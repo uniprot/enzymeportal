@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.ebi.ep</groupId>
+    <artifactId>ep</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>EnzymePortal</name>
+    <url>http://enzymeportal.sf.net</url>
+    <organization>
+        <name>EMBL-EBI</name>
+        <url>http://www.ebi.ac.uk</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>hongcao</id>
+            <name>Hong Cao</name>
+            <email>hongcao@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>rafalcan</id>
+            <name>Rafael Alcántara</name>
+            <email>rafalcan@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>pmatos</id>
+            <name>Paula de Matos</name>
+            <email>pmatos@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <roles>
+                <role>Coordinator</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>steinbeck</id>
+            <name>Christoph Steinbeck</name>
+            <email>steinbeck@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <roles>
+                <role>Team leader</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <repositories>
+        <repository>
+            <id>maven-repo</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>ibiblio</id>
+            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+        </repository>
+        <repository>
+            <releases/>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>ebi-repo</id>
+            <name>EBI maven repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots/>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI maven snapshots repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+        </repository>
+        <repository>
+            <id>biobabel-repo</id>
+            <url>${biobabel.maven.repo.url}</url>
+        </repository>
+        <repository>
+            <id>dev.java.net.2</id>
+            <name>java.net repository for Maven2</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>ebi-repo</id>
+            <name>EBI Maven Repository</name>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI Maven Snapshots Repository</name>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id>rhea-ebi.sf.net</id>
+            <name>Rhea SourceForge web site</name>
+            <url>
+                scp://shell.sourceforge.net/home/project-web/enzymeportal/htdocs
+            </url>
+        </site>
+    </distributionManagement>
+    <issueManagement>
+    	<system>SourceForge trackers</system>
+    	<url>http://sourceforge.net/tracker/?group_id=275360ampatid=1169891</url>
+    </issueManagement>
+    <scm>
+        <connection>
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk
+        </connection>
+        <developerConnection>
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk
+        </developerConnection>
+        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/trunk/</url>
+    </scm>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+  <modules>
+    <module>ep-domain</module>
+  </modules>
+</project>
