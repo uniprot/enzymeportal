@@ -25,15 +25,18 @@ public class LucenceQuery {
         int counter = 1;
         while (fieldIt.hasNext()) {
             SearchField searchField = (SearchField) fieldIt.next();
-            query.append(searchField);
-            query.append("=");
+            query.append(searchField.getId());
+            query.append(":");
             query.append("kinase");
             if (counter <listLength)
-            query.append(" OR ");
-            System.out.println(query);
+            query.append(" OR ");            
             counter++;
-
         }
+            if (domain.getId().equalsIgnoreCase("uniprot")) {
+                query.append(" AND EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7* OR 8* OR 9*) ");
+            }
+
+        System.out.println(query.toString());
         return query.toString();
     }
 }
