@@ -18,10 +18,6 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-        <groupId>uk.ac.ebi.uniprot.kraken</groupId>
-        <artifactId>uniprotjapi</artifactId>
-        <version>2011_03</version>
-    </dependency>
   </dependencies>
 </project>
+
