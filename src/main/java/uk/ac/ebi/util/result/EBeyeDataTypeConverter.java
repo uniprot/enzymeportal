@@ -32,8 +32,8 @@ public class EBeyeDataTypeConverter {
         Iterator it = fieldList.iterator();
         ArrayOfString resultRefFields= new ArrayOfString();
         while (it.hasNext()) {
-            String field = (String)it.next();
-            resultRefFields.getString().add(field);
+            ResultField field = (ResultField)it.next();
+            resultRefFields.getString().add(field.getId());
         }
         return resultRefFields;
     }
