@@ -8,7 +8,10 @@ package uk.ac.ebi.ep.core.search;
  *          $Author$
  * @author  $Author$
  */
-public class Query {
+public class Constant {
+    /*
+     *
+     */
 
 //********************************* VARIABLES ********************************//
 

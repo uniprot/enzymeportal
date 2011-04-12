@@ -1394,9 +1394,13 @@ public class EBeyeClient {
             //String[] myArgs = {"--getResults","rhea","carbon"," acc,  chebiidequation, id, name","0","100" };
             //String[] myArgs = {"--getResults","reactome","carbon","acc, description, id, name","0","1" };
             //String[] myArgs = {"--getResults","uniprot","gene_primary_name:dehydrogenase","acc, descSubName, gene_primary_name, id, organism_scientific_name, sequence_length, status","0","20" };
+            // OR description:carbon OR keywords:carbon OR organism_species:carbon OR organism_scientific_name:carbon OR organism_lineage:carbon OR organism_host_species:carbon OR dbRefProp_EMBL_protein_sequence_ID:carbon OR dbRefProp_EnsemblBacteria_protein_sequence_ID:carbon OR dbRefProp_EnsemblFungi_protein_sequence_ID:carbon OR dbRefProp_EnsemblMetazoa_protein_sequence_ID:carbon OR dbRefProp_EnsemblPlants_protein_sequence_ID:carbon OR dbRefProp_EnsemblProtists_protein_sequence_ID:carbon OR dbRefProp_Ensembl_protein_sequence_ID:carbon OR dbRefProp_GeneFarm_family_ID:carbon OR dbRefProp_WormBase_protein_sequence_ID :carbon OR acc:carbon OR id:carbon AND EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7* OR 8* OR 9*)
+            //String[] myArgs = {"--getResults","uniprot","descRecName:carbon*","acc, descSubName, gene_primary_name, id, organism_scientific_name, sequence_length, status","0","20" };
             //String[] myArgs = {"--getResults","uniprot","organism_species:Human AND (descRecName:dehydrogenase OR gene_primary_name:dehydrogenase)","id, descRecName,organism_scientific_name","0","20" };
             //There are cases with descRecName=null
-            String[] myArgs = {"--getResults","uniprot","EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7* OR 8* OR 9*)","acc, id, descRecName, descSubName,organism_scientific_name","0","100" };
+            //String[] myArgs = {"--getResults","uniprot","EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7* OR 8* OR 9*)","acc, id, descRecName, descSubName,organism_scientific_name","0","100" };
+            //String[] myArgs = {"--getNumberOfResults","uniprot","EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7* OR 8* OR 9*)"};
+            
             //String[] myArgs = {"--getResults","uniprot","organism_species:sapiens","organism_scientific_name","0","100" };
             //String[] myArgs = {"--getResults","uniprot","gene_primary_name:dehydrogenase","id","0","20" };
             //String[] myArgs = {"--getAllResultsIds","uniprot","gene_primary_name:dehydrogenase","0","20" };
@@ -1411,6 +1415,10 @@ public class EBeyeClient {
            // getResultsIds("uniprot", "acc:P19921", 0, 1)
             //String[] myArgs = {"--getDomainsReferencedInEntry", "uniprot","P19921"};
 
+            //String[] myArgs = {"--getDomainsReferencedInDomain", "intenz"};
+            //String[] myArgs = {"--getDomainsReferencedInDomain", "chebi"};
+            //String[] myArgs = {"--getDomainsReferencedInDomain", "rhea"};
+            String[] myArgs = {"--getDomainsReferencedInDomain", "uniprot"};
 
 
             //String[] myArgs = {"--getResults","uniprot","Carbon","descSubName","0","100" };
