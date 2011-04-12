@@ -3,6 +3,96 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://ebi.ac.uk/enzymeportal config.xsd ">
   <Domain>
+    <id>intenz</id>
+    <SearchFieldList>
+      <SearchField>
+        <id>name</id>
+      </SearchField>
+      <SearchField>
+        <id>synonym</id>
+      </SearchField>
+      <SearchField>
+        <id>systematic_name</id>
+      </SearchField>
+      <SearchField>
+        <id>id</id>
+      </SearchField>
+    </SearchFieldList>
+  </Domain>
+  <Domain>
+    <id>rhea</id>
+    <SearchFieldList>
+      <SearchField>
+        <id>acc</id>
+      </SearchField>
+      <SearchField>
+        <id>id</id>
+      </SearchField>
+      <SearchField>
+        <id>chebiidequation</id>
+      </SearchField>
+      <SearchField>
+        <id>name</id>
+      </SearchField>
+    </SearchFieldList>
+  </Domain>
+  <Domain>
+    <id>reactome</id>
+    <SearchFieldList>
+      <SearchField>
+        <id>acc</id>
+      </SearchField>
+      <SearchField>
+        <id>id</id>
+      </SearchField>
+      <SearchField>
+        <id>name</id>
+      </SearchField>
+      <SearchField>
+        <id>description</id>
+      </SearchField>
+    </SearchFieldList>
+  </Domain>
+  <Domain>
+    <id>chebi</id>
+    <SearchFieldList>
+      <SearchField>
+        <id>acc</id>
+      </SearchField>
+      <SearchField>
+        <id>id</id>
+      </SearchField>
+      <SearchField>
+        <id>name</id>
+      </SearchField>
+      <SearchField>
+        <id>synonym</id>
+      </SearchField>
+    </SearchFieldList>
+  </Domain>
+  <Domain>
+    <id>chembl-compound</id>
+    <SearchFieldList>
+      <SearchField>
+        <id>acc</id>
+      </SearchField>
+      <SearchField>
+        <id>id</id>
+      </SearchField>
+    </SearchFieldList>
+  </Domain>
+  <Domain>
+    <id>pdbe</id>
+    <SearchFieldList>
+      <SearchField>
+        <id>acc</id>
+      </SearchField>
+      <SearchField>
+        <id>id </id>
+      </SearchField>
+    </SearchFieldList>
+  </Domain>
+<Domain>
     <id>uniprot</id>
     <SearchFieldList>
       <SearchField>
@@ -69,10 +159,7 @@
         <id>acc</id>
       </ResultField>
       <ResultField>
-        <id>descSubName</id>
-      </ResultField>
-      <ResultField>
-        <id>gene_primary_name</id>
+        <id>descRecName</id>
       </ResultField>
       <ResultField>
         <id>organism_scientific_name</id>
@@ -84,92 +171,5 @@
         <id>status</id>
       </ResultField>
     </ResultFieldList>
-  </Domain>
-  <Domain>
-    <id>intenz</id>
-    <SearchFieldList>
-      <SearchField>
-        <id>name</id>
-      </SearchField>
-      <SearchField>
-        <id>synonym</id>
-      </SearchField>
-      <SearchField>
-        <id>systematic_name</id>
-      </SearchField>
-      <SearchField>
-        <id>id</id>
-      </SearchField>
-    </SearchFieldList>
-  </Domain>
-  <Domain>
-    <id>rhea</id>
-    <SearchFieldList>
-      <SearchField>
-        <id>acc</id>
-      </SearchField>
-      <SearchField>
-        <id>id</id>
-      </SearchField>
-      <SearchField>
-        <id>chebiidequation</id>
-      </SearchField>
-      <SearchField>
-        <id>name</id>
-      </SearchField>
-    </SearchFieldList>
-  </Domain>
-  <Domain>
-    <id>reactome</id>
-    <SearchFieldList>
-      <SearchField>
-        <id>acc</id>
-      </SearchField>
-      <SearchField>
-        <id>id</id>
-      </SearchField>
-      <SearchField>
-        <id>description</id>
-      </SearchField>
-    </SearchFieldList>
-  </Domain>
-  <Domain>
-    <id>chebi</id>
-    <SearchFieldList>
-      <SearchField>
-        <id>acc</id>
-      </SearchField>
-      <SearchField>
-        <id>id</id>
-      </SearchField>
-      <SearchField>
-        <id>name</id>
-      </SearchField>
-      <SearchField>
-        <id>synonym</id>
-      </SearchField>
-    </SearchFieldList>
-  </Domain>
-  <Domain>
-    <id>chembl-compound</id>
-    <SearchFieldList>
-      <SearchField>
-        <id>acc</id>
-      </SearchField>
-      <SearchField>
-        <id>id </id>
-      </SearchField>
-    </SearchFieldList>
-  </Domain>
-  <Domain>
-    <id>pdbe</id>
-    <SearchFieldList>
-      <SearchField>
-        <id>acc</id>
-      </SearchField>
-      <SearchField>
-        <id>id </id>
-      </SearchField>
-    </SearchFieldList>
   </Domain>
 </ep:EnzymeRelatedDomains>
