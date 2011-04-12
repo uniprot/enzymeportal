@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.util.List;
-import java.util.Map;
+import uk.ac.ebi.ep.search.parameter.SearchParams;
+import uk.ac.ebi.ep.search.result.EnzymeResultSet;
 
 /**
  *
@@ -23,6 +23,6 @@ public interface IEnzymeFinder extends IEnzyme {
 
 
 //********************************** METHODS *********************************//
-    public Map<String,Map<String,String>> find(Object searchInput);
+    public EnzymeResultSet find(SearchParams searchInput);
 
 }
