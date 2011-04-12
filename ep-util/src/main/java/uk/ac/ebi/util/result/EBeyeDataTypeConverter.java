@@ -37,4 +37,18 @@ public class EBeyeDataTypeConverter {
         }
         return resultRefFields;
     }
+    public static String  convertArrayOfStringToString(ArrayOfString arrayOfString) {
+        List<String> list = arrayOfString.getString();
+        Iterator it = list.iterator();
+        StringBuffer sb = new StringBuffer();
+        int counter = 0;
+        while (it.hasNext()) {
+            sb.append((String)it.next());
+            counter++;
+            if (counter<list.size()){
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
 }
