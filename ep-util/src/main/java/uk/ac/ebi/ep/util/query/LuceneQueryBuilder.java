@@ -10,9 +10,9 @@ import uk.ac.ebi.ep.search.parameter.SearchParams;
  * Hello world!
  *
  */
-public class LucenceQuery {
+public class LuceneQueryBuilder {
     public static final String ENZYME_FILTER =
-            "EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7* OR 8* OR 9*)";
+            "EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7*)";
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
@@ -26,14 +26,20 @@ public class LucenceQuery {
         Iterator fieldIt = SearchFieldList.iterator();
         int listLength = SearchFieldList.size();
         int counter = 1;
+        query.append("(");
         while (fieldIt.hasNext()) {
-            SearchField searchField = (SearchField) fieldIt.next();
+            SearchField searchField = (SearchField) fieldIt.next();            
             query.append(searchField.getId());
             query.append(":");
             query.append(searchParams.getKeywords());
             query.append("*");
-            if (counter <listLength)
-            query.append(" OR ");            
+            if (counter <listLength) {
+                query.append(" OR ");
+            }
+            else {
+                query.append(")");
+            }
+            
             counter++;
         }
             if (domain.getId().equalsIgnoreCase("uniprot")) {
@@ -51,5 +57,26 @@ public class LucenceQuery {
         query.append(" AND " );
         query.append(ENZYME_FILTER);
         return query.toString();
+    }
+
+    public static String createQueryIN(List<String> ids) {
+        StringBuffer query = new StringBuffer();
+        Iterator it = ids.iterator();
+        query.append("id:(");
+        int counter = 1;
+        while(it.hasNext()) {
+            String id = (String)it.next();
+            query.append(id);
+            if (counter <id.length()) {
+                query.append(" OR ");
+            }
+            counter++;
+        }
+         query.append(")");
+        return query.toString();
+    }
+
+    public static String createUniprotQueryForEnzyme(List<String> ids) {
+        return createQueryIN(ids) + " AND " + ENZYME_FILTER;
     }
 }
