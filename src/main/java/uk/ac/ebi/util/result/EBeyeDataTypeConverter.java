@@ -1,10 +1,15 @@
 package uk.ac.ebi.util.result;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
+import uk.ac.ebi.webservices.jaxws.stubs.ebeye.ArrayOfArrayOfString;
+import uk.ac.ebi.webservices.jaxws.stubs.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.jaxws.stubs.ebeye.ArrayOfString;
+import uk.ac.ebi.webservices.jaxws.stubs.ebeye.EntryReferences;
 
 /**
  *
@@ -51,4 +56,29 @@ public class EBeyeDataTypeConverter {
         }
         return sb.toString();
     }
+
+    public static List<String> convertArrayOfEntryReferencesToList(ArrayOfEntryReferences
+                        arrayOfEntryReferences) {
+        List<String> resultList = new ArrayList<String>();
+        Iterator it = arrayOfEntryReferences.getEntryReferences().iterator();
+        while (it.hasNext()) {
+           EntryReferences entryReferences = (EntryReferences)it.next();
+           JAXBElement<ArrayOfArrayOfString> jAXBElement = entryReferences.getReferences();
+            resultList.addAll(
+                    convertArrayOfArrayOfStringToList(jAXBElement.getValue()));
+        }
+        return resultList;
+    }
+
+    public static List<String> convertArrayOfArrayOfStringToList(ArrayOfArrayOfString
+                        arrayOfArrayOfString) {
+        List<String> resultList = new ArrayList<String>();
+        Iterator it = arrayOfArrayOfString.getArrayOfString().iterator();
+        while (it.hasNext()) {
+            ArrayOfString arrayOfString = (ArrayOfString)it.next();
+            resultList.addAll(arrayOfString.getString());
+        }
+        return resultList;
+    }
+
 }
