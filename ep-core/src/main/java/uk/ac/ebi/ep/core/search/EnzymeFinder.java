@@ -18,7 +18,7 @@ import uk.ac.ebi.ep.search.result.EnzymeResultSet;
 import uk.ac.ebi.ep.search.result.EnzymeSummary;
 import uk.ac.ebi.ep.search.result.EnzymeSummaryCollection;
 import uk.ac.ebi.ep.search.result.Species;
-import uk.ac.ebi.ep.util.query.LucenceQuery;
+import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.util.result.EBeyeDataTypeConverter;
 import uk.ac.ebi.webservices.jaxws.stubs.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.jaxws.stubs.ebeye.ArrayOfEntryReferences;
@@ -42,9 +42,10 @@ public class EnzymeFinder implements IEnzymeFinder {
     //TODO
     public static final int TOP_RESULT_SIZE = 100;
     public static final int RESULT_PER_DOMAIN_LIMIT = 20;
+    public static final int NUMBER_OF_RECORDS_PER_PAGE = 20;
+    public static final String UNIPROT_DOMAIN = "uniprot";
     public static final int START_AT = 0;
     private static Logger log = Logger.getLogger("EnzymeFinder.class");
-
 
 //******************************** CONSTRUCTORS ******************************//
 
@@ -72,7 +73,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         EnzymeResultSet resultSet = null;
         while (it.hasNext()) {
             Domain domain = (Domain)it.next();
-            query = LucenceQuery.createQueryOR(domain, searchInput);
+            query = LuceneQueryBuilder.createQueryOR(domain, searchInput);
             String domainId = domain.getId();
             /*
             log.debug("Domain: " +domainId);
@@ -100,22 +101,29 @@ public class EnzymeFinder implements IEnzymeFinder {
                     +EBeyeDataTypeConverter.convertArrayOfStringToString(result));
 
             //ArrayOfString result = eBeyeClient.getSrvProxy().getAllResultsIds(domainId, query);
-            if (domainId.equals("uniprot")) {
-                addUniprotIdsToResults(result, false);
+            if (domainId.equals(UNIPROT_DOMAIN)) {
+                addUniprotIdsToResults(result);
             }
             //If the domain is not uniprot then the results must be converted
             //into uniprot ids
             else {
                 try {
                     ArrayOfEntryReferences uniprotIds = getUniprotIds(domainId, result);
+                    List<String> refList = EBeyeDataTypeConverter
+                            .convertArrayOfEntryReferencesToList(uniprotIds);
+
                      if (domainId.equals("intenz")) {
                         /*if the domain is intenz then there is no need to check if
                     the entry is enzyme.
                    */
-                        addUniprotIdsToResults(uniprotIds, true);
+                        //addUniprotIdsToResults(uniprotIds);
+                         this.uniprotIdList.addAll(refList);
                      }
-                     else{
-                        addUniprotIdsToResults(uniprotIds, false);
+                     else{                        
+                        List<String> uniprotIdsEnzymeOnly = filterOutNonEnzymeUniprot(
+                                refList);
+                        this.uniprotIdList.addAll(uniprotIdsEnzymeOnly);
+                        //addUniprotIdsToResults(uniprotIds);
                      }
                     
                 } catch (ServiceException ex) {
@@ -139,18 +147,18 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public static void main(String[] args) throws ServiceException, IOException, JAXBException {
         EnzymeFinder enzyme = new EnzymeFinder();
-        int numberOfResults = enzyme.eBeyeClient.getSrvProxy().getNumberOfResults("uniprot", "EC:1.1*");
+        int numberOfResults = enzyme.eBeyeClient.getSrvProxy().getNumberOfResults(UNIPROT_DOMAIN, "EC:1.1*");
         Set<String> uniprotEnzymeList = new TreeSet<String>();
         ArrayOfString result = null;
         if (numberOfResults>RESULT_PER_DOMAIN_LIMIT) {
             int counter = 0;
             while (counter<numberOfResults) {                
-                result = enzyme.eBeyeClient.getSrvProxy().getResultsIds("uniprot", "EC:1*", counter-1,RESULT_PER_DOMAIN_LIMIT);
+                result = enzyme.eBeyeClient.getSrvProxy().getResultsIds(UNIPROT_DOMAIN, "EC:1*", counter-1,RESULT_PER_DOMAIN_LIMIT);
                 counter = counter+RESULT_PER_DOMAIN_LIMIT;
             }
         }
         else {
-            result = enzyme.eBeyeClient.getSrvProxy().getResultsIds("uniprot", "EC:1*", START_AT, numberOfResults);
+            result = enzyme.eBeyeClient.getSrvProxy().getResultsIds(UNIPROT_DOMAIN, "EC:1*", START_AT, numberOfResults);
         }
          List<String> resultList = result.getString();
         Iterator it = resultList.iterator();
@@ -183,11 +191,11 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 
     public EnzymeResultSet queryUniprotResults(List<String> IdList) throws ServiceException {
-        //String[] myArgs = {"--getResults","uniprot","gene_primary_name:dehydrogenase","acc, descSubName, gene_primary_name, id, organism_scientific_name, sequence_length, status","0","20" };
+        //String[] myArgs = {"--getResults",UNIPROT_DOMAIN,"gene_primary_name:dehydrogenase","acc, descSubName, gene_primary_name, id, organism_scientific_name, sequence_length, status","0","20" };
         //getEntry(domain, entry, fields)
         Iterator it = IdList.iterator();
         ArrayOfString result = null;        
-        Domain uniprotDomain = Config.getDomain("uniprot");
+        Domain uniprotDomain = Config.getDomain(UNIPROT_DOMAIN);
         ArrayOfString resultFields = EBeyeDataTypeConverter
                                     .createEbeyeFieldArray(uniprotDomain);
        EnzymeResultSet resultSet = new EnzymeResultSet();
@@ -202,7 +210,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
          resultSet.setEnzymeSummaryCollection(enzymes);
          return resultSet;
-     //  Config.getDomain("uniprot").getResultFieldList().getResultField().
+     //  Config.getDomain(UNIPROT_DOMAIN).getResultFieldList().getResultField().
     }
     
     public EnzymeSummary createResultSet(List<String> result) {
@@ -260,42 +268,51 @@ public class EnzymeFinder implements IEnzymeFinder {
         ArrayOfString resultRefFields= new ArrayOfString();
         resultRefFields.getString().add("id");
         ArrayOfEntryReferences refSearchResult = eBeyeClient.getSrvProxy()
-                .getReferencedEntriesSet(domainId, result, "uniprot", resultRefFields);
+                .getReferencedEntriesSet(domainId, result, UNIPROT_DOMAIN, resultRefFields);
          return refSearchResult;
     }
 
     
-    public List<String> addUniprotIdsToResults(ArrayOfEntryReferences result, boolean checkEnzyme) {
+    public List<String> addUniprotIdsToResults(ArrayOfEntryReferences result) {
         List refList = result.getEntryReferences();
         Iterator it = refList.iterator();
         while (it.hasNext()) {
            EntryReferences entryReferences = (EntryReferences)it.next();
            JAXBElement<ArrayOfArrayOfString> jAXBElement = entryReferences.getReferences();
-            uniprotIdList = addUniprotIdsToResults(jAXBElement.getValue(), checkEnzyme);
+            uniprotIdList = addUniprotIdsToResults(jAXBElement.getValue());
         }
         return uniprotIdList;
     }
 
-    public List<String> mergeUniprotId(List<ArrayOfString> result, boolean checkEnzyme) {
+    public List<String> mergeUniprotId(List<ArrayOfString> result) {
         Iterator it = result.iterator();
         while (it.hasNext()) {
             ArrayOfString arrayList = (ArrayOfString)it.next();
-            uniprotIdList = addUniprotIdsToResults(arrayList, checkEnzyme);
+            uniprotIdList = addUniprotIdsToResults(arrayList);
         }
         return uniprotIdList;
     }
 
-    public List<String> addUniprotIdsToResults(ArrayOfArrayOfString result
-            ,  boolean checkEnzyme) {
+    public List<String> addUniprotIdsToResults(ArrayOfArrayOfString result) {
         List resultList = result.getArrayOfString();
         Iterator it = resultList.iterator();
         while (it.hasNext()) {
             ArrayOfString arrayList = (ArrayOfString)it.next();
-            uniprotIdList = addUniprotIdsToResults(arrayList, checkEnzyme);
+            uniprotIdList = addUniprotIdsToResults(arrayList);
+        }
+        return uniprotIdList;
+    }
+    public List<String> addUniprotIdsToResults( ArrayOfString result) {
+        List resultList = result.getString();
+        Iterator it = resultList.iterator();
+        while (it.hasNext()) {
+            String id = (String)it.next();
+            uniprotIdList.add(id);
         }
         return uniprotIdList;
     }
 
+    /*
     public List<String> addUniprotIdsToResults( ArrayOfString result, boolean checkEnzyme) {
         List resultList = result.getString();
         Iterator it = resultList.iterator();
@@ -312,14 +329,14 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
         return uniprotIdList;
     }
-
+*/
 
     public boolean isEnzyme(String uniprotId){
         boolean isEnzyme=false;
-        String query = LucenceQuery.createQueryToGetEnzymeOnly(uniprotId);
+        String query = LuceneQueryBuilder.createQueryToGetEnzymeOnly(uniprotId);
         ArrayOfString result = null;
         try {
-            result = eBeyeClient.getSrvProxy().getResultsIds("uniprot", query, 0, 1);
+            result = eBeyeClient.getSrvProxy().getResultsIds(UNIPROT_DOMAIN, query, 0, 1);
         } catch (ServiceException ex) {
             //java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -331,4 +348,26 @@ public class EnzymeFinder implements IEnzymeFinder {
         return isEnzyme;
     }
 
+    public List<String> filterOutNonEnzymeUniprot(List<String> ids) throws ServiceException {     
+        int numberOfResults = ids.size();
+        Pagination pagination = new Pagination();
+        pagination.paginateResults(numberOfResults, NUMBER_OF_RECORDS_PER_PAGE);
+        int startAt = 0;
+        int endAt = 0;
+        List<String> resultlist = new ArrayList<String>();
+        for (int i = 0; i < pagination.getTotalPages(); i++) {
+            //0+20-1 = 19
+            if (i==(pagination.getTotalPages()-1)) {
+                endAt = ids.size();
+            }
+            endAt = ((startAt+NUMBER_OF_RECORDS_PER_PAGE));
+            List<String> subList = ids.subList(startAt, endAt);
+            String query = LuceneQueryBuilder.createUniprotQueryForEnzyme(subList);
+            int numberOfResultsOfSubQuery = eBeyeClient.getSrvProxy().getNumberOfResults(UNIPROT_DOMAIN, query);
+            ArrayOfString result = eBeyeClient.getSrvProxy().getResultsIds(UNIPROT_DOMAIN, query, 0,numberOfResultsOfSubQuery);
+            resultlist.addAll(result.getString());
+            startAt = subList.size();
+        }
+        return resultlist;
+    }
 }
