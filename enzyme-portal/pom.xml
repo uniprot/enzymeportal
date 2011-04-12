@@ -148,5 +148,8 @@
     </properties>
   <modules>
     <module>ep-domain</module>
+    <module>ep-web-client</module>
+    <module>ep-core</module>
+    <module>ep-util</module>
   </modules>
 </project>
