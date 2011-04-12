@@ -96,6 +96,12 @@
     <id>uniprot</id>
     <SearchFieldList>
       <SearchField>
+        <id>acc</id>
+      </SearchField>
+      <SearchField>
+        <id>id</id>
+      </SearchField>
+      <SearchField>
         <id>descRecName</id>
       </SearchField>
       <SearchField>
@@ -115,7 +121,7 @@
       </SearchField>
       <SearchField>
         <id>organism_host_species</id>
-      </SearchField>
+      </SearchField>      
       <SearchField>
         <id>dbRefProp_EMBL_protein_sequence_ID</id>
       </SearchField>
@@ -142,12 +148,6 @@
       </SearchField>
       <SearchField>
         <id>dbRefProp_WormBase_protein_sequence_ID </id>
-      </SearchField>
-      <SearchField>
-        <id>acc</id>
-      </SearchField>
-      <SearchField>
-        <id>id</id>
       </SearchField>
     </SearchFieldList>
     <!--acc, descSubName, gene_primary_name, id, organism_scientific_name, sequence_length, status-->
