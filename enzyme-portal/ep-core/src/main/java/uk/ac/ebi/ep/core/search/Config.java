@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
@@ -34,7 +34,8 @@ public static List<Domain> domainList;
 static {
         try {
             EnzymeRelatedDomains enzymeRelatedDomains =
-                    unmarshalConfigFile(new File("/Users/hongcao/Projects/enzymeportal/trunk/enzyme-portal/ep-core/src/main/java/uk/ac/ebi/ep/core/search/config.xml"));
+                    //unmarshalConfigFile(new File("/Users/hongcao/Projects/enzymeportal/trunk/enzyme-portal/ep-core/src/main/java/uk/ac/ebi/ep/core/search/config.xml"));
+                    unmarshalConfigFile(Config.class.getResourceAsStream("/config.xml"));
             domainList = enzymeRelatedDomains.getDomain();
         } catch (IOException ex) {
            //COnfig file not found
@@ -44,7 +45,7 @@ static {
 
 }
 
-    public static EnzymeRelatedDomains unmarshalConfigFile(File inFile)
+    public static EnzymeRelatedDomains unmarshalConfigFile(InputStream inFile)
              throws IOException, JAXBException
             {
         EnzymeRelatedDomains enzymeRelatedDomains = null;

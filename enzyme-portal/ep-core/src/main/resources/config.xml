@@ -162,6 +162,9 @@
         <id>descRecName</id>
       </ResultField>
       <ResultField>
+        <id>descSubName</id>
+      </ResultField>
+      <ResultField>
         <id>organism_scientific_name</id>
       </ResultField>
       <ResultField>
