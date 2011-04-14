@@ -49,7 +49,6 @@
             </roles>
         </developer>
     </developers>
-
     <repositories>
         <repository>
             <id>maven-repo</id>
@@ -101,7 +100,7 @@
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
-            <id>rhea-ebi.sf.net</id>
+            <id>enzymeportal</id>
             <name>Rhea SourceForge web site</name>
             <url>
                 scp://shell.sourceforge.net/home/project-web/enzymeportal/htdocs
@@ -151,5 +150,6 @@
     <module>ep-web-client</module>
     <module>ep-core</module>
     <module>ep-util</module>
+    <module>ebeye-client</module>
   </modules>
 </project>
