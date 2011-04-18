@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.core.search;
 
 import uk.ac.ebi.ep.search.parameter.SearchParams;
-import uk.ac.ebi.ep.search.result.EnzymeResultSet;
+import uk.ac.ebi.ep.search.result.EnzymeSearchResults;
 
 /**
  *
@@ -23,6 +23,6 @@ public interface IEnzymeFinder extends IEnzyme {
 
 
 //********************************** METHODS *********************************//
-    public EnzymeResultSet find(SearchParams searchInput);
+    public EnzymeSearchResults find(SearchParams searchInput);
 
 }
