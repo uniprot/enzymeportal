@@ -18,6 +18,11 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>ebeye-client</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
 
