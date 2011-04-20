@@ -1,6 +1,13 @@
 package uk.ac.ebi.ep.core.search;
 
 import java.util.concurrent.Callable;
+import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
+import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
+import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
+import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
+import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
+import uk.ac.ebi.util.result.EBeyeDataTypeConverter;
+import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 import uk.ac.ebi.webservices.ebeye.EBISearchService;
 import uk.ac.ebi.webservices.ebeye.EBISearchService_Service;
@@ -13,55 +20,144 @@ import uk.ac.ebi.webservices.ebeye.EBISearchService_Service;
  *          $Author$
  * @author  $Author$
  */
-public class EBeyeWsCallable implements Callable<ArrayOfString>{
-    protected EBISearchService eBISearchService;
-    protected ParamOfGetResultsIds paramOfGetResultsIds;
-
-    public EBeyeWsCallable(ParamOfGetResultsIds paramOfGetResultsIds) {
-        EBISearchService_Service service = new EBISearchService_Service();
-        eBISearchService = service.getEBISearchServiceHttpPort();
-        this.paramOfGetResultsIds = paramOfGetResultsIds;
-    }
-
+public class EBeyeWsCallable {
 
 //********************************* VARIABLES ********************************//
+    private static EBISearchService eBISearchService
+            = new EBISearchService_Service().getEBISearchServiceHttpPort();
 
 
-//******************************** CONSTRUCTORS ******************************//
+//******************************** INNER CLASS *******************************//
+    public static class GetResultsIdCallable 
+            implements Callable<ResultOfGetResultsIds> {
 
+        protected ParamOfGetResultsIds paramOfGetResultsIds;
 
+        public GetResultsIdCallable(ParamOfGetResultsIds paramOfGetResultsIds) {
+            this.paramOfGetResultsIds = paramOfGetResultsIds;
+        }
 
-//****************************** GETTER & SETTER *****************************//
+        public ResultOfGetResultsIds call() throws Exception {
+            return callGetResultsIds();
+        }
 
-    public EBISearchService geteBISearchService() {
-        return eBISearchService;
+        public ResultOfGetResultsIds callGetResultsIds() {
+            ResultOfGetResultsIds result = new ResultOfGetResultsIds();
+            int start = paramOfGetResultsIds.getSearchParams().getStart();
+            int size = paramOfGetResultsIds.getSearchParams().getSize();
+            String domain = paramOfGetResultsIds
+                    .getResultOfGetNumberOfResults()
+                    .getParamGetNumberOfResults()
+                    .getDomain();
+            String query = paramOfGetResultsIds
+                    .getResultOfGetNumberOfResults()
+                    .getParamGetNumberOfResults()
+                    .getQuery();           
+            ArrayOfString EbeyeResult = eBISearchService
+                    .getResultsIds(domain, query, start, size);
+            //result.setResultOfGetNumberOfResults(paramOfGetResultsIds)
+            result.setParamOfGetResultsIds(paramOfGetResultsIds);
+            result.setResult(EbeyeResult);
+            return result;
+        }
+
     }
 
-    public void seteBISearchService(EBISearchService eBISearchService) {
-        this.eBISearchService = eBISearchService;
+//******************************** INNER CLASS *******************************//
+    public static class GetNumberOfResultsCallable 
+            implements Callable<ResultOfGetNumberOfResults> {
+        protected ParamGetNumberOfResults paramGetNumberOfResults;
+
+        public GetNumberOfResultsCallable(
+                ParamGetNumberOfResults paramGetNumberOfResults) {
+            this.paramGetNumberOfResults = paramGetNumberOfResults;
+        }
+
+        public ParamGetNumberOfResults getParamGetNumberOfResults() {
+            return paramGetNumberOfResults;
+        }
+
+        public void setParamGetNumberOfResults(
+                ParamGetNumberOfResults paramGetNumberOfResults) {
+            this.paramGetNumberOfResults = paramGetNumberOfResults;
+        }
+
+        public ResultOfGetNumberOfResults callGetResultsIds() {
+            ResultOfGetNumberOfResults
+                    resultOfGetNumberOfResults= new ResultOfGetNumberOfResults();
+            resultOfGetNumberOfResults
+                    .setParamGetNumberOfResults(paramGetNumberOfResults);
+            int totalFound = eBISearchService.getNumberOfResults(
+                    paramGetNumberOfResults.getDomain()
+                    , paramGetNumberOfResults.getQuery());
+            resultOfGetNumberOfResults.setTotalFound(totalFound);
+            return resultOfGetNumberOfResults;
+        }
+
+        public ResultOfGetNumberOfResults call() throws Exception {
+           return callGetResultsIds();
+        }
+    
     }
 
-    public ParamOfGetResultsIds getParamOfGetResultsIds() {
-        return paramOfGetResultsIds;
+//******************************** INNER CLASS *******************************//
+    public static class GetReferencedEntriesSetCallable
+            implements Callable<ResultOfGetReferencedEntriesSet> {
+        protected ResultOfGetResultsIds resultOfGetResultsIds;
+
+        public GetReferencedEntriesSetCallable(
+                ResultOfGetResultsIds resultOfGetResultsIds) {
+            this.resultOfGetResultsIds = resultOfGetResultsIds;
+        }
+
+        public ResultOfGetResultsIds getResultOfGetResultsIds() {
+            return resultOfGetResultsIds;
+        }
+
+        public void setResultOfGetResultsIds(
+                ResultOfGetResultsIds resultOfGetResultsIds) {
+            this.resultOfGetResultsIds = resultOfGetResultsIds;
+        }
+        
+
+
+        public ResultOfGetReferencedEntriesSet call() throws Exception {
+            return CallGetReferencedEntriesSet();
+        }
+
+        public ResultOfGetReferencedEntriesSet CallGetReferencedEntriesSet() {
+            ResultOfGetReferencedEntriesSet resultOfGetReferencedEntriesSet
+                    = new ResultOfGetReferencedEntriesSet();
+            resultOfGetReferencedEntriesSet
+                    .setResultOfGetResultsIds(resultOfGetResultsIds);
+        ArrayOfString resultRefFields= new ArrayOfString();
+        resultRefFields.getString().add("id");
+        ArrayOfString result = this.resultOfGetResultsIds.getResult();
+        String domain = this.resultOfGetResultsIds
+                .getParamOfGetResultsIds()
+                .getResultOfGetNumberOfResults()
+                .getParamGetNumberOfResults()
+                .getDomain();
+        //TODO uniprot should not be hardcoded
+        ArrayOfEntryReferences refSearchResult = null;
+        if (!domain.equals("uniprot")) {
+            refSearchResult = eBISearchService
+                    .getReferencedEntriesSet(domain, result, "uniprot", resultRefFields);
+            if (refSearchResult != null) {
+                 resultOfGetReferencedEntriesSet.setUniprotXRefList(
+                        EBeyeDataTypeConverter
+                                .convertArrayOfEntryReferencesToList(refSearchResult)
+                                );
+            }
+        }
+         return resultOfGetReferencedEntriesSet;
+        }
+
     }
 
-    public void setParamOfGetResultsIds(ParamOfGetResultsIds paramOfGetResultsIds) {
-        this.paramOfGetResultsIds = paramOfGetResultsIds;
-    }
+    /*
+        ArrayOfEntryReferences refSearchResult = eBISearchService
+                .getReferencedEntriesSet(domainId, result, UNIPROT_DOMAIN, resultRefFields);
 
-
-//********************************** METHODS *********************************//
-    public ArrayOfString call() throws Exception {
-        return invokeGetResultsIds();
-    }
-    public ArrayOfString invokeGetResultsIds() {        
-        ArrayOfString result = eBISearchService.getResultsIds(
-                this.paramOfGetResultsIds.getDomain()
-                , this.paramOfGetResultsIds.getQuery()
-                , this.paramOfGetResultsIds.getStart()
-                , this.paramOfGetResultsIds.getSize());
-        return result;
-    }
-
-
+     */
 }
