@@ -28,7 +28,51 @@ public class EBeyeWsCallable {
 
 
 //******************************** INNER CLASS *******************************//
-    public static class GetResultsIdCallable 
+
+    public static class GetNumberOfResultsCallable 
+            implements Callable<ResultOfGetNumberOfResults> {
+        protected ParamGetNumberOfResults paramGetNumberOfResults;
+
+        public GetNumberOfResultsCallable(
+                ParamGetNumberOfResults paramGetNumberOfResults) {
+            this.paramGetNumberOfResults = paramGetNumberOfResults;
+        }
+
+        public ParamGetNumberOfResults getParamGetNumberOfResults() {
+            return paramGetNumberOfResults;
+        }
+
+        public void setParamGetNumberOfResults(
+                ParamGetNumberOfResults paramGetNumberOfResults) {
+            this.paramGetNumberOfResults = paramGetNumberOfResults;
+        }
+
+        /**
+         *
+         * @return an {@link ResultOfGetNumberOfResults} object that might the
+         * total result found equal to 0.
+         */
+        public ResultOfGetNumberOfResults callGetResultsIds() {
+            ResultOfGetNumberOfResults resultOfGetNumberOfResults=
+                    new ResultOfGetNumberOfResults();
+            int totalFound = eBISearchService.getNumberOfResults(
+                    paramGetNumberOfResults.getDomain()
+                    , paramGetNumberOfResults.getQuery());                 
+                resultOfGetNumberOfResults
+                    .setParamGetNumberOfResults(paramGetNumberOfResults);
+                resultOfGetNumberOfResults.setTotalFound(totalFound);
+            return resultOfGetNumberOfResults;
+        }
+
+        public ResultOfGetNumberOfResults call() throws Exception {
+           return callGetResultsIds();
+        }
+    
+    }
+
+
+//******************************** INNER CLASS *******************************//
+    public static class GetResultsIdCallable
             implements Callable<ResultOfGetResultsIds> {
 
         protected ParamOfGetResultsIds paramOfGetResultsIds;
@@ -52,7 +96,7 @@ public class EBeyeWsCallable {
             String query = paramOfGetResultsIds
                     .getResultOfGetNumberOfResults()
                     .getParamGetNumberOfResults()
-                    .getQuery();           
+                    .getQuery();
             ArrayOfString EbeyeResult = eBISearchService
                     .getResultsIds(domain, query, start, size);
             //result.setResultOfGetNumberOfResults(paramOfGetResultsIds)
@@ -62,44 +106,7 @@ public class EBeyeWsCallable {
         }
 
     }
-
-//******************************** INNER CLASS *******************************//
-    public static class GetNumberOfResultsCallable 
-            implements Callable<ResultOfGetNumberOfResults> {
-        protected ParamGetNumberOfResults paramGetNumberOfResults;
-
-        public GetNumberOfResultsCallable(
-                ParamGetNumberOfResults paramGetNumberOfResults) {
-            this.paramGetNumberOfResults = paramGetNumberOfResults;
-        }
-
-        public ParamGetNumberOfResults getParamGetNumberOfResults() {
-            return paramGetNumberOfResults;
-        }
-
-        public void setParamGetNumberOfResults(
-                ParamGetNumberOfResults paramGetNumberOfResults) {
-            this.paramGetNumberOfResults = paramGetNumberOfResults;
-        }
-
-        public ResultOfGetNumberOfResults callGetResultsIds() {
-            ResultOfGetNumberOfResults
-                    resultOfGetNumberOfResults= new ResultOfGetNumberOfResults();
-            resultOfGetNumberOfResults
-                    .setParamGetNumberOfResults(paramGetNumberOfResults);
-            int totalFound = eBISearchService.getNumberOfResults(
-                    paramGetNumberOfResults.getDomain()
-                    , paramGetNumberOfResults.getQuery());
-            resultOfGetNumberOfResults.setTotalFound(totalFound);
-            return resultOfGetNumberOfResults;
-        }
-
-        public ResultOfGetNumberOfResults call() throws Exception {
-           return callGetResultsIds();
-        }
     
-    }
-
 //******************************** INNER CLASS *******************************//
     public static class GetReferencedEntriesSetCallable
             implements Callable<ResultOfGetReferencedEntriesSet> {
@@ -144,14 +151,17 @@ public class EBeyeWsCallable {
             refSearchResult = eBISearchService
                     .getReferencedEntriesSet(domain, result, "uniprot", resultRefFields);
             if (refSearchResult != null) {
+
                  resultOfGetReferencedEntriesSet.setUniprotXRefList(
                         EBeyeDataTypeConverter
                                 .convertArrayOfEntryReferencesToList(refSearchResult)
                                 );
+                 //Filter out uniprot ids that are not enzymes
             }
         }
          return resultOfGetReferencedEntriesSet;
         }
+
 
     }
 
