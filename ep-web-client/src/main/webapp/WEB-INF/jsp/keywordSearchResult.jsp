@@ -14,7 +14,11 @@
     <c:forEach items="${enzymes}" var="enzyme">
         <p>
           Uniprot id: <c:out value="${enzyme.uniprotid}"/><br>
-          Uniprot accession: <c:out value="${enzyme.uniprotaccession}"/><br>
+          Uniprot accession:
+          <c:forEach items="${enzyme.uniprotaccession}" var="uniprotAcccession">
+              <c:out value="${uniprotAcccession}"/><br>
+          </c:forEach>
+
           Uniprot name: <c:out value="${enzyme.name}"/>
         </p>
     </c:forEach>
