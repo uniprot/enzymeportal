@@ -67,7 +67,7 @@ public class LuceneQueryBuilder {
         while(it.hasNext()) {
             String id = (String)it.next();
             query.append(id);
-            if (counter <id.length()) {
+            if (counter <ids.size()) {
                 query.append(" OR ");
             }
             counter++;
