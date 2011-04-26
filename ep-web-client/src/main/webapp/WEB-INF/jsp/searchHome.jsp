@@ -12,7 +12,7 @@
     </head>
     <body>
         <div id="keywordSearch">
-            <form:form modelAttribute="searchParameters" action="showResults" method="post">
+            <form:form modelAttribute="searchParameters" action="showResults" method="post">                
                 <p>
                     <form:input path="keywords" size="80"/><input type="submit" />
                 </p>
