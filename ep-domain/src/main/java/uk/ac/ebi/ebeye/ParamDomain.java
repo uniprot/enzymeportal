@@ -13,11 +13,14 @@ public class ParamDomain {
 //********************************* VARIABLES ********************************//
 protected String domain;
 
-    public ParamDomain(String domain) {
-        this.domain = domain;
+    public ParamDomain() {
     }
 
 //******************************** CONSTRUCTORS ******************************//
+
+    public ParamDomain(String domain) {
+        this.domain = domain;
+    }
 
 
 //****************************** GETTER & SETTER *****************************//
