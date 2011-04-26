@@ -1,7 +1,5 @@
 package uk.ebi.ac.uk.ep.web;
 
-import java.util.logging.Level;
-import javax.xml.rpc.ServiceException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.parameter.SearchParams;
@@ -53,12 +51,8 @@ public class SearchController {
 
     @RequestMapping(value = "/showResults", method = RequestMethod.POST)
     public String viewSearchResult(SearchParams searchParameters, BindingResult result, Model model) {
-        IEnzymeFinder finder = null;
-        try {
-            finder = new EnzymeFinder();
-        } catch (ServiceException ex) {
-            log.error(ex.getMessage());
-        }
+        IEnzymeFinder finder = new EnzymeFinder();
+        int start = searchParameters.getStart();
         EnzymeSearchResults resultSet = null;
         try {
             resultSet = finder.find(searchParameters);
@@ -66,6 +60,7 @@ public class SearchController {
             log.error("Unable to create the result list because an error " +
                     "has occurred in the find method! \n", ex);
         }
+        //searchParameters.setStart(1);
         model.addAttribute("searchParameters", searchParameters);
         model.addAttribute("enzymeSummaryCollection", resultSet.getEnzymesummarycollection());
         return "searchHome";
