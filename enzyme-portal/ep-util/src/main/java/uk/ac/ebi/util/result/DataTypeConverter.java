@@ -1,7 +1,10 @@
 package uk.ac.ebi.util.result;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
+import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 
 /**
  *
@@ -39,6 +42,59 @@ public class DataTypeConverter {
         }
         return list;
     }
+    /**
+     * Retieve the ids of all domains in the {@link ResultOfGetResultsIds} list
+     * @param resultList
+     * @return
+     */
+    public static List<String> getResultsIds(
+        List<ResultOfGetResultsIds> resultList) {
+        Iterator it = resultList.iterator();
+        List<String> resultsIds = new ArrayList<String>();
+        while (it.hasNext()) {
+            ResultOfGetResultsIds result =
+            (ResultOfGetResultsIds)it.next();
+            resultsIds.addAll(result.getResult().getString());
+        }
+        return resultsIds;
+    }
+
+    public static List<String> getResultsIdsFromDomain(
+        List<ResultOfGetResultsIds> resultList, String domain) {
+        Iterator it = resultList.iterator();
+        List<String> uniprotIdList = new ArrayList<String>();
+        while (it.hasNext()) {
+            ResultOfGetResultsIds result =
+            (ResultOfGetResultsIds)it.next();
+            String resultDomain = result.getParamOfGetResultsIds()
+                    .getResultOfGetNumberOfResults()
+                    .getParamGetNumberOfResults()
+                    .getDomain();
+            if (resultDomain.equals(domain)) {
+                uniprotIdList.addAll(result.getResult().getString());
+            }
+        }
+        return uniprotIdList;
+    }
+
+    public static List<String> getXrefIdsFromDomain(
+            List<ResultOfGetReferencedEntriesSet> xrefResults, String domain) {
+        Iterator it = xrefResults.iterator();
+        while(it.hasNext()) {
+            ResultOfGetReferencedEntriesSet xrefResult =
+                    (ResultOfGetReferencedEntriesSet)it.next();
+            String resultDomain = xrefResult
+                    .getResultOfGetResultsIds()
+                    .getParamOfGetResultsIds()
+                    .getResultOfGetNumberOfResults()
+                    .getParamGetNumberOfResults()
+                    .getDomain();
+            if (resultDomain.equals(domain))
+            return xrefResult.getUniprotXRefList();
+        }
+        return null;
+    }
+
 
     /*
     public static String StringOfAccessionsToXLinks(Constant.DOMAINS_ENUM domains,

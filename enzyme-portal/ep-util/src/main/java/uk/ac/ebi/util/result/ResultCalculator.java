@@ -42,7 +42,14 @@ public static int estimateTotalUniprotXrefs(
             uniprotXrefResults + approxXrefsForNextResults;
     return approxXrefsForTotalResultsPerDomain;
 }
-
+    /**
+     * Calculate the size of the results for the getResultsIds method. Normally
+     * size should be the limit size per query, but if the total found
+     * is smaller than the limit size then the size is equal to the total found
+     * @param totalFound total found resulted from the getNumberOfResults
+     * @param resultSizePerQuery the configured size of results
+     * @return the size to be passed to the getResultsIds
+     */
     public static int calGetResultsIdsSize(int totalFound, int resultSizePerQuery) {
         int resultLimit = 0;
         if (totalFound < resultSizePerQuery) {
@@ -55,6 +62,9 @@ public static int estimateTotalUniprotXrefs(
 
     public static int calTotalResultsFound(
             List<ResultOfGetNumberOfResults> resultList) {
+        if (resultList ==  null) {
+            return 0;
+        }
         Iterator it = resultList.iterator();
         int counter = 0;
         while (it.hasNext()) {
