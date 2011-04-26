@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.JAXBElement;
-import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
+import uk.ac.ebi.ep.search.result.EnzymeSearchResults;
+import uk.ac.ebi.ep.search.result.EnzymeSummary;
+import uk.ac.ebi.ep.search.result.EnzymeSummaryCollection;
+import uk.ac.ebi.ep.search.result.Species;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
@@ -79,5 +82,76 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         }
         return resultList;
     }
+
+    public static ArrayOfString listToArrayOfString(List<String> list) {
+        ArrayOfString arrayOfString = new ArrayOfString();
+        arrayOfString.getString().addAll(list);
+        return arrayOfString;
+    }
+
+
+    public static EnzymeSummary getEntryResultToEnzymeSummary(
+                                                        List<String> resultFields) {
+        EnzymeSummary enzymeSummary= new EnzymeSummary();
+        int counter = 0;
+        for (String field:resultFields) {
+            String resultFieldValue = new String(field);
+            switch (counter) {
+                case 0: {
+                    enzymeSummary.setUniprotid(resultFieldValue);
+                    break;
+                }
+                case 1: {
+                    /*
+                    String accessionXLinks = DataTypeConverter
+                                        .uniprotAccessionsToXLinks(resultFieldValue);
+                     *
+                     */
+                    List accessionList =DataTypeConverter
+                                            .accessionsToList(resultFieldValue.split("\\s"));
+                    enzymeSummary.getUniprotaccessions().addAll(accessionList);
+                    break;
+                }
+                case 2: {
+                    enzymeSummary.setName(resultFieldValue);
+                    break;
+                }
+                case 3: {
+                    String name = enzymeSummary.getName();
+                    if (name.isEmpty() || name==null) {
+                        //descSubName
+                        enzymeSummary.setName(resultFieldValue);
+                    }
+                    break;
+                }
+                case 4: {
+                    Species species = new Species();
+                    species.setScientificname(resultFieldValue);
+                    enzymeSummary.setSpecies(species);
+                    break;
+                }
+            }
+        counter++;
+        }
+
+       return enzymeSummary;
+
+    }
+
+    public static EnzymeSummaryCollection 
+            getEntriesResultsToEnzymeSummaryCollection (
+                                            ArrayOfArrayOfString results) {
+        List<ArrayOfString> resultList = results.getArrayOfString();
+        Iterator it = resultList.iterator();
+        EnzymeSummaryCollection enzymes = new EnzymeSummaryCollection();
+        while (it.hasNext()) {
+            ArrayOfString result = (ArrayOfString)it.next();
+             EnzymeSummary enzymeSummary =
+                     getEntryResultToEnzymeSummary(result.getString());
+                enzymes.getEnzymesummary().add(enzymeSummary);
+        }
+         return enzymes;
+    }
+
 
 }
