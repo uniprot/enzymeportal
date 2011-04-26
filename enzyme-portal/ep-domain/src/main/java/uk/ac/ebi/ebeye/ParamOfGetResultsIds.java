@@ -1,7 +1,5 @@
 package uk.ac.ebi.ebeye;
 
-import uk.ac.ebi.ep.search.parameter.SearchParams;
-
 /**
  *
  * @since   1.0
@@ -15,7 +13,8 @@ public class ParamOfGetResultsIds {
 
 //********************************* VARIABLES ********************************//
     protected ResultOfGetNumberOfResults resultOfGetNumberOfResults;
-        protected SearchParams searchParams;
+    protected int start;
+    protected int size;
     
     
 //******************************** CONSTRUCTORS ******************************//
@@ -24,14 +23,15 @@ public class ParamOfGetResultsIds {
 
     }
 
-    public ParamOfGetResultsIds(ResultOfGetNumberOfResults resultOfGetNumberOfResults, SearchParams searchParams) {
+    public ParamOfGetResultsIds(ResultOfGetNumberOfResults
+                    resultOfGetNumberOfResults, int start, int size) {
         this.resultOfGetNumberOfResults = resultOfGetNumberOfResults;
-        this.searchParams = searchParams;
+        this.size = size;
+        this.start = start;
     }
-
-
-
 //****************************** GETTER & SETTER *****************************//
+
+
     public ResultOfGetNumberOfResults getResultOfGetNumberOfResults() {
         return resultOfGetNumberOfResults;
     }
@@ -40,21 +40,21 @@ public class ParamOfGetResultsIds {
         this.resultOfGetNumberOfResults = resultOfGetNumberOfResults;
     }
 
-    public SearchParams getSearchParams() {
-        return searchParams;
+    public int getSize() {
+        return size;
     }
 
-    public void setSearchParams(SearchParams searchParams) {
-        this.searchParams = searchParams;
+    public void setSize(int size) {
+        this.size = size;
     }
 
+    public int getStart() {
+        return start;
+    }
 
+    public void setStart(int start) {
+        this.start = start;
+    }
 
-
-
-
-
-
-//********************************** METHODS *********************************//
 
 }
