@@ -69,13 +69,17 @@ protected List<String> resultsTobeRanked;
             String id = (String) it.next();
             int score = rankingTable.get(id);
             Set<String> rankingGroup = resultsGroupedByRank.get(score);
-            if (rankingGroup == null) {
-                rankingGroup = new TreeSet<String>();
-                rankingGroup.add(id);                
-            } else {
-                rankingGroup.add(id);                
+            if (id != null) {
+                if (rankingGroup == null) {
+                    rankingGroup = new TreeSet<String>();
+                    rankingGroup.add(id);
+                    resultsGroupedByRank.put(score, rankingGroup);
+                }
+
+                else {
+                    rankingGroup.add(id);
+                }  
             }
-            resultsGroupedByRank.put(score, rankingGroup);
         }
         return resultsGroupedByRank;
     }
