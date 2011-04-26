@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.core.search;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
@@ -10,6 +11,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.EnzymeRelatedDomains;
+import uk.ac.ebi.ep.config.ResultField;
 
 /**
  *
@@ -68,5 +70,15 @@ static {
         return domain;        
     }
 
+        public static List<String> getResultFields(Domain domain) {
+        List<ResultField> fieldList = domain.getResultFieldList().getResultField();
+        Iterator it = fieldList.iterator();
+        List<String> resultRefFields = new ArrayList<String>();
+        while (it.hasNext()) {
+            ResultField field = (ResultField) it.next();
+            resultRefFields.add(field.getId());
+        }
+        return resultRefFields;
+    }
 
 }
