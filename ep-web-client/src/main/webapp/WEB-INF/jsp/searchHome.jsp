@@ -12,23 +12,53 @@
     </head>
     <body>
         <div id="keywordSearch">
-            <form:form modelAttribute="searchParameters" action="showResults" method="post">                
+            <form:form modelAttribute="searchParameters" action="showResults" method="get">
                 <p>
                     <form:input path="keywords" size="80"/><input type="submit" />
                 </p>
             </form:form>
         </div>
-        <div id="keywordSearchResult">            
-            <form:form modelAttribute="enzymeSummaryCollection" action="showResults" method="post">
-                <c:if test="${enzymeSummaryCollection.enzymesummary!=null}">
-                About <c:out value="${enzymeSummaryCollection.totalfound}"/> results found
-                <table border="1">
+    <div id="keywordSearchResult">
+      <form:form modelAttribute="enzymeSummaryCollection" action="showResults" method="get">
+        <c:set var="totalfound" value="${enzymeSummaryCollection.totalfound}"/>
+        <c:if test="${totalfound==0}">
+            No results found!
+        </c:if>
+         <c:if test="${enzymeSummaryCollection.enzymesummary!=null && enzymeSummaryCollection.totalfound>0}">
+             <table width="100%"><tr><td width="30%">
+About <c:out value="${totalfound}"/> results found
+                     </td><td width="20%"></td>
+                     <td width="50%">
+            <form:form modelAttribute="pagination">
+                <c:set var="totalPages" value="${pagination.totalPages}"/>
+                <c:set var="maxPages" value="${totalPages}"/>
+                <c:if test="${totalPages>pagination.maxDisplayedPages}">
+                    <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
+                    <c:set var="showNextButton" value="${true}"/>
+                </c:if>
+                <c:forEach var="i" begin="1" end="${maxPages}">
+                  <c:set var="start" value="${(i-1)*pagination.numberResultsPerPage}"/>
+                  <a href="showResults?keywords=${searchParameters.keywords}&start=${start}">
+                      <c:out value="${i}"/>
+                  </a>
+                  &nbsp;
+              </c:forEach>
+                <c:if test="${showNextButton==true}">
+                  <a href="showResults?keywords=${searchParameters.keywords}&start=${pagination.start+pagination.numberResultsPerPage}">
+                      next
+                  </a>
+                </c:if>
+            </form:form>
+
+                     </td></tr></table>
+                
+                <table border="1"  width="100%">
                     <thead>
                         <tr>
-                            <td>Id</td>
-                            <td width="500">Accessions</td>
-                            <td>Name</td>
-                            <td>Species</td>
+                            <td width="10%">Id</td>
+                            <td width="30%">Accessions</td>
+                            <td width="30%">Name</td>
+                            <td width="30%">Species</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,9 +67,11 @@
                             <td><c:out value="${enzyme.uniprotid}"/></td>
                             <td>
                               <c:forEach items="${enzyme.uniprotaccessions}" var="uniprotAcccession">
+                                  <!--TODO make the url base configured-->
                                   <a href="http://www.uniprot.org/uniprot/${uniprotAcccession}" target="blank">
                                       <c:out value="${uniprotAcccession}"/>
                                   </a>
+                                  &nbsp;
                               </c:forEach>                                
                             </td>
                             <td><c:out value="${enzyme.name}"/></td>
@@ -48,7 +80,8 @@
                         </c:forEach>
                     </tbody>
                 </table>
-                </c:if>
+    </c:if>
+
                 <!--
                 <c:forEach items="${enzymes}" var="enzyme">
                     <p>
@@ -65,7 +98,8 @@
                     </p>
                 </c:forEach>
                 -->
-            </form:form>
-        </div>
+          
+    </form:form>
+      </div>
     </body>
 </html>
