@@ -79,6 +79,7 @@ public class DataTypeConverter {
 
     public static List<String> getXrefIdsFromDomain(
             List<ResultOfGetReferencedEntriesSet> xrefResults, String domain) {
+         List<String> result = new ArrayList<String>();
         Iterator it = xrefResults.iterator();
         while(it.hasNext()) {
             ResultOfGetReferencedEntriesSet xrefResult =
@@ -89,10 +90,11 @@ public class DataTypeConverter {
                     .getResultOfGetNumberOfResults()
                     .getParamGetNumberOfResults()
                     .getDomain();
-            if (resultDomain.equals(domain))
-            return xrefResult.getUniprotXRefList();
+            if (resultDomain.equals(domain)) {
+                result = xrefResult.getUniprotXRefList();
+            }
         }
-        return null;
+        return result;
     }
 
 
