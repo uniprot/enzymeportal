@@ -28,7 +28,7 @@
         </configuration>
       </plugin>
     </plugins>
-    <finalName>EnzymePortalWebClient</finalName>
+    <finalName>EnzymePortalWebClientTest100</finalName>
   </build>
   <dependencies>
     <dependency>
