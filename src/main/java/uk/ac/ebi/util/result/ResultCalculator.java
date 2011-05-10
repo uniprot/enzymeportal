@@ -50,6 +50,7 @@ public static int estimateTotalUniprotXrefs(
      * @param resultSizePerQuery the configured size of results
      * @return the size to be passed to the getResultsIds
      */
+/*
     public static int calGetResultsIdsSize(int totalFound, int resultSizePerQuery) {
         int resultLimit = 0;
         if (totalFound < resultSizePerQuery) {
@@ -59,7 +60,7 @@ public static int estimateTotalUniprotXrefs(
         }
         return resultLimit;
     }
-
+*/
     public static int calTotalResultsFound(
             List<ResultOfGetNumberOfResults> resultList) {
         if (resultList ==  null) {
