@@ -77,6 +77,25 @@ public class DataTypeConverter {
         return uniprotIdList;
     }
 
+    public static List<ResultOfGetResultsIds> excludeDomainFromResults(
+        List<ResultOfGetResultsIds> resultList, String domain) {
+        Iterator it = resultList.iterator();
+        List<ResultOfGetResultsIds> uniprotIdList =
+                        new ArrayList<ResultOfGetResultsIds>();
+        while (it.hasNext()) {
+            ResultOfGetResultsIds result =
+            (ResultOfGetResultsIds)it.next();
+            String resultDomain = result.getParamOfGetResultsIds()
+                    .getResultOfGetNumberOfResults()
+                    .getParamGetNumberOfResults()
+                    .getDomain();
+            if (!resultDomain.equals(domain)) {
+                uniprotIdList.add(result);
+            }
+        }
+        return uniprotIdList;
+    }
+
     public static List<String> getXrefIdsFromDomain(
             List<ResultOfGetReferencedEntriesSet> xrefResults, String domain) {
          List<String> result = new ArrayList<String>();
