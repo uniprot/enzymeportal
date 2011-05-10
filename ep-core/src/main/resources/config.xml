@@ -88,7 +88,16 @@
         <id>acc</id>
       </SearchField>
       <SearchField>
-        <id>id </id>
+        <id>id</id>
+      </SearchField>
+      <SearchField>
+        <id>description</id>
+      </SearchField>
+      <SearchField>
+        <id>keywords</id>
+      </SearchField>
+      <SearchField>
+        <id>name</id>
       </SearchField>
     </SearchFieldList>
   </Domain>

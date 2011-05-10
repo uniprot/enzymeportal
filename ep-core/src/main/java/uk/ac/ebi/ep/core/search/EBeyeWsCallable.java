@@ -56,7 +56,7 @@ public class EBeyeWsCallable {
          * @return an {@link ResultOfGetNumberOfResults} object that might the
          * total result found equal to 0.
          */
-        public ResultOfGetNumberOfResults callGetResultsIds() {
+        public ResultOfGetNumberOfResults callGetNumberOfResultsIds() {
             ResultOfGetNumberOfResults resultOfGetNumberOfResults=
                     new ResultOfGetNumberOfResults();
             int totalFound = eBISearchService.getNumberOfResults(
@@ -69,7 +69,7 @@ public class EBeyeWsCallable {
         }
 
         public ResultOfGetNumberOfResults call() throws Exception {
-           return callGetResultsIds();
+           return callGetNumberOfResultsIds();
         }
     
     }
@@ -148,10 +148,9 @@ public class EBeyeWsCallable {
                 .getParamOfGetResultsIds()
                 .getResultOfGetNumberOfResults()
                 .getParamGetNumberOfResults()
-                .getDomain();
-        //TODO uniprot should not be hardcoded
+                .getDomain();        
         ArrayOfEntryReferences refSearchResult = null;
-        if (!domain.equals("uniprot")) {
+        //if (!domain.equals("uniprot")) {
             refSearchResult = eBISearchService
                     .getReferencedEntriesSet(domain, result, "uniprot", resultRefFields);
             if (refSearchResult != null) {
@@ -162,7 +161,7 @@ public class EBeyeWsCallable {
                                 );
                  //Filter out uniprot ids that are not enzymes
             }
-        }
+        //}
          return resultOfGetReferencedEntriesSet;
         }
 
@@ -237,5 +236,6 @@ public class EBeyeWsCallable {
             }
 */
     }
+
 
 }
