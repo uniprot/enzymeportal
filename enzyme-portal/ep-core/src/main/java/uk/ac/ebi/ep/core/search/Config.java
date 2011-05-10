@@ -9,9 +9,17 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
+import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
+import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.EnzymeRelatedDomains;
 import uk.ac.ebi.ep.config.ResultField;
+import uk.ac.ebi.ep.core.search.EBeyeWsCallable.GetNumberOfResultsCallable;
+import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
+import uk.ac.ebi.ep.search.parameter.SearchParams;
+import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
+import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**
  *
@@ -80,5 +88,20 @@ static {
         }
         return resultRefFields;
     }
+
+    public static void main(String[] args) throws EnzymeFinderException {
+        ParamGetNumberOfResults param = new ParamGetNumberOfResults(
+                EnzymeFinder.UNIPROT_DOMAIN, LuceneQueryBuilder.ENZYME_FILTER);
+        GetNumberOfResultsCallable caller = new GetNumberOfResultsCallable(param);
+        ResultOfGetNumberOfResults results = caller.callGetNumberOfResultsIds();
+        int totalFound = results.getTotalFound();
+        EnzymeFinder finder = new EnzymeFinder();
+        List<ResultOfGetNumberOfResults> list = new ArrayList<ResultOfGetNumberOfResults>();
+        list.add(results);
+        List<ResultOfGetResultsIds> ids = finder.getResultsIds(list);
+        DataTypeConverter.getResultsIds(ids);
+        System.out.print(ids);
+    }
+
 
 }
