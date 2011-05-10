@@ -14,6 +14,17 @@ public class SearchParams {
     protected int start;
     protected int size;
 
+    public SearchParams() {
+    }
+
+    
+    public SearchParams(String keywords, int start, int size) {
+        this.keywords = keywords;
+        this.start = start;
+        this.size = size;
+    }
+
+
     public String getKeywords() {
         return keywords;
     }
