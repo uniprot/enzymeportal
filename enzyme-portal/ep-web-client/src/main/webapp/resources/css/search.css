@@ -1,0 +1,318 @@
+/* 
+    Document   : ${name}
+    Created on : ${date}, ${time}
+    Author     : ${user}
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+#species a{
+	color: #207a7a;
+	text-decoration: underline;
+}
+.search {
+    padding: 5px 0px;
+    background: #fff; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dedede', endColorstr='#ffffff'); /* for IE */
+    background: -moz-linear-gradient(center top, #dedede, #ffffff);
+    background: -webkit-gradient(linear, left top, left bottom, from(#dedede), to(#ffffff)); /* for webkit browsers */
+    margin-top: 5px;
+    min-height: 50px;
+    text-align:center;
+}
+
+.content {
+    min-height: 700px;
+}
+
+.field {
+    width: 500px;
+    font-size: 120%;
+    padding: 5px;
+    margin:0px auto;
+    border-radius: 15px 15px 15px 15px;;
+    -moz-border-radius: 15px 15px 15px 15px;;
+    -webkit-border-radius: 15px 15px 15px 15px;;
+}
+.button {
+    display: inline-block;
+    position: relative;
+    margin: 2px auto 5px auto;
+    padding: 4px 5px;
+    font-size: 130%;
+    background: #ddd;
+    color: #72B55F;
+    vertical-align: center;
+    border: 1px solid #777;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+
+#tnt_pagination {
+    float: left;
+    display:block;
+    max-height: 40px;
+    line-height:21px;
+    text-align: center;
+    width: 40%;
+}
+
+#tnt_pagination a:link, #tnt_pagination a:visited{
+    padding:7px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border:1px solid #EBEBEB;
+    margin-left:5px;
+    background-color:#F5F5F5;
+    color:#207A7A;
+    width:22px;
+    font-weight:normal;
+    text-decoration: underline;    
+}
+
+#tnt_pagination a:hover {
+    background-color:#ddd;
+    border:1px solid #207A7A;
+    color:#207A7A;
+}
+
+#tnt_pagination .active_tnt_link {
+    padding:7px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border:1px solid #BBDDFF;
+    margin-left:5px;
+    text-decoration:none;
+    background-color:#DDEEFF;
+    color:#207A7A;
+    cursor:default;
+}
+
+#tnt_pagination .disabled_tnt_pagination {
+    padding:7px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border:1px solid #EBEBEB;
+    margin-left:10px;
+    text-decoration:none;
+    background-color:#F5F5F5;
+    color:#D7D7D7;
+    cursor:default;
+}
+
+.filter  {
+    float:left;
+    margin-left:2px;
+    margin-right:2px;
+    width:20%;
+    padding: 4px 4px;
+    margin-top: 5px;
+    height: 100%;
+    /*border: 2px solid #ddd;*/
+    /*
+    -moz-border-radius: 15px 15px 15px 15px;
+    border-radius:15px 15px 15px 15px;
+    -webkit-border-radius:15px 15px 15px 15px;
+    */
+}
+
+.filter .sublevel1 {
+    margin-top: 10px;
+    min-height: 100px;
+    max-height: 180px;
+    border: 1px solid #ddd;    
+    -moz-border-radius: 8px 8px 8px 8px;
+    border-radius:8px 8px 8px 8px;
+    -webkit-border-radius:8px 8px 8px 8px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.filter .sublevel1 .content {    
+    width: 100%;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin-left: 2px;
+    margin-right: 2px;
+    line-height: 18pt;
+}
+.filter .sublevel1 .content .text {
+    float: left;
+    width: 70%;
+}
+
+.filter .sublevel1 .content .text .otherName {
+    font-size: 8pt;
+    font-style: italic;    
+}
+.filter .sublevel1 .content .checkItem {
+    vertical-align: top;
+    float: right;
+    width: 10%;
+    margin-right: 10px;
+}
+
+.result  {
+    float:left;
+    margin-left:2px;
+    margin-right:0px;
+    width:78%;
+    padding: 2px 2px;
+    margin-top: 5px;
+    min-height: 700px;
+}
+
+.title {
+    height: 20px;
+    font-weight: bold;
+    color: #408C8C;
+    /*border-bottom: 1px solid #ddd;*/
+}
+
+.subTitle {
+    padding: 4px 4px;
+    height: 20px;
+    font-weight: bold;
+    color: #408C8C;
+    -moz-border-radius: 8px 8px 8px 8px;
+    border-radius:8px 8px 8px 8px;
+    -webkit-border-radius:8px 8px 8px 8px;
+    background: #fff; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dedede', endColorstr='#ffffff'); /* for IE */
+    background: -moz-linear-gradient(center top, #dedede, #ffffff);
+    background: -webkit-gradient(linear, left top, left bottom, from(#dedede), to(#ffffff)); /* for webkit browsers */
+
+}
+
+
+/*search result text: Total found*/
+.resultText {
+    float:left;
+    height: 20px;
+    width:40%;
+}
+
+.comparison {
+    font-weight: bold;
+    color: #408C8C;
+    float:right;
+    max-height: 40px;
+    width:19%;
+}
+
+#allButtons {
+    margin-top: -4px;
+    margin-bottom: -6px;
+    float: right;
+}
+
+#buttonItems {
+    float: right;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+    height: 100px;    
+    width: 19%;
+}
+
+.resultContent {
+    padding-top: 10px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    width: 100%
+}
+
+.line {
+    margin-bottom: 5px;
+    max-height: 2px;
+    border-bottom: 1px solid #ddd;
+}
+
+.resultItem {
+    float: left;
+    -moz-border-radius: 15px 15px 15px 15px;
+    border-radius:15px 15px 15px 15px;
+    -webkit-border-radius:15px 15px 15px 15px;
+    border: 1px solid #ddd ;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 5px;
+    vertical-align: top;
+    height: 100px;
+    width: 76%;
+}
+
+#proteinImg {
+    float: left;
+    width: 18%;
+    height: 90px;   
+}
+
+#desc {
+    float: left;
+    text-align: left;
+    width: 60%;
+}
+
+#in {
+    float: left;
+    width: 2%;
+    margin-left: 10px;
+}
+
+#species {
+    float: right;
+    width: 15%;
+}
+
+.basket{
+    float: right;        
+}
+
+.basket #compareButton {
+    font-weight: bold;
+    height: 22px;
+    margin-bottom: 0px;
+}
+
+
+/*
+.right  {
+    float:right;
+    margin-left:2px;
+    margin-right:0px;
+    width:15%;
+    padding: 2px 2px;
+    margin-top: 5px;
+    min-height: 700px;
+}
+
+.right  .line {
+    margin-bottom: 2px;
+    max-height: 2px;
+    border-bottom: 1px solid #ddd;
+}
+#allButtons {
+    margin-bottom: -8px;
+}
+
+#buttonItems {    
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+    height: 100px;
+}
+
+*/
