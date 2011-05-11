@@ -90,17 +90,32 @@ static {
     }
 
     public static void main(String[] args) throws EnzymeFinderException {
-        ParamGetNumberOfResults param = new ParamGetNumberOfResults(
-                EnzymeFinder.UNIPROT_DOMAIN, LuceneQueryBuilder.ENZYME_FILTER);
-        GetNumberOfResultsCallable caller = new GetNumberOfResultsCallable(param);
-        ResultOfGetNumberOfResults results = caller.callGetNumberOfResultsIds();
-        int totalFound = results.getTotalFound();
-        EnzymeFinder finder = new EnzymeFinder();
-        List<ResultOfGetNumberOfResults> list = new ArrayList<ResultOfGetNumberOfResults>();
-        list.add(results);
-        List<ResultOfGetResultsIds> ids = finder.getResultsIds(list);
-        DataTypeConverter.getResultsIds(ids);
-        System.out.print(ids);
+        String[] queryArray = {
+            "EC:(1 OR 1.1* OR 1.2* OR 1.3*)"
+            ,"EC:(1.4* OR 1.5* OR 1.6* OR 1.7* OR 1.8*)"
+            ,"EC:(1.9*)"
+            ,"EC:(2 OR 2.1* OR 2.2* OR 2.3* OR 2.4*)"
+            ,"EC:(2.5* OR 2.6* OR 2.8* OR 2.9*)"
+            ,"EC:(2.7* NOT 2.7.7*)"
+            ,"EC:(2.7.7* OR 3 OR 3.1* OR 3.2*)"
+            ,"EC:(3.3* OR 3.4* OR 3.5* OR 3.6* OR 3.7* OR 3.8* OR 3.9*)"
+            ,"EC:(4*)"
+            ,"EC:(5*)"
+            ,"EC:(6* OR 7* OR 8* OR 9*)"
+        };
+        List<ParamGetNumberOfResults> queryList = new
+                ArrayList<ParamGetNumberOfResults>();
+        for (String query: queryArray) {
+            ParamGetNumberOfResults param = new ParamGetNumberOfResults(
+                    EnzymeFinder.UNIPROT_DOMAIN, query);
+            queryList.add(param);
+        }
+        IEnzymeFinder finder = new EnzymeFinder();
+        List<ResultOfGetNumberOfResults> nrOfResultsList =
+        finder.getNumberOfResults(queryList);
+        List<ResultOfGetResultsIds> resultList = finder.getResultsIds(nrOfResultsList);
+        List<String> idList = DataTypeConverter.getResultsIds(resultList);
+        //System.out.print(idList);
     }
 
 

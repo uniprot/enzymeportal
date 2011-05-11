@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ebeye.ParamGetEntries;
 import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
+import uk.ac.ebi.ebeye.ParamOfGetResults;
 import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
 import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
 import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
-import uk.ac.ebi.ep.search.result.EnzymeSummaryCollection;
+import uk.ac.ebi.ep.config.Domain;
+import uk.ac.ebi.ep.config.ResultFieldList;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
 import uk.ac.ebi.util.result.EBeyeDataTypeConverter;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
@@ -236,6 +239,43 @@ public class EBeyeWsCallable {
             }
 */
     }
+
+//******************************** INNER CLASS *******************************//
+    public static class GetResultsCallable
+            implements Callable<List<ResultFieldList>> {
+
+        protected ParamOfGetResults paramOfGetResults;
+
+        public GetResultsCallable(ParamOfGetResults paramOfGetResults) {
+            this.paramOfGetResults = paramOfGetResults;
+        }
+
+        public List<ResultFieldList> call() throws Exception {
+            return callGetResults();
+        }
+
+        public List<ResultFieldList> callGetResults() {
+            String domain = paramOfGetResults.getDomain();
+            Domain domainObj = Config.getDomain(domain);
+            ArrayOfString fields = EBeyeDataTypeConverter
+                                    .createEbeyeFieldArray(domainObj);
+
+            int start = paramOfGetResults.getStart();
+            int size = paramOfGetResults.getSize();
+
+            String query = paramOfGetResults.getQuery();
+            ArrayOfArrayOfString EbeyeResult = eBISearchService
+                    .getResults(domain, query, fields, start, size);
+                    //.getResultsIds(domain, query, start, size);
+            //result.setResultOfGetNumberOfResults(paramOfGetResultsIds)
+            List<ResultFieldList> results =
+            EBeyeDataTypeConverter.setResultsValues(
+                    domainObj.getResultFieldList(), EbeyeResult);
+            return results;
+        }
+
+    }
+
 
 
 }
