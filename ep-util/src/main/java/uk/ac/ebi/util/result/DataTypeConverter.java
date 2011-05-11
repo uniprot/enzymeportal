@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
+import uk.ac.ebi.ep.config.ResultField;
+import uk.ac.ebi.ep.config.ResultFieldList;
 
 /**
  *
@@ -116,6 +118,20 @@ public class DataTypeConverter {
         return result;
     }
 
+    public static ResultFieldList cloneResultFieldList(ResultFieldList originalObj) {
+        ResultFieldList clonedObj = new ResultFieldList();
+        Iterator clonedIt = clonedObj.getResultField().iterator();
+        Iterator orgIt = originalObj.getResultField().iterator();
+        while (orgIt.hasNext() && clonedIt.hasNext()) {
+            ResultField clonedResultField = (ResultField)clonedIt.next();
+            ResultField orgResultField = (ResultField)orgIt.next();
+            clonedResultField.setId(orgResultField.getId());
+            clonedResultField.setName(orgResultField.getName());
+            clonedResultField.setResultvalue(orgResultField.getResultvalue());
+            clonedObj.getResultField().add(clonedResultField);
+        }
+        return clonedObj;
+    }
 
     /*
     public static String StringOfAccessionsToXLinks(Constant.DOMAINS_ENUM domains,

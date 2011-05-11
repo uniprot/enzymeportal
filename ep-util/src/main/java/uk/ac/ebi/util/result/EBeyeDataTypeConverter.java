@@ -6,10 +6,10 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
-import uk.ac.ebi.ep.search.result.EnzymeSearchResults;
-import uk.ac.ebi.ep.search.result.EnzymeSummary;
-import uk.ac.ebi.ep.search.result.EnzymeSummaryCollection;
-import uk.ac.ebi.ep.search.result.Species;
+import uk.ac.ebi.ep.config.ResultFieldList;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
+import uk.ac.ebi.ep.search.result.jaxb.Species;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
@@ -39,7 +39,7 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         }
         return resultRefFields;
     }
-
+    
     public static String convertArrayOfStringToString(ArrayOfString arrayOfString) {
         if (arrayOfString == null) {
             return null;
@@ -153,5 +153,34 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
          return enzymes;
     }
 
+
+    public static List<ResultFieldList> setResultsValues( 
+            ResultFieldList resultFieldList
+            , ArrayOfArrayOfString results) {
+        //ResultFieldList resultFieldList = domain.getResultFieldList();
+        List<ResultFieldList> resultsValues = new ArrayList<ResultFieldList>();
+        List<ArrayOfString> resultList = results.getArrayOfString();
+        Iterator it = resultList.iterator();
+        while (it.hasNext()) {
+            ArrayOfString result = (ArrayOfString)it.next();
+            ResultFieldList clonedObj =
+                    DataTypeConverter.cloneResultFieldList(resultFieldList);
+            setResultValues(clonedObj, result);
+            resultsValues.add(clonedObj);
+        }
+        return resultsValues;
+    }
+
+    public static void setResultValues(ResultFieldList resultFieldList
+            , ArrayOfString result) {
+        List<String> values = result.getString();
+        Iterator itField = resultFieldList.getResultField().iterator();
+        Iterator itResult = values.iterator();
+        while (itField.hasNext() && itResult.hasNext()) {
+            ResultField resultField = (ResultField)itField.next();
+            String value = (String)itResult.next();
+            resultField.setResultvalue(value);
+        }
+    }
 
 }
