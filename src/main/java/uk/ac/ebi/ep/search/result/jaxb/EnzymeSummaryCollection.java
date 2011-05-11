@@ -6,8 +6,9 @@
 //
 
 
-package uk.ac.ebi.ep.search.result;
+package uk.ac.ebi.ep.search.result.jaxb;
 
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;

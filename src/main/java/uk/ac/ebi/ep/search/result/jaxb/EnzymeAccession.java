@@ -6,28 +6,29 @@
 //
 
 
-package uk.ac.ebi.ep.search.result;
+package uk.ac.ebi.ep.search.result.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for CompoundEnzyme complex type.
+ * <p>Java class for EnzymeAccession complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="CompoundEnzyme">
+ * &lt;complexType name="EnzymeAccession">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="compound" type="{http://ebi.ac.uk/enzymeportal/enzymes}Compound"/>
- *         &lt;element name="uniprotids" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
+ *         &lt;element name="uniprotaccessions" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
+ *         &lt;element name="species" type="{http://ebi.ac.uk/enzymeportal/enzymes}Species"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,54 +38,33 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CompoundEnzyme", propOrder = {
-    "compound",
-    "uniprotids"
+@XmlType(name = "EnzymeAccession", propOrder = {
+    "uniprotaccessions",
+    "species"
 })
-public class CompoundEnzyme {
+@XmlSeeAlso({
+    EnzymeSummary.class
+})
+public class EnzymeAccession {
 
     @XmlElement(required = true)
-    protected Compound compound;
+    protected List<String> uniprotaccessions;
     @XmlElement(required = true)
-    protected List<String> uniprotids;
+    protected Species species;
 
     /**
-     * Gets the value of the compound property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Compound }
-     *     
-     */
-    public Compound getCompound() {
-        return compound;
-    }
-
-    /**
-     * Sets the value of the compound property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Compound }
-     *     
-     */
-    public void setCompound(Compound value) {
-        this.compound = value;
-    }
-
-    /**
-     * Gets the value of the uniprotids property.
+     * Gets the value of the uniprotaccessions property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the uniprotids property.
+     * This is why there is not a <CODE>set</CODE> method for the uniprotaccessions property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getUniprotids().add(newItem);
+     *    getUniprotaccessions().add(newItem);
      * </pre>
      * 
      * 
@@ -94,11 +74,35 @@ public class CompoundEnzyme {
      * 
      * 
      */
-    public List<String> getUniprotids() {
-        if (uniprotids == null) {
-            uniprotids = new ArrayList<String>();
+    public List<String> getUniprotaccessions() {
+        if (uniprotaccessions == null) {
+            uniprotaccessions = new ArrayList<String>();
         }
-        return this.uniprotids;
+        return this.uniprotaccessions;
+    }
+
+    /**
+     * Gets the value of the species property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Species }
+     *     
+     */
+    public Species getSpecies() {
+        return species;
+    }
+
+    /**
+     * Sets the value of the species property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Species }
+     *     
+     */
+    public void setSpecies(Species value) {
+        this.species = value;
     }
 
 }

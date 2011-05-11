@@ -6,8 +6,16 @@
 //
 
 
-package uk.ac.ebi.ep.search.result;
+package uk.ac.ebi.ep.search.result.jaxb;
 
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSearchResults;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeAccession;
+import uk.ac.ebi.ep.search.result.jaxb.DiseaseEnzyme;
+import uk.ac.ebi.ep.search.result.jaxb.Disease;
+import uk.ac.ebi.ep.search.result.jaxb.CompoundEnzyme;
+import uk.ac.ebi.ep.search.result.jaxb.Compound;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
