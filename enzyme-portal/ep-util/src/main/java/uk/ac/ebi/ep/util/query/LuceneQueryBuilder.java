@@ -20,7 +20,7 @@ public class LuceneQueryBuilder {
             "EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7*)";
     public static final int EBEYE_MAX_RESULTS_PER_QUERY = 100;
     //133343 results does not pass the load test
-    public static final int MAX_RESULTS = 100000;
+    //public static final int MAX_RESULTS = 100000;
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
@@ -151,9 +151,12 @@ public class LuceneQueryBuilder {
                         );
                     paramOfGetResultsIdsList.add(paramOfGetResultsIds);
                     start = start+resultSize;
+                    /*
                     if (start > MAX_RESULTS) {
                         break;
                     }
+                     * 
+                     */
                 }
             }
         }
