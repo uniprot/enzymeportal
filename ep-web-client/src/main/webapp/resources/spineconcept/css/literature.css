@@ -1,0 +1,97 @@
+/* Literature specific */
+.literature .category {
+	margin-bottom: 20px;
+}
+
+.literature h2 {
+	z-index: 1;
+	display: block;
+	position: relative;
+	border-bottom-color: #366999;
+	text-shadow: 1px 1px 2px #ddd;
+}
+
+.literature h2 a {
+	color: #366999;
+}
+.literature ol {
+	margin: 7px 0;
+}
+
+.literature ol li {
+	list-style: none;
+	margin: 0;
+}
+
+.literature .category  .pub_title a {
+	text-decoration: underline;
+	font-weight: bold;
+	font-size: 110%;
+}
+
+.literature .category  .pub_authors {
+	
+}
+
+.literature .category  .pub_info {
+	margin-bottom: 10px;
+	font-style: italic;
+}
+
+.literature a#mainLink {
+	float: right;
+	clear: none;
+	bottom: 5px;
+	right: 5px;
+	position: absolute;
+	bottom: 5px;
+}
+
+.literature .category_link {
+	background: 2px 5px
+		url('../images/external-link.png')
+		no-repeat transparent;
+	padding: 0px 0px 0px 15px;
+	position: relative;
+	display: block;
+	text-decoration: underline;
+}
+
+.literature .category h2 div.help {
+	float: right;
+	cursor: help;
+	display: block;
+	position: relative;
+}
+
+.literature .category h2 div.help img {
+	padding: 0;
+	margin: -2px -2px 0 0;
+	display: block;
+	position: relative;
+}
+
+.literature .category h2 div.help span {
+	display: none;
+}
+
+.literature .category h2 div.help:hover span {
+	display: block;
+	width: 600px;
+	position: absolute;
+	right: 5px;
+	-moz-box-shadow: 0 3px 6px rgba(0, 0, 0, .25);
+	-webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .25);
+	box-shadow: 0 3px 6px rgba(0, 0, 0, .25);
+	background-color: #fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px solid #a7b8c1;
+	padding: 5px;
+	font-size: 10pt;
+	font-style: italic;
+	text-shadow: none;
+	color: #555;
+	z-index: 20;
+}

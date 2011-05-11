@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<wicket:head>
+			<wicket:link>
+		<link media="screen" href="css/960gs/reset.css" type="text/css" rel="stylesheet" />
+		<link media="screen" href="css/960gs/text.css" type="text/css" rel="stylesheet" />
+		<link media="screen" href="css/960gs/960.css" type="text/css" rel="stylesheet" />
+		<link media="screen" href="css/common.css" type="text/css" rel="stylesheet" />
+		<link media="screen" href="css/summary.css" type="text/css" rel="stylesheet" />
+		<link media="screen" href="css/literature.css" type="text/css" rel="stylesheet" />
+		<link media="screen" href="css/species.css" type="text/css" rel="stylesheet" />
+		<link media="screen" href="javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />	
+		<script src="javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+		<script src="javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
+		<script src="javascript/summary.js" type="text/javascript"></script>
+			</wicket:link>
+		</wicket:head>
+		<title wicket:id="pageTitle">Gene &amp; Protein Summary</title>
+	</head>
+	<body>
+		<div class="page container_12">
+			<div class="grid_12">
+				<div class="master">
+					<a class="logo" href="http://www.ebi.ac.uk" title="Link to the EBI website"><img src="images/logo.png" alt="EBI logo" wicket:id="logo" /></a>
+					<div class="form" wicket:id="searchForm">
+						<form>
+							<input class="field" type="text" value="toto" />
+							<input class="button" type="submit" value="Search" />
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="grid_12">
+				<div class="breadcrumbs" wicket:id="breadcrumbs">
+					<ul>
+						<li class="first"><a href="">EBI</a></li>
+						<li><a href="">Search BLA</a></li>
+						<li><a href="">Identification BLA</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="grid_12">
+				<h1 wicket:id="title">Gene &amp; Protein Summary</h1>
+			</div>
+			<div class="grid_12 header"  style="">
+				<div class="container_12">
+					<div class="grid_4 prefix_4 suffix_3 alpha">
+						<div wicket:id="classification">
+							<div class="classification">
+								<div class="label">ORGANISMS</div>
+								<div class="box selected Homo_sapiens">
+									<span class="name">Human</span>
+									<span class="extra">Homo sapiens</span>
+								</div>
+							</div>
+							<div class="selection">
+								<ul>
+									<li class="selected">
+										<div class="box Homo_sapiens">
+											<span class="name">Human</span>
+											<span class="extra">Homo sapiens</span>
+										</div>
+									</li>
+									<li>
+										<div class="box Mus_musculus">
+											<span class="name">House mouse</span>
+											<span class="extra">Mus musculus</span>
+										</div>
+									</li>
+									<li>
+										<a href="MultiReferencePage.html">
+											<span>
+												<span class="box Rattus_norvegicus">
+													<span class="name">Rat</span>
+													<span class="extra">Rattus norvegicus</span>
+												</span>
+												<span class="cardinality">x2</span>
+											</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="grid_1 omega">
+						<div class="menu">
+							<a href="http://www.ebi.ac.uk/inc/help/search_help.html" class="help">Help</a>
+							<a href="" wicket:id="print" class="print"><span wicket:id="printLabel">Print</span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="grid_12">
+				<div wicket:id="reference" class="content">
+					<div class="column1">
+						<ul>
+							<li class="tab gene">
+								<a href="">
+									<span class="inner_tab">
+										<span class="icon"></span>
+										<span class="label">Gene</span>
+									</span>
+								</a>
+							</li>
+							<li class="tab expression selected">
+								<span class="inner_tab">
+									<span class="icon"></span>
+									<span class="label">Expression</span>
+								</span>
+							</li>
+							<li class="tab protein">
+								<a href="">
+									<span class="inner_tab">
+										<span class="icon"></span>
+										<span class="label">Protein</span>
+									</span>
+								</a>
+							</li>
+							<li class="tab structure">
+								<a href="">
+									<span class="inner_tab">
+										<span class="icon"></span>
+										<span class="label">Protein Structure</span>
+									</span>
+								</a>
+							</li>
+							<li class="tab literature">
+								<a href="">
+									<span class="inner_tab">
+										<span class="icon"></span>
+										<span class="label">Literature</span>
+									</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="column2">
+						<div class="node">
+							<div class="networks">
+								<ul>
+									<li class="selected">BRCA1</li>
+									<li><a href="" title="This is the title for BRCA2">BRCA2</a></li>
+									<li><a href="" title="This is the title for BRCA3">BRCA3</a></li>
+								</ul>
+							</div>
+							<div class="view">
+								<div class="references">
+									<div class="button">2 other protein structures</div>
+									<table>
+										<tr class="selected"><td><a href="">3eu7</a></td><td>Crystal Structure of a PALB2 / BRCA2 complex</td></tr>
+										<tr><td><a href="">1n0w</a></td><td>Crystal Structure of a RAD51-BRCA2 BRC repeat complex</td></tr>
+									</table>
+								</div>
+								<div class="summary">
+									<h2>Triosephosphate isomerase 12</h2>
+									<div class="main_link">
+										<a href="">View in Ensembl</a>
+									</div>
+									
+									<div class="image">
+										<a href="" rel="external">
+											<img src="http://www.ebi.ac.uk/gxa/anatomogram/ENSG00000111669.png"></img>
+											<span class="caption">This is the legend for this particular image.</span>
+										</a>
+									</div>
+									<dl>
+										<dt>Gene Information and Sequence</dt>
+										<dd>
+											<ul>
+												<li>TPI1 spans 3829 bps of chromosome 12 from 6976283 to 6980112.</li>
+												<li>TPI1 has 8 transcripts containing a total of 26 exons on the forward strand.</li>
+												<li>Gene containing both Ensembl genebuild transcripts and Havana manual curation, see article.</li>
+											</ul>
+										</dd>
+									</dl>
+									<dl>
+										<dt>Variations</dt>
+										<dd>
+											<ul>
+												<li>TPI1 has 88 SNPs.</li>
+											</ul>
+										</dd>
+									</dl>
+									<dl>
+										<dt>Orthologs</dt>
+										<dd>
+											<ul>
+												<li>TPI1 has 50 orthologs.</li>
+											</ul>
+										</dd>
+									</dl>
+									<div class="image wide">
+										<a href="" rel="external">
+											<img style="" src="http://www.ensembl.org/Homo_sapiens/Component/Location/Web/MultiBottom?export=png;g=ENSG00000111669;db=core;i_width=750"></img>
+											<span class="caption">This is the legend for this other wider image.</span>
+										</a>
+									</div>
+									<div class="provenance">
+										<ul>
+											<li>The Ensembl project produces genome databases for vertebrates and other eukaryotic species, and makes this information freely available online.</li>
+											<li>The current release 61 ( Feb 2011 ) of the Ensembl provides access to the genomic, comparative, functional and variation data from 52 species.</li>
+											<li><a href="">View more information in Ensembl</a></li>
+											<li><a href="">View more information somewhere else</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="grid_12">
+				<div class="footer">&copy; 
+				  <a target="_top" href="http://www.ebi.ac.uk/" title="European Bioinformatics Institute Home Page">European Bioinformatics Institute</a> 
+				  2011. EBI is an Outstation of the 
+				  <a href="http://www.embl.org/" target="_blank" title="European Molecular Biology Laboratory Home Page">European Molecular Biology Laboratory</a>.
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</body>
+</html>

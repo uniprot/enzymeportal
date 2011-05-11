@@ -1,0 +1,161 @@
+body {
+	font-family: sans-serif;
+}
+
+h1.summaryLabel {
+	font-size: 16pt;
+	font-weight: bold;
+	margin-bottom: 5px;
+	text-shadow: none;
+	border: 1px solid #000;
+	padding: 2px 4px;
+}
+
+.summary {
+	padding: 5px;
+}
+
+.summary h2 {
+	margin-top: 5px;
+	font-size: 14pt;
+	text-shadow: 0 1px 0 #ccc;
+	color: #000;
+	border: none;
+}
+
+h2 .help {
+	display: none;
+}
+
+a {
+	color: #207a7a;
+}
+
+.summary .main_link a {
+	text-align: left;
+	background: none;
+	padding: 0;
+}
+
+.summary .image .caption {
+	background: none;
+	padding: 0;
+}
+
+.summary .provenance ul li a {
+	padding: 0;
+	background: none;
+}
+
+a.category_link {
+}
+
+dl {
+	display: block;
+	clear: left;
+}
+
+dl#classification dt, dl#identification dt {
+	float: left;
+	width: 115px;
+	text-decoration: underline;
+}
+
+dl#classification dd, dl#identification dd {
+	padding-left: 120px;
+	font-weight: bold;
+}
+
+.extra {
+	font-style: italic;
+}
+	
+.nodeLabel {
+	font-size: 14pt;
+	border-bottom: 1px solid #207a7a;
+	color: #207a7a;
+	text-shadow: 0 1px 0 #ccc;
+	margin: 5px 0;
+	font-weight: bold;
+}
+
+.details {
+	page-break-after: always;
+}
+
+dl.selectedReference {
+	display: none;
+}
+
+.summary .image {
+	float: none;
+	margin: 20px auto;
+	display: block;
+	position: relative;
+	text-align: center;
+}
+
+.summary .image img {
+	margin: 5px auto;
+	border: none;
+}
+
+.summary dl {
+	list-style: none;
+	margin-top: 5px;
+}
+
+.summary dl dt {
+	font-weight: bold;
+	text-shadow: 0 1px 0 #ccc;
+}
+
+.summary dl dd {
+	margin: 0;
+}
+
+.summary dl dd ul {
+	list-style: none;
+	padding: 0;
+}
+
+.summary dl dd ul li {
+	margin: 0;
+}
+
+.summary dl dd ul li a {
+	background: none;
+	padding: 0;
+}
+
+.summary dl dd ul li a img {
+	display: none;
+}
+
+.pub_title a {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.pub_info {
+	margin-bottom: 10px;
+	font-style: italic;
+}
+
+.category_link {
+	display: block;
+	margin-bottom: 10px; 
+}
+
+.references {
+	border: none;
+}
+
+.references table {
+	border: none;
+	width: auto;
+}
+
+.literature {
+	background: none;
+}

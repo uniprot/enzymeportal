@@ -1,0 +1,165 @@
+body {
+	font-family: helvetica,arial,sans-serif;
+	background-color: #ddd;
+}
+
+body a {
+	color: #207a7a;
+	text-decoration: none;
+}
+
+body a:hover {
+	color: #e44949;
+}
+
+.container_12 {
+	background-color: #FFF;
+}
+
+.page.container_12 {
+	box-shadow: 0 0 4px #555;
+	-moz-box-shadow: 0 0 4px #555;
+	-webkit-box-shadow: 0 0 4px #555;
+}
+
+.master {
+	background: #217b7b;
+	filter: progid:DXImageTransform.Microsoft.gradient(gradientType='1', startColorstr='#217b7b', endColorstr='#92bebe'); /* for IE */
+	background: -moz-linear-gradient(left top, #217b7b, #92bebe);
+	background: -webkit-gradient(linear, left top, right top, from(#217b7b), to(#92bebe)); /* for webkit browsers */
+	padding-top: 2px;
+	margin-bottom: 5px;
+}
+
+.master .logo {
+	margin: 5px 10px;
+	padding: 0;
+}
+
+.master .logo img {
+	margin: 0;
+	padding: 0;
+}
+
+.master .form {
+	float: right;
+	margin: 0px 0 0px 10px;
+	padding: 10px;
+	position: relative;
+}
+
+.master .form .field {
+	width: 350px;
+	font-size: 15px;
+	margin: 0;
+	padding: 4px 5px;
+}
+
+.master .form .button {
+	padding: 4px 5px;
+	font-size: 14px;
+	margin: 0;
+	background: #ddd;
+	color: #000;
+	vertical-align: top;
+	border: 1px solid #777;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+}
+
+.content {
+}
+
+.footer {
+	border-top: 1px solid #ddd;
+	text-align: center;
+	margin-top: 15px;
+	padding: 5px;
+}
+
+.footer a {
+	text-decoration: underline;
+	color: #000;
+}
+
+h1 {
+	/*border: 1px solid #A7B8C1;
+	background: #EEF5F5;
+	color: #207a7a;
+	font-size: 12pt;
+	padding: 3px 5px;
+	margin: 5px 0px;*/
+	
+	position: absolute;
+	width: 250px;
+	padding: 12px 12px;
+	margin: 5px;
+	font-size: 16pt;
+	line-height: 19pt;
+}
+
+.breadcrumbs ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.breadcrumbs li {
+	font-size: 90%;
+	float: left;
+	padding-left: 15px;
+	margin: 0 5px 0 0;
+	background: 0 0 url('http://www.ebi.ac.uk/inc/images/bread_arrow2.gif') no-repeat;
+}
+
+.breadcrumbs li.first {
+	padding-left: 0px;
+	background: none;
+}
+
+.breadcrumbs li a {
+	text-decoration: none;
+	color: #999;
+	padding: 0;
+	margin: 0;
+}
+
+.breadcrumbs li a:hover {
+	text-decoration: underline;
+	color: #E83E3e;
+}
+
+.header {
+	padding: 5px 0px;
+	background: #fff; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dedede', endColorstr='#ffffff'); /* for IE */
+	background: -moz-linear-gradient(center top, #dedede, #ffffff);
+	background: -webkit-gradient(linear, left top, left bottom, from(#dedede), to(#ffffff)); /* for webkit browsers */
+ 	margin-top: 5px;
+	min-height: 50px;
+}
+
+.menu {
+	padding-right: 5px;
+	text-align: right;
+}
+
+.menu a {
+	color: #000;
+	text-decoration: underline;
+}
+
+.menu a.help {
+	padding-left: 20px;
+	background: center left url('../images/help-small.png') no-repeat;
+}
+
+.message {
+	min-height: 10px;
+}
+
+.box {
+	background-image: url('../images/unknown.png');
+	background-repeat: no-repeat;
+}
