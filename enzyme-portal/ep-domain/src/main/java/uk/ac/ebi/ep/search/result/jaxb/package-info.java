@@ -6,4 +6,4 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://ebi.ac.uk/enzymeportal/enzymes")
-package uk.ac.ebi.ep.search.result;
+package uk.ac.ebi.ep.search.result.jaxb;

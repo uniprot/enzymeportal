@@ -6,7 +6,7 @@
 //
 
 
-package uk.ac.ebi.ep.search.result;
+package uk.ac.ebi.ep.search.result.jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,18 +15,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Compound complex type.
+ * <p>Java class for Species complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Compound">
+ * &lt;complexType name="Species">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="definition" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="scientificname" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="commonname" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,89 +35,63 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Compound", propOrder = {
-    "id",
-    "name",
-    "definition"
+@XmlType(name = "Species", propOrder = {
+    "scientificname",
+    "commonname"
 })
-public class Compound {
+public class Species {
 
     @XmlElement(required = true)
-    protected String id;
+    protected String scientificname;
     @XmlElement(required = true)
-    protected String name;
-    protected String definition;
+    protected String commonname;
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the scientificname property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getId() {
-        return id;
+    public String getScientificname() {
+        return scientificname;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the scientificname property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setId(String value) {
-        this.id = value;
+    public void setScientificname(String value) {
+        this.scientificname = value;
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the commonname property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getCommonname() {
+        return commonname;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the commonname property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the definition property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefinition() {
-        return definition;
-    }
-
-    /**
-     * Sets the value of the definition property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefinition(String value) {
-        this.definition = value;
+    public void setCommonname(String value) {
+        this.commonname = value;
     }
 
 }

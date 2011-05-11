@@ -6,7 +6,7 @@
 //
 
 
-package uk.ac.ebi.ep.search.result;
+package uk.ac.ebi.ep.search.result.jaxb;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,18 +15,18 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Disease complex type.
+ * <p>Java class for Compound complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Disease">
+ * &lt;complexType name="Compound">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="definition" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,18 +36,18 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Disease", propOrder = {
+@XmlType(name = "Compound", propOrder = {
     "id",
     "name",
-    "description"
+    "definition"
 })
-public class Disease {
+public class Compound {
 
     @XmlElement(required = true)
     protected String id;
     @XmlElement(required = true)
     protected String name;
-    protected String description;
+    protected String definition;
 
     /**
      * Gets the value of the id property.
@@ -98,27 +98,27 @@ public class Disease {
     }
 
     /**
-     * Gets the value of the description property.
+     * Gets the value of the definition property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getDescription() {
-        return description;
+    public String getDefinition() {
+        return definition;
     }
 
     /**
-     * Sets the value of the description property.
+     * Sets the value of the definition property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setDescription(String value) {
-        this.description = value;
+    public void setDefinition(String value) {
+        this.definition = value;
     }
 
 }

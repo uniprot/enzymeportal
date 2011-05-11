@@ -6,8 +6,9 @@
 //
 
 
-package uk.ac.ebi.ep.search.result;
+package uk.ac.ebi.ep.search.result.jaxb;
 
+import uk.ac.ebi.ep.search.result.jaxb.Compound;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -17,16 +18,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for SpeciesEnzyme complex type.
+ * <p>Java class for CompoundEnzyme complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="SpeciesEnzyme">
+ * &lt;complexType name="CompoundEnzyme">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="species" type="{http://ebi.ac.uk/enzymeportal/enzymes}Species"/>
+ *         &lt;element name="compound" type="{http://ebi.ac.uk/enzymeportal/enzymes}Compound"/>
  *         &lt;element name="uniprotids" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -37,39 +38,39 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SpeciesEnzyme", propOrder = {
-    "species",
+@XmlType(name = "CompoundEnzyme", propOrder = {
+    "compound",
     "uniprotids"
 })
-public class SpeciesEnzyme {
+public class CompoundEnzyme {
 
     @XmlElement(required = true)
-    protected Species species;
+    protected Compound compound;
     @XmlElement(required = true)
     protected List<String> uniprotids;
 
     /**
-     * Gets the value of the species property.
+     * Gets the value of the compound property.
      * 
      * @return
      *     possible object is
-     *     {@link Species }
+     *     {@link Compound }
      *     
      */
-    public Species getSpecies() {
-        return species;
+    public Compound getCompound() {
+        return compound;
     }
 
     /**
-     * Sets the value of the species property.
+     * Sets the value of the compound property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Species }
+     *     {@link Compound }
      *     
      */
-    public void setSpecies(Species value) {
-        this.species = value;
+    public void setCompound(Compound value) {
+        this.compound = value;
     }
 
     /**
