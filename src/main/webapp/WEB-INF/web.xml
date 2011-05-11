@@ -10,18 +10,22 @@
         <servlet-class>
             org.springframework.web.servlet.DispatcherServlet
         </servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/ep-servlet.xml</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>ep</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-  <welcome-file-list>
-    <welcome-file>
-      index.jsp
-    </welcome-file>
-  </welcome-file-list>
-        <!--Localtion of Spring config files-->
+    <welcome-file-list>
+        <welcome-file>
+            index.jsp
+        </welcome-file>
+    </welcome-file-list>
+    <!--Localtion of Spring config files-->
         <!--
       <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -33,5 +37,5 @@
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
     </listener>
--->
+    -->
 </web-app>

@@ -1,0 +1,17 @@
+/* 
+    Document   : enzyme
+    Created on : May 6, 2011, 8:03:11 PM
+    Author     : hongcao
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.tab.reaction .inner_tab .icon {
+	background-image: url("../images/reaction.png");
+}
+.tab.disease .inner_tab .icon {
+	background-image: url("../images/disease.png");
+}
+.tab.molecule .inner_tab .icon {
+	background-image: url("../images/molecule.png");
+}
