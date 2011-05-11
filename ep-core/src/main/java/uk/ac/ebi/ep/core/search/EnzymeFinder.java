@@ -25,8 +25,8 @@ import uk.ac.ebi.ep.search.exception.InvalidSearchException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.exception.QueryException;
 import uk.ac.ebi.ep.search.parameter.SearchParams;
-import uk.ac.ebi.ep.search.result.EnzymeSearchResults;
-import uk.ac.ebi.ep.search.result.EnzymeSummaryCollection;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSearchResults;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.ep.util.validation.Validator;
 import uk.ac.ebi.util.result.DataTypeConverter;
@@ -126,7 +126,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         }
 
-        List<String> enzymeUniprotIdsList = new ArrayList<String>();
+        //List<String> enzymeUniprotIdsList = new ArrayList<String>();
             if (filterResults.size() > 0) {
                 enzymeUniprotIds.addAll(
                         DataTypeConverter.getResultsIds(filterResults));
@@ -158,15 +158,17 @@ public class EnzymeFinder implements IEnzymeFinder {
                 new ArrayList<ResultOfGetNumberOfResults>();
         totalResultsList = this.getNumberOfResults(this.searchParams);
         //No results found
+        /*
         if (totalResultsList.size() == 0) {
             return enzymeSearchResults;
         }
-
+        */
         if (ResultCalculator.calTotalResultsFound(totalResultsList)==0) {
             return enzymeSearchResults;
         }
 
         //This list contains results for all domains
+        //Query directly xrefs
         List<ResultOfGetResultsIds> resultsIdsList =
                 new ArrayList<ResultOfGetResultsIds>();
                     resultsIdsList =
@@ -260,7 +262,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         //Query the number of results for all domains
         List<ResultOfGetNumberOfResults> resultOfGetNumberOfResults;
-        resultOfGetNumberOfResults = this.invokeGetNumberOfResults(queries);
+        resultOfGetNumberOfResults = this.getNumberOfResults(queries);
         return resultOfGetNumberOfResults;
     }
 
@@ -277,7 +279,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         List<ParamGetNumberOfResults> numberOfResultsParams =
                 this.prepareUniprotFilterQueries(uniprotIdList);
         List<ResultOfGetNumberOfResults> numberOfResultsList = null;
-        numberOfResultsList = this.invokeGetNumberOfResults(numberOfResultsParams);
+        numberOfResultsList = this.getNumberOfResults(numberOfResultsParams);
         int totalFound = ResultCalculator.calTotalResultsFound(numberOfResultsList);
         List<ResultOfGetResultsIds> enzymeUniprotIds = null;
         if (totalFound > 0) {
@@ -419,7 +421,7 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    public List<ResultOfGetNumberOfResults> invokeGetNumberOfResults(
+    public List<ResultOfGetNumberOfResults> getNumberOfResults(
                             List<ParamGetNumberOfResults> paramList) throws MultiThreadingException {
         String msg = null;
         Iterator it = paramList.iterator();

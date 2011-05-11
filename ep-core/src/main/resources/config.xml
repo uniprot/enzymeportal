@@ -18,6 +18,17 @@
         <id>id</id>
       </SearchField>
     </SearchFieldList>
+    <ResultFieldList>
+      <ResultField>
+        <id>id</id>
+      </ResultField>
+      <ResultField>
+        <id>acc</id>
+      </ResultField>
+      <ResultField>
+        <id>UNIPROT</id>
+      </ResultField>
+    </ResultFieldList>
   </Domain>
   <Domain>
     <id>rhea</id>
@@ -52,6 +63,17 @@
         <id>description</id>
       </SearchField>
     </SearchFieldList>
+    <ResultFieldList>
+      <ResultField>
+        <id>id</id>
+      </ResultField>
+      <ResultField>
+        <id>acc</id>
+      </ResultField>
+      <ResultField>
+        <id>UNIPROT</id>
+      </ResultField>
+    </ResultFieldList>
   </Domain>
   <Domain>
     <id>chebi</id>
@@ -69,6 +91,17 @@
         <id>synonym</id>
       </SearchField>
     </SearchFieldList>
+    <ResultFieldList>
+      <ResultField>
+        <id>id</id>
+      </ResultField>
+      <ResultField>
+        <id>acc</id>
+      </ResultField>
+      <ResultField>
+        <id>UNIPROT</id>
+      </ResultField>
+    </ResultFieldList>
   </Domain>
   <Domain>
     <id>chembl-compound</id>
@@ -100,6 +133,17 @@
         <id>name</id>
       </SearchField>
     </SearchFieldList>
+    <ResultFieldList>
+      <ResultField>
+        <id>id</id>
+      </ResultField>
+      <ResultField>
+        <id>acc</id>
+      </ResultField>
+      <ResultField>
+        <id>UNIPROT</id>
+      </ResultField>
+    </ResultFieldList>
   </Domain>
 <Domain>
     <id>uniprot</id>
