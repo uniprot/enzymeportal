@@ -1,11 +1,7 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
-import uk.ac.ebi.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 import uk.ac.ebi.webservices.ebeye.EBISearchService;
@@ -22,6 +18,7 @@ import uk.ac.ebi.webservices.ebeye.EBISearchService_Service;
 public class EbeyeCallable {
 
 //********************************* VARIABLES ********************************//
+    
     private static EBISearchService eBISearchService
             = new EBISearchService_Service().getEBISearchServiceHttpPort();
 
@@ -105,6 +102,74 @@ public class EbeyeCallable {
 
     }
 
+//getAllDomainsResults
+
+//******************************** INNER CLASS *******************************//
+/*
+    public static class GetAllResultsCallable
+            implements Callable<List<ArrayOfArrayOfString>> {
+        ParamOfGetAllResults paramOfGetAllResults;
+
+        public GetAllResultsCallable(ParamOfGetAllResults paramOfGetAllResults) {
+            this.paramOfGetAllResults = paramOfGetAllResults;
+        }
 
 
+        public List<ArrayOfArrayOfString> call() throws Exception {
+            return getAllResults();
+        }
+
+    public List<ArrayOfArrayOfString> getAllResults()
+                                        throws InterruptedException, ExecutionException {
+        NumberOfResultsCaller caller =
+                new EbeyeCallable.NumberOfResultsCaller(paramOfGetAllResults);
+
+        int totalFound = caller.getNumberOfResults();
+        List<ArrayOfArrayOfString> rawResults =
+                this.getEbeyeResults(totalFound);
+        return rawResults;
+    }
+
+    public List<ArrayOfArrayOfString> getEbeyeResults (int totalFound)
+            throws InterruptedException, ExecutionException {
+        String domain = paramOfGetAllResults.getDomain();
+        String query = paramOfGetAllResults.getQuery();
+        List<String> fields = paramOfGetAllResults.getFields();
+
+        List<ArrayOfArrayOfString> resultList = new ArrayList<ArrayOfArrayOfString>();
+        if (totalFound > 0) {
+            ExecutorService pool = Executors.newCachedThreadPool();
+            try {
+                ArrayOfString ebeyeFields = Transformer.transformToArrayOfString(fields);
+                int numberOfLoops = Calculator.calTotalPages(totalFound,
+                        IEbeyeAdapter.EBEYE_RESULT_LIMIT);
+                int lastLoopSize = Calculator.getLastPageResults(totalFound,
+                        IEbeyeAdapter.EBEYE_RESULT_LIMIT);
+                int currentLoop = 0;
+                int start = 0;
+                while (currentLoop < numberOfLoops) {
+                    int size = IEbeyeAdapter.EBEYE_RESULT_LIMIT;
+                    if (currentLoop == numberOfLoops-1) {
+                        size = lastLoopSize;
+                    }
+                    Callable<ArrayOfArrayOfString> callable =
+                            new GetResultsCallable(
+                            domain, query, ebeyeFields, start,size);
+                    Future<ArrayOfArrayOfString> future = pool.submit(callable);
+                    ArrayOfArrayOfString rawResults = (ArrayOfArrayOfString)future.get();
+                    resultList.add(rawResults);
+                    start = start+size;
+                    currentLoop++;
+                }
+            }
+            finally {
+                pool.shutdown();
+            }
+
+        }
+        return resultList;
+    }
+
+    }
+*/
 }
