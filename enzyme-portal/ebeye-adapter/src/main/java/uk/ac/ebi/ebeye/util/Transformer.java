@@ -3,8 +3,6 @@ package uk.ac.ebi.ebeye.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import uk.ac.ebi.ep.ebeye.adapter.ResultFactory;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
@@ -54,5 +52,14 @@ public class Transformer {
             mergedResults.addAll(transformToList(resultLines));
         }
         return mergedResults;
+    }
+
+    public static List<String> transform(String ebeyeAccList) {
+     String[] accArray = ebeyeAccList.split("\\s");
+     List<String> accList = new ArrayList<String>();
+     for (String acc: accArray) {
+         accList.add(acc);
+     }
+     return accList;
     }
 }

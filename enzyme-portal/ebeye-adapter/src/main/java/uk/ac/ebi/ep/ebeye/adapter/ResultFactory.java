@@ -3,10 +3,13 @@ package uk.ac.ebi.ep.ebeye.adapter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import uk.ac.ebi.ep.ebeye.adapter.ResultFactory.Domains;
+import uk.ac.ebi.ebeye.util.Transformer;
+import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.Domains;
+import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.FieldsOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.IntenzResult;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.ep.ebeye.result.jaxb.UniprotResult;
+import uk.ac.ebi.ep.ebeye.result.jaxb.Xref;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
 /**
@@ -23,16 +26,13 @@ public class ResultFactory {
     protected String domain;
     protected List<String> resultFields;
     //Object where result content is saved
-    public static enum Domains {intenz,unitprot,rhea,reactome,chebi
-                                                ,pdbe,chembl_compound, chembl_target,omim,mesh
-        };
-    public static enum UniprotFields {
-       id, acc
-    };
 
 
 
 //******************************** CONSTRUCTORS ******************************//
+    public ResultFactory(List<String> resultFields) {        
+        this.resultFields = resultFields;        
+    }
 
     public ResultFactory(String domain, List<String> resultFields) {
         this.domain = domain;
@@ -62,19 +62,29 @@ public class ResultFactory {
 
 //********************************** METHODS *********************************//
     public Result getResult( List<String> resultContent) {
-         Result resultObj = null;
-        Domains domainSelected = Domains.valueOf(domain);
-        switch(domainSelected) {
-            case unitprot: {
-                resultObj = createUniprotResult(resultContent);
-            }
-            case intenz: {
-                //createIntenzResult(rawResultList);
-            }
+        Result result = new Result();
+        this.createResult(result, resultContent);
 
-        }
-
-        return resultObj;
+         /*
+            Domains domainSelected = IEbeyeAdapter.Domains.valueOf(domain);
+            switch(domainSelected) {
+                case uniprot: {
+                    resultObj = createUniprotResult(resultContent);
+                    break;
+                }
+                case intenz: {
+                    //createIntenzResult(rawResultList);
+                    break;
+                }
+                default: {
+                    Result result = new Result();
+                    this.createResult(result, resultContent);
+                    break;
+                }
+            }
+          *
+          */
+        return result;
     }
 
     public List<Result> getResults (List<List<String>> resultContentList) {
@@ -88,25 +98,43 @@ public class ResultFactory {
         return results;
     }
 
-    public Result createUniprotResult(List<String> resultContent) {
-        UniprotResult uniprotResult = new UniprotResult();
+    public Result createResult(Result result, List<String> resultContent) {
         Iterator fieldIt = this.resultFields.iterator();
         Iterator resultIt = resultContent.iterator();
         while (fieldIt.hasNext() && resultIt.hasNext()) {
             String fieldId = (String)fieldIt.next();
             String fieldValue = (String)resultIt.next();
-            UniprotFields fieldSelected = UniprotFields.valueOf(fieldId);
+            FieldsOfGetResults fieldSelected = FieldsOfGetResults.valueOf(fieldId);
             switch(fieldSelected) {
                 case id: {
-                    uniprotResult.setId(fieldValue);
+                    result.setId(fieldValue);
+                    break;
                 }
                 case acc: {
-                    uniprotResult.getAcc().add(fieldValue);
+                    List<String> accessions =
+                    Transformer.transform(fieldValue);
+                    result.getAcc().addAll(accessions);
+                    break;
+                }
+                case UNIPROT: {
+                    Xref xref = new Xref();
+                    xref.setDomain(Domains.uniprot.name());
+                    List<String> xrefAccs =
+                    Transformer.transform(fieldValue);
+                    xref.getAcc().addAll(xrefAccs);
+                    result.getXrefs().add(xref);
                 }
             }
-            
+
         }
-        return uniprotResult;
+
+        return result;
+    }
+
+    public Result createUniprotResult(List<String> resultContent) {        
+        UniprotResult uniprotResult = new UniprotResult();
+        //Result uniprotResult = new Result();
+        return createResult(uniprotResult, resultContent);
 
     }
 
