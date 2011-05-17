@@ -14,8 +14,6 @@ public class Constant {
      */
 
 //********************************* VARIABLES ********************************//
-public static enum DOMAINS_ENUM {intenz,unitprot,rhea,reactome,chebi
-                                                ,pdbe,omim,mesh};
 //TODO
 public static final int TOP_RESULT_SIZE = 100;
 public static final int RESULT_PER_DOMAIN_LIMIT = 20;

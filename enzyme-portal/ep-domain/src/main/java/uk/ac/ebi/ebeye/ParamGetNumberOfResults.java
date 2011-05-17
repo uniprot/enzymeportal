@@ -6,7 +6,8 @@ package uk.ac.ebi.ebeye;
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>
  *          $Author$
- * @author  $Author$
+ * @author  $Author: hongcao
+ * @deprecated 
  */
 public class ParamGetNumberOfResults extends ParamDomain{
 

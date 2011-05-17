@@ -7,6 +7,7 @@ package uk.ac.ebi.ebeye;
  *          $LastChangedDate$ <br/>
  *          $Author$
  * @author  $Author$
+ * @deprecated 
  */
 public class ParamDomain {
 
