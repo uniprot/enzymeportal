@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://ebi.ac.uk/enzymeportal/ebeye/result" xmlns:ebeye="http://ebi.ac.uk/enzymeportal/ebeye/result" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Result" type="ebeye:Result"/>
+	<xs:complexType name="Result">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="acc" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="xrefs" type="ebeye:Xref" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="IntenzResult" type="ebeye:IntenzResult"/>
+	<xs:complexType name="IntenzResult">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="reaction" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="uniprotacc" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="UniprotResult" type="ebeye:UniprotResult"/>
+	<xs:complexType name="UniprotResult">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="descaltname" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="descrecname" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="descsubname" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="gene_primary_name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="organism_scientific_name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="sequence_length" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="status" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ChebiResult" type="ebeye:ChebiResult"/>
+	<xs:complexType name="ChebiResult">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="inchi" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="inchikey" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="smiles" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ChemblCompound" type="ebeye:ChemblCompound"/>
+	<xs:complexType name="ChemblCompound">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="alogp" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="canonical_smiles" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="compound_synonym" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="hydrogen_bond_acceptor_count" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="hydrogen_bond_donor_count" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="inchi" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="inchi_key" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="med_chem_friendly" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="molecular_formula" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="molecular_weight" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="polar_surface_area" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ChemblTarget" type="ebeye:ChemblTarget"/>
+	<xs:complexType name="ChemblTarget">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="organism" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="target_synonym" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="PdbeResult" type="ebeye:PdbeResult"/>
+	<xs:complexType name="PdbeResult">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="keywords" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ReactomeResult" type="ebeye:ReactomeResult"/>
+	<xs:complexType name="ReactomeResult">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ResultCollection" type="ebeye:ResultCollection"/>
+	<xs:complexType name="ResultCollection">
+		<xs:sequence>
+			<xs:element name="resultlist" type="ebeye:Result" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="RheaResult" type="ebeye:RheaResult"/>
+	<xs:complexType name="RheaResult">
+		<xs:complexContent>
+			<xs:extension base="ebeye:Result">
+				<xs:sequence>
+					<xs:element name="chebiidequation" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Xref" type="ebeye:Xref"/>
+	<xs:complexType name="Xref">
+		<xs:sequence>
+			<xs:element name="domain" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="acc" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
