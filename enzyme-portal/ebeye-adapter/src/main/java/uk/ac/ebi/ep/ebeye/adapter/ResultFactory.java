@@ -7,6 +7,7 @@ import uk.ac.ebi.ebeye.util.Transformer;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.FieldsOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.IntenzResult;
+import uk.ac.ebi.ep.ebeye.result.jaxb.PdbeResult;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.ep.ebeye.result.jaxb.UniprotResult;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Xref;
@@ -62,28 +63,27 @@ public class ResultFactory {
 
 //********************************** METHODS *********************************//
     public Result getResult( List<String> resultContent) {
+        /*
         Result result = new Result();
         this.createResult(result, resultContent);
-
-         /*
+        */
+         Result result = new Result();
             Domains domainSelected = IEbeyeAdapter.Domains.valueOf(domain);
             switch(domainSelected) {
                 case uniprot: {
-                    resultObj = createUniprotResult(resultContent);
+                    result = createUniprotResult(resultContent);
                     break;
                 }
                 case intenz: {
-                    //createIntenzResult(rawResultList);
+                    createIntenzResult(resultContent);
                     break;
                 }
-                default: {
-                    Result result = new Result();
-                    this.createResult(result, resultContent);
+                case pdbe: {
+                    result = createResult(result, resultContent);
                     break;
                 }
             }
-          *
-          */
+
         return result;
     }
 
@@ -135,13 +135,22 @@ public class ResultFactory {
         UniprotResult uniprotResult = new UniprotResult();
         //Result uniprotResult = new Result();
         return createResult(uniprotResult, resultContent);
-
     }
 
-    public Result createIntenzResult(ArrayOfString rawResult) {
+    public Result createIntenzResult(List<String> resultContent) {
         IntenzResult intenzResult = new IntenzResult();
-        return intenzResult;
+        //Result uniprotResult = new Result();
+        return createResult(intenzResult, resultContent);
     }
+
+    public Result createPdbeResult(List<String> resultContent) {
+        PdbeResult bdPdbeResult = new PdbeResult();
+        //Result uniprotResult = new Result();
+        return createResult(bdPdbeResult, resultContent);
+    }
+
+//TODO
+
 
 
     //TODO

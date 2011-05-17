@@ -1,14 +1,17 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import uk.ac.ebi.ebeye.param.ParamOfGetAllResults;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ebeye.util.Calculator;
@@ -53,132 +56,104 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 
     }
 
-
-/*
-    public List<Result> getAllResults(ParamOfGetAllResults paramOfGetAllResults)
-                                        throws InterruptedException, ExecutionException {
-        String domain = paramOfGetAllResults.getDomain();
-        List<String> fields = paramOfGetAllResults.getFields();
-        List<Result> resultList = new ArrayList<Result>();        
-        //getNumberOfResults
-        NumberOfResultsCaller caller =
-                new EbeyeCallable.NumberOfResultsCaller(paramOfGetAllResults);
-
-        int totalFound = caller.getNumberOfResults();
-        List<ArrayOfArrayOfString> rawResults =
-                this.getEbeyeResults(totalFound, paramOfGetAllResults);
-        List<List<String>> transformedResults = Transformer.transformToList(rawResults);
-        //Save the content to an object
-        ResultFactory resultFactory = new ResultFactory(domain, fields);
-        resultList = resultFactory.getResults(transformedResults);
-
-        return resultList;
-    }
-
-    public List<ArrayOfArrayOfString> getEbeyeResults (int totalFound
-            , ParamOfGetAllResults paramOfGetAllResults)
-            throws InterruptedException, ExecutionException {
-        String domain = paramOfGetAllResults.getDomain();
-        String query = paramOfGetAllResults.getQuery();
-        List<String> fields = paramOfGetAllResults.getFields();
-
-        List<ArrayOfArrayOfString> resultList = new ArrayList<ArrayOfArrayOfString>();
-        if (totalFound > 0) {
-            ExecutorService pool = Executors.newCachedThreadPool();
-            try {
-                ArrayOfString ebeyeFields = Transformer.transformToArrayOfString(fields);
-                int numberOfLoops = Calculator.calTotalPages(totalFound,
-                        IEbeyeAdapter.EBEYE_RESULT_LIMIT);
-                int lastLoopSize = Calculator.getLastPageResults(totalFound,
-                        IEbeyeAdapter.EBEYE_RESULT_LIMIT);
-                int currentLoop = 0;
-                int start = 0;
-                while (currentLoop < numberOfLoops) {
-                    int size = IEbeyeAdapter.EBEYE_RESULT_LIMIT;
-                    if (currentLoop == numberOfLoops-1) {
-                        size = lastLoopSize;
-                    }
-                    Callable<ArrayOfArrayOfString> callable =
-                            new GetResultsCallable(
-                            domain, query, ebeyeFields, start,size);
-                    Future<ArrayOfArrayOfString> future = pool.submit(callable);
-                    ArrayOfArrayOfString rawResults = (ArrayOfArrayOfString)future.get();     
-                    resultList.add(rawResults);
-                    start = start+size;
-                    currentLoop++;
-                }
-            }
-            finally {
-                pool.shutdown();
-            }
-
-        }
-        return resultList;
-    }
-*/
-
-    public List<List<Result>> getAllDomainsResults(
+    public Map<String, List<Result>> getAllDomainsResults(
             List<ParamOfGetAllResults> ParamOfGetAllResultsList)
             throws InterruptedException, ExecutionException {
-         List<List<Result>> allDomainsResults = new ArrayList<List<Result>>();
-        Iterator it = ParamOfGetAllResultsList.iterator();
-        while (it.hasNext()) {
+        Map<String, List<Result>>  result = null;
+        try {
+            result = executeCallables(ParamOfGetAllResultsList);
+            /*
+            List<List<Result>> allDomainsResults = new ArrayList<List<Result>>();
+            Iterator it = ParamOfGetAllResultsList.iterator();
+            while (it.hasNext()) {
             ParamOfGetAllResults param = (ParamOfGetAllResults)it.next();
             allDomainsResults.add(getAllResults(param));
             //Callable callable = new GetAllResultsCallable(param);
+            }
+            return allDomainsResults;
+             *
+             */
+        } catch (TimeoutException ex) {
+            //Logger.getLogger(EbeyeAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return result;
+    }
+
+    public Map<String, List<Result>> executeCallables(
+            List<ParamOfGetAllResults> ParamOfGetAllResultsList)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        Map<String, List<Result>> allDomainsResults = new HashMap<String, List<Result>>();
+        Iterator it = ParamOfGetAllResultsList.iterator();
+        ExecutorService pool = null;
+        try {
+            pool = Executors.newCachedThreadPool();
+            while (it.hasNext()) {
+                ParamOfGetAllResults param = (ParamOfGetAllResults) it.next();
+                //allDomainsResults.add(getAllResults(param));
+                //Callable callable = new GetAllResultsCallable(param);
+                NumberOfResultsCaller caller =
+                        new EbeyeCallable.NumberOfResultsCaller(param);
+
+                int totalFound = caller.getNumberOfResults();
+
+                List<ParamOfGetResults> paramOfGetResultsList =
+                        prepareGetResultsParams(totalFound, param);
+                 List<Callable<ArrayOfArrayOfString>> callableList = prepareCallableCollection(paramOfGetResultsList);
+
+                 List<ArrayOfArrayOfString> rawResults = submitAll(callableList);
+
+                //List<Future<ArrayOfArrayOfString>> futureList = pool.invokeAll(
+                /*
+                List<Future<ArrayOfArrayOfString>> futureList = pool.invokeAll(
+                        prepareCallableCollection(paramOfGetResultsList), 2, TimeUnit.HOURS);
+             
+                List<ArrayOfArrayOfString> rawResults = getResultFromThreads(futureList);
+                **/
+                List<List<String>> transformedResults = Transformer.transformToList(rawResults);
+                //Save the content to an object
+                ResultFactory resultFactory = new ResultFactory(
+                        param.getDomain(), param.getFields());
+                List<Result> resultList = resultFactory.getResults(transformedResults);
+                allDomainsResults.put(param.getDomain(), resultList);
+            }
+
+        }
+        finally {
+            pool.shutdownNow();
+        }
+        
         return allDomainsResults;
     }
 
-    public List<List<Result>> executeCallables(
-            List<ParamOfGetAllResults> ParamOfGetAllResultsList)
-            throws InterruptedException, ExecutionException {
-         List<List<Result>> allDomainsResults = new ArrayList<List<Result>>();
-        Iterator it = ParamOfGetAllResultsList.iterator();
-        ExecutorService pool = Executors.newCachedThreadPool();
+    public List<ArrayOfArrayOfString>  submitAll(List<Callable<ArrayOfArrayOfString>> callableList) throws InterruptedException, ExecutionException, TimeoutException {
+        Iterator it = callableList.iterator();
+        ExecutorService pool =  Executors.newCachedThreadPool();
+        List<ArrayOfArrayOfString> resultList = new ArrayList<ArrayOfArrayOfString>();
         while (it.hasNext()) {
-            ParamOfGetAllResults param = (ParamOfGetAllResults)it.next();
-            //allDomainsResults.add(getAllResults(param));
-            //Callable callable = new GetAllResultsCallable(param);
-        NumberOfResultsCaller caller =
-                new EbeyeCallable.NumberOfResultsCaller(param);
-
-        int totalFound = caller.getNumberOfResults();
-
-        List<ParamOfGetResults> paramOfGetResultsList =
-                                prepareGetResultsParams(totalFound, param);
-
-
-        List<Future<ArrayOfArrayOfString>> futureList =  pool.invokeAll(
-                prepareCallableCollection(paramOfGetResultsList)
-                , 2
-                , TimeUnit.HOURS
-                );
-        List<ArrayOfArrayOfString> rawResults = getResultFromThreads(futureList);
-        List<List<String>> transformedResults = Transformer.transformToList(rawResults);
-        //Save the content to an object
-        ResultFactory resultFactory = new ResultFactory(
-                param.getDomain(), param.getFields());
-        List<Result> resultList = resultFactory.getResults(transformedResults);
-        allDomainsResults.add(resultList);
+            Callable<ArrayOfArrayOfString> callable =
+                    (Callable<ArrayOfArrayOfString>)it.next();
+            Future<ArrayOfArrayOfString>future = pool.submit(callable);
+            ArrayOfArrayOfString result = (ArrayOfArrayOfString)future.get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            resultList.add(result);
         }
         pool.shutdown();
-        return allDomainsResults;
+        return resultList;
     }
 
     public List<ArrayOfArrayOfString> getResultFromThreads(
             List<Future<ArrayOfArrayOfString>> futureList )
-            throws InterruptedException, ExecutionException {
+            throws InterruptedException, ExecutionException, TimeoutException {
         List<ArrayOfArrayOfString> resultList = new ArrayList<ArrayOfArrayOfString>();
         Iterator it = futureList.iterator();
         while (it.hasNext()) {
             Future<ArrayOfArrayOfString> future
                     =(Future<ArrayOfArrayOfString>)it.next();
-            ArrayOfArrayOfString resultLine = (ArrayOfArrayOfString)future.get();
+            ArrayOfArrayOfString resultLine = (ArrayOfArrayOfString)future.get(IEbeyeAdapter.EBEYE_ONE_RECORD_TIMEOUT, TimeUnit.MILLISECONDS);
             resultList.add(resultLine);
         }
         return resultList;
     }
+
     public List<ArrayOfArrayOfString> getAllEbeyeResults(
             ParamOfGetAllResults paramOfGetAllResults)
                                         throws InterruptedException, ExecutionException {
@@ -231,7 +206,8 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         }
         return resultList;
     }
-        public List<Callable<ArrayOfArrayOfString>> prepareCallableCollection (List<ParamOfGetResults> paramList)
+        public List<Callable<ArrayOfArrayOfString>> prepareCallableCollection (
+                List<ParamOfGetResults> paramList)
             throws InterruptedException, ExecutionException {
             List<Callable<ArrayOfArrayOfString>> callableList
                     = new ArrayList<Callable<ArrayOfArrayOfString>>();
@@ -282,57 +258,6 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         }
         return paramList;
     }
-
-        /*
-    public List<ArrayOfArrayOfString> getEbeyeResults (int totalFound
-            , ParamOfGetAllResults paramOfGetAllResults)
-            throws InterruptedException, ExecutionException {
-        String domain = paramOfGetAllResults.getDomain();
-        String query = paramOfGetAllResults.getQuery();
-        List<String> fields = paramOfGetAllResults.getFields();
-
-        List<ArrayOfArrayOfString> resultList = new ArrayList<ArrayOfArrayOfString>();
-        List<Callable<ArrayOfArrayOfString>> queue = new ArrayList<Callable<ArrayOfArrayOfString>>();
-        if (totalFound > 0) {
-            ExecutorService pool = Executors.newCachedThreadPool();
-            try {
-                ArrayOfString ebeyeFields = Transformer.transformToArrayOfString(fields);
-                int numberOfLoops = Calculator.calTotalPages(totalFound,
-                        IEbeyeAdapter.EBEYE_RESULT_LIMIT);
-                int lastLoopSize = Calculator.getLastPageResults(totalFound,
-                        IEbeyeAdapter.EBEYE_RESULT_LIMIT);
-                int currentLoop = 0;
-                int start = 0;
-                while (currentLoop < numberOfLoops) {
-                    int size = IEbeyeAdapter.EBEYE_RESULT_LIMIT;
-                    if (currentLoop == numberOfLoops-1) {
-                        size = lastLoopSize;
-                    }
-                    Callable<ArrayOfArrayOfString> callable =
-                            new GetResultsCallable(
-                            domain, query, ebeyeFields, start,size);
-                    queue.add(callable);           
-                    start = start+size;
-                    currentLoop++;
-                }
-
-                    List<Future<ArrayOfArrayOfString>> futures = pool.invokeAll(queue);
-                    Iterator fIt = futures.iterator();
-                    while (fIt.hasNext()) {
-                        Future<ArrayOfArrayOfString> future = (Future<ArrayOfArrayOfString>)fIt.next();
-                        ArrayOfArrayOfString rawResults = (ArrayOfArrayOfString)future.get();
-                        resultList.add(rawResults);
-                    }
-
-            }
-            finally {
-                pool.shutdown();
-            }
-
-        }
-        return resultList;
-    }
-*/
 
     public List<Result> getResults(ParamOfGetResults paramOfGetResults) {
         throw new UnsupportedOperationException("Not supported yet.");
