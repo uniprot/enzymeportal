@@ -36,6 +36,9 @@ public class EBeyeWsCallable {
 
 //******************************** INNER CLASS *******************************//
 
+    /**
+     * @deprecated 
+     */
     public static class GetNumberOfResultsCallable 
             implements Callable<ResultOfGetNumberOfResults> {
         protected ParamGetNumberOfResults paramGetNumberOfResults;
@@ -241,6 +244,7 @@ public class EBeyeWsCallable {
     }
 
 //******************************** INNER CLASS *******************************//
+
     public static class GetResultsCallable
             implements Callable<List<ResultFieldList>> {
 
@@ -275,7 +279,6 @@ public class EBeyeWsCallable {
         }
 
     }
-
 
 
 }
