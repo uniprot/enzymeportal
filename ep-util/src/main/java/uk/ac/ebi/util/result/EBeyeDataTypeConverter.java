@@ -83,6 +83,11 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         return resultList;
     }
 
+    /**
+     * @deprecated see transform
+     * @param list
+     * @return
+     */
     public static ArrayOfString listToArrayOfString(List<String> list) {
         ArrayOfString arrayOfString = new ArrayOfString();
         arrayOfString.getString().addAll(list);
@@ -152,7 +157,6 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         }
          return enzymes;
     }
-
 
     public static List<ResultFieldList> setResultsValues( 
             ResultFieldList resultFieldList
