@@ -1,4 +1,13 @@
 package uk.ac.ebi.ep.ebeye.adapter;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import uk.ac.ebi.ebeye.param.ParamOfGetAllResults;
+import uk.ac.ebi.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+
+/*
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +25,7 @@ import uk.ac.ebi.ep.ebeye.adapter.EbeyeCallable.NumberOfResultsCaller;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
+*/
 /**
  *
  * @since   1.0
@@ -25,6 +35,18 @@ import uk.ac.ebi.webservices.ebeye.ArrayOfString;
  * @author  $Author$
  */
 public class EbeyeAdapterCache implements IEbeyeAdapter{
+
+    public List<Result> getAllResults(ParamOfGetAllResults paramOfGetResults) throws InterruptedException, ExecutionException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Map<String, List<Result>> getAllDomainsResults(List<ParamOfGetAllResults> ParamOfGetResultsList) throws InterruptedException, ExecutionException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public List<Result> getResults(ParamOfGetResults paramOfGetResults) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 //********************************* VARIABLES ********************************//
 
@@ -36,6 +58,7 @@ public class EbeyeAdapterCache implements IEbeyeAdapter{
 
 
 //********************************** METHODS *********************************//
+    /*
     public List<Result> getAllResults(ParamOfGetAllResults paramOfGetAllResults)
                                         throws InterruptedException, ExecutionException {
          List<Result> resultList = new ArrayList<Result>();
@@ -120,5 +143,5 @@ public class EbeyeAdapterCache implements IEbeyeAdapter{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
+*/
 }
