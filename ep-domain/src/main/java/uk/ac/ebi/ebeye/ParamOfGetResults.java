@@ -1,8 +1,5 @@
 package uk.ac.ebi.ebeye;
 
-import java.util.List;
-import uk.ac.ebi.ep.config.ResultFieldList;
-
 /**
  *
  * @since   1.0
@@ -10,6 +7,7 @@ import uk.ac.ebi.ep.config.ResultFieldList;
  *          $LastChangedDate$ <br/>
  *          $Author$
  * @author  $Author$
+ * @deprecated 
  */
 public class ParamOfGetResults extends ParamGetNumberOfResults {
     protected int start;
