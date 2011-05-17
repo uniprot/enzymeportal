@@ -29,7 +29,21 @@
             </plugin>
         </plugins>
     </build>
+    <!--
+    <repositories>
+        <repository>
+            <id>ebi-repo</id>
+            <name>>ebi-repo</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+    </repositories>
+        -->
     <dependencies>
+        <dependency>
+          <groupId>uk.ac.ebi.ep</groupId>
+          <artifactId>uniprot-adapter</artifactId>
+          <version>1.0-SNAPSHOT</version>
+        </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -69,6 +83,11 @@
             <groupId>javax.xml</groupId>
             <artifactId>jaxrpc-api</artifactId>
             <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ebeye-adapter</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>
