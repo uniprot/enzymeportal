@@ -152,5 +152,6 @@
     <module>ep-util</module>
     <module>ebeye-client</module>
     <module>ebeye-adapter</module>
+    <module>uniprot-adapter</module>
   </modules>
 </project>
