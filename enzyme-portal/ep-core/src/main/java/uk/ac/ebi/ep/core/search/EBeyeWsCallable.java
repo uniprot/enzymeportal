@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ebeye.ParamGetEntries;
@@ -11,6 +12,7 @@ import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultFieldList;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
 import uk.ac.ebi.util.result.EBeyeDataTypeConverter;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
@@ -199,15 +201,35 @@ public class EBeyeWsCallable {
             return getEntries();
         }
 
+
         public EnzymeSummaryCollection getEntries() {
             ArrayOfArrayOfString results = callGetEntries();
-            EnzymeSummaryCollection enzymeSummaryCollection =
-                    EBeyeDataTypeConverter
-                    .getEntriesResultsToEnzymeSummaryCollection(results);
+            EnzymeSummaryCollection enzymeSummaryCollection = null;
+                   //getEntriesResultsToEnzymeSummaryCollection(results);
             return enzymeSummaryCollection;
         }
+/*
+    public static EnzymeSummaryCollection
+            getEntriesResultsToEnzymeSummaryCollection (
+                                            ArrayOfArrayOfString results) {
+        List<ArrayOfString> resultList = results.getArrayOfString();
+        Iterator it = resultList.iterator();
+        EnzymeSummaryCollection enzymes = new EnzymeSummaryCollection();
+        while (it.hasNext()) {
+            ArrayOfString result = (ArrayOfString)it.next();
+             EnzymeSummary enzymeSummary =
+                     getEntryResultToEnzymeSummary(result.getString());
+             enzymeSummary.setFunction();
+             enzymeSummary.setEc();
+             enzymeSummary.getRelatedspecies().add();
+             enzymeSummary.getSynonym().add();
 
+                enzymes.getEnzymesummary().add(enzymeSummary);
+        }
+         return enzymes;
+    }
 
+*/
         public ArrayOfArrayOfString callGetEntries() {
                 List<String> ids = paramGetEntries.getEntries();
                 ArrayOfString IdArray = EBeyeDataTypeConverter
