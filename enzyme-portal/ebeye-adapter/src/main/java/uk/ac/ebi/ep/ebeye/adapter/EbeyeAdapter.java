@@ -84,9 +84,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
             throws InterruptedException, ExecutionException, TimeoutException {
         Map<String, List<Result>> allDomainsResults = new HashMap<String, List<Result>>();
         Iterator it = ParamOfGetAllResultsList.iterator();
-        ExecutorService pool = null;
-        try {
-            pool = Executors.newCachedThreadPool();
+
             while (it.hasNext()) {
                 ParamOfGetAllResults param = (ParamOfGetAllResults) it.next();
                 //allDomainsResults.add(getAllResults(param));
@@ -117,26 +115,32 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 allDomainsResults.put(param.getDomain(), resultList);
             }
 
-        }
-        finally {
-            pool.shutdownNow();
-        }
+
         
         return allDomainsResults;
     }
 
-    public List<ArrayOfArrayOfString>  submitAll(List<Callable<ArrayOfArrayOfString>> callableList) throws InterruptedException, ExecutionException, TimeoutException {
+    public List<ArrayOfArrayOfString>  submitAll(
+            List<Callable<ArrayOfArrayOfString>> callableList)
+            throws InterruptedException, ExecutionException, TimeoutException {
         Iterator it = callableList.iterator();
-        ExecutorService pool =  Executors.newCachedThreadPool();
+        ExecutorService pool = null;
         List<ArrayOfArrayOfString> resultList = new ArrayList<ArrayOfArrayOfString>();
-        while (it.hasNext()) {
-            Callable<ArrayOfArrayOfString> callable =
-                    (Callable<ArrayOfArrayOfString>)it.next();
-            Future<ArrayOfArrayOfString>future = pool.submit(callable);
-            ArrayOfArrayOfString result = (ArrayOfArrayOfString)future.get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
-            resultList.add(result);
+        try {
+            pool = Executors.newCachedThreadPool();
+        
+            while (it.hasNext()) {
+                Callable<ArrayOfArrayOfString> callable =
+                        (Callable<ArrayOfArrayOfString>)it.next();
+                Future<ArrayOfArrayOfString>future = pool.submit(callable);
+                ArrayOfArrayOfString result = (ArrayOfArrayOfString)future
+                        .get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                resultList.add(result);
+            }
         }
-        pool.shutdown();
+        finally {
+            pool.shutdownNow();
+        }
         return resultList;
     }
 
