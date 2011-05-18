@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
+import java.util.concurrent.TimeoutException;
 import uk.ac.ebi.ep.search.result.Pagination;
 import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
 import java.util.ArrayList;
@@ -12,13 +13,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.ebeye.ParamGetEntries;
 import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
 import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
 import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import uk.ac.ebi.ep.config.Domain;
-import uk.ac.ebi.ep.core.search.EBeyeWsCallable.GetEntriesCallable;
 import uk.ac.ebi.ep.core.search.EBeyeWsCallable.GetNumberOfResultsCallable;
 import uk.ac.ebi.ep.core.search.EBeyeWsCallable.GetResultsIdCallable;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
@@ -38,6 +37,9 @@ import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.FieldsOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Xref;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
+import uk.ac.ebi.ep.uniprot.adapter.IUniprotAdapter;
+import uk.ac.ebi.ep.uniprot.adapter.UniprotAdapter;
 
 
 /**
@@ -79,7 +81,8 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 //********************************** METHODS *********************************//
     public List<String> getEnzymeUniprotIds(
-            List<ResultOfGetResultsIds> resultsIdsList) throws MultiThreadingException, QueryException {
+            List<ResultOfGetResultsIds> resultsIdsList)
+                            throws MultiThreadingException, QueryException {
         List<String> enzymeUniprotIds = new ArrayList<String>();
 
         //Uniprot results from getResultsIds query which has been filtered as enzymes
@@ -162,6 +165,16 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 */
 
+    public List<String> getUniprotPrimaAccList(
+            List<Result> uniprotMergedResults, List<String> ids) {
+        List<String> accessions = new ArrayList<String>();
+        for (Result result:uniprotMergedResults) {
+            String primaAcc = result.getAcc().get(0);
+            accessions.add(primaAcc);
+        }
+        return accessions;
+    }
+
     public EnzymeSearchResults getEnzymes(SearchParams searchParams) throws EnzymeFinderException {
 
         EnzymeSearchResults enzymeSearchResults = createEmptyResponse();
@@ -169,6 +182,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             throw new InvalidSearchException("Search can only be performed with " +
                     "at leasr one keyword!");
         }
+        //TODO
         //TODO set in the constructor
         this.searchParams = searchParams;
 
@@ -194,9 +208,8 @@ public class EnzymeFinder implements IEnzymeFinder {
         } catch (ExecutionException ex) {
             System.out.println(ex.getMessage());
         }
-        System.out.println("Before filtering" +allDomainsResults.size());
+
         List<Result> uniprotMergedResults = this.filterNonEnzymes(allDomainsResults);
-        System.out.println("After filtering" +allDomainsResults.size());
 
         //Old code
         List<String> uniprotIdList = new ArrayList<String>();
@@ -216,10 +229,12 @@ public class EnzymeFinder implements IEnzymeFinder {
         List<String> topRankedResults = this.getTopRankedResults(
                  rankedResults, searchParams.getStart(), searchParams.getSize()
                 );
-
+        List<String> topRankedAccessions =
+        getUniprotPrimaAccList(uniprotMergedResults, topRankedResults);
         //get data for the list of top ranked ids
         EnzymeSummaryCollection resultsOfGetEntries =
-                this.getUniprotEntries(topRankedResults);
+                this.getUniprotEntries(topRankedAccessions);
+                //this.getUniprotEntries(topRankedResults);
 
         //Process the pagination
 
@@ -459,21 +474,21 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 
 
-    public EnzymeSummaryCollection getUniprotEntries(List<String> topRankedResults) {
-        Domain uniprotDomain = Config.getDomain(UNIPROT_DOMAIN);
-        List<String> resultFields = Config.getResultFields(uniprotDomain);
+    public EnzymeSummaryCollection getUniprotEntries(List<String> uniprotAccessions) {
+        EnzymeSummaryCollection result = new EnzymeSummaryCollection();
+        IUniprotAdapter uniprotAdapter = new UniprotAdapter();
+        List<EnzymeSummary> enzymeSummaryList = null;
+        try {
+            enzymeSummaryList = uniprotAdapter.getEnzymeEntries(uniprotAccessions);
+        } catch (InterruptedException ex) {
 
-        ParamGetEntries paramGetEntries =
-                new ParamGetEntries(UNIPROT_DOMAIN, topRankedResults, resultFields);
+        } catch (ExecutionException ex) {
 
-        //Callable<EnzymeSummaryCollection> callable =
-        GetEntriesCallable request =
-        new GetEntriesCallable(paramGetEntries);
-        EnzymeSummaryCollection resultsOfGetEntries = request.getEntries();
-        //The size of top ranked results has been calculated previously
-        resultsOfGetEntries.setResultsize(topRankedResults.size());
-        resultsOfGetEntries.setResultstartat(searchParams.getStart());
-        return resultsOfGetEntries;
+        } catch (TimeoutException ex) {
+
+        }
+        result.getEnzymesummary().addAll(enzymeSummaryList);
+        return result;
     }
 
     public List<ResultOfGetResultsIds> getResultsIds(
