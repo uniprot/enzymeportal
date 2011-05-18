@@ -142,7 +142,7 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
        return enzymeSummary;
 
     }
-
+/*
     public static EnzymeSummaryCollection 
             getEntriesResultsToEnzymeSummaryCollection (
                                             ArrayOfArrayOfString results) {
@@ -157,7 +157,7 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         }
          return enzymes;
     }
-
+*/
     public static List<ResultFieldList> setResultsValues( 
             ResultFieldList resultFieldList
             , ArrayOfArrayOfString results) {
