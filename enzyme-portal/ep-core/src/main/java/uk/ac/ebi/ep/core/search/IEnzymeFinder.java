@@ -33,7 +33,7 @@ public interface IEnzymeFinder extends IEnzyme {
 //********************************** METHODS *********************************//
     public EnzymeSearchResults getEnzymes(SearchParams searchInput)
             throws EnzymeFinderException;
-
+/*
     public List<ResultOfGetNumberOfResults> getNumberOfResults(
             SearchParams searchInput) throws EnzymeFinderException;
 
@@ -54,5 +54,5 @@ public interface IEnzymeFinder extends IEnzyme {
     public List<String> rankEnzymes(List<String> uniprotIds);
 
     public EnzymeSummaryCollection getUniprotEntries(List<String> uniprotIds);
-
+*/
 }
