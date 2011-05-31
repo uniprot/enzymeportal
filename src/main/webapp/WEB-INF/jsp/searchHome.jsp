@@ -6,6 +6,8 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
     <head>
@@ -192,12 +194,31 @@
                                     </a>
                                 </div>
                                 <div id="desc">
-                                    <c:out value="${enzyme.name}"/><br/>
-                                    Function: <br/>
+                                    <a href="entry">
+                                        <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
+                                        <c:out value="${showName}"/>
+                                    </a>
+                                    <br/>
+                                    Function:
+                                    <c:set var="showFunction" value="${fn:substring(enzyme.function, 0, 100)}"/>
+                                    <c:out value="${showFunction}"/>...<br/>
                                     Synonyms:
+                                    <c:set var="synSize" value="${0}"/>
+                                    <c:forEach items="${enzyme.synonym}" var="syn">                                        
+                                        <c:set var="nameSize" value="${nameSize+1}"/>
+                                    </c:forEach>
+                                    <c:set var="counter" value="${0}"/>
+                                    <c:forEach items="${enzyme.synonym}" var="syn">                                        
+                                        <c:if test="${nameSize>1 && counter>0}">
+                                            ; 
+                                        </c:if>
+                                        <c:out value="${syn}"/>
+                                        <c:set var="counter" value="${counter+1}"/>
+                                    </c:forEach>
+
                                 </div>
                                     <div id="in">in</div>
-                                    <div id="species">
+                                    <div class="species">
                                     Human<br/>
                                     Mouse<br/>
                                     Dog<br/>                                    
