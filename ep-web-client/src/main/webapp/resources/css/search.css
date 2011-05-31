@@ -11,8 +11,8 @@
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
 
-#species a{
-	color: #207a7a;
+a:link {
+	/*color: #207a7a;*/
 	text-decoration: underline;
 }
 .search {
@@ -270,7 +270,7 @@
     margin-left: 10px;
 }
 
-#species {
+.species {
     float: right;
     width: 15%;
 }

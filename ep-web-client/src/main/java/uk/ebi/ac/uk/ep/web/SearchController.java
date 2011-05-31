@@ -91,7 +91,7 @@ public class SearchController {
         pagination.calCurrentPage(start);
         model.addAttribute("searchParameters", searchParameters);
         model.addAttribute("pagination", pagination);
-        model.addAttribute("enzymeSummaryCollection", resultSet.getEnzymesummarycollection());
+        model.addAttribute("enzymeSummaryCollection", collection);
         return "searchHome";
     }
 }
