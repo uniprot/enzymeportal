@@ -1,8 +1,10 @@
 package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
 
 /**
@@ -15,7 +17,7 @@ import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
  */
 public interface IUniprotAdapter {
     //second
-    public static final int ENTRY_TIMEOUT = 15;
+    public static final int ENTRY_TIMEOUT = 30;
 
 //********************************* VARIABLES ********************************//
 
@@ -27,9 +29,12 @@ public interface IUniprotAdapter {
 
 
 //********************************** METHODS *********************************//
-    public EnzymeSummary getEnzymeEntry(String uniprotAccession);
+    public EnzymeSummary getEnzymeEntry(String accession);
 
-    public List<EnzymeSummary> getEnzymeEntries(List<String> uniprotAccession)
+    public List<EnzymeSummary> getEnzymeEntries(Set<String> accessionList)
+            throws InterruptedException, ExecutionException, TimeoutException ;
+
+    public List<EnzymeSummary> getEnzymeEntries(List<Result> briefResultList)
             throws InterruptedException, ExecutionException, TimeoutException ;
 
 }
