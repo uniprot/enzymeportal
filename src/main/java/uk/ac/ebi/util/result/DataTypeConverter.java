@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
-import uk.ac.ebi.ep.config.Domain;
-import uk.ac.ebi.ep.config.ResultField;
-import uk.ac.ebi.ep.config.ResultFieldList;
+import uk.ac.ebi.ep.config.jaxb.Domain;
+import uk.ac.ebi.ep.config.jaxb.ResultField;
+import uk.ac.ebi.ep.config.jaxb.ResultFieldList;
 
 /**
  *

@@ -24,9 +24,9 @@ public class Validator {
 
 
 //********************************** METHODS *********************************//
-    public static boolean isSearchParamsOK(SearchParams searchParams) {
+    public static boolean isSearchParamsOK(String inputKeywords) {
         boolean ok = false;
-        String keywords = searchParams.getKeywords().trim();
+        String keywords = inputKeywords.trim();
         if ( keywords != null) {
             ok = true;
         }
