@@ -1,36 +1,25 @@
 package uk.ac.ebi.ep.core.search;
 
 import java.util.concurrent.TimeoutException;
-import uk.ac.ebi.ep.search.result.Pagination;
-import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
+import java.util.logging.Level;
+import uk.ac.ebi.ep.config.Config;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
-import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
-import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
-import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
-import uk.ac.ebi.ep.config.Domain;
-import uk.ac.ebi.ep.core.search.EBeyeWsCallable.GetNumberOfResultsCallable;
-import uk.ac.ebi.ep.core.search.EBeyeWsCallable.GetResultsIdCallable;
+import uk.ac.ebi.biobabel.lucene.LuceneParser;
+import uk.ac.ebi.ep.config.jaxb.Domain;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.InvalidSearchException;
-import uk.ac.ebi.ep.search.exception.MultiThreadingException;
-import uk.ac.ebi.ep.search.exception.QueryException;
 import uk.ac.ebi.ep.search.parameter.SearchParams;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSearchResults;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.ep.util.validation.Validator;
-import uk.ac.ebi.util.result.DataTypeConverter;
-import uk.ac.ebi.util.result.ResultCalculator;
 import uk.ac.ebi.ebeye.param.ParamOfGetAllResults;
 import uk.ac.ebi.ep.ebeye.adapter.EbeyeAdapter;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter;
@@ -80,70 +69,6 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 
 //********************************** METHODS *********************************//
-    public List<String> getEnzymeUniprotIds(
-            List<ResultOfGetResultsIds> resultsIdsList)
-                            throws MultiThreadingException, QueryException {
-        List<String> enzymeUniprotIds = new ArrayList<String>();
-
-        //Uniprot results from getResultsIds query which has been filtered as enzymes
-        List<String> uniprotResults = new ArrayList<String>();
-        uniprotResults = DataTypeConverter
-                .getResultsIdsFromDomain(resultsIdsList, UNIPROT_DOMAIN);
-        //Save uniprot ids (enzymes and none enzyme) in a list
-        if (uniprotResults.size() > 0) {
-            enzymeUniprotIds.addAll(uniprotResults);
-        }
-
-        //Retrieve uniprot ids of the entries from domains other than uniprot
-        List<ResultOfGetResultsIds> noneUniprotIds =
-        DataTypeConverter.excludeDomainFromResults(resultsIdsList, UNIPROT_DOMAIN);
-
-        //List of uniprot ids derived from domains other than uniprot.
-        List<ResultOfGetReferencedEntriesSet> refEntriesSet=
-                new ArrayList<ResultOfGetReferencedEntriesSet>();
-
-        refEntriesSet =
-                this.getReferencedEntriesSet(noneUniprotIds);
-
-        //Retrieve uniprot ids for intenz. Since those ids are, for sure enzymes
-        //there is no need to filter them.
-        List<String> intenzUniprotXrefs = new ArrayList<String>();
-
-        //List of uniprot ids from domains other than intenz
-        List<String> uniprotXrefs =  new ArrayList<String>();
-        if (refEntriesSet.size() > 0) {
-            intenzUniprotXrefs =
-            DataTypeConverter.getXrefIdsFromDomain(
-                    refEntriesSet, INTENZ_DOMAIN);
-            if (intenzUniprotXrefs.size() > 0) {
-                enzymeUniprotIds.addAll(intenzUniprotXrefs);
-            }
-
-            uniprotXrefs = excludeIntenzUniprotResults(
-                    refEntriesSet);
-        }
-
-        //merge uniprot ids received from querying directly to uniprot
-        //Filter out uniprot ids that are not enzymes        
-            List<ResultOfGetResultsIds> filterResults =
-                    new ArrayList<ResultOfGetResultsIds>();
-
-        if(uniprotXrefs.size() > 0) {
-                filterResults =
-                        filterNoneEnzymeIds(uniprotXrefs);
-
-        }
-
-        //List<String> enzymeUniprotIdsList = new ArrayList<String>();
-            if (filterResults.size() > 0) {
-                enzymeUniprotIds.addAll(
-                        DataTypeConverter.getResultsIds(filterResults));
-            }
-        return enzymeUniprotIds;
-
-    }
-
-
 
     public List<String> rankEnzymes(List<String> uniprotIdList) {
         ResultRanker resultRanker = new ResultRanker(uniprotIdList);
@@ -165,27 +90,22 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 */
 
-    public List<String> getUniprotPrimaAccList(
-            List<Result> uniprotMergedResults, List<String> ids) {
-        List<String> accessions = new ArrayList<String>();
-        for (Result result:uniprotMergedResults) {
-            String primaAcc = result.getAcc().get(0);
-            accessions.add(primaAcc);
+    public Set<String> getUniprotPrimaAccList(
+            List<Result> cachedResults, List<String> ids) {
+        Set<String> accessions = new TreeSet<String>();
+        for (String id:ids) {
+            for (Result result:cachedResults) {
+                String selectedId = result.getId();
+                if (selectedId.equals(id)) {
+                    accessions.add(result.getAcc().get(0));
+                    break;
+                }
+            }
         }
         return accessions;
     }
 
-    public EnzymeSearchResults getEnzymes(SearchParams searchParams) throws EnzymeFinderException {
-
-        EnzymeSearchResults enzymeSearchResults = createEmptyResponse();
-        if (!Validator.isSearchParamsOK(searchParams)) {
-            throw new InvalidSearchException("Search can only be performed with " +
-                    "at leasr one keyword!");
-        }
-        //TODO
-        //TODO set in the constructor
-        this.searchParams = searchParams;
-
+    public  Map<String, List<Result>> queryResultsForAllDomains() {
         IEbeyeAdapter ebeyeAdapter = new EbeyeAdapter();
         List<String> fieldNames = new ArrayList<String>();
         FieldsOfGetResults[] fields = IEbeyeAdapter.FieldsOfGetResults.values();
@@ -199,19 +119,39 @@ public class EnzymeFinder implements IEnzymeFinder {
         List<ParamOfGetAllResults> paramOfGetAllResults =
                                     prepareParamOfGetAllResults(searchParams, fieldNames);
         //List<List<Result>> allDomainsResults = null;
-        Map<String, List<Result>> allDomainsResults = null;
-        try {
-            allDomainsResults = ebeyeAdapter.getAllDomainsResults(paramOfGetAllResults);
-        } catch (InterruptedException ex) {
-            System.out.println(ex.getMessage());
+        Map<String, List<Result>> allDomainsResults =
+                ebeyeAdapter.getAllDomainsResults(paramOfGetAllResults);
 
-        } catch (ExecutionException ex) {
-            System.out.println(ex.getMessage());
+        return allDomainsResults;
+    }
+
+    public void validateSearchInput(String userKeywords) throws InvalidSearchException {
+        if (!Validator.isSearchParamsOK(userKeywords)) {
+            throw new InvalidSearchException("Search can only be performed with " +
+                    "at leasr one keyword!");
         }
+        LuceneParser luceneParser = new LuceneParser();        
+        String cleanedKeywords = luceneParser
+                .escapeLuceneSpecialChars(userKeywords);
+        this.searchParams.setKeywords(cleanedKeywords);
+    }
+
+    public EnzymeSearchResults getEnzymes(SearchParams searchParams) throws EnzymeFinderException {
+        this.searchParams = searchParams;
+        String userKeywords = this.searchParams.getKeywords();
+        validateSearchInput(userKeywords);
+        EnzymeSearchResults enzymeSearchResults = createEmptyResponse();
+
+        //Unit test: queryResultsForAllDomains, prepareParamOfGetAllResults,
+        //ebeyeAdapter.getAllDomainsResults
+        Map<String, List<Result>> allDomainsResults = queryResultsForAllDomains();
+
+        //List<Result> cachedIds = Config.enzymesInUniprot;
 
         List<Result> uniprotMergedResults = this.filterNonEnzymes(allDomainsResults);
 
         //Old code
+        /*
         List<String> uniprotIdList = new ArrayList<String>();
 
         Iterator it = uniprotMergedResults.iterator();
@@ -221,30 +161,59 @@ public class EnzymeFinder implements IEnzymeFinder {
             uniprotIdList.add(result.getId());
         }
 
-
-
         //Rank return a list of ids
         List<String> rankedResults = new ArrayList<String>();
         rankedResults = this.rankEnzymes(uniprotIdList);
         List<String> topRankedResults = this.getTopRankedResults(
                  rankedResults, searchParams.getStart(), searchParams.getSize()
                 );
-        List<String> topRankedAccessions =
-        getUniprotPrimaAccList(uniprotMergedResults, topRankedResults);
+        Set<String> topRankedAccessions =
+        getUniprotPrimaAccList(cachedIds, topRankedResults);
+        */
         //get data for the list of top ranked ids
-        EnzymeSummaryCollection resultsOfGetEntries =
-                this.getUniprotEntries(topRankedAccessions);
-                //this.getUniprotEntries(topRankedResults);
+        EnzymeSummaryCollection searchResults = new EnzymeSummaryCollection();
 
         //Process the pagination
 
-
-        resultsOfGetEntries.setTotalfound(rankedResults.size());
+        //int totalFound = rankedResults.size();
+        //searchResults.setTotalfound(totalFound);
         //resultsize
-        resultsOfGetEntries.setResultsize(topRankedResults.size());
-        resultsOfGetEntries.setResultstartat(searchParams.getStart());
-        enzymeSearchResults = new EnzymeSearchResults();
-        enzymeSearchResults.setEnzymesummarycollection(resultsOfGetEntries);
+        //searchResults.setResultsize(topRankedResults.size());
+        int totalFound = uniprotMergedResults.size();
+        int size = searchParams.getSize();
+        int start =  searchParams.getStart();
+        int subListIndex = start+size;
+        if (totalFound<subListIndex) {
+            subListIndex=totalFound;
+        }
+        List<Result> briefResultSubset = uniprotMergedResults.subList(
+               start, subListIndex);
+        
+        searchResults.setTotalfound(totalFound);
+        //resultsize
+        searchResults.setResultsize(briefResultSubset.size());
+
+
+        searchResults.setResultstartat(searchParams.getStart());
+        
+        //this.getUniprotResults(topRankedAccessions);
+        
+        IUniprotAdapter uniprotAdapter = new UniprotAdapter();
+        List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
+        try {
+            enzymeSummaryList = uniprotAdapter.getEnzymeEntries(briefResultSubset);
+        } catch (InterruptedException ex) {
+            java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        searchResults.getEnzymesummary().addAll(enzymeSummaryList);
+
+
+        enzymeSearchResults.setEnzymesummarycollection(searchResults);
+        searchParams.setKeywords(userKeywords);
         return enzymeSearchResults;
         
 
@@ -403,7 +372,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         return paramList;
     }
 
-    public List<Result> getUniprotResults(List<String> accessions) {
+    public List<Result> getUniprotResults(Set<String> accessions) {
         Iterator accessionsIt = accessions.iterator();
         List<Result> uniprotResults = new ArrayList<Result>();
         while (accessionsIt.hasNext()) {
@@ -429,13 +398,19 @@ public class EnzymeFinder implements IEnzymeFinder {
     public List<Result> getUniprotResult(List<Xref> xRefList) {
         List<Result> results = new ArrayList<Result>();
         Iterator it = xRefList.iterator();
+        Set<String> uniprotAccList = new TreeSet<String>();
         while (it.hasNext()) {
                Xref uniprotXref = (Xref)it.next();
-               List<String> uniprotXrefAccs = uniprotXref.getAcc();              
-               results.addAll( getUniprotResults(uniprotXrefAccs));
+               List<String> uniprotXrefAccs = uniprotXref.getAcc();
+               for (String accession: uniprotXrefAccs) {
+                   uniprotAccList.add(accession);
+               }
+               //results.addAll( getUniprotResults(uniprotXrefAccs));
         }
+        results.addAll(getUniprotResults(uniprotAccList));
         return results;
-    }        
+    }
+    /*
     public List<Result> getEnzymeUniprot(List<Result> resultList) {
         List<Result> filteredResults = new ArrayList<Result>();
         if (resultList.size() != 0) {
@@ -450,75 +425,46 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
         return filteredResults;
     }
+*/
+    public Set<String> mergeUniprotAccessions(List<Result> resultList) {
+        Set<String> uniprotAccList = new TreeSet<String>();
+        if (resultList.size() != 0) {
+            Iterator it1 = resultList.iterator();
+            while (it1.hasNext()) {
+                Result resultObj = (Result) it1.next();
+
+                //Uniprot Xref
+                List<Xref> xRefList = resultObj.getXrefs();
+                for (Xref xRef: xRefList) {
+                    List<String> accList = xRef.getAcc();
+                    for (String acc:accList) {
+                        uniprotAccList.add(acc);
+                    }
+                }
+                //filteredResults.addAll(getUniprotResult(accList));
+            }
+        }
+        return uniprotAccList;
+    }
 
     //Results from more than one domains
     public List<Result> filterNonEnzymes(Map<String,List<Result>> results) {
-
+        Set<String> mergedUniprotAccs = mergeUniprotAccessions(results);
         //iterate thru each domain
-        List<Result> filteredResults = new ArrayList<Result>();
-        Iterator it = results.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String)it.next();
-            List<Result> resultList = (List<Result>)results.get(key);
-            if (resultList.size()>0) {
-                if (!key.equals(IEbeyeAdapter.Domains.uniprot.name())) {
-                    List<Result> filteredDomainResults = getEnzymeUniprot(resultList);
-                    filteredResults.addAll(filteredDomainResults);
-                }
-                else {
-                    filteredResults.addAll(resultList);
-                }
-            }
-        }
+        List<Result> filteredResults = getUniprotResults(mergedUniprotAccs);
+
         return filteredResults;
     }
 
-
-    public EnzymeSummaryCollection getUniprotEntries(List<String> uniprotAccessions) {
-        EnzymeSummaryCollection result = new EnzymeSummaryCollection();
-        IUniprotAdapter uniprotAdapter = new UniprotAdapter();
-        List<EnzymeSummary> enzymeSummaryList = null;
-        try {
-            enzymeSummaryList = uniprotAdapter.getEnzymeEntries(uniprotAccessions);
-        } catch (InterruptedException ex) {
-
-        } catch (ExecutionException ex) {
-
-        } catch (TimeoutException ex) {
-
+    public Set<String> mergeUniprotAccessions(Map<String,List<Result>> results) {
+        Iterator it = results.keySet().iterator();
+        Set<String> uniprotAccList = new TreeSet<String>();
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            List<Result> resultList = (List<Result>)results.get(key);
+            uniprotAccList.addAll(mergeUniprotAccessions(resultList));
         }
-        result.getEnzymesummary().addAll(enzymeSummaryList);
-        return result;
-    }
-
-    public List<ResultOfGetResultsIds> getResultsIds(
-            List<ResultOfGetNumberOfResults> resultOfGetNumberOfResults)
-            throws QueryException, MultiThreadingException {
-        String msg = null;
-        List<ParamOfGetResultsIds> paramOfGetResultsIdsList =
-            LuceneQueryBuilder.prepareGetResultsIdsQueries(
-            resultOfGetNumberOfResults);
-
-
-        List<ResultOfGetResultsIds> resultList = new ArrayList<ResultOfGetResultsIds>();
-        resultList = this.invokeGetResultsIds(paramOfGetResultsIdsList);
-
-        return resultList;
-
-    }
-
-    public List<ResultOfGetNumberOfResults> getNumberOfResults(
-            SearchParams searchParams) throws
-        QueryException, MultiThreadingException {
-        String msg = null;
-        //Prepare queries of getNumberOfResults for all domains
-        List<ParamGetNumberOfResults> queries
-                = this.prepareGetNumberOfResultsQueries(searchParams);
-
-        //Query the number of results for all domains
-        List<ResultOfGetNumberOfResults> resultOfGetNumberOfResults;
-        resultOfGetNumberOfResults = this.getNumberOfResults(queries);
-        return resultOfGetNumberOfResults;
+        return uniprotAccList;
     }
 
     public EnzymeSearchResults createEmptyResponse() {
@@ -527,50 +473,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         enzymeSummaryCollection.setTotalfound(0);
         enzymeSearchResults.setEnzymesummarycollection(enzymeSummaryCollection);
         return enzymeSearchResults;
-    }
-
-    public List<ResultOfGetResultsIds> filterNoneEnzymeIds(
-            List<String> uniprotIdList) throws QueryException, MultiThreadingException {
-        List<ParamGetNumberOfResults> numberOfResultsParams =
-                this.prepareUniprotFilterQueries(uniprotIdList);
-        List<ResultOfGetNumberOfResults> numberOfResultsList = null;
-        numberOfResultsList = this.getNumberOfResults(numberOfResultsParams);
-        int totalFound = ResultCalculator.calTotalResultsFound(numberOfResultsList);
-        List<ResultOfGetResultsIds> enzymeUniprotIds = null;
-        if (totalFound > 0) {
-            List<ParamOfGetResultsIds> ResultsIdsParams =
-            //this.prepareGetResultsIdsQueries(numberOfResultsList);
-            LuceneQueryBuilder.prepareGetResultsIdsQueries(numberOfResultsList);
-            //List<ResultOfGetResultsIds> enzymeUniprotIds = null;
-            enzymeUniprotIds = this.invokeGetResultsIds(ResultsIdsParams);
-        }
-        return enzymeUniprotIds;
-    }
-    /**
-     * retrieve xref uniprot ids of domain other than intenz and uniprot
-     * @param xRefList
-     * @return
-     */
-    public List<String> excludeIntenzUniprotResults(
-            List<ResultOfGetReferencedEntriesSet> xRefList) {
-        Iterator it = xRefList.iterator();
-        List<String> uniprotIdList = new ArrayList<String>();
-        while (it.hasNext()) {
-            ResultOfGetReferencedEntriesSet xRef =
-            (ResultOfGetReferencedEntriesSet)it.next();
-            String domain = xRef.getResultOfGetResultsIds()
-                    .getParamOfGetResultsIds()
-                    .getResultOfGetNumberOfResults()
-                    .getParamGetNumberOfResults()
-                    .getDomain();
-            List<String> uniprotXrefList = xRef.getUniprotXRefList();
-            if (uniprotXrefList!=null && (!domain.equals(UNIPROT_DOMAIN)
-                    || !domain.equals(INTENZ_DOMAIN))) {
-                uniprotIdList.addAll(uniprotXrefList);
-            }
-
-        }
-        return uniprotIdList;
     }
     
     public List<String>  getTopRankedResults(
@@ -590,192 +492,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
         return topResults;
 
-    }
-
-    public ParamGetNumberOfResults prepareGetNumberOfResultsIdsQuery(Domain domain
-            , SearchParams searchParams) throws QueryException{
-        String query = LuceneQueryBuilder.createQueryOR(domain, searchParams);
-        String domainId = domain.getId();
-        if (query == null) {
-            throw new QueryException("Unable to create a query for"
-                    +" GetNumberOfResults operation from domain "
-                    + domainId
-                    + " and keywords "
-                    + searchParams.getKeywords());
-        }
-        ParamGetNumberOfResults param = new ParamGetNumberOfResults(
-                domainId, query);
-
-        return param;
-    }
-    public List<ParamGetNumberOfResults> prepareGetNumberOfResultsQueries(
-            SearchParams searchParams) throws QueryException {
-        List<Domain> domainList = Config.domainList;
-        if (domainList == null || domainList.size() == 0) {
-            throw new QueryException("Unable to load the domain list from " +
-                    "the configuation file!");
-        }
-        Iterator it = domainList.iterator();
-        List<ParamGetNumberOfResults> params = new ArrayList<ParamGetNumberOfResults>();
-        while (it.hasNext()) {
-            Domain domain = (Domain)it.next();
-                //param.setTotalResultFound(totalResultsFound);
-            ParamGetNumberOfResults param =
-                    this.prepareGetNumberOfResultsIdsQuery(domain, searchParams);
-            params.add(param);
-        }
-
-        if (params == null || params.size()==0) {
-            throw new QueryException(
-                    "Unable to create queries for GetNumberOfResults operation"
-                    +" from keywords "
-                    +searchParams.getKeywords());
-        }
-        return params;
-    }
-
-    public List<ResultOfGetResultsIds> invokeGetResultsIds(
-            List<ParamOfGetResultsIds> paramList) throws MultiThreadingException {
-        String msg = null;
-        //ExecutorService pool = Executors.newFixedThreadPool(paramList.size());
-        ExecutorService pool = Executors.newCachedThreadPool();
-        List<ResultOfGetResultsIds> resultList = new ArrayList<ResultOfGetResultsIds>();
-        try {
-            Iterator it = paramList.iterator();
-            while (it.hasNext()) {
-                ParamOfGetResultsIds paramOfGetResultsIds = (ParamOfGetResultsIds) it.next();
-                Callable<ResultOfGetResultsIds> callable =
-                        new GetResultsIdCallable(paramOfGetResultsIds);
-                Future<ResultOfGetResultsIds> future = pool.submit(callable);
-                ResultOfGetResultsIds resultOfGetResultsIds = null;
-                try {
-                    resultOfGetResultsIds = (ResultOfGetResultsIds) future.get();
-                } catch (InterruptedException ex) {
-                    msg = "getResultsIds operation failed! One of the threads has been interrupted";
-                    throw new MultiThreadingException(msg, ex);
-                } catch (ExecutionException ex) {
-                    msg = "getResultsIds operation failed! One of the threads has not been executed!";
-                    throw new MultiThreadingException(msg, ex);
-                }
-                if (resultOfGetResultsIds != null) {
-                    resultList.add(resultOfGetResultsIds);
-                }
-            }
-        }
-        finally {
-            pool.shutdown();
-        }
-        return resultList;        
-    }
-
-    /**
-     *
-     * @param paramList
-     * @return An object of {@link ResultOfGetNumberOfResults} that might
-     * contains the total results found equal to 0.
-     * @throws InterruptedException
-     * @throws ExecutionException
-     */
-    public List<ResultOfGetNumberOfResults> getNumberOfResults(
-                            List<ParamGetNumberOfResults> paramList) throws MultiThreadingException {
-        String msg = null;
-        Iterator it = paramList.iterator();
-        //ExecutorService pool = Executors.newFixedThreadPool(paramList.size());
-        ExecutorService pool = Executors.newCachedThreadPool();
-        List<ResultOfGetNumberOfResults> resultList
-                                = new ArrayList<ResultOfGetNumberOfResults>();
-        try {
-            while (it.hasNext()) {
-                ParamGetNumberOfResults paramGetNumberOfResults =
-                        (ParamGetNumberOfResults)it.next();
-                Callable<ResultOfGetNumberOfResults> callable =
-                        new GetNumberOfResultsCallable(paramGetNumberOfResults);
-                Future<ResultOfGetNumberOfResults> future = pool.submit(callable);
-                ResultOfGetNumberOfResults resultOfGetNumberOfResults = null;
-                try {
-                    resultOfGetNumberOfResults = (ResultOfGetNumberOfResults) future.get();
-                    if (resultOfGetNumberOfResults != null) {
-                        resultList.add(resultOfGetNumberOfResults);
-                    }
-                } catch (InterruptedException ex) {
-                    msg = "getNumberOfResults operation failed! One of the threads has been interrupted!";
-                    throw new MultiThreadingException(msg, ex);
-                } catch (ExecutionException ex) {
-                    msg = "getNumberOfResults operation failed! One of the threads has not been executed!";
-                    throw new MultiThreadingException(msg, ex);
-                }
-            }
-
-        }
-        finally {
-            pool.shutdown();
-        }
-        return resultList;
-    }
-
-
-    public List<ResultOfGetReferencedEntriesSet> getReferencedEntriesSet(
-            List<ResultOfGetResultsIds> resultList) throws MultiThreadingException {
-        String msg = null;
-        Iterator it = resultList.iterator();
-        //ExecutorService pool = Executors.newFixedThreadPool(resultList.size());
-        ExecutorService pool = Executors.newCachedThreadPool();
-        List<ResultOfGetReferencedEntriesSet> uniprotXrefList =
-                            new ArrayList<ResultOfGetReferencedEntriesSet>();
-        try {
-            while (it.hasNext()) {
-                ResultOfGetResultsIds resultEntry = (ResultOfGetResultsIds)it.next();
-                Callable<ResultOfGetReferencedEntriesSet> getReferencedEntriesSetCallable
-                        = new EBeyeWsCallable.GetReferencedEntriesSetCallable(resultEntry);
-                Future<ResultOfGetReferencedEntriesSet> future
-                        = pool.submit(getReferencedEntriesSetCallable);
-                ResultOfGetReferencedEntriesSet resultOfGetReferencedEntriesSet = null;
-                try {
-                    resultOfGetReferencedEntriesSet = (ResultOfGetReferencedEntriesSet) future.get();
-                } catch (InterruptedException ex) {
-                    msg = "getReferencedEntriesSet operation failed! One of the threads has been interrupted!";
-                    throw new MultiThreadingException(msg, ex);
-                } catch (ExecutionException ex) {
-                    msg = "getReferencedEntriesSet operation failed! One of the threads has not been executed!";
-                    throw new MultiThreadingException(msg, ex);
-                }
-
-                if (resultOfGetReferencedEntriesSet != null) {
-                    uniprotXrefList.add(resultOfGetReferencedEntriesSet);
-                }
-            }
-        }
-        finally {
-            pool.shutdown();
-        }
-        return uniprotXrefList;
-    }
-
-    public List<ParamGetNumberOfResults> prepareUniprotFilterQueries (List<String> list) {
-        int numberOfResults = list.size();
-        int startAt = 0;
-        int endAt = 0;
-        Pagination pagination = new Pagination(numberOfResults, MAX_IDS_PER_FILTER_QUERY);
-        int totalPages = pagination.calTotalPages();
-        List<ParamGetNumberOfResults> queryList = new ArrayList<ParamGetNumberOfResults>();
-        for (int i = 0; i < totalPages ; i++) {
-            //0+20-1 = 19
-            if (i==(totalPages-1)) {
-                endAt = numberOfResults;
-            }
-            else {
-                endAt = ((startAt+MAX_IDS_PER_FILTER_QUERY));
-            }
-
-            List<String> subList = list.subList(startAt, endAt);
-            String query = LuceneQueryBuilder.createUniprotQueryForEnzyme(subList);
-
-            ParamGetNumberOfResults paramGetNumberOfResults =
-                    new ParamGetNumberOfResults(UNIPROT_DOMAIN, query);
-            queryList.add(paramGetNumberOfResults);
-            startAt = endAt;
-        }
-        return queryList;
     }
 
   }
