@@ -7,6 +7,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Field;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.FieldType;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
+import uk.ac.ebi.kraken.model.uniprot.comments.FunctionCommentImpl;
 
 /**
  *
@@ -29,39 +30,57 @@ public class Transformer {
 
 //********************************** METHODS *********************************//
 
-    public static String transformToFunction(List<Comment> commentList) {
+    public static String getFunction(List<Comment> commentList) {
         Iterator it = commentList.iterator();
         StringBuffer sb = new StringBuffer();
         while (it.hasNext()) {
-            Comment comment = (Comment)it.next();
-            String commentText = comment.toString();
+            FunctionCommentImpl comment = (FunctionCommentImpl)it.next();
+            String commentText = comment.getValue();
             sb.append(commentText);
+            sb.append(" ");
             //comment.getEvidenceIds();
         }
         return sb.toString();
 
     }
-
+/*
     public static List<String> transformNames(List<Name> altName) {
         Iterator it = altName.iterator();
         List<String> synonyms = new ArrayList<String>();
         while (it.hasNext()) {
             Name name = (Name)it.next();
-            String nameValue = transformToName(name.getFields());
+            String nameValue = getFullName(name.getFields());
+            FieldType.
             synonyms.add(name.toString());
         }
         return synonyms;
     }
+    */
 
-    public static String transformToName(List<Field> fields) {
-        Iterator it = fields.iterator();
-        StringBuffer sb = new StringBuffer();
-        while (it.hasNext()) {
-            Field field = (Field)it.next();
-            FieldType fieldType = field.getType();
-            if (!fieldType.equals(FieldType.EC))
-            return field.getValue();
+    public static String getFullName(Name name) {
+        List<Field> fields = name.getFieldsByType(FieldType.FULL);
+        String nameValue = null;
+        for (Field field:fields) {
+            nameValue = field.getValue();
+            break;
         }
-        return sb.toString();
+        return nameValue;
+    }
+    public static  List<String> getNames(Name name) {
+        List<Field> fields = name.getFields();
+        List<String> names = new ArrayList<String>();
+        String nameValue = null;
+        for (Field field:fields) {
+            nameValue = field.getValue();
+            names.add(nameValue);
+        }
+        return names;
+    }
+    public static List<String> getAltNames (List<Name> altNames) {
+        List<String> synonyms = new ArrayList<String>();
+        for (Name altName: altNames) {   
+            synonyms.addAll(getNames(altName));
+        }
+        return synonyms;
     }
 }
