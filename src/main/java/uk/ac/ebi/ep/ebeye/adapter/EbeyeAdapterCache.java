@@ -36,17 +36,18 @@ import uk.ac.ebi.webservices.ebeye.ArrayOfString;
  */
 public class EbeyeAdapterCache implements IEbeyeAdapter{
 
-    public List<Result> getAllResults(ParamOfGetAllResults paramOfGetResults) throws InterruptedException, ExecutionException {
+    public List<Result> getAllResults(ParamOfGetAllResults paramOfGetResults) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Map<String, List<Result>> getAllDomainsResults(List<ParamOfGetAllResults> ParamOfGetResultsList) throws InterruptedException, ExecutionException {
+    public Map<String, List<Result>> getAllDomainsResults(List<ParamOfGetAllResults> ParamOfGetResultsList) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public List<Result> getResults(ParamOfGetResults paramOfGetResults) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
 //********************************* VARIABLES ********************************//
 

@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import uk.ac.ebi.ebeye.param.ParamOfGetAllResults;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
@@ -19,10 +18,11 @@ public interface IEbeyeAdapter {
 
 //********************************* VARIABLES ********************************//
     public static final int EBEYE_RESULT_LIMIT = 100;
+    public static final int EBEYE_RESULTSET_LIMIT = 2000;
     //MILLISECOND
     public static final int EBEYE_ONE_RECORD_TIMEOUT = 10;
     //SECOND
-    public static final int EBEYE_ONLINE_REQUEST_TIMEOUT = 30;
+    public static final int EBEYE_ONLINE_REQUEST_TIMEOUT = 60;
     //HOUR
     public static final int EBEYE_CACHE_TIMEOUT = 2;
     public static enum Domains {intenz,uniprot,rhea,reactome,chebi
@@ -46,12 +46,10 @@ public interface IEbeyeAdapter {
 
 //********************************** METHODS *********************************//
 
-    public List<Result> getAllResults(ParamOfGetAllResults paramOfGetResults)
-                throws InterruptedException, ExecutionException;
+    public List<Result> getAllResults(ParamOfGetAllResults paramOfGetResults);
 
     public Map<String, List<Result>> getAllDomainsResults(
-            List<ParamOfGetAllResults>  ParamOfGetResultsList)
-                throws InterruptedException, ExecutionException;
+            List<ParamOfGetAllResults>  ParamOfGetResultsList);
 
     public List<Result> getResults(ParamOfGetResults paramOfGetResults);
 
