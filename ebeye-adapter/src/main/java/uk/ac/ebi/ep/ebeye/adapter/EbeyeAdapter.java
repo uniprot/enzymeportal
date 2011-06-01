@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import uk.ac.ebi.ebeye.util.Transformer;
 import uk.ac.ebi.ep.ebeye.adapter.EbeyeCallable.GetResultsCallable;
 import uk.ac.ebi.ep.ebeye.adapter.EbeyeCallable.NumberOfResultsCaller;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
@@ -60,45 +62,82 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     }
 
     public Map<String, List<Result>> getAllDomainsResults(
-            List<ParamOfGetAllResults> ParamOfGetAllResultsList)  {
+            List<ParamOfGetAllResults> ParamOfGetAllResultsList) throws MultiThreadingException  {
         Map<String, List<Result>>  result = null;
         result = executeCallables(ParamOfGetAllResultsList);
 
         return result;
     }
 
-    public Map<String, List<Result>> executeCallables(
-            List<ParamOfGetAllResults> ParamOfGetAllResultsList) {
-        Map<String, List<Result>> allDomainsResults = new HashMap<String, List<Result>>();
-        Iterator it = ParamOfGetAllResultsList.iterator();
+    public Map<String, List<ParamOfGetResults>> getNumberOfResults(
+            List<ParamOfGetAllResults> paramOfGetAllResultsList) throws MultiThreadingException {
+        Map<String, List<ParamOfGetResults>> domainParams = new
+                Hashtable<String, List<ParamOfGetResults>>();
+        ExecutorService pool = Executors.newCachedThreadPool();        
+        try {
+            for (ParamOfGetAllResults param:paramOfGetAllResultsList) {
+                Callable<Integer> callable = new NumberOfResultsCaller(param);
+                Future<Integer> future = pool.submit(callable);
+                Integer totalFound;
+                try {
+                    totalFound = future.get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
 
-            while (it.hasNext()) {
-                ParamOfGetAllResults param = (ParamOfGetAllResults) it.next();
-                NumberOfResultsCaller caller =
-                        new EbeyeCallable.NumberOfResultsCaller(param);
-
-                int totalFound = caller.getNumberOfResults();
-                if (totalFound > IEbeyeAdapter.EBEYE_RESULTSET_LIMIT) {
-                    totalFound = IEbeyeAdapter.EBEYE_RESULTSET_LIMIT;
+                if (totalFound > IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT) {
+                    totalFound = IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT;
                 }
 
-                List<ParamOfGetResults> paramOfGetResultsList =
-                        prepareGetResultsParams(totalFound, param);
-                 List<Callable<ArrayOfArrayOfString>> callableList
-                         = prepareCallableCollection(paramOfGetResultsList);
+                List<ParamOfGetResults> paramOfGetResultsList = null;
+                if (totalFound > 0) {
+                        paramOfGetResultsList = prepareGetResultsParams(totalFound, param);
+                        domainParams.put(param.getDomain(), paramOfGetResultsList);
+                }
+                } catch (InterruptedException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                } catch (ExecutionException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                } catch (TimeoutException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                }
+                      
+            }            
+        }
+        finally {
+            pool.shutdown();
+        }
 
-                 //List<ArrayOfArrayOfString> rawResults =
-                    //      submitAll(paramOfGetResultsList);
-                 List<ArrayOfArrayOfString> rawResults = submitAll(callableList);
+        return domainParams;
 
-                List<List<String>> transformedResults
-                        = Transformer.transformToList(rawResults);
-                //Save the content to an object
-                ResultFactory resultFactory = new ResultFactory(
-                        param.getDomain(), param.getFields());
-                List<Result> resultList = resultFactory.getResults(transformedResults);
-                allDomainsResults.put(param.getDomain(), resultList);
-            }        
+    }
+
+    public Map<String, List<Result>> executeCallables(
+            List<ParamOfGetAllResults> paramOfGetAllResultsList) throws MultiThreadingException {
+        Map<String, List<ParamOfGetResults>> nrOfResults =
+                                getNumberOfResults(paramOfGetAllResultsList);
+        Map<String, List<Result>> allDomainsResults = new HashMap<String, List<Result>>();
+        Iterator it = nrOfResults.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String) it.next();
+            List<ParamOfGetResults> paramOfGetResultsList = nrOfResults.get(key);
+            if (paramOfGetResultsList != null) {
+                if (paramOfGetResultsList.size() > 0) {
+                    List<String> domainFields = paramOfGetResultsList.get(0).getFields();
+                    List<Callable<ArrayOfArrayOfString>> callableList
+                             = prepareCallableCollection(paramOfGetResultsList);
+
+                     //List<ArrayOfArrayOfString> rawResults =
+                        //      submitAll(paramOfGetResultsList);
+                     List<ArrayOfArrayOfString> rawResults = submitAll(callableList);
+
+                    List<List<String>> transformedResults
+                            = Transformer.transformToList(rawResults);
+                    //Save the content to an object
+                    ResultFactory resultFactory = new ResultFactory(
+                            key, domainFields);
+                    List<Result> resultList = resultFactory.getResults(transformedResults);
+                    allDomainsResults.put(key, resultList);
+                }
+            }
+        }
         return allDomainsResults;
     }
     /*
@@ -144,7 +183,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
      */
 
     public List<ArrayOfArrayOfString>  submitAll(
-            List<Callable<ArrayOfArrayOfString>> callableList){
+            List<Callable<ArrayOfArrayOfString>> callableList) throws MultiThreadingException{
         Iterator it = callableList.iterator();
         ExecutorService pool = null;
         List<ArrayOfArrayOfString> resultList = new ArrayList<ArrayOfArrayOfString>();
@@ -160,11 +199,11 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                     result = (ArrayOfArrayOfString) future
                         .get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
-                log.error(ex.getMessage(), ex.getCause());
+                throw  new MultiThreadingException(ex.getMessage(), ex);
             } catch (ExecutionException ex) {
-                log.error(ex.getMessage(), ex.getCause());
+                throw  new MultiThreadingException(ex.getMessage(), ex);
             } catch (TimeoutException ex) {
-                log.error(ex.getMessage(), ex.getCause());
+                throw  new MultiThreadingException(ex.getMessage(), ex);
             }
                 resultList.add(result);
             }
@@ -295,6 +334,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 }
                 ParamOfGetResults paramOfGetResults =
                         new ParamOfGetResults(domain, query, fields, start,size);
+                paramOfGetResults.setTotalFound(totalFound);
                 paramList.add(paramOfGetResults);
                 start = start+size;
                 currentLoop++;
@@ -303,7 +343,72 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         return paramList;
     }
 
-    public List<Result> getResults(ParamOfGetResults paramOfGetResults) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Result> getResults(List<ParamOfGetAllResults>
+            paramOfGetAllResultsList) throws MultiThreadingException {
+
+        List<ParamOfGetResults> paramList =
+                getNrOfResultAccQuery(paramOfGetAllResultsList);
+        
+        List<Callable<ArrayOfArrayOfString>> callables = prepareCallableCollection(paramList);
+
+        List<ArrayOfArrayOfString> ebeyeResultList = new ArrayList<ArrayOfArrayOfString>();
+
+        ExecutorService pool = Executors.newCachedThreadPool();
+        ArrayOfArrayOfString result = null;
+        for (Callable<ArrayOfArrayOfString> callable:callables) {
+            Future<ArrayOfArrayOfString> future  = pool.submit(callable);
+            ArrayOfArrayOfString rawResults = null;
+            try {
+                rawResults = (ArrayOfArrayOfString) future
+                        .get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            } catch (InterruptedException ex) {
+                throw  new MultiThreadingException(ex.getMessage(), ex);
+            } catch (ExecutionException ex) {
+                throw  new MultiThreadingException(ex.getMessage(), ex);
+            } catch (TimeoutException ex) {
+                throw  new MultiThreadingException(ex.getMessage(), ex);
+            }
+            ebeyeResultList.add(rawResults);
+        }
+        List<String> domainFields = paramList.get(0).getFields();
+        String domain =  paramList.get(0).getDomain();
+            List<List<String>> transformedResults
+                    = Transformer.transformToList(ebeyeResultList);
+            //Save the content to an object
+            ResultFactory resultFactory = new ResultFactory(
+                    domain, domainFields);
+            List<Result> resultList = resultFactory.getResults(transformedResults);
+        return resultList;
+    }
+
+    public List<ParamOfGetResults> getNrOfResultAccQuery(
+            List<ParamOfGetAllResults> paramOfGetAllResultsList) throws MultiThreadingException {
+        List<ParamOfGetResults> params = new ArrayList<ParamOfGetResults>();
+        ExecutorService pool = Executors.newCachedThreadPool();
+        try {
+            for (ParamOfGetAllResults param:paramOfGetAllResultsList) {
+                Callable<Integer> callable = new NumberOfResultsCaller(param);
+                Future<Integer> future = pool.submit(callable);
+                try {
+                    int totalFound = future.get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                List<ParamOfGetResults> paramOfGetResultsList =
+                        prepareGetResultsParams(totalFound, param);
+                        params.addAll(paramOfGetResultsList);
+                } catch (InterruptedException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                } catch (ExecutionException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                } catch (TimeoutException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                }
+
+            }
+        }
+        finally {
+            pool.shutdown();
+        }
+
+        return params;
+
     }
 }
