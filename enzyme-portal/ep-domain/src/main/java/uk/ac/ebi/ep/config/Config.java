@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +37,7 @@ public class Config {
     public static List<Domain> domainList;
     public static List<Result> enzymesInUniprot;
     //public static List<String> enzymeUniprotIds;
-    //public static Set<String> enzymeUniprotAccs;
+    //public static List<String> enzymeUniprotAccs;
     public static String configFile = "/config.xml";
     public static String resourcePath = new File(
             Config.class.getResource(configFile).getPath()
@@ -64,7 +66,7 @@ public class Config {
         } catch (JAXBException ex) {
             //Config file provided can be unmarshalled
         }
-
+/*
         ResultCollection resultCollection = null;
         try {
             resultCollection = unmarshalCacheFile(cacheFile);
@@ -74,8 +76,18 @@ public class Config {
 
         }
         enzymesInUniprot =  resultCollection.getResultlist();
+ *
+ */
+        /*
+        List<Result> results = resultCollection.getResultlist();
+        for (Result result:results) {
+            enzymeUniprotAccs.addAll(result.getAcc());
         }
-
+        Collections.sort(enzymeUniprotAccs);
+         * 
+         */
+        }
+        
     /*
 
         System.out.println("Number of enzyme uniprot accessions: " +resultCollection.getResultlist().size());
