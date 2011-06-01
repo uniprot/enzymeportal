@@ -5,16 +5,15 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.StopAnalyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.WhitespaceAnalyzer;
-import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
@@ -46,19 +45,14 @@ public class LuceneQueryBuilder {
         int listLength = SearchFieldList.size();
         int counter = 1;
         String keywords = searchParams.getKeywords();
-        int numberOfKeywords = keywords.split("\\s").length;
+        //int numberOfKeywords = keywords.split("\\s").length;
         query.append("(");
         while (fieldIt.hasNext()) {
             SearchField searchField = (SearchField) fieldIt.next();            
             query.append(searchField.getId());
-            query.append(":");
-            if (numberOfKeywords>1) {
-                query.append("\"");
-            }
+            query.append(":\"");
             query.append(keywords);
-            if (numberOfKeywords>1) {
-                query.append("\"");
-            }
+            query.append("\"");
             if (counter <listLength) {
                 query.append(" OR ");
             }
@@ -123,15 +117,15 @@ public class LuceneQueryBuilder {
         return query.toString();
     }
 
-    public static String createQueryIN(List<String> ids) {
+    public static String createQueryIN(List<String> accs) {
         StringBuffer query = new StringBuffer();
-        Iterator it = ids.iterator();
-        query.append("id:(");
+        Iterator it = accs.iterator();
+        query.append("acc:(");
         int counter = 1;
         while(it.hasNext()) {
             String id = (String)it.next();
             query.append(id);
-            if (counter <ids.size()) {
+            if (counter <accs.size()) {
                 query.append(" OR ");
             }
             counter++;
@@ -140,8 +134,8 @@ public class LuceneQueryBuilder {
         return query.toString();
     }
 
-    public static String createUniprotQueryForEnzyme(List<String> ids) {
-        return createQueryIN(ids) + " AND " + ENZYME_FILTER;
+    public static String createUniprotQueryForEnzyme(List<String> accs) {
+        return createQueryIN(accs) + " AND " + ENZYME_FILTER;
     }
 
     public static ParamOfGetResultsIds prepareGetResultsIdsQuery(
