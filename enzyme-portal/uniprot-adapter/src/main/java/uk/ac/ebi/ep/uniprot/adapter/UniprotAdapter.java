@@ -11,7 +11,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
 import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.GetEntriesCaller;
 
@@ -38,16 +41,28 @@ public class UniprotAdapter implements IUniprotAdapter{
 //********************************** METHODS *********************************//
 
     public List<EnzymeSummary> getEnzymeEntries(
-                    Set<String> accessionList)
-                    throws InterruptedException, ExecutionException, TimeoutException {
+                    Set<String> accessionList) throws MultiThreadingException{
         ExecutorService pool = Executors.newCachedThreadPool();        
         List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
         try {
             for (String accession:accessionList) {
                 Callable caller = new GetEntriesCaller(accession);
                 Future<EnzymeSummary> future = pool.submit(caller);
-                EnzymeSummary enzymeSummary = future.get(
-                        IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS );
+                EnzymeSummary enzymeSummary = null;
+                try {
+                    enzymeSummary = future.get(IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS);
+                } catch (InterruptedException ex) {
+                    throw new MultiThreadingException(
+                            "One of Uniprot get entry thread was interupted! ", ex);
+                } catch (ExecutionException ex) {
+                    throw new MultiThreadingException(
+                            "One of Uniprot get entry thread was not executed! ", ex);
+
+                } catch (TimeoutException ex) {
+                    throw new MultiThreadingException(
+                            "One of Uniprot get entry thread did not return the result" +
+                            " before timeout! ", ex);
+                }
                 enzymeSummaryList.add(enzymeSummary);
             }
             return enzymeSummaryList;
@@ -63,7 +78,7 @@ public class UniprotAdapter implements IUniprotAdapter{
     }
 
     public List<EnzymeSummary> getEnzymeEntries(List<Result> briefResultList)
-            throws InterruptedException, ExecutionException, TimeoutException {
+            throws MultiThreadingException {
         ExecutorService pool = Executors.newCachedThreadPool();
         List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
         try {
@@ -71,8 +86,21 @@ public class UniprotAdapter implements IUniprotAdapter{
                 String primaryAccession = result.getAcc().get(0);
                 Callable caller = new GetEntriesCaller(primaryAccession);
                 Future<EnzymeSummary> future = pool.submit(caller);
-                EnzymeSummary enzymeSummary = future.get(
-                        IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS );
+                EnzymeSummary enzymeSummary;
+                try {
+                    enzymeSummary = future.get(IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS);
+                } catch (InterruptedException ex) {
+                    throw new MultiThreadingException(
+                            "One of Uniprot get entry thread was interupted! ", ex);
+                } catch (ExecutionException ex) {
+                    throw new MultiThreadingException(
+                            "One of Uniprot get entry thread was not executed! ", ex);
+
+                } catch (TimeoutException ex) {
+                    throw new MultiThreadingException(
+                            "One of Uniprot get entry thread did not return the result" +
+                            " before timeout! ", ex);
+                }
                 enzymeSummary.setUniprotid(result.getId());
                 //enzymeSummary.getPdbeaccession(result.get)
                 enzymeSummaryList.add(enzymeSummary);
