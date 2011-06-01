@@ -2,10 +2,10 @@ package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import uk.ac.ebi.ebeye.param.ParamOfGetAllResults;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /*
 import java.util.ArrayList;
@@ -45,6 +45,10 @@ public class EbeyeAdapterCache implements IEbeyeAdapter{
     }
 
     public List<Result> getResults(ParamOfGetResults paramOfGetResults) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public List<Result> getResults(List<ParamOfGetAllResults> paramOfGetAllResultsList) throws MultiThreadingException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

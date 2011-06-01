@@ -16,6 +16,7 @@ public class ParamOfGetResults extends ParamOfGetAllResults {
 //********************************* VARIABLES ********************************//
     protected int start;
     protected  int size;
+    protected int totalFound;
 
     //This is configured in the config file
     //protected ResultFieldList resultFieldList;
@@ -52,6 +53,16 @@ public class ParamOfGetResults extends ParamOfGetAllResults {
     public void setStart(int start) {
         this.start = start;
     }
+
+    public int getTotalFound() {
+        return totalFound;
+    }
+
+    public void setTotalFound(int totalFound) {
+        this.totalFound = totalFound;
+    }
+
+    
 
 //********************************** METHODS *********************************//
 
