@@ -5,6 +5,7 @@ import java.util.Map;
 import uk.ac.ebi.ebeye.param.ParamOfGetAllResults;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**
  *
@@ -18,7 +19,8 @@ public interface IEbeyeAdapter {
 
 //********************************* VARIABLES ********************************//
     public static final int EBEYE_RESULT_LIMIT = 100;
-    public static final int EBEYE_RESULTSET_LIMIT = 2000;
+    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 20;
+    public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 8000;
     //MILLISECOND
     public static final int EBEYE_ONE_RECORD_TIMEOUT = 10;
     //SECOND
@@ -49,8 +51,9 @@ public interface IEbeyeAdapter {
     public List<Result> getAllResults(ParamOfGetAllResults paramOfGetResults);
 
     public Map<String, List<Result>> getAllDomainsResults(
-            List<ParamOfGetAllResults>  ParamOfGetResultsList);
+            List<ParamOfGetAllResults>  ParamOfGetResultsList)
+            throws MultiThreadingException;
 
-    public List<Result> getResults(ParamOfGetResults paramOfGetResults);
-
+    public List<Result> getResults(List<ParamOfGetAllResults>
+            paramOfGetAllResultsList) throws MultiThreadingException;
 }

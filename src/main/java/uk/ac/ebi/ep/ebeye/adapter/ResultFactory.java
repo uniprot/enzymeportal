@@ -68,6 +68,8 @@ public class ResultFactory {
         this.createResult(result, resultContent);
         */
          Result result = new Result();
+         result = createResult(resultContent);
+         /*
             Domains domainSelected = IEbeyeAdapter.Domains.valueOf(domain);
             switch(domainSelected) {
                 case uniprot: {
@@ -83,7 +85,7 @@ public class ResultFactory {
                     break;
                 }
             }
-
+        */
         return result;
     }
 
@@ -98,7 +100,8 @@ public class ResultFactory {
         return results;
     }
 
-    public Result createResult(Result result, List<String> resultContent) {
+    public Result createResult(List<String> resultContent) {
+        Result result = new Result();
         Iterator fieldIt = this.resultFields.iterator();
         Iterator resultIt = resultContent.iterator();
         while (fieldIt.hasNext() && resultIt.hasNext()) {
@@ -117,12 +120,17 @@ public class ResultFactory {
                     break;
                 }
                 case UNIPROT: {
-                    Xref xref = new Xref();
-                    xref.setDomain(Domains.uniprot.name());
-                    List<String> xrefAccs =
-                    Transformer.transform(fieldValue);
-                    xref.getAcc().addAll(xrefAccs);
-                    result.getXrefs().add(xref);
+                    if (fieldValue!=null) {
+                        if (!fieldValue.equals("")) {
+                            Xref xref = new Xref();
+                            xref.setDomain(Domains.uniprot.name());
+                            List<String> xrefAccs =
+                            Transformer.transform(fieldValue);
+                            xref.getAcc().addAll(xrefAccs);
+                            result.getXrefs().add(xref);
+                        }
+                    }
+
                 }
             }
 
@@ -131,6 +139,9 @@ public class ResultFactory {
         return result;
     }
 
+
+
+/*
     public Result createUniprotResult(List<String> resultContent) {        
         UniprotResult uniprotResult = new UniprotResult();
         //Result uniprotResult = new Result();
@@ -148,7 +159,7 @@ public class ResultFactory {
         //Result uniprotResult = new Result();
         return createResult(bdPdbeResult, resultContent);
     }
-
+*/
 //TODO
 
 
