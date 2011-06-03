@@ -1,7 +1,6 @@
 package uk.ac.ebi.ebeye.param;
 
 import java.util.List;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
 /**
  *
@@ -11,47 +10,43 @@ import uk.ac.ebi.webservices.ebeye.ArrayOfString;
  *          $Author$
  * @author  $Author$
  */
-public class ParamOfGetResults extends ParamOfGetAllResults {
-
-//********************************* VARIABLES ********************************//
-    protected int start;
-    protected  int size;
-    protected int totalFound;
-
+public class ParamOfGetResults extends ParamGetNumberOfResults {
     //This is configured in the config file
     //protected ResultFieldList resultFieldList;
-    
+    //It's better to have it here to decouple the code completely
+    protected List<String> fields;
+    protected int totalFound;
+    protected List<ParamOfResultSize> resultSizeList;
+//********************************* VARIABLES ********************************//
+
 //******************************** CONSTRUCTORS ******************************//
-
-
-    public ParamOfGetResults(String domain, String query, List<String> fields, int start, int size) {
-        super(domain, query, fields);
-        this.start = start;
-        this.size = size;
-    }
-
-    public ParamOfGetResults(String domain, String query, int start, int size) {
+    public ParamOfGetResults(String domain, String query) {
         super(domain, query);
-        this.start = start;
-        this.size = size;
     }
+
+    public ParamOfGetResults(String domain, String query, List<String> fields) {
+        super(domain, query);
+        this.fields = fields;
+    }
+
+    public ParamOfGetResults(String domain, String query, List<String> fields, int totalFound) {
+        super(domain, query);
+        this.fields = fields;
+        this.totalFound = totalFound;
+    }
+
+    
+
 
 //****************************** GETTER & SETTER *****************************//
 
-    public int getSize() {
-        return size;
+
+    public List<String> getFields() {
+        return fields;
     }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public void setStart(int start) {
-        this.start = start;
+    public void setFields(List<String> fields) {
+        this.fields = fields;
     }
 
     public int getTotalFound() {
@@ -62,8 +57,17 @@ public class ParamOfGetResults extends ParamOfGetAllResults {
         this.totalFound = totalFound;
     }
 
-    
+    public List<ParamOfResultSize> getResultSizeList() {
+        return resultSizeList;
+    }
 
+    public void setResultSizeList(List<ParamOfResultSize> resultSizeList) {
+        this.resultSizeList = resultSizeList;
+    }
+
+
+
+    
 //********************************** METHODS *********************************//
 
 }
