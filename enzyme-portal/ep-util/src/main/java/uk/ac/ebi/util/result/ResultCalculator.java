@@ -2,7 +2,7 @@ package uk.ac.ebi.util.result;
 
 import java.util.Iterator;
 import java.util.List;
-import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
+//import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
 
 /**
  *
@@ -61,6 +61,7 @@ public static int estimateTotalUniprotXrefs(
         return resultLimit;
     }
 */
+/*
     public static int calTotalResultsFound(
             List<ResultOfGetNumberOfResults> resultList) {
         if (resultList ==  null) {
@@ -77,5 +78,5 @@ public static int estimateTotalUniprotXrefs(
         }
         return counter;
     }
-
+*/
 }
