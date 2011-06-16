@@ -11,9 +11,16 @@
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
 
-a:link {
+#desc a:link, #desc a:visited{
 	/*color: #207a7a;*/
 	text-decoration: underline;
+}
+.species  a:link, .species a:visited{
+	/*color: #207a7a;*/
+	text-decoration: underline;
+}
+.ebiHeader {
+    min-height: 50px;
 }
 .search {
     padding: 5px 0px;
@@ -221,7 +228,7 @@ a:link {
     vertical-align: middle;
     text-align: center;
     height: 100px;    
-    width: 19%;
+    width: 7%;
 }
 
 .resultContent {
@@ -245,23 +252,24 @@ a:link {
     -webkit-border-radius:15px 15px 15px 15px;
     border: 1px solid #ddd ;
     margin-right: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
     padding: 5px;
     vertical-align: top;
     height: 100px;
-    width: 76%;
+    /*width: 76%;*/
+    width: 88%;
 }
 
 #proteinImg {
     float: left;
-    width: 18%;
+    width: 15%;
     height: 90px;   
 }
 
 #desc {
     float: left;
     text-align: left;
-    width: 60%;
+    width: 59%;
 }
 
 #in {
@@ -272,7 +280,7 @@ a:link {
 
 .species {
     float: right;
-    width: 15%;
+    width: 18%;
 }
 
 .basket{
