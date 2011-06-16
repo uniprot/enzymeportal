@@ -1,12 +1,5 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
-import java.util.List;
-import java.util.Map;
-import uk.ac.ebi.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ebeye.param.ParamOfResultSize;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
-import uk.ac.ebi.ep.search.exception.MultiThreadingException;
-
 /*
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,20 +27,7 @@ import uk.ac.ebi.webservices.ebeye.ArrayOfString;
  *          $Author$
  * @author  $Author$
  */
-public class EbeyeAdapterCache implements IEbeyeAdapter{
-
-    public List<Result> getAllResults(ParamOfGetResults paramOfGetResults) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Map<String, List<Result>> getMultiDomainsResults(List<ParamOfGetResults> ParamOfGetResultsList) throws MultiThreadingException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public List<Result> getResultsByAccessions(String domain, List<String> accessions) throws MultiThreadingException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+public class EbeyeAdapterCache{
 
 
 //********************************* VARIABLES ********************************//

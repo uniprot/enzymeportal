@@ -1,13 +1,7 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
-import java.util.List;
 import java.util.concurrent.Callable;
-import uk.ac.ebi.ebeye.ParamGetEntries;
-import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
 import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
-import uk.ac.ebi.ebeye.util.Transformer;
-import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
-import uk.ac.ebi.util.result.EBeyeDataTypeConverter;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 import uk.ac.ebi.webservices.ebeye.EBISearchService;
@@ -56,11 +50,6 @@ public class EbeyeCallable {
             this.paramGetNumberOfResults = paramGetNumberOfResults;
         }
 
-        /**
-         *
-         * @return an {@link ResultOfGetNumberOfResults} object that might the
-         * total result found equal to 0.
-         */
         public Integer getNumberOfResults() {
             int totalFound = eBISearchService.getNumberOfResults(
                     paramGetNumberOfResults.getDomain()
@@ -179,91 +168,5 @@ public class EbeyeCallable {
     }
 */
 
-//******************************** INNER CLASS *******************************//
-    public static class GetEntriesCallable
-            implements Callable<EnzymeSummaryCollection> {
 
-        protected ParamGetEntries paramGetEntries;
-
-        public GetEntriesCallable() {
-        }
-
-        public GetEntriesCallable(ParamGetEntries paramGetEntries) {
-            this.paramGetEntries = paramGetEntries;
-        }
-
-        public ParamGetEntries getParamGetEntries() {
-            return paramGetEntries;
-        }
-
-        public void setParamGetEntries(ParamGetEntries paramGetEntries) {
-            this.paramGetEntries = paramGetEntries;
-        }
-
-        public EnzymeSummaryCollection call() throws Exception {
-            return getEntries();
-        }
-
-
-        public EnzymeSummaryCollection getEntries() {
-            ArrayOfArrayOfString results = callGetEntries();
-            EnzymeSummaryCollection enzymeSummaryCollection = null;
-                   //getEntriesResultsToEnzymeSummaryCollection(results);
-            return enzymeSummaryCollection;
-        }
-/*
-    public static EnzymeSummaryCollection
-            getEntriesResultsToEnzymeSummaryCollection (
-                                            ArrayOfArrayOfString results) {
-        List<ArrayOfString> resultList = results.getArrayOfString();
-        Iterator it = resultList.iterator();
-        EnzymeSummaryCollection enzymes = new EnzymeSummaryCollection();
-        while (it.hasNext()) {
-            ArrayOfString result = (ArrayOfString)it.next();
-             EnzymeSummary enzymeSummary =
-                     getEntryResultToEnzymeSummary(result.getString());
-             enzymeSummary.setFunction();
-             enzymeSummary.setEc();
-             enzymeSummary.getRelatedspecies().add();
-             enzymeSummary.getSynonym().add();
-
-                enzymes.getEnzymesummary().add(enzymeSummary);
-        }
-         return enzymes;
-    }
-
-*/
-        public ArrayOfArrayOfString callGetEntries() {
-                List<String> ids = paramGetEntries.getEntries();
-                ArrayOfString IdArray = Transformer.transformToArrayOfString(ids);
-                String domainId = paramGetEntries.getDomain();
-                ArrayOfString resultFields = Transformer.transformToArrayOfString(
-                        paramGetEntries.getFields());
-                ArrayOfArrayOfString result = eBISearchService
-                        .getEntries(domainId, IdArray, resultFields);
-                return result;
-            }
-
-/*
-            ArrayOfString result = null;
-            Domain uniprotDomain = Config.getDomain(UNIPROT_DOMAIN);
-            ArrayOfString resultFields = EBeyeDataTypeConverter
-                                        .createEbeyeFieldArray(uniprotDomain);
-           EnzymeSearchResults resultSet = new EnzymeSearchResults();
-            EnzymeSummaryCollection enzymes = new EnzymeSummaryCollection();
-
-            while (it.hasNext()) {
-                String id = (String)it.next();
-                result = eBISearchService.getEntry(
-                    uniprotDomain.getId(), id,resultFields);
-                    //enzymes.getEnzymeSummary().add();
-                    enzymes.getEnzymesummary().add(createResultSet(result.getString()));
-            }
-             //resultSet.setEnzymeSummaryCollection(enzymes);
-             resultSet.setEnzymesummarycollection(enzymes);
-             return resultSet;
-         //  Config.getDomain(UNIPROT_DOMAIN).getResultFieldList().getResultField().
-            }
-*/
-    }
 }
