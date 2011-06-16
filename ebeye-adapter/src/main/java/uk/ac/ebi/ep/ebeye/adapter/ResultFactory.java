@@ -6,12 +6,8 @@ import java.util.List;
 import uk.ac.ebi.ebeye.util.Transformer;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.FieldsOfGetResults;
-import uk.ac.ebi.ep.ebeye.result.jaxb.IntenzResult;
-import uk.ac.ebi.ep.ebeye.result.jaxb.PdbeResult;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
-import uk.ac.ebi.ep.ebeye.result.jaxb.UniprotResult;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Xref;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
 /**
  *
@@ -62,13 +58,23 @@ public class ResultFactory {
 
 
 //********************************** METHODS *********************************//
-    public Result getResult( List<String> resultContent) {
+    public List<Result> getResult( List<String> resultContent) {
         /*
         Result result = new Result();
         this.createResult(result, resultContent);
         */
-         Result result = new Result();
-         result = createResult(resultContent);
+         List<Result>  results = new ArrayList<Result>();
+         if (domain.equals(IEbeyeAdapter.Domains.uniprot.name())) {
+             results.add(createResult(resultContent));
+         }
+         else {
+             List<Result> otherDomainsResults = convertResultToUniprot(resultContent);
+             if (otherDomainsResults != null) {
+                 results.addAll(otherDomainsResults);
+             }
+             
+         }
+         
          /*
             Domains domainSelected = IEbeyeAdapter.Domains.valueOf(domain);
             switch(domainSelected) {
@@ -86,7 +92,7 @@ public class ResultFactory {
                 }
             }
         */
-        return result;
+        return results;
     }
 
     public List<Result> getResults (List<List<String>> resultContentList) {
@@ -94,16 +100,16 @@ public class ResultFactory {
         Iterator it = resultContentList.iterator();
         while (it.hasNext()) {
             List<String> resultContent =(List<String>)it.next();
-            Result resultObj = getResult(resultContent);
-            results.add(resultObj);
+            List<Result> resultObj = getResult(resultContent);
+            results.addAll(resultObj);
         }
         return results;
     }
 
-    public Result createResult(List<String> resultContent) {
+    public Result createResult(List<String> rawResult) {
         Result result = new Result();
         Iterator fieldIt = this.resultFields.iterator();
-        Iterator resultIt = resultContent.iterator();
+        Iterator resultIt = rawResult.iterator();
         while (fieldIt.hasNext() && resultIt.hasNext()) {
             String fieldId = (String)fieldIt.next();
             String fieldValue = (String)resultIt.next();
@@ -138,8 +144,30 @@ public class ResultFactory {
 
         return result;
     }
+    public List<Result> convertResultToUniprot(List<String> resultFromOtherDomains) {
+            List<Result> resultList = new ArrayList<Result>();
+            String idField = resultFromOtherDomains.get(0);
+            String accsField = resultFromOtherDomains.get(1);
+            String uniprotField = resultFromOtherDomains.get(2);
+            if (!uniprotField.isEmpty()) {
+                //List<String> nonUniprotAccs = Transformer.transform(accsField);
+                Xref xref = new Xref();
+                xref.setDomain(this.domain);
+                xref.getAcc().add(accsField);
 
+                List<String> uniprotAccs =
+                Transformer.transform(uniprotField);
+                for (String acc: uniprotAccs) {
+                    Result result = new Result();
+                result.getAcc().add(acc);
+                result.getXrefs().add(xref);
+                resultList.add(result);
+            }
+            return resultList;
+        }
 
+        return resultList;
+    }
 
 /*
     public Result createUniprotResult(List<String> resultContent) {        
