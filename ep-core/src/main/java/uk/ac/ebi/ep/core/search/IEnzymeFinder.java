@@ -1,15 +1,8 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.util.List;
-import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
-import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
-import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
-import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.parameter.SearchParams;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSearchResults;
-import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
 
 /**
  *
