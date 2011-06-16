@@ -15,13 +15,11 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
-import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
-import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
+//import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
+//import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
 import uk.ac.ebi.ep.config.jaxb.Domain;
 import uk.ac.ebi.ep.config.jaxb.SearchField;
-import uk.ac.ebi.ep.search.exception.QueryException;
 import uk.ac.ebi.ep.search.parameter.SearchParams;
-import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
  * Hello world!
@@ -30,6 +28,8 @@ import uk.ac.ebi.ep.search.result.Pagination;
 public class LuceneQueryBuilder {
     public static final String ENZYME_FILTER =
             "EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7*)";
+    public static final String UNIPROT_ID_FIELD ="id";
+    public static final String UNIPROT_ID_SUFFIX_WILDCARD ="_*";
     public static final int EBEYE_MAX_RESULTS_PER_QUERY = 100;
     //133343 results does not pass the load test
     //public static final int MAX_RESULTS = 100000;
@@ -68,6 +68,19 @@ public class LuceneQueryBuilder {
             }
         //System.out.println(query.toString());
         return query.toString();
+    }
+
+    public static List<String> createUniprotQueryByIdPrefixes(List<String> idPrefixes) {
+        List<String> queries = new ArrayList<String>();
+        for (String idPrefix:idPrefixes) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(UNIPROT_ID_FIELD);
+            sb.append(":");
+            sb.append(idPrefix);
+            sb.append(UNIPROT_ID_SUFFIX_WILDCARD);
+            queries.add(sb.toString());
+        }
+        return queries;
     }
 
     /*
@@ -137,6 +150,7 @@ public class LuceneQueryBuilder {
         return createQueryIN(accs) + " AND " + ENZYME_FILTER;
     }
 
+    /*
     public static ParamOfGetResultsIds prepareGetResultsIdsQuery(
                         ResultOfGetNumberOfResults resultOfGetNumberOfResults
                         , int start, int size) throws QueryException {
@@ -200,12 +214,6 @@ public class LuceneQueryBuilder {
                         );
                     paramOfGetResultsIdsList.add(paramOfGetResultsIds);
                     start = start+resultSize;
-                    /*
-                    if (start > MAX_RESULTS) {
-                        break;
-                    }
-                     * 
-                     */
                 }
             }
         }
@@ -216,7 +224,7 @@ public class LuceneQueryBuilder {
         }
         return paramOfGetResultsIdsList;
     }
-
+*/
 
 
     public static void buildGetAllResultsQuery (String domain) {

@@ -3,8 +3,8 @@ package uk.ac.ebi.util.result;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
-import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
+//import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
+//import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import uk.ac.ebi.ep.config.jaxb.Domain;
 import uk.ac.ebi.ep.config.jaxb.ResultField;
 import uk.ac.ebi.ep.config.jaxb.ResultFieldList;
@@ -50,6 +50,7 @@ public class DataTypeConverter {
      * @param resultList
      * @return
      */
+    /*
     public static List<String> getResultsIds(
         List<ResultOfGetResultsIds> resultList) {
         Iterator it = resultList.iterator();
@@ -61,7 +62,7 @@ public class DataTypeConverter {
         }
         return resultsIds;
     }
-
+   
     public static List<String> getResultsIdsFromDomain(
         List<ResultOfGetResultsIds> resultList, String domain) {
         Iterator it = resultList.iterator();
@@ -79,7 +80,7 @@ public class DataTypeConverter {
         }
         return uniprotIdList;
     }
-
+    
     public static List<ResultOfGetResultsIds> excludeDomainFromResults(
         List<ResultOfGetResultsIds> resultList, String domain) {
         Iterator it = resultList.iterator();
@@ -99,6 +100,7 @@ public class DataTypeConverter {
         return uniprotIdList;
     }
 
+    
     public static List<String> getXrefIdsFromDomain(
             List<ResultOfGetReferencedEntriesSet> xrefResults, String domain) {
          List<String> result = new ArrayList<String>();
@@ -118,7 +120,7 @@ public class DataTypeConverter {
         }
         return result;
     }
-
+ */
     public static List<String> getConfigResultFields(Domain domain) {
         List<ResultField> fields = domain.getResultFieldList().getResultField();
         List<String> configFields = new ArrayList<String>();
