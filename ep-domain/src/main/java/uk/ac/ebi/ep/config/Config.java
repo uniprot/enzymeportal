@@ -35,14 +35,14 @@ public class Config {
 
 //********************************* VARIABLES ********************************//
     public static List<Domain> domainList;
-    public static List<Result> enzymesInUniprot;
+    //public static List<Result> enzymesInUniprot;
     //public static List<String> enzymeUniprotIds;
     //public static List<String> enzymeUniprotAccs;
     public static String configFile = "/config.xml";
     public static String resourcePath = new File(
             Config.class.getResource(configFile).getPath()
     ).getParent();
-    public static File cacheFile = new File (resourcePath+"/enzymeUniprot.xml");
+    //public static File cacheFile = new File (resourcePath+"/enzymeUniprot.xml");
 
 
 	public void initIt() throws Exception {
