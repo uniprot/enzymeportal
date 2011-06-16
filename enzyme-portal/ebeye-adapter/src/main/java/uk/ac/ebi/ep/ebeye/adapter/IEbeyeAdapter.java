@@ -3,6 +3,8 @@ package uk.ac.ebi.ep.ebeye.adapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+//import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
+import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
@@ -19,8 +21,10 @@ public interface IEbeyeAdapter {
 
 //********************************* VARIABLES ********************************//
     public static final int EBEYE_RESULT_LIMIT = 100;
+    //The number of accessions to be included in the query should not be more than 400
+    public static final int EBEYE_NR_OF_ACC_LIMIT = 400;
     public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 20;
-    public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 8000;
+    public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 5000;
     public static final int EP_THREADS_LIMIT = EP_UNIPROT_XREF_RESULT_LIMIT/EBEYE_RESULT_LIMIT;
     //MILLISECOND
     public static final int EBEYE_ONE_RECORD_TIMEOUT = 10;
@@ -57,11 +61,28 @@ public interface IEbeyeAdapter {
 //********************************** METHODS *********************************//
 
     public List<Result> getAllResults(ParamOfGetResults paramOfGetResults);
-
+    
+    /**
+     * Query Ebeye service for uniprot {@link Result} of more than one domain.
+     * The {@link #getNumberOfResults(java.util.List)} must be invoked to set
+     * the totalFound before invoking this method.
+     * @param paramOfGetResultsList
+     * @return
+     * @throws MultiThreadingException
+     */
     public Map<String, List<Result>> getMultiDomainsResults(
             List<ParamOfGetResults>  ParamOfGetResultsList)
             throws MultiThreadingException;
+    
+    public List<Result> getDomainResults(ParamOfGetResults param)
+            throws MultiThreadingException;
 
+    public List<ParamOfGetResults> getNumberOfResults(
+            List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
+    
     public List<Result> getResultsByAccessions(String domain, List<String>
             accessions) throws MultiThreadingException;
+
+    public int getNrOfResultsByAccessions(String domain
+            , List<String> accessions) throws MultiThreadingException;
 }

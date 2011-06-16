@@ -1,8 +1,5 @@
 package uk.ac.ebi.ebeye.param;
 
-import java.util.List;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
-
 /**
  *
  * @since   1.0
