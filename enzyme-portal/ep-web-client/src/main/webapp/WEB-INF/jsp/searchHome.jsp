@@ -42,6 +42,14 @@
     </head>
     <body>        
         <div class="page container_12">
+            <div  class="grid_12">
+<div class="headerdiv" id="headerdiv" style="height: 60px;">
+    <iframe src="http://www.ebi.ac.uk/inc/homepage_head.html" name="head" id="head" marginwidth="0" marginheight="0" style="height: 125px;" frameborder="0" scrolling="no" width="100%">
+</iframe> </div>
+
+            </div>
+            <div class="clear"></div>
+
             <div class="grid_12">
                 <div class="breadcrumbs" id="breadcrumbs">
                     <ul>
@@ -197,6 +205,7 @@
                                     <a href="entry">
                                         <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
                                         <c:out value="${showName}"/>
+                                       <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
                                     </a>
                                     <br/>
                                     Function:
@@ -219,10 +228,41 @@
                                 </div>
                                     <div id="in">in</div>
                                     <div class="species">
-                                    Human<br/>
-                                    Mouse<br/>
-                                    Dog<br/>                                    
-                                    <a href="">See more</a> <br/>
+                                        <c:choose>
+                                        <c:when test='${enzyme.species.commonname == ""}'>
+                                            <c:out value="${enzyme.species.scientificname}"/><br/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${enzyme.species.commonname}"/><br/>
+                                        </c:otherwise>
+                                        </c:choose>
+                                        <c:set var="speciesCounter" value="${1}"/>
+                                        <c:set var="speciesSize" value="${fn:length(enzyme.relatedspecies)+1}"/>
+                                        <c:forEach items="${enzyme.relatedspecies}" var="relspecies">                                            
+                                            <c:if test="${speciesCounter < 4}">
+                                                
+                                                <c:choose>
+                                                <c:when test='${relspecies.species.commonname == ""}'>
+                                                    <a href="entry">
+                                                    <c:out value="${relspecies.species.scientificname}"/>
+                                                    </a>
+                                                    <br/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="entry">
+                                                    <c:out value="${relspecies.species.commonname}"/>
+                                                    </a>
+                                                    <br/>
+                                                </c:otherwise>
+                                                </c:choose>
+                                                    
+                                            </c:if>
+                                            <c:set var="speciesCounter" value="${speciesCounter+1}"/>
+                                        </c:forEach>
+                                                <c:if test="${speciesSize > 3}">
+                                                <a href="">See more</a> <br/>
+                                            </c:if>
+                                    
                                 </div>                                    
                             </div>
                             <div id="buttonItems">
