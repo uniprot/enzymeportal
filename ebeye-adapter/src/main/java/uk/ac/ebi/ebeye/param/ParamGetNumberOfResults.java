@@ -12,6 +12,7 @@ public class ParamGetNumberOfResults extends ParamDomain{
 
 //********************************* VARIABLES ********************************//
 protected String query;
+protected int totalFound;
 
     public ParamGetNumberOfResults(String domain, String query) {
         super(domain);
@@ -29,6 +30,16 @@ protected String query;
     public void setQuery(String query) {
         this.query = query;
     }
+
+    public int getTotalFound() {
+        return totalFound;
+    }
+
+    public void setTotalFound(int totalFound) {
+        this.totalFound = totalFound;
+    }
+
+    
 
 
 //********************************** METHODS *********************************//
