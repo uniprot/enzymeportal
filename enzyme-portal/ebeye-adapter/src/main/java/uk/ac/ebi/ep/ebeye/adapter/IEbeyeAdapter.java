@@ -47,10 +47,24 @@ public interface IEbeyeAdapter {
            return fields;
        }
     };
+    
+    public static enum FieldsOfGetNames {
+        id, name;
+       public static List<String> getFields() {
+           List<String> fields = new ArrayList<String>();
+           fields.add(id.name());
+           fields.add(name.name());
+           return fields;
+       }
 
+    };
+
+/*
     public static enum UniprotResultFields  {
         descSubName,descRecName,organism_scientific_name,status
     };
+ *
+ */
 
 //******************************** CONSTRUCTORS ******************************//
 
@@ -60,7 +74,8 @@ public interface IEbeyeAdapter {
 
 //********************************** METHODS *********************************//
 
-    public List<Result> getAllResults(ParamOfGetResults paramOfGetResults);
+    public List<Result> getResults(ParamOfGetResults param, boolean transformResultToUniprot)
+            throws MultiThreadingException;
     
     /**
      * Query Ebeye service for uniprot {@link Result} of more than one domain.
@@ -70,12 +85,14 @@ public interface IEbeyeAdapter {
      * @return
      * @throws MultiThreadingException
      */
-    public Map<String, List<Result>> getMultiDomainsResults(
-            List<ParamOfGetResults>  ParamOfGetResultsList)
-            throws MultiThreadingException;
+    public Map<String, List<Result>> getUniprotResults(
+            List<ParamOfGetResults> paramOfGetResultsList) throws MultiThreadingException;
     
-    public List<Result> getDomainResults(ParamOfGetResults param)
+    public List<Result> getResults(ParamOfGetResults param)
             throws MultiThreadingException;
+
+    public Map<String, String> getNames(String domain
+            , List<String> ids);
 
     public List<ParamOfGetResults> getNumberOfResults(
             List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
@@ -83,6 +100,11 @@ public interface IEbeyeAdapter {
     public List<Result> getResultsByAccessions(String domain, List<String>
             accessions) throws MultiThreadingException;
 
+    public Map<String,String> getUniprotXrefs(List<String>ids, String xRefDomain);
+
+/*
     public int getNrOfResultsByAccessions(String domain
             , List<String> accessions) throws MultiThreadingException;
+ * 
+ */
 }

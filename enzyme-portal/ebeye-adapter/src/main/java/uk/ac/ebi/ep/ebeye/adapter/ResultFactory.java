@@ -58,12 +58,23 @@ public class ResultFactory {
 
 
 //********************************** METHODS *********************************//
-    public List<Result> getResult( List<String> resultContent) {
+    public List<Result> getResult( List<String> resultContent, boolean convertResultToUniprot) {
         /*
         Result result = new Result();
         this.createResult(result, resultContent);
         */
          List<Result>  results = new ArrayList<Result>();
+         
+         if (convertResultToUniprot) {
+             List<Result> otherDomainsResults = convertResultToUniprot(resultContent);
+             if (otherDomainsResults != null) {
+                 results.addAll(otherDomainsResults);
+             }
+             
+         } else {
+             results.add(createResult(resultContent));
+         }
+         /*
          if (domain.equals(IEbeyeAdapter.Domains.uniprot.name())) {
              results.add(createResult(resultContent));
          }
@@ -74,7 +85,7 @@ public class ResultFactory {
              }
              
          }
-         
+         */
          /*
             Domains domainSelected = IEbeyeAdapter.Domains.valueOf(domain);
             switch(domainSelected) {
@@ -95,12 +106,13 @@ public class ResultFactory {
         return results;
     }
 
-    public List<Result> getResults (List<List<String>> resultContentList) {
+    public List<Result> getResults (List<List<String>> resultContentList
+            , boolean convertResultToUniprot ) {
         List<Result> results = new ArrayList<Result>();
         Iterator it = resultContentList.iterator();
         while (it.hasNext()) {
             List<String> resultContent =(List<String>)it.next();
-            List<Result> resultObj = getResult(resultContent);
+            List<Result> resultObj = getResult(resultContent, convertResultToUniprot);
             results.addAll(resultObj);
         }
         return results;
@@ -153,7 +165,12 @@ public class ResultFactory {
                 //List<String> nonUniprotAccs = Transformer.transform(accsField);
                 Xref xref = new Xref();
                 xref.setDomain(this.domain);
-                xref.getAcc().add(accsField);
+                if (this.domain.equals(EbeyeAdapter.Domains.chebi.name())) {
+                    xref.getAcc().add(idField);
+                } else {
+                    xref.getAcc().add(accsField);
+                }
+                
 
                 List<String> uniprotAccs =
                 Transformer.transform(uniprotField);
