@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.core.search;
 
 import uk.ac.ebi.ep.config.Config;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -10,13 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.collections.SetUtils;
 import org.apache.log4j.Logger;
-import org.apache.lucene.util.ArrayUtil;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.config.jaxb.Domain;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
@@ -33,9 +27,14 @@ import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.FieldsOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.ep.ebeye.result.jaxb.Xref;
+import uk.ac.ebi.ep.search.result.jaxb.Compound;
+import uk.ac.ebi.ep.search.result.jaxb.EnzymeAccession;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
+import uk.ac.ebi.ep.search.result.jaxb.SearchFilter;
+import uk.ac.ebi.ep.search.result.jaxb.Species;
 import uk.ac.ebi.ep.uniprot.adapter.IUniprotAdapter;
 import uk.ac.ebi.ep.uniprot.adapter.UniprotAdapter;
+import uk.ac.ebi.util.result.DataTypeConverter;
 
 
 /**
@@ -253,6 +252,7 @@ public class EnzymeFinder implements IEnzymeFinder {
           return subMap;
       }
 
+
     public EnzymeSearchResults getEnzymes(SearchParams searchParams) throws EnzymeFinderException {
         //setting variable values and validation
         this.searchParams = searchParams;
@@ -272,17 +272,37 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         //Query uniprot results
         List<Result> uniprotResults = new ArrayList<Result>();
-        uniprotResults.addAll(ebeyeAdapter.getDomainResults(uniprotParam));
+        uniprotResults.addAll(ebeyeAdapter.getResults(uniprotParam));
 
         //Save uniprot accession separately
         Set<String> accessionsFromUniprot = this.getUniprotPrimAcc(uniprotResults);
 
         //Query results for other domain
         Map<String, List<Result>> allDomainsResults = ebeyeAdapter
-                .getMultiDomainsResults(nrOfResultParams);
+                .getUniprotResults(nrOfResultParams);
         
         //Save uniprot accessions resulted from other domains
         Set<String> accessionsFromOtherDomains = this.getUniprotPrimAcc(allDomainsResults);
+
+        //Save chebi ids
+        String chebiDomain = IEbeyeAdapter.Domains.chebi.name();
+        List<Result> chebiResults =  allDomainsResults.get(chebiDomain);
+        List<String> chebiAccs = this.getResultsXrefsList(chebiResults);
+
+        //Save pdbE results
+
+        //List<Result> pdbeResults = allDomainsResults.get(IEbeyeAdapter.Domains.pdbe.name());
+
+        
+
+        SearchFilter searchFilter = new SearchFilter();
+        
+
+        Map<String,String> chebiNames = ebeyeAdapter.getNames(chebiDomain, chebiAccs);
+        List<Compound> compList = DataTypeConverter.mapToCompound(chebiNames);
+        searchFilter.getCompounds().addAll(compList);
+        //searchFilter.getCompounds().addAll(chebiAccs);
+        enzymeSearchResults.setSearchfilter(searchFilter);
 
         int nrOfResultFromOtherDomains = accessionsFromOtherDomains.size();
         List<Result> queryResults = null;
@@ -327,6 +347,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         //get data for the list of top ranked ids
         EnzymeSummaryCollection searchResults = new EnzymeSummaryCollection();
 
+
         //Process the pagination
         //int totalFound = uniprotResults.size();
         int totalFound = idPrefixes.size();
@@ -359,17 +380,115 @@ public class EnzymeFinder implements IEnzymeFinder {
         //enzymeSummaryList = uniprotAdapter.getEnzymeEntries(briefResultSubset);
         List<String> queries = LuceneQueryBuilder.createUniprotQueryByIdPrefixes(idPrefixesSubList);
         enzymeSummaryList = uniprotAdapter.queryEnzymeByIdPrefixes(queries);
+
+        //setPdbeAccession(enzymeSummaryList, pdbeResults);
         //resultsize
+        List<String> uniprotIds = getUniprotIds(enzymeSummaryList);
+        Map<String,String> pdbeAccs =
+        ebeyeAdapter.getUniprotXrefs(uniprotIds, IEbeyeAdapter.Domains.pdbe.name());
+
+        setPdbeAccession(enzymeSummaryList, pdbeAccs);
         searchResults.setResultsize(enzymeSummaryList.size());
 
         searchResults.getEnzymesummary().addAll(enzymeSummaryList);
 
+        //EnzymeSummary enzymeSummary = searchResults.getEnzymesummary().get(0);
+        //enzymeSummary.
 
         enzymeSearchResults.setEnzymesummarycollection(searchResults);
+
+        createSpeciesFilter(enzymeSearchResults);
+
         searchParams.setKeywords(userKeywords);
+
         return enzymeSearchResults;
 
     }
+    public void setPdbeAccession(List<EnzymeSummary> enzymeSummaryList
+            ,  Map<String,String> pdbeAccs) {
+        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+            String uniprotId = enzymeSummary.getUniprotid();
+            String pdbeAcc = pdbeAccs.get(uniprotId);
+            enzymeSummary.getPdbeaccession().add(pdbeAcc);
+        }       
+    }
+
+/*
+
+    public void setPdbeAccession(List<EnzymeSummary> enzymeSummaryList
+            , List<Result> pdbeResults) {
+        Set<String> uniprotIds = getUniprotAccs(enzymeSummaryList);
+        //Set<String> pdbeAccs = getResultsXrefs(pdbeResults);
+        //Map<String, String> uniprotAndPdbeIdsMap = new Hashtable<String, String>();
+        //getResultsXrefs(pdbeResults);
+        for (Result pdbeResult:pdbeResults) {
+            String pdbeResultUniprotAcc = pdbeResult.getAcc().get(0);
+            for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+                String uniprotAcc = enzymeSummary.getUniprotaccessions().get(0);
+                if (pdbeResultUniprotAcc.equals(uniprotAcc)) {
+                    String pdbeId = pdbeResult.getXrefs().get(0).getAcc().get(0);
+                    enzymeSummary.getPdbeaccession().add(pdbeId);
+                }
+            }
+        }
+
+        System.out.print(uniprotIds);
+    }
+*/
+   public List<String> getUniprotIds(List<EnzymeSummary> enzymeSummaryList) {
+        List<String> uniprotIds = new ArrayList<String>();
+        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+            String uniprotId = enzymeSummary.getUniprotid();
+            uniprotIds.add(uniprotId);
+        }
+        return uniprotIds;
+    }
+    public Set<String> getUniprotAccs(List<EnzymeSummary> enzymeSummaryList) {
+        Set<String> uniprotAccs = new TreeSet<String>();
+        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+            String uniprotAcc = enzymeSummary.getUniprotaccessions().get(0);
+            uniprotAccs.add(uniprotAcc);
+        }
+        return uniprotAccs;
+    }
+    public void createSpeciesFilter(EnzymeSearchResults enzymeSearchResults) {
+        List<EnzymeSummary> enzymeSummaryList = enzymeSearchResults
+                .getEnzymesummarycollection().getEnzymesummary();
+        List<Species> speciesFilter = enzymeSearchResults.getSearchfilter().getSpecies();
+        Set<String> speciesNames = new TreeSet<String>();
+        for (EnzymeSummary enzymeSummary: enzymeSummaryList) {
+            Species species = enzymeSummary.getSpecies();
+            String name = species.getCommonname();
+            if (name == null || name.equals("")) {
+                name = species.getScientificname();
+            }
+            boolean added = false;
+            if (name != null) {
+                added = speciesNames.add(name);
+            }
+
+            if (added) {
+                speciesFilter.add(species);
+            }
+
+            List<EnzymeAccession> enzymeAccessions = enzymeSummary.getRelatedspecies();
+            for (EnzymeAccession acc: enzymeAccessions) {
+                Species relSpecies = acc.getSpecies();
+                String relName = relSpecies.getCommonname();
+                if (relName == null) {
+                    relName = relSpecies.getScientificname();
+                }
+                boolean relAdded = speciesNames.add(relName);
+                if (relAdded) {
+                    speciesFilter.add(relSpecies);
+                }
+            }
+        }
+
+        System.out.print(speciesFilter);
+
+    }
+
 
     public static List<ParamOfGetResults>  prepareParamOfGetAllResults(
             SearchParams searchParams, List<String> resultFields) {
@@ -452,8 +571,13 @@ public class EnzymeFinder implements IEnzymeFinder {
         return filteredResults;
     }
 */
-    public Set<String> getUniprotXrefs(List<Result> resultList) {
-        Set<String> uniprotAccList = new TreeSet<String>();
+    public List<String> getResultsXrefsList(List<Result> resultList) {
+        List<String> list = new ArrayList<String>();
+        list.addAll(getResultsXrefs(resultList));
+        return list;
+    }
+    public Set<String> getResultsXrefs(List<Result> resultList) {
+        Set<String> xrefAccList = new TreeSet<String>();
         if (resultList.size() != 0) {
             Iterator it1 = resultList.iterator();
             while (it1.hasNext()) {
@@ -466,7 +590,7 @@ public class EnzymeFinder implements IEnzymeFinder {
                     if (accList!=null) {
                         if (accList.size()>0) {
                             for (String acc:accList) {
-                                uniprotAccList.add(acc);
+                                xrefAccList.add(acc);
                             }                        
                         }
                     }
@@ -474,7 +598,7 @@ public class EnzymeFinder implements IEnzymeFinder {
                 //filteredResults.addAll(getUniprotResult(accList));
             }
         }
-        return uniprotAccList;
+        return xrefAccList;
     }
 /*
     public static boolean isEnzyme(String acc) {
