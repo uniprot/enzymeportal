@@ -31,6 +31,9 @@ public class LuceneQueryBuilder {
     public static final String UNIPROT_ID_FIELD ="id";
     public static final String UNIPROT_ID_SUFFIX_WILDCARD ="_*";
     public static final int EBEYE_MAX_RESULTS_PER_QUERY = 100;
+    public static final String ENZYME_FILTER_UNIPROTAPI =
+            "EC:*";
+
     //133343 results does not pass the load test
     //public static final int MAX_RESULTS = 100000;
     public static LuceneParser luceneParser = new LuceneParser();  
@@ -78,6 +81,7 @@ public class LuceneQueryBuilder {
             sb.append(":");
             sb.append(idPrefix);
             sb.append(UNIPROT_ID_SUFFIX_WILDCARD);
+            //sb.append(" AND " +ENZYME_FILTER_UNIPROTAPI);
             queries.add(sb.toString());
         }
         return queries;
