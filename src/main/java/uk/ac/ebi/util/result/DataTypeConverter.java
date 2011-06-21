@@ -5,9 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 //import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 //import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
+import java.util.Map;
+import java.util.Set;
 import uk.ac.ebi.ep.config.jaxb.Domain;
 import uk.ac.ebi.ep.config.jaxb.ResultField;
 import uk.ac.ebi.ep.config.jaxb.ResultFieldList;
+import uk.ac.ebi.ep.search.result.jaxb.Compound;
 
 /**
  *
@@ -132,6 +135,17 @@ public class DataTypeConverter {
         return configFields;
     }
 
+    public static List<Compound> mapToCompound(Map<String,String> compoundMap) {
+         List<Compound> compoundList = new ArrayList<Compound>();
+         Set<String> keys = compoundMap.keySet();
+         for (String key:keys) {
+             Compound compound = new Compound();
+             compound.setId(key);
+             compound.setName(compoundMap.get(key));
+             compoundList.add(compound);
+         }
+         return compoundList;
+    }
    
     public static ResultFieldList cloneResultFieldList(ResultFieldList originalObj) {
         ResultFieldList clonedObj = new ResultFieldList();
@@ -147,6 +161,7 @@ public class DataTypeConverter {
         }
         return clonedObj;
     }
+
 /*
     
     public static String StringOfAccessionsToXLinks(Constant.DOMAINS_ENUM domains,

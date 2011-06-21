@@ -58,30 +58,7 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         return sb.toString();
     }
 
-    public static List<String> convertArrayOfEntryReferencesToList(
-                                        ArrayOfEntryReferences arrayOfEntryReferences) {
-        List<String> resultList = new ArrayList<String>();
-        Iterator it = arrayOfEntryReferences.getEntryReferences().iterator();
-        while (it.hasNext()) {
-            EntryReferences entryReferences = (EntryReferences) it.next();
-            JAXBElement<ArrayOfArrayOfString> jAXBElement =
-                                                            entryReferences.getReferences();
-            resultList.addAll(
-                    convertArrayOfArrayOfStringToList(jAXBElement.getValue()));
-        }
-        return resultList;
-    }
 
-    public static List<String> convertArrayOfArrayOfStringToList(
-                                                ArrayOfArrayOfString arrayOfArrayOfString) {
-        List<String> resultList = new ArrayList<String>();
-        Iterator it = arrayOfArrayOfString.getArrayOfString().iterator();
-        while (it.hasNext()) {
-            ArrayOfString arrayOfString = (ArrayOfString) it.next();
-            resultList.addAll(arrayOfString.getString());
-        }
-        return resultList;
-    }
 
     /**
      * @deprecated see transform
