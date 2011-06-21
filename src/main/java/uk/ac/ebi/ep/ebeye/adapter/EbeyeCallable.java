@@ -2,7 +2,10 @@ package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
+import uk.ac.ebi.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ebeye.util.Transformer;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
+import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 import uk.ac.ebi.webservices.ebeye.EBISearchService;
 import uk.ac.ebi.webservices.ebeye.EBISearchService_Service;
@@ -66,20 +69,12 @@ public class EbeyeCallable {
 //******************************** INNER CLASS *******************************//
     public static class GetResultsCallable
             implements Callable<ArrayOfArrayOfString> {
-        protected String domain;
-        protected String query;
-        protected ArrayOfString fields;
+        protected ParamOfGetResults param;
         protected int start;
         protected int size;
 
-        public GetResultsCallable(
-                String domain
-                , String query
-                , ArrayOfString fields
-                , int start, int size) {
-            this.domain = domain;
-            this.fields = fields;
-            this.query = query;
+        public GetResultsCallable(ParamOfGetResults param, int start, int size) {
+            this.param = param;
             this.start = start;
             this.size = size;
         }
@@ -89,9 +84,17 @@ public class EbeyeCallable {
             return callGetResults();
         }
 
-        public ArrayOfArrayOfString callGetResults() {            
+        public ArrayOfArrayOfString callGetResults() {
+            ArrayOfString ebeyeFields = Transformer
+                    .transformToArrayOfString(param.getFields());
             ArrayOfArrayOfString EbeyeResult = eBISearchService
-                    .getResults(domain, query, fields, start, size);
+                    .getResults(
+                    param.getDomain()
+                    ,param.getQuery()
+                    ,ebeyeFields
+                    ,start
+                    ,size
+                    );
             return EbeyeResult;
         }
 
@@ -100,6 +103,65 @@ public class EbeyeCallable {
 //getAllDomainsResults
 
 //******************************** INNER CLASS *******************************//
+//******************************** INNER CLASS *******************************//
+    public static class GetEntriesCallable
+            implements Callable<ArrayOfArrayOfString>  {
+        protected String domain;
+        protected ArrayOfString id;
+        protected ArrayOfString fields;
+
+        public GetEntriesCallable(String domain, ArrayOfString id, ArrayOfString fields) {
+            this.domain = domain;
+            this.id = id;
+            this.fields = fields;
+        }
+
+        public ArrayOfArrayOfString call() throws Exception {
+            return callGetEntries();
+        }
+
+        public ArrayOfArrayOfString callGetEntries() {
+            ArrayOfArrayOfString EbeyeResult = eBISearchService
+                    .getEntries(domain, id, fields);
+            return EbeyeResult;
+        }
+
+    }
+
+//******************************** INNER CLASS *******************************//
+    public static class GetReferencedEntriesSet
+            implements Callable<ArrayOfEntryReferences>  {
+        protected String domain;
+        protected ArrayOfString entries;
+        protected String referencedDomain;
+        protected ArrayOfString fields;
+
+        public GetReferencedEntriesSet(String domain, ArrayOfString entries
+                , String referencedDomain, ArrayOfString fields) {
+            this.domain = domain;
+            this.entries = entries;
+            this.referencedDomain = referencedDomain;
+            this.fields = fields;
+        }
+
+
+
+        public ArrayOfEntryReferences call() throws Exception {
+            return callGetReferencedEntriesSet();
+        }
+
+        public ArrayOfEntryReferences callGetReferencedEntriesSet() {
+            ArrayOfEntryReferences EbeyeResult = eBISearchService
+                    .getReferencedEntriesSet(domain, entries, referencedDomain, fields);
+            return EbeyeResult;
+        }
+
+    }
+
+
+
+//******************************** INNER CLASS *******************************//
+
 /*
     public static class GetAllResultsCallable
             implements Callable<List<ArrayOfArrayOfString>> {

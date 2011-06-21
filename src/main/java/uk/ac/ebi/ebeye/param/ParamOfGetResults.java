@@ -14,9 +14,9 @@ public class ParamOfGetResults extends ParamGetNumberOfResults {
     //This is configured in the config file
     //protected ResultFieldList resultFieldList;
     //It's better to have it here to decouple the code completely
-    protected List<String> fields;
-    protected int totalFound;
-    protected List<ParamOfResultSize> resultSizeList;
+    protected List<String> fields;    
+    //protected List<ParamOfResultSize> resultSizeList;
+
 //********************************* VARIABLES ********************************//
 
 //******************************** CONSTRUCTORS ******************************//
@@ -28,15 +28,7 @@ public class ParamOfGetResults extends ParamGetNumberOfResults {
         super(domain, query);
         this.fields = fields;
     }
-
-    public ParamOfGetResults(String domain, String query, List<String> fields, int totalFound) {
-        super(domain, query);
-        this.fields = fields;
-        this.totalFound = totalFound;
-    }
-
     
-
 
 //****************************** GETTER & SETTER *****************************//
 
@@ -48,25 +40,6 @@ public class ParamOfGetResults extends ParamGetNumberOfResults {
     public void setFields(List<String> fields) {
         this.fields = fields;
     }
-
-    public int getTotalFound() {
-        return totalFound;
-    }
-
-    public void setTotalFound(int totalFound) {
-        this.totalFound = totalFound;
-    }
-
-    public List<ParamOfResultSize> getResultSizeList() {
-        return resultSizeList;
-    }
-
-    public void setResultSizeList(List<ParamOfResultSize> resultSizeList) {
-        this.resultSizeList = resultSizeList;
-    }
-
-
-
     
 //********************************** METHODS *********************************//
 
