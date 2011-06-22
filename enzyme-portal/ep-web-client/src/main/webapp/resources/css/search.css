@@ -120,7 +120,6 @@
     width:20%;
     padding: 4px 4px;
     margin-top: 5px;
-    height: 100%;
     /*border: 2px solid #ddd;*/
     /*
     -moz-border-radius: 15px 15px 15px 15px;
@@ -131,8 +130,8 @@
 
 .filter .sublevel1 {
     margin-top: 10px;
-    min-height: 100px;
-    max-height: 180px;
+    min-height: 120px;
+    max-height: 600px;
     border: 1px solid #ddd;    
     -moz-border-radius: 8px 8px 8px 8px;
     border-radius:8px 8px 8px 8px;
@@ -141,30 +140,32 @@
     margin-right: 2px;
 }
 
-.filter .sublevel1 .content {    
+.filterContent {
     width: 100%;
     padding-left: 6px;
     padding-right: 6px;
-    margin-left: 2px;
-    margin-right: 2px;
-    line-height: 18pt;
+    padding-bottom: 6px;
+    line-height:120%;
 }
-.filter .sublevel1 .content .text {
+.text {
     float: left;
-    width: 70%;
+    width: 80%;
 }
 
-.filter .sublevel1 .content .text .otherName {
+.otherName {
     font-size: 8pt;
     font-style: italic;    
 }
-.filter .sublevel1 .content .checkItem {
+.checkItem {
     vertical-align: top;
     float: right;
     width: 10%;
-    margin-right: 10px;
+    margin-right: 10px;    
 }
 
+.filterLine {
+    margin-bottom: 8px;
+}
 .result  {
     float:left;
     margin-left:2px;
@@ -210,7 +211,7 @@
     color: #408C8C;
     float:right;
     max-height: 40px;
-    width:19%;
+    width:19%;    
 }
 
 #allButtons {
@@ -255,15 +256,17 @@
     margin-top: 10px;
     padding: 5px;
     vertical-align: top;
-    height: 100px;
+    max-height: 350px;
+    min-height: 80px;
     /*width: 76%;*/
     width: 88%;
 }
 
 #proteinImg {
     float: left;
-    width: 15%;
-    height: 90px;   
+    width: 17%;
+    height: 90px;
+    text-align: center;
 }
 
 #desc {

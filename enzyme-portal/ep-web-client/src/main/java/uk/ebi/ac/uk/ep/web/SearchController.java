@@ -15,6 +15,7 @@ import uk.ac.ebi.ep.search.result.Pagination;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSearchResults;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
 import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
+import uk.ac.ebi.ep.search.result.jaxb.SearchFilter;
 
 /**
  *
@@ -76,6 +77,7 @@ public class SearchController {
         }
         EnzymeSummaryCollection collection = resultSet.getEnzymesummarycollection();
         List<EnzymeSummary> enzymeSummaryList =collection.getEnzymesummary();
+        SearchFilter searchFilter = resultSet.getSearchfilter();
         /*
         PagedListHolder pagedListHolder = new PagedListHolder(enzymeSummaryList);
         pagedListHolder.s
@@ -89,9 +91,12 @@ public class SearchController {
         int totalPage = pagination.calTotalPages();
         pagination.setTotalPages(totalPage);
         pagination.calCurrentPage(start);
+
         model.addAttribute("searchParameters", searchParameters);
         model.addAttribute("pagination", pagination);
-        model.addAttribute("enzymeSummaryCollection", collection);
+        //model.addAttribute("enzymeSummaryCollection", collection);
+        //model.addAttribute("searchFilter", searchFilter);
+        model.addAttribute("resultSet", resultSet);
         return "searchHome";
     }
 }

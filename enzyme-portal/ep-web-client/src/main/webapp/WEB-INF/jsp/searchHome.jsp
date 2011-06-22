@@ -7,8 +7,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
+
 <html>
     <head>
         <title>Enzyme Portal</title>        
@@ -73,10 +74,15 @@
                     </p>
                 </form:form>
                  </div>
-            </div>            
+            </div>
+            <form:form modelAttribute="resultSet" action="showResults" method="get">
+                <c:set var="searchFilter" value="${resultSet.searchfilter}"/>
+                <c:set var="enzymeSummaryCollection" value="${resultSet.enzymesummarycollection}"/>
+                <c:set var="totalfound" value="${enzymeSummaryCollection.totalfound}"/>
             <div class="grid_12 content">
                 <c:if test="${enzymeSummaryCollection.enzymesummary!=null && enzymeSummaryCollection.totalfound>0}">
                 <div class="filter">
+                    <c:set var="filterMaxDisplay" value="${10}"/>
                     <div class="title">
                         Search Filters
                     </div>
@@ -86,77 +92,66 @@
                         <div class="subTitle">
                             Chemical Compounds
                         </div>
-                        <div class="content">
-                            <div class="text">
-                            <span>Sildenafil</span>
-                            </div>
-                            <div class="checkItem">
-                                <input type="checkbox" name="human" value="human" />
-                            </div>
-                           <div class="clear"></div>
-                            <div class="text">
-                            <span>Others</span>
-                            </div>
-                            <div class="checkItem">
-                                <input type="checkbox" name="human" value="human" />
-                            </div>
+                        <div class="filterContent">
+                            <c:set var="compoundList" value="${searchFilter.compounds}"/>
+                            <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
+                            <c:set var="compoundListMaxSize" value="${compoundListSize}"/>
 
+                            <c:if test="${compoundListMaxSize > filterMaxDisplay}">
+                                <c:set var="compoundListMaxSize" value="${filterMaxDisplay}"/>
+                            </c:if>
+                            <c:if test="${compoundListMaxSize > 0}">
+                                <c:forEach var="i" begin="0" end="${compoundListMaxSize-1}">
+                                    <div class="filterLine">
+                                    <div class="text">
+                                        <xchars:translate>
+                                            <c:out value="${compoundList[i].name}" escapeXml="false"/>
+                                        </xchars:translate>
+                                    </div>
+                                    <div class="checkItem">
+                                        <input type="checkbox" name="human" value="human" />
+                                     </div>
+                                    <div class="clear"></div>
+                                    </div>
+                                </c:forEach>
+
+                            </c:if>
                         </div>
                     </div>
-
-
-
-                    <div class="sublevel1">
-                        <div class="subTitle">
-                            Disease
-                        </div>
-                        <div class="content">
-                            <div class="text">
-                            <span>Diabetes</span>
-                            </div>
-                            <div class="checkItem">
-                                <input type="checkbox" name="human" value="human" />
-                            </div>
-                           <div class="clear"></div>
-                            <div class="text">
-                            <span>Other diseases</span>
-                            </div>
-                            <div class="checkItem">
-                                <input type="checkbox" name="human" value="human" />
-                            </div>
-
-                        </div>
-                    </div>
-
 
                     <div class="sublevel1">
                         <div class="subTitle">
                             Species
                         </div>
-                        <div class="content">
-                            <div class="text">
-                            <span>Human</span>&nbsp;<span class="otherName">(Homo Sapiens)</span>
-                            </div>
-                            <div class="checkItem">
-                                <input type="checkbox" name="human" value="human" />
-                            </div>
-                           <div class="clear"></div>
-                            <div class="text">
-                            <span>Rat</span>&nbsp;<span class="otherName">(Rattus norvegicus)</span>
-                            </div>
-                            <div class="checkItem">
-                                <input type="checkbox" name="human" value="human" />
-                            </div>
-
+                        <div class="filterContent">
+                            <c:set var="speciesList" value="${searchFilter.species}"/>
+                            <c:set var="speciesListSize" value="${fn:length(speciesList)}"/>
+                            <c:set var="speciesListMaxSize" value="${speciesListSize}"/>
+                            <c:if test="${speciesListMaxSize > filterMaxDisplay}">
+                                <c:set var="speciesListMaxSize" value="${filterMaxDisplay}"/>
+                            </c:if>
+                            <c:forEach var="i" begin="0" end="${speciesListMaxSize-1}">
+                                <c:set var="speciesName" value="${speciesList[i].commonname}"/>
+                                <c:if test='${speciesName==null || speciesName ==""}'>
+                                    <c:set var="speciesName" value="${speciesList[i].scientificname}"/>
+                                </c:if>
+                                <div class="filterLine">
+                                <div class="text">
+                                <span>
+                                    <c:out value="${speciesName}"/>                                    
+                                </span>
+                                </div>
+                                <div class="checkItem">
+                                    <input type="checkbox" name="human" value="human" />
+                                 </div>
+                                <div class="clear"></div>
+                                </div>                                
+                            </c:forEach>
                         </div>
                     </div>
-
-
                 </div>
                 </c:if>                
                 <div id="keywordSearchResult" class="result">
-                <form:form modelAttribute="enzymeSummaryCollection" action="showResults" method="get">
-                    <c:set var="totalfound" value="${enzymeSummaryCollection.totalfound}"/>
                     <c:if test="${totalfound==0}">
                         No results found!
                     </c:if>
@@ -195,22 +190,25 @@
                     </div>                        
                         <div class="resultContent">
                             <c:forEach items="${enzymeSummaryCollection.enzymesummary}" var="enzyme">
+                             <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
                             <div class="resultItem">
                                 <div id="proteinImg">
-                                    <a href="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/1ha1_cbc600.png" target="blank">
-                                    <img src="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/1ha1_cbc600.png" alt="Klematis" width="110" height="90" />
-                                    </a>
+                                    <c:set var="imgFile" value='${enzyme.pdbeaccession[0]}'/>
+                                    <c:set var="imgLink" value=""/>
+                                    <c:if test='${imgFile != "" && imgFile != null}'>
+                                        <c:set var="imgLink" value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
+                                    </c:if>                                    
+                                    <img src="${imgLink}" alt="Image not available!" width="110" height="90"/>                                 
                                 </div>
                                 <div id="desc">
-                                    <a href="entry">
+                                    <a href="entry/${primAcc}">
                                         <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
                                         <c:out value="${showName}"/>
                                        <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
                                     </a>
                                     <br/>
-                                    Function:
-                                    <c:set var="showFunction" value="${fn:substring(enzyme.function, 0, 100)}"/>
-                                    <c:out value="${showFunction}"/>...<br/>
+                                    Function:                                    
+                                    <c:out value="${enzyme.function}"/><br/>
                                     Synonyms:
                                     <c:set var="synSize" value="${0}"/>
                                     <c:forEach items="${enzyme.synonym}" var="syn">                                        
@@ -228,34 +226,31 @@
                                 </div>
                                     <div id="in">in</div>
                                     <div class="species">
+                                        <a href="entry/${primAcc}">
                                         <c:choose>
                                         <c:when test='${enzyme.species.commonname == ""}'>
-                                            <c:out value="${enzyme.species.scientificname}"/><br/>
+                                            <c:out value="${enzyme.species.scientificname}"/>
                                         </c:when>
                                         <c:otherwise>
-                                            <c:out value="${enzyme.species.commonname}"/><br/>
+                                            <c:out value="${enzyme.species.commonname}"/>
                                         </c:otherwise>
                                         </c:choose>
+                                        </a><br/>
                                         <c:set var="speciesCounter" value="${1}"/>
                                         <c:set var="speciesSize" value="${fn:length(enzyme.relatedspecies)+1}"/>
                                         <c:forEach items="${enzyme.relatedspecies}" var="relspecies">                                            
                                             <c:if test="${speciesCounter < 4}">
-                                                
+                                                <a href="entry/${relspecies.uniprotaccessions[0]}">
                                                 <c:choose>
-                                                <c:when test='${relspecies.species.commonname == ""}'>
-                                                    <a href="entry">
+                                                <c:when test='${relspecies.species.commonname == ""}'>                                                
                                                     <c:out value="${relspecies.species.scientificname}"/>
-                                                    </a>
-                                                    <br/>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a href="entry">
                                                     <c:out value="${relspecies.species.commonname}"/>
-                                                    </a>
-                                                    <br/>
                                                 </c:otherwise>
                                                 </c:choose>
-                                                    
+                                             </a>
+                                             <br/>
                                             </c:if>
                                             <c:set var="speciesCounter" value="${speciesCounter+1}"/>
                                         </c:forEach>
@@ -277,24 +272,6 @@
                             </c:forEach>
                         </div>
                     </c:if>
-
-                    <!--
-                    <c:forEach items="${enzymes}" var="enzyme">
-                        <p>
-                            Uniprot id: <c:out value="${enzyme.uniprotid}"/><br>
-                            Uniprot accession:
-                        <c:forEach items="${enzyme.uniprotaccessions}" var="uniprotAcccession">
-                            <a href="http://www.uniprot.org/uniprot/${uniprotAcccession}" target="blank">
-                            <c:out value="${uniprotAcccession}"/>
-                        </a>
-                        </c:forEach>
-                      <br>
-                      Uniprot name: <c:out value="${enzyme.name}"/><br>
-                      Uniprot species: <c:out value="${enzyme.species.scientificname}"/>
-                  </p>
-                    </c:forEach>
-                    -->
-
                 </form:form>
             </div>
 
