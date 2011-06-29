@@ -1,9 +1,6 @@
 package uk.ac.ebi.ep.util.validation;
 
 
-import uk.ac.ebi.ep.search.parameter.SearchParams;
-
-
 /**
  *
  * @since   1.0
