@@ -35,7 +35,7 @@
         </configuration>
       </plugin>
     </plugins>
-    <finalName>EnzymePortalWebClient_V05</finalName>
+    <finalName>EnzymePortalWebClient_V06</finalName>
   </build>
   <dependencies>
     <dependency>
@@ -115,8 +115,14 @@
       <artifactId>xchars-config</artifactId>
       <version>1.0.3</version>
     </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+    </dependency>
   </dependencies>
 </project>
+
 
 
 
