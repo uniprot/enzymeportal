@@ -153,5 +153,6 @@
     <module>ebeye-client</module>
     <module>ebeye-adapter</module>
     <module>uniprot-adapter</module>
+    <module>intenz-adapter</module>
   </modules>
 </project>
