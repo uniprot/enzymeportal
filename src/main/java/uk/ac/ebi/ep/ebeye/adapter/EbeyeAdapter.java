@@ -19,7 +19,7 @@ import uk.ac.ebi.ep.ebeye.adapter.EbeyeCallable.GetEntriesCallable;
 import uk.ac.ebi.ep.ebeye.adapter.EbeyeCallable.GetReferencedEntriesSet;
 import uk.ac.ebi.ep.ebeye.adapter.EbeyeCallable.GetResultsCallable;
 import uk.ac.ebi.ep.ebeye.adapter.EbeyeCallable.NumberOfResultsCaller;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+import uk.ac.ebi.ep.ebeye.result.Result;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.result.Pagination;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;

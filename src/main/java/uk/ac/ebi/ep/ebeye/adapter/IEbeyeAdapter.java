@@ -6,7 +6,7 @@ import java.util.Map;
 //import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
 import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+import uk.ac.ebi.ep.ebeye.result.Result;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**
