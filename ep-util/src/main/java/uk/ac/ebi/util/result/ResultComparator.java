@@ -1,7 +1,7 @@
 package uk.ac.ebi.util.result;
 
 import java.util.Comparator;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
+import uk.ac.ebi.ep.ebeye.result.Result;
 
 /**
  *
