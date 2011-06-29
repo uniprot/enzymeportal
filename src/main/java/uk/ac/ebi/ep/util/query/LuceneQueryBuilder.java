@@ -17,9 +17,9 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 //import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
 //import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
-import uk.ac.ebi.ep.config.jaxb.Domain;
-import uk.ac.ebi.ep.config.jaxb.SearchField;
-import uk.ac.ebi.ep.search.parameter.SearchParams;
+import uk.ac.ebi.ep.config.Domain;
+import uk.ac.ebi.ep.config.SearchField;
+import uk.ac.ebi.ep.search.model.SearchParams;
 
 /**
  * Hello world!
@@ -46,7 +46,7 @@ public class LuceneQueryBuilder {
         Iterator fieldIt = SearchFieldList.iterator();
         int listLength = SearchFieldList.size();
         int counter = 1;
-        String keywords = searchParams.getKeywords();
+        String keywords = searchParams.getText();
         //int numberOfKeywords = keywords.split("\\s").length;
         query.append("(");
         while (fieldIt.hasNext()) {

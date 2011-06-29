@@ -3,17 +3,13 @@ package uk.ac.ebi.util.result;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
-import uk.ac.ebi.ep.config.jaxb.Domain;
-import uk.ac.ebi.ep.config.jaxb.ResultField;
-import uk.ac.ebi.ep.config.jaxb.ResultFieldList;
-import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
-import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummaryCollection;
-import uk.ac.ebi.ep.search.result.jaxb.Species;
+import uk.ac.ebi.ep.config.Domain;
+import uk.ac.ebi.ep.config.ResultField;
+import uk.ac.ebi.ep.config.ResultFieldList;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
-import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
-import uk.ac.ebi.webservices.ebeye.EntryReferences;
 
 /**
  *
