@@ -6,8 +6,8 @@ import java.util.List;
 import uk.ac.ebi.ebeye.util.Transformer;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.FieldsOfGetResults;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Xref;
+import uk.ac.ebi.ep.ebeye.result.Result;
+import uk.ac.ebi.ep.ebeye.result.Xref;
 
 /**
  *
