@@ -38,7 +38,7 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp" />
     </bean>
-   <bean id="config" class="uk.ac.ebi.ep.config.Config"
+   <bean id="config" class="uk.ac.ebi.ep.core.search.Config"
    	init-method="initIt" destroy-method="cleanUp">
 
    	<!--<property name="message" value="i'm property message" />-->
