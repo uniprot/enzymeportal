@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Contains the searchable and retrievable fields-->
-<ep:EnzymeRelatedDomains xmlns:ep="http://ebi.ac.uk/enzymeportal" 
+<ep:EnzymeRelatedDomains xmlns:ep="http://ebi.ac.uk/ep/config"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://ebi.ac.uk/enzymeportal config.xsd ">
+    xsi:schemaLocation="http://ebi.ac.uk/ep/config config.xsd ">
   <Domain>
     <id>intenz</id>
     <SearchFieldList>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://ebi.ac.uk/enzymeportal/ebeye/result" xmlns:ebeye="http://ebi.ac.uk/enzymeportal/ebeye/result" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema targetNamespace="http://ebi.ac.uk/ep/ebeye/result" xmlns:ebeye="http://ebi.ac.uk/ep/ebeye/result" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="Result" type="ebeye:Result"/>
 	<xs:complexType name="Result">
 		<xs:sequence>
