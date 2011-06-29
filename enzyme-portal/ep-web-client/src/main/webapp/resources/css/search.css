@@ -17,7 +17,7 @@
 }
 .species  a:link, .species a:visited{
 	/*color: #207a7a;*/
-	text-decoration: underline;
+	text-decoration: underline;       
 }
 .ebiHeader {
     min-height: 50px;
@@ -267,6 +267,7 @@
     width: 17%;
     height: 90px;
     text-align: center;
+    margin-left: -8px;   
 }
 
 #desc {
@@ -283,9 +284,13 @@
 
 .species {
     float: right;
-    width: 18%;
+    width: 18%;    
 }
 
+p{
+    line-height: 12pt;
+    margin-bottom: 4pt;
+}
 .basket{
     float: right;        
 }
