@@ -1,8 +1,8 @@
 package uk.ac.ebi.ep.core.search;
 
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.parameter.SearchParams;
-import uk.ac.ebi.ep.search.result.jaxb.EnzymeSearchResults;
+import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.ep.search.model.SearchResults;
 
 /**
  *
@@ -24,7 +24,7 @@ public interface IEnzymeFinder extends IEnzyme {
 
 
 //********************************** METHODS *********************************//
-    public EnzymeSearchResults getEnzymes(SearchParams searchInput)
+    public SearchResults getEnzymes(SearchParams searchInput)
             throws EnzymeFinderException;
 /*
     public List<ResultOfGetNumberOfResults> getNumberOfResults(
