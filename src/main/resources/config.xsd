@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://ebi.ac.uk/enzymeportal" xmlns:ep="http://ebi.ac.uk/enzymeportal" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema targetNamespace="http://ebi.ac.uk/ep/config" xmlns:ep="http://ebi.ac.uk/ep/config" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="Domain" type="ep:Domain"/>
 	<xs:complexType name="Domain">
 		<xs:sequence>
