@@ -2,9 +2,8 @@ package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.List;
 import java.util.Set;
-import uk.ac.ebi.ep.ebeye.result.jaxb.Result;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
-import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
 
 /**
  *
@@ -16,7 +15,7 @@ import uk.ac.ebi.ep.search.result.jaxb.EnzymeSummary;
  */
 public interface IUniprotAdapter {
     //second
-    public static final int ENTRY_TIMEOUT = 30;
+    public static final int ENTRY_TIMEOUT = 60;
 
 //********************************* VARIABLES ********************************//
 
@@ -30,11 +29,11 @@ public interface IUniprotAdapter {
 //********************************** METHODS *********************************//
     public EnzymeSummary getEnzymeEntry(String accession);
 
-    public List<EnzymeSummary> getEnzymeEntries(Set<String> accessionList) throws
+    public List<EnzymeSummary> getEnzymeEntries(Set<String> queries) throws
             MultiThreadingException;
-
-    public List<EnzymeSummary> getEnzymeEntries(List<Result> briefResultList)
-            throws MultiThreadingException;
+    
+    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries) throws
+            MultiThreadingException;
 
 }
 
