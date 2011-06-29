@@ -7,10 +7,10 @@ import java.util.List;
 //import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import java.util.Map;
 import java.util.Set;
-import uk.ac.ebi.ep.config.jaxb.Domain;
-import uk.ac.ebi.ep.config.jaxb.ResultField;
-import uk.ac.ebi.ep.config.jaxb.ResultFieldList;
-import uk.ac.ebi.ep.search.result.jaxb.Compound;
+import uk.ac.ebi.ep.config.Domain;
+import uk.ac.ebi.ep.config.ResultField;
+import uk.ac.ebi.ep.config.ResultFieldList;
+import uk.ac.ebi.ep.search.model.Compound;
 
 /**
  *
