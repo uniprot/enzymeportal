@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
@@ -39,6 +40,10 @@ public class EbeyeCallable {
             implements Callable<Integer> {
         protected ParamGetNumberOfResults paramGetNumberOfResults;
 
+        public NumberOfResultsCaller() {
+            
+        }
+
         public NumberOfResultsCaller(
                 ParamGetNumberOfResults paramGetNumberOfResults) {
             this.paramGetNumberOfResults = paramGetNumberOfResults;
@@ -54,9 +59,16 @@ public class EbeyeCallable {
         }
 
         public Integer getNumberOfResults() {
-            int totalFound = eBISearchService.getNumberOfResults(
+            int totalFound = getNumberOfResults(
                     paramGetNumberOfResults.getDomain()
                     , paramGetNumberOfResults.getQuery());
+            return totalFound;
+        }
+
+        public Integer getNumberOfResults(String domain, String query) {
+            int totalFound = eBISearchService.getNumberOfResults(
+                    domain
+                    , query);
             return totalFound;
         }
 
@@ -73,6 +85,9 @@ public class EbeyeCallable {
         protected int start;
         protected int size;
 
+        public GetResultsCallable(){
+        }
+        
         public GetResultsCallable(ParamOfGetResults param, int start, int size) {
             this.param = param;
             this.start = start;
@@ -85,12 +100,24 @@ public class EbeyeCallable {
         }
 
         public ArrayOfArrayOfString callGetResults() {
-            ArrayOfString ebeyeFields = Transformer
-                    .transformToArrayOfString(param.getFields());
-            ArrayOfArrayOfString EbeyeResult = eBISearchService
-                    .getResults(
+            ArrayOfArrayOfString EbeyeResult = callGetResults(
                     param.getDomain()
                     ,param.getQuery()
+                    ,param.getFields()
+                    ,start
+                    ,size
+                    );
+            return EbeyeResult;
+        }
+
+        public ArrayOfArrayOfString callGetResults(
+                String domain, String query, List<String> fields, int start, int size) {
+            ArrayOfString ebeyeFields = Transformer
+                    .transformToArrayOfString(fields);
+            ArrayOfArrayOfString EbeyeResult = eBISearchService
+                    .getResults(
+                    domain
+                    ,query
                     ,ebeyeFields
                     ,start
                     ,size
@@ -153,6 +180,12 @@ public class EbeyeCallable {
         public ArrayOfEntryReferences callGetReferencedEntriesSet() {
             ArrayOfEntryReferences EbeyeResult = eBISearchService
                     .getReferencedEntriesSet(domain, entries, referencedDomain, fields);
+            return EbeyeResult;
+        }
+
+        public ArrayOfArrayOfString callGetReferencedEntriesFlatSet() {
+            ArrayOfArrayOfString EbeyeResult = eBISearchService
+                    .getReferencedEntriesFlatSet(domain, entries, referencedDomain, fields);
             return EbeyeResult;
         }
 

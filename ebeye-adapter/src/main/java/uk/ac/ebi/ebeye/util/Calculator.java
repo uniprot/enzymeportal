@@ -1,5 +1,9 @@
 package uk.ac.ebi.ebeye.util;
 
+import java.util.Iterator;
+import java.util.List;
+import uk.ac.ebi.ebeye.param.ParamOfGetResults;
+
 /**
  *
  * @since   1.0
@@ -7,6 +11,7 @@ package uk.ac.ebi.ebeye.util;
  *          $LastChangedDate$ <br/>
  *          $Author$
  * @author  $Author$
+ @deprecated  See Pagination
  */
 public class Calculator {
 
@@ -51,4 +56,6 @@ public class Calculator {
 
         return totalPages;
     }
+
+
 }
