@@ -10,6 +10,7 @@ import java.util.Set;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
 import uk.ac.ebi.ep.config.ResultFieldList;
+import uk.ac.ebi.ep.config.SearchField;
 import uk.ac.ebi.ep.search.model.Compound;
 
 /**
@@ -130,6 +131,17 @@ public class DataTypeConverter {
         Iterator it = fields.iterator();
         while (it.hasNext()) {
             ResultField field = (ResultField)it.next();
+            configFields.add(field.getId());
+        }
+        return configFields;
+    }
+
+    public static List<String> getConfigSearchFields(Domain domain) {
+        List<SearchField> fields = domain.getSearchFieldList().getSearchField();
+        List<String> configFields = new ArrayList<String>();
+        Iterator it = fields.iterator();
+        while (it.hasNext()) {
+            SearchField field = (SearchField)it.next();
             configFields.add(field.getId());
         }
         return configFields;
