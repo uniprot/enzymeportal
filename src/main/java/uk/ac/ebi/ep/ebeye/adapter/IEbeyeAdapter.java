@@ -1,10 +1,11 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 //import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
-import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
+import java.util.Set;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.ebeye.result.Result;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
@@ -32,9 +33,22 @@ public interface IEbeyeAdapter {
     public static final int EBEYE_ONLINE_REQUEST_TIMEOUT = 60;
     //HOUR
     public static final int EBEYE_CACHE_TIMEOUT = 2;
-    public static enum Domains {intenz,uniprot,rhea,reactome,chebi
-                                                ,pdbe,chembl_compound, chembl_target,omim,mesh
+    //TODO either use this or domains in the config file
+    public static enum Domains {intenz,uniprot,rhea,reactome,chebi,pdbe;
+                                                //,pdbe,chembl_compound, chembl_target,omim,mesh
+       public static List<String> getFields() {
+           List<String> fields = new ArrayList<String>();
+           fields.add(intenz.name());
+           fields.add(uniprot.name());
+           fields.add(rhea.name());
+           fields.add(reactome.name());
+           fields.add(chebi.name());
+           fields.add(pdbe.name());
+           return fields;
+       }
+
         };
+    public static final String UNIPROT_REF_FIELD="UNIPROT";
     //Supported fields
         //TODO change the schema to add UNIPROT array
     public static enum FieldsOfGetResults {
@@ -47,7 +61,29 @@ public interface IEbeyeAdapter {
            return fields;
        }
     };
-    
+
+    public static enum FieldsOfUniprotNameMap {
+    id, descRecName;
+   public static List<String> getFields() {
+       List<String> fields = new ArrayList<String>();
+       fields.add(id.name());
+       fields.add(descRecName.name());
+       return fields;
+   }
+
+    };
+
+    public static enum FieldsOfChebiNameMap {
+    id, name;
+   public static List<String> getFields() {
+       List<String> fields = new ArrayList<String>();
+       fields.add(id.name());
+       fields.add(name.name());
+       return fields;
+   }
+
+    };
+    /*
     public static enum FieldsOfGetNames {
         id, name;
        public static List<String> getFields() {
@@ -58,7 +94,7 @@ public interface IEbeyeAdapter {
        }
 
     };
-
+*/
 /*
     public static enum UniprotResultFields  {
         descSubName,descRecName,organism_scientific_name,status
@@ -91,20 +127,55 @@ public interface IEbeyeAdapter {
     public List<Result> getResults(ParamOfGetResults param)
             throws MultiThreadingException;
 
+    public Collection<String> getUniprotXrefAccessions(List<ParamOfGetResults> params)
+            throws MultiThreadingException;
+
+/*
     public Map<String, String> getNames(String domain
             , List<String> ids);
+*/
 
+    /**
+     * Gets number of results for more than 1 queries. The number of results per
+     * query is set to the ParamOfGetResults object.
+     * @param paramOfGetResults
+     * @return
+     * @throws MultiThreadingException
+     */
     public List<ParamOfGetResults> getNumberOfResults(
             List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
     
-    public List<Result> getResultsByAccessions(String domain, List<String>
-            accessions) throws MultiThreadingException;
+    public ParamOfGetResults getNumberOfResults(ParamOfGetResults paramOfGetResults);
 
-    public Map<String,String> getUniprotXrefs(List<String>ids, String xRefDomain);
+    public Set<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
+
+    public Set<String> getValueOfFields(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
+
+    public Set<String> getValueOfFields(ParamOfGetResults paramOfGetResults)  throws MultiThreadingException;
+    
+
+    public Map<String,String> getUniprotXrefIds(List<String>ids, String xRefDomain);
+
+    public Map<String,Map<String,String>> getUniprotXrefIdAndName(List<String> ids, String xRefDomain);
 
 /*
     public int getNrOfResultsByAccessions(String domain
             , List<String> accessions) throws MultiThreadingException;
  * 
  */
+
+
+    //TESTING new interface
+    //public Collection<String> getUniprotXrefAccessions(String query);
+
+
+    public Map<String, String> getNameMapByAccessions(
+            String domain, Collection<String> accessions);
+
+    public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions);
+
+    public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions, int from, int size);
+
+    public int getNrOfResultsOfGetNameSetByAccessions(String domain, Collection<String> accessions);
+    
 }
