@@ -1,10 +1,13 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -76,6 +79,8 @@ public class EbeyeAdapter implements IEbeyeAdapter {
          List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
             List<List<String>> transformedResults
                     = Transformer.transformToList(rawResults);
+
+            Collection<String> accessionList = Transformer.transformFieldValueToList(rawResults, true);
             //Save the content to an object
             ResultFactory resultFactory = new ResultFactory(
                     domain, domainFields);
@@ -376,10 +381,28 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                         Callable<ArrayOfArrayOfString> callable =
                                 new GetResultsCallable(param, start, size);
                         callableList.add(callable);
+                        //TODO check
+                        start = start+ size;
                     }
             return callableList;
         }
 
+        /*
+        public List<Callable<ArrayOfArrayOfString>> prepareCallableCollection (
+                List<ParamOfGetResults> params){
+            List<Callable<ArrayOfArrayOfString>> callableList
+                    = new ArrayList<Callable<ArrayOfArrayOfString>>();
+            for (ParamOfGetResults param: params) {
+                List<Callable<ArrayOfArrayOfString>> callableSubList =
+                        prepareCallableCollection(param);
+                if (callableSubList.size() > 0) {
+                    callableList.addAll(callableSubList);
+                }
+            }
+            return callableList;
+        }
+         *
+         */
 
 /*
         public List<ParamOfGetResults> prepareGetResultsParams (
@@ -408,9 +431,10 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         return paramList;
     }
 */
-
-    public List<ParamOfGetResults> prepareQueriesForAccessions(String domain
-            , List<String> fields, List<String> uniprotXrefAccs, int limitOfAccessions) {
+/*
+    public List<ParamOfGetResults> prepareQueriesForAccessions(
+            List<String> fields, List<String> uniprotXrefAccs, int limitOfAccessions
+            , List<String> speciesFilter) {
         List<ParamOfGetResults> params = new ArrayList<ParamOfGetResults>();
         if (uniprotXrefAccs.size() > 0) {
             List<String> uniprotXrefAccList = new ArrayList<String>();
@@ -430,9 +454,22 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 } else {
                     endIndex = endIndex + limitOfAccessions;
                 }
-                String query = LuceneQueryBuilder.createUniprotQueryForEnzyme(uniprotXrefAccList.subList(start, endIndex));
+                String simpleQuery = LuceneQueryBuilder.createUniprotQueryForEnzyme(uniprotXrefAccList.subList(start, endIndex));
+                String query = "";
+                if (speciesFilter == null) {
+                   query = simpleQuery;
+                } else {
+                    if (speciesFilter.size() > 0) {
+                        query = LuceneQueryBuilder.addSpeciesFilterQuery(simpleQuery, speciesFilter);
+                    }
+                    else {
+                         query = simpleQuery;
+                    }
+                     
+                }
+
                 ParamOfGetResults paramOfGetAllResults =
-                        new ParamOfGetResults(domain, query, fields);
+                        new ParamOfGetResults(IEbeyeAdapter.Domains.uniprot.name(), query, fields);
                 params.add(paramOfGetAllResults);
                 start = endIndex;
             }
@@ -440,20 +477,23 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         }
         return params;
     }
-
-    public List<ParamOfGetResults> queryNrOfResultsByAccessions(String domain
-            , List<String> accessions, List<String> fields) throws MultiThreadingException {
+*/
+    /*
+    public List<ParamOfGetResults> queryNrOfResultsByAccessions(
+            List<String> accessions, List<String> fields) throws MultiThreadingException {
         //List<String> fields = new ArrayList<String>();
         //IEbeyeAdapter.FieldsOfGetResults.getFields();
         //fields.add(IEbeyeAdapter.FieldsOfGetResults.id.name());
         //fields.add(IEbeyeAdapter.FieldsOfGetResults.acc.name());
         List<ParamOfGetResults> params = prepareQueriesForAccessions(
-                domain, fields, accessions, IEbeyeAdapter.EBEYE_NR_OF_ACC_LIMIT);
+                fields, accessions, IEbeyeAdapter.EBEYE_NR_OF_ACC_LIMIT);
                 //Get and save
         getNumberOfResults(params);
         return params;
 
     }
+     * 
+     */
 
     public int countNrOfResults(List<ParamOfGetResults> params) {
         int totalFound = 0;
@@ -471,15 +511,25 @@ public class EbeyeAdapter implements IEbeyeAdapter {
   }
  *
  */
-    public List<Result> getResultsByAccessions(String domain
-            , List<String> accessions) throws MultiThreadingException {
+    /*
+    public List<Result> getUniprotEnzymes(List<String> accessions) throws MultiThreadingException {
+        return getUniprotEnzymes(accessions, null);
+    }
+
+    public List<Result> getUniprotEnzymes(List<String> accessions, List<String> speciesFilter) throws MultiThreadingException {
         List<String> fields = new ArrayList<String>();
         //IEbeyeAdapter.FieldsOfGetResults.getFields();
         fields.add(IEbeyeAdapter.FieldsOfGetResults.id.name());
         fields.add(IEbeyeAdapter.FieldsOfGetResults.acc.name());
 
-        List<ParamOfGetResults> params = queryNrOfResultsByAccessions(
-                domain, accessions, fields);
+        //List<ParamOfGetResults> params = queryNrOfResultsByAccessions(accessions, fields);
+        List<ParamOfGetResults> params = prepareQueriesForAccessions(
+                fields, accessions, IEbeyeAdapter.EBEYE_NR_OF_ACC_LIMIT, speciesFilter);
+
+        //Get and save
+        List<ParamOfGetResults> paramsWithNrOfResults = new ArrayList<ParamOfGetResults>();
+        paramsWithNrOfResults.addAll(getNumberOfResults(params));
+
         List<Result> resultList = null;
         if (params.size()>0) {
             //Maybe we don't need to get the results for domains other than uniprot,
@@ -491,7 +541,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                     = Transformer.transformToList(ebeyeResultList);
             //Save the content to an object
             ResultFactory resultFactory = new ResultFactory(
-                    domain, params.get(0).getFields());
+                    IEbeyeAdapter.Domains.uniprot.name(), params.get(0).getFields());
             resultList = resultFactory.getResults(transformedResults,false);
 
 //            resultList = transformRawResult(domain, params.get(0).getFields(), ebeyeResultList);
@@ -499,7 +549,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 
         return resultList;
     }
-
+*/
 /*
     public List<Result> transformRawResult(String domain, List<String> fields
             , List<ArrayOfArrayOfString> ebeyeResultList) {
@@ -545,6 +595,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 
 
     }
+
     public List<ParamOfGetResults> getNumberOfResults(
             List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException {
         List<ParamOfGetResults> params = new ArrayList<ParamOfGetResults>();
@@ -555,7 +606,11 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 Future<Integer> future = pool.submit(callable);
                 try {
                     int totalFound = future.get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
-                    param.setTotalFound(totalFound);
+                    if (totalFound > 0) {
+                        param.setTotalFound(totalFound);
+                        params.add(param);
+                    }
+                    
                 } catch (InterruptedException ex) {
                     throw  new MultiThreadingException(ex.getMessage(), ex);
                 } catch (ExecutionException ex) {
@@ -584,7 +639,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 
     }
 
-
+/*
     public Map<String, String> getNames(String domain, List<String> ids){
         ArrayOfString fields = Transformer
                 .transformToArrayOfString(FieldsOfGetNames.getFields());
@@ -598,8 +653,8 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         Map<String,String> resultMap = Transformer.transformToMap(results);
         return resultMap;
     }
-
-    public Map<String,String> getUniprotXrefs(List<String> ids, String xRefDomain) {
+*/
+    public Map<String,String> getUniprotXrefIds(List<String> ids, String xRefDomain) {
         ArrayOfString uniprotIds = Transformer.transformToArrayOfString(ids);
         ArrayOfString fields = Transformer.transformToArrayOfString(
                 IEbeyeAdapter.FieldsOfGetResults.id.name());
@@ -608,9 +663,190 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         GetReferencedEntriesSet caller = new EbeyeCallable.GetReferencedEntriesSet(
                 uniprotDomain, uniprotIds, xRefDomain, fields);
         ArrayOfEntryReferences rawResults = caller.callGetReferencedEntriesSet();
-        Map<String,String> results = Transformer.transformToList(rawResults);
+        Map<String,String> results = Transformer.transformToMap(rawResults);
         return results;
     }
 
+    public Map<String,Map<String,String>> getUniprotXrefIdAndName(List<String> ids, String xRefDomain) {
+        ArrayOfString uniprotIds = Transformer.transformToArrayOfString(ids);
+        ArrayOfString fields = Transformer.transformToArrayOfString(
+                FieldsOfChebiNameMap.getFields()
+                );
+        String uniprotDomain = IEbeyeAdapter.Domains.uniprot.name();
 
+        GetReferencedEntriesSet caller = new EbeyeCallable.GetReferencedEntriesSet(
+                uniprotDomain, uniprotIds, xRefDomain, fields);
+        ArrayOfArrayOfString rawResults = caller.callGetReferencedEntriesFlatSet();
+        Map<String, Map<String, String>> results = Transformer.transformIdAndNameMap(rawResults);
+        return results;
+    }
+      public Map<String, String> getNameMapByAccessions(String domain, Collection<String> accessions) {
+        ArrayOfString fields = Transformer
+                .transformToArrayOfString(FieldsOfUniprotNameMap.getFields());
+        
+        //TODO limited array size
+        ArrayOfString idsArray = Transformer
+                .transformToArrayOfString(accessions);
+
+        GetEntriesCallable caller = new EbeyeCallable
+                .GetEntriesCallable(domain, idsArray, fields);
+
+        ArrayOfArrayOfString results = caller.callGetEntries();
+        Map<String,String> resultMap = Transformer.transformToMap(results);
+        return resultMap;
+    }
+
+    public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions) {
+        List<String> fields = new ArrayList<String>();
+        fields.add(IEbeyeAdapter.FieldsOfUniprotNameMap.descRecName.name());
+
+        //GetEntriesCallable caller = new EbeyeCallable
+           //     .GetEntriesCallable(domain, idsArray, fields);
+
+        GetResultsCallable caller = new GetResultsCallable();
+        ArrayOfArrayOfString results = caller.
+        callGetResults(domain
+                , LuceneQueryBuilder.createAccessionQueryIN(accessions)
+                , fields
+                //TODO
+                , 0
+                , 20);
+        Set<String> resultSet = Transformer.transformToSet(results);
+        return resultSet;
+
+    }
+
+    public Collection<String> getUniprotXrefAccessions(List<ParamOfGetResults> params) throws MultiThreadingException {
+
+        List<Callable<ArrayOfArrayOfString>> callableList
+                 = prepareCallableCollection(params);
+
+
+         //List<ArrayOfArrayOfString> rawResults =
+            //      submitAll(paramOfGetResultsList);
+         //List<ArrayOfArrayOfString> rawResults = submitAll(callableList);
+         List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
+         Collection<String> transformedResults
+                    = Transformer.transformFieldValueToList(rawResults, true);
+            //Save the content to an object
+         /*
+        List<List<String>> transformedResults
+                = Transformer.transformToList(rawResults);
+        //Save the content to an object
+
+        ResultFactory resultFactory = new ResultFactory(
+                domain, domainFields);
+        List<Result> resultList = resultFactory.getResults(transformedResults);
+          *
+          */
+         return transformedResults;
+
+
+    }
+
+    public ParamOfGetResults getNumberOfResults(
+            ParamOfGetResults param){
+        NumberOfResultsCaller callable = new NumberOfResultsCaller(param);
+        int totalFound = callable.getNumberOfResults();
+        param.setTotalFound(totalFound);
+        return param;
+    }
+
+    public Collection<String> getRelatedUniprotAccessionSet(ParamOfGetResults param)
+            throws MultiThreadingException {
+        List<Callable<ArrayOfArrayOfString>> callableList
+                 = prepareCallableCollection(param);         
+         Collection<String> accessionList = getFieldValue(callableList, true);
+         return accessionList;
+    }
+
+    public LinkedHashSet<String> getFieldValue(List<Callable<ArrayOfArrayOfString>> callableList, boolean isUNIPROTfield) throws MultiThreadingException {
+         List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
+         LinkedHashSet<String> accessionList = Transformer.transformFieldValueToList(rawResults, isUNIPROTfield);
+         return accessionList;
+
+    }
+
+    public Set<String> getValueOfFields(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException {
+            List<Callable<ArrayOfArrayOfString>> callableList
+                     = prepareCallableCollection(paramOfGetResults);
+             List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
+             Set<String> NameList = Transformer.transformFieldValueToList(rawResults, false);
+             return NameList;
+    }
+
+    public Set<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException {
+        Set<String> accessionSet = new LinkedHashSet<String>();
+        for (ParamOfGetResults param:paramOfGetResults )  {
+            Collection<String> resultsPerDomain = getRelatedUniprotAccessionSet(param);
+            if (resultsPerDomain.size() > 0) {
+                accessionSet.addAll(resultsPerDomain);
+            }
+        }
+        return accessionSet;
+    }
+
+    public Set<String> getValueOfFields(ParamOfGetResults paramOfGetResults) throws MultiThreadingException {
+        List<Callable<ArrayOfArrayOfString>> callableList
+                 = prepareCallableCollection(paramOfGetResults);
+         List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
+         Set<String> NameList = Transformer.transformFieldValueToList(rawResults, false);
+         return NameList;
+    }
+
+    public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions, int from, int size) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int getNrOfResultsOfGetNameSetByAccessions(String domain, Collection<String> accessions) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /*
+        public Collection<String> getUniprotXrefAccessions(List<ParamOfGetResults> paramOfGetResultsList) throws MultiThreadingException {
+        Map<String, List<Result>> allDomainsResults = new HashMap<String, List<Result>>();
+        //getResultsByAccessions(paramOfGetResultsList)
+
+        for (ParamOfGetResults param:paramOfGetResultsList )  {
+            List<Result> resultList = this.getResults(param, false);
+                    allDomainsResults.put(param.getDomain(), resultList);
+        }
+        return allDomainsResults;
+
+        }
+
+    
+    public Collection<String> getUniprotXrefs(String query) {
+        String domain = IEbeyeAdapter.Domains.uniprot.name();
+        String fieldName = IEbeyeAdapter.FieldsOfGetResults.UNIPROT.name();
+        List<String> fields = new ArrayList<String>();
+        fields.add(fieldName);
+        int totalFound = getNumberOfResults(domain, query);
+        Pagination pagination = new Pagination(totalFound, EBEYE_RESULT_LIMIT);
+        int nrOfQueries = pagination.calTotalPages();
+        int resultSize = IEbeyeAdapter.EBEYE_RESULT_LIMIT;
+        Set<String> results = new LinkedHashSet<String>();
+        int start = 0;
+        ParamOfGetResults param = new ParamOfGetResults(domain, query, fields);
+        //TODO
+        for (int i = 0; i < nrOfQueries; i++) {
+            //if (i == nrOfQueries - 1 && (totalFound % IEbeyeAdapter.EBEYE_RESULT_LIMIT) > 0) {
+            //Last page
+            if (i == nrOfQueries - 1) {
+                resultSize =pagination.getLastPageResults();
+            }
+
+            Callable<ArrayOfArrayOfString> callable = new GetResultsCallable(
+                    param, start, resultSize);
+        }
+
+    }
+
+
+
+    public int getNumberOfResults(String domain, String query) {
+        NumberOfResultsCaller caller = new NumberOfResultsCaller();
+        return caller.getNumberOfResults(domain, query);
+    }
+*/
 }

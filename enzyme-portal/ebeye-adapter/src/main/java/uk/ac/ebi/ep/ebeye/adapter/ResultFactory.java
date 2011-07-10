@@ -133,7 +133,7 @@ public class ResultFactory {
                 }
                 case acc: {
                     List<String> accessions =
-                    Transformer.transform(fieldValue);
+                    Transformer.transformAccessionsString(fieldValue);
                     result.getAcc().addAll(accessions);
                     break;
                 }
@@ -143,7 +143,7 @@ public class ResultFactory {
                             Xref xref = new Xref();
                             xref.setDomain(Domains.uniprot.name());
                             List<String> xrefAccs =
-                            Transformer.transform(fieldValue);
+                            Transformer.transformAccessionsString(fieldValue);
                             xref.getAcc().addAll(xrefAccs);
                             result.getXrefs().add(xref);
                         }
@@ -173,7 +173,7 @@ public class ResultFactory {
                 
 
                 List<String> uniprotAccs =
-                Transformer.transform(uniprotField);
+                Transformer.transformAccessionsString(uniprotField);
                 for (String acc: uniprotAccs) {
                     Result result = new Result();
                 result.getAcc().add(acc);

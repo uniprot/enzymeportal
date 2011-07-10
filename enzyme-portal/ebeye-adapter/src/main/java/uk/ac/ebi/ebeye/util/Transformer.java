@@ -1,11 +1,14 @@
 package uk.ac.ebi.ebeye.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.xml.bind.JAXBElement;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
@@ -32,11 +35,12 @@ public class Transformer {
 
 
 //********************************** METHODS *********************************//
-    public static ArrayOfString transformToArrayOfString(List<String> list) {
+    public static ArrayOfString transformToArrayOfString(Collection<String> list) {
         ArrayOfString arrayOfString = new ArrayOfString();
         arrayOfString.getString().addAll(list);
         return arrayOfString;
     }
+
 
     public static ArrayOfString transformToArrayOfString(String field) {
         ArrayOfString arrayOfString = new ArrayOfString();
@@ -66,11 +70,47 @@ public class Transformer {
         return mergedResults;
     }
 
-    public static List<String> transform(String ebeyeAccList) {
+
+
+
+
+    public static Collection<String> transformFieldValueToList(ArrayOfArrayOfString rawResults
+            , boolean isUNIPROTfield) {
+        Collection<String> rawResultList = new LinkedHashSet<String>();
+        Iterator it = rawResults.getArrayOfString().iterator();
+        while (it.hasNext()) {
+            ArrayOfString arrayOfString = (ArrayOfString)it.next();
+            String fieldValue = arrayOfString.getString().get(0);
+            if (isUNIPROTfield) {
+                rawResultList.addAll(transformAccessionsString(fieldValue));
+            } else {
+                rawResultList.add(fieldValue);
+            }
+            
+        }
+        return rawResultList;
+    }
+
+    public static LinkedHashSet<String> transformFieldValueToList(
+            List<ArrayOfArrayOfString> rawResultsList,  boolean isUNIPROTfield) {
+        LinkedHashSet<String> mergedResults = new LinkedHashSet<String>();
+        Iterator it = rawResultsList.iterator();
+        while (it.hasNext()) {
+            ArrayOfArrayOfString resultLines = (ArrayOfArrayOfString)it.next();
+            mergedResults.addAll(transformFieldValueToList(resultLines, isUNIPROTfield));
+        }
+        return mergedResults;
+    }
+
+    public static List<String> transformAccessionsString(String ebeyeAccList) {
      String[] accArray = ebeyeAccList.split("\\s");
      List<String> accList = new ArrayList<String>();
      for (String acc: accArray) {
-         accList.add(acc);
+         if (acc != null) {
+             if (!acc.equals("")) {
+                accList.add(acc);
+             }
+         }
      }
      return accList;
     }
@@ -86,7 +126,17 @@ public class Transformer {
         return resultLineMap;
     }
 
-    public static Map<String,String> transformToList(
+    public static Set<String> transformToSet(ArrayOfArrayOfString rawResultsList) {
+        Set<String> resultSet = new LinkedHashSet<String>();
+        List<ArrayOfString> resultLines = rawResultsList
+                .getArrayOfString();
+        for (ArrayOfString resultLine: resultLines) {
+            resultSet.add(resultLine.getString().get(0));
+        }
+        return resultSet;
+    }
+
+    public static Map<String,String> transformToMap(
                                         ArrayOfEntryReferences arrayOfEntryReferences) {
         Map<String,String> resultMap = new Hashtable<String, String>();
         List<EntryReferences> entryRefs = arrayOfEntryReferences.getEntryReferences();
@@ -99,10 +149,26 @@ public class Transformer {
             }
 
         }
+        return resultMap;
+    }
 
+    public static Map<String,Map<String,String>> transformIdAndNameMap(
+                                       ArrayOfArrayOfString rawResults) {
+        Map<String,Map<String,String>> resultMap = new Hashtable<String,Map<String,String>>();
+
+        List<List<String>> results = Transformer.transformToList(rawResults);
+        for (List<String> resultFields:results) {
+            String uniprotId = resultFields.get(0);
+            String referencedId = resultFields.get(1);
+            String referencedName = resultFields.get(2);
+            Map<String,String> idAndName = new HashMap<String, String>();
+            idAndName.put(referencedId, referencedName);
+            resultMap.put(uniprotId, idAndName);
+        }
         return resultMap;
 
     }
+
 
 
     public static List<String> transformToListOfString(
