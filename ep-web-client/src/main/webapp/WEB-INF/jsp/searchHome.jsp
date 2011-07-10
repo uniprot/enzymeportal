@@ -144,7 +144,7 @@
                                 </span>
                                 </div>
                                 <div class="checkItem">
-                                    <form:checkbox path="searchparams.species" value="${speciesName}"/>
+                                    <form:checkbox path="searchparams.species" value="${speciesList[i].scientificname}"/>
                                  </div>
                                 <div class="clear"></div>
                                 </div>
