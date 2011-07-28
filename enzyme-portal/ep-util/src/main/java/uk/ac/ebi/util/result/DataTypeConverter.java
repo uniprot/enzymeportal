@@ -1,7 +1,9 @@
 package uk.ac.ebi.util.result;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 //import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 //import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
@@ -12,6 +14,7 @@ import uk.ac.ebi.ep.config.ResultField;
 import uk.ac.ebi.ep.config.ResultFieldList;
 import uk.ac.ebi.ep.config.SearchField;
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
  *
@@ -42,6 +45,37 @@ public class DataTypeConverter {
         return sb.toString();
     }
 */
+    public static List<List<String>> createSubLists(List<String> longList, int subListSize)  {
+        List<List<String>> subLists = new ArrayList<List<String>>();
+        int listSize = longList.size();
+        int endIndex = 0;
+        //Work around to solve big result set issue
+        Pagination pagination = new Pagination(listSize, subListSize);
+        int nrOfQueries = pagination.calTotalPages();
+        int start = 0;
+        //TODO
+        for (int i = 0; i < nrOfQueries; i++) {
+            //In case of last page and the result of the last page is more than 0
+            if (i == (nrOfQueries - 1) && (listSize % subListSize) > 0) {
+                endIndex = endIndex + pagination.getLastPageResults();
+            } else {
+                endIndex = endIndex + subListSize;
+            }
+
+            List<String> subList = longList.subList(start, endIndex);
+            subLists.add(subList);
+
+            start = endIndex;
+        }
+        return subLists;
+    }
+    public static LinkedHashSet<String> mergeList(Collection<List<String>> multipleList) {
+        LinkedHashSet mergedSet = new LinkedHashSet();
+        for (List<String> list:multipleList){
+            mergedSet.addAll((List<String>)list);
+        }
+        return mergedSet;
+    }
     public static List<String> accessionsToList (String[] arrayOfAccessions) {
         List<String> list = new ArrayList<String>();
         for (String accession:arrayOfAccessions) {
@@ -158,7 +192,17 @@ public class DataTypeConverter {
          }
          return compoundList;
     }
-   
+
+    public static List<Compound> listToCompound(Collection<String> compoundNames) {
+         List<Compound> compoundList = new ArrayList<Compound>();
+         for (String compoundName:compoundNames) {
+             Compound compound = new Compound();
+             compound.setName(compoundName);
+             compoundList.add(compound);
+         }
+         return compoundList;
+    }
+
     public static ResultFieldList cloneResultFieldList(ResultFieldList originalObj) {
         ResultFieldList clonedObj = new ResultFieldList();
         Iterator clonedIt = clonedObj.getResultField().iterator();
