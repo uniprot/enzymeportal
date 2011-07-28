@@ -23,7 +23,7 @@ public interface IEbeyeAdapter {
 //********************************* VARIABLES ********************************//
     public static final int EBEYE_RESULT_LIMIT = 100;
     //The number of accessions to be included in the query should not be more than 400
-    public static final int EBEYE_NR_OF_ACC_LIMIT = 400;
+    public static final int EBEYE_NR_OF_QUERY_IN_LIMIT = 400;
     public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 20;
     public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 5000;
     public static final int EP_THREADS_LIMIT = EP_UNIPROT_XREF_RESULT_LIMIT/EBEYE_RESULT_LIMIT;
@@ -33,6 +33,8 @@ public interface IEbeyeAdapter {
     public static final int EBEYE_ONLINE_REQUEST_TIMEOUT = 60;
     //HOUR
     public static final int EBEYE_CACHE_TIMEOUT = 2;
+    
+    public static final String EBEYE_SPECIES_FIELD ="organism_scientific_name";
     //TODO either use this or domains in the config file
     public static enum Domains {intenz,uniprot,rhea,reactome,chebi,pdbe;
                                                 //,pdbe,chembl_compound, chembl_target,omim,mesh
@@ -154,9 +156,18 @@ public interface IEbeyeAdapter {
     public Set<String> getValueOfFields(ParamOfGetResults paramOfGetResults)  throws MultiThreadingException;
     
 
-    public Map<String,String> getUniprotXrefIds(List<String>ids, String xRefDomain);
+    /**
+     * Retrieve all the external referenced ids of the target domain from a list
+     * of Uniprot ids.
+     * @param uniprotIds
+     * @param targetDomain
+     * @return
+     */
+    public Map<String,String> getReferencedIds(List<String>uniprotIds, String targetDomain);
 
-    public Map<String,Map<String,String>> getUniprotXrefIdAndName(List<String> ids, String xRefDomain);
+    public Map<String,List<String>> getUniprotRefAccesionsMap(ParamOfGetResults paramOfGetResults) throws MultiThreadingException;
+
+    //public Map<String,Map<String,String>> getUniprotXrefIdAndName(List<String> ids, String xRefDomain);
 
 /*
     public int getNrOfResultsByAccessions(String domain

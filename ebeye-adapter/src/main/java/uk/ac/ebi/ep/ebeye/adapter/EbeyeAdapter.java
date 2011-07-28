@@ -654,19 +654,19 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         return resultMap;
     }
 */
-    public Map<String,String> getUniprotXrefIds(List<String> ids, String xRefDomain) {
+    public Map<String,String> getReferencedIds(List<String> ids, String targetDomain) {
         ArrayOfString uniprotIds = Transformer.transformToArrayOfString(ids);
         ArrayOfString fields = Transformer.transformToArrayOfString(
                 IEbeyeAdapter.FieldsOfGetResults.id.name());
         String uniprotDomain = IEbeyeAdapter.Domains.uniprot.name();
 
         GetReferencedEntriesSet caller = new EbeyeCallable.GetReferencedEntriesSet(
-                uniprotDomain, uniprotIds, xRefDomain, fields);
+                uniprotDomain, uniprotIds, targetDomain, fields);
         ArrayOfEntryReferences rawResults = caller.callGetReferencedEntriesSet();
         Map<String,String> results = Transformer.transformToMap(rawResults);
         return results;
     }
-
+/*
     public Map<String,Map<String,String>> getUniprotXrefIdAndName(List<String> ids, String xRefDomain) {
         ArrayOfString uniprotIds = Transformer.transformToArrayOfString(ids);
         ArrayOfString fields = Transformer.transformToArrayOfString(
@@ -680,6 +680,8 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         Map<String, Map<String, String>> results = Transformer.transformIdAndNameMap(rawResults);
         return results;
     }
+ * 
+ */
       public Map<String, String> getNameMapByAccessions(String domain, Collection<String> accessions) {
         ArrayOfString fields = Transformer
                 .transformToArrayOfString(FieldsOfUniprotNameMap.getFields());
@@ -792,6 +794,14 @@ public class EbeyeAdapter implements IEbeyeAdapter {
          List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
          Set<String> NameList = Transformer.transformFieldValueToList(rawResults, false);
          return NameList;
+    }
+
+    public Map<String,List<String>> getUniprotRefAccesionsMap(ParamOfGetResults paramOfGetResults) throws MultiThreadingException {
+        List<Callable<ArrayOfArrayOfString>> callableList
+                 = prepareCallableCollection(paramOfGetResults);
+         List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
+         Map<String,List<String>> uniprotRefAccesionsMap = Transformer.transformChebiResults(rawResults, true);
+         return uniprotRefAccesionsMap;
     }
 
     public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions, int from, int size) {
