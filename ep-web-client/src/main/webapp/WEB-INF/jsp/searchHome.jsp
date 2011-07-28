@@ -24,7 +24,7 @@
         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
         <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>
-
+        <script src="resources/javascript/search.js" type="text/javascript"></script>
         <!--
        <link media="screen" href="resources/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
         <link href="resources/lib/layout-default-latest.css" type="text/css" rel="stylesheet" />
@@ -44,10 +44,11 @@
     <body>        
         <div class="page container_12">
             <div  class="grid_12">
+                <!--
 <div class="headerdiv" id="headerdiv" style="height: 60px;">
     <iframe src="http://www.ebi.ac.uk/inc/homepage_head.html" name="head" id="head" marginwidth="0" marginheight="0" style="height: 125px;" frameborder="0" scrolling="no" width="100%">
 </iframe> </div>
-
+-->
             </div>
             <div class="clear"></div>
 
@@ -75,12 +76,12 @@
                     </p>
                  </div>
             </div>
-
-
-                <c:set var="searchFilter" value="${searchModel.searchresults.searchfilters}"/>
-                <c:set var="searchresults" value="${searchModel.searchresults}"/>
-                <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
-                <c:set var="totalfound" value="${searchresults.totalfound}"/>
+            <!--Global variables-->
+            <c:set var="showButton" value="Show more"/>
+            <c:set var="searchresults" value="${searchModel.searchresults}"/>
+             <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
+            <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
+            <c:set var="totalfound" value="${searchresults.totalfound}"/>
             <div class="grid_12 content">
                 <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
                 <div class="filter">
@@ -101,14 +102,14 @@
 
                             <c:if test="${compoundListMaxSize > filterMaxDisplay}">
                                 <c:set var="compoundListMaxSize" value="${filterMaxDisplay}"/>
-                            </c:if>
-                            <c:if test="${compoundListMaxSize > 0}">
+                            </c:if>                            
+                            <c:if test="${compoundListMaxSize > 0}">                                
                                 <c:forEach var="i" begin="0" end="${compoundListMaxSize-1}">
                                     <div class="filterLine">
                                     <div class="text">
                                         <xchars:translate>
                                             <c:out value="${compoundList[i].name}" escapeXml="false"/>
-                                        </xchars:translate>
+                                        </xchars:translate>                                        
                                     </div>
                                     <div class="checkItem">
                                         <input type="checkbox" name="human" value="human" />
@@ -191,6 +192,7 @@
                         <input type="button" value="Add All"/><input type="button" value="Remove All"/>
                     </div>
                         <div class="resultContent">
+                            <c:set var="resultItemId" value="${0}"/>
                             <c:forEach items="${summaryentries}" var="enzyme">
                              <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
                             <div class="resultItem">
@@ -200,7 +202,7 @@
                                     <c:if test='${imgFile != "" && imgFile != null}'>
                                         <c:set var="imgLink" value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
                                     </c:if>
-                                    <img src="${imgLink}" alt="Image not available!" width="110" height="90"/>
+                                    <img src="${imgLink}" width="110" height="90"/>
                                 </div>
                                 <div id="desc">
                                     <p>
@@ -220,19 +222,32 @@
                                     </c:if>
                                     <c:set var="synonym" value="${enzyme.synonym}"/>
                                     <c:if test='${fn:length(synonym)>0}'>
+                                        <div id ="synonym">
                                         Synonyms:
-                                        <c:set var="synSize" value="${0}"/>
+                                        <c:set var="synSize" value="${5}"/>
+                                        <c:set var="hiddenSyns" value=""/>
                                         <c:forEach items="${enzyme.synonym}" var="syn">
                                             <c:set var="nameSize" value="${nameSize+1}"/>
                                         </c:forEach>
                                         <c:set var="counter" value="${0}"/>
                                         <c:forEach items="${enzyme.synonym}" var="syn">
-                                            <c:if test="${nameSize>1 && counter>0}">
-                                                ;
-                                            </c:if>
-                                            <c:out value="${syn}"/>
-                                            <c:set var="counter" value="${counter+1}"/>
+                                            <c:choose>
+                                                <c:when test="${counter<=synSize}">                                                    
+                                                    <c:out value="${syn}"/>;
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="hiddenSyns" value='${hiddenSyns} ${syn}; '/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <c:set var="counter" value="${counter+1}"/>                                            
                                         </c:forEach>
+                                            <span  id='syn_${resultItemId}' style="display: none">
+                                            <c:out value="${hiddenSyns}"/>
+                                        </span>
+                                        </div>
+                                            <c:if test="${counter>synSize}">
+                                                <a id="<c:out value='syn_link_${resultItemId}'/>" href=""><c:out value="${showButton}"/></a>
+                                            </c:if>
                                     </c:if>
                                 </div>
                                     <div id="in">in</div>
@@ -252,24 +267,32 @@
                                         <c:set var="speciesCounter" value="${1}"/>
                                         <c:set var="speciesSize" value="${fn:length(enzyme.relatedspecies)+1}"/>
                                         <c:forEach items="${enzyme.relatedspecies}" var="relspecies">
-                                            <c:if test="${speciesCounter < 4}">
-                                                <p>
-                                                <a href="entry/${relspecies.uniprotaccessions[0]}">
+                                            <p>
                                                 <c:choose>
                                                 <c:when test='${relspecies.species.commonname == ""}'>
-                                                    <c:out value="${relspecies.species.scientificname}"/>
+                                                    <c:set var="speciesName" value="${relspecies.species.scientificname}"/>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:out value="${relspecies.species.commonname}"/>
+                                                    <c:set var="speciesName" value="${relspecies.species.commonname}"/>
                                                 </c:otherwise>
                                                 </c:choose>
-                                                </a>
-                                                </p>
-                                            </c:if>
+                                            <a href="entry/${relspecies.uniprotaccessions[0]}">
+                                            <c:choose>
+                                                <c:when test="${speciesCounter < 4}">
+                                                    <c:out value="${speciesName}"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span  id='relSpecies_${resultItemId}' style="display: none">
+                                                    <c:out value="${speciesName}"/>
+                                                    </span>                                                    
+                                                </c:otherwise>
+                                            </c:choose>
+                                            </a>
+                                            </p>
                                             <c:set var="speciesCounter" value="${speciesCounter+1}"/>
                                         </c:forEach>
-                                                <c:if test="${speciesSize > 3}">
-                                                <a href="">See more</a> <br/>
+                                                <c:if test="${speciesSize > 4}">
+                                                <a id="<c:out value='relSpecies_link_${resultItemId}'/>" href=""><c:out value="${showButton}"/></a> <br/>
                                             </c:if>
 
                                 </div>
@@ -283,6 +306,7 @@
                                 <br/>
                             </div>
                             <div class="clear"></div>
+                            <c:set var="resultItemId" value="${resultItemId+1}"/>
                             </c:forEach>
                         </div>
                     </c:if>
