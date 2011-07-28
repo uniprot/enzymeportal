@@ -37,7 +37,6 @@
       </ResultField>
     </ResultFieldList>
   </Domain>
-  <!--
   <Domain>
     <id>rhea</id>
     <SearchFieldList>
@@ -55,7 +54,6 @@
       </SearchField>
     </SearchFieldList>
   </Domain>
-  -->
   <Domain>
     <id>reactome</id>
     <SearchFieldList>

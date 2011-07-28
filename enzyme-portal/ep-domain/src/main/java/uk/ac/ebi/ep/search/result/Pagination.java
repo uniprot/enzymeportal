@@ -10,7 +10,6 @@ import java.util.List;
  *          $LastChangedDate$ <br/>
  *          $Author$
  * @author  $Author$
- * @deprecated  moved to package uk.ac.ebi.ebeye.util
  */
 public class Pagination implements Serializable {
 
