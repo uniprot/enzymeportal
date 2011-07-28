@@ -2,15 +2,14 @@ package uk.ac.ebi.ep.util.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 //import uk.ac.ebi.ebeye.ParamOfGetResultsIds;
 //import uk.ac.ebi.ebeye.ResultOfGetNumberOfResults;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.SearchField;
 import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**
  * Hello world!
@@ -19,32 +18,35 @@ import uk.ac.ebi.ep.search.model.SearchParams;
 public class LuceneQueryBuilder {
     public static final String LUCENE_EQUAL = ":";
     public static final String LUCENE_QUOTE = "\"";
+    //FOr EBeye EC must be in upper case
     public static final String ENZYME_FILTER =
             "EC:(1* OR 2* OR 3* OR 4* OR 5* OR 6* OR 7*)";
     public static final String UNIPROT_ID_FIELD ="id";
     public static final String UNIPROT_NAME_FIELD ="name";
     public static final String ACCESSION_FIELD ="acc";
-    public static final String LUCENE_WILDCARD ="*";
-    public static final int EBEYE_MAX_RESULTS_PER_QUERY = 100;
-    public static final String ENZYME_FILTER_UNIPROTAPI =
-            "ec:*.*";
-
-     //public static LuceneParser luceneParser = new LuceneParser();
-
-    //public static final String FIELD_SPECIES_NAME ="organism_species";
+    public static final String LUCENE_WILDCARD ="_*";
+    public static final String ENZYME_FILTER_UNIPROTAPI ="ec:*.*";
     public static final String UNIPROT_SPECIES_FIELD ="organism";
     public static final String EBEYE_SPECIES_FIELD ="organism_scientific_name";
-    //public static final String[] FIELD_SPECIES_ARRAY = {FIELD_SPECIES_NAME,FIELD_SPECIES_NAME_SCI};
-    //public static final List<String> FIELD_SPECIES_LIST = Arrays.asList(FIELD_SPECIES_ARRAY);
 
     //133343 results does not pass the load test
     //public static final int MAX_RESULTS = 100000;
     public static LuceneParser luceneParser = new LuceneParser();  
 
-    public static String createGetRelatedUniprotAccessionsQueries(Domain domain, SearchParams searchParams) {
+    /**
+     * Create a Lucene query for a list of fields of which value is from
+     * the searchParam. The query consists of several search fields configured
+     * in the Config.xml file. Each field is separated by an OR statement.
+     * The keyword in the {@link SearchParams} is the value to be
+     * queried in each field. Eg.: id:"Sildenafil" OR name:"Sildenafil".
+     * @param domain The Domain object that contains the search fields which are
+     * used to create the fields query.
+     * @param searchParams The SearchParam object which contain the keywords and
+     * the filter which are used to ass 
+     * @return a Lucene query
+     */
+    public static String createFieldsQuery(Domain domain, SearchParams searchParams) {
         StringBuffer query = new StringBuffer();
-        //System.out.println(domain.getId());
-        //System.out.println(domain.getName());
         List<SearchField> SearchFieldList = domain.getSearchFieldList().getSearchField();
         List<String> fieldNames = new ArrayList<String>();
         for (SearchField field: SearchFieldList) {
@@ -55,33 +57,30 @@ public class LuceneQueryBuilder {
         return query.toString();
     }
 
-        public static String createGetUniprotFieldQueries(Domain domain, SearchParams searchParams) {
+    /**
+     * Similar to the {@link #createFieldsQuery(uk.ac.ebi.ep.config.Domain, uk.ac.ebi.ep.search.model.SearchParams)}
+     * except this method adds the enzyme filter String to query enzyme only in
+     * Uniprot domain. This query can only be used to query data from Uniprot domain,
+     * because other domains do not have the ec field.
+     * @param domain
+     * @param searchParams
+     * @return
+     * @see {@link #createFieldsQuery(uk.ac.ebi.ep.config.Domain, uk.ac.ebi.ep.search.model.SearchParams)}
+     */
+    public static String createFieldsQueryWithEnzymeFilter(Domain domain, SearchParams searchParams) {
         StringBuffer query = new StringBuffer();
-        //System.out.println(domain.getId());
-        //System.out.println(domain.getName());
-        List<SearchField> SearchFieldList = domain.getSearchFieldList().getSearchField();
-        List<String> fieldNames = new ArrayList<String>();
-        for (SearchField field: SearchFieldList) {
-            fieldNames.add(field.getId());
-        }
-        String keywords = searchParams.getText();
-        query.append(createFieldsQuery(fieldNames,keywords));
+        query.append(createFieldsQuery(domain, searchParams));
         query.append(" AND " +ENZYME_FILTER);
-        //add species filters
-        /*
-        List<String> speciesFilter = searchParams.getSpecies();
-        if ( speciesFilter!= null) {
-            if (speciesFilter.size() > 0) {
-                String simpleQuery = query.toString();
-                query.append(addSpeciesFilterQuery(
-                        simpleQuery, EBEYE_SPECIES_FIELD, speciesFilter));
-            }
-        }
-        */
         return query.toString();
     }
 
-
+    /**
+     * Overloaded method to create a Lucene query from the fieldNames and fieldValue
+     * instead of a Domain object and a SearchParam object.
+     * @param fieldNames The search field names
+     * @param fieldValue The value of the field names to query
+     * @return a Lucene query OR
+     */
     public static String createFieldsQuery(List<String> fieldNames, String fieldValue) {
         StringBuffer query = new StringBuffer();
         int listLength = fieldNames.size();
@@ -123,6 +122,7 @@ public class LuceneQueryBuilder {
                 sb.append("(");
                 for (String species: speciesList) {
                     sb.append(LUCENE_QUOTE);
+                    //sb.append(luceneParser.escapeLuceneSpecialChars(species));
                     sb.append(species);
                     sb.append(LUCENE_QUOTE);
                     if (counter <listLength) {
@@ -139,7 +139,15 @@ public class LuceneQueryBuilder {
         return sb.toString();
     }
 
-    public static List<String> createUniprotQueryByIdPrefixes(List<String> idPrefixes, Collection<String> speciesFilter) {
+    /**
+     * Create a list of query by id. A query is created for each id. Queries
+     * created by the method can only be used for Uniprot API.
+     * @param idPrefixes
+     * @param speciesFilter
+     * @return
+     */
+    public static List<String> createUniprotAPIQueryByIdPrefixes(
+            List<String> idPrefixes, Collection<String> speciesFilter) {
         List<String> queryList = new ArrayList<String>();
         for (String idPrefix : idPrefixes) {
             StringBuffer sb = new StringBuffer();
@@ -155,67 +163,6 @@ public class LuceneQueryBuilder {
         return queryList;
     }
 
-/*
-    public static List<String> createUniprotQueryByName(List<String> names) {
-        List<String> queries = new ArrayList<String>();
-        for (String name:names) {
-            StringBuffer sb = new StringBuffer();
-            sb.append(UNIPROT_NAME_FIELD);
-            sb.append(":\"");
-            sb.append(luceneParser.escapeLuceneSpecialChars(name));
-            sb.append("\"");
-            sb.append(" AND " +ENZYME_FILTER_UNIPROTAPI);
-            queries.add(sb.toString());
-        }
-        return queries;
-    }
-*/
-    /*
-    public static String createQueryOR(Domain domain, SearchParams searchParams) {
-        StringBuffer query = new StringBuffer();
-        //System.out.println(domain.getId());
-        //System.out.println(domain.getName());
-        List<SearchField> SearchFieldList = domain.getSearchFieldList().getSearchField();
-        Iterator fieldIt = SearchFieldList.iterator();
-        int listLength = SearchFieldList.size();
-        int counter = 1;
-        //query.append("(");
-        while (fieldIt.hasNext()) {
-            SearchField searchField = (SearchField) fieldIt.next();
-            query.append(searchField.getId());
-            query.append(":(\"");
-            query.append(searchParams.getKeywords());
-            query.append("\")");
-            if (counter <listLength) {
-                query.append(" OR ");
-            }
-            else {
-                //query.append(")");
-            }
-
-            counter++;
-        }
-        /*
-            if (domain.getId().equalsIgnoreCase("uniprot")) {
-                //query.insert(0, "(");
-                //query.append(")");
-                query.append(" AND " +ENZYME_FILTER);
-            }
-         * 
-         */
-        //System.out.println(query.toString());
-       // return query.toString();
-    //}
-/*
-    public static String createQueryToGetEnzymeOnly(String uniprotId){
-        StringBuffer query = new StringBuffer();
-        query.append("id:");
-        query.append(uniprotId);
-        query.append(" AND " );
-        query.append(ENZYME_FILTER);
-        return query.toString();
-    }
-*/
     public static String createQueryIN(
             String fieldName, boolean wildcard, Collection<String> fieldValues) {
         StringBuffer query = new StringBuffer();
@@ -247,130 +194,57 @@ public class LuceneQueryBuilder {
                     query, EBEYE_SPECIES_FIELD, speciesFilter);
     }
 
-    public static String createIdSuffixWildcardQuery(Collection<String> fieldValues
-            , Collection<String> speciesFilter) {
-        String query = createQueryIN(UNIPROT_ID_FIELD, true, fieldValues);
-        return addSpeciesFilterQuery(query, EBEYE_SPECIES_FIELD, speciesFilter);
-    }
-   
 
-    /*
-    public static ParamOfGetResultsIds prepareGetResultsIdsQuery(
-                        ResultOfGetNumberOfResults resultOfGetNumberOfResults
-                        , int start, int size) throws QueryException {
-        //TODO - This size should be the size of the final result,
-        //not the size per query
-        //searchParams.setSize(
-           //     ResultCalculator.calGetResultsIdsSize(totalFound
-              //                                  , NUMBER_OF_RECORDS_PER_PAGE));
-        ParamOfGetResultsIds paramOfGetResultsIds
-                = new ParamOfGetResultsIds(
-                        resultOfGetNumberOfResults
-                        ,start
-                        ,size);
-        if (paramOfGetResultsIds == null) {
-           throw new QueryException(
-                    "Unable to create query for GetResultsIds operation");
+    /**
+     * Create a list of Lucene queries IN (eg.: id:("PDE7B_HUMAN","PDE7B_MOUSE"))
+     * for a long list of field values. If the list is too long then it is divided
+     * into sub lists. A query is created for each sub list.
+     * @param queryField
+     * @param fieldValues
+     * @param wildcard
+     * @param subListSize
+     * @return
+     * @throws EnzymeFinderException
+     */
+    public static List<String> createQueriesIn(
+            String queryField
+            , List<String> fieldValues, boolean wildcard, int subListSize) {
+        List<String> queries = new ArrayList<String>();
+        List<List<String>> subLists = DataTypeConverter
+                .createSubLists(fieldValues, subListSize);
+        for (List<String> subList: subLists) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(createQueryIN(queryField, wildcard, subList));
+            sb.append( " AND ");
+            sb.append(ENZYME_FILTER);
+            queries.add(sb.toString());
         }
-        return paramOfGetResultsIds;
-
+        return queries;
     }
 
-
-    public static List<ParamOfGetResultsIds> prepareGetResultsIdsQueries(
-            List<ResultOfGetNumberOfResults> resultOfGetNumberOfResultsList) 
-            throws QueryException {
-
-        //    , int start, int configResultSize
-        Iterator it = resultOfGetNumberOfResultsList.iterator();
-        List<ParamOfGetResultsIds> paramOfGetResultsIdsList
-                = new ArrayList<ParamOfGetResultsIds>();
-        //loop to process each domain
-        while (it.hasNext()){
-            ResultOfGetNumberOfResults resultOfGetNumberOfResults
-                    = (ResultOfGetNumberOfResults)it.next();
-            int totalPerDomain = resultOfGetNumberOfResults.getTotalFound();
-            if (totalPerDomain>0) {
-                //TODO: if the size > 100 what happens?
-                //int size = ResultCalculator.calGetResultsIdsSize(totalPerDomain
-                   //                     , EBEYE_MAX_RESULTS);                
-                Pagination pagination = new Pagination(totalPerDomain, EBEYE_MAX_RESULTS_PER_QUERY);
-                pagination.calTotalPages();
-                int lastPageResult = pagination.getLastPageResults();
-                int numberOfQueries =  pagination.getTotalPages();
-                //cal the size of the result
-                int resultSize = EBEYE_MAX_RESULTS_PER_QUERY;
-
-                ParamOfGetResultsIds paramOfGetResultsIds = null;
-                int start = 0;
-                int counter = 0;
-                //loop to process results > 100
-                while (counter < numberOfQueries) {
-                    counter++;
-                    //last page result size
-                    if (counter==numberOfQueries) {
-                        resultSize = lastPageResult;
-                    }
-                    paramOfGetResultsIds =
-                        prepareGetResultsIdsQuery(resultOfGetNumberOfResults
-                        , start
-                        , resultSize
-                        );
-                    paramOfGetResultsIdsList.add(paramOfGetResultsIds);
-                    start = start+resultSize;
-                }
-            }
-        }
-        if (paramOfGetResultsIdsList == null
-                || paramOfGetResultsIdsList.size() ==0) {
-            throw new QueryException(
-                    "Unable to create queries for GetResultsIds operation");
-        }
-        return paramOfGetResultsIdsList;
-    }
-*/
-
-
-    public static void buildGetAllResultsQuery (String domain) {
-
-
-    }
-
-    /*
-    public static List<String> buildDomainQueryOr(String keywords) {
-        List<Domain> domains = Config.domainList;
+    /**
+     * Concat a simple query with a filter query by AND condition.
+     * @param query
+     * @param filterQuery
+     * @return
+     */
+    public static String createANDQuery(String query, String filterQuery) {
         StringBuffer sb = new StringBuffer();
-        List<String> queryList = new ArrayList();
-        for (Domain domain:domains) {
-            String domainId = domain.getId();
-            List<SearchField> fields = domain.getSearchFieldList().getSearchField();
-            queryList.add(buidFieldsQueryOr(keywords, fields));
-        }
-        return queryList;
-    }
-
-    public static String buidFieldsQueryOr(String keywords, List<SearchField> fields) {
-        String query1 = null;
-        String query2 = null;
-        String cleanKeywords = cleanKeywords(keywords);
-        StringBuffer sb = new StringBuffer();
-        for (SearchField field: fields) {
-            query1 = luceneParser.parseOrTerms(cleanKeywords, field.getId());
-            query2 = luceneParser.parsePhraseTerms(cleanKeywords, field.getId());
-            String query3 = luceneParser.parseUserTerms(cleanKeywords, field.getId());
-            sb.append(query1);
-        }
+        sb.append(query);
+        sb.append(" AND ");
+        sb.append(filterQuery);
         return sb.toString();
     }
 
-	private static String cleanKeywords(String keywords){
-            StandardAnalyzer standardAnalyzer = new StandardAnalyzer(Version.LUCENE_31);
-           // standardAnalyzer.
-
-            return null;
+    public static List<String> addFilterQueriesAND(List<String> queries
+            , String filterFieldName, List<String> filterValues)  {
+        List<String> queriesWithFilter = new ArrayList<String>();
+        //String filterQuery = LuceneQueryBuilder.a.createQueryIN(filterFieldName, false, filterValues);
+        for (String query:queries) {
+            String qryWithSpecies = addSpeciesFilterQuery(query, filterFieldName, filterValues);
+            System.out.println(qryWithSpecies);
+            queriesWithFilter.add(qryWithSpecies);
         }
-     * 
-     */
-
-
+        return queriesWithFilter;
+    }
 }
