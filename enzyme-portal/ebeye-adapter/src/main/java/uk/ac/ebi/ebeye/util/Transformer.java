@@ -74,9 +74,9 @@ public class Transformer {
 
 
 
-    public static Collection<String> transformFieldValueToList(ArrayOfArrayOfString rawResults
+    public static LinkedHashSet<String> transformFieldValueToList(ArrayOfArrayOfString rawResults
             , boolean isUNIPROTfield) {
-        Collection<String> rawResultList = new LinkedHashSet<String>();
+        LinkedHashSet<String> rawResultList = new LinkedHashSet<String>();
         Iterator it = rawResults.getArrayOfString().iterator();
         while (it.hasNext()) {
             ArrayOfString arrayOfString = (ArrayOfString)it.next();
@@ -100,6 +100,21 @@ public class Transformer {
             mergedResults.addAll(transformFieldValueToList(resultLines, isUNIPROTfield));
         }
         return mergedResults;
+    }
+
+    public static Map<String, List<String>> transformChebiResults(
+            List<ArrayOfArrayOfString> rawResultsList,  boolean isUNIPROTfield) {
+        Map<String, List<String>> results = new HashMap<String, List<String>>();
+        List<List<String>> resultLines = Transformer.transformToList(rawResultsList);
+        for (List<String> resultLine: resultLines) {
+            String chebiName = resultLine.get(0);
+            List<String> uniprotAcc = transformAccessionsString(resultLine.get(1));
+            if (uniprotAcc.size() > 0) {
+                results.put(chebiName, uniprotAcc);
+            }
+
+        }
+        return results;
     }
 
     public static List<String> transformAccessionsString(String ebeyeAccList) {
