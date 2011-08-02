@@ -82,10 +82,11 @@
              <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
             <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
+            <c:set var="filterMaxDisplay" value="${5}"/>            
+
             <div class="grid_12 content">
                 <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
-                <div class="filter">
-                    <c:set var="filterMaxDisplay" value="${10}"/>
+                <div class="filter">                    
                     <div class="title">
                         Search Filters
                     </div>
@@ -97,14 +98,12 @@
                         </div>
                         <div class="filterContent">
                             <c:set var="compoundList" value="${searchFilter.compounds}"/>
-                            <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
-                            <c:set var="compoundListMaxSize" value="${compoundListSize}"/>
-
-                            <c:if test="${compoundListMaxSize > filterMaxDisplay}">
-                                <c:set var="compoundListMaxSize" value="${filterMaxDisplay}"/>
+                            <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>                           
+                            <c:if test="${compoundListSize <= filterMaxDisplay}">
+                                <c:set var="filterMaxDisplay" value="${compoundListSize}"/>
                             </c:if>                            
-                            <c:if test="${compoundListMaxSize > 0}">                                
-                                <c:forEach var="i" begin="0" end="${compoundListMaxSize-1}">
+                            <c:if test="${filterMaxDisplay > 0}">
+                                <c:forEach var="i" begin="0" end="${filterMaxDisplay-1}">
                                     <div class="filterLine">
                                     <div class="text">
                                         <xchars:translate>
@@ -112,12 +111,30 @@
                                         </xchars:translate>                                        
                                     </div>
                                     <div class="checkItem">
-                                        <input type="checkbox" name="human" value="human" />
+                                        <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}"/>
                                      </div>
                                     <div class="clear"></div>
                                     </div>
                                 </c:forEach>
-
+                            </c:if>
+                            <c:if test="${compoundListSize > filterMaxDisplay}">
+                             <div id="compound_0" style="display: none">
+                                <c:forEach var="i" begin="${filterMaxDisplay}" end="${compoundListSize-1}">
+                                    <div class="filterLine">
+                                    <div class="text">
+                                        <xchars:translate>
+                                            <c:out value="${compoundList[i].name}" escapeXml="false"/>
+                                        </xchars:translate>
+                                    </div>
+                                    <div class="checkItem">
+                                        <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}"/>
+                                     </div>
+                                    <div class="clear"></div>
+                                    </div>
+                                </c:forEach>
+                              </div>
+                             <c:set var="moreSize" value="${compoundListSize-filterMaxDisplay}"/>
+                             <a class="link" id="<c:out value='compound_link_0'/>"><c:out value="See ${moreSize} more"/></a> <br/>
                             </c:if>
                         </div>
                     </div>
@@ -129,11 +146,11 @@
                         <div class="filterContent">
                             <c:set var="speciesList" value="${searchFilter.species}"/>
                             <c:set var="speciesListSize" value="${fn:length(speciesList)}"/>
-                            <c:set var="speciesListMaxSize" value="${speciesListSize}"/>
-                            <c:if test="${speciesListMaxSize > filterMaxDisplay}">
-                                <c:set var="speciesListMaxSize" value="${filterMaxDisplay}"/>
+                            
+                            <c:if test="${speciesListSize > 0 && speciesListSize < filterMaxDisplay}">
+                                <c:set var="filterMaxDisplay" value="${speciesListSize}"/>
                             </c:if>
-                            <c:forEach var="i" begin="0" end="${speciesListMaxSize-1}">
+                            <c:forEach var="i" begin="0" end="${filterMaxDisplay-1}">
                                 <c:set var="speciesName" value="${speciesList[i].commonname}"/>
                                 <c:if test='${speciesName==null || speciesName ==""}'>
                                     <c:set var="speciesName" value="${speciesList[i].scientificname}"/>
@@ -150,6 +167,28 @@
                                 <div class="clear"></div>
                                 </div>
                             </c:forEach>
+                            <c:if test="${speciesListSize > filterMaxDisplay}">
+                                <div id="species_0" style="display: none">
+                                <c:forEach var="j" begin="${filterMaxDisplay}" end="${speciesListSize-1}">
+                                    <c:set var="speciesName" value="${speciesList[j].commonname}"/>
+                                    <c:if test='${speciesName==null || speciesName ==""}'>
+                                        <c:set var="speciesName" value="${speciesList[j].scientificname}"/>
+                                    </c:if>
+                                    <div class="filterLine">
+                                    <div class="text">
+                                    <span>
+                                        <c:out value="${speciesName}"/>
+                                    </span>
+                                    </div>
+                                    <div class="checkItem">
+                                        <form:checkbox path="searchparams.species" value="${speciesList[j].scientificname}"/>
+                                     </div>
+                                    <div class="clear"></div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                                <a class="link" id="<c:out value='species_link_0'/>"><c:out value="${showButton}"/></a> <br/>
+                            </c:if>
                         </div>
                     </div>
                 </div>
@@ -246,7 +285,7 @@
                                         </span>
                                         </div>
                                             <c:if test="${counter>synSize}">
-                                                <a id="<c:out value='syn_link_${resultItemId}'/>" href=""><c:out value="${showButton}"/></a>
+                                                <a class="link" id="<c:out value='syn_link_${resultItemId}'/>"><c:out value="${showButton}"/></a>
                                             </c:if>
                                     </c:if>
                                 </div>
@@ -264,37 +303,50 @@
                                         </c:choose>
                                         </a>
                                         </p>
-                                        <c:set var="speciesCounter" value="${1}"/>
-                                        <c:set var="speciesSize" value="${fn:length(enzyme.relatedspecies)+1}"/>
-                                        <c:forEach items="${enzyme.relatedspecies}" var="relspecies">
+                                        <!--display = 3 = 2 related species + 1 default species -->
+                                        <c:set var="relSpeciesMaxDisplay" value="${2}"/>
+                                        <c:set var="relspecies" value="${enzyme.relatedspecies}"/>                                        
+                                        <c:set var="relSpeciesSize" value="${fn:length(relspecies)}"/>
+                                        <c:if test="${relSpeciesSize > 0}">
+                                        <c:if test="${relSpeciesSize <= relSpeciesMaxDisplay}">
+                                            <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
+                                        </c:if>
+                                        <c:forEach var = "i" begin="0" end="${relSpeciesMaxDisplay-1}">
                                             <p>
                                                 <c:choose>
-                                                <c:when test='${relspecies.species.commonname == ""}'>
-                                                    <c:set var="speciesName" value="${relspecies.species.scientificname}"/>
+                                                <c:when test='${relspecies[i].species.commonname == ""}'>
+                                                    <c:set var="speciesName" value="${relspecies[i].species.scientificname}"/>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:set var="speciesName" value="${relspecies.species.commonname}"/>
+                                                    <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                 </c:otherwise>
                                                 </c:choose>
-                                            <a href="entry/${relspecies.uniprotaccessions[0]}">
-                                            <c:choose>
-                                                <c:when test="${speciesCounter < 4}">
-                                                    <c:out value="${speciesName}"/>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span  id='relSpecies_${resultItemId}' style="display: none">
-                                                    <c:out value="${speciesName}"/>
-                                                    </span>                                                    
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <a href="entry/${relspecies[i].uniprotaccessions[0]}">
+                                                <c:out value="${speciesName}"/>
                                             </a>
-                                            </p>
-                                            <c:set var="speciesCounter" value="${speciesCounter+1}"/>
+                                            </p>                                            
                                         </c:forEach>
-                                                <c:if test="${speciesSize > 4}">
-                                                <a id="<c:out value='relSpecies_link_${resultItemId}'/>" href=""><c:out value="${showButton}"/></a> <br/>
-                                            </c:if>
-
+                                        <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
+                                            <div id="relSpecies_${resultItemId}" style="display: none">
+                                            <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">
+                                                <p>
+                                                    <c:choose>
+                                                    <c:when test='${relspecies[i].species.commonname == ""}'>
+                                                        <c:set var="speciesName" value="${relspecies[i].species.scientificname}"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
+                                                    </c:otherwise>
+                                                    </c:choose>
+                                                <a href="entry/${relspecies[i].uniprotaccessions[0]}">
+                                                    <c:out value="${speciesName}"/>
+                                                </a>
+                                                </p>
+                                            </c:forEach>
+                                         </div>
+                                         <a class="link" id="<c:out value='relSpecies_link_${resultItemId}'/>"><c:out value="${showButton}"/></a> <br/>
+                                         </c:if>
+                                       </c:if>
                                 </div>
                             </div>
                             <div id="buttonItems">

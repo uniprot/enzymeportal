@@ -15,9 +15,10 @@
 	/*color: #207a7a;*/
 	text-decoration: underline;
 }
-.species  a:link, .species a:visited{
+.link{
 	/*color: #207a7a;*/
-	text-decoration: underline;       
+	text-decoration: underline;
+
 }
 .ebiHeader {
     min-height: 50px;
