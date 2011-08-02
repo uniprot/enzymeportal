@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -94,13 +95,23 @@ public class UniprotAdapter implements IUniprotAdapter{
                             "One of Uniprot get entry thread did not return the result" +
                             " before timeout! ", ex);
                 }
-                enzymeSummaryList.add(enzymeSummary);
+                if (enzymeSummary != null) {
+                    enzymeSummaryList.add(enzymeSummary);
+                }
             }
             return enzymeSummaryList;
         }
         finally {
             pool.shutdown();
         }
+    }
+
+    public Map<String, String> getSpecies(List<String> idPrefixList, List<String> speciesFilter) throws MultiThreadingException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public List<EnzymeSummary> getEnzymeEntries(List<String> uniprotNames) throws MultiThreadingException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 /*

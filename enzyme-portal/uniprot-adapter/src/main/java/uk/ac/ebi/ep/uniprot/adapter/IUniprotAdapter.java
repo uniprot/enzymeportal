@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -31,8 +32,15 @@ public interface IUniprotAdapter {
 
     public List<EnzymeSummary> getEnzymeEntries(Set<String> queries) throws
             MultiThreadingException;
+
+    public List<EnzymeSummary> getEnzymeEntries(List<String> uniprotNames) throws
+            MultiThreadingException;
     
     public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries) throws
+            MultiThreadingException;
+
+        public Map<String, String> getSpecies(List<String> idPrefixList
+            , List<String> speciesFilter) throws
             MultiThreadingException;
 
 }
