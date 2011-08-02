@@ -61,6 +61,7 @@ public class UniprotAdapterTest {
     /**
      * Test of getEnzymeEntries method, of class UniprotAdapter.
      */
+    
     @Test
     public void testGetEnzymeEntries() throws Exception {
         System.out.println("getEnzymeEntries");        

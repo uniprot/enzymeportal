@@ -1,7 +1,9 @@
 package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -145,6 +147,7 @@ public class UniprotCallable {
         public EnzymeSummary queryEntry()  {
             //Retrieve UniProt entry by its accession number
             Query uniprotQuery = UniProtQueryBuilder.buildQuery(query);
+            //Query uniprotQuery = UniProtQueryBuilder.buildFullTextSearch(query);
             List<EnzymeAccession> speciesList = getSpecies(uniprotQuery);
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
@@ -233,6 +236,53 @@ public class UniprotCallable {
                 secEntries.remove(this.mainEntry);
             }
             return secEntries;
+        }
+
+  }
+
+//******************************** INNER CLASS *******************************//
+
+    public static class GetSpeciesCaller implements Callable<Map<String,String>> {
+        protected String query;
+
+        public GetSpeciesCaller(String query) {
+            this.query = query;
+        }
+
+
+        public Map<String,String> call() throws Exception {
+            return getSpecies();
+        }
+        public Map<String,String> getSpecies() {
+            Query uniprotQuery = UniProtQueryBuilder.buildQuery(query);
+            return getSpecies(uniprotQuery);
+        }
+        public Map<String,String> getSpecies(Query uniprotQuery) {
+             AttributeIterator<UniProtEntry> attributes  = queryService
+                     .getAttributes(uniprotQuery, "ognl:organism");
+             Map<String,String> speciesMap = new HashMap<String, String>();
+             for (Attribute att : attributes) {
+                Organism organism = (Organism)att.getValue();
+                String commonName = organism.getCommonName().getValue();
+                String scientificName = organism.getScientificName().getValue();
+                speciesMap.put(scientificName, commonName);
+
+             }
+             return speciesMap;
+        }
+
+        public Map<String,String> getIds(Query uniprotQuery) {
+             AttributeIterator<UniProtEntry> attributes  = queryService
+                     .getAttributes(uniprotQuery, "ognl:organism");
+             Map<String,String> speciesMap = new HashMap<String, String>();
+             for (Attribute att : attributes) {
+                Organism organism = (Organism)att.getValue();
+                String commonName = organism.getCommonName().getValue();
+                String scientificName = organism.getScientificName().getValue();
+                speciesMap.put(scientificName, commonName);
+
+             }
+             return speciesMap;
         }
 
   }
