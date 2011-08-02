@@ -415,7 +415,12 @@ public class EnzymeFinder implements IEnzymeFinder {
         String cleanedKeywords = luceneParser
                 .escapeLuceneSpecialChars(userKeywords);
         this.searchParams.setText(cleanedKeywords);
-
+        List<String> compoundFilter = searchParams.getCompounds();
+        if (compoundFilter != null) {
+            if (compoundFilter.size() > 0) {
+                //search chebi directly
+            }
+        }
         //Query the number of results for all domains and save the value in ParamOfGetResults object
         List<ParamOfGetResults> nrOfResultParams = this.getNrOfRecordsRelatedToUniprot();
 
@@ -486,6 +491,10 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
 
         //Results from other domain are ranked in second place
+        if (uniprotAccsFromChebi.size() > 0) {
+            mergedList.addAll(uniprotAccsFromChebi);
+        }
+
         if (uniprotIdsRefFromOtherDomains.size() > 0) {
             mergedList.addAll(uniprotIdsRefFromOtherDomains);
         }
@@ -670,6 +679,8 @@ public class EnzymeFinder implements IEnzymeFinder {
 
             intenzUniqueSyns.addAll(uniprotSyns);
 
+            //Remove the synonyms from uniprot because they have been merged with
+            //synonyms from intenz
             enzymeSummary.getSynonym().clear();
 
             enzymeSummary.getSynonym().addAll(intenzUniqueSyns);
