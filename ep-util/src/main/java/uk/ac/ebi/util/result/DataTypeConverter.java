@@ -193,11 +193,11 @@ public class DataTypeConverter {
          return compoundList;
     }
 
-    public static List<Compound> listToCompound(Collection<String> compoundNames) {
+    public static List<Compound> listToCompound(Collection<String> compoundIds) {
          List<Compound> compoundList = new ArrayList<Compound>();
-         for (String compoundName:compoundNames) {
+         for (String compoundId:compoundIds) {
              Compound compound = new Compound();
-             compound.setName(compoundName);
+             compound.setId(compoundId);
              compoundList.add(compound);
          }
          return compoundList;
