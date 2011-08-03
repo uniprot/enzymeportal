@@ -683,8 +683,17 @@ public class EbeyeAdapter implements IEbeyeAdapter {
  * 
  */
       public Map<String, String> getNameMapByAccessions(String domain, Collection<String> accessions) {
+        Domains domains = IEbeyeAdapter.Domains.valueOf(domain);
+        List<String> configFields = null;
+        switch (domains) {
+            case chebi:
+                configFields = IEbeyeAdapter.FieldsOfChebiNameMap.getFields();
+                break;
+           default: configFields = IEbeyeAdapter.FieldsOfUniprotNameMap.getFields();
+
+        }
         ArrayOfString fields = Transformer
-                .transformToArrayOfString(FieldsOfUniprotNameMap.getFields());
+                .transformToArrayOfString(configFields);
         
         //TODO limited array size
         ArrayOfString idsArray = Transformer
