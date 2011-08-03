@@ -5,10 +5,10 @@
 
 
 $(document).ready(function() {
-    var showMoreLink = "Show more";
-    var showLessLink = "Show less";
-    var linkName = "link";
+    //var showMoreLink = "Show more";
+    //var showLessLink = "Show less"; 
    $("a").click(function(event) {
+       var linkName = "link";
         var clickedId = event.target.id;
         var idClickedSplit = clickedId.split("_");
         /*id of the link is made up by 3 parts:
@@ -26,14 +26,17 @@ $(document).ready(function() {
         if (itemClicked == linkName) {
             var idOfHiddenText = "#"+idPrefixClicked+"_"+orderOfItemClicked;
             var jqClickedId= "#"+clickedId;
-            var newValue = $(jqClickedId).text();
+            var linkValue = $(jqClickedId).text();
+            var splitLinkName = linkValue.split(" ");
+            var size = splitLinkName.length;
+            var linkLastName = splitLinkName[size-1];
             
-            if (newValue == showMoreLink) {
+            if (linkLastName == "more") {
                 $(idOfHiddenText).show();
-                $(jqClickedId).html(showLessLink);
+                $(jqClickedId).html(linkValue.replace(linkLastName,"less"));
             } else {
                 $(idOfHiddenText).hide();
-                 $(jqClickedId).html(showMoreLink);
+                $(jqClickedId).html(linkValue.replace(linkLastName,"more"));
             }
         }
     });
