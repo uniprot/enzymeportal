@@ -84,8 +84,6 @@
             <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
             <c:set var="filterSizeDefault" value="${5}"/>
-            <c:set var="maxFilterSizeDefault" value="${15}"/>
-
             <div class="grid_12 content">
                 <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
                 <div class="filter">                    
@@ -119,10 +117,7 @@
                                 <div class="clear"></div>
                                 </div>
                             </c:forEach>
-                            <c:if test="${compoundListSize > filterSizeDefault}">
-                                <c:if test="${compoundListSize > maxFilterSizeDefault}">
-                                    <c:set var="compoundListSize" value="${maxFilterSizeDefault}"/>
-                                </c:if>                            
+                            <c:if test="${compoundListSize > filterSizeDefault}">                          
                              <div id="compound_0" style="display: none">
                                 <c:forEach var="i" begin="${filterSizeDefault}" end="${compoundListSize-1}">
                                     <div class="filterLine">
@@ -173,9 +168,6 @@
                                 </div>
                             </c:forEach>
                             <c:if test="${speciesListSize > filterSizeDefault}">
-                                <c:if test="${speciesListSize > maxFilterSizeDefault}">
-                                    <c:set var="speciesListSize" value="${maxFilterSizeDefault}"/>
-                                </c:if>
                                 <div id="species_0" style="display: none">
                                 <c:forEach var="j" begin="${filterSizeDefault}" end="${speciesListSize-1}">
                                     <c:set var="speciesName" value="${speciesList[j].commonname}"/>
