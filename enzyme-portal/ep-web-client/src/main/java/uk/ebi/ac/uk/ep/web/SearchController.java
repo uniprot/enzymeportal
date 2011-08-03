@@ -52,7 +52,7 @@ public class SearchController {
     public String viewSearchHome(Model model) {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
-        searchParams.setText("sildenafil");
+        //searchParams.setText("sildenafil");
         searchParams.setStart(0);
         searchModelForm.setSearchparams(searchParams);
         //resultSetForm.getSummaryentries().setEnzymesummarycollection(emptyResults);

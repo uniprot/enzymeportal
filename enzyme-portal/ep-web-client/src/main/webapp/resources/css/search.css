@@ -132,7 +132,7 @@
 .filter .sublevel1 {
     margin-top: 10px;
     min-height: 120px;
-    max-height: 600px;
+    /*max-height: 600px;*/
     border: 1px solid #ddd;    
     -moz-border-radius: 8px 8px 8px 8px;
     border-radius:8px 8px 8px 8px;
@@ -256,8 +256,7 @@
     margin-right: 5px;
     margin-top: 10px;
     padding: 5px;
-    vertical-align: top;
-    max-height: 450px;
+    vertical-align: top;    
     min-height: 80px;
     /*width: 76%;*/
     width: 88%;

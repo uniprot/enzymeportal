@@ -66,12 +66,13 @@
                 </div>
             </div>
             <div class="clear"></div>
-            <form:form modelAttribute="searchModel" action="showResults" method="get">
+            <form:form id="searchForm" modelAttribute="searchModel" action="showResults" method="get">
             <div class="grid_12">
                 <div  id="keywordSearch" class="search">
                     <p>
                         <form:input path="searchparams.text" cssClass="field"/>
                         <form:hidden path="searchparams.start" />
+                        <form:hidden path="searchparams.previoustext" />
                         <input type="submit" value="Search" class="button" />
                     </p>
                  </div>
@@ -82,7 +83,8 @@
              <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
             <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
-            <c:set var="filterMaxDisplay" value="${5}"/>            
+            <c:set var="filterSizeDefault" value="${5}"/>
+            <c:set var="maxFilterSizeDefault" value="${15}"/>
 
             <div class="grid_12 content">
                 <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
@@ -98,28 +100,31 @@
                         </div>
                         <div class="filterContent">
                             <c:set var="compoundList" value="${searchFilter.compounds}"/>
-                            <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>                           
-                            <c:if test="${compoundListSize <= filterMaxDisplay}">
-                                <c:set var="filterMaxDisplay" value="${compoundListSize}"/>
+                            <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
+                            <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+
+                            <c:if test="${compoundListSize > 0 && compoundListSize <= filterSizeDefault}">
+                                <c:set var="limitedDisplay" value="${compoundListSize}"/>
                             </c:if>                            
-                            <c:if test="${filterMaxDisplay > 0}">
-                                <c:forEach var="i" begin="0" end="${filterMaxDisplay-1}">
-                                    <div class="filterLine">
-                                    <div class="text">
-                                        <xchars:translate>
-                                            <c:out value="${compoundList[i].name}" escapeXml="false"/>
-                                        </xchars:translate>                                        
-                                    </div>
-                                    <div class="checkItem">
-                                        <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}"/>
-                                     </div>
-                                    <div class="clear"></div>
-                                    </div>
-                                </c:forEach>
-                            </c:if>
-                            <c:if test="${compoundListSize > filterMaxDisplay}">
+                            <c:forEach var="i" begin="0" end="${limitedDisplay-1}">
+                                <div class="filterLine">
+                                <div class="text">
+                                    <xchars:translate>
+                                        <c:out value="${compoundList[i].name}" escapeXml="false"/>
+                                    </xchars:translate>
+                                </div>
+                                <div class="checkItem">
+                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}"/>
+                                 </div>
+                                <div class="clear"></div>
+                                </div>
+                            </c:forEach>
+                            <c:if test="${compoundListSize > filterSizeDefault}">
+                                <c:if test="${compoundListSize > maxFilterSizeDefault}">
+                                    <c:set var="compoundListSize" value="${maxFilterSizeDefault}"/>
+                                </c:if>                            
                              <div id="compound_0" style="display: none">
-                                <c:forEach var="i" begin="${filterMaxDisplay}" end="${compoundListSize-1}">
+                                <c:forEach var="i" begin="${filterSizeDefault}" end="${compoundListSize-1}">
                                     <div class="filterLine">
                                     <div class="text">
                                         <xchars:translate>
@@ -133,8 +138,8 @@
                                     </div>
                                 </c:forEach>
                               </div>
-                             <c:set var="moreSize" value="${compoundListSize-filterMaxDisplay}"/>
-                             <a class="link" id="<c:out value='compound_link_0'/>"><c:out value="See ${moreSize} more"/></a> <br/>
+                             <c:set var="compoundMoreSize" value="${compoundListSize-filterSizeDefault}"/>
+                             <a class="link" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
                             </c:if>
                         </div>
                     </div>
@@ -146,11 +151,11 @@
                         <div class="filterContent">
                             <c:set var="speciesList" value="${searchFilter.species}"/>
                             <c:set var="speciesListSize" value="${fn:length(speciesList)}"/>
-                            
-                            <c:if test="${speciesListSize > 0 && speciesListSize < filterMaxDisplay}">
-                                <c:set var="filterMaxDisplay" value="${speciesListSize}"/>
+                            <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+                            <c:if test="${speciesListSize > 0 && speciesListSize < filterSizeDefault}">
+                                <c:set var="limitedDisplay" value="${speciesListSize}"/>
                             </c:if>
-                            <c:forEach var="i" begin="0" end="${filterMaxDisplay-1}">
+                            <c:forEach var="i" begin="0" end="${limitedDisplay-1}">
                                 <c:set var="speciesName" value="${speciesList[i].commonname}"/>
                                 <c:if test='${speciesName==null || speciesName ==""}'>
                                     <c:set var="speciesName" value="${speciesList[i].scientificname}"/>
@@ -167,9 +172,12 @@
                                 <div class="clear"></div>
                                 </div>
                             </c:forEach>
-                            <c:if test="${speciesListSize > filterMaxDisplay}">
+                            <c:if test="${speciesListSize > filterSizeDefault}">
+                                <c:if test="${speciesListSize > maxFilterSizeDefault}">
+                                    <c:set var="speciesListSize" value="${maxFilterSizeDefault}"/>
+                                </c:if>
                                 <div id="species_0" style="display: none">
-                                <c:forEach var="j" begin="${filterMaxDisplay}" end="${speciesListSize-1}">
+                                <c:forEach var="j" begin="${filterSizeDefault}" end="${speciesListSize-1}">
                                     <c:set var="speciesName" value="${speciesList[j].commonname}"/>
                                     <c:if test='${speciesName==null || speciesName ==""}'>
                                         <c:set var="speciesName" value="${speciesList[j].scientificname}"/>
@@ -186,8 +194,9 @@
                                     <div class="clear"></div>
                                     </div>
                                 </c:forEach>
+                                <c:set var="speciesMoreSize" value="${speciesListSize-filterSizeDefault}"/>
                             </div>
-                                <a class="link" id="<c:out value='species_link_0'/>"><c:out value="${showButton}"/></a> <br/>
+                                <a class="link" id="<c:out value='species_link_0'/>"><c:out value="See ${speciesMoreSize} more"/></a> <br/>
                             </c:if>
                         </div>
                     </div>
@@ -200,9 +209,10 @@
                     <c:if test="${summaryentries!=null && searchresults.totalfound>0}">    
                         <div class="resultText">
                             About <c:out value="${totalfound}"/> results found
-                        </div>
+
+                                                     </div>
                         <div id="tnt_pagination">
-                            <form:form modelAttribute="pagination">
+                             <form:form modelAttribute="pagination">        
                                 <c:set var="totalPages" value="${pagination.totalPages}"/>
                                 <c:set var="maxPages" value="${totalPages}"/>
                                 <c:if test="${totalPages>pagination.maxDisplayedPages}">
@@ -260,33 +270,30 @@
                                         </p>
                                     </c:if>
                                     <c:set var="synonym" value="${enzyme.synonym}"/>
-                                    <c:if test='${fn:length(synonym)>0}'>
+                                    <c:set var="synonymSize" value="${fn:length(synonym)}"/>
+                                    <c:set var="synLimitedDisplayDefault" value="${5}"/>
+                                    <c:set var="synLimitedDisplay" value="${synLimitedDisplayDefault}"/>
+                                    <c:if test='${synonymSize>0}'>
                                         <div id ="synonym">
-                                        Synonyms:
-                                        <c:set var="synSize" value="${5}"/>
-                                        <c:set var="hiddenSyns" value=""/>
-                                        <c:forEach items="${enzyme.synonym}" var="syn">
-                                            <c:set var="nameSize" value="${nameSize+1}"/>
-                                        </c:forEach>
-                                        <c:set var="counter" value="${0}"/>
-                                        <c:forEach items="${enzyme.synonym}" var="syn">
-                                            <c:choose>
-                                                <c:when test="${counter<=synSize}">                                                    
-                                                    <c:out value="${syn}"/>;
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:set var="hiddenSyns" value='${hiddenSyns} ${syn}; '/>
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <c:set var="counter" value="${counter+1}"/>                                            
-                                        </c:forEach>
-                                            <span  id='syn_${resultItemId}' style="display: none">
-                                            <c:out value="${hiddenSyns}"/>
-                                        </span>
+                                        Synonyms:                                        
+                                        <c:if test="${synonymSize > 0 && synonymSize <= synLimitedDisplay}">
+                                            <c:set var="synLimitedDisplay" value="${synonymSize}"/>
+                                        </c:if>
+
+                                        <c:set var="hiddenSyns" value=""/>                                        
+                                        <c:forEach var="i" begin="0" end="${synLimitedDisplay-1}">
+                                            <c:out value="${synonym[i]}"/>;
+                                        </c:forEach>                                        
+                                        <c:if test="${synonymSize>synLimitedDisplay}">
+                                        <span  id='syn_${resultItemId}' style="display: none">
+                                            <c:forEach var="i" begin="${synLimitedDisplay}" end="${synonymSize-1}">
+                                                <c:out value="${synonym[i]}"/>;
+                                            </c:forEach>
+                                            </span>
+                                            <br/>
+                                            <a class="link" id="<c:out value='syn_link_${resultItemId}'/>"><c:out value="${showButton}"/></a>
+                                        </c:if>
                                         </div>
-                                            <c:if test="${counter>synSize}">
-                                                <a class="link" id="<c:out value='syn_link_${resultItemId}'/>"><c:out value="${showButton}"/></a>
-                                            </c:if>
                                     </c:if>
                                 </div>
                                     <div id="in">in</div>
