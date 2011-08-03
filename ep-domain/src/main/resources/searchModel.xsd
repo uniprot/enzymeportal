@@ -58,6 +58,7 @@
 	<xs:complexType name="SearchParams">
 		<xs:sequence>
 			<xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="previoustext" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="start" type="xs:int" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="size" type="xs:int" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="compounds" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
