@@ -107,10 +107,12 @@ public class Transformer {
         Map<String, List<String>> results = new HashMap<String, List<String>>();
         List<List<String>> resultLines = Transformer.transformToList(rawResultsList);
         for (List<String> resultLine: resultLines) {
-            String chebiName = resultLine.get(0);
+            //String chebiName = resultLine.get(0);
+            String chebiId = resultLine.get(0);
             List<String> uniprotAcc = transformAccessionsString(resultLine.get(1));
             if (uniprotAcc.size() > 0) {
-                results.put(chebiName, uniprotAcc);
+                //results.put(chebiName, uniprotAcc);
+                results.put(chebiId, uniprotAcc);
             }
 
         }
