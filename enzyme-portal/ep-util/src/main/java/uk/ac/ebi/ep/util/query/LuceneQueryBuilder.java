@@ -155,7 +155,11 @@ public class LuceneQueryBuilder {
             sb.append(LUCENE_EQUAL);
             sb.append(idPrefix);
             sb.append(LUCENE_WILDCARD);
-            sb.append(" AND " + ENZYME_FILTER_UNIPROTAPI);
+            /*Adding this will make the result list from Uniprot API smaller
+           * than the result list from Ebeye
+           */
+
+            //sb.append(" AND " + ENZYME_FILTER_UNIPROTAPI);
             queryList.add(
                     addSpeciesFilterQuery(
                         sb.toString(), UNIPROT_SPECIES_FIELD, speciesFilter));
