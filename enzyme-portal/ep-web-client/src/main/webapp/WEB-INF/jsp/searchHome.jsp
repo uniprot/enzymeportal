@@ -112,7 +112,7 @@
                                     </xchars:translate>
                                 </div>
                                 <div class="checkItem">
-                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}"/>
+                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
                                  </div>
                                 <div class="clear"></div>
                                 </div>
@@ -123,11 +123,11 @@
                                     <div class="filterLine">
                                     <div class="text">
                                         <xchars:translate>
-                                            <c:out value="${compoundList[i].name}" escapeXml="false"/>
+                                            <c:out value="${compoundList[i].id}" escapeXml="false"/>
                                         </xchars:translate>
                                     </div>
                                     <div class="checkItem">
-                                        <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}"/>
+                                        <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
                                      </div>
                                     <div class="clear"></div>
                                     </div>
@@ -224,14 +224,8 @@
                                 </c:if>
                             </form:form>
                         </div>
-                    <div class="comparison">
-                        Compare & download
-                    </div>
                     <div class="clear"></div>
                         <div class="line"></div>
-                    <div id ="allButtons">
-                        <input type="button" value="Add All"/><input type="button" value="Remove All"/>
-                    </div>
                         <div class="resultContent">
                             <c:set var="resultItemId" value="${0}"/>
                             <c:forEach items="${summaryentries}" var="enzyme">
@@ -347,14 +341,6 @@
                                          </c:if>
                                        </c:if>
                                 </div>
-                            </div>
-                            <div id="buttonItems">
-                                <br/>
-                                <br/>
-                                <input type="button" value="Add"/><br/>
-                                <input type="button" value="Remove"/>
-                                <br/>
-                                <br/>
                             </div>
                             <div class="clear"></div>
                             <c:set var="resultItemId" value="${resultItemId+1}"/>
