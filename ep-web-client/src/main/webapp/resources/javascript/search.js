@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 
-
 $(document).ready(function() {
-    //var showMoreLink = "Show more";
-    //var showLessLink = "Show less"; 
-   $("a").click(function(event) {
-       var linkName = "link";
+    var pageSize = 10;
+    /*
+     * handles show more and show less links
+     */
+   $("a.showLink").click(function(event) {
         var clickedId = event.target.id;
         var idClickedSplit = clickedId.split("_");
         /*id of the link is made up by 3 parts:
@@ -23,7 +23,6 @@ $(document).ready(function() {
         var idPrefixClicked = idClickedSplit[0];
         var itemClicked = idClickedSplit[1];
         var orderOfItemClicked = idClickedSplit[2];
-        if (itemClicked == linkName) {
             var idOfHiddenText = "#"+idPrefixClicked+"_"+orderOfItemClicked;
             var jqClickedId= "#"+clickedId;
             var linkValue = $(jqClickedId).text();
@@ -37,7 +36,29 @@ $(document).ready(function() {
             } else {
                 $(idOfHiddenText).hide();
                 $(jqClickedId).html(linkValue.replace(linkLastName,"more"));
-            }
+            }        
+    });
+
+    var pageClicked = false;
+    $("#tnt_pagination").click(function(event) {
+        var clickedId = event.target.id;
+        var nextStart = $("#nextStart").val();
+        var prevStart = $("#prevStart").val();
+        if (clickedId == "prevButton") {
+            $("#start").val(prevStart);
+        } else {
+            $("#start").val(nextStart);
         }
+        //var currentPage = parseInt($("#currentPage").val());
+        //var nextPage = currentPage + 1;
+                
+        //$("#pageNr").html(nextPage);
+        pageClicked = true;
+        $('#searchButton').trigger("click");
+    });
+
+    $("#searchButton").click(function(event) {
+        if (!pageClicked)
+            $("#start").val(0);
     });
 });

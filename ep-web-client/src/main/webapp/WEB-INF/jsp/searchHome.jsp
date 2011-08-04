@@ -66,22 +66,25 @@
                 </div>
             </div>
             <div class="clear"></div>
-            <form:form id="searchForm" modelAttribute="searchModel" action="showResults" method="get">
+            <form:form id="searchForm" modelAttribute="searchModel" action="showResults" method="POST">
             <div class="grid_12">
                 <div  id="keywordSearch" class="search">
                     <p>
                         <form:input path="searchparams.text" cssClass="field"/>
-                        <form:hidden path="searchparams.start" />
+                        <form:hidden id="start" path="searchparams.start" />
                         <form:hidden path="searchparams.previoustext" />
-                        <input type="submit" value="Search" class="button" />
+                        <input id ="searchButton" type="submit" value="Search" class="button" />
                     </p>
                  </div>
             </div>
             <!--Global variables-->
             <c:set var="showButton" value="Show more"/>
+            <c:set var="searchText" value="${searchModel.searchparams.text}"/>
+            <c:set var="startRecord" value="${searchModel.searchparams.start}"/>
             <c:set var="searchresults" value="${searchModel.searchresults}"/>
              <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
             <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
+            <c:set var="summaryentriesSize" value="${fn:length(summaryentries)}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
             <c:set var="filterSizeDefault" value="${5}"/>
             <div class="grid_12 content">
@@ -123,7 +126,7 @@
                                     <div class="filterLine">
                                     <div class="text">
                                         <xchars:translate>
-                                            <c:out value="${compoundList[i].id}" escapeXml="false"/>
+                                            <c:out value="${compoundList[i].name}" escapeXml="false"/>
                                         </xchars:translate>
                                     </div>
                                     <div class="checkItem">
@@ -134,7 +137,7 @@
                                 </c:forEach>
                               </div>
                              <c:set var="compoundMoreSize" value="${compoundListSize-filterSizeDefault}"/>
-                             <a class="link" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
+                             <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
                             </c:if>
                         </div>
                     </div>
@@ -188,7 +191,7 @@
                                 </c:forEach>
                                 <c:set var="speciesMoreSize" value="${speciesListSize-filterSizeDefault}"/>
                             </div>
-                                <a class="link" id="<c:out value='species_link_0'/>"><c:out value="See ${speciesMoreSize} more"/></a> <br/>
+                                <a class="showLink" id="<c:out value='species_link_0'/>"><c:out value="See ${speciesMoreSize} more"/></a> <br/>
                             </c:if>
                         </div>
                     </div>
@@ -198,32 +201,37 @@
                     <c:if test="${totalfound==0}">
                         No results found!
                     </c:if>
-                    <c:if test="${summaryentries!=null && searchresults.totalfound>0}">    
+                    <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
+                        <form:form modelAttribute="pagination">
+                        <c:set var="totalPages" value="${pagination.totalPages}"/>
+                        <c:set var="maxPages" value="${totalPages}"/>
                         <div class="resultText">
-                            About <c:out value="${totalfound}"/> results found
+                            About <c:out value="${totalfound}"/> results found for <c:out value="${searchText}"/>,
+                            displaying <c:out value="${startRecord+1}"/> - <c:out value="${startRecord+summaryentriesSize}"/>
 
-                                                     </div>
-                        <div id="tnt_pagination">
-                             <form:form modelAttribute="pagination">        
-                                <c:set var="totalPages" value="${pagination.totalPages}"/>
-                                <c:set var="maxPages" value="${totalPages}"/>
+                        </div>
+                        <div id="tnt_pagination">                                    
                                 <c:if test="${totalPages>pagination.maxDisplayedPages}">
                                     <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
                                     <c:set var="showNextButton" value="${true}"/>
                                 </c:if>
-                                <c:forEach var="i" begin="1" end="${maxPages}">
-                                    <c:set var="start" value="${(i-1)*pagination.numberResultsPerPage}"/>
-                                    <a href="showResults?keywords=${searchParameters.keywords}&start=${start}">
-                                        <c:out value="${i}"/>
-                                    </a>
-                                </c:forEach>
-                                <c:if test="${showNextButton==true}">
-                                    <a href="showResults?keywords=${searchParameters.keywords}&start=${searchParameters.start+pagination.numberResultsPerPage}">
-                                        next
-                                    </a>
+                                <input id ="prevStart" type="hidden" value="${startRecord-summaryentriesSize}">
+                                <c:if test="${pagination.currentPage==1}">
+                                    <c:set var="prevDisplay" value="none"/>
                                 </c:if>
-                            </form:form>
+                                <a id="prevButton" style="display:${prevDisplay}">
+                                    Previous
+                                </a>
+                                Page <c:out value="${pagination.currentPage}"/> of <c:out value="${totalPages}"/>
+
+                                <c:if test="${showNextButton==true}">
+                                    <input id ="nextStart" type="hidden" value="${startRecord+summaryentriesSize}">                                    
+                                    <a id="nextButton">
+                                        Next
+                                    </a>
+                                </c:if>                         
                         </div>
+                        </form:form>
                     <div class="clear"></div>
                         <div class="line"></div>
                         <div class="resultContent">
@@ -277,7 +285,7 @@
                                             </c:forEach>
                                             </span>
                                             <br/>
-                                            <a class="link" id="<c:out value='syn_link_${resultItemId}'/>"><c:out value="${showButton}"/></a>
+                                            <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>"><c:out value="${showButton}"/></a>
                                         </c:if>
                                         </div>
                                     </c:if>
@@ -337,7 +345,7 @@
                                                 </p>
                                             </c:forEach>
                                          </div>
-                                         <a class="link" id="<c:out value='relSpecies_link_${resultItemId}'/>"><c:out value="${showButton}"/></a> <br/>
+                                         <a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>"><c:out value="${showButton}"/></a> <br/>
                                          </c:if>
                                        </c:if>
                                 </div>
