@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -78,8 +79,16 @@ public static class GetSynonymsCaller implements Callable<Set<String>> {
             try {
                 is = con.getInputStream();
             } catch (IOException ex) {
+                /*If there is an error of this type write in the log rather than
+                 * throwing a exception so that the processing can continue.
+                 */
+                log.error(IintenzAdapter.FAILED_MSG + "Unable download the xml file from "
+                        +this.ecUrl +"!", ex);
+                /*
                 throw new SynonymException(IintenzAdapter.FAILED_MSG + "Unable download the xml file from "
                         +this.ecUrl +"!", ex);
+                 * *
+                 */
             }
 
         JAXBContext jaxbContext = null;
@@ -99,25 +108,32 @@ public static class GetSynonymsCaller implements Callable<Set<String>> {
             }
         Intenz intenz = null;
             try {
-                intenz = (Intenz) unmarshaller.unmarshal(is);
+                if (is != null) {
+                    intenz = (Intenz) unmarshaller.unmarshal(is);
+                }
             } catch (JAXBException ex) {
                  throw new SynonymException(IintenzAdapter.FAILED_MSG + "unmarshal Intenz xml file " +
                          "to the object model failed!", ex);
             }
             finally {
                 try {
-                    is.close();
+                    if (is != null) {
+                        is.close();
+                    }
                 } catch (IOException ex) {
                     log.warn("Failed to close inputstream of the intenz xml file! ");
                 }
             }
 
-        
-        return getSynonyms(intenz);
+         Set<String> synonyms = new LinkedHashSet<String>();
+         if (intenz != null) {
+             synonyms.addAll(getSynonyms(intenz));
+         }
+        return synonyms;
       }
 
         public Set<String> getSynonyms(Intenz intenz) {
-            Set<String> names = new TreeSet<String>();
+            Set<String> names = new LinkedHashSet<String>();
             Synonyms synonymsType =
                     intenz.getEcClass().get(0).getEcSubclass().get(0)
                     .getEcSubSubclass().get(0).getEnzyme().get(0).getSynonyms();
