@@ -644,7 +644,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         enzymeSearchResults.setTotalfound(totalFound);
 
         createSpeciesFilter(enzymeSearchResults);
-
+        searchParams.setStart(start);
         searchParams.setText(userKeywords);
         searchParams.setPrevioustext(userKeywords);
 
