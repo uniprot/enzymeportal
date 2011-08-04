@@ -9,7 +9,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
-
 <html>
     <head>
         <title>Enzyme Portal</title>        
@@ -53,6 +52,18 @@
             <div class="clear"></div>
 
             <div class="grid_12">
+                    <div class="master">
+                            <a class="logo" href="http://www.ebi.ac.uk" title="Link to the EBI website"><img src="images/logo.png" alt="EBI logo" wicket:id="logo" /></a>
+                            <div class="form" wicket:id="searchForm">
+                                    <form>
+                                            <input class="field" type="text" value="toto" />
+                                            <input class="button" type="submit" value="Search" />
+                                    </form>
+                            </div>
+                    </div>
+            </div>
+            
+            <div class="grid_12">
                 <div class="breadcrumbs" id="breadcrumbs">
                     <ul>
                         <li class="first"><a href="">EBI</a></li>
@@ -61,9 +72,11 @@
                         <li><a href="">Search Results</a></li>
                     </ul>
                 </div>
+                <!--
                 <div class="basket">
                     <input id ="compareButton" type="button" value="Compare & Download (0)" />
                 </div>
+                -->
             </div>
             <div class="clear"></div>
             <form:form id="searchForm" modelAttribute="searchModel" action="showResults" method="POST">
@@ -86,7 +99,7 @@
             <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
             <c:set var="summaryentriesSize" value="${fn:length(summaryentries)}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
-            <c:set var="filterSizeDefault" value="${5}"/>
+            <c:set var="filterSizeDefault" value="${10}"/>
             <div class="grid_12 content">
                 <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
                 <div class="filter">                    
@@ -94,54 +107,6 @@
                         Search Filters
                     </div>
                     <div class="line"></div>
-
-                    <div class="sublevel1">
-                        <div class="subTitle">
-                            Chemical Compounds
-                        </div>
-                        <div class="filterContent">
-                            <c:set var="compoundList" value="${searchFilter.compounds}"/>
-                            <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
-                            <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
-
-                            <c:if test="${compoundListSize > 0 && compoundListSize <= filterSizeDefault}">
-                                <c:set var="limitedDisplay" value="${compoundListSize}"/>
-                            </c:if>                            
-                            <c:forEach var="i" begin="0" end="${limitedDisplay-1}">
-                                <div class="filterLine">
-                                <div class="text">
-                                    <xchars:translate>
-                                        <c:out value="${compoundList[i].name}" escapeXml="false"/>
-                                    </xchars:translate>
-                                </div>
-                                <div class="checkItem">
-                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
-                                 </div>
-                                <div class="clear"></div>
-                                </div>
-                            </c:forEach>
-                            <c:if test="${compoundListSize > filterSizeDefault}">                          
-                             <div id="compound_0" style="display: none">
-                                <c:forEach var="i" begin="${filterSizeDefault}" end="${compoundListSize-1}">
-                                    <div class="filterLine">
-                                    <div class="text">
-                                        <xchars:translate>
-                                            <c:out value="${compoundList[i].name}" escapeXml="false"/>
-                                        </xchars:translate>
-                                    </div>
-                                    <div class="checkItem">
-                                        <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
-                                     </div>
-                                    <div class="clear"></div>
-                                    </div>
-                                </c:forEach>
-                              </div>
-                             <c:set var="compoundMoreSize" value="${compoundListSize-filterSizeDefault}"/>
-                             <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
-                            </c:if>
-                        </div>
-                    </div>
-
                     <div class="sublevel1">
                         <div class="subTitle">
                             Species
@@ -195,6 +160,54 @@
                             </c:if>
                         </div>
                     </div>
+                    <div class="sublevel1">
+                        <div class="subTitle">
+                            Chemical Compounds
+                        </div>
+                        <div class="filterContent">
+                            <c:set var="compoundList" value="${searchFilter.compounds}"/>
+                            <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
+                            <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+                            <c:if test="${compoundListSize > 0}">
+                                <c:if test="${compoundListSize <= filterSizeDefault}">
+                                    <c:set var="limitedDisplay" value="${compoundListSize}"/>
+                                </c:if>
+                            <c:forEach var="i" begin="0" end="${limitedDisplay-1}">
+                                <div class="filterLine">
+                                <div class="text">
+                                    <xchars:translate>
+                                        <c:out value="${compoundList[i].name}" escapeXml="false"/>
+                                    </xchars:translate>
+                                </div>
+                                <div class="checkItem">
+                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
+                                 </div>
+                                <div class="clear"></div>
+                                </div>
+                            </c:forEach>
+                            </c:if>
+                            <c:if test="${compoundListSize > filterSizeDefault}">
+                             <div id="compound_0" style="display: none">
+                                <c:forEach var="i" begin="${filterSizeDefault}" end="${compoundListSize-1}">
+                                    <div class="filterLine">
+                                    <div class="text">
+                                        <xchars:translate>
+                                            <c:out value="${compoundList[i].name}" escapeXml="false"/>
+                                        </xchars:translate>
+                                    </div>
+                                    <div class="checkItem">
+                                        <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
+                                     </div>
+                                    <div class="clear"></div>
+                                    </div>
+                                </c:forEach>
+                              </div>
+                             <c:set var="compoundMoreSize" value="${compoundListSize-filterSizeDefault}"/>
+                             <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
+                            </c:if>
+                        </div>
+                    </div>
+
                 </div>
                 </c:if>
                 <div id="keywordSearchResult" class="result">
@@ -219,14 +232,14 @@
                                 <c:if test="${pagination.currentPage==1}">
                                     <c:set var="prevDisplay" value="none"/>
                                 </c:if>
-                                <a id="prevButton" style="display:${prevDisplay}">
+                                <a id="prevButton" href="javascript:void(0);" style="display:${prevDisplay}">
                                     Previous
                                 </a>
                                 Page <c:out value="${pagination.currentPage}"/> of <c:out value="${totalPages}"/>
 
                                 <c:if test="${showNextButton==true}">
                                     <input id ="nextStart" type="hidden" value="${startRecord+summaryentriesSize}">                                    
-                                    <a id="nextButton">
+                                    <a id="nextButton" href="javascript:void(0);">
                                         Next
                                     </a>
                                 </c:if>                         
