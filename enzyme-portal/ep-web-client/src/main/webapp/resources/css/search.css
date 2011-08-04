@@ -15,7 +15,7 @@
 	/*color: #207a7a;*/
 	text-decoration: underline;
 }
-.link{
+.showLink{
 	/*color: #207a7a;*/
 	text-decoration: underline;
 
@@ -63,12 +63,11 @@
 }
 
 #tnt_pagination {
-    float: left;
+    float: right;
     display:block;
     max-height: 40px;
     line-height:21px;
-    text-align: center;
-    width: 40%;
+    text-align: center;    
 }
 
 #tnt_pagination a:link, #tnt_pagination a:visited{
@@ -204,7 +203,8 @@
 .resultText {
     float:left;
     height: 20px;
-    width:40%;
+    /*width:40%;*/
+    width:50%;
 }
 
 .comparison {
@@ -242,7 +242,8 @@
 }
 
 .line {
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
+    margin-bottom: 2px;
     max-height: 2px;
     border-bottom: 1px solid #ddd;
 }
@@ -254,7 +255,7 @@
     -webkit-border-radius:15px 15px 15px 15px;
     border: 1px solid #ddd ;
     margin-right: 5px;
-    margin-top: 10px;
+    /*margin-top: 10px;*/    
     padding: 5px;
     vertical-align: top;    
     min-height: 80px;    

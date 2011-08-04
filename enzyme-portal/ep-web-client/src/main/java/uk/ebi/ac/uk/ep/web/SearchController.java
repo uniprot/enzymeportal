@@ -28,7 +28,7 @@ import uk.ac.ebi.ep.search.model.SearchParams;
 @Controller
 public class SearchController {
     public static final int TOP_RESULT_SIZE = 10;
-    public static final int MAX_DISPLAYED_PAGES = 5;
+    public static final int MAX_DISPLAYED_PAGES = 1;
     private static Logger log = Logger.getLogger(SearchController.class);
 //********************************* VARIABLES ********************************//
 
@@ -67,7 +67,7 @@ public class SearchController {
         return "searchHome";
     }
 
-    @RequestMapping(value = "/showResults", method = RequestMethod.GET)
+    @RequestMapping(value = "/showResults", method = RequestMethod.POST)
     public String viewSearchResult(SearchModel searchModelForm,  BindingResult result, Model model) {
         SearchParams searchParameters = searchModelForm.getSearchparams();
         List<String> String = searchModelForm.getSearchparams().getSpecies();
