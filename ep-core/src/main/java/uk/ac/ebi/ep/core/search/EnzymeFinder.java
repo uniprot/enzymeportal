@@ -402,10 +402,19 @@ public class EnzymeFinder implements IEnzymeFinder {
         String queryField = IEbeyeAdapter.FieldsOfGetResults.acc.name();
         int subListSize = IEbeyeAdapter.EBEYE_NR_OF_QUERY_IN_LIMIT;
         List<String> resultFields = new ArrayList<String>();
+
         resultFields.add(IEbeyeAdapter.FieldsOfGetResults.id.name());
+        List<String> limitedList = null;
+        //Limited the results to process in order to improve the performance
+        if (accs.size() > IEbeyeAdapter.EP_UNIPROT_XREF_RESULT_LIMIT){
+            limitedList = accs.subList(0, IEbeyeAdapter.EP_UNIPROT_XREF_RESULT_LIMIT);
+        } else {
+            limitedList = accs;
+        }
+
         //Enzyme filter must be added
         List<String> queries = LuceneQueryBuilder.createQueriesIn(
-                queryField, accs, false, subListSize);
+                queryField, limitedList, false, subListSize);
         List<ParamOfGetResults> paramList = this.prepareParamsForQueryIN(
                 IEbeyeAdapter.Domains.uniprot.name(), queries,
                 resultFields);
