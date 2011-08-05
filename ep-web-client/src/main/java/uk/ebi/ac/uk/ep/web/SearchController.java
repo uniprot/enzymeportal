@@ -57,17 +57,17 @@ public class SearchController {
         searchModelForm.setSearchparams(searchParams);
         //resultSetForm.getSummaryentries().setEnzymesummarycollection(emptyResults);
          model.addAttribute("searchModel", searchModelForm);
-        return "searchHome";
+        return "index";
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchByKeywords(SearchModel searchModel, BindingResult result, Model model) {
         //System.out.println(searchParameters.getKeywords());
         model.addAttribute("searchModel", searchModel);
-        return "searchHome";
+        return "index";
     }
 
-    @RequestMapping(value = "/showResults", method = RequestMethod.POST)
+    @RequestMapping(value = "/results", method = RequestMethod.POST)
     public String viewSearchResult(SearchModel searchModelForm,  BindingResult result, Model model) {
         SearchParams searchParameters = searchModelForm.getSearchparams();
         List<String> String = searchModelForm.getSearchparams().getSpecies();
@@ -103,6 +103,6 @@ public class SearchController {
         //model.addAttribute("searchFilter", searchFilter);
         searchModelForm.setSearchresults(resultSet);
         model.addAttribute("searchModel", searchModelForm);
-        return "searchHome";
+        return "index";
     }
 }
