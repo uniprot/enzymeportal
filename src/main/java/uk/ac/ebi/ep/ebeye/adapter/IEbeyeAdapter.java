@@ -22,6 +22,7 @@ public interface IEbeyeAdapter {
 
 //********************************* VARIABLES ********************************//
     public static final int EBEYE_RESULT_LIMIT = 100;
+    //public static final int QRY_WITH_UNIPROT_FIELD_RESULT_LIMIT = 10;
     //The number of accessions to be included in the query should not be more than 400
     public static final int EBEYE_NR_OF_QUERY_IN_LIMIT = 400;
     public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 20;
@@ -30,7 +31,7 @@ public interface IEbeyeAdapter {
     //MILLISECOND
     public static final int EBEYE_ONE_RECORD_TIMEOUT = 10;
     //SECOND
-    public static final int EBEYE_ONLINE_REQUEST_TIMEOUT = 60;
+    public static final int EBEYE_ONLINE_REQUEST_TIMEOUT = 120;
     //HOUR
     public static final int EBEYE_CACHE_TIMEOUT = 2;
     
@@ -164,6 +165,8 @@ public interface IEbeyeAdapter {
      * @return
      */
     public Map<String,String> getReferencedIds(List<String>uniprotIds, String targetDomain);
+
+    public Map<String,String> getReferencedIds(String sourceDomain, List<String>sourceIds, String targetDomain);
 
     public Map<String,List<String>> getUniprotRefAccesionsMap(ParamOfGetResults paramOfGetResults) throws MultiThreadingException;
 
