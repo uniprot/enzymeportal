@@ -160,7 +160,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         //prepare list of parameters
         ParamOfGetResults param =prepareGetUniprotIdQueries(searchParams);
         ebeyeAdapter.getNumberOfResults(param);
-        resetNrOfResultsToLimit(param);
+        //resetNrOfResultsToLimit(param);
        return param;
     }
 
@@ -170,7 +170,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         //prepare list of parameters
         ParamOfGetResults param =prepareChebiQueries();
         ebeyeAdapter.getNumberOfResults(param);
-        resetNrOfResultsToLimit(param);
+        //resetNrOfResultsToLimit(param);
        return param;
     }
 
