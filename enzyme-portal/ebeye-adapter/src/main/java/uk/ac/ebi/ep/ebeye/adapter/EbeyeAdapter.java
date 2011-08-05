@@ -666,6 +666,19 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         Map<String,String> results = Transformer.transformToMap(rawResults);
         return results;
     }
+
+    public Map<String,String> getReferencedIds(String sourceDomain, List<String>sourceIds, String targetDomain) {
+         ArrayOfString ids = Transformer.transformToArrayOfString(sourceIds);
+        ArrayOfString fields = Transformer.transformToArrayOfString(
+                IEbeyeAdapter.FieldsOfGetResults.id.name());
+        //String uniprotDomain = IEbeyeAdapter.Domains.uniprot.name();
+
+        GetReferencedEntriesSet caller = new EbeyeCallable.GetReferencedEntriesSet(
+                sourceDomain, ids, targetDomain, fields);
+        ArrayOfEntryReferences rawResults = caller.callGetReferencedEntriesSet();
+        Map<String,String> results = Transformer.transformToMap(rawResults);
+        return results;
+    }
 /*
     public Map<String,Map<String,String>> getUniprotXrefIdAndName(List<String> ids, String xRefDomain) {
         ArrayOfString uniprotIds = Transformer.transformToArrayOfString(ids);
