@@ -139,6 +139,19 @@ public class LuceneQueryBuilder {
         return sb.toString();
     }
 
+    public static List<String> escapeSpecies( Collection<String> speciesFilter) {
+        List<String> escapedList = new ArrayList<String>();
+        for (String species:speciesFilter) {
+            String escapedSpecies = luceneParser.escapeLuceneSpecialChars(species);
+            /*Work around to fix the bug in Uniprot API. Any species ended with
+             * " / S288c" has 0 result
+             */
+            String newEscapedSpecies = escapedSpecies.replaceAll(" / S288c", "*/*S288c");
+            escapedList.add(newEscapedSpecies);
+        }
+        return escapedList;
+    }
+
     /**
      * Create a list of query by id. A query is created for each id. Queries
      * created by the method can only be used for Uniprot API.
@@ -149,6 +162,7 @@ public class LuceneQueryBuilder {
     public static List<String> createUniprotAPIQueryByIdPrefixes(
             List<String> idPrefixes, Collection<String> speciesFilter) {
         List<String> queryList = new ArrayList<String>();
+        List<String> escapedSpeciesFilter = escapeSpecies(speciesFilter);
         for (String idPrefix : idPrefixes) {
             StringBuffer sb = new StringBuffer();
             sb.append(UNIPROT_ID_FIELD);
@@ -162,7 +176,7 @@ public class LuceneQueryBuilder {
             //sb.append(" AND " + ENZYME_FILTER_UNIPROTAPI);
             queryList.add(
                     addSpeciesFilterQuery(
-                        sb.toString(), UNIPROT_SPECIES_FIELD, speciesFilter));
+                        sb.toString(), UNIPROT_SPECIES_FIELD, escapedSpeciesFilter));
         }
         return queryList;
     }
@@ -226,6 +240,22 @@ public class LuceneQueryBuilder {
         return queries;
     }
 
+    public static List<String> createUniprotAPIQueriesIn(
+            String queryField
+            , List<String> fieldValues, boolean wildcard, int subListSize) {
+        List<String> queries = new ArrayList<String>();
+        List<List<String>> subLists = DataTypeConverter
+                .createSubLists(fieldValues, subListSize);
+        for (List<String> subList: subLists) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(createQueryIN(queryField, wildcard, subList));
+            //This will slow down the search. Remove for now
+            //sb.append( " AND ");
+            //sb.append(ENZYME_FILTER_UNIPROTAPI);
+            queries.add(sb.toString());
+        }
+        return queries;
+    }
     /**
      * Concat a simple query with a filter query by AND condition.
      * @param query
