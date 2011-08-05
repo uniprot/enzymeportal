@@ -266,15 +266,18 @@ body {
     vertical-align: top;    
     min-height: 80px;    
     /*width: 88%;*/
-    width: 97%;
+    width: 100%;
 }
 
-#proteinImg {
+#proteinImg img {
     float: left;
-    width: 17%;
-    height: 90px;
+    width: 90px;
+    height: 85px;
     text-align: center;
-    margin-left: -8px;   
+    margin-top: 5px;
+    margin-right: 5px;
+    border: none;
+
 }
 
 #desc {
