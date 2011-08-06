@@ -6,6 +6,7 @@ import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
@@ -41,8 +42,9 @@ public class SearchController {
 
 //********************************** METHODS *********************************//
     
-    @RequestMapping(value="/entry")
-    public String viewHomePage(Model model) {
+    @RequestMapping(value="/entry/{accession}")
+    public String viewHomePage(@PathVariable String accession, Model model) {
+        String acc = accession;
          model.addAttribute("entryParameters", new SearchParams());
         return "entry";
     }
