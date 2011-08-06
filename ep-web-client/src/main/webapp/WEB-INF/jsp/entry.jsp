@@ -7,18 +7,18 @@
 <html>
     <head>        
         <title>Enzyme Entry</title>
-        <link media="screen" href="resources/lib/spineconcept/css/960gs/reset.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/960gs/text.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/960gs/960.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/css/enzyme.css" type="text/css" rel="stylesheet" />
-        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
-        <script src="resources/lib/spineconcept/javascript/summary.js" type="text/javascript"></script>
+        <link media="screen" href="../resources/lib/spineconcept/css/960gs/reset.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/lib/spineconcept/css/960gs/text.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/lib/spineconcept/css/960gs/960.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/lib/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/lib/spineconcept/javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../resources/css/enzyme.css" type="text/css" rel="stylesheet" />
+        <script src="../resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
+        <script src="../resources/lib/spineconcept/javascript/summary.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="page container_12">

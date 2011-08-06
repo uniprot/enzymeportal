@@ -35,7 +35,7 @@
         </configuration>
       </plugin>
     </plugins>
-    <finalName>EnzymePortalWebClient_V07</finalName>
+    <finalName>EnzymePortalWebClient_V08</finalName>
   </build>
   <dependencies>
     <dependency>
@@ -84,16 +84,16 @@
            <version>3.0.2.RELEASE</version>
         </dependency>
 -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
+    <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework-version}</version>
+    </dependency>
+    <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${org.springframework-version}</version>
+    </dependency>
 
     <dependency>
       <groupId>javax.servlet</groupId>

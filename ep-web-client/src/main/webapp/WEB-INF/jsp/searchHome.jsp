@@ -209,11 +209,13 @@
                             <div class="resultItem">
                                 <div id="proteinImg">
                                     <c:set var="imgFile" value='${enzyme.pdbeaccession[0]}'/>
-                                    <c:set var="imgLink" value=""/>
+                                    <c:set var="imgBaseLink" value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/"/>
                                     <c:if test='${imgFile != "" && imgFile != null}'>
-                                        <c:set var="imgLink" value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
+                                        <c:set var="imgLink" value="${imgBaseLink}${imgFile}_cbc600.png"/>
+                                        <a target="blank" href="${imgLink}">
+                                            <img src="${imgLink}" width="110" height="90" alt=""/>
+                                        </a>
                                     </c:if>
-                                    <img src="${imgLink}" width="110" height="90" alt=""/>
                                 </div>
                                 <div id="desc">
                                     <p>
