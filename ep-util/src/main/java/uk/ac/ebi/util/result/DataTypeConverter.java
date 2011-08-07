@@ -2,7 +2,9 @@ package uk.ac.ebi.util.result;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 //import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
@@ -202,7 +204,12 @@ public class DataTypeConverter {
          }
          return compoundList;
     }
-
+/*
+    public static Map<String,String> rankMap(Map<String,String> map, String matchedKeywords) {
+        Map<String,String> rankedMap = new lLinkedHashMap<String, String>();
+        rankedMap.
+    }
+*/
     public static ResultFieldList cloneResultFieldList(ResultFieldList originalObj) {
         ResultFieldList clonedObj = new ResultFieldList();
         Iterator clonedIt = clonedObj.getResultField().iterator();
