@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ebeye.util.Transformer;
@@ -799,6 +800,38 @@ public class EbeyeAdapter implements IEbeyeAdapter {
              return NameList;
     }
 
+        public Map<String, String> getMapOfFieldAndValue(List<ParamOfGetResults> params) throws MultiThreadingException{
+        Map<String,String> fieldValueMap = new HashMap<String, String>();
+        ExecutorService pool = Executors.newCachedThreadPool();
+        try {
+            for (ParamOfGetResults param: params) {
+                Callable callable = new GetResultsCallable(param, 0,1);
+                Future<ArrayOfArrayOfString> future  = pool.submit(callable);
+                ArrayOfArrayOfString rawResults;
+                try {
+                    rawResults = (ArrayOfArrayOfString) future
+                                .get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                } catch (InterruptedException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                } catch (ExecutionException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                } catch (TimeoutException ex) {
+                    throw  new MultiThreadingException(ex.getMessage(), ex);
+                }
+                 List<String> valueList =
+                         new ArrayList<String>(Transformer.transformFieldValueToList(rawResults, false));
+                 if (valueList.size() > 0) {
+                     fieldValueMap.put(param.getQuery(), valueList.get(0));
+                 }
+            }
+        }
+        finally {
+            pool.shutdown();
+        }
+        return fieldValueMap;
+    }
+
+
     public Set<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException {
         Set<String> accessionSet = new LinkedHashSet<String>();
         for (ParamOfGetResults param:paramOfGetResults )  {
@@ -833,6 +866,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     public int getNrOfResultsOfGetNameSetByAccessions(String domain, Collection<String> accessions) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     /*
         public Collection<String> getUniprotXrefAccessions(List<ParamOfGetResults> paramOfGetResultsList) throws MultiThreadingException {
