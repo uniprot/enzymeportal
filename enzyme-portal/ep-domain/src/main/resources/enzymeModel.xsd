@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://ebi.ac.uk/ep/enzyme/model" xmlns:epe="http://ebi.ac.uk/ep/enzyme/model" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ep="http://ebi.ac.uk/ep/search/model">
+	<xs:import namespace="http://ebi.ac.uk/ep/search/model" schemaLocation="searchModel.xsd"/>
+	<xs:element name="EcClass" type="epe:EcClass"/>
+	<xs:complexType name="EcClass">
+		<xs:sequence>
+			<xs:element name="ec" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="EntryDate" type="epe:EntryDate"/>
+	<xs:complexType name="EntryDate">
+		<xs:sequence>
+			<xs:element name="deposit" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="release" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="revision" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Enzyme" type="epe:Enzyme"/>
+	<xs:complexType name="Enzyme">
+		<xs:sequence>
+			<xs:element name="ecclasshierarchy" type="epe:EcClass" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="enzymetype" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="proteinsequence" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="EnzymeModel" type="epe:EnzymeModel"/>
+	<xs:complexType name="EnzymeModel">
+		<xs:complexContent>
+			<xs:extension base="ep:EnzymeSummary">
+				<xs:sequence>
+					<xs:element name="enzyme" type="epe:Enzyme" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="proteinstructure" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="reactionpathway" type="epe:ReactionPathway" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Experiment" type="epe:Experiment"/>
+	<xs:complexType name="Experiment">
+		<xs:sequence>
+			<xs:element name="resolution" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="rfactor" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="freerfactor" type="xs:string" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ProteinStructure" type="epe:ProteinStructure"/>
+	<xs:complexType name="ProteinStructure">
+		<xs:sequence>
+			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="method" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="experiment" type="epe:Experiment" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="dates" type="epe:EntryDate" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="depositauthor" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ReactionPathway" type="epe:ReactionPathway"/>
+	<xs:complexType name="ReactionPathway">
+		<xs:sequence>
+			<xs:element name="reaction" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="pathway" type="xs:anySimpleType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
