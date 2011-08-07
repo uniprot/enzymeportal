@@ -25,7 +25,9 @@ public interface IEbeyeAdapter {
     //public static final int QRY_WITH_UNIPROT_FIELD_RESULT_LIMIT = 10;
     //The number of accessions to be included in the query should not be more than 400
     public static final int EBEYE_NR_OF_QUERY_IN_LIMIT = 400;
-    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 20;
+    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 5;
+    public static final int EP_CHEBI_RESULTS_LIMIT = 20;
+    public static final int EP_UNIPROT_RESULTS_LIMIT = 1000;
     public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 5000;
     public static final int EP_THREADS_LIMIT = EP_UNIPROT_XREF_RESULT_LIMIT/EBEYE_RESULT_LIMIT;
     //MILLISECOND
@@ -155,6 +157,10 @@ public interface IEbeyeAdapter {
     public Set<String> getValueOfFields(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
 
     public Set<String> getValueOfFields(ParamOfGetResults paramOfGetResults)  throws MultiThreadingException;
+
+    public Map<String, String> getMapOfFieldAndValue(List<ParamOfGetResults> params) throws MultiThreadingException;
+
+    //public String getValueOfField(ParamOfGetResults param);
     
 
     /**
@@ -183,13 +189,14 @@ public interface IEbeyeAdapter {
     //public Collection<String> getUniprotXrefAccessions(String query);
 
 
-    public Map<String, String> getNameMapByAccessions(
-            String domain, Collection<String> accessions);
+    public Map<String, String> getNameMapByAccessions(String domain, Collection<String> accessions);
 
     public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions);
 
     public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions, int from, int size);
 
     public int getNrOfResultsOfGetNameSetByAccessions(String domain, Collection<String> accessions);
+
+
     
 }

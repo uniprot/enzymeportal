@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +105,7 @@ public class Transformer {
 
     public static Map<String, List<String>> transformChebiResults(
             List<ArrayOfArrayOfString> rawResultsList,  boolean isUNIPROTfield) {
-        Map<String, List<String>> results = new HashMap<String, List<String>>();
+        Map<String, List<String>> results = new LinkedHashMap<String, List<String>>();
         List<List<String>> resultLines = Transformer.transformToList(rawResultsList);
         for (List<String> resultLine: resultLines) {
             //String chebiName = resultLine.get(0);
@@ -133,7 +134,7 @@ public class Transformer {
     }
 
     public static Map<String,String> transformToMap(ArrayOfArrayOfString rawResultsList) {
-        Map<String, String> resultLineMap = new HashMap<String, String>();
+        Map<String, String> resultLineMap = new LinkedHashMap<String, String>();
         List<ArrayOfString> resultLines = rawResultsList
                 .getArrayOfString();
         for (ArrayOfString resultLine: resultLines) {
