@@ -19,9 +19,15 @@
 	<xs:element name="Enzyme" type="epe:Enzyme"/>
 	<xs:complexType name="Enzyme">
 		<xs:sequence>
-			<xs:element name="ecclasshierarchy" type="epe:EcClass" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="echierarchies" type="epe:EnzymeHierarchy" minOccurs="1" maxOccurs="unbounded"/>
 			<xs:element name="enzymetype" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-			<xs:element name="proteinsequence" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="sequence" type="epe:Sequence" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="EnzymeHierarchy" type="epe:EnzymeHierarchy"/>
+	<xs:complexType name="EnzymeHierarchy">
+		<xs:sequence>
+			<xs:element name="ecclass" type="epe:EcClass" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="EnzymeModel" type="epe:EnzymeModel"/>
@@ -59,6 +65,14 @@
 		<xs:sequence>
 			<xs:element name="reaction" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="pathway" type="xs:anySimpleType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Sequence" type="epe:Sequence"/>
+	<xs:complexType name="Sequence">
+		<xs:sequence>
+			<xs:element name="sequence" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="weight" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="sequenceurl" type="xs:string" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
