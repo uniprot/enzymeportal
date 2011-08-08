@@ -2,8 +2,6 @@ package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -37,48 +35,18 @@ public class UniprotAdapter implements IUniprotAdapter{
 
 //********************************** METHODS *********************************//
 
-    public List<EnzymeSummary> getEnzymeEntries(
-                    Set<String> accessionList) throws MultiThreadingException{
-        ExecutorService pool = Executors.newCachedThreadPool();        
-        List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
-        try {
-            for (String accession:accessionList) {
-                Callable caller = new GetEntriesCaller(accession);
-                Future<EnzymeSummary> future = pool.submit(caller);
-                EnzymeSummary enzymeSummary = null;
-                try {
-                    enzymeSummary = future.get(IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS);
-                } catch (InterruptedException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was interupted! ", ex);
-                } catch (ExecutionException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was not executed! ", ex);
-
-                } catch (TimeoutException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread did not return the result" +
-                            " before timeout! ", ex);
-                }
-                enzymeSummaryList.add(enzymeSummary);
-            }
-            return enzymeSummaryList;
-        }
-        finally {
-            pool.shutdown();
-        }
-
+    public EnzymeSummary getEnzymeEntry(String accession) {
+       GetEntriesCaller caller = new GetEntriesCaller(accession);
+        EnzymeSummary enzymeSummary = caller.getEnzymeEntry(true);
+       return enzymeSummary;
     }
-    public EnzymeSummary getEnzymeEntry(String uniprotAccession) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries)
+    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies)
             throws MultiThreadingException {
         ExecutorService pool = Executors.newCachedThreadPool();
         List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
         try {
             for (String query:queries) {
-                Callable caller = new UniprotCallable.QueryEntryByIdCaller(query);
+                Callable caller = new UniprotCallable.QueryEntryByIdCaller(query, defaultSpecies);
                 Future<EnzymeSummary> future = pool.submit(caller);
                 EnzymeSummary enzymeSummary = null;
                 try {
@@ -106,13 +74,6 @@ public class UniprotAdapter implements IUniprotAdapter{
         }
     }
 
-    public Map<String, String> getSpecies(List<String> idPrefixList, List<String> speciesFilter) throws MultiThreadingException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public List<EnzymeSummary> getEnzymeEntries(List<String> uniprotNames) throws MultiThreadingException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
 /*
     public List<EnzymeSummary> getEnzymeEntries(List<Result> briefResultList)
