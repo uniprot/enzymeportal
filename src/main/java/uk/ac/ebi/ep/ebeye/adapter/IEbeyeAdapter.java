@@ -88,24 +88,6 @@ public interface IEbeyeAdapter {
    }
 
     };
-    /*
-    public static enum FieldsOfGetNames {
-        id, name;
-       public static List<String> getFields() {
-           List<String> fields = new ArrayList<String>();
-           fields.add(id.name());
-           fields.add(name.name());
-           return fields;
-       }
-
-    };
-*/
-/*
-    public static enum UniprotResultFields  {
-        descSubName,descRecName,organism_scientific_name,status
-    };
- *
- */
 
 //******************************** CONSTRUCTORS ******************************//
 
@@ -114,31 +96,6 @@ public interface IEbeyeAdapter {
 
 
 //********************************** METHODS *********************************//
-
-    public List<Result> getResults(ParamOfGetResults param, boolean transformResultToUniprot)
-            throws MultiThreadingException;
-    
-    /**
-     * Query Ebeye service for uniprot {@link Result} of more than one domain.
-     * The {@link #getNumberOfResults(java.util.List)} must be invoked to set
-     * the totalFound before invoking this method.
-     * @param paramOfGetResultsList
-     * @return
-     * @throws MultiThreadingException
-     */
-    public Map<String, List<Result>> getUniprotResults(
-            List<ParamOfGetResults> paramOfGetResultsList) throws MultiThreadingException;
-    
-    public List<Result> getResults(ParamOfGetResults param)
-            throws MultiThreadingException;
-
-    public Collection<String> getUniprotXrefAccessions(List<ParamOfGetResults> params)
-            throws MultiThreadingException;
-
-/*
-    public Map<String, String> getNames(String domain
-            , List<String> ids);
-*/
 
     /**
      * Gets number of results for more than 1 queries. The number of results per
@@ -163,40 +120,8 @@ public interface IEbeyeAdapter {
     //public String getValueOfField(ParamOfGetResults param);
     
 
-    /**
-     * Retrieve all the external referenced ids of the target domain from a list
-     * of Uniprot ids.
-     * @param uniprotIds
-     * @param targetDomain
-     * @return
-     */
-    public Map<String,String> getReferencedIds(List<String>uniprotIds, String targetDomain);
-
-    public Map<String,String> getReferencedIds(String sourceDomain, List<String>sourceIds, String targetDomain);
-
     public Map<String,List<String>> getUniprotRefAccesionsMap(ParamOfGetResults paramOfGetResults) throws MultiThreadingException;
 
-    //public Map<String,Map<String,String>> getUniprotXrefIdAndName(List<String> ids, String xRefDomain);
-
-/*
-    public int getNrOfResultsByAccessions(String domain
-            , List<String> accessions) throws MultiThreadingException;
- * 
- */
-
-
-    //TESTING new interface
-    //public Collection<String> getUniprotXrefAccessions(String query);
-
-
     public Map<String, String> getNameMapByAccessions(String domain, Collection<String> accessions);
-
-    public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions);
-
-    public Collection<String> getNameSetByAccessions(String domain, Collection<String> accessions, int from, int size);
-
-    public int getNrOfResultsOfGetNameSetByAccessions(String domain, Collection<String> accessions);
-
-
-    
+ 
 }
