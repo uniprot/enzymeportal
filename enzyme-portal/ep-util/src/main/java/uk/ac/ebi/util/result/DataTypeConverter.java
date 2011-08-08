@@ -2,20 +2,21 @@ package uk.ac.ebi.util.result;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 //import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
 //import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
 import uk.ac.ebi.ep.config.ResultFieldList;
 import uk.ac.ebi.ep.config.SearchField;
+import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
@@ -47,6 +48,33 @@ public class DataTypeConverter {
         return sb.toString();
     }
 */
+
+    /**
+     * ec numbers end with "-" will be excluded from the results.
+     * @param enzymeSummaryList
+     * @return
+     * @throws MultiThreadingException
+     */
+    public static Set<String> getUniprotEcs(
+            List<EnzymeSummary> enzymeSummaryList) throws MultiThreadingException {
+        Set<String> ecSet = new TreeSet<String>();
+        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+            ecSet.addAll(getUniprotEcs(enzymeSummary));
+        }
+        return ecSet;
+    }
+
+    public static Set<String> getUniprotEcs(EnzymeSummary enzymeSummary) throws MultiThreadingException {
+        Set<String> ecSet = new TreeSet<String>();
+            List<String> ecList = enzymeSummary.getEc();
+            for (String ec: ecList) {
+                if (!ec.contains("-")) {
+                    ecSet.add(ec);
+                }
+        }
+        return ecSet;
+    }
+
     public static List<List<String>> createSubLists(List<String> longList, int subListSize)  {
         List<List<String>> subLists = new ArrayList<List<String>>();
         int listSize = longList.size();
