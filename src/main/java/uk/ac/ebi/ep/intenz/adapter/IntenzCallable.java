@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.intenz.adapter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -16,6 +15,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.enzyme.model.EcClass;
+import uk.ac.ebi.ep.enzyme.model.EnzymeHierarchy;
 import uk.ac.ebi.intenz.xml.jaxb.EcClassType;
 import uk.ac.ebi.intenz.xml.jaxb.EcSubclassType;
 import uk.ac.ebi.intenz.xml.jaxb.EcSubsubclassType;
@@ -36,6 +36,7 @@ public class IntenzCallable {
 
 //********************************* VARIABLES ********************************//
     public static final String INTENZ_PACKAGE = "uk.ac.ebi.intenz.xml.jaxb";
+    private static Logger log = Logger.getLogger(GetSynonymsCaller.class);
 
 
 //******************************** CONSTRUCTORS ******************************//
@@ -47,20 +48,19 @@ public class IntenzCallable {
 //********************************** METHODS *********************************//
 
 //******************************** INNER CLASS *******************************//
+public static class GetIntenzCaller implements Callable<Intenz> {
 
-public static class GetSynonymsCaller implements Callable<Set<String>> {
-    private static Logger log = Logger.getLogger(GetSynonymsCaller.class);
     protected String ecUrl;
 
-    public GetSynonymsCaller(String ecUrl) {
+    public GetIntenzCaller(String ecUrl) {
         this.ecUrl = ecUrl;
     }
 
+    public GetIntenzCaller() {
+    }
 
-
-
-    public Set<String> call() throws Exception {
-        return getSynonyms();
+    public Intenz call() throws Exception {
+        return getData();
     }
     public Intenz getData() {
         URL url = null;
@@ -133,34 +133,6 @@ public static class GetSynonymsCaller implements Callable<Set<String>> {
         return intenz;
       }
 
-    public Set<String> getSynonyms() {
-        Intenz intenz = this.getData();
-         Set<String> synonyms = new LinkedHashSet<String>();
-         if (intenz != null) {
-             synonyms.addAll(getSynonyms(intenz));
-         }
-        return synonyms;
-      }
-
-        public Set<String> getSynonyms(Intenz intenz) {
-            Set<String> names = new LinkedHashSet<String>();
-            Synonyms synonymsType =
-                    intenz.getEcClass().get(0).getEcSubclass().get(0)
-                    .getEcSubSubclass().get(0).getEnzyme().get(0).getSynonyms();
-            if (synonymsType != null) {
-                List<EnzymeNameType> synonyms = synonymsType.getSynonym();
-                if (synonyms.size() > 0) {
-                    for (EnzymeNameType synonym : synonyms) {
-                        List<Object> objList = synonym.getContent();
-                        String name = (String) objList.get(0);
-                        names.add(name);
-                    }
-
-                }
-
-            }
-            return names;
-        }
         public List<EcClass> getEcClass(Intenz intenz) {
             List<EcClass> ecClasseList = new ArrayList<EcClass>();
             EcClass ecClass = new EcClass();
@@ -197,6 +169,77 @@ public static class GetSynonymsCaller implements Callable<Set<String>> {
             ecClasseList.add(ecClass4);
             return ecClasseList;
         }
+
+
+}
+
+public static class GetSynonymsCaller implements Callable<Set<String>> {
+
+    protected GetIntenzCaller intenzCaller;
+    public GetSynonymsCaller(String ecUrl) {
+        intenzCaller = new GetIntenzCaller(ecUrl);
+    }
+
+    public GetSynonymsCaller() {
+    }
+
+    public Set<String> call() throws Exception {
+        return getSynonyms();
+    }
+
+    public Set<String> getSynonyms() {
+        Intenz intenz = intenzCaller.getData();
+         Set<String> synonyms = new LinkedHashSet<String>();
+         if (intenz != null) {
+             synonyms.addAll(getSynonyms(intenz));
+         }
+        return synonyms;
+      }
+
+        public Set<String> getSynonyms(Intenz intenz) {
+            Set<String> names = new LinkedHashSet<String>();
+            Synonyms synonymsType =
+                    intenz.getEcClass().get(0).getEcSubclass().get(0)
+                    .getEcSubSubclass().get(0).getEnzyme().get(0).getSynonyms();
+            if (synonymsType != null) {
+                List<EnzymeNameType> synonyms = synonymsType.getSynonym();
+                if (synonyms.size() > 0) {
+                    for (EnzymeNameType synonym : synonyms) {
+                        List<Object> objList = synonym.getContent();
+                        String name = (String) objList.get(0);
+                        names.add(name);
+                    }
+
+                }
+
+            }
+            return names;
+        }
+    }
+
+    public static class GetEcHierarchyCaller implements Callable<EnzymeHierarchy> {
+        protected GetIntenzCaller intenzCaller;
+
+        public GetEcHierarchyCaller(String ecUrl) {
+            intenzCaller = new GetIntenzCaller(ecUrl);
+        }
+        
+        public GetEcHierarchyCaller() {
+            intenzCaller = new GetIntenzCaller();
+        }
+
+        public EnzymeHierarchy call() throws Exception {
+            Intenz intenz = intenzCaller.getData();
+            return getEcHierarchy(intenz);
+        }
+
+        public EnzymeHierarchy getEcHierarchy(Intenz intenz) {
+            EnzymeHierarchy enzymeHierarchy = new EnzymeHierarchy();
+            List<EcClass> ecClassList = intenzCaller.getEcClass(intenz);
+            enzymeHierarchy.setEcclass(ecClassList);
+            return enzymeHierarchy;
+        }
+
     }
 
 }
