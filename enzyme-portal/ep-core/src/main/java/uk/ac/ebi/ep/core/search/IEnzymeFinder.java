@@ -16,7 +16,7 @@ public interface IEnzymeFinder extends IEnzyme {
 
 //********************************* VARIABLES ********************************//
 
-
+    public static final String DEFAULT_SPECIES = "HUMAN";
 //******************************** CONSTRUCTORS ******************************//
 
 
