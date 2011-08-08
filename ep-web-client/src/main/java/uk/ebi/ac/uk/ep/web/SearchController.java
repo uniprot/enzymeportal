@@ -1,7 +1,9 @@
 package uk.ebi.ac.uk.ep.web;
 
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,7 +51,12 @@ public class SearchController {
     public String viewHomePage(@PathVariable String accession, EnzymeModel searchModelForm,  BindingResult result, Model model) {
         String acc = accession;
         IEnzymeRetriever retriever = new EnzymeRetriever();        
-        EnzymeModel enzymeModel = retriever.retieveEnzyme(accession);
+        EnzymeModel enzymeModel = null;
+        try {
+            enzymeModel = retriever.retieveEnzyme(accession);
+        } catch (EnzymeRetrieverException ex) {
+            log.error("Unable to retrieve the entry! ",  ex);
+        }
          model.addAttribute("enzymeModel", enzymeModel);
         return "entry";
     }
