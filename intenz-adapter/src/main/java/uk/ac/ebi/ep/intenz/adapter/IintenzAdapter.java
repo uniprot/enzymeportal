@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.intenz.adapter;
 
 import java.util.Map;
 import java.util.Set;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**
@@ -17,5 +18,7 @@ public interface IintenzAdapter {
 
     public Map<String, Set<String>> getSynonyms(Set<String> ecNumbers)
             throws MultiThreadingException;
+
+    public EnzymeModel getEcDetails(EnzymeModel enzymeModel);
 
 }
