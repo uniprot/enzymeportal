@@ -120,8 +120,6 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 
     public List<ParamOfGetResults> getNrOfRecordsRelatedToUniprot() throws EnzymeFinderException {
-        //Uniprot number of result
-        //IEbeyeAdapter ebeyeAdapter = new EbeyeAdapter();
 
         //prepare list of parameters
         List<ParamOfGetResults> paramsWithoutNrOfResults =
