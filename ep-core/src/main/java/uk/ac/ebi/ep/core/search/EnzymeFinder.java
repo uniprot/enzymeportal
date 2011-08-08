@@ -508,7 +508,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         setIntenzSynonyms(enzymeSummaryList);
         */
         List<ParamOfGetResults> pdbeParams =
-                prepareQueryForPdbeAccs(this.getUniprotEcs(enzymeSummaryList));
+                prepareQueryForPdbeAccs(DataTypeConverter.getUniprotEcs(enzymeSummaryList));
                 Map<String,String> pdbeAccs =
         ebeyeAdapter.getMapOfFieldAndValue(pdbeParams);
 
@@ -571,7 +571,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     public void addIntenzSynonyms(
             List<EnzymeSummary> enzymeSummaryList) throws MultiThreadingException {
 
-        Set<String> ecSet  = getUniprotEcs(enzymeSummaryList);
+        Set<String> ecSet  = DataTypeConverter.getUniprotEcs(enzymeSummaryList);
         Map<String,Set<String>> intenzSynonyms = intenzAdapter.getSynonyms(ecSet);
 
         for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
@@ -596,25 +596,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
     }
 
-    /**
-     * ec numbers end with "-" will be excluded from the results.
-     * @param enzymeSummaryList
-     * @return
-     * @throws MultiThreadingException
-     */
-    public Set<String> getUniprotEcs(
-            List<EnzymeSummary> enzymeSummaryList) throws MultiThreadingException {        
-        Set<String> ecSet = new TreeSet<String>();
-        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
-            List<String> ecList = enzymeSummary.getEc();
-            for (String ec: ecList) {
-                if (!ec.contains("-")) {
-                    ecSet.add(ec);
-                }
-            }
-        }
-        return ecSet;
-    }
+
 
 
 /*
