@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
+import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 
 /**
@@ -23,6 +24,6 @@ public interface IEnzymeRetriever {
 
 //********************************** METHODS *********************************//
 
-    public EnzymeModel retieveEnzyme(String uniprotAccession);
+    public EnzymeModel retieveEnzyme(String uniprotAccession) throws EnzymeRetrieverException;
 
 }

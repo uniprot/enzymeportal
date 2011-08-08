@@ -1,8 +1,8 @@
 package uk.ac.ebi.ep.core.search;
 
+import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.uniprot.adapter.IUniprotAdapter;
-import uk.ac.ebi.ep.uniprot.adapter.UniprotAdapter;
+import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**
  *
@@ -37,9 +37,13 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
 //********************************** METHODS *********************************//
 
-    public EnzymeModel retieveEnzyme(String uniprotAccession) {
+    public EnzymeModel retieveEnzyme(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeEntry(uniprotAccession);
-        this.intenzAdapter.getEcDetails(enzymeModel);
+        try {
+            this.intenzAdapter.getEnzymeDetails(enzymeModel);
+        } catch (MultiThreadingException ex) {
+            throw new EnzymeRetrieverException ("Unable to retrieve the entry details! ", ex);
+        }
         return enzymeModel;
     }
 
