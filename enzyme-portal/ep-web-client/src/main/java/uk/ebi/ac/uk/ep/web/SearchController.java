@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
+import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder;
+import uk.ac.ebi.ep.core.search.IEnzymeRetriever;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.result.Pagination;
 import uk.ac.ebi.ep.search.model.SearchResults;
 import uk.ac.ebi.ep.search.model.SearchModel;
@@ -43,9 +46,11 @@ public class SearchController {
 //********************************** METHODS *********************************//
     
     @RequestMapping(value="/entry/{accession}")
-    public String viewHomePage(@PathVariable String accession, Model model) {
+    public String viewHomePage(@PathVariable String accession, EnzymeModel searchModelForm,  BindingResult result, Model model) {
         String acc = accession;
-         model.addAttribute("entryParameters", new SearchParams());
+        IEnzymeRetriever retriever = new EnzymeRetriever();        
+        EnzymeModel enzymeModel = retriever.retieveEnzyme(accession);
+         model.addAttribute("enzymeModel", enzymeModel);
         return "entry";
     }
 
@@ -105,6 +110,7 @@ public class SearchController {
         //model.addAttribute("searchFilter", searchFilter);
         searchModelForm.setSearchresults(resultSet);
         model.addAttribute("searchModel", searchModelForm);
+        //model.addAttribute("enzymeModel", new EnzymeModel());
         return "index";
     }
 }

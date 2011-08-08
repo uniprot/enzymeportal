@@ -46,7 +46,7 @@
             <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
             <c:set var="summaryentriesSize" value="${fn:length(summaryentries)}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
-            <c:set var="filterSizeDefault" value="${5}"/>
+            <c:set var="filterSizeDefault" value="${10}"/>
             <div class="grid_12 content">
                 <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
                 <div class="filter">                    
@@ -204,7 +204,7 @@
                         <div class="line"></div>
                         <div class="resultContent">
                             <c:set var="resultItemId" value="${0}"/>
-                            <c:forEach items="${summaryentries}" var="enzyme">
+                            <c:forEach items="${summaryentries}" var="enzyme">                             
                              <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
                             <div class="resultItem">
                                 <div id="proteinImg">
