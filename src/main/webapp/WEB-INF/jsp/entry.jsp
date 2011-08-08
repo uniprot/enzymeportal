@@ -4,6 +4,11 @@
     Author     : hongcao
 --%>
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <html>
     <head>        
         <title>Enzyme Entry</title>
@@ -33,13 +38,14 @@
                 </div>
             </div>
             <div class="grid_12">
-                <h1 wicket:id="title">Enzyme Summary</h1>
+                <h1 id="title">Enzyme Summary</h1>
             </div>
             <!--Species combo box-->
+            <form:form id="entryForm" modelAttribute="enzymeModel" action="entry" method="GET">
             <div class="grid_12 header"  style="">
                 <div class="container_12">
                     <div class="grid_4 prefix_4 suffix_3 alpha">
-                        <div wicket:id="classification">
+                        <div id="classification">
                             <div class="classification">
                                 <div class="label">ORGANISMS</div>
                                 <div class="box selected Homo_sapiens">
@@ -79,7 +85,7 @@
                     <div class="grid_1 omega">
                         <div class="menu">
                             <a href="http://www.ebi.ac.uk/inc/help/search_help.html" class="help">Help</a>
-                            <a href="" wicket:id="print" class="print"><span wicket:id="printLabel">Print</span></a>
+                            <a href="" id="print" class="print"><span id="printLabel">Print</span></a>
                         </div>
                     </div>
                 </div>
@@ -146,12 +152,12 @@
                         <!--This div is generated at the server side-->
                             <div class="view">
                                 <div id="enzymeContent" class="summary">
-                                    <h2>Enzyme title</h2>
+                                    <h2><c:out value="${enzymeModel.name}"/></h2>
                                     <dl>
                                         <dt>Function</dt>
                                         <dd>
                                             <ul>
-                                                <li>Enzyme function</li>
+                                                <li><c:out value="${enzymeModel.function}"/></li>
                                             </ul>
                                         </dd>
                                     </dl>
@@ -159,7 +165,31 @@
                                         <dt>EC Classification</dt>
                                         <dd>
                                             <ul>
-                                                <li>Enzyme classification</li>
+                                                <li>
+                                                
+                                                <c:set var="ecClass" value="${enzymeModel.enzyme.ecclasshierarchy}"/>
+                                                <c:set var="ecClassSize" value="${fn:length(ecClass)}"/>
+                                                <c:if test='${ecClassSize>0}'>
+                                                    <c:forEach var="i" begin="0" end="${ecClassSize-1}">
+                                                        <c:if test='${i > 0}'>
+                                                                <c:set var="dot" value="."/>
+                                                            </c:if>
+
+                                                        <c:if test='${i <= 2}'>
+                                                            <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                            <c:out value="${ecClass[i].name}"/>
+                                                            >
+                                                        </c:if>
+                                                        
+                                                        <c:if test='${i > 2}'>
+                                                            <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                            <c:out value="${ecNumber}"/> -
+                                                            <c:out value="${ecClass[i].name}"/>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+
+                                                </li>
                                             </ul>
                                         </dd>
                                     </dl>
@@ -171,6 +201,23 @@
                                             </ul>
                                         </dd>
                                     </dl>
+                                    <dl>
+                                        <dt>Other names</dt>
+                                        <dd>
+                                            <ul>
+                                                <li>
+                                                <c:set var="synonym" value="${enzymeModel.synonym}"/>
+                                                <c:set var="synonymSize" value="${fn:length(synonym)}"/>
+                                                <c:if test='${synonymSize>0}'>
+                                                    <c:forEach var="i" begin="0" end="${synonymSize-1}">
+                                                        <c:out value="${synonym[i]}"/><br>
+                                                    </c:forEach>
+                                                </c:if>
+                                                </li>
+                                            </ul>
+                                        </dd>
+                                    </dl>
+
                                     <dl>
                                         <dt>Protein Sequence</dt>
                                         <dd>
@@ -186,6 +233,7 @@
                 </div>
             </div>
             <div class="grid_12">
+            </form:form>
                 <div class="footer">&copy;
                     <a target="_top" href="http://www.ebi.ac.uk/" title="European Bioinformatics Institute Home Page">European Bioinformatics Institute</a>
 				  2011. EBI is an Outstation of the
