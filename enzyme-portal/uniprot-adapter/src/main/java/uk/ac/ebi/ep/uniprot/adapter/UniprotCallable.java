@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import uk.ac.ebi.ep.enzyme.model.Enzyme;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.Sequence;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
@@ -69,8 +72,42 @@ public class UniprotCallable {
             return setEnzymeProperties(entry);
         }
 
+        public EnzymeSummary getEnzymeEntry(boolean moreDetail)  {
+            //Retrieve UniProt entry by its accession number
+            UniProtEntry entry = (UniProtEntry) entryRetrievalService
+                    .getUniProtEntry(accession);
+            return setEnzymeProperties(entry, moreDetail);
+        }
+
+    public EnzymeSummary setEnzymeProperties(UniProtEntry entry, boolean moreDetail) {
+        EnzymeSummary enzymeModel = null;
+        enzymeModel = setEnzymeProperties(entry);
+        if (moreDetail) {
+            setEnzymeProperties(entry, (EnzymeModel)enzymeModel);
+        }
+        return enzymeModel;
+    }
+
+    public EnzymeSummary setEnzymeProperties(UniProtEntry entry, EnzymeModel enzymeModel) {
+        int seqLength = entry.getSequence().getLength();
+        int weight = entry.getSequence().getMolecularWeight();
+        String seqUrl = IUniprotAdapter.SEQUENCE_URL_BASE
+                +this.accession
+                +IUniprotAdapter.SEQUENCE_URL_SUFFIX;
+
+        Sequence seq = new Sequence();
+        seq.setSequence(String.valueOf(seqLength));
+        seq.setWeight(String.valueOf(weight));
+        seq.setSequenceurl(seqUrl);
+        Enzyme enzyme = new Enzyme();
+        enzyme.setSequence(seq);
+        enzymeModel.setEnzyme(enzyme);
+        return enzymeModel;
+    }
+
     public EnzymeSummary setEnzymeProperties(UniProtEntry entry) {
-        EnzymeSummary enzymeSummary = new EnzymeSummary();
+        //EnzymeSummary enzymeSummary = new EnzymeSummary();
+        EnzymeSummary enzymeSummary = new EnzymeModel();
         enzymeSummary.getUniprotaccessions().add(entry.getPrimaryUniProtAccession().getValue());
         enzymeSummary.setUniprotid(entry.getUniProtId().getValue());
         if (entry != null) {            
@@ -110,12 +147,13 @@ public class UniprotCallable {
 //******************************** INNER CLASS *******************************//
 
     public static class QueryEntryByIdCaller implements Callable<EnzymeSummary> {
-        protected String query;
-
+        protected String query;        
         protected UniProtEntry mainEntry;
+        protected String defaultSpecies;
 
-        public QueryEntryByIdCaller(String query) {
+        public QueryEntryByIdCaller(String query, String defaultSpecies) {
             this.query = query;
+            this.defaultSpecies = defaultSpecies;
         }
 
 
@@ -151,12 +189,12 @@ public class UniprotCallable {
             List<EnzymeAccession> speciesList = getSpecies(uniprotQuery);
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
-                EnzymeAccession defaultSpecies = speciesList.get(0);               
+                EnzymeAccession topSpecies = speciesList.get(0);
                 GetEntriesCaller caller = new GetEntriesCaller(
-                defaultSpecies.getUniprotaccessions().get(0));
+                topSpecies.getUniprotaccessions().get(0));
                 enzymeSummary = caller.getEnzymeEntry();
                 if (speciesList.size() > 1) {
-                    speciesList.remove(defaultSpecies);
+                    speciesList.remove(topSpecies);
                     enzymeSummary.getRelatedspecies().addAll(speciesList);
                 }
                 
@@ -185,7 +223,7 @@ public class UniprotCallable {
                 species.setCommonname(commonName);
                 species.setScientificname(scientificName);
                 enzymeAccession.setSpecies(species);        
-                 if (commonName.equalsIgnoreCase("HUMAN")) {
+                 if (commonName.equalsIgnoreCase(this.defaultSpecies)) {
                      accSpeciesList.add(0,enzymeAccession);
                  } else {
                     accSpeciesList.add(enzymeAccession);
@@ -222,7 +260,7 @@ public class UniprotCallable {
             boolean hasMainEntry = false;
             for (UniProtEntry uniProtEntry: entries) {
                 String species = uniProtEntry.getOrganism().getCommonName().getValue();
-                if (species.equalsIgnoreCase("HUMAN")) {
+                if (species.equalsIgnoreCase(this.defaultSpecies)) {
                     this.mainEntry = uniProtEntry;
                     hasMainEntry = true;
                 } else {

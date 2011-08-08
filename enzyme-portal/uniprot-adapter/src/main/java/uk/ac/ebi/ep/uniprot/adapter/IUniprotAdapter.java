@@ -1,8 +1,6 @@
 package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 
@@ -18,6 +16,12 @@ public interface IUniprotAdapter {
     //second
     public static final int ENTRY_TIMEOUT = 60;
 
+    public static final String ACCESSION_FIELD = "accession";
+    public static final String SEQUENCE_URL_BASE = "http://www.uniprot.org/uniprot/";
+    public static final String SEQUENCE_URL_SUFFIX = ".html#section_seq";
+
+
+
 //********************************* VARIABLES ********************************//
 
 
@@ -29,18 +33,8 @@ public interface IUniprotAdapter {
 
 //********************************** METHODS *********************************//
     public EnzymeSummary getEnzymeEntry(String accession);
-
-    public List<EnzymeSummary> getEnzymeEntries(Set<String> queries) throws
-            MultiThreadingException;
-
-    public List<EnzymeSummary> getEnzymeEntries(List<String> uniprotNames) throws
-            MultiThreadingException;
     
-    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries) throws
-            MultiThreadingException;
-
-        public Map<String, String> getSpecies(List<String> idPrefixList
-            , List<String> speciesFilter) throws
+    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies) throws
             MultiThreadingException;
 
 }
