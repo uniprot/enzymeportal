@@ -167,28 +167,32 @@
                                             <ul>
                                                 <li>
                                                 
-                                                <c:set var="ecClass" value="${enzymeModel.enzyme.ecclasshierarchy}"/>
-                                                <c:set var="ecClassSize" value="${fn:length(ecClass)}"/>
-                                                <c:if test='${ecClassSize>0}'>
-                                                    <c:forEach var="i" begin="0" end="${ecClassSize-1}">
-                                                        <c:if test='${i > 0}'>
-                                                                <c:set var="dot" value="."/>
+                                                <c:set var="echierarchies" value="${enzymeModel.enzyme.echierarchies}"/>
+                                                <c:set var="echierarchiesSize" value="${fn:length(echierarchies)}"/>
+                                                <c:forEach var="j" begin="0" end="${echierarchiesSize-1}">
+                                                    <c:set var="ecClass" value="${echierarchies[j].ecclass}"/>
+                                                    <c:set var="ecClassSize" value="${fn:length(ecClass)}"/>
+                                                    <c:if test='${ecClassSize>0}'>
+                                                        <c:set var="ecNumber" value=""/>
+                                                        <c:set var="dot" value=""/>
+                                                        <c:forEach var="i" begin="0" end="${ecClassSize-1}">
+                                                            <c:if test='${i > 0}'>
+                                                                    <c:set var="dot" value="."/>
+                                                                </c:if>
+                                                            <c:if test='${i <= 2}'>
+                                                                <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                                <c:out value="${ecClass[i].name}"/>
+                                                                >
                                                             </c:if>
 
-                                                        <c:if test='${i <= 2}'>
-                                                            <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
-                                                            <c:out value="${ecClass[i].name}"/>
-                                                            >
-                                                        </c:if>
-                                                        
-                                                        <c:if test='${i > 2}'>
-                                                            <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
-                                                            <c:out value="${ecNumber}"/> -
-                                                            <c:out value="${ecClass[i].name}"/>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </c:if>
-
+                                                            <c:if test='${i > 2}'>
+                                                                <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                                <c:out value="${ecNumber}"/> -
+                                                                <c:out value="${ecClass[i].name}"/>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                </c:forEach>
                                                 </li>
                                             </ul>
                                         </dd>
@@ -222,7 +226,15 @@
                                         <dt>Protein Sequence</dt>
                                         <dd>
                                             <ul>
-                                                <li>Sequence info</li>
+                                                <li>
+                                                    <c:set var="sequence" value="${enzymeModel.enzyme.sequence}"/>
+                                                    This sequence has 
+                                                    <c:out value="${sequence.sequence}"/>
+                                                    amino acids and a molecular weight of
+                                                    <c:out value="${sequence.weight}"/> <br>
+                                                    <a target="blank" href="${sequence.sequenceurl}">View Sequence in Uniprot</a>
+
+                                                </li>
                                             </ul>
                                         </dd>
                                     </dl>
