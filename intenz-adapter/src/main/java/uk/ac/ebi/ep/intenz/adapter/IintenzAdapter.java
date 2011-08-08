@@ -19,6 +19,6 @@ public interface IintenzAdapter {
     public Map<String, Set<String>> getSynonyms(Set<String> ecNumbers)
             throws MultiThreadingException;
 
-    public EnzymeModel getEcDetails(EnzymeModel enzymeModel);
+   public EnzymeModel getEnzymeDetails(EnzymeModel enzymeModel)  throws MultiThreadingException;
 
 }
