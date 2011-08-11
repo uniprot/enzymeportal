@@ -75,6 +75,17 @@ public class DataTypeConverter {
         return ecSet;
     }
 
+    //TODO Maybe not necesssary
+    /*
+    public static Set<String> getPdbeAccessions(
+            List<EnzymeSummary> enzymeSummaryList) throws MultiThreadingException {
+        Set<String> pdbeAccs = new TreeSet<String>();
+        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+            enzymeSummary.getPdbeaccession();
+        }
+        return ecSet;
+    }
+*/
     public static List<List<String>> createSubLists(List<String> longList, int subListSize)  {
         List<List<String>> subLists = new ArrayList<List<String>>();
         int listSize = longList.size();

@@ -115,6 +115,15 @@ public class LuceneQueryBuilder {
         return query.toString();
     }
 
+    public static String createWildcardFieldValueQuery(String field, String value) {
+        StringBuffer query = new StringBuffer();
+        query.append(field);
+        query.append(":");
+        query.append(value);
+        query.append("*");
+        return query.toString();
+    }
+
     public static String addSpeciesFilterQuery(String simpleQuery
             , String speciesField, Collection<String> speciesList) {
         StringBuffer sb = new StringBuffer();
@@ -185,7 +194,7 @@ public class LuceneQueryBuilder {
            * than the result list from Ebeye
            */
 
-            //sb.append(" AND " + ENZYME_FILTER_UNIPROTAPI);
+            sb.append(" AND " + ENZYME_FILTER_UNIPROTAPI);
             queryList.add(
                     addSpeciesFilterQuery(
                         sb.toString(), UNIPROT_SPECIES_FIELD, escapedSpeciesFilter));
@@ -242,7 +251,7 @@ public class LuceneQueryBuilder {
         return queries;
     }
 
-    public static List<String> createUniprotAPIQueriesIn(
+    public static List<String> createEbeyeQueriesIn(
             String queryField
             , List<String> fieldValues, boolean wildcard, int subListSize) {
         List<String> queries = new ArrayList<String>();
@@ -251,9 +260,9 @@ public class LuceneQueryBuilder {
         for (List<String> subList: subLists) {
             StringBuffer sb = new StringBuffer();
             sb.append(createQueryIN(queryField, wildcard, subList));
-            //This will slow down the search. Remove for now
-            //sb.append( " AND ");
-            //sb.append(ENZYME_FILTER_UNIPROTAPI);
+            //This will slow down the search. 
+            sb.append( " AND ");
+            sb.append(ENZYME_FILTER);
             queries.add(sb.toString());
         }
         return queries;
