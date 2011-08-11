@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.uniprot.adapter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Field;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.FieldType;
@@ -83,4 +84,5 @@ public class Transformer {
         }
         return synonyms;
     }
+    
 }

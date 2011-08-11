@@ -12,6 +12,8 @@ import java.util.concurrent.TimeoutException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.GetEntriesCaller;
+import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.QueryEntryByIdCaller;
+import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 
 /**
  *
@@ -38,7 +40,17 @@ public class UniprotAdapter implements IUniprotAdapter{
     public EnzymeSummary getEnzymeEntry(String accession) {
        GetEntriesCaller caller = new GetEntriesCaller(accession);
         EnzymeSummary enzymeSummary = caller.getEnzymeEntry(true);
+        setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
+    }
+
+    public void setRelatedSpecies(EnzymeSummary enzymeSummary) {
+        String uniprotIdPrefix =  enzymeSummary.getUniprotid().split(ID_SPLIT_SYMBOL)[0];
+        String defaultSpecies = enzymeSummary.getSpecies().getScientificname();
+        String query = LuceneQueryBuilder
+                .createWildcardFieldValueQuery(IUniprotAdapter.ID_FIELD,uniprotIdPrefix);
+        QueryEntryByIdCaller caller = new QueryEntryByIdCaller(query, defaultSpecies);
+        enzymeSummary.setRelatedspecies( caller.getSpecies());
     }
     public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies)
             throws MultiThreadingException {
