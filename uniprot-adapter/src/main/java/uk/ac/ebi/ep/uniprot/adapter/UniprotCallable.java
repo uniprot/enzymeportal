@@ -2,8 +2,10 @@ package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ep.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
@@ -11,12 +13,17 @@ import uk.ac.ebi.ep.enzyme.model.Sequence;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
+import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseCrossReference;
+import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseType;
 import uk.ac.ebi.kraken.interfaces.uniprot.Organism;
 import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
+import uk.ac.ebi.kraken.interfaces.uniprot.dbx.pdb.PdbResolution;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
+import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
+import uk.ac.ebi.kraken.model.uniprot.dbx.pdb.PdbImpl;
 import uk.ac.ebi.kraken.uuw.services.remoting.Attribute;
 import uk.ac.ebi.kraken.uuw.services.remoting.AttributeIterator;
 import uk.ac.ebi.kraken.uuw.services.remoting.EntryIterator;
@@ -105,6 +112,23 @@ public class UniprotCallable {
         return enzymeModel;
     }
 
+    public List<String> getPdbeAccessions(UniProtEntry entry) {
+        List<PdbImpl> refList = entry.getDatabaseCrossReferences(DatabaseType.PDB);
+        List<String> results = new ArrayList<String>();
+        if (refList.size() > 0) {
+            for (PdbImpl ref:refList) {
+                String dbAccession = ref.getDbAccession();
+                PdbResolution resolution = ref.getPdbResolution();
+                String resolutionValue = resolution.getValue();
+                if (dbAccession != null) {
+                    //The url of pdbe images use lowercase
+                    results.add(dbAccession.toLowerCase());
+                }
+            }
+        }
+        return results;
+    }
+
     public EnzymeSummary setEnzymeProperties(UniProtEntry entry) {
         //EnzymeSummary enzymeSummary = new EnzymeSummary();
         EnzymeSummary enzymeSummary = new EnzymeModel();
@@ -139,6 +163,7 @@ public class UniprotCallable {
             species.setCommonname(speciesCommonName);
             species.setScientificname(scientificName);
             enzymeSummary.setSpecies(species);
+            enzymeSummary.setPdbeaccession(this.getPdbeAccessions(entry));    
         }
         return enzymeSummary;
     }
@@ -146,13 +171,13 @@ public class UniprotCallable {
   }
 //******************************** INNER CLASS *******************************//
 
-    public static class QueryEntryByIdCaller implements Callable<EnzymeSummary> {
-        protected String query;        
+    public static class QueryEntryByIdCaller implements Callable<EnzymeSummary> {    
         protected UniProtEntry mainEntry;
         protected String defaultSpecies;
+        protected Query uniprotQuery;
 
         public QueryEntryByIdCaller(String query, String defaultSpecies) {
-            this.query = query;
+            uniprotQuery = UniProtQueryBuilder.buildQuery(query);
             this.defaultSpecies = defaultSpecies;
         }
 
@@ -184,15 +209,18 @@ public class UniprotCallable {
 */
         public EnzymeSummary queryEntry()  {
             //Retrieve UniProt entry by its accession number
-            Query uniprotQuery = UniProtQueryBuilder.buildQuery(query);
+            
             //Query uniprotQuery = UniProtQueryBuilder.buildFullTextSearch(query);
-            List<EnzymeAccession> speciesList = getSpecies(uniprotQuery);
+            List<EnzymeAccession> speciesList = getSpecies();
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
                 GetEntriesCaller caller = new GetEntriesCaller(
                 topSpecies.getUniprotaccessions().get(0));
+                //Retieve the main entry
                 enzymeSummary = caller.getEnzymeEntry();
+
+                //Add related species
                 if (speciesList.size() > 1) {
                     speciesList.remove(topSpecies);
                     enzymeSummary.getRelatedspecies().addAll(speciesList);
@@ -209,9 +237,9 @@ public class UniprotCallable {
             return enzymeSummary;
         }
 
-        public List<EnzymeAccession> getSpecies(Query query) {
+        public List<EnzymeAccession> getSpecies() {
              AttributeIterator<UniProtEntry> attributes  = queryService
-                     .getAttributes(query, "ognl:organism");
+                     .getAttributes(uniprotQuery, "ognl:organism");
              List<EnzymeAccession> accSpeciesList = new ArrayList<EnzymeAccession>();
              for (Attribute att : attributes) {
                 Organism organism = (Organism)att.getValue();
@@ -223,7 +251,8 @@ public class UniprotCallable {
                 species.setCommonname(commonName);
                 species.setScientificname(scientificName);
                 enzymeAccession.setSpecies(species);        
-                 if (commonName.equalsIgnoreCase(this.defaultSpecies)) {
+                 //if (commonName.equalsIgnoreCase(this.defaultSpecies)) {
+                if (scientificName.equalsIgnoreCase(this.defaultSpecies)) {
                      accSpeciesList.add(0,enzymeAccession);
                  } else {
                     accSpeciesList.add(enzymeAccession);
@@ -232,6 +261,7 @@ public class UniprotCallable {
              }
              return accSpeciesList;
         }
+
 
         /*
         public List<EnzymeAccession> getRelatedSpecies(List<UniProtEntry> secEntries ) {
