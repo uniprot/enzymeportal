@@ -19,16 +19,16 @@
             <iframe src="http://www.ebi.ac.uk/inc/head.html" name="head" id="head" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  width="100%" style="position:absolute; z-index: 1; height: 800px;">[Your user agent does not support frames or is currently configured not to display iframes.</iframe>
         </div>
         <div class="contents" id="contents">
+            <div class="container_12">
             <div class="breadcrumbs">
                 <a href="http://www.ebi.ac.uk/" class="firstbreadcrumb">EBI</a>
                 <a href="http://www.ebi.ac.uk/Databases/">Databases</a>
                 <a href="http://www.ebi.ac.uk/Databases/">Enzymes</a>
             </div>
-            <div style="width: 100%; margin-top: 0px;">
-                <jsp:include page='<%= request.getParameter("content")%>' />
-            </div>
+            <jsp:include page='<%= request.getParameter("content")%>' />
             <div class="footerdiv" id="footerdiv"  style="z-index:2;">
                 <iframe src="http://www.ebi.ac.uk/inc/foot.html" name="foot" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  height="22px" width="100%"  style="z-index:2;">[Your user agent does not support frames or is currently configured not to display iframes.]</iframe>
+            </div>
             </div>
         </div>
     </body>

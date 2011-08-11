@@ -11,6 +11,8 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <html>
     <head>
+        <link rel="stylesheet"  href="http://www.ebi.ac.uk/inc/css/contents.css"     type="text/css" />
+        <!--
         <link media="screen" href="resources/lib/spineconcept/css/960gs/reset.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="resources/lib/spineconcept/css/960gs/text.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="resources/lib/spineconcept/css/960gs/960.css" type="text/css" rel="stylesheet" />
@@ -23,10 +25,19 @@
         <script src="resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
         <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
+        -->
+        <link media="screen" href="resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="resources/lib/spineconcept/css/identification.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
+        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>
+        <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
+        <script src="resources/javascript/search.js" type="text/javascript"></script>
     </head>
     <body>        
         <div class="page container_12">
-            <form:form id="searchForm" modelAttribute="searchModel" action="results" method="POST">
+            <form:form id="searchForm" modelAttribute="searchModel" action="enzymes" method="POST">
             <div class="grid_12">
                 <div  id="keywordSearch" class="search">
                     <p>
@@ -204,7 +215,8 @@
                         <div class="line"></div>
                         <div class="resultContent">
                             <c:set var="resultItemId" value="${0}"/>
-                            <c:forEach items="${summaryentries}" var="enzyme">                             
+                            <c:forEach items="${summaryentries}" var="enzyme">
+                            <c:set var="uniprotId" value="${enzyme.uniprotid}"/>                            
                              <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
                             <div class="resultItem">
                                 <div id="proteinImg">
@@ -213,18 +225,16 @@
                                     <c:if test='${imgFile != "" && imgFile != null}'>
                                         <c:set var="imgLink" value="${imgBaseLink}${imgFile}_cbc600.png"/>
                                         <a target="blank" href="${imgLink}">
-                                            <img src="${imgLink}" width="110" height="90" alt=""/>
+                                            <img src="${imgLink}" width="110" height="90" alt="Reference to Pdbe found, but no image available!"/>
                                         </a>
                                     </c:if>
                                 </div>
                                 <div id="desc">
-                                    <p>
-                                    <a href="entry/${primAcc}">
+                                    <a href="enzymes/${primAcc}">
                                         <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
                                         <c:out value="${showName}"/>
                                        <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
                                     </a>
-                                    </p>
 
                                     <c:set var="function" value="${enzyme.function}"/>
                                     <c:if test='${function != null && function != ""}'>
@@ -260,10 +270,10 @@
                                         </div>
                                     </c:if>
                                 </div>
+                                <div id="speciesContainer">
                                     <div id="in">in</div>
                                     <div class="species">
-                                        <p>
-                                        <a href="entry/${primAcc}">
+                                        <a href="enzymes/${primAcc}">
                                         <c:choose>
                                         <c:when test='${enzyme.species.commonname == ""}'>
                                             <c:out value="${enzyme.species.scientificname}"/>
@@ -272,8 +282,7 @@
                                             <c:out value="${enzyme.species.commonname}"/>
                                         </c:otherwise>
                                         </c:choose>
-                                        </a>
-                                        </p>
+                                        </a> <br/>
                                         <!--display = 3 = 2 related species + 1 default species -->
                                         <c:set var="relSpeciesMaxDisplay" value="${2}"/>
                                         <c:set var="relspecies" value="${enzyme.relatedspecies}"/>                                        
@@ -283,7 +292,6 @@
                                             <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
                                         </c:if>
                                         <c:forEach var = "i" begin="0" end="${relSpeciesMaxDisplay-1}">
-                                            <p>
                                                 <c:choose>
                                                 <c:when test='${relspecies[i].species.commonname == ""}'>
                                                     <c:set var="speciesName" value="${relspecies[i].species.scientificname}"/>
@@ -292,15 +300,14 @@
                                                     <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                 </c:otherwise>
                                                 </c:choose>
-                                            <a href="entry/${relspecies[i].uniprotaccessions[0]}">
+                                            <a href="enzymes/${relspecies[i].uniprotaccessions[0]}">
                                                 <c:out value="${speciesName}"/>
                                             </a>
-                                            </p>                                            
+                                             <br/>
                                         </c:forEach>
                                         <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
                                             <div id="relSpecies_${resultItemId}" style="display: none">
-                                            <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">
-                                                <p>
+                                            <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">                                                
                                                     <c:choose>
                                                     <c:when test='${relspecies[i].species.commonname == ""}'>
                                                         <c:set var="speciesName" value="${relspecies[i].species.scientificname}"/>
@@ -309,16 +316,17 @@
                                                         <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                     </c:otherwise>
                                                     </c:choose>
-                                                <a href="entry/${relspecies[i].uniprotaccessions[0]}">
+                                                <a href="enzymes/${relspecies[i].uniprotaccessions[0]}">
                                                     <c:out value="${speciesName}"/>
                                                 </a>
-                                                </p>
+                                               <br/>
                                             </c:forEach>
                                          </div>
                                          <a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>"><c:out value="${showButton}"/></a> <br/>
                                          </c:if>
                                        </c:if>
                                 </div>
+                            </div>
                             </div>
                             <div class="clear"></div>
                             <c:set var="resultItemId" value="${resultItemId+1}"/>

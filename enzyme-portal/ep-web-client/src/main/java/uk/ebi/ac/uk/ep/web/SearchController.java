@@ -46,10 +46,18 @@ public class SearchController {
 
 
 //********************************** METHODS *********************************//
-    
-    @RequestMapping(value="/entry/{accession}")
-    public String viewHomePage(@PathVariable String accession, EnzymeModel searchModelForm,  BindingResult result, Model model) {
-        String acc = accession;
+
+    /**
+     * Process the entry page
+     * @param id Uniprot id
+     * @param accession Uniprot accession
+     * @param searchModelForm
+     * @param result
+     * @param model
+     * @return An enzyme entry
+     */
+    @RequestMapping(value="/enzymes/{accession}")
+    public String viewHomePage(@PathVariable String accession, Model model) {
         IEnzymeRetriever retriever = new EnzymeRetriever();        
         EnzymeModel enzymeModel = null;
         try {
@@ -58,10 +66,18 @@ public class SearchController {
             log.error("Unable to retrieve the entry! ",  ex);
         }
          model.addAttribute("enzymeModel", enzymeModel);
+
         return "entry";
     }
 
 
+    /**
+     * This method is an entry point that accepts the request when the search home
+     * page is loaded. It then forwards the request to the search page.
+     *
+     * @param model
+     * @return
+     */
     @RequestMapping(value="/")
     public String viewSearchHome(Model model) {
         SearchModel searchModelForm = new SearchModel();
@@ -74,15 +90,33 @@ public class SearchController {
         return "index";
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String searchByKeywords(SearchModel searchModel, BindingResult result, Model model) {
+    /**
+     * A wrapper of {@code postSearchResult} method, created to accept the search
+     * request using GET.
+     * @param searchModel
+     * @param result
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/enzymes", method = RequestMethod.GET)
+    public String getSearchResult(SearchModel searchModel, BindingResult result, Model model) {
         //System.out.println(searchParameters.getKeywords());
-        model.addAttribute("searchModel", searchModel);
+        postSearchResult(searchModel, result, model);
         return "index";
     }
 
-    @RequestMapping(value = "/results", method = RequestMethod.POST)
-    public String viewSearchResult(SearchModel searchModelForm,  BindingResult result, Model model) {
+    /**
+     *
+     * @param searchModelForm
+     * @param result
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/enzymes", method = RequestMethod.POST)
+    public String postSearchResult(SearchModel searchModelForm,  BindingResult result, Model model) {
+        if (searchModelForm == null) {
+            return "index";
+        }
         SearchParams searchParameters = searchModelForm.getSearchparams();
         List<String> String = searchModelForm.getSearchparams().getSpecies();
         //String[] selectedSpecies = searchParameters.getSelectedSPecies();
