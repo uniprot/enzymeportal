@@ -12,11 +12,11 @@ import uk.ac.ebi.ep.search.model.SearchResults;
  *          $Author$
  * @author  $Author$
  */
-public interface IEnzymeFinder extends IEnzyme {
+public interface IEnzymeFinder {
 
 //********************************* VARIABLES ********************************//
 
-    public static final String DEFAULT_SPECIES = "HUMAN";
+    public static final String DEFAULT_SPECIES = "Homo sapiens";
 //******************************** CONSTRUCTORS ******************************//
 
 
@@ -26,26 +26,4 @@ public interface IEnzymeFinder extends IEnzyme {
 //********************************** METHODS *********************************//
     public SearchResults getEnzymes(SearchParams searchInput)
             throws EnzymeFinderException;
-/*
-    public List<ResultOfGetNumberOfResults> getNumberOfResults(
-            SearchParams searchInput) throws EnzymeFinderException;
-
-    public List<ResultOfGetNumberOfResults> getNumberOfResults(
-                                    List<ParamGetNumberOfResults> paramList)
-                                                            throws MultiThreadingException;
-
-    public List<ResultOfGetResultsIds> getResultsIds(
-            List<ResultOfGetNumberOfResults> resultOfGetNumberOfResults)
-            throws EnzymeFinderException;
-
-    public List<ResultOfGetReferencedEntriesSet> getReferencedEntriesSet(
-            List<ResultOfGetResultsIds> resultList) throws EnzymeFinderException;
-
-    public List<String> getEnzymeUniprotIds(
-            List<ResultOfGetResultsIds> resultsIdsList) throws EnzymeFinderException;
-
-    public List<String> rankEnzymes(List<String> uniprotIds);
-
-    public EnzymeSummaryCollection getUniprotEntries(List<String> uniprotIds);
-*/
 }
