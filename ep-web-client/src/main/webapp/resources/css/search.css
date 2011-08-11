@@ -10,11 +10,19 @@
    TODO customize this sample style
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
+body, td.contentsarea {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: helvetica,"trebuchet MS",arial,sans-serif;
+    font-size: 9pt;
+    margin: 0;
+    padding: 0;
+    line-height: 16px;
+    width: 100%;
+}
 
-body {
-	font-family: helvetica,arial,sans-serif;
-	/*background-color: #ddd;*/
-        background: white;
+a:link, a:visited {
+    text-decoration: underline;
 }
 
 #desc a:link, #desc a:visited, .species{
@@ -124,7 +132,9 @@ body {
     float:left;
     margin-left:2px;
     margin-right:2px;
-    width:25%;
+    /*min-width:150px;*/
+    min-width: 15%;
+    max-width: 20%;
     padding: 4px 4px;
     margin-top: 5px;
     /*border: 2px solid #ddd;*/
@@ -149,14 +159,15 @@ body {
 
 .filterContent {
     width: 100%;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-bottom: 6px;
-    line-height:120%;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    line-height:16pt;
 }
 .text {
     float: left;
-    width: 80%;
+    width: 82%;
+    /*border: 1px solid #ddd;*/
 }
 
 .otherName {
@@ -165,23 +176,27 @@ body {
 }
 .checkItem {
     vertical-align: top;
-    float: right;
-    width: 10%;
-    margin-right: 10px;    
+    float: left;
+    width: 15%;
+    /*border: 1px solid #ddd;*/
 }
 
 .filterLine {
     margin-bottom: 8px;
     vertical-align: top;
 }
+
+/*The container of result items on the right side of the filter*/
 .result  {
     float:left;
     margin-left:2px;
     margin-right:0px;
-    width:72%;
+    max-width:76%;
+    min-width:70%;
     padding: 2px 2px;
     margin-top: 5px;
     min-height: 700px;
+    /*border: 1px solid #ddd;*/
 }
 
 .title {
@@ -239,12 +254,13 @@ body {
     width: 7%;
 }
 
+/*The container of the search result items in rounded box*/
 .resultContent {
-    padding-top: 10px;
+    padding-top: 0px;
     padding-left: 2px;
     padding-right: 2px;
     padding-bottom: 2px;
-    width: 100%
+    max-width: 99%
 }
 
 .line {
@@ -254,6 +270,7 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
+/*The search result item in rounded box*/
 .resultItem {
     float: left;
     -moz-border-radius: 15px 15px 15px 15px;
@@ -261,7 +278,7 @@ body {
     -webkit-border-radius:15px 15px 15px 15px;
     border: 1px solid #ddd ;
     margin-right: 5px;
-    /*margin-top: 10px;*/    
+    margin-top: 10px;
     padding: 5px;
     vertical-align: top;    
     min-height: 80px;    
@@ -273,34 +290,49 @@ body {
     float: left;
     width:110px;
     height:90px;
-    text-align: center;
-    margin-top: 5px;
+    text-align: center;    
     margin-right: 5px;
-    border: none;
+    /*border: none;*/
+    /*border: 1px solid #ddd;*/
+
+}
+
+#proteinImg a{
+   color: white;
+    text-decoration: none;
 
 }
 
 #desc {
     float: left;
     text-align: left;
-    width: 59%;
+    /*for smaller resolution
+    width: 55%;*/
+    width: 65%;
+    /*border: 1px solid #ddd;*/
+}
+
+
+#speciesContainer{
+     float: left;
+     width: 18%;
+    /*border: 1px solid #ddd;*/
 }
 
 #in {
     float: left;
-    width: 2%;
-    margin-left: 10px;
+    width: 20px;
+    padding-left:5px;
+    /*border: 1px solid #ddd;*/
 }
 
 .species {
-    float: right;
-    width: 18%;    
+    margin-left: 5px;
+    float: left;
+    width: 82%;
+    /*border: 1px solid #ddd;*/
 }
 
-p{
-    line-height: 12pt;
-    margin-bottom: 4pt;
-}
 .basket{
     float: right;        
 }

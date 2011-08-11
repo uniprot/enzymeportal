@@ -368,9 +368,9 @@
 	background-image: url('../images/species/thumb_Rattus_norvegicus.png');
 }
 
-.Saccharomyces_cerevisiae {
-	background-image:
-		url('../images/species/thumb_Saccharomyces_cerevisiae.png');
+.Saccharomyces_cerevisiae, .Saccharomyces_cerevisiae_S288c {
+        background-image:
+                url('../images/species/thumb_Saccharomyces_cerevisiae.png');
 }
 
 .Schizosaccharomyces_pombe {
