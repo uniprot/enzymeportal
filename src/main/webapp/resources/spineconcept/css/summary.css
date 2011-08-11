@@ -1,3 +1,8 @@
+.header .panel {
+	width: 300px;
+	margin: 0px auto;
+}
+
 .classification {
 	border: 1px solid #FFD98F;
 	border-radius: 6px;
@@ -65,6 +70,7 @@
 	font-weight: bold;
 	padding: 4px 4px 0px 4px;
 	line-height: 12pt;
+	height: 16px;
 }
 
 .box .extra {
@@ -73,6 +79,7 @@
 	font-style: italic;
 	padding: 0px 4px 2px 4px;
 	line-height: 12pt;
+	height: 15px;
 }
 
 .selection {
@@ -88,6 +95,7 @@
 	width: 298px;
 	margin: 0;
 	z-index: 10;
+	padding: 0;
 }
 
 .selection ul li {
@@ -246,6 +254,12 @@
 	min-height: 500px;
 }
 
+.gradient {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#E7F1F1'); /* for IE */
+	background: -moz-linear-gradient(center top, #FFFFFF, #E7F1F1);
+	background: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#E7F1F1)); /* for webkit browsers */
+}
+
 .not_found .message {
 	color: #5e5e5e;
 	border: 0px solid #aaa;
@@ -258,13 +272,6 @@
 	position: relative;
 	text-shadow: 1px 1px 1px rgba(120, 50, 120, 0.25);
 }
-
-.grid2 .column1 {
-	z-index: 60;
-	position: relative;
-	margin-right: 10px;
-	margin-bottom: 10px;
-}			
 
 .column1 {
 	z-index: 60;
@@ -291,8 +298,8 @@
 	width: auto;
 	display: block;
 	position: relative;
-	float: none;
 	margin-bottom: 10px;
+	float: none;
 }
 
 .tab {
@@ -468,14 +475,12 @@
 
 .references table {
 	padding: 1px;
-	width: 752px;
 }
 .references table {
 	max-height: 200px;
 	overflow: auto;
 	display: block;
 	background: #fff;
-	border: 1px solid rgb(167, 184, 193);
 	border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomLeft: 5px;
 	-webkit-border-bottom-left-radius: 5px;
@@ -508,7 +513,7 @@
 	border-bottom: 1px solid #408c8c;
 	font-size: 14pt;
 	color: #408c8c;
-	margin-bottom: 0px;
+	margin: 0px;
 	text-shadow: 1px 1px 2px rgba(64, 140, 140, 0.55);
 	/*text-overflow: ellipsis;
 	overflow: hidden;
@@ -521,7 +526,11 @@
 
 .summary .main_link a {
 	padding-left: 14px;
-	background: 0px 4px url('../images/external-link.png') no-repeat #fff;
+	background: 0px 2px url('../images/external-link.png') no-repeat #fff;
+}
+
+.summary .main_link a:hover {
+	background-image: url('../images/external-link-red.png');
 }
 
 .summary .image {
@@ -543,8 +552,12 @@
 	width: auto;
 	margin: 10px auto 0px auto;
 	padding-left: 14px;
-	background: 0px 4px url('../images/external-link.png') no-repeat #fff;
+	background: 0px 2px url('../images/external-link.png') no-repeat #fff;
 	text-align: left;
+}
+
+.summary .image a:hover .caption {
+	background-image: url('../images/external-link-red.png');
 }
 
 .summary dl dt {
@@ -561,6 +574,7 @@
 
 .summary dl dd ul {
 	margin: 0px;
+	padding: 0px;
 	list-style: none;
 }
 
@@ -568,8 +582,13 @@
 	margin: 0px;
 }
 
-.summary dl dd ul li a img {
-	margin-right: 3px;
+.summary dl dd ul li a.sectionLink {
+	padding-left: 14px;
+	background: 1px 2px url('../images/external-link.png') no-repeat #fff;
+}
+
+.summary dl dd ul li a.sectionLink:hover {
+	background-image: url('../images/external-link-red.png');
 }
 
 .summary .image.wide {
@@ -584,6 +603,7 @@
 }
 
 .summary .image.wide img {
+	margin: 0px auto; 
 	display: block;
 	position: relative;
 	max-width: none;
@@ -609,6 +629,11 @@
 .summary .provenance ul li a {
 	padding-left: 14px;
 	background: 0px 1px url('../images/external-link.png') no-repeat #fff;
+}
+
+.summary .provenance ul li a:hover {
+	padding-left: 14px;
+	background-image: url('../images/external-link-red.png');
 }
 
 .tab.gene .inner_tab .icon {

@@ -15,7 +15,7 @@ h2 {
 	color: #222;
 	border: 0px solid #aaa;
 	padding: 2px 2px 0 2px;
-	font-size: 12pt;
+	font-size: 11pt;
 	margin: 5px 0 0px 0;
 	display: block;
 	position: relative;
@@ -117,7 +117,8 @@ h3 {
 }
 
 .multi ol {
-	margin: 5px 0px 5px 20px;;
+	margin: 5px 0px 5px 20px;
+	padding: 0;
 }
 
 .multi.closed ol {
