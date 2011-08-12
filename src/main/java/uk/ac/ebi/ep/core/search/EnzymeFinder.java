@@ -645,7 +645,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         List<String> queries = LuceneQueryBuilder
                 .createUniprotAPIQueryByIdPrefixes(resultSubList, speciesFilter);
         List<EnzymeSummary> enzymeList = uniprotAdapter
-                .queryEnzymeByIdPrefixes(queries, IEnzymeFinder.DEFAULT_SPECIES);
+                .queryEnzymeByIdPrefixes(queries, IUniprotAdapter.DEFAULT_SPECIES);
         return enzymeList;
     }
 

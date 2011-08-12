@@ -16,7 +16,6 @@ public interface IEnzymeFinder {
 
 //********************************* VARIABLES ********************************//
 
-    public static final String DEFAULT_SPECIES = "Homo sapiens";
 //******************************** CONSTRUCTORS ******************************//
 
 

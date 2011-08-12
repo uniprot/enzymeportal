@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
+import java.util.List;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 
@@ -15,7 +16,6 @@ public interface IEnzymeRetriever {
 
 //********************************* VARIABLES ********************************//
 
-
 //******************************** CONSTRUCTORS ******************************//
 
 
@@ -24,6 +24,20 @@ public interface IEnzymeRetriever {
 
 //********************************** METHODS *********************************//
 
-    public EnzymeModel retieveEnzyme(String uniprotAccession) throws EnzymeRetrieverException;
+    public EnzymeModel getEnzyme(String uniprotAccession) throws EnzymeRetrieverException;
+
+    public EnzymeModel getReactions(List<String> reactionIds) throws EnzymeRetrieverException;
+
+    public EnzymeModel getPathways(String uniprotAccession) throws EnzymeRetrieverException;
+
+    public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException;
+
+    public EnzymeModel getProteinStructure(String uniprotAccession) throws EnzymeRetrieverException;
+
+    public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException;
+
+    public EnzymeModel getDiseases(String uniprotAccession) throws EnzymeRetrieverException;
+
+    public EnzymeModel getLiterarture(String uniprotAccession) throws EnzymeRetrieverException;
 
 }
