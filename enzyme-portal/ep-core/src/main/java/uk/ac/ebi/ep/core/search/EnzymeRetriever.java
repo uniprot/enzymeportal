@@ -39,7 +39,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 //********************************** METHODS *********************************//
 
     public EnzymeModel getEnzyme(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeEntry(uniprotAccession);
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeSummary(uniprotAccession);
         try {
             this.intenzAdapter.getEnzymeDetails(enzymeModel);
         } catch (MultiThreadingException ex) {
