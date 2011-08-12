@@ -39,6 +39,18 @@ public class SearchController {
 //********************************* VARIABLES ********************************//
 
 
+    public enum Fields {
+        enzyme,
+        proteinStructure,
+        reactionsPathways,
+        molecules,
+        disease,
+        literarture,
+        brief,
+        full
+    }
+
+
 //******************************** CONSTRUCTORS ******************************//
 
 
@@ -49,27 +61,38 @@ public class SearchController {
 
     /**
      * Process the entry page
-     * @param id Uniprot id
-     * @param accession Uniprot accession
-     * @param searchModelForm
-     * @param result
+     * @param accession
+     * @param field
      * @param model
-     * @return An enzyme entry
+     * @return
      */
-    @RequestMapping(value="/enzymes/{accession}")
-    public String viewHomePage(@PathVariable String accession, Model model) {
-        IEnzymeRetriever retriever = new EnzymeRetriever();        
+    @RequestMapping(value="/enzymes/{accession}/{field}")
+    public String viewReationsPathways(
+            @PathVariable String accession, @PathVariable String field, Model model) {
+        Fields requestedField = Fields.valueOf(field);
+        IEnzymeRetriever retriever = new EnzymeRetriever();
         EnzymeModel enzymeModel = null;
-        try {
-            enzymeModel = retriever.retieveEnzyme(accession);
-        } catch (EnzymeRetrieverException ex) {
-            log.error("Unable to retrieve the entry! ",  ex);
-        }
-         model.addAttribute("enzymeModel", enzymeModel);
 
+        switch (requestedField) {
+            case enzyme: {
+                try {
+                    enzymeModel = retriever.getEnzyme(accession);
+                } catch (EnzymeRetrieverException ex) {
+                    log.error("Unable to retrieve the entry! ",  ex);
+                }
+                 model.addAttribute("enzymeModel", enzymeModel);
+                 break;
+            }
+            case reactionsPathways: {
+                try {
+                    enzymeModel = retriever.getReactionsPathways(accession);
+                } catch (EnzymeRetrieverException ex) {
+                    java.util.logging.Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         return "entry";
     }
-
 
     /**
      * This method is an entry point that accepts the request when the search home

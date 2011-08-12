@@ -38,10 +38,35 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp" />
     </bean>
-   <bean id="config" class="uk.ac.ebi.ep.core.search.Config"
-   	init-method="initIt" destroy-method="cleanUp">
+    <bean id="config" class="uk.ac.ebi.ep.core.search.Config"
+          init-method="initIt" destroy-method="cleanUp">
 
-   	<!--<property name="message" value="i'm property message" />-->
-   </bean>
+        <!--<property name="message" value="i'm property message" />-->
+    </bean>
 
+    <!--Start internationalization-->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <bean id="localeChangeInterceptor"
+          class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="lang" />
+    </bean>
+
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="en"/>
+    </bean>
+
+    <bean id="handlerMapping"
+          class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <ref bean="localeChangeInterceptor" />
+        </property>
+    </bean>
+
+    <!--End internationalization-->
 </beans>
