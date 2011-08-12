@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
+import java.util.List;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
@@ -37,7 +38,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
 //********************************** METHODS *********************************//
 
-    public EnzymeModel retieveEnzyme(String uniprotAccession) throws EnzymeRetrieverException {
+    public EnzymeModel getEnzyme(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeEntry(uniprotAccession);
         try {
             this.intenzAdapter.getEnzymeDetails(enzymeModel);
@@ -45,6 +46,34 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             throw new EnzymeRetrieverException ("Unable to retrieve the entry details! ", ex);
         }
         return enzymeModel;
+    }
+
+    public EnzymeModel getReactions(List<String> reactionIds) throws EnzymeRetrieverException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public EnzymeModel getPathways(String uniprotAccession) throws EnzymeRetrieverException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public EnzymeModel getProteinStructure(String uniprotAccession) throws EnzymeRetrieverException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public EnzymeModel getDiseases(String uniprotAccession) throws EnzymeRetrieverException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public EnzymeModel getLiterarture(String uniprotAccession) throws EnzymeRetrieverException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
