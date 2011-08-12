@@ -7,8 +7,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
     <head>
         <link rel="stylesheet"  href="http://www.ebi.ac.uk/inc/css/contents.css"     type="text/css" />
@@ -178,7 +180,7 @@
                 </c:if>
                 <div id="keywordSearchResult" class="result">
                     <c:if test="${totalfound==0}">
-                        No results found!
+                        <spring:message code="label.search.empty"/>
                     </c:if>
                     <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
                         <form:form modelAttribute="pagination">
@@ -230,7 +232,7 @@
                                     </c:if>
                                 </div>
                                 <div id="desc">
-                                    <a href="enzymes/${primAcc}">
+                                    <a href="enzymes/${primAcc}/enzyme">
                                         <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
                                         <c:out value="${showName}"/>
                                        <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
@@ -273,7 +275,7 @@
                                 <div id="speciesContainer">
                                     <div id="in">in</div>
                                     <div class="species">
-                                        <a href="enzymes/${primAcc}">
+                                        <a href="enzymes/${primAcc}/enzyme">
                                         <c:choose>
                                         <c:when test='${enzyme.species.commonname == ""}'>
                                             <c:out value="${enzyme.species.scientificname}"/>
@@ -300,7 +302,7 @@
                                                     <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                 </c:otherwise>
                                                 </c:choose>
-                                            <a href="enzymes/${relspecies[i].uniprotaccessions[0]}">
+                                            <a href="enzymes/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                 <c:out value="${speciesName}"/>
                                             </a>
                                              <br/>
@@ -316,7 +318,7 @@
                                                         <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                     </c:otherwise>
                                                     </c:choose>
-                                                <a href="enzymes/${relspecies[i].uniprotaccessions[0]}">
+                                                <a href="enzymes/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                     <c:out value="${speciesName}"/>
                                                 </a>
                                                <br/>
