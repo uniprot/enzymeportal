@@ -26,10 +26,6 @@ public interface IEnzymeRetriever {
 
     public EnzymeModel getEnzyme(String uniprotAccession) throws EnzymeRetrieverException;
 
-    public EnzymeModel getReactions(List<String> reactionIds) throws EnzymeRetrieverException;
-
-    public EnzymeModel getPathways(String uniprotAccession) throws EnzymeRetrieverException;
-
     public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException;
 
     public EnzymeModel getProteinStructure(String uniprotAccession) throws EnzymeRetrieverException;
