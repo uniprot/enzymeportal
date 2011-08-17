@@ -154,5 +154,6 @@
     <module>ebeye-adapter</module>
     <module>uniprot-adapter</module>
     <module>intenz-adapter</module>
+    <module>reactome-adapter</module>
   </modules>
 </project>
