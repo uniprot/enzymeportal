@@ -44,8 +44,8 @@ public class SearchController {
         proteinStructure,
         reactionsPathways,
         molecules,
-        disease,
-        literarture,
+        diseaseDrugs,
+        literature,
         brief,
         full
     }
@@ -72,26 +72,62 @@ public class SearchController {
         Fields requestedField = Fields.valueOf(field);
         IEnzymeRetriever retriever = new EnzymeRetriever();
         EnzymeModel enzymeModel = null;
-
+        String responsePage = "entry";
         switch (requestedField) {
-            case enzyme: {
+            case proteinStructure: {
                 try {
                     enzymeModel = retriever.getEnzyme(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    log.error("Unable to retrieve the entry! ",  ex);
+                    log.error("Unable to retrieve the entry!",  ex);
                 }
-                 model.addAttribute("enzymeModel", enzymeModel);
                  break;
             }
             case reactionsPathways: {
                 try {
                     enzymeModel = retriever.getReactionsPathways(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    java.util.logging.Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+                    log.error("Unable to retrieve the entry!",  ex);
                 }
+                 break;
+            }
+            case molecules: {
+                try {
+                    enzymeModel = retriever.getEnzyme(accession);
+                } catch (EnzymeRetrieverException ex) {
+                    log.error("Unable to retrieve the entry!",  ex);
+                }
+                 break;
+            }
+            case diseaseDrugs: {
+                try {
+                    enzymeModel = retriever.getEnzyme(accession);
+                } catch (EnzymeRetrieverException ex) {
+                    log.error("Unable to retrieve the entry!",  ex);
+                }
+                 break;
+            }            
+            case literature: {
+                try {
+                    enzymeModel = retriever.getEnzyme(accession);
+                } catch (EnzymeRetrieverException ex) {
+                    log.error("Unable to retrieve the entry!",  ex);
+                }
+                 break;
+            }            
+            
+            default: {
+                try {
+                    enzymeModel = retriever.getEnzyme(accession);
+                } catch (EnzymeRetrieverException ex) {
+                    log.error("Unable to retrieve the entry! ",  ex);
+                }
+                requestedField = Fields.enzyme;
+                 break;
             }
         }
-        return "entry";
+        enzymeModel.setRequestedfield(requestedField.name());
+        model.addAttribute("enzymeModel", enzymeModel);
+        return responsePage;
     }
 
     /**

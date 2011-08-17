@@ -3,15 +3,15 @@
     Created on : May 6, 2011, 7:40:14 PM
     Author     : hongcao
 --%>
-<!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<!DOCTYPE html>
 <html>
-    <head>        
+    <head>
         <title>Enzyme Entry</title>
         <link rel="stylesheet"  href="http://www.ebi.ac.uk/inc/css/contents.css"     type="text/css" />
         <link media="screen" href="../../resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
@@ -27,7 +27,6 @@
         <script src="../../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="../../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
         <script src="../../resources/lib/spineconcept/javascript/summary.js" type="text/javascript"></script>
-
     </head>
     <body>
         <div class="headerdiv" id="headerdiv" style="position:absolute; z-index: 1;">
@@ -37,6 +36,26 @@
         </div>
         <form:form id="entryForm" modelAttribute="enzymeModel" action="entry" method="GET">
             <c:set var="enzyme" value="${enzymeModel.enzyme}"/>
+            <!--requestedfield is an enum type in the controller. Its value has to be one of the values in the Field variable in the controller-->
+            <c:set var="requestedfield" value="${enzymeModel.requestedfield}"/>
+            <c:if test='${requestedfield=="enzyme"}'>
+                <c:set var="enzymeSelected" value="selected"/>
+            </c:if>
+            <c:if test='${requestedfield=="proteinStructure"}'>
+                <c:set var="proteinStructureSelected" value="selected"/>
+            </c:if>
+            <c:if test='${requestedfield=="reactionsPathways"}'>
+                <c:set var="reactionsPathwaysSelected" value="selected"/>
+            </c:if>
+            <c:if test='${requestedfield=="molecules"}'>
+                <c:set var="moleculesSelected" value="selected"/>
+            </c:if>
+            <c:if test='${requestedfield=="diseaseDrugs"}'>
+                <c:set var="diseaseDrugsSelected" value="selected"/>
+            </c:if>
+            <c:if test='${requestedfield=="literature"}'>
+                <c:set var="literatureSelected" value="selected"/>
+            </c:if>
             <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
             relatedspecies
             <div class="contents">
@@ -69,7 +88,7 @@
                                             <ul>
                                                 <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
                                                     <c:set var="species" value="${relSpecies[i].species}"/>
-                                                    <a href="${relSpecies[i].uniprotaccessions[0]}">
+                                                    <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
                                                         <c:set var="select" value=""/>
                                                         <c:if test="${i==0}">
                                                             <c:set var="select" value="selected"/>
@@ -100,9 +119,9 @@
                     <div class="grid_12">
                         <div wicket:id="reference" class="content">
                             <div class="column1">
-                                <ul>
-                                    <li id="enzyme" class="tab protein selected">
-                                        <a href="">
+                                <ul>                                    
+                                    <li id="enzyme" class="tab protein ${enzymeSelected}">
+                                        <a href="enzyme">
                                             <span class="inner_tab">
                                                 <span class="icon"></span>
                                                 <span class="label">
@@ -111,8 +130,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li id="structure" class="tab structure">
-                                        <a href="entry/id/P86883">
+                                    <li id="structure" class="tab structure ${proteinStructureSelected}">
+                                        <a href="proteinStructure">
                                             <span class="inner_tab">
                                                 <span class="icon"></span>
                                                 <span class="label">
@@ -121,7 +140,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li id="reaction" class="tab reaction">
+                                    <li id="reaction" class="tab reaction ${reactionsPathwaysSelected}">
                                         <a href="reactionsPathways">
                                             <span class="inner_tab">
                                                 <span class="icon"></span>
@@ -131,16 +150,18 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li id="molecule" class="tab molecule">
-                                        <span class="inner_tab">
-                                            <span class="icon"></span>
-                                            <span class="label">
-                                                <spring:message code="label.entry.molecules.title"/>
+                                    <li id="molecule" class="tab molecule ${moleculesSelected}">
+                                        <a href="molecules">
+                                            <span class="inner_tab">
+                                                <span class="icon"></span>
+                                                <span class="label">
+                                                    <spring:message code="label.entry.molecules.title"/>
+                                                </span>
                                             </span>
-                                        </span>
+                                        </a>
                                     </li>
-                                    <li id="disease" class="tab disease">
-                                        <a href="">
+                                    <li id="disease" class="tab disease ${diseaseDrugsSelected}">
+                                        <a href="diseaseDrugs">
                                             <span class="inner_tab">
                                                 <span class="icon"></span>
                                                 <span class="label">
@@ -149,12 +170,12 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li id="literature" class="tab literature">
-                                        <a href="">
+                                    <li id="literature" class="tab literature ${literatureSelected}">
+                                        <a href="literature">
                                             <span class="inner_tab">
                                                 <span class="icon"></span>
                                                 <span class="label">
-                                                    <spring:message code="label.entry.literarture.title"/>
+                                                    <spring:message code="label.entry.literature.title"/>
                                                 </span>
                                             </span>
                                         </a>
@@ -162,103 +183,146 @@
                                 </ul>
                             </div>
                             <div class="column2">
-                                <div class="node">
-                                    <div class="view">
-                                        <div id="enzymeContent" class="summary">
-                                            <h2><c:out value="${enzymeModel.name}"/></h2>
-                                            <dl>
-                                                <dt>Function</dt>
-                                                <dd>
-                                                    <ul>
-                                                        <li><c:out value="${enzymeModel.function}"/></li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <dl>
-                                                <dt>EC Classification</dt>
-                                                <dd>
-                                                    <ul>
-                                                        <li>
+                                <c:if test='${requestedfield=="enzyme"}'>
+                                    <div class="node">
+                                        <div class="view">
+                                            <div id="enzymeContent" class="summary">
+                                                <h2><c:out value="${enzymeModel.name}"/></h2>
+                                                <dl>
+                                                    <dt>Function</dt>
+                                                    <dd>
+                                                        <ul>
+                                                            <li><c:out value="${enzymeModel.function}"/></li>
+                                                        </ul>
+                                                    </dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>EC Classification</dt>
+                                                    <dd>
+                                                        <ul>
+                                                            <li>
 
-                                                            <c:set var="echierarchies" value="${enzyme.echierarchies}"/>
-                                                            <c:set var="echierarchiesSize" value="${fn:length(echierarchies)}"/>
-                                                            <c:forEach var="j" begin="0" end="${echierarchiesSize-1}">
-                                                                <c:set var="ecClass" value="${echierarchies[j].ecclass}"/>
-                                                                <c:set var="ecClassSize" value="${fn:length(ecClass)}"/>
-                                                                <c:if test='${ecClassSize>0}'>
-                                                                    <c:set var="ecNumber" value=""/>
-                                                                    <c:set var="dot" value=""/>
-                                                                    <c:forEach var="i" begin="0" end="${ecClassSize-1}">
-                                                                        <c:if test='${i > 0}'>
-                                                                            <c:set var="dot" value="."/>
-                                                                        </c:if>
-                                                                        <c:if test='${i <= 2}'>
-                                                                            <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
-                                                                            <c:out value="${ecClass[i].name}"/>
-                                                                            >
-                                                                        </c:if>
+                                                                <c:set var="echierarchies" value="${enzyme.echierarchies}"/>
+                                                                <c:set var="echierarchiesSize" value="${fn:length(echierarchies)}"/>
+                                                                <c:forEach var="j" begin="0" end="${echierarchiesSize-1}">
+                                                                    <c:set var="ecClass" value="${echierarchies[j].ecclass}"/>
+                                                                    <c:set var="ecClassSize" value="${fn:length(ecClass)}"/>
+                                                                    <c:if test='${ecClassSize>0}'>
+                                                                        <c:set var="ecNumber" value=""/>
+                                                                        <c:set var="dot" value=""/>
+                                                                        <c:forEach var="i" begin="0" end="${ecClassSize-1}">
+                                                                            <c:if test='${i > 0}'>
+                                                                                <c:set var="dot" value="."/>
+                                                                            </c:if>
+                                                                            <c:if test='${i <= 2}'>
+                                                                                <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                                                <c:out value="${ecClass[i].name}"/>
+                                                                                >
+                                                                            </c:if>
 
-                                                                        <c:if test='${i > 2}'>
-                                                                            <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
-                                                                            <c:out value="${ecNumber}"/> -
-                                                                            <c:out value="${ecClass[i].name}"/>
-                                                                        </c:if>
-                                                                    </c:forEach>
-                                                                    <br/>
-                                                                </c:if>
-                                                            </c:forEach>
-                                                        </li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <dl>
-                                                <dt>Enzyme Type</dt>
-                                                <dd>
-                                                    <ul>
-                                                        <li>Enzyme Type</li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <dl>
-                                                <dt>Other names</dt>
-                                                <dd>
-                                                    <ul>
-                                                        <li>
-                                                            <c:set var="synonym" value="${enzymeModel.synonym}"/>
-                                                            <c:set var="synonymSize" value="${fn:length(synonym)}"/>
-                                                            <c:if test='${synonymSize>0}'>
-                                                                <c:forEach var="i" begin="0" end="${synonymSize-1}">
-                                                                    <c:out value="${synonym[i]}"/><br>
+                                                                            <c:if test='${i > 2}'>
+                                                                                <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                                                <c:out value="${ecNumber}"/> -
+                                                                                <c:out value="${ecClass[i].name}"/>
+                                                                            </c:if>
+                                                                        </c:forEach>
+                                                                        <br/>
+                                                                    </c:if>
                                                                 </c:forEach>
-                                                            </c:if>
-                                                        </li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
+                                                            </li>
+                                                        </ul>
+                                                    </dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>Enzyme Type</dt>
+                                                    <dd>
+                                                        <ul>
+                                                            <li>Enzyme Type</li>
+                                                        </ul>
+                                                    </dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>Other names</dt>
+                                                    <dd>
+                                                        <ul>
+                                                            <li>
+                                                                <c:set var="synonym" value="${enzymeModel.synonym}"/>
+                                                                <c:set var="synonymSize" value="${fn:length(synonym)}"/>
+                                                                <c:if test='${synonymSize>0}'>
+                                                                    <c:forEach var="i" begin="0" end="${synonymSize-1}">
+                                                                        <c:out value="${synonym[i]}"/><br>
+                                                                    </c:forEach>
+                                                                </c:if>
+                                                            </li>
+                                                        </ul>
+                                                    </dd>
+                                                </dl>
 
-                                            <dl>
-                                                <dt>Protein Sequence</dt>
-                                                <dd>
-                                                    <ul>
-                                                        <li>
-                                                            <c:set var="sequence" value="${enzyme.sequence}"/>
-                                                            This sequence has
-                                                            <c:out value="${sequence.sequence}"/>
-                                                            amino acids and a molecular weight of
-                                                            <c:out value="${sequence.weight}"/> <br>
-                                                            <a target="blank" href="${sequence.sequenceurl}">View Sequence in Uniprot</a>
+                                                <dl>
+                                                    <dt>Protein Sequence</dt>
+                                                    <dd>
+                                                        <ul>
+                                                            <li>
+                                                                <c:set var="sequence" value="${enzyme.sequence}"/>
+                                                                This sequence has
+                                                                <c:out value="${sequence.sequence}"/>
+                                                                amino acids and a molecular weight of
+                                                                <c:out value="${sequence.weight}"/> <br>
+                                                                <a target="blank" href="${sequence.sequenceurl}">View Sequence in Uniprot</a>
 
-                                                        </li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
+                                                            </li>
+                                                        </ul>
+                                                    </dd>
+                                                </dl>
+                                            </div>
                                         </div>
                                     </div>
+                                </c:if>
 
+                                <!--START PROTEIN STRUCTURE TAB-->
+                                <c:if test='${requestedfield=="proteinStructure"}'>
+                                    <div class="node">
+                                        <div class="view">
+                                            <spring:message code="label.entry.underconstruction"/>
+                                        </div>
+                                    </div>
+                                </c:if>
 
+                                <!--START REACTIONS & PATHWAYS TAB-->
+                                <c:if test='${requestedfield=="reactionsPathways"}'>
+                                    <div class="node">
+                                        <div class="view">
+                                            <spring:message code="label.entry.underconstruction"/>
+                                        </div>
+                                    </div>
+                                </c:if>
 
+                                <!--START SMALL MOLECULES TAB-->
+                                <c:if test='${requestedfield=="molecules"}'>
+                                    <div class="node">
+                                        <div class="view">
+                                            <spring:message code="label.entry.underconstruction"/>
+                                        </div>
+                                    </div>
+                                </c:if>
 
-                                </div>
+                                <!--START DISEASE & DRUGS TAB-->
+                                <c:if test='${requestedfield=="diseaseDrugs"}'>
+                                    <div class="node">
+                                        <div class="view">
+                                            <spring:message code="label.entry.underconstruction"/>
+                                        </div>
+                                    </div>
+                                </c:if>
+
+                                <!--START literature TAB-->
+                                <c:if test='${requestedfield=="literature"}'>
+                                    <div class="node">
+                                        <div class="view">
+                                            <spring:message code="label.entry.underconstruction"/>
+                                        </div>
+                                    </div>
+                                </c:if>
                             </div>
                         </div>
                     </div>
