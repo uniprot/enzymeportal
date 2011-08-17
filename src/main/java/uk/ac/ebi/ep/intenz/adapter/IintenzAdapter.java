@@ -19,6 +19,12 @@ public interface IintenzAdapter {
     public Map<String, Set<String>> getSynonyms(Set<String> ecNumbers)
             throws MultiThreadingException;
 
+    /**
+     * Get synonyms and EC classification from Intenz
+     * @param enzymeModel
+     * @return
+     * @throws MultiThreadingException
+     */
    public EnzymeModel getEnzymeDetails(EnzymeModel enzymeModel)  throws MultiThreadingException;
 
 }
