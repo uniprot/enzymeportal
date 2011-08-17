@@ -25,12 +25,12 @@ public interface IEbeyeAdapter {
     //public static final int QRY_WITH_UNIPROT_FIELD_RESULT_LIMIT = 10;
     //The number of accessions to be included in the query should not be more than 400
     public static final int EBEYE_NR_OF_QUERY_IN_LIMIT = 100;
-    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 2;
+    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 5;
     //TEST
-    public static final int EP_CHEBI_RESULTS_LIMIT = 2;
+    public static final int EP_CHEBI_RESULTS_LIMIT = 40;
     //public static final int EP_CHEBI_RESULTS_LIMIT = 2;
     public static final int EP_UNIPROT_RESULTS_LIMIT = 500;
-    public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 5000;
+    public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 6000;
     public static final int EP_THREADS_LIMIT = EP_UNIPROT_XREF_RESULT_LIMIT/EBEYE_RESULT_LIMIT;
     //MILLISECOND
     public static final int EBEYE_ONE_RECORD_TIMEOUT = 10;
