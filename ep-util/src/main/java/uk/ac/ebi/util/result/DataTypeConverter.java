@@ -110,6 +110,20 @@ public class DataTypeConverter {
         }
         return subLists;
     }
+
+
+    public static LinkedHashSet<String> mergeAndLimitResult(
+            Collection<List<String>> multipleList, int maxResult) {
+        LinkedHashSet mergedSet = new LinkedHashSet();
+        for (List<String> list:multipleList){
+            mergedSet.addAll((List<String>)list);
+            if (mergedSet.size() >=maxResult) {
+                return mergedSet;
+            }
+        }
+        return mergedSet;
+    }
+    
     public static LinkedHashSet<String> mergeList(Collection<List<String>> multipleList) {
         LinkedHashSet mergedSet = new LinkedHashSet();
         for (List<String> list:multipleList){
