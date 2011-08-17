@@ -6,8 +6,6 @@ import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
-import uk.ac.ebi.ep.reactome.IReactomeAdapter;
-import uk.ac.ebi.ep.reactome.ReactomeAdapter;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.rhea.ws.client.IRheaAdapter;
@@ -32,7 +30,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     protected IRheaAdapter rheaAdapter;
 
-    protected IReactomeAdapter reactomeAdapter;
+    //protected IReactomeAdapter reactomeAdapter;
 
     public String getAccesion() {
         return accesion;
@@ -47,7 +45,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public EnzymeRetriever() {
         rheaAdapter = new RheasResourceClient();
-        reactomeAdapter = new ReactomeAdapter();
+        //reactomeAdapter = new ReactomeAdapter();
     }
 
 
