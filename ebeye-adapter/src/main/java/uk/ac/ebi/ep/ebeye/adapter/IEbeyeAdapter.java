@@ -7,7 +7,6 @@ import java.util.Map;
 //import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
 import java.util.Set;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ep.ebeye.result.Result;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**
@@ -25,13 +24,15 @@ public interface IEbeyeAdapter {
     //public static final int QRY_WITH_UNIPROT_FIELD_RESULT_LIMIT = 10;
     //The number of accessions to be included in the query should not be more than 400
     public static final int EBEYE_NR_OF_QUERY_IN_LIMIT = 100;
-    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 5;
+    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 2;
     //TEST
-    public static final int EP_CHEBI_RESULTS_LIMIT = 40;
+    public static final int EP_CHEBI_RESULTS_LIMIT = 15;
     //public static final int EP_CHEBI_RESULTS_LIMIT = 2;
-    public static final int EP_UNIPROT_RESULTS_LIMIT = 500;
-    public static final int EP_UNIPROT_XREF_RESULT_LIMIT = 6000;
-    public static final int EP_THREADS_LIMIT = EP_UNIPROT_XREF_RESULT_LIMIT/EBEYE_RESULT_LIMIT;
+    public static final int QUERY_ENZYME_DOMAIN_RESULT_LIMIT = 600;
+    public static final int QUERY_UNIPROT_FIELD_RESULT_LIMIT = 100;
+    public static final int JOINT_QUERY_UNIPROT_FIELD_RESULT_LIMIT = 2000;
+    public static final int QUERY_UNIPROT_FIELD_ALL_DOMAINS_RESULT_LIMITE = 5000;
+    public static final int EP_THREADS_LIMIT = QUERY_UNIPROT_FIELD_ALL_DOMAINS_RESULT_LIMITE/EBEYE_RESULT_LIMIT;
     //MILLISECOND
     public static final int EBEYE_ONE_RECORD_TIMEOUT = 10;
     //SECOND
@@ -111,7 +112,7 @@ public interface IEbeyeAdapter {
     
     public ParamOfGetResults getNumberOfResults(ParamOfGetResults paramOfGetResults);
 
-    public Set<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
+    public List<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
 
     public Set<String> getValueOfFields(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException;
 

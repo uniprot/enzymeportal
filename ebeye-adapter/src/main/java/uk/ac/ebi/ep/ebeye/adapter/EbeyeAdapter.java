@@ -337,15 +337,29 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     }
 
 
-    public Set<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException {
-        Set<String> accessionSet = new LinkedHashSet<String>();
+    public List<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults) throws MultiThreadingException {
+        List<String> accessionList= new ArrayList<String>();
+                List<Callable<ArrayOfArrayOfString>> callableList
+                        = new ArrayList<Callable<ArrayOfArrayOfString>>();
         for (ParamOfGetResults param:paramOfGetResults )  {
+            callableList.addAll(prepareCallableCollection(param));
+        }
+        
+        //this.executeCallables(callableList);
+         List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
+         Set<String> accessionSet = Transformer.transformFieldValueToList(rawResults, true);
+        /*
             Collection<String> resultsPerDomain = getRelatedUniprotAccessionSet(param);
             if (resultsPerDomain.size() > 0) {
                 accessionSet.addAll(resultsPerDomain);
             }
-        }
-        return accessionSet;
+
+        List<Callable<ArrayOfArrayOfString>> callableList
+                 = prepareCallableCollection(param);
+         Collection<String> accessionList = getFieldValue(callableList, true);
+        */
+        accessionList.addAll(accessionSet);
+        return accessionList;
     }
 
     public Set<String> getValueOfFields(ParamOfGetResults paramOfGetResults) throws MultiThreadingException {
