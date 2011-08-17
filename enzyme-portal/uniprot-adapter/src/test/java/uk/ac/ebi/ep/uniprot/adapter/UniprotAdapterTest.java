@@ -94,7 +94,7 @@ public class UniprotAdapterTest {
     public void testGetEnzymeEntry() {
         System.out.println("getEnzymeEntry");
         UniprotAdapter instance = new UniprotAdapter();
-        EnzymeSummary result = instance.getEnzymeEntry(INPUT_ACCESSION_1);
+        EnzymeSummary result = instance.getEnzymeSummary(INPUT_ACCESSION_1);
         assertEquals(result.getName(), this.prepareEnzymeEntry1().getName());
         //assertEquals(result.getFunction(), this.p);
         //assertEquals(this.expEnzymeEntryResult, result);

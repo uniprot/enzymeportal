@@ -34,7 +34,7 @@ public interface IUniprotAdapter {
 
 
 //********************************** METHODS *********************************//
-    public EnzymeSummary getEnzymeEntry(String accession);
+    public EnzymeSummary getEnzymeSummary(String accession);
     
     public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies) throws
             MultiThreadingException;    
