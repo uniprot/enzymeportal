@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
+import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
@@ -111,12 +112,21 @@ public class Transformer {
             //String chebiName = resultLine.get(0);
             String chebiId = resultLine.get(0);
             List<String> uniprotAcc = transformAccessionsString(resultLine.get(1));
+            List<String> uniprotAccSubList = null;
             if (uniprotAcc.size() > 0) {
                 //results.put(chebiName, uniprotAcc);
-                results.put(chebiId, uniprotAcc);
+                //limited uniprot accessions per chebi id
+                if (isUNIPROTfield && uniprotAcc.size() > IEbeyeAdapter.QUERY_UNIPROT_FIELD_RESULT_LIMIT) {
+                    uniprotAccSubList = uniprotAcc.subList(0, IEbeyeAdapter.QUERY_UNIPROT_FIELD_RESULT_LIMIT);                 
+                } else {
+                    uniprotAccSubList = uniprotAcc;
+                }
+
+                results.put(chebiId, uniprotAccSubList);
             }
 
         }
+
         return results;
     }
 
