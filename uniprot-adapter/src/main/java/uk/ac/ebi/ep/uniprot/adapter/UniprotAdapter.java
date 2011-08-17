@@ -38,8 +38,8 @@ public class UniprotAdapter implements IUniprotAdapter{
 //********************************** METHODS *********************************//
 
     public EnzymeSummary getEnzymeSummary(String accession) {
-       GetEntriesCaller caller = new GetEntriesCaller(accession);
-        EnzymeSummary enzymeSummary = caller.getEnzymeEntry(true);
+       GetEntriesCaller caller = new GetEntriesCaller(accession, true);
+        EnzymeSummary enzymeSummary = caller.getEnzymeEntry();
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
     }
@@ -50,7 +50,7 @@ public class UniprotAdapter implements IUniprotAdapter{
         String query = LuceneQueryBuilder
                 .createWildcardFieldValueQuery(IUniprotAdapter.ID_FIELD,uniprotIdPrefix);
         QueryEntryByIdCaller caller = new QueryEntryByIdCaller(query, defaultSpecies);
-        enzymeSummary.setRelatedspecies( caller.getSpecies());
+        enzymeSummary.setRelatedspecies( caller.getSpecies(true));
     }
     public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies)
             throws MultiThreadingException {

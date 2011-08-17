@@ -61,16 +61,38 @@ public class UniprotCallable {
 
     public static class GetEntriesCaller implements Callable<EnzymeSummary> {
         protected String accession;
+        protected boolean entryPage;
         public GetEntriesCaller() {
         }
-        public GetEntriesCaller(String accession) {
+
+        public GetEntriesCaller(String accession, boolean entryPage) {
             this.accession = accession;
+            this.entryPage = entryPage;
         }
+
 
 
         public EnzymeSummary call() throws Exception {
             return getEnzymeEntry();
         }
+
+        public String getAccession() {
+            return accession;
+        }
+
+        public void setAccession(String accession) {
+            this.accession = accession;
+        }
+
+        public boolean isEntryPage() {
+            return entryPage;
+        }
+
+        public void setEntryPage(boolean entryPage) {
+            this.entryPage = entryPage;
+        }
+
+
 
         public EnzymeSummary getEnzymeEntry()  {
             //Retrieve UniProt entry by its accession number
@@ -79,17 +101,17 @@ public class UniprotCallable {
             return setEnzymeProperties(entry);
         }
 
-        public EnzymeSummary getEnzymeEntry(boolean moreDetail)  {
+        public EnzymeSummary getEnzymeEntryDetails()  {
             //Retrieve UniProt entry by its accession number
             UniProtEntry entry = (UniProtEntry) entryRetrievalService
                     .getUniProtEntry(accession);
-            return setEnzymeProperties(entry, moreDetail);
+            return setEnzymeProperties(entry);
         }
 
-    public EnzymeSummary setEnzymeProperties(UniProtEntry entry, boolean moreDetail) {
+    public EnzymeSummary setEnzymePropertyDetails(UniProtEntry entry) {
         EnzymeSummary enzymeModel = null;
         enzymeModel = setEnzymeProperties(entry);
-        if (moreDetail) {
+        if (entryPage) {
             setEnzymeProperties(entry, (EnzymeModel)enzymeModel);
         }
         return enzymeModel;
@@ -208,15 +230,12 @@ public class UniprotCallable {
         }
 */
         public EnzymeSummary queryEntry()  {
-            //Retrieve UniProt entry by its accession number
-            
-            //Query uniprotQuery = UniProtQueryBuilder.buildFullTextSearch(query);
-            List<EnzymeAccession> speciesList = getSpecies();
+            List<EnzymeAccession> speciesList = getSpecies(false);
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
                 GetEntriesCaller caller = new GetEntriesCaller(
-                topSpecies.getUniprotaccessions().get(0));
+                topSpecies.getUniprotaccessions().get(0), false);
                 //Retieve the main entry
                 enzymeSummary = caller.getEnzymeEntry();
 
@@ -237,7 +256,7 @@ public class UniprotCallable {
             return enzymeSummary;
         }
 
-        public List<EnzymeAccession> getSpecies() {
+        public List<EnzymeAccession> getSpecies(boolean entryPage) {
              AttributeIterator<UniProtEntry> attributes  = queryService
                      .getAttributes(uniprotQuery, "ognl:organism");
              List<EnzymeAccession> accSpeciesList = new ArrayList<EnzymeAccession>();
@@ -258,6 +277,9 @@ public class UniprotCallable {
                     accSpeciesList.add(enzymeAccession);
                  }
 
+                if (!entryPage && accSpeciesList.size() == 20) {
+                    break;
+                }
              }
              return accSpeciesList;
         }
