@@ -155,5 +155,6 @@
     <module>uniprot-adapter</module>
     <module>intenz-adapter</module>
     <module>reactome-adapter</module>
+    <module>das-adapter</module>
   </modules>
 </project>
