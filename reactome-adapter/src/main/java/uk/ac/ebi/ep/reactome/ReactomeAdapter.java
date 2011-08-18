@@ -1,9 +1,17 @@
 package uk.ac.ebi.ep.reactome;
 
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.axis.client.Call;
 import org.reactome.cabig.domain.Event;
 import org.reactome.cabig.domain.Pathway;
@@ -43,6 +51,40 @@ public class ReactomeAdapter implements IReactomeAdapter{
             e.printStackTrace();
         }
     }
+
+   public Map<String,String> parseUrl(String reactionAccession) throws MalformedURLException, IOException {
+       String reactomeBaseUrl = "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID/";
+       String reactomeUrl = reactomeBaseUrl+reactionAccession;
+        URL oracle = new URL(reactomeUrl);
+        URLConnection uCon = oracle.openConnection();
+        BufferedReader in = new BufferedReader(
+                                new InputStreamReader(
+                                uCon.getInputStream()));
+        String inputLine;
+        String pathwayId = null;
+        String reactionId = null;
+        while ((inputLine = in.readLine()) != null)
+
+            if (inputLine.contains("PATHWAY_ID")) {
+                String formString = inputLine;
+                int start = formString.indexOf("action")+8;
+                int end = formString.indexOf("method")-3;
+                String stringUrl = inputLine.substring(start,end);
+                //URL url = new URL("http://www.reactome.org"+stringUrl);
+                //url.get
+                String[] split1 = stringUrl.split("&");
+                pathwayId = split1[2].split("=")[1];
+                reactionId = split1[3].split("=")[1];
+                System.out.println(pathwayId);
+                System.out.println(reactionId);
+                ///entitylevelview/PathwayBrowser.html#DB=test_reactome_37&FOCUS_SPECIES_ID=48887&FOCUS_PATHWAY_ID=156580&ID=176606
+            }
+       in.close();
+       Map<String, String> reactionPathway = new HashMap<String, String>();
+       reactionPathway.put(reactionId, pathwayId);
+       return reactionPathway;
+   }
+
     public static void generatePathwayDiagramInSVG(Call call) throws Exception {
         Pathway pathway = new Pathway();
         //pathway.setId(69278L);
