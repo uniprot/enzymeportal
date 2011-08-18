@@ -15,3 +15,25 @@
 .tab.molecule .inner_tab .icon {
 	background-image: url("../images/molecule.png");
 }
+
+#equation img {
+    border: none;
+}
+
+#reaction fieldset {
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+}
+
+#equation table {
+    text-align: center;
+    width: 100%;
+}
+.inlineLinks {
+    display: inline-table;
+    margin-left: 10px;
+    margin-right: 20px;
+    margin-top: 10px;
+     margin-bottom: 10px;
+}
