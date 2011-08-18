@@ -77,14 +77,17 @@ public class ReactomeClient {
         try {
             reactomeClient.initReactomeService();
             //211000,74160
+            //queryById will be used to query everything
             //reactomeClient.testCaBIO();
-            reactomeClient.testQueryPathwaysForReferenceEntities();
+            //This will be used to query pathways and reactions?
+            //reactomeClient.testQueryPathwaysForReferenceEntities();
             //reactomeClient.generatePathwayDiagramInSVG();
             //reactomeClient.testBatchLoading();
             //reactomeClient.outputBioPAX();
-            //reactomeClient.testLoadPathway();
+           //reactomeClient.testLoadPathway();
 
-           // reactomeClient.testReaction();
+           //reactomeClient.testReaction();
+           reactomeClient.testForActualExample();
 
         }
         catch(Exception e) {
@@ -145,7 +148,7 @@ public class ReactomeClient {
         Call call = createCall("queryByIds");
         // call.setSOAPVersion(SOAPConstants.SOAP12_CONSTANTS);
         List<Long> ids = new ArrayList<Long>();
-        ids.add(new Long(176606)); //418553
+        ids.add(new Long(418457)); //418553
         //ids.add(109581L);
         //ids.add(76031L);
         //ids.add(110654L);
@@ -189,13 +192,15 @@ public class ReactomeClient {
         // These two pathways don't work correctly: 163200 should be loaded first
         // but not. To much memory is used for this pathway
         Long[] ids = new Long[] {
-            418346L,
+            418457L
+            //418346L,
             //163200L
         };
         for (Long id : ids) {
             Pathway pathway = (Pathway) call.invoke(new Object[]{id});
             printOutput(pathway);
         }
+        /*
         //A contained Pathway in Apoptosis
         Pathway pathway = (Pathway) call.invoke(new Object[]{109581L});
         printOutput(pathway);
@@ -210,6 +215,8 @@ public class ReactomeClient {
         call = createCall("loadPathwayForObject");
         pathway = (Pathway) call.invoke(new Object[]{pathway});
         //showCall(call);
+         * *
+         */
     }
 
     public void generatePathwayDiagramInSVG() throws Exception {
@@ -235,11 +242,20 @@ public class ReactomeClient {
         //identifiers[2] = "P20248";
         Call call = null;
         String[] identifiers = new String[1];
-        identifiers[0] = "P61218";
-        //identifiers[0] = "REACT_6763.1";
+        //identifiers[0] = "P61218";
+        //OK for Uniprot ref, but not for Rhea
+        //identifiers[0] = "1.1.1.37";
+        //Reaction
+        identifiers[0] = "REACT_6763.1";
+        //identifiers[0] = "REACT_710.4";
+
+        //identifiers[0] = "388396";
+        //identifiers[0] = "418553";
+
+        //identifiers[0] = "3.1.3.7";
         call = createCall("queryPathwaysForReferenceIdentifiers");
         Pathway[] pathways = (Pathway[]) call.invoke(new Object[]{identifiers});
-        this.parsePathways(pathways);
+        //this.parsePathways(pathways);
         long time2 = System.currentTimeMillis();
         System.out.printf("Pathway for a list of identifiers: %d (%d)%n",
                 pathways.length, (time2 - time1));
@@ -305,15 +321,18 @@ public class ReactomeClient {
         System.out.println("Human Taxon: " + humanTaxon);
          *
          */
-        Object[] rtn = callQuery(Reaction.class.getName(),
+        Object[] rtn = callQuery(Summation.class.getName(),
                 "id",
-                "176606",
+                "418458",
                 paras,
                 call);
+        //paras[0]="id";
+        //paras[1]= new Long(418458);
+        //paras[2]=call;
         System.out.printf("Total human pathways: %d%n", rtn.length);
         for (int i = 0; i < rtn.length; i++) {
-            Reaction reaction = (Reaction) rtn[i];
-            System.out.printf("%d -> %s%n", reaction.getId(), reaction.getName());
+            Summation reaction = (Summation) rtn[i];
+            System.out.printf("%d -> %s%n", reaction.getId(), reaction.getText());
         }
 
     }
@@ -370,7 +389,9 @@ public class ReactomeClient {
         Call call = createCall("queryById");
         // Test cases
 
-        int[] dbIds = new int[]{176606
+        int[] dbIds = new int[]{
+            //211859
+            176606
             /*
                 76131, // ReferenceMolecule
                 30390, // DatabaseIdentifier
@@ -719,5 +740,118 @@ public class ReactomeClient {
 //            new ArrayDeserializerFactory(componentModel));
     }
 
+    /**
+     * Test the operation of listObjects for a specified class name.
+     * @throws Exception
+     */
+    public void testListObjects() throws Exception {
+        Call call = createCall("listObjects");
+        String[] domainClsNames = new String[]{
+//              "org.reactome.cabig.domain.CatalystActivity",
+//              "org.reactome.cabig.domain.Complex",
+//              "org.reactome.cabig.domain.DatabaseCrossReference",
+//              "org.reactome.cabig.domain.EventEntity",
+//              "org.reactome.cabig.domain.EventEntitySet",
+//              "org.reactome.cabig.domain.EventSet",
+//              "org.reactome.cabig.domain.GeneOntology",
+//              "org.reactome.cabig.domain.GenomeEncodedEntity",
+//              "org.reactome.cabig.domain.ModifiedResidue",
+//              "org.reactome.cabig.domain.Pathway",
+//              "org.reactome.cabig.domain.Polymer",
+//              "org.reactome.cabig.domain.PublicationSource",
+                "org.reactome.cabig.domain.Reaction",
+//              "org.reactome.cabig.domain.ReferenceChemical",
+//              "org.reactome.cabig.domain.ReferenceGene",
+//              "org.reactome.cabig.domain.ReferenceProtein",
+//              "org.reactome.cabig.domain.ReferenceRNA",
+//              "org.reactome.cabig.domain.Regulation",
+//              "org.reactome.cabig.domain.Regulator",
+//              "org.reactome.cabig.domain.SmallMoleculeEntity",
+//              "org.reactome.cabig.domain.Summation",
+//              "org.reactome.cabig.domain.Taxon"
+        };
+        StringBuilder counterOutput = new StringBuilder();
+        int total = 0;
+        int length = getMaxSizeInListObjects();
+        for (String clsName : domainClsNames) {
+            System.out.println("Loading " + clsName + "...");
+            total = 0;
+            long time1 = System.currentTimeMillis();
+            // Remember: the returned object will be an array, not a Collection.
+            Object[] objects = null;
+            StringBuilder output = new StringBuilder();
+            // Try two cycles
+            int counter = 0;
+            while (counter < 2) {
+                objects = (Object[]) call.invoke(new Object[]{clsName, total, length});
+                if (objects == null || objects.length == 0)
+                    break;
+                for (int i = 0; i < objects.length; i++) {
+                    output.append(objects[i].toString());
+                    output.append("\n");
+                }
+                total += objects.length;
+                System.out.println("total: " + total);
+                counter ++;
+            }
+            System.out.println(output.toString());
+            counterOutput.append(clsName + ": " + total + "\n");
+            long time2 = System.currentTimeMillis();
+            System.out.println("Time: " + (time2 - time1));
+        }
+        System.out.println("Counter:\n" + counterOutput.toString());
+        //showCall(call);
+    }
 
+        /**
+     * Test the operation of getmaxSizeInListObjects.
+     * @throws Exception
+     */
+    public void testGetMaxSizeInListObjects() throws Exception {
+        Call call = createCall("getMaxSizeInListObjects");
+        Integer rtn = (Integer) call.invoke(EMPTY_ARG);
+        System.out.println("getMaxSizeInListObjects: " + rtn);
+    }
+
+    private int getMaxSizeInListObjects() throws Exception {
+        Call call = createCall("getMaxSizeInListObjects");
+        Integer rtn = (Integer) call.invoke(EMPTY_ARG);
+        return rtn;
+    }
+
+public void testForActualExample() throws Exception {
+        String[] ids = new String[]{
+                "ENSMUSP00000029610",
+                "ENSMUSP00000029610",
+                "ENSMUSP00000004192"
+        };
+        Call call = createCall("listByQuery");
+        
+        Object[] paras = new Object[3];
+        paras[0] = ReferenceEntity.class.getName();
+        paras[1] = "ST_ID";
+        Set entities = new HashSet();
+        for (int i = 0; i < ids.length; i++) {
+            paras[2] = "REACT_6763.1";
+            Object[] rtn = (Object[]) call.invoke(paras);
+            entities.addAll(Arrays.asList(rtn));
+        }
+        call = createCall("queryPathwaysForEntities");
+        Pathway[] pathways = (Pathway[]) call.invoke(new Object[]{entities.toArray()});
+        System.out.printf("queryPathwaysForEntities: %d%n", pathways.length);
+        outputArray(pathways);
+        
+        /*
+        String[] identifiers = new String[]{
+                //"NM_010578", "NM_016898", "NM_153088", "NM_011962", "NM_010683",
+                //"NM_145558", "NM_008212", "NM_198710", "NM_022305", "NM_145418",
+                //"NM_009498"};
+            "REACT_6763.1"};
+        call = createCall("queryPathwaysForReferenceIdentifiers");
+        Pathway[] pathways = (Pathway[]) call.invoke(new Object[]{identifiers});
+        System.out.printf("queryPathwaysForReferenceIdentifiers: %d%n", pathways.length);
+        outputArray(pathways);
+         * 
+         */
+    }
 }
