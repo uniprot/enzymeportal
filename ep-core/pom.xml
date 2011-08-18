@@ -7,6 +7,13 @@
   <version>1.0-SNAPSHOT</version>
   <name>EnzymePortalCore</name>
   <url>http://maven.apache.org</url>
+  
+  <parent>
+  	<groupId>uk.ac.ebi.ep</groupId>
+  	<artifactId>ep</artifactId>
+  	<version>1.0-SNAPSHOT</version>
+  </parent>
+  
     <build>
         <plugins>
             <plugin>
@@ -29,15 +36,7 @@
             </plugin>
         </plugins>
     </build>
-    <!--
-    <repositories>
-        <repository>
-            <id>ebi-repo</id>
-            <name>>ebi-repo</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
-        </repository>
-    </repositories>
-        -->
+
     <dependencies>
         <dependency>
           <groupId>uk.ac.ebi.ep</groupId>
@@ -100,6 +99,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ebeye-adapter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>das-adapter</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
