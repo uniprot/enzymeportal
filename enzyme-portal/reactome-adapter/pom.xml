@@ -20,14 +20,15 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.reactome</groupId>
+      <groupId>org.sbml</groupId>
       <artifactId>jsbml</artifactId>
-      <version>0.8-b1-with-dependencies</version>
+      <version>0.8-b1</version>
+      <classifier>with-dependencies</classifier>
     </dependency>
     <dependency>
       <groupId>org.reactome</groupId>
       <artifactId>reactome-ws</artifactId>
-      <version>1.0</version>
+      <version>20110818</version>
     </dependency>
     <dependency>
       <groupId>jdom</groupId>
@@ -46,8 +47,8 @@
     </dependency>
     <dependency>
       <groupId>org.reactome</groupId>
-      <artifactId>client</artifactId>
-      <version>1.0</version>
+      <artifactId>reactome-client</artifactId>
+      <version>20110818</version>
     </dependency>
      <dependency>
             <groupId>${project.groupId}</groupId>
