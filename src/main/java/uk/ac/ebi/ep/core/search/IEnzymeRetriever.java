@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.util.List;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 
