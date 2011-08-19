@@ -324,8 +324,14 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
         List<String> pdbIds = enzymeModel.getPdbeaccession();
     	try {
-			Collection<SegmentAdapter> features = pdbeAdapter.getFeatures(pdbIds);
+			Collection<SegmentAdapter> segments = pdbeAdapter.getFeatures(pdbIds);
 			// TODO: fill enzymeModel with structure(s)
+            for (SegmentAdapter segment : segments){
+                String pdbCode = segments.getId();
+                for (FeatureAdapter feature : segment.getFeature()){
+                    
+                }
+            }
 		} catch (MalformedURLException e) {
 	        throw new EnzymeRetrieverException("Wrong URL");
 		} catch (JAXBException e) {
