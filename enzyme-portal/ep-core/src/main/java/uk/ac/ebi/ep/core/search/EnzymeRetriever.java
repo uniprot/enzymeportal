@@ -2,13 +2,15 @@ package uk.ac.ebi.ep.core.search;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Equation;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
+import uk.ac.ebi.ep.reactome.IReactomeAdapter;
+import uk.ac.ebi.ep.reactome.ReactomeAdapter;
+import uk.ac.ebi.ep.reactome.ReactomeFetchDataException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.rhea.domain.Database;
@@ -24,7 +26,7 @@ import uk.ac.ebi.rhea.ws.response.cmlreact.Reactant;
 import uk.ac.ebi.rhea.ws.response.cmlreact.ReactantList;
 import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 import uk.ac.ebi.xchars.SpecialCharacters;
-import uk.ac.ebi.xchars.domain.EncodingType;
+
 
 /**
  *
@@ -39,8 +41,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 //********************************* VARIABLES ********************************//
     protected String accesion;
     protected IRheaAdapter rheaAdapter;
+    private static Logger log = Logger.getLogger(EnzymeRetriever.class);
 
-    //protected IReactomeAdapter reactomeAdapter;
+    protected IReactomeAdapter reactomeAdapter;
     public String getAccesion() {
         return accesion;
     }
@@ -52,7 +55,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever() {
         rheaAdapter = new RheasResourceClient();
-        //reactomeAdapter = new ReactomeAdapter();
+        reactomeAdapter = new ReactomeAdapter();
     }
 
 //****************************** GETTER & SETTER *****************************//
@@ -97,6 +100,23 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
         getReactionsPathways(enzymeModel);
+        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+        for (ReactionPathway reactionPathway: reactionPathways) {
+            List<Object> links = reactionPathway.getPathways();
+            EnzymeReaction enzymeReaction = reactionPathway.getReaction();
+            for (Object link: links) {
+                Link castedLink = (Link)link;
+                String reactomeUrl = castedLink.getHref();
+                try {
+                    String[] result = this.reactomeAdapter.getReaction(reactomeUrl);
+                    if (result.length > 1){
+                        enzymeReaction.setDescription(result[1]);
+                    }
+                } catch (ReactomeFetchDataException ex) {
+                    log.error("Failed to retrieve reaction desciption for " +reactomeUrl);
+                }
+            }
+        }        
         return enzymeModel;
     }
 
