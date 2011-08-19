@@ -14,10 +14,11 @@ import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Equation;
+import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.reactome.IReactomeAdapter;
 import uk.ac.ebi.ep.reactome.ReactomeAdapter;
-import uk.ac.ebi.ep.reactome.ReactomeFetchDataException;
+import uk.ac.ebi.ep.reactome.ReactomeServiceException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.rhea.domain.Database;
@@ -109,17 +110,16 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         getReactionsPathways(enzymeModel);
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
         for (ReactionPathway reactionPathway: reactionPathways) {
-            List<Object> links = reactionPathway.getPathways();
+            List<Pathway> pathways = reactionPathway.getPathways();
             EnzymeReaction enzymeReaction = reactionPathway.getReaction();
-            for (Object link: links) {
-                Link castedLink = (Link)link;
-                String reactomeUrl = castedLink.getHref();
+            for (Pathway pathway: pathways) {
+                String reactomeUrl = (String)pathway.getUrl();
                 try {
                     String[] result = this.reactomeAdapter.getReaction(reactomeUrl);
                     if (result.length > 1){
                         enzymeReaction.setDescription(result[1]);
                     }
-                } catch (ReactomeFetchDataException ex) {
+                } catch (ReactomeServiceException ex) {
                     log.error("Failed to retrieve reaction desciption for " +reactomeUrl);
                 }
             }
@@ -218,10 +218,25 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         List<Object> mecList = getMechanismLinks(linkList);
         reactionPathway.setMechanism(mecList);
         List<Object> pwList = getPathwayLinks(linkList);
-        reactionPathway.setPathways(pwList);
+        setPathwayUrls(reactionPathway,pwList);
         return reactionPathway;
     }
 
+    public void setPathwayUrls(ReactionPathway reactionPathway, List<Object> urls) {
+        List<Pathway> pathways = reactionPathway.getPathways();
+        if (pathways == null) {
+            pathways = new ArrayList<Pathway>();
+            reactionPathway.setPathways(pathways);
+            pathways = reactionPathway.getPathways();
+        }
+        for (Object url:urls) {
+            Link urlString = (Link)url;
+            Pathway pathway = new Pathway();
+            pathway.setUrl(urlString.getHref());
+            pathways.add(pathway);
+        }
+
+    }
     public String createReactionTitle(Equation equation) {
         StringBuffer sb = new StringBuffer();
         List<Object> reacanttList = equation.getReactantlist();
