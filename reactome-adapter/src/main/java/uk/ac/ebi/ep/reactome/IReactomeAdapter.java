@@ -1,7 +1,5 @@
 package uk.ac.ebi.ep.reactome;
 
-import java.util.List;
-import org.reactome.cabig.domain.Reaction;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 
 /**
@@ -27,6 +25,6 @@ public interface IReactomeAdapter {
 
     public EnzymeModel getPathways(String uniprotAccession);
 
-    public Reaction getReaction(String reactomeReactionAccession);
+    public String[] getReaction(String reactomeUrl)throws ReactomeFetchDataException;
 
 }

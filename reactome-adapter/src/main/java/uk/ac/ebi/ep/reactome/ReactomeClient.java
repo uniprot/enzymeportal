@@ -78,7 +78,7 @@ public class ReactomeClient {
             reactomeClient.initReactomeService();
             //211000,74160
             //queryById will be used to query everything
-            //reactomeClient.testCaBIO();
+            reactomeClient.testCaBIO();
             //This will be used to query pathways and reactions?
             //reactomeClient.testQueryPathwaysForReferenceEntities();
             //reactomeClient.generatePathwayDiagramInSVG();
