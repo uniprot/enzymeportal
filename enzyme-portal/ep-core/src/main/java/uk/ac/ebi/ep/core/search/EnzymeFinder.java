@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.IDASFeaturesAdapter;
+import uk.ac.ebi.ep.adapter.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
@@ -72,6 +73,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
         uniprotAdapter = new UniprotAdapter();
+        pdbeAdapter = new SimpleDASFeaturesAdapter();
     }
 
 
