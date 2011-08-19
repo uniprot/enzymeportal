@@ -10,18 +10,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.axis.client.Call;
 import org.reactome.cabig.domain.Event;
 import org.reactome.cabig.domain.Pathway;
 import org.reactome.cabig.domain.Reaction;
 import org.reactome.cabig.domain.Summation;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 
 /**
  *
@@ -34,7 +29,11 @@ import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 public class ReactomeAdapter implements IReactomeAdapter{
 
 //********************************* VARIABLES ********************************//
+    protected ReactomeServiceConfig reactomeService;
 
+    public ReactomeAdapter() {
+        reactomeService = new ReactomeServiceConfig();
+    }
 //******************************** CONSTRUCTORS ******************************//
 
 
@@ -44,7 +43,7 @@ public class ReactomeAdapter implements IReactomeAdapter{
 //********************************** METHODS *********************************//
 
     public static void main(String[] args) {
-        ServiceInitializer serviceInitializer = new ServiceInitializer();
+        ReactomeServiceConfig serviceInitializer = new ReactomeServiceConfig();
         //Call diagramCall = serviceInitializer.generatePathwayDiagramInSVGNewCall();
         //Call queryById = serviceInitializer.getQueryByIdCall();
         ReactomeAdapter reactomeAdapter = new ReactomeAdapter();
@@ -53,7 +52,9 @@ public class ReactomeAdapter implements IReactomeAdapter{
             //testQueryPathwaysForReferenceEntities(getRefCall);
             //generatePathwayDiagramInSVG(diagramCall);
             //reactomeAdapter.parseUrl();
-            reactomeAdapter.getReaction("http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_6763.1");
+            //reactomeAdapter.getReaction("http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_6763.1");
+            Object[] results = reactomeAdapter.getReactionPathway("http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_6763.1");
+            System.out.print(results);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -61,62 +62,76 @@ public class ReactomeAdapter implements IReactomeAdapter{
         
     }
 
-    public String[] getReaction(String reactomeUrl)throws ReactomeFetchDataException{
-        String[] pathwayAndReactionIds = null;
+    public Object[] getReactionAndPathwayByIds(Long[] ids) throws Exception {
+        Call call = this.reactomeService.getQueryByIdsCall();
+        Object[] eventObjects = (Object[]) call.invoke(new Object[]{ids});
+        System.out.println("Output from queryByIds(): " + eventObjects.length);
+        return eventObjects;
+    }
+
+    public Reaction getReactomeReaction(Long reactomeReactionId) throws ReactomeFetchDataException {
+        Call call = reactomeService.getQueryByIdCall();
+        Reaction reaction = null;
+        try {
+            reaction = (Reaction) call.invoke(new Object[]{reactomeReactionId});
+        } catch (RemoteException ex) {
+            throw new ReactomeFetchDataException(
+                    "Failed to get the reaction " +reactomeReactionId +" from Reactome WS! ", ex);
+        }
+        return reaction;
+    }
+
+    public Object[] getReactionPathway(String reactomeUrl)throws ReactomeServiceException{
+        Long[] pathwayAndReactionIds = null;
+        try {
+            pathwayAndReactionIds = ReactomeUtil.parseUrl(reactomeUrl);
+        } catch (MalformedURLException ex) {
+            throw new ReactomeConnectionException(
+                    "Failed to create the URL for " +reactomeUrl, ex);
+        } catch (IOException ex) {
+            throw new ReactomeFetchDataException(
+                    "Failed to get reaction and pathway ids from Reactome Web site! ", ex);
+        }
+        Object[] objs = null;
+        try {
+            objs = getReactionAndPathwayByIds(pathwayAndReactionIds);
+        } catch (Exception ex) {
+            throw new ReactomeServiceException(ex);
+        }
+        return objs;
+    }
+
+
+    public String[] getReaction(String reactomeUrl)throws ReactomeServiceException{
+        Long[] reactionAndPathwayIds = null;
         String[] pathwayidAndReactionDesc = new String[2];
         try {
-            pathwayAndReactionIds = this.parseUrl(reactomeUrl);
+            reactionAndPathwayIds = ReactomeUtil.parseUrl(reactomeUrl);
         } catch (MalformedURLException ex) {
-            throw new ReactomeFetchDataException (
-                    "Unable create the URL for " +reactomeUrl);
+            throw new ReactomeConnectionException(
+                    "Failed to create the URL for " +reactomeUrl, ex);
         } catch (IOException ex) {
-            Logger.getLogger(ReactomeAdapter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //this.getPathwaysByXrefIds(null);
-        //this.ge
-        ServiceInitializer serviceInitializer = new ServiceInitializer();
-        Call call = serviceInitializer.getQueryByIdCall();
-        StringBuffer sb = new StringBuffer();
+            throw new ReactomeFetchDataException(
+                    "Failed to get reaction and pathway ids from Reactome Web site! ", ex);
+        }                
+        Long reactionId = reactionAndPathwayIds[0];
+        Reaction reaction = getReactomeReaction(reactionId);
+        /*
         try {
-            Reaction reaction = (Reaction)call.invoke(new Object[]{new Long(pathwayAndReactionIds[1])});
-            List<Summation> summations = reaction.getSummation();
-            for (Summation summation:summations) {
-                sb.append(summation.getText());
-                sb.append("\n");
-            }
-            long pathwayId = reaction.getId();
-            pathwayidAndReactionDesc[0] =String.valueOf(pathwayId);
-            pathwayidAndReactionDesc[1] = sb.toString();
+            Pathway pathway = (Pathway) call.invoke(new Object[]{new Long(pathwayAndReactionIds[0])});
         } catch (RemoteException ex) {
-            throw new ReactomeFetchDataException (
-                    "Call to Reactome WS failed for reaction " +reactomeUrl);
+            throw new ReactomeFetchDataException(
+                    "Failed to get the pathway from Reactome WS! ", ex);
         }
+         *
+         */
+
+        long pathwayId = reaction.getId();
+        pathwayidAndReactionDesc[0] = String.valueOf(pathwayId);
+//        pathwayidAndReactionDesc[1] = ReactomeUtil.getReactionDescription(reaction);
 
         return pathwayidAndReactionDesc;
     }
-
-   public String[] parseUrl(String reactomeReactionUrl) throws MalformedURLException, IOException {
-        URL url = new URL(reactomeReactionUrl);
-        URLConnection uCon = url.openConnection();
-        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(
-                                uCon.getInputStream()));
-        String inputLine;
-        String pathwayId = null;
-        String reactionId = null;
-        while ((inputLine = in.readLine()) != null)
-        if (inputLine.startsWith("<form")) {
-            String formString = inputLine;
-            String[] split1 = formString.split("&");
-            pathwayId = split1[2].split("=")[1];
-            reactionId = split1[3].split("=")[1];
-            System.out.println(pathwayId);
-            System.out.println(reactionId);
-        }
-       in.close();
-       String[] pathwayAndReactionIds = {pathwayId, reactionId};
-       return pathwayAndReactionIds;
-   }
 
     public static void generatePathwayDiagramInSVG(Call call) throws Exception {
         Pathway pathway = new Pathway();

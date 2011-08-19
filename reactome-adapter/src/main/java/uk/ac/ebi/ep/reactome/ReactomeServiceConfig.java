@@ -1,36 +1,14 @@
 package uk.ac.ebi.ep.reactome;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Method;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
-import javax.xml.rpc.ParameterMode;
 import javax.xml.rpc.ServiceException;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.Name;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPBodyElement;
-import javax.xml.soap.SOAPConnection;
-import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
 
-import junit.framework.TestCase;
 
-import org.apache.axis.Message;
-import org.apache.axis.MessageContext;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
 import org.apache.axis.encoding.ser.ArrayDeserializerFactory;
@@ -52,7 +30,7 @@ import org.reactome.servlet.ReactomeRemoteException;
  *          $Author$
  * @author  $Author$
  */
-public class ServiceInitializer {
+public class ReactomeServiceConfig {
 
 //********************************* VARIABLES ********************************//
     private static final String SERVICE_URL_NAME="http://www.reactome.org:8080/caBIOWebApp/services/caBIOService";    
@@ -61,11 +39,12 @@ public class ServiceInitializer {
 
     private static Call generatePathwayDiagramInSVGCall = createCall("generatePathwayDiagramInSVG");
     private static Call queryPathwaysByXrefIdsCall = createCall("queryPathwaysForReferenceIdentifiers");
+    private static Call queryByIdsCall = createCall("queryByIds");
     private static Call queryByIdCall = createCall("queryById");
 
    
 
-    public ServiceInitializer() {
+    public ReactomeServiceConfig() {
     }
 
     public Call getGeneratePathwayDiagramInSVGCall() {
@@ -79,6 +58,10 @@ public class ServiceInitializer {
     public Call getQueryPathwaysByXrefIdsCall() {
         return queryPathwaysByXrefIdsCall;
     }
+
+    public Call getQueryByIdsCall() {
+        return queryByIdsCall;
+    }
 //******************************** CONSTRUCTORS ******************************//
 
 
@@ -87,7 +70,7 @@ public class ServiceInitializer {
 
 //********************************** METHODS *********************************//
     public static void main(String[] args) throws RemoteException {
-        ServiceInitializer serviceInitializer = new ServiceInitializer();
+        ReactomeServiceConfig serviceInitializer = new ReactomeServiceConfig();
         Call call = serviceInitializer.getQueryByIdCall();
         Object obj = call.invoke(new Object[]{new Long("176606")});
     }
@@ -99,12 +82,12 @@ public class ServiceInitializer {
         try {
             soapFactory = SOAPFactory.newInstance();
         } catch (SOAPException ex) {
-            Logger.getLogger(ServiceInitializer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReactomeServiceConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             caBIOService = new Service(SERVICE_URL_NAME + "?wsdl", new QName(SERVICE_URL_NAME, "CaBioDomainWSEndPointService"));
         } catch (ServiceException ex) {
-            Logger.getLogger(ServiceInitializer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReactomeServiceConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
         String portName = "caBIOService";
         Call call = null;
@@ -112,7 +95,7 @@ public class ServiceInitializer {
             call = (Call) caBIOService.createCall(new QName(SERVICE_URL_NAME, portName),
                                                    callName);
         } catch (ServiceException ex) {
-            Logger.getLogger(ServiceInitializer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReactomeServiceConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
         registerTypeMappings(call);
         return call;
