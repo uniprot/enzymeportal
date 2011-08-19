@@ -65,7 +65,7 @@
 	<xs:complexType name="ReactionPathway">
 		<xs:sequence>
 			<xs:element name="reaction" type="epe:EnzymeReaction" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="pathways" type="xs:anySimpleType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="pathways" type="epe:Pathway" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="mechanism" type="xs:anySimpleType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -77,13 +77,13 @@
 			<xs:element name="sequenceurl" type="xs:string" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:element name="EnzymeReaction" type="epe:EnzymeReaction"/>
-	<xs:complexType name="EnzymeReaction">
+	<xs:element name="Pathway" type="epe:Pathway"/>
+	<xs:complexType name="Pathway">
 		<xs:sequence>
 			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="equation" type="epe:Equation" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="url" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Equation" type="epe:Equation"/>
@@ -93,5 +93,15 @@
 			<xs:element name="direction" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="productlist" type="xs:anySimpleType" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="EnzymeReaction" type="epe:EnzymeReaction"/>
+	<xs:complexType name="EnzymeReaction">
+		<xs:complexContent>
+			<xs:extension base="epe:Pathway">
+				<xs:sequence>
+					<xs:element name="equation" type="epe:Equation" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>
