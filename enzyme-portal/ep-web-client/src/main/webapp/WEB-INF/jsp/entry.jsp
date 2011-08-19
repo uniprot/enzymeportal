@@ -352,6 +352,9 @@
                                                             </tr>
                                                         </table>
                                                         </div>
+                                                                <div id="reactionDesc">
+                                                                    <c:out value="${reaction.description}"/>
+                                                                </div>
                                                            <div id="rheaExtLinks">
                                                             <div id="rheaLink" class="inlineLinks">
                                                                 <a target="blank" href="${rheaEntryUrl}">
