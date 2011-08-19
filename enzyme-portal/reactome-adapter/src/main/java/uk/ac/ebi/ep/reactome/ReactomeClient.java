@@ -78,16 +78,16 @@ public class ReactomeClient {
             reactomeClient.initReactomeService();
             //211000,74160
             //queryById will be used to query everything
-            reactomeClient.testCaBIO();
+            //reactomeClient.testCaBIO();
             //This will be used to query pathways and reactions?
             //reactomeClient.testQueryPathwaysForReferenceEntities();
             //reactomeClient.generatePathwayDiagramInSVG();
-            //reactomeClient.testBatchLoading();
+            reactomeClient.testBatchLoading();
             //reactomeClient.outputBioPAX();
            //reactomeClient.testLoadPathway();
 
            //reactomeClient.testReaction();
-           reactomeClient.testForActualExample();
+           //reactomeClient.testForActualExample();
 
         }
         catch(Exception e) {
@@ -148,7 +148,8 @@ public class ReactomeClient {
         Call call = createCall("queryByIds");
         // call.setSOAPVersion(SOAPConstants.SOAP12_CONSTANTS);
         List<Long> ids = new ArrayList<Long>();
-        ids.add(new Long(418457)); //418553
+        ids.add(new Long(176606)); //418553
+        ids.add(new Long(156580)); //418553
         //ids.add(109581L);
         //ids.add(76031L);
         //ids.add(110654L);
