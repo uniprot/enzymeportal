@@ -36,7 +36,7 @@
 			<xs:extension base="ep:EnzymeSummary">
 				<xs:sequence>
 					<xs:element name="enzyme" type="epe:Enzyme" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="proteinstructure" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="proteinstructure" type="epe:ProteinStructure" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="reactionpathway" type="epe:ReactionPathway" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="requestedfield" type="xs:string" minOccurs="1" maxOccurs="1"/>
 				</xs:sequence>
