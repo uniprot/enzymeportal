@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
+import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
@@ -327,7 +328,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 			Collection<SegmentAdapter> segments = pdbeAdapter.getFeatures(pdbIds);
 			// TODO: fill enzymeModel with structure(s)
             for (SegmentAdapter segment : segments){
-                String pdbCode = segments.getId();
+                //String pdbCode = segments.getId();
                 for (FeatureAdapter feature : segment.getFeature()){
                     
                 }
