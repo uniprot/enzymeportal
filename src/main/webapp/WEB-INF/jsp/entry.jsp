@@ -289,6 +289,7 @@
                                     <div class="node">
                                         <div class="view">
                                             <spring:message code="label.entry.underconstruction"/>
+                                        	<%@include file="proteinStructure.jsp" %>
                                         </div>
                                     </div>
                                 </c:if>

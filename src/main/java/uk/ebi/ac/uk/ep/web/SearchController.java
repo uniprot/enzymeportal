@@ -76,7 +76,7 @@ public class SearchController {
         switch (requestedField) {
             case proteinStructure: {
                 try {
-                    enzymeModel = retriever.getEnzyme(accession);
+                    enzymeModel = retriever.getProteinStructure(accession);
                 } catch (EnzymeRetrieverException ex) {
                     log.error("Unable to retrieve the entry!",  ex);
                 }
