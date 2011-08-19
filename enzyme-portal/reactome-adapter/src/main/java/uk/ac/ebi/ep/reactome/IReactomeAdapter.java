@@ -25,6 +25,8 @@ public interface IReactomeAdapter {
 
     public EnzymeModel getPathways(String uniprotAccession);
 
-    public String[] getReaction(String reactomeUrl)throws ReactomeFetchDataException;
+    public String[] getReaction(String reactomeUrl)throws ReactomeServiceException;
+
+    public Object[] getReactionPathway(String reactomeUrl)throws ReactomeServiceException;
 
 }

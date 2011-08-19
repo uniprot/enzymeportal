@@ -8,21 +8,21 @@ package uk.ac.ebi.ep.reactome;
  *          $Author$
  * @author  $Author$
  */
-public class ReactomeFetchDataException extends Exception{
+public class ReactomeFetchDataException extends ReactomeServiceException{
 
-    public ReactomeFetchDataException(Throwable cause) {
-        super(cause);
-    }
-
-    public ReactomeFetchDataException(String message, Throwable cause) {
-        super(message, cause);
+    public ReactomeFetchDataException() {
     }
 
     public ReactomeFetchDataException(String message) {
         super(message);
     }
 
-    public ReactomeFetchDataException() {
+    public ReactomeFetchDataException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ReactomeFetchDataException(Throwable cause) {
+        super(cause);
     }
 
 }

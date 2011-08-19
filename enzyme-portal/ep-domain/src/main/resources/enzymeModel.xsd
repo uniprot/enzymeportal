@@ -8,14 +8,6 @@
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:element name="EntryDate" type="epe:EntryDate"/>
-	<xs:complexType name="EntryDate">
-		<xs:sequence>
-			<xs:element name="deposit" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="release" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="revision" type="xs:string" minOccurs="1" maxOccurs="1"/>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:element name="Enzyme" type="epe:Enzyme"/>
 	<xs:complexType name="Enzyme">
 		<xs:sequence>
@@ -36,31 +28,29 @@
 			<xs:extension base="ep:EnzymeSummary">
 				<xs:sequence>
 					<xs:element name="enzyme" type="epe:Enzyme" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="proteinstructure" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="proteinstructure" type="epe:ProteinStructure" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="reactionpathway" type="epe:ReactionPathway" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="requestedfield" type="xs:string" minOccurs="1" maxOccurs="1"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="Experiment" type="epe:Experiment"/>
-	<xs:complexType name="Experiment">
-		<xs:sequence>
-			<xs:element name="resolution" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="rfactor" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="freerfactor" type="xs:string" minOccurs="1" maxOccurs="1"/>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:element name="ProteinStructure" type="epe:ProteinStructure"/>
 	<xs:complexType name="ProteinStructure">
 		<xs:sequence>
-			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="method" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-			<xs:element name="experiment" type="epe:Experiment" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="dates" type="epe:EntryDate" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="depositauthor" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="pdbCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="image" type="epe:Image" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="provenance" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element name="summary" type="epe:DASSummary" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+    <xs:complexType name="DASSummary">
+        <xs:sequence>
+            <xs:element name="label" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="note" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
 	<xs:element name="ReactionPathway" type="epe:ReactionPathway"/>
 	<xs:complexType name="ReactionPathway">
 		<xs:sequence>
@@ -104,4 +94,11 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+    <xs:complexType name="Image">
+        <xs:sequence>
+            <xs:element name="source" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="caption" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="href" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>

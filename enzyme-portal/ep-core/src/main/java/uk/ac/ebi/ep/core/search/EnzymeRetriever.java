@@ -11,11 +11,15 @@ import org.apache.log4j.Logger;
 
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
+import uk.ac.ebi.das.jdas.exceptions.ValidationException;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
+import uk.ac.ebi.ep.enzyme.model.DASSummary;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Equation;
+import uk.ac.ebi.ep.enzyme.model.Image;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
+import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.reactome.IReactomeAdapter;
 import uk.ac.ebi.ep.reactome.ReactomeAdapter;
@@ -326,18 +330,36 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         List<String> pdbIds = enzymeModel.getPdbeaccession();
     	try {
 			Collection<SegmentAdapter> segments = pdbeAdapter.getFeatures(pdbIds);
-			// TODO: fill enzymeModel with structure(s)
             for (SegmentAdapter segment : segments){
-                //String pdbCode = segments.getId();
+                ProteinStructure structure = new ProteinStructure();
+                structure.setPdbCode(segment.getId());
                 for (FeatureAdapter feature : segment.getFeature()){
-                    
+                    if (feature.getType().getId().equals("description")){
+                        structure.setDescription(feature.getNotes());
+                    } else if (feature.getType().getId().equals("image")){
+                        Image image = new Image();
+                        image.setSource(feature.getLinks().get(0).getHref());
+                        image.setCaption(feature.getLinks().get(0).getContent());
+                        image.setHref(feature.getLinks().get(1).getHref());
+                        structure.setImage(image);
+                    } else if (feature.getType().getId().equals("provenance")){
+                        structure.setProvenance(feature.getNotes());
+                    } else if (feature.getType().getId().equals("summary")){
+                        DASSummary summary = new DASSummary();
+                        summary.setLabel(feature.getLabel());
+                        summary.setNote(feature.getNotes());
+                        structure.getSummary().add(summary);
+                    }
                 }
+                enzymeModel.getProteinstructure().add(structure);
             }
 		} catch (MalformedURLException e) {
 	        throw new EnzymeRetrieverException("Wrong URL");
 		} catch (JAXBException e) {
 	        throw new EnzymeRetrieverException("Unable to get data from DAS server");
-		}
+		} catch (ValidationException e){
+	        throw new EnzymeRetrieverException("Validation error for DASGGF");
+        }
     	return enzymeModel;
     }
 
