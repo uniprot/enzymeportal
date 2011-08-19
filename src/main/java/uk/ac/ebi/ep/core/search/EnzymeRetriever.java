@@ -1,8 +1,15 @@
 package uk.ac.ebi.ep.core.search;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
+
 import org.apache.log4j.Logger;
+
+import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
@@ -297,10 +304,22 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     }
 
-    public EnzymeModel getProteinStructure(String uniprotAccession) throws EnzymeRetrieverException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public EnzymeModel getProteinStructure(String uniprotAccession)
+	throws EnzymeRetrieverException {
+        EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
+        List<String> pdbIds = enzymeModel.getPdbeaccession();
+    	try {
+			Collection<SegmentAdapter> features = pdbeAdapter.getFeatures(pdbIds);
+			// TODO: fill enzymeModel with structure(s)
+		} catch (MalformedURLException e) {
+	        throw new EnzymeRetrieverException("Wrong URL");
+		} catch (JAXBException e) {
+	        throw new EnzymeRetrieverException("Unable to get data from DAS server");
+		}
+    	return enzymeModel;
     }
 
+    
     public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
