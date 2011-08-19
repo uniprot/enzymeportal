@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -59,9 +60,24 @@ public class ServiceInitializer {
     private static SOAPFactory soapFactory;
 
     private static Call generatePathwayDiagramInSVGCall = createCall("generatePathwayDiagramInSVG");
-    private static Call queryPathwaysForReferenceIdentifiersCall = createCall("queryPathwaysForReferenceIdentifiers");
+    private static Call queryPathwaysByXrefIdsCall = createCall("queryPathwaysForReferenceIdentifiers");
+    private static Call queryByIdCall = createCall("queryById");
+
+   
 
     public ServiceInitializer() {
+    }
+
+    public Call getGeneratePathwayDiagramInSVGCall() {
+        return generatePathwayDiagramInSVGCall;
+    }
+
+    public Call getQueryByIdCall() {
+        return queryByIdCall;
+    }
+
+    public Call getQueryPathwaysByXrefIdsCall() {
+        return queryPathwaysByXrefIdsCall;
     }
 //******************************** CONSTRUCTORS ******************************//
 
@@ -70,18 +86,15 @@ public class ServiceInitializer {
 
 
 //********************************** METHODS *********************************//
-
-     public Call generatePathwayDiagramInSVGNewCall() {
-        return generatePathwayDiagramInSVGCall;
-     }
-
-     public Call queryPathwaysForReferenceIdentifiersNewCall() {
-        return queryPathwaysForReferenceIdentifiersCall;
-     }
-
+    public static void main(String[] args) throws RemoteException {
+        ServiceInitializer serviceInitializer = new ServiceInitializer();
+        Call call = serviceInitializer.getQueryByIdCall();
+        Object obj = call.invoke(new Object[]{new Long("176606")});
+    }
 
 
     private static Call createCall(String callName) {
+        //System.out.print("TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
         BasicConfigurator.configure();
         try {
             soapFactory = SOAPFactory.newInstance();
