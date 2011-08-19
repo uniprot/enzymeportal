@@ -381,7 +381,7 @@
                                                                 <legend>Pathways</legend>
                                                                 <br/>
                                                                 <c:forEach var="pathway" items="${reactionpathway.pathways}">
-                                                                <c:set var="reactomeUrl" value="${pathway.href}"/>
+                                                                <c:set var="reactomeUrl" value="${pathway.url}"/>
                                                                 <a target="blank" href="${reactomeUrl}">
                                                                 <spring:message code="label.entry.reactionsPathways.link.reactome"/>
                                                                 </a>
