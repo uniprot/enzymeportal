@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
 
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
+import uk.ac.ebi.das.jdas.exceptions.ValidationException;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
@@ -20,6 +22,7 @@ import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.reactome.IReactomeAdapter;
 import uk.ac.ebi.ep.reactome.ReactomeAdapter;
 import uk.ac.ebi.ep.reactome.ReactomeServiceException;
+import uk.ac.ebi.ep.reactome.ReactomeUtil;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.rhea.domain.Database;
@@ -105,7 +108,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return enzymeModel;
 
     }
-
+/*
     public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
         getReactionsPathways(enzymeModel);
@@ -125,6 +128,36 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                 }
             }
         }        
+        return enzymeModel;
+    }
+*/
+    public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
+        EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
+        getReactionsPathways(enzymeModel);
+        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+        for (ReactionPathway reactionPathway: reactionPathways) {
+            List<Pathway> pathways = reactionPathway.getPathways();
+            EnzymeReaction enzymeReaction = reactionPathway.getReaction();
+            for (Pathway pathway: pathways) {
+                String reactomeUrl = (String)pathway.getUrl();
+                try {
+                    Object[] results = this.reactomeAdapter.getReactionPathway(reactomeUrl);
+                    if (results.length > 1){
+                        for (Object result: results) {
+                        if (result instanceof org.reactome.cabig.domain.Reaction) {
+                            org.reactome.cabig.domain.Reaction reaction
+                                    = (org.reactome.cabig.domain.Reaction)result;
+                            String reactionDesc = ReactomeUtil.getReactionDescription(reaction);
+                            enzymeReaction.setDescription(reactionDesc);
+                        }
+                        }
+
+                    }
+                } catch (ReactomeServiceException ex) {
+                    log.error("Failed to retrieve reaction desciption for " +reactomeUrl, ex);
+                }
+            }
+        }
         return enzymeModel;
     }
 
@@ -328,9 +361,12 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 			Collection<SegmentAdapter> segments = pdbeAdapter.getFeatures(pdbIds);
 			// TODO: fill enzymeModel with structure(s)
             for (SegmentAdapter segment : segments){
-                //String pdbCode = segments.getId();
-                for (FeatureAdapter feature : segment.getFeature()){
-                    
+                try {
+                    //String pdbCode = segments.getId();
+                    for (FeatureAdapter feature : segment.getFeature()) {
+                    }
+                } catch (ValidationException ex) {
+                    java.util.logging.Logger.getLogger(EnzymeRetriever.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 		} catch (MalformedURLException e) {
