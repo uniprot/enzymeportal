@@ -84,6 +84,7 @@
 			<xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="url" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="xrefs" type="xs:anySimpleType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Equation" type="epe:Equation"/>
