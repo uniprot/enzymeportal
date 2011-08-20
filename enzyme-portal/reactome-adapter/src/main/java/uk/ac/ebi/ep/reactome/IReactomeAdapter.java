@@ -11,6 +11,9 @@ import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
  * @author  $Author$
  */
 public interface IReactomeAdapter {
+    public static final String REACTOME_SEARCH_URL =
+            "http://www.reactome.org/cgi-bin/search2?OPERATOR=ALL&SPECIES=48887&QUERY=";
+
 
 //********************************* VARIABLES ********************************//
 
@@ -23,10 +26,12 @@ public interface IReactomeAdapter {
 
 //********************************** METHODS *********************************//
 
-    public EnzymeModel getPathways(String uniprotAccession);
+    public String getReactionDescription(String reactomeAccession)throws ReactomeServiceException;
 
-    public String[] getReaction(String reactomeUrl)throws ReactomeServiceException;
+    public String getPathwayDescription(String reactomeAccession)throws ReactomeServiceException;
 
     public Object[] getReactionPathway(String reactomeUrl)throws ReactomeServiceException;
+
+
 
 }
