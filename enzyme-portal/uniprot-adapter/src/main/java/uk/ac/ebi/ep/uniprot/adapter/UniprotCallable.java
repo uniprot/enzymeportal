@@ -2,27 +2,25 @@ package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ep.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.Pathway;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.enzyme.model.Sequence;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
-import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseType;
 import uk.ac.ebi.kraken.interfaces.uniprot.Organism;
 import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
-import uk.ac.ebi.kraken.interfaces.uniprot.dbx.pdb.PdbResolution;
+import uk.ac.ebi.kraken.interfaces.uniprot.dbx.reactome.Reactome;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
-import uk.ac.ebi.kraken.interfaces.uniprot.evidences.EvidenceId;
 import uk.ac.ebi.kraken.model.uniprot.dbx.pdb.PdbImpl;
 import uk.ac.ebi.kraken.uuw.services.remoting.Attribute;
 import uk.ac.ebi.kraken.uuw.services.remoting.AttributeIterator;
@@ -140,8 +138,8 @@ public class UniprotCallable {
         if (refList.size() > 0) {
             for (PdbImpl ref:refList) {
                 String dbAccession = ref.getDbAccession();
-                PdbResolution resolution = ref.getPdbResolution();
-                String resolutionValue = resolution.getValue();
+                //PdbResolution resolution = ref.getPdbResolution();
+                //String resolutionValue = resolution.getValue();
                 if (dbAccession != null) {
                     //The url of pdbe images use lowercase
                     results.add(dbAccession.toLowerCase());
@@ -151,9 +149,29 @@ public class UniprotCallable {
         return results;
     }
 
+   
+    public ReactionPathway getReactomeAccessions(UniProtEntry entry) {
+        List<Reactome> refList = entry.getDatabaseCrossReferences(DatabaseType.REACTOME);
+        List<String> results = new ArrayList<String>();
+        ReactionPathway reactionpathway = new ReactionPathway();
+        if (refList.size() > 0) {
+            for (Reactome ref:refList) {
+                String dbAccession = ref.getReactomeAccessionNumber().getValue();
+                if (dbAccession != null) {
+                    ref.getReactomeDescription();
+                    Pathway pathway = new Pathway();
+                    pathway.setId(dbAccession);
+                    pathway.setTitle(ref.getReactomeDescription().getValue());
+                    reactionpathway.getPathways().add(pathway);
+                }
+            }
+        }
+        return reactionpathway;
+    }
+    
     public EnzymeSummary setEnzymeProperties(UniProtEntry entry) {
         //EnzymeSummary enzymeSummary = new EnzymeSummary();
-        EnzymeSummary enzymeSummary = new EnzymeModel();
+        EnzymeModel enzymeSummary = new EnzymeModel();
         enzymeSummary.getUniprotaccessions().add(entry.getPrimaryUniProtAccession().getValue());
         enzymeSummary.setUniprotid(entry.getUniProtId().getValue());
         if (entry != null) {            
@@ -185,7 +203,11 @@ public class UniprotCallable {
             species.setCommonname(speciesCommonName);
             species.setScientificname(scientificName);
             enzymeSummary.setSpecies(species);
-            enzymeSummary.setPdbeaccession(this.getPdbeAccessions(entry));    
+            enzymeSummary.setPdbeaccession(this.getPdbeAccessions(entry));           
+            if (entryPage) {
+                ReactionPathway reactionpathway = this.getReactomeAccessions(entry);
+                enzymeSummary.getReactionpathway().add(reactionpathway);
+            }            
         }
         return enzymeSummary;
     }
@@ -248,13 +270,15 @@ public class UniprotCallable {
             }
             return enzymeSummary;
         }
-
+/*
         public EnzymeSummary setMainEntry(UniProtEntry mainEntry) {
             EnzymeSummary enzymeSummary = new EnzymeSummary();
             GetEntriesCaller caller = new GetEntriesCaller();
             enzymeSummary = caller.setEnzymeProperties(mainEntry);
             return enzymeSummary;
         }
+ * 
+ */
 
         public List<EnzymeAccession> getSpecies(boolean entryPage) {
              AttributeIterator<UniProtEntry> attributes  = queryService
