@@ -16,7 +16,7 @@
 	background-image: url("../images/molecule.png");
 }
 
-#equation img {
+img {
     border: none;
 }
 
@@ -37,3 +37,14 @@
     margin-top: 10px;
      margin-bottom: 10px;
 }
+#pathwayDesc
+  {
+    float: left;
+    width: 80%;
+  }
+
+  #pathwayImg
+  {
+    float: right;
+    width: 20%;
+  }

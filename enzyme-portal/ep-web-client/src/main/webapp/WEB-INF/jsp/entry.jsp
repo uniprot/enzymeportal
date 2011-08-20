@@ -354,7 +354,7 @@
                                                         </table>
                                                         </div>
                                                                 <div id="reactionDesc">
-                                                                    <c:out value="${reaction.description}"/>
+                                                                    <c:out value="${reaction.description}" escapeXml="false"/>
                                                                 </div>
                                                            <div id="rheaExtLinks">
                                                             <div id="rheaLink" class="inlineLinks">
@@ -372,19 +372,35 @@
                                                                 </div>
                                                             </c:if>
                                                         </div>
+                                                            <br/>
                                                             <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
                                                             <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
                                                             <c:if test="${pathwaysSize>0}" >
                                                                 <spring:message code="label.entry.reactionsPathways.found.text" arguments="${pathwaysSize}"/>
                                                             <div id="pathways">
+                                                            <br/>
                                                             <fieldset>
-                                                                <legend>Pathways</legend>
-                                                                <br/>
                                                                 <c:forEach var="pathway" items="${reactionpathway.pathways}">
-                                                                <c:set var="reactomeUrl" value="${pathway.url}"/>
+                                                                    <c:set var="reactomeUrl" value="${pathway.url}"/>
+                                                                <legend><c:out value="${pathway.title}" escapeXml="false"/></legend>
+                                                                <br/>
+                                                                <div id="pathwayDesc">
+                                                                <div>
+                                                                    <c:out value="${pathway.description}" escapeXml="false"/>
+                                                                </div>
+                                                                    <br/><br/>
+                                                                <div class="inlineLinks">
                                                                 <a target="blank" href="${reactomeUrl}">
                                                                 <spring:message code="label.entry.reactionsPathways.link.reactome"/>
                                                                 </a>
+                                                                </div>
+
+                                                                </div>                                                                
+                                                                <div id="pathwayImg">
+                                                                    <a target="blank" href="${reactomeUrl}">
+                                                                        <img src="../../resources/images/pathway.png" alt="?"/>
+                                                                    </a>
+                                                                </div>                                                                
                                                                 </c:forEach>
                                                             </fieldset>
                                                             </div>
