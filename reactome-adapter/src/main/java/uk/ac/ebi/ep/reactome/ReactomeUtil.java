@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+import org.reactome.cabig.domain.Event;
 import org.reactome.cabig.domain.Reaction;
 import org.reactome.cabig.domain.Summation;
 
@@ -54,13 +55,43 @@ public class ReactomeUtil {
        return pathwayAndReactionIds;
    }
 
-    public static String getReactionDescription(Reaction reaction) {
+    public static String getReactionDescription(Object eventObj) {
         StringBuffer sb = new StringBuffer();
-        List<Summation> summations = reaction.getSummation();
+        Event event = (Event)eventObj;
+        List<Summation> summations = event.getSummation();
         for (Summation summation:summations) {
-            sb.append(summation.getText());
-            sb.append("\n");
+            String text = summation.getText();
+            if (text != null) {
+                sb.append(summation.getText());
+                sb.append("\n");
+            }
         }
         return sb.toString();
     }
+
+   public static String parseReactomeHtml(String reactomeAccession, String parseTerm) throws MalformedURLException, IOException {
+        URL oracle = new URL(IReactomeAdapter.REACTOME_SEARCH_URL +reactomeAccession);
+        URLConnection uCon = oracle.openConnection();
+        BufferedReader in = new BufferedReader(
+                                new InputStreamReader(
+                                uCon.getInputStream()));
+        String inputLine;
+        boolean fetch = false;
+        String reactionDesc = null;
+        while ((inputLine = in.readLine()) != null) {
+            if(fetch == true) {
+                reactionDesc = inputLine;
+                break;
+            }
+            if (inputLine.contains(parseTerm)) {
+                fetch = true;
+                in.readLine();
+            }
+        }
+                System.out.println(reactionDesc);
+       in.close();
+       return reactionDesc;
+   }
+
+
 }
