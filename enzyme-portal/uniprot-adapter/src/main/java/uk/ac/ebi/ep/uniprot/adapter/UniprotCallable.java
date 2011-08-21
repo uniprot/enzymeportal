@@ -161,7 +161,7 @@ public class UniprotCallable {
                     ref.getReactomeDescription();
                     Pathway pathway = new Pathway();
                     pathway.setId(dbAccession);
-                    pathway.setTitle(ref.getReactomeDescription().getValue());
+                    pathway.setName(ref.getReactomeDescription().getValue());
                     reactionpathway.getPathways().add(pathway);
                 }
             }
