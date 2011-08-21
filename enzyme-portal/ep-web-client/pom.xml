@@ -11,7 +11,6 @@
   <artifactId>ep-web-client</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>EnzymePortalWebClient</name>
   <organization>
     <name>EMBL-EBI</name>
     <url>http://www.ebi.ac.uk</url>
@@ -35,7 +34,7 @@
         </configuration>
       </plugin>
     </plugins>
-    <finalName>EnzymePortalWebClient_V010</finalName>
+    <finalName>enzymeportal</finalName>
   </build>
   <dependencies>
     <dependency>
@@ -121,7 +120,9 @@
       <version>2.5</version>
     </dependency>
   </dependencies>
+    <name>enzymeportal</name>
 </project>
+
 
 
 
