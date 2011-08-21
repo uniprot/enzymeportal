@@ -4,7 +4,18 @@
  */
 
 $(document).ready(function() {
-    var pageSize = 10;
+    //search default text
+    $("#searchbox").live("blur", function(){
+          var default_value = $(this).attr("rel");
+          if ($(this).val() == ""){
+                  $(this).val(default_value);
+          }
+    }).live("focus", function(){
+          var default_value = $(this).attr("rel");
+          if ($(this).val() == default_value){
+                  $(this).val("");
+          }
+    });
     /*
      * handles show more and show less links
      */
@@ -40,7 +51,7 @@ $(document).ready(function() {
     });
 
     var pageClicked = false;
-    $("#tnt_pagination").click(function(event) {
+    $("#pagination").click(function(event) {
         var clickedId = event.target.id;
         var nextStart = $("#nextStart").val();
         var prevStart = $("#prevStart").val();
@@ -49,10 +60,6 @@ $(document).ready(function() {
         } else {
             $("#start").val(nextStart);
         }
-        //var currentPage = parseInt($("#currentPage").val());
-        //var nextPage = currentPage + 1;
-                
-        //$("#pageNr").html(nextPage);
         pageClicked = true;
         $('#searchButton').trigger("click");
     });
@@ -61,4 +68,12 @@ $(document).ready(function() {
         if (!pageClicked)
             $("#start").val(0);
     });
+
+/**
+ * Submits form when Filter button is clicked
+ */
+    $("#filterButton").click(function(event) {
+        $('#searchButton').trigger("click");
+    });
+
 });

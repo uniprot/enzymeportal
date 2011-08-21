@@ -40,7 +40,6 @@
     </bean>
     <bean id="config" class="uk.ac.ebi.ep.core.search.Config"
           init-method="initIt" destroy-method="cleanUp">
-
         <!--<property name="message" value="i'm property message" />-->
     </bean>
 

@@ -48,3 +48,11 @@ img {
     float: right;
     width: 20%;
   }
+
+fieldset {
+    margin-top: 20px;
+}
+
+legend {
+    font-weight: bold;
+}
