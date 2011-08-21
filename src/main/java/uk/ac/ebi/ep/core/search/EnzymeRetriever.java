@@ -77,7 +77,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     public EnzymeModel getReactionsPathways(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
-        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+        //List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+        List<ReactionPathway> reactionPathways = new ArrayList<ReactionPathway>();
         List<String> ecList = enzymeModel.getEc();
         String query = LuceneQueryBuilder.createQueryIN(IRheaAdapter.RheaQueryFields.EC.name(), false, ecList);
         List<Reaction> reactions;
@@ -109,9 +110,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         List<Pathway> reactomeUniprotLinks = reactomeUniproPw.getPathways();
         Map<String,String> reactomeAccessionsInUniprot =
                 getReactomeAccQueriedFromUniprot(reactomeUniprotLinks);
-        if (reactomeUniprotLinks.size() > 0) {
-            enzymeModel.setReactionpathway(null);
-        }
+
         //Query Rhea WS
         getReactionsPathways(enzymeModel);
         
@@ -127,7 +126,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                 String reactomeUrl = null;
                 if (rheaReactomeLinks.size() > 0) {
                     reactomeUrl = (String)rheaReactomeLinks.get(0);
-                }
                     try {
                         //Object[] results = this.reactomeAdapter.getReactionPathway(reactomeUrl);
                         String reactomeAccession = reactomeUrl.split("=")[1];
@@ -138,6 +136,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     catch (ReactomeServiceException ex) {
                         log.error("Failed to retrieve reaction desciption for " +reactomeUrl, ex);
                     }
+
+                }
             }
         }
         Set<Entry<String, String>> entries = reactomeAccessionsInUniprot.entrySet();
