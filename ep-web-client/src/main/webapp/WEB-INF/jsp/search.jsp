@@ -13,21 +13,8 @@
 
 <html>
     <head>
+        <title>Enzyme Portal</title>
         <link rel="stylesheet"  href="http://www.ebi.ac.uk/inc/css/contents.css"     type="text/css" />
-        <!--
-        <link media="screen" href="resources/lib/spineconcept/css/960gs/reset.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/960gs/text.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/960gs/960.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/identification.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="resources/lib/spineconcept/javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />
-        <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
-        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
-        <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>
-        <script src="resources/javascript/search.js" type="text/javascript"></script>
-        -->
         <link media="screen" href="resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="resources/lib/spineconcept/css/identification.css" type="text/css" rel="stylesheet" />
@@ -37,19 +24,13 @@
         <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <script src="resources/javascript/search.js" type="text/javascript"></script>
     </head>
-    <body>        
+    <body>
+    <jsp:include page="header.jsp"/>
+    <div class="contents">
         <div class="page container_12">
-            <form:form id="searchForm" modelAttribute="searchModel" action="enzymes" method="POST">
-            <div class="grid_12">
-                <div  id="keywordSearch" class="search">
-                    <p>
-                        <form:input path="searchparams.text" cssClass="field"/>
-                        <form:hidden id="start" path="searchparams.start" />
-                        <form:hidden path="searchparams.previoustext" />
-                        <input id ="searchButton" type="submit" value="Search" class="button" />
-                    </p>
-                 </div>
-            </div>
+            <jsp:include page="subHeader.jsp"/>
+            <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
+            <jsp:include page="searchBox.jsp"/>
             <!--Global variables-->
             <c:set var="showButton" value="Show more"/>
             <c:set var="searchText" value="${searchModel.searchparams.text}"/>
@@ -175,7 +156,9 @@
                             </c:if>
                         </div>
                     </div>
-
+                    <div class="floatRight">
+                        <input id ="filterButton" type="submit" value="Filter Selected" class="filterButton"/>
+                    </div>
                 </div>
                 </c:if>
                 <div id="keywordSearchResult" class="result">
@@ -191,7 +174,7 @@
                             displaying <c:out value="${startRecord+1}"/> - <c:out value="${startRecord+summaryentriesSize}"/>
 
                         </div>
-                        <div id="tnt_pagination">                                    
+                        <div id="pagination">                                    
                                 <c:if test="${totalPages>pagination.maxDisplayedPages}">
                                     <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
                                     <c:set var="showNextButton" value="${true}"/>
@@ -241,7 +224,7 @@
                                     <c:set var="function" value="${enzyme.function}"/>
                                     <c:if test='${function != null && function != ""}'>
                                         <p>
-                                        Function:
+                                            <b>Function</b>:
                                         <c:out value="${enzyme.function}"/>.<br/>
                                         </p>
                                     </c:if>
@@ -251,7 +234,7 @@
                                     <c:set var="synLimitedDisplay" value="${synLimitedDisplayDefault}"/>
                                     <c:if test='${synonymSize>0}'>
                                         <div id ="synonym">
-                                        Synonyms:                                        
+                                            <b>Synonyms</b>:
                                         <c:if test="${synonymSize > 0 && synonymSize <= synLimitedDisplay}">
                                             <c:set var="synLimitedDisplay" value="${synonymSize}"/>
                                         </c:if>
@@ -340,6 +323,7 @@
             </div>
         </div>
         </div>
-
+    <jsp:include page="footer.jsp"/>
+    </div>    
     </body>
 </html>
