@@ -35,7 +35,7 @@
         </configuration>
       </plugin>
     </plugins>
-    <finalName>EnzymePortalWebClient_V010</finalName>
+    <finalName>ep-structuresBranch</finalName>
   </build>
   <dependencies>
     <dependency>
