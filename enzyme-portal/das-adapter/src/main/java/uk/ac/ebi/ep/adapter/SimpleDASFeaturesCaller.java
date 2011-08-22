@@ -43,10 +43,10 @@ public class SimpleDASFeaturesCaller implements Callable<List<SegmentAdapter>> {
 	}
 
 	public List<SegmentAdapter> call() throws Exception {
-		return getFeatures();
+		return getSegments();
 	}
 
-	List<SegmentAdapter> getFeatures()
+	List<SegmentAdapter> getSegments()
 	throws MalformedURLException, JAXBException {
 		FeaturesClient featuresClient = new FeaturesClient();
 		DasGFFAdapter dasGFF = featuresClient.fetchData(serverURL, segments);

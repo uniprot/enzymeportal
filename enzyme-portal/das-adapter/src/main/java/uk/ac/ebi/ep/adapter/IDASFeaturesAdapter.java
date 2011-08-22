@@ -11,11 +11,11 @@ import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 public interface IDASFeaturesAdapter {
 
 	// FIXME: TAKE THIS TO A PROPERTIES FILE, JMX-MANAGEABLE
-	String PDBE_DAS_URL = "http://www.ebi.ac.uk/das-srv/proteindas/das/pdbe_summary/";
+	String PDBE_DAS_URL = "http://www.ebi.ac.uk/das-srv/proteindas/das/pdbe_summary/features";
 
-	public SegmentAdapter getFeatures(String segmentId)
+	public SegmentAdapter getSegment(String segmentId)
 	throws MalformedURLException, JAXBException;
 	
-	public Collection<SegmentAdapter> getFeatures(List<String> segmentIds)
+	public Collection<SegmentAdapter> getSegments(List<String> segmentIds)
 	throws MalformedURLException, JAXBException;
 }

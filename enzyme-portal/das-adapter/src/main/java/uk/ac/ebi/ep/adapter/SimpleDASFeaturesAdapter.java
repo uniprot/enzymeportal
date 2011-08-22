@@ -11,22 +11,22 @@ import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 
 public class SimpleDASFeaturesAdapter implements IDASFeaturesAdapter {
 
-	public SegmentAdapter getFeatures(String segmentId)
+	public SegmentAdapter getSegment(String segmentId)
 	throws MalformedURLException, JAXBException {
 		SimpleDASFeaturesCaller callable =
 				new SimpleDASFeaturesCaller(IDASFeaturesAdapter.PDBE_DAS_URL, segmentId);
-		List<SegmentAdapter> adapters = callable.getFeatures();
+		List<SegmentAdapter> adapters = callable.getSegments();
 		return adapters == null || adapters.size() == 0?
 				null :
 				adapters.get(0);
 	}
 
-	public Collection<SegmentAdapter> getFeatures(List<String> segmentIds)
+	public Collection<SegmentAdapter> getSegments(List<String> segmentIds)
 	throws MalformedURLException, JAXBException {
 		// No need of multithreading, as we can request all of them at once:
 		SimpleDASFeaturesCaller callable =
 				new SimpleDASFeaturesCaller(IDASFeaturesAdapter.PDBE_DAS_URL, segmentIds);
-		return callable.getFeatures();
+		return callable.getSegments();
 	}
 
 
