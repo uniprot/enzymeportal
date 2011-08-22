@@ -329,7 +329,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
         List<String> pdbIds = enzymeModel.getPdbeaccession();
     	try {
-			Collection<SegmentAdapter> segments = pdbeAdapter.getFeatures(pdbIds);
+			Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);
             for (SegmentAdapter segment : segments){
                 ProteinStructure structure = new ProteinStructure();
                 structure.setPdbCode(segment.getId());
@@ -354,11 +354,11 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                 enzymeModel.getProteinstructure().add(structure);
             }
 		} catch (MalformedURLException e) {
-	        throw new EnzymeRetrieverException("Wrong URL");
+	        throw new EnzymeRetrieverException("Wrong URL", e);
 		} catch (JAXBException e) {
-	        throw new EnzymeRetrieverException("Unable to get data from DAS server");
+	        throw new EnzymeRetrieverException("Unable to get data from DAS server", e);
 		} catch (ValidationException e){
-	        throw new EnzymeRetrieverException("Validation error for DASGGF");
+	        throw new EnzymeRetrieverException("Validation error for DASGGF", e);
         }
     	return enzymeModel;
     }
