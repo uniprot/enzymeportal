@@ -20,7 +20,7 @@ img {
     border: none;
 }
 
-#reaction fieldset {
+fieldset {
     border-radius: 8px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
@@ -40,12 +40,13 @@ img {
 #pathwayDesc
   {
     float: left;
-    width: 80%;
+    max-width:80%;
+    min-width: 250px;
   }
 
   #pathwayImg
   {
-    float: right;
+    float: left;
     width: 20%;
   }
 
@@ -55,4 +56,18 @@ fieldset {
 
 legend {
     font-weight: bold;
+}
+.bold{
+    font-weight: bold;
+}
+
+.molImg {
+    display: inline;
+    float: left;
+    width: 220px;
+}
+.molText {
+    display: inline;
+    float: left;
+    width: 80%;
 }

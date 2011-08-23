@@ -92,7 +92,7 @@ public class SearchController {
             }
             case molecules: {
                 try {
-                    enzymeModel = retriever.getEnzyme(accession);
+                    enzymeModel = retriever.getMolecules(accession);
                 } catch (EnzymeRetrieverException ex) {
                     log.error("Unable to retrieve the entry!",  ex);
                 }
