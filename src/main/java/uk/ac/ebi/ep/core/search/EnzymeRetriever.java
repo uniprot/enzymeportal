@@ -17,9 +17,15 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
 import uk.ac.ebi.das.jdas.exceptions.ValidationException;
+import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
+import uk.ac.ebi.ep.chebi.adapter.ChebiFetchDataException;
+import uk.ac.ebi.ep.chebi.adapter.IChebiAdapter;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
+import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.reactome.IReactomeAdapter;
@@ -45,23 +51,18 @@ import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
 //********************************* VARIABLES ********************************//
-    protected String accesion;
     protected IRheaAdapter rheaAdapter;
     private static Logger log = Logger.getLogger(EnzymeRetriever.class);
 
     protected IReactomeAdapter reactomeAdapter;
-    public String getAccesion() {
-        return accesion;
-    }
 
-    public void setAccesion(String accesion) {
-        this.accesion = accesion;
-    }
+    protected IChebiAdapter chebiAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever() {
         rheaAdapter = new RheasResourceClient();
         reactomeAdapter = new ReactomeAdapter();
+        chebiAdapter = new ChebiAdapter();
     }
 
 //****************************** GETTER & SETTER *****************************//
@@ -76,7 +77,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return enzymeModel;
     }
 
-    public EnzymeModel getReactionsPathways(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
+    public EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
         //List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
         List<ReactionPathway> reactionPathways = new ArrayList<ReactionPathway>();
         List<String> ecList = enzymeModel.getEc();
@@ -98,21 +99,21 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public Map<String,String> getReactomeAccQueriedFromUniprot(List<Pathway> reactomeUniprotLinks ) {
         Map<String, String> idNameMap = new HashMap<String, String>();
-        for (Pathway pathway:reactomeUniprotLinks) {
-            idNameMap.put(pathway.getId(),pathway.getTitle());
+        for (Entity pathway:reactomeUniprotLinks) {
+            idNameMap.put(pathway.getId(),pathway.getName());
 
         }
         return idNameMap;
     }
     public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getPathwaySummary(uniprotAccession);
         ReactionPathway reactomeUniproPw= enzymeModel.getReactionpathway().get(0);
         List<Pathway> reactomeUniprotLinks = reactomeUniproPw.getPathways();
         Map<String,String> reactomeAccessionsInUniprot =
                 getReactomeAccQueriedFromUniprot(reactomeUniprotLinks);
 
         //Query Rhea WS
-        getReactionsPathways(enzymeModel);
+        queryRheaWsForReactions(enzymeModel);
         
         List<ReactionPathway> reactionPathways = reactionPathways = enzymeModel.getReactionpathway();
         //get the reaction and pathways with rhea ws results set
@@ -152,7 +153,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             }
             Pathway pathway = new Pathway();
             pathway.setId(reactomeAccession);
-            pathway.setTitle(entry.getValue());
+            pathway.setName(entry.getValue());
             pathway.setDescription(pathwayDesc);
             String url = Database.REACTOME.getEntryUrl(reactomeAccession);
             pathway.setUrl(url);
@@ -171,6 +172,36 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         //enzymeModel.setReactionpathway(reactionPathways);
 
         return enzymeModel;
+    }
+
+    public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
+        List<Molecule> drugs = enzymeModel.getMolecules().getDrugs();
+        List<Molecule> moleculesFromChebi = new ArrayList<Molecule>();
+        for (Molecule drug:drugs) {
+            List<Object> drugBankIds = drug.getXrefs();
+            String drugBankId = null;
+            if (drugBankIds.size() > 0 ) {
+                drugBankId = (String) drugBankIds.get(0);
+            }
+            if (drugBankId != null) {
+                try {
+                    List<String> chebiIdsLinkedToDrugbank = this.chebiAdapter.getChebiLiteEntity(drugBankId);
+                    //System.out.print("Chebi drugs: " +chebiEntitiesLinkedToDrugBank);
+                    for (String chebiId: chebiIdsLinkedToDrugbank) {
+                        Molecule moleculeFromChebi = (Molecule)this.chebiAdapter.getChebiCompleteEntity(chebiId);
+                        moleculeFromChebi.setXrefs(drugBankIds);
+                        moleculesFromChebi.add(moleculeFromChebi);
+                    }
+                } catch (ChebiFetchDataException ex) {
+                    log.error("Failed to query Chebi for DrugBank id " +drugBankId, ex);
+                    //java.util.logging.Logger.getLogger(EnzymeRetriever.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        enzymeModel.getMolecules().setDrugs(moleculesFromChebi);
+        return enzymeModel;
+
     }
 
 /*
@@ -221,16 +252,12 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     	return enzymeModel;
     }
 
-    
-    public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public EnzymeModel getDiseases(String uniprotAccession) throws EnzymeRetrieverException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public EnzymeModel getLiterarture(String uniprotAccession) throws EnzymeRetrieverException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
+        return enzymeModel;
     }
 }
