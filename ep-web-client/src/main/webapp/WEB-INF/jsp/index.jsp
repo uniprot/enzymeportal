@@ -47,7 +47,7 @@
                                 <a href="underconstruction">
                                     <legend>Browse Disease</legend>
                                     <div class="iconBox">
-                                        <img src="resources/images/disease2.png"  alt="?" width="200px" height="200px"/>
+                                        <img src="resources/images/disease3.png"  alt="?" width="200px" height="200px"/>
                                     </div>
                                 </a>
                             </fieldset>                            

@@ -215,7 +215,7 @@
                                     </c:if>
                                 </div>
                                 <div id="desc">
-                                    <a href="enzymes/${primAcc}/enzyme">
+                                    <a href="search/${primAcc}/enzyme">
                                         <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
                                         <c:out value="${showName}"/>
                                        <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
@@ -258,7 +258,7 @@
                                 <div id="speciesContainer">
                                     <div id="in">in</div>
                                     <div class="species">
-                                        <a href="enzymes/${primAcc}/enzyme">
+                                        <a href="search/${primAcc}/enzyme">
                                         <c:choose>
                                         <c:when test='${enzyme.species.commonname == ""}'>
                                             <c:out value="${enzyme.species.scientificname}"/>
@@ -285,7 +285,7 @@
                                                     <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                 </c:otherwise>
                                                 </c:choose>
-                                            <a href="enzymes/${relspecies[i].uniprotaccessions[0]}/enzyme">
+                                            <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                 <c:out value="${speciesName}"/>
                                             </a>
                                              <br/>
@@ -301,7 +301,7 @@
                                                         <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                     </c:otherwise>
                                                     </c:choose>
-                                                <a href="enzymes/${relspecies[i].uniprotaccessions[0]}/enzyme">
+                                                <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                     <c:out value="${speciesName}"/>
                                                 </a>
                                                <br/>
