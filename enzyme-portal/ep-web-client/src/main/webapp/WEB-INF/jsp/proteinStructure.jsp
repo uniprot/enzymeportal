@@ -12,8 +12,8 @@
             function showStructure(pdbCode){
                 var children = document.getElementById('proteinStructures').childNodes;
                 for (var i = 0; i < children.length; i++){
-                    if (children.nodeName.toLowerCase() == 'div'){
-                        structures[i].style.display = 'none';
+                    if (children[i].nodeName.toLowerCase() == 'div'){
+                    	children[i].style.display = 'none';
                     }
                 }
                 document.getElementById(pdbCode).style.display = 'block';
@@ -27,8 +27,9 @@
 				available</div>
             <table style="display: none;">
             <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
-                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}">
-                    <td><a href="#" onclick="return showStructure('${proteinStructure.pdbCode}');">${proteinStructure.pdbCode}</a></td>
+                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
+                	onclick="return showStructure('${proteinStructure.pdbCode}');">
+                    <td><a href="#">${proteinStructure.pdbCode}</a></td>
                     <td>${proteinStructure.description[0]}</td>
                 </tr>
             </c:forEach>
