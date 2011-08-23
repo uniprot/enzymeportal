@@ -38,19 +38,42 @@ public class UniprotAdapter implements IUniprotAdapter{
 //********************************** METHODS *********************************//
 
     public EnzymeSummary getEnzymeSummary(String accession) {
-       GetEntriesCaller caller = new GetEntriesCaller(accession, true);
-        EnzymeSummary enzymeSummary = caller.getEnzymeEntry();
+       GetEntriesCaller caller = new GetEntriesCaller(accession);
+        EnzymeSummary enzymeSummary = caller.getEnzymeWithSequenceByAccession();
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
     }
+    public EnzymeSummary getPathwaySummary(String accession) {
+       GetEntriesCaller caller = new GetEntriesCaller(accession);
+        EnzymeSummary enzymeSummary = caller.getEnzymePathwayByAccession();
+        setRelatedSpecies(enzymeSummary);
+       return enzymeSummary;
 
+    }
+
+    public EnzymeSummary getMoleculeSummary(String accession) {
+       GetEntriesCaller caller = new GetEntriesCaller(accession);
+        EnzymeSummary enzymeSummary = caller.getEnzymeDrugByAccession();
+        setRelatedSpecies(enzymeSummary);
+       return enzymeSummary;
+
+    }
+
+/*
+    public EnzymeSummary getDrugSummary(String accession) {
+       GetEntriesCaller caller = new GetEntriesCaller(accession);
+        EnzymeSummary enzymeSummary = caller.getEnzymePathwayByAccession();
+        setRelatedSpecies(enzymeSummary);
+       return enzymeSummary
+    }
+*/
     public void setRelatedSpecies(EnzymeSummary enzymeSummary) {
         String uniprotIdPrefix =  enzymeSummary.getUniprotid().split(ID_SPLIT_SYMBOL)[0];
         String defaultSpecies = enzymeSummary.getSpecies().getScientificname();
         String query = LuceneQueryBuilder
                 .createWildcardFieldValueQuery(IUniprotAdapter.ID_FIELD,uniprotIdPrefix);
         QueryEntryByIdCaller caller = new QueryEntryByIdCaller(query, defaultSpecies);
-        enzymeSummary.setRelatedspecies( caller.getSpecies(true));
+        enzymeSummary.setRelatedspecies( caller.getSpecies(IUniprotAdapter.SPECIES_BRIEF_MAX_SIZE));
     }
     public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies)
             throws MultiThreadingException {
@@ -85,79 +108,4 @@ public class UniprotAdapter implements IUniprotAdapter{
             pool.shutdown();
         }
     }
-
-
-/*
-    public List<EnzymeSummary> getEnzymeEntries(List<Result> briefResultList)
-            throws MultiThreadingException {
-        ExecutorService pool = Executors.newCachedThreadPool();
-        List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
-        try {
-            for (Result result:briefResultList) {
-                String primaryAccession = result.getAcc().get(0);
-                Callable caller = new GetEntriesCaller(primaryAccession);
-                Future<EnzymeSummary> future = pool.submit(caller);
-                EnzymeSummary enzymeSummary;
-                try {
-                    enzymeSummary = future.get(IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS);
-                } catch (InterruptedException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was interupted! ", ex);
-                } catch (ExecutionException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was not executed! ", ex);
-
-                } catch (TimeoutException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread did not return the result" +
-                            " before timeout! ", ex);
-                }
-                enzymeSummary.setUniprotid(result.getId());
-                //enzymeSummary.getPdbeaccession(result.get)
-                enzymeSummaryList.add(enzymeSummary);
-            }
-            return enzymeSummaryList;
-        }
-        finally {
-            pool.shutdown();
-        }
-    }
-    */
-/*
-    public List<EnzymeSummary> getEnzymeEntries(Map<String>,List<Result>> briefResultList)
-            throws MultiThreadingException {
-        ExecutorService pool = Executors.newCachedThreadPool();
-        List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
-        try {
-            for (Result result:briefResultList) {
-                String primaryAccession = result.getAcc().get(0);
-                Callable caller = new GetEntriesCaller(primaryAccession);
-                Future<EnzymeSummary> future = pool.submit(caller);
-                EnzymeSummary enzymeSummary;
-                try {
-                    enzymeSummary = future.get(IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS);
-                } catch (InterruptedException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was interupted! ", ex);
-                } catch (ExecutionException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was not executed! ", ex);
-
-                } catch (TimeoutException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread did not return the result" +
-                            " before timeout! ", ex);
-                }
-                enzymeSummary.setUniprotid(result.getId());
-                //enzymeSummary.getPdbeaccession(result.get)
-                enzymeSummaryList.add(enzymeSummary);
-            }
-            return enzymeSummaryList;
-        }
-        finally {
-            pool.shutdown();
-        }
-    }
- * 
- */
 }

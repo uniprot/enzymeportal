@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.enzyme.model.Sequence;
+import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
@@ -19,6 +23,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
+import uk.ac.ebi.kraken.interfaces.uniprot.dbx.drugbank.DrugBank;
 import uk.ac.ebi.kraken.interfaces.uniprot.dbx.reactome.Reactome;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
 import uk.ac.ebi.kraken.model.uniprot.dbx.pdb.PdbImpl;
@@ -59,19 +64,18 @@ public class UniprotCallable {
 
     public static class GetEntriesCaller implements Callable<EnzymeSummary> {
         protected String accession;
-        protected boolean entryPage;
+        //protected boolean entryPage;
         public GetEntriesCaller() {
         }
 
-        public GetEntriesCaller(String accession, boolean entryPage) {
+        public GetEntriesCaller(String accession) {
             this.accession = accession;
-            this.entryPage = entryPage;
         }
 
 
 
         public EnzymeSummary call() throws Exception {
-            return getEnzymeEntry();
+            return getEnzymeSummaryByAccession();
         }
 
         public String getAccession() {
@@ -82,40 +86,17 @@ public class UniprotCallable {
             this.accession = accession;
         }
 
-        public boolean isEntryPage() {
-            return entryPage;
-        }
-
-        public void setEntryPage(boolean entryPage) {
-            this.entryPage = entryPage;
-        }
-
-
-
-        public EnzymeSummary getEnzymeEntry()  {
+        public EnzymeSummary getEnzymeSummaryByAccession()  {
             //Retrieve UniProt entry by its accession number
             UniProtEntry entry = (UniProtEntry) entryRetrievalService
                     .getUniProtEntry(accession);
-            return setEnzymeProperties(entry);
+            return setEzymeResult(entry);
         }
 
-        public EnzymeSummary getEnzymeEntryDetails()  {
-            //Retrieve UniProt entry by its accession number
-            UniProtEntry entry = (UniProtEntry) entryRetrievalService
-                    .getUniProtEntry(accession);
-            return setEnzymeProperties(entry);
-        }
-
-    public EnzymeSummary setEnzymePropertyDetails(UniProtEntry entry) {
-        EnzymeSummary enzymeModel = null;
-        enzymeModel = setEnzymeProperties(entry);
-        if (entryPage) {
-            setEnzymeProperties(entry, (EnzymeModel)enzymeModel);
-        }
-        return enzymeModel;
-    }
-
-    public EnzymeSummary setEnzymeProperties(UniProtEntry entry, EnzymeModel enzymeModel) {
+    public EnzymeSummary getEnzymeWithSequenceByAccession() {
+        UniProtEntry entry = (UniProtEntry) entryRetrievalService
+                .getUniProtEntry(accession);
+        EnzymeModel enzymeModel =  (EnzymeModel)setEzymeResult(entry);
         int seqLength = entry.getSequence().getLength();
         int weight = entry.getSequence().getMolecularWeight();
         String seqUrl = IUniprotAdapter.SEQUENCE_URL_BASE
@@ -129,6 +110,27 @@ public class UniprotCallable {
         Enzyme enzyme = new Enzyme();
         enzyme.setSequence(seq);
         enzymeModel.setEnzyme(enzyme);
+        return enzymeModel;
+    }
+
+    public EnzymeSummary getEnzymePathwayByAccession() {
+        UniProtEntry entry = (UniProtEntry) entryRetrievalService
+                .getUniProtEntry(accession);
+        EnzymeModel enzymeModel = (EnzymeModel)setEnzymeCommonProperties(entry);
+        ReactionPathway reactionpathway = this.getReactomePathways(entry);
+        enzymeModel.getReactionpathway().add(reactionpathway);
+        return enzymeModel;
+    }
+
+    public EnzymeSummary getEnzymeDrugByAccession() {
+        UniProtEntry entry = (UniProtEntry) entryRetrievalService
+                .getUniProtEntry(accession);
+        EnzymeModel enzymeModel = (EnzymeModel)setEnzymeCommonProperties(entry);
+        //ReactionPathway reactionpathway = this.setReactomePathways(entry);
+        List<Molecule>  molecules = this.getDrugBankAccessions(entry);
+        ChemicalEntity chemicalEntity = new ChemicalEntity();
+        chemicalEntity.setDrugs(molecules);
+        enzymeModel.setMolecules(chemicalEntity);
         return enzymeModel;
     }
 
@@ -150,7 +152,7 @@ public class UniprotCallable {
     }
 
    
-    public ReactionPathway getReactomeAccessions(UniProtEntry entry) {
+    public ReactionPathway getReactomePathways(UniProtEntry entry) {
         List<Reactome> refList = entry.getDatabaseCrossReferences(DatabaseType.REACTOME);
         List<String> results = new ArrayList<String>();
         ReactionPathway reactionpathway = new ReactionPathway();
@@ -168,18 +170,30 @@ public class UniprotCallable {
         }
         return reactionpathway;
     }
-    
-    public EnzymeSummary setEnzymeProperties(UniProtEntry entry) {
-        //EnzymeSummary enzymeSummary = new EnzymeSummary();
+
+    public List<Molecule> getDrugBankAccessions(UniProtEntry entry) {
+        List<DrugBank> refList = entry.getDatabaseCrossReferences(DatabaseType.DRUGBANK);        
+        List<Molecule> molecules = new ArrayList<Molecule>();
+        if (refList.size() > 0) {
+            for (DrugBank ref:refList) {
+                String dbAccession = ref.getDrugBankAccessionNumber().getValue();
+                if (dbAccession != null) {
+                    String name = ref.getDrugBankDescription().getValue();
+                    Molecule molecule = new Molecule();
+                    molecule.getXrefs().add(ref.getDrugBankAccessionNumber().getValue());
+                    molecules.add(molecule);
+                }
+            }
+        }
+        return molecules;
+    }
+
+    public EnzymeSummary setEnzymeCommonProperties(UniProtEntry entry) {
         EnzymeModel enzymeSummary = new EnzymeModel();
         enzymeSummary.getUniprotaccessions().add(entry.getPrimaryUniProtAccession().getValue());
         enzymeSummary.setUniprotid(entry.getUniProtId().getValue());
-        if (entry != null) {            
-            List<Comment> commentList = entry.getComments(CommentType.FUNCTION);
-            String function = Transformer.getFunction(commentList);
-            enzymeSummary.setFunction(function);
-
-            ProteinDescription desc = entry.getProteinDescription();            
+        if (entry != null) {
+            ProteinDescription desc = entry.getProteinDescription();
             String name = null;
             if (desc.hasSubNames()){
                  List<Name> names  = desc.getSubNames();
@@ -192,10 +206,6 @@ public class UniprotCallable {
 
             enzymeSummary.setName(name);
 
-            if (desc.hasAlternativeNames()){
-                List<Name> names = desc.getAlternativeNames();
-                enzymeSummary.getSynonym().addAll(Transformer.getAltNames(names));
-            }
             enzymeSummary.getEc().addAll(desc.getEcNumbers());
             String speciesCommonName = entry.getOrganism().getCommonName().getValue();
             String scientificName = entry.getOrganism().getScientificName().getValue();
@@ -203,18 +213,34 @@ public class UniprotCallable {
             species.setCommonname(speciesCommonName);
             species.setScientificname(scientificName);
             enzymeSummary.setSpecies(species);
-            enzymeSummary.setPdbeaccession(this.getPdbeAccessions(entry));           
-            if (entryPage) {
-                ReactionPathway reactionpathway = this.getReactomeAccessions(entry);
-                enzymeSummary.getReactionpathway().add(reactionpathway);
-            }            
+        }
+        return enzymeSummary;
+    }
+    
+    public EnzymeSummary setEzymeResult(UniProtEntry entry) {
+        //EnzymeSummary enzymeSummary = new EnzymeSummary();
+        EnzymeSummary enzymeSummary = setEnzymeCommonProperties(entry);
+        if (entry != null) {            
+            List<Comment> commentList = entry.getComments(CommentType.FUNCTION);
+            String function = Transformer.getFunction(commentList);
+            enzymeSummary.setFunction(function);
+
+            ProteinDescription desc = entry.getProteinDescription();            
+            if (desc.hasAlternativeNames()){
+                List<Name> names = desc.getAlternativeNames();
+                enzymeSummary.getSynonym().addAll(Transformer.getAltNames(names));
+            }
+            enzymeSummary.setPdbeaccession(this.getPdbeAccessions(entry));                     
         }
         return enzymeSummary;
     }
 
   }
 //******************************** INNER CLASS *******************************//
-
+    /**
+     * A caller that implements the {@link Callable} interface that can be called
+     * to perform concurrent queries to Uniprot API to get Uniprot entries grouped by species.
+     */
     public static class QueryEntryByIdCaller implements Callable<EnzymeSummary> {    
         protected UniProtEntry mainEntry;
         protected String defaultSpecies;
@@ -227,39 +253,18 @@ public class UniprotCallable {
 
 
         public EnzymeSummary call() throws Exception {
-            return queryEntry();
+            return queryforEnzymeSummaryEntry();
         }
-/*
-        public EnzymeSummary queryEntry()  {
-            //Retrieve UniProt entry by its accession number
-            Query uniprotQuery = UniProtQueryBuilder.buildQuery(query);
-            List<EnzymeAccession> speciesList = getSpecies(uniprotQuery);
-            EntryIterator<UniProtEntry> entries = queryService.getEntryIterator(uniprotQuery);
-            int resultSize = entries.getResultSize();
-            EnzymeSummary enzymeSummary = new EnzymeSummary();
-            if (resultSize > 0) {
-                List<UniProtEntry> secEntries = separateEntries (entries);
-                enzymeSummary = setMainEntry(this.mainEntry);
-                if (secEntries.size() > 0) {
-                    List<EnzymeAccession>  relSpecies = getRelatedSpecies(secEntries);
-                    enzymeSummary.getRelatedspecies().addAll(relSpecies);
-                }
-            }
-            else {
-                int resSize = resultSize;
-            }
-            return enzymeSummary;
-        }
-*/
-        public EnzymeSummary queryEntry()  {
-            List<EnzymeAccession> speciesList = getSpecies(false);
+
+        public EnzymeSummary queryforEnzymeSummaryEntry()  {
+            List<EnzymeAccession> speciesList = getSpecies(0);
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
                 GetEntriesCaller caller = new GetEntriesCaller(
-                topSpecies.getUniprotaccessions().get(0), false);
+                topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
-                enzymeSummary = caller.getEnzymeEntry();
+                enzymeSummary = caller.getEnzymeSummaryByAccession();
 
                 //Add related species
                 if (speciesList.size() > 1) {
@@ -270,17 +275,47 @@ public class UniprotCallable {
             }
             return enzymeSummary;
         }
-/*
-        public EnzymeSummary setMainEntry(UniProtEntry mainEntry) {
-            EnzymeSummary enzymeSummary = new EnzymeSummary();
-            GetEntriesCaller caller = new GetEntriesCaller();
-            enzymeSummary = caller.setEnzymeProperties(mainEntry);
+
+        public EnzymeSummary queryforEnzymeSequenceEntry()  {
+            List<EnzymeAccession> speciesList = getSpecies(IUniprotAdapter.SPECIES_BRIEF_MAX_SIZE);
+            EnzymeSummary enzymeSummary = null;
+            if (speciesList.size() > 0) {
+                EnzymeAccession topSpecies = speciesList.get(0);
+                GetEntriesCaller caller = new GetEntriesCaller(
+                topSpecies.getUniprotaccessions().get(0));
+                //Retieve the main entry
+                enzymeSummary = caller.getEnzymeWithSequenceByAccession();
+                //Add related species
+                if (speciesList.size() > 1) {
+                    speciesList.remove(topSpecies);
+                    enzymeSummary.getRelatedspecies().addAll(speciesList);
+                }
+
+            }
             return enzymeSummary;
         }
- * 
- */
 
-        public List<EnzymeAccession> getSpecies(boolean entryPage) {
+        public EnzymeSummary queryforEnzymePathwayEntry()  {
+            List<EnzymeAccession> speciesList = getSpecies(IUniprotAdapter.SPECIES_BRIEF_MAX_SIZE);
+            EnzymeSummary enzymeSummary = null;
+            if (speciesList.size() > 0) {
+                EnzymeAccession topSpecies = speciesList.get(0);
+                GetEntriesCaller caller = new GetEntriesCaller(
+                topSpecies.getUniprotaccessions().get(0));
+                //Retieve the main entry
+                enzymeSummary = caller.getEnzymePathwayByAccession();
+                //Add related species
+                if (speciesList.size() > 1) {
+                    //The top species is not set in getEnzymePathwaysByAccession method
+                    speciesList.remove(topSpecies);
+                    enzymeSummary.getRelatedspecies().addAll(speciesList);
+                }
+
+            }
+            return enzymeSummary;
+        }
+
+        public List<EnzymeAccession> getSpecies(int size) {
              AttributeIterator<UniProtEntry> attributes  = queryService
                      .getAttributes(uniprotQuery, "ognl:organism");
              List<EnzymeAccession> accSpeciesList = new ArrayList<EnzymeAccession>();
@@ -293,7 +328,7 @@ public class UniprotCallable {
                 Species species = new Species();
                 species.setCommonname(commonName);
                 species.setScientificname(scientificName);
-                enzymeAccession.setSpecies(species);        
+                enzymeAccession.setSpecies(species);
                  //if (commonName.equalsIgnoreCase(this.defaultSpecies)) {
                 if (scientificName.equalsIgnoreCase(this.defaultSpecies)) {
                      accSpeciesList.add(0,enzymeAccession);
@@ -301,35 +336,13 @@ public class UniprotCallable {
                     accSpeciesList.add(enzymeAccession);
                  }
 
-                if (!entryPage && accSpeciesList.size() == 20) {
+                if (accSpeciesList.size() == size) {
                     break;
                 }
              }
              return accSpeciesList;
+
         }
-
-
-        /*
-        public List<EnzymeAccession> getRelatedSpecies(List<UniProtEntry> secEntries ) {
-            List<EnzymeAccession> relatedSpecies = new ArrayList<EnzymeAccession>();
-            Iterator it = secEntries.iterator();
-            while (it.hasNext()) {
-                UniProtEntry entry = (UniProtEntry)it.next();
-                String commonName = entry.getOrganism().getCommonName().getValue();
-                EnzymeAccession enzymeAccession = new EnzymeAccession();
-                Species species = new Species();
-                species.setCommonname(commonName);
-                enzymeAccession.setSpecies(species);
-                String accesion = entry.getPrimaryUniProtAccession().getValue();
-                enzymeAccession.getUniprotaccessions().add(accesion);
-                relatedSpecies.add(enzymeAccession);
-
-            }
-            return relatedSpecies;
-        }
-         *
-         */
-//                    AttributeIterator<UniProtEntry> speciesList  = queryService.getAttributes(uniprotQuery, "ognl:organism.scientificName");
 
         public List<UniProtEntry> separateEntries(EntryIterator<UniProtEntry> entries) {
             List<UniProtEntry> secEntries = new ArrayList<UniProtEntry>();
