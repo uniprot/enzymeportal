@@ -11,6 +11,21 @@
 			<xs:element name="drugs" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:element name="DASSummary" type="epe:DASSummary"/>
+	<xs:complexType name="DASSummary">
+		<xs:sequence>
+			<xs:element name="label" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="note" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Disease" type="epe:Disease"/>
+	<xs:complexType name="Disease">
+		<xs:complexContent>
+			<xs:extension base="epe:Entity">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:element name="EcClass" type="epe:EcClass"/>
 	<xs:complexType name="EcClass">
 		<xs:sequence>
@@ -26,14 +41,6 @@
 			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="url" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="xrefs" type="xs:anySimpleType" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:element name="EntryDate" type="epe:EntryDate"/>
-	<xs:complexType name="EntryDate">
-		<xs:sequence>
-			<xs:element name="deposit" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="release" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="revision" type="xs:string" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Enzyme" type="epe:Enzyme"/>
@@ -56,7 +63,7 @@
 			<xs:extension base="ep:EnzymeSummary">
 				<xs:sequence>
 					<xs:element name="enzyme" type="epe:Enzyme" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="proteinstructure" type="xs:anySimpleType" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="proteinstructure" type="epe:ProteinStructure" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="reactionpathway" type="epe:ReactionPathway" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="requestedfield" type="xs:string" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="molecule" type="epe:ChemicalEntity" minOccurs="1" maxOccurs="1"/>
@@ -84,12 +91,12 @@
 			<xs:element name="productlist" type="xs:anySimpleType" minOccurs="1" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:element name="Experiment" type="epe:Experiment"/>
-	<xs:complexType name="Experiment">
+	<xs:element name="Image" type="epe:Image"/>
+	<xs:complexType name="Image">
 		<xs:sequence>
-			<xs:element name="resolution" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="rfactor" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="freerfactor" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="source" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="caption" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="href" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Molecule" type="epe:Molecule"/>
@@ -115,10 +122,8 @@
 		<xs:complexContent>
 			<xs:extension base="epe:Entity">
 				<xs:sequence>
-					<xs:element name="method" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-					<xs:element name="experiment" type="epe:Experiment" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="dates" type="epe:EntryDate" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="depositauthor" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+					<xs:element name="image" type="epe:Image" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="summary" type="epe:DASSummary" minOccurs="1" maxOccurs="unbounded"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -138,13 +143,5 @@
 			<xs:element name="weight" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="sequenceurl" type="xs:string" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
-	</xs:complexType>
-	<xs:element name="Disease" type="epe:Disease"/>
-	<xs:complexType name="Disease">
-		<xs:complexContent>
-			<xs:extension base="epe:Entity">
-				<xs:sequence/>
-			</xs:extension>
-		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>
