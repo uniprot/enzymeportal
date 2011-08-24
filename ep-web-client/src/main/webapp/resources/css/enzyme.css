@@ -20,7 +20,7 @@ img {
     border: none;
 }
 
-fieldset {
+.epBox , fieldset {
     border-radius: 8px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
@@ -61,13 +61,12 @@ legend {
     font-weight: bold;
 }
 
-.molImg {
+.epBox {
+    width: 46%;
+    min-height: 300px;
     display: inline;
     float: left;
-    width: 220px;
-}
-.molText {
-    display: inline;
-    float: left;
-    width: 80%;
+    margin: 5px 5px 5px 5px;
+    border: 1px solid #ddd;
+    text-align: center;
 }

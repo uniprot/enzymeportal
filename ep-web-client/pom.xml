@@ -34,7 +34,7 @@
         </configuration>
       </plugin>
     </plugins>
-    <finalName>enzymeportal</finalName>
+    <finalName>enzymeportal012</finalName>
   </build>
   <dependencies>
     <dependency>
