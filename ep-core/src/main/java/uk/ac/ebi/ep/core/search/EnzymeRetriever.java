@@ -176,7 +176,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
-        List<Molecule> drugs = enzymeModel.getMolecules().getDrugs();
+        List<Molecule> drugs = enzymeModel.getMolecule().getDrugs();
         List<Molecule> moleculesFromChebi = new ArrayList<Molecule>();
         for (Molecule drug:drugs) {
             List<Object> drugBankIds = drug.getXrefs();
@@ -199,7 +199,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                 }
             }
         }
-        enzymeModel.getMolecules().setDrugs(moleculesFromChebi);
+        enzymeModel.getMolecule().setDrugs(moleculesFromChebi);
         return enzymeModel;
 
     }
@@ -231,6 +231,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
+        /*
         List<String> pdbIds = enzymeModel.getPdbeaccession();
     	try {
 			Collection<SegmentAdapter> segments = pdbeAdapter.getFeatures(pdbIds);
@@ -249,6 +250,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 		} catch (JAXBException e) {
 	        throw new EnzymeRetrieverException("Unable to get data from DAS server");
 		}
+         * 
+         */
     	return enzymeModel;
     }
 
