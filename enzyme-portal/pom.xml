@@ -156,5 +156,6 @@
     <module>intenz-adapter</module>
     <module>reactome-adapter</module>
     <module>das-adapter</module>
+    <module>literature-adapter</module>
   </modules>
 </project>

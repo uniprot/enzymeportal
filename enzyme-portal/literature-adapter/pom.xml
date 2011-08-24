@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>ep</artifactId>
+		<groupId>uk.ac.ebi.ep</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<groupId>uk.ac.ebi.ep</groupId>
+	<artifactId>literature-adapter</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>literature-adapter</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>uk.ac.ebi.biobabel</groupId>
+			<artifactId>biobabel-citations</artifactId>
+			<version>1.0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.ebi.uniprot.kraken</groupId>
+			<artifactId>uniprotjapi</artifactId>
+			<version>[2011.08,)</version>
+		</dependency>
+	</dependencies>
+</project>
