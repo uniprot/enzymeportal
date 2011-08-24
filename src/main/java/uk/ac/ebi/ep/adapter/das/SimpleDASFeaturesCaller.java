@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.adapter;
+package uk.ac.ebi.ep.adapter.das;
 
 import java.net.MalformedURLException;
 import java.util.Arrays;
@@ -43,10 +43,10 @@ public class SimpleDASFeaturesCaller implements Callable<List<SegmentAdapter>> {
 	}
 
 	public List<SegmentAdapter> call() throws Exception {
-		return getFeatures();
+		return getSegments();
 	}
 
-	List<SegmentAdapter> getFeatures()
+	List<SegmentAdapter> getSegments()
 	throws MalformedURLException, JAXBException {
 		FeaturesClient featuresClient = new FeaturesClient();
 		DasGFFAdapter dasGFF = featuresClient.fetchData(serverURL, segments);
