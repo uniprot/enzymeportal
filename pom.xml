@@ -157,5 +157,6 @@
     <module>reactome-adapter</module>
     <module>das-adapter</module>
     <module>chebi-adapter</module>
+    <module>literature-adapter</module>
   </modules>
 </project>

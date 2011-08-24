@@ -14,19 +14,19 @@
     <head>
         <title>Enzyme Entry</title>
         <link rel="stylesheet"  href="http://www.ebi.ac.uk/inc/css/contents.css"     type="text/css" />
-        <link media="screen" href="../../resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../../resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../../resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../../resources/lib/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../../resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../../resources/lib/spineconcept/javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../../resources/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../../resources/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../../resources/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../../resources/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../../resources/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
+        <link media="screen" href="../../resources/spineconcept/javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="../../resources/css/enzyme.css" type="text/css" rel="stylesheet" />
 
         <link href="../../resources/css/search.css" type="text/css" rel="stylesheet" />
-        <script src="../../resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="../../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="../../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
-        <script src="../../resources/lib/spineconcept/javascript/summary.js" type="text/javascript"></script>
+        <script src="../../resources/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="../../resources/spineconcept/javascript/jquery-ui/js/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="../../resources/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
+        <script src="../../resources/spineconcept/javascript/summary.js" type="text/javascript"></script>
     </head>
     <body>
         <jsp:include page="header.jsp"/>
@@ -207,7 +207,7 @@
                                                                             <c:if test='${i <= 2}'>
                                                                                 <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
                                                                                 <a target="blank" href="${intenzEntryBaseUrl}${ecNumber}"><c:out value="${ecClass[i].name}"/></a>
-                                                                                >
+                                                                                &gt;
                                                                             </c:if>
 
                                                                             <c:if test='${i > 2}'>
@@ -276,9 +276,7 @@
                                 <c:if test='${requestedfield=="proteinStructure"}'>
                                     <div class="node">
                                         <div class="view">
-                                            <div id="proteinContent" class="summary">
-                                                <spring:message code="label.entry.underconstruction"/>                                                
-                                            </div>
+                                        	<%@include file="proteinStructure.jsp" %>
                                         </div>
                                     </div>
                                 </c:if>
