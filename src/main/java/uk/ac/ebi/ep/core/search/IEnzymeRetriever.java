@@ -35,7 +35,7 @@ public interface IEnzymeRetriever {
 
     public EnzymeModel getDiseases(String uniprotAccession) throws EnzymeRetrieverException;
 
-    public EnzymeModel getLiterarture(String uniprotAccession) throws EnzymeRetrieverException;
+    public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException;
 
 
 }
