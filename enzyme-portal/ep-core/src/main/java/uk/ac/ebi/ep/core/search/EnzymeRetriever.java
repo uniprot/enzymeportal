@@ -372,7 +372,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public EnzymeModel getLiterarture(String uniprotAccession) throws EnzymeRetrieverException {
+    public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
