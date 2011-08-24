@@ -19,7 +19,7 @@ public interface IUniprotAdapter {
     public static final int ENTRY_TIMEOUT = 60;
 
     //Limited species list
-    public static final int SPECIES_BRIEF_MAX_SIZE = 20;
+    public static final int SPECIES_BRIEF_MAX_SIZE = 10;
     public static final String ACCESSION_FIELD = "accession";
     public static final String ID_FIELD = "id";
     public static final String SEQUENCE_URL_BASE = "http://www.uniprot.org/uniprot/";
@@ -37,6 +37,12 @@ public interface IUniprotAdapter {
 
 //********************************** METHODS *********************************//
     public EnzymeSummary getEnzymeSummary(String accession);
+
+    public EnzymeSummary getPathwaySummary(String accession);
+
+    public EnzymeSummary getMoleculeSummary(String accession);
+
+    //public EnzymeSummary getDrugSummary(String accession);
     
     public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies) throws
             MultiThreadingException;    

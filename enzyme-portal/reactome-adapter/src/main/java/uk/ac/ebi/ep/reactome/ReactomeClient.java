@@ -82,16 +82,74 @@ public class ReactomeClient {
             //This will be used to query pathways and reactions?
             //reactomeClient.testQueryPathwaysForReferenceEntities();
             //reactomeClient.generatePathwayDiagramInSVG();
-            reactomeClient.testBatchLoading();
+            //reactomeClient.testBatchLoading();
             //reactomeClient.outputBioPAX();
            //reactomeClient.testLoadPathway();
 
-           //reactomeClient.testReaction();
+            //reactomeClient.testComprehensiveExample();
+
+           reactomeClient.testReaction();
            //reactomeClient.testForActualExample();
 
         }
         catch(Exception e) {
             e.printStackTrace();
+        }
+    }
+
+   @SuppressWarnings("unchecked")
+    public void testComprehensiveExample() throws Exception {
+        // A list of gene identifiers from MGD
+        String[] identifiers = new String[]{
+               // "NM_010578", "NM_016898", "NM_153088", "NM_011962", "NM_010683",
+                //"NM_145558", "NM_008212", "NM_198710", "NM_022305", "NM_145418",
+                //"NM_009498"};
+            "NM_009498"};
+        // Initialize three Call objects
+        Call listByQuery = createCall("listByQuery");
+        Call queryPathwaysForEntities = createCall("queryPathwaysForEntityIds");
+        Call listPathwayParticipantsForId = createCall("listPathwayParticipantsForId");
+        Object[] rtn = null;
+        // Iterate identifiers array
+        for (String id : identifiers) {
+            // Query for ReferenceProtein
+            rtn = (Object[]) listByQuery.invoke(new Object[]{
+                                  Summation.class.getName(),
+                                  "relatedIdentifiers",
+                                  id
+            });
+            if (rtn == null || rtn.length == 0)
+                continue;
+            // Query for GenomeEncodedEntity used returned ReferenceProteins
+            Set entities = new HashSet();
+            for (Object obj : rtn) {
+                Object[] rtn1 = (Object[]) listByQuery.invoke(new Object[] {
+                        GenomeEncodedEntity.class.getName(),
+                        "referenceEntity",
+                        obj
+                });
+                if (rtn1 != null)
+                    entities.addAll(Arrays.asList(rtn1));
+            }
+            // Query for pathways these EventEntities participating
+            long[] ids = new long[entities.size()];
+            int index = 0;
+            for (Iterator it = entities.iterator(); it.hasNext();) {
+                EventEntity entity = (EventEntity) it.next();
+                ids[index] = entity.getId();
+                index ++;
+            }
+            Pathway[] pathways = (Pathway[]) queryPathwaysForEntities.invoke(new Object[]{ids});
+            // Get all participants in the returned Pathway objects.
+            System.out.println("ID: " + id);
+            for (Pathway p : pathways) {
+                EventEntity[] participants = (EventEntity[]) listPathwayParticipantsForId.invoke(
+                                                                 new Object[]{p.getId()});
+                System.out.println(p.getName() + ": " + participants.length);
+                // Print out participants
+                for (EventEntity entity : participants)
+                    System.out.printf("    %d: %s%n", entity.getId(), entity.getName());
+            }
         }
     }
     public void outputBioPAX() throws Exception {
@@ -147,6 +205,7 @@ public class ReactomeClient {
     public void testBatchLoading() throws Exception {
         Call call = createCall("queryByIds");
         // call.setSOAPVersion(SOAPConstants.SOAP12_CONSTANTS);
+        /*
         List<Long> ids = new ArrayList<Long>();
         ids.add(new Long(176606)); //418553
         ids.add(new Long(156580)); //418553
@@ -160,19 +219,24 @@ public class ReactomeClient {
         for (int i = 0; i < rtn.length; i++) {
             System.out.println(i);
             printOutput(rtn[i]);
-        }
+        }*/
+        
         // Test for queryByObjects()
         List<Object> objects = new ArrayList<Object>();
         Pathway pathway = new Pathway();
         //pathway.setId(new Long(418346));
-        pathway.setId(new Long(176606));
+        //pathway.setId(new Long(156580));
+        pathway.setId(new Long(71291));
+
         objects.add(pathway);
         Reaction reaction = new Reaction();
         //reaction.setId(new Long(418553));
-        reaction.setId(new Long(176606));
+        //reaction.setId(new Long(176606));
+        reaction.setId(new Long(70837));
+
         objects.add(reaction);
         call = createCall("queryByObjects");
-        rtn = (Object[]) call.invoke(new Object[]{objects.toArray()});
+        Object[] rtn = (Object[]) call.invoke(new Object[]{objects.toArray()});
         System.out.println("Output from queryByObjects(): " + rtn.length);
         for (int i = 0; i < rtn.length; i++) {
             System.out.println(i);
@@ -180,6 +244,7 @@ public class ReactomeClient {
         }
         //displaySOAPResponseBody(call);
         //showCall(call);
+
     }
 
     /**
@@ -193,7 +258,7 @@ public class ReactomeClient {
         // These two pathways don't work correctly: 163200 should be loaded first
         // but not. To much memory is used for this pathway
         Long[] ids = new Long[] {
-            418457L
+            15869L
             //418346L,
             //163200L
         };
@@ -247,7 +312,7 @@ public class ReactomeClient {
         //OK for Uniprot ref, but not for Rhea
         //identifiers[0] = "1.1.1.37";
         //Reaction
-        identifiers[0] = "REACT_6763.1";
+        identifiers[0] = "Q16773";
         //identifiers[0] = "REACT_710.4";
 
         //identifiers[0] = "388396";
@@ -311,7 +376,7 @@ public class ReactomeClient {
     public void testReaction() throws Exception {
         Call call = createCall("listByQuery");
         Object[] paras = new Object[3];
-        /*
+        
         Object[] rtn = callQuery(Taxon.class.getName(),
                 "scientificName",
                 "homo sapiens",
@@ -320,16 +385,18 @@ public class ReactomeClient {
         // There should be one instance
         Taxon humanTaxon = (Taxon) rtn[0];
         System.out.println("Human Taxon: " + humanTaxon);
-         *
-         */
-        Object[] rtn = callQuery(Summation.class.getName(),
+
+        /*
+        Object[] rtn = callQuery(Pathway.class.getName(),
                 "id",
-                "418458",
+                "71406",
                 paras,
                 call);
         //paras[0]="id";
         //paras[1]= new Long(418458);
         //paras[2]=call;
+         *
+         */
         System.out.printf("Total human pathways: %d%n", rtn.length);
         for (int i = 0; i < rtn.length; i++) {
             Summation reaction = (Summation) rtn[i];
@@ -392,7 +459,9 @@ public class ReactomeClient {
 
         int[] dbIds = new int[]{
             //211859
-            176606
+            //156589
+            //15869
+            178468
             /*
                 76131, // ReferenceMolecule
                 30390, // DatabaseIdentifier

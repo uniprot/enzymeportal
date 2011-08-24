@@ -16,11 +16,11 @@
 	background-image: url("../images/molecule.png");
 }
 
-#equation img {
+img {
     border: none;
 }
 
-#reaction fieldset {
+.epBox , fieldset {
     border-radius: 8px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
@@ -36,4 +36,37 @@
     margin-right: 20px;
     margin-top: 10px;
      margin-bottom: 10px;
+}
+#pathwayDesc
+  {
+    float: left;
+    max-width:80%;
+    min-width: 250px;
+  }
+
+  #pathwayImg
+  {
+    float: left;
+    width: 20%;
+  }
+
+fieldset {
+    margin-top: 20px;
+}
+
+legend {
+    font-weight: bold;
+}
+.bold{
+    font-weight: bold;
+}
+
+.epBox {
+    width: 46%;
+    min-height: 300px;
+    display: inline;
+    float: left;
+    margin: 5px 5px 5px 5px;
+    border: 1px solid #ddd;
+    text-align: center;
 }

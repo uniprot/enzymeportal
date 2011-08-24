@@ -3,11 +3,13 @@ package uk.ac.ebi.ep.uniprot.adapter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Field;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.FieldType;
 import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
+import uk.ac.ebi.kraken.model.uniprot.comments.DiseaseCommentImpl;
 import uk.ac.ebi.kraken.model.uniprot.comments.FunctionCommentImpl;
 
 /**
@@ -31,18 +33,32 @@ public class Transformer {
 
 //********************************** METHODS *********************************//
 
-    public static String getFunction(List<Comment> commentList) {
-        Iterator it = commentList.iterator();
+    public static String getCommentString(List<Comment> commentList) {
         StringBuffer sb = new StringBuffer();
-        while (it.hasNext()) {
-            FunctionCommentImpl comment = (FunctionCommentImpl)it.next();
-            String commentText = comment.getValue();
+        for (Comment comment: commentList) {
+            FunctionCommentImpl castedComment = (FunctionCommentImpl)comment;
+            String commentText = castedComment.getValue();
             sb.append(commentText);
-            sb.append(" ");
+            if (commentList.size() > 1) {
+                sb.append("\n");
+            }
             //comment.getEvidenceIds();
         }
         return sb.toString();
+    }
 
+    public static List<Disease> getDiseases(List<Comment> commentList) {
+        List<Disease> diseases = new ArrayList<Disease>();
+        for (Comment comment: commentList) {
+            Disease disease = new Disease();
+            DiseaseCommentImpl castedComment = (DiseaseCommentImpl)comment;
+            String commentText = castedComment.getValue();
+            String id = String.valueOf(castedComment.getId());
+            disease.setId(id);
+            disease.setDescription(commentText);
+            diseases.add(disease);
+         }
+        return diseases;
     }
 /*
     public static List<String> transformNames(List<Name> altName) {

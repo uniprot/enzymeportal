@@ -29,54 +29,39 @@
         <script src="../../resources/spineconcept/javascript/summary.js" type="text/javascript"></script>
     </head>
     <body>
-        <div class="headerdiv" id="headerdiv" style="position:absolute; z-index: 1;">
-            <iframe src="http://www.ebi.ac.uk/inc/head.html" name="head" id="head" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  width="100%" style="position:absolute; z-index: 1; height: 800px;">
-				[Your user agent does not support frames or is currently configured not to display iframes.]
-            </iframe>
-        </div>
-        <form:form id="entryForm" modelAttribute="enzymeModel" action="entry" method="GET">
-            <c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&chebiId="/>
-            <c:set var="chebiEntryBaseUrl" value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI%3A57746&conversationContext=3"/>
-            <c:set var="chebiEntryBaseUrlParam" value="&conversationContext=3"/>
-            <c:set var="rheaEntryBaseUrl" value="http://www.ebi.ac.uk/rhea//reaction.xhtml?id="/>            
+        <jsp:include page="header.jsp"/>
+        <div class="contents">
+            <div class="container_12">
+                <jsp:include page="subHeader.jsp"/>
+                <form:form id="entryForm" modelAttribute="enzymeModel" action="entry" method="GET">
+                    <c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&chebiId="/>
+                    <c:set var="chebiEntryBaseUrl" value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI%3A57746&conversationContext=3"/>
+                    <c:set var="chebiEntryBaseUrlParam" value="&conversationContext=3"/>
+                    <c:set var="rheaEntryBaseUrl" value="http://www.ebi.ac.uk/rhea//reaction.xhtml?id="/>
+                    <c:set var="intenzEntryBaseUrl" value="http://wwwdev.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
 
-            <c:set var="enzyme" value="${enzymeModel.enzyme}"/>
-            <!--requestedfield is an enum type in the controller. Its value has to be one of the values in the Field variable in the controller-->
-            <c:set var="requestedfield" value="${enzymeModel.requestedfield}"/>
-            <c:if test='${requestedfield=="enzyme"}'>
-                <c:set var="enzymeSelected" value="selected"/>
-            </c:if>
-            <c:if test='${requestedfield=="proteinStructure"}'>
-                <c:set var="proteinStructureSelected" value="selected"/>
-            </c:if>
-            <c:if test='${requestedfield=="reactionsPathways"}'>
-                <c:set var="reactionsPathwaysSelected" value="selected"/>
-            </c:if>
-            <c:if test='${requestedfield=="molecules"}'>
-                <c:set var="moleculesSelected" value="selected"/>
-            </c:if>
-            <c:if test='${requestedfield=="diseaseDrugs"}'>
-                <c:set var="diseaseDrugsSelected" value="selected"/>
-            </c:if>
-            <c:if test='${requestedfield=="literature"}'>
-                <c:set var="literatureSelected" value="selected"/>
-            </c:if>
-            <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
-            relatedspecies
-            <div class="contents">
-                <div class="container_12">
-                    <div class="grid_12">
-                        <div class="breadcrumbs" wicket:id="breadcrumbs">
-                            <ul>
-                                <li class="first"><a href="http://www.ebi.ac.uk/" class="firstbreadcrumb">EBI</a></li>
-                                <li><a href="http://www.ebi.ac.uk/Databases/">Databases</a></li>
-                                <li><a href="http://www.ebi.ac.uk/Databases/">Enzyme Portal</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="grid_12">
-                        <h1 wicket:id="title">Enzyme</h1>
-                    </div>
+                    <c:set var="enzyme" value="${enzymeModel.enzyme}"/>
+                    <!--requestedfield is an enum type in the controller. Its value has to be one of the values in the Field variable in the controller-->
+                    <c:set var="requestedfield" value="${enzymeModel.requestedfield}"/>
+                    <c:if test='${requestedfield=="enzyme"}'>
+                        <c:set var="enzymeSelected" value="selected"/>
+                    </c:if>
+                    <c:if test='${requestedfield=="proteinStructure"}'>
+                        <c:set var="proteinStructureSelected" value="selected"/>
+                    </c:if>
+                    <c:if test='${requestedfield=="reactionsPathways"}'>
+                        <c:set var="reactionsPathwaysSelected" value="selected"/>
+                    </c:if>
+                    <c:if test='${requestedfield=="molecules"}'>
+                        <c:set var="moleculesSelected" value="selected"/>
+                    </c:if>
+                    <c:if test='${requestedfield=="diseaseDrugs"}'>
+                        <c:set var="diseaseDrugsSelected" value="selected"/>
+                    </c:if>
+                    <c:if test='${requestedfield=="literature"}'>
+                        <c:set var="literatureSelected" value="selected"/>
+                    </c:if>
+                    <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
                     <div class="grid_12 header"  style="">
                         <div class="container_12">
                             <div class="grid_4 prefix_4 suffix_3 alpha">
@@ -221,14 +206,16 @@
                                                                             </c:if>
                                                                             <c:if test='${i <= 2}'>
                                                                                 <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
-                                                                                <c:out value="${ecClass[i].name}"/>
+                                                                                <a target="blank" href="${intenzEntryBaseUrl}${ecNumber}"><c:out value="${ecClass[i].name}"/></a>
                                                                                 &gt;
                                                                             </c:if>
 
                                                                             <c:if test='${i > 2}'>
                                                                                 <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                                                <a target="blank" href="${intenzEntryBaseUrl}${ecNumber}">
                                                                                 <c:out value="${ecNumber}"/> -
                                                                                 <c:out value="${ecClass[i].name}"/>
+                                                                                </a>
                                                                             </c:if>
                                                                         </c:forEach>
                                                                         <br/>
@@ -238,6 +225,7 @@
                                                         </ul>
                                                     </dd>
                                                 </dl>
+                                                                <!--
                                                 <dl>
                                                     <dt>Enzyme Type</dt>
                                                     <dd>
@@ -246,6 +234,7 @@
                                                         </ul>
                                                     </dd>
                                                 </dl>
+                                                                -->
                                                 <dl>
                                                     <dt>Other names</dt>
                                                     <dd>
@@ -272,12 +261,11 @@
                                                                 This sequence has
                                                                 <c:out value="${sequence.sequence}"/>
                                                                 amino acids and a molecular weight of
-                                                                <c:out value="${sequence.weight}"/> <br>
-                                                                <a target="blank" href="${sequence.sequenceurl}">View Sequence in Uniprot</a>
-
+                                                                <c:out value="${sequence.weight}"/> 
                                                             </li>
                                                         </ul>
                                                     </dd>
+                                                    <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in Uniprot</a></p>
                                                 </dl>
                                             </div>
                                         </div>
@@ -297,101 +285,133 @@
                                 <c:if test='${requestedfield=="reactionsPathways"}'>
                                     <div class="node">
                                         <div class="view">
-                                            <c:set var="reactionpathways" value="${enzymeModel.reactionpathway}"/>
-                                            <c:forEach items="${reactionpathways}" var="reactionpathway">
-                                                <c:set var="reaction" value="${reactionpathway.reaction}"/>
-                                                <div id="reaction">
-                                                    <fieldset>
-                                                        <c:set var="rheaEntryUrl" value="${rheaEntryBaseUrl}${reaction.id}"/>
-                                                        <legend>
-                                                            <!--<a target="blank" href="${rheaEntryUrl}"><c:out value="${reaction.title}" escapeXml="false"/></a>-->
-                                                            <c:out value="${reaction.title}" escapeXml="false"/>
-                                                        </legend>
-                                                        <div id="equation">
-                                                        <table>
-                                                            <tr>
-                                                                <c:set var="reactants" value="${reaction.equation.reactantlist}"/>
-                                                                <c:set var="counter" value="${1}"/>
-                                                                <c:forEach items="${reactants}" var="reactant">
-                                                                    <td>
-                                                                        <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${reactant.id}"/>
-                                                                        <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${reactant.id}${chebiEntryBaseUrlParam}"/>
-                                                                        <a target="blank" href="${chebiEntryUrl}">
-                                                                            <img src="${chebiImageUrl}" alt="${reactant.title}"/>
-                                                                        </a>
-                                                                    </td>
-                                                                    <c:if test="${counter < fn:length(reactants)}">
-                                                                        <td>
-                                                                            <b>+</b>
-                                                                        </td>
-                                                                    </c:if>
-                                                                    <c:set var="counter" value="${counter+1}"/>
-                                                                </c:forEach>
+                                            <div id="reactionContent" class="summary">
+                                                <h2><c:out value="${enzymeModel.name}"/></h2>
+                                                <c:set var="reactionpathways" value="${enzymeModel.reactionpathway}"/>
+                                                <c:forEach items="${reactionpathways}" var="reactionpathway">
+                                                    <c:set var="reaction" value="${reactionpathway.reaction}"/>
+                                                    <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
+                                                    <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
 
-                                                                <td>
-                                                                    <b><c:out value="${reaction.equation.direction}"/></b>
-                                                                </td>
+                                                    <div id="reaction">
+                                                        <fieldset>
+                                                            <c:if test="${reaction == null}">
+                                                                <legend><spring:message code="label.entry.reactionsPathways.found.text.alt" arguments="${pathwaysSize}"/></legend>
+                                                            </c:if>
+                                                            <c:if test="${reaction != null}">
+                                                                <c:set var="rheaEntryUrl" value="${rheaEntryBaseUrl}${reaction.id}"/>
+                                                                <legend>
+                                                                    <!--<a target="blank" href="${rheaEntryUrl}"><c:out value="${reaction.name}" escapeXml="false"/></a>-->
+                                                                    <c:out value="${reaction.name}" escapeXml="false"/>
+                                                                </legend>
+                                                                <div id="equation">
+                                                                    <table>
+                                                                        <tr>
+                                                                            <c:set var="reactants" value="${reaction.equation.reactantlist}"/>
+                                                                            <c:set var="reactantsSize" value="${fn:length(reactants)}"/>
+                                                                            <c:set var="products" value="${reaction.equation.productlist}"/>
+                                                                            <c:set var="productsSize" value="${fn:length(products)}"/>
+                                                                            <!--OK for small screen, but Look odd in big screen-->
+                                                                            <c:set var="imageSize" value=""/>
+                                                                            <c:if test="${(reactantsSize+productsSize)>5}">
+                                                                                <c:set var="imageSize" value="80%"/>
+                                                                            </c:if>
+                                                                            <c:set var="counter" value="${1}"/>
+                                                                            <c:forEach items="${reactants}" var="reactant">
+                                                                                <td>
+                                                                                    <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${reactant.id}"/>
+                                                                                    <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${reactant.id}${chebiEntryBaseUrlParam}"/>
+                                                                                    <a target="blank" href="${chebiEntryUrl}">
+                                                                                        <img src="${chebiImageUrl}" alt="${reactant.title}" width="${imageSize}"/>
+                                                                                    </a>
+                                                                                </td>
+                                                                                <c:if test="${counter < reactantsSize}">
+                                                                                    <td width="1%">
+                                                                                        <b>+</b>
+                                                                                    </td>
+                                                                                </c:if>
+                                                                                <c:set var="counter" value="${counter+1}"/>
+                                                                            </c:forEach>
 
-                                                                <c:set var="products" value="${reaction.equation.productlist}"/>
-                                                                <c:set var="counter" value="${1}"/>
-                                                                <c:forEach items="${products}" var="product">
-                                                                    <td>
-                                                                        <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${product.id}"/>
-                                                                        <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${product.id}${chebiEntryBaseUrlParam}"/>
-                                                                        <a target="blank" href="${chebiEntryUrl}">
-                                                                            <img src="${chebiImageUrl}" alt="${product.title}"/>
-                                                                        </a>
-                                                                    </td>
-                                                                    <c:if test="${counter < fn:length(products)}">
-                                                                        <td>
-                                                                            <b>+</b>
-                                                                        </td>
-                                                                    </c:if>
-                                                                    <c:set var="counter" value="${counter+1}"/>
-                                                                </c:forEach>
-                                                            </tr>
-                                                        </table>
-                                                        </div>
+                                                                            <td>
+                                                                                <b><c:out value="${reaction.equation.direction}"/></b>
+                                                                            </td>
+
+                                                                            <c:set var="counter" value="${1}"/>
+                                                                            <c:forEach items="${products}" var="product">
+                                                                                <td>
+                                                                                    <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${product.id}"/>
+                                                                                    <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${product.id}${chebiEntryBaseUrlParam}"/>
+                                                                                    <a target="blank" href="${chebiEntryUrl}">
+                                                                                        <img src="${chebiImageUrl}" alt="${product.title}" width="${imageSize}"/>
+                                                                                    </a>
+                                                                                </td>
+                                                                                <c:if test="${counter < productsSize}">
+                                                                                    <td>
+                                                                                        <b>+</b>
+                                                                                    </td>
+                                                                                </c:if>
+                                                                                <c:set var="counter" value="${counter+1}"/>
+                                                                            </c:forEach>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
                                                                 <div id="reactionDesc">
-                                                                    <c:out value="${reaction.description}"/>
+                                                                    <c:out value="${reaction.description}" escapeXml="false"/>
                                                                 </div>
-                                                           <div id="rheaExtLinks">
-                                                            <div id="rheaLink" class="inlineLinks">
-                                                                <a target="blank" href="${rheaEntryUrl}">
-                                                                    <spring:message code="label.entry.reactionsPathways.link.rhea"/>
-                                                                </a>
-                                                            </div>
-                                                            <c:set var="macielinks" value="${reactionpathway.mechanism}"/>
-                                                            <c:if test="${fn:length(macielinks) > 0}">
-                                                            <c:set var="macieEntryUrl" value="${macielinks[0].href}"/>
-                                                                <div  id="macieLink" class="inlineLinks">
-                                                                    <a target="blank" href="${macieEntryUrl}">
-                                                                        <spring:message code="label.entry.reactionsPathways.link.macie"/>
-                                                                    </a>
+                                                                <div id="rheaExtLinks">
+                                                                    <div id="rheaLink" class="inlineLinks">
+                                                                        <a target="blank" href="${rheaEntryUrl}">
+                                                                            <spring:message code="label.entry.reactionsPathways.link.rhea"/>
+                                                                        </a>
+                                                                    </div>
+                                                                    <c:set var="macielinks" value="${reactionpathway.mechanism}"/>
+                                                                    <c:if test="${fn:length(macielinks) > 0}">
+                                                                        <c:set var="macieEntryUrl" value="${macielinks[0].href}"/>
+                                                                        <div  id="macieLink" class="inlineLinks">
+                                                                            <a target="blank" href="${macieEntryUrl}">
+                                                                                <spring:message code="label.entry.reactionsPathways.link.macie"/>
+                                                                            </a>
+                                                                        </div>
+                                                                    </c:if>
                                                                 </div>
                                                             </c:if>
-                                                        </div>
-                                                            <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
-                                                            <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
                                                             <c:if test="${pathwaysSize>0}" >
-                                                                <spring:message code="label.entry.reactionsPathways.found.text" arguments="${pathwaysSize}"/>
-                                                            <div id="pathways">
-                                                            <fieldset>
-                                                                <legend>Pathways</legend>
-                                                                <br/>
-                                                                <c:forEach var="pathway" items="${reactionpathway.pathways}">
-                                                                <c:set var="reactomeUrl" value="${pathway.url}"/>
-                                                                <a target="blank" href="${reactomeUrl}">
-                                                                <spring:message code="label.entry.reactionsPathways.link.reactome"/>
-                                                                </a>
-                                                                </c:forEach>
-                                                            </fieldset>
-                                                            </div>
-                                                            </c:if>
-                                                    </fieldset>
-                                                </div>
-                                            </c:forEach>
+                                                                <c:if test="${reaction != null}">
+                                                                    <spring:message code="label.entry.reactionsPathways.found.text" arguments="${pathwaysSize}"/>
+                                                                </c:if>
+                                                                <div id="pathways">
+                                                                    <c:forEach var="pathway" items="${reactionpathway.pathways}">
+                                                                        <fieldset>
+                                                                            <c:set var="reactomeUrl" value="${pathway.url}"/>
+                                                                            <legend><c:out value="${pathway.name}" escapeXml="false"/></legend>
+                                                                            <br/>
+                                                                            <div id="pathwayDesc">
+                                                                                <div>
+                                                                                    <c:out value="${pathway.description}" escapeXml="false"/>
+                                                                                </div>
+                                                                                <br/><br/>
+                                                                                <div class="inlineLinks">
+                                                                                    <a target="blank" href="${reactomeUrl}">
+                                                                                        <spring:message code="label.entry.reactionsPathways.link.reactome"/>
+                                                                                    </a>
+                                                                                </div>
 
+                                                                            </div>
+                                                                            <div id="pathwayImg">
+                                                                                <a target="blank" href="${reactomeUrl}">
+                                                                                    <img src="../../resources/images/pathwayDiagram.png" alt="?"/>
+                                                                                </a>
+                                                                            </div>
+                                                                        </fieldset>                                                                        
+                                                                    </c:forEach>                                                                
+                                                                </div>
+                                                            </c:if>
+                                                        </fieldset>
+                                                    </div>
+                                                </c:forEach>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </c:if>
@@ -400,16 +420,88 @@
                                 <c:if test='${requestedfield=="molecules"}'>
                                     <div class="node">
                                         <div class="view">
-                                            <spring:message code="label.entry.underconstruction"/>
+                                            <div id="moleculeContent" class="summary">
+                                                <h2><c:out value="${enzymeModel.name}"/></h2>
+                                                <c:set var="molecules" value="${enzymeModel.molecule}"/>
+                                                <div id="molecules">
+                                                <c:if test='${molecules!=null}'>
+                                                <c:set var="drugs" value="${molecules.drugs}"/>
+                                                <c:set var="drugsSize" value="${fn:length(drugs)}"/>
+                                                <!--<spring:message code="label.entry.underconstruction"/>-->
+                                                    <div id="drugs">
+                                                        <c:if test='${drugsSize == 0}'>
+                                                            <div>
+                                                            <spring:message code="label.entry.molecules.empty" arguments="drugs"/>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test='${drugsSize > 0}'>
+                                                        <fieldset>
+                                                            <legend>
+                                                                <spring:message code="label.entry.molecules.drug.title"/>
+                                                            </legend>
+                                                            <p>
+                                                                <spring:message code="label.entry.molecules.drug.explaination"/>
+                                                            </p>
+                                                            <c:forEach var="drug" items="${drugs}">
+                                                                <fieldset class="epBox">                                                                        
+                                                                        <a href="${chebiImageBaseUrl}${drug.id}" target="blank">
+                                                                            <c:out value="${drug.name}"/>
+                                                                        </a>                                                                        
+                                                                        <div>
+                                                                            <div>
+                                                                                <a target="blank" href="${drug.url}">
+                                                                                    <img src="${chebiImageBaseUrl}${drug.id}" alt="${drug.name}"/>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div>
+                                                                                    <c:out value="${drug.description}"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <span class="bold"><spring:message code="label.entry.molecules.drug.formula"/></span>: <c:out value="${drug.formula}"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>                                                                            
+                                                                        </div>
+                                                                    </fieldset>
+                                                            </c:forEach>
+                                                        </fieldset>
+                                                        </c:if>
+                                                    </div>
+                                                </div>
+                                                </c:if>
+                                            </div>
                                         </div>
                                     </div>
                                 </c:if>
-
                                 <!--START DISEASE & DRUGS TAB-->
                                 <c:if test='${requestedfield=="diseaseDrugs"}'>
                                     <div class="node">
                                         <div class="view">
-                                            <spring:message code="label.entry.underconstruction"/>
+                                            <div id="diseaseContent" class="summary">
+                                            <h2><c:out value="${enzymeModel.name}"/></h2>
+                                                <c:set var="diseases" value="${enzymeModel.disease}"/>
+                                                    <c:set var="diseasesSize" value="${fn:length(diseases)}"/>
+                                                    <c:set var="plural" value="y"/>
+                                                    <c:if test='${diseasesSize > 1}'>
+                                                        <c:set var="plural" value="ies"/>
+                                                    </c:if>
+
+                                                <c:if test='${diseasesSize == 0}'>
+                                                    <p><spring:message code="label.entry.molecules.empty" arguments="diseases"/></p>
+                                                </c:if>
+                                                <c:if test='${diseasesSize > 0}'>
+                                                <p><spring:message code="label.entry.disease.found" arguments="${diseasesSize},${plural}"/></p>
+                                                <c:forEach items="${diseases}" var="disease">
+                                                    <ul>
+                                                        <li>
+                                                        <c:out value="${disease.description}"/>
+                                                        </li>
+                                                    </ul>
+                                                </c:forEach>
+                                                </c:if>
+                                            </div>
                                         </div>
                                     </div>
                                 </c:if>
@@ -425,21 +517,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="clear"></div>
-                </div>
+                </form:form>
+                <div class="clear"></div>
             </div>
-        </form:form>
-        <script type="text/javascript">
-            function getQueryString() {
-                /* variable searchTerm is automaticatlly added by the framework */
-                return searchTerm;
-            }
-
-            window.onload=function() {
-                if (navigator.userAgent.indexOf('MSIE') != -1) {
-                    document.getElementById('head').allowTransparency = true;
-                }
-            }
-        </script>
+            <jsp:include page="footer.jsp"/>
+        </div>
     </body>
 </html>

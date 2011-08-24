@@ -16,21 +16,14 @@ import org.apache.log4j.Logger;
 
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
-<<<<<<< .working
-import uk.ac.ebi.das.jdas.exceptions.ValidationException;
-=======
 import uk.ac.ebi.das.jdas.exceptions.ValidationException;
 import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
 import uk.ac.ebi.ep.chebi.adapter.ChebiFetchDataException;
 import uk.ac.ebi.ep.chebi.adapter.IChebiAdapter;
->>>>>>> .merge-right.r237
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
-<<<<<<< .working
 import uk.ac.ebi.ep.enzyme.model.DASSummary;
-=======
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.Entity;
->>>>>>> .merge-right.r237
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
@@ -241,17 +234,15 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
-        /*
         List<String> pdbIds = enzymeModel.getPdbeaccession();
     	try {
 			Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);
             for (SegmentAdapter segment : segments){
-<<<<<<< .working
                 ProteinStructure structure = new ProteinStructure();
-                structure.setPdbCode(segment.getId());
+                structure.setId(segment.getId());
                 for (FeatureAdapter feature : segment.getFeature()){
                     if (feature.getType().getId().equals("description")){
-                        structure.setDescription(feature.getNotes());
+                        structure.setDescription(feature.getNotes().get(0)); // FIXME?
                     } else if (feature.getType().getId().equals("image")){
                         Image image = new Image();
                         image.setSource(feature.getLinks().get(0).getHref());
@@ -266,14 +257,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                         summary.setNote(feature.getNotes());
                         structure.getSummary().add(summary);
                     }
-=======
-                try {
-                    //String pdbCode = segments.getId();
-                    for (FeatureAdapter feature : segment.getFeature()) {
-                    }
-                } catch (ValidationException ex) {
-                    java.util.logging.Logger.getLogger(EnzymeRetriever.class.getName()).log(Level.SEVERE, null, ex);
->>>>>>> .merge-right.r237
                 }
                 enzymeModel.getProteinstructure().add(structure);
             }
@@ -284,8 +267,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 		} catch (ValidationException e){
 	        throw new EnzymeRetrieverException("Validation error for DASGGF", e);
         }
-         * 
-         */
     	return enzymeModel;
     }
 

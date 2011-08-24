@@ -28,21 +28,21 @@
             <table style="display: none;">
             <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
                 <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
-                	onclick="return showStructure('${proteinStructure.pdbCode}');">
-                    <td><a href="#">${proteinStructure.pdbCode}</a></td>
-                    <td>${proteinStructure.description[0]}</td>
+                	onclick="return showStructure('${proteinStructure.id}');">
+                    <td><a href="#">${proteinStructure.id}</a></td>
+                    <td>${proteinStructure.description}</td>
                 </tr>
             </c:forEach>
             </table>
             <div id="proteinStructures">
             <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
-			<div class="summary structure" id="${proteinStructure.pdbCode}"
+			<div class="summary structure" id="${proteinStructure.id}"
                 style="display: ${vs.index eq 0? 'block':'none'}">
 				<div class="summary">
-					<h2>${proteinStructure.description[0]}</td></h2>
+					<h2>${proteinStructure.description}</td></h2>
 					<div class="main_link">
 						<a rel="external"
-							href="http://www.ebi.ac.uk/pdbe-srv/view/entry/${proteinStructure.pdbCode}/summary">View
+							href="http://www.ebi.ac.uk/pdbe-srv/view/entry/${proteinStructure.id}/summary">View
 							in PDBe</a>
 					</div>
 					<div class="image">
@@ -56,10 +56,7 @@
 						<dt>Description</dt>
 						<dd>
 							<ul>
-							<c:forEach var="desc" varStatus="vs"
-								items="${proteinStructure.description}">
-								<li class="note_${vs.index}">${desc}</li>
-							</c:forEach>
+								<li class="note_${vs.index}">${proteinStructure.description}</li>
 							</ul>
 						</dd>
 					</dl>

@@ -41,6 +41,7 @@ public class ReactomeServiceConfig {
     private static Call queryPathwaysByXrefIdsCall = createCall("queryPathwaysForReferenceIdentifiers");
     private static Call queryByIdsCall = createCall("queryByIds");
     private static Call queryByIdCall = createCall("queryById");
+    private static Call queryByObjectsCall = createCall("queryByObjects");
 
    
 
@@ -61,6 +62,10 @@ public class ReactomeServiceConfig {
 
     public Call getQueryByIdsCall() {
         return queryByIdsCall;
+    }
+
+    public Call getQueryByObjectsCall() {
+        return queryByObjectsCall;
     }
 //******************************** CONSTRUCTORS ******************************//
 

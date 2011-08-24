@@ -5,7 +5,7 @@
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>EnzymePortal</name>
+    <name>EnzymePortalProject</name>
     <url>http://enzymeportal.sf.net</url>
     <organization>
         <name>EMBL-EBI</name>
@@ -156,6 +156,7 @@
     <module>intenz-adapter</module>
     <module>reactome-adapter</module>
     <module>das-adapter</module>
+    <module>chebi-adapter</module>
     <module>literature-adapter</module>
   </modules>
 </project>
