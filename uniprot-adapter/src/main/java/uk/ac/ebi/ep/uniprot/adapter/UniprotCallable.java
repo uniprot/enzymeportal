@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
@@ -130,7 +131,7 @@ public class UniprotCallable {
         List<Molecule>  molecules = this.getDrugBankAccessions(entry);
         ChemicalEntity chemicalEntity = new ChemicalEntity();
         chemicalEntity.setDrugs(molecules);
-        enzymeModel.setMolecules(chemicalEntity);
+        enzymeModel.setMolecule(chemicalEntity);
         return enzymeModel;
     }
 
@@ -219,20 +220,22 @@ public class UniprotCallable {
     
     public EnzymeSummary setEzymeResult(UniProtEntry entry) {
         //EnzymeSummary enzymeSummary = new EnzymeSummary();
-        EnzymeSummary enzymeSummary = setEnzymeCommonProperties(entry);
+        EnzymeModel enzymeModel = (EnzymeModel) setEnzymeCommonProperties(entry);
         if (entry != null) {            
-            List<Comment> commentList = entry.getComments(CommentType.FUNCTION);
-            String function = Transformer.getFunction(commentList);
-            enzymeSummary.setFunction(function);
-
+            List<Comment> functionCommentList = entry.getComments(CommentType.FUNCTION);
+            String function = Transformer.getCommentString(functionCommentList);
+            enzymeModel.setFunction(function);
+            List<Comment> diseaseCommentList = entry.getComments(CommentType.DISEASE);
+            List<Disease> diseases = Transformer.getDiseases(diseaseCommentList);
+            enzymeModel.setDisease(diseases);
             ProteinDescription desc = entry.getProteinDescription();            
             if (desc.hasAlternativeNames()){
                 List<Name> names = desc.getAlternativeNames();
-                enzymeSummary.getSynonym().addAll(Transformer.getAltNames(names));
+                enzymeModel.getSynonym().addAll(Transformer.getAltNames(names));
             }
-            enzymeSummary.setPdbeaccession(this.getPdbeAccessions(entry));                     
+            enzymeModel.setPdbeaccession(this.getPdbeAccessions(entry));
         }
-        return enzymeSummary;
+        return enzymeModel;
     }
 
   }
