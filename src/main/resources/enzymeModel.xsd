@@ -124,6 +124,7 @@
 				<xs:sequence>
 					<xs:element name="image" type="epe:Image" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="summary" type="epe:DASSummary" minOccurs="1" maxOccurs="unbounded"/>
+					<xs:element name="provenance" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
