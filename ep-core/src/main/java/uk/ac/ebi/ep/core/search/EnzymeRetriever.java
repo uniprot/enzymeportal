@@ -234,7 +234,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
-        /*
         List<String> pdbIds = enzymeModel.getPdbeaccession();
     	try {
 			Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);
@@ -277,8 +276,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 		} catch (ValidationException e){
 	        throw new EnzymeRetrieverException("Validation error for DASGGF", e);
         }
-         * 
-         */
     	return enzymeModel;
     }
 
