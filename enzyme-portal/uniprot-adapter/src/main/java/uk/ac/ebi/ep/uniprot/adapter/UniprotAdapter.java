@@ -108,4 +108,5 @@ public class UniprotAdapter implements IUniprotAdapter{
             pool.shutdown();
         }
     }
+
 }
