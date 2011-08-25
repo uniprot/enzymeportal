@@ -260,15 +260,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                 }
                 enzymeModel.getProteinstructure().add(structure);
             }
-            for (SegmentAdapter segment : segments){
-                try {
-                    //String pdbCode = segments.getId();
-                    for (FeatureAdapter feature : segment.getFeature()) {
-                    }
-                } catch (ValidationException ex) {
-                    java.util.logging.Logger.getLogger(EnzymeRetriever.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
 		} catch (MalformedURLException e) {
 	        throw new EnzymeRetrieverException("Wrong URL", e);
 		} catch (JAXBException e) {
