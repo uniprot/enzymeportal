@@ -178,6 +178,8 @@
                                         <div class="view">
                                             <div id="enzymeContent" class="summary">
                                                 <h2><c:out value="${enzymeModel.name}"/></h2>
+                                                <c:set var="function" value="${enzymeModel.function}"/>
+                                                <c:if test='${function!=null || function !=""}'>
                                                 <dl>
                                                     <dt>Function</dt>
                                                     <dd>
@@ -186,32 +188,32 @@
                                                         </ul>
                                                     </dd>
                                                 </dl>
+                                                </c:if>
+
                                                 <dl>
                                                     <dt>EC Classification</dt>
                                                     <dd>
                                                         <ul>
                                                             <li>
-
                                                                 <c:set var="echierarchies" value="${enzyme.echierarchies}"/>
                                                                 <c:set var="echierarchiesSize" value="${fn:length(echierarchies)}"/>
+
+                                                                    <c:choose>
+                                                                        <c:when test='${echierarchiesSize > 0}'>
+
                                                                 <c:forEach var="j" begin="0" end="${echierarchiesSize-1}">
                                                                     <c:set var="ecClass" value="${echierarchies[j].ecclass}"/>
                                                                     <c:set var="ecClassSize" value="${fn:length(ecClass)}"/>
-                                                                    <c:if test='${ecClassSize>0}'>
-                                                                        <c:set var="ecNumber" value=""/>
-                                                                        <c:set var="dot" value=""/>
+                                                                    <c:if test='${ecClassSize>0}'>                                                                        
                                                                         <c:forEach var="i" begin="0" end="${ecClassSize-1}">
-                                                                            <c:if test='${i > 0}'>
-                                                                                <c:set var="dot" value="."/>
-                                                                            </c:if>
                                                                             <c:if test='${i <= 2}'>
-                                                                                <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                                                <c:set var="ecNumber" value="${ecClass[i].ec}"/>
                                                                                 <a target="blank" href="${intenzEntryBaseUrl}${ecNumber}"><c:out value="${ecClass[i].name}"/></a>
-                                                                                &gt;
+                                                                                 &gt;
                                                                             </c:if>
 
                                                                             <c:if test='${i > 2}'>
-                                                                                <c:set var="ecNumber" value="${ecNumber}${dot}${ecClass[i].ec}"/>
+                                                                                <c:set var="ecNumber" value="${ecClass[i].ec}"/>
                                                                                 <a target="blank" href="${intenzEntryBaseUrl}${ecNumber}">
                                                                                 <c:out value="${ecNumber}"/> -
                                                                                 <c:out value="${ecClass[i].name}"/>
@@ -220,7 +222,14 @@
                                                                         </c:forEach>
                                                                         <br/>
                                                                     </c:if>
+
                                                                 </c:forEach>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+This enzyme has been partially classified because its catalytic activity is either not well known or well known, but not yet classified by IUBMB.
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                
                                                             </li>
                                                         </ul>
                                                     </dd>
