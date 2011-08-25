@@ -78,44 +78,43 @@ public class IntenzAdapter implements IintenzAdapter{
 
     public EnzymeModel getEnzymeDetails(EnzymeModel enzymeModel) throws MultiThreadingException {
         Set<String> ecList = DataTypeConverter.getUniprotEcs(enzymeModel);
-
-        DataTypeConverter.getUniprotEcs(enzymeModel);
+        //DataTypeConverter.getUniprotEcs(enzymeModel);
         //Synonyms are merged into one list if there are more than 1 ec number
         Set<String> synonyms = new LinkedHashSet<String>();
 
         List<Intenz> intenzList = getIntenz(ecList);
 
         List<EnzymeHierarchy> enzymeHierarchies = new ArrayList<EnzymeHierarchy>();
+        if (enzymeHierarchies.size() > 0) {
+            for (Intenz intenz : intenzList) {
+                GetSynonymsCaller synonymsCaller = new GetSynonymsCaller();
+                GetEcHierarchyCaller ecCaller = new GetEcHierarchyCaller();
 
-        for (Intenz intenz : intenzList) {
-            GetSynonymsCaller synonymsCaller = new GetSynonymsCaller();
-            GetEcHierarchyCaller ecCaller = new GetEcHierarchyCaller();
+                //Intenz intenz = intenzCaller.getData();
 
-            //Intenz intenz = intenzCaller.getData();
+                synonyms.addAll(synonymsCaller.getSynonyms(intenz));
 
-            synonyms.addAll(synonymsCaller.getSynonyms(intenz));
-
-            EnzymeHierarchy enzymeHierarchy = ecCaller.getEcHierarchy(intenz);
-            if (enzymeHierarchy != null) {
-                enzymeHierarchies.add(enzymeHierarchy);
+                EnzymeHierarchy enzymeHierarchy = ecCaller.getEcHierarchy(intenz);
+                if (enzymeHierarchy != null) {
+                    enzymeHierarchies.add(enzymeHierarchy);
+                }
             }
 
-        }
+            if (synonyms.size() > 0) {
+                enzymeModel.getSynonym().addAll(synonyms);
+            }
 
-        if (synonyms.size() > 0) {
-            enzymeModel.getSynonym().addAll(synonyms);
-        }
+            //Enzyme has previously initiatized to set Sequence info
+            //Enzyme enzyme = new Enzyme();
 
-        //Enzyme has previously initiatized to set Sequence info
-        //Enzyme enzyme = new Enzyme();
-
-        if (enzymeModel.getEnzyme()  == null) {
-            Enzyme enzyme = new Enzyme();
-            enzymeModel.setEnzyme(enzyme);
+            if (enzymeModel.getEnzyme()  == null) {
+                Enzyme enzyme = new Enzyme();
+                enzymeModel.setEnzyme(enzyme);
+            }
+            if (enzymeHierarchies.size() > 0) {
+                enzymeModel.getEnzyme().setEchierarchies(enzymeHierarchies);
+            }        
         }
-        if (enzymeHierarchies.size() > 0) {
-            enzymeModel.getEnzyme().setEchierarchies(enzymeHierarchies);
-        }        
 
         return enzymeModel;
     }
@@ -129,7 +128,11 @@ public class IntenzAdapter implements IintenzAdapter{
                 Callable callable = new GetIntenzCaller(
                     IntenzUtil.createIntenzEntryUrl(ec));
                  Future<Intenz> future = pool.submit(callable);
-                 results.add(future.get());
+                 Intenz intenz = future.get();
+                 if (intenz != null) {
+                     results.add(intenz);
+                 }
+                 
              }
          }
         catch (InterruptedException ex) {
