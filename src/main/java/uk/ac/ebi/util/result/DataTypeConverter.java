@@ -68,9 +68,9 @@ public class DataTypeConverter {
         Set<String> ecSet = new TreeSet<String>();
             List<String> ecList = enzymeSummary.getEc();
             for (String ec: ecList) {
-                if (!ec.contains("-")) {
-                    ecSet.add(ec);
-                }
+                ecSet.add(ec);
+                //if (!ec.contains("-")) {
+                //}
         }
         return ecSet;
     }
