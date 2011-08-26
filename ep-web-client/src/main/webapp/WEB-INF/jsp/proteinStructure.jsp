@@ -21,19 +21,22 @@
             }
         </script>
         
-        <div class="references">
-			<div class="button">${fn:length(enzymeModel.pdbeaccession)}
-				protein structure${fn:length(enzymeModel.pdbeaccession) gt 1? 's':''}
-				available</div>
-            <table style="display: none;">
-            <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
-                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
-                	onclick="return showStructure('${proteinStructure.id}');">
-                    <td><a href="#">${proteinStructure.id}</a></td>
-                    <td>${proteinStructure.description}</td>
-                </tr>
-            </c:forEach>
-            </table>
+        <div class="view">
+        	<c:if test="${fn:length(enzymeModel.pdbeaccession) gt 1}">
+	        	<div class="references">
+					<div class="button">${fn:length(enzymeModel.pdbeaccession)}
+						protein structures available</div>
+		            <table style="display: none;">
+		            <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
+		                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
+		                	onclick="return showStructure('${proteinStructure.id}');">
+		                    <td><a href="#">${proteinStructure.id}</a></td>
+		                    <td>${proteinStructure.description}</td>
+		                </tr>
+		            </c:forEach>
+		            </table>
+	            </div>
+        	</c:if>
             <div id="proteinStructures">
             <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
 			<div class="summary structure" id="${proteinStructure.id}"
