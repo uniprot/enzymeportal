@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
 
@@ -17,17 +16,21 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
 import uk.ac.ebi.das.jdas.exceptions.ValidationException;
+import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
+import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
+import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
+import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
+import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
 import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
 import uk.ac.ebi.ep.chebi.adapter.ChebiFetchDataException;
 import uk.ac.ebi.ep.chebi.adapter.IChebiAdapter;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.DASSummary;
-import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
-import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Image;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
@@ -54,18 +57,29 @@ import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
 //********************************* VARIABLES ********************************//
+	
+	private static final Logger LOGGER = Logger.getLogger(EnzymeRetriever.class);
+	
     protected IRheaAdapter rheaAdapter;
     private static Logger log = Logger.getLogger(EnzymeRetriever.class);
 
     protected IReactomeAdapter reactomeAdapter;
 
     protected IChebiAdapter chebiAdapter;
+	protected IDASFeaturesAdapter pdbeAdapter;
+	protected ILiteratureAdapter litAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever() {
         rheaAdapter = new RheasResourceClient();
         reactomeAdapter = new ReactomeAdapter();
         chebiAdapter = new ChebiAdapter();
+        try {
+			pdbeAdapter = new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
+		} catch (Exception e) {
+			LOGGER.error("Unable to create a PDBe adapter", e);
+		}
+        litAdapter = new SimpleLiteratureAdapter();
     }
 
 //****************************** GETTER & SETTER *****************************//
@@ -234,8 +248,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
-        List<String> pdbIds = enzymeModel.getPdbeaccession();
-    	try {
+    	if (pdbeAdapter != null) try {
+            List<String> pdbIds = enzymeModel.getPdbeaccession();
 			Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);
             for (SegmentAdapter segment : segments){
                 ProteinStructure structure = new ProteinStructure();
@@ -275,7 +289,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
+        EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
+        List<LabelledCitation> citations = litAdapter.getCitations(uniprotAccession);
+        enzymeModel.setLiterature(new ArrayList<Object>(citations)); // FIXME and also the schema!
         return enzymeModel;
     }
 }
