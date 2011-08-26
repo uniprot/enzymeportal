@@ -28,7 +28,7 @@ public class SimpleDASFeaturesCaller implements Callable<List<SegmentAdapter>> {
 	 * @param serverURL
 	 * @param segment
 	 */
-	SimpleDASFeaturesCaller(String serverURL, String segment){
+	public SimpleDASFeaturesCaller(String serverURL, String segment){
 		this(serverURL, Arrays.asList(new String[]{ segment }));
 	}
 	
@@ -37,7 +37,7 @@ public class SimpleDASFeaturesCaller implements Callable<List<SegmentAdapter>> {
 	 * @param serverURL
 	 * @param segments
 	 */
-	SimpleDASFeaturesCaller(String serverURL, List<String> segments){
+	public SimpleDASFeaturesCaller(String serverURL, List<String> segments){
 		this.serverURL = serverURL;
 		this.segments = segments;
 	}
