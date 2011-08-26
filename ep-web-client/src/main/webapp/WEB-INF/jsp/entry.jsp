@@ -519,7 +519,7 @@ This enzyme has been partially classified because its catalytic activity is eith
                                 <c:if test='${requestedfield=="literature"}'>
                                     <div class="node">
                                         <div class="view">
-                                            <spring:message code="label.entry.underconstruction"/>
+                                        	<%@include file="literature.jsp" %>
                                         </div>
                                     </div>
                                 </c:if>
