@@ -1,8 +1,11 @@
 package uk.ac.ebi.ep.adapter.literature;
 
-import uk.ac.ebi.cdb.webservice.Citation;
+import java.util.List;
+
+import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
 
 public interface ILiteratureAdapter {
 
-	public Citation getCitations(String uniprotId);
+	public List<LabelledCitation> getCitations(String uniprotId);
+	
 }
