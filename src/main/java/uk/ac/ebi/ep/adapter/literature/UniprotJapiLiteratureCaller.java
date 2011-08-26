@@ -1,19 +1,23 @@
 package uk.ac.ebi.ep.adapter.literature;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
+import org.apache.log4j.Logger;
+
+import uk.ac.ebi.biobabel.citations.CitexploreWSClient;
 import uk.ac.ebi.biobabel.citations.DataSource;
 import uk.ac.ebi.cdb.webservice.Journal;
 import uk.ac.ebi.cdb.webservice.JournalIssue;
+import uk.ac.ebi.cdb.webservice.QueryException_Exception;
+import uk.ac.ebi.kraken.interfaces.uniprot.Citation;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.citations.AgricolaId;
 import uk.ac.ebi.kraken.interfaces.uniprot.citations.Author;
 import uk.ac.ebi.kraken.interfaces.uniprot.citations.Book;
-import uk.ac.ebi.kraken.interfaces.uniprot.Citation;
 import uk.ac.ebi.kraken.interfaces.uniprot.citations.ElectronicArticle;
 import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasAgricolaId;
 import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasAuthors;
@@ -41,19 +45,21 @@ import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
  *
  */
 public class UniprotJapiLiteratureCaller
-implements Callable<Collection<uk.ac.ebi.cdb.webservice.Citation>> {
+implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 
+	private static final Logger LOGGER = Logger.getLogger(UniprotJapiLiteratureCaller.class);
+	
 	private String uniprotId;
-
+	
 	/**
-	 * The constructor.
+	 * Constructor with a UniProt ID to search.
 	 * @param uniprotId The UniProt ID to get citations from.
 	 */
 	public UniprotJapiLiteratureCaller(String uniprotId){
 		this.uniprotId = uniprotId;
 	}
 	
-	public Collection<uk.ac.ebi.cdb.webservice.Citation> call()
+	public Set<uk.ac.ebi.cdb.webservice.Citation> call()
 	throws Exception {
 		// CiteXplore citations:
 		HashSet<uk.ac.ebi.cdb.webservice.Citation> cxCits = null;
@@ -70,31 +76,41 @@ implements Callable<Collection<uk.ac.ebi.cdb.webservice.Citation>> {
 			@SuppressWarnings("unchecked")
 			List<Citation> upCits = (List<Citation>) att.getValue();
 			for (Citation upCit :upCits){
-				uk.ac.ebi.cdb.webservice.Citation cxCit =
-						new uk.ac.ebi.cdb.webservice.Citation();
-				JournalIssue issue = new JournalIssue();
-				Journal journal = new Journal();
-				issue.setJournal(journal);
-				cxCit.setJournalIssue(issue);
-				loadCoreMetadata(upCit, cxCit);
-				loadXrefs(upCit, cxCit);
-				// Special bits:
-				switch (upCit.getCitationType()){
-				case BOOK:
-					Book book = (Book) upCit;
-					load(cxCit, book);
-					break;
-				case PATENT:
-					Patent patent = (Patent) upCit;
-					load(cxCit, patent);
-					break;
-				/* Ignoring other cases */
+				uk.ac.ebi.cdb.webservice.Citation cxCit = null;
+				// Try to get it from CiteXplore:
+				cxCit = getCitationFromCitexplore(upCit);
+				if (cxCit == null){
+					// Otherwise, build one:
+					cxCit = buildCitation(upCit);
 				}
-				
 				cxCits.add(cxCit);
 			}
 		}
 		return cxCits;
+	}
+
+	private uk.ac.ebi.cdb.webservice.Citation buildCitation(Citation upCit) {
+		uk.ac.ebi.cdb.webservice.Citation cxCit =
+				new uk.ac.ebi.cdb.webservice.Citation();
+		JournalIssue issue = new JournalIssue();
+		Journal journal = new Journal();
+		issue.setJournal(journal);
+		cxCit.setJournalIssue(issue);
+		loadCoreMetadata(upCit, cxCit);
+		loadXrefs(upCit, cxCit);
+		// Special bits:
+		switch (upCit.getCitationType()){
+		case BOOK:
+			Book book = (Book) upCit;
+			load(cxCit, book);
+			break;
+		case PATENT:
+			Patent patent = (Patent) upCit;
+			load(cxCit, patent);
+			break;
+		/* Ignoring other cases */
+		}
+		return cxCit;
 	}
 
 	/**
@@ -225,6 +241,26 @@ implements Callable<Collection<uk.ac.ebi.cdb.webservice.Citation>> {
 				cxCit.setExternalId(agricolaId.getValue());
 			}
 		}
+	}
+	
+	private uk.ac.ebi.cdb.webservice.Citation getCitationFromCitexplore(Citation upCit){
+		uk.ac.ebi.cdb.webservice.Citation cxCit = null;
+		try {
+			if (upCit instanceof HasPubMedId){
+				PubMedId pubmedId = ((HasPubMedId) upCit).getPubMedId();
+				if (pubmedId != null){
+					cxCit = CitexploreWSClient.getCitation(DataSource.MED, pubmedId.getValue());
+				}
+			} else if (upCit instanceof HasAgricolaId){
+				AgricolaId agricolaId = ((HasAgricolaId) upCit).getAgricolaId();
+				if (agricolaId != null){
+						cxCit = CitexploreWSClient.getCitation(DataSource.AGR, agricolaId.getValue());
+				}
+			}
+		} catch (QueryException_Exception e) {
+			LOGGER.error("Unable to get citation from CiteXplore", e);
+		}
+		return cxCit;
 	}
 
 }
