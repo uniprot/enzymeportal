@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.adapter.literature;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class DASLiteratureCallerTest {
 	@Test
 	public void testCall() throws Exception {
 		Set<Citation> citations = dasCaller.call();
-		assertEquals(1, citations.size());
+		assertTrue(citations.size() >= 1);
 		Citation cit = citations.iterator().next();
 		assertEquals("MED", cit.getDataSource());
 		assertEquals("7278969", cit.getExternalId());

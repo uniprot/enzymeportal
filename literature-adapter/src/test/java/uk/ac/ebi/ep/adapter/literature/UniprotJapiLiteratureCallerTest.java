@@ -15,7 +15,7 @@ public class UniprotJapiLiteratureCallerTest {
 		UniprotJapiLiteratureCaller caller =
 				new UniprotJapiLiteratureCaller("P12345");
 		Collection<Citation> citations = caller.call();
-		assertEquals(1, citations.size());
+		assertTrue(citations.size() >= 1);
 		Citation citation = citations.iterator().next();
 		assertEquals("Aspartate aminotransferase isozymes from rabbit liver. Purification and properties.",
 				citation.getTitle());
