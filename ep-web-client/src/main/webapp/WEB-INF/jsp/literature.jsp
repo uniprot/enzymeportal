@@ -33,7 +33,7 @@ function filterCitations(cb){
 	</c:forEach>
 	<c:set var="citationLabels" value="${citationLabels} ${citationLabel}" />
 	
-	<li class="${citationLabel}">
+	<li class="${citationLabel}" style="display: inline;">
 		<div class="pub_title" style="font-weight: bold;">
 			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.externalId}&amp;dataSource=${cit.dataSource}"
                 title="View ${cit.dataSource} ${cit.externalId} in CiteXplore"
