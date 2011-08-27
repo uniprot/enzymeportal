@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -146,8 +148,11 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		}
 		// Year:
 		if (upCit instanceof HasPublicationDate){
-			cxCit.getJournalIssue().setYearOfPublication(Short.valueOf(
-					((HasPublicationDate) upCit).getPublicationDate().getValue()));
+			// UniProt's publication date might come as 'JUL-2010':
+			Pattern p = Pattern.compile("(?:\\w{3}-)?(\\d{4})(?:-\\d{2}-\\d{2})?");
+			Matcher m = p.matcher(((HasPublicationDate) upCit)
+					.getPublicationDate().getValue());
+			cxCit.getJournalIssue().setYearOfPublication(Short.valueOf(m.group(1)));
 		}
 		// Volume:
 		if (upCit instanceof HasVolume){
