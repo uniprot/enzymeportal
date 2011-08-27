@@ -61,14 +61,28 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			if (!(o instanceof LabelledCitation)) return false;
 			if (o == this) return true;
 			LabelledCitation other = (LabelledCitation) o;
-			return other.citation.getDataSource().equals(this.citation.getDataSource())
-					&& other.citation.getExternalId().equals(this.citation.getExternalId());
+			String tcei = this.citation.getExternalId();
+			String ocei = other.citation.getExternalId();
+			if (tcei == null ^ ocei == null) return false;
+			if (tcei != null && ocei != null){
+				String tcds = this.citation.getDataSource();
+				String ocds = other.citation.getDataSource();
+				return tcei.equals(ocei) && tcds.equals(ocds);
+			}
+			return this.citation.getTitle().equals(other.citation.getTitle());
 		}
 		@Override
 		public int hashCode() {
 			int hash = 17;
-			hash = hash * 17 + citation.getDataSource().hashCode();
-			hash = hash * 17 + citation.getExternalId().hashCode();
+			hash = hash * 17;
+			if (citation.getDataSource() != null){
+				hash += citation.getDataSource().hashCode();
+			}
+			hash = hash * 17;
+			if (citation.getExternalId() != null){
+				hash += citation.getExternalId().hashCode();
+			}
+			hash = hash * 17 + citation.getTitle().hashCode();
 			return hash;
 		}
 		
