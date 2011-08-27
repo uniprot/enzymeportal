@@ -150,9 +150,14 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		if (upCit instanceof HasPublicationDate){
 			// UniProt's publication date might come as 'JUL-2010':
 			Pattern p = Pattern.compile("(?:\\w{3}-)?(\\d{4})(?:-\\d{2}(?:-\\d{2}(?:.*)?)?)?");
-			Matcher m = p.matcher(((HasPublicationDate) upCit)
-					.getPublicationDate().getValue());
-			cxCit.getJournalIssue().setYearOfPublication(Short.valueOf(m.group(1)));
+			String upDate = ((HasPublicationDate) upCit)
+					.getPublicationDate().getValue();
+			Matcher m = p.matcher(upDate);
+			if (m.matches()){
+				cxCit.getJournalIssue().setYearOfPublication(Short.valueOf(m.group(1)));
+			} else {
+				LOGGER.warn("Date pattern not recognised: " + upDate);
+			}
 		}
 		// Volume:
 		if (upCit instanceof HasVolume){
