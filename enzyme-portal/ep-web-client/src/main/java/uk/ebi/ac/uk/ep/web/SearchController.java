@@ -1,25 +1,26 @@
 package uk.ebi.ac.uk.ep.web;
 
 import java.util.List;
-import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
-import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
-import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder;
 import uk.ac.ebi.ep.core.search.IEnzymeRetriever;
+import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.search.result.Pagination;
-import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.SearchModel;
 import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
  *
@@ -108,7 +109,7 @@ public class SearchController {
             }            
             case literature: {
                 try {
-                    enzymeModel = retriever.getEnzyme(accession);
+                    enzymeModel = retriever.getLiterature(accession);
                 } catch (EnzymeRetrieverException ex) {
                     log.error("Unable to retrieve the entry!",  ex);
                 }
