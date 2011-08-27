@@ -149,7 +149,7 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		// Year:
 		if (upCit instanceof HasPublicationDate){
 			// UniProt's publication date might come as 'JUL-2010':
-			Pattern p = Pattern.compile("(?:\\w{3}-)?(\\d{4})(?:-\\d{2}-\\d{2})?");
+			Pattern p = Pattern.compile("(?:\\w{3}-)?(\\d{4})(?:-\\d{2}(?:-\\d{2})?)?");
 			Matcher m = p.matcher(((HasPublicationDate) upCit)
 					.getPublicationDate().getValue());
 			cxCit.getJournalIssue().setYearOfPublication(Short.valueOf(m.group(1)));
