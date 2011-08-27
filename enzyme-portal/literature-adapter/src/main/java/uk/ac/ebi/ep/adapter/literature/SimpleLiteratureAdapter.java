@@ -90,13 +90,15 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			for (Future<Set<Citation>> future : futures) {
 				try {
 					Set<Citation> cits = future.get();
-					CitationLabel label = getLabel(callables.get(futures.indexOf(future)));
-					for (Citation cit : cits) {
-						LabelledCitation citation = new LabelledCitation(cit, label);
-						if (citations.contains(citation)){
-							citations.get(citations.indexOf(citation)).addLabel(label);
-						} else {
-							citations.add(citation);
+					if (cits != null){
+						CitationLabel label = getLabel(callables.get(futures.indexOf(future)));
+						for (Citation cit : cits) {
+							LabelledCitation citation = new LabelledCitation(cit, label);
+							if (citations.contains(citation)){
+								citations.get(citations.indexOf(citation)).addLabel(label);
+							} else {
+								citations.add(citation);
+							}
 						}
 					}
 				} catch (InterruptedException e) {
