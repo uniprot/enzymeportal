@@ -129,41 +129,6 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 				LOGGER.error(notExecuted.size() + " jobs not sent!");
 			}
 		}
-//		futures = new ArrayList<Future<Set<Citation>>>();
-//		for (Callable<Set<Citation>> callable : callables) {
-//			futures.add(threadPool.submit(callable));
-//		}
-//		List<Future<Set<Citation>>> pending =
-//				new ArrayList<Future<Set<Citation>>>(futures);
-//		// Collect results:
-//		Set<LabelledCitation> citations = new HashSet<LabelledCitation>();
-//		while (!pending.isEmpty()){
-//			for (Future<Set<Citation>> future : pending) {
-//				if (future.isDone()){
-//					try {
-//						Set<Citation> cits = future.get();
-//						CitationLabel label = getLabel(callables.get(futures.indexOf(future)));
-//						for (Citation cit : cits) {
-//							LabelledCitation citation = new LabelledCitation(cit, label);
-//							if (citations.contains(citation)){
-//								
-//							} else {
-//								
-//							}
-//							citations.add();
-//						}
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (ExecutionException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} finally {
-//						
-//					}
-//				}
-//			}
-//		}
 		return citations;
 	}
 

@@ -83,10 +83,11 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 					cxCit = getCitationFromCitexplore(upCit);
 					if (cxCit == null){
 						// Otherwise, build one:
-						LOGGER.warn("No literature identifiers found for " + uniprotId);
-						cxCit = buildCitation(upCit);
+						LOGGER.warn("No literature identifier found for one citation: " + uniprotId);
+						//cxCit = buildCitation(upCit);
+					} else {
+						cxCits.add(cxCit);
 					}
-					cxCits.add(cxCit);
 				}
 			}
 		} else {
