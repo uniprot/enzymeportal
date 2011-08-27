@@ -50,7 +50,7 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 	 * @return
 	 */
 	protected Set<Citation> getLiterature(List<SegmentAdapter> segments) {
-		Set<Citation> citations = null;
+		Set<Citation> citations = new HashSet<Citation>();
 		for (SegmentAdapter segment : segments) {
 			try {
 				for (FeatureAdapter feature : segment.getFeature()) {
@@ -66,10 +66,10 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 						}
 						if (citation == null){
 							// Build a citation with data from DAS:
-							citation = buildCitation(feature, pubMedId);
+							//citation = buildCitation(feature, pubMedId);
+						} else {
+							citations.add(citation);
 						}
-						if (citations == null) citations = new HashSet<Citation>();
-						citations.add(citation);
 					}
 				}
 				if (citations == null){
