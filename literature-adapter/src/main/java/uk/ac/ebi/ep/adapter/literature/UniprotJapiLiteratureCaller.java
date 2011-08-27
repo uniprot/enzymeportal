@@ -263,12 +263,20 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 			if (upCit instanceof HasPubMedId){
 				PubMedId pubmedId = ((HasPubMedId) upCit).getPubMedId();
 				if (pubmedId != null){
-					cxCit = CitexploreWSClient.getCitation(DataSource.MED, pubmedId.getValue());
+					String val = pubmedId.getValue();
+					if (val != null && val.length() > 0){
+						cxCit = CitexploreWSClient.getCitation(
+								DataSource.MED, pubmedId.getValue());
+					}
 				}
 			} else if (upCit instanceof HasAgricolaId){
 				AgricolaId agricolaId = ((HasAgricolaId) upCit).getAgricolaId();
 				if (agricolaId != null){
-						cxCit = CitexploreWSClient.getCitation(DataSource.AGR, agricolaId.getValue());
+					String val = agricolaId.getValue();
+					if (val != null && val.length() > 0){
+						cxCit = CitexploreWSClient.getCitation(
+								DataSource.AGR, agricolaId.getValue());
+					}
 				}
 			}
 		} catch (QueryException_Exception e) {
