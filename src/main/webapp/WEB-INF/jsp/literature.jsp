@@ -11,9 +11,17 @@ function filterCitations(cb){
 //-->
 </script>
 
+<div class="summary">
+<h2><c:out value="${enzymeModel.name}"/></h2>
+
+<c:choose>
+	<c:when test="${empty enzymeModel.literature}">
+		There is no literature information available for this enzyme.
+	</c:when>
+	<c:otherwise>
+	
 <div style="position: relative; width: 100%; top: 3ex;">
 
-<c:set var="citationLabels" value="" />
 <div class="literature" style="position: relative; width: 100%; top: 3ex;">
 <ol>
 <c:forEach var="labelledCitation" items="${enzymeModel.literature}">
@@ -26,7 +34,7 @@ function filterCitations(cb){
 	<c:set var="citationLabels" value="${citationLabels} ${citationLabel}" />
 	
 	<li class="${citationLabel}">
-		<div class="pub_title">
+		<div class="pub_title" style="font-weight: bold;">
 			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.externalId}&amp;dataSource=${cit.dataSource}"
                 title="View ${cit.dataSource} ${cit.externalId} in CiteXplore"
                 target="_blank" class="extLink ${cit.dataSource}"
@@ -53,6 +61,7 @@ function filterCitations(cb){
 
 <c:set var="shownFilters" value="" />
 <div id="literatureFilters" style="position: absolute; top: 0; width: 100%">
+	<b>Filters:</b>
 	<c:forEach var="citationLabel" items="${fn:split(fn:trim(citationLabels), ' ')}">
 		<c:if test="${not fn:contains(shownFilters, citationLabel)}">
 		<label><input type="checkbox" checked="checked" value="${citationLabel}"
@@ -61,5 +70,10 @@ function filterCitations(cb){
 		</c:if>
 	</c:forEach>
 </div>
+
+</div>
+
+	</c:otherwise>
+</c:choose>
 
 </div>
