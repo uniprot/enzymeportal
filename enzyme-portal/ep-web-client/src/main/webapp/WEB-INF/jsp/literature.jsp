@@ -1,13 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%-- HERE FILTERS --%>
+<script type="text/javascript">
+<!--
+function filterCitations(cb){
+	var jQueryClass = '.' + cb.value;
+	$(jQueryClass).css('display', cb.checked? 'inline' : 'none');
+}
+//-->
+</script>
 
-<div class="literature">
+<div style="position: relative; width: 100%; top: 3ex;">
+
+<c:set var="citationLabels" value="" />
+<div class="literature" style="position: relative; width: 100%; top: 3ex;">
 <ol>
 <c:forEach var="labelledCitation" items="${enzymeModel.literature}">
 	<c:set var="cit" value="${labelledCitation.citation}"/>
-	<li class="${labelledCitation.label}">
+	
+	<c:set var="citationLabel" value="" />
+	<c:forEach var="label" items="${labelledCitation.label}">
+		<c:set var="citationLabel" value="${citationLabel} ${label}" />
+	</c:forEach>
+	<c:set var="citationLabels" value="${citationLabels} ${citationLabel}" />
+	
+	<li class="${citationLabel}">
 		<div class="pub_title">
 			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.externalId}&amp;dataSource=${cit.dataSource}"
                 title="View ${cit.dataSource} ${cit.externalId} in CiteXplore"
@@ -31,4 +49,17 @@
 	</li>
 </c:forEach>
 </ol>
+</div>
+
+<c:set var="shownFilters" value="" />
+<div id="literatureFilters" style="position: absolute; top: 0; width: 100%">
+	<c:forEach var="citationLabel" items="${fn:split(fn:trim(citationLabels), ' '}">
+		<c:if test="${not fn:contains(shownFilters, citationLabel}">
+		<label><input type="checkbox" checked="checked" value="${citationLabel}"
+			onclick="filterCitations(this);"/>${citationLabel}</label>
+		<c:set var="shownFilters" value="${shownFilters} ${citationLabel}" />
+		</c:if>
+	</c:forEach>
+</div>
+
 </div>
