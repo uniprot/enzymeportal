@@ -69,22 +69,25 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 				Arrays.asList(new String[]{ uniprotId }));
 		AttributeIterator<UniProtEntry> it =
 				uniProtQueryService.getAttributes(query, "ognl:citations");
-		if (it.hasNext()) cxCits =
-				new HashSet<uk.ac.ebi.cdb.webservice.Citation>();
-		for (Attribute att: it){
-			// UniProt citations:
-			@SuppressWarnings("unchecked")
-			List<Citation> upCits = (List<Citation>) att.getValue();
-			for (Citation upCit :upCits){
-				uk.ac.ebi.cdb.webservice.Citation cxCit = null;
-				// Try to get it from CiteXplore:
-				cxCit = getCitationFromCitexplore(upCit);
-				if (cxCit == null){
-					// Otherwise, build one:
-					cxCit = buildCitation(upCit);
+		if (it.hasNext()){
+			cxCits = new HashSet<uk.ac.ebi.cdb.webservice.Citation>();
+			for (Attribute att: it){
+				// UniProt citations:
+				@SuppressWarnings("unchecked")
+				List<Citation> upCits = (List<Citation>) att.getValue();
+				for (Citation upCit :upCits){
+					uk.ac.ebi.cdb.webservice.Citation cxCit = null;
+					// Try to get it from CiteXplore:
+					cxCit = getCitationFromCitexplore(upCit);
+					if (cxCit == null){
+						// Otherwise, build one:
+						cxCit = buildCitation(upCit);
+					}
+					cxCits.add(cxCit);
 				}
-				cxCits.add(cxCit);
 			}
+		} else {
+			LOGGER.warn("No citations retrieved from " + uniprotId);
 		}
 		return cxCits;
 	}

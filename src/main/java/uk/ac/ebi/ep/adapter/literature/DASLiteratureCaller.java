@@ -70,6 +70,9 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 						citations.add(citation);
 					}
 				}
+				if (citations == null){
+					LOGGER.warn("No citations retrieved for " +  segment.getId());
+				}
 			} catch (ValidationException e) {
 				LOGGER.error("Unable to get citations from DAS for " + segment.getId(), e);
 			}
