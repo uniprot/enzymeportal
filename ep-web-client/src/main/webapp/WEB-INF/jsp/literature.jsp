@@ -53,8 +53,8 @@ function filterCitations(cb){
 
 <c:set var="shownFilters" value="" />
 <div id="literatureFilters" style="position: absolute; top: 0; width: 100%">
-	<c:forEach var="citationLabel" items="${fn:split(fn:trim(citationLabels), ' '}">
-		<c:if test="${not fn:contains(shownFilters, citationLabel}">
+	<c:forEach var="citationLabel" items="${fn:split(fn:trim(citationLabels), ' ')}">
+		<c:if test="${not fn:contains(shownFilters, citationLabel)}">
 		<label><input type="checkbox" checked="checked" value="${citationLabel}"
 			onclick="filterCitations(this);"/>${citationLabel}</label>
 		<c:set var="shownFilters" value="${shownFilters} ${citationLabel}" />
