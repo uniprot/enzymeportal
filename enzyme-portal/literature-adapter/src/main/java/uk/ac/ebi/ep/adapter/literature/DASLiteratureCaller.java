@@ -61,6 +61,8 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 						if (pubMedId != null && pubMedId.length() > 0){
 							// Try to get from CiteXplore with the PubMed ID:
 							citation = getCitationFromCitexplore(pubMedId);
+						} else {
+							LOGGER.warn("No PubMed ID found for " + segment.getId());
 						}
 						if (citation == null){
 							// Build a citation with data from DAS:
@@ -112,8 +114,10 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 	 */
 	protected String getPubMedId(String url) {
 		final String pubMedParam = "Citation_pubmed_id=";
-		return url.substring(
-				url.lastIndexOf(pubMedParam) + pubMedParam.length());
+		int index = url.lastIndexOf(pubMedParam);
+		return index > -1?
+				url.substring(index + pubMedParam.length()):
+				null;
 	}
 
 	/* No authors from DAS' GFF!!
