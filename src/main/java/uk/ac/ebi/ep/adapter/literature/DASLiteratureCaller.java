@@ -40,6 +40,10 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 		featuresCaller = new SimpleDASFeaturesCaller(serverURL, segment);
 	}
 	
+	public DASLiteratureCaller(String serverURL, List<String> segments){
+		featuresCaller = new SimpleDASFeaturesCaller(serverURL, segments);
+	}
+	
 	public Set<Citation> call() throws Exception {
 		return getLiterature(featuresCaller.call());
 	}
