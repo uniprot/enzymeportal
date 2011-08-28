@@ -18,7 +18,8 @@ import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
 
 public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 	
-	private static final Logger LOGGER = Logger.getLogger(SimpleLiteratureAdapter.class);
+	private static final Logger LOGGER =
+			Logger.getLogger(SimpleLiteratureAdapter.class);
 	
 	public enum CitationLabel { // FIXME take strings from common properties file
 		enzyme("Enzyme"),
@@ -93,9 +94,9 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 	// Not used, it does not find UniProt IDs easily
 	//private CitexploreLiteratureCaller citexploreCaller;
 	
-	public List<LabelledCitation> getCitations(String uniprotId) {
+	public List<LabelledCitation> getCitations(String uniprotId, List<String> pdbIds) {
 		List<LabelledCitation> citations = null;
-		List<Callable<Set<Citation>>> callables = getCallables(uniprotId);
+		List<Callable<Set<Citation>>> callables = getCallables(uniprotId, pdbIds);
 		List<Future<Set<Citation>>> futures = null;
 		try {
 			futures = threadPool.invokeAll(callables);
@@ -132,11 +133,12 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		return citations;
 	}
 
-	private List<Callable<Set<Citation>>> getCallables(String uniprotId) {
+	private List<Callable<Set<Citation>>> getCallables(String uniprotId,
+			List<String> pdbIds) {
 		List<Callable<Set<Citation>>> callables =
 				new ArrayList<Callable<Set<Citation>>>();
 		callables.add(new UniprotJapiLiteratureCaller(uniprotId));
-		callables.add(new DASLiteratureCaller(IDASFeaturesAdapter.PDBE_DAS_URL, uniprotId));
+		callables.add(new DASLiteratureCaller(IDASFeaturesAdapter.PDBE_DAS_URL, pdbIds));
 		return callables;
 	}
 	
