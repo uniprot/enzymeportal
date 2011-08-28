@@ -55,11 +55,15 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 	 */
 	protected Set<Citation> getLiterature(List<SegmentAdapter> segments) {
 		Set<Citation> citations = new HashSet<Citation>();
-		for (SegmentAdapter segment : segments) {
+		segmentsLoop: for (SegmentAdapter segment : segments) {
 			try {
 				for (FeatureAdapter feature : segment.getFeature()) {
 					if (feature.getType().getId().equals("summary")
 							&& feature.getLabel().equals("Primary Citation")){
+						if (feature.getLinks().size() == 0){
+							LOGGER.warn("Citation is not available for " + segment.getId());
+							continue segmentsLoop;
+						}
 						Citation citation = null;
 						String pubMedId = getPubMedId(feature.getLinks().get(0).getHref());
 						if (pubMedId != null && pubMedId.length() > 0){
