@@ -25,9 +25,10 @@ public interface IEbeyeAdapter {
     //The number of accessions to be included in the query should not be more than 400
     public static final int EBEYE_NR_OF_QUERY_IN_LIMIT = 100;
     public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 2;
+    //public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 1;
     //TEST
     public static final int EP_CHEBI_RESULTS_LIMIT = 15;
-    //public static final int EP_CHEBI_RESULTS_LIMIT = 2;
+    //public static final int EP_CHEBI_RESULTS_LIMIT = 1;
     public static final int QUERY_ENZYME_DOMAIN_RESULT_LIMIT = 600;
     public static final int QUERY_UNIPROT_FIELD_RESULT_LIMIT = 100;
     public static final int JOINT_QUERY_UNIPROT_FIELD_RESULT_LIMIT = 2000;

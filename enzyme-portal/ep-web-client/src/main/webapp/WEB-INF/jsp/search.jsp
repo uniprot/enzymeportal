@@ -285,10 +285,12 @@
                                                     <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
                                                 </c:otherwise>
                                                 </c:choose>
+                                            <c:if test="${relspecies[i].species.scientificname!=enzyme.species.scientificname}">
                                             <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                 <c:out value="${speciesName}"/>
                                             </a>
-                                             <br/>
+                                            <br/>
+                                            </c:if>                                             
                                         </c:forEach>
                                         <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
                                             <div id="relSpecies_${resultItemId}" style="display: none">
