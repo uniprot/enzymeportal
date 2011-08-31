@@ -17,5 +17,5 @@
                 </div>
             </div>
             <div class="grid_12">
-                    <h1>Enzyme Portal - An integrated resource about enzymes</h1>
+                    <h1>Enzyme Portal</h1>
             </div>
