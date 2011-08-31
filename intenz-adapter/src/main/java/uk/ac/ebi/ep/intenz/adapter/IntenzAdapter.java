@@ -85,7 +85,7 @@ public class IntenzAdapter implements IintenzAdapter{
         List<Intenz> intenzList = getIntenz(ecList);
 
         List<EnzymeHierarchy> enzymeHierarchies = new ArrayList<EnzymeHierarchy>();
-        if (enzymeHierarchies.size() > 0) {
+        if (intenzList.size() > 0) {
             for (Intenz intenz : intenzList) {
                 GetSynonymsCaller synonymsCaller = new GetSynonymsCaller();
                 GetEcHierarchyCaller ecCaller = new GetEcHierarchyCaller();
