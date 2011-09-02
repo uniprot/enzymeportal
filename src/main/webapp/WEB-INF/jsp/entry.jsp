@@ -434,6 +434,93 @@ This enzyme has been partially classified because its catalytic activity is eith
                                                 <c:set var="molecules" value="${enzymeModel.molecule}"/>
                                                 <div id="molecules">
                                                 <c:if test='${molecules!=null}'>
+                                                <c:set var="inhibitors" value="${molecules.inhibitors}"/>
+                                                <c:set var="inhibitorsSize" value="${fn:length(inhibitors)}"/>
+                                                    <div id="inhibitor">
+                                                        <c:if test='${inhibitorsSize == 0}'>
+                                                            <div>
+                                                            <spring:message code="label.entry.molecules.empty" arguments="inhibitors"/>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test='${inhibitorsSize > 0}'>
+                                                        <fieldset>
+                                                            <legend>
+                                                                <spring:message code="label.entry.molecules.sub.title" arguments="Inhibitors,inhibit"/>
+                                                            </legend>
+                                                            <p>
+                                                                <spring:message code="label.entry.molecules.explaination" arguments="inhibitors,inhibit"/>
+                                                            </p>
+                                                            <c:forEach var="inhibitor" items="${inhibitors}">
+                                                                <fieldset class="epBox">
+                                                                        <a href="${inhibitor.url}" target="blank">
+                                                                            <c:out value="${inhibitor.name}"/>
+                                                                        </a>
+                                                                        <div>
+                                                                            <div>
+                                                                                <a target="blank" href="${inhibitor.url}">
+                                                                                    <img src="${chebiImageBaseUrl}${inhibitor.id}" alt="${inhibitor.name}"/>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div>
+                                                                                    <c:out value="${inhibitor.description}"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <span class="bold"><spring:message code="label.entry.molecules.formula"/></span>: <c:out value="${inhibitor.formula}"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </fieldset>
+                                                            </c:forEach>
+                                                        </fieldset>
+                                                        </c:if>
+                                                    </div>
+                                                <c:set var="activators" value="${molecules.activators}"/>
+                                                <c:set var="activatorsSize" value="${fn:length(activators)}"/>
+                                                    <div id="activator">
+                                                        <c:if test='${activatorsSize == 0}'>
+                                                            <div>
+                                                            <spring:message code="label.entry.molecules.empty" arguments="activators"/>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test='${activatorsSize > 0}'>
+                                                        <fieldset>
+                                                            <legend>
+                                                                <spring:message code="label.entry.molecules.sub.title" arguments="Activators,activate"/>
+                                                            </legend>
+                                                            <p>
+                                                                <spring:message code="label.entry.molecules.explaination" arguments="Activators,activate"/>
+                                                            </p>
+                                                            <c:forEach var="activator" items="${activators}">
+                                                                <fieldset class="epBox">
+                                                                        <a href="${activator.url}" target="blank">
+                                                                            <c:out value="${activator.name}"/>
+                                                                        </a>
+                                                                        <div>
+                                                                            <div>
+                                                                                <a target="blank" href="${activator.url}">
+                                                                                    <img src="${chebiImageBaseUrl}${activator.id}" alt="${activator.name}"/>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div>
+                                                                                    <c:out value="${activator.description}"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <span class="bold"><spring:message code="label.entry.molecules.formula"/></span>: <c:out value="${activator.formula}"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </fieldset>
+                                                            </c:forEach>
+                                                        </fieldset>
+                                                        </c:if>
+                                                    </div>
+
                                                 <c:set var="drugs" value="${molecules.drugs}"/>
                                                 <c:set var="drugsSize" value="${fn:length(drugs)}"/>
                                                 <!--<spring:message code="label.entry.underconstruction"/>-->
@@ -446,14 +533,14 @@ This enzyme has been partially classified because its catalytic activity is eith
                                                         <c:if test='${drugsSize > 0}'>
                                                         <fieldset>
                                                             <legend>
-                                                                <spring:message code="label.entry.molecules.drug.title"/>
+                                                                <spring:message code="label.entry.molecules.sub.title" arguments="Drugs,interact"/>
                                                             </legend>
                                                             <p>
-                                                                <spring:message code="label.entry.molecules.drug.explaination"/>
+                                                                <spring:message code="label.entry.molecules.explaination" arguments="drugs,interact with" />
                                                             </p>
                                                             <c:forEach var="drug" items="${drugs}">
                                                                 <fieldset class="epBox">                                                                        
-                                                                        <a href="${chebiImageBaseUrl}${drug.id}" target="blank">
+                                                                        <a href="${drug.url}" target="blank">
                                                                             <c:out value="${drug.name}"/>
                                                                         </a>                                                                        
                                                                         <div>
@@ -468,7 +555,7 @@ This enzyme has been partially classified because its catalytic activity is eith
                                                                                 </div>
                                                                                 <div>
                                                                                     <div>
-                                                                                        <span class="bold"><spring:message code="label.entry.molecules.drug.formula"/></span>: <c:out value="${drug.formula}"/>
+                                                                                        <span class="bold"><spring:message code="label.entry.molecules.formula"/></span>: <c:out value="${drug.formula}"/>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>                                                                            
