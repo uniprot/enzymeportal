@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
 
@@ -190,7 +191,17 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
         return enzymeModel;
     }
+    public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
+        try {
+            this.chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
+        } catch (ChebiFetchDataException ex) {
+            throw new EnzymeRetrieverException("Failed to get small molecule details from Chebi", ex);
+        }
+        return enzymeModel;
 
+    }
+/*
     public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
         List<Molecule> drugs = enzymeModel.getMolecule().getDrugs();
@@ -206,7 +217,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     List<String> chebiIdsLinkedToDrugbank = this.chebiAdapter.getChebiLiteEntity(drugBankId);
                     //System.out.print("Chebi drugs: " +chebiEntitiesLinkedToDrugBank);
                     for (String chebiId: chebiIdsLinkedToDrugbank) {
-                        Molecule moleculeFromChebi = (Molecule)this.chebiAdapter.getChebiCompleteEntity(chebiId);
+                        Molecule moleculeFromChebi = (Molecule)this.chebiAdapter.getEpChemicalEntity(chebiId);
                         moleculeFromChebi.setXrefs(drugBankIds);
                         moleculesFromChebi.add(moleculeFromChebi);
                     }
@@ -220,7 +231,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return enzymeModel;
 
     }
-
+*/
 /*
     public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
