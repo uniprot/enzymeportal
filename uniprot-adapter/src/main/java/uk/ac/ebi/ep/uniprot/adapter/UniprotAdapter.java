@@ -53,7 +53,7 @@ public class UniprotAdapter implements IUniprotAdapter{
 
     public EnzymeSummary getMoleculeSummary(String accession) {
        GetEntriesCaller caller = new GetEntriesCaller(accession);
-        EnzymeSummary enzymeSummary = caller.getEnzymeDrugByAccession();
+        EnzymeSummary enzymeSummary = caller.getSmallMoleculesByAccession();
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
     }

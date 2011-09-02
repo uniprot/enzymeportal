@@ -1,10 +1,7 @@
 package uk.ac.ebi.ep.uniprot.adapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
@@ -27,7 +24,7 @@ import uk.ac.ebi.kraken.model.uniprot.comments.FunctionCommentImpl;
 public class Transformer {
 
 //********************************* VARIABLES ********************************//
-    public static final String COMMON_REGEX = "|.ompletely|.artially|and|,|;|.|\\s|or";
+    public static final String COMMON_REGEX = "|\\b.ompletely\\b|\\b.artially\\b|[\\s]\\band\\b[\\s]|;|\\bor\\b|\\b.otentially\\b|\\balso\\b|\\bby\\b|\\b.pecifically\\b|\\b.compound[s\\s]\\b|\\(|\\)";
     public static final String INHIBITOR_REGEX = ".nhibited by"+COMMON_REGEX;
     public static final String ACTIVATOR_REGEX = ".ctivated by"+COMMON_REGEX;
     //public static final String INHIBITOR_KEY= "inhibitor";
@@ -60,7 +57,8 @@ public class Transformer {
         for (Comment comment: commentList) {
             Disease disease = new Disease();
             DiseaseCommentImpl castedComment = (DiseaseCommentImpl)comment;
-            String commentText = castedComment.getValue();
+            //Work around to delete Note= from the comment
+            String commentText = castedComment.getValue().replace("Note=", "");
             String id = String.valueOf(castedComment.getId());
             disease.setId(id);
             disease.setDescription(commentText);
@@ -93,30 +91,30 @@ public class Transformer {
      */
 
     public static List<Molecule> parseTextForInhibitors(String text) {
-        List<Molecule> inhibitors = parseText(Transformer.INHIBITOR_REGEX, text);
+        List<Molecule> inhibitors = parseText(text, Transformer.INHIBITOR_REGEX);
         return inhibitors;
     }
 
     public static List<Molecule> parseTextForActivators(String text) {
-        List<Molecule> inhibitors = parseText(Transformer.INHIBITOR_REGEX, text);
+        List<Molecule> inhibitors = parseText(text,Transformer.ACTIVATOR_REGEX);
         return inhibitors;
     }
 
     public static List<Molecule> parseText(String text, String regex) {
-        //String regex = "\\s\\w\\w\\w\\w\\w\\wted by\\s";
-        //String iRegex = ".nhibited by|.ompletely|.artially|and|,|;|\\s|or";
-        //String iRegex = ".nhibited by|.ompletely|.artially|and|,|;|.|\\s|or";
-        String cleanedText = new String(text.replaceAll(regex, " "));
-        StringTokenizer stringTokenizer = new StringTokenizer(cleanedText, " ");
-        List<Molecule> inhibitorList = new ArrayList<Molecule>();
+        String cleanedText = new String(text.replaceAll(regex, ","));
+        StringTokenizer stringTokenizer = new StringTokenizer(cleanedText, ",");
+        List<Molecule> results = new ArrayList<Molecule>();
         while(stringTokenizer.hasMoreTokens()) {
-            String token = stringTokenizer.nextToken();
+            String token = stringTokenizer.nextToken().trim();
             Molecule molecule = new Molecule();
-            molecule.setName(token);
-            inhibitorList.add(molecule);
+            if (!token.equals("")) {
+                molecule.setName(token);
+                results.add(molecule);
+            }
         }
-        return inhibitorList;
+        return results;
     }
+
 
     public static String getFullName(Name name) {
         List<Field> fields = name.getFieldsByType(FieldType.FULL);
