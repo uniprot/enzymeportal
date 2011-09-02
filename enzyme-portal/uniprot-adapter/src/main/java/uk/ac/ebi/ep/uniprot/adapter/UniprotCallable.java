@@ -134,6 +134,7 @@ public class UniprotCallable {
         }
 
         //TODO
+        /*
         public ChemicalEntity getSmallMolecules() {
             ChemicalEntity chemicalEntity = new ChemicalEntity();
             List<Comment> comments = getComments(CommentType.ENZYME_REGULATION);
@@ -150,6 +151,8 @@ public class UniprotCallable {
             //Should this return a
             return chemicalEntity;
         }
+         *
+         */
 
     public EnzymeSummary getEnzymeWithSequenceByAccession() {
         UniProtEntry entry = (UniProtEntry) entryRetrievalService
@@ -180,14 +183,32 @@ public class UniprotCallable {
         return enzymeModel;
     }
 
-    public EnzymeSummary getEnzymeDrugByAccession() {
+    public EnzymeSummary getSmallMoleculesByAccession() {
         UniProtEntry entry = (UniProtEntry) entryRetrievalService
                 .getUniProtEntry(accession);
         EnzymeModel enzymeModel = (EnzymeModel)setEnzymeCommonProperties(entry);
         //ReactionPathway reactionpathway = this.setReactomePathways(entry);
-        List<Molecule>  molecules = this.getDrugBankAccessions(entry);
+        //List<Molecule>  molecules = this.getDrugBankAccessions(entry);
+        //chemicalEntity.setDrugs(molecules);
         ChemicalEntity chemicalEntity = new ChemicalEntity();
+        List<Molecule>  molecules = getDrugBankMoleculeNames();
         chemicalEntity.setDrugs(molecules);
+        
+        //Inhibitors, activators
+        List<Comment> comments = getComments(CommentType.ENZYME_REGULATION);
+        String commentText = Transformer.getMoleculeComments(comments);
+        String[] sentences = commentText.split("\\.");
+        for (String sentence: sentences) {
+            if (sentence.contains("Activated by") || sentence.contains("activated by")) {
+                List<Molecule>  activators = Transformer.parseTextForActivators(sentence.trim());
+                chemicalEntity.setActivators(activators);
+            }
+            if (sentence.contains("Inhibited by") || sentence.contains("inhibited by")) {
+                List<Molecule>  inhibitors = Transformer.parseTextForInhibitors(sentence.trim());
+                chemicalEntity.setInhibitors(inhibitors);
+            }
+        }
+
         enzymeModel.setMolecule(chemicalEntity);
         return enzymeModel;
     }
