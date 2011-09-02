@@ -14,6 +14,7 @@ import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
 import uk.ac.ebi.ep.config.ResultFieldList;
 import uk.ac.ebi.ep.config.SearchField;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -62,6 +63,14 @@ public class DataTypeConverter {
             ecSet.addAll(getUniprotEcs(enzymeSummary));
         }
         return ecSet;
+    }
+
+    public static List<String> getMoleculeNames(List<Molecule> mols) {
+        List<String> molNames = new ArrayList<String>();
+        for (Molecule mol:mols) {
+            molNames.add(mol.getName());
+        }
+        return molNames;
     }
 
     public static Set<String> getUniprotEcs(EnzymeSummary enzymeSummary) throws MultiThreadingException {
