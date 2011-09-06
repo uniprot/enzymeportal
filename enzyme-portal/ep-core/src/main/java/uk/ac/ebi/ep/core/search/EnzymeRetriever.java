@@ -343,7 +343,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
+        //EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getProteinStructureSummary(uniprotAccession);
+
     	if (pdbeAdapter != null) try {
             List<String> pdbIds = enzymeModel.getPdbeaccession();
 			Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);

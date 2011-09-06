@@ -1,11 +1,9 @@
 package uk.ac.ebi.ep.uniprot.adapter;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.Disease;
@@ -21,7 +19,6 @@ import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseType;
 import uk.ac.ebi.kraken.interfaces.uniprot.Organism;
-import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
@@ -36,7 +33,6 @@ import uk.ac.ebi.kraken.uuw.services.remoting.Query;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
-import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**
  *
@@ -64,20 +60,20 @@ public class UniprotCallable {
 
 //******************************** INNER CLASS *******************************//
 
-    public static class GetEntriesCaller implements Callable<EnzymeSummary> {
+    public static class GetEntryCaller implements Callable<EnzymeSummary> {
         protected String accession;
         //protected boolean entryPage;
-        public GetEntriesCaller() {
+        public GetEntryCaller() {
         }
 
-        public GetEntriesCaller(String accession) {
+        public GetEntryCaller(String accession) {
             this.accession = accession;
         }
 
 
 
         public EnzymeSummary call() throws Exception {
-            return getEnzymeSummaryByAccession();
+            return getEnzymeCommonProperties();
         }
 
         public String getAccession() {
@@ -88,13 +84,14 @@ public class UniprotCallable {
             this.accession = accession;
         }
 
+        /*
         public EnzymeSummary getEnzymeSummaryByAccession()  {
             //Retrieve UniProt entry by its accession number
             //UniProtEntry entry = (UniProtEntry) entryRetrievalService
                //     .getUniProtEntry(accession);
             return setEnzymeProperties();
         }
-
+        */
 
         public List<Comment> getComments(CommentType commentType) {
             //StringBuffer sb = new StringBuffer("ognl:getComments(@uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType@");
@@ -167,12 +164,28 @@ public class UniprotCallable {
          *
          */
 
-    public EnzymeSummary getEnzymeWithSequenceByAccession() {
+    /**
+     * Query Uniprot for the data that is shown in the Enzyme tab.
+     * @return
+     */
+    public EnzymeSummary getEnzymeTabData() {
         //niProtEntry entry = (UniProtEntry) entryRetrievalService
            //     .getUniProtEntry(accession);
         //EnzymeModel enzymeModel =  (EnzymeModel)setEzymeResult(accession);
         //EnzymeModel enzymeModel =  (EnzymeModel)setEnzymeCommonProperties(accession);
-        EnzymeModel enzymeModel =  (EnzymeModel)setEnzymeProperties();
+        //EnzymeModel enzymeModel =  (EnzymeModel)setEnzymeProperties();
+        EnzymeModel enzymeModel = (EnzymeModel) getEnzymeCommonProperties();
+        List<Comment> functionCommentList = getComments(CommentType.FUNCTION);
+        String function = Transformer.getCommentText(functionCommentList);
+        enzymeModel.setFunction(function);
+        List<Comment> diseaseCommentList = getComments(CommentType.DISEASE);
+        List<Disease> diseases = Transformer.getDiseases(diseaseCommentList);
+        enzymeModel.setDisease(diseases);
+
+        List<Name> names = (List<Name>) getAttribute("proteinAlterNamestpl");
+        enzymeModel.getSynonym().addAll(Transformer.getAltNames(names));
+        enzymeModel.setPdbeaccession(this.getPdbeAccessions());
+
         int seqLength = (Integer)getAttribute("sequenceLengthTpl");
         int weight = (Integer)getAttribute("moleculeWeightTpl");
         String seqUrl = IUniprotAdapter.SEQUENCE_URL_BASE
@@ -190,14 +203,19 @@ public class UniprotCallable {
     }
 
     public EnzymeSummary getReactionPathwayByAccession() {
-        EnzymeModel enzymeModel = (EnzymeModel)setEnzymeCommonProperties(accession);
+        EnzymeModel enzymeModel = (EnzymeModel)getEnzymeCommonProperties();
         ReactionPathway reactionpathway = this.getReactomePathways();
         enzymeModel.getReactionpathway().add(reactionpathway);
         return enzymeModel;
     }
 
+    public EnzymeSummary getProteinStructureByAccession() {
+        EnzymeModel enzymeModel = (EnzymeModel)getEnzymeCommonProperties();
+        enzymeModel.getPdbeaccession().addAll(getPdbeAccessions());
+        return enzymeModel;
+    }
     public EnzymeSummary getSmallMoleculesByAccession() {
-        EnzymeModel enzymeModel = (EnzymeModel)setEnzymeCommonProperties(accession);
+        EnzymeModel enzymeModel = (EnzymeModel)getEnzymeCommonProperties();
         //ReactionPathway reactionpathway = this.setReactomePathways(entry);
         //List<Molecule>  molecules = this.getDrugBankAccessions(entry);
         //chemicalEntity.setDrugs(molecules);
@@ -289,7 +307,14 @@ public class UniprotCallable {
             return attValue;
         }
 
-        public EnzymeSummary setEnzymeCommonProperties(String accession) {
+        /**
+         * Query Uniprot for enzyme common attributes to be shown in the seacrch
+         * results and the species header of the entry tabs. The attributes that
+         * are set here include enzyme names, ec, species.
+         * 
+         * @return
+         */
+        public EnzymeSummary getEnzymeCommonProperties() {
             EnzymeModel enzymeSummary = new EnzymeModel();
             enzymeSummary.getUniprotaccessions().add(accession);
             String id = (String) getAttribute("idTpl");
@@ -322,6 +347,7 @@ public class UniprotCallable {
 
             return enzymeSummary;
         }
+    }
     /*
     public EnzymeSummary setEnzymeCommonProperties(UniProtEntry entry) {
         EnzymeModel enzymeSummary = new EnzymeModel();
@@ -352,6 +378,7 @@ public class UniprotCallable {
         return enzymeSummary;
     }
     */
+        /*
     public EnzymeSummary setEnzymeProperties() {
         //EnzymeSummary enzymeSummary = new EnzymeSummary();
         EnzymeModel enzymeModel = (EnzymeModel) setEnzymeCommonProperties(accession);
@@ -369,7 +396,7 @@ public class UniprotCallable {
     }
 
   }
-
+*/
 
 
 
@@ -399,10 +426,10 @@ public class UniprotCallable {
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
-                GetEntriesCaller caller = new GetEntriesCaller(
+                GetEntryCaller caller = new GetEntryCaller(
                 topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
-                enzymeSummary = caller.getEnzymeSummaryByAccession();
+                enzymeSummary = caller.getEnzymeCommonProperties();
 
                 //Add related species
                 if (speciesList.size() > 1) {
@@ -419,10 +446,10 @@ public class UniprotCallable {
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
-                GetEntriesCaller caller = new GetEntriesCaller(
+                GetEntryCaller caller = new GetEntryCaller(
                 topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
-                enzymeSummary = caller.getEnzymeWithSequenceByAccession();
+                enzymeSummary = caller.getEnzymeTabData();
                 //Add related species
                 if (speciesList.size() > 1) {
                     //speciesList.remove(topSpecies);
@@ -438,7 +465,7 @@ public class UniprotCallable {
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
-                GetEntriesCaller caller = new GetEntriesCaller(
+                GetEntryCaller caller = new GetEntryCaller(
                 topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
                 enzymeSummary = caller.getReactionPathwayByAccession();
@@ -477,6 +504,7 @@ public class UniprotCallable {
              return accSpeciesList;
 
         }
+  }
 /*
         public List<UniProtEntry> separateEntries(EntryIterator<UniProtEntry> entries) {
             List<UniProtEntry> secEntries = new ArrayList<UniProtEntry>();
@@ -499,7 +527,7 @@ public class UniprotCallable {
             return secEntries;
         }
 */
-  }
+
 
 //******************************** INNER CLASS *******************************//
 
@@ -531,21 +559,6 @@ public class UniprotCallable {
              }
              return speciesMap;
         }
-/*
-        public Map<String,String> getIds(Query uniprotQuery) {
-             AttributeIterator<UniProtEntry> attributes  = queryService
-                     .getAttributes(uniprotQuery, "ognl:organism");
-             Map<String,String> speciesMap = new HashMap<String, String>();
-             for (Attribute att : attributes) {
-                Organism organism = (Organism)att.getValue();
-                String commonName = organism.getCommonName().getValue();
-                String scientificName = organism.getScientificName().getValue();
-                speciesMap.put(scientificName, commonName);
 
-             }
-             return speciesMap;
-        }
-*/
-  }
-
+    }    
 }

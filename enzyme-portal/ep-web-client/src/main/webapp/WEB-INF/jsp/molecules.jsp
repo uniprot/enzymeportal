@@ -10,258 +10,149 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
-<html>
-    <head>
-        <title>Enzyme Entry</title>
-        <!--
-        <link media="screen" href="../resources/lib/spineconcept/css/960gs/reset.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/lib/spineconcept/css/960gs/text.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/lib/spineconcept/css/960gs/960.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/lib/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/lib/spineconcept/javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="../resources/css/enzyme.css" type="text/css" rel="stylesheet" />
-        <link href="../resources/css/search.css" type="text/css" rel="stylesheet" />
-        <script src="../resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
-        <script src="../resources/lib/spineconcept/javascript/summary.js" type="text/javascript"></script>
-        -->
 
-		<link media="screen" href="../resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
-		<link media="screen" href="../resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
-		<link media="screen" href="../resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
-		<link media="screen" href="../resources/lib/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />
-		<link media="screen" href="../resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
-		<link media="screen" href="../resources/lib/spineconcept/javascript/jquery-ui/css/custom-theme/jquery-ui-1.8.11.custom.css" type="text/css" rel="stylesheet" />
-                        <link media="screen" href="../resources/css/enzyme.css" type="text/css" rel="stylesheet" />
+                                            <div id="moleculeContent" class="summary">
+                                                <h2><c:out value="${enzymeModel.name}"/></h2>
+                                                <c:set var="molecules" value="${enzymeModel.molecule}"/>
+                                                <div id="molecules">
+                                                <c:if test='${molecules!=null}'>
 
-                <link href="../resources/css/search.css" type="text/css" rel="stylesheet" />
-		<script src="../resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-		<script src="../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-1.5.1.min.js" type="text/javascript"></script>
-		<script src="../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
-		<script src="../resources/lib/spineconcept/javascript/summary.js" type="text/javascript"></script>
+                                                <c:set var="drugs" value="${molecules.drugs}"/>
+                                                <c:set var="drugsSize" value="${fn:length(drugs)}"/>
+                                                <!--<spring:message code="label.entry.underconstruction"/>-->
+                                                    <div id="drugs">
+                                                        <c:if test='${drugsSize == 0}'>
+                                                            <br/>
+                                                            <div>
+                                                            <spring:message code="label.entry.molecules.empty" arguments="drugs"/>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test='${drugsSize > 0}'>
+                                                        <fieldset>
+                                                            <legend>
+                                                                <spring:message code="label.entry.molecules.sub.title" arguments="Drugs,interact"/>
+                                                            </legend>
+                                                            <p>
+                                                                <spring:message code="label.entry.molecules.explaination" arguments="drugs,interact with" />
+                                                            </p>
+                                                            <c:forEach var="drug" items="${drugs}">
+                                                                <fieldset class="epBox">
+                                                                        <a href="${drug.url}" target="blank">
+                                                                            <c:out value="${drug.name}"/>
+                                                                        </a>
+                                                                        <div>
+                                                                            <div>
+                                                                                <a target="blank" href="${drug.url}">
+                                                                                    <img src="${chebiImageBaseUrl}${drug.id}${chebiImageParams}" alt="${drug.name}"/>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div>
+                                                                                    <c:out value="${drug.description}"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <span class="bold"><spring:message code="label.entry.molecules.formula"/></span>: <c:out value="${drug.formula}"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </fieldset>
+                                                            </c:forEach>
+                                                        </fieldset>
+                                                        </c:if>
+                                                    </div>
 
-    </head>
-	<body>
-		<div class="headerdiv" id="headerdiv" style="position:absolute; z-index: 1;">
-			<iframe src="/inc/head.html" name="head" id="head" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  width="100%" style="position:absolute; z-index: 1; height: 800px;">
-				[Your user agent does not support frames or is currently configured not to display iframes.]
-			</iframe>
-		</div>
-		<div class="contents">
-			<div class="container_12">
-				<div class="grid_12">
-					<div class="breadcrumbs" wicket:id="breadcrumbs">
-						<ul>
-							<li class="first"><a href="">EBI</a></li>
-							<li><a href="">Search BLA</a></li>
-							<li><a href="">Identification BLA</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="grid_12">
-					<h1 wicket:id="title">Gene &amp; Protein Summary</h1>
-				</div>
-				<div class="grid_12 header"  style="">
-					<div class="container_12">
-						<div class="grid_4 prefix_4 suffix_3 alpha">
-							<div class="panel">
-								<div wicket:id="classification">
-									<div class="classification">
-										<div class="label">ORGANISMS</div>
-										<div class="box selected Homo_sapiens">
-											<span class="name">Human</span>
-											<span class="extra">Homo sapiens</span>
-										</div>
-									</div>
-									<div class="selection">
-										<ul>
-											<li class="selected">
-												<div class="box Homo_sapiens">
-													<span class="name">Human</span>
-													<span class="extra">Homo sapiens</span>
-												</div>
-											</li>
-											<li>
-												<div class="box Mus_musculus">
-													<span class="name">House mouse</span>
-													<span class="extra">Mus musculus</span>
-												</div>
-											</li>
-											<li>
-												<a href="MultiReferencePage.html">
-													<span>
-														<span class="box Rattus_norvegicus">
-															<span class="name">Rat</span>
-															<span class="extra">Rattus norvegicus</span>
-														</span>
-														<span class="cardinality">x2</span>
-													</span>
-												</a>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="grid_1 omega">
-							<div class="menu">
-								<a href="http://www.ebi.ac.uk/inc/help/search_help.html" class="help">Help</a>
-								<a href="" wicket:id="print" class="print"><span wicket:id="printLabel">Print</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="container_12 gradient">
-				<div class="grid_12">
-					<div wicket:id="reference" class="content">
-						<div class="column1">
-							<ul>
-								<li class="tab gene">
-									<a href="">
-										<span class="inner_tab">
-											<span class="icon"></span>
-											<span class="label">Gene</span>
-										</span>
-									</a>
-								</li>
-								<li class="tab expression selected">
-									<span class="inner_tab">
-										<span class="icon"></span>
-										<span class="label">Expression</span>
-									</span>
-								</li>
-								<li class="tab protein">
-									<a href="">
-										<span class="inner_tab">
-											<span class="icon"></span>
-											<span class="label">Protein</span>
-										</span>
-									</a>
-								</li>
-								<li class="tab structure">
-									<a href="">
-										<span class="inner_tab">
-											<span class="icon"></span>
-											<span class="label">Protein Structure</span>
-										</span>
-									</a>
-								</li>
-								<li class="tab literature">
-									<a href="">
-										<span class="inner_tab">
-											<span class="icon"></span>
-											<span class="label">Literature</span>
-										</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-						<div class="column2">
-							<div class="node">
-								<div class="networks">
-									<ul>
-										<li class="selected">BRCA1</li>
-										<li><a href="" title="This is the title for BRCA2">BRCA2</a></li>
-										<li><a href="" title="This is the title for BRCA3">BRCA3</a></li>
-									</ul>
-								</div>
-								<div class="view">
-									<div class="references">
-										<div class="button">2 other protein structures</div>
-										<table>
-											<tr class="selected"><td><a href="">3eu7</a></td><td>Crystal Structure of a PALB2 / BRCA2 complex</td></tr>
-											<tr><td><a href="">1n0w</a></td><td>Crystal Structure of a RAD51-BRCA2 BRC repeat complex</td></tr>
-										</table>
-									</div>
-									<div class="summary">
-										<h2>Triosephosphate isomerase 12</h2>
-										<div class="main_link">
-											<a href="">View in Ensembl</a>
-										</div>
+                                                <c:set var="inhibitors" value="${molecules.inhibitors}"/>
+                                                <c:set var="inhibitorsSize" value="${fn:length(inhibitors)}"/>
+                                                    <div id="inhibitor">
+                                                        <c:if test='${inhibitorsSize == 0}'>
+                                                            <br/>
+                                                            <div>
+                                                            <spring:message code="label.entry.molecules.empty" arguments="inhibitors"/>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test='${inhibitorsSize > 0}'>
+                                                        <fieldset>
+                                                            <legend>
+                                                                <spring:message code="label.entry.molecules.sub.title" arguments="Inhibitors,inhibit"/>
+                                                            </legend>
+                                                            <p>
+                                                                <spring:message code="label.entry.molecules.explaination" arguments="inhibitors,inhibit"/>
+                                                            </p>
+                                                            <c:forEach var="inhibitor" items="${inhibitors}">
+                                                                <fieldset class="epBox">
+                                                                        <a href="${inhibitor.url}" target="blank">
+                                                                            <c:out value="${inhibitor.name}"/>
+                                                                        </a>
+                                                                        <div>
+                                                                            <div>
+                                                                                <a target="blank" href="${inhibitor.url}">
+                                                                                    <img src="${chebiImageBaseUrl}${inhibitor.id}${chebiImageParams}" alt="${inhibitor.name}"/>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div>
+                                                                                    <c:out value="${inhibitor.description}"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <span class="bold"><spring:message code="label.entry.molecules.formula"/></span>: <c:out value="${inhibitor.formula}"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </fieldset>
+                                                            </c:forEach>
+                                                        </fieldset>
+                                                        </c:if>
+                                                    </div>
+                                                <c:set var="activators" value="${molecules.activators}"/>
+                                                <c:set var="activatorsSize" value="${fn:length(activators)}"/>
+                                                    <div id="activator">
+                                                        <c:if test='${activatorsSize == 0}'>
+                                                            <br/>
+                                                            <div>
+                                                            <spring:message code="label.entry.molecules.empty" arguments="activators"/>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test='${activatorsSize > 0}'>
+                                                        <fieldset>
+                                                            <legend>
+                                                                <spring:message code="label.entry.molecules.sub.title" arguments="Activators,activate"/>
+                                                            </legend>
+                                                            <p>
+                                                                <spring:message code="label.entry.molecules.explaination" arguments="Activators,activate"/>
+                                                            </p>
+                                                            <c:forEach var="activator" items="${activators}">
+                                                                <fieldset class="epBox">
+                                                                        <a href="${activator.url}" target="blank">
+                                                                            <c:out value="${activator.name}"/>
+                                                                        </a>
+                                                                        <div>
+                                                                            <div>
+                                                                                <a target="blank" href="${activator.url}">
+                                                                                    <img src="${chebiImageBaseUrl}${activator.id}${chebiImageParams}" alt="${activator.name}"/>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div>
+                                                                                <div>
+                                                                                    <c:out value="${activator.description}"/>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <div>
+                                                                                        <span class="bold"><spring:message code="label.entry.molecules.formula"/></span>: <c:out value="${activator.formula}"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </fieldset>
+                                                            </c:forEach>
+                                                        </fieldset>
+                                                        </c:if>
+                                                    </div>
 
-										<div class="image">
-											<a href="" rel="external">
-												<img src="http://www.ebi.ac.uk/gxa/anatomogram/ENSG00000111669.png"></img>
-												<span class="caption">This is the legend for this particular image.</span>
-											</a>
-										</div>
-										<dl>
-											<dt>Gene Information and Sequence</dt>
-											<dd>
-												<ul>
-													<li>TPI1 spans 3829 bps of chromosome 12 from 6976283 to 6980112.</li>
-													<li>TPI1 has 8 transcripts containing a total of 26 exons on the forward strand.</li>
-													<li>Gene containing both Ensembl genebuild transcripts and Havana manual curation, see article.</li>
-												</ul>
-											</dd>
-										</dl>
-										<dl>
-											<dt>Variations</dt>
-											<dd>
-												<ul>
-													<li>TPI1 has 88 SNPs.</li>
-												</ul>
-											</dd>
-										</dl>
-										<dl>
-											<dt>Orthologs</dt>
-											<dd>
-												<ul>
-													<li>TPI1 has 50 orthologs.</li>
-												</ul>
-											</dd>
-										</dl>
-										<div class="image wide">
-											<a href="" rel="external">
-												<img style="" src="http://www.ensembl.org/Homo_sapiens/Component/Location/Web/MultiBottom?export=png;g=ENSG00000111669;db=core;i_width=750"></img>
-												<span class="caption">This is the legend for this other wider image.</span>
-											</a>
-										</div>
-										<div class="provenance">
-											<ul>
-												<li>The Ensembl project produces genome databases for vertebrates and other eukaryotic species, and makes this information freely available online.</li>
-												<li>The current release 61 ( Feb 2011 ) of the Ensembl provides access to the genomic, comparative, functional and variation data from 52 species.</li>
-												<li><a href="">View more information in Ensembl</a></li>
-												<li><a href="">View more information somewhere else</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div id="afterContent"></div>
-			<table class="footerpane" id="footerpane" summary="The main footer pane of the page">
-				<tr>
-					<td colspan ="4" class="footerrow">
-
-						<div class="footerdiv" id="footerdiv"  style="z-index:2;">
-							<iframe src="http://www.ebi.ac.uk/inc/foot.html" name="foot" frameborder="0" marginwidth="0px" marginheight="0px" scrolling="no"  height="22px" width="100%"  style="z-index:2;">
-								[Your user agent does not support frames or is currently configured not to display iframes.]
-							</iframe>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<script type="text/javascript">
-				function getQueryString() {
-					/* variable searchTerm is automaticatlly added by the framework */
-					return searchTerm;
-				}
-
-			window.onload=function() {
-				if (navigator.userAgent.indexOf('MSIE') != -1) {
-					document.getElementById('head').allowTransparency = true;
-				}
-			}
-		</script>
-	</body>
-</html>
+                                                </div>
+                                                </c:if>
+                                            </div>
+                                        

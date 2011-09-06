@@ -42,7 +42,7 @@ public interface IUniprotAdapter {
 
     public EnzymeSummary getMoleculeSummary(String accession);
 
-    public EnzymeSummary ProteinStructureSummary(String accession);
+    public EnzymeSummary getProteinStructureSummary(String accession);
 
     //public EnzymeSummary getDrugSummary(String accession);
     
