@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 import org.reactome.cabig.domain.Event;
-import org.reactome.cabig.domain.Reaction;
 import org.reactome.cabig.domain.Summation;
 
 /**
@@ -69,8 +68,8 @@ public class ReactomeUtil {
         return sb.toString();
     }
 
-   public static String parseReactomeHtml(String reactomeAccession, String parseTerm) throws MalformedURLException, IOException {
-        URL oracle = new URL(IReactomeAdapter.REACTOME_SEARCH_URL +reactomeAccession);
+   public static String parseReactomeHtml(String stableId, String parseTerm) throws MalformedURLException, IOException {
+        URL oracle = new URL(Constant.REACTOME_SEARCH_URL +stableId);
         URLConnection uCon = oracle.openConnection();
         BufferedReader in = new BufferedReader(
                                 new InputStreamReader(
@@ -92,6 +91,5 @@ public class ReactomeUtil {
        in.close();
        return reactionDesc;
    }
-
 
 }

@@ -1,7 +1,9 @@
 package uk.ac.ebi.ep.uniprot.adapter;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
@@ -142,5 +144,18 @@ public class Transformer {
         }
         return synonyms;
     }
-    
+
+    public static String getMessageTemplate(String tplName, Object[] messageArguments) {
+        ResourceBundle messages = ResourceBundle.getBundle("MessageBundle_ognl");
+        //Object[] messageArguments = {tplName};
+        MessageFormat formatter = new MessageFormat("");
+        formatter.applyPattern(messages.getString(tplName));
+        String message = formatter.format(messageArguments);
+        return message;
+    }
+
+    public static String getMessageTemplate(String tplName) {
+        ResourceBundle messages = ResourceBundle.getBundle("MessageBundle_ognl");
+        return messages.getString(tplName);
+    }
 }

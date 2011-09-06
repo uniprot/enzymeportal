@@ -38,9 +38,11 @@ public interface IUniprotAdapter {
 //********************************** METHODS *********************************//
     public EnzymeSummary getEnzymeSummary(String accession);
 
-    public EnzymeSummary getPathwaySummary(String accession);
+    public EnzymeSummary getReactionPathwaySummary(String accession);
 
     public EnzymeSummary getMoleculeSummary(String accession);
+
+    public EnzymeSummary ProteinStructureSummary(String accession);
 
     //public EnzymeSummary getDrugSummary(String accession);
     
