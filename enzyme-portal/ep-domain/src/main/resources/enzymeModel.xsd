@@ -113,7 +113,9 @@
 	<xs:complexType name="Pathway">
 		<xs:complexContent>
 			<xs:extension base="epe:Entity">
-				<xs:sequence/>
+				<xs:sequence>
+					<xs:element name="image" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

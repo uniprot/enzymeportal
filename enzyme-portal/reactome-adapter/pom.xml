@@ -20,6 +20,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+        <groupId>uk.ac.ebi.rhea</groupId>
+        <artifactId>rhea-domain</artifactId>
+        <version>1.6.6</version>
+    </dependency>
+    <dependency>
       <groupId>org.sbml</groupId>
       <artifactId>jsbml</artifactId>
       <version>0.8-b1</version>

@@ -43,9 +43,9 @@ public class UniprotAdapter implements IUniprotAdapter{
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
     }
-    public EnzymeSummary getPathwaySummary(String accession) {
+    public EnzymeSummary getReactionPathwaySummary(String accession) {
        GetEntriesCaller caller = new GetEntriesCaller(accession);
-        EnzymeSummary enzymeSummary = caller.getEnzymePathwayByAccession();
+        EnzymeSummary enzymeSummary = caller.getReactionPathwayByAccession();
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
 
@@ -106,6 +106,10 @@ public class UniprotAdapter implements IUniprotAdapter{
         finally {
             pool.shutdown();
         }
+    }
+
+    public EnzymeSummary ProteinStructureSummary(String accession) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

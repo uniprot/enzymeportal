@@ -37,19 +37,20 @@ img {
     margin-top: 10px;
      margin-bottom: 10px;
 }
-#pathwayDesc
+/*
+.pathwayDesc
   {
     float: left;
-    max-width:80%;
+    max-width:50%;
     min-width: 250px;
   }
 
-  #pathwayImg
+.pathwayImg
   {
     float: left;
-    width: 20%;
+    width: 50%;
   }
-
+*/
 fieldset {
     margin-top: 20px;
 }
