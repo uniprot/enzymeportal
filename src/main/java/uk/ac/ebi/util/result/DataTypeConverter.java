@@ -1,5 +1,9 @@
 package uk.ac.ebi.util.result;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,7 +18,10 @@ import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
 import uk.ac.ebi.ep.config.ResultFieldList;
 import uk.ac.ebi.ep.config.SearchField;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -41,6 +48,29 @@ public class DataTypeConverter {
 
 
 //********************************** METHODS *********************************//
+
+    public static URL createEncodedUrl(String baseUrl, String decodedQuery) throws UnsupportedEncodingException, MalformedURLException {
+            String charset = "UTF-8";
+            String encodedRequest = String.format(baseUrl+"%s",
+            URLEncoder.encode(decodedQuery, charset));
+            URL url = new URL(encodedRequest);
+            return url;
+    }
+
+    public static List<String> getReactionXrefs(EnzymeModel enzymeModel) {
+        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+        List<String> reactomeReactionIds = new ArrayList<String>();
+        for (ReactionPathway reactionPathway:reactionPathways) {
+            EnzymeReaction enzymeReaction = reactionPathway.getReaction();
+            List<Object> xrefs = enzymeReaction.getXrefs();
+            if (xrefs != null) {
+                for (Object xref: xrefs) {
+                    reactomeReactionIds.add((String)xref);
+                }
+            }
+        }
+        return reactomeReactionIds;
+    }
 /*
     public static String accessionToXLink(String url, String accession) {
         StringBuffer sb = new StringBuffer();
