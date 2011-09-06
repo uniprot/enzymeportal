@@ -6,9 +6,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.logging.Level;
 
 import javax.xml.bind.JAXBException;
 
@@ -22,6 +19,8 @@ import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
+import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
+import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
 import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
 import uk.ac.ebi.ep.chebi.adapter.ChebiFetchDataException;
 import uk.ac.ebi.ep.chebi.adapter.IChebiAdapter;
@@ -31,7 +30,6 @@ import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Image;
-import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
@@ -40,11 +38,11 @@ import uk.ac.ebi.ep.reactome.ReactomeAdapter;
 import uk.ac.ebi.ep.reactome.ReactomeServiceException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
-import uk.ac.ebi.rhea.domain.Database;
 import uk.ac.ebi.rhea.ws.client.IRheaAdapter;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
 import uk.ac.ebi.rhea.ws.client.RheasResourceClient;
 import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
+import uk.ac.ebi.util.result.DataTypeConverter;
 
 
 /**
@@ -67,14 +65,16 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     protected IReactomeAdapter reactomeAdapter;
 
     protected IChebiAdapter chebiAdapter;
-	protected IDASFeaturesAdapter pdbeAdapter;
-	protected ILiteratureAdapter litAdapter;
+    protected IDASFeaturesAdapter pdbeAdapter;
+    protected ILiteratureAdapter litAdapter;
+    protected BiomartAdapter biomartAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever() {
         rheaAdapter = new RheasResourceClient();
         reactomeAdapter = new ReactomeAdapter();
         chebiAdapter = new ChebiAdapter();
+        biomartAdapter = new BiomartAdapter();
         try {
 			pdbeAdapter = new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
 		} catch (Exception e) {
@@ -124,73 +124,158 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return idNameMap;
     }
     public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getPathwaySummary(uniprotAccession);
-        ReactionPathway reactomeUniproPw= enzymeModel.getReactionpathway().get(0);
-        List<Pathway> reactomeUniprotLinks = reactomeUniproPw.getPathways();
-        Map<String,String> reactomeAccessionsInUniprot =
-                getReactomeAccQueriedFromUniprot(reactomeUniprotLinks);
+        //Get pathways from uniprot --> maybe not for now
+        //Get pathways from Biomart (from Reactome reaction retrieved from Rhea)
+        //Choose 2 top pathways to extract from Reactome Website
+        // View pathway in reactome should be associated with the reaction.        
+        //EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getReactionPathwaySummary(uniprotAccession);
+        
+        //TODO check
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeSummary(uniprotAccession);
 
+        //List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+
+        //ReactionPathway reactomeUniproPw= reactionPathways.get(0);
+        //List<Pathway> reactomeUniprotLinks = reactomeUniproPw.getPathways();
+        //Map<String,String> reactomeAccessionsInUniprot =
+           //     getReactomeAccQueriedFromUniprot(reactomeUniprotLinks);
+        //List<String> reactomeStableIdsFromUniprot = new ArrayList<String>();
+        //reactomeStableIdsFromUniprot.addAll(reactomeAccessionsInUniprot.keySet());
         //Query Rhea WS
         queryRheaWsForReactions(enzymeModel);
-        
-        List<ReactionPathway> reactionPathways = reactionPathways = enzymeModel.getReactionpathway();
-        //get the reaction and pathways with rhea ws results set
-        //List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
-        for (ReactionPathway reactionPathway: reactionPathways) {
-            //List<Pathway> pathways = reactionPathway.getPathways();
-            EnzymeReaction enzymeReaction = reactionPathway.getReaction();
-           // for (Pathway pathway: pathways) {
-            if (enzymeReaction != null) {
-                List<Object> rheaReactomeLinks = enzymeReaction.getXrefs();
-                String reactomeUrl = null;
-                if (rheaReactomeLinks.size() > 0) {
-                    reactomeUrl = (String)rheaReactomeLinks.get(0);
-                    try {
-                        //Object[] results = this.reactomeAdapter.getReactionPathway(reactomeUrl);
-                        String reactomeAccession = reactomeUrl.split("=")[1];
-                        String reactionDesc = this.reactomeAdapter.getReactionDescription(reactomeAccession);
 
-                        enzymeReaction.setDescription(reactionDesc);
-                    }
-                    catch (ReactomeServiceException ex) {
-                        log.error("Failed to retrieve reaction desciption for " +reactomeUrl, ex);
-                    }
+        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
 
+        if (reactionPathways.size() > 0) {
+            List<String> reactomeReactionIds = DataTypeConverter.getReactionXrefs(enzymeModel);
+            if (reactomeReactionIds.size() > 0) {
+                getReactionPathwaysByRheaResults(enzymeModel);
+
+            } else { //found Rhea reaction, but not reactome reaction referenced in Rhea
+                List<String> pathwayReactomeIds = null;
+                try {
+                    pathwayReactomeIds = biomartAdapter.getPathwaysByUniprotAccession(uniprotAccession);
+                } catch (BiomartFetchDataException ex) {
+                    throw new EnzymeRetrieverException(
+                            "Failed to get pathway ids from Biomart for uniprot accession " +uniprotAccession, ex);
                 }
+                List<Pathway> pathways = getPathwayDescFromReactome(pathwayReactomeIds);
+                //To use Rhea reaction without a reference to a Reactome reaction
+                //all pathways found are assigned to the first Rhea reaction
+                reactionPathways.get(0).setPathways(pathways);
+            }
+            
+        } else { //No Rhea reactions found, use reactome reaction and pathways
+            getReactionPathwaysByUniprotAcc(enzymeModel);
+        }
+        
+        /*
+        for (ReactionPathway reactionPathway: reactionPathways) {
+            EnzymeReaction reaction = reactionPathway.getReaction();
+            if (reaction != null) {
+                List<String> reactomeStableIds = new ArrayList<String>();
+                List<Object> reactomeReactionIds = reaction.getXrefs();
+                //if there is no Reactome reaction id in Rhea
+
+                for (Object reactomeReactionId:reactomeReactionIds ) {
+                    String castedId = null;
+
+                    try {
+                        castedId = (String) reactomeReactionId;
+                        reactomeStableIds.addAll(biomartAdapter.getPathwaysByReactionId(castedId));
+                    } catch (BiomartFetchDataException ex) {
+                        throw new EnzymeRetrieverException("Failed to get reactome stable ids " +
+                                "from Biomart for Reaction " +castedId, ex);
+                    }
+                    if (reactomeStableIds.size() == 0) {
+                        reactomeReactionIds.addAll(reactomeStableIdsFromUniprot);
+                    } else {
+                        List<Pathway> pathways = null;
+                        try {
+                            reactomeAdapter.getPathwayDescription(reactomeStableIds);
+                        } catch (ReactomeServiceException ex) {
+                            throw new EnzymeRetrieverException("Failed to get reactome description " +
+                                "from Reactome for Reaction " +castedId, ex);
+                        }
+
+                        reactionPathway.setPathways(pathways);
+                    }
+                }
+
+
             }
         }
-        Set<Entry<String, String>> entries = reactomeAccessionsInUniprot.entrySet();
-        List<Pathway> pathways = new ArrayList<Pathway>();
-        for (Entry<String, String> entry: entries) {
-             String reactomeAccession = entry.getKey();
-             String pathwayDesc = null;
-            try {
-                pathwayDesc = this.reactomeAdapter.getPathwayDescription(reactomeAccession);
-            } catch (ReactomeServiceException ex) {
-                log.error("Failed to retrieve pathway desciption for " +reactomeAccession, ex);
-            }
-            Pathway pathway = new Pathway();
-            pathway.setId(reactomeAccession);
-            pathway.setName(entry.getValue());
-            pathway.setDescription(pathwayDesc);
-            String url = Database.REACTOME.getEntryUrl(reactomeAccession);
-            pathway.setUrl(url);
-            pathways.add(pathway);
-            //reactionPathways.add(reactionPathway);
-        }
-        //ReactionPathway reactionPathway = reactionPathways.get(0);
-        //ReactionPathway reactionPathway = null;
-        if (reactionPathways.size() == 0) {
-            ReactionPathway reactionPathway = new ReactionPathway();            
-            reactionPathways.add(reactionPathway);
-        }
-
-        reactionPathways.get(0).setPathways(pathways);
-
-        //enzymeModel.setReactionpathway(reactionPathways);
-
+        */
         return enzymeModel;
     }
+
+    public List<Pathway> getPathwaysByReactomeReactionsId(String reactomeReactionId) throws EnzymeRetrieverException {
+        List<Pathway> pathways = null;
+        List<String> reactomeStableIds = null;
+        try {
+            reactomeStableIds = biomartAdapter.getPathwaysByReactionId(reactomeReactionId);
+        } catch (BiomartFetchDataException ex) {
+            throw new EnzymeRetrieverException("Failed to get reactome pathway stable ids "
+                    + "from Biomart for Reaction " + reactomeReactionId, ex);
+        }
+        pathways= getPathwayDescFromReactome(reactomeStableIds);
+        return pathways;
+    }
+
+    public List<ReactionPathway> getReactionPathwaysByRheaResults(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
+            try {
+                reactomeAdapter.getReationDescription(enzymeModel);
+            } catch (ReactomeServiceException ex) {
+                throw new EnzymeRetrieverException(
+                        "Failed to get reaction description from Reactome for Rhea reactions", ex);
+            }
+        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+        getPathwaysFromRheaXref(reactionPathways);
+        return reactionPathways;
+    }
+
+    public List<ReactionPathway> getPathwaysFromRheaXref( List<ReactionPathway> reactionPathways) throws EnzymeRetrieverException {
+        //List<String> reactomeReactionId = new ArrayList<String>();
+            for (ReactionPathway reactionPathway : reactionPathways) {
+                EnzymeReaction reaction = reactionPathway.getReaction();                
+                List xref = reaction.getXrefs();
+                if (xref != null) {
+                    String reactomeReactionId = (String)xref.get(0);
+                     List<Pathway> pathways = getPathwaysByReactomeReactionsId(reactomeReactionId);
+                    reactionPathway.setPathways(pathways);
+                }
+            }                   
+
+        return reactionPathways;
+    }
+
+    public List<ReactionPathway> getReactionPathwaysByUniprotAcc(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
+        //No Rhea reaction, use Reactome reactions
+        String uniprotAccession = enzymeModel.getUniprotaccessions().get(0);
+            List<ReactionPathway> reactionPathwaysFromReactome = null;
+                try {
+                    reactionPathwaysFromReactome = biomartAdapter.getReactionsByUniprotAccession(uniprotAccession);
+                } catch (BiomartFetchDataException ex) {
+                        throw new EnzymeRetrieverException("Failed to get reactome reactions "
+                                + "from Biomart for uniprot accession " + uniprotAccession, ex);
+                }
+                enzymeModel.setReactionpathway(reactionPathwaysFromReactome);
+        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+        getPathwaysFromRheaXref(reactionPathways);
+        return reactionPathways;
+    }
+
+    public List<Pathway> getPathwayDescFromReactome(List<String> reactomeStableIds) throws EnzymeRetrieverException {
+        List<Pathway> pathways = null;
+        try {
+            pathways = reactomeAdapter.getPathwayDescription(reactomeStableIds);
+        } catch (ReactomeServiceException ex) {
+            throw new EnzymeRetrieverException("Failed to get reactome description "
+                    + "from Reactome for pathways " + reactomeStableIds, ex);
+        }
+        return pathways;
+    }
+
     public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
         try {
