@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
-import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.GetEntriesCaller;
+import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.GetEntryCaller;
 import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.QueryEntryByIdCaller;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 
@@ -38,13 +38,13 @@ public class UniprotAdapter implements IUniprotAdapter{
 //********************************** METHODS *********************************//
 
     public EnzymeSummary getEnzymeSummary(String accession) {
-       GetEntriesCaller caller = new GetEntriesCaller(accession);
-        EnzymeSummary enzymeSummary = caller.getEnzymeWithSequenceByAccession();
+       GetEntryCaller caller = new GetEntryCaller(accession);
+        EnzymeSummary enzymeSummary = caller.getEnzymeTabData();
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
     }
     public EnzymeSummary getReactionPathwaySummary(String accession) {
-       GetEntriesCaller caller = new GetEntriesCaller(accession);
+       GetEntryCaller caller = new GetEntryCaller(accession);
         EnzymeSummary enzymeSummary = caller.getReactionPathwayByAccession();
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
@@ -52,10 +52,19 @@ public class UniprotAdapter implements IUniprotAdapter{
     }
 
     public EnzymeSummary getMoleculeSummary(String accession) {
-       GetEntriesCaller caller = new GetEntriesCaller(accession);
+       GetEntryCaller caller = new GetEntryCaller(accession);
         EnzymeSummary enzymeSummary = caller.getSmallMoleculesByAccession();
         setRelatedSpecies(enzymeSummary);
        return enzymeSummary;
+    }
+
+
+    public EnzymeSummary getProteinStructureSummary(String accession) {
+       GetEntryCaller caller = new GetEntryCaller(accession);
+        EnzymeSummary enzymeSummary = caller.getProteinStructureByAccession();
+        setRelatedSpecies(enzymeSummary);
+       return enzymeSummary;
+
     }
 
 /*
@@ -108,8 +117,5 @@ public class UniprotAdapter implements IUniprotAdapter{
         }
     }
 
-    public EnzymeSummary ProteinStructureSummary(String accession) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
 }
