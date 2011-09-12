@@ -27,9 +27,9 @@
     <body>
     <jsp:include page="header.jsp"/>
     <div class="contents">
-        <div class="page container_12">
-            <jsp:include page="subHeader.jsp"/>
+        <div class="page container_12">            
             <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
+            <jsp:include page="subHeader.jsp"/>
             <jsp:include page="searchBox.jsp"/>
             <!--Global variables-->
             <c:set var="showButton" value="Show more"/>
@@ -157,7 +157,7 @@
                         </div>
                     </div>
                     <div class="floatRight">
-                        <input id ="filterButton" type="submit" value="Filter Selected" class="filterButton"/>
+                        <input id ="filterButton" type="submit" value="Filter Selected" class="filterButton"/>                        
                     </div>
                 </div>
                 </c:if>
@@ -269,7 +269,7 @@
                                         </c:choose>
                                         </a> <br/>
                                         <!--display = 3 = 2 related species + 1 default species -->
-                                        <c:set var="relSpeciesMaxDisplay" value="${2}"/>
+                                        <c:set var="relSpeciesMaxDisplay" value="${5}"/>
                                         <c:set var="relspecies" value="${enzyme.relatedspecies}"/>                                        
                                         <c:set var="relSpeciesSize" value="${fn:length(relspecies)}"/>
                                         <c:if test="${relSpeciesSize > 0}">

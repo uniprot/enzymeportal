@@ -76,4 +76,18 @@ $(document).ready(function() {
         $('#searchButton').trigger("click");
     });
 
+    /**
+     * Save the form parameters for the breadcrumb link
+     */
+
+    $("#searchForm").submit( function () {        
+        var breadcrumb=$('#searchForm').serialize();
+         $("#breadcrumb").val(breadcrumb);         
+    } );
+
+    $("#searchBreadcrumb").click(function(event) {
+        var breadcrumb=$('#searchForm').serialize();
+         $("#breadcrumb").val(breadcrumb);
+         alert(breadcrumb);
+    });
 });
