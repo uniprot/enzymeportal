@@ -209,11 +209,13 @@ public class UniprotCallable {
         return enzymeModel;
     }
 
+
     public EnzymeSummary getProteinStructureByAccession() {
         EnzymeModel enzymeModel = (EnzymeModel)getEnzymeCommonProperties();
         enzymeModel.getPdbeaccession().addAll(getPdbeAccessions());
         return enzymeModel;
     }
+
     public EnzymeSummary getSmallMoleculesByAccession() {
         EnzymeModel enzymeModel = (EnzymeModel)getEnzymeCommonProperties();
         //ReactionPathway reactionpathway = this.setReactomePathways(entry);
@@ -429,7 +431,9 @@ public class UniprotCallable {
                 GetEntryCaller caller = new GetEntryCaller(
                 topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
-                enzymeSummary = caller.getEnzymeCommonProperties();
+                //enzymeSummary = caller.getEnzymeCommonProperties();
+                //The search result must have the pdbe accessions
+                enzymeSummary = caller.getProteinStructureByAccession();
 
                 //Add related species
                 if (speciesList.size() > 1) {
