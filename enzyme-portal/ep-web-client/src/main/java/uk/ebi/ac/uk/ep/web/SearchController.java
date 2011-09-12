@@ -145,7 +145,6 @@ public class SearchController {
         searchParams.setText("Enter a name to search");
         searchParams.setStart(0);
         searchModelForm.setSearchparams(searchParams);
-        //resultSetForm.getSummaryentries().setEnzymesummarycollection(emptyResults);
          model.addAttribute("searchModel", searchModelForm);
         return "index";
     }
@@ -160,13 +159,13 @@ public class SearchController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String getSearchResult(SearchModel searchModel, BindingResult result, Model model) {
-        //System.out.println(searchParameters.getKeywords());
         postSearchResult(searchModel, result, model);
         return "search";
     }
 
     /**
-     *
+     * Processes the search request. When user enters a search text and presses
+     * the submit button the request is processed here.
      * @param searchModelForm
      * @param result
      * @param model
@@ -177,13 +176,9 @@ public class SearchController {
         if (searchModelForm == null) {
             return "search";
         }
-        SearchParams searchParameters = searchModelForm.getSearchparams();
-        List<String> String = searchModelForm.getSearchparams().getSpecies();
-        //String[] selectedSpecies = searchParameters.getSelectedSPecies();
+        SearchParams searchParameters = searchModelForm.getSearchparams();        
         IEnzymeFinder finder = new EnzymeFinder();
-        //int start = searchParameters.getStart();
         searchParameters.setSize(SearchController.TOP_RESULT_SIZE);
-
         SearchResults resultSet = null;
         try {
             resultSet = finder.getEnzymes(searchParameters);
@@ -191,27 +186,15 @@ public class SearchController {
             log.error("Unable to create the result list because an error " +
                     "has occurred in the find method! \n", ex);
         }
-        /*
-        PagedListHolder pagedListHolder = new PagedListHolder(enzymeSummaryList);
-        pagedListHolder.s
-         *
-         */
-        //searchParameters.setStart(1);
-        //TODO: merge paging to search param?
         Pagination pagination = new Pagination(
                 resultSet.getTotalfound(), searchParameters.getSize());
         pagination.setMaxDisplayedPages(MAX_DISPLAYED_PAGES);
         int totalPage = pagination.calTotalPages();
         pagination.setTotalPages(totalPage);
         pagination.calCurrentPage(searchParameters.getStart());
-
-        //model.addAttribute("searchParameters", searchParameters);
         model.addAttribute("pagination", pagination);
-        //model.addAttribute("enzymeSummaryCollection", collection);
-        //model.addAttribute("searchFilter", searchFilter);
         searchModelForm.setSearchresults(resultSet);
         model.addAttribute("searchModel", searchModelForm);
-        //model.addAttribute("enzymeModel", new EnzymeModel());
         return "search";
     }
 
