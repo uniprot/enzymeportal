@@ -277,7 +277,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
         try {
             this.chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
         } catch (ChebiFetchDataException ex) {
@@ -344,7 +344,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
         //EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getProteinStructureSummary(uniprotAccession);
+        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeSummaryWithProteinStructure(uniprotAccession);
 
     	if (pdbeAdapter != null) try {
             List<String> pdbIds = enzymeModel.getPdbeaccession();
