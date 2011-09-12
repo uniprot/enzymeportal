@@ -28,8 +28,9 @@
         <jsp:include page="header.jsp"/>
         <div class="contents">
             <div class="page container_12">
-                <jsp:include page="subHeader.jsp"/>
                 <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
+                <jsp:include page="subHeader.jsp"/>
+                
                 
                     <jsp:include page="searchBox.jsp"/>
 
