@@ -9,6 +9,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import org.apache.log4j.Logger;
+
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.GetEntryCaller;
@@ -27,7 +30,7 @@ public class UniprotAdapter implements IUniprotAdapter{
 
 
 //********************************* VARIABLES ********************************//
-
+	private static final Logger LOGGER = Logger.getLogger(UniprotAdapter.class);
 
 //******************************** CONSTRUCTORS ******************************//
 
@@ -76,43 +79,53 @@ public class UniprotAdapter implements IUniprotAdapter{
     }
 */
     public void setRelatedSpecies(EnzymeSummary enzymeSummary) {
+    	LOGGER.debug("SEARCH start setRelatedSpecies");
         String uniprotIdPrefix =  enzymeSummary.getUniprotid().split(ID_SPLIT_SYMBOL)[0];
         String defaultSpecies = enzymeSummary.getSpecies().getScientificname();
         String query = LuceneQueryBuilder
                 .createWildcardFieldValueQuery(IUniprotAdapter.ID_FIELD,uniprotIdPrefix);
         QueryEntryByIdCaller caller = new QueryEntryByIdCaller(query, defaultSpecies);
         enzymeSummary.setRelatedspecies( caller.getSpecies());
+    	LOGGER.debug("SEARCH end setRelatedSpecies");
     }
-    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies)
-            throws MultiThreadingException {
+    
+    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries,
+    		String defaultSpecies)
+    throws MultiThreadingException {
         ExecutorService pool = Executors.newCachedThreadPool();
         List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
         try {
+            List<Future<EnzymeSummary>> futures =
+            		new ArrayList<Future<EnzymeSummary>>();
+			LOGGER.debug("SEARCH before uniprot callables loop");
             for (String query:queries) {
-                Callable caller = new UniprotCallable.QueryEntryByIdCaller(query, defaultSpecies);
-                Future<EnzymeSummary> future = pool.submit(caller);
-                EnzymeSummary enzymeSummary = null;
-                try {
-                    enzymeSummary = future.get(IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS);
-                } catch (InterruptedException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was interupted! ", ex);
-                } catch (ExecutionException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread was not executed! ", ex);
-
-                } catch (TimeoutException ex) {
-                    throw new MultiThreadingException(
-                            "One of Uniprot get entry thread did not return the result" +
-                            " before timeout! ", ex);
-                }
-                if (enzymeSummary != null) {
-                    enzymeSummaryList.add(enzymeSummary);
-                }
+                Callable<EnzymeSummary> caller =
+                		new UniprotCallable.QueryEntryByIdCaller(query, defaultSpecies);
+                futures.add(pool.submit(caller));
+            }
+			try {
+				LOGGER.debug("SEARCH before uniprot futures loop");
+	            for (Future<EnzymeSummary> future : futures) {
+	                EnzymeSummary enzymeSummary = future.get(
+	                		IUniprotAdapter.ENTRY_TIMEOUT, TimeUnit.SECONDS);
+	                if (enzymeSummary != null) {
+	                    enzymeSummaryList.add(enzymeSummary);
+	                }
+	            }
+	            LOGGER.debug("SEARCH after  uniprot futures loop");
+            } catch (InterruptedException ex) {
+                throw new MultiThreadingException(
+                        "One of Uniprot get entry thread was interupted! ", ex);
+            } catch (ExecutionException ex) {
+                throw new MultiThreadingException(
+                        "One of Uniprot get entry thread was not executed! ", ex);
+            } catch (TimeoutException ex) {
+                throw new MultiThreadingException(
+                        "One of Uniprot get entry thread did not return the result" +
+                        " before timeout! ", ex);
             }
             return enzymeSummaryList;
-        }
-        finally {
+        } finally {
             pool.shutdown();
         }
     }

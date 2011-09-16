@@ -1,4 +1,4 @@
-package uk.ebi.ac.uk.ep.web;
+package uk.ac.ebi.ep.web;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ import uk.ac.ebi.ep.search.result.Pagination;
 public class SearchController {
     public static final int TOP_RESULT_SIZE = 10;
     public static final int MAX_DISPLAYED_PAGES = 1;
-    private static Logger log = Logger.getLogger(SearchController.class);
+    private static final Logger LOGGER = Logger.getLogger(SearchController.class);
 //********************************* VARIABLES ********************************//
 
 
@@ -79,7 +79,7 @@ public class SearchController {
                 try {
                     enzymeModel = retriever.getProteinStructure(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    log.error("Unable to retrieve the entry!",  ex);
+                    LOGGER.error("Unable to retrieve the entry!",  ex);
                 }
                  break;
             }
@@ -87,7 +87,7 @@ public class SearchController {
                 try {
                     enzymeModel = retriever.getReactionsPathways(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    log.error("Unable to retrieve the entry!",  ex);
+                    LOGGER.error("Unable to retrieve the entry!",  ex);
                 }
                  break;
             }
@@ -95,7 +95,7 @@ public class SearchController {
                 try {
                     enzymeModel = retriever.getMolecules(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    log.error("Unable to retrieve the entry!",  ex);
+                    LOGGER.error("Unable to retrieve the entry!",  ex);
                 }
                  break;
             }
@@ -103,7 +103,7 @@ public class SearchController {
                 try {
                     enzymeModel = retriever.getEnzyme(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    log.error("Unable to retrieve the entry!",  ex);
+                    LOGGER.error("Unable to retrieve the entry!",  ex);
                 }
                  break;
             }            
@@ -111,7 +111,7 @@ public class SearchController {
                 try {
                     enzymeModel = retriever.getLiterature(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    log.error("Unable to retrieve the entry!",  ex);
+                    LOGGER.error("Unable to retrieve the entry!",  ex);
                 }
                  break;
             }            
@@ -120,7 +120,7 @@ public class SearchController {
                 try {
                     enzymeModel = retriever.getEnzyme(accession);
                 } catch (EnzymeRetrieverException ex) {
-                    log.error("Unable to retrieve the entry! ",  ex);
+                    LOGGER.error("Unable to retrieve the entry! ",  ex);
                 }
                 requestedField = Fields.enzyme;
                  break;
@@ -176,16 +176,19 @@ public class SearchController {
         if (searchModelForm == null) {
             return "search";
         }
+        LOGGER.debug("SEARCH start");
         SearchParams searchParameters = searchModelForm.getSearchparams();        
         IEnzymeFinder finder = new EnzymeFinder();
         searchParameters.setSize(SearchController.TOP_RESULT_SIZE);
         SearchResults resultSet = null;
+        LOGGER.debug("SEARCH before finder.getEnzymes");
         try {
             resultSet = finder.getEnzymes(searchParameters);
         } catch (EnzymeFinderException ex) {
-            log.error("Unable to create the result list because an error " +
+            LOGGER.error("Unable to create the result list because an error " +
                     "has occurred in the find method! \n", ex);
         }
+        LOGGER.debug("SEARCH before pagination");
         Pagination pagination = new Pagination(
                 resultSet.getTotalfound(), searchParameters.getSize());
         pagination.setMaxDisplayedPages(MAX_DISPLAYED_PAGES);
@@ -193,8 +196,10 @@ public class SearchController {
         pagination.setTotalPages(totalPage);
         pagination.calCurrentPage(searchParameters.getStart());
         model.addAttribute("pagination", pagination);
+        LOGGER.debug("SEARCH after  pagination");
         searchModelForm.setSearchresults(resultSet);
         model.addAttribute("searchModel", searchModelForm);
+        LOGGER.debug("SEARCH end");
         return "search";
     }
 

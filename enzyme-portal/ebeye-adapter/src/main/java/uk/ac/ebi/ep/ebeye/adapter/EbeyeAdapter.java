@@ -138,37 +138,28 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     }
 
     public List<ArrayOfArrayOfString> executeCallables(
-            List<Callable<ArrayOfArrayOfString>> callables) throws MultiThreadingException {
+            List<Callable<ArrayOfArrayOfString>> callables)
+	throws MultiThreadingException {
         List<ArrayOfArrayOfString> ebeyeResultList = new ArrayList<ArrayOfArrayOfString>();
            ExecutorService pool = Executors.newCachedThreadPool();
         int counter = 0;
         try {
-            for (Callable<ArrayOfArrayOfString> callable:callables) {
-                Future<ArrayOfArrayOfString> future  = pool.submit(callable);
-                ArrayOfArrayOfString rawResults = null;
-                try {
-                    rawResults = (ArrayOfArrayOfString) future
-                            .get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
-                } catch (InterruptedException ex) {
-                    throw  new MultiThreadingException(ex.getMessage(), ex);
-                } catch (ExecutionException ex) {
-                    throw  new MultiThreadingException(ex.getMessage(), ex);
-                } catch (TimeoutException ex) {
-                    throw  new MultiThreadingException(ex.getMessage(), ex);
-                }
+        	List<Future<ArrayOfArrayOfString>> futures = pool.invokeAll(callables);
+        	for (Future<ArrayOfArrayOfString> future : futures) {
+                ArrayOfArrayOfString rawResults = future.get(
+                		IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT,
+                		TimeUnit.SECONDS);
                 ebeyeResultList.add(rawResults);
                 counter++;
                 if (counter >  IEbeyeAdapter.EP_THREADS_LIMIT)
                     break;
-            }
-        }
-        finally {
+			}
+        } catch (Exception e) {
+			throw new MultiThreadingException(e.getMessage(), e);
+		} finally {
             pool.shutdown();
         }
-
         return ebeyeResultList;
-
-
     }
 
     public List<ParamOfGetResults> getNumberOfResults(

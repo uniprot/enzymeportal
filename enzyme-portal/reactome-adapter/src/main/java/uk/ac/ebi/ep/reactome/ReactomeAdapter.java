@@ -3,15 +3,16 @@ package uk.ac.ebi.ep.reactome;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
@@ -150,26 +151,28 @@ public class ReactomeAdapter implements IReactomeAdapter{
             List<String> stableIds) throws ReactomeServiceException {
         ExecutorService pool = Executors.newCachedThreadPool();
         List<Pathway> pathways = new ArrayList<Pathway>();
-        try {            
-            for (String id: stableIds) {
-                try {
-                    GetPathwayCaller callable = new ReactomeCallable.GetPathwayCaller(id);
-                    Future<Pathway> future = pool.submit(callable);
-                    Pathway pathway = future.get(TIME_OUT, TimeUnit.SECONDS);
-                    pathways.add(pathway);
-                } catch (InterruptedException ex) {
-                    throw new ReactomeServiceException("The thread was interrupted while retieving from Reactome pathway " +id, ex);
-                } catch (ExecutionException ex) {
-                    throw new ReactomeServiceException("Failed to execute the thread to retrieve from Reactome pathway " +id, ex);
-                } catch (TimeoutException ex) {
-                    throw new ReactomeServiceException("Time out to retrieve from Reactome pathway " +id, ex);
-                }
-            }
-        }
-        finally {
+        Map<String, Future<Pathway>> futures =
+        		new HashMap<String, Future<Pathway>>();
+        try {
+	        for (String id: stableIds) {
+	            GetPathwayCaller callable = new ReactomeCallable.GetPathwayCaller(id);
+	            futures.put(id, pool.submit(callable));
+	        }
+	        for (String id : futures.keySet()) {
+				try {
+					Pathway pathway = futures.get(id).get(TIME_OUT, TimeUnit.SECONDS);
+	                pathways.add(pathway);
+	            } catch (InterruptedException ex) {
+	                throw new ReactomeServiceException("The thread was interrupted while retieving from Reactome pathway " +id, ex);
+	            } catch (ExecutionException ex) {
+	                throw new ReactomeServiceException("Failed to execute the thread to retrieve from Reactome pathway " +id, ex);
+	            } catch (TimeoutException ex) {
+	                throw new ReactomeServiceException("Time out to retrieve from Reactome pathway " +id, ex);
+	            }
+			}
+        } finally {
             pool.shutdown();
         }
-
         return pathways;
     }
 
