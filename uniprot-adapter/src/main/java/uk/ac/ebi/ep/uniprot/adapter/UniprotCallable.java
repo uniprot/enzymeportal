@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
+import org.apache.log4j.Logger;
+
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Enzyme;
@@ -49,6 +52,7 @@ public class UniprotCallable {
            .factory.getEntryRetrievalService();
    protected  static UniProtQueryService queryService = UniProtJAPI
            .factory.getUniProtQueryService();
+   private static final Logger LOGGER = Logger.getLogger(UniprotCallable.class);
 
 //******************************** CONSTRUCTORS ******************************//
 
@@ -211,8 +215,11 @@ public class UniprotCallable {
 
 
     public EnzymeSummary getProteinStructureByAccession() {
+    	LOGGER.debug("SEARCH before getEnzymeCommonProperties");
         EnzymeModel enzymeModel = (EnzymeModel)getEnzymeCommonProperties();
+    	LOGGER.debug("SEARCH before getPdbeAccessions");
         enzymeModel.getPdbeaccession().addAll(getPdbeAccessions());
+    	LOGGER.debug("SEARCH after getPdbeAccessions");
         return enzymeModel;
     }
 
@@ -424,17 +431,20 @@ public class UniprotCallable {
         }
 
         public EnzymeSummary queryforEnzymeSummaryEntry()  {
+        	LOGGER.debug("SEARCH before getSpecies");
             List<EnzymeAccession> speciesList = getSpecies();
+            LOGGER.debug("SEARCH after  getSpecies");
             EnzymeSummary enzymeSummary = null;
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
                 GetEntryCaller caller = new GetEntryCaller(
-                topSpecies.getUniprotaccessions().get(0));
+                		topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
                 //enzymeSummary = caller.getEnzymeCommonProperties();
                 //The search result must have the pdbe accessions
+                LOGGER.debug("SEARCH before getProteinStructureByAccession");
                 enzymeSummary = caller.getProteinStructureByAccession();
-
+                LOGGER.debug("SEARCH after  getProteinStructureByAccession");
                 //Add related species
                 if (speciesList.size() > 1) {
                     //speciesList.remove(topSpecies);
