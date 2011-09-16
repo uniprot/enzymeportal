@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.intenz.adapter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -10,10 +11,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
 import org.apache.log4j.Logger;
+
 import uk.ac.ebi.ep.enzyme.model.EcClass;
 import uk.ac.ebi.ep.enzyme.model.EnzymeHierarchy;
 import uk.ac.ebi.intenz.xml.jaxb.EcClassType;
@@ -37,7 +41,16 @@ public class IntenzCallable {
 
 //********************************* VARIABLES ********************************//
     public static final String INTENZ_PACKAGE = "uk.ac.ebi.intenz.xml.jaxb";
-    private static Logger log = Logger.getLogger(GetSynonymsCaller.class);
+    private static final Logger LOGGER = Logger.getLogger(IntenzCallable.class);
+    private static JAXBContext jaxbContext = null;
+    static {
+    	try {
+	        jaxbContext = JAXBContext.newInstance(INTENZ_PACKAGE);
+	    } catch (JAXBException ex) {
+	        LOGGER.error(IintenzAdapter.FAILED_MSG + "Unable to find the package "
+	                + INTENZ_PACKAGE + " to map the intenz xml file!", ex);
+	    }
+    }
 
 //******************************** CONSTRUCTORS ******************************//
 //****************************** GETTER & SETTER *****************************//
@@ -59,68 +72,38 @@ public class IntenzCallable {
         }
 
         public Intenz getData() {
+            Intenz intenz = null;
             URL url = null;
-            try {
-                url = new URL(ecUrl);
-            } catch (MalformedURLException ex) {
-                log.error(IintenzAdapter.FAILED_MSG
-                        + "ec url is invalid: " + this.ecUrl, ex);
-            }
-
             URLConnection con = null;
-            try {
-                con = url.openConnection();
-            } catch (IOException ex) {
-                log.error(IintenzAdapter.FAILED_MSG + "Unable to connection to Intenz server!", ex);
-            }
-
             InputStream is = null;
             try {
+                url = new URL(ecUrl);
+                LOGGER.debug("SEARCH before openConnection");
+                con = url.openConnection(Proxy.NO_PROXY);
+                con.connect();
+                LOGGER.debug("SEARCH before getInputStream");
                 is = con.getInputStream();
-            } catch (IOException ex) {
-                /*If there is an error of this type write in the log rather than
-                 * throwing a exception so that the processing can continue.
-                 */
-                log.error(IintenzAdapter.FAILED_MSG + "Unable download the xml file from "
-                        + this.ecUrl + "!", ex);
-                /*
-                throw new SynonymException(IintenzAdapter.FAILED_MSG + "Unable download the xml file from "
-                +this.ecUrl +"!", ex);
-                 * *
-                 */
-            }
-
-            JAXBContext jaxbContext = null;
-            try {
-                jaxbContext = JAXBContext.newInstance(INTENZ_PACKAGE);
-            } catch (JAXBException ex) {
-                log.error(IintenzAdapter.FAILED_MSG + "Unable to find the package "
-                        + INTENZ_PACKAGE + " to map the intenz xml file!", ex);
-            }
-            Unmarshaller unmarshaller = null;
-            try {
-                unmarshaller = jaxbContext.createUnmarshaller();
-            } catch (JAXBException ex) {
-                log.error(IintenzAdapter.FAILED_MSG + "Failed to create JAXB Context!", ex);
-            }
-            Intenz intenz = null;
-            try {
+                LOGGER.debug("SEARCH before creating unmarshaller");
+                Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 if (is != null) {
+                    LOGGER.debug("SEARCH before unmarshal");
                     intenz = (Intenz) unmarshaller.unmarshal(is);
+                    LOGGER.debug("SEARCH after unmarshal");
                 }
+            } catch (MalformedURLException ex) {
+                LOGGER.error(IintenzAdapter.FAILED_MSG
+                        + "ec url is invalid: " + this.ecUrl, ex);
+            } catch (IOException ex) {
+                LOGGER.error(IintenzAdapter.FAILED_MSG + "Unable to connect to Intenz server!", ex);
             } catch (JAXBException ex) {
-                log.error(IintenzAdapter.FAILED_MSG + "unmarshal Intenz xml file "
-                        + "to the object model failed!", ex);
+                LOGGER.error(IintenzAdapter.FAILED_MSG + "Failed to create/use unmarshaller!", ex);
             } finally {
                 try {
-                    if (is != null) {
-                        is.close();
-                    }
+                    if (is != null) is.close();
                 } catch (IOException ex) {
-                    log.warn("Failed to close inputstream of the intenz xml file! ");
+                    LOGGER.warn("Failed to close inputstream of the intenz xml file! ");
                 }
             }
-
             return intenz;
         }
 
