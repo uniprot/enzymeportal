@@ -2,8 +2,6 @@ package uk.ac.ebi.ep.adapter.das;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,11 +34,13 @@ public class SimpleDASFeaturesAdapter implements IDASFeaturesAdapter {
 		if (dasURL == null){
 			throw new NullPointerException("dasURL cannot be null");
 		} else {
+			/* Check that the URL exists and is valid:
 			URL url = new URL(dasURL);
 			URLConnection con = url.openConnection();
 			con.connect();
 			con.getContent();
 			// end of checks
+			*/
 			this.dasURL = dasURL;
 		}
 	}
