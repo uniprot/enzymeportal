@@ -1,7 +1,13 @@
 package uk.ac.ebi.ebeye.param;
 
+import uk.ac.ebi.ep.config.Domain;
+import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter.Domains;
+
 /**
- *
+ * Objects of this class wrap a query parameter:
+ * <ul>
+ * 	<li>domain: the {@link Domain domain} to restrict the search to.</li>
+ * </ul>
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>

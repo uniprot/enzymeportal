@@ -228,7 +228,8 @@ public class LuceneQueryBuilder {
     /**
      * Create a list of Lucene queries IN (eg.: id:("PDE7B_HUMAN","PDE7B_MOUSE"))
      * for a long list of field values. If the list is too long then it is divided
-     * into sub lists. A query is created for each sub list.
+     * into sub lists. A query is created for each sub list. Every query includes
+     * an "enzyme filter".
      * @param queryField
      * @param fieldValues
      * @param wildcard

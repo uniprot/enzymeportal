@@ -150,14 +150,28 @@ public class DataTypeConverter {
         return subLists;
     }
 
-
+    /**
+     * Merges several lists of Strings into one collection, limiting its
+     * size. If the given limit has to be applied, the last objects are
+     * discarded.
+     * @param multipleList a collection of lists of Strings.
+     * @param maxResult The maximum number of elements in the returned
+     * 		collection.
+     * @return a single collection of Strings with at most
+     * 		<code>maxResult</code> elements.
+     */
     public static LinkedHashSet<String> mergeAndLimitResult(
             Collection<List<String>> multipleList, int maxResult) {
-        LinkedHashSet mergedSet = new LinkedHashSet();
-        for (List<String> list:multipleList){
-            mergedSet.addAll((List<String>)list);
-            if (mergedSet.size() >=maxResult) {
-                return mergedSet;
+        LinkedHashSet<String> mergedSet = new LinkedHashSet<String>();
+        for (List<String> list : multipleList){
+            if (mergedSet.size()+list.size() < maxResult){
+                mergedSet.addAll(list);
+            } else {
+            	int i = 0;
+            	while (mergedSet.size() < maxResult){
+            		mergedSet.add(list.get(i++));
+            	}
+            	break;
             }
         }
         return mergedSet;

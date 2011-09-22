@@ -137,19 +137,19 @@ public class ResultFactory {
                     result.getAcc().addAll(accessions);
                     break;
                 }
-                case UNIPROT: {
-                    if (fieldValue!=null) {
-                        if (!fieldValue.equals("")) {
-                            Xref xref = new Xref();
-                            xref.setDomain(Domains.uniprot.name());
-                            List<String> xrefAccs =
-                            Transformer.transformAccessionsString(fieldValue);
-                            xref.getAcc().addAll(xrefAccs);
-                            result.getXrefs().add(xref);
-                        }
-                    }
-
-                }
+//                case UNIPROT: {
+//                    if (fieldValue!=null) {
+//                        if (!fieldValue.equals("")) {
+//                            Xref xref = new Xref();
+//                            xref.setDomain(Domains.uniprot.name());
+//                            List<String> xrefAccs =
+//                            Transformer.transformAccessionsString(fieldValue);
+//                            xref.getAcc().addAll(xrefAccs);
+//                            result.getXrefs().add(xref);
+//                        }
+//                    }
+//
+//                }
             }
 
         }

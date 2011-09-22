@@ -2,8 +2,16 @@ package uk.ac.ebi.ebeye.param;
 
 import java.util.List;
 
+import uk.ac.ebi.ep.config.Domain;
+
 /**
- *
+ * Objects of this class wrap query parameters:
+ * <ul>
+ * 	<li>domain: the {@link Domain domain} to restrict the search to.</li>
+ * 	<li>query: a Lucene query.</li>
+ * 	<li>totalFound: the total number of results found.</li>
+ * 	<li>fields: the fields to be retrieved from the Lucene index.</li>
+ * </ul>
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>

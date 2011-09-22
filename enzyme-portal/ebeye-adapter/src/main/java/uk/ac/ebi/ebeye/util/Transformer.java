@@ -43,6 +43,23 @@ public class Transformer {
         return arrayOfString;
     }
 
+    /**
+     * Transforms a list of {@link ArrayOfArrayOfString} into an ArrayOfString.
+     * To that end, <b>only the first items of the contained {@link ArrayOfString}s
+     * is taken into account</b>. Any other strings are lost.
+     * @param laas
+     * @return
+     */
+    public static ArrayOfString transformToArrayOfString(List<ArrayOfArrayOfString> laas){
+    	ArrayOfString result = null;
+    	for (ArrayOfArrayOfString aas : laas) {
+        	for (ArrayOfString as : aas.getArrayOfString()) {
+    			if (result == null) result = as;
+    			else result.getString().add(as.getString().get(0));
+    		}
+		}
+    	return result;
+    }
 
     public static ArrayOfString transformToArrayOfString(String field) {
         ArrayOfString arrayOfString = new ArrayOfString();
@@ -164,18 +181,17 @@ public class Transformer {
         return resultSet;
     }
 
-    public static Map<String,String> transformToMap(
+    public static Map<String, List<String>> transformToMap(
                                         ArrayOfEntryReferences arrayOfEntryReferences) {
-        Map<String,String> resultMap = new Hashtable<String, String>();
+        Map<String, List<String>> resultMap = new Hashtable<String, List<String>>();
         List<EntryReferences> entryRefs = arrayOfEntryReferences.getEntryReferences();
         for (EntryReferences entryRef:entryRefs) {
             String id = entryRef.getEntry().getValue();
-            ArrayOfArrayOfString Accs = entryRef.getReferences().getValue();
-            List<String> accList = transformToListOfString(Accs);
+            ArrayOfArrayOfString accs = entryRef.getReferences().getValue();
+            List<String> accList = transformToListOfString(accs);
             if (accList.size()>0) {
-                resultMap.put(id, accList.get(0));
+                resultMap.put(id, accList);
             }
-
         }
         return resultMap;
     }
