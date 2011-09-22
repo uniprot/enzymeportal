@@ -23,8 +23,9 @@ public class EbeyeCallable {
 
 //********************************* VARIABLES ********************************//
     
-    private static EBISearchService eBISearchService
-            = new EBISearchService_Service().getEBISearchServiceHttpPort();
+	/** The EBEye search service doing all the work. */
+    private static EBISearchService eBISearchService =
+    		new EBISearchService_Service().getEBISearchServiceHttpPort();
 
 
 //******************************** CONSTRUCTORS ******************************//
@@ -36,16 +37,17 @@ public class EbeyeCallable {
 //********************************** METHODS *********************************//
 //******************************** INNER CLASS *******************************//
 
+    /**
+     * Callable to retrieve the number of results for a given domain and query.
+     */
     public static class NumberOfResultsCaller
-            implements Callable<Integer> {
+	implements Callable<Integer> {
+    	
         protected ParamGetNumberOfResults paramGetNumberOfResults;
 
-        public NumberOfResultsCaller() {
-            
-        }
+        public NumberOfResultsCaller() {}
 
-        public NumberOfResultsCaller(
-                ParamGetNumberOfResults paramGetNumberOfResults) {
+        public NumberOfResultsCaller(ParamGetNumberOfResults paramGetNumberOfResults) {
             this.paramGetNumberOfResults = paramGetNumberOfResults;
         }
 
@@ -53,23 +55,20 @@ public class EbeyeCallable {
             return paramGetNumberOfResults;
         }
 
-        public void setParamGetNumberOfResults(
-                ParamGetNumberOfResults paramGetNumberOfResults) {
+        public void setParamGetNumberOfResults(ParamGetNumberOfResults
+        		paramGetNumberOfResults) {
             this.paramGetNumberOfResults = paramGetNumberOfResults;
         }
 
         public Integer getNumberOfResults() {
             int totalFound = getNumberOfResults(
-                    paramGetNumberOfResults.getDomain()
-                    , paramGetNumberOfResults.getQuery());
+                    paramGetNumberOfResults.getDomain(),
+                    paramGetNumberOfResults.getQuery());
             return totalFound;
         }
 
         public Integer getNumberOfResults(String domain, String query) {
-            int totalFound = eBISearchService.getNumberOfResults(
-                    domain
-                    , query);
-            return totalFound;
+            return eBISearchService.getNumberOfResults(domain, query);
         }
 
         public Integer call() throws Exception {
@@ -79,14 +78,19 @@ public class EbeyeCallable {
     }
 
 //******************************** INNER CLASS *******************************//
+    
+    /**
+     * Callable to get lists of results given a domain, a query and fields to
+     * retrieve.
+     */
     public static class GetResultsCallable
-            implements Callable<ArrayOfArrayOfString> {
+    implements Callable<ArrayOfArrayOfString> {
+    	
         protected ParamOfGetResults param;
         protected int start;
         protected int size;
 
-        public GetResultsCallable(){
-        }
+        public GetResultsCallable(){}
         
         public GetResultsCallable(ParamOfGetResults param, int start, int size) {
             this.param = param;
@@ -94,45 +98,39 @@ public class EbeyeCallable {
             this.size = size;
         }
 
-
         public ArrayOfArrayOfString call() throws Exception {
             return callGetResults();
         }
 
         public ArrayOfArrayOfString callGetResults() {
             ArrayOfArrayOfString EbeyeResult = callGetResults(
-                    param.getDomain()
-                    ,param.getQuery()
-                    ,param.getFields()
-                    ,start
-                    ,size
-                    );
+                    param.getDomain(),
+                    param.getQuery(),
+                    param.getFields(),
+                    start,
+                    size);
             return EbeyeResult;
         }
 
-        public ArrayOfArrayOfString callGetResults(
-                String domain, String query, List<String> fields, int start, int size) {
+        public ArrayOfArrayOfString callGetResults(String domain, String query,
+        		List<String> fields, int start, int size) {
             ArrayOfString ebeyeFields = Transformer
                     .transformToArrayOfString(fields);
-            ArrayOfArrayOfString EbeyeResult = eBISearchService
-                    .getResults(
-                    domain
-                    ,query
-                    ,ebeyeFields
-                    ,start
-                    ,size
-                    );
+            ArrayOfArrayOfString EbeyeResult = eBISearchService.getResults(
+                    domain, query, ebeyeFields, start, size);
             return EbeyeResult;
         }
 
     }
 
-//getAllDomainsResults
-
 //******************************** INNER CLASS *******************************//
-//******************************** INNER CLASS *******************************//
+    
+    /**
+     * Callable to retrieve entries (with field values) given their domain and IDs.
+     */
     public static class GetEntriesCallable
-            implements Callable<ArrayOfArrayOfString>  {
+    implements Callable<ArrayOfArrayOfString> {
+    	
         protected String domain;
         protected ArrayOfString id;
         protected ArrayOfString fields;
@@ -148,50 +146,53 @@ public class EbeyeCallable {
         }
 
         public ArrayOfArrayOfString callGetEntries() {
-            ArrayOfArrayOfString EbeyeResult = eBISearchService
-                    .getEntries(domain, id, fields);
+            ArrayOfArrayOfString EbeyeResult = eBISearchService.getEntries(
+            		domain, id, fields);
             return EbeyeResult;
         }
 
     }
 
 //******************************** INNER CLASS *******************************//
+    
+    /**
+     * Callable to get entries referenced from one domain to another.
+     */
     public static class GetReferencedEntriesSet
-            implements Callable<ArrayOfEntryReferences>  {
+    implements Callable<ArrayOfEntryReferences> {
+    	
         protected String domain;
         protected ArrayOfString entries;
         protected String referencedDomain;
         protected ArrayOfString fields;
 
-        public GetReferencedEntriesSet(String domain, ArrayOfString entries
-                , String referencedDomain, ArrayOfString fields) {
+        public GetReferencedEntriesSet(String domain, ArrayOfString entries,
+                String referencedDomain, ArrayOfString fields) {
             this.domain = domain;
             this.entries = entries;
             this.referencedDomain = referencedDomain;
             this.fields = fields;
         }
 
-
-
         public ArrayOfEntryReferences call() throws Exception {
             return callGetReferencedEntriesSet();
         }
 
         public ArrayOfEntryReferences callGetReferencedEntriesSet() {
-            ArrayOfEntryReferences EbeyeResult = eBISearchService
-                    .getReferencedEntriesSet(domain, entries, referencedDomain, fields);
+            ArrayOfEntryReferences EbeyeResult =
+            		eBISearchService.getReferencedEntriesSet(
+            				domain, entries, referencedDomain, fields);
             return EbeyeResult;
         }
 
         public ArrayOfArrayOfString callGetReferencedEntriesFlatSet() {
-            ArrayOfArrayOfString EbeyeResult = eBISearchService
-                    .getReferencedEntriesFlatSet(domain, entries, referencedDomain, fields);
+            ArrayOfArrayOfString EbeyeResult =
+            		eBISearchService.getReferencedEntriesFlatSet(
+            				domain, entries, referencedDomain, fields);
             return EbeyeResult;
         }
 
     }
-
-
 
 //******************************** INNER CLASS *******************************//
 
