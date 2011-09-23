@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.ebeye.adapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ public interface IEbeyeAdapter {
         //,pdbe, chembl_compound, chembl_target, omim, mesh
     	;
 	    public static List<String> getFields() {
-			List<String> fields = new ArrayList<String>();
+	    	List<String> fields = new ArrayList<String>();
 			fields.add(intenz.name());
 			fields.add(uniprot.name());
 			fields.add(rhea.name());
@@ -60,6 +61,10 @@ public interface IEbeyeAdapter {
 		}
 	};
 
+	/**
+	 * (Pseudo?)field retrievable from EBEye web services for some domains,
+	 * containing cross references to UniProt accessions.
+	 */
 	public static final String UNIPROT_REF_FIELD = "UNIPROT";
 
 	// Supported fields
