@@ -29,6 +29,8 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			this.label = label;
 		}
 		public String toString(){ return label; }
+		public String getCode(){ return name(); }
+		public String getDisplayText(){ return label; }
 	}
 	
 	/**
@@ -47,7 +49,7 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		public Citation getCitation() {
 			return citation;
 		}
-		public EnumSet<CitationLabel> getLabel() {
+		public EnumSet<CitationLabel> getLabels() {
 			return labels;
 		}
 		public void addLabel(CitationLabel label) {
