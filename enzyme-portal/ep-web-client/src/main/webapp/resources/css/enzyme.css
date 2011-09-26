@@ -71,3 +71,7 @@ legend {
     border: 1px solid #ddd;
     text-align: center;
 }
+
+.citationsList li {
+	margin-bottom: 2ex;
+}
