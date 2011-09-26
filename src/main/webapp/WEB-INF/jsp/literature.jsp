@@ -13,18 +13,18 @@
 	</c:when>
 	<c:otherwise>
 	
-<div style="position: relative; width: 100%; top: 3ex;">
+<div style="position: relative; width: 100%; top: 2ex;">
 
-<div class="literature" style="position: relative; width: 100%; top: 3ex;">
+<div class="literature" style="position: relative; width: 100%; top: 6ex;">
 <c:set var="allLabels" value="" />
 <c:set var="allLabelCodes" value="" />
-<ol>
+<ol id="citationsList">
 <c:forEach var="labelledCitation" items="${enzymeModel.literature}">
 	<c:set var="cit" value="${labelledCitation.citation}"/>
 	<c:set var="citationClass" value="" />
 	<c:forEach var="label" items="${labelledCitation.labels}">
 		<c:set var="citationClass" value="${citationClass} cit-${label.code}" />
-		<c:if test="${not fn:contains(allLabels, label)}">
+		<c:if test="${not fn:contains(allLabelCodes, label.code)}">
 			<%-- allLabels: pipe-separated list of CitationLabels --%>
 			<c:set var="allLabels" value="${allLabels}|${label.displayText}"/>
 			<%-- allLabelCodes: pipe-separated list of CitationLabel codes --%>
@@ -42,8 +42,8 @@
 	    <c:if test="${not empty cit.abstractText}">
 	    <div class="pub_abstract" style="display: table-row;">
 	    	<div onclick="$('#cit-${cit.externalId}').toggle()"
-	    		style="display: table-cell; white-space: nowrap; cursor: pointer;">
-	    		Toggle abstract &gt;</div>
+	    		style="display: table-cell; white-space: nowrap; cursor: pointer; font-size: small">
+	    		Toggle abstract &gt; </div>
 			<div id="cit-${cit.externalId}" style="display: none">${cit.abstractText}</div>
 	    </div>
 	    </c:if>
@@ -55,9 +55,8 @@
 			</c:forEach>
 			<c:choose>
 				<c:when test="${fn:length(cit.authorCollection) gt 10}">
-					<c:set var="firstAuthor"
-						value="${cit.authorCollection[0]}"/>
-					${firstAuthor.fullName} <span title="${authors}">et al.</span>
+					${cit.authorCollection[0].fullName}
+					<span title="${authors}">et al.</span>
 				</c:when>
 				<c:otherwise>
 					${authors}
@@ -75,21 +74,37 @@
 </div>
 
 <script type="text/javascript">
-<!--
-function filterCitations(cb){
-	var cssClass = '.cit-' + cb.value;
-	$(cssClass).css('display', cb.checked? 'inline' : 'none');
+function filterCitations(){
+    var cits = document.getElementById('citationsList').children;
+    var citFilters = document.getElementById('literatureFilters');
+    var cbs = citFilters.getElementsByTagName('input');
+    var i, j;
+    for (i = 0; i < cits.length; i++){
+        var show = false;
+        for (j = 0; j < cbs.length; j++){
+            var matches = cits[i].className.indexOf(cbs[j].value) > -1;
+            if (matches && cbs[j].checked){
+                show = true;
+                break;
+            }
+        }
+        cits[i].style.display = show? 'block' : 'none';
+    }
 }
-//-->
 </script>
 
-<div id="literatureFilters" style="position: absolute; top: 0; width: 100%">
-	<b>Filters:</b>
+<div id="literatureFilters" class="subTitle"
+    style="position: absolute; top: 0; width: 100%">
+	Filters:
 	<c:set var="splitLabelCodes" value="${fn:split(allLabelCodes, '|')}"/>
 	<c:forEach var="citationLabel" varStatus="clvs"
 		items="${fn:split(fn:trim(allLabels), '|')}">
-		<label><input type="checkbox" checked="checked" value="${splitLabelCodes[clvs.index]}"
-			onclick="filterCitations(this);"/>${citationLabel}</label>
+		<label style="font-weight: normal; color: black">
+            <input type="checkbox" checked="checked"
+                value="cit-${splitLabelCodes[clvs.index]}"
+			    onclick="filterCitations();"/>
+            ${citationLabel}
+        </label>
 	</c:forEach>
 </div>
 
