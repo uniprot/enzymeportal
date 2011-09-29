@@ -253,12 +253,21 @@ public class LuceneQueryBuilder {
         return queries;
     }
 
-    public static List<String> createEbeyeQueriesIn(
-            String queryField
-            , List<String> fieldValues, boolean wildcard, int subListSize) {
+    /**
+     * Builds queries for the given field and field values, <i>adding an
+     * enzyme filter</i>.
+     * @param queryField field to query
+     * @param fieldValues values to match
+     * @param wildcard use a wildcard?
+     * @param subListSize size of sublist to divide the original list of field
+     * 		values, if it is too long.
+     * @return
+     */
+    public static List<String> createEbeyeQueriesIn(String queryField,
+            List<String> fieldValues, boolean wildcard, int subListSize) {
         List<String> queries = new ArrayList<String>();
-        List<List<String>> subLists = DataTypeConverter
-                .createSubLists(fieldValues, subListSize);
+        List<List<String>> subLists =
+        		DataTypeConverter.createSubLists(fieldValues, subListSize);
         for (List<String> subList: subLists) {
             StringBuffer sb = new StringBuffer();
             sb.append(createQueryIN(queryField, wildcard, subList));
