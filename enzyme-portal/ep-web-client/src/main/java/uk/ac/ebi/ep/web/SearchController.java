@@ -1,8 +1,12 @@
 package uk.ac.ebi.ep.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,8 +54,7 @@ public class SearchController {
         brief,
         full
     }
-
-
+    
 //******************************** CONSTRUCTORS ******************************//
 
 
@@ -68,8 +71,9 @@ public class SearchController {
      * @return
      */
     @RequestMapping(value="/search/{accession}/{field}")
-    public String viewReationsPathways(
-            @PathVariable String accession, @PathVariable String field, Model model) {
+    public String viewReationsPathways(Model model,
+            @PathVariable String accession, @PathVariable String field,
+            HttpSession session) {
         Fields requestedField = Fields.valueOf(field);
         IEnzymeRetriever retriever = new EnzymeRetriever();
         EnzymeModel enzymeModel = null;
@@ -128,6 +132,7 @@ public class SearchController {
         }
         enzymeModel.setRequestedfield(requestedField.name());
         model.addAttribute("enzymeModel", enzymeModel);
+        addToHistory(session, accession);
         return responsePage;
     }
 
@@ -139,14 +144,15 @@ public class SearchController {
      * @return
      */
     @RequestMapping(value="/")
-    public String viewSearchHome(Model model) {
-        SearchModel searchModelForm = new SearchModel();
-        SearchParams searchParams = new SearchParams();
-        searchParams.setText("Enter a name to search");
-        searchParams.setStart(0);
-        searchModelForm.setSearchparams(searchParams);
-         model.addAttribute("searchModel", searchModelForm);
-        return "index";
+    public String viewSearchHome(Model model, HttpSession session) {
+		SearchModel searchModelForm = new SearchModel();
+		SearchParams searchParams = new SearchParams();
+		searchParams.setText("Enter a name to search");
+		searchParams.setStart(0);
+		searchModelForm.setSearchparams(searchParams);
+		model.addAttribute("searchModel", searchModelForm);
+		clearHistory(session);
+		return "index";
     }
 
     /**
@@ -158,9 +164,9 @@ public class SearchController {
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String getSearchResult(SearchModel searchModel, BindingResult result, Model model) {
-        postSearchResult(searchModel, result, model);
-        return "search";
+    public String getSearchResult(SearchModel searchModel, BindingResult result,
+    		Model model, HttpSession session) {
+        return postSearchResult(searchModel, result, model, session);
     }
 
     /**
@@ -172,39 +178,67 @@ public class SearchController {
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String postSearchResult(SearchModel searchModelForm,  BindingResult result, Model model) {
-        if (searchModelForm == null) {
-            return "search";
-        }
-        LOGGER.debug("SEARCH start");
-        SearchParams searchParameters = searchModelForm.getSearchparams();        
-        IEnzymeFinder finder = new EnzymeFinder();
-        searchParameters.setSize(SearchController.TOP_RESULT_SIZE);
-        SearchResults resultSet = null;
-        LOGGER.debug("SEARCH before finder.getEnzymes");
-        try {
-            resultSet = finder.getEnzymes(searchParameters);
-        } catch (EnzymeFinderException ex) {
-            LOGGER.error("Unable to create the result list because an error " +
-                    "has occurred in the find method! \n", ex);
-        }
-        LOGGER.debug("SEARCH before pagination");
-        Pagination pagination = new Pagination(
-                resultSet.getTotalfound(), searchParameters.getSize());
-        pagination.setMaxDisplayedPages(MAX_DISPLAYED_PAGES);
-        int totalPage = pagination.calTotalPages();
-        pagination.setTotalPages(totalPage);
-        pagination.calCurrentPage(searchParameters.getStart());
-        model.addAttribute("pagination", pagination);
-        LOGGER.debug("SEARCH after  pagination");
-        searchModelForm.setSearchresults(resultSet);
-        model.addAttribute("searchModel", searchModelForm);
-        LOGGER.debug("SEARCH end");
-        return "search";
+    public String postSearchResult(SearchModel searchModelForm, BindingResult result,
+    		Model model, HttpSession session) {
+    	String view = "search";
+        if (searchModelForm != null) try {
+            LOGGER.debug("SEARCH start");
+            SearchParams searchParameters = searchModelForm.getSearchparams();        
+            IEnzymeFinder finder = new EnzymeFinder();
+            searchParameters.setSize(SearchController.TOP_RESULT_SIZE);
+            SearchResults resultSet = null;
+            LOGGER.debug("SEARCH before finder.getEnzymes");
+            try {
+                resultSet = finder.getEnzymes(searchParameters);
+            } catch (EnzymeFinderException ex) {
+                LOGGER.error("Unable to create the result list because an error " +
+                        "has occurred in the find method! \n", ex);
+            }
+            LOGGER.debug("SEARCH before pagination");
+            Pagination pagination = new Pagination(
+                    resultSet.getTotalfound(), searchParameters.getSize());
+            pagination.setMaxDisplayedPages(MAX_DISPLAYED_PAGES);
+            int totalPage = pagination.calTotalPages();
+            pagination.setTotalPages(totalPage);
+            pagination.calCurrentPage(searchParameters.getStart());
+            model.addAttribute("pagination", pagination);
+            LOGGER.debug("SEARCH after  pagination");
+            searchModelForm.setSearchresults(resultSet);
+            model.addAttribute("searchModel", searchModelForm);
+            LOGGER.debug("SEARCH end");
+            addToHistory(session,
+            		"searchparams.text=" + searchModelForm.getSearchparams().getText());
+            view = "search";
+		} catch (Exception e) {
+			LOGGER.error("Failed search", e);
+			view = "error";
+		}
+        return view;
     }
 
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
     public String getSearchResult(Model model) {
         return "underconstruction";
+    }
+    
+    private void addToHistory(HttpSession session, String s){
+    	@SuppressWarnings("unchecked")
+		List<String> history = (List<String>) session.getAttribute("history");
+    	if (history == null){
+    		history = new ArrayList<String>();
+    		session.setAttribute("history", history);
+    	}
+    	if (history.isEmpty() || !history.get(history.size()-1).equals(s)){
+        	history.add(s);
+    	}
+    }
+    
+    private void clearHistory(HttpSession session){
+    	@SuppressWarnings("unchecked")
+		List<String> history = (List<String>) session.getAttribute("history");
+    	if (history == null){
+    		history = new ArrayList<String>();
+    		session.setAttribute("history", history);
+    	} else history.clear();
     }
 }
