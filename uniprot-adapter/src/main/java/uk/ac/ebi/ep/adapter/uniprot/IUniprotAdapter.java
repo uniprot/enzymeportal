@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.uniprot.adapter;
+package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.util.List;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.ep.uniprot.adapter;
+package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.util.List;
 import org.junit.After;
@@ -11,6 +11,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import uk.ac.ebi.ep.adapter.uniprot.UniprotCallable;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
