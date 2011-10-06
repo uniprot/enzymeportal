@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.uniprot.adapter;
+package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

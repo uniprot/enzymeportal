@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.uniprot.adapter;
+package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.ebi.ep.adapter.uniprot.UniprotCallable.GetEntryCaller;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotCallable.QueryEntryByIdCaller;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
-import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.GetEntryCaller;
-import uk.ac.ebi.ep.uniprot.adapter.UniprotCallable.QueryEntryByIdCaller;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 
 /**
