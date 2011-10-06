@@ -21,33 +21,13 @@ import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 public interface IEbeyeAdapter {
 
 //********************************* VARIABLES ********************************//
-    public static final int EBEYE_RESULT_LIMIT = 100;
-    //public static final int QRY_WITH_UNIPROT_FIELD_RESULT_LIMIT = 10;
-    //The number of accessions to be included in the query should not be more than 400
-    public static final int EBEYE_NR_OF_QUERY_IN_LIMIT = 100;
-    public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 2;
-    //public static final int EP_RESULTS_PER_DOIMAIN_LIMIT = 1;
-    //TEST
-    public static final int EP_CHEBI_RESULTS_LIMIT = 30;
-    //public static final int EP_CHEBI_RESULTS_LIMIT = 1;
-    public static final int QUERY_ENZYME_DOMAIN_RESULT_LIMIT = 600;
-    public static final int QUERY_UNIPROT_FIELD_RESULT_LIMIT = 100;
-    public static final int JOINT_QUERY_UNIPROT_FIELD_RESULT_LIMIT = 2000;
-    public static final int QUERY_UNIPROT_FIELD_ALL_DOMAINS_RESULT_LIMITE = 5000;
-    public static final int EP_THREADS_LIMIT = QUERY_UNIPROT_FIELD_ALL_DOMAINS_RESULT_LIMITE/EBEYE_RESULT_LIMIT;
-    //MILLISECOND
-    public static final int EBEYE_ONE_RECORD_TIMEOUT = 10;
-    //SECOND
-    public static final int EBEYE_ONLINE_REQUEST_TIMEOUT = 30;
-    //HOUR
-    public static final int EBEYE_CACHE_TIMEOUT = 2;
     
     public static final String EBEYE_SPECIES_FIELD ="organism_scientific_name";
     
     //TODO either use this or domains in the config file
     public static enum Domains {
     	intenz, uniprot, rhea, reactome, chebi, pdbe
-        //,pdbe, chembl_compound, chembl_target, omim, mesh
+        //, chembl_compound, chembl_target, omim, mesh
     	;
 	    public static List<String> getFields() {
 	    	List<String> fields = new ArrayList<String>();
@@ -62,7 +42,7 @@ public interface IEbeyeAdapter {
 	};
 
 	/**
-	 * (Pseudo?)field retrievable from EBEye web services for some domains,
+	 * Field retrievable from EBEye web services for some domains,
 	 * containing cross references to UniProt accessions.
 	 */
 	public static final String UNIPROT_REF_FIELD = "UNIPROT";
@@ -176,5 +156,17 @@ public interface IEbeyeAdapter {
      */
     public Map<String, String> getNameMapByAccessions(String domain,
     		Collection<String> accessions);
+
+    /**
+     * Sets the configuration for EB-Eye searches.
+     * @param config
+     */
+	public abstract void setConfig(EbeyeConfig config);
+
+	/**
+	 * Gets the current configuration, which can then be modified.
+	 * @return the current configuration for EB-Eye searches.
+	 */
+	public abstract EbeyeConfig getConfig();
  
 }
