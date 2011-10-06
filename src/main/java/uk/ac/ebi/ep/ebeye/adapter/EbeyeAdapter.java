@@ -43,17 +43,26 @@ import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 public class EbeyeAdapter implements IEbeyeAdapter {
 
 //********************************* VARIABLES ********************************//
-  private static final Logger LOGGER = Logger.getLogger(EbeyeAdapter.class);
+	private static final Logger LOGGER = Logger.getLogger(EbeyeAdapter.class);
 
+	private EbeyeConfig config;
+	
 //******************************** CONSTRUCTORS ******************************//
 
 
 //****************************** GETTER & SETTER *****************************//
 
+	public EbeyeConfig getConfig() {
+		return config;
+	}
+
+	public void setConfig(EbeyeConfig config) {
+		this.config = config;
+	}
 
 //********************************** METHODS *********************************//
 
-/* Not in use
+	/* Not in use
     public List<Result> getResults(ParamOfGetResults param, boolean convertResultToUniprot)
             throws MultiThreadingException {
         List<String> domainFields = param.getFields();
@@ -102,14 +111,14 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         List<Callable<ArrayOfArrayOfString>> callableList
                 = new ArrayList<Callable<ArrayOfArrayOfString>>();
         int totalFound = param.getTotalFound();
-        int size = IEbeyeAdapter.EBEYE_RESULT_LIMIT;
+        int size = config.getResultsLimit();
         //Work around to solve big result set issue
-        Pagination pagination = new Pagination(totalFound, IEbeyeAdapter.EBEYE_RESULT_LIMIT);
+        Pagination pagination = new Pagination(totalFound, config.getResultsLimit());
         int nrOfQueries = pagination.calTotalPages();
         int start = 0;
         //TODO
         for (int i = 0; i < nrOfQueries; i++) {
-            if (i == nrOfQueries - 1 && (totalFound % IEbeyeAdapter.EBEYE_RESULT_LIMIT) > 0) {
+            if (i == nrOfQueries - 1 && (totalFound % config.getResultsLimit()) > 0) {
                 size = pagination.getLastPageResults();
             }
             Callable<ArrayOfArrayOfString> callable =
@@ -161,7 +170,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         	for (int i = 0; i < callables.size(); i++) {
 				try {
 					final Future<ArrayOfArrayOfString> taken =
-							ecs.poll(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT,
+							ecs.poll(config.getThreadTimeout(),
 									TimeUnit.SECONDS);
 		        	LOGGER.debug("SEARCH after taken");
 		        	// Just for debugging purposes:
@@ -205,7 +214,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
             for (ParamOfGetResults param : paramOfGetResults) {
 				try {
 					Future<Integer> future = ecs.poll(
-							IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT,
+							config.getThreadTimeout(),
 							TimeUnit.SECONDS);
 					if (future != null){
 	                    int totalFound = future.get();
@@ -343,7 +352,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 ArrayOfArrayOfString rawResults;
                 try {
                     rawResults = (ArrayOfArrayOfString) future
-                                .get(IEbeyeAdapter.EBEYE_ONLINE_REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                                .get(config.getThreadTimeout(), TimeUnit.SECONDS);
                 } catch (InterruptedException ex) {
                     throw  new MultiThreadingException(ex.getMessage(), ex);
                 } catch (ExecutionException ex) {
