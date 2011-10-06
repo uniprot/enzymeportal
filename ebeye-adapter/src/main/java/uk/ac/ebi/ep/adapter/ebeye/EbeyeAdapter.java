@@ -20,11 +20,11 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 
-import uk.ac.ebi.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ebeye.util.Transformer;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetEntriesCallable;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetResultsCallable;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.NumberOfResultsCaller;
+import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.ebeye.result.Result;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.result.Pagination;
