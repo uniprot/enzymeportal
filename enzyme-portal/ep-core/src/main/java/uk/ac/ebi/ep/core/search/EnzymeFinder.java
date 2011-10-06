@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.config.Domain;
@@ -19,6 +21,7 @@ import uk.ac.ebi.ep.search.model.SearchResults;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.ebeye.adapter.EbeyeAdapter;
+import uk.ac.ebi.ep.ebeye.adapter.EbeyeConfig;
 import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter;
 import uk.ac.ebi.ep.intenz.adapter.IintenzAdapter;
 import uk.ac.ebi.ep.intenz.adapter.IntenzAdapter;
@@ -34,7 +37,7 @@ import uk.ac.ebi.util.result.DataTypeConverter;
 
 
 /**
- *
+ * NOTE: the ebeyeAdapter must be configured before using this finder!
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>
@@ -44,6 +47,8 @@ import uk.ac.ebi.util.result.DataTypeConverter;
 public class EnzymeFinder implements IEnzymeFinder {
 
 //********************************* VARIABLES ********************************//
+    private static final Logger LOGGER = Logger.getLogger(EnzymeFinder.class);
+
     protected SearchParams searchParams;
     SearchResults enzymeSearchResults;
     IEbeyeAdapter ebeyeAdapter;
@@ -58,7 +63,6 @@ public class EnzymeFinder implements IEnzymeFinder {
     List<EnzymeSummary> enzymeSummaryList;
     IintenzAdapter intenzAdapter;
     IUniprotAdapter uniprotAdapter; 
-    private static final Logger LOGGER = Logger.getLogger(EnzymeFinder.class);
 
 //******************************** CONSTRUCTORS ******************************//
 
@@ -310,24 +314,27 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     }
 
-    public void resetNrOfResultsToLimit(ParamOfGetResults param) {
-            int totalFound = param.getTotalFound();
-            if (param.getDomain().equals(IEbeyeAdapter.Domains.uniprot.name())) {
-                if (totalFound > IEbeyeAdapter.QUERY_ENZYME_DOMAIN_RESULT_LIMIT) {
-                    param.setTotalFound(IEbeyeAdapter.QUERY_ENZYME_DOMAIN_RESULT_LIMIT);
-                }
-            } else {
-                if (param.getDomain().equals(IEbeyeAdapter.Domains.chebi.name())) {
-                    if (totalFound > IEbeyeAdapter.EP_CHEBI_RESULTS_LIMIT) {
-                        param.setTotalFound(IEbeyeAdapter.EP_CHEBI_RESULTS_LIMIT);
-                    }
-                } else {
-                    if (totalFound > IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT) {
-                        param.setTotalFound(IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT);
-                    }
-            }
-            }
-    }
+	public void resetNrOfResultsToLimit(ParamOfGetResults param) {
+		int totalFound = param.getTotalFound();
+		if (param.getDomain().equals(IEbeyeAdapter.Domains.uniprot.name())) {
+			if (totalFound > ebeyeAdapter.getConfig().getMaxUniprotResults()) {
+				param.setTotalFound(ebeyeAdapter.getConfig()
+						.getMaxUniprotResults());
+			}
+		} else {
+			if (param.getDomain().equals(IEbeyeAdapter.Domains.chebi.name())) {
+				if (totalFound > ebeyeAdapter.getConfig().getMaxChebiResults()) {
+					param.setTotalFound(ebeyeAdapter.getConfig()
+							.getMaxChebiResults());
+				}
+			} else {
+				if (totalFound > ebeyeAdapter.getConfig().getMaxResults()) {
+					param.setTotalFound(ebeyeAdapter.getConfig()
+							.getMaxResults());
+				}
+			}
+		}
+	}
 
     public List<String> limiteResultList(List<String> resultList, int maxResults) {
         List<String> subList = null;
@@ -385,15 +392,17 @@ public class EnzymeFinder implements IEnzymeFinder {
      * species filter.
      * @param ids UniProt IDs
      * @param selectedSpecies the species we want
+     * @param maxAccessionsInQuery 
      * @return a list of lucene queries.
      */
     private static List<String> createIdWildcardQueriesWithSpeciesFilter (
-                    List<String> ids, List<String> selectedSpecies)  {
+                    List<String> ids, List<String> selectedSpecies,
+                    int maxAccessionsInQuery)  {
         List<String> queries = LuceneQueryBuilder.createEbeyeQueriesIn(
                 IEbeyeAdapter.FieldsOfGetResults.id.name(),
-                ids, true, EbeyeAdapter.EBEYE_NR_OF_QUERY_IN_LIMIT);
+                ids, true, maxAccessionsInQuery);
         List<String> joinedQueries = LuceneQueryBuilder.addFilterQueriesAND(
-                queries, EbeyeAdapter.EBEYE_SPECIES_FIELD, selectedSpecies);
+                queries, IEbeyeAdapter.EBEYE_SPECIES_FIELD, selectedSpecies);
         return joinedQueries;
     }
 
@@ -440,7 +449,6 @@ public class EnzymeFinder implements IEnzymeFinder {
 	throws MultiThreadingException {
         LOGGER.debug("SEARCH start filterEnzymes");
         String queryField = IEbeyeAdapter.FieldsOfGetResults.acc.name();
-        int subListSize = IEbeyeAdapter.EBEYE_NR_OF_QUERY_IN_LIMIT;
         List<String> resultFields = new ArrayList<String>();
 
         resultFields.add(IEbeyeAdapter.FieldsOfGetResults.id.name());
@@ -448,7 +456,8 @@ public class EnzymeFinder implements IEnzymeFinder {
         //Enzyme filter must be added
         LOGGER.debug("SEARCH before LuceneQueryBuilder.createQueriesIn");
         List<String> queries = LuceneQueryBuilder.createQueriesIn(
-                queryField, accs, false, subListSize);
+                queryField, accs, false,
+                ebeyeAdapter.getConfig().getMaxAccessionsInQuery());
         LOGGER.debug("SEARCH before prepareParamsForQueryIN");
         List<ParamOfGetResults> paramList = this.prepareParamsForQueryIN(
                 IEbeyeAdapter.Domains.uniprot.name(), queries,
@@ -482,7 +491,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         	LOGGER.debug("SEARCH before DataTypeConverter.mergeAndLimitResult");
             Set<String> uniprotAccsFromChebiSet =
             		DataTypeConverter.mergeAndLimitResult(chebiAccs,
-            				IEbeyeAdapter.QUERY_UNIPROT_FIELD_RESULT_LIMIT);
+            				ebeyeAdapter.getConfig().getMaxUniprotResultsFromChebi());
         	LOGGER.debug("SEARCH after DataTypeConverter.mergeAndLimitResult, UniProt accs: " + uniprotAccsFromChebiSet.size());
         	LOGGER.debug("SEARCH before filterEnzymes");
         	// Filter those which are enzymes:
@@ -517,7 +526,8 @@ public class EnzymeFinder implements IEnzymeFinder {
                 ebeyeAdapter.getRelatedUniprotAccessionSet(nrOfResultParams);
     	LOGGER.debug("SEARCH before limiteResultList");
         List<String>limitedResults = this.limiteResultList(
-                relatedUniprotAccessionList, IEbeyeAdapter.JOINT_QUERY_UNIPROT_FIELD_RESULT_LIMIT);
+                relatedUniprotAccessionList,
+                ebeyeAdapter.getConfig().getMaxUniprotResultsFromOtherDomains());
     	LOGGER.debug("SEARCH before filterEnzymes");
         List<String> uniprotIdsRefFromOtherDomains =
                 filterEnzymes(limitedResults);
@@ -574,7 +584,8 @@ public class EnzymeFinder implements IEnzymeFinder {
 	        resultFields.add(IEbeyeAdapter.FieldsOfGetResults.id.name());
 	        List<String> filterQueries =
 	        		createIdWildcardQueriesWithSpeciesFilter(
-	        				unfilteredIdPrefixes, speciesFilter);
+	        				unfilteredIdPrefixes, speciesFilter,
+	        				ebeyeAdapter.getConfig().getMaxAccessionsInQuery());
 	        List<ParamOfGetResults> filteredNrOfResults =
 	                prepareParamsForQueryIN(
 	                		IEbeyeAdapter.Domains.uniprot.name(),

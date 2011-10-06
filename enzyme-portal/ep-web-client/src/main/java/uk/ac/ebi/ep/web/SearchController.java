@@ -18,6 +18,7 @@ import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder;
 import uk.ac.ebi.ep.core.search.IEnzymeRetriever;
+import uk.ac.ebi.ep.ebeye.adapter.EbeyeConfig;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
@@ -43,7 +44,6 @@ public class SearchController {
     private static final Logger LOGGER = Logger.getLogger(SearchController.class);
 //********************************* VARIABLES ********************************//
 
-
     public enum Fields {
         enzyme,
         proteinStructure,
@@ -54,6 +54,9 @@ public class SearchController {
         brief,
         full
     }
+    
+    @Autowired
+    private EbeyeConfig ebeyeConfig;
     
 //******************************** CONSTRUCTORS ******************************//
 
@@ -75,7 +78,8 @@ public class SearchController {
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Fields requestedField = Fields.valueOf(field);
-        IEnzymeRetriever retriever = new EnzymeRetriever();
+        EnzymeRetriever retriever = new EnzymeRetriever();
+        retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = "entry";
         switch (requestedField) {
@@ -184,7 +188,8 @@ public class SearchController {
         if (searchModelForm != null) try {
             LOGGER.debug("SEARCH start");
             SearchParams searchParameters = searchModelForm.getSearchparams();        
-            IEnzymeFinder finder = new EnzymeFinder();
+            EnzymeFinder finder = new EnzymeFinder();
+            finder.getEbeyeAdapter().setConfig(ebeyeConfig);
             searchParameters.setSize(SearchController.TOP_RESULT_SIZE);
             SearchResults resultSet = null;
             LOGGER.debug("SEARCH before finder.getEnzymes");

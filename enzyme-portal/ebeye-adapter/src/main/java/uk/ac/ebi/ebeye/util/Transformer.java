@@ -121,32 +121,6 @@ public class Transformer {
         return mergedResults;
     }
 
-    public static Map<String, List<String>> transformChebiResults(
-            List<ArrayOfArrayOfString> rawResultsList,  boolean isUNIPROTfield) {
-        Map<String, List<String>> results = new LinkedHashMap<String, List<String>>();
-        List<List<String>> resultLines = Transformer.transformToList(rawResultsList);
-        for (List<String> resultLine: resultLines) {
-            //String chebiName = resultLine.get(0);
-            String chebiId = resultLine.get(0);
-            List<String> uniprotAcc = transformAccessionsString(resultLine.get(1));
-            List<String> uniprotAccSubList = null;
-            if (uniprotAcc.size() > 0) {
-                //results.put(chebiName, uniprotAcc);
-                //limited uniprot accessions per chebi id
-                if (isUNIPROTfield && uniprotAcc.size() > IEbeyeAdapter.QUERY_UNIPROT_FIELD_RESULT_LIMIT) {
-                    uniprotAccSubList = uniprotAcc.subList(0, IEbeyeAdapter.QUERY_UNIPROT_FIELD_RESULT_LIMIT);                 
-                } else {
-                    uniprotAccSubList = uniprotAcc;
-                }
-
-                results.put(chebiId, uniprotAccSubList);
-            }
-
-        }
-
-        return results;
-    }
-
     public static List<String> transformAccessionsString(String ebeyeAccList) {
      String[] accArray = ebeyeAccList.split("\\s");
      List<String> accList = new ArrayList<String>();
