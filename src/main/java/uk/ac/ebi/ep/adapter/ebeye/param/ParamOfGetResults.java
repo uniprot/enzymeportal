@@ -1,4 +1,4 @@
-package uk.ac.ebi.ebeye.param;
+package uk.ac.ebi.ep.adapter.ebeye.param;
 
 import java.util.List;
 

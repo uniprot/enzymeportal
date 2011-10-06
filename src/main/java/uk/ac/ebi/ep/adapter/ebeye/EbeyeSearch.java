@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import uk.ac.ebi.ebeye.util.Transformer;
+
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetEntriesCallable;
+import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.search.adapter.ISearchAdapter;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;

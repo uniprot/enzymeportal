@@ -1,8 +1,9 @@
-package uk.ac.ebi.ebeye.util;
+package uk.ac.ebi.ep.adapter.ebeye.util;
 
 import java.util.Iterator;
 import java.util.List;
-import uk.ac.ebi.ebeye.param.ParamOfGetResults;
+
+import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 
 /**
  *

@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 //import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
 import java.util.Set;
-import uk.ac.ebi.ebeye.param.ParamOfGetResults;
+
+import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**

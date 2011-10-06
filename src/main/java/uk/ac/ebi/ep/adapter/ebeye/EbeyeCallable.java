@@ -2,9 +2,10 @@ package uk.ac.ebi.ep.adapter.ebeye;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-import uk.ac.ebi.ebeye.param.ParamGetNumberOfResults;
-import uk.ac.ebi.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ebeye.util.Transformer;
+
+import uk.ac.ebi.ep.adapter.ebeye.param.ParamGetNumberOfResults;
+import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;

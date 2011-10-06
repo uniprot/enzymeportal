@@ -1,4 +1,4 @@
-package uk.ac.ebi.ebeye.util;
+package uk.ac.ebi.ep.adapter.ebeye.util;
 
 import java.util.ArrayList;
 import java.util.Collection;

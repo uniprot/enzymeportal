@@ -3,9 +3,10 @@ package uk.ac.ebi.ep.adapter.ebeye;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import uk.ac.ebi.ebeye.util.Transformer;
+
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.FieldsOfGetResults;
+import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.ebeye.result.Result;
 import uk.ac.ebi.ep.ebeye.result.Xref;
 
