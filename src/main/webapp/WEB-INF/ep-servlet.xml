@@ -48,6 +48,23 @@
 
     <util:list id="history" value-type="java.lang.String" scope="session" />
 
+	<!-- MBeans -->
+	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+		<property name="autodetect" value="true"/>
+	</bean>
+	
+	<bean name="uk.ac.ebi.ep:name=ebeyeConfig" class="uk.ac.ebi.ep.ebeye.adapter.EbeyeConfig">
+		<property name="resultsLimit" value="100"/>
+		<property name="maxAccessionsInQuery" value="100"/>
+		<property name="maxResults" value="2"/>
+		<property name="maxChebiResults" value="30"/>
+		<property name="maxUniprotResults" value="600"/>
+		<property name="maxUniprotResultsFromChebi" value="100"/>
+		<property name="maxUniprotResultsFromOtherDomains" value="2000"/>
+		<property name="maxThreads" value="50"/>
+		<property name="threadTimeout" value="30"/>
+	</bean>
+	
     <!--Start internationalization-->
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
