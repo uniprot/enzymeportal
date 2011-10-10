@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import uk.ac.ebi.ep.adapter.uniprot.UniprotCallable;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiCallable;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
  * @author hongcao
  */
 public class UniprotCallableTest {
-    private UniprotCallable.GetEntryCaller getEntriesCallerInstance;
+    private UniprotJapiCallable.GetEntryCaller getEntriesCallerInstance;
     public static final String uniprotAccession = "P67910";
     //public static final String uniprotAccession = "p16499"; //proteinDesc did not work
     public static final String uniprotAccessionForDrugTest = "O00408";
@@ -48,7 +48,7 @@ public class UniprotCallableTest {
 
     @Before
     public void setUp() {
-        getEntriesCallerInstance = new UniprotCallable.GetEntryCaller(uniprotAccession);
+        getEntriesCallerInstance = new UniprotJapiCallable.GetEntryCaller(uniprotAccession);
     }
 
     @After
@@ -110,7 +110,7 @@ public class UniprotCallableTest {
     @Test
     public void testGetDrugBankNames() {
         System.out.println("testGetDrugBankNames");
-        getEntriesCallerInstance  = new UniprotCallable.GetEntryCaller(uniprotAccessionForDrugTest);
+        getEntriesCallerInstance  = new UniprotJapiCallable.GetEntryCaller(uniprotAccessionForDrugTest);
         List<Molecule> drugBankMoleculenames = getEntriesCallerInstance.getDrugBankMoleculeNames();
         List<String> molNames = DataTypeConverter.getMoleculeNames(drugBankMoleculenames);
         String[] expectedResults = {"Sildenafil","Sulindac"};
@@ -127,7 +127,7 @@ public class UniprotCallableTest {
         assertArrayEquals(expectedResultsForInhibitors, molNames.toArray());
         System.out.println("Inhibitor results are ok!");
 
-        getEntriesCallerInstance  = new UniprotCallable.GetEntryCaller(uniprotAccessionForActivatorTest);
+        getEntriesCallerInstance  = new UniprotJapiCallable.GetEntryCaller(uniprotAccessionForActivatorTest);
         EnzymeModel enzymeModel1 = (EnzymeModel)getEntriesCallerInstance.getSmallMoleculesByAccession();
         String[] expectedResultsForActivator = {"phosphorylation"};
         List<String> activatorNames = DataTypeConverter.getMoleculeNames(

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import uk.ac.ebi.ep.adapter.uniprot.UniprotAdapter;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiAdapter;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
@@ -61,13 +61,13 @@ public class UniprotAdapterTest {
     }
 
     /**
-     * Test of getEnzymeEntries method, of class UniprotAdapter.
+     * Test of getEnzymeEntries method, of class UniprotJapiAdapter.
      */
     
     @Test
     public void testGetEnzymeEntries() throws Exception {
         System.out.println("getEnzymeEntries");        
-        UniprotAdapter instance = new UniprotAdapter();
+        UniprotJapiAdapter instance = new UniprotJapiAdapter();
         //List<EnzymeSummary> resultlist = instance.getEnzymeEntries(inputAccessionList);
         List<EnzymeSummary> resultlist = null;
         /*
@@ -90,12 +90,12 @@ public class UniprotAdapterTest {
     }
 
     /**
-     * Test of getEnzymeEntry method, of class UniprotAdapter.
+     * Test of getEnzymeEntry method, of class UniprotJapiAdapter.
      */
     //@Test
     public void testGetEnzymeEntry() {
         System.out.println("getEnzymeEntry");
-        UniprotAdapter instance = new UniprotAdapter();
+        UniprotJapiAdapter instance = new UniprotJapiAdapter();
         EnzymeSummary result = instance.getEnzymeSummary(INPUT_ACCESSION_1);
         assertEquals(result.getName(), this.prepareEnzymeEntry1().getName());
         //assertEquals(result.getFunction(), this.p);
