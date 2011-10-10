@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
+import uk.ac.ebi.ep.core.search.ConfigMBean;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
-import uk.ac.ebi.ep.core.search.IEnzymeFinder;
-import uk.ac.ebi.ep.core.search.IEnzymeRetriever;
-import uk.ac.ebi.ep.ebeye.adapter.EbeyeConfig;
+import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
@@ -39,24 +40,18 @@ import uk.ac.ebi.ep.search.result.Pagination;
 
 @Controller
 public class SearchController {
-    public static final int TOP_RESULT_SIZE = 10;
-    public static final int MAX_DISPLAYED_PAGES = 1;
+
     private static final Logger LOGGER = Logger.getLogger(SearchController.class);
 //********************************* VARIABLES ********************************//
 
-    public enum Fields {
-        enzyme,
-        proteinStructure,
-        reactionsPathways,
-        molecules,
-        diseaseDrugs,
-        literature,
-        brief,
-        full
-    }
-    
     @Autowired
     private EbeyeConfig ebeyeConfig;
+    
+    @Autowired
+    private UniprotConfig uniprotConfig;
+    
+    @Autowired
+    private ConfigMBean searchConfig;
     
 //******************************** CONSTRUCTORS ******************************//
 
@@ -77,9 +72,10 @@ public class SearchController {
     public String viewReationsPathways(Model model,
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
-        Fields requestedField = Fields.valueOf(field);
+        Field requestedField = Field.valueOf(field);
         EnzymeRetriever retriever = new EnzymeRetriever();
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
+        retriever.getUniprotAdapter().setConfig(uniprotConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = "entry";
         switch (requestedField) {
@@ -130,7 +126,7 @@ public class SearchController {
                 } catch (EnzymeRetrieverException ex) {
                     LOGGER.error("Unable to retrieve the entry! ",  ex);
                 }
-                requestedField = Fields.enzyme;
+                requestedField = Field.enzyme;
                  break;
             }
         }
@@ -190,7 +186,8 @@ public class SearchController {
             SearchParams searchParameters = searchModelForm.getSearchparams();        
             EnzymeFinder finder = new EnzymeFinder();
             finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-            searchParameters.setSize(SearchController.TOP_RESULT_SIZE);
+            finder.getUniprotAdapter().setConfig(uniprotConfig);
+            searchParameters.setSize(searchConfig.getResultsPerPage());
             SearchResults resultSet = null;
             LOGGER.debug("SEARCH before finder.getEnzymes");
             try {
@@ -202,7 +199,7 @@ public class SearchController {
             LOGGER.debug("SEARCH before pagination");
             Pagination pagination = new Pagination(
                     resultSet.getTotalfound(), searchParameters.getSize());
-            pagination.setMaxDisplayedPages(MAX_DISPLAYED_PAGES);
+            pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
             int totalPage = pagination.calTotalPages();
             pagination.setTotalPages(totalPage);
             pagination.calCurrentPage(searchParameters.getStart());
