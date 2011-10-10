@@ -41,10 +41,6 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp" />
     </bean>
-    <bean id="config" class="uk.ac.ebi.ep.core.search.Config"
-          init-method="initIt" destroy-method="cleanUp">
-        <!--<property name="message" value="i'm property message" />-->
-    </bean>
 
     <util:list id="history" value-type="java.lang.String" scope="session" />
 
@@ -52,8 +48,17 @@
 	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
 		<property name="autodetect" value="true"/>
 	</bean>
+
+    <bean name="uk.ac.ebi.ep:name=searchConfig" id="config"
+    	class="uk.ac.ebi.ep.core.search.Config"
+        init-method="initIt" destroy-method="cleanUp">
+        <property name="resultsPerPage" value="10"/>
+        <property name="maxPages" value="1"/>
+        <property name="resultsPerPage" value=""/>
+    </bean>
 	
-	<bean name="uk.ac.ebi.ep:name=ebeyeConfig" class="uk.ac.ebi.ep.ebeye.adapter.EbeyeConfig">
+	<bean name="uk.ac.ebi.ep:name=ebeyeConfig"
+		class="uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig">
 		<property name="resultsLimit" value="100"/>
 		<property name="maxAccessionsInQuery" value="100"/>
 		<property name="maxResults" value="2"/>
@@ -63,6 +68,14 @@
 		<property name="maxUniprotResultsFromOtherDomains" value="2000"/>
 		<property name="maxThreads" value="50"/>
 		<property name="threadTimeout" value="30"/>
+	</bean>
+	
+	<bean name="uk.ac.ebi.ep:name=uniprotConfig"
+		class="uk.ac.ebi.ep.adapter.uniprot.UniprotConfig">
+		<property name="timeout" value="60"/>
+		<property name="reviewed" value="false"/>
+		<property name="wsUrl"
+			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
 	</bean>
 	
     <!--Start internationalization-->
