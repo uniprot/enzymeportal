@@ -5,7 +5,7 @@ import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 
 /**
- *
+ * Proxy to get enzyme data from UniProt.
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>
@@ -15,13 +15,14 @@ import uk.ac.ebi.ep.search.model.EnzymeSummary;
 public interface IUniprotAdapter {
 
 //********************************* VARIABLES ********************************//
-    //second
-    public static final int ENTRY_TIMEOUT = 60;
 
     //Limited species list
-    public static final int SPECIES_BRIEF_MAX_SIZE = 10;
+//    public static final int SPECIES_BRIEF_MAX_SIZE = 10;
     public static final String ACCESSION_FIELD = "accession";
+    
+    /** id field in EB-Eye, that is the UniProt accession! */
     public static final String ID_FIELD = "id";
+    
     public static final String SEQUENCE_URL_BASE = "http://www.uniprot.org/uniprot/";
     public static final String SEQUENCE_URL_SUFFIX = ".html#section_seq";
     public static final String ID_SPLIT_SYMBOL = "_";
@@ -36,18 +37,67 @@ public interface IUniprotAdapter {
 
 
 //********************************** METHODS *********************************//
+    
+    /**
+     * @return the configuration for this UniProt proxy.
+     */
+    public UniprotConfig getConfig();
+    
+    /**
+     * Sets the configuration for this proxy.
+     * @param config
+     */
+    public void setConfig(UniprotConfig config);
+    
+    /**
+     * Gets a basic summary of one entry by UniProt accession.
+     * @param accession a UniProt accession.
+     * @return an enzyme summary.
+     */
     public EnzymeSummary getEnzymeSummary(String accession);
 
+    /**
+     * Gets a summary of one entry, including information about reactions and
+     * pathways.
+     * @param accession a UniProt accession.
+     * @return an enzyme summary.
+     */
     public EnzymeSummary getEnzymeSummaryWithReactionPathway(String accession);
 
+    /**
+     * Gets a summary of one entry, including information about small molecules.
+     * @param accession a UniProt accession.
+     * @return an enzyme summary.
+     */
     public EnzymeSummary getEnzymeSummaryWithMolecules(String accession);
 
+    /**
+     * Gets a summary of one entry, including information about structure.
+     * @param accession a UniProt accession.
+     * @return an enzyme summary.
+     */
     public EnzymeSummary getEnzymeSummaryWithProteinStructure(String accession);
 
     //public EnzymeSummary getDrugSummary(String accession);
     
-    public List<EnzymeSummary> queryEnzymeByIdPrefixes(List<String> queries, String defaultSpecies) throws
-            MultiThreadingException;    
+    /**
+     * Gets summaries of enzymes by their IDs.
+     * @param queries a list of UniProt ID prefixes (i.e. without the species
+     * 		suffix).
+     * @param defaultSpecies the species to use as default.
+     * @return an list of enzyme summaries.
+     * @throws MultiThreadingException
+     */
+    public List<EnzymeSummary> getEnzymesByIdPrefixes(List<String> queries,
+    		String defaultSpecies)
+	throws MultiThreadingException;
+
+    /**
+     * Gets the UniProt IDs (entry names) returned by a simple text query.
+     * @param query the query to UniProt.
+     * @return a list of UniProt IDs (entry names).
+     */
+	public List<String> getUniprotIds(String query);    
 }
 
 

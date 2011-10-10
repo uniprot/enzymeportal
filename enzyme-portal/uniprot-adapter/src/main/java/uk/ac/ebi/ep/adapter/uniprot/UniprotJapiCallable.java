@@ -31,6 +31,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.description.Name;
 import uk.ac.ebi.kraken.model.uniprot.dbx.pdb.PdbImpl;
 import uk.ac.ebi.kraken.uuw.services.remoting.Attribute;
 import uk.ac.ebi.kraken.uuw.services.remoting.AttributeIterator;
+import uk.ac.ebi.kraken.uuw.services.remoting.EntryIterator;
 import uk.ac.ebi.kraken.uuw.services.remoting.EntryRetrievalService;
 import uk.ac.ebi.kraken.uuw.services.remoting.Query;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
@@ -38,31 +39,21 @@ import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
 
 /**
- *
+ * This class is not a Callable, actually.
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>
  *          $Author$
  * @author  $Author$
  */
-public class UniprotCallable {
+public class UniprotJapiCallable {
 
 //********************************* VARIABLES ********************************//
    protected  static EntryRetrievalService entryRetrievalService = UniProtJAPI
            .factory.getEntryRetrievalService();
    protected  static UniProtQueryService queryService = UniProtJAPI
            .factory.getUniProtQueryService();
-   private static final Logger LOGGER = Logger.getLogger(UniprotCallable.class);
-
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
-
-//******************************** INNER CLASS *******************************//
+   private static final Logger LOGGER = Logger.getLogger(UniprotJapiCallable.class);
 
     public static class GetEntryCaller implements Callable<EnzymeSummary> {
         protected String accession;
@@ -173,11 +164,6 @@ public class UniprotCallable {
      * @return
      */
     public EnzymeSummary getEnzymeTabData() {
-        //niProtEntry entry = (UniProtEntry) entryRetrievalService
-           //     .getUniProtEntry(accession);
-        //EnzymeModel enzymeModel =  (EnzymeModel)setEzymeResult(accession);
-        //EnzymeModel enzymeModel =  (EnzymeModel)setEnzymeCommonProperties(accession);
-        //EnzymeModel enzymeModel =  (EnzymeModel)setEnzymeProperties();
         EnzymeModel enzymeModel = (EnzymeModel) getEnzymeCommonProperties();
         List<Comment> functionCommentList = getComments(CommentType.FUNCTION);
         String function = Transformer.getCommentText(functionCommentList);
@@ -357,74 +343,25 @@ public class UniprotCallable {
             return enzymeSummary;
         }
     }
-    /*
-    public EnzymeSummary setEnzymeCommonProperties(UniProtEntry entry) {
-        EnzymeModel enzymeSummary = new EnzymeModel();
-        enzymeSummary.getUniprotaccessions().add(entry.getPrimaryUniProtAccession().getValue());
-        enzymeSummary.setUniprotid(entry.getUniProtId().getValue());
-        if (entry != null) {
-            ProteinDescription desc = entry.getProteinDescription();
-            String name = null;
-            if (desc.hasSubNames()){
-                 List<Name> names  = desc.getSubNames();
-                name = Transformer.getFullName(names.get(0));
-            }
-            else {
-                Name recName = desc.getRecommendedName();
-                name = Transformer.getFullName(recName);
-            }
-
-            enzymeSummary.setName(name);
-
-            enzymeSummary.getEc().addAll(desc.getEcNumbers());
-            String speciesCommonName = entry.getOrganism().getCommonName().getValue();
-            String scientificName = entry.getOrganism().getScientificName().getValue();
-            Species species = new Species();
-            species.setCommonname(speciesCommonName);
-            species.setScientificname(scientificName);
-            enzymeSummary.setSpecies(species);
-        }
-        return enzymeSummary;
-    }
-    */
-        /*
-    public EnzymeSummary setEnzymeProperties() {
-        //EnzymeSummary enzymeSummary = new EnzymeSummary();
-        EnzymeModel enzymeModel = (EnzymeModel) setEnzymeCommonProperties(accession);
-        List<Comment> functionCommentList = getComments(CommentType.FUNCTION);
-        String function = Transformer.getCommentText(functionCommentList);
-            enzymeModel.setFunction(function);
-            List<Comment> diseaseCommentList = getComments(CommentType.DISEASE);
-            List<Disease> diseases = Transformer.getDiseases(diseaseCommentList);
-            enzymeModel.setDisease(diseases);
-
-            List<Name> names = (List<Name>) getAttribute("proteinAlterNamestpl");
-            enzymeModel.getSynonym().addAll(Transformer.getAltNames(names));
-            enzymeModel.setPdbeaccession(this.getPdbeAccessions());
-        return enzymeModel;
-    }
-
-  }
-*/
-
-
-
-
-    //******************************** INNER CLASS *******************************//
     /**
      * A caller that implements the {@link Callable} interface that can be called
-     * to perform concurrent queries to Uniprot API to get Uniprot entries grouped by species.
+     * to perform concurrent queries to Uniprot API to get Uniprot entries
+     * grouped by species.
+     * Actually, this callable is querying for species, getting the first one
+     * and using the first UniProt accession of it.
      */
     public static class QueryEntryByIdCaller implements Callable<EnzymeSummary> {    
         //protected UniProtEntry mainEntry;
         protected String defaultSpecies;
         protected Query uniprotQuery;
-
-        public QueryEntryByIdCaller(String query, String defaultSpecies) {
+        
+        public QueryEntryByIdCaller(String query, String defaultSpecies, boolean reviewed) {
             uniprotQuery = UniProtQueryBuilder.buildQuery(query);
             this.defaultSpecies = defaultSpecies;
+            if (reviewed){
+            	uniprotQuery = UniProtQueryBuilder.setReviewedEntries(uniprotQuery);
+            }
         }
-
 
         public EnzymeSummary call() throws Exception {
             return queryforEnzymeSummaryEntry();
@@ -461,7 +398,7 @@ public class UniprotCallable {
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
                 GetEntryCaller caller = new GetEntryCaller(
-                topSpecies.getUniprotaccessions().get(0));
+                		topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
                 enzymeSummary = caller.getEnzymeTabData();
                 //Add related species
@@ -480,7 +417,7 @@ public class UniprotCallable {
             if (speciesList.size() > 0) {
                 EnzymeAccession topSpecies = speciesList.get(0);
                 GetEntryCaller caller = new GetEntryCaller(
-                topSpecies.getUniprotaccessions().get(0));
+                		topSpecies.getUniprotaccessions().get(0));
                 //Retieve the main entry
                 enzymeSummary = caller.getReactionPathwayByAccession();
                 //Add related species
@@ -495,7 +432,7 @@ public class UniprotCallable {
         }
 
         public List<EnzymeAccession> getSpecies() {
-             AttributeIterator<UniProtEntry> attributes  = queryService
+             AttributeIterator<UniProtEntry> attributes = queryService
                      .getAttributes(uniprotQuery, "ognl:organism");
              List<EnzymeAccession> accSpeciesList = new ArrayList<EnzymeAccession>();
              for (Attribute att : attributes) {
@@ -519,45 +456,31 @@ public class UniprotCallable {
 
         }
   }
-/*
-        public List<UniProtEntry> separateEntries(EntryIterator<UniProtEntry> entries) {
-            List<UniProtEntry> secEntries = new ArrayList<UniProtEntry>();
-            boolean hasMainEntry = false;
-            for (UniProtEntry uniProtEntry: entries) {
-                String species = uniProtEntry.getOrganism().getCommonName().getValue();
-                if (species.equalsIgnoreCase(this.defaultSpecies)) {
-                    this.mainEntry = uniProtEntry;
-                    hasMainEntry = true;
-                } else {
-                    secEntries.add(uniProtEntry);
-                }
 
-                String accesion = uniProtEntry.getPrimaryUniProtAccession().getValue();
-            }
-            if (!hasMainEntry) {
-                this.mainEntry = secEntries.get(0);
-                //secEntries.remove(this.mainEntry);
-            }
-            return secEntries;
-        }
-*/
-
-
-//******************************** INNER CLASS *******************************//
-
+    /**
+     * Callable to get a map of scientific names to common names of species
+     * from a query to UniProt.
+     * @author rafa
+     *
+     */
     public static class GetSpeciesCaller implements Callable<Map<String,String>> {
-        protected String query;
-
-        public GetSpeciesCaller(String query) {
+    	
+        private String query;
+        private boolean reviewed;
+        
+        public GetSpeciesCaller(String query, boolean reviewed) {
             this.query = query;
+            this.reviewed = reviewed;
         }
-
 
         public Map<String,String> call() throws Exception {
             return getSpecies();
         }
         public Map<String,String> getSpecies() {
             Query uniprotQuery = UniProtQueryBuilder.buildQuery(query);
+            if (reviewed){
+            	uniprotQuery = UniProtQueryBuilder.setReviewedEntries(uniprotQuery);
+            }
             return getSpecies(uniprotQuery);
         }
         public Map<String,String> getSpecies(Query uniprotQuery) {
@@ -574,5 +497,27 @@ public class UniprotCallable {
              return speciesMap;
         }
 
-    }    
+    }
+    
+    /**
+     * Retrieves UniProt IDs (entry names) from a text query.
+     * @param s the text query.
+     * @param reviewed do we want only reviewed (Swiss-Prot) entries?
+     * @return a list of UniProt IDs (entry names).
+     */
+    List<String> getUniprotIds(String s, boolean reviewed){
+    	List<String> ids = null;
+    	Query query = UniProtQueryBuilder.buildQuery(s);
+    	if (reviewed){
+    		query = UniProtQueryBuilder.setReviewedEntries(query);
+    	}
+    	EntryIterator<UniProtEntry> entries = queryService.getEntryIterator(query);
+    	if (entries.getResultSize() > 0){
+    		ids = new ArrayList<String>();
+    		for (UniProtEntry entry : entries) {
+				ids.add(entry.getUniProtId().getValue());
+			}
+    	}
+    	return ids;
+    }
 }
