@@ -22,15 +22,17 @@ import uk.ac.ebi.ep.config.ResultField;
  *          $Author$
  * @author  $Author$
  */
-public class Config {
+public class Config implements ConfigMBean {
 
-//********************************* VARIABLES ********************************//
     public static List<Domain> domainList;
-    public static String configFile = "/config.xml";
-    public static String resourcePath = new File(
-            Config.class.getResource(configFile).getPath()
-    ).getParent();
+    public static final String configFile = "/config.xml";
+    public static String resourcePath =
+    		new File(Config.class.getResource(configFile).getPath()).getParent();
 
+    private int resultsPerPage;
+    
+    private int maxPages;
+    
 	public void initIt() throws Exception {
 	  System.out.println("Init method after properties are set : ");
           loadCacheData();
@@ -41,7 +43,7 @@ public class Config {
           
 	}
 
-        public void loadCacheData() {
+    public void loadCacheData() {
         try {
             EnzymeRelatedDomains enzymeRelatedDomains =
                     unmarshalConfigFile(Config.class.getResourceAsStream(configFile));
@@ -52,9 +54,9 @@ public class Config {
         } catch (JAXBException ex) {
             //Config file provided can be unmarshalled
         }
-        }
+    }
 
-        /*
+/*
     public static File marshalResultToXml(ResultCollection resultCollection, File f) throws JAXBException
             {
             JAXBContext jaxbContext = JAXBContext.newInstance("uk.ac.ebi.ep.ebeye.result");
@@ -99,4 +101,20 @@ public class Config {
         }
         return resultRefFields;
     }
+
+	public int getResultsPerPage() {
+		return resultsPerPage;
+	}
+
+	public void setResultsPerPage(int resultsPerPage) {
+		this.resultsPerPage = resultsPerPage;
+	}
+
+	public int getMaxPages() {
+		return maxPages;
+	}
+
+	public void setMaxPages(int maxPages) {
+		this.maxPages = maxPages;
+	}
 }
