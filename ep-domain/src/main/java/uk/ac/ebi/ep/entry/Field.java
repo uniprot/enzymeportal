@@ -1,11 +1,11 @@
 package uk.ac.ebi.ep.entry;
 
 /**
- * Fields to show for an enzyme in the portal.
+ * Field to show for an enzyme in the portal.
  * @author rafa
  *
  */
-public enum Fields {
+public enum Field {
     enzyme,
     proteinStructure,
     reactionsPathways,
