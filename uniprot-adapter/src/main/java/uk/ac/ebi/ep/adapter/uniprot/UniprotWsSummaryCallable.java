@@ -5,15 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -32,7 +34,7 @@ import uk.ac.ebi.ep.search.model.Species;
 
 /**
  * Callable to get enzyme summaries from UniProt web services given an
- * accession number.
+ * accession number or entry name (ID).
  * @author rafa
  *
  */
@@ -40,21 +42,39 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 
 	private static final Logger LOGGER = Logger.getLogger(UniprotWsSummaryCallable.class);
 	
-	private String accession;
+	/** Type of identifier used to retrieve the summary. */
+	protected enum IdType {
+		/** Accession number. */
+		ACCESSION,
+		/** Entry name (ID) */
+		ENTRY_NAME
+	}
+	
+	private String accOrId;
+	
+	private IdType idType;
 	
 	private Field field;
+	
+	private String defaultSpecies;
 	
 	private int timeout;
 	
 	/**
 	 * Constructor.
-	 * @param accession a UniProt accession number.
-	 * @param field the perspective we are interested in.
-	 * @param timeout timeout for the web service request.
+	 * @param accOrId a UniProt accession number or ID.
+	 * @param idType the type of identifier (accession or entry name)
+	 * @param field the field we are interested in.
+	 * @param defaultSpecies the species to show by default (only used when the
+	 * 		web service returns more than one entries).
+	 * @param timeout timeout (ms) for the web service request.
 	 */
-	public UniprotWsSummaryCallable(String accession, Field field, int timeout) {
-		this.accession = accession;
+	public UniprotWsSummaryCallable(String accOrId, IdType idType, Field field,
+			String defaultSpecies, int timeout){
+		this.accOrId = accOrId;
+		this.idType = idType;
 		this.field = field;
+		this.defaultSpecies = defaultSpecies;
 		this.timeout = timeout;
 	}
 
@@ -63,32 +83,33 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	}
 	
 	protected EnzymeSummary getEnzymeSummary(){
-		List<String> enzymeInfo = getEnzymeInfo(accession, getColumns());
-		if (enzymeInfo.size() > 1){
-			// More than one entry for one accession? It has been demerged.
-			LOGGER.warn("More than one entry for " + accession);
-		}
+		List<String> enzymeInfo = getEnzymeInfo(accOrId, idType, getColumns());
+		// Take only first one, see below about the others:
 		String[] colValues = enzymeInfo.iterator().next().split("\t", -1);
-		
 		// Parse common properties:
-		EnzymeModel summary = buildSummary(accession, colValues);
+		EnzymeModel summary = buildSummary(colValues);
+		summary.setRelatedspecies(parseRelatedSpecies(enzymeInfo));
+		if (enzymeInfo.size() > 1 && idType.equals(IdType.ACCESSION)){
+			// More than one entry for one accession? It has been demerged?
+			LOGGER.warn("More than one entry for " + accOrId);
+		}
 		
 		// Populate the summary according to the field:
 		switch (field) {
 		case enzyme:
-			if (colValues[4].length() > 0){
-				summary.setFunction(parseFunction(colValues[4]));
-			}
 			if (colValues[5].length() > 0){
-				summary.setDisease(parseDiseases(colValues[5]));
+				summary.setFunction(parseFunction(colValues[5]));
 			}
 			if (colValues[6].length() > 0){
-				summary.setPdbeaccession(Arrays.asList(colValues[6].split(";")));
+				summary.setDisease(parseDiseases(colValues[6]));
+			}
+			if (colValues[7].length() > 0){
+				summary.setPdbeaccession(Arrays.asList(colValues[7].split(";")));
 			}
 			Sequence seq = new Sequence();
-			seq.setSequence(String.valueOf(colValues[7].length()));
+			seq.setSequence(String.valueOf(colValues[8].length()));
 			// TODO seq.setWeight(value);
-	        seq.setSequenceurl(IUniprotAdapter.SEQUENCE_URL_BASE + accession
+	        seq.setSequenceurl(IUniprotAdapter.SEQUENCE_URL_BASE + accOrId
 	        		+ IUniprotAdapter.SEQUENCE_URL_SUFFIX);
 			Enzyme enzyme = new Enzyme();
 			enzyme.setSequence(seq);
@@ -96,34 +117,68 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			
 	        String uniprotIdPrefix = summary.getUniprotid()
 	        		.split(IUniprotAdapter.ID_SPLIT_SYMBOL)[0];
-	        String defaultSpecies = summary.getSpecies().getScientificname();
-			summary.setRelatedspecies(getSpecies(uniprotIdPrefix, defaultSpecies));
+	        String defSp = idType.equals(IdType.ACCESSION)?
+	        		summary.getSpecies().getScientificname():
+	        		defaultSpecies;
+			summary.setRelatedspecies(getSpecies(uniprotIdPrefix, defSp));
 			break;
 		case proteinStructure:
-			if (colValues[4].length() > 0){
+			if (colValues[5].length() > 0){
 				summary.getPdbeaccession().addAll(
-						Arrays.asList(colValues[4].toLowerCase().split(";")));
+						Arrays.asList(colValues[5].toLowerCase().split(";")));
 			}
 			break;
 		case reactionsPathways:
-			if (colValues[4].length() > 0){
-				summary.getReactionpathway().add(parseReactionPathways(colValues[4]));
+			if (colValues[5].length() > 0){
+				summary.getReactionpathway().add(parseReactionPathways(colValues[5]));
 			}
 			break;
 		case molecules:
-			summary.setMolecule(parseChemicalEntity(colValues[4], colValues[5]));
+			summary.setMolecule(parseChemicalEntity(colValues[5], colValues[5]));
 			break;
 		case diseaseDrugs:
-			// TODO?
+			// TODO
 			break;
 		case literature:
-			// TODO?
+			// TODO
 			break;
-		default:
+		case full:
+			// TODO
 			break;
 		}
-		
 		return summary;
+	}
+
+	/**
+	 * Parses multiple lines returned by the web service in tab format,
+	 * getting the whole list of species with the default one (if found)
+	 * at the top of it.
+	 * @param enzymeInfo lines returned by the web service.
+	 * @return a list of Species with the default one (if found) at the top..
+	 */
+	private List<EnzymeAccession> parseRelatedSpecies(List<String> enzymeInfo) {
+		List<EnzymeAccession> relatedSpecies = null;
+		Map<String, String> spAcc = new HashMap<String, String>();
+		for (String line : enzymeInfo) {
+			String[] split = line.split("\t", -1);
+			// organism is always [4], accession is [0], see getColumns()
+			spAcc.put(split[4], split[0]);
+		}
+		if (!spAcc.isEmpty()){
+			relatedSpecies = new ArrayList<EnzymeAccession>();
+			for (String sp : spAcc.keySet()) {
+				EnzymeAccession ea = new EnzymeAccession();
+				ea.getUniprotaccessions().add(spAcc.get(sp));
+				Species relSp = parseSpecies(sp);
+				ea.setSpecies(relSp);
+				if (relSp.getScientificname().equalsIgnoreCase(defaultSpecies)){
+					relatedSpecies.add(0, ea);
+				} else {
+					relatedSpecies.add(ea);
+				}
+			}
+		}
+		return relatedSpecies;
 	}
 
 	/**
@@ -132,7 +187,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	 * @return
 	 */
 	private String getColumns() {
-		String columns = "entry name,protein names,ec,organism";
+		String columns = "id,entry+name,protein+names,ec,organism";
 		switch (field) {
 		case enzyme:
 			columns += ",comment(FUNCTION),comment(DISEASE),database(PDB),sequence";
@@ -147,10 +202,13 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			columns += ",database(DRUGBANK),comment(ENZYME_REGULATION)";
 			break;
 		case diseaseDrugs:
+			// TODO
 			break;
 		case literature:
+			// TODO
 			break;
-		default:
+		case full:
+			// TODO
 			break;
 		}
 		return columns;
@@ -163,6 +221,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	 * @param columns fields returned from the web service. There might be more,
 	 * 		but these first ones are required in this order:
 	 * <ol>
+	 * 	<li>accession</li>
 	 * 	<li>entry name (id)</li>
 	 * 	<li>protein name(s)</li>
 	 * 	<li>ec(s)</li>
@@ -170,11 +229,12 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	 * </ol>
 	 * @return
 	 */
-	private EnzymeModel buildSummary(String accession, String[] columns) {
-		final String id = columns[0];
-		final List<String> nameSynonyms = parseNameSynonyms(columns[1]);
-		final List<String> ecs = Arrays.asList(columns[2].split("; "));
-		final Species species = parseSpecies(columns[3]);
+	private EnzymeModel buildSummary(String[] columns) {
+		final String accession = columns[0];
+		final String id = columns[1];
+		final List<String> nameSynonyms = parseNameSynonyms(columns[2]);
+		final List<String> ecs = Arrays.asList(columns[3].split("; "));
+		final Species species = parseSpecies(columns[4]);
 		EnzymeModel summary = new EnzymeModel();
 		summary.getUniprotaccessions().add(accession);
 		summary.setUniprotid(id);
@@ -298,20 +358,32 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 
 	/**
 	 * Retrieves data from UniProt for a given accession.
-	 * @param accession the query to UniProt (an accession number).
+	 * @param accOrId the query to UniProt (an accession number or ID).
+	 * @param idType 
 	 * @param columns columns to retrieve.
 	 * @return a list of tab-delimited Strings containing the requested fields
 	 * 		in the same order, or <code>null</code> if some error happened.
 	 */
-	private List<String> getEnzymeInfo(String accession, String columns) {
+	private List<String> getEnzymeInfo(String accOrId, IdType idType, String columns) {
 		List<String> enzymeInfo = null;
+		String query = null;
+		switch (idType) {
+		case ACCESSION:
+			query = "accession:";
+			break;
+		case ENTRY_NAME:
+			query = "mnemonic:";
+			break;
+		}
+		query += accOrId;
 		String url = MessageFormat.format(UniprotWsAdapter.UNIPROT_WS_URL,
-				"accession:" + accession, columns);
+				query, columns);
+		LOGGER.debug(url);
 		BufferedReader br = null;
 		InputStreamReader isr = null;
 		InputStream is = null;
 		try {
-			URLConnection con = new URL(url).openConnection();
+			URLConnection con = new URL(url).openConnection(Proxy.NO_PROXY);
 			con.setReadTimeout(timeout);
 			con.connect();
 			is = con.getInputStream();
@@ -355,7 +427,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		List<EnzymeAccession> enzymeAccessions = null;
 		String fields = "id,organism";
 		List<String> enzymeInfo =
-				getEnzymeInfo("mnemonic:" + uniprotIdPrefix + "*", fields);
+				getEnzymeInfo(uniprotIdPrefix + "*", IdType.ENTRY_NAME, fields);
 		for (String s : enzymeInfo) {
 			EnzymeAccession ea = new EnzymeAccession();
 			String[] split = s.split("\t");

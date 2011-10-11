@@ -1,6 +1,8 @@
 package uk.ac.ebi.ep.adapter.uniprot;
 
+import java.util.Collection;
 import java.util.List;
+
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 
@@ -85,11 +87,12 @@ public interface IUniprotAdapter {
      * @param queries a list of UniProt ID prefixes (i.e. without the species
      * 		suffix).
      * @param defaultSpecies the species to use as default.
+     * @param speciesFilter the species used as filter.
      * @return an list of enzyme summaries.
      * @throws MultiThreadingException
      */
     public List<EnzymeSummary> getEnzymesByIdPrefixes(List<String> queries,
-    		String defaultSpecies)
+    		String defaultSpecies, Collection<String> speciesFilter)
 	throws MultiThreadingException;
 
     /**

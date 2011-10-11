@@ -27,4 +27,12 @@ public class UniprotConfig implements UniprotConfigMBean {
 		this.reviewed = reviewed;
 	}
 
+	public String getWsUrl() {
+		return wsUrl;
+	}
+
+	public void setWsUrl(String wsUrl) {
+		this.wsUrl = wsUrl;
+	}
+
 }
