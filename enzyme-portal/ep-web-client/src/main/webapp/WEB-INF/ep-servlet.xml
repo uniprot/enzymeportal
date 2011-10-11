@@ -49,12 +49,14 @@
 		<property name="autodetect" value="true"/>
 	</bean>
 
-    <bean name="uk.ac.ebi.ep:name=searchConfig" id="config"
+    <bean name="uk.ac.ebi.ep:name=searchConfig"
     	class="uk.ac.ebi.ep.core.search.Config"
         init-method="initIt" destroy-method="cleanUp">
         <property name="resultsPerPage" value="10"/>
         <property name="maxPages" value="1"/>
-        <property name="resultsPerPage" value=""/>
+        <property name="finderUniprotSource" value="EBEYE"/>
+        <property name="retrieverUniprotSource" value="UNIPROT"/>
+        <property name="uniprotImplementation" value="WS"/>
     </bean>
 	
 	<bean name="uk.ac.ebi.ep:name=ebeyeConfig"
@@ -67,12 +69,12 @@
 		<property name="maxUniprotResultsFromChebi" value="100"/>
 		<property name="maxUniprotResultsFromOtherDomains" value="2000"/>
 		<property name="maxThreads" value="50"/>
-		<property name="threadTimeout" value="30"/>
+		<property name="threadTimeout" value="30000"/>
 	</bean>
 	
 	<bean name="uk.ac.ebi.ep:name=uniprotConfig"
 		class="uk.ac.ebi.ep.adapter.uniprot.UniprotConfig">
-		<property name="timeout" value="60"/>
+		<property name="timeout" value="30000"/>
 		<property name="reviewed" value="false"/>
 		<property name="wsUrl"
 			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
