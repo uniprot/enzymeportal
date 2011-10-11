@@ -46,7 +46,7 @@ public class UniprotWsSearchCallable implements Callable<List<String>> {
 	}
 
 	/**
-	 * Retrieves UniProt IDs matching the query.
+	 * Retrieves UniProt IDs for enzymes matching the query.
 	 * @return
 	 */
 	protected List<String> getUniprotIds(){

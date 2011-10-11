@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
@@ -31,9 +32,12 @@ public class UniprotJapiAdapter extends AbstractUniprotAdapter{
 	private static final Logger LOGGER = Logger.getLogger(UniprotJapiAdapter.class);
 
 	public List<EnzymeSummary> getEnzymesByIdPrefixes(List<String> queries,
-			String defaultSpecies)
+			String defaultSpecies, Collection<String> speciesFilter)
 	throws MultiThreadingException {
-	    ExecutorService pool = Executors.newCachedThreadPool();
+
+        List<String> processedQueries = LuceneQueryBuilder
+                .createUniprotAPIQueryByIdPrefixes(queries, speciesFilter);
+		ExecutorService pool = Executors.newCachedThreadPool();
 	    CompletionService<EnzymeSummary> ecs =
 	    		new ExecutorCompletionService<EnzymeSummary>(pool);
 	    List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
@@ -41,7 +45,7 @@ public class UniprotJapiAdapter extends AbstractUniprotAdapter{
 	        List<Future<EnzymeSummary>> futures =
 	        		new ArrayList<Future<EnzymeSummary>>();
 			LOGGER.debug("SEARCH before uniprot callables loop");
-	        for (String query:queries) {
+	        for (String query : processedQueries) {
 	            Callable<EnzymeSummary> caller =
 	            		new QueryEntryByIdCaller(query, defaultSpecies, config.isReviewed());
 	            futures.add(ecs.submit(caller));
