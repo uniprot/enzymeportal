@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
-import uk.ac.ebi.ep.core.search.ConfigMBean;
+import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.entry.Field;
@@ -51,7 +51,7 @@ public class SearchController {
     private UniprotConfig uniprotConfig;
     
     @Autowired
-    private ConfigMBean searchConfig;
+    private Config searchConfig;
     
 //******************************** CONSTRUCTORS ******************************//
 
@@ -73,7 +73,7 @@ public class SearchController {
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Field requestedField = Field.valueOf(field);
-        EnzymeRetriever retriever = new EnzymeRetriever();
+        EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         retriever.getUniprotAdapter().setConfig(uniprotConfig);
         EnzymeModel enzymeModel = null;
@@ -184,7 +184,7 @@ public class SearchController {
         if (searchModelForm != null) try {
             LOGGER.debug("SEARCH start");
             SearchParams searchParameters = searchModelForm.getSearchparams();        
-            EnzymeFinder finder = new EnzymeFinder();
+            EnzymeFinder finder = new EnzymeFinder(searchConfig);
             finder.getEbeyeAdapter().setConfig(ebeyeConfig);
             finder.getUniprotAdapter().setConfig(uniprotConfig);
             searchParameters.setSize(searchConfig.getResultsPerPage());
