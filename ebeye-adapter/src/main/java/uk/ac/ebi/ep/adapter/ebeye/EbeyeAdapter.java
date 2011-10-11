@@ -171,7 +171,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 				try {
 					final Future<ArrayOfArrayOfString> taken =
 							ecs.poll(config.getThreadTimeout(),
-									TimeUnit.SECONDS);
+									TimeUnit.MILLISECONDS);
 		        	LOGGER.debug("SEARCH after taken");
 		        	// Just for debugging purposes:
 	        		final ParamOfGetResults param =
@@ -215,7 +215,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 				try {
 					Future<Integer> future = ecs.poll(
 							config.getThreadTimeout(),
-							TimeUnit.SECONDS);
+							TimeUnit.MILLISECONDS);
 					if (future != null){
 	                    int totalFound = future.get();
 	                    param.setTotalFound(totalFound);
@@ -352,7 +352,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 ArrayOfArrayOfString rawResults;
                 try {
                     rawResults = (ArrayOfArrayOfString) future
-                                .get(config.getThreadTimeout(), TimeUnit.SECONDS);
+                                .get(config.getThreadTimeout(), TimeUnit.MILLISECONDS);
                 } catch (InterruptedException ex) {
                     throw  new MultiThreadingException(ex.getMessage(), ex);
                 } catch (ExecutionException ex) {

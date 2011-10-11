@@ -78,7 +78,7 @@ public interface EbeyeConfigMBean {
 
 	/**
 	 * Sets the timeout for threaded jobs.
-	 * @param i the timeout in seconds.
+	 * @param i the timeout in miliseconds.
 	 */
 	public void setThreadTimeout(int i); // EBEYE_ONLINE_REQUEST_TIMEOUT
 }
