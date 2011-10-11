@@ -5,13 +5,19 @@
 
 package uk.ac.ebi.ep.core.search;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
+import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
+import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 
@@ -35,7 +41,17 @@ public class EnzymeRetrieverTest {
 
     @Before
     public void setUp() {
-        instance = new EnzymeRetriever();
+    	Config config = new Config();
+    	config.setFinderUniprotSource(UniprotSource.EBEYE.name());
+    	config.setRetrieverUniprotSource(UniprotSource.UNIPROT.name());
+    	config.setResultsPerPage(10);
+    	config.setMaxPages(1);
+    	config.setUniprotImplementation(UniprotImplementation.JAPI.name());
+        instance = new EnzymeRetriever(config);
+        UniprotConfig uniprotConfig = new UniprotConfig();
+        uniprotConfig.setReviewed(false);
+        uniprotConfig.setTimeout(30);
+        instance.uniprotAdapter.setConfig(uniprotConfig);
     }
 
     @After

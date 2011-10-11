@@ -14,15 +14,18 @@ import uk.ac.ebi.ep.search.model.SearchResults;
  */
 public interface IEnzymeFinder {
 
-//********************************* VARIABLES ********************************//
+	/**
+	 * Resources used to search/retrieve enzymes in UniProt.
+	 * @author rafa
+	 */
+	public static enum UniprotSource { EBEYE, UNIPROT }
+	
+	/**
+	 * Implementation used to search/retrieve enzymes from UniProt.
+	 * @author rafa
+	 */
+	public static enum UniprotImplementation { JAPI, WS }
 
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
-    public SearchResults getEnzymes(SearchParams searchInput)
+	public SearchResults getEnzymes(SearchParams searchInput)
             throws EnzymeFinderException;
 }
