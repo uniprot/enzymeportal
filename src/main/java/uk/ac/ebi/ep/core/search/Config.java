@@ -13,6 +13,8 @@ import javax.xml.bind.Unmarshaller;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.EnzymeRelatedDomains;
 import uk.ac.ebi.ep.config.ResultField;
+import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
+import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
 
 /**
  *
@@ -29,9 +31,15 @@ public class Config implements ConfigMBean {
     public static String resourcePath =
     		new File(Config.class.getResource(configFile).getPath()).getParent();
 
-    private int resultsPerPage;
+    protected int resultsPerPage;
     
-    private int maxPages;
+    protected int maxPages;
+    
+    protected UniprotSource finderUniprotSource;
+    
+    protected UniprotSource retrieverUniprotSource;
+    
+    protected UniprotImplementation uniprotImplementation;
     
 	public void initIt() throws Exception {
 	  System.out.println("Init method after properties are set : ");
@@ -116,5 +124,29 @@ public class Config implements ConfigMBean {
 
 	public void setMaxPages(int maxPages) {
 		this.maxPages = maxPages;
+	}
+
+	public String getFinderUniprotSource() {
+		return finderUniprotSource.name();
+	}
+
+	public void setFinderUniprotSource(String finderUniprotSource) {
+		this.finderUniprotSource = UniprotSource.valueOf(finderUniprotSource);
+	}
+
+	public String getRetrieverUniprotSource() {
+		return retrieverUniprotSource.name();
+	}
+
+	public void setRetrieverUniprotSource(String retrieverUniprotSource) {
+		this.retrieverUniprotSource = UniprotSource.valueOf(retrieverUniprotSource);
+	}
+
+	public String getUniprotImplementation() {
+		return uniprotImplementation.name();
+	}
+
+	public void setUniprotImplementation(String imp) {
+		this.uniprotImplementation = UniprotImplementation.valueOf(imp);
 	}
 }

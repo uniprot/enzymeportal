@@ -60,17 +60,15 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 	private static final Logger LOGGER = Logger.getLogger(EnzymeRetriever.class);
 	
     protected IRheaAdapter rheaAdapter;
-    private static Logger log = Logger.getLogger(EnzymeRetriever.class);
-
     protected IReactomeAdapter reactomeAdapter;
-
     protected IChebiAdapter chebiAdapter;
     protected IDASFeaturesAdapter pdbeAdapter;
     protected ILiteratureAdapter litAdapter;
     protected BiomartAdapter biomartAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
-    public EnzymeRetriever() {
+    public EnzymeRetriever(Config searchConfig) {
+    	super(searchConfig);
         rheaAdapter = new RheasResourceClient();
         reactomeAdapter = new ReactomeAdapter();
         chebiAdapter = new ChebiAdapter();
