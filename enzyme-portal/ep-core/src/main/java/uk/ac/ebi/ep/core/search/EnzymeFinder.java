@@ -3,41 +3,39 @@ package uk.ac.ebi.ep.core.search;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
-import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
+import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
+import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
+import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ep.adapter.uniprot.IUniprotAdapter;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiAdapter;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotWsAdapter;
 import uk.ac.ebi.ep.config.Domain;
-import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.exception.MultiThreadingException;
-import uk.ac.ebi.ep.search.model.SearchResults;
-import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
-import uk.ac.ebi.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ep.ebeye.adapter.EbeyeAdapter;
-import uk.ac.ebi.ep.ebeye.adapter.EbeyeConfig;
-import uk.ac.ebi.ep.ebeye.adapter.IEbeyeAdapter;
 import uk.ac.ebi.ep.intenz.adapter.IintenzAdapter;
 import uk.ac.ebi.ep.intenz.adapter.IntenzAdapter;
+import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
+import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.SearchFilters;
 import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.ep.search.model.SearchResults;
 import uk.ac.ebi.ep.search.model.Species;
-import uk.ac.ebi.ep.uniprot.adapter.IUniprotAdapter;
-import uk.ac.ebi.ep.uniprot.adapter.UniprotAdapter;
+import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.util.result.DataTypeConverter;
 
 
 /**
- * NOTE: the ebeyeAdapter must be configured before using this finder!
+ * NOTE: the adapters must be configured before using this finder!
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>
@@ -48,7 +46,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 //********************************* VARIABLES ********************************//
     private static final Logger LOGGER = Logger.getLogger(EnzymeFinder.class);
-
+    
     protected SearchParams searchParams;
     SearchResults enzymeSearchResults;
     IEbeyeAdapter ebeyeAdapter;
@@ -66,14 +64,21 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 //******************************** CONSTRUCTORS ******************************//
 
-    public EnzymeFinder() {
+    public EnzymeFinder(Config config) {
         enzymeSearchResults = new SearchResults();
         ebeyeAdapter = new EbeyeAdapter();
         uniprotEnzymeIds = new ArrayList<String>();
         uniprotIdPrefixSet = new LinkedHashSet<String>();
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
-        uniprotAdapter = new UniprotAdapter();
+        switch (config.uniprotImplementation) {
+		case JAPI:
+	        uniprotAdapter = new UniprotJapiAdapter();
+			break;
+		case WS:
+			uniprotAdapter = new UniprotWsAdapter();
+			break;
+		}
     }
 
 
@@ -287,7 +292,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         enzymeSearchResults.setTotalfound(totalFound);
         LOGGER.debug("SEARCH before getEnzymeSummary, resultSubList.size = "
         		+ resultSubList.size());
-        enzymeSummaryList = this.getEnzymeSummary(resultSubList);
+        enzymeSummaryList = this.getEnzymeSummaries(resultSubList);
         LOGGER.debug("SEARCH after  getEnzymeSummary");
 
         enzymeSearchResults.getSummaryentries().addAll(enzymeSummaryList);
@@ -538,7 +543,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     }
     private void queryEbeyeForUniprotIds() throws EnzymeFinderException {
-    	LOGGER.debug("SEARCH start queryUniprotEbeyeForIds");
+    	LOGGER.debug("SEARCH start queryEbeyeForUniprotIds");
         //Query uniprot directly
         ParamOfGetResults uniprotNrOfResultParams = this.getUniprotNrOfRecords();
         resetNrOfResultsToLimit(uniprotNrOfResultParams);
@@ -671,16 +676,15 @@ public class EnzymeFinder implements IEnzymeFinder {
 	throws MultiThreadingException {
     	LOGGER.debug("SEARCH before creating queries, resultSubList.size = "
     			+ resultSubList.size());
-        List<String> queries = LuceneQueryBuilder
-                .createUniprotAPIQueryByIdPrefixes(resultSubList, speciesFilter);
         LOGGER.debug("SEARCH before uniprotAdapter.queryEnzymeByIdPrefixes");
-        List<EnzymeSummary> enzymeList = uniprotAdapter
-                .queryEnzymeByIdPrefixes(queries, IUniprotAdapter.DEFAULT_SPECIES);
+        List<EnzymeSummary> enzymeList =
+        		uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
+        				IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
         LOGGER.debug("SEARCH after  uniprotAdapter.queryEnzymeByIdPrefixes");
         return enzymeList;
     }
 
-    public List<EnzymeSummary> getEnzymeSummary(List<String> resultSubList)
+    private List<EnzymeSummary> getEnzymeSummaries(List<String> resultSubList)
 	throws MultiThreadingException {
     	LOGGER.debug("SEARCH before getEnzymeFromUniprotAPI, resultSubList.size = "
     			+ resultSubList.size());
@@ -714,7 +718,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         if (resultList ==  null) {
             return 0;
         }
-        Iterator it = resultList.iterator();
         int counter = 0;
         for (ParamOfGetResults param:resultList){
             counter = counter + param.getTotalFound();
