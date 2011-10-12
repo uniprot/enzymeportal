@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:beans="http://www.springframework.org/schema/beans"
-        xmlns:context="http://www.springframework.org/schema/context"
-        xsi:schemaLocation="
-        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                    http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd"
-        >
--->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
@@ -77,7 +65,11 @@
 		<property name="timeout" value="30000"/>
 		<property name="reviewed" value="false"/>
 		<property name="wsUrl"
+			value="http://193.62.193.81/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
+		<!-- connection refused from two of the IPs from test server
+		<property name="wsUrl"
 			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
+		 -->
 	</bean>
 	
     <!--Start internationalization-->
