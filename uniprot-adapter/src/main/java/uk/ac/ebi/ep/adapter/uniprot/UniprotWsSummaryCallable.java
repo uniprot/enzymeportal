@@ -58,7 +58,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	
 	private String defaultSpecies;
 	
-	private int timeout;
+	private UniprotConfig config;
 	
 	/**
 	 * Constructor.
@@ -67,15 +67,15 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	 * @param field the field we are interested in.
 	 * @param defaultSpecies the species to show by default (only used when the
 	 * 		web service returns more than one entries).
-	 * @param timeout timeout (ms) for the web service request.
+	 * @param config Configuration for UniProt.
 	 */
 	public UniprotWsSummaryCallable(String accOrId, IdType idType, Field field,
-			String defaultSpecies, int timeout){
+			String defaultSpecies, UniprotConfig config){
 		this.accOrId = accOrId;
 		this.idType = idType;
 		this.field = field;
 		this.defaultSpecies = defaultSpecies;
-		this.timeout = timeout;
+		this.config = config;
 	}
 
 	public EnzymeSummary call() throws Exception {
@@ -161,8 +161,11 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		Map<String, String> spAcc = new HashMap<String, String>();
 		for (String line : enzymeInfo) {
 			String[] split = line.split("\t", -1);
-			// organism is always [4], accession is [0], see getColumns()
-			spAcc.put(split[4], split[0]);
+			// some entries don't return a species, ex. Q5D707
+			if (split[4].length() > 0){
+				// organism is always [4], accession is [0], see getColumns()
+				spAcc.put(split[4], split[0]);
+			}
 		}
 		if (!spAcc.isEmpty()){
 			relatedSpecies = new ArrayList<EnzymeAccession>();
@@ -376,7 +379,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			break;
 		}
 		query += accOrId;
-		String url = MessageFormat.format(UniprotWsAdapter.UNIPROT_WS_URL,
+		String url = MessageFormat.format(config.getWsUrl(),
 				query, columns);
 		LOGGER.debug(url);
 		BufferedReader br = null;
@@ -384,7 +387,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		InputStream is = null;
 		try {
 			URLConnection con = new URL(url).openConnection(Proxy.NO_PROXY);
-			con.setReadTimeout(timeout);
+			con.setReadTimeout(config.getTimeout());
 			con.connect();
 			is = con.getInputStream();
 			isr = new InputStreamReader(is);

@@ -35,15 +35,16 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	 * to retrieve.</li>
 	 * </ul>
 	 */
-	protected static final String UNIPROT_WS_URL =
-			"http://www.uniprot.org/uniprot/?format=tab&sort=score" +
-			"&query={0}&columns={1}";
+//	protected static final String UNIPROT_WS_URL =
+//			"http://www.uniprot.org/uniprot/?format=tab&sort=score" +
+//			"&query={0}&columns={1}";
 	
 	private static final Logger LOGGER = Logger.getLogger(UniprotWsAdapter.class);
 
 	/** Pattern of species name(s) returned by the web service. */
-	protected static final Pattern speciesPattern =
+	protected static final Pattern speciesPattern = // FIXME Ex:Schizosaccharomyces pombe (strain ATCC 38366 / 972) (Fission yeast)
 			Pattern.compile("([^()]+)(?: \\((.*)\\))?");
+	// "([^()]+)( \\(strain [^()]+\\))?( \\(.+\\))?"
 	
 	public EnzymeSummary getEnzymeSummary(String accession) {
 		return getEnzymeSummary(accession, Field.enzyme);
@@ -63,7 +64,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	
 	private EnzymeSummary getEnzymeSummary(String accession, Field field){
 		return new UniprotWsSummaryCallable(accession, IdType.ACCESSION, field,
-				null, config.getTimeout())
+				null, config)
 			.getEnzymeSummary();
 	}
 
@@ -79,7 +80,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    	for (String query : idPrefixes) {
 				Callable<EnzymeSummary> callable = new UniprotWsSummaryCallable(
 						query+"*", IdType.ENTRY_NAME, Field.brief,
-						defaultSpecies, config.getTimeout());
+						defaultSpecies, config);
 				ecs.submit(callable);
 			}
 	    	for (int i = 0; i < idPrefixes.size(); i++){
@@ -104,7 +105,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	}
 	
 	public List<String> getUniprotIds(String query){
-		return new UniprotWsSearchCallable(query, config.isReviewed(), config.getTimeout())
+		return new UniprotWsSearchCallable(query, config)
 			.getUniprotIds();
 	}
 
