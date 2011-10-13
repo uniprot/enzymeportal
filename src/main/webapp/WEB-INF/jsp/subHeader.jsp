@@ -14,5 +14,5 @@
     <%@ include file="breadcrumbs.jsp" %>
 </div>
 <div class="grid_12">
-        <h1>Enzyme Portal</h1>
+        <h1 style="border: none; background: none;">Enzyme Portal</h1>
 </div>
