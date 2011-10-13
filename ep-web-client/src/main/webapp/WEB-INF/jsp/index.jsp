@@ -37,46 +37,41 @@
                     <div class="grid_12 content">
                         <div class="iconGroup">
                             <fieldset class="iconField">
-                                <a href="underconstruction">
-                                    <legend>Browse Enzyme Classification</legend>
+                                    <legend>Enzyme Classification</legend>
                                     <div class="iconBox">
-                                        <img src="resources/images/classification.png"  alt="?" width="200px" height="200px"/>
+                                        <img src="resources/images/classification.png"
+                                        	alt="?" width="100px" height="100px"/>
                                     </div>
-                                </a>
                             </fieldset>
                             <fieldset class="iconField">
-                                <a href="underconstruction">
-                                    <legend>Browse Disease</legend>
+                                    <legend>Disease</legend>
                                     <div class="iconBox">
-                                        <img src="resources/images/disease3.png"  alt="?" width="200px" height="200px"/>
+                                        <img src="resources/images/disease3.png"
+                                        	alt="?" width="100px" height="100px"/>
                                     </div>
-                                </a>
                             </fieldset>                            
                             <fieldset class="iconField">
-                                <a href="underconstruction">
-                                    <legend>Browse Expression</legend>
+                                    <legend>Expression</legend>
                                     <div class="iconBox">
-                                        <img src="resources/images/expression.png"  alt="?" width="200px" height="200px"/>
+                                        <img src="resources/images/expression.png"
+                                        	alt="?" width="100px" height="100px"/>
                                     </div>
-                                </a>
                             </fieldset>
                         </div>
                         <div class="iconGroup">
                             <fieldset class="iconField">
-                                <a href="underconstruction">
-                                    <legend>Browse Chemical Compound</legend>
+                                    <legend>Chemical Compound</legend>
                                     <div class="iconBox">
-                                        <img src="resources/images/compounds.png"  alt="?" width="200px" height="200px"/>
+                                        <img src="resources/images/compounds.png"
+                                        	alt="?" width="100px" height="100px"/>
                                     </div>
-                                </a>
                             </fieldset>
                             <fieldset class="iconField">
-                                <a href="underconstruction">
-                                    <legend>Browse Taxonomy</legend>
+                                    <legend>Taxonomy</legend>
                                     <div class="iconBox">
-                                        <img src="resources/images/taxonomy.png"  alt="?" width="200px" height="200px"/>
+                                        <img src="resources/images/taxonomy.png"
+											alt="?" width="100px" height="100px"/>
                                     </div>
-                                </a>
                             </fieldset>
                         </div>
                     </div>
