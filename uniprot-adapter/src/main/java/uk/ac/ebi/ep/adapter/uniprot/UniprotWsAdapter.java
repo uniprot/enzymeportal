@@ -25,26 +25,20 @@ import uk.ac.ebi.ep.search.model.EnzymeSummary;
  *
  */
 public class UniprotWsAdapter extends AbstractUniprotAdapter {
-
-	/**
-	 * URL to query the web service. It should include two spaceholders:
-	 * <ul>
-	 * 	<li>{0} for the <a href="http://www.uniprot.org/help/query-fields">query</a></li>
-	 * 	<li>{1} for the
-	 * <a href="http://www.uniprot.org/faq/28#retrieving_entries_via_queries">columns</a>
-	 * to retrieve.</li>
-	 * </ul>
-	 */
-//	protected static final String UNIPROT_WS_URL =
-//			"http://www.uniprot.org/uniprot/?format=tab&sort=score" +
-//			"&query={0}&columns={1}";
 	
 	private static final Logger LOGGER = Logger.getLogger(UniprotWsAdapter.class);
 
-	/** Pattern of species name(s) returned by the web service. */
-	protected static final Pattern speciesPattern = // FIXME Ex:Schizosaccharomyces pombe (strain ATCC 38366 / 972) (Fission yeast)
-			Pattern.compile("([^()]+)(?: \\((.*)\\))?");
-	// "([^()]+)( \\(strain [^()]+\\))?( \\(.+\\))?"
+	/** Pattern of species name(s) returned by the web service. It can get the
+	 * following groups:
+	 * <ol>
+	 * 	<li>scientific name</li>
+	 * 	<li>strain info (when available)</li>
+	 * 	<li>common name (when available)</li>
+	 * 	<li>alternative scientific name (when available)</li>
+	 * </ol>
+	 */
+	protected static final Pattern speciesPattern =
+			Pattern.compile("([^()]+)(?: \\(strain ([^()]+)\\))?(?: \\(([^()]+)\\))?(?: \\(([^()]+)\\))?");
 	
 	public EnzymeSummary getEnzymeSummary(String accession) {
 		return getEnzymeSummary(accession, Field.enzyme);
