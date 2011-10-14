@@ -25,14 +25,15 @@ a:link, a:visited {
     text-decoration: underline;
 }
 
-#desc a:link, #desc a:visited, .species{
+.desc a:link, .desc a:visited, .species{
 	/*color: #207a7a;*/
 	text-decoration: underline;
 }
 .showLink{
 	/*color: #207a7a;*/
 	text-decoration: underline;
-
+	font-style: italic;
+	white-space: nowrap;
 }
 .ebiHeader {
     min-height: 50px;
@@ -262,7 +263,7 @@ a:link, a:visited {
     width: 100%;
 }
 
-#proteinImg {
+.proteinImg {
     float: left;
     width:110px;
     height:90px;
@@ -270,22 +271,22 @@ a:link, a:visited {
     margin-right: 5px;
     /*border: none;*/
     /*border: 1px solid #ddd;*/
+    display: table-cell;
 }
 
-
-#proteinImg a{
-   color: white;
+.proteinImg a{
+	color: white;
     text-decoration: none;
-
 }
 
-#desc {
+.desc {
     float: left;
     text-align: left;
     /*for smaller resolution
     width: 55%;*/
     width: 65%;
     /*border: 1px solid #ddd;*/
+    display: table-cell;
 }
 
 
@@ -346,6 +347,27 @@ a:link, a:visited {
   {   
     border: none;
   }
+
+.searchTab {
+    padding: 0.5ex 2em;
+    margin: 0ex 1em;
+    border-top-left-radius: 2ex;
+    border-top-right-radius: 2ex;
+}
+.selected.searchTab {
+	color: #aaa;
+}
+.disabled.searchTab {
+    background-color: #bbb;
+    color: #eee;
+}
+.selected.searchTab, .searchTabContent {
+    background-color: #eee;
+}
+.searchTabContent {
+    margin-top: 0.3ex;
+    padding: 2ex 1em;
+}
 
 
 
