@@ -48,10 +48,10 @@ public class UniprotWsSearchCallable implements Callable<List<String>> {
 	 */
 	protected List<String> getUniprotIds(){
 		List<String> ids = null;
-		String fields = "entry name";
+		String fields = "entry+name";
 		// Add flags for reviewed and enzymes:
 		final String rev = config.isReviewed()? " reviewed:yes" : "";
-		final String enzymes = " ec:*";
+		final String enzymes = "+ec:*";
 		String url = MessageFormat.format(config.getWsUrl(),
 				query + rev + enzymes, fields);
 		BufferedReader br = null;
