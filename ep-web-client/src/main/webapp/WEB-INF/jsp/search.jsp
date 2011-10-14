@@ -200,11 +200,11 @@
                         <div class="line"></div>
                         <div class="resultContent">
                             <c:set var="resultItemId" value="${0}"/>
-                            <c:forEach items="${summaryentries}" var="enzyme">
+                            <c:forEach items="${summaryentries}" var="enzyme" varStatus="vsEnzymes">
                             <c:set var="uniprotId" value="${enzyme.uniprotid}"/>                            
                              <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
                             <div class="resultItem">
-                                <div id="proteinImg">
+                                <div class="proteinImg">
                                     <c:set var="imgFile" value='${enzyme.pdbeaccession[0]}'/>
                                     <c:set var="imgBaseLink" value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/"/>
                                     <c:if test='${imgFile != "" && imgFile != null}'>
@@ -214,19 +214,22 @@
                                         </a>
                                     </c:if>
                                 </div>
-                                <div id="desc">
+                                <div class="desc">
                                     <a href="search/${primAcc}/enzyme">
                                         <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
                                         <c:out value="${showName}"/>
                                        <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
+                                       [${empty enzyme.species.commonname?
+                                       		enzyme.species.scientificname :
+                                       		enzyme.species.commonname}]
                                     </a>
 
                                     <c:set var="function" value="${enzyme.function}"/>
                                     <c:if test='${function != null && function != ""}'>
-                                        <p>
+                                        <div>
                                             <b>Function</b>:
                                         <c:out value="${enzyme.function}"/>.<br/>
-                                        </p>
+                                        </div>
                                     </c:if>
                                     <c:set var="synonym" value="${enzyme.synonym}"/>
                                     <c:set var="synonymSize" value="${fn:length(synonym)}"/>
@@ -244,30 +247,28 @@
                                             <c:out value="${synonym[i]}"/>;
                                         </c:forEach>                                        
                                         <c:if test="${synonymSize>synLimitedDisplay}">
-                                        <span  id='syn_${resultItemId}' style="display: none">
+                                        <span id='syn_${resultItemId}' style="display: none">
                                             <c:forEach var="i" begin="${synLimitedDisplay}" end="${synonymSize-1}">
                                                 <c:out value="${synonym[i]}"/>;
                                             </c:forEach>
                                             </span>
-                                            <br/>
-                                            <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>"><c:out value="${showButton}"/></a>
+                                            <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>">Show more synonyms</a>
                                         </c:if>
                                         </div>
                                     </c:if>
-                                </div>
-                                <div id="speciesContainer">
-                                    <div id="in">in</div>
-                                    <div class="species">
+
+
+
+
+                                <div>
+                                    <!-- div id="in">in</div -->
+                                    <div>
+                                    	<b>Species:</b>
                                         <a href="search/${primAcc}/enzyme">
-                                        <c:choose>
-                                        <c:when test='${enzyme.species.commonname == ""}'>
-                                            <c:out value="${enzyme.species.scientificname}"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:out value="${enzyme.species.commonname}"/>
-                                        </c:otherwise>
-                                        </c:choose>
-                                        </a> <br/>
+                                        [${empty enzyme.species.commonname?
+                                       		enzyme.species.scientificname :
+                                       		enzyme.species.commonname}]
+                                        </a>
                                         <!--display = 3 = 2 related species + 1 default species -->
                                         <c:set var="relSpeciesMaxDisplay" value="${5}"/>
                                         <c:set var="relspecies" value="${enzyme.relatedspecies}"/>                                        
@@ -277,43 +278,34 @@
                                             <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
                                         </c:if>
                                         <c:forEach var = "i" begin="0" end="${relSpeciesMaxDisplay-1}">
-                                                <c:choose>
-                                                <c:when test='${relspecies[i].species.commonname == ""}'>
-                                                    <c:set var="speciesName" value="${relspecies[i].species.scientificname}"/>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
-                                                </c:otherwise>
-                                                </c:choose>
                                             <c:if test="${relspecies[i].species.scientificname!=enzyme.species.scientificname}">
                                             <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
-                                                <c:out value="${speciesName}"/>
+                                                [${empty relspecies[i].species.commonname?
+		                                       		relspecies[i].species.scientificname :
+		                                       		relspecies[i].species.commonname}]
                                             </a>
-                                            <br/>
                                             </c:if>                                             
                                         </c:forEach>
                                         <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
-                                            <div id="relSpecies_${resultItemId}" style="display: none">
+                                            <span id="relSpecies_${resultItemId}" style="display: none">
                                             <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">                                                
-                                                    <c:choose>
-                                                    <c:when test='${relspecies[i].species.commonname == ""}'>
-                                                        <c:set var="speciesName" value="${relspecies[i].species.scientificname}"/>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:set var="speciesName" value="${relspecies[i].species.commonname}"/>
-                                                    </c:otherwise>
-                                                    </c:choose>
                                                 <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
-                                                    <c:out value="${speciesName}"/>
+	                                                [${empty relspecies[i].species.commonname?
+			                                       		relspecies[i].species.scientificname :
+			                                       		relspecies[i].species.commonname}]
                                                 </a>
-                                               <br/>
                                             </c:forEach>
-                                         </div>
-                                         <a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>"><c:out value="${showButton}"/></a> <br/>
+                                         	</span>
+                                         	<a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>">Show more species</a>
                                          </c:if>
                                        </c:if>
                                 </div>
                             </div>
+
+
+
+
+                                </div>
                             </div>
                             <div class="clear"></div>
                             <c:set var="resultItemId" value="${resultItemId+1}"/>

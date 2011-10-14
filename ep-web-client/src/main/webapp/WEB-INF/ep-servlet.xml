@@ -65,11 +65,7 @@
 		<property name="timeout" value="30000"/>
 		<property name="reviewed" value="false"/>
 		<property name="wsUrl"
-			value="http://193.62.193.81/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
-		<!-- connection refused from two of the IPs from test server
-		<property name="wsUrl"
 			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
-		 -->
 	</bean>
 	
     <!--Start internationalization-->

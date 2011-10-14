@@ -11,9 +11,21 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-    <div class="grid_12">
-        <div  id="keywordSearch" class="searchBackground">
-            <p style="width: 65em; margin-left: auto; margin-right: auto">
+<div class="grid_12">
+    <div  id="keywordSearch" class="searchBackground">
+        <div style="width: 65em; margin-left: auto; margin-right: auto; margin-top: 2ex;">
+            <div style="text-align: left !important; margin: 0ex;">
+                <span class="selected searchTab">
+                    Keyword search
+                </span>
+                <span class="disabled searchTab">
+                    Chemical structure search
+                </span>
+                <span class="disabled searchTab">
+                    Protein sequence search
+                </span>
+            </div>
+            <div class="searchTabContent">
                 <form:input id="searchbox" path="searchparams.text" cssClass="field" rel="Enter a name to search"/>
                 <form:hidden id="start" path="searchparams.start" />
                 <form:hidden path="searchparams.previoustext" />
@@ -21,12 +33,14 @@
                 <br/>
                 <spring:message code="label.search.example"/>
                 <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
-				<a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
-				<a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
-				<a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,
-				<a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
-				<a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-				<a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-            </p>
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
+            </div>
         </div>
+        </p>
     </div>
+</div>

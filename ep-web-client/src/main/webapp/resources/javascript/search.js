@@ -38,16 +38,13 @@ $(document).ready(function() {
             var jqClickedId= "#"+clickedId;
             var linkValue = $(jqClickedId).text();
             var splitLinkName = linkValue.split(" ");
-            var size = splitLinkName.length;
-            var linkLastName = splitLinkName[size-1];
-            
-            if (linkLastName == "more") {
+            if (jQuery.inArray('more', splitLinkName) > -1){
                 $(idOfHiddenText).show();
-                $(jqClickedId).html(linkValue.replace(linkLastName,"less"));
+                $(jqClickedId).html(linkValue.replace('more','less'));
             } else {
                 $(idOfHiddenText).hide();
-                $(jqClickedId).html(linkValue.replace(linkLastName,"more"));
-            }        
+                $(jqClickedId).html(linkValue.replace('less','more'));
+            }
     });
 
     var pageClicked = false;
