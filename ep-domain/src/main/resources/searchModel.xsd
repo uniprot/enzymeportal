@@ -18,9 +18,15 @@
 	</xs:complexType>
 	<xs:element name="EnzymeAccession" type="ep:EnzymeAccession"/>
 	<xs:complexType name="EnzymeAccession">
-		<xs:sequence>
-			<xs:element name="uniprotaccessions" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-			<xs:element name="species" type="ep:Species" minOccurs="1" maxOccurs="1"/>
+        <xs:annotation>
+        	<xs:documentation>An enzyme UniProt accession (or possibly more) corresponding to a given species, along with any known PDBe codes.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+			<xs:element name="uniprotaccessions" type="xs:string"
+				minOccurs="1" maxOccurs="unbounded" />
+			<xs:element name="species" type="ep:Species" minOccurs="1"
+				maxOccurs="1" />
+			<xs:element name="pdbCodes" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="EnzymeSummary" type="ep:EnzymeSummary"/>
@@ -34,7 +40,10 @@
 					<xs:element name="synonym" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="pdbeaccession" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="uniprotid" type="xs:string" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="relatedspecies" type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="relatedspecies" type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>Any species related to the one described by the EnzymeSummary, each one represented by one EnzymeAccession.</xs:documentation>
+						</xs:annotation></xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
