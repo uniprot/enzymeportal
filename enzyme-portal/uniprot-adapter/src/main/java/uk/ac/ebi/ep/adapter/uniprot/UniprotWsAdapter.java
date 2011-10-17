@@ -32,13 +32,16 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	 * following groups:
 	 * <ol>
 	 * 	<li>scientific name</li>
-	 * 	<li>strain info (when available)</li>
+	 * 	<li>strain/isolate info (when available)</li>
 	 * 	<li>common name (when available)</li>
-	 * 	<li>alternative scientific name (when available)</li>
+	 * 	<li>alternative scientific name (when available), might include strain info</li>
 	 * </ol>
 	 */
 	protected static final Pattern speciesPattern =
-			Pattern.compile("([^()]+)(?: \\(strain ([^()]+)\\))?(?: \\(([^()]+)\\))?(?: \\(([^()]+)\\))?");
+			Pattern.compile("([^()]+)" +
+					"( \\((?:strain|isolate) [^()]+(?:\\([^()]+\\))?[^()]*\\))?" +
+					"(?: \\(([^()]+)\\))?" +
+					"(?: \\(([^()]+(?:\\([^()]+\\))?)\\))?");
 	
 	public EnzymeSummary getEnzymeSummary(String accession) {
 		return getEnzymeSummary(accession, Field.enzyme);

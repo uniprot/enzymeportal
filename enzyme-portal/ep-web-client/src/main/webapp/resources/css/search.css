@@ -266,7 +266,7 @@ a:link, a:visited {
 .proteinImg {
     float: left;
     width:110px;
-    height:90px;
+    /*height:90px;*/
     text-align: center;    
     margin-right: 5px;
     /*border: none;*/
@@ -277,6 +277,10 @@ a:link, a:visited {
 .proteinImg a{
 	color: white;
     text-decoration: none;
+}
+
+.imgFooter {
+	font-size: smaller;
 }
 
 .desc {
@@ -355,7 +359,7 @@ a:link, a:visited {
     border-top-right-radius: 2ex;
 }
 .selected.searchTab {
-	color: #aaa;
+	color: #888;
 }
 .disabled.searchTab {
     background-color: #bbb;
