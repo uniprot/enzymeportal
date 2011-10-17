@@ -18,7 +18,6 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.LengthFilter;
 
 import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
@@ -89,8 +88,81 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			// More than one entry for one accession? It has been demerged?
 			LOGGER.warn("More than one entry for " + accOrId);
 		}
-		// Take only first one, see below about the others:
-		String[] colValues = enzymeInfo.iterator().next().split("\t", -1);
+		
+		String accession = null, id = null,
+		nameSynonymsString = null, ecsString = null,
+		diseasesString = null, sequence = null, functionString = null,
+		pdbeAccessions = null, rpString = null, drugsString = null,
+		regulString = null;
+		Species species = null;
+		List<EnzymeAccession> relSpecies = new ArrayList<EnzymeAccession>();
+
+		int bestSpecies = 0; // the best choice to show
+		String[] colValues = null;
+		for (int i = 0; i < enzymeInfo.size(); i ++){
+			colValues = enzymeInfo.get(i).split("\t", -1);
+			
+			// some entries don't return a species, ex. Q5D707
+			if (colValues[4].length() == 0) continue;
+			
+			EnzymeAccession ea = new EnzymeAccession();
+			// organism is always [4], accession is [0], see getColumns()
+			species = parseSpecies(colValues[4]);
+			ea.setSpecies(species);
+			ea.getUniprotaccessions().add(colValues[0]);
+			List<String> pdbCodes = null;
+			if (field.equals(Field.brief) || field.equals(Field.enzyme)){
+				// We already have PDB codes in enzymeInfo as [6], see getColumns()
+				pdbCodes = parsePdbCodes(colValues[6]);
+			}
+			ea.setPdbCodes(pdbCodes);
+			
+			final boolean isDefSp =
+					species.getScientificname().equalsIgnoreCase(defaultSpecies);
+			final boolean noDefSp = relSpecies.isEmpty()
+					|| !relSpecies.get(0).getSpecies().getScientificname().equalsIgnoreCase(defaultSpecies);
+			if (isDefSp || (noDefSp && pdbCodes != null)){
+				relSpecies.add(0, ea); // FIXME !!
+				bestSpecies = i;
+			} else {
+				relSpecies.add(ea);
+			}
+		}
+		
+		// Take the default species or one with structures.
+		colValues = enzymeInfo.get(bestSpecies).split("\t", -1);
+		accession = colValues[0];
+		id = colValues[1];
+		nameSynonymsString = colValues[2];
+		ecsString = colValues[3];
+		switch (field) {
+		case enzyme:
+			diseasesString = colValues[7];
+			sequence = colValues[8];
+		case brief:
+			functionString = colValues[5];
+			pdbeAccessions = colValues[6];
+			break;
+		case proteinStructure:
+			pdbeAccessions = colValues[5];
+			break;
+		case reactionsPathways:
+			rpString = colValues[5];
+			break;
+		case molecules:
+			drugsString = colValues[5];
+			regulString = colValues[6];
+			break;
+		case diseaseDrugs:
+			// TODO
+			break;
+		case literature:
+			// TODO
+			break;
+		case full:
+			// TODO
+			break;
+		}
 /*
 		// Parse common properties:
 		EnzymeModel summary = buildSummary(colValues);
@@ -148,85 +220,16 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			break;
 		}
 */
-		
-		String accession, id,
-		nameSynonymsString, ecsString, speciesString,
-		diseasesString = null, sequence = null, functionString = null,
-		pdbeAccessions = null, rpString = null, drugsString = null,
-		regulString = null;
-
-		accession = colValues[0];
-		id = colValues[1];
-		nameSynonymsString = colValues[2];
-		ecsString = colValues[3];
-		speciesString = colValues[4];
-		switch (field) {
-		case enzyme:
-			diseasesString = colValues[7];
-			sequence = colValues[8];
-		case brief:
-			functionString = colValues[5];
-			pdbeAccessions = colValues[6];
-			break;
-		case proteinStructure:
-			pdbeAccessions = colValues[5];
-			break;
-		case reactionsPathways:
-			rpString = colValues[5];
-			break;
-		case molecules:
-			drugsString = colValues[5];
-			regulString = colValues[6];
-			break;
-		case diseaseDrugs:
-			// TODO
-			break;
-		case literature:
-			// TODO
-			break;
-		case full:
-			// TODO
-			break;
+		if (idType.equals(IdType.ACCESSION)){
+			// We'll have to make one more request to get other species:
+			String uniprotIdPrefix = id.split(IUniprotAdapter.ID_SPLIT_SYMBOL)[0];
+	        String defSp = species.getScientificname();
+			relSpecies = getRelatedSpecies(uniprotIdPrefix, defSp);
 		}
 		
 		return buildSummary(accession, id, nameSynonymsString, ecsString,
-				speciesString, diseasesString, sequence, functionString,
-				pdbeAccessions, rpString, drugsString, regulString);
-	}
-
-	/**
-	 * Parses multiple lines returned by the web service in tab format,
-	 * getting the whole list of species with the default one (if found)
-	 * at the top of it.
-	 * @param enzymeInfo lines returned by the web service.
-	 * @return a list of Species with the default one (if found) at the top..
-	 */
-	private List<EnzymeAccession> parseRelatedSpecies(List<String> enzymeInfo) {
-		List<EnzymeAccession> relatedSpecies = null;
-		Map<String, String> spAcc = new HashMap<String, String>();
-		for (String line : enzymeInfo) {
-			String[] split = line.split("\t", -1);
-			// some entries don't return a species, ex. Q5D707
-			if (split[4].length() > 0){
-				// organism is always [4], accession is [0], see getColumns()
-				spAcc.put(split[4], split[0]);
-			}
-		}
-		if (!spAcc.isEmpty()){
-			relatedSpecies = new ArrayList<EnzymeAccession>();
-			for (String sp : spAcc.keySet()) {
-				EnzymeAccession ea = new EnzymeAccession();
-				ea.getUniprotaccessions().add(spAcc.get(sp));
-				Species relSp = parseSpecies(sp);
-				ea.setSpecies(relSp);
-				if (relSp.getScientificname().equalsIgnoreCase(defaultSpecies)){
-					relatedSpecies.add(0, ea);
-				} else {
-					relatedSpecies.add(ea);
-				}
-			}
-		}
-		return relatedSpecies;
+				species, diseasesString, sequence, functionString,
+				pdbeAccessions, rpString, drugsString, regulString, relSpecies);
 	}
 
 	/**
@@ -299,10 +302,10 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	}
 
 	private EnzymeModel buildSummary(String accession, String id,
-			String nameSynonymsString, String ecsString, String speciesString,
+			String nameSynonymsString, String ecsString, Species species,
 			String diseasesString, String sequence, String functionString,
 			String pdbeAccessions, String rpString, String drugsString,
-			String regulString) {
+			String regulString, List<EnzymeAccession> relSpecies) {
 		EnzymeModel summary = new EnzymeModel();
 		summary.getUniprotaccessions().add(accession);
 		summary.setUniprotid(id);
@@ -314,12 +317,8 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		if (ecsString != null){
 			summary.getEc().addAll(Arrays.asList(ecsString.split("; ")));
 		}
-		summary.setSpecies(parseSpecies(speciesString));
-        String uniprotIdPrefix = id.split(IUniprotAdapter.ID_SPLIT_SYMBOL)[0];
-        String defSp = idType.equals(IdType.ACCESSION)?
-        		summary.getSpecies().getScientificname():
-        		defaultSpecies;
-		summary.setRelatedspecies(getRelatedSpecies(uniprotIdPrefix, defSp));
+		summary.setSpecies(species);
+		summary.setRelatedspecies(relSpecies);
 		// Optional fields:
 		if (diseasesString != null){
 			summary.setDisease(parseDiseases(diseasesString));
@@ -392,7 +391,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	        species = new Species();
 	        String strain = "";
 	        if (m.group(2) != null){
-	        	strain = " (strain " + m.group(2) + ")";
+	        	strain = m.group(2);
 	        }
 	        species.setScientificname(m.group(1) + strain);
 	        if (m.group(3) != null){
@@ -405,8 +404,16 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		return species;
 	}
 
+	/**
+	 * Parses the string returned from the UniProt web service for the PDB codes.
+	 * @param pdbString
+	 * @return a list of Strings (PDB codes), or <code>null</code> if none is
+	 * 		returned.
+	 */
 	private List<String> parsePdbCodes(String pdbString) {
-		return Arrays.asList(pdbString.toLowerCase().split(";"));
+		return (pdbString == null || pdbString.length() == 0)?
+				null:
+				Arrays.asList(pdbString.toLowerCase().split(";"));
 	}
 
 	private List<Disease> parseDiseases(String diseaseColumn){
@@ -541,6 +548,53 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			}
 		}
 		return enzymeInfo;
+	}
+
+	/**
+	 * Parses multiple lines returned by the web service in tab format,
+	 * getting the whole list of species with the default one (if found)
+	 * at the top of it.
+	 * @param enzymeInfo lines returned by the web service.
+	 * @return a list of EnzymeAccession objects corresponding to all known
+	 * 		species, with the default one (if found) at the top.
+	 */
+	private List<EnzymeAccession> parseRelatedSpecies(List<String> enzymeInfo) {
+		List<EnzymeAccession> enzymeAccessions = null;
+		// EnzymeAccession is automatically generated, no hashcode or equals methods:
+		Map<String, EnzymeAccession> relSps = new HashMap<String, EnzymeAccession>();
+		for (String line : enzymeInfo) {
+			String[] split = line.split("\t", -1);
+			// some entries don't return a species, ex. Q5D707
+			if (split[4].length() > 0){
+				List<String> pdbCodes = null;
+				if (field.equals(Field.brief) || field.equals(Field.enzyme)){
+					// we already have PDB codes in enzymeInfo as [6], see getColumns()
+					pdbCodes = parsePdbCodes(split[6]);
+				}
+				// organism is always [4], accession is [0], see getColumns()
+				Species sp = parseSpecies(split[4]);
+				if (relSps.containsKey(sp.getScientificname()) && pdbCodes != null){
+					// Just add any new PDB codes:
+					relSps.get(sp.getScientificname()).getPdbCodes().addAll(pdbCodes);
+				} else {
+					// Create a new one:
+					EnzymeAccession ea = new EnzymeAccession();
+					ea.setSpecies(sp);
+					ea.getUniprotaccessions().add(split[0]);
+					ea.setPdbCodes(pdbCodes);
+					relSps.put(sp.getScientificname(), ea);
+				}
+			}
+		}
+		if (!relSps.isEmpty()){
+			enzymeAccessions = new ArrayList<EnzymeAccession>(relSps.values());
+			if (relSps.containsKey(defaultSpecies)){
+				// Put it at the top:
+				enzymeAccessions.remove(relSps.get(defaultSpecies));
+				enzymeAccessions.add(0, relSps.get(defaultSpecies));
+			}
+		}
+		return enzymeAccessions;
 	}
 
 	/**
