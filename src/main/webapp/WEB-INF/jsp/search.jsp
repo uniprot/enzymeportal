@@ -63,10 +63,10 @@
                                 <c:forEach var="i" begin="0" end="${limitedDisplay-1}">
                                     <c:set var="speciesSciName" value="${speciesList[i].scientificname}"/>
                                     <c:set var="speciesName" value="${speciesList[i].commonname}"/>
-                                    <c:if test='${speciesName ==""}'>
+                                    <c:if test='${empty speciesName}'>
                                         <c:set var="speciesName" value="${speciesSciName}"/>
                                     </c:if>
-                                    <c:if test='${speciesSciName != ""}'>
+                                    <c:if test='${not empty speciesSciName}'>
                                     <div class="filterLine">
                                     <div class="text">
                                     <span>
@@ -204,16 +204,43 @@
                             <c:set var="uniprotId" value="${enzyme.uniprotid}"/>                            
                              <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
                             <div class="resultItem">
+                            
                                 <div class="proteinImg">
                                     <c:set var="imgFile" value='${enzyme.pdbeaccession[0]}'/>
-                                    <c:set var="imgBaseLink" value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/"/>
+                                   	<c:set var="imgFooter" value=""/>
+                                    <c:if test="${empty imgFile}">
+                                    	<c:forEach var="relSp" items="${enzyme.relatedspecies}">
+                                    	<c:if test="${empty imgFile and not empty relSp.pdbCodes}">
+                                    		<c:set var="imgFile" value="${relSp.pdbCodes[0]}"/>
+                                    		<c:set var="imgFooter">
+	                                    		<spring:message code="label.entry.proteinStructure.other.species"/>
+                                    			${empty relSp.species.commonname?
+                                    				relSp.species.scientificname : relSp.species.commonname}
+                                   			</c:set>
+                                    	</c:if>
+                                    	</c:forEach>
+                                    </c:if>
+                                    <c:choose>
+                                    	<c:when test="${empty imgFile}">
+                                    		<img src="resources/images/noStructure-light.png"
+                                    			width="110" height="90"
+                                            	alt="No structure available"
+                                            	title="No structure available"/>
+                                    	</c:when>
+                                    	<c:otherwise>
+                                        	<c:set var="imgLink"
+                                        		value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
+	                                        <a target="blank" href="${imgLink}">
+	                                            <img src="${imgLink}" width="110" height="90"
+	                                            	alt="PDB ${imgFile}"/>
+	                                        </a>
+	                                        <div class="imgFooter">${imgFooter}</div>
+                                    	</c:otherwise>
+                                    </c:choose>
                                     <c:if test='${imgFile != "" && imgFile != null}'>
-                                        <c:set var="imgLink" value="${imgBaseLink}${imgFile}_cbc600.png"/>
-                                        <a target="blank" href="${imgLink}">
-                                            <img src="${imgLink}" width="110" height="90" alt="Reference to Pdbe found, but no image available!"/>
-                                        </a>
                                     </c:if>
                                 </div>
+                                
                                 <div class="desc">
                                     <a href="search/${primAcc}/enzyme">
                                         <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
@@ -257,17 +284,15 @@
                                         </div>
                                     </c:if>
 
-
-
-
                                 <div>
                                     <!-- div id="in">in</div -->
                                     <div>
                                     	<b>Species:</b>
                                         <a href="search/${primAcc}/enzyme">
-                                        [${empty enzyme.species.commonname?
-                                       		enzyme.species.scientificname :
-                                       		enzyme.species.commonname}]
+	                                        [${empty enzyme.species.commonname?
+	                                       		enzyme.species.scientificname :
+	                                       		enzyme.species.commonname}]
+                                       		<!-- ${enzyme.pdbeaccession} -->
                                         </a>
                                         <!--display = 3 = 2 related species + 1 default species -->
                                         <c:set var="relSpeciesMaxDisplay" value="${5}"/>
@@ -283,6 +308,7 @@
                                                 [${empty relspecies[i].species.commonname?
 		                                       		relspecies[i].species.scientificname :
 		                                       		relspecies[i].species.commonname}]
+		                                       	<!-- ${relspecies[i].pdbCodes} -->
                                             </a>
                                             </c:if>                                             
                                         </c:forEach>
@@ -293,6 +319,7 @@
 	                                                [${empty relspecies[i].species.commonname?
 			                                       		relspecies[i].species.scientificname :
 			                                       		relspecies[i].species.commonname}]
+		                                       		<!-- ${relspecies[i].pdbCodes} -->
                                                 </a>
                                             </c:forEach>
                                          	</span>
