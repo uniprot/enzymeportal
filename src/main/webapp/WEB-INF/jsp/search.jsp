@@ -288,29 +288,31 @@
                                     <!-- div id="in">in</div -->
                                     <div>
                                     	<b>Species:</b>
+                                    	<%--
                                         <a href="search/${primAcc}/enzyme">
 	                                        [${empty enzyme.species.commonname?
 	                                       		enzyme.species.scientificname :
 	                                       		enzyme.species.commonname}]
                                        		<!-- ${enzyme.pdbeaccession} -->
                                         </a>
+                                    	 --%>
                                         <!--display = 3 = 2 related species + 1 default species -->
                                         <c:set var="relSpeciesMaxDisplay" value="${5}"/>
                                         <c:set var="relspecies" value="${enzyme.relatedspecies}"/>                                        
                                         <c:set var="relSpeciesSize" value="${fn:length(relspecies)}"/>
-                                        <c:if test="${relSpeciesSize > 0}">
+                                        <c:if test="${relSpeciesSize gt 0}">
                                         <c:if test="${relSpeciesSize <= relSpeciesMaxDisplay}">
                                             <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
                                         </c:if>
-                                        <c:forEach var = "i" begin="0" end="${relSpeciesMaxDisplay-1}">
-                                            <c:if test="${relspecies[i].species.scientificname!=enzyme.species.scientificname}">
+                                        <c:forEach var="i" begin="0" end="${relSpeciesMaxDisplay-1}">
+                                            <!-- c:if test="${relspecies[i].species.scientificname ne enzyme.species.scientificname}" -->
                                             <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                 [${empty relspecies[i].species.commonname?
 		                                       		relspecies[i].species.scientificname :
 		                                       		relspecies[i].species.commonname}]
 		                                       	<!-- ${relspecies[i].pdbCodes} -->
                                             </a>
-                                            </c:if>                                             
+                                            <!-- /c:if -->                                             
                                         </c:forEach>
                                         <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
                                             <span id="relSpecies_${resultItemId}" style="display: none">
