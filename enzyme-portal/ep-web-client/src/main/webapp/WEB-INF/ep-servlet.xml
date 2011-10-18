@@ -66,6 +66,7 @@
 		<property name="reviewed" value="false"/>
 		<property name="wsUrl"
 			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
+		<property name="useProxy" value="true"/>
 	</bean>
 	
     <!--Start internationalization-->

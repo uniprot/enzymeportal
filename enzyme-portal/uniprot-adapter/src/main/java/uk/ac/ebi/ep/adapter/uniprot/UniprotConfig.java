@@ -6,6 +6,8 @@ public class UniprotConfig implements UniprotConfigMBean {
 	
 	private boolean reviewed;
 	
+	private boolean useProxy;
+	
 	/**
 	 * http://www.uniprot.org/uniprot/?format=tab&sort=score&query={0}&columns={1}
 	 */
@@ -33,6 +35,14 @@ public class UniprotConfig implements UniprotConfigMBean {
 
 	public void setWsUrl(String wsUrl) {
 		this.wsUrl = wsUrl;
+	}
+
+	public void setUseProxy(boolean useProxy) {
+		this.useProxy = useProxy;
+	}
+
+	public boolean getUseProxy() {
+		return useProxy;
 	}
 
 }
