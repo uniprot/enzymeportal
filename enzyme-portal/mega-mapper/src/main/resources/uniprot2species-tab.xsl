@@ -5,7 +5,7 @@
 	xmlns:up="http://uniprot.org/uniprot">
 	<xsl:output method="text"/>
 	<xsl:template match="/">
-		<xsl:apply-templates select="//up:uniprot/up:entry"/>
+		<xsl:apply-templates select="//up:uniprot/up:entry/up:dbReference[@type='EC']/.."/>
 	</xsl:template>
 	<xsl:template match="up:entry">
 		<xsl:for-each select="./up:accession">
