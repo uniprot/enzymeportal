@@ -34,14 +34,15 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	 * 	<li>scientific name</li>
 	 * 	<li>strain/isolate info (when available)</li>
 	 * 	<li>common name (when available)</li>
-	 * 	<li>alternative scientific name (when available), might include strain info</li>
+	 * 	<li>alternative scientific name(s) (when available). Might include
+	 * 		strain info. If more than one, only the last one is taken.</li>
 	 * </ol>
 	 */
 	protected static final Pattern speciesPattern =
 			Pattern.compile("([^()]+)" +
 					"( \\((?:strain|isolate) [^()]+(?:\\([^()]+\\))?[^()]*\\))?" +
 					"(?: \\(([^()]+)\\))?" +
-					"(?: \\(([^()]+(?:\\([^()]+\\))?)\\))?");
+					"(?: \\(([^()]+(?:\\([^()]+\\))?)\\))*");
 	
 	public EnzymeSummary getEnzymeSummary(String accession) {
 		return getEnzymeSummary(accession, Field.enzyme);
@@ -76,7 +77,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    try {
 	    	for (String query : idPrefixes) {
 				Callable<EnzymeSummary> callable = new UniprotWsSummaryCallable(
-						query+"*", IdType.ENTRY_NAME, Field.brief,
+						query+"_*", IdType.ENTRY_NAME, Field.brief,
 						defaultSpecies, config);
 				ecs.submit(callable);
 			}

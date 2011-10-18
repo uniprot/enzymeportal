@@ -27,5 +27,13 @@ public interface UniprotConfigMBean {
 	public abstract void setWsUrl(String wsUrl);
 
 	public abstract String getWsUrl();
+	
+	/**
+	 * Sets the use of a proxy to get web service requests.
+	 * @param useProxy Use a proxy?
+	 */
+	public abstract void setUseProxy(boolean useProxy);
+	
+	public abstract boolean getUseProxy();
 
 }
