@@ -3,15 +3,14 @@ package uk.ac.ebi.ep.reactome;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
@@ -29,19 +28,11 @@ import uk.ac.ebi.ep.reactome.ReactomeCallable.GetPathwayCaller;
  */
 public class ReactomeAdapter implements IReactomeAdapter{
 
-//********************************* VARIABLES ********************************//
     //seconds
     public static final int TIME_OUT = 40;
 
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
-
-    public String getReactionDescription(String reactomeAccession)throws ReactomeServiceException{
+    public String getReactionDescription(String reactomeAccession)
+	throws ReactomeServiceException{
         String reactionDesc = null;
         //String searchUrl = IReactomeAdapter.REACTOME_SEARCH_URL +reactomeAccession;
         try {
@@ -56,48 +47,8 @@ public class ReactomeAdapter implements IReactomeAdapter{
         return reactionDesc;
     }
 
-/*
-    public String getReactionDescription(String reactomeUrl)throws ReactomeServiceException{
-        Long[] reactionAndPathwayIds = null;
-        //String[] pathwayidAndReactionDesc = new String[2];
-        try {
-            reactionAndPathwayIds = ReactomeUtil.parseUrl(reactomeUrl);
-        } catch (MalformedURLException ex) {
-            throw new ReactomeConnectionException(
-                    "Failed to create the URL for " +reactomeUrl, ex);
-        } catch (IOException ex) {
-            throw new ReactomeFetchDataException(
-                    "Failed to get reaction and pathway ids from Reactome Web site! ", ex);
-        }                
-        Long reactionId = reactionAndPathwayIds[0];
-        Reaction reaction = getReactomeReaction(reactionId);
-        */
-        /*
-        try {
-            Pathway pathway = (Pathway) call.invoke(new Object[]{new Long(pathwayAndReactionIds[0])});
-        } catch (RemoteException ex) {
-            throw new ReactomeFetchDataException(
-                    "Failed to get the pathway from Reactome WS! ", ex);
-        }
-         *
-         */
-
-        //long pathwayId = reaction.getId();
-        //pathwayidAndReactionDesc[0] = String.valueOf(pathwayId);
-//        pathwayidAndReactionDesc[1] = ReactomeUtil.getReactionDescription(reaction);
-/*
-        Summation summation = reaction.getSummation().get(0);
-        if (summation.getText() == null) {
-            long sumId = summation.getId();
-            Call call = this.reactomeService.getQueryByIdCall();
-            summation = getSummationById(sumId);
-        }
-        String reactionDesc = summation.getText();
-        return reactionDesc;
-    }
-*/
-
-    public String getPathwayDescription(String reactomeAccession) throws ReactomeServiceException {
+    public String getPathwayDescription(String reactomeAccession)
+	throws ReactomeServiceException {
         String pathwayDesc = null;
         //String searchUrl = IReactomeAdapter.REACTOME_SEARCH_URL +reactomeAccession;
         try {
@@ -113,7 +64,8 @@ public class ReactomeAdapter implements IReactomeAdapter{
 
     }
 
-    public EnzymeModel getReationDescription(EnzymeModel enzymeModel) throws ReactomeServiceException {
+    public EnzymeModel addReactionDescriptions(EnzymeModel enzymeModel)
+	throws ReactomeServiceException {
         //To be done in EnzymeRetriever
         //queryRheaWsForReactions(enzymeModel);
 
@@ -147,27 +99,27 @@ public class ReactomeAdapter implements IReactomeAdapter{
         return enzymeModel;
     }
 
-    public List<Pathway> getPathwayDescription (
-            List<String> stableIds) throws ReactomeServiceException {
+    public List<Pathway> getPathways (List<String> stableIds)
+	throws ReactomeServiceException {
         ExecutorService pool = Executors.newCachedThreadPool();
+	    CompletionService<Pathway> ecs =
+	    		new ExecutorCompletionService<Pathway>(pool);
         List<Pathway> pathways = new ArrayList<Pathway>();
-        Map<String, Future<Pathway>> futures =
-        		new HashMap<String, Future<Pathway>>();
         try {
 	        for (String id: stableIds) {
 	            GetPathwayCaller callable = new ReactomeCallable.GetPathwayCaller(id);
-	            futures.put(id, pool.submit(callable));
+	            ecs.submit(callable);
 	        }
-	        for (String id : futures.keySet()) {
+	        for (int i = 0; i < stableIds.size(); i++) {
 				try {
-					Pathway pathway = futures.get(id).get(TIME_OUT, TimeUnit.SECONDS);
-	                pathways.add(pathway);
+					Future<Pathway> future = ecs.poll(TIME_OUT, TimeUnit.SECONDS);
+	    			if (future != null){
+		                pathways.add(future.get());
+	    			}
 	            } catch (InterruptedException ex) {
-	                throw new ReactomeServiceException("The thread was interrupted while retieving from Reactome pathway " +id, ex);
+	                throw new ReactomeServiceException("The thread was interrupted while retieving from Reactome pathway " +stableIds.get(i), ex);
 	            } catch (ExecutionException ex) {
-	                throw new ReactomeServiceException("Failed to execute the thread to retrieve from Reactome pathway " +id, ex);
-	            } catch (TimeoutException ex) {
-	                throw new ReactomeServiceException("Time out to retrieve from Reactome pathway " +id, ex);
+	                throw new ReactomeServiceException("Failed to execute the thread to retrieve from Reactome pathway " +stableIds.get(i), ex);
 	            }
 			}
         } finally {
