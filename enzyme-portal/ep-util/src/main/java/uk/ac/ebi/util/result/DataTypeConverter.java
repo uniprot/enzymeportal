@@ -62,6 +62,7 @@ public class DataTypeConverter {
         List<String> reactomeReactionIds = new ArrayList<String>();
         for (ReactionPathway reactionPathway:reactionPathways) {
             EnzymeReaction enzymeReaction = reactionPathway.getReaction();
+            if (enzymeReaction == null) continue; // ReactionPathway containing only Pathways
             List<Object> xrefs = enzymeReaction.getXrefs();
             if (xrefs != null) {
                 for (Object xref: xrefs) {
