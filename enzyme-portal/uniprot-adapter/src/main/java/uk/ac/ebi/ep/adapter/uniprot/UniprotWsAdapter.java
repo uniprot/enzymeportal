@@ -48,6 +48,14 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 		return getEnzymeSummary(accession, Field.enzyme);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <br>
+	 * <b>WARNING:</b>This implementation does not currently populate properly the model,
+	 * but just adds Reactome IDs (Pathway objects within one singe
+	 * ReactionPathway object).
+	 * @see UniprotWsSummaryCallable#parseReactionPathways implementation.
+	 */
 	public EnzymeSummary getEnzymeSummaryWithReactionPathway(String accession) {
 		return getEnzymeSummary(accession, Field.reactionsPathways);
 	}

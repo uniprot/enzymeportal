@@ -382,7 +382,8 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	/**
 	 * Parses Reactome IDs.
 	 * @param reactomeIds Reactome IDs returned by the UniProt web service.
-	 * @return a ReactionPathway object, or <code>null</code> if none found.
+	 * @return a ReactionPathway object containing one or more Pathways,
+	 * 		or <code>null</code> if none found.
 	 */
 	private ReactionPathway parseReactionPathways(String reactomeIds) {
 		ReactionPathway reactionPathway = null;
