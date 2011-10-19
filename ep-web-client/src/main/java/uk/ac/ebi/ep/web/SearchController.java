@@ -62,14 +62,14 @@ public class SearchController {
 //********************************** METHODS *********************************//
 
     /**
-     * Process the entry page
-     * @param accession
-     * @param field
+     * Process the entry page,
+     * @param accession The UniProt accession of the enzyme.
+     * @param field the requested tab.
      * @param model
-     * @return
+     * @return 
      */
     @RequestMapping(value="/search/{accession}/{field}")
-    public String viewReationsPathways(Model model,
+    protected String getEnzymeModel(Model model,
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Field requestedField = Field.valueOf(field);
