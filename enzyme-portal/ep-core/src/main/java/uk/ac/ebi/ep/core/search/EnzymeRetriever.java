@@ -93,22 +93,34 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return enzymeModel;
     }
 
-    public EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
-        //List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
+    /**
+     * Searches Rhea for any EC numbers in the model and adds the corresponding
+     * reactions if found.
+     * <br><b>WARNING:</b> the added reactions have links only to Reactome and
+     * MACiE.
+     * @param enzymeModel
+     * @return an updated model with ReactionPathway objects, one per reaction
+     * 		found.
+     * @throws EnzymeRetrieverException
+     */
+    public EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel)
+	throws EnzymeRetrieverException {
         List<ReactionPathway> reactionPathways = new ArrayList<ReactionPathway>();
         List<String> ecList = enzymeModel.getEc();
-        String query = LuceneQueryBuilder.createQueryIN(IRheaAdapter.RheaQueryFields.EC.name(), false, ecList);
+        String query = LuceneQueryBuilder.createQueryIN(
+        		IRheaAdapter.RheaQueryFields.EC.name(), false, ecList);
         List<Reaction> reactions;
         try {
-            reactions = this.rheaAdapter.getRheasInCmlreact(query);
+            reactions = rheaAdapter.getRheasInCmlreact(query);
         } catch (RheaFetchDataException ex) {
             throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
         }
         for (Reaction reaction : reactions) {
-            ReactionPathway reactionPathway = this.rheaAdapter.getReactionPathway(reaction);
+        	// This adapted reaction will have links only to Reactome and MACiE!:
+            ReactionPathway reactionPathway = rheaAdapter.getReactionPathway(reaction);
             reactionPathways.add(reactionPathway);
         }
-        enzymeModel.setReactionpathway(reactionPathways);
+        enzymeModel.getReactionpathway().addAll(reactionPathways);
         return enzymeModel;
 
     }
@@ -121,35 +133,38 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         }
         return idNameMap;
     }
-    public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
+    public EnzymeModel getReactionsPathways(String uniprotAccession)
+	throws EnzymeRetrieverException {
         //Get pathways from uniprot --> maybe not for now
         //Get pathways from Biomart (from Reactome reaction retrieved from Rhea)
         //Choose 2 top pathways to extract from Reactome Website
         // View pathway in reactome should be associated with the reaction.        
         //EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getReactionPathwaySummary(uniprotAccession);
         
-        //TODO check
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeSummary(uniprotAccession);
-
-        //List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
-
-        //ReactionPathway reactomeUniproPw= reactionPathways.get(0);
-        //List<Pathway> reactomeUniprotLinks = reactomeUniproPw.getPathways();
-        //Map<String,String> reactomeAccessionsInUniprot =
-           //     getReactomeAccQueriedFromUniprot(reactomeUniprotLinks);
-        //List<String> reactomeStableIdsFromUniprot = new ArrayList<String>();
-        //reactomeStableIdsFromUniprot.addAll(reactomeAccessionsInUniprot.keySet());
-        //Query Rhea WS
+        EnzymeModel enzymeModel = (EnzymeModel)
+        		uniprotAdapter.getEnzymeSummaryWithReactionPathway(uniprotAccession);
+        // The model comes with Reactome IDs in one ReactionPathway object, no more.
+        // Now we get more ReactionPathways (one per Rhea reaction):
         queryRheaWsForReactions(enzymeModel);
-
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
-
+        
         if (reactionPathways.size() > 0) {
-            List<String> reactomeReactionIds = DataTypeConverter.getReactionXrefs(enzymeModel);
+        	
+        	for (ReactionPathway reactionPathway : reactionPathways) {
+        		// These are Reactome IDs from UniProt WS:
+				List<Pathway> pathways = reactionPathway.getPathways();
+				if (pathways != null && !pathways.isEmpty()){
+					// Populate with extra info:
+					// TODO
+				}
+			}
+        	
+        	
+            List<String> reactomeReactionIds =
+            		DataTypeConverter.getReactionXrefs(enzymeModel);
             if (reactomeReactionIds.size() > 0) {
                 getReactionPathwaysByRheaResults(enzymeModel);
-
-            } else { //found Rhea reaction, but not reactome reaction referenced in Rhea
+            } else { //found Rhea reaction, but not Reactome reaction referenced in Rhea
                 List<String> pathwayReactomeIds = null;
                 try {
                     pathwayReactomeIds = biomartAdapter.getPathwaysByUniprotAccession(uniprotAccession);
@@ -222,7 +237,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public List<ReactionPathway> getReactionPathwaysByRheaResults(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
             try {
-                reactomeAdapter.getReationDescription(enzymeModel);
+                reactomeAdapter.addReactionDescriptions(enzymeModel);
             } catch (ReactomeServiceException ex) {
                 throw new EnzymeRetrieverException(
                         "Failed to get reaction description from Reactome for Rhea reactions", ex);
@@ -266,7 +281,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public List<Pathway> getPathwayDescFromReactome(List<String> reactomeStableIds) throws EnzymeRetrieverException {
         List<Pathway> pathways = null;
         try {
-            pathways = reactomeAdapter.getPathwayDescription(reactomeStableIds);
+            pathways = reactomeAdapter.getPathways(reactomeStableIds);
         } catch (ReactomeServiceException ex) {
             throw new EnzymeRetrieverException("Failed to get reactome description "
                     + "from Reactome for pathways " + reactomeStableIds, ex);
