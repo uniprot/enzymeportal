@@ -14,22 +14,15 @@ import uk.ac.ebi.ep.enzyme.model.Pathway;
  */
 public interface IReactomeAdapter {
 
-//********************************* VARIABLES ********************************//
+    public String getReactionDescription(String reactomeAccession)
+	throws ReactomeServiceException;
 
+    public String getPathwayDescription(String reactomeAccession)
+    throws ReactomeServiceException;
 
-//******************************** CONSTRUCTORS ******************************//
+    public EnzymeModel addReactionDescriptions(EnzymeModel enzymeModel)
+    throws ReactomeServiceException;
 
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
-
-    public String getReactionDescription(String reactomeAccession)throws ReactomeServiceException;
-
-    public String getPathwayDescription(String reactomeAccession)throws ReactomeServiceException;
-
-    public EnzymeModel getReationDescription(EnzymeModel enzymeModel)throws ReactomeServiceException;
-
-    public List<Pathway> getPathwayDescription(List<String> stableIds)throws ReactomeServiceException;
+    public List<Pathway> getPathways(List<String> stableIds)
+    throws ReactomeServiceException;
 }
