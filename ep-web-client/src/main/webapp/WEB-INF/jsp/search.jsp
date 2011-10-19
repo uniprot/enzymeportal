@@ -222,6 +222,9 @@
                                     </c:if>
                                     <c:choose>
                                     	<c:when test="${empty imgFile}">
+                                    		<div style="position: absolute; width: 110px; height: 90px;
+                                    			background-color: #eee; opacity: 0.6; vertical-align: middle;
+                                    			margin-top: 0px; padding: 0px;">No structure available</div>
                                     		<img src="resources/images/noStructure-light.png"
                                     			width="110" height="90"
                                             	alt="No structure available"
