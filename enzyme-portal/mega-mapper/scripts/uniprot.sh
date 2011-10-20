@@ -11,10 +11,11 @@ MM_INDEX=/nfs/seqdb/production/intenz/users/rafalcan/tmp/ep/mmIndex
 #XSL=$(dirname $0)/../src/main/resources/uniprot2species-tab.xsl
 #xsltproc $XSL $SWISSPROT > SwissProt2species.tab
 
+cd $(dirname $0)/..
 mvn clean package
 
 CP=.
-for JAR in $(dirname $0)/../target/*.jar
+for JAR in target/*.jar
 do
     CP=$CP:$JAR
 done
