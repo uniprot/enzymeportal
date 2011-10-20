@@ -16,13 +16,13 @@
 	</appender>
 
 	<logger name="uk.ac.ebi.ep" additivity="false">
-		<level value="DEBUG"/>
-		<appender-ref ref="stdout"/>
+		<level value="INFO"/>
+		<appender-ref ref="file"/>
 	</logger>
 	
 	<root>
 		<level value="INFO"/>
-		<appender-ref ref="stdout"/>
+		<appender-ref ref="file"/>
 	</root>
 
 </log4j:configuration>
