@@ -20,6 +20,6 @@ do
     CP=$CP:$JAR
 done
 
-java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
+java -classpath $CP uk.ac.ebi.ep.mm.UniprotIndexer \
     -xmlFile $SWISSPROT -indexDir $MM_INDEX
 
