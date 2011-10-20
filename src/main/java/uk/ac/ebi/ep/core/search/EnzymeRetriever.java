@@ -99,8 +99,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * <br><b>WARNING:</b> the added reactions have links only to Reactome and
      * MACiE.
      * @param enzymeModel
-     * @return an updated model with ReactionPathway objects, one per reaction
-     * 		found.
+     * @return the same model updated with ReactionPathway objects, one per
+     * 		reaction found.
      * @throws EnzymeRetrieverException
      */
     public EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel)
@@ -140,16 +140,18 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         //Choose 2 top pathways to extract from Reactome Website
         // View pathway in reactome should be associated with the reaction.        
         //EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getReactionPathwaySummary(uniprotAccession);
-        
+/* Future fix TODO        
         EnzymeModel enzymeModel = (EnzymeModel)
         		uniprotAdapter.getEnzymeSummaryWithReactionPathway(uniprotAccession);
+*/
+        EnzymeModel enzymeModel = (EnzymeModel)
+        		uniprotAdapter.getEnzymeSummary(uniprotAccession);
         // The model comes with Reactome IDs in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
         queryRheaWsForReactions(enzymeModel);
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
-        
-        if (reactionPathways.size() > 0) {
-        	
+        if (!reactionPathways.isEmpty()) {
+/* Future fix TODO
         	for (ReactionPathway reactionPathway : reactionPathways) {
         		// These are Reactome IDs from UniProt WS:
 				List<Pathway> pathways = reactionPathway.getPathways();
@@ -158,8 +160,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 					// TODO
 				}
 			}
-        	
-        	
+*/
             List<String> reactomeReactionIds =
             		DataTypeConverter.getReactionXrefs(enzymeModel);
             if (reactomeReactionIds.size() > 0) {
@@ -235,7 +236,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return pathways;
     }
 
-    public List<ReactionPathway> getReactionPathwaysByRheaResults(EnzymeModel enzymeModel) throws EnzymeRetrieverException {
+    private List<ReactionPathway> getReactionPathwaysByRheaResults(EnzymeModel enzymeModel)
+	throws EnzymeRetrieverException {
             try {
                 reactomeAdapter.addReactionDescriptions(enzymeModel);
             } catch (ReactomeServiceException ex) {
