@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
@@ -29,6 +30,8 @@ import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
 
+import uk.ac.ebi.biobabel.lucene.LuceneParser;
+import uk.ac.ebi.ebinocle.DatabaseType;
 import uk.ac.ebi.ebinocle.EntriesType;
 import uk.ac.ebi.ebinocle.EntryType;
 import uk.ac.ebi.ebinocle.RefType;
@@ -48,7 +51,18 @@ public class EbeyeIndexer implements MmIndexer {
 
 	private IndexSearcher indexSearcher;
 	private IndexWriter indexWriter;
-	private QueryParser luceneParser;
+	
+	/**
+	 * Biobabel utility object to prepare query strings for lucene.
+	 */
+	private LuceneParser luceneParser = new LuceneParser();
+;
+	
+	/**
+	 * Lucene parser to prepare a query from a string.
+	 */
+	private QueryParser queryParser;
+
 	private MmField dbField;
 
 	/**
@@ -73,47 +87,72 @@ public class EbeyeIndexer implements MmIndexer {
 	public void parse(String xmlFile, String luceneIndexDir)
 	throws JAXBException, IOException, ParseException {
 		openDirectory(luceneIndexDir);
-		EntriesType entries = getEntries(xmlFile);
-		for (EntryType entry : entries.getEntry()) {
-			List<String> uniprotAccs = new ArrayList<String>();
-			for (RefType xref : entry.getCrossReferences().getRef()) {
-				// Take only UniProt:
-				if (xref.getDbname().equalsIgnoreCase("UniProt")
-						|| xref.getDbname().equalsIgnoreCase("SWISS-PROT")){
-					uniprotAccs.add(xref.getDbkey());
+		try {
+			LOGGER.info("Parsing start");
+			EntriesType entries = getEntries(xmlFile);
+			for (EntryType entry : entries.getEntry()) {
+				List<String> uniprotAccs = new ArrayList<String>();
+				for (RefType xref : entry.getCrossReferences().getRef()) {
+					// Take only UniProt:
+					if (xref.getDbname().equalsIgnoreCase("UniProt")
+							|| xref.getDbname().equalsIgnoreCase("SWISS-PROT")){
+						uniprotAccs.add(xref.getDbkey());
+					}
+				}
+				if (!uniprotAccs.isEmpty()){
+					// We may associate with the accession if it is in the index
+				    Query query = queryParser.parse(getQuery(uniprotAccs));
+				    ScoreDoc[] hits = indexSearcher.search(query, null, 1000).scoreDocs;
+				    if (hits.length > 0){
+				    	List<Document> hitDocs = new ArrayList<Document>();
+				    	String idAcc = null; // ID or accession
+				    	switch(dbField){
+				    	case CHEMBL_ID:
+				    		// ChEMBL does not provide accession, just ID:
+				    		idAcc = entry.getId();
+				    		break;
+			    		default:
+				    		idAcc = entry.getAcc();
+				    	}
+				    	for (int i = 0; i < hits.length; i++) {
+							Document hitDoc = indexSearcher.doc(hits[i].doc);
+							hitDoc.add(new Field(dbField.name(), idAcc,
+									Field.Store.YES, Field.Index.ANALYZED));
+							hitDocs.add(hitDoc);
+						}
+						// Write changes
+				    	indexWriter.deleteDocuments(query);
+				    	for (Document hitDoc : hitDocs) {
+					    	indexWriter.addDocument(hitDoc);
+						}
+				    }
 				}
 			}
-			if (!uniprotAccs.isEmpty()){
-				// We may associate with the accession if it is in the index
-			    Query query = luceneParser.parse(getQuery(uniprotAccs));
-			    ScoreDoc[] hits = indexSearcher.search(query, null, 1000).scoreDocs;
-			    if (hits.length > 0){
-			    	String idAcc = null; // ID or accession
-			    	switch(dbField){
-			    	case CHEMBL_ID:
-			    		// ChEMBL does not provide accession, just ID:
-			    		idAcc = entry.getId();
-			    		break;
-		    		default:
-			    		idAcc = entry.getAcc();
-			    	}
-			    	for (int i = 0; i < hits.length; i++) {
-						Document hitDoc = indexSearcher.doc(hits[i].doc);
-						hitDoc.add(new Field(dbField.name(), idAcc,
-								Field.Store.YES, Field.Index.ANALYZED));
-					}
-			    }
-			}
+			LOGGER.info("Parsing end");
+		} finally {
+			closeDirectory();
 		}
-		// TODO: write changes
-		closeDirectory();
 	}
 
+	/**
+	 * Prepares a query for lucene.
+	 * @param uniprotAccs list of UniProt accessions.
+	 * @return a String ready for lucene, with OR'ed UniProt accessions.
+	 */
 	private String getQuery(List<String> uniprotAccs) {
-		// TODO Auto-generated method stub
-		return null;
+		return luceneParser.group(null, MmField.UNIPROT_ACCESSION.name(),
+				false, null, uniprotAccs.toArray(new String[]{}));
 	}
 
+	/**
+	 * Detects the database being processed - stored in the field
+	 * <code>dbField</code> - and returns the entries in it.
+	 * @param xmlFile an EB-Eye XML file.
+	 * @return the entries in the XML file.
+	 * @throws JAXBException
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	private EntriesType getEntries(String xmlFile)
 	throws JAXBException, FileNotFoundException, IOException {
 		JAXBContext jc = JAXBContext.newInstance( "uk.ac.ebi.ebinocle" );
@@ -122,8 +161,19 @@ public class EbeyeIndexer implements MmIndexer {
 		EntriesType entries = null;
 		try {
 			fis = new FileInputStream(xmlFile);
-			entries = (EntriesType) u.unmarshal(fis);
-			// TODO get dbField
+			@SuppressWarnings("unchecked")
+			JAXBElement<DatabaseType> elem = (JAXBElement<DatabaseType>) u.unmarshal(fis);
+			DatabaseType db = (DatabaseType) elem.getValue();
+			String dbName = db.getName();
+			LOGGER.info("Getting entries for " + dbName);
+			if (dbName.toUpperCase().startsWith("CHEBI")){
+				dbField = MmField.CHEBI_ID;
+			} else if (dbName.toUpperCase().startsWith("CHEMBL")){
+				dbField = MmField.CHEMBL_ID;
+			} else {
+				throw new RuntimeException("Database not supported: " + dbName);
+			}
+			entries = db.getEntries();
 		} catch (FileNotFoundException e) {
 			LOGGER.error("XML file not found", e);
 			throw e;
@@ -148,13 +198,15 @@ public class EbeyeIndexer implements MmIndexer {
 		indexSearcher = new IndexSearcher(directory, false);
 		indexWriter = new IndexWriter(directory, analyzer, MaxFieldLength.LIMITED);
 		// The lucene parses is for the UniProt accession field:
-		luceneParser = new QueryParser(Version.LUCENE_30,
+		queryParser = new QueryParser(Version.LUCENE_30,
 				MmField.UNIPROT_ACCESSION.name(), analyzer);
+		LOGGER.info("Index opened");
 	}
 	
 	private void closeDirectory() throws IOException {
 		if (indexSearcher != null) indexSearcher.close();
 		if (indexWriter != null) indexWriter.close();
+		LOGGER.info("Index closed");
 	}
 
 	/**
