@@ -121,11 +121,11 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 	throws FileNotFoundException, SAXException, IOException {
 		File uniprotXmlFile = new File(uniprotXml);
 		File indexDir = getIndexDir(luceneIndexDir);
-		LOGGER.info("Index created");
 		indexWriter = new IndexWriter(
 				new NIOFSDirectory(indexDir),
 				new StandardAnalyzer(Version.LUCENE_30),
 				MaxFieldLength.LIMITED);
+		LOGGER.info("Index open to import UniProt entries");
 		
 		XMLReader xr = XMLReaderFactory.createXMLReader();
 		xr.setContentHandler(this);
