@@ -189,7 +189,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			columns += ",comment(FUNCTION),database(PDB),3d";
 			break;
 		case enzyme:
-			columns += ",comment(FUNCTION),database(PDB),3d,comment(DISEASE),sequence";
+			columns += ",comment(FUNCTION),database(PDB),3d,comment(DISEASE),length";
 			break;
 		case proteinStructure:
 			columns += ",database(PDB),3d";
