@@ -1,15 +1,11 @@
 #!/bin/bash
-# Params:
-# 
+# Indexes TrEMBL enzymes into an existing mega-mapper index.
+# Param:
+# $1: directory for the existing lucene index.
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
-DOWNLOAD_BASE=/ebi/extserv/projects/ebinocle/data/uniprot/latest
-TREMBL=$DOWNLOAD_BASE/uniprot_trembl.xml
-MM_INDEX=/nfs/seqdb/production/intenz/users/rafalcan/tmp/ep/mmIndex
-
-# xsltproc builds the tree in DOM, too much menory.
-#XSL=$(dirname $0)/../src/main/resources/uniprot2species-tab.xsl
-#xsltproc $XSL $SWISSPROT > SwissProt2species.tab
+EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
+TREMBL=$EBINOCLE_DATA/uniprot/latest/uniprot_trembl.xml
 
 cd $(dirname $0)/..
 mvn clean package
@@ -21,5 +17,5 @@ do
 done
 
 java -classpath $CP uk.ac.ebi.ep.mm.UniprotIndexer \
-    -xmlFile $TREMBL -indexDir $MM_INDEX
+    -xmlFile $TREMBL -indexDir $1
 
