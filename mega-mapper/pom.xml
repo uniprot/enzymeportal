@@ -26,6 +26,11 @@
             <version>3.0.2</version>
         </dependency>
         <dependency>
+			<groupId>uk.ac.ebi</groupId>
+			<artifactId>ebinocle</artifactId>
+			<version>1.0.4</version>
+        </dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
