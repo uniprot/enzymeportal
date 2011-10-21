@@ -1,8 +1,9 @@
 #!/bin/bash
+# Params:
+# 
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
 DOWNLOAD_BASE=/ebi/extserv/projects/ebinocle/data/uniprot/latest
-SWISSPROT=$DOWNLOAD_BASE/uniprot_sprot.xml
 TREMBL=$DOWNLOAD_BASE/uniprot_trembl.xml
 MM_INDEX=/nfs/seqdb/production/intenz/users/rafalcan/tmp/ep/mmIndex
 
@@ -20,7 +21,5 @@ do
 done
 
 java -classpath $CP uk.ac.ebi.ep.mm.UniprotIndexer \
-    -xmlFile $SWISSPROT -indexDir $MM_INDEX \
-&& java -classpath $CP uk.ac.ebi.ep.mm.UniprotIndexer \
     -xmlFile $TREMBL -indexDir $MM_INDEX
 
