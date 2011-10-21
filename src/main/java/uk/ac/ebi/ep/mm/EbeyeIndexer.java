@@ -22,6 +22,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriter.MaxFieldLength;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -91,6 +92,16 @@ public class EbeyeIndexer implements MmIndexer {
 			LOGGER.info("Parsing start");
 			EntriesType entries = getEntries(xmlFile);
 			for (EntryType entry : entries.getEntry()) {
+				if (entry.getCrossReferences() == null) continue;
+		    	String idAcc = null; // ID or accession
+		    	switch(dbField){
+		    	case CHEMBL_ID:
+		    		// ChEMBL does not provide accession, just ID:
+		    		idAcc = entry.getId();
+		    		break;
+	    		default:
+		    		idAcc = entry.getAcc();
+		    	}
 				List<String> uniprotAccs = new ArrayList<String>();
 				for (RefType xref : entry.getCrossReferences().getRef()) {
 					// Take only UniProt:
@@ -99,21 +110,16 @@ public class EbeyeIndexer implements MmIndexer {
 						uniprotAccs.add(xref.getDbkey());
 					}
 				}
+				if (uniprotAccs.size() > 1024){
+					LOGGER.warn("[SKIPPED] More than 1024 xrefs for " + idAcc);
+					continue;
+				}
 				if (!uniprotAccs.isEmpty()){
 					// We may associate with the accession if it is in the index
 				    Query query = queryParser.parse(getQuery(uniprotAccs));
 				    ScoreDoc[] hits = indexSearcher.search(query, null, 1000).scoreDocs;
 				    if (hits.length > 0){
 				    	List<Document> hitDocs = new ArrayList<Document>();
-				    	String idAcc = null; // ID or accession
-				    	switch(dbField){
-				    	case CHEMBL_ID:
-				    		// ChEMBL does not provide accession, just ID:
-				    		idAcc = entry.getId();
-				    		break;
-			    		default:
-				    		idAcc = entry.getAcc();
-				    	}
 				    	for (int i = 0; i < hits.length; i++) {
 							Document hitDoc = indexSearcher.doc(hits[i].doc);
 							hitDoc.add(new Field(dbField.name(), idAcc,
@@ -200,6 +206,7 @@ public class EbeyeIndexer implements MmIndexer {
 		// The lucene parses is for the UniProt accession field:
 		queryParser = new QueryParser(Version.LUCENE_30,
 				MmField.UNIPROT_ACCESSION.name(), analyzer);
+//		BooleanQuery.setMaxClauseCount(4096);
 		LOGGER.info("Index opened");
 	}
 	
