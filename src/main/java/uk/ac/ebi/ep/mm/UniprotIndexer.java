@@ -28,7 +28,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * UniProt XML parser which takes into account only accessions, entry names
- * (IDs) and organisms.
+ * (IDs) and organisms, and indexes/stores them in a lucene index.
  * @author rafa
  *
  */
@@ -121,7 +121,7 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 	throws FileNotFoundException, SAXException, IOException {
 		File uniprotXmlFile = new File(uniprotXml);
 		File indexDir = getIndexDir(luceneIndexDir);
-		LOGGER.debug("Index created");
+		LOGGER.info("Index created");
 		indexWriter = new IndexWriter(
 				new NIOFSDirectory(indexDir),
 				new StandardAnalyzer(Version.LUCENE_30),
@@ -132,11 +132,11 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 		xr.setErrorHandler(this);
 		InputStream is = new FileInputStream(uniprotXmlFile);
 		InputSource source = new InputSource(is);
-		LOGGER.debug("Parsing start");
+		LOGGER.info("Parsing start");
 		xr.parse(source);
-		LOGGER.debug("Parsing end");
+		LOGGER.info("Parsing end");
 		indexWriter.close();
-		LOGGER.debug("Index closed");
+		LOGGER.info("Index closed");
 	}
 
 	@Override
