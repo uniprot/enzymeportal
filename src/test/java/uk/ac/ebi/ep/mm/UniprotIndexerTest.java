@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-public class UniprotSaxParserTest extends UniprotIndexer {
+public class UniprotIndexerTest extends UniprotIndexer {
 
 	UniprotIndexer parser;
 	
