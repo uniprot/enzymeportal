@@ -11,11 +11,6 @@ import java.util.List;
 import java.util.Stack;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -37,7 +32,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author rafa
  *
  */
-public class UniprotIndexer extends DefaultHandler {
+public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 
 	private static final String UNIPROT_ENTRY =
 			"//uniprot/entry";
@@ -98,33 +93,15 @@ public class UniprotIndexer extends DefaultHandler {
 	 * 	<li>-indexDir: the directory for the lucene index. If it does not
 	 * 		exist, a new one is created.</li>
 	 * </ul>
-	 * @throws FileNotFoundException
-	 * @throws SAXException
-	 * @throws IOException
+	 * @throws Exception in case of error while parsing.
 	 */
-	@SuppressWarnings("static-access")
-	public static void main(String... args)
-	throws FileNotFoundException, SAXException, IOException{
-        Options options = new Options();
-        options.addOption(OptionBuilder.isRequired()
-                .hasArg().withArgName("xmlFile")
-                .withDescription("UniProt XML file")
-                .create("xmlFile"));
-        options.addOption(OptionBuilder.isRequired()
-                .hasArg().withArgName("indexDir")
-                .withDescription("Lucene index directory")
-                .create("indexDir"));
-        CommandLine cl = null;
-        try {
-            cl = new GnuParser().parse(options, args);
-        } catch (ParseException e){
-            new HelpFormatter().printHelp(UniprotIndexer.class.getName(), options);
-            return;
+	public static void main(String... args) throws Exception{
+        CommandLine cl = CliOptionsParser.getCommandLine(args);
+        if (cl != null){
+    		MmIndexer parser = new UniprotIndexer();
+    		parser.parse(cl.getOptionValue("xmlFile"), cl.getOptionValue("indexDir"));
         }
-
-		UniprotIndexer parser = new UniprotIndexer();
-		parser.parse(cl.getOptionValue("xmlFile"), cl.getOptionValue("indexDir"));
-	}
+	}	
 	
 	/**
 	 * Parses a UniProt XML file and indexes/stores the UniProt accessions,
@@ -213,11 +190,13 @@ public class UniprotIndexer extends DefaultHandler {
 			entryNames.add(currentChars.toString());
 		} else if (isOrgSciName){
 			orgSciName = currentChars.toString();
-		} else if (isEntry && !ecs.isEmpty()){ // only enzymes are indexed
-			try {
-				indexWriter.addDocument(buildDoc());
-			} catch (Exception e) {
-				throw new RuntimeException("Adding document to index", e);
+		} else if (isEntry){
+			if (!ecs.isEmpty()){ // XXX here is the enzyme filter
+				try {
+					indexWriter.addDocument(buildDoc());
+				} catch (Exception e) {
+					throw new RuntimeException("Adding document to index", e);
+				}
 			}
 			// Clean up:
 			accessions.clear();
