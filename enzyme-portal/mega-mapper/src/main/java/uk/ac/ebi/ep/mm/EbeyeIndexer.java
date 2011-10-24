@@ -64,7 +64,10 @@ public class EbeyeIndexer implements MmIndexer {
 	 */
 	private QueryParser queryParser;
 
-	private MmField dbField;
+	/**
+	 * The database we are indexing.
+	 */
+	private MmDatabase database;
 
 	/**
 	 * Parses a EB-Eye XML file and indexes/stores the database identifiers
@@ -86,7 +89,7 @@ public class EbeyeIndexer implements MmIndexer {
 	}
 
 	public void parse(String xmlFile, String luceneIndexDir)
-	throws JAXBException, IOException, ParseException {
+	throws Exception {
 		openDirectory(luceneIndexDir);
 		try {
 			LOGGER.info("Parsing start");
@@ -94,13 +97,15 @@ public class EbeyeIndexer implements MmIndexer {
 			for (EntryType entry : entries.getEntry()) {
 				if (entry.getCrossReferences() == null) continue;
 		    	String idAcc = null; // ID or accession
-		    	switch(dbField){
-		    	case CHEMBL_ID:
+		    	String name = null; // entry name
+		    	switch(database){
+		    	case ChEMBL:
 		    		// ChEMBL does not provide accession, just ID:
 		    		idAcc = entry.getId();
 		    		break;
 	    		default:
 		    		idAcc = entry.getAcc();
+		    		name = entry.getName();
 		    	}
 				List<String> uniprotAccs = new ArrayList<String>();
 				for (RefType xref : entry.getCrossReferences().getRef()) {
@@ -110,31 +115,47 @@ public class EbeyeIndexer implements MmIndexer {
 						uniprotAccs.add(xref.getDbkey());
 					}
 				}
-				if (uniprotAccs.size() > 1024){
-					LOGGER.warn("[SKIPPED] More than 1024 xrefs for " + idAcc);
-					continue;
-				}
 				if (!uniprotAccs.isEmpty()){
-					// We may associate with the accession if it is in the index
-				    Query query = queryParser.parse(getQuery(uniprotAccs));
-				    ScoreDoc[] hits = indexSearcher.search(query, null, 1000).scoreDocs;
-				    if (hits.length > 0){
-				    	List<Document> hitDocs = new ArrayList<Document>();
-				    	for (int i = 0; i < hits.length; i++) {
-							Document hitDoc = indexSearcher.doc(hits[i].doc);
-							hitDoc.add(new Field(dbField.name(), idAcc,
-									Field.Store.YES, Field.Index.ANALYZED));
-							hitDocs.add(hitDoc);
-						}
-						// Write changes
-				    	indexWriter.deleteDocuments(query);
-				    	for (Document hitDoc : hitDocs) {
-					    	indexWriter.addDocument(hitDoc);
-						}
-				    }
+					// We may associate with the accession if it is in the index.
+				    // We might have too many xrefs for lucene to handle (max. is
+					// 1024 by default), let's pass them in chunks:
+                    int chunkSize = 1024;
+                    for (int i = 0; i < ((uniprotAccs.size() % chunkSize) + 1); i++){
+                        int from = i * chunkSize;
+                        int to = from + chunkSize - 1;
+                        if (to > uniprotAccs.size()) to = uniprotAccs.size();
+                        List<String> chunk = uniprotAccs.subList(from, to); 
+
+                        Query query = queryParser.parse(getQuery(chunk));
+                        ScoreDoc[] hits = indexSearcher.search(query, null, 1000).scoreDocs;
+                        if (hits.length > 0){
+                            List<Document> hitDocs = new ArrayList<Document>();
+                            for (int j = 0; j < hits.length; j++) {
+                                Document hitDoc = indexSearcher.doc(hits[j].doc);
+                                hitDoc.add(new Field(
+                                		database.getIdField().name(), idAcc,
+                                        Field.Store.YES, Field.Index.ANALYZED));
+                                hitDoc.add(new Field(
+                                		database.getNameField().name(), name,
+                                        Field.Store.YES, Field.Index.ANALYZED));
+                                hitDocs.add(hitDoc);
+                            }
+                            // Write changes
+                            indexWriter.deleteDocuments(query);
+                            for (Document hitDoc : hitDocs) {
+                                indexWriter.addDocument(hitDoc);
+                            }
+                        }
+
+                        if (to == uniprotAccs.size()) break;
+                    }
 				}
 			}
 			LOGGER.info("Parsing end");
+        } catch (Exception e){
+            LOGGER.error("During parsing", e);
+            indexWriter.rollback();
+            throw e;
 		} finally {
 			closeDirectory();
 		}
@@ -161,6 +182,7 @@ public class EbeyeIndexer implements MmIndexer {
 	 */
 	private EntriesType getEntries(String xmlFile)
 	throws JAXBException, FileNotFoundException, IOException {
+		LOGGER.info("Getting entries from EB-Eye XML file.");
 		JAXBContext jc = JAXBContext.newInstance( "uk.ac.ebi.ebinocle" );
 		Unmarshaller u = jc.createUnmarshaller();
 		FileInputStream fis = null;
@@ -173,13 +195,14 @@ public class EbeyeIndexer implements MmIndexer {
 			String dbName = db.getName();
 			LOGGER.info("Getting entries for " + dbName);
 			if (dbName.toUpperCase().startsWith("CHEBI")){
-				dbField = MmField.CHEBI_ID;
-			} else if (dbName.toUpperCase().startsWith("CHEMBL")){
-				dbField = MmField.CHEMBL_ID;
+				database = MmDatabase.ChEBI;
+//			} else if (dbName.toUpperCase().startsWith("CHEMBL")){
+//				database = MmDatabase.ChEMBL;
 			} else {
 				throw new RuntimeException("Database not supported: " + dbName);
 			}
 			entries = db.getEntries();
+			LOGGER.info("Got them!");
 		} catch (FileNotFoundException e) {
 			LOGGER.error("XML file not found", e);
 			throw e;
