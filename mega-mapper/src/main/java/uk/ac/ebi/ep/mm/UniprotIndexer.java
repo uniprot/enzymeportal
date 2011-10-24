@@ -118,7 +118,7 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 	 * 		or from the parser.
 	 */
 	public void parse(String uniprotXml, String luceneIndexDir)
-	throws FileNotFoundException, SAXException, IOException {
+	throws Exception {
 		File uniprotXmlFile = new File(uniprotXml);
 		File indexDir = getIndexDir(luceneIndexDir);
 		indexWriter = new IndexWriter(
@@ -127,16 +127,22 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 				MaxFieldLength.LIMITED);
 		LOGGER.info("Index open to import UniProt entries");
 		
-		XMLReader xr = XMLReaderFactory.createXMLReader();
-		xr.setContentHandler(this);
-		xr.setErrorHandler(this);
-		InputStream is = new FileInputStream(uniprotXmlFile);
-		InputSource source = new InputSource(is);
-		LOGGER.info("Parsing start");
-		xr.parse(source);
-		LOGGER.info("Parsing end");
-		indexWriter.close();
-		LOGGER.info("Index closed");
+        try {
+            XMLReader xr = XMLReaderFactory.createXMLReader();
+            xr.setContentHandler(this);
+            xr.setErrorHandler(this);
+            InputStream is = new FileInputStream(uniprotXmlFile);
+            InputSource source = new InputSource(is);
+            LOGGER.info("Parsing start");
+            xr.parse(source);
+            LOGGER.info("Parsing end");
+            indexWriter.close();
+            LOGGER.info("Index closed");
+        } catch (Exception e){
+            LOGGER.error("During parsing", e);
+            indexWriter.rollback();
+            throw e;
+        }
 	}
 
 	@Override
