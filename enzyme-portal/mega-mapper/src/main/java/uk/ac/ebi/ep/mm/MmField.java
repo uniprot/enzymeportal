@@ -16,6 +16,7 @@ public enum MmField {
 	 */
 	EC,
 	CHEBI_ID,
+	CHEBI_NAME,
 	CHEMBL_ID,
 	PDBECHEM_ID
 }
