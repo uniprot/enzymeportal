@@ -13,6 +13,11 @@
 <div class="grid_12">                
     <%@ include file="breadcrumbs.jsp" %>
 </div>
-<div class="grid_12">
-        <h1 style="border: none; background: none;">Enzyme Portal</h1>
+<div class="grid_12" style="display: table-row;">
+	<div style="display: table-cell;">
+		<h1 style="border: none; background: none;">Enzyme Portal</h1>
+	</div>
+	<div style="display: table-cell;">
+		- Your portal to enzyme-related information at the EBI.
+	</div>
 </div>

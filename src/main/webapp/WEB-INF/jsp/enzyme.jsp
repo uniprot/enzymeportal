@@ -102,10 +102,10 @@ This enzyme has been partially classified because its catalytic activity is eith
             <ul>
                 <li>
                     <c:set var="sequence" value="${enzyme.sequence}"/>
-                    This sequence has
-                    <c:out value="${sequence.sequence}"/>
-                    amino acids and a molecular weight of
-                    <c:out value="${sequence.weight}"/>
+                    This sequence has ${sequence.sequence} amino acids
+                    <c:if test="${not empty sequence.weight}">
+                    	and a molecular weight of ${sequence.weight}
+                    </c:if>
                 </li>
             </ul>
         </dd>

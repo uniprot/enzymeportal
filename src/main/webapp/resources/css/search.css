@@ -359,14 +359,15 @@ a:link, a:visited {
     border-top-right-radius: 2ex;
 }
 .selected.searchTab {
-	color: #888;
+	color: #000;
 }
 .disabled.searchTab {
     background-color: #bbb;
     color: #eee;
 }
 .selected.searchTab, .searchTabContent {
-    background-color: #eee;
+    background-color: #fff;
+    /*border: thin solid #fd0;*/
 }
 .searchTabContent {
     margin-top: 0.3ex;
