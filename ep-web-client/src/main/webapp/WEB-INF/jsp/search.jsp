@@ -61,20 +61,16 @@
                                     <c:set var="limitedDisplay" value="${speciesListSize}"/>
                                 </c:if>
                                 <c:forEach var="i" begin="0" end="${limitedDisplay-1}">
-                                    <c:set var="speciesSciName" value="${speciesList[i].scientificname}"/>
-                                    <c:set var="speciesName" value="${speciesList[i].commonname}"/>
-                                    <c:if test='${empty speciesName}'>
-                                        <c:set var="speciesName" value="${speciesSciName}"/>
-                                    </c:if>
-                                    <c:if test='${not empty speciesSciName}'>
+                                    <c:if test='${not empty speciesList[i].scientificname}'>
                                     <div class="filterLine">
                                     <div class="text">
-                                    <span>
-                                        <c:out value="${speciesName}"/>
+                                    <span>${empty speciesList[i].commonname?
+                                            speciesList[i].scientificname :
+                                            speciesList[i].commonname}
                                     </span>
                                     </div>
                                     <div class="checkItem">
-                                        <form:checkbox path="searchparams.species" value="${speciesSciName}"/>
+                                        <form:checkbox path="searchparams.species" value="${speciesList[i].scientificname}"/>
                                      </div>
                                     <div class="clear"></div>
                                     </div>

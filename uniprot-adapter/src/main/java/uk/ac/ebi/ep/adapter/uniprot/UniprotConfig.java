@@ -8,6 +8,8 @@ public class UniprotConfig implements UniprotConfigMBean {
 	
 	private boolean useProxy;
 	
+	private int maxTermsPerQuery;
+	
 	/**
 	 * http://www.uniprot.org/uniprot/?format=tab&sort=score&query={0}&columns={1}
 	 */
@@ -43,6 +45,14 @@ public class UniprotConfig implements UniprotConfigMBean {
 
 	public boolean getUseProxy() {
 		return useProxy;
+	}
+
+	public void setMaxTermsPerQuery(int max) {
+		this.maxTermsPerQuery = max;
+	}
+
+	public int getMaxTermsPerQuery() {
+		return maxTermsPerQuery;
 	}
 
 }

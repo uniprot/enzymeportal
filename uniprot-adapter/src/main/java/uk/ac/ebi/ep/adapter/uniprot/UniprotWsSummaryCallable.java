@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
 
@@ -107,7 +106,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			
 			EnzymeAccession ea = new EnzymeAccession();
 			// organism is always [4], accession is [0], see getColumns()
-			ea.setSpecies(parseSpecies(colValues[4]));
+			ea.setSpecies(UniprotWsAdapter.parseSpecies(colValues[4]));
 			ea.getUniprotaccessions().add(colValues[0]);
 			List<String> pdbCodes = null;
 			if (field.equals(Field.brief) || field.equals(Field.enzyme)){
@@ -138,7 +137,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		switch (field) {
 		case enzyme:
 			diseasesString = colValues[8];
-			sequence = colValues[8];
+			sequence = colValues[9];
 		case brief:
 			functionString = colValues[5];
 			pdbeAccessions = colValues[6];
@@ -216,36 +215,22 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	/**
 	 * Builds an EnzymeModel and populates it with basic information (enough
 	 * for an EnzymeSummary).
-	 * @param accession the UniProt accession number.
-	 * @param columns fields returned from the web service. There might be more,
-	 * 		but these first ones are required in this order:
-	 * <ol>
-	 * 	<li>accession</li>
-	 * 	<li>entry name (id)</li>
-	 * 	<li>protein name(s)</li>
-	 * 	<li>ec(s)</li>
-	 * 	<li>species</li>
-	 * </ol>
+	 * @param accession
+	 * @param id
+	 * @param nameSynonymsString
+	 * @param ecsString
+	 * @param species
+	 * @param diseasesString
+	 * @param sequence
+	 * @param functionString
+	 * @param pdbAccessions
+	 * @param pdbMethods
+	 * @param rpString
+	 * @param drugsString
+	 * @param regulString
+	 * @param relSpecies
 	 * @return
 	 */
-	private EnzymeModel buildSummary(String[] columns) {
-		final String accession = columns[0];
-		final String id = columns[1];
-		final List<String> nameSynonyms = parseNameSynonyms(columns[2]);
-		final List<String> ecs = Arrays.asList(columns[3].split("; "));
-		final Species species = parseSpecies(columns[4]);
-		EnzymeModel summary = new EnzymeModel();
-		summary.getUniprotaccessions().add(accession);
-		summary.setUniprotid(id);
-		summary.setName(nameSynonyms.get(0));
-		if (nameSynonyms.size() > 1){
-			summary.getSynonym().addAll(nameSynonyms.subList(0, nameSynonyms.size()-1));
-		}
-		summary.getEc().addAll(ecs);
-		summary.setSpecies(species);
-		return summary;
-	}
-
 	private EnzymeModel buildSummary(String accession, String id,
 			String nameSynonymsString, String ecsString, Species species,
 			String diseasesString, String sequence, String functionString,
@@ -265,12 +250,12 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		summary.setSpecies(species);
 		summary.setRelatedspecies(relSpecies);
 		// Optional fields:
-		if (diseasesString != null){
+		if (diseasesString != null && diseasesString.length() > 0){
 			summary.setDisease(parseDiseases(diseasesString));
 		}
 		if (sequence != null){
 			Sequence seq = new Sequence();
-			seq.setSequence(String.valueOf(sequence.length()));
+			seq.setSequence(sequence);
 			// TODO seq.setWeight(value);
 	        seq.setSequenceurl(IUniprotAdapter.SEQUENCE_URL_BASE + accession
 	        		+ IUniprotAdapter.SEQUENCE_URL_SUFFIX);
@@ -278,7 +263,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			enzyme.setSequence(seq);
 			summary.setEnzyme(enzyme);
 		}
-		if (functionString != null){
+		if (functionString != null && functionString.length() > 0){
 			summary.setFunction(parseFunction(functionString));
 		}
 		if (pdbAccessions != null){
@@ -324,32 +309,6 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	}
 
 	/**
-	 * Parses the string returned by the UniProt web service for the
-	 * organism column.
-	 * @param speciesTxt
-	 * @return a Species object.
-	 */
-	private Species parseSpecies(String speciesTxt){
-		Species species = null;
-		Matcher m = UniprotWsAdapter.speciesPattern.matcher(speciesTxt);
-		if (m.matches()){
-	        species = new Species();
-	        String strain = "";
-	        if (m.group(2) != null){
-	        	strain = m.group(2);
-	        }
-	        species.setScientificname(m.group(1) + strain);
-	        if (m.group(3) != null){
-		        species.setCommonname(m.group(3));
-	        }
-	        if (m.group(4) != null){
-	        	// What can we do with another scientific name?
-	        }
-		}
-		return species;
-	}
-
-	/**
 	 * Parses the strings returned from the UniProt web service for the PDB codes.
 	 * @param pdbAccessions
 	 * @param pdbMethods the methods used to resolve the structures. If all
@@ -368,9 +327,9 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	}
 
 	private List<Disease> parseDiseases(String diseaseColumn){
-		diseaseColumn.replaceAll("^DISEASE: ", "");
+		String ds = diseaseColumn.replaceAll("^DISEASE: ", "");
 		List<Disease> diseases = new ArrayList<Disease>();
-		for (String s : diseaseColumn.split("; DISEASE: ")){
+		for (String s : ds.split("; DISEASE: ")){
 			Disease disease = new Disease();
 			disease.setDescription(s);
 			// TODO: disease ID
@@ -458,7 +417,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		query += accOrId;
 		String url = MessageFormat.format(config.getWsUrl(),
 				query, columns);
-		LOGGER.debug(url);
+//		LOGGER.debug(url);
 		BufferedReader br = null;
 		InputStreamReader isr = null;
 		InputStream is = null;
@@ -527,7 +486,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 					pdbCodes = parsePdbCodes(split[6], split[7]);
 				}
 				// organism is always [4], accession is [0], see getColumns()
-				Species sp = parseSpecies(split[4]);
+				Species sp = UniprotWsAdapter.parseSpecies(split[4]);
 				if (relSps.containsKey(sp.getScientificname()) && pdbCodes != null){
 					// Just add any new PDB codes:
 					relSps.get(sp.getScientificname()).getPdbCodes().addAll(pdbCodes);
@@ -570,7 +529,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			String[] split = s.split("\t", -1);
 			if (split[1].length() == 0) continue; // no organism info
 			ea.getUniprotaccessions().add(split[0]);
-			ea.setSpecies(parseSpecies(split[1]));
+			ea.setSpecies(UniprotWsAdapter.parseSpecies(split[1]));
 			if (split[2].length() > 0){
 				ea.setPdbCodes(parsePdbCodes(split[2], split[3]));
 			}

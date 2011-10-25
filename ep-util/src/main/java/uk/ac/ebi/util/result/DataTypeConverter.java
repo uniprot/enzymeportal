@@ -9,11 +9,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-//import uk.ac.ebi.ebeye.ResultOfGetReferencedEntriesSet;
-//import uk.ac.ebi.ebeye.ResultOfGetResultsIds;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.apache.log4j.Logger;
+
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
 import uk.ac.ebi.ep.config.ResultFieldList;
@@ -37,18 +38,8 @@ import uk.ac.ebi.ep.search.result.Pagination;
  */
 public class DataTypeConverter {
 
-
-//********************************* VARIABLES ********************************//
-
-
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
-
+	private static final Logger LOGGER = Logger.getLogger(DataTypeConverter.class);
+	
     public static URL createEncodedUrl(String baseUrl, String decodedQuery) throws UnsupportedEncodingException, MalformedURLException {
             String charset = "UTF-8";
             String encodedRequest = String.format(baseUrl+"%s",
@@ -164,10 +155,16 @@ public class DataTypeConverter {
     public static LinkedHashSet<String> mergeAndLimitResult(
             Collection<List<String>> multipleList, int maxResult) {
         LinkedHashSet<String> mergedSet = new LinkedHashSet<String>();
+        int numOfResults = 0;
+        for (List<String> list : multipleList){
+        	numOfResults += list.size();
+        }        
         for (List<String> list : multipleList){
             if (mergedSet.size()+list.size() < maxResult){
                 mergedSet.addAll(list);
             } else {
+            	LOGGER.warn("[CUTOFF] Limiting results from " + numOfResults
+            			+ " to " + maxResult);
             	int i = 0;
             	while (mergedSet.size() < maxResult){
             		mergedSet.add(list.get(i++));

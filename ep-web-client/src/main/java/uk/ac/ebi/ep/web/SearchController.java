@@ -42,7 +42,6 @@ import uk.ac.ebi.ep.search.result.Pagination;
 public class SearchController {
 
     private static final Logger LOGGER = Logger.getLogger(SearchController.class);
-//********************************* VARIABLES ********************************//
 
     @Autowired
     private EbeyeConfig ebeyeConfig;
@@ -52,14 +51,6 @@ public class SearchController {
     
     @Autowired
     private Config searchConfig;
-    
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
 
     /**
      * Process the entry page,
@@ -78,57 +69,30 @@ public class SearchController {
         retriever.getUniprotAdapter().setConfig(uniprotConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = "entry";
-        switch (requestedField) {
-            case proteinStructure: {
-                try {
-                    enzymeModel = retriever.getProteinStructure(accession);
-                } catch (EnzymeRetrieverException ex) {
-                    LOGGER.error("Unable to retrieve the entry!",  ex);
-                }
-                 break;
-            }
-            case reactionsPathways: {
-                try {
-                    enzymeModel = retriever.getReactionsPathways(accession);
-                } catch (EnzymeRetrieverException ex) {
-                    LOGGER.error("Unable to retrieve the entry!",  ex);
-                }
-                 break;
-            }
-            case molecules: {
-                try {
-                    enzymeModel = retriever.getMolecules(accession);
-                } catch (EnzymeRetrieverException ex) {
-                    LOGGER.error("Unable to retrieve the entry!",  ex);
-                }
-                 break;
-            }
-            case diseaseDrugs: {
-                try {
-                    enzymeModel = retriever.getEnzyme(accession);
-                } catch (EnzymeRetrieverException ex) {
-                    LOGGER.error("Unable to retrieve the entry!",  ex);
-                }
-                 break;
-            }            
-            case literature: {
-                try {
-                    enzymeModel = retriever.getLiterature(accession);
-                } catch (EnzymeRetrieverException ex) {
-                    LOGGER.error("Unable to retrieve the entry!",  ex);
-                }
-                 break;
-            }            
-            
-            default: {
-                try {
-                    enzymeModel = retriever.getEnzyme(accession);
-                } catch (EnzymeRetrieverException ex) {
-                    LOGGER.error("Unable to retrieve the entry! ",  ex);
-                }
+        try {
+            switch (requestedField) {
+            case proteinStructure:
+                enzymeModel = retriever.getProteinStructure(accession);
+                break;
+            case reactionsPathways:
+                enzymeModel = retriever.getReactionsPathways(accession);
+                break;
+            case molecules:
+                enzymeModel = retriever.getMolecules(accession);
+                break;
+            case diseaseDrugs:
+                enzymeModel = retriever.getEnzyme(accession);
+                break;
+            case literature:
+                enzymeModel = retriever.getLiterature(accession);
+                break;
+            default:
+                enzymeModel = retriever.getEnzyme(accession);
                 requestedField = Field.enzyme;
-                 break;
+                break;
             }
+        } catch (EnzymeRetrieverException ex) {
+            LOGGER.error("Unable to retrieve the entry!",  ex);
         }
         enzymeModel.setRequestedfield(requestedField.name());
         model.addAttribute("enzymeModel", enzymeModel);
@@ -182,21 +146,21 @@ public class SearchController {
     		Model model, HttpSession session) {
     	String view = "search";
         if (searchModelForm != null) try {
-            LOGGER.debug("SEARCH start");
+//            LOGGER.debug("SEARCH start");
             SearchParams searchParameters = searchModelForm.getSearchparams();        
             EnzymeFinder finder = new EnzymeFinder(searchConfig);
             finder.getEbeyeAdapter().setConfig(ebeyeConfig);
             finder.getUniprotAdapter().setConfig(uniprotConfig);
             searchParameters.setSize(searchConfig.getResultsPerPage());
             SearchResults resultSet = null;
-            LOGGER.debug("SEARCH before finder.getEnzymes");
+//            LOGGER.debug("SEARCH before finder.getEnzymes");
             try {
                 resultSet = finder.getEnzymes(searchParameters);
             } catch (EnzymeFinderException ex) {
                 LOGGER.error("Unable to create the result list because an error " +
                         "has occurred in the find method! \n", ex);
             }
-            LOGGER.debug("SEARCH before pagination");
+//            LOGGER.debug("SEARCH before pagination");
             Pagination pagination = new Pagination(
                     resultSet.getTotalfound(), searchParameters.getSize());
             pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
@@ -204,10 +168,10 @@ public class SearchController {
             pagination.setTotalPages(totalPage);
             pagination.calCurrentPage(searchParameters.getStart());
             model.addAttribute("pagination", pagination);
-            LOGGER.debug("SEARCH after  pagination");
+//            LOGGER.debug("SEARCH after  pagination");
             searchModelForm.setSearchresults(resultSet);
             model.addAttribute("searchModel", searchModelForm);
-            LOGGER.debug("SEARCH end");
+//            LOGGER.debug("SEARCH end");
             addToHistory(session,
             		"searchparams.text=" + searchModelForm.getSearchparams().getText());
             view = "search";
