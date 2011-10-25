@@ -42,15 +42,9 @@ import uk.ac.ebi.webservices.ebeye.ArrayOfString;
  */
 public class EbeyeAdapter implements IEbeyeAdapter {
 
-//********************************* VARIABLES ********************************//
 	private static final Logger LOGGER = Logger.getLogger(EbeyeAdapter.class);
 
 	private EbeyeConfig config;
-	
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
 
 	public EbeyeConfig getConfig() {
 		return config;
@@ -60,36 +54,6 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 		this.config = config;
 	}
 
-//********************************** METHODS *********************************//
-
-	/* Not in use
-    public List<Result> getResults(ParamOfGetResults param, boolean convertResultToUniprot)
-            throws MultiThreadingException {
-        List<String> domainFields = param.getFields();
-        String domain  = param.getDomain();
-
-        //Limited uniprot results to 100
-//        if (domain.equals(IEbeyeAdapter.Domains.uniprot.name())) {
-//            if (param.getTotalFound()> IEbeyeAdapter.EBEYE_RESULT_LIMIT) {
-//                param.setTotalFound(IEbeyeAdapter.EBEYE_RESULT_LIMIT);
-//            }
-//        }
-        List<Callable<ArrayOfArrayOfString>> callableList
-                 = prepareCallableCollection(param);
-         List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
-            List<List<String>> transformedResults
-                    = Transformer.transformToList(rawResults);
-
-            Collection<String> accessionList = Transformer.transformFieldValueToList(rawResults, true);
-            //Save the content to an object
-            ResultFactory resultFactory = new ResultFactory(
-                    domain, domainFields);
-            List<Result> resultList = resultFactory.getResults(transformedResults
-                    , convertResultToUniprot);
-         return resultList;
-
-    }
-*/
     private List<Callable<ArrayOfArrayOfString>> prepareCallableCollection (
             List<ParamOfGetResults> paramList){
         List<Callable<ArrayOfArrayOfString>> callableList =
@@ -159,29 +123,29 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         	* END OF TESTING CODE */
         	
         	/* THIS IS THE WORKING CODE: */
-        	LOGGER.debug("SEARCH before callables loop, size = " + callables.size());
+//        	LOGGER.debug("SEARCH before callables loop, size = " + callables.size());
         	// Just for debugging purposes:
     		Map<Future<ArrayOfArrayOfString>, Callable<ArrayOfArrayOfString>> futuresCallables =
     				new HashMap<Future<ArrayOfArrayOfString>, Callable<ArrayOfArrayOfString>>();
         	for (Callable<ArrayOfArrayOfString> callable : callables) {
 				futuresCallables.put(ecs.submit(callable), callable);
 			}
-        	LOGGER.debug("SEARCH before futures loop");
+//        	LOGGER.debug("SEARCH before futures loop");
         	for (int i = 0; i < callables.size(); i++) {
 				try {
 					final Future<ArrayOfArrayOfString> taken =
 							ecs.poll(config.getThreadTimeout(),
 									TimeUnit.MILLISECONDS);
-		        	LOGGER.debug("SEARCH after taken");
+//		        	LOGGER.debug("SEARCH after taken");
 		        	// Just for debugging purposes:
-	        		final ParamOfGetResults param =
-	        				((GetResultsCallable) futuresCallables.get(taken)).param;
-					LOGGER.debug("SEARCH domain: " + param.getDomain());
-	        		LOGGER.debug("SEARCH query: " + param.getQuery());
-	        		LOGGER.debug("SEARCH fields: " + param.getFields());
+//	        		final ParamOfGetResults param =
+//	        				((GetResultsCallable) futuresCallables.get(taken)).param;
+//					LOGGER.debug("SEARCH domain: " + param.getDomain());
+//	        		LOGGER.debug("SEARCH query: " + param.getQuery());
+//	        		LOGGER.debug("SEARCH fields: " + param.getFields());
 		        	if (taken != null){
 						ArrayOfArrayOfString rawResults = taken.get();
-			        	LOGGER.debug("SEARCH after got");
+//			        	LOGGER.debug("SEARCH after got");
 	                    ebeyeResultList.add(rawResults);
 		        	} else {
 		        		LOGGER.warn("SEACH job result not retrieved!");
@@ -192,7 +156,8 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 			+ " - " + e.getMessage(), e);
 				}
 			}
-        	LOGGER.debug("SEARCH after futures loop, successful = " + ebeyeResultList.size());
+        	LOGGER.debug("SEARCH after futures loop, successful = "
+        			+ ebeyeResultList.size() + "/" + callables.size());
         	/* */
 		} finally {
             pool.shutdown();
@@ -376,17 +341,17 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     public List<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults)
 	throws MultiThreadingException {
         List<String> accessionList= new ArrayList<String>();
-        LOGGER.debug("SEARCH before preparing callables for getRelatedUniprotAccessionSet");
+//        LOGGER.debug("SEARCH before preparing callables for getRelatedUniprotAccessionSet");
         List<Callable<ArrayOfArrayOfString>> callableList = 
                 new ArrayList<Callable<ArrayOfArrayOfString>>();
         for (ParamOfGetResults param:paramOfGetResults)  {
             callableList.addAll(prepareCallableCollection(param));
         }
-        LOGGER.debug("SEARCH before executing callables for getRelatedUniprotAccessionSet");
+//        LOGGER.debug("SEARCH before executing callables for getRelatedUniprotAccessionSet");
         List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
-        LOGGER.debug("SEARCH before Transformer.transformFieldValueToList");
+//        LOGGER.debug("SEARCH before Transformer.transformFieldValueToList");
 		Set<String> accessionSet = Transformer.transformFieldValueToList(rawResults, true);
-        LOGGER.debug("SEARCH after Transformer.transformFieldValueToList");
+//        LOGGER.debug("SEARCH after Transformer.transformFieldValueToList");
         accessionList.addAll(accessionSet);
         return accessionList;
     }
@@ -401,10 +366,10 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 
     public Map<String, List<String>> getUniprotRefAccesionsMap(
     		ParamOfGetResults paramOfGetResults) throws MultiThreadingException {
-    	LOGGER.debug("SEARCH before prepareCallableCollection");
+//    	LOGGER.debug("SEARCH before prepareCallableCollection");
         List<Callable<ArrayOfArrayOfString>> callableList
                  = prepareCallableCollection(paramOfGetResults);
-    	LOGGER.debug("SEARCH before executeCallables");
+//    	LOGGER.debug("SEARCH before executeCallables");
         List<ArrayOfArrayOfString> ids = executeCallables(callableList);
         
         EbeyeCallable.GetReferencedEntriesSet callable =
@@ -415,11 +380,11 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     					Transformer.transformToArrayOfString(FieldsOfUniprotNameMap.id.name()));
         ArrayOfEntryReferences references = callable.callGetReferencedEntriesSet();
         
-     	LOGGER.debug("SEARCH before Transformer.transformChebiResults");
+//     	LOGGER.debug("SEARCH before Transformer.transformChebiResults");
 //        Map<String,List<String>> uniprotRefAccessionsMap = Transformer.transformChebiResults(rawResults, true);
      	Map<String, List<String>> uniprotRefAccessionsMap =
      			Transformer.transformToMap(references);
-     	LOGGER.debug("SEARCH after Transformer.transformChebiResults");
+//     	LOGGER.debug("SEARCH after Transformer.transformChebiResults");
         return uniprotRefAccessionsMap;
     }
 
