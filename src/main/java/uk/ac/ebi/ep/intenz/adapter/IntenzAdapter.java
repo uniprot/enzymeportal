@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -37,47 +39,38 @@ import uk.ac.ebi.util.result.DataTypeConverter;
  */
 public class IntenzAdapter implements IintenzAdapter{
 
-
-//********************************* VARIABLES ********************************//
 	private static final Logger LOGGER = Logger.getLogger(IntenzAdapter.class);
 
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
-
-    public Map<String, Set<String>> getSynonyms(
-            Set<String> ecNumbers) throws MultiThreadingException {
+    public Map<String, Set<String>> getSynonyms(Set<String> ecNumbers)
+	throws MultiThreadingException {
         ExecutorService pool = Executors.newCachedThreadPool();
+        // TODO: use a CompletionExecutionService,
+        // but how to know which Future is for which EC number?
         Map<String, Set<String>> resultMap =
         		new Hashtable<String, Set<String>>();
         Map<String, Future<Set<String>>> futures =
         		new HashMap<String, Future<Set<String>>>();
         try {
-        	LOGGER.debug("SEARCH synonyms before submitting callables");
+//        	LOGGER.debug("SEARCH synonyms before submitting callables");
 	        for (String ecNumber:ecNumbers) {
 	            Callable<Set<String>> callable = new GetSynonymsCaller(
 	                    IntenzUtil.createIntenzEntryUrl(ecNumber));
 	            Future<Set<String>> future = pool.submit(callable);
 	            futures.put(ecNumber, future);
 	        }
-        	LOGGER.debug("SEARCH synonyms before getting futures");
+//        	LOGGER.debug("SEARCH synonyms before getting futures");
 	        for (String ecNumber : futures.keySet()) {
 				try {
 		            Set<String> synonyms = (Set<String>) futures.get(ecNumber).get();
 	                if (synonyms.size() > 0) {
 	                    resultMap.put(ecNumber, synonyms);
 	                }
-		        } catch (InterruptedException ex) {
-		            throw new MultiThreadingException(IintenzAdapter.FAILED_MSG, ex);
-		        } catch (ExecutionException ex) {
-		            throw new MultiThreadingException(IintenzAdapter.FAILED_MSG, ex);
+		        } catch (Exception e) {
+		        	// Don't stop the others
+		        	LOGGER.error("Getting synonyms", e);
 				}
 			}
-        	LOGGER.debug("SEARCH synonyms after getting futures");
+//        	LOGGER.debug("SEARCH synonyms after getting futures");
         } finally {
         	pool.shutdown();
         }
@@ -89,25 +82,25 @@ public class IntenzAdapter implements IintenzAdapter{
         //DataTypeConverter.getUniprotEcs(enzymeModel);
         //Synonyms are merged into one list if there are more than 1 ec number
         Set<String> synonyms = new LinkedHashSet<String>();
-        LOGGER.debug("SEARCH before getIntenz");
+//        LOGGER.debug("SEARCH before getIntenz");
         List<Intenz> intenzList = getIntenz(ecList);
-        LOGGER.debug("SEARCH after  getIntenz");
+//        LOGGER.debug("SEARCH after  getIntenz");
         List<EnzymeHierarchy> enzymeHierarchies = new ArrayList<EnzymeHierarchy>();
         if (intenzList.size() > 0) {
-            LOGGER.debug("SEARCH before intenzList");
+//            LOGGER.debug("SEARCH before intenzList");
             for (Intenz intenz : intenzList) {
                 GetSynonymsCaller synonymsCaller = new GetSynonymsCaller();
                 GetEcHierarchyCaller ecCaller = new GetEcHierarchyCaller();
-                LOGGER.debug("SEARCH before getSynonyms");
+//                LOGGER.debug("SEARCH before getSynonyms");
                 synonyms.addAll(synonymsCaller.getSynonyms(intenz));
-                LOGGER.debug("SEARCH before getEcHierarchy");
+//                LOGGER.debug("SEARCH before getEcHierarchy");
                 EnzymeHierarchy enzymeHierarchy = ecCaller.getEcHierarchy(intenz);
                 if (enzymeHierarchy != null) {
                     enzymeHierarchies.add(enzymeHierarchy);
                 }
-                LOGGER.debug("SEARCH after  getEcHierarchy");
+//                LOGGER.debug("SEARCH after  getEcHierarchy");
             }
-            LOGGER.debug("SEARCH after intenzList");
+//            LOGGER.debug("SEARCH after intenzList");
             if (synonyms.size() > 0) {
                 enzymeModel.getSynonym().addAll(synonyms);
             }
@@ -132,26 +125,32 @@ public class IntenzAdapter implements IintenzAdapter{
 	 throws MultiThreadingException {
          List<Intenz> results = new ArrayList<Intenz>();
          ExecutorService pool = Executors.newCachedThreadPool();
-         List<Future<Intenz>> futures = new ArrayList<Future<Intenz>>();
+         CompletionService<Intenz> ecs =
+        		 new ExecutorCompletionService<Intenz>(pool);
          try {
-        	 LOGGER.debug("SEARCH before callables loop");
+//        	 LOGGER.debug("SEARCH before callables loop");
              for (String ec : ecList) {
-                Callable<Intenz> callable = new GetIntenzCaller(
-                    IntenzUtil.createIntenzEntryUrl(ec));
-                 futures.add(pool.submit(callable));
+                Callable<Intenz> callable =
+                		new GetIntenzCaller(IntenzUtil.createIntenzEntryUrl(ec));
+                ecs.submit(callable);
              }
-        	 LOGGER.debug("SEARCH before futures loop");
-             for (Future<Intenz> future : futures) {
-                 Intenz intenz = future.get();
-                 if (intenz != null) {
-                     results.add(intenz);
-                 }
+//        	 LOGGER.debug("SEARCH before futures loop");
+             for (int i = 0; i < ecList.size(); i++) {
+            	 try {
+                	 Future<Intenz> future = ecs.poll(); // TODO: add timeout
+                     if (future != null) {
+                         Intenz intenz = future.get();
+                         if (intenz != null) results.add(intenz);
+                     } else {
+                    	 LOGGER.warn("Job not returned!");
+                     }
+            	 } catch (Exception e){
+            		 // Don't stop the others
+ 	            	LOGGER.error("Callable " + (i+1) + " of " + ecList.size()
+	            			+ " - " + e.getMessage(), e);
+            	 }
              }
-        	 LOGGER.debug("SEARCH after  futures loop");
-         } catch (InterruptedException ex) {
-        	 throw new MultiThreadingException(IintenzAdapter.FAILED_MSG, ex);
-         } catch (ExecutionException ex) {
-        	 throw new MultiThreadingException(IintenzAdapter.FAILED_MSG, ex);
+//        	 LOGGER.debug("SEARCH after  futures loop");
          } finally {
         	 pool.shutdown();
          }
