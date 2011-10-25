@@ -52,10 +52,6 @@ public class IntenzCallable {
 	    }
     }
 
-//******************************** CONSTRUCTORS ******************************//
-//****************************** GETTER & SETTER *****************************//
-//********************************** METHODS *********************************//
-//******************************** INNER CLASS *******************************//
     public static class GetIntenzCaller implements Callable<Intenz> {
 
         protected String ecUrl;
@@ -78,17 +74,17 @@ public class IntenzCallable {
             InputStream is = null;
             try {
                 url = new URL(ecUrl);
-                LOGGER.debug("SEARCH before openConnection");
+//                LOGGER.debug("SEARCH before openConnection");
                 con = url.openConnection(Proxy.NO_PROXY);
                 con.connect();
-                LOGGER.debug("SEARCH before getInputStream");
+//                LOGGER.debug("SEARCH before getInputStream");
                 is = con.getInputStream();
-                LOGGER.debug("SEARCH before creating unmarshaller");
+//                LOGGER.debug("SEARCH before creating unmarshaller");
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 if (is != null) {
-                    LOGGER.debug("SEARCH before unmarshal");
+//                    LOGGER.debug("SEARCH before unmarshal");
                     intenz = (Intenz) unmarshaller.unmarshal(is);
-                    LOGGER.debug("SEARCH after unmarshal");
+//                    LOGGER.debug("SEARCH after unmarshal");
                 }
             } catch (MalformedURLException ex) {
                 LOGGER.error(IintenzAdapter.FAILED_MSG

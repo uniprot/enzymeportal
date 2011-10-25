@@ -35,5 +35,14 @@ public interface UniprotConfigMBean {
 	public abstract void setUseProxy(boolean useProxy);
 	
 	public abstract boolean getUseProxy();
+	
+	/**
+	 * Sets the maximum number of terms (accessions, IDs) that canbe used
+	 * in a single query as OR'ed terms.
+	 * @param max the maximum number of terms per query.
+	 */
+	public abstract void setMaxTermsPerQuery(int max);
+	
+	public abstract int getMaxTermsPerQuery();
 
 }

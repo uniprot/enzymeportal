@@ -8,19 +8,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
 /**
- * Callable to search UniProt via web services, getting UniProt IDs matching
- * a query.
+ * Superclass for Callables to search UniProt via web services. All queries get
+ * automatically a filter for enzymes.
  * @author rafa
+ * @param <T>
  *
  */
-public class UniprotWsSearchCallable implements Callable<List<String>> {
+public abstract class UniprotWsSearchCallable<T>
+implements Callable<T> {
 	
 	private static final Logger LOGGER = Logger.getLogger(UniprotWsSearchCallable.class);
 	
@@ -33,27 +33,25 @@ public class UniprotWsSearchCallable implements Callable<List<String>> {
 	 * 		for uniprot.
 	 * @param config configuration for UniProt.
 	 */
-	public UniprotWsSearchCallable(String query, UniprotConfig config) {
+	protected UniprotWsSearchCallable(String query, UniprotConfig config) {
 		this.query = query;
 		this.config = config;
 	}
 
-	public List<String> call() {
-		return getUniprotIds();
-	}
-
 	/**
-	 * Retrieves UniProt IDs for enzymes matching the query.
-	 * @return
+	 * Gets results from the web service.
+	 * @param processor the processor to use, depending on what we are
+	 * 		interested in.
+	 * @return results from the web service, or <code>null</code> if none
+	 * 		found.
 	 */
-	protected List<String> getUniprotIds(){
-		List<String> ids = null;
-		String fields = "entry+name";
+	protected Object get(IUniprotWsSearchProcessor<?> processor){
+		Object result = null;
 		// Add flags for reviewed and enzymes:
-		final String rev = config.isReviewed()? " reviewed:yes" : "";
+		final String rev = config.isReviewed()? "+reviewed:yes" : "";
 		final String enzymes = "+ec:*";
 		String url = MessageFormat.format(config.getWsUrl(),
-				query + rev + enzymes, fields);
+				query + rev + enzymes, processor.getFields());
 		BufferedReader br = null;
 		InputStreamReader isr = null;
 		InputStream is = null;
@@ -64,14 +62,7 @@ public class UniprotWsSearchCallable implements Callable<List<String>> {
 			is = con.getInputStream();
 			isr = new InputStreamReader(is);
 			br = new BufferedReader(isr);
-			String id = null;
-			while ((id = br.readLine()) != null){
-				if (ids == null){
-					ids = new ArrayList<String>();
-					continue; // first line is a header
-				}
-				ids.add(id);
-			}
+			result = processor.process(br);
 		} catch (MalformedURLException e) {
 			LOGGER.error("Bad URL: " + url, e);
 		} catch (IOException e) {
@@ -96,7 +87,29 @@ public class UniprotWsSearchCallable implements Callable<List<String>> {
 					LOGGER.error("Unable to close reader", e);
 				}
 		}
-		return ids;
+		return result;
 	}
 
+	/**
+	 * An object which knows what columns to retrieve from the web service
+	 * and how to process them.
+	 * @author rafa
+	 *
+	 * @param <T>
+	 */
+	protected interface IUniprotWsSearchProcessor<T> {
+		
+		/**
+		 * @return The fields (columns) retrieved from the web service.
+		 */
+		String getFields();
+		
+		/**
+		 * Processes the stream from the web service.
+		 * @param reader The object reading the response from the web service.
+		 * @return The expected result from the implementation.
+		 * @throws IOException
+		 */
+		T process(BufferedReader reader) throws IOException;
+	}
 }

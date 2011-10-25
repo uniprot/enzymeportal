@@ -2,9 +2,11 @@ package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.Species;
 
 /**
  * Proxy to get enzyme data from UniProt.
@@ -16,11 +18,7 @@ import uk.ac.ebi.ep.search.model.EnzymeSummary;
  */
 public interface IUniprotAdapter {
 
-//********************************* VARIABLES ********************************//
-
-    //Limited species list
-//    public static final int SPECIES_BRIEF_MAX_SIZE = 10;
-    public static final String ACCESSION_FIELD = "accession";
+	public static final String ACCESSION_FIELD = "accession";
     
     /** id field in EB-Eye, that is the UniProt accession! */
     public static final String ID_FIELD = "id";
@@ -30,15 +28,6 @@ public interface IUniprotAdapter {
     public static final String ID_SPLIT_SYMBOL = "_";
 
     public static final String DEFAULT_SPECIES = "Homo sapiens";
-
-
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
     
     /**
      * @return the configuration for this UniProt proxy.
@@ -88,7 +77,7 @@ public interface IUniprotAdapter {
      * 		suffix).
      * @param defaultSpecies the species to use as default.
      * @param speciesFilter the species used as filter.
-     * @return an list of enzyme summaries.
+     * @return a list of enzyme summaries.
      * @throws MultiThreadingException
      */
     public List<EnzymeSummary> getEnzymesByIdPrefixes(List<String> queries,
@@ -100,7 +89,29 @@ public interface IUniprotAdapter {
      * @param query the query to UniProt.
      * @return a list of UniProt IDs (entry names).
      */
-	public List<String> getUniprotIds(String query);    
+	public List<String> getUniprotIds(String query);
+
+	/**
+	 * Gets the UniProt accessions returned by a simple text query.
+	 * @param query the query to UniProt.
+	 * @return A list of UniProt accessions.
+	 */
+	public List<String> getUniprotAccessions(String query);
+
+    /**
+     * Gets the UniProt IDs (entry names) along with their corresponding
+     * species.
+     * @param accessions the UniProt accessions.
+     * @return a map of UniProt IDs (entry names) to species (one to one).
+     */
+	public Map<String,Species> getIdsAndSpecies(Collection<String> accessions);
+	
+	/**
+	 * Gets all known species (homologs) corresponding to the given ID prefixes.
+	 * @param idPrefixes the prefixes of UniProt IDs.
+	 * @return a collection of Species.
+	 */
+	public Collection<Species> getSpecies(Collection<String> idPrefixes); 
 }
 
 

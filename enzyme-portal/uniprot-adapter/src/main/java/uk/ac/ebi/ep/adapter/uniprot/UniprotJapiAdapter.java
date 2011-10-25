@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.adapter.uniprot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
@@ -17,6 +18,7 @@ import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiCallable.GetEntryCaller;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiCallable.QueryEntryByIdCaller;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 
 /**
@@ -124,5 +126,16 @@ public class UniprotJapiAdapter extends AbstractUniprotAdapter{
     	LOGGER.debug("SEARCH end setRelatedSpecies");
     }
 
+	public Map<String, Species> getIdsAndSpecies(Collection<String> accessions) {
+		throw new UnsupportedOperationException("Not implemented"); // FIXME ?
+	}
+
+	public List<String> getUniprotAccessions(String query) {
+		throw new UnsupportedOperationException("Not implemented"); // FIXME ?
+	}
+
+	public Collection<Species> getSpecies(Collection<String> idPrefixes) {
+		throw new UnsupportedOperationException("Not implemented"); // FIXME ?
+	}
 
 }

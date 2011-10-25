@@ -81,10 +81,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         litAdapter = new SimpleLiteratureAdapter();
     }
 
-//****************************** GETTER & SETTER *****************************//
-//********************************** METHODS *********************************//
-    public EnzymeModel getEnzyme(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel) this.uniprotAdapter.getEnzymeSummary(uniprotAccession);
+    public EnzymeModel getEnzyme(String uniprotAccession)
+	throws EnzymeRetrieverException {
+        EnzymeModel enzymeModel = (EnzymeModel)
+        		uniprotAdapter.getEnzymeSummary(uniprotAccession);
         try {
             this.intenzAdapter.getEnzymeDetails(enzymeModel);
         } catch (MultiThreadingException ex) {
@@ -133,6 +133,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         }
         return idNameMap;
     }
+    
     public EnzymeModel getReactionsPathways(String uniprotAccession)
 	throws EnzymeRetrieverException {
         //Get pathways from uniprot --> maybe not for now
