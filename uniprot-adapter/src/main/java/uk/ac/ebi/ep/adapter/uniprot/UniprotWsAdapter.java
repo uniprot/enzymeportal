@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -111,20 +112,21 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    ExecutorService pool = Executors.newCachedThreadPool();
 	    CompletionService<EnzymeSummary> ecs =
 	    		new ExecutorCompletionService<EnzymeSummary>(pool);
-	    List<EnzymeSummary> enzymeSummaryList = new ArrayList<EnzymeSummary>();
+	    Map<Future<EnzymeSummary>, EnzymeSummary> future2summary =
+	    		new LinkedHashMap<Future<EnzymeSummary>, EnzymeSummary>();
 	    try {
 	    	for (String query : idPrefixes) {
 				Callable<EnzymeSummary> callable = new UniprotWsSummaryCallable(
 						query+"_*", IdType.ENTRY_NAME, Field.brief,
 						defaultSpecies, config);
-				ecs.submit(callable);
+				future2summary.put(ecs.submit(callable), null);
 			}
 	    	for (int i = 0; i < idPrefixes.size(); i++){
 	    		try {
 	    			Future<EnzymeSummary> future =
 	    					ecs.poll(config.getTimeout(), TimeUnit.SECONDS);
 	    			if (future != null){
-	    				enzymeSummaryList.add(future.get());
+	    				future2summary.put(future, future.get());
 	    			} else {
 	    				LOGGER.warn("SEARCH job result not retrieved!");
 	    			}
@@ -134,7 +136,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	            			+ " - " + e.getMessage(), e);
 	    		}
 	    	}
-	    	return enzymeSummaryList;
+	    	return new ArrayList<EnzymeSummary>(future2summary.values());
 	    } finally {
 	    	pool.shutdown();
 	    }
