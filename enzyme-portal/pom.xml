@@ -159,5 +159,6 @@
     <module>chebi-adapter</module>
     <module>literature-adapter</module>
     <module>biomart-adapter</module>
+    <module>mega-mapper</module>
   </modules>
 </project>
