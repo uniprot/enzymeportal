@@ -109,7 +109,7 @@ This enzyme has been partially classified because its catalytic activity is eith
                 </li>
             </ul>
         </dd>
-        <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in Uniprot</a></p>
+        <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in UniProt</a></p>
     </dl>
 </div>
                                         
