@@ -90,7 +90,7 @@ public class DataTypeConverter {
     public static List<String> getMoleculeNames(List<Molecule> mols) {
         List<String> molNames = new ArrayList<String>();
         for (Molecule mol:mols) {
-            molNames.add(mol.getName());
+            if (mol.getName() != null) molNames.add(mol.getName());
         }
         return molNames;
     }
