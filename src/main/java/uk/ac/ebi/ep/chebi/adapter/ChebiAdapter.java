@@ -1,14 +1,12 @@
 package uk.ac.ebi.ep.chebi.adapter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.DataItem;
@@ -22,7 +20,6 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
-import uk.ac.ebi.rhea.domain.Database;
 import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**
@@ -203,7 +200,7 @@ public class ChebiAdapter implements IChebiAdapter {
     public EnzymeModel getMoleculeCompleteEntries(EnzymeModel enzymeModel) throws ChebiFetchDataException {
         ChemicalEntity chemicalEntity = enzymeModel.getMolecule();
         Set<String> uniqueMoleculeNames = new HashSet<String>();
-        List<String> drugNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getDrugs());
+        List<String> drugNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getDrugs());// FIXME drugbank comes without names
         List<String> activatorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getActivators());
         List<String> inhibitorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getInhibitors());
         uniqueMoleculeNames.addAll(drugNames);
