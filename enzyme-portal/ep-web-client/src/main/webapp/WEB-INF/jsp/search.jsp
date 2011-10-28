@@ -80,20 +80,16 @@
                             <c:if test="${speciesListSize > filterSizeDefault}">
                                 <div id="species_0" style="display: none">
                                 <c:forEach var="i" begin="${filterSizeDefault}" end="${speciesListSize-1}">
-                                    <c:set var="speciesSciName" value="${speciesList[i].scientificname}"/>
-                                    <c:set var="speciesName" value="${speciesList[i].commonname}"/>
-                                    <c:if test='${speciesName ==""}'>
-                                        <c:set var="speciesName" value="${speciesSciName}"/>
-                                    </c:if>
-                                    <c:if test='${speciesSciName != ""}'>
+                                    <c:if test="${not empty speciesList[i].scientificname}">
                                     <div class="filterLine">
                                     <div class="text">
-                                    <span>
-                                        <c:out value="${speciesName}"/>
+                                    <span>${empty speciesList[i].commonname?
+                                            speciesList[i].scientificname :
+                                            speciesList[i].commonname}
                                     </span>
                                     </div>
                                     <div class="checkItem">
-                                        <form:checkbox path="searchparams.species" value="${speciesSciName}"/>
+                                        <form:checkbox path="searchparams.species" value="${speciesList[i].scientificname}"/>
                                      </div>
                                     <div class="clear"></div>
                                     </div>
@@ -109,6 +105,7 @@
                         <div class="subTitle">
                             Chemical Compounds
                         </div>
+                        <%--
                         <div class="filterContent">
                             <c:set var="compoundList" value="${searchFilter.compounds}"/>
                             <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
@@ -151,6 +148,12 @@
                              <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
                             </c:if>
                         </div>
+                         --%>
+                    </div>
+                    <div class="sublevel1" >
+                        <div class="subTitle">
+                            Diseases
+                        </div>
                     </div>
                     <div class="floatRight">
                         <input id ="filterButton" type="submit" value="Filter Selected" class="filterButton"/>                        
@@ -170,26 +173,28 @@
                             displaying <c:out value="${startRecord+1}"/> - <c:out value="${startRecord+summaryentriesSize}"/>
 
                         </div>
-                        <div id="pagination">                                    
-                                <c:if test="${totalPages>pagination.maxDisplayedPages}">
-                                    <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
-                                    <c:set var="showNextButton" value="${true}"/>
-                                </c:if>
-                                <input id ="prevStart" type="hidden" value="${startRecord-summaryentriesSize}">
-                                <c:if test="${pagination.currentPage==1}">
-                                    <c:set var="prevDisplay" value="none"/>
-                                </c:if>
-                                <a id="prevButton" href="javascript:void(0);" style="display:${prevDisplay}">
-                                    Previous
+                        <div id="pagination">
+                            <c:if test="${totalPages gt pagination.maxDisplayedPages}">
+                                <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
+                                <c:set var="showNextButton" value="${true}"/>
+                            </c:if>
+                            <input id ="prevStart" type="hidden"
+                            	value="${startRecord - pagination.numberResultsPerPage}">
+                            <c:if test="${pagination.currentPage eq 1}">
+                                <c:set var="prevDisplay" value="none"/>
+                            </c:if>
+                            <a id="prevButton" href="javascript:void(0);" style="display:${prevDisplay}">
+                                Previous
+                            </a>
+                            Page <c:out value="${pagination.currentPage}"/> of <c:out value="${totalPages}"/>
+							
+                            <c:if test="${startRecord + pagination.numberResultsPerPage le totalfound}">
+                                <input id ="nextStart" type="hidden"
+                                	value="${startRecord + pagination.numberResultsPerPage}">                                    
+                                <a id="nextButton" href="javascript:void(0);">
+                                    Next
                                 </a>
-                                Page <c:out value="${pagination.currentPage}"/> of <c:out value="${totalPages}"/>
-
-                                <c:if test="${showNextButton==true}">
-                                    <input id ="nextStart" type="hidden" value="${startRecord+summaryentriesSize}">                                    
-                                    <a id="nextButton" href="javascript:void(0);">
-                                        Next
-                                    </a>
-                                </c:if>                         
+                            </c:if>                         
                         </div>
                         </form:form>
                     <div class="clear"></div>

@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.intenz.adapter;
+package uk.ac.ebi.ep.adapter.intenz;
 
 import java.io.IOException;
 import java.io.InputStream;

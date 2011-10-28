@@ -1,4 +1,4 @@
-package uk.ac.ebi.intenz.adapter.exception;
+package uk.ac.ebi.ep.adapter.intenz.exception;
 
 /**
  *

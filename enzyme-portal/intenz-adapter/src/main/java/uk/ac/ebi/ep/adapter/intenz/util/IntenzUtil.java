@@ -1,4 +1,4 @@
-package uk.ac.ebi.intenz.adapter.util;
+package uk.ac.ebi.ep.adapter.intenz.util;
 
 /**
  *
@@ -10,20 +10,10 @@ package uk.ac.ebi.intenz.adapter.util;
  */
 public class IntenzUtil {
 
-//********************************* VARIABLES ********************************//
-
     public static final String INTENZ_FTP_ADD =
             "ftp://ftp.ebi.ac.uk/pub/databases/intenz/xml/ASCII";
             //"ftp://ftp.ebi.ac.uk/pub/databases/intenz/xml/ASCII/EC_1/EC_1.1/EC_1.1.1/EC_1.1.1.1.xml";
     public static final String EC_PREFIX = "EC_";
-
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
 
     public static String createIntenzEntryUrl(String ecNumber) {
         String[] ecNumberFragments = ecNumber.split("\\.");
@@ -45,10 +35,6 @@ public class IntenzUtil {
         }
         sb.append(".xml");
         return sb.toString();
-    }
-
-    public static void main (String[] args) {
-        System.out.print(IntenzUtil.createIntenzEntryUrl("1.1.1.1"));
     }
 
 }

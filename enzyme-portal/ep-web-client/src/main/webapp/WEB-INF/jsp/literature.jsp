@@ -42,9 +42,10 @@
 	    <c:if test="${not empty cit.abstractText}">
 	    <div class="pub_abstract" style="display: table-row;">
 	    	<div onclick="$('#cit-${cit.externalId}').toggle()"
-	    		style="display: table-cell; white-space: nowrap; cursor: pointer; font-size: small">
+	    		style="display: table-cell; white-space: nowrap; cursor: pointer; font-size: smaller;">
 	    		Toggle abstract &gt; </div>
-			<div id="cit-${cit.externalId}" style="display: none">${cit.abstractText}</div>
+			<div id="cit-${cit.externalId}" style="display: none; margin-left: 1em;">
+				${cit.abstractText}</div>
 	    </div>
 	    </c:if>
 		<div class="pub_authors">
