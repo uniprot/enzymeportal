@@ -86,7 +86,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         EnzymeModel enzymeModel = (EnzymeModel)
         		uniprotAdapter.getEnzymeSummary(uniprotAccession);
         try {
-            this.intenzAdapter.getEnzymeDetails(enzymeModel);
+            intenzAdapter.getEnzymeDetails(enzymeModel);
         } catch (MultiThreadingException ex) {
             throw new EnzymeRetrieverException("Unable to retrieve the entry details! ", ex);
         }
@@ -183,44 +183,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         } else { //No Rhea reactions found, use reactome reaction and pathways
             getReactionPathwaysByUniprotAcc(enzymeModel);
         }
-        
-        /*
-        for (ReactionPathway reactionPathway: reactionPathways) {
-            EnzymeReaction reaction = reactionPathway.getReaction();
-            if (reaction != null) {
-                List<String> reactomeStableIds = new ArrayList<String>();
-                List<Object> reactomeReactionIds = reaction.getXrefs();
-                //if there is no Reactome reaction id in Rhea
-
-                for (Object reactomeReactionId:reactomeReactionIds ) {
-                    String castedId = null;
-
-                    try {
-                        castedId = (String) reactomeReactionId;
-                        reactomeStableIds.addAll(biomartAdapter.getPathwaysByReactionId(castedId));
-                    } catch (BiomartFetchDataException ex) {
-                        throw new EnzymeRetrieverException("Failed to get reactome stable ids " +
-                                "from Biomart for Reaction " +castedId, ex);
-                    }
-                    if (reactomeStableIds.size() == 0) {
-                        reactomeReactionIds.addAll(reactomeStableIdsFromUniprot);
-                    } else {
-                        List<Pathway> pathways = null;
-                        try {
-                            reactomeAdapter.getPathwayDescription(reactomeStableIds);
-                        } catch (ReactomeServiceException ex) {
-                            throw new EnzymeRetrieverException("Failed to get reactome description " +
-                                "from Reactome for Reaction " +castedId, ex);
-                        }
-
-                        reactionPathway.setPathways(pathways);
-                    }
-                }
-
-
-            }
-        }
-        */
         return enzymeModel;
     }
 
@@ -292,70 +254,17 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return pathways;
     }
 
-    public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
+    public EnzymeModel getMolecules(String uniprotAccession)
+	throws EnzymeRetrieverException {
+        EnzymeModel enzymeModel = (EnzymeModel)
+        		uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
         try {
-            this.chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
+            chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
         } catch (ChebiFetchDataException ex) {
             throw new EnzymeRetrieverException("Failed to get small molecule details from Chebi", ex);
         }
         return enzymeModel;
-
     }
-/*
-    public EnzymeModel getMolecules(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getMoleculeSummary(uniprotAccession);
-        List<Molecule> drugs = enzymeModel.getMolecule().getDrugs();
-        List<Molecule> moleculesFromChebi = new ArrayList<Molecule>();
-        for (Molecule drug:drugs) {
-            List<Object> drugBankIds = drug.getXrefs();
-            String drugBankId = null;
-            if (drugBankIds.size() > 0 ) {
-                drugBankId = (String) drugBankIds.get(0);
-            }
-            if (drugBankId != null) {
-                try {
-                    List<String> chebiIdsLinkedToDrugbank = this.chebiAdapter.getChebiLiteEntity(drugBankId);
-                    //System.out.print("Chebi drugs: " +chebiEntitiesLinkedToDrugBank);
-                    for (String chebiId: chebiIdsLinkedToDrugbank) {
-                        Molecule moleculeFromChebi = (Molecule)this.chebiAdapter.getEpChemicalEntity(chebiId);
-                        moleculeFromChebi.setXrefs(drugBankIds);
-                        moleculesFromChebi.add(moleculeFromChebi);
-                    }
-                } catch (ChebiFetchDataException ex) {
-                    log.error("Failed to query Chebi for DrugBank id " +drugBankId, ex);
-                    //java.util.logging.Logger.getLogger(EnzymeRetriever.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        enzymeModel.getMolecule().setDrugs(moleculesFromChebi);
-        return enzymeModel;
-
-    }
-*/
-/*
-    public EnzymeModel getReactionsPathways(String uniprotAccession) throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
-        getReactionsPathways(enzymeModel);
-        List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
-        for (ReactionPathway reactionPathway: reactionPathways) {
-            List<Pathway> pathways = reactionPathway.getPathways();
-            EnzymeReaction enzymeReaction = reactionPathway.getReaction();
-            for (Pathway pathway: pathways) {
-                String reactomeUrl = (String)pathway.getUrl();
-                try {
-                    String[] result = this.reactomeAdapter.getReaction(reactomeUrl);
-                    if (result.length > 1){
-                        enzymeReaction.setDescription(result[1]);
-                    }
-                } catch (ReactomeServiceException ex) {
-                    log.error("Failed to retrieve reaction desciption for " +reactomeUrl);
-                }
-            }
-        }        
-        return enzymeModel;
-    }
-*/
 
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
