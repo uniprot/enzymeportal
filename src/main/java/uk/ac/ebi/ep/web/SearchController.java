@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
+import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
@@ -51,6 +52,9 @@ public class SearchController {
     
     @Autowired
     private Config searchConfig;
+    
+    @Autowired
+    private IntenzConfig intenzConfig;
 
     /**
      * Process the entry page,
@@ -67,6 +71,7 @@ public class SearchController {
         EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         retriever.getUniprotAdapter().setConfig(uniprotConfig);
+        retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = "entry";
         try {

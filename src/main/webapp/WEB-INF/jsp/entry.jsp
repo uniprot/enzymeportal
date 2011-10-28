@@ -37,9 +37,9 @@
                     <!--<c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&chebiId="/>-->
                     <c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId="/>
                     <c:set var="chebiImageParams" value="&dimensions=200&scaleMolecule=true"/>
-                    <c:set var="chebiEntryBaseUrl" value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI%3A57746&conversationContext=3"/>
-                    <c:set var="chebiEntryBaseUrlParam" value="&conversationContext=3"/>
-                    <c:set var="rheaEntryBaseUrl" value="http://www.ebi.ac.uk/rhea//reaction.xhtml?id="/>
+                    <c:set var="chebiEntryBaseUrl" value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId="/>
+                    <c:set var="chebiEntryBaseUrlParam" value=""/>
+                    <c:set var="rheaEntryBaseUrl" value="http://www.ebi.ac.uk/rhea/reaction.xhtml?id="/>
                     <c:set var="intenzEntryBaseUrl" value="http://wwwdev.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
 
                     <c:set var="reactomeImageBaseUrl" value="http://www.reactome.org/"/>

@@ -120,8 +120,10 @@ a:link, a:visited {
 
 .filter .sublevel1 {
     margin-top: 10px;
+    /*
     min-height: 120px;
-    /*max-height: 600px;*/
+    max-height: 600px;
+    */
     border: 1px solid #ddd;    
     -moz-border-radius: 8px 8px 8px 8px;
     border-radius:8px 8px 8px 8px;
