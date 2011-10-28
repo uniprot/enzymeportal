@@ -16,12 +16,12 @@ import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ep.adapter.intenz.IintenzAdapter;
+import uk.ac.ebi.ep.adapter.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.adapter.uniprot.IUniprotAdapter;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiAdapter;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotWsAdapter;
 import uk.ac.ebi.ep.config.Domain;
-import uk.ac.ebi.ep.intenz.adapter.IintenzAdapter;
-import uk.ac.ebi.ep.intenz.adapter.IntenzAdapter;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
@@ -317,7 +317,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         enzymeSearchResults.setTotalfound(totalFound);
 //        LOGGER.debug("SEARCH before getEnzymeSummary, resultSubList.size = "
 //        		+ resultSubList.size());
-        enzymeSummaryList = this.getEnzymeSummaries(resultSubList);
+        enzymeSummaryList = getEnzymeSummaries(resultSubList);
 //        LOGGER.debug("SEARCH after  getEnzymeSummary");
 
         enzymeSearchResults.getSummaryentries().addAll(enzymeSummaryList);
