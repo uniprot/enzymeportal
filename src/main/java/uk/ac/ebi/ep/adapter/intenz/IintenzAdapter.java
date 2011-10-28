@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.intenz.adapter;
+package uk.ac.ebi.ep.adapter.intenz;
 
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +25,11 @@ public interface IintenzAdapter {
      * @return
      * @throws MultiThreadingException
      */
-   public EnzymeModel getEnzymeDetails(EnzymeModel enzymeModel)  throws MultiThreadingException;
+	public EnzymeModel getEnzymeDetails(EnzymeModel enzymeModel)
+	throws MultiThreadingException;
+
+	public void setConfig(IntenzConfig config);
+
+	public IntenzConfig getConfig();
 
 }
