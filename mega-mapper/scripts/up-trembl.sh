@@ -1,5 +1,5 @@
 #!/bin/bash
-# Indexes TrEMBL enzymes into an existing mega-mapper index.
+# Indexes TrEMBL enzymes into an existing mega-map.
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
