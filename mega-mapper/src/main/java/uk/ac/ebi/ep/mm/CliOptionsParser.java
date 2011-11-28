@@ -24,10 +24,11 @@ public class CliOptionsParser {
 	 * 	<li>-indexDir &lt;indexDir&gt; (optional): the directory for a lucene
 	 * 		index. If it does not exist, a new one is created.</li>
 	 * 	<li>-dbConfig &lt;dbConfig&gt; (optional): the name of a database
-	 * 		configuration as defined in a hibernate configuration file.</li>
+	 * 		configuration (hibernate configuration file).</li>
 	 * </ul>
 	 * Either <code>-indexDir</code> or <code>-dbConfig</code> must be defined,
-	 * but not both.
+	 * but not both. If none of them is defined, the default hibernate config
+	 * file - <code>hibernate.cfg.xml</code> - will be used as dbConfig. 
 	 * @return a commandLine object with the required options, or
 	 * 		<code>null</code> if the arguments are not valid.
 	 */
@@ -49,9 +50,7 @@ public class CliOptionsParser {
         CommandLine cl = null;
         try {
             cl = new GnuParser().parse(options, args);
-	        if (!cl.hasOption("indexDir") && !cl.hasOption("dbConfig")){
-	        	throw new ParseException("Either indexDir or dbConfig must be defined");
-	        } else if (cl.hasOption("indexDir") && cl.hasOption("dbCOnfig")){
+	        if (cl.hasOption("indexDir") && cl.hasOption("dbCOnfig")){
             	throw new ParseException("Either indexDir or dbConfig must be" +
             			" defined, but not both");
 	        }
