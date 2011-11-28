@@ -28,22 +28,22 @@ public class MegaDbMapper implements MegaMapper {
 
 	@Override
 	public void writeEntry(Entry entry) throws IOException {
-		session.save(entry);
+		session.saveOrUpdate(entry);
 	}
 
 	@Override
 	public void writeRelationship(Relationship relationship) throws IOException {
-		session.save(relationship);
+		session.saveOrUpdate(relationship);
 	}
 
 	@Override
 	public void write(Collection<Entry> entries,
 			Collection<Relationship> relationships) throws IOException {
 		for (Entry entry : entries) {
-			session.save(entry);
+			writeEntry(entry);
 		}
 		for (Relationship relationship : relationships) {
-			session.save(relationship);
+			writeRelationship(relationship);
 		}
 	}
 
