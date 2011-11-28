@@ -46,7 +46,6 @@ public class Entry {
 		int result = 1;
 		result = prime * result + ((dbName == null) ? 0 : dbName.hashCode());
 		result = prime * result + ((entryId == null) ? 0 : entryId.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 	@Override
@@ -67,8 +66,6 @@ public class Entry {
 			if (other.entryId != null)
 				return false;
 		} else if (!entryId.equals(other.entryId))
-			return false;
-		if (id != other.id)
 			return false;
 		return true;
 	}

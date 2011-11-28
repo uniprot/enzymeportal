@@ -42,7 +42,6 @@ public class Relationship implements Serializable {
 		int result = 1;
 		result = prime * result
 				+ ((fromEntry == null) ? 0 : fromEntry.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result
 				+ ((relationship == null) ? 0 : relationship.hashCode());
 		result = prime * result
@@ -62,8 +61,6 @@ public class Relationship implements Serializable {
 			if (other.fromEntry != null)
 				return false;
 		} else if (!fromEntry.equals(other.fromEntry))
-			return false;
-		if (id != other.id)
 			return false;
 		if (relationship == null) {
 			if (other.relationship != null)
