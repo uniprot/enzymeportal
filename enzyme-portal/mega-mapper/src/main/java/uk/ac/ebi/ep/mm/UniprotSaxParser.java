@@ -97,9 +97,9 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
         CommandLine cl = CliOptionsParser.getCommandLine(args);
         if (cl != null){
     		MmParser parser = new UniprotSaxParser();
-    		MegaMapper writer = cl.hasOption("dbConfig")?
-    				new MegaDbMapper(cl.getOptionValue("dbConfig")):
-    				new MegaLuceneMapper(cl.getOptionValue("indexDir"));
+    		MegaMapper writer = cl.hasOption("indexDir")?
+    				new MegaLuceneMapper(cl.getOptionValue("indexDir")):
+    				new MegaDbMapper(cl.getOptionValue("dbConfig"));
     		parser.setWriter(writer);
     		parser.parse(cl.getOptionValue("xmlFile"));
         }
