@@ -13,6 +13,6 @@ do
     CP=$CP:$JAR
 done
 
-java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser \
-    -xmlFile $1 -indexDir $2
-
+echo "Starting EB-Eye import - $(date)"
+java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser -xmlFile $1
+echo "Finished EB-Eye import - $(date)"

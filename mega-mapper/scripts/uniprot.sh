@@ -16,8 +16,7 @@ do
     CP=$CP:$JAR
 done
 
-java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $SWISSPROT \
-&& java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $TREMBL
-
+echo "Starting UniProt import - $(date)"
+java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $SWISSPROT \
+&& java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $TREMBL
+echo "Finished UniProt import - $(date)"
