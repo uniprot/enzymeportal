@@ -14,4 +14,6 @@ do
     CP=$CP:$JAR
 done
 
+echo "Starting TrEMBL import - $(date)"
 java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $TREMBL
+echo "Finished TrEMBL import - $(date)"

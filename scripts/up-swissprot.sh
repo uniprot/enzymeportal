@@ -14,5 +14,6 @@ do
     CP=$CP:$JAR
 done
 
+echo "Starting Swiss-Prot import - $(date)"
 java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $SWISSPROT
-
+echo "Finished Swiss-Prot import - $(date)"
