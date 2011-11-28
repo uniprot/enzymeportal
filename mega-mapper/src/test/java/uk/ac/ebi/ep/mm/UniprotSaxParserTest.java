@@ -5,19 +5,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 
-public class UniprotIndexerTest extends UniprotIndexer {
+public class UniprotSaxParserTest {
 
-	UniprotIndexer parser;
+	UniprotSaxParser parser;
 	
 	@Before
 	public void init(){
-		parser = new UniprotIndexer();
+		parser = new UniprotSaxParser();
 	}
 
 	@Test
@@ -94,12 +91,6 @@ public class UniprotIndexerTest extends UniprotIndexer {
 		assertEquals(1, parser.accessions.size());
 		parser.endElement(null, "accession", null);
 		assertEquals(2, parser.accessions.size());
-	}
-
-	@Test
-	public void testListToString() {
-		List<String> list = Arrays.asList(new String[]{ "a", "b", "c" });
-		assertEquals("a,b,c", parser.listToString(list));
 	}
 
 }

@@ -13,6 +13,6 @@ do
     CP=$CP:$JAR
 done
 
-java -classpath $CP uk.ac.ebi.ep.mm.EbeyeIndexer \
+java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser \
     -xmlFile $1 -indexDir $2
 

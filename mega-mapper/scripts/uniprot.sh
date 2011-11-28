@@ -18,8 +18,8 @@ do
     CP=$CP:$JAR
 done
 
-java -classpath $CP uk.ac.ebi.ep.mm.UniprotIndexer \
+java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
     -xmlFile $SWISSPROT -indexDir $1 \
-&& java -classpath $CP uk.ac.ebi.ep.mm.UniprotIndexer \
+&& java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
     -xmlFile $TREMBL -indexDir $1
 
