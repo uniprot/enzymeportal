@@ -1,7 +1,5 @@
 #!/bin/bash
 # Indexes TrEMBL enzymes into an existing mega-mapper index.
-# Param:
-# $1: directory for the existing lucene index.
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
@@ -16,6 +14,4 @@ do
     CP=$CP:$JAR
 done
 
-java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $TREMBL -indexDir $1
-
+java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $TREMBL
