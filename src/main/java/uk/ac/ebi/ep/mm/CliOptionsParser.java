@@ -17,12 +17,17 @@ public class CliOptionsParser {
 	/**
 	 * Processes the command line options.
 	 * @param args (order does not matter):
-	 * 		-xmlFile &lt;xmlFile&gt; -indexDir &lt;indexDir&gt;
+	 * 		-xmlFile &lt;xmlFile&gt; (-indexDir &lt;indexDir&gt;|-dbConfig
+	 * 		&lt;dbConfig&gt;)
 	 * <ul>
-	 * 	<li>-xmlFile: the XML file to parse</li>
-	 * 	<li>-indexDir: the directory for the lucene index. If it does not
-	 * 		exist, a new one is created.</li>
+	 * 	<li>-xmlFile &lt;xmlFile&gt;: the XML file to parse</li>
+	 * 	<li>-indexDir &lt;indexDir&gt; (optional): the directory for a lucene
+	 * 		index. If it does not exist, a new one is created.</li>
+	 * 	<li>-dbConfig &lt;dbConfig&gt; (optional): the name of a database
+	 * 		configuration as defined in a hibernate configuration file.</li>
 	 * </ul>
+	 * Either <code>-indexDir</code> or <code>-dbConfig</code> must be defined,
+	 * but not both.
 	 * @return a commandLine object with the required options, or
 	 * 		<code>null</code> if the arguments are not valid.
 	 */
@@ -33,15 +38,25 @@ public class CliOptionsParser {
                 .hasArg().withArgName("xmlFile")
                 .withDescription("UniProt XML file")
                 .create("xmlFile"));
-        options.addOption(OptionBuilder.isRequired()
+        options.addOption(OptionBuilder
                 .hasArg().withArgName("indexDir")
                 .withDescription("Lucene index directory")
                 .create("indexDir"));
+        options.addOption(OptionBuilder
+                .hasArg().withArgName("dbConfig")
+                .withDescription("Configuration for DB connection")
+                .create("dbConfig"));
         CommandLine cl = null;
         try {
             cl = new GnuParser().parse(options, args);
+	        if (!cl.hasOption("indexDir") && !cl.hasOption("dbConfig")){
+	        	throw new ParseException("Either indexDir or dbConfig must be defined");
+	        } else if (cl.hasOption("indexDir") && cl.hasOption("dbCOnfig")){
+            	throw new ParseException("Either indexDir or dbConfig must be" +
+            			" defined, but not both");
+	        }
         } catch (ParseException e){
-            new HelpFormatter().printHelp(UniprotIndexer.class.getName(), options);
+            new HelpFormatter().printHelp(UniprotSaxParser.class.getName(), options);
         }
 		return cl;
 	}

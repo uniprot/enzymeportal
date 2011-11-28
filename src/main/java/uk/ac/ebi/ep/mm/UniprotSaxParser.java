@@ -7,18 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriter.MaxFieldLength;
-import org.apache.lucene.store.NIOFSDirectory;
-import org.apache.lucene.util.Version;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -32,7 +27,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author rafa
  *
  */
-public class UniprotIndexer extends DefaultHandler implements MmIndexer {
+public class UniprotSaxParser extends DefaultHandler implements MmParser {
 
 	private static final String UNIPROT_ENTRY =
 			"//uniprot/entry";
@@ -49,7 +44,10 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 	private static final String UNIPROT_ENTRY_ORGANISM_NAME =
 			"//uniprot/entry/organism/name";
 
-	private static final Logger LOGGER = Logger.getLogger(UniprotIndexer.class);
+	private static final String UNIPROT_ENTRY_PROTEIN_REC_NAME =
+			"//uniprot/entry/protein/recommendedName/fullName";
+	
+	private final Logger LOGGER = Logger.getLogger(UniprotSaxParser.class);
 
 	/**
 	 * The current element (tree path) being parsed.
@@ -68,48 +66,54 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 	protected boolean isEntryName;
 
 	protected boolean isOrgSciName;
+
+	protected boolean isOrgComName;
 	
 	protected boolean isEcRef;
+	
+	protected boolean isProtRecName;
 
-	/**
-	 * The lucene index directory.
-	 */
-	private IndexWriter indexWriter;
+	private MegaMapper mm;
 
 	protected List<String> accessions = new ArrayList<String>();
 
 	protected List<String> entryNames = new ArrayList<String>();
 
+	protected String orgSciName;
+
+	protected String orgComName;
+	
 	protected List<String> ecs = new ArrayList<String>();
 
-	protected String orgSciName;
+	protected String protRecName;
 
 	/**
 	 * Parses a UniProt XML file and indexes/stores the UniProt accessions,
-	 * IDs and organisms into a lucene index.
-	 * @param args
-	 * <ul>
-	 * 	<li>-xmlFile: the XML file to parse</li>
-	 * 	<li>-indexDir: the directory for the lucene index. If it does not
-	 * 		exist, a new one is created.</li>
-	 * </ul>
+	 * IDs and organisms into a mega-map.
+	 * @param args see {@link CliOptionsParser#getCommandLine(String...)}
 	 * @throws Exception in case of error while parsing.
 	 */
 	public static void main(String... args) throws Exception{
         CommandLine cl = CliOptionsParser.getCommandLine(args);
         if (cl != null){
-    		MmIndexer parser = new UniprotIndexer();
-    		parser.parse(cl.getOptionValue("xmlFile"), cl.getOptionValue("indexDir"));
+    		MmParser parser = new UniprotSaxParser();
+    		MegaMapper writer = cl.hasOption("dbConfig")?
+    				new MegaDbMapper(cl.getOptionValue("dbConfig")):
+    				new MegaLuceneMapper(cl.getOptionValue("indexDir"));
+    		parser.setWriter(writer);
+    		parser.parse(cl.getOptionValue("xmlFile"));
         }
-	}	
+	}
+	
+	public void setWriter(MegaMapper mmWriter){
+		this.mm = mmWriter;
+	}
 	
 	/**
 	 * Parses a UniProt XML file and indexes/stores the UniProt accessions,
 	 * IDs and organisms into a lucene index.<br>
 	 * This method is not thread safe.
 	 * @param uniprotXml the XML file to parse
-	 * @param luceneIndexDir the directory for the lucene index. If it does not
-	 * 		exist, a new one is created.
 	 * @throws FileNotFoundException if the UniProt XML file is not found
 	 * 		or not readable.
 	 * @throws SAXException if no default XMLReader can be found or
@@ -117,17 +121,16 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 	 * @throws IOException if the lucene index cannot be opened/created,
 	 * 		or from the parser.
 	 */
-	public void parse(String uniprotXml, String luceneIndexDir)
+	public void parse(String uniprotXml)
 	throws Exception {
+		if (mm == null){
+			// Don't go ahead:
+			throw new NullPointerException("A MegaMapper must be configured");
+		}
 		File uniprotXmlFile = new File(uniprotXml);
-		File indexDir = getIndexDir(luceneIndexDir);
-		indexWriter = new IndexWriter(
-				new NIOFSDirectory(indexDir),
-				new StandardAnalyzer(Version.LUCENE_30),
-				MaxFieldLength.LIMITED);
-		LOGGER.info("Index open to import UniProt entries");
-		
-        try {
+		LOGGER.info("Mega-map open to import UniProt entries");
+		try {
+        	mm.openMap();
             XMLReader xr = XMLReaderFactory.createXMLReader();
             xr.setContentHandler(this);
             xr.setErrorHandler(this);
@@ -136,11 +139,11 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
             LOGGER.info("Parsing start");
             xr.parse(source);
             LOGGER.info("Parsing end");
-            indexWriter.close();
-            LOGGER.info("Index closed");
+            mm.closeMap();
+            LOGGER.info("Map closed");
         } catch (Exception e){
             LOGGER.error("During parsing", e);
-            indexWriter.rollback();
+            mm.handleError();
             throw e;
         }
 	}
@@ -166,8 +169,11 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 		isEntryName = UNIPROT_ENTRY_NAME.equals(currentXpath);
 		isOrgSciName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
 				&& "scientific".equals(attributes.getValue("", "type"));
+		isOrgComName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
+				&& "common".equals(attributes.getValue("", "type"));
 		isEcRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath)
 				&& "EC".equals(attributes.getValue("", "type"));
+		isProtRecName = UNIPROT_ENTRY_PROTEIN_REC_NAME.equals(currentXpath);
 		// Clear placeholder:
 		currentChars.delete(0, Integer.MAX_VALUE);
 		if (isEcRef){
@@ -179,7 +185,7 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		// Check whether we need to do something:
-		if (isAccession || isEntryName || isOrgSciName){
+		if (isAccession || isEntryName || isOrgSciName || isOrgComName || isProtRecName){
 			currentChars.append(Arrays.copyOfRange(ch, start, start+length));
 		}
 	}
@@ -196,12 +202,51 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 			entryNames.add(currentChars.toString());
 		} else if (isOrgSciName){
 			orgSciName = currentChars.toString();
+		} else if (isOrgComName){
+			orgComName = currentChars.toString();
+		} else if (isProtRecName){
+			protRecName = currentChars.toString();
 		} else if (isEntry){
 			if (!ecs.isEmpty()){ // XXX here is the enzyme filter
 				try {
-					indexWriter.addDocument(buildDoc());
+					Collection<Entry> entries = new HashSet<Entry>();
+					Collection<Relationship> rels = new HashSet<Relationship>();
+
+					Entry uniprotEntry = new Entry();
+					uniprotEntry.setAccessions(accessions);
+					uniprotEntry.setDbName(MmDatabase.UniProt.name());
+					uniprotEntry.setEntryId(entryNames.get(0)); // FIXME
+					uniprotEntry.setEntryName(protRecName);
+					entries.add(uniprotEntry);
+					
+					Entry speciesEntry = new Entry();
+					speciesEntry.setDbName(MmDatabase.Linnean.name());
+					speciesEntry.setEntryId(orgSciName);
+					speciesEntry.setEntryName(orgComName);
+					entries.add(speciesEntry);
+					
+					Relationship up2sp = new Relationship();
+					up2sp.setFromEntry(uniprotEntry);
+					up2sp.setRelationship(Relationships.belongs_to.name());
+					up2sp.setToEntry(speciesEntry);
+					rels.add(up2sp);
+					
+					for (String ec: ecs){
+						Entry ecEntry = new Entry();
+						ecEntry.setDbName(MmDatabase.EC.name());
+						ecEntry.setEntryId(ec);
+						entries.add(ecEntry);
+						
+						Relationship up2ec = new Relationship();
+						up2ec.setFromEntry(uniprotEntry);
+						up2ec.setRelationship(Relationships.belongs_to.name());
+						up2ec.setToEntry(ecEntry);
+						rels.add(up2ec);
+					}
+					
+					mm.write(entries, rels);
 				} catch (Exception e) {
-					throw new RuntimeException("Adding document to index", e);
+					throw new RuntimeException("Adding entry to mega-map", e);
 				}
 			}
 			// Clean up:
@@ -219,60 +264,12 @@ public class UniprotIndexer extends DefaultHandler implements MmIndexer {
 		isOrgSciName = false;
 	}
 
-	private Document buildDoc() {
-		Document doc = new Document();
-		if (!accessions.isEmpty()){
-			for (String accession : accessions) {
-				doc.add(new Field(MmField.UNIPROT_ACCESSION.name(), accession,
-						Field.Store.YES, Field.Index.ANALYZED));
-			}
-		}
-		if (!entryNames.isEmpty()){
-			for (String entryName : entryNames) {
-				doc.add(new Field(MmField.UNIPROT_NAME.name(), entryName,
-						Field.Store.YES, Field.Index.ANALYZED));
-			}
-		}
-		doc.add(new Field(MmField.SPECIES.name(), orgSciName,
-				Field.Store.YES, Field.Index.ANALYZED));
-		for (String ec : ecs) {
-			doc.add(new Field(MmField.EC.name(), ec,
-					Field.Store.YES, Field.Index.ANALYZED));
-		}
-		return doc;
-	}
-
-	protected File getIndexDir(String luceneIndexDir) throws IOException {
-		File indexDir = new File(luceneIndexDir);
-		if (indexDir.exists()){
-			LOGGER.info("Using existing index directory: " + luceneIndexDir);
-		} else {
-			boolean created = indexDir.mkdirs();
-			if (created){
-				LOGGER.info("Created new index directory: " + luceneIndexDir);
-			} else {
-				throw new IOException("Could not create directory for the index: "
-						+ luceneIndexDir);
-			}
-		}
-		return indexDir;
-	}
-
 	protected String getCurrentXpath() {
 		StringBuilder xpath = new StringBuilder("/");
 		for (String string : currentContext) {
 			xpath.append('/').append(string);
 		}
 		return xpath.toString();
-	}
-	
-	protected String listToString(List<String> list){
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < list.size(); i++) {
-			if (i > 0) sb.append(',');
-			sb.append(list.get(i));
-		}
-		return sb.toString();
 	}
 
 }
