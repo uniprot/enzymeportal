@@ -1,5 +1,5 @@
 #!/bin/bash
-# Creates an initial mega-mapper lucene index with the EB-Eye Swiss-Prot file.
+# Creates an initial mega-map with the Swiss-Prot file.
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data

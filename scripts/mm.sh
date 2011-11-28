@@ -1,5 +1,5 @@
 #!/bin/bash
-# Creates a mega-mapper lucene index with EB-Eye files.
+# Creates a complete mega-map.
 # Indexes UniProt enzymes (both Swiss-Prot and TrEMBL) and then ChEBI and
 # ChEMBL.
 # Param:
