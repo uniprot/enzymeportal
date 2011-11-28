@@ -21,12 +21,8 @@ do
     CP=$CP:$JAR
 done
 
-java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $SWISSPROT -indexDir $1 \
-&& java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $TREMBL -indexDir $1 \
-&& java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser \
-    -xmlFile $CHEBI -indexDir $1 \
-&& java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser \
-    -xmlFile $CHEMBL -indexDir $1
+java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser-xmlFile $SWISSPROT \
+&& java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $TREMBL \
+&& java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser -xmlFile $CHEBI \
+&& java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser -xmlFile $CHEMBL
 
