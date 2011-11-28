@@ -1,7 +1,5 @@
 #!/bin/bash
 # Creates an initial mega-mapper index with both Swiss-Prot and TrEMBL enzymes.
-# Param:
-# $1: directory for the created lucene index.
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
@@ -19,7 +17,7 @@ do
 done
 
 java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $SWISSPROT -indexDir $1 \
+    -xmlFile $SWISSPROT \
 && java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $TREMBL -indexDir $1
+    -xmlFile $TREMBL
 
