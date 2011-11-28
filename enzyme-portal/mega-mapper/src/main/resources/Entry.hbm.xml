@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 7, 2011 12:48:45 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+ <class name="uk.ac.ebi.ep.mm.Entry" table="MM_ENTRY">
+  <id name="id">
+   <column name="ID" not-null="true" sql-type="NUMBER" unique="true"/>
+   <generator class="increment"/>
+  </id>
+  <property generated="never" lazy="false" name="dbName" not-null="true" type="java.lang.String">
+   <column name="DB_NAME" not-null="true" sql-type="VARCHAR2"/>
+  </property>
+  <property generated="never" lazy="false" name="entryId"
+   not-null="true" type="java.lang.String">
+   <column name="ENTRY_ID" sql-type="VARCHAR2"/>
+  </property>
+  <property generated="never" lazy="false" name="entryName" type="java.lang.String">
+   <column name="ENTRY_NAME" sql-type="VARCHAR2"/>
+  </property>
+  <list name="accessions" table="MM_ACCESSIONS">
+   <key column="ID" not-null="true"/>
+   <list-index base="0" column="ACCESSION_INDEX"/>
+   <element column="ACCESSION" type="string"/>
+  </list>
+ </class>
+</hibernate-mapping>
