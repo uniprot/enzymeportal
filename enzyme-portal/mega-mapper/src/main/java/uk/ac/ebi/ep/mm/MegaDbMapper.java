@@ -17,7 +17,7 @@ public class MegaDbMapper implements MegaMapper {
 	private Session session;
 	
 	public MegaDbMapper(String dbConfig){
-		sessionFactory = HibernateUtil.getSessionFactory();
+		sessionFactory = HibernateUtil.getSessionFactory(dbConfig);
 		session = sessionFactory.getCurrentSession();
 	}
 	
