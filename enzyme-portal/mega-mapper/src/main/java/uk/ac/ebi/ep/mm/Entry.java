@@ -1,8 +1,11 @@
 package uk.ac.ebi.ep.mm;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Entry {
+public class Entry implements Serializable {
+
+	private static final long serialVersionUID = -4341633305667373550L;
 
 	private long id;
 	private String dbName;
