@@ -22,12 +22,18 @@
         	<xs:documentation>An enzyme UniProt accession (or possibly more) corresponding to a given species, along with any known PDBe codes.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-			<xs:element name="uniprotaccessions" type="xs:string"
-				minOccurs="1" maxOccurs="unbounded" />
-			<xs:element name="species" type="ep:Species" minOccurs="1"
-				maxOccurs="1" />
-			<xs:element name="pdbCodes" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+        	<xs:element name="uniprotaccessions" type="xs:string"
+        		minOccurs="1" maxOccurs="unbounded" />
+        	<xs:element name="species" type="ep:Species" minOccurs="1"
+        		maxOccurs="1" />
+        	<xs:element name="pdbCodes" type="xs:string" minOccurs="0"
+        		maxOccurs="unbounded" />
+        	<xs:element name="compounds" type="ep:Compound"
+        		minOccurs="0" maxOccurs="unbounded">
+        	</xs:element>
+        	<xs:element name="diseases" type="ep:Disease"
+        		maxOccurs="unbounded" minOccurs="0"></xs:element>
+        </xs:sequence>
 	</xs:complexType>
 	<xs:element name="EnzymeSummary" type="ep:EnzymeSummary"/>
 	<xs:complexType name="EnzymeSummary">
