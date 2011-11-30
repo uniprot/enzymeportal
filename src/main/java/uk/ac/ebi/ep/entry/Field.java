@@ -6,12 +6,19 @@ package uk.ac.ebi.ep.entry;
  *
  */
 public enum Field {
+	/**
+	 * The minimal information to handle result lists and filters internally.
+	 */
+	minimal,
+    /**
+     * Just a summary to show in the results page.
+     */
+    brief,
     enzyme,
     proteinStructure,
     reactionsPathways,
     molecules,
     diseaseDrugs,
     literature,
-    brief,
     full
 }
