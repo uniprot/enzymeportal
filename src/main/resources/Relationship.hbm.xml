@@ -4,7 +4,7 @@
 <!-- Generated Nov 8, 2011 2:07:17 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
  <class name="uk.ac.ebi.ep.mm.Relationship" table="MM_RELATIONSHIP">
-  <id column="ID" name="id"/>
+  <id name="id"/>
   <many-to-one cascade="all" class="uk.ac.ebi.ep.mm.Entry"
    column="FROM_ENTRY" name="fromEntry" not-null="true"/>
   <many-to-one cascade="all" class="uk.ac.ebi.ep.mm.Entry"

@@ -6,16 +6,15 @@ public class Relationship implements Serializable {
 
 	private static final long serialVersionUID = 6877255103431212096L;
 	
-	private long id;
 	private Entry fromEntry;
 	private String relationship;
 	private Entry toEntry;
 	
-	public long getId() {
-		return id;
+	public int getId() {
+		return hashCode(); // FIXME, possibly not unique
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setId(int id) {
+		// no-op
 	}
 	public Entry getFromEntry() {
 		return fromEntry;
