@@ -14,11 +14,32 @@ public enum Field {
      * Just a summary to show in the results page.
      */
     brief,
+    /**
+     * Enzyme tab.
+     */
     enzyme,
+    /**
+     * Structure tab.
+     */
     proteinStructure,
+    /**
+     * Reactions/pathways tab.
+     */
     reactionsPathways,
+    /**
+     * Small molecules tab.
+     */
     molecules,
+    /**
+     * Diseases/drugs tab.
+     */
     diseaseDrugs,
+    /**
+     * Literature tab.
+     */
     literature,
+    /**
+     * Full information about the enzyme.
+     */
     full
 }
