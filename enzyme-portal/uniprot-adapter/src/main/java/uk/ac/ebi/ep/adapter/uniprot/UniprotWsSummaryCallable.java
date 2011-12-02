@@ -244,7 +244,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		if (nameSynonyms.size() > 1){
 			summary.getSynonym().addAll(nameSynonyms.subList(0, nameSynonyms.size()-1));
 		}
-		if (ecsString != null){
+		if (ecsString != null && ecsString.length() > 0){
 			summary.getEc().addAll(Arrays.asList(ecsString.split("; ")));
 		}
 		summary.setSpecies(species);
