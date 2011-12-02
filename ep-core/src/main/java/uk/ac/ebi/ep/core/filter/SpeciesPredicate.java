@@ -37,6 +37,9 @@ public class SpeciesPredicate implements Predicate {
 	 * 		species in the filter, <code>false</code> otherwise.
 	 */
 	public boolean evaluate(Object obj) {
+		if (speciesFilter == null || speciesFilter.isEmpty()){
+			return true;
+		}
 		boolean eval = false;
 		if (obj instanceof EnzymeSummary){
 			EnzymeSummary es = (EnzymeSummary) obj;

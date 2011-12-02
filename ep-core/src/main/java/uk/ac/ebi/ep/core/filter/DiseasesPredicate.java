@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.apache.commons.collections.Predicate;
 
-import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -28,6 +27,9 @@ public class DiseasesPredicate implements Predicate {
 	 * 		diseases in the filter, <code>false</code> otherwise.
 	 */
 	public boolean evaluate(Object obj) {
+		if (diseasesFilter == null || diseasesFilter.isEmpty()){
+			return true;
+		}
 		boolean eval = false;
 		if (obj instanceof EnzymeSummary){
 			EnzymeSummary es = (EnzymeSummary) obj;
