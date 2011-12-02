@@ -1,10 +1,13 @@
 package uk.ac.ebi.ep.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
+import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
+import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
+import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
 import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
@@ -24,6 +30,7 @@ import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.SearchModel;
 import uk.ac.ebi.ep.search.model.SearchParams;
 import uk.ac.ebi.ep.search.model.SearchResults;
@@ -151,35 +158,74 @@ public class SearchController {
     		Model model, HttpSession session) {
     	String view = "search";
         if (searchModelForm != null) try {
-//            LOGGER.debug("SEARCH start");
             SearchParams searchParameters = searchModelForm.getSearchparams();        
-            EnzymeFinder finder = new EnzymeFinder(searchConfig);
-            finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-            finder.getUniprotAdapter().setConfig(uniprotConfig);
             searchParameters.setSize(searchConfig.getResultsPerPage());
             SearchResults resultSet = null;
-//            LOGGER.debug("SEARCH before finder.getEnzymes");
-            try {
-                resultSet = finder.getEnzymes(searchParameters);
-            } catch (EnzymeFinderException ex) {
-                LOGGER.error("Unable to create the result list because an error " +
-                        "has occurred in the find method! \n", ex);
-            }
-//            LOGGER.debug("SEARCH before pagination");
-            Pagination pagination = new Pagination(
-                    resultSet.getTotalfound(), searchParameters.getSize());
-            pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
-            int totalPage = pagination.calTotalPages();
-            pagination.setTotalPages(totalPage);
-            pagination.calCurrentPage(searchParameters.getStart());
-            model.addAttribute("pagination", pagination);
-//            LOGGER.debug("SEARCH after  pagination");
-            searchModelForm.setSearchresults(resultSet);
+        	// See if it is already there, perhaps we are paginating:
+        	@SuppressWarnings("unchecked")
+    		Map<String, SearchResults> prevSearches =
+        			(Map<String, SearchResults>) session.getAttribute("searches");
+    		if (prevSearches != null){
+        		resultSet = prevSearches.get(searchParameters.getText());
+    		} else {
+    			prevSearches = new HashMap<String, SearchResults>();
+    			session.setAttribute("searches", prevSearches);
+    		}
+    		if (resultSet == null){
+    			// Make a new search:
+                EnzymeFinder finder = new EnzymeFinder(searchConfig);
+                finder.getEbeyeAdapter().setConfig(ebeyeConfig);
+                finder.getUniprotAdapter().setConfig(uniprotConfig);
+                finder.getIntenzAdapter().setConfig(intenzConfig);
+                try {
+                    resultSet = finder.getEnzymes(searchParameters);
+                    // cache it in the session:
+                    prevSearches.put(searchParameters.getText(), resultSet);
+                } catch (EnzymeFinderException ex) {
+                    LOGGER.error("Unable to create the result list because an error " +
+                            "has occurred in the find method! \n", ex);
+                }
+        	}
+    		
+    		// Filter:
+    		List<String> speciesFilter = searchParameters.getSpecies();
+    		List<String> compoundsFilter = searchParameters.getCompounds();
+    		List<String> diseasesFilter = searchParameters.getDiseases();
+    		if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()){
+        		@SuppressWarnings("unchecked")
+    			List<EnzymeSummary> filteredResults =
+    					new ArrayList<EnzymeSummary>(resultSet.getSummaryentries());
+        		CollectionUtils.filter(filteredResults,
+	    				new SpeciesPredicate(speciesFilter));
+        		CollectionUtils.filter(filteredResults,
+	    				new CompoundsPredicate(compoundsFilter));
+        		CollectionUtils.filter(filteredResults,
+        				new DiseasesPredicate(diseasesFilter));
+        		// Create a new SearchResults, don't modify the one in session
+        		SearchResults sr = new SearchResults();
+        		sr.setSearchfilters(resultSet.getSearchfilters());
+        		sr.setSummaryentries(filteredResults);
+        		// show the total number of hits (w/o filtering):
+        		sr.setTotalfound(resultSet.getTotalfound());
+        		searchModelForm.setSearchresults(sr);
+    		} else {
+    			// Show all of them:
+        		searchModelForm.setSearchresults(resultSet);
+    		}
+    		
             model.addAttribute("searchModel", searchModelForm);
-//            LOGGER.debug("SEARCH end");
+            
+            // Paginate:
+            final int numOfResults =
+            		searchModelForm.getSearchresults().getSummaryentries().size();
+			Pagination pagination = new Pagination(
+                    numOfResults, searchParameters.getSize());
+            pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
+            pagination.setFirstResult(searchParameters.getStart());
+            model.addAttribute("pagination", pagination);
+
             addToHistory(session,
-            		"searchparams.text=" + searchModelForm.getSearchparams().getText());
-            view = "search";
+            		"searchparams.text=" + searchParameters.getText());
 		} catch (Exception e) {
 			LOGGER.error("Failed search", e);
 			view = "error";
