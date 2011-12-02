@@ -17,7 +17,7 @@ extends UniprotWsSearchCallable<Map<String, Species>> {
 	}
 
 	private class UniprotWsSearchAccessionsAndSpeciesProcessor
-	implements IUniprotWsSearchProcessor<Map<String, Species>> {
+	implements IUniprotWsProcessor<Map<String, Species>, BufferedReader> {
 	
 		public final String getFields() {
 			return "id,organism";
@@ -40,7 +40,7 @@ extends UniprotWsSearchCallable<Map<String, Species>> {
 	}
 
 	private class UniprotWsSearchAccessionsProcessor
-	implements IUniprotWsSearchProcessor<List<String>> {
+	implements IUniprotWsProcessor<List<String>, BufferedReader> {
 	
 		public String getFields() {
 			return "id";
@@ -67,7 +67,7 @@ extends UniprotWsSearchCallable<Map<String, Species>> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected List<String> getAccessions() {
-		IUniprotWsSearchProcessor<List<String>> processor =
+		IUniprotWsProcessor<List<String>, BufferedReader> processor =
 				new UniprotWsSearchAccessionsProcessor();
 		return (List<String>) get(processor);
 	}
@@ -80,7 +80,7 @@ extends UniprotWsSearchCallable<Map<String, Species>> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Map<String, Species> getAccessionsAndSpecies(){
-		IUniprotWsSearchProcessor<Map<String, Species>> processor =
+		IUniprotWsProcessor<Map<String, Species>, BufferedReader> processor =
 				new UniprotWsSearchAccessionsAndSpeciesProcessor();
 		return (Map<String, Species>) get(processor);
 	}
