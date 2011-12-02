@@ -74,19 +74,17 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         int totalFound = param.getTotalFound();
         int size = config.getResultsLimit();
         //Work around to solve big result set issue
-        Pagination pagination = new Pagination(totalFound, config.getResultsLimit());
-        int nrOfQueries = pagination.calTotalPages();
+        Pagination pagination = new Pagination(totalFound, size);
+        int nrOfQueries = pagination.getLastPage();
         int start = 0;
-        //TODO
         for (int i = 0; i < nrOfQueries; i++) {
-            if (i == nrOfQueries - 1 && (totalFound % config.getResultsLimit()) > 0) {
-                size = pagination.getLastPageResults();
+            if (i == nrOfQueries - 1 && (totalFound % size) > 0) {
+                size = totalFound % size;
             }
             Callable<ArrayOfArrayOfString> callable =
                     new GetResultsCallable(param, start, size);
             callableList.add(callable);
-            //TODO check
-            start = start+ size;
+            start = start + size;
         }
         return callableList;
     }
@@ -215,7 +213,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 				prepareCallableCollection(paramOfGetResults);
 		List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
 		Set<String> NameList = Transformer.transformFieldValueToList(
-				rawResults, false);
+				rawResults, false); // FIXME: VARIABLE #RESULTS
 		return NameList;
 	}
 
