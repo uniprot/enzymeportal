@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  * Superclass for Callables to search UniProt via web services. All queries get
  * automatically a filter for enzymes.
  * @author rafa
- * @param <T>
+ * @param <T> the type returned by the <code>call</code> method.
  *
  */
 public abstract class UniprotWsSearchCallable<T>
@@ -45,7 +45,7 @@ implements Callable<T> {
 	 * @return results from the web service, or <code>null</code> if none
 	 * 		found.
 	 */
-	protected Object get(IUniprotWsSearchProcessor<?> processor){
+	protected Object get(IUniprotWsProcessor<?, BufferedReader> processor){
 		Object result = null;
 		// Add flags for reviewed and enzymes:
 		final String rev = config.isReviewed()? "+reviewed:yes" : "";
@@ -88,28 +88,5 @@ implements Callable<T> {
 				}
 		}
 		return result;
-	}
-
-	/**
-	 * An object which knows what columns to retrieve from the web service
-	 * and how to process them.
-	 * @author rafa
-	 *
-	 * @param <T>
-	 */
-	protected interface IUniprotWsSearchProcessor<T> {
-		
-		/**
-		 * @return The fields (columns) retrieved from the web service.
-		 */
-		String getFields();
-		
-		/**
-		 * Processes the stream from the web service.
-		 * @param reader The object reading the response from the web service.
-		 * @return The expected result from the implementation.
-		 * @throws IOException
-		 */
-		T process(BufferedReader reader) throws IOException;
 	}
 }
