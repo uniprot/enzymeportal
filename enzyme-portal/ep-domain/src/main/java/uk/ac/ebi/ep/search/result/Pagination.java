@@ -13,27 +13,38 @@ import java.util.List;
  */
 public class Pagination implements Serializable {
 
-//********************************* VARIABLES ********************************//
+	private static final long serialVersionUID = 7646465324977743547L;
 
-    protected int numberOfResults;
-    protected int numberResultsPerPage;
-    protected int totalPages;
+	protected int numberOfResults;
+    /**
+     * First result shown (zero-based).
+     */
+    protected int firstResult;
+    /**
+     * Last result shown (zero-based).
+     */
+    protected int lastResult;
+    protected int resultsPerPage;
     protected List<String> pageLinks;
     protected int maxDisplayedPages;
-    protected int currentPage;
 
-//******************************** CONSTRUCTORS ******************************//
-    public Pagination() {
-    }
+    /**
+     * Last page (pages are 1-based, as their purpose is UI).
+     */
+    protected int lastPage;
+    
+    /**
+     * Current page (pages are 1-based, as their purpose is UI).
+     */
+    private int currentPage;
 
-    public Pagination(int numberOfResults, int numberResultsPerPage) {
+    public Pagination() {}
+
+    public Pagination(int numberOfResults, int numberOfResultsPerPage) {
         this.numberOfResults = numberOfResults;
-        this.numberResultsPerPage = numberResultsPerPage;
+        this.resultsPerPage = numberOfResultsPerPage;
+        recalculate();
     }
-
-
-//****************************** GETTER & SETTER *****************************//
-
 
     public int getNumberOfResults() {
         return numberOfResults;
@@ -41,14 +52,33 @@ public class Pagination implements Serializable {
 
     public void setNumberOfResults(int numberOfResults) {
         this.numberOfResults = numberOfResults;
+        recalculate();
     }
 
-    public int getNumberResultsPerPage() {
-        return numberResultsPerPage;
+    public int getFirstResult() {
+		return firstResult;
+	}
+
+	public void setFirstResult(int firstResult) {
+		this.firstResult = firstResult;
+		paginate();
+	}
+
+	public int getLastResult() {
+		return lastResult;
+	}
+
+	public void setLastResult(int lastResult) {
+		this.lastResult = lastResult;
+	}
+
+	public int getNumberOfResultsPerPage() {
+        return resultsPerPage;
     }
 
-    public void setNumberResultsPerPage(int numberResultsPerPage) {
-        this.numberResultsPerPage = numberResultsPerPage;
+    public void setNumberOfResultsPerPage(int numberResultsPerPage) {
+        this.resultsPerPage = numberResultsPerPage;
+        recalculate();
     }
 
     public List<String> getPageLinks() {
@@ -57,28 +87,6 @@ public class Pagination implements Serializable {
 
     public void setPageLinks(List<String> pageLinks) {
         this.pageLinks = pageLinks;
-    }
-    public int getTotalPages() {
-        return totalPages;
-    }
-/*
-    public int getTotalPages() {
-        int lastPageResults = 0;
-        if (numberOfResults>0 && numberResultsPerPage>0) {
-            lastPageResults = getLastPageResults();
-            int addPage = 0;
-            if (lastPageResults > 0) {
-                addPage = 1;
-            }
-            totalPages =
-                    ((numberOfResults-lastPageResults)/numberResultsPerPage)+addPage;
-        }
-
-        return totalPages;
-    }
-*/
-    public void setTotalPages(int totalPages) {
-        this.totalPages = totalPages;
     }
 
     public int getMaxDisplayedPages() {
@@ -93,71 +101,28 @@ public class Pagination implements Serializable {
         return currentPage;
     }
 
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
+    public int getLastPage() {
+        return lastPage;
+    }
+    
+    private void recalculate(){
+    	calculateLastPage();
+    	paginate();
     }
 
+    private void calculateLastPage(){
+        lastPage = numberOfResults / resultsPerPage;
+        if (numberOfResults % resultsPerPage > 0) lastPage++;
+	}
 
-//********************************** METHODS *********************************//
-/*
-    public void paginateResults(int numberOfResults, int numberResultPerPage) {
-        if (numberOfResults < numberResultPerPage) {
-            if (numberOfResults==0) {
-                lastPageRecords = 0;
-                totalPages=0;
-            }
-            else {
-                lastPageRecords = numberOfResults;
-                totalPages=1;
-            }
+	private void paginate() {
+		int lastEstimatedResult = firstResult + resultsPerPage - 1;
+		lastResult = lastEstimatedResult > numberOfResults - 1?
+				numberOfResults - 1:
+				lastEstimatedResult;
+        if (resultsPerPage > 0) {
+        	currentPage = (firstResult+resultsPerPage)/resultsPerPage;
         }
-        else {
-            lastPageRecords = (numberOfResults%numberResultPerPage);
-            if (lastPageRecords > 0) {
-                totalPages = ((numberOfResults-lastPageRecords)/numberResultPerPage)+1;
-            }
-            else {
-                totalPages = numberOfResults/numberResultPerPage;
-            }
-        }
-        
-
-    }
-*/
-    public int getLastPageResults() {
-        int lastPageRecords = 0;
-        if (numberOfResults>0 && numberResultsPerPage>0) {
-            if (numberOfResults>numberResultsPerPage) {
-                lastPageRecords = (numberOfResults%numberResultsPerPage);
-            }
-            else {
-                lastPageRecords = numberOfResults;
-            }
-        }
-        return lastPageRecords;
-    }
-
-    public int calTotalPages() {
-        int lastPageResults = 0;
-        if (numberOfResults>0 && numberResultsPerPage>0) {
-            lastPageResults = getLastPageResults();
-            int addPage = 0;
-            if (lastPageResults > 0) {
-                addPage = 1;
-            }
-            totalPages =
-                    ((numberOfResults-lastPageResults)/numberResultsPerPage)+addPage;
-        }
-
-        return totalPages;
-    }
-
-    public int calCurrentPage(int start) {
-        if (this.numberResultsPerPage > 0) {
-        currentPage =
-        (start+this.numberResultsPerPage)/this.numberResultsPerPage;
-        }
-        return currentPage;
     }
 
 }
