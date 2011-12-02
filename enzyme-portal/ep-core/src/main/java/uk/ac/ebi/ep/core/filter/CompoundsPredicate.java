@@ -34,6 +34,9 @@ public class CompoundsPredicate implements Predicate {
 	 * 		compounds in the filter, <code>false</code> otherwise.
 	 */
 	public boolean evaluate(Object obj) {
+		if (compoundsFilter == null || compoundsFilter.isEmpty()){
+			return true;
+		}
 		boolean eval = false;
 		if (obj instanceof EnzymeSummary){
 			EnzymeSummary es = (EnzymeSummary) obj;
