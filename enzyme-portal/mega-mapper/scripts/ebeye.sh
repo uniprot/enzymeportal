@@ -3,6 +3,8 @@
 # Params:
 # $1: EB-Eye XML file (ChEBI/ChEMBL-target)
 
+EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
+
 cd $(dirname $0)/..
 mvn clean package
 
@@ -13,5 +15,6 @@ do
 done
 
 echo "Starting EB-Eye import - $(date)"
-java -classpath $CP uk.ac.ebi.ep.mm.EbeyeParser -xmlFile $1
+java -Xms512M -Xmx1G -classpath $CP uk.ac.ebi.ep.mm.EbeyeSaxParser \
+	-xmlFile $1
 echo "Finished EB-Eye import - $(date)"

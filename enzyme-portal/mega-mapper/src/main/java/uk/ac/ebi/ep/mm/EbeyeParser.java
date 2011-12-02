@@ -162,7 +162,6 @@ public class EbeyeParser implements MmParser {
 		}
 	}
 
-	@Override
 	public void setWriter(MegaMapper writer) {
 		this.mm = writer;
 	}

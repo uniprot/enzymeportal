@@ -66,15 +66,14 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
         CommandLine cl = CliOptionsParser.getCommandLine(args);
         if (cl != null){
     		MmParser parser = new EbeyeSaxParser();
-    		MegaMapper writer = cl.hasOption("dbConfig")?
-    				new MegaDbMapper(cl.getOptionValue("dbConfig")):
-    				new MegaLuceneMapper(cl.getOptionValue("indexDir"));
+    		MegaMapper writer = cl.hasOption("indexDir")?
+    				new MegaLuceneMapper(cl.getOptionValue("indexDir")):
+    				new MegaDbMapper(cl.getOptionValue("dbConfig"));
     		parser.setWriter(writer);
     		parser.parse(cl.getOptionValue("xmlFile"));
         }
 	}
 	
-	@Override
 	public void parse(String xmlFile) throws Exception {
 		if (mm == null){
 			// Don't go ahead:
@@ -158,7 +157,6 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		}
 	}
 
-	@Override
 	public void setWriter(MegaMapper writer) {
 		this.mm = writer;
 	}
