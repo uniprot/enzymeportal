@@ -54,21 +54,6 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
-
-        <!--EB-eye libs start-->
-    <!--
-    <dependency>
-      <groupId>axis</groupId>
-      <artifactId>axis-jaxrpc</artifactId>
-      <version>1.3</version>
-    </dependency>
-    <dependency>
-      <groupId>ant</groupId>
-      <artifactId>ant-commons-logging</artifactId>
-      <version>1.6.5</version>
-    </dependency>
-    -->
-    <!--EB-eye libs end-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>intenz-adapter</artifactId>
@@ -79,13 +64,6 @@
             <artifactId>ep-domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!--
-     <dependency>
-          <groupId>${project.groupId}</groupId>
-          <artifactId>reactome-adapter</artifactId>
-          <version>1.0-SNAPSHOT</version>
-     </dependency>
-     -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ep-util</artifactId>
@@ -156,6 +134,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>literature-adapter</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>commons-collections</groupId>
+        	<artifactId>commons-collections</artifactId>
+        	<version>3.2.1</version>
         </dependency>
     </dependencies>
     <properties>
