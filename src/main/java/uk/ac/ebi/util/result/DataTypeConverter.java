@@ -123,13 +123,13 @@ public class DataTypeConverter {
         int endIndex = 0;
         //Work around to solve big result set issue
         Pagination pagination = new Pagination(listSize, subListSize);
-        int nrOfQueries = pagination.calTotalPages();
+        int nrOfQueries = pagination.getLastPage();
         int start = 0;
         //TODO
         for (int i = 0; i < nrOfQueries; i++) {
             //In case of last page and the result of the last page is more than 0
             if (i == (nrOfQueries - 1) && (listSize % subListSize) > 0) {
-                endIndex = endIndex + pagination.getLastPageResults();
+                endIndex = endIndex + pagination.getLastPage();
             } else {
                 endIndex = endIndex + subListSize;
             }
@@ -176,7 +176,7 @@ public class DataTypeConverter {
     }
     
     public static LinkedHashSet<String> mergeList(Collection<List<String>> multipleList) {
-        LinkedHashSet mergedSet = new LinkedHashSet();
+        LinkedHashSet<String> mergedSet = new LinkedHashSet<String>();
         for (List<String> list:multipleList){
             mergedSet.addAll((List<String>)list);
         }
@@ -268,7 +268,7 @@ public class DataTypeConverter {
     public static List<String> getConfigResultFields(Domain domain) {
         List<ResultField> fields = domain.getResultFieldList().getResultField();
         List<String> configFields = new ArrayList<String>();
-        Iterator it = fields.iterator();
+        Iterator<ResultField> it = fields.iterator();
         while (it.hasNext()) {
             ResultField field = (ResultField)it.next();
             configFields.add(field.getId());
@@ -279,7 +279,7 @@ public class DataTypeConverter {
     public static List<String> getConfigSearchFields(Domain domain) {
         List<SearchField> fields = domain.getSearchFieldList().getSearchField();
         List<String> configFields = new ArrayList<String>();
-        Iterator it = fields.iterator();
+        Iterator<SearchField> it = fields.iterator();
         while (it.hasNext()) {
             SearchField field = (SearchField)it.next();
             configFields.add(field.getId());
@@ -316,8 +316,8 @@ public class DataTypeConverter {
 */
     public static ResultFieldList cloneResultFieldList(ResultFieldList originalObj) {
         ResultFieldList clonedObj = new ResultFieldList();
-        Iterator clonedIt = clonedObj.getResultField().iterator();
-        Iterator orgIt = originalObj.getResultField().iterator();
+        Iterator<ResultField> clonedIt = clonedObj.getResultField().iterator();
+        Iterator<ResultField> orgIt = originalObj.getResultField().iterator();
         while (orgIt.hasNext() && clonedIt.hasNext()) {
             ResultField clonedResultField = (ResultField)clonedIt.next();
             ResultField orgResultField = (ResultField)orgIt.next();
