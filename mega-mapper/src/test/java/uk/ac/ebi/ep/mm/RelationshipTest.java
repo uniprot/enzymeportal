@@ -16,7 +16,7 @@ import org.junit.Test;
 public class RelationshipTest {
 
 	private SessionFactory sessionFactory;
-	List<Long> entityIds = new ArrayList<Long>();
+	List<Integer> entityIds = new ArrayList<Integer>();
 	
 	@Before
 	public void before(){
@@ -24,13 +24,13 @@ public class RelationshipTest {
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		Entry entity1 = new Entry();
-		entity1.setDbName("UNIPROT");
+		entity1.setDbName(MmDatabase.UniProt.name());
 		entity1.setEntryId("ABCD_HUMAN");
-		entityIds.add((Long) session.save(entity1));
+		entityIds.add((Integer) session.save(entity1));
 		Entry entity2 = new Entry();
-		entity2.setDbName("CHEBI");
+		entity2.setDbName(MmDatabase.ChEBI.name());
 		entity2.setEntryId("CHEBI:12345");
-		entityIds.add((Long) session.save(entity2));
+		entityIds.add((Integer) session.save(entity2));
 		session.getTransaction().commit();
 	}
 	
@@ -40,16 +40,16 @@ public class RelationshipTest {
 		session.beginTransaction();
 		String relQuery = "DELETE Relationship WHERE fromEntry = :fromEnt OR toEntry = :toEnt";
 		String entQuery = "DELETE Entry WHERE id = :theId";
-		for (Long id : entityIds) {
+		for (Integer id : entityIds) {
 			int n = session.createQuery(relQuery)
-						.setLong("fromEnt", id)
-						.setLong("toEnt", id)
+						.setInteger("fromEnt", id)
+						.setInteger("toEnt", id)
 						.executeUpdate();
 			System.out.println(n + " relationships deleted");
 			int m = session.createQuery(entQuery)
-						.setLong("theId", id)
+						.setInteger("theId", id)
 						.executeUpdate();
-			System.out.println(m + " entities deleted");
+			System.out.println(m + " entries deleted");
 		}
 		session.getTransaction().commit();
     	sessionFactory.close();
@@ -65,7 +65,7 @@ public class RelationshipTest {
     		Relationship rel = new Relationship();
     		rel.setFromEntry(ent2);
     		rel.setToEntry(ent1);
-    		rel.setRelationship("is_drug_for");
+    		rel.setRelationship(Relationships.is_drug_for.toString());
     		session.save(rel);
     		session.getTransaction().commit();
     		

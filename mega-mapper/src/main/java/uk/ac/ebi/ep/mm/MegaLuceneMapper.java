@@ -47,7 +47,6 @@ public class MegaLuceneMapper implements MegaMapper {
 		this.luceneIndexDir = luceneIndexDir;
 	}
 
-	@Override
 	public void openMap() throws IOException {
 		File indexDir = getIndexDir(luceneIndexDir);
 		Directory directory = new NIOFSDirectory(indexDir);
@@ -59,7 +58,6 @@ public class MegaLuceneMapper implements MegaMapper {
 				MmDatabase.UniProt.getAccessionField(), analyzer);
 	}
 
-	@Override
 	public void writeEntry(Entry entry) throws CorruptIndexException, IOException {
 		Document doc = new Document();
 		addEntryToDoc(doc, entry);
@@ -71,7 +69,6 @@ public class MegaLuceneMapper implements MegaMapper {
 	 * Currently, this implementation just adds the entries at both ends of the
 	 * relationship to the same lucene document.
 	 */
-	@Override
 	public void writeRelationship(Relationship relationship)
 	throws CorruptIndexException, IOException {
 		Document doc = new Document();
@@ -84,7 +81,6 @@ public class MegaLuceneMapper implements MegaMapper {
 	 * @throws IOException 
 	 * @throws CorruptIndexException 
 	 */
-	@Override
 	public void write(Collection<Entry> entries, Collection<Relationship> rels)
 			throws CorruptIndexException, IOException {
 		Document doc = new Document();
@@ -100,25 +96,21 @@ public class MegaLuceneMapper implements MegaMapper {
 		indexWriter.addDocument(doc);
 	}
 
-	@Override
 	public Collection<Relationship> queryMap(Entry entry, MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Collection<Relationship> queryMap(Collection<Entry> entries,
 			MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void handleError() throws IOException {
         indexWriter.rollback();
 	}
 
-	@Override
 	public void closeMap() throws IOException {
         if (indexWriter != null){
         	indexWriter.commit();

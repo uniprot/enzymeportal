@@ -3,6 +3,8 @@ package uk.ac.ebi.ep.mm;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -13,30 +15,31 @@ import org.hibernate.SessionFactory;
  */
 public class MegaDbMapper implements MegaMapper {
 
-	private SessionFactory sessionFactory;
+	private final Logger logger = Logger.getLogger(MegaDbMapper.class);
 	private Session session;
 	
 	public MegaDbMapper(String dbConfig){
-		sessionFactory = HibernateUtil.getSessionFactory(dbConfig);
+		SessionFactory sessionFactory =
+				HibernateUtil.getSessionFactory(dbConfig);
 		session = sessionFactory.getCurrentSession();
+		session.setFlushMode(FlushMode.COMMIT);
 	}
 	
-	@Override
 	public void openMap() throws IOException {
 		session.beginTransaction();
+		logger.info("Map opened");
 	}
 
-	@Override
 	public void writeEntry(Entry entry) throws IOException {
-		session.saveOrUpdate(entry);
+		session.merge(entry); // save or saveOrUpdate does not work!
+		logger.debug(entry.getEntryId() + " written");
 	}
 
-	@Override
-	public void writeRelationship(Relationship relationship) throws IOException {
-		session.saveOrUpdate(relationship);
+	public void writeRelationship(Relationship relationship)
+	throws IOException {
+		session.merge(relationship); // save or saveOrUpdate does not work!
 	}
 
-	@Override
 	public void write(Collection<Entry> entries,
 			Collection<Relationship> relationships) throws IOException {
 		for (Entry entry : entries) {
@@ -47,27 +50,26 @@ public class MegaDbMapper implements MegaMapper {
 		}
 	}
 
-	@Override
 	public Collection<Relationship> queryMap(Entry entry, MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Collection<Relationship> queryMap(Collection<Entry> entries,
 			MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void handleError() throws IOException {
 		session.getTransaction().rollback();
+		logger.error("Session rolled back");
 	}
 
-	@Override
 	public void closeMap() throws IOException {
+		session.flush();
 		session.getTransaction().commit();
+		logger.error("Session committed");
 	}
 
 }

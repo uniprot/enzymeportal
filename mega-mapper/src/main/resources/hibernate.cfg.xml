@@ -2,22 +2,20 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
                                          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-	<session-factory name="test">
-		<property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
-		<!-- property name="hibernate.connection.url">jdbc:oracle:thin:@kava.ebi.ac.uk:1561:ENZDEV</property -->
-		<property name="hibernate.connection.url">jdbc:oracle:thin:@${enzdev.host.port}:ENZDEV</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
-		<property name="hibernate.connection.username">${enzdev.username}</property>
-		<property name="hibernate.connection.password">${enzdev.password}</property>
-		<property name="hibernate.connection.pool_size">1</property>
-		<property name="hibernate.connection.autocommit">true</property>
-		<!-- Enable Hibernate's automatic session context management -->
-		<property name="current_session_context_class">thread</property>
-		<!-- Disable the second-level cache -->
-		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
-		<!-- Echo all executed SQL to stdout -->
-		<property name="show_sql">true</property>
-		<mapping resource="Entry.hbm.xml" />
-		<mapping resource="Relationship.hbm.xml" />
-	</session-factory>
+ <session-factory name="test">
+  <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+  <!-- property name="hibernate.connection.url">jdbc:oracle:thin:@kava.ebi.ac.uk:1561:ENZDEV</property -->
+  <property name="hibernate.connection.url">jdbc:oracle:thin:@${enzdev.host.port}:ENZDEV</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+  <property name="hibernate.connection.username">${enzdev.username}</property>
+  <property name="hibernate.connection.password">${enzdev.password}</property>
+  <property name="hibernate.connection.pool_size">1</property>
+  <property name="hibernate.connection.autocommit">true</property>
+  <property name="hibernate.cache.use_second_level_cache">false</property>
+  <property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+  <property name="hibernate.show_sql">false</property>
+  <property name="hibernate.current_session_context_class">thread</property>
+  <mapping resource="Entry.hbm.xml"/>
+  <mapping resource="Relationship.hbm.xml"/>
+ </session-factory>
 </hibernate-configuration>

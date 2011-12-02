@@ -7,17 +7,16 @@ public class Entry implements Serializable {
 
 	private static final long serialVersionUID = -4341633305667373550L;
 
-	private long id;
 	private String dbName;
 	private String entryId;
 	private String entryName;
 	private List<String> accessions;
 	
-	public long getId() {
-		return id;
+	public int getId() {
+		return hashCode(); // FIXME, possibly not unique
 	}
-	public void setId(long id) {
-		this.id = id;
+	public void setId(int id) {
+		// no-op
 	}
 	public String getDbName() {
 		return dbName;
