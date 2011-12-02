@@ -112,6 +112,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    ExecutorService pool = Executors.newCachedThreadPool();
 	    CompletionService<EnzymeSummary> ecs =
 	    		new ExecutorCompletionService<EnzymeSummary>(pool);
+	    // We must keep the order of the summaries, the same as the ID prefixes:
 	    Map<Future<EnzymeSummary>, EnzymeSummary> future2summary =
 	    		new LinkedHashMap<Future<EnzymeSummary>, EnzymeSummary>();
 	    try {
@@ -124,7 +125,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    	for (int i = 0; i < idPrefixes.size(); i++){
 	    		try {
 	    			Future<EnzymeSummary> future =
-	    					ecs.poll(config.getTimeout(), TimeUnit.SECONDS);
+	    					ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
 	    			if (future != null){
 	    				future2summary.put(future, future.get());
 	    			} else {
