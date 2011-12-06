@@ -1,13 +1,65 @@
 package uk.ac.ebi.ep.mm;
 
+import org.apache.log4j.Logger;
+
 /**
  * Databases included in the mega-map.
  * @author rafa
  *
  */
 public enum MmDatabase {
+	
+	Agricola("Agricola citation"),
+	ArrayExpressAtlas,
+	BRENDA,
+	Beilstein("Beilstein Registry Number"),
+	BioModels,
+	CAS("CAS Registry Number"),
+	COMe,
+	ChEBI,
+	ChEMBL("ChEMBL COMPOUND"),
+	Chinese_Abstracts("Chinese Abstracts citation"),
+	DrugBank,
+	EC,
+	Gmelin("Gmelin Registry Number"),
+	HMDB,
+	IEDB,
+	IntAct,
+	IntEnz,
+	KEGG_COMPOUND("KEGG COMPOUND"),
+	KEGG_DRUG("KEGG DRUG"),
+	KEGG_GLYCAN("KEGG GLYCAN"),
+	Linnean, // taxonomy
+	LIPID_MAPS_class("LIPID MAPS class"),
+	LIPID_MAPS_instance("LIPID MAPS instance"),
+	MetaCyc,
+	MolBase,
+	NMRShiftDB,
+	PDB,
+	PDBeChem,
+	Patent,
+	PubChem,
+	PubMed("PubMed citation"),
+	RESID,
+	Reactome,
+	Reaxys("Reaxys Registry Number"),
+	Rhea,
+	SABIO_RK("SABIO-RK"),
+	UM_BBD_compID("UM-BBD compID"),
+	UniProt("Swiss-Prot", "TrEMBL"),
+	WebElements,
+	Wikipedia;
+	
 
-	ChEBI, ChEMBL, PDBeChem, UniProt, Linnean, EC;
+	private static final Logger LOGGER = Logger.getLogger(MmDatabase.class);
+
+	/**
+	 * Any synonyms for the database.
+	 */
+	private String[] synonyms;
+	private MmDatabase(String... synonyms){
+		this.synonyms = synonyms;
+	}
 	
 	public String getIdField(){
 		return name() + "_ID";
@@ -23,21 +75,36 @@ public enum MmDatabase {
 
 	/**
 	 * Parses a string into a MmDatabase value. This method is more flexible
-	 * than <code>valueOf</code>, accepting names which simply start with the
-	 * database name, ignoring letter case. It also interprets 'Swiss-Prot' and
-	 * 'TrEMBL' as {@link MmDatabase#UniProt}.
+	 * than <code>valueOf</code>, accepting database synonyms (ex. 'TrEMBL'
+	 * will be parsed as {@link #UniProt}) and ignoring letter case.
 	 * @param s
 	 * @return a MmDatabase, or <code>null</code> if no match is found.
 	 */
 	public static MmDatabase parse(String s){
-		if ("Swiss-Prot".equalsIgnoreCase(s) || "TrEMBL".equalsIgnoreCase(s)){
-			return UniProt;
-		}
-		for (MmDatabase db : values()) {
-			if (s.toUpperCase().startsWith(db.name().toUpperCase())){
-				return db;
+		MmDatabase result = null;
+		try {
+			result = MmDatabase.valueOf(s);
+		} catch (Exception e){
+			dbLoop: for (MmDatabase db : values()) {
+				// Try ignoring case:
+				if (db.name().equalsIgnoreCase(s)){
+					result = db;
+					break dbLoop;
+				}
+				// Try to guess from synonyms:
+				if (db.synonyms != null){
+					for (String synonym: db.synonyms){
+						if (synonym.equalsIgnoreCase(s)){
+							result = db;
+							break dbLoop;
+						}
+					}
+				}
 			}
 		}
-		return null;
+		if (result == null){
+			LOGGER.warn("No Database found for " + s);
+		}
+		return result;
 	}
 }
