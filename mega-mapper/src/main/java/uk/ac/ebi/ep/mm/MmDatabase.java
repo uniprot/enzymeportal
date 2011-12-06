@@ -22,6 +22,7 @@ public enum MmDatabase {
 	DrugBank,
 	EC,
 	Gmelin("Gmelin Registry Number"),
+	Golm,
 	HMDB,
 	IEDB,
 	IntAct,
@@ -103,7 +104,7 @@ public enum MmDatabase {
 			}
 		}
 		if (result == null){
-			LOGGER.warn("No Database found for " + s);
+			LOGGER.warn("No database found for " + s);
 		}
 		return result;
 	}
