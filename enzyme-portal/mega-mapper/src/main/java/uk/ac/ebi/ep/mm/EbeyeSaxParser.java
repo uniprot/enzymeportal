@@ -110,9 +110,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		isEntry = DATABASE_ENTRIES_ENTRY.equals(currentXpath);
 		isEntryName = DATABASE_ENTRIES_ENTRY_NAME.equals(currentXpath);
 		isXrefs = DATABASE_ENTRIES_ENTRY_XREFS.equals(currentXpath);
-		// XXX: we are considering only UniProt xrefs
-		isRef = DATABASE_ENTRIES_ENTRY_XREFS_REF.equals(currentXpath)
-				&& MmDatabase.UniProt.equals(MmDatabase.parse(attributes.getValue("", "dbname")));
+		isRef = DATABASE_ENTRIES_ENTRY_XREFS_REF.equals(currentXpath);
 		
 		if (isEntry){
 			entry = new Entry();
@@ -122,14 +120,19 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		} else if (isXrefs){
 			rels.clear();
 		} else if (isRef){
-			Entry refEntry = new Entry();
-			refEntry.setDbName(MmDatabase.parse(attributes.getValue("", "dbname")).name());
-			refEntry.setEntryId(attributes.getValue("", "dbkey"));
-			Relationship rel = new Relationship();
-			rel.setFromEntry(entry);
-			rel.setRelationship(Relationships.is_related_to.name()); // FIXME
-			rel.setToEntry(refEntry);
-			rels.add(rel);
+			final MmDatabase refdDb =
+					MmDatabase.parse(attributes.getValue("", "dbname"));
+			// XXX: we are considering only UniProt xrefs
+			if (MmDatabase.UniProt.equals(refdDb)){
+				Entry refEntry = new Entry();
+				refEntry.setDbName(refdDb.name());
+				refEntry.setEntryId(attributes.getValue("", "dbkey"));
+				Relationship rel = new Relationship();
+				rel.setFromEntry(entry);
+				rel.setRelationship(Relationships.between(db, refdDb).name());
+				rel.setToEntry(refEntry);
+				rels.add(rel);
+			}
 		}
 	}
 
@@ -155,6 +158,14 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				throw new RuntimeException("Adding entry to mega-map");
 			}
 		}
+		currentContext.pop();
+		// Update flags:
+		String currentXpath = getCurrentXpath();
+		isXrefs = DATABASE_ENTRIES_ENTRY_XREFS.equals(currentXpath);
+		isEntry = DATABASE_ENTRIES_ENTRY.equals(currentXpath);
+		isDbName = false;
+		isEntryName = false;
+		isRef = false;
 	}
 
 	public void setWriter(MegaMapper writer) {
