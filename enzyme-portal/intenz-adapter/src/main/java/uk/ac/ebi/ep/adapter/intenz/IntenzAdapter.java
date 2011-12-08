@@ -56,21 +56,19 @@ public class IntenzAdapter implements IintenzAdapter{
         ExecutorService pool = Executors.newCachedThreadPool();
         CompletionService<Set<String>> ecs =
        		 	new ExecutorCompletionService<Set<String>>(pool);
-        // TODO: use a CompletionExecutionService,
-        // but how to know which Future is for which EC number?
         Map<String, Set<String>> resultMap =
         		new Hashtable<String, Set<String>>();
         Map<Future<Set<String>>, String> future2ec =
         		new HashMap<Future<Set<String>>, String>();
         try {
-//        	LOGGER.debug("SEARCH synonyms before submitting callables");
 	        for (String ecNumber:ecNumbers) {
+	        	// Avoid dashes, there are no IntEnzXML files for those:
+	        	if (ecNumber.indexOf('-') > -1) continue;
 	            Callable<Set<String>> callable = new GetSynonymsCaller(
 	                    IntenzUtil.createIntenzEntryUrl(ecNumber));
 	            future2ec.put(ecs.submit(callable), ecNumber);
 	        }
-//        	LOGGER.debug("SEARCH synonyms before getting futures");
-	        for (int i = 0; i < ecNumbers.size(); i++){
+	        for (int i = 0; i < future2ec.size(); i++){
 	        	try {
 	        		Future<Set<String>> future =
 	        				ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
