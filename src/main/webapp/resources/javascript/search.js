@@ -54,11 +54,13 @@ $(document).ready(function() {
         var prevStart = $("#prevStart").val();
         if (clickedId == "prevButton") {
             $("#start").val(prevStart);
-        } else {
+            pageClicked = true;
+            $('#searchButton').trigger("click");
+        } else if (clickedId == "nextButton"){
             $("#start").val(nextStart);
+            pageClicked = true;
+            $('#searchButton').trigger("click");
         }
-        pageClicked = true;
-        $('#searchButton').trigger("click");
     });
 
     $("#searchButton").click(function(event) {
