@@ -388,7 +388,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 		}
 	}
 
-    public List<String> limiteResultList(List<String> resultList, int maxResults) {
+    private List<String> limiteResultList(List<String> resultList, int maxResults) {
         List<String> subList = null;
         if (resultList != null) {
             if (resultList.size() > maxResults){
@@ -571,7 +571,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             List<String> limitedResults = this.limiteResultList(
                     relatedUniprotAccessionList,
                     ebeyeAdapter.getConfig().getMaxUniprotResultsFromOtherDomains());
-        	LOGGER.debug("Other domains, phase D: " +  relatedUniprotAccessionList.size());
+        	LOGGER.debug("Other domains, phase D: " +  limitedResults.size());
             List<String> uniprotIdsRefFromOtherDomains =
                     filterEnzymes(limitedResults);
         	LOGGER.debug("SEARCH after filterEnzymes, results: " + uniprotIdsRefFromOtherDomains.size());
