@@ -69,8 +69,9 @@ public class LuceneQueryBuilder {
      * @see {@link #createFieldsQuery(uk.ac.ebi.ep.config.Domain, uk.ac.ebi.ep.search.model.SearchParams)}
      */
     public static String createFieldsQueryWithEnzymeFilter(Domain domain, SearchParams searchParams) {
-        StringBuffer query = new StringBuffer();
-        query.append(createFieldsQuery(domain, searchParams));
+        StringBuffer query = new StringBuffer()
+//        	.append(createFieldsQuery(domain, searchParams));
+        	.append(searchParams.getText());
         query.append(" AND " +ENZYME_FILTER);
         return query.toString();
     }
