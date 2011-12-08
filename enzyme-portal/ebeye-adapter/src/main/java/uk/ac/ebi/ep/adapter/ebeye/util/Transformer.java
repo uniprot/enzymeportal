@@ -10,9 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.xml.bind.JAXBElement;
 
-import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
 import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
 import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
 import uk.ac.ebi.webservices.ebeye.ArrayOfString;
@@ -28,16 +26,6 @@ import uk.ac.ebi.webservices.ebeye.EntryReferences;
  */
 public class Transformer {
 
-//********************************* VARIABLES ********************************//
-
-
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
     public static ArrayOfString transformToArrayOfString(Collection<String> list) {
         ArrayOfString arrayOfString = new ArrayOfString();
         arrayOfString.getString().addAll(list);
@@ -70,7 +58,7 @@ public class Transformer {
 
     public static List<List<String>> transformToList(ArrayOfArrayOfString rawResults) {
         List<List<String>> rawResultList = new ArrayList<List<String>>();
-        Iterator it = rawResults.getArrayOfString().iterator();
+        Iterator<?> it = rawResults.getArrayOfString().iterator();
         while (it.hasNext()) {
             ArrayOfString arrayOfString = (ArrayOfString)it.next();
             List<String> resultLine = arrayOfString.getString();
@@ -82,7 +70,7 @@ public class Transformer {
     public static List<List<String>> transformToList(
             List<ArrayOfArrayOfString> rawResultsList) {
         List<List<String>> mergedResults = new ArrayList<List<String>>();
-        Iterator it = rawResultsList.iterator();
+        Iterator<ArrayOfArrayOfString> it = rawResultsList.iterator();
         while (it.hasNext()) {
             ArrayOfArrayOfString resultLines = (ArrayOfArrayOfString)it.next();
             mergedResults.addAll(transformToList(resultLines));
@@ -97,7 +85,7 @@ public class Transformer {
     public static LinkedHashSet<String> transformFieldValueToList(ArrayOfArrayOfString rawResults
             , boolean isUNIPROTfield) {
         LinkedHashSet<String> rawResultList = new LinkedHashSet<String>();
-        Iterator it = rawResults.getArrayOfString().iterator();
+        Iterator<?> it = rawResults.getArrayOfString().iterator();
         while (it.hasNext()) {
             ArrayOfString arrayOfString = (ArrayOfString)it.next();
             String fieldValue = arrayOfString.getString().get(0);
@@ -114,7 +102,7 @@ public class Transformer {
     public static LinkedHashSet<String> transformFieldValueToList(
             List<ArrayOfArrayOfString> rawResultsList,  boolean isUNIPROTfield) {
         LinkedHashSet<String> mergedResults = new LinkedHashSet<String>();
-        Iterator it = rawResultsList.iterator();
+        Iterator<ArrayOfArrayOfString> it = rawResultsList.iterator();
         while (it.hasNext()) {
             ArrayOfArrayOfString resultLines = (ArrayOfArrayOfString)it.next();
             mergedResults.addAll(transformFieldValueToList(resultLines, isUNIPROTfield));
@@ -193,7 +181,7 @@ public class Transformer {
     public static List<String> transformToListOfString(
                                                 ArrayOfArrayOfString arrayOfArrayOfString) {
         List<String> resultList = new ArrayList<String>();
-        Iterator it = arrayOfArrayOfString.getArrayOfString().iterator();
+        Iterator<ArrayOfString> it = arrayOfArrayOfString.getArrayOfString().iterator();
         while (it.hasNext()) {
             ArrayOfString arrayOfString = (ArrayOfString) it.next();
             resultList.addAll(arrayOfString.getString());
