@@ -34,15 +34,15 @@
             <!--Global variables-->
             <c:set var="showButton" value="Show more"/>
             <c:set var="searchText" value="${searchModel.searchparams.text}"/>
-            <c:set var="startRecord" value="${searchModel.searchparams.start}"/>
+            <c:set var="startRecord" value="${pagination.firstResult}"/>
             <c:set var="searchresults" value="${searchModel.searchresults}"/>
              <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
-            <c:set var="summaryentries" value="${searchresults.summaryentries}"/>
-            <c:set var="summaryentriesSize" value="${fn:length(summaryentries)}"/>
+            <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
+            <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
             <c:set var="filterSizeDefault" value="${10}"/>
             <div class="grid_12 content">
-                <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
+                <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
                 <div class="filter">                    
                     <div class="title">
                         Search Filters
@@ -161,36 +161,36 @@
                 </div>
                 </c:if>
                 <div id="keywordSearchResult" class="result">
-                    <c:if test="${totalfound==0}">
+                    <c:if test="${totalfound eq 0}">
                         <spring:message code="label.search.empty"/>
                     </c:if>
-                    <c:if test="${summaryentries!=null && searchresults.totalfound>0}">
+                    <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
                         <form:form modelAttribute="pagination">
-                        <c:set var="totalPages" value="${pagination.totalPages}"/>
+                        <c:set var="totalPages" value="${pagination.lastPage}"/>
                         <c:set var="maxPages" value="${totalPages}"/>
                         <div class="resultText">
-                            About <c:out value="${totalfound}"/> results found for <c:out value="${searchText}"/>,
-                            displaying <c:out value="${startRecord+1}"/> - <c:out value="${startRecord+summaryentriesSize}"/>
-
+                            <c:out value="${totalfound}"/> results found for <c:out value="${searchText}"/>,
+                            <c:if test="${totalfound ne summaryEntriesSize}">
+                            	filtered to ${summaryEntriesSize},
+                            </c:if>
+                            displaying ${pagination.firstResult+1} - ${pagination.lastResult+1}
                         </div>
                         <div id="pagination">
                             <c:if test="${totalPages gt pagination.maxDisplayedPages}">
                                 <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
                                 <c:set var="showNextButton" value="${true}"/>
                             </c:if>
-                            <input id ="prevStart" type="hidden"
-                            	value="${startRecord - pagination.numberResultsPerPage}">
-                            <c:if test="${pagination.currentPage eq 1}">
-                                <c:set var="prevDisplay" value="none"/>
-                            </c:if>
-                            <a id="prevButton" href="javascript:void(0);" style="display:${prevDisplay}">
+                            <input id="prevStart" type="hidden"
+                            	value="${pagination.firstResult - pagination.numberOfResultsPerPage}">
+                            <a id="prevButton" href="javascript:void(0);"
+                            	style="display:${pagination.currentPage eq 1? 'none' : 'inline'}">
                                 Previous
                             </a>
-                            Page <c:out value="${pagination.currentPage}"/> of <c:out value="${totalPages}"/>
+                            Page ${pagination.currentPage} of ${totalPages}
 							
-                            <c:if test="${startRecord + pagination.numberResultsPerPage le totalfound}">
+                            <c:if test="${pagination.lastResult+1 lt summaryEntriesSize}">
                                 <input id ="nextStart" type="hidden"
-                                	value="${startRecord + pagination.numberResultsPerPage}">                                    
+                                	value="${startRecord + pagination.numberOfResultsPerPage}">                                    
                                 <a id="nextButton" href="javascript:void(0);">
                                     Next
                                 </a>
@@ -201,7 +201,9 @@
                         <div class="line"></div>
                         <div class="resultContent">
                             <c:set var="resultItemId" value="${0}"/>
-                            <c:forEach items="${summaryentries}" var="enzyme" varStatus="vsEnzymes">
+                            <c:forEach items="${summaryEntries}"
+                            	begin="${pagination.firstResult}"
+                            	end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
                             <c:set var="uniprotId" value="${enzyme.uniprotid}"/>                            
                              <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
                             <div class="resultItem">
