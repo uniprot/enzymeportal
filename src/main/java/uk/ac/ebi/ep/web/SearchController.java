@@ -166,7 +166,7 @@ public class SearchController {
     		Map<String, SearchResults> prevSearches =
         			(Map<String, SearchResults>) session.getAttribute("searches");
     		if (prevSearches != null){
-        		resultSet = prevSearches.get(searchParameters.getText());
+        		resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
     		} else {
     			prevSearches = new HashMap<String, SearchResults>();
     			session.setAttribute("searches", prevSearches);
@@ -180,7 +180,7 @@ public class SearchController {
                 try {
                     resultSet = finder.getEnzymes(searchParameters);
                     // cache it in the session:
-                    prevSearches.put(searchParameters.getText(), resultSet);
+                    prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
                 } catch (EnzymeFinderException ex) {
                     LOGGER.error("Unable to create the result list because an error " +
                             "has occurred in the find method! \n", ex);
@@ -192,7 +192,6 @@ public class SearchController {
     		List<String> compoundsFilter = searchParameters.getCompounds();
     		List<String> diseasesFilter = searchParameters.getDiseases();
     		if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()){
-        		@SuppressWarnings("unchecked")
     			List<EnzymeSummary> filteredResults =
     					new ArrayList<EnzymeSummary>(resultSet.getSummaryentries());
         		CollectionUtils.filter(filteredResults,
