@@ -14,6 +14,7 @@
 <div class="grid_12">
     <div  id="keywordSearch" class="searchBackground">
         <div style="width: 65em; margin-left: auto; margin-right: auto; margin-top: 2ex;">
+        <!-- 
             <div style="text-align: left !important; margin: 0ex;">
                 <span class="selected searchTab">
                     Keyword search
@@ -25,6 +26,7 @@
                     Protein sequence search
                 </span>
             </div>
+         -->
             <div class="searchTabContent">
                 <form:input id="searchbox" path="searchparams.text" cssClass="field" rel="Enter a name to search"/>
                 <form:hidden id="start" path="searchparams.start" />
