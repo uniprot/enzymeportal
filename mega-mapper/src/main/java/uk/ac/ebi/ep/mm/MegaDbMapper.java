@@ -29,19 +29,17 @@ public class MegaDbMapper implements MegaMapper {
 	 */
 	public MegaDbMapper(String dbConfig, int chunkSize){
 		sessionFactory = HibernateUtil.getSessionFactory(dbConfig);
-		session = sessionFactory.getCurrentSession();
-		session.setFlushMode(FlushMode.COMMIT);
 		this.chunkSize = chunkSize;
 	}
 	
 	public void openMap() throws IOException {
-		session.beginTransaction();
-		logger.info("Map opened");
+		session = getSession();
 	}
 
 	private Session getSession() {
 		Session s = sessionFactory.getCurrentSession();
 		s.setFlushMode(FlushMode.COMMIT);
+		s.beginTransaction();
 		return s;
 	}
 
