@@ -17,12 +17,21 @@ public class MegaDbMapper implements MegaMapper {
 
 	private final Logger logger = Logger.getLogger(MegaDbMapper.class);
 	private Session session;
+	private final int chunkSize;
+	private int counter = 0;
+	private SessionFactory sessionFactory;
 	
-	public MegaDbMapper(String dbConfig){
-		SessionFactory sessionFactory =
-				HibernateUtil.getSessionFactory(dbConfig);
+	/**
+	 * @param dbConfig file name for hibernate configuration. If
+	 * 		<code>null</code>, defaults to hibernate default.
+	 * @param chunkSize size of the chunks which will be commited to the
+	 * 		database to avoid huge sessions and running out of memory.
+	 */
+	public MegaDbMapper(String dbConfig, int chunkSize){
+		sessionFactory = HibernateUtil.getSessionFactory(dbConfig);
 		session = sessionFactory.getCurrentSession();
 		session.setFlushMode(FlushMode.COMMIT);
+		this.chunkSize = chunkSize;
 	}
 	
 	public void openMap() throws IOException {
@@ -30,14 +39,36 @@ public class MegaDbMapper implements MegaMapper {
 		logger.info("Map opened");
 	}
 
+	private Session getSession() {
+		Session s = sessionFactory.getCurrentSession();
+		s.setFlushMode(FlushMode.COMMIT);
+		return s;
+	}
+
+	/**
+	 * Checks if the session has reached the chunk size to commit.
+	 */
+	private void checkChunkSize() {
+		if (counter++ >= chunkSize){
+			session.getTransaction().commit();
+			session = getSession();
+			counter = 0;
+		}
+	}
+
 	public void writeEntry(Entry entry) throws IOException {
 		session.merge(entry); // save or saveOrUpdate does not work!
 		logger.debug(entry.getEntryId() + " written");
+		checkChunkSize();
 	}
 
 	public void writeRelationship(Relationship relationship)
 	throws IOException {
 		session.merge(relationship); // save or saveOrUpdate does not work!
+		logger.debug(relationship.getFromEntry().getEntryId()
+				+ "-" + relationship.getToEntry().getEntryId()
+				+ " written");
+		checkChunkSize();
 	}
 
 	public void write(Collection<Entry> entries,

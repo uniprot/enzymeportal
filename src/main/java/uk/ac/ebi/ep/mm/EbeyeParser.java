@@ -78,7 +78,7 @@ public class EbeyeParser implements MmParser {
         if (cl != null){
     		MmParser parser = new EbeyeParser();
     		MegaMapper writer = cl.hasOption("dbConfig")?
-    				new MegaDbMapper(cl.getOptionValue("dbConfig")):
+    				new MegaDbMapper(cl.getOptionValue("dbConfig"), 1000):
     				new MegaLuceneMapper(cl.getOptionValue("indexDir"));
     		parser.setWriter(writer);
     		parser.parse(cl.getOptionValue("xmlFile"));
