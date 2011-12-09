@@ -134,6 +134,8 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				rels.add(rel);
 			}
 		}
+		// Clear placeholder:
+		currentChars.delete(0, Integer.MAX_VALUE);
 	}
 
 	@Override
