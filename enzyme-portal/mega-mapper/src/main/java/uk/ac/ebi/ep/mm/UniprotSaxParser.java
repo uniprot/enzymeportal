@@ -99,7 +99,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
     		MmParser parser = new UniprotSaxParser();
     		MegaMapper writer = cl.hasOption("indexDir")?
     				new MegaLuceneMapper(cl.getOptionValue("indexDir")):
-    				new MegaDbMapper(cl.getOptionValue("dbConfig"));
+    				new MegaDbMapper(cl.getOptionValue("dbConfig"), 1000);
     		parser.setWriter(writer);
     		parser.parse(cl.getOptionValue("xmlFile"));
         }
