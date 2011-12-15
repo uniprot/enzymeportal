@@ -67,7 +67,7 @@ public class MegaDbMapper implements MegaMapper {
 		checkChunkSize();
 	}
 
-	public void writeRelationship(Relationship relationship)
+	public void writeRelationship(XRef relationship)
 	throws IOException {
 		session.merge(relationship); // save or saveOrUpdate does not work!
 		logger.debug(relationship.getFromEntry().getEntryId()
@@ -77,11 +77,11 @@ public class MegaDbMapper implements MegaMapper {
 	}
 
 	public void write(Collection<Entry> entries,
-			Collection<Relationship> relationships) throws IOException {
+			Collection<XRef> relationships) throws IOException {
 		for (Entry entry : entries) {
 			writeEntry(entry);
 		}
-		for (Relationship relationship : relationships) {
+		for (XRef relationship : relationships) {
 			writeRelationship(relationship);
 		}
 	}
@@ -95,12 +95,12 @@ public class MegaDbMapper implements MegaMapper {
 				.setString("accession", accession).uniqueResult();
 	}
 
-	public Collection<Relationship> queryMap(Entry entry, MmDatabase db) {
+	public Collection<XRef> queryMap(Entry entry, MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<Relationship> queryMap(Collection<Entry> entries,
+	public Collection<XRef> queryMap(Collection<Entry> entries,
 			MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;

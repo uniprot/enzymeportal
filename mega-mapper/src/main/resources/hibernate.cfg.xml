@@ -16,6 +16,6 @@
   <property name="hibernate.current_session_context_class">thread</property>
   <property name="hibernate.hbm2ddl.auto">create</property>
   <mapping resource="Entry.hbm.xml"/>
-  <mapping resource="Relationship.hbm.xml"/>
+  <mapping resource="XRef.hbm.xml"/>
  </session-factory>
 </hibernate-configuration>

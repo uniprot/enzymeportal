@@ -1,78 +1,44 @@
 package uk.ac.ebi.ep.mm;
 
-import java.io.Serializable;
+public enum Relationship {
 
-public class Relationship implements Serializable {
-
-	private static final long serialVersionUID = 6877255103431212096L;
+	/** Most generic. */
+	is_related_to,
+	/** Is part of, is found in... */
+	belongs_to,
 	
-	private Entry fromEntry;
-	private String relationship;
-	private Entry toEntry;
+	// Relationships from compounds:
+	binds_to,
+	is_drug_for,
+	is_cofactor_of,
+	is_inhibitor_of,
+	is_activator_of;
 	
-	public int getId() {
-		return hashCode(); // FIXME, possibly not unique
-	}
-	public void setId(int id) {
-		// no-op
-	}
-	public Entry getFromEntry() {
-		return fromEntry;
-	}
-	public void setFromEntry(Entry fromEntity) {
-		this.fromEntry = fromEntity;
-	}
-	public Entry getToEntry() {
-		return toEntry;
-	}
-	public void setToEntry(Entry toEntity) {
-		this.toEntry = toEntity;
-	}
-	public String getRelationship() {
-		return relationship;
-	}
-	public void setRelationship(String relationship) {
-		this.relationship = relationship;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((fromEntry == null) ? 0 : fromEntry.hashCode());
-		result = prime * result
-				+ ((relationship == null) ? 0 : relationship.hashCode());
-		result = prime * result
-				+ ((toEntry == null) ? 0 : toEntry.hashCode());
+	/**
+	 * Gets the usual relationship between two databases.
+	 */
+	public static Relationship between(MmDatabase from, MmDatabase to){
+		Relationship result = is_related_to;
+		switch (from) {
+		case UniProt:
+			switch (to) {
+			case Linnean:
+			case EC:
+				result = belongs_to;
+				break;
+			}
+			break;
+		case ChEBI:
+			switch (to) {
+			case ChEMBL:
+				break;
+			case UniProt:
+				break;
+			}
+			break;
+		case ChEMBL:
+			break;
+		}
 		return result;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Relationship other = (Relationship) obj;
-		if (fromEntry == null) {
-			if (other.fromEntry != null)
-				return false;
-		} else if (!fromEntry.equals(other.fromEntry))
-			return false;
-		if (relationship == null) {
-			if (other.relationship != null)
-				return false;
-		} else if (!relationship.equals(other.relationship))
-			return false;
-		if (toEntry == null) {
-			if (other.toEntry != null)
-				return false;
-		} else if (!toEntry.equals(other.toEntry))
-			return false;
-		return true;
-	}
-	
-	
 }

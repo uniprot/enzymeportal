@@ -29,7 +29,7 @@ public interface MegaMapper {
 	 * @param relationship
 	 * @throws IOException
 	 */
-	public void writeRelationship(Relationship relationship) throws IOException;
+	public void writeRelationship(XRef relationship) throws IOException;
 	
 	/**
 	 * Writes entries and relationships to the mega-map.
@@ -37,7 +37,7 @@ public interface MegaMapper {
 	 * @param relationships
 	 * @throws IOException
 	 */
-	public void write(Collection<Entry> entries, Collection<Relationship> relationships)
+	public void write(Collection<Entry> entries, Collection<XRef> relationships)
 	throws IOException;
 	
 	/**
@@ -55,7 +55,7 @@ public interface MegaMapper {
 	 * 		<code>null</code>, all available databases should be considered.
 	 * @return a collection of related entries in the map.
 	 */
-	public Collection<Relationship> queryMap(Entry entry, MmDatabase db);
+	public Collection<XRef> queryMap(Entry entry, MmDatabase db);
 	
 	/**
 	 * Makes a query to the map.
@@ -64,7 +64,7 @@ public interface MegaMapper {
 	 * 		<code>null</code>, all available databases should be considered.
 	 * @return a collection of related entries in the map.
 	 */
-	public Collection<Relationship> queryMap(Collection<Entry> entries, MmDatabase db);
+	public Collection<XRef> queryMap(Collection<Entry> entries, MmDatabase db);
 	
 	/**
 	 * Handles any errors which might affect the mega-map.

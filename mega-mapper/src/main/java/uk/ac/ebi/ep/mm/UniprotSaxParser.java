@@ -211,7 +211,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 			if (!ecs.isEmpty()){ // XXX here is the enzyme filter
 				try {
 					Collection<Entry> entries = new HashSet<Entry>();
-					Collection<Relationship> rels = new HashSet<Relationship>();
+					Collection<XRef> rels = new HashSet<XRef>();
 
 					Entry uniprotEntry = new Entry();
 					uniprotEntry.setAccessions(accessions);
@@ -226,9 +226,9 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					speciesEntry.setEntryName(orgComName);
 					entries.add(speciesEntry);
 					
-					Relationship up2sp = new Relationship();
+					XRef up2sp = new XRef();
 					up2sp.setFromEntry(uniprotEntry);
-					up2sp.setRelationship(Relationships.belongs_to.name());
+					up2sp.setRelationship(Relationship.belongs_to);
 					up2sp.setToEntry(speciesEntry);
 					rels.add(up2sp);
 					
@@ -238,9 +238,9 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 						ecEntry.setEntryId(ec);
 						entries.add(ecEntry);
 						
-						Relationship up2ec = new Relationship();
+						XRef up2ec = new XRef();
 						up2ec.setFromEntry(uniprotEntry);
-						up2ec.setRelationship(Relationships.belongs_to.name());
+						up2ec.setRelationship(Relationship.belongs_to);
 						up2ec.setToEntry(ecEntry);
 						rels.add(up2ec);
 					}
