@@ -33,11 +33,11 @@ public class XRef implements Serializable {
 	public void setToEntry(Entry toEntity) {
 		this.toEntry = toEntity;
 	}
-	public Relationship getRelationship() {
-		return relationship;
+	public String getRelationship() {
+		return relationship.name();
 	}
-	public void setRelationship(Relationship relationship) {
-		this.relationship = relationship;
+	public void setRelationship(String s) {
+		this.relationship = Relationship.valueOf(s);
 	}
 
 	@Override
