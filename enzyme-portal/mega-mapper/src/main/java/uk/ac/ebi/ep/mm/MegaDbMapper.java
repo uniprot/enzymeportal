@@ -114,7 +114,7 @@ public class MegaDbMapper implements MegaMapper {
 	public void closeMap() throws IOException {
 		session.flush();
 		session.getTransaction().commit();
-		logger.error("Session committed");
+		logger.info("Session committed");
 		sessionFactory.close();
 	}
 
