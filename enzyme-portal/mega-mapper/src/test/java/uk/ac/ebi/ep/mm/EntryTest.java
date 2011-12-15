@@ -2,10 +2,11 @@ package uk.ac.ebi.ep.mm;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,7 +25,7 @@ public class EntryTest {
         entry.setEntryId("PDE5A_HUMAN");
         entry.setDbName(MmDatabase.UniProt.name());
         entry.setEntryName("cGMP-specific 3',5'-cyclic phosphodiesterase");
-        List<String> accessions = new ArrayList<String>();
+        Set<String> accessions = new HashSet<String>();
         accessions.add("O76074");
         accessions.add("A0AV69");
         accessions.add("A8K2C4");
@@ -52,7 +53,7 @@ public class EntryTest {
 	        myEntry = (Entry) session.get(Entry.class, savedId);
 	        assertEquals("PDE5A_HUMAN", myEntry.getEntryId());
 	        assertEquals(5, myEntry.getAccessions().size());
-	        assertEquals("O76074", myEntry.getAccessions().get(0));
+	        assertTrue(myEntry.getAccessions().contains("O76074"));
 	        
 	        session.delete(myEntry);
 	        myEntry = (Entry) session.get(Entry.class, savedId);
