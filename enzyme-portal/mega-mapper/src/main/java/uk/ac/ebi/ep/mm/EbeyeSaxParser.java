@@ -52,7 +52,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 	
 	private MmDatabase db;
 	private Entry entry;
-	private Collection<Relationship> rels = new HashSet<Relationship>();
+	private Collection<XRef> rels = new HashSet<XRef>();
 	
 	private MegaMapper mm;
 	
@@ -128,9 +128,9 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				Entry refEntry = mm.getEntryForAccession(
 						MmDatabase.UniProt.name(), uniprotAccession);
 				if (refEntry != null){
-					Relationship rel = new Relationship();
+					XRef rel = new XRef();
 					rel.setFromEntry(entry);
-					rel.setRelationship(Relationships.between(db, refdDb).name());
+					rel.setRelationship(Relationship.between(db, refdDb));
 					rel.setToEntry(refEntry);
 					rels.add(rel);
 				}
