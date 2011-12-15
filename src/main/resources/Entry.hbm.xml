@@ -9,13 +9,11 @@
   	not-null="true" type="java.lang.String" column="DB_NAME"/>
   <property generated="never" lazy="false" name="entryId"
    not-null="true" type="java.lang.String" column="ENTRY_ID"/>
-  <property generated="never" lazy="false" name="entryName" type="java.lang.String">
-   <column name="ENTRY_NAME" sql-type="VARCHAR2"/>
-  </property>
-  <list name="accessions" table="MM_ACCESSIONS">
+  <property generated="never" lazy="false" name="entryName"
+   not-null="false" type="java.lang.String" column="ENTRY_NAME"/>
+  <set name="accessions" table="MM_ACCESSIONS">
    <key column="ID" not-null="true"/>
-   <list-index base="0" column="ACCESSION_INDEX"/>
    <element column="ACCESSION" type="string"/>
-  </list>
+  </set>
  </class>
 </hibernate-mapping>

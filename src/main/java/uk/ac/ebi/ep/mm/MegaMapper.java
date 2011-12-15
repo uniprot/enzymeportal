@@ -41,6 +41,14 @@ public interface MegaMapper {
 	throws IOException;
 	
 	/**
+	 * Retrieves an entry for a given accession.
+	 * @param dbName
+	 * @param accession
+	 * @return an {@link Entry}.
+	 */
+	public Entry getEntryForAccession(String dbName, String accession);
+	
+	/**
 	 * Makes a query to the map.
 	 * @param entry The entry we want relationships for.
 	 * @param db The database to which the entry is related. If

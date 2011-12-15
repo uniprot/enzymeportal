@@ -101,7 +101,7 @@ public class EbeyeParser implements MmParser {
 				Entry ent = new Entry();
 				ent.setEntryId(entry.getId());
 				ent.setEntryName(entry.getName());
-				ent.setAccessions(Collections.singletonList(entry.getAcc()));
+				ent.setAccessions(Collections.singleton(entry.getAcc()));
 				ent.setDbName(database.name());
 				mm.writeEntry(ent);
 				
