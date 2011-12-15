@@ -59,7 +59,7 @@ public class MegaDbMapper implements MegaMapper {
 	}
 
 	public void writeEntry(Entry entry) throws IOException {
-        if (entry.getEntryName().length() > 300){
+        if (entry.getEntryName() != null && entry.getEntryName().length() > 300){
             logger.warn("[BIG] " + entry.getEntryName());
         }
 		session.merge(entry); // save or saveOrUpdate does not work!
