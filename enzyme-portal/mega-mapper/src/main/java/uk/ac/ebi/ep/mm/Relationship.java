@@ -30,13 +30,16 @@ public enum Relationship {
 			break;
 		case ChEBI:
 			switch (to) {
-			case ChEMBL:
-				break;
 			case UniProt:
 				break;
 			}
 			break;
 		case ChEMBL:
+			switch (to) {
+			case UniProt:
+				result = is_drug_for;
+				break;
+			}
 			break;
 		}
 		return result;

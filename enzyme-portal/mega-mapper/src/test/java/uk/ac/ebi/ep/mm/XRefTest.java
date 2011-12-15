@@ -65,7 +65,7 @@ public class XRefTest {
     		XRef rel = new XRef();
     		rel.setFromEntry(ent2);
     		rel.setToEntry(ent1);
-    		rel.setRelationship(Relationship.is_drug_for);
+    		rel.setRelationship(Relationship.is_drug_for.name());
     		session.save(rel);
     		session.getTransaction().commit();
     		
