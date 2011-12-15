@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.hibernate.FlushMode;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -16,10 +17,12 @@ import org.hibernate.SessionFactory;
 public class MegaDbMapper implements MegaMapper {
 
 	private final Logger logger = Logger.getLogger(MegaDbMapper.class);
-	private Session session;
+	protected Session session;
 	private final int chunkSize;
 	private int counter = 0;
 	private SessionFactory sessionFactory;
+	
+	private Query entryForAccessionQuery;
 	
 	/**
 	 * @param dbConfig file name for hibernate configuration. If
@@ -33,14 +36,15 @@ public class MegaDbMapper implements MegaMapper {
 	}
 	
 	public void openMap() throws IOException {
-		session = getSession();
+		openNewSession();
 	}
 
-	private Session getSession() {
-		Session s = sessionFactory.getCurrentSession();
-		s.setFlushMode(FlushMode.COMMIT);
-		s.beginTransaction();
-		return s;
+	private void openNewSession() {
+		session = sessionFactory.getCurrentSession();
+		session.setFlushMode(FlushMode.COMMIT);
+		session.beginTransaction();
+		entryForAccessionQuery = session.createQuery("from Entry where" +
+				" dbName = :dbName and :accession in elements(accessions)");
 	}
 
 	/**
@@ -49,7 +53,7 @@ public class MegaDbMapper implements MegaMapper {
 	private void checkChunkSize() {
 		if (counter++ >= chunkSize){
 			session.getTransaction().commit();
-			session = getSession();
+			openNewSession();
 			counter = 0;
 		}
 	}
@@ -79,6 +83,15 @@ public class MegaDbMapper implements MegaMapper {
 		}
 	}
 
+	public Entry getEntryForAccession(String dbName, String accession) {
+//		session.createCriteria(Entry.class).add(Restrictions.and(
+//				Property.forName("dbName").eq(dbName),
+//				Property.forName("accessions").))
+		return (Entry) entryForAccessionQuery
+				.setString("dbName", dbName)
+				.setString("accession", accession).uniqueResult();
+	}
+
 	public Collection<Relationship> queryMap(Entry entry, MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
@@ -99,6 +112,7 @@ public class MegaDbMapper implements MegaMapper {
 		session.flush();
 		session.getTransaction().commit();
 		logger.error("Session committed");
+		sessionFactory.close();
 	}
 
 }

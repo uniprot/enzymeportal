@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 public class Entry implements Serializable {
 
@@ -10,7 +10,7 @@ public class Entry implements Serializable {
 	private String dbName;
 	private String entryId;
 	private String entryName;
-	private List<String> accessions;
+	private Set<String> accessions;
 	
 	public int getId() {
 		return hashCode(); // FIXME, possibly not unique
@@ -36,10 +36,10 @@ public class Entry implements Serializable {
 	public void setEntryName(String name) {
 		this.entryName = name;
 	}
-	public List<String> getAccessions() {
+	public Set<String> getAccessions() {
 		return accessions;
 	}
-	public void setAccessions(List<String> accessions) {
+	public void setAccessions(Set<String> accessions) {
 		this.accessions = accessions;
 	}
 	@Override

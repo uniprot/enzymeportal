@@ -124,6 +124,38 @@
 			        </dependency>
 				</dependencies>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>${ep.config.dir}/ep-mm-db${ep.mm.db.config}.properties</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+	
+	<properties>
+		<!-- default one is empty -->
+		<ep.mm.db.config></ep.mm.db.config>
+	</properties>
+	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<ep.mm.db.config>-dev</ep.mm.db.config>
+			</properties>
+		</profile>
+	</profiles>
 </project>

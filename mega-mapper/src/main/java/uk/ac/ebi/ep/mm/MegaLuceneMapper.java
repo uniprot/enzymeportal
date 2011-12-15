@@ -163,4 +163,9 @@ public class MegaLuceneMapper implements MegaMapper {
 		closeMap();
 	}
 
+	public Entry getEntryForAccession(String dbName, String accession) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

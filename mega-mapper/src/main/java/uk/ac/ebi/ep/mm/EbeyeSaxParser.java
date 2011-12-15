@@ -116,7 +116,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
-			entry.setAccessions(Collections.singletonList(attributes.getValue("", "acc")));
+			entry.setAccessions(Collections.singleton(attributes.getValue("", "acc")));
 		} else if (isXrefs){
 			rels.clear();
 		} else if (isRef){
@@ -124,14 +124,16 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 					MmDatabase.parse(attributes.getValue("", "dbname"));
 			// XXX: we are considering only UniProt xrefs
 			if (MmDatabase.UniProt.equals(refdDb)){
-				Entry refEntry = new Entry();
-				refEntry.setDbName(refdDb.name());
-				refEntry.setEntryId(attributes.getValue("", "dbkey"));
-				Relationship rel = new Relationship();
-				rel.setFromEntry(entry);
-				rel.setRelationship(Relationships.between(db, refdDb).name());
-				rel.setToEntry(refEntry);
-				rels.add(rel);
+				final String uniprotAccession = attributes.getValue("", "dbkey");
+				Entry refEntry = mm.getEntryForAccession(
+						MmDatabase.UniProt.name(), uniprotAccession);
+				if (refEntry != null){
+					Relationship rel = new Relationship();
+					rel.setFromEntry(entry);
+					rel.setRelationship(Relationships.between(db, refdDb).name());
+					rel.setToEntry(refEntry);
+					rels.add(rel);
+				}
 			}
 		}
 		// Clear placeholder:
@@ -155,7 +157,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry.setEntryName(currentChars.toString());
 		} else if (isEntry){
 			try {
-				mm.write(Collections.singletonList(entry), rels);
+				mm.write(Collections.singleton(entry), rels);
 			} catch (IOException e) {
 				throw new RuntimeException("Adding entry to mega-map");
 			}
