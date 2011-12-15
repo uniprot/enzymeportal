@@ -13,7 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RelationshipTest {
+public class XRefTest {
 
 	private SessionFactory sessionFactory;
 	List<Integer> entityIds = new ArrayList<Integer>();
@@ -38,7 +38,7 @@ public class RelationshipTest {
 	public void after(){
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
-		String relQuery = "DELETE Relationship WHERE fromEntry = :fromEnt OR toEntry = :toEnt";
+		String relQuery = "DELETE XRef WHERE fromEntry = :fromEnt OR toEntry = :toEnt";
 		String entQuery = "DELETE Entry WHERE id = :theId";
 		for (Integer id : entityIds) {
 			int n = session.createQuery(relQuery)
@@ -62,19 +62,19 @@ public class RelationshipTest {
     		session.beginTransaction();
     		Entry ent1 = (Entry) session.get(Entry.class, entityIds.get(0));
     		Entry ent2 = (Entry) session.get(Entry.class, entityIds.get(1));
-    		Relationship rel = new Relationship();
+    		XRef rel = new XRef();
     		rel.setFromEntry(ent2);
     		rel.setToEntry(ent1);
-    		rel.setRelationship(Relationships.is_drug_for.toString());
+    		rel.setRelationship(Relationship.is_drug_for);
     		session.save(rel);
     		session.getTransaction().commit();
     		
     		session = sessionFactory.getCurrentSession();
     		session.beginTransaction();
     		final Query fromQuery =
-    				session.createQuery("FROM Relationship WHERE fromEntry = :fromEnt");
+    				session.createQuery("FROM XRef WHERE fromEntry = :fromEnt");
     		final Query toQuery =
-    				session.createQuery("FROM Relationship WHERE toEntry = :toEnt");
+    				session.createQuery("FROM XRef WHERE toEntry = :toEnt");
 			assertEquals(0, fromQuery.setEntity("fromEnt", ent1).list().size());
 			assertEquals(1, fromQuery.setEntity("fromEnt", ent2).list().size());
 			assertEquals(1, toQuery.setEntity("toEnt", ent1).list().size());

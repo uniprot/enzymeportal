@@ -69,7 +69,7 @@ public class MegaLuceneMapper implements MegaMapper {
 	 * Currently, this implementation just adds the entries at both ends of the
 	 * relationship to the same lucene document.
 	 */
-	public void writeRelationship(Relationship relationship)
+	public void writeRelationship(XRef relationship)
 	throws CorruptIndexException, IOException {
 		Document doc = new Document();
 		addEntryToDoc(doc, relationship.getFromEntry());
@@ -81,7 +81,7 @@ public class MegaLuceneMapper implements MegaMapper {
 	 * @throws IOException 
 	 * @throws CorruptIndexException 
 	 */
-	public void write(Collection<Entry> entries, Collection<Relationship> rels)
+	public void write(Collection<Entry> entries, Collection<XRef> rels)
 			throws CorruptIndexException, IOException {
 		Document doc = new Document();
 		// FIXME: before creating a new doc, check whether there is one already
@@ -89,19 +89,19 @@ public class MegaLuceneMapper implements MegaMapper {
 		for (Entry entry : entries) {
 			addEntryToDoc(doc, entry);
 		}
-		for (Relationship rel : rels) {
+		for (XRef rel : rels) {
 			addEntryToDoc(doc, rel.getFromEntry());
 			addEntryToDoc(doc, rel.getToEntry());
 		}
 		indexWriter.addDocument(doc);
 	}
 
-	public Collection<Relationship> queryMap(Entry entry, MmDatabase db) {
+	public Collection<XRef> queryMap(Entry entry, MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<Relationship> queryMap(Collection<Entry> entries,
+	public Collection<XRef> queryMap(Collection<Entry> entries,
 			MmDatabase db) {
 		// TODO Auto-generated method stub
 		return null;
