@@ -19,6 +19,14 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+/**
+ * Parser for EB-Eye XML files to populate a mega-map.
+ * Currently, this implementation only considers cross references to UniProt,
+ * and has been used with ChEBI and ChEMBL-target files (ChEMBL target is the
+ * only one for this database which links compounds with protein IDs).
+ * @author rafa
+ *
+ */
 public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 
 	private static final String DATABASE_NAME = "//database/name";
@@ -130,7 +138,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				if (refEntry != null){
 					XRef rel = new XRef();
 					rel.setFromEntry(entry);
-					rel.setRelationship(Relationship.between(db, refdDb));
+					rel.setRelationship(Relationship.between(db, refdDb).name());
 					rel.setToEntry(refEntry);
 					rels.add(rel);
 				}

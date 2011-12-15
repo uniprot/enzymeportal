@@ -228,7 +228,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					
 					XRef up2sp = new XRef();
 					up2sp.setFromEntry(uniprotEntry);
-					up2sp.setRelationship(Relationship.belongs_to);
+					up2sp.setRelationship(Relationship.belongs_to.name());
 					up2sp.setToEntry(speciesEntry);
 					rels.add(up2sp);
 					
@@ -240,7 +240,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 						
 						XRef up2ec = new XRef();
 						up2ec.setFromEntry(uniprotEntry);
-						up2ec.setRelationship(Relationship.belongs_to);
+						up2ec.setRelationship(Relationship.belongs_to.name());
 						up2ec.setToEntry(ecEntry);
 						rels.add(up2ec);
 					}
