@@ -7,14 +7,7 @@
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 XML_FILE=${1:-$EBINOCLE_DATA/uniprot/latest/uniprot_sprot.xml}
 
-cd $(dirname $0)/..
-mvn clean package
-
-CP=.
-for JAR in target/*.jar
-do
-    CP=$CP:$JAR
-done
+. $(dirname $0)/mvnBuild.sh
 
 echo "Starting Swiss-Prot import - $(date)"
 java -Xms512M -Xmx1G -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
