@@ -51,25 +51,25 @@ public class UniprotSaxParserTest {
 		assertFalse(parser.isEntry);
 		assertFalse(parser.isAccession);
 		assertFalse(parser.isEntryName);
-		assertFalse(parser.isEcRef);
+		assertFalse(parser.isDbRef);
 		assertFalse(parser.isOrgSciName);
 		parser.startElement(null, "entry", null, null);
 		assertTrue(parser.isEntry);
 		assertFalse(parser.isAccession);
 		assertFalse(parser.isEntryName);
-		assertFalse(parser.isEcRef);
+		assertFalse(parser.isDbRef);
 		assertFalse(parser.isOrgSciName);
 		parser.startElement(null, "accession", null, null);
 		assertFalse(parser.isEntry);
 		assertTrue(parser.isAccession);
 		assertFalse(parser.isEntryName);
-		assertFalse(parser.isEcRef);
+		assertFalse(parser.isDbRef);
 		assertFalse(parser.isOrgSciName);
 		parser.startElement(null, "foo", null, null);
 		assertFalse(parser.isEntry);
 		assertFalse(parser.isAccession);
 		assertFalse(parser.isEntryName);
-		assertFalse(parser.isEcRef);
+		assertFalse(parser.isDbRef);
 		assertFalse(parser.isOrgSciName);
 	}
 
