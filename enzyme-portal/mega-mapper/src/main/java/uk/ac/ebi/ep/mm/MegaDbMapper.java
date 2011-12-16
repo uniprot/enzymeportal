@@ -67,22 +67,22 @@ public class MegaDbMapper implements MegaMapper {
 		checkChunkSize();
 	}
 
-	public void writeRelationship(XRef relationship)
+	public void writeXref(XRef xref)
 	throws IOException {
-		session.merge(relationship); // save or saveOrUpdate does not work!
-		logger.debug(relationship.getFromEntry().getEntryId()
-				+ "-" + relationship.getToEntry().getEntryId()
+		session.merge(xref); // save or saveOrUpdate does not work!
+		logger.debug(xref.getFromEntry().getEntryId()
+				+ "-" + xref.getToEntry().getEntryId()
 				+ " written");
 		checkChunkSize();
 	}
 
 	public void write(Collection<Entry> entries,
-			Collection<XRef> relationships) throws IOException {
+			Collection<XRef> xrefs) throws IOException {
 		for (Entry entry : entries) {
 			writeEntry(entry);
 		}
-		for (XRef relationship : relationships) {
-			writeRelationship(relationship);
+		for (XRef xref : xrefs) {
+			writeXref(xref);
 		}
 	}
 

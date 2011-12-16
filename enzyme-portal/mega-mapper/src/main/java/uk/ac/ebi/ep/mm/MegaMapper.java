@@ -29,7 +29,7 @@ public interface MegaMapper {
 	 * @param relationship
 	 * @throws IOException
 	 */
-	public void writeRelationship(XRef relationship) throws IOException;
+	public void writeXref(XRef relationship) throws IOException;
 	
 	/**
 	 * Writes entries and relationships to the mega-map.
