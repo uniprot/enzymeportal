@@ -70,7 +70,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 
 	protected boolean isOrgComName;
 	
-	protected boolean isEcRef;
+	protected boolean isDbRef;
 	
 	protected boolean isProtRecName;
 
@@ -85,6 +85,8 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	protected String orgComName;
 	
 	protected List<String> ecs = new ArrayList<String>();
+	
+	protected List<String> pdbCodes = new ArrayList<String>();
 
 	protected String protRecName;
 
@@ -168,17 +170,22 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 		isEntry = UNIPROT_ENTRY.equals(currentXpath);
 		isAccession = UNIPROT_ENTRY_ACCESSION.equals(currentXpath);
 		isEntryName = UNIPROT_ENTRY_NAME.equals(currentXpath);
+		final String typeAttr = attributes == null?
+				null : attributes.getValue("", "type");
 		isOrgSciName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
-				&& "scientific".equals(attributes.getValue("", "type"));
+				&& "scientific".equals(typeAttr);
 		isOrgComName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
-				&& "common".equals(attributes.getValue("", "type"));
-		isEcRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath)
-				&& "EC".equals(attributes.getValue("", "type"));
+				&& "common".equals(typeAttr);
+		isDbRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath);
 		isProtRecName = UNIPROT_ENTRY_PROTEIN_REC_NAME.equals(currentXpath);
 		// Clear placeholder:
 		currentChars.delete(0, Integer.MAX_VALUE);
-		if (isEcRef){
-			ecs.add(attributes.getValue("", "id"));
+		if (isDbRef){
+			if ("EC".equals(typeAttr)){
+				ecs.add(attributes.getValue("", "id"));
+			} else if ("PDB".equals(typeAttr)){
+				pdbCodes.add(attributes.getValue("", "id"));
+			}
 		}
 	}
 
@@ -228,7 +235,8 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					
 					XRef up2sp = new XRef();
 					up2sp.setFromEntry(uniprotEntry);
-					up2sp.setRelationship(Relationship.belongs_to.name());
+					up2sp.setRelationship(Relationship.between(
+							MmDatabase.UniProt, MmDatabase.Linnean).name());
 					up2sp.setToEntry(speciesEntry);
 					rels.add(up2sp);
 					
@@ -240,9 +248,22 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 						
 						XRef up2ec = new XRef();
 						up2ec.setFromEntry(uniprotEntry);
-						up2ec.setRelationship(Relationship.belongs_to.name());
+						up2ec.setRelationship(Relationship.between(
+								MmDatabase.UniProt, MmDatabase.EC).name());
 						up2ec.setToEntry(ecEntry);
 						rels.add(up2ec);
+					}
+					
+					for (String pdbCode : pdbCodes) {
+						Entry pdbEntry = new Entry();
+						pdbEntry.setDbName(MmDatabase.PDB.name());
+						pdbEntry.setEntryId(pdbCode);
+						entries.add(pdbEntry);
+						
+						XRef up2pdb = new XRef();
+						up2pdb.setFromEntry(uniprotEntry);
+						up2pdb.setRelationship(Relationship.between(
+								MmDatabase.UniProt, MmDatabase.PDB).name());
 					}
 					
 					mm.write(entries, rels);

@@ -4,8 +4,12 @@ public enum Relationship {
 
 	/** Most generic. */
 	is_related_to,
-	/** Is part of, is found in... */
+	
+	/** Is part of a wider group, is found in... */
 	belongs_to,
+	
+	/** Is found in a concrete instance */
+	is_part_of,
 	
 	// Relationships from compounds:
 	binds_to,
@@ -26,6 +30,8 @@ public enum Relationship {
 			case EC:
 				result = belongs_to;
 				break;
+			case PDB:
+				result = is_part_of;
 			}
 			break;
 		case ChEBI:
