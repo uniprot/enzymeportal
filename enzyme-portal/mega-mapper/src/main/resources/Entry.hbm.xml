@@ -11,9 +11,10 @@
    not-null="true" type="java.lang.String" column="ENTRY_ID"/>
   <property generated="never" lazy="false" name="entryName"
    not-null="false" type="java.lang.String" column="ENTRY_NAME"/>
-  <set name="accessions" table="MM_ACCESSION">
+  <list name="accessions" table="MM_ACCESSION">
    <key column="ID" not-null="true"/>
+   <list-index base="0" column="ACCESSION_INDEX"/>
    <element column="ACCESSION" type="string"/>
-  </set>
+  </list>
  </class>
 </hibernate-mapping>

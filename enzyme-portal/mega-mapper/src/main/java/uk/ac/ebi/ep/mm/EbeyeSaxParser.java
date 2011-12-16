@@ -124,7 +124,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
-			entry.setAccessions(Collections.singleton(attributes.getValue("", "acc")));
+			entry.setAccessions(Collections.singletonList(attributes.getValue("", "acc")));
 		} else if (isXrefs){
 			rels.clear();
 		} else if (isRef){
