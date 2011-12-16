@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 public class Entry implements Serializable {
 
@@ -10,7 +10,12 @@ public class Entry implements Serializable {
 	private String dbName;
 	private String entryId;
 	private String entryName;
-	private Set<String> accessions;
+	
+	/**
+	 * Ordered list of accession for the entry. Databases have usually primary
+	 * accessions, which will appear as first in the list.
+	 */
+	private List<String> accessions;
 	
 	public int getId() {
 		return hashCode(); // FIXME, possibly not unique
@@ -36,10 +41,10 @@ public class Entry implements Serializable {
 	public void setEntryName(String name) {
 		this.entryName = name;
 	}
-	public Set<String> getAccessions() {
+	public List<String> getAccessions() {
 		return accessions;
 	}
-	public void setAccessions(Set<String> accessions) {
+	public void setAccessions(List<String> accessions) {
 		this.accessions = accessions;
 	}
 	@Override
