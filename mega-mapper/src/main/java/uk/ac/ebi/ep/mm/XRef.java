@@ -34,7 +34,7 @@ public class XRef implements Serializable {
 		this.toEntry = toEntity;
 	}
 	public String getRelationship() {
-		return relationship.name();
+		return relationship == null? null : relationship.name();
 	}
 	public void setRelationship(String s) {
 		this.relationship = Relationship.valueOf(s);

@@ -218,7 +218,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 			if (!ecs.isEmpty()){ // XXX here is the enzyme filter
 				try {
 					Collection<Entry> entries = new HashSet<Entry>();
-					Collection<XRef> rels = new HashSet<XRef>();
+					Collection<XRef> xrefs = new HashSet<XRef>();
 
 					Entry uniprotEntry = new Entry();
 					uniprotEntry.setAccessions(accessions);
@@ -238,7 +238,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					up2sp.setRelationship(Relationship.between(
 							MmDatabase.UniProt, MmDatabase.Linnean).name());
 					up2sp.setToEntry(speciesEntry);
-					rels.add(up2sp);
+					xrefs.add(up2sp);
 					
 					for (String ec: ecs){
 						Entry ecEntry = new Entry();
@@ -251,7 +251,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 						up2ec.setRelationship(Relationship.between(
 								MmDatabase.UniProt, MmDatabase.EC).name());
 						up2ec.setToEntry(ecEntry);
-						rels.add(up2ec);
+						xrefs.add(up2ec);
 					}
 					
 					for (String pdbCode : pdbCodes) {
@@ -264,9 +264,11 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 						up2pdb.setFromEntry(uniprotEntry);
 						up2pdb.setRelationship(Relationship.between(
 								MmDatabase.UniProt, MmDatabase.PDB).name());
+						up2pdb.setToEntry(pdbEntry);
+						xrefs.add(up2pdb);
 					}
 					
-					mm.write(entries, rels);
+					mm.write(entries, xrefs);
 				} catch (Exception e) {
 					throw new RuntimeException("Adding entry to mega-map", e);
 				}

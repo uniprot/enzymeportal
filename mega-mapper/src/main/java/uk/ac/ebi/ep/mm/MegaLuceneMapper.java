@@ -69,7 +69,7 @@ public class MegaLuceneMapper implements MegaMapper {
 	 * Currently, this implementation just adds the entries at both ends of the
 	 * relationship to the same lucene document.
 	 */
-	public void writeRelationship(XRef relationship)
+	public void writeXref(XRef relationship)
 	throws CorruptIndexException, IOException {
 		Document doc = new Document();
 		addEntryToDoc(doc, relationship.getFromEntry());
