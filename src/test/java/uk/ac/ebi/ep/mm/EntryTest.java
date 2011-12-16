@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,7 +25,7 @@ public class EntryTest {
         entry.setEntryId("PDE5A_HUMAN");
         entry.setDbName(MmDatabase.UniProt.name());
         entry.setEntryName("cGMP-specific 3',5'-cyclic phosphodiesterase");
-        Set<String> accessions = new HashSet<String>();
+        List<String> accessions = new ArrayList<String>();
         accessions.add("O76074");
         accessions.add("A0AV69");
         accessions.add("A8K2C4");

@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 import org.apache.commons.cli.CommandLine;
@@ -76,7 +75,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 
 	private MegaMapper mm;
 
-	protected Set<String> accessions = new HashSet<String>();
+	protected List<String> accessions = new ArrayList<String>();
 
 	protected List<String> entryNames = new ArrayList<String>();
 

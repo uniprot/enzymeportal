@@ -26,7 +26,7 @@ public class MegaDbMapperTest {
 		Entry entity1 = new Entry();
 		entity1.setDbName(MmDatabase.UniProt.name());
 		entity1.setEntryId("ABCD_HUMAN");
-		Set<String> accessions = new HashSet<String>();
+		List<String> accessions = new ArrayList<String>();
 		accessions.add("P12345");
 		accessions.add("Q98765");
 		entity1.setAccessions(accessions);
