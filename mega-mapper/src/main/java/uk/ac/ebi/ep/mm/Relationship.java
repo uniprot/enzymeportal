@@ -5,6 +5,12 @@ public enum Relationship {
 	/** Most generic. */
 	is_related_to,
 	
+	/**
+	 * An entry in a database referencing basically the same entity in another
+	 * one.
+	 */
+	same_as,
+	
 	/** Is part of a wider group, is found in... */
 	belongs_to,
 	
@@ -36,11 +42,13 @@ public enum Relationship {
 			break;
 		case ChEBI:
 			switch (to) {
-			case UniProt:
+			case PDBeChem:
+				result = same_as;
 				break;
 			}
 			break;
 		case ChEMBL:
+		case ChEMBL_Target:
 			switch (to) {
 			case UniProt:
 				result = is_drug_for;
