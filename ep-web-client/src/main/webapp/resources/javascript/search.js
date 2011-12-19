@@ -40,10 +40,17 @@ $(document).ready(function() {
             var splitLinkName = linkValue.split(" ");
             if (jQuery.inArray('more', splitLinkName) > -1){
                 $(idOfHiddenText).show();
-                $(jqClickedId).html(linkValue.replace('more','less'));
-            } else {
+                $(jqClickedId).html(linkValue.replace('more','fewer'));
+            } else if (jQuery.inArray('fewer', splitLinkName) > -1) {
                 $(idOfHiddenText).hide();
-                $(jqClickedId).html(linkValue.replace('less','more'));
+                $(jqClickedId).html(linkValue.replace('fewer','more'));
+            } else if (jQuery.inArray('whole', splitLinkName) > -1){
+                $(idOfHiddenText).show();
+                $(jqClickedId).html(linkValue
+                		.replace('whole','less').replace('... ',''));
+            } else if (jQuery.inArray('less', splitLinkName) > -1) {
+                $(idOfHiddenText).hide();
+                $(jqClickedId).html('... ' + linkValue.replace('less','whole'));
             }
     });
 
