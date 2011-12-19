@@ -41,6 +41,7 @@
             <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
             <c:set var="totalfound" value="${searchresults.totalfound}"/>
             <c:set var="filterSizeDefault" value="${10}"/>
+            <c:set var="textMaxLength" value="${100}"/>
             <div class="grid_12 content">
                 <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
                 <div class="filter">                    
@@ -257,11 +258,25 @@
                                        		enzyme.species.commonname}]
                                     </a>
 
-                                    <c:set var="function" value="${enzyme.function}"/>
-                                    <c:if test='${function != null && function != ""}'>
+                                    <c:if test="${not empty enzyme.function}">
                                         <div>
                                             <b>Function</b>:
-                                        <c:out value="${enzyme.function}"/>.<br/>
+                                            <c:choose>
+                                            	<c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt textMaxLength}">
+                                            		<c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
+                                            			begin="0" end="${textMaxLength-1}">
+                                            		${word}</c:forEach>
+		                                            <span id="fun_${resultItemId}" style="display: none">
+                                            		<c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
+                                            			begin="${textMaxLength}">
+                                            		${word}</c:forEach>
+		                                            </span>
+		                                            <a class="showLink" id="fun_link_${resultItemId}">... Show whole function</a>
+                                            	</c:when>
+                                            	<c:otherwise>
+                                            		${enzyme.function}
+                                            	</c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </c:if>
                                     <c:set var="synonym" value="${enzyme.synonym}"/>
