@@ -18,6 +18,7 @@ public enum MmDatabase {
 	COMe,
 	ChEBI,
 	ChEMBL("ChEMBL COMPOUND"),
+	ChEMBL_Target("ChEMBL.Target"),
 	Chinese_Abstracts("Chinese Abstracts citation"),
 	DrugBank,
 	EC,
