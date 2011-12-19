@@ -183,6 +183,13 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		currentChars.delete(0, Integer.MAX_VALUE);
 	}
 
+	/**
+	 * Are we interested in a cross reference?
+	 * @param db the database providing the EB-Eye XML file.
+	 * @param refdDb the referenced database.
+	 * @return <code>true</code> if the xref is interesting
+	 * (see {@link #interestingXrefs}).
+	 */
 	private boolean isInterestingXref(MmDatabase db, MmDatabase refdDb) {
 		return Arrays.binarySearch(interestingXrefs.get(db), refdDb) > -1;
 	}
