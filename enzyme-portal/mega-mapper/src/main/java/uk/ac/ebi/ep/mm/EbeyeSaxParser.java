@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.cli.CommandLine;
@@ -29,6 +31,22 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 
+	/**
+	 * Cross-references to be extracted from the EB-Eye XML file, which depend
+	 * on the file (database) being parsed.
+	 */
+	private static Map<MmDatabase, MmDatabase[]> interestingXrefs =
+			new HashMap<MmDatabase, MmDatabase[]>();
+	
+	static {
+		interestingXrefs.put(MmDatabase.ChEBI,
+				new MmDatabase[]{ MmDatabase.UniProt, MmDatabase.PDBeChem });
+		interestingXrefs.put(MmDatabase.PDBeChem,
+				new MmDatabase[]{ MmDatabase.PDB });
+		interestingXrefs.put(MmDatabase.ChEMBL,
+				new MmDatabase[]{ MmDatabase.UniProt });
+	}
+	
 	private static final String DATABASE_NAME = "//database/name";
 	private static final String DATABASE_ENTRIES = "//database/entries";
 	private static final String DATABASE_ENTRIES_ENTRY =
@@ -60,7 +78,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 	
 	private MmDatabase db;
 	private Entry entry;
-	private Collection<XRef> rels = new HashSet<XRef>();
+	private Collection<XRef> xrefs = new HashSet<XRef>();
 	
 	private MegaMapper mm;
 	
@@ -120,32 +138,53 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		isXrefs = DATABASE_ENTRIES_ENTRY_XREFS.equals(currentXpath);
 		isRef = DATABASE_ENTRIES_ENTRY_XREFS_REF.equals(currentXpath);
 		
-		if (isEntry){
+		if (isEntry && !MmDatabase.ChEMBL_Target.equals(db)){
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
 			entry.setAccessions(Collections.singletonList(attributes.getValue("", "acc")));
 		} else if (isXrefs){
-			rels.clear();
+			xrefs.clear();
 		} else if (isRef){
 			final MmDatabase refdDb =
 					MmDatabase.parse(attributes.getValue("", "dbname"));
-			// XXX: we are considering only UniProt xrefs
-			if (MmDatabase.UniProt.equals(refdDb)){
-				final String uniprotAccession = attributes.getValue("", "dbkey");
-				Entry refEntry = mm.getEntryForAccession(
-						MmDatabase.UniProt.name(), uniprotAccession);
+			String dbKey = attributes.getValue("", "dbkey");
+			// Strange case: PDBeChem refers to PDBe using altkey:
+			if (dbKey == null){
+				dbKey = attributes.getValue("", "altkey");
+			}
+			if (MmDatabase.ChEMBL_Target.equals(db)
+					&& MmDatabase.ChEMBL.equals(refdDb)){
+				entry = new Entry();
+				entry.setDbName(refdDb.name());
+				entry.setEntryId(dbKey);
+			} else if (isInterestingXref(db, refdDb)){
+				Entry refEntry;
+				if (MmDatabase.UniProt.equals(refdDb)){
+					// UniProt xrefs use accessions, not IDs:
+					refEntry = mm.getEntryForAccession(
+							MmDatabase.UniProt.name(),
+							dbKey);
+				} else {
+					refEntry = new Entry();
+					refEntry.setDbName(refdDb.name());
+					refEntry.setEntryId(dbKey);
+				}
 				if (refEntry != null){
-					XRef rel = new XRef();
-					rel.setFromEntry(entry);
-					rel.setRelationship(Relationship.between(db, refdDb).name());
-					rel.setToEntry(refEntry);
-					rels.add(rel);
+					XRef xref = new XRef();
+					xref.setFromEntry(entry);
+					xref.setRelationship(Relationship.between(db, refdDb).name());
+					xref.setToEntry(refEntry);
+					xrefs.add(xref);
 				}
 			}
 		}
 		// Clear placeholder:
 		currentChars.delete(0, Integer.MAX_VALUE);
+	}
+
+	private boolean isInterestingXref(MmDatabase db, MmDatabase refdDb) {
+		return Arrays.binarySearch(interestingXrefs.get(db), refdDb) > -1;
 	}
 
 	@Override
@@ -165,7 +204,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry.setEntryName(currentChars.toString());
 		} else if (isEntry){
 			try {
-				mm.write(Collections.singleton(entry), rels);
+				mm.write(Collections.singleton(entry), xrefs);
 			} catch (IOException e) {
 				throw new RuntimeException("Adding entry to mega-map");
 			}
