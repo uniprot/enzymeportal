@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.reactome;
+package uk.ac.ebi.ep.adapter.reactome;
 
 import java.util.List;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
@@ -14,6 +14,8 @@ import uk.ac.ebi.ep.enzyme.model.Pathway;
  */
 public interface IReactomeAdapter {
 
+	public void setConfig(ReactomeConfig config);
+	
     public String getReactionDescription(String reactomeAccession)
 	throws ReactomeServiceException;
 

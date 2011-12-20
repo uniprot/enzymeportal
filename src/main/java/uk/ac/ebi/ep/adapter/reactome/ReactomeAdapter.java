@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.reactome;
+package uk.ac.ebi.ep.adapter.reactome;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -14,14 +14,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.ebi.ep.adapter.reactome.ReactomeCallable.GetPathwayCaller;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
-import uk.ac.ebi.ep.reactome.ReactomeCallable.GetPathwayCaller;
 
 /**
- *
+ * Proxy to retrieve enzyme information from Reactome.
+ * Note that in order to use an instance of this class, a proper
+ * configuration must be set.
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>
@@ -30,8 +32,7 @@ import uk.ac.ebi.ep.reactome.ReactomeCallable.GetPathwayCaller;
  */
 public class ReactomeAdapter implements IReactomeAdapter{
 
-    //seconds
-    public static final int TIME_OUT = 40; // FIXME take me out of here!
+	private ReactomeConfig config;
 
     private final Logger logger = Logger.getLogger(ReactomeAdapter.class);
     
@@ -116,7 +117,8 @@ public class ReactomeAdapter implements IReactomeAdapter{
         	logger.debug(" -RP- before retrieving jobs");
 	        for (int i = 0; i < stableIds.size(); i++) {
 				try {
-					Future<Pathway> future = ecs.poll(TIME_OUT, TimeUnit.SECONDS);
+					Future<Pathway> future =
+							ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
 	    			if (future != null){
 		                pathways.add(future.get());
 	    			} else {
@@ -134,6 +136,10 @@ public class ReactomeAdapter implements IReactomeAdapter{
     	logger.debug(" -RP- before returning");
         return pathways;
     }
+
+	public void setConfig(ReactomeConfig config) {
+		this.config = config;
+	}
 
 
 }
