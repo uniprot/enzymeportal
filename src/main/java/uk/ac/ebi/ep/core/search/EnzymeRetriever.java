@@ -275,12 +275,25 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public List<Pathway> getPathwayDescFromReactome(List<String> reactomeStableIds) throws EnzymeRetrieverException {
         List<Pathway> pathways = null;
+    	/*
+    	 * Ajaxified: disabled until Reactome provides a performant ws.
+
         try {
             pathways = reactomeAdapter.getPathways(reactomeStableIds);
         } catch (ReactomeServiceException ex) {
             throw new EnzymeRetrieverException("Failed to get reactome description "
                     + "from Reactome for pathways " + reactomeStableIds, ex);
         }
+
+    	 * For now, we build 'empty' Pathway objects only with their
+    	 * ids, which will be retrieved using ajax from the JSP.
+    	 */
+    	for (String id: reactomeStableIds) {
+    		if (pathways == null) pathways = new ArrayList<Pathway>();
+			Pathway pathway = new Pathway();
+			pathway.setId(id);
+			pathways.add(pathway);
+		}
         return pathways;
     }
 
