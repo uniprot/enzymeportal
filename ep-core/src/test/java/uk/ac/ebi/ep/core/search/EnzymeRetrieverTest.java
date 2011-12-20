@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
@@ -52,6 +53,10 @@ public class EnzymeRetrieverTest {
         uniprotConfig.setReviewed(false);
         uniprotConfig.setTimeout(30);
         instance.uniprotAdapter.setConfig(uniprotConfig);
+        ReactomeConfig reactomeConfig = new ReactomeConfig();
+        reactomeConfig.setTimeout(30000);
+        reactomeConfig.setUseProxy(false);
+        instance.reactomeAdapter.setConfig(reactomeConfig);
     }
 
     @After
