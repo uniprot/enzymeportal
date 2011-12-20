@@ -104,6 +104,17 @@
                     </c:if>
                     <div id="pathways">
                         <c:forEach var="pathway" items="${reactionpathway.pathways}">
+<div id="pathway-${pathway.id}">
+<fieldset>
+<legend>Loading pathway (${pathway.id})...</legend>
+<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
+	alt="Loading..."/>
+</fieldset> 
+</div>
+<script>
+$('#pathway-${pathway.id}').load("${pageContext.request.contextPath}/ajax/reactome/${pathway.id}");
+</script>
+<%--
                             <fieldset>
                                 <c:set var="reactomeUrl" value="${pathway.url}"/>
                                 <legend><c:out value="${pathway.name}" escapeXml="false"/></legend>
@@ -125,6 +136,7 @@
                                     </a>
                                 </div>
                             </fieldset>
+ --%>
                         </c:forEach>
                     </div>
                 </c:if>

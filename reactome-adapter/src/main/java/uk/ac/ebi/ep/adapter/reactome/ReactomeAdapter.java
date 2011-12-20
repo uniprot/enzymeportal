@@ -111,7 +111,7 @@ public class ReactomeAdapter implements IReactomeAdapter{
         try {
         	logger.debug(" -RP- before sending jobs");
 	        for (String id: stableIds) {
-	            GetPathwayCaller callable = new ReactomeCallable.GetPathwayCaller(id);
+	            GetPathwayCaller callable = new ReactomeCallable.GetPathwayCaller(id, config);
 	            ecs.submit(callable);
 	        }
         	logger.debug(" -RP- before retrieving jobs");
