@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.reactome;
+package uk.ac.ebi.ep.adapter.reactome;
 
 /**
  *
