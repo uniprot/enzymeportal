@@ -145,10 +145,12 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         EnzymeModel enzymeModel = (EnzymeModel)
         		uniprotAdapter.getEnzymeSummaryWithReactionPathway(uniprotAccession);
 */
+    	LOGGER.debug(" -RP- before uniprotAdapter.getEnzymeSummary");
         EnzymeModel enzymeModel = (EnzymeModel)
         		uniprotAdapter.getEnzymeSummary(uniprotAccession);
         // The model comes with Reactome IDs in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
+    	LOGGER.debug(" -RP- before queryRheaWsForReactions");
         queryRheaWsForReactions(enzymeModel);
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
         if (!reactionPathways.isEmpty()) {
@@ -162,18 +164,22 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 				}
 			}
 */
+        	LOGGER.debug(" -RP- before DataTypeConverter.getReactionXrefs");
             List<String> reactomeReactionIds =
             		DataTypeConverter.getReactionXrefs(enzymeModel);
             if (reactomeReactionIds.size() > 0) {
+            	LOGGER.debug(" -RP- before getReactionPathwaysByRheaResults");
                 getReactionPathwaysByRheaResults(enzymeModel);
             } else { //found Rhea reaction, but not Reactome reaction referenced in Rhea
                 List<String> pathwayReactomeIds = null;
                 try {
+                	LOGGER.debug(" -RP- before biomartAdapter.getPathwaysByUniprotAccession");
                     pathwayReactomeIds = biomartAdapter.getPathwaysByUniprotAccession(uniprotAccession);
                 } catch (BiomartFetchDataException ex) {
                     throw new EnzymeRetrieverException(
                             "Failed to get pathway ids from Biomart for uniprot accession " +uniprotAccession, ex);
                 }
+            	LOGGER.debug(" -RP- before getPathwayDescFromReactome");
                 List<Pathway> pathways = getPathwayDescFromReactome(pathwayReactomeIds);
                 //To use Rhea reaction without a reference to a Reactome reaction
                 //all pathways found are assigned to the first Rhea reaction
@@ -181,8 +187,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             }
             
         } else { //No Rhea reactions found, use reactome reaction and pathways
+        	LOGGER.debug(" -RP- before getReactionPathwaysByUniprotAcc");
             getReactionPathwaysByUniprotAcc(enzymeModel);
         }
+    	LOGGER.debug(" -RP- before returning");
         return enzymeModel;
     }
 
@@ -199,31 +207,49 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return pathways;
     }
 
-    private List<ReactionPathway> getReactionPathwaysByRheaResults(EnzymeModel enzymeModel)
+    /**
+     * Populates an enzyme model with information related to the catalysed
+     * reactions: descriptions, any related pathways.
+     * @param enzymeModel
+     * @return A list of ReactionPathway objects - the ones from the model -
+     * 		with updated information. Note that the underlying model (the
+     * 		passed parameter) is also updated.
+     * @throws EnzymeRetrieverException
+     */
+    private List<ReactionPathway> getReactionPathwaysByRheaResults(
+    		EnzymeModel enzymeModel)
 	throws EnzymeRetrieverException {
-            try {
-                reactomeAdapter.addReactionDescriptions(enzymeModel);
-            } catch (ReactomeServiceException ex) {
-                throw new EnzymeRetrieverException(
-                        "Failed to get reaction description from Reactome for Rhea reactions", ex);
-            }
+        try {
+            reactomeAdapter.addReactionDescriptions(enzymeModel);
+        } catch (ReactomeServiceException ex) {
+            throw new EnzymeRetrieverException(
+                    "Failed to get reaction description from Reactome for Rhea reactions", ex);
+        }
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
         getPathwaysFromRheaXref(reactionPathways);
         return reactionPathways;
     }
 
-    public List<ReactionPathway> getPathwaysFromRheaXref( List<ReactionPathway> reactionPathways) throws EnzymeRetrieverException {
-        //List<String> reactomeReactionId = new ArrayList<String>();
-            for (ReactionPathway reactionPathway : reactionPathways) {
-                EnzymeReaction reaction = reactionPathway.getReaction();                
-                List xref = reaction.getXrefs();
-                if (xref != null) {
-                    String reactomeReactionId = (String)xref.get(0);
-                     List<Pathway> pathways = getPathwaysByReactomeReactionsId(reactomeReactionId);
-                    reactionPathway.setPathways(pathways);
-                }
-            }                   
-
+    /**
+     * Gets pathways for the enzymatic reactions on the base of xrefs from
+     * Rhea to Reactome.
+     * @param reactionPathways objects containing reactions.
+     * @return the same list of ReactionPathway objects with any added pathways.
+     * @throws EnzymeRetrieverException
+     */
+    public List<ReactionPathway> getPathwaysFromRheaXref(
+    		List<ReactionPathway> reactionPathways)
+	throws EnzymeRetrieverException {
+        for (ReactionPathway reactionPathway : reactionPathways) {
+            EnzymeReaction reaction = reactionPathway.getReaction();                
+            List<Object> xrefs = reaction.getXrefs();
+            if (xrefs != null) {
+            	// FIXME: why should the first one be Reactome's??
+                String reactomeReactionId = (String)xrefs.get(0);
+                List<Pathway> pathways = getPathwaysByReactomeReactionsId(reactomeReactionId);
+                reactionPathway.setPathways(pathways);
+            }
+        }                   
         return reactionPathways;
     }
 
