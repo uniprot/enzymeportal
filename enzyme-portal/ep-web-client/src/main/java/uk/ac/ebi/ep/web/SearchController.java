@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
+import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
 import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
@@ -63,6 +64,9 @@ public class SearchController {
     @Autowired
     private IntenzConfig intenzConfig;
 
+    @Autowired
+	private ReactomeConfig reactomeConfig;
+
     /**
      * Process the entry page,
      * @param accession The UniProt accession of the enzyme.
@@ -79,6 +83,7 @@ public class SearchController {
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         retriever.getUniprotAdapter().setConfig(uniprotConfig);
         retriever.getIntenzAdapter().setConfig(intenzConfig);
+        retriever.getReactomeAdapter().setConfig(reactomeConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = "entry";
         try {

@@ -75,6 +75,12 @@
 		<property name="timeout" value="30000"/>
 	</bean>
 	
+	<bean name="uk.ac.ebi.ep:name=reactomeConfig"
+		class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
+		<property name="timeout" value="30000"/>
+		<property name="useProxy" value="true"/>
+	</bean>
+	
     <!--Start internationalization-->
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

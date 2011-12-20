@@ -19,6 +19,9 @@ import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
+import uk.ac.ebi.ep.adapter.reactome.IReactomeAdapter;
+import uk.ac.ebi.ep.adapter.reactome.ReactomeAdapter;
+import uk.ac.ebi.ep.adapter.reactome.ReactomeServiceException;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
 import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
@@ -33,9 +36,6 @@ import uk.ac.ebi.ep.enzyme.model.Image;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
-import uk.ac.ebi.ep.reactome.IReactomeAdapter;
-import uk.ac.ebi.ep.reactome.ReactomeAdapter;
-import uk.ac.ebi.ep.reactome.ReactomeServiceException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.rhea.ws.client.IRheaAdapter;
@@ -81,7 +81,11 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         litAdapter = new SimpleLiteratureAdapter();
     }
 
-    public EnzymeModel getEnzyme(String uniprotAccession)
+    public IReactomeAdapter getReactomeAdapter() {
+		return reactomeAdapter;
+	}
+
+	public EnzymeModel getEnzyme(String uniprotAccession)
 	throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = (EnzymeModel)
         		uniprotAdapter.getEnzymeSummary(uniprotAccession);
