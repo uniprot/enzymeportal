@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -28,9 +29,11 @@ public class ReactomeCallable {
 	
     public static class GetPathwayCaller implements Callable<Pathway> {
         protected String pathwayId;
+        protected ReactomeConfig config;
 
-        public GetPathwayCaller(String pathwayId) {
+        public GetPathwayCaller(String pathwayId, ReactomeConfig config) {
             this.pathwayId = pathwayId;
+            this.config = config;
         }
 
         
@@ -48,8 +51,11 @@ public class ReactomeCallable {
             BufferedReader in = null;
             try {
             	LOGGER.debug(" -RP- before openConnection");
-                uCon = new URL(Constant.REACTOME_ENTRY_URL + "?" + query).openConnection();
+                final URL url = new URL(Constant.REACTOME_ENTRY_URL + "?" + query);
+				uCon = config.getUseProxy()?
+						url.openConnection() : url.openConnection(Proxy.NO_PROXY);
                 uCon.addRequestProperty("Cookie", "ClassicView=1");
+                uCon.setReadTimeout(config.getTimeout());
             	LOGGER.debug(" -RP- before getInputStream");
                 in = new BufferedReader(
                         new InputStreamReader(
