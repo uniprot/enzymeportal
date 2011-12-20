@@ -9,6 +9,8 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.concurrent.Callable;
 
+import org.apache.log4j.Logger;
+
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.rhea.domain.Database;
 
@@ -22,6 +24,8 @@ import uk.ac.ebi.rhea.domain.Database;
  */
 public class ReactomeCallable {
 
+	private static final Logger LOGGER = Logger.getLogger(ReactomeCallable.class);
+	
     public static class GetPathwayCaller implements Callable<Pathway> {
         protected String pathwayId;
 
@@ -43,8 +47,10 @@ public class ReactomeCallable {
             URLConnection uCon = null;
             BufferedReader in = null;
             try {
+            	LOGGER.debug(" -RP- before openConnection");
                 uCon = new URL(Constant.REACTOME_ENTRY_URL + "?" + query).openConnection();
                 uCon.addRequestProperty("Cookie", "ClassicView=1");
+            	LOGGER.debug(" -RP- before getInputStream");
                 in = new BufferedReader(
                         new InputStreamReader(
                         uCon.getInputStream()));
@@ -52,6 +58,7 @@ public class ReactomeCallable {
                 String description = null;
                 String pathwayName = null;
                 String image = null;
+            	LOGGER.debug(" -RP- before processing HTML");
 	            while ((inputLine = in.readLine()) != null) {
 	                if (inputLine.contains("\"eventname\"")) {
 	                    //<TR><TD CLASS="eventname" COLSPAN="2">CDT1 association with the CDC6:ORC:origin complex</TD></TR>
@@ -76,6 +83,7 @@ public class ReactomeCallable {
 	                    break;
 	                }
 	            }
+            	LOGGER.debug(" -RP- before building pathway");
 	            pathway.setId(stableId);
 	            pathway.setName(pathwayName);
 	            pathway.setDescription(description);
@@ -84,6 +92,7 @@ public class ReactomeCallable {
             } finally {
             	if (in != null) in.close();
             }
+        	LOGGER.debug(" -RP- before returning");
             return pathway;
         }
     }
