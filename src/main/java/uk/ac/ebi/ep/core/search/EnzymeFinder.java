@@ -1,15 +1,27 @@
 package uk.ac.ebi.ep.core.search;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
@@ -39,7 +51,6 @@ import uk.ac.ebi.ep.util.EPUtil;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.util.result.DataTypeConverter;
 
-
 /**
  * NOTE: the adapters must be configured before using this finder!
  * @since   1.0
@@ -52,25 +63,23 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 //********************************* VARIABLES ********************************//
     private static final Logger LOGGER = Logger.getLogger(EnzymeFinder.class);
-    
     IEbeyeAdapter ebeyeAdapter;
-    IUniprotAdapter uniprotAdapter; 
+    IUniprotAdapter uniprotAdapter;
     IintenzAdapter intenzAdapter;
-
     protected SearchParams searchParams;
     SearchResults enzymeSearchResults;
     List<String> uniprotEnzymeIds;
-    Map<String,Collection<Species>> uniprotIds2species;
+    Map<String, Collection<Species>> uniprotIds2species;
     boolean newSearch;
-    Map<String,List<String>> chebiResults;
+    Map<String, List<String>> chebiResults;
     List<String> chebiIds;
     Set<String> uniprotIdPrefixSet;
     List<String> speciesFilter;
     List<String> compoundFilter;
     List<EnzymeSummary> enzymeSummaryList;
+    
 
 //******************************** CONSTRUCTORS ******************************//
-
     public EnzymeFinder(Config config) {
         enzymeSearchResults = new SearchResults();
         ebeyeAdapter = new EbeyeAdapter();
@@ -79,15 +88,14 @@ public class EnzymeFinder implements IEnzymeFinder {
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
         switch (config.uniprotImplementation) {
-		case JAPI:
-	        uniprotAdapter = new UniprotJapiAdapter();
-			break;
-		case WS:
-			uniprotAdapter = new UniprotWsAdapter();
-			break;
-		}
+            case JAPI:
+                uniprotAdapter = new UniprotJapiAdapter();
+                break;
+            case WS:
+                uniprotAdapter = new UniprotWsAdapter();
+                break;
+        }
     }
-
 
 //****************************** GETTER & SETTER *****************************//
     public SearchParams getSearchParams() {
@@ -105,7 +113,6 @@ public class EnzymeFinder implements IEnzymeFinder {
     public void setCompoundFilter(List<String> compoundFilter) {
         this.compoundFilter = compoundFilter;
     }
-
 
     public List<String> getChebiIds() {
         return chebiIds;
@@ -196,10 +203,10 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 
     public SearchResults getEnzymes(SearchParams searchParams)
-	throws EnzymeFinderException {        
+            throws EnzymeFinderException {
         String userKeywords = new String(searchParams.getText());
         //setting variable values and validation keywords before being cleaned
-        processInputs(searchParams);
+           processInputs(searchParams);
 
         /* First time search or when user inserts a new keyword, the filter is reset
          * then the search is performed across all domains without considering the
@@ -208,18 +215,18 @@ public class EnzymeFinder implements IEnzymeFinder {
         if (newSearch) {
             // Search in EBEye for Uniprot ids, the search is filtered by ec:*
             queryEbeyeForUniprotIds();
-/* replacing EB-Eye with UniProt ws here:
-        	uniprotIds2species = new HashMap<String,Collection<Species>>();
-    		final List<String> uniprotAccessions =
-    				uniprotAdapter.getUniprotAccessions(searchParams.getText());
-    		if (uniprotAccessions != null){
-    			final Map<String, Collection<Species>> idsAndSpecies =
-    					uniprotAdapter.getAccessionsAndSpecies(uniprotAccessions);
-				if (idsAndSpecies != null) uniprotIds2species.putAll(idsAndSpecies);
-    		}
-*/
+            /* replacing EB-Eye with UniProt ws here:
+            uniprotIds2species = new HashMap<String,Collection<Species>>();
+            final List<String> uniprotAccessions =
+            uniprotAdapter.getUniprotAccessions(searchParams.getText());
+            if (uniprotAccessions != null){
+            final Map<String, Collection<Species>> idsAndSpecies =
+            uniprotAdapter.getAccessionsAndSpecies(uniprotAccessions);
+            if (idsAndSpecies != null) uniprotIds2species.putAll(idsAndSpecies);
+            }
+             */
             LOGGER.debug("UniProt IDs from UniProt: " + uniprotEnzymeIds.size());
-            
+
             /* Search in Ebeye for Uniprot ids that are referenced in Chebi domain
              * This search has to be performed separately, because the results
              * must contain Chebi ids to show in the Compound search filter. */
@@ -278,10 +285,10 @@ public class EnzymeFinder implements IEnzymeFinder {
 //                    filterCompoundBySpecies(uniprotFilteredIdPrefixes);
 //                }
 //            }
-          }
-        
+        }
+
         List<String> idPrefixesList =
-        		new ArrayList<String>(uniprotIdPrefixSet);
+                new ArrayList<String>(uniprotIdPrefixSet);
 //		THIS PSEUDO-PAGINATION HAS MOVED OUT!
 //      int totalFound = uniprotIdPrefixSet.size();
 //      int size = this.searchParams.getSize();
@@ -293,6 +300,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 //    enzymeSearchResults.setTotalfound(totalFound);
 //        List<String> resultSubList = idPrefixesList.subList(
 //               start, end);
+
 
         enzymeSearchResults.setTotalfound(uniprotIdPrefixSet.size());
         enzymeSummaryList = getEnzymeSummaries(idPrefixesList);
@@ -312,89 +320,133 @@ public class EnzymeFinder implements IEnzymeFinder {
         return enzymeSearchResults;
     }
 
-
     /**
      * Builds filters - species, compounds, diseases - from a result list.
      * @param searchResults the result list, which will be modified by setting
      * the relevant filters.
      */
     private void buildFilters(SearchResults searchResults) {
-    	Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
-    	Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
-    	Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
-		for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
-			for (EnzymeAccession ea : summaryEntry.getRelatedspecies()) {
-				Species sp = ea.getSpecies();
-				if (sp != null) uniqueSpecies.add(new SpeciesDefaultWrapper(sp));
-				List<Compound> compounds = ea.getCompounds();
-				if (compounds != null){
-					for (Compound compound : compounds) {
-						uniqueCompounds.add(new CompoundDefaultWrapper(compound));
-					}
-				}
-				List<Disease> diseases = ea.getDiseases();
-				if (diseases != null){
-					for (Disease disease : diseases) {
-						uniqueDiseases.add(new DiseaseDefaultWrapper(disease));
-					}
-				}
-			}
-		}
-		List<Species> speciesFilter = new ArrayList<Species>();
-		for (SpeciesDefaultWrapper sw : uniqueSpecies) {
-			speciesFilter.add(sw.getSpecies());
-		}
-		List<Compound> compoundFilter = new ArrayList<Compound>();
-		for (CompoundDefaultWrapper cw : uniqueCompounds) {
-			compoundFilter.add(cw.getCompound());
-		}
-		List<Disease> diseaseFilter = new ArrayList<Disease>();
-		for (DiseaseDefaultWrapper dw : uniqueDiseases) {
-			diseaseFilter.add(dw.getDisease());
-		}
-    	SearchFilters filters = new SearchFilters();
-    	filters.setSpecies(speciesFilter);
-    	filters.setCompounds(compoundFilter);
-    	filters.setDiseases(diseaseFilter);
-    	searchResults.setSearchfilters(filters);
-	}
+        String[] commonSpecies = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
+        List<String> commonSpecieList = Arrays.asList(commonSpecies);
+        Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
 
+        Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
+        Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
+        Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
+         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
+              for (EnzymeAccession ea : summaryEntry.getRelatedspecies()) {
+                Species sp = ea.getSpecies();
+                if (sp.getCommonname() != null) {
+                    uniqueSpecies.add(new SpeciesDefaultWrapper(sp));
 
-	/**
+               }
+                List<Compound> compounds = ea.getCompounds();
+                  if (compounds != null) {
+                    for (Compound compound : compounds) {
+                      uniqueCompounds.add(new CompoundDefaultWrapper(compound));
+                    }
+                }
+                List<Disease> diseases = ea.getDiseases();
+                if (diseases != null) {
+                    for (Disease disease : diseases) {
+                        uniqueDiseases.add(new DiseaseDefaultWrapper(disease));
+                    }
+                }
+            }
+        }
+        AtomicInteger key = new AtomicInteger(8);
+        for (SpeciesDefaultWrapper wrapper : uniqueSpecies) {
+            Species sp = wrapper.getSpecies();
+            if (commonSpecieList.contains(sp.getCommonname())) {
+                // Human, Mouse, Rat, Fly, Worm, Yeast, Ecoli 
+                if (sp.getCommonname().equalsIgnoreCase("Human")) {
+                    priorityMapper.put(1, sp);
+                } else if (sp.getCommonname().equalsIgnoreCase("Mouse")) {
+                    priorityMapper.put(2, sp);
+                } else if (sp.getCommonname().equalsIgnoreCase("Rat")) {
+                    priorityMapper.put(3, sp);
+                } else if (sp.getCommonname().equalsIgnoreCase("Fruit fly")) {
+                    priorityMapper.put(4, sp);
+                } else if (sp.getCommonname().equalsIgnoreCase("Worm")) {
+                    priorityMapper.put(5, sp);
+                } else if (sp.getCommonname().equalsIgnoreCase("Yeast")) {
+                    priorityMapper.put(6, sp);
+                } else if (sp.getCommonname().equalsIgnoreCase("Ecoli")) {
+                    priorityMapper.put(7, sp);
+                }
+            } else {
+
+                priorityMapper.put(key.getAndIncrement(), sp);
+
+            }
+        }
+        
+        //to use enum check this example
+        
+       // PriorityMapper mapper = new PriorityMapper();//make this singleton
+        //mapper.map(uniqueSpecies);
+        List<Species> speciesFilters = new LinkedList<Species>();
+        for (Map.Entry<Integer, Species> map : priorityMapper.entrySet()) {         
+            speciesFilters.add(map.getValue());
+
+        }
+
+//        List<Species> speciesFilter = new ArrayList<Species>();
+//        for (SpeciesDefaultWrapper sw : uniqueSpecies) {
+//            System.out.println("Unique " + sw.getSpecies().getCommonname() + " sci = " + sw.getSpecies().getScientificname());
+//            speciesFilter.add(sw.getSpecies());
+//        }
+        List<Compound> compoundFilter = new ArrayList<Compound>();
+        for (CompoundDefaultWrapper cw : uniqueCompounds) {
+            compoundFilter.add(cw.getCompound());
+        }
+        List<Disease> diseaseFilter = new ArrayList<Disease>();
+        for (DiseaseDefaultWrapper dw : uniqueDiseases) {
+            diseaseFilter.add(dw.getDisease());
+        }
+
+        SearchFilters filters = new SearchFilters();
+        filters.setSpecies(speciesFilters);
+        filters.setCompounds(compoundFilter);
+        filters.setDiseases(diseaseFilter);
+        searchResults.setSearchfilters(filters);
+    }
+
+    /**
      * Limite the number of results to the {@code IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT}
      * 
      * @param params
      */
     public void resetNrOfResultsToLimit(List<ParamOfGetResults> params) {
-        for (ParamOfGetResults param:params) {
+        for (ParamOfGetResults param : params) {
             resetNrOfResultsToLimit(param);
         }
     }
 
-	public void resetNrOfResultsToLimit(ParamOfGetResults param) {
-		int totalFound = param.getTotalFound();
-		int maxResults;
-		if (param.getDomain().equals(IEbeyeAdapter.Domains.uniprot.name())) {
-			maxResults = ebeyeAdapter.getConfig().getMaxUniprotResults();
-		} else if (param.getDomain().equals(IEbeyeAdapter.Domains.chebi.name())) {
-			maxResults = ebeyeAdapter.getConfig().getMaxChebiResults();
-		} else {
-			maxResults = ebeyeAdapter.getConfig().getMaxResults();
-		}
-		if (totalFound > maxResults) {
-			LOGGER.warn("[CUTOFF] Limiting results for " + param.getDomain() +
-					" from " + totalFound + " to " + maxResults);
-			param.setTotalFound(maxResults);
-		}
-	}
+    public void resetNrOfResultsToLimit(ParamOfGetResults param) {
+        int totalFound = param.getTotalFound();
+        int maxResults;
+        if (param.getDomain().equals(IEbeyeAdapter.Domains.uniprot.name())) {
+            maxResults = ebeyeAdapter.getConfig().getMaxUniprotResults();
+        } else if (param.getDomain().equals(IEbeyeAdapter.Domains.chebi.name())) {
+            maxResults = ebeyeAdapter.getConfig().getMaxChebiResults();
+        } else {
+            maxResults = ebeyeAdapter.getConfig().getMaxResults();
+        }
+        if (totalFound > maxResults) {
+            LOGGER.warn("[CUTOFF] Limiting results for " + param.getDomain()
+                    + " from " + totalFound + " to " + maxResults);
+            param.setTotalFound(maxResults);
+        }
+    }
 
     private List<String> limiteResultList(List<String> resultList, int maxResults) {
         List<String> subList = null;
         if (resultList != null) {
-            if (resultList.size() > maxResults){
+            if (resultList.size() > maxResults) {
                 subList = resultList.subList(0, maxResults);
                 LOGGER.warn("[CUTOFF] Limiting results from "
-                		+ resultList.size() + " to " + maxResults);
+                        + resultList.size() + " to " + maxResults);
             } else {
                 subList = resultList;
             }
@@ -406,8 +458,8 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         //prepare list of parameters
         List<ParamOfGetResults> paramsWithoutNrOfResults =
-                                    prepareGetRelatedRecordsToUniprotQueries(searchParams);
-       List<ParamOfGetResults> paramsWithNrOfResults = new ArrayList<ParamOfGetResults>();
+                prepareGetRelatedRecordsToUniprotQueries(searchParams);
+        List<ParamOfGetResults> paramsWithNrOfResults = new ArrayList<ParamOfGetResults>();
         try {
             //List<List<Result>> allDomainsResults = null;
             //get and set the value at the same time
@@ -418,27 +470,27 @@ public class EnzymeFinder implements IEnzymeFinder {
         } catch (MultiThreadingException ex) {
             //java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return paramsWithoutNrOfResults;
+        return paramsWithoutNrOfResults;
     }
 
     public ParamOfGetResults getUniprotNrOfRecords() throws EnzymeFinderException {
         //Uniprot number of result
         //IEbeyeAdapter ebeyeAdapter = new EbeyeAdapter();
         //prepare list of parameters
-        ParamOfGetResults param =prepareGetUniprotIdQueries(searchParams);
+        ParamOfGetResults param = prepareGetUniprotIdQueries(searchParams);
         ebeyeAdapter.getNumberOfResults(param);
         //resetNrOfResultsToLimit(param);
-       return param;
+        return param;
     }
 
     public ParamOfGetResults getChebiNrOfRecords() throws EnzymeFinderException {
         //Uniprot number of result
         //IEbeyeAdapter ebeyeAdapter = new EbeyeAdapter();
         //prepare list of parameters
-        ParamOfGetResults param =prepareChebiQueries();
+        ParamOfGetResults param = prepareChebiQueries();
         ebeyeAdapter.getNumberOfResults(param);
         //resetNrOfResultsToLimit(param);
-       return param;
+        return param;
     }
 
     /**
@@ -450,9 +502,9 @@ public class EnzymeFinder implements IEnzymeFinder {
      * 		(if we have more than that, they are split and queried in chunks).
      * @return a list of lucene queries.
      */
-    private static List<String> createIdWildcardQueriesWithSpeciesFilter (
-                    List<String> ids, List<String> selectedSpecies,
-                    int maxAccessionsInQuery)  {
+    private static List<String> createIdWildcardQueriesWithSpeciesFilter(
+            List<String> ids, List<String> selectedSpecies,
+            int maxAccessionsInQuery) {
         List<String> queries = LuceneQueryBuilder.createEbeyeQueriesIn(
                 IEbeyeAdapter.FieldsOfGetResults.id.name(),
                 ids, true, maxAccessionsInQuery);
@@ -463,23 +515,23 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public List<ParamOfGetResults> prepareParamsForQueryIN(
             String domain, List<String> queries, List<String> resultFields) {
-        List<ParamOfGetResults> paramList = new ArrayList<ParamOfGetResults>();       
-        for (String query: queries) {
+        List<ParamOfGetResults> paramList = new ArrayList<ParamOfGetResults>();
+        for (String query : queries) {
             ParamOfGetResults param = new ParamOfGetResults(
-            domain, query, resultFields);
+                    domain, query, resultFields);
             paramList.add(param);
         }
         return paramList;
     }
 
-      /**
-       * Filters UniProt accessions which are enzymes and returns their IDs.
-       * @param accs UniProt <i>accessions</i>
-       * @return a list of UniProt <i>IDs</i> of only those which are enzymes.
-       * @throws MultiThreadingException
-       */
+    /**
+     * Filters UniProt accessions which are enzymes and returns their IDs.
+     * @param accs UniProt <i>accessions</i>
+     * @return a list of UniProt <i>IDs</i> of only those which are enzymes.
+     * @throws MultiThreadingException
+     */
     private List<String> filterEnzymes(List<String> accs)
-	throws MultiThreadingException {
+            throws MultiThreadingException {
         String queryField = IEbeyeAdapter.FieldsOfGetResults.acc.name();
         List<String> resultFields = new ArrayList<String>();
 
@@ -500,7 +552,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
         return results;
     }
-    
+
     /**
      * Queries EB-Eye for ChEBI IDs, and their corresponding UniProt accessions.
      * The result is stored in the <code>chebiResults</code> field, and those
@@ -514,28 +566,28 @@ public class EnzymeFinder implements IEnzymeFinder {
         resetNrOfResultsToLimit(chebiParam);
         chebiResults = ebeyeAdapter.getUniprotRefAccesionsMap(chebiParam);
         Collection<List<String>> chebiAccs = chebiResults.values();
-        if (chebiAccs.size() > 0){
+        if (chebiAccs.size() > 0) {
             Set<String> uniprotAccsFromChebiSet =
-            		DataTypeConverter.mergeAndLimitResult(chebiAccs,
-            				ebeyeAdapter.getConfig().getMaxUniprotResultsFromChebi());
-        	// Filter those which are enzymes:
-        	List<String> uniprotIdsRefFromChebi =
-        			filterEnzymes(new ArrayList<String>(uniprotAccsFromChebiSet));
-        	uniprotEnzymeIds.addAll(uniprotIdsRefFromChebi);
-/*
-        	Map<String, Species> ids2species =
-        			uniprotAdapter.getIdsAndSpecies(uniprotAccsFromChebiSet);
-        	if (ids2species != null) uniprotIds2species.putAll(ids2species);
-*/
+                    DataTypeConverter.mergeAndLimitResult(chebiAccs,
+                    ebeyeAdapter.getConfig().getMaxUniprotResultsFromChebi());
+            // Filter those which are enzymes:
+            List<String> uniprotIdsRefFromChebi =
+                    filterEnzymes(new ArrayList<String>(uniprotAccsFromChebiSet));
+            uniprotEnzymeIds.addAll(uniprotIdsRefFromChebi);
+            /*
+            Map<String, Species> ids2species =
+            uniprotAdapter.getIdsAndSpecies(uniprotAccsFromChebiSet);
+            if (ids2species != null) uniprotIds2species.putAll(ids2species);
+             */
         }
     }
 
     private List<Compound> newCompoundFilter(List<String> chebiIds) {
-        Map<String,String> chebiIdNameMap = ebeyeAdapter.getNameMapByAccessions(
+        Map<String, String> chebiIdNameMap = ebeyeAdapter.getNameMapByAccessions(
                 IEbeyeAdapter.Domains.chebi.name(), chebiIds);
         return DataTypeConverter.mapToCompound(chebiIdNameMap);
     }
-    
+
     /**
      * Reduces the species collection by removing redundant ones.<br>
      * This method is required as Species.class is generated from a XML schema
@@ -544,13 +596,13 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @see UniprotWsAdapter#
      * @return
      */
-    private List<Species> newSpeciesFilter(Collection<Species> sps){
-		Map<String, Species> speciesMap = new HashMap<String, Species>();
-		for (Species sp : sps) {
-			speciesMap.put(sp.getScientificname(), sp);
-		}
-		return new ArrayList<Species>(speciesMap.values());
-	}
+    private List<Species> newSpeciesFilter(Collection<Species> sps) {
+        Map<String, Species> speciesMap = new HashMap<String, Species>();
+        for (Species sp : sps) {
+            speciesMap.put(sp.getScientificname(), sp);
+        }
+        return new ArrayList<Species>(speciesMap.values());
+    }
 
     /**
      * Queries EB-Eye for UniProt IDs from domains other than UniProt or ChEBI.
@@ -558,38 +610,38 @@ public class EnzymeFinder implements IEnzymeFinder {
      * stored in the <code>uniprotEnzymeIds</code> field.
      * @throws EnzymeFinderException
      */
-	private void queryEbeyeOtherDomainForIds() throws EnzymeFinderException {
+    private void queryEbeyeOtherDomainForIds() throws EnzymeFinderException {
         List<ParamOfGetResults> nrOfResultParams = this.getNrOfRecordsRelatedToUniprot();
-    	LOGGER.debug("Other domains, phase A: " +  nrOfResultParams.size());
+        LOGGER.debug("Other domains, phase A: " + nrOfResultParams.size());
         resetNrOfResultsToLimit(nrOfResultParams);
-    	LOGGER.debug("Other domains, phase B: " +  nrOfResultParams.size());
+        LOGGER.debug("Other domains, phase B: " + nrOfResultParams.size());
         //Retrieve accessions from UNIPROT field
         List<String> relatedUniprotAccessionList =
                 ebeyeAdapter.getRelatedUniprotAccessionSet(nrOfResultParams);
-    	LOGGER.debug("Other domains, phase C: " +  relatedUniprotAccessionList.size());
-        if (relatedUniprotAccessionList.size() > 0){
+        LOGGER.debug("Other domains, phase C: " + relatedUniprotAccessionList.size());
+        if (relatedUniprotAccessionList.size() > 0) {
             List<String> limitedResults = this.limiteResultList(
                     relatedUniprotAccessionList,
                     ebeyeAdapter.getConfig().getMaxUniprotResultsFromOtherDomains());
-        	LOGGER.debug("Other domains, phase D: " +  limitedResults.size());
+            LOGGER.debug("Other domains, phase D: " + limitedResults.size());
             List<String> uniprotIdsRefFromOtherDomains =
                     filterEnzymes(limitedResults);
-        	LOGGER.debug("SEARCH after filterEnzymes, results: " + uniprotIdsRefFromOtherDomains.size());
+            LOGGER.debug("SEARCH after filterEnzymes, results: " + uniprotIdsRefFromOtherDomains.size());
             if (uniprotIdsRefFromOtherDomains != null) {
                 uniprotEnzymeIds.addAll(uniprotIdsRefFromOtherDomains);
             }
-/*
-        	Map<String, Species> ids2species = uniprotAdapter.getIdsAndSpecies(limitedResults);
-        	if (ids2species != null) uniprotIds2species.putAll(ids2species);
-*/
+            /*
+            Map<String, Species> ids2species = uniprotAdapter.getIdsAndSpecies(limitedResults);
+            if (ids2species != null) uniprotIds2species.putAll(ids2species);
+             */
         }
     }
-	
-	/**
-	 * Queries EB-Eye for UniProt IDs corresponding to enzymes, and adds them
-	 * to the uniprotEnzymeIds field.
-	 * @throws EnzymeFinderException
-	 */
+
+    /**
+     * Queries EB-Eye for UniProt IDs corresponding to enzymes, and adds them
+     * to the uniprotEnzymeIds field.
+     * @throws EnzymeFinderException
+     */
     private void queryEbeyeForUniprotIds() throws EnzymeFinderException {
         ParamOfGetResults uniprotNrOfResultParams = this.getUniprotNrOfRecords();
         resetNrOfResultsToLimit(uniprotNrOfResultParams);
@@ -607,14 +659,14 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @return a list of UniProt ID prefixes.
      * @throws EnzymeFinderException
      */
-	private List<String> filterUniprotIdPrefixesBySpecies(
-			List<String> unfilteredIdPrefixes, List<String> speciesFilter)
-	throws EnzymeFinderException {
-		List<String> filteredIdPrefixes = new ArrayList<String>();
-		filteredIdPrefixes.addAll(filterUniprotIdBySpecies(
-				unfilteredIdPrefixes, speciesFilter));
-		return EPUtil.getIdPrefixes(filteredIdPrefixes);
-	}
+    private List<String> filterUniprotIdPrefixesBySpecies(
+            List<String> unfilteredIdPrefixes, List<String> speciesFilter)
+            throws EnzymeFinderException {
+        List<String> filteredIdPrefixes = new ArrayList<String>();
+        filteredIdPrefixes.addAll(filterUniprotIdBySpecies(
+                unfilteredIdPrefixes, speciesFilter));
+        return EPUtil.getIdPrefixes(filteredIdPrefixes);
+    }
 
     /**
      * Filters UniProt IDs by species.
@@ -625,28 +677,28 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @throws EnzymeFinderException
      */
     private List<String> filterUniprotIdBySpecies(List<String> unfilteredIdPrefixes,
-    		List<String> speciesFilter)
-	throws EnzymeFinderException {        
+            List<String> speciesFilter)
+            throws EnzymeFinderException {
         Set<String> filteredResults = null;
         //Ignore filters for new search
         if (speciesFilter.size() > 0 && !newSearch) {
-	        List<String> resultFields = new ArrayList<String>();
-	        resultFields.add(IEbeyeAdapter.FieldsOfGetResults.id.name());
-	        List<String> filterQueries =
-	        		createIdWildcardQueriesWithSpeciesFilter(
-	        				unfilteredIdPrefixes, speciesFilter,
-	        				ebeyeAdapter.getConfig().getMaxAccessionsInQuery());
-	        List<ParamOfGetResults> filteredNrOfResults =
-	                prepareParamsForQueryIN(
-	                		IEbeyeAdapter.Domains.uniprot.name(),
-	                		filterQueries,
-	                		resultFields);
-	        ebeyeAdapter.getNumberOfResults(filteredNrOfResults);
-	        filteredResults = ebeyeAdapter.getValueOfFields(filteredNrOfResults);
+            List<String> resultFields = new ArrayList<String>();
+            resultFields.add(IEbeyeAdapter.FieldsOfGetResults.id.name());
+            List<String> filterQueries =
+                    createIdWildcardQueriesWithSpeciesFilter(
+                    unfilteredIdPrefixes, speciesFilter,
+                    ebeyeAdapter.getConfig().getMaxAccessionsInQuery());
+            List<ParamOfGetResults> filteredNrOfResults =
+                    prepareParamsForQueryIN(
+                    IEbeyeAdapter.Domains.uniprot.name(),
+                    filterQueries,
+                    resultFields);
+            ebeyeAdapter.getNumberOfResults(filteredNrOfResults);
+            filteredResults = ebeyeAdapter.getValueOfFields(filteredNrOfResults);
         }
         return new ArrayList<String>(filteredResults);
-     }
-   
+    }
+
     /**
      * Escapes the keyowrds, validates the filters and sets the global variables
      * to be used in other methods.
@@ -656,8 +708,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         this.searchParams = searchParams;
         speciesFilter = searchParams.getSpecies();
         LuceneParser luceneParser = new LuceneParser();
-        String cleanedKeywords = luceneParser
-                .escapeLuceneSpecialChars(this.searchParams.getText());
+        String cleanedKeywords = luceneParser.escapeLuceneSpecialChars(this.searchParams.getText());
         this.searchParams.setText(cleanedKeywords);
         String previousText = searchParams.getPrevioustext();
         String currentText = searchParams.getText();
@@ -669,9 +720,9 @@ public class EnzymeFinder implements IEnzymeFinder {
          * case 1 - the new text is different from the previous text
          * case 2 - all filters are empty
          */
-        if (!previousText.equalsIgnoreCase(currentText) ||
-                (compoundFilter.size() == 0 && speciesFilter.size() == 0)) {
-             newSearch = true;
+        if (!previousText.equalsIgnoreCase(currentText)
+                || (compoundFilter.size() == 0 && speciesFilter.size() == 0)) {
+            newSearch = true;
             searchParams.getSpecies().clear();
             searchParams.getCompounds().clear();
         }
@@ -686,8 +737,8 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @throws EnzymeFinderException
      */
     private void filterCompoundBySpecies(Set<String> uniprotFilteredIdPrefixes)
-	throws EnzymeFinderException {
-         
+            throws EnzymeFinderException {
+
         this.uniprotEnzymeIds.clear();
         this.uniprotIdPrefixSet.clear();
         queryEbeyeChebiForUniprotIds();
@@ -695,33 +746,33 @@ public class EnzymeFinder implements IEnzymeFinder {
         //workaround does not completely solve non ref from uniprot to chebi problem
 
         Set<String> chebiFilteredIdPrefixes = new LinkedHashSet<String>(
-        		filterUniprotIdPrefixesBySpecies(chebiUnfilteredIdPrefixes, speciesFilter));
+                filterUniprotIdPrefixesBySpecies(chebiUnfilteredIdPrefixes, speciesFilter));
 
         //If chebi
 
         //uniprotFilteredIdPrefixes.containsAll(chebiIds);
 
         if (Collections.disjoint(uniprotFilteredIdPrefixes, chebiFilteredIdPrefixes)) {
-			uniprotIdPrefixSet.addAll(uniprotFilteredIdPrefixes);
-			// XXX: no chebiFilteredIdPrefixes????
-			chebiIds = new ArrayList<String>(); // XXX: no ChEBI IDs????
-		} else {
-			uniprotIdPrefixSet.addAll(chebiFilteredIdPrefixes);
-			// XXX: no uniprotFilteredIdPrefixes???? even if slight overlap????
-			if (chebiResults.size() > 0) {
-				chebiIds = new ArrayList<String>(chebiResults.keySet());
-				// To avoid showing compounds that are not for the selected
-				// species
-				// chebiIds.retainAll(uniprotFilteredIdPrefixes);
-			}
-		}
+            uniprotIdPrefixSet.addAll(uniprotFilteredIdPrefixes);
+            // XXX: no chebiFilteredIdPrefixes????
+            chebiIds = new ArrayList<String>(); // XXX: no ChEBI IDs????
+        } else {
+            uniprotIdPrefixSet.addAll(chebiFilteredIdPrefixes);
+            // XXX: no uniprotFilteredIdPrefixes???? even if slight overlap????
+            if (chebiResults.size() > 0) {
+                chebiIds = new ArrayList<String>(chebiResults.keySet());
+                // To avoid showing compounds that are not for the selected
+                // species
+                // chebiIds.retainAll(uniprotFilteredIdPrefixes);
+            }
+        }
     }
 
     public List<EnzymeSummary> getEnzymesFromUniprotAPI(List<String> resultSubList)
-	throws MultiThreadingException {
+            throws MultiThreadingException {
         List<EnzymeSummary> enzymeList =
-        		uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
-        				IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
+                uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
+                IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
         return enzymeList;
     }
 
@@ -732,7 +783,7 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @throws MultiThreadingException
      */
     private List<EnzymeSummary> getEnzymeSummaries(List<String> uniprotIdPrefixes)
-	throws MultiThreadingException {
+            throws MultiThreadingException {
         List<EnzymeSummary> enzymeList = getEnzymesFromUniprotAPI(uniprotIdPrefixes);
         if (enzymeList != null) {
             addIntenzSynonyms(enzymeList);
@@ -742,49 +793,50 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     /*
     public List<ParamOfGetResults> prepareQueryForPdbeAccs(Collection<String> pdbeAccs) {
-        List<ParamOfGetResults> params = new ArrayList<ParamOfGetResults>();
-        for (String ec: pdbeAccs) {
-            List<String> field = new ArrayList<String>();
-            field.add(IEbeyeAdapter.FieldsOfGetResults.acc.name());
-            String query = LuceneQueryBuilder
-                    .createFieldValueQuery(
-                            IEbeyeAdapter.FieldsOfGetResults.acc.name(),
-                            ec);
-            ParamOfGetResults pdbeParam = new ParamOfGetResults(
-                  IEbeyeAdapter.Domains.pdbe.name(), query, field);
-            params.add(pdbeParam);
-        }
-        return params;
+    List<ParamOfGetResults> params = new ArrayList<ParamOfGetResults>();
+    for (String ec: pdbeAccs) {
+    List<String> field = new ArrayList<String>();
+    field.add(IEbeyeAdapter.FieldsOfGetResults.acc.name());
+    String query = LuceneQueryBuilder
+    .createFieldValueQuery(
+    IEbeyeAdapter.FieldsOfGetResults.acc.name(),
+    ec);
+    ParamOfGetResults pdbeParam = new ParamOfGetResults(
+    IEbeyeAdapter.Domains.pdbe.name(), query, field);
+    params.add(pdbeParam);
     }
-*/
+    return params;
+    }
+     */
     public static int calTotalResultsFound(
             List<ParamOfGetResults> resultList) {
-        if (resultList ==  null) {
+        if (resultList == null) {
             return 0;
         }
         int counter = 0;
-        for (ParamOfGetResults param:resultList){
+        for (ParamOfGetResults param : resultList) {
             counter = counter + param.getTotalFound();
         }
         return counter;
     }
+
     public void addIntenzSynonyms(
             List<EnzymeSummary> enzymeSummaryList) throws MultiThreadingException {
 
-        Set<String> ecSet  = DataTypeConverter.getUniprotEcs(enzymeSummaryList);
+        Set<String> ecSet = DataTypeConverter.getUniprotEcs(enzymeSummaryList);
 //        LOGGER.debug("SEARCH before intenzAdapter.getSynonyms");
-        Map<String,Set<String>> intenzSynonyms = intenzAdapter.getSynonyms(ecSet);
+        Map<String, Set<String>> intenzSynonyms = intenzAdapter.getSynonyms(ecSet);
 //        LOGGER.debug("SEARCH before enzymeSummary loop, size = " + ecSet.size());
-        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+        for (EnzymeSummary enzymeSummary : enzymeSummaryList) {
             List<String> ecList = enzymeSummary.getEc();
             List<String> uniprotSyns = enzymeSummary.getSynonym();
             Set<String> intenzUniqueSyns = new TreeSet<String>();
-            for (String ec:ecList) {
+            for (String ec : ecList) {
                 Set<String> ecSynonyms = intenzSynonyms.get(ec);
                 if (ecSynonyms != null) {
                     intenzUniqueSyns.addAll(ecSynonyms);
                 }
-                
+
             }
 
             intenzUniqueSyns.addAll(uniprotSyns);
@@ -798,47 +850,43 @@ public class EnzymeFinder implements IEnzymeFinder {
 //        LOGGER.debug("SEARCH after  enzymeSummary loop");
     }
 
-
-
-
-/*
+    /*
     public void setPdbeAccession(Map<String,String> pdbeAccs) {
-        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
-            String uniprotId = enzymeSummary.getUniprotid();
-            String pdbeAcc = pdbeAccs.get(uniprotId);
-            enzymeSummary.getPdbeaccession().add(pdbeAcc);
-        }       
+    for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+    String uniprotId = enzymeSummary.getUniprotid();
+    String pdbeAcc = pdbeAccs.get(uniprotId);
+    enzymeSummary.getPdbeaccession().add(pdbeAcc);
+    }       
     }
-*/
-
-    public void setPdbeAccession(Map<String,String> pdbeAccs) {
-        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+     */
+    public void setPdbeAccession(Map<String, String> pdbeAccs) {
+        for (EnzymeSummary enzymeSummary : enzymeSummaryList) {
             List<String> ecList = enzymeSummary.getEc();
             if (ecList.size() > 0) {
-            String ec = enzymeSummary.getEc().get(0);
-            String pdbeAcc = pdbeAccs.get(ec);
-            if (pdbeAcc != null) {
-                enzymeSummary.getPdbeaccession().add(pdbeAcc);
+                String ec = enzymeSummary.getEc().get(0);
+                String pdbeAcc = pdbeAccs.get(ec);
+                if (pdbeAcc != null) {
+                    enzymeSummary.getPdbeaccession().add(pdbeAcc);
                 }
             }
         }
     }
 
-   public List<String> getUniprotIds(List<EnzymeSummary> enzymeSummaryList) {
+    public List<String> getUniprotIds(List<EnzymeSummary> enzymeSummaryList) {
         List<String> uniprotIds = new ArrayList<String>();
-        for (EnzymeSummary enzymeSummary:enzymeSummaryList) {
+        for (EnzymeSummary enzymeSummary : enzymeSummaryList) {
             String uniprotId = enzymeSummary.getUniprotid();
             uniprotIds.add(uniprotId);
         }
         return uniprotIds;
     }
 
-    public void createSpeciesFilter(SearchResults enzymeSearchResults) {        
+    public void createSpeciesFilter(SearchResults enzymeSearchResults) {
         SearchFilters searchFilters = enzymeSearchResults.getSearchfilters();
         List<Species> uniprotSpeciesFilter = new ArrayList<Species>();
 
         Set<String> speciesNames = new TreeSet<String>();
-        for (EnzymeSummary enzymeSummary: enzymeSummaryList) {
+        for (EnzymeSummary enzymeSummary : enzymeSummaryList) {
             Species species = enzymeSummary.getSpecies();
             String name = species.getCommonname();
             if (name == null || name.equals("")) {
@@ -854,7 +902,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             }
 
             List<EnzymeAccession> enzymeAccessions = enzymeSummary.getRelatedspecies();
-            for (EnzymeAccession acc: enzymeAccessions) {
+            for (EnzymeAccession acc : enzymeAccessions) {
                 Species relSpecies = acc.getSpecies();
                 String relName = relSpecies.getCommonname();
                 if (relName == null) {
@@ -879,7 +927,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             SearchParams searchParams) {
         List<Domain> domains = Config.domainList;
         List<ParamOfGetResults> paramList = new ArrayList<ParamOfGetResults>();
-        for (Domain domain: domains) {
+        for (Domain domain : domains) {
             String domainId = domain.getId();
             if (!domainId.equals(IEbeyeAdapter.Domains.uniprot.name())
                     && !domainId.equals(IEbeyeAdapter.Domains.chebi.name())) {
@@ -887,7 +935,7 @@ public class EnzymeFinder implements IEnzymeFinder {
                 resultFields.add(IEbeyeAdapter.UNIPROT_REF_FIELD);
                 String query = LuceneQueryBuilder.createFieldsQuery(
                         domain, searchParams);
-               ParamOfGetResults paramOfGetAllResults =
+                ParamOfGetResults paramOfGetAllResults =
                         new ParamOfGetResults(domainId, query, resultFields);
                 paramList.add(paramOfGetAllResults);
             }
@@ -896,41 +944,40 @@ public class EnzymeFinder implements IEnzymeFinder {
         return paramList;
     }
 
-	public static ParamOfGetResults prepareGetUniprotIdQueries(
-			SearchParams searchParams) {
-		Domain domain = Config.getDomain(IEbeyeAdapter.Domains.uniprot.name());
-		// List<String> searchFields =
-		// DataTypeConverter.getConfigSearchFields(domain);
-		List<String> resultFields = new ArrayList<String>();
-		resultFields.add(IEbeyeAdapter.FieldsOfUniprotNameMap.id.name());
-		String query = LuceneQueryBuilder.createFieldsQueryWithEnzymeFilter(
-				domain, searchParams);
-		ParamOfGetResults paramOfGetAllResults = new ParamOfGetResults(
-				IEbeyeAdapter.Domains.uniprot.name(), query, resultFields);
-		return paramOfGetAllResults;
-	}
+    public static ParamOfGetResults prepareGetUniprotIdQueries(
+            SearchParams searchParams) {
+        Domain domain = Config.getDomain(IEbeyeAdapter.Domains.uniprot.name());
+        // List<String> searchFields =
+        // DataTypeConverter.getConfigSearchFields(domain);
+        List<String> resultFields = new ArrayList<String>();
+        resultFields.add(IEbeyeAdapter.FieldsOfUniprotNameMap.id.name());
+        String query = LuceneQueryBuilder.createFieldsQueryWithEnzymeFilter(
+                domain, searchParams);
+        ParamOfGetResults paramOfGetAllResults = new ParamOfGetResults(
+                IEbeyeAdapter.Domains.uniprot.name(), query, resultFields);
+        return paramOfGetAllResults;
+    }
 
     private ParamOfGetResults prepareChebiQueries() {
         Domain domain = Config.getDomain(IEbeyeAdapter.Domains.chebi.name());
         //List<String> searchFields = DataTypeConverter.getConfigSearchFields(domain);
-		List<String> resultFields = new ArrayList<String>();
-		//resultFields.add(IEbeyeAdapter.FieldsOfChebiNameMap.name.name());
-		resultFields.add(IEbeyeAdapter.FieldsOfChebiNameMap.id.name());
-		/* THIS IS TOXIC: EBEye does not store such a field 'UNIPROT' in the chebi domain
-		resultFields.add(IEbeyeAdapter.FieldsOfGetResults.UNIPROT.name());
-		*/
-		//The query has to be created differently if the compound filter is selected
-		String query = null;
-		List<String> compoundFilter = this.searchParams.getCompounds();
-		if (compoundFilter.size() > 0) {
-			query = LuceneQueryBuilder.createQueryIN(
-					IEbeyeAdapter.FieldsOfChebiNameMap.id.name(), false, compoundFilter);
-		} else {
-			query = LuceneQueryBuilder.createFieldsQuery(domain, searchParams);
-		}
-		ParamOfGetResults paramOfGetAllResults =
-				new ParamOfGetResults(IEbeyeAdapter.Domains.chebi.name(), query, resultFields);
+        List<String> resultFields = new ArrayList<String>();
+        //resultFields.add(IEbeyeAdapter.FieldsOfChebiNameMap.name.name());
+        resultFields.add(IEbeyeAdapter.FieldsOfChebiNameMap.id.name());
+        /* THIS IS TOXIC: EBEye does not store such a field 'UNIPROT' in the chebi domain
+        resultFields.add(IEbeyeAdapter.FieldsOfGetResults.UNIPROT.name());
+         */
+        //The query has to be created differently if the compound filter is selected
+        String query = null;
+        List<String> compoundFilter = this.searchParams.getCompounds();
+        if (compoundFilter.size() > 0) {
+            query = LuceneQueryBuilder.createQueryIN(
+                    IEbeyeAdapter.FieldsOfChebiNameMap.id.name(), false, compoundFilter);
+        } else {
+            query = LuceneQueryBuilder.createFieldsQuery(domain, searchParams);
+        }
+        ParamOfGetResults paramOfGetAllResults =
+                new ParamOfGetResults(IEbeyeAdapter.Domains.chebi.name(), query, resultFields);
         return paramOfGetAllResults;
     }
-    
 }
