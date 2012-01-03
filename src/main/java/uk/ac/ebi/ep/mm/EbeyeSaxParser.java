@@ -40,7 +40,11 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 	
 	static {
 		interestingXrefs.put(MmDatabase.ChEBI,
-				new MmDatabase[]{ MmDatabase.UniProt, MmDatabase.PDBeChem });
+				new MmDatabase[]{
+					MmDatabase.UniProt,
+					MmDatabase.PDBeChem,
+					MmDatabase.ChEMBL
+				});
 		interestingXrefs.put(MmDatabase.PDBeChem,
 				new MmDatabase[]{ MmDatabase.PDB });
 		interestingXrefs.put(MmDatabase.ChEMBL,
