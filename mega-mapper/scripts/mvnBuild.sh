@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd $(dirname $0)/..
-mvn -P dev clean package
+mvn -DskipTests=true -P dev clean package
 
 CP=.
 for JAR in target/*.jar
