@@ -39,12 +39,13 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			new HashMap<MmDatabase, MmDatabase[]>();
 	
 	static {
-		interestingXrefs.put(MmDatabase.ChEBI,
-				new MmDatabase[]{
-					MmDatabase.UniProt,
-					MmDatabase.PDBeChem,
-					MmDatabase.ChEMBL
-				});
+		final MmDatabase[] chebiInterestingXrefs = new MmDatabase[]{
+			MmDatabase.UniProt,
+			MmDatabase.PDBeChem,
+			MmDatabase.ChEMBL
+		};
+		Arrays.sort(chebiInterestingXrefs);
+		interestingXrefs.put(MmDatabase.ChEBI, chebiInterestingXrefs);
 		interestingXrefs.put(MmDatabase.PDBeChem,
 				new MmDatabase[]{ MmDatabase.PDB });
 		interestingXrefs.put(MmDatabase.ChEMBL,
