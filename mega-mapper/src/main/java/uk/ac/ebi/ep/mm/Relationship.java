@@ -7,7 +7,7 @@ public enum Relationship {
 	
 	/**
 	 * An entry in a database referencing basically the same entity in another
-	 * one.
+	 * one (unification xref).
 	 */
 	same_as,
 	
