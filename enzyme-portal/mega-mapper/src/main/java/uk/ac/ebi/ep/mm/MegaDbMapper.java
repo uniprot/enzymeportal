@@ -27,7 +27,7 @@ public class MegaDbMapper implements MegaMapper {
 	/**
 	 * @param dbConfig file name for hibernate configuration. If
 	 * 		<code>null</code>, defaults to hibernate default.
-	 * @param chunkSize size of the chunks which will be commited to the
+	 * @param chunkSize size of the chunks which will be committed to the
 	 * 		database to avoid huge sessions and running out of memory.
 	 */
 	public MegaDbMapper(String dbConfig, int chunkSize){
