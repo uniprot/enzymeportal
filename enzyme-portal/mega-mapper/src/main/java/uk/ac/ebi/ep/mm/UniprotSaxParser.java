@@ -178,7 +178,9 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 		isDbRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath);
 		isProtRecName = UNIPROT_ENTRY_PROTEIN_REC_NAME.equals(currentXpath);
 		// Clear placeholder:
-		currentChars.delete(0, Integer.MAX_VALUE);
+		if (currentChars.length() > 0){
+			currentChars.delete(0, currentChars.length());
+		}
 		if (isDbRef){
 			if ("EC".equals(typeAttr)){
 				ecs.add(attributes.getValue("", "id"));
@@ -276,6 +278,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 			accessions.clear();
 			entryNames.clear();
 			ecs.clear();
+			pdbCodes.clear();
 			orgSciName = null;
 		}
 		currentContext.pop();
