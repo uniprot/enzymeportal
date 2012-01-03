@@ -35,6 +35,7 @@ import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.SearchModel;
 import uk.ac.ebi.ep.search.model.SearchParams;
 import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
@@ -183,7 +184,7 @@ public class SearchController {
                 finder.getUniprotAdapter().setConfig(uniprotConfig);
                 finder.getIntenzAdapter().setConfig(intenzConfig);
                 try {
-                    resultSet = finder.getEnzymes(searchParameters);
+                    resultSet = finder.getEnzymes(searchParameters);                 
                     // cache it in the session:
                     prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
                 } catch (EnzymeFinderException ex) {
