@@ -6,20 +6,20 @@
 $(document).ready(function() {
     //search default text
     $("#searchbox").live("blur", function(){
-          var default_value = $(this).attr("rel");
-          if ($(this).val() == ""){
-                  $(this).val(default_value);
-          }
+        var default_value = $(this).attr("rel");
+        if ($(this).val() == ""){
+            $(this).val(default_value);
+        }
     }).live("focus", function(){
-          var default_value = $(this).attr("rel");
-          if ($(this).val() == default_value){
-                  $(this).val("");
-          }
+        var default_value = $(this).attr("rel");
+        if ($(this).val() == default_value){
+            $(this).val("");
+        }
     });
     /*
      * handles show more and show less links
      */
-   $("a.showLink").click(function(event) {
+    $("a.showLink").click(function(event) {
         var clickedId = event.target.id;
         var idClickedSplit = clickedId.split("_");
         /*id of the link is made up by 3 parts:
@@ -34,24 +34,24 @@ $(document).ready(function() {
         var idPrefixClicked = idClickedSplit[0];
         var itemClicked = idClickedSplit[1];
         var orderOfItemClicked = idClickedSplit[2];
-            var idOfHiddenText = "#"+idPrefixClicked+"_"+orderOfItemClicked;
-            var jqClickedId= "#"+clickedId;
-            var linkValue = $(jqClickedId).text();
-            var splitLinkName = linkValue.split(" ");
-            if (jQuery.inArray('more', splitLinkName) > -1){
-                $(idOfHiddenText).show();
-                $(jqClickedId).html(linkValue.replace('more','fewer'));
-            } else if (jQuery.inArray('fewer', splitLinkName) > -1) {
-                $(idOfHiddenText).hide();
-                $(jqClickedId).html(linkValue.replace('fewer','more'));
-            } else if (jQuery.inArray('whole', splitLinkName) > -1){
-                $(idOfHiddenText).show();
-                $(jqClickedId).html(linkValue
-                		.replace('whole','less').replace('... ',''));
-            } else if (jQuery.inArray('less', splitLinkName) > -1) {
-                $(idOfHiddenText).hide();
-                $(jqClickedId).html('... ' + linkValue.replace('less','whole'));
-            }
+        var idOfHiddenText = "#"+idPrefixClicked+"_"+orderOfItemClicked;
+        var jqClickedId= "#"+clickedId;
+        var linkValue = $(jqClickedId).text();
+        var splitLinkName = linkValue.split(" ");
+        if (jQuery.inArray('more', splitLinkName) > -1){
+            $(idOfHiddenText).show();
+            $(jqClickedId).html(linkValue.replace('more','fewer'));
+        } else if (jQuery.inArray('fewer', splitLinkName) > -1) {
+            $(idOfHiddenText).hide();
+            $(jqClickedId).html(linkValue.replace('fewer','more'));
+        } else if (jQuery.inArray('whole', splitLinkName) > -1){
+            $(idOfHiddenText).show();
+            $(jqClickedId).html(linkValue
+                .replace('whole','less').replace('... ',''));
+        } else if (jQuery.inArray('less', splitLinkName) > -1) {
+            $(idOfHiddenText).hide();
+            $(jqClickedId).html('... ' + linkValue.replace('less','whole'));
+        }
     });
 
     var pageClicked = false;
@@ -74,26 +74,26 @@ $(document).ready(function() {
         if (!pageClicked)
             $("#start").val(0);
     });
-
-/**
+    
+    /**
  * Submits form when Filter button is clicked
  */
     $("#filterButton").click(function(event) {
         $('#searchButton').trigger("click");
     });
-
+     
     /**
      * Save the form parameters for the breadcrumb link
      */
 
     $("#searchForm").submit( function () {        
         var breadcrumb=$('#searchForm').serialize();
-         $("#breadcrumb").val(breadcrumb);         
+        $("#breadcrumb").val(breadcrumb);         
     } );
 
     $("#searchBreadcrumb").click(function(event) {
         var breadcrumb=$('#searchForm').serialize();
-         $("#breadcrumb").val(breadcrumb);
-         alert(breadcrumb);
+        $("#breadcrumb").val(breadcrumb);
+        alert(breadcrumb);
     });
 });
