@@ -5,14 +5,7 @@
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 
-cd $(dirname $0)/..
-mvn clean package
-
-CP=.
-for JAR in target/*.jar
-do
-    CP=$CP:$JAR
-done
+. $(dirname $0)/mvnBuild.sh
 
 echo "Starting EB-Eye import - $(date)"
 java -Xms512M -Xmx1G -classpath $CP uk.ac.ebi.ep.mm.EbeyeSaxParser \
