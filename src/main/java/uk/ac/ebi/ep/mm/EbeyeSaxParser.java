@@ -23,8 +23,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Parser for EB-Eye XML files to populate a mega-map.
- * Currently, this implementation only considers cross references to UniProt,
- * and has been used with ChEBI and ChEMBL-target files (ChEMBL target is the
+ * Currently, this implementation has been used with ChEBI and
+ * ChEMBL-target files (ChEMBL target is the
  * only one for this database which links compounds with protein IDs).
  * @author rafa
  *
@@ -147,7 +147,9 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
-			entry.setAccessions(Collections.singletonList(attributes.getValue("", "acc")));
+			entry.setAccessions(Collections.singletonList(
+					attributes.getValue("", "acc")));
+			LOGGER.debug("Parsing entry " + entry.getEntryId());
 		} else if (isXrefs){
 			xrefs.clear();
 		} else if (isRef){
@@ -163,19 +165,20 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				entry = new Entry();
 				entry.setDbName(refdDb.name());
 				entry.setEntryId(dbKey);
+				LOGGER.debug("Parsing entry " + entry.getEntryId());
 			} else if (isInterestingXref(db, refdDb)){
 				Entry refEntry;
 				if (MmDatabase.UniProt.equals(refdDb)){
 					// UniProt xrefs use accessions, not IDs:
 					refEntry = mm.getEntryForAccession(
-							MmDatabase.UniProt.name(),
-							dbKey);
+							MmDatabase.UniProt, dbKey);
 				} else {
 					refEntry = new Entry();
 					refEntry.setDbName(refdDb.name());
 					refEntry.setEntryId(dbKey);
 				}
 				if (refEntry != null){
+					LOGGER.debug("\tParsing xref to " + refEntry.getEntryId());
 					XRef xref = new XRef();
 					xref.setFromEntry(entry);
 					xref.setRelationship(Relationship.between(db, refdDb).name());
@@ -212,9 +215,10 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			throws SAXException {
 		if (isDbName){
 			db = MmDatabase.parse(currentChars.toString());
+			LOGGER.info("Parsing EB-Eye file for " + db.name());
 		} else if (isEntryName){
 			entry.setEntryName(currentChars.toString());
-		} else if (isEntry){
+		} else if (isEntry && !xrefs.isEmpty()){
 			try {
 				mm.write(Collections.singleton(entry), xrefs);
 			} catch (IOException e) {

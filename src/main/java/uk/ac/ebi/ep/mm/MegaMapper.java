@@ -42,29 +42,65 @@ public interface MegaMapper {
 	
 	/**
 	 * Retrieves an entry for a given accession.
-	 * @param dbName
+	 * @param db
 	 * @param accession
 	 * @return an {@link Entry}.
 	 */
-	public Entry getEntryForAccession(String dbName, String accession);
+	public Entry getEntryForAccession(MmDatabase db, String accession);
 	
 	/**
-	 * Makes a query to the map.
+	 * Retrieves cross references from the mega-map regardless of the
+	 * referencing/referenced database.
 	 * @param entry The entry we want relationships for.
-	 * @param db The database to which the entry is related. If
-	 * 		<code>null</code>, all available databases should be considered.
-	 * @return a collection of related entries in the map.
+	 * @return a collection of xrefs in the map, regardless of the
+	 * 		database. Note that the entry used in the query may be either the
+	 * 		origin or the target of an xref.
 	 */
-	public Collection<XRef> queryMap(Entry entry, MmDatabase db);
+	public Collection<XRef> getXrefs(Entry entry);
 	
 	/**
-	 * Makes a query to the map.
-	 * @param entries The entries we want relationships for.
-	 * @param db The database to which the entry is related. If
-	 * 		<code>null</code>, all available databases should be considered.
-	 * @return a collection of related entries in the map.
+	 * Retrieves cross references from the mega-map.
+	 * @param entry The entry we want relationships for.
+	 * @param db The database to which the entry is related.
+	 * @return a collection of xrefs in the map. Note that the entry
+	 * 		used in the query may be either the origin or the target of an
+	 * 		xref.
 	 */
-	public Collection<XRef> queryMap(Collection<Entry> entries, MmDatabase db);
+	public Collection<XRef> getXrefs(Entry entry, MmDatabase db);
+	
+	/**
+	 * Retrieves cross references from the mega-map for several entries.
+	 * @param entries The entries we want relationships for.
+	 * @param db The database to which the entries are related.
+	 * @return a collection of xrefs in the map. Note that the entries
+	 * 		used in the query may be either the origin or the target of an
+	 * 		xref.
+	 */
+	public Collection<XRef> getXrefs(Collection<Entry> entries, MmDatabase db);
+
+	/**
+	 * Retrieves cross references from the mega-map for a given accession
+	 * (not ID) regardless of the referencing/referenced database..
+	 * @param db the database where the accession is from.
+	 * @param accession the accession number.
+	 * @return a collection of xrefs in the map. Note that the accession
+	 * 		used in the query may be either the origin or the target of an
+	 * 		xref.
+	 */
+	public Collection<XRef> getXrefs(MmDatabase db, String accession);
+
+	/**
+	 * Retrieves cross references from the mega-map for a given accession
+	 * (not ID).
+	 * @param db the database where the accession is from.
+	 * @param accession the accession number.
+	 * @param xDb the referencing/referenced database.
+	 * @return a collection of xrefs in the map. Note that the accession
+	 * 		used in the query may be either the origin or the target of an
+	 * 		xref.
+	 */
+	public Collection<XRef> getXrefs(MmDatabase db, String accession,
+			MmDatabase xDb);
 	
 	/**
 	 * Handles any errors which might affect the mega-map.

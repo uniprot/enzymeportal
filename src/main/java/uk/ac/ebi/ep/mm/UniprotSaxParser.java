@@ -22,8 +22,11 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * UniProt XML parser which takes into account only accessions, entry names
- * (IDs) and organisms, and indexes/stores them in a lucene index.
+ * UniProt XML parser which takes into account only primary accessions,
+ * entry names (IDs), organisms, EC numbers and PDB codes, and indexes/stores
+ * them in a mega-map.
+ * <br>
+ * Only enzymes - i.e. entries with an EC number assigned - are considered.
  * @author rafa
  *
  */

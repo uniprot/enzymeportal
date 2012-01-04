@@ -86,22 +86,35 @@ public class MegaDbMapper implements MegaMapper {
 		}
 	}
 
-	public Entry getEntryForAccession(String dbName, String accession) {
-//		session.createCriteria(Entry.class).add(Restrictions.and(
-//				Property.forName("dbName").eq(dbName),
-//				Property.forName("accessions").))
+	public Entry getEntryForAccession(MmDatabase db, String accession) {
 		return (Entry) entryForAccessionQuery
-				.setString("dbName", dbName)
+				.setString("dbName", db.name())
 				.setString("accession", accession).uniqueResult();
 	}
 
-	public Collection<XRef> queryMap(Entry entry, MmDatabase db) {
+	public Collection<XRef> getXrefs(Entry entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<XRef> queryMap(Collection<Entry> entries,
+	public Collection<XRef> getXrefs(Entry entry, MmDatabase db) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<XRef> getXrefs(Collection<Entry> entries,
 			MmDatabase db) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<XRef> getXrefs(MmDatabase db, String accession) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<XRef> getXrefs(MmDatabase db, String accession,
+			MmDatabase xDb) {
 		// TODO Auto-generated method stub
 		return null;
 	}
