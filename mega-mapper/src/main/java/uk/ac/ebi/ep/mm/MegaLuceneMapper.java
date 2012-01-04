@@ -19,8 +19,10 @@ import org.apache.lucene.util.Version;
 
 /**
  * Mega-mapper writing/reading to/from a lucene index.
+ * <br>
+ * <b>Use {@link MegaDbMapper} if possible, as a Lucene index does store
+ * information horizontally.</b>
  * @author rafa
- *
  */
 public class MegaLuceneMapper implements MegaMapper {
 
@@ -96,13 +98,29 @@ public class MegaLuceneMapper implements MegaMapper {
 		indexWriter.addDocument(doc);
 	}
 
-	public Collection<XRef> queryMap(Entry entry, MmDatabase db) {
+	public Collection<XRef> getXrefs(Entry entry) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<XRef> queryMap(Collection<Entry> entries,
+	public Collection<XRef> getXrefs(Entry entry, MmDatabase db) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<XRef> getXrefs(Collection<Entry> entries,
 			MmDatabase db) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<XRef> getXrefs(MmDatabase db, String accession) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<XRef> getXrefs(MmDatabase db, String accession,
+			MmDatabase xDb) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -163,7 +181,7 @@ public class MegaLuceneMapper implements MegaMapper {
 		closeMap();
 	}
 
-	public Entry getEntryForAccession(String dbName, String accession) {
+	public Entry getEntryForAccession(MmDatabase db, String accession) {
 		// TODO Auto-generated method stub
 		return null;
 	}
