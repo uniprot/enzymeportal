@@ -10,6 +10,6 @@ XML_FILE=${1:-$EBINOCLE_DATA/uniprot/latest/uniprot_sprot.xml}
 . $(dirname $0)/mvnBuild.sh
 
 echo "Starting Swiss-Prot import - $(date)"
-java -Xms512M -Xmx1G -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
-    -xmlFile $XML_FILE
+java -Xms512M -Xmx1G -classpath $CP -Dhibernate.hbm2ddl.auto=create \
+	uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $XML_FILE
 echo "Finished Swiss-Prot import - $(date)"
