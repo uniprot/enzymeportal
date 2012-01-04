@@ -205,7 +205,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	@Override
 	public void endElement(String uri, String localName, String qName)
 	throws SAXException {
-		if (isAccession){
+		if (isAccession && accessions.isEmpty()){ // take only the primary one!
 			accessions.add(currentChars.toString());
 		} else if (isEntryName){
 			entryNames.add(currentChars.toString());
