@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.FlushMode;
@@ -22,7 +23,9 @@ public class MegaDbMapper implements MegaMapper {
 	private int counter = 0;
 	private SessionFactory sessionFactory;
 	
-	private Query entryForAccessionQuery;
+	private Query entryForAccessionQuery,
+		xrefsForAccessionQuery, allXrefsForAccessionQuery,
+		xrefsForEntryQuery, allXrefsForEntryQuery;
 	
 	/**
 	 * @param dbConfig file name for hibernate configuration. If
@@ -43,8 +46,11 @@ public class MegaDbMapper implements MegaMapper {
 		session = sessionFactory.getCurrentSession();
 		session.setFlushMode(FlushMode.COMMIT);
 		session.beginTransaction();
-		entryForAccessionQuery = session.createQuery("from Entry where" +
-				" dbName = :dbName and :accession in elements(accessions)");
+		entryForAccessionQuery = null;
+		xrefsForAccessionQuery = null;
+		allXrefsForAccessionQuery =  null;
+		xrefsForEntryQuery = null;
+		allXrefsForEntryQuery = null;
 	}
 
 	/**
@@ -87,19 +93,37 @@ public class MegaDbMapper implements MegaMapper {
 	}
 
 	public Entry getEntryForAccession(MmDatabase db, String accession) {
+		if (entryForAccessionQuery == null){
+			entryForAccessionQuery = session.createQuery("from Entry where" +
+					" dbName = :dbName and :accession in elements(accessions)");
+		}
 		return (Entry) entryForAccessionQuery
 				.setString("dbName", db.name())
 				.setString("accession", accession).uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<XRef> getXrefs(Entry entry) {
-		// TODO Auto-generated method stub
-		return null;
+		if (allXrefsForEntryQuery == null){
+			allXrefsForEntryQuery = session.createQuery("from XRef" +
+					" where fromEntry = :entry or toEntry = :entry");
+		}
+		return (List<XRef>) allXrefsForEntryQuery
+				.setEntity("entry", entry)
+				.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<XRef> getXrefs(Entry entry, MmDatabase db) {
-		// TODO Auto-generated method stub
-		return null;
+		if (xrefsForEntryQuery == null){
+			xrefsForEntryQuery = session.createQuery("from XRef" +
+					" where (fromEntry = :entry and toEntry.dbName = :dbName)" +
+					" or (toEntry = :entry and fromEntry.dbName = :dbName)");
+		}
+		return (List<XRef>) xrefsForEntryQuery
+				.setEntity("entry", entry)
+				.setString("dbName", db.name())
+				.list();
 	}
 
 	public Collection<XRef> getXrefs(Collection<Entry> entries,
@@ -108,15 +132,38 @@ public class MegaDbMapper implements MegaMapper {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<XRef> getXrefs(MmDatabase db, String accession) {
-		// TODO Auto-generated method stub
-		return null;
+		if (allXrefsForAccessionQuery == null){
+			allXrefsForAccessionQuery = session.createQuery("from XRef" +
+					" where (fromEntry.dbName = :dbName" +
+					" and :accession in elements(fromEntry.accessions))" +
+					" or (toEntry.dbName = :dbName" +
+					" and :accession in elements(toEntry.accessions))");
+		}
+		return (List<XRef>) allXrefsForAccessionQuery
+				.setString("dbName", db.name())
+				.setString("accession", accession)
+				.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<XRef> getXrefs(MmDatabase db, String accession,
 			MmDatabase xDb) {
-		// TODO Auto-generated method stub
-		return null;
+		if (xrefsForAccessionQuery == null){
+			xrefsForAccessionQuery = session.createQuery("from XRef" +
+					" where (fromEntry.dbName = :dbName" +
+					" and :accession in elements(fromEntry.accessions)" +
+					" and toEntry.dbName = :xDbName)" +
+					" or (toEntry.dbName = :dbName" +
+					" and :accession in elements(toEntry.accessions)" +
+					" and fromEntry.dbName = :xDbName)");
+		}
+		return (List<XRef>) xrefsForAccessionQuery
+				.setString("dbName", db.name())
+				.setString("accession", accession)
+				.setString("xDbName", xDb.name())
+				.list();
 	}
 
 	public void handleError() throws IOException {

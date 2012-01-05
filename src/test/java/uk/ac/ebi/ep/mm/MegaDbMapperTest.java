@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.mm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,6 +51,26 @@ public class MegaDbMapperTest {
 		e1 = mm.getEntryForAccession(MmDatabase.UniProt, "V98765");
 		assertNotNull(e1);
 		assertEquals("ABCD_VOGON", e1.getEntryId());
+	}
+	
+	@Test
+	public void testGetXrefsAllByEntry(){
+		fail("Not implemented");
+	}
+	
+	@Test
+	public void testGetXrefsByEntry(){
+		fail("Not implemented");
+	}
+	
+	@Test
+	public void testGetXrefsAllByAccession(){
+		fail("Not implemented");
+	}
+	
+	@Test
+	public void testGetXrefsByAccession(){
+		fail("Not implemented");
 	}
 
 }
