@@ -25,11 +25,12 @@ public class XRefTest {
 		session.beginTransaction();
 		Entry entity1 = new Entry();
 		entity1.setDbName(MmDatabase.UniProt.name());
-		entity1.setEntryId("ABCD_HUMAN");
+		entity1.setEntryId("ABCD_VOGON");
+		entity1.setEntryAccession("V01234");
 		entityIds.add((Integer) session.save(entity1));
 		Entry entity2 = new Entry();
 		entity2.setDbName(MmDatabase.ChEBI.name());
-		entity2.setEntryId("CHEBI:12345");
+		entity2.setEntryAccession("CHEBI:12345");
 		entityIds.add((Integer) session.save(entity2));
 		session.getTransaction().commit();
 	}

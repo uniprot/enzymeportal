@@ -8,13 +8,10 @@
   <property column="DB_NAME" generated="never" lazy="false"
    name="dbName" not-null="true" type="java.lang.String"/>
   <property column="ENTRY_ID" generated="never" lazy="false"
-   name="entryId" not-null="true" type="java.lang.String"/>
+   name="entryId" not-null="false" type="java.lang.String"/>
+  <property column="ENTRY_ACCESSION" generated="never" lazy="false"
+   name="entryAccession" not-null="true" type="java.lang.String"/>
   <property column="ENTRY_NAME" generated="never" lazy="false"
    length="500" name="entryName" type="java.lang.String"/>
-  <list name="accessions" table="MM_ACCESSION">
-   <key column="ID" not-null="true"/>
-   <list-index base="0" column="ACCESSION_INDEX"/>
-   <element column="ACCESSION" type="string"/>
-  </list>
  </class>
 </hibernate-mapping>

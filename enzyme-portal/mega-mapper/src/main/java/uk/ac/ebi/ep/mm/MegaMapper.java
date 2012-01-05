@@ -61,22 +61,22 @@ public interface MegaMapper {
 	/**
 	 * Retrieves cross references from the mega-map.
 	 * @param entry The entry we want relationships for.
-	 * @param db The database to which the entry is related.
+	 * @param db The database(s) to which the entry is related.
 	 * @return a collection of xrefs in the map. Note that the entry
 	 * 		used in the query may be either the origin or the target of an
 	 * 		xref.
 	 */
-	public Collection<XRef> getXrefs(Entry entry, MmDatabase db);
+	public Collection<XRef> getXrefs(Entry entry, MmDatabase... db);
 	
 	/**
 	 * Retrieves cross references from the mega-map for several entries.
 	 * @param entries The entries we want relationships for.
-	 * @param db The database to which the entries are related.
+	 * @param db The database(s) to which the entries are related.
 	 * @return a collection of xrefs in the map. Note that the entries
 	 * 		used in the query may be either the origin or the target of an
 	 * 		xref.
 	 */
-	public Collection<XRef> getXrefs(Collection<Entry> entries, MmDatabase db);
+	public Collection<XRef> getXrefs(Collection<Entry> entries, MmDatabase... db);
 
 	/**
 	 * Retrieves cross references from the mega-map for a given accession
@@ -94,13 +94,13 @@ public interface MegaMapper {
 	 * (not ID).
 	 * @param db the database where the accession is from.
 	 * @param accession the accession number.
-	 * @param xDb the referencing/referenced database.
+	 * @param xDb the referencing/referenced database(s).
 	 * @return a collection of xrefs in the map. Note that the accession
 	 * 		used in the query may be either the origin or the target of an
 	 * 		xref.
 	 */
 	public Collection<XRef> getXrefs(MmDatabase db, String accession,
-			MmDatabase xDb);
+			MmDatabase... xDb);
 	
 	/**
 	 * Handles any errors which might affect the mega-map.

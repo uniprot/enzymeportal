@@ -95,7 +95,7 @@ public class MegaDbMapper implements MegaMapper {
 	public Entry getEntryForAccession(MmDatabase db, String accession) {
 		if (entryForAccessionQuery == null){
 			entryForAccessionQuery = session.createQuery("from Entry where" +
-					" dbName = :dbName and :accession in elements(accessions)");
+					" dbName = :dbName and :accession = entryAccession");
 		}
 		return (Entry) entryForAccessionQuery
 				.setString("dbName", db.name())
@@ -114,20 +114,20 @@ public class MegaDbMapper implements MegaMapper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<XRef> getXrefs(Entry entry, MmDatabase db) {
+	public Collection<XRef> getXrefs(Entry entry, MmDatabase... db) {
 		if (xrefsForEntryQuery == null){
 			xrefsForEntryQuery = session.createQuery("from XRef" +
-					" where (fromEntry = :entry and toEntry.dbName = :dbName)" +
-					" or (toEntry = :entry and fromEntry.dbName = :dbName)");
+					" where (fromEntry = :entry and toEntry.dbName in (:dbNames))" +
+					" or (toEntry = :entry and fromEntry.dbName in (:dbNames))");
 		}
 		return (List<XRef>) xrefsForEntryQuery
 				.setEntity("entry", entry)
-				.setString("dbName", db.name())
+				.setParameterList("dbNames", db)
 				.list();
 	}
 
 	public Collection<XRef> getXrefs(Collection<Entry> entries,
-			MmDatabase db) {
+			MmDatabase... db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -137,9 +137,9 @@ public class MegaDbMapper implements MegaMapper {
 		if (allXrefsForAccessionQuery == null){
 			allXrefsForAccessionQuery = session.createQuery("from XRef" +
 					" where (fromEntry.dbName = :dbName" +
-					" and :accession in elements(fromEntry.accessions))" +
+					" and :accession = fromEntry.entryAccession)" +
 					" or (toEntry.dbName = :dbName" +
-					" and :accession in elements(toEntry.accessions))");
+					" and :accession = toEntry.entryAccession)");
 		}
 		return (List<XRef>) allXrefsForAccessionQuery
 				.setString("dbName", db.name())
@@ -149,20 +149,20 @@ public class MegaDbMapper implements MegaMapper {
 
 	@SuppressWarnings("unchecked")
 	public Collection<XRef> getXrefs(MmDatabase db, String accession,
-			MmDatabase xDb) {
+			MmDatabase... xDb) {
 		if (xrefsForAccessionQuery == null){
 			xrefsForAccessionQuery = session.createQuery("from XRef" +
 					" where (fromEntry.dbName = :dbName" +
-					" and :accession in elements(fromEntry.accessions)" +
-					" and toEntry.dbName = :xDbName)" +
+					" and :accession = fromEntry.entryAccession" +
+					" and toEntry.dbName in (:xDbNames))" +
 					" or (toEntry.dbName = :dbName" +
-					" and :accession in elements(toEntry.accessions)" +
-					" and fromEntry.dbName = :xDbName)");
+					" and :accession = toEntry.entryAccession" +
+					" and fromEntry.dbName in (:xDbNames))");
 		}
 		return (List<XRef>) xrefsForAccessionQuery
 				.setString("dbName", db.name())
 				.setString("accession", accession)
-				.setString("xDbName", xDb.name())
+				.setParameterList("xDbNames", xDb)
 				.list();
 	}
 
