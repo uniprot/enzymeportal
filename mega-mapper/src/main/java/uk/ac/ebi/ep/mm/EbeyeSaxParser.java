@@ -148,7 +148,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
 			entry.setEntryAccession(attributes.getValue("", "acc"));
-			LOGGER.debug("Parsing entry " + entry.getEntryId());
+			LOGGER.debug("Parsing entry " + entry.getEntryAccession());
 		} else if (isXrefs){
 			xrefs.clear();
 		} else if (isRef){
@@ -164,26 +164,17 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				entry = new Entry();
 				entry.setDbName(refdDb.name());
 				entry.setEntryAccession(dbKey);
-				LOGGER.debug("Parsing entry " + entry.getEntryId());
+				LOGGER.debug("Parsing entry " + entry.getEntryAccession());
 			} else if (isInterestingXref(db, refdDb)){
-				Entry refEntry;
-				if (MmDatabase.UniProt.equals(refdDb)){
-					// UniProt xrefs use accessions, not IDs:
-					refEntry = mm.getEntryForAccession(
-							MmDatabase.UniProt, dbKey);
-				} else {
-					refEntry = new Entry();
-					refEntry.setDbName(refdDb.name());
-					refEntry.setEntryAccession(dbKey);
-				}
-				if (refEntry != null){
-					LOGGER.debug("\tParsing xref to " + refEntry.getEntryAccession());
-					XRef xref = new XRef();
-					xref.setFromEntry(entry);
-					xref.setRelationship(Relationship.between(db, refdDb).name());
-					xref.setToEntry(refEntry);
-					xrefs.add(xref);
-				}
+				Entry refEntry = new Entry();
+				refEntry.setDbName(refdDb.name());
+				refEntry.setEntryAccession(dbKey);
+				LOGGER.debug("\tParsing xref to " + refEntry.getEntryAccession());
+				XRef xref = new XRef();
+				xref.setFromEntry(entry);
+				xref.setRelationship(Relationship.between(db, refdDb).name());
+				xref.setToEntry(refEntry);
+				xrefs.add(xref);
 			}
 		}
 		// Clear placeholder:
