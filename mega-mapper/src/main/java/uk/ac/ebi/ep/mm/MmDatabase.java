@@ -17,7 +17,7 @@ public enum MmDatabase {
 	CAS("CAS Registry Number"),
 	COMe,
 	ChEBI,
-	ChEMBL("ChEMBL COMPOUND"),
+	ChEMBL("ChEMBL COMPOUND", "ChEMBL-Compound"),
 	ChEMBL_Target("ChEMBL.Target"),
 	Chinese_Abstracts("Chinese Abstracts citation"),
 	DrugBank,
