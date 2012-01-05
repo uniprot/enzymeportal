@@ -12,6 +12,6 @@
   <property column="ENTRY_ACCESSION" generated="never" lazy="false"
    name="entryAccession" not-null="true" type="java.lang.String"/>
   <property column="ENTRY_NAME" generated="never" lazy="false"
-   length="500" name="entryName" type="java.lang.String"/>
+   length="1000" name="entryName" type="java.lang.String"/>
  </class>
 </hibernate-mapping>

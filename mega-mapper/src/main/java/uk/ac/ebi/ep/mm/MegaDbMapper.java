@@ -66,7 +66,8 @@ public class MegaDbMapper implements MegaMapper {
 
 	public void writeEntry(Entry entry) throws IOException {
         if (entry.getEntryName() != null && entry.getEntryName().length() > 300){
-            logger.warn("[BIG] " + entry.getEntryName());
+            logger.warn("[BIG: " + entry.getEntryName().length() + "] "
+            		+ entry.getEntryName());
         }
 		session.merge(entry); // save or saveOrUpdate does not work!
 		logger.debug(entry.getEntryId() + " written");
@@ -76,8 +77,8 @@ public class MegaDbMapper implements MegaMapper {
 	public void writeXref(XRef xref)
 	throws IOException {
 		session.merge(xref); // save or saveOrUpdate does not work!
-		logger.debug(xref.getFromEntry().getEntryId()
-				+ "-" + xref.getToEntry().getEntryId()
+		logger.debug(xref.getFromEntry().getEntryAccession()
+				+ "-" + xref.getToEntry().getEntryAccession()
 				+ " written");
 		checkChunkSize();
 	}
