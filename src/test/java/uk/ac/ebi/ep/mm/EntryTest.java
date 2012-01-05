@@ -2,11 +2,7 @@ package uk.ac.ebi.ep.mm;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,16 +18,10 @@ public class EntryTest {
 	@Before
 	public void before(){
         entry = new Entry();
-        entry.setEntryId("PDE5A_HUMAN");
         entry.setDbName(MmDatabase.UniProt.name());
-        entry.setEntryName("cGMP-specific 3',5'-cyclic phosphodiesterase");
-        List<String> accessions = new ArrayList<String>();
-        accessions.add("O76074");
-        accessions.add("A0AV69");
-        accessions.add("A8K2C4");
-        accessions.add("O75026");
-        accessions.add("O75887");
-        entry.setAccessions(accessions);
+        entry.setEntryAccession("V01234");
+        entry.setEntryId("XYZ_VOGON");
+        entry.setEntryName("vogodiesterase");
 
 		sessionFactory = HibernateUtil.getSessionFactory();
 	}
@@ -51,9 +41,8 @@ public class EntryTest {
 	        savedId = (Integer) session.save(entry);
 	        
 	        myEntry = (Entry) session.get(Entry.class, savedId);
-	        assertEquals("PDE5A_HUMAN", myEntry.getEntryId());
-	        assertEquals(5, myEntry.getAccessions().size());
-	        assertTrue(myEntry.getAccessions().contains("O76074"));
+	        assertEquals("XYZ_VOGON", myEntry.getEntryId());
+	        assertEquals(myEntry.getEntryAccession(), "V01234");
 	        
 	        session.delete(myEntry);
 	        myEntry = (Entry) session.get(Entry.class, savedId);
@@ -83,13 +72,13 @@ public class EntryTest {
 	        session1.merge(entry);
 	        
 	        Entry same = new Entry();
-	        same.setEntryId("PDE5A_HUMAN");
 	        same.setDbName(MmDatabase.UniProt.name());
+	        same.setEntryAccession("V01234");
 	        assertEquals(entry, same);
 	        
 	        session1.merge(same);
 	        session1.getTransaction().commit();
-	        assertEquals(entry.getId(), same.getId());
+	        assertEquals(entry.getEntryAccession(), same.getEntryAccession());
         } catch (Exception e){
         	if (session1 != null && session1.isOpen()){
             	session1.getTransaction().rollback();
@@ -111,8 +100,8 @@ public class EntryTest {
 	        session1.getTransaction().commit();
 	        
 	        Entry same = new Entry();
-	        same.setEntryId("PDE5A_HUMAN");
 	        same.setDbName(MmDatabase.UniProt.name());
+	        same.setEntryAccession("V01234");
 	        assertEquals(entry, same);
 	        
 	        session2 = sessionFactory.getCurrentSession();

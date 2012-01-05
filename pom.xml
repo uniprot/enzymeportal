@@ -112,7 +112,7 @@
 					</components>
 					<componentProperties>
 						<drop>true</drop>
-						<configurationfile>/src/main/resources/hibernate.cfg.xml</configurationfile>
+						<configurationfile>src/main/resources/hibernate.cfg.xml</configurationfile>
 						<outputfilename>schema.sql</outputfilename>
 					</componentProperties>
 				</configuration>

@@ -147,8 +147,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
-			entry.setAccessions(Collections.singletonList(
-					attributes.getValue("", "acc")));
+			entry.setEntryAccession(attributes.getValue("", "acc"));
 			LOGGER.debug("Parsing entry " + entry.getEntryId());
 		} else if (isXrefs){
 			xrefs.clear();
@@ -164,7 +163,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 					&& MmDatabase.ChEMBL.equals(refdDb)){
 				entry = new Entry();
 				entry.setDbName(refdDb.name());
-				entry.setEntryId(dbKey);
+				entry.setEntryAccession(dbKey);
 				LOGGER.debug("Parsing entry " + entry.getEntryId());
 			} else if (isInterestingXref(db, refdDb)){
 				Entry refEntry;
@@ -175,10 +174,10 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				} else {
 					refEntry = new Entry();
 					refEntry.setDbName(refdDb.name());
-					refEntry.setEntryId(dbKey);
+					refEntry.setEntryAccession(dbKey);
 				}
 				if (refEntry != null){
-					LOGGER.debug("\tParsing xref to " + refEntry.getEntryId());
+					LOGGER.debug("\tParsing xref to " + refEntry.getEntryAccession());
 					XRef xref = new XRef();
 					xref.setFromEntry(entry);
 					xref.setRelationship(Relationship.between(db, refdDb).name());

@@ -103,13 +103,13 @@ public class MegaLuceneMapper implements MegaMapper {
 		return null;
 	}
 
-	public Collection<XRef> getXrefs(Entry entry, MmDatabase db) {
+	public Collection<XRef> getXrefs(Entry entry, MmDatabase... db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Collection<XRef> getXrefs(Collection<Entry> entries,
-			MmDatabase db) {
+			MmDatabase... db) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -120,7 +120,7 @@ public class MegaLuceneMapper implements MegaMapper {
 	}
 
 	public Collection<XRef> getXrefs(MmDatabase db, String accession,
-			MmDatabase xDb) {
+			MmDatabase... xDb) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -151,12 +151,10 @@ public class MegaLuceneMapper implements MegaMapper {
 			doc.add(new Field(fieldName, entry.getEntryName(),
 					Field.Store.YES, Field.Index.ANALYZED));
 		}
-		if (entry.getAccessions() != null){
+		if (entry.getEntryAccession() != null){
 			String fieldName = entry.getDbName() + "_ACCESSION";
-			for (String accession : entry.getAccessions()) {
-				doc.add(new Field(fieldName, accession,
-						Field.Store.YES, Field.Index.ANALYZED));
-			}
+			doc.add(new Field(fieldName, entry.getEntryAccession(),
+					Field.Store.YES, Field.Index.ANALYZED));
 		}
 	}
 

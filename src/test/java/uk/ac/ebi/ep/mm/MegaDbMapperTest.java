@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class MegaDbMapperTest {
@@ -24,11 +25,8 @@ public class MegaDbMapperTest {
 		mm.openMap();
 		Entry entity1 = new Entry();
 		entity1.setDbName(MmDatabase.UniProt.name());
+		entity1.setEntryAccession("V12345");
 		entity1.setEntryId("ABCD_VOGON");
-		List<String> accessions = new ArrayList<String>();
-		accessions.add("V12345");
-		accessions.add("V98765");
-		entity1.setAccessions(accessions);
 		mm.writeEntry(entity1);
 		entityIds.add((Integer) entity1.getId());
 		mm.closeMap();
@@ -48,27 +46,27 @@ public class MegaDbMapperTest {
 	public void testGetEntryForAccession() {
 		Entry e1 = mm.getEntryForAccession(MmDatabase.UniProt, "V01234");
 		assertNull(e1);
-		e1 = mm.getEntryForAccession(MmDatabase.UniProt, "V98765");
+		e1 = mm.getEntryForAccession(MmDatabase.UniProt, "V12345");
 		assertNotNull(e1);
 		assertEquals("ABCD_VOGON", e1.getEntryId());
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetXrefsAllByEntry(){
 		fail("Not implemented");
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetXrefsByEntry(){
 		fail("Not implemented");
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetXrefsAllByAccession(){
 		fail("Not implemented");
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetXrefsByAccession(){
 		fail("Not implemented");
 	}
