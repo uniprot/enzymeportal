@@ -233,7 +233,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					
 					Entry speciesEntry = new Entry();
 					speciesEntry.setDbName(MmDatabase.Linnean.name());
-					speciesEntry.setEntryId(orgSciName);
+					speciesEntry.setEntryAccession(orgSciName); // XXX ???
 					speciesEntry.setEntryName(orgComName);
 					entries.add(speciesEntry);
 					
