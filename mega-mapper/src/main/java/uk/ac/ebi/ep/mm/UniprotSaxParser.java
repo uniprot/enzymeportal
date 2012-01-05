@@ -225,8 +225,8 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					Collection<XRef> xrefs = new HashSet<XRef>();
 
 					Entry uniprotEntry = new Entry();
-					uniprotEntry.setAccessions(accessions);
 					uniprotEntry.setDbName(MmDatabase.UniProt.name());
+					uniprotEntry.setEntryAccession(accessions.get(0)); // take primary one
 					uniprotEntry.setEntryId(entryNames.get(0)); // take first one
 					uniprotEntry.setEntryName(protRecName);
 					entries.add(uniprotEntry);
@@ -247,7 +247,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					for (String ec: ecs){
 						Entry ecEntry = new Entry();
 						ecEntry.setDbName(MmDatabase.EC.name());
-						ecEntry.setEntryId(ec);
+						ecEntry.setEntryAccession(ec);
 						entries.add(ecEntry);
 						
 						XRef up2ec = new XRef();
@@ -261,7 +261,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 					for (String pdbCode : pdbCodes) {
 						Entry pdbEntry = new Entry();
 						pdbEntry.setDbName(MmDatabase.PDB.name());
-						pdbEntry.setEntryId(pdbCode);
+						pdbEntry.setEntryAccession(pdbCode);
 						entries.add(pdbEntry);
 						
 						XRef up2pdb = new XRef();

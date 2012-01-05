@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Entry implements Serializable {
 
@@ -10,12 +9,10 @@ public class Entry implements Serializable {
 	private String dbName;
 	private String entryId;
 	private String entryName;
-	
-	/**
-	 * Ordered list of accession for the entry. Databases have usually primary
-	 * accessions, which will appear as first in the list.
+	/*
+	 * Formerly a collection, we are now storing just the primary one.
 	 */
-	private List<String> accessions;
+	private String entryAccession;
 	
 	public int getId() {
 		return hashCode(); // FIXME, possibly not unique
@@ -41,18 +38,20 @@ public class Entry implements Serializable {
 	public void setEntryName(String name) {
 		this.entryName = name;
 	}
-	public List<String> getAccessions() {
-		return accessions;
+	public String getEntryAccession() {
+		return entryAccession;
 	}
-	public void setAccessions(List<String> accessions) {
-		this.accessions = accessions;
+	public void setEntryAccession(String accession) {
+		this.entryAccession = accession;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dbName == null) ? 0 : dbName.hashCode());
-		result = prime * result + ((entryId == null) ? 0 : entryId.hashCode());
+		result = prime * result
+				+ ((dbName == null) ? 0 : dbName.hashCode());
+		result = prime * result
+				+ ((entryAccession == null) ? 0 : entryAccession.hashCode());
 		return result;
 	}
 	@Override
@@ -69,10 +68,10 @@ public class Entry implements Serializable {
 				return false;
 		} else if (!dbName.equals(other.dbName))
 			return false;
-		if (entryId == null) {
-			if (other.entryId != null)
+		if (entryAccession == null) {
+			if (other.entryAccession != null)
 				return false;
-		} else if (!entryId.equals(other.entryId))
+		} else if (!entryAccession.equals(other.entryAccession))
 			return false;
 		return true;
 	}
