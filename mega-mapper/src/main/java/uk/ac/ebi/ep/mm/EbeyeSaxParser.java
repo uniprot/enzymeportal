@@ -154,28 +154,31 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		} else if (isRef){
 			final MmDatabase refdDb =
 					MmDatabase.parse(attributes.getValue("", "dbname"));
-			String dbKey = attributes.getValue("", "dbkey");
-			// Strange case: PDBeChem refers to PDBe using altkey:
-			if (dbKey == null){
-				dbKey = attributes.getValue("", "altkey");
-			}
-			if (MmDatabase.ChEMBL_Target.equals(db)
-					&& MmDatabase.UniProt.equals(refdDb)){
-				// ChEMBL target entries are proteins targetted by drugs:
-				entry = new Entry();
-				entry.setDbName(refdDb.name());
-				entry.setEntryAccession(dbKey);
-				LOGGER.debug("Parsing entry " + entry.getEntryAccession());
-			} else if (isInterestingXref(db, refdDb)){
-				Entry refEntry = new Entry();
-				refEntry.setDbName(refdDb.name());
-				refEntry.setEntryAccession(dbKey);
-				LOGGER.debug("\tParsing xref to " + refEntry.getEntryAccession());
-				XRef xref = new XRef();
-				xref.setFromEntry(entry);
-				xref.setRelationship(Relationship.between(db, refdDb).name());
-				xref.setToEntry(refEntry);
-				xrefs.add(xref);
+			// The xref'd database might be unknown to us:
+			if (refdDb != null){
+				String dbKey = attributes.getValue("", "dbkey");
+				// Strange case: PDBeChem refers to PDBe using altkey:
+				if (dbKey == null){
+					dbKey = attributes.getValue("", "altkey");
+				}
+				if (MmDatabase.ChEMBL_Target.equals(db)
+						&& MmDatabase.UniProt.equals(refdDb)){
+					// ChEMBL target entries are proteins targeted by drugs:
+					entry = new Entry();
+					entry.setDbName(refdDb.name());
+					entry.setEntryAccession(dbKey);
+					LOGGER.debug("Parsing entry " + entry.getEntryAccession());
+				} else if (isInterestingXref(db, refdDb)){
+					Entry refEntry = new Entry();
+					refEntry.setDbName(refdDb.name());
+					refEntry.setEntryAccession(dbKey);
+					LOGGER.debug("\tParsing xref to " + refEntry.getEntryAccession());
+					XRef xref = new XRef();
+					xref.setFromEntry(entry);
+					xref.setRelationship(Relationship.between(db, refdDb).name());
+					xref.setToEntry(refEntry);
+					xrefs.add(xref);
+				}
 			}
 		}
 		// Clear placeholder:
