@@ -64,6 +64,28 @@ public class MegaDbMapper implements MegaMapper {
 		}
 	}
 
+	/**
+	 * Converts an array of database objects into an array of database names.
+	 * @param dbs an array of {@link MmDatabase}
+	 * @return an array of String
+	 */
+	private String[] getDbNames(MmDatabase[] dbs){
+		String[] dbNames = new String[dbs.length];
+		for (int i = 0; i < dbs.length; i++) {
+			dbNames[i] = dbs[i].name();
+		}
+		return dbNames;
+	}
+	
+	private String getDbNamesAsString(MmDatabase[] dbs){
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < dbs.length; i++) {
+			if (i > 0) sb.append(',');
+			sb.append('\'').append(dbs[i].name()).append('\'');
+		}
+		return sb.toString();
+	}
+
 	public void writeEntry(Entry entry) throws IOException {
         if (entry.getEntryName() != null && entry.getEntryName().length() > 300){
             logger.warn("[BIG: " + entry.getEntryName().length() + "] "
@@ -115,7 +137,7 @@ public class MegaDbMapper implements MegaMapper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<XRef> getXrefs(Entry entry, MmDatabase... db) {
+	public Collection<XRef> getXrefs(Entry entry, MmDatabase... dbs) {
 		if (xrefsForEntryQuery == null){
 			xrefsForEntryQuery = session.createQuery("from XRef" +
 					" where (fromEntry = :entry and toEntry.dbName in (:dbNames))" +
@@ -123,8 +145,16 @@ public class MegaDbMapper implements MegaMapper {
 		}
 		return (List<XRef>) xrefsForEntryQuery
 				.setEntity("entry", entry)
-				.setParameterList("dbNames", db)
+				.setParameterList("dbNames", getDbNames(dbs))
 				.list();
+//		String queryString = "from XRef" +
+//				" where (fromEntry = :entry and toEntry.dbName in (:dbNames))" +
+//				" or (toEntry = :entry and fromEntry.dbName in (" +
+//				getDbNamesAsString(dbs)+"))";
+//		xrefsForEntryQuery = session.createQuery(queryString);
+//		return (List<XRef>) xrefsForEntryQuery
+//				.setEntity("entry", entry)
+//				.list();
 	}
 
 	public Collection<XRef> getXrefs(Collection<Entry> entries,
@@ -148,9 +178,17 @@ public class MegaDbMapper implements MegaMapper {
 				.list();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <br>
+	 * Note that this method is currently slow when the database array has more
+	 * than one element. It is probably faster to make separate queries for
+	 * each of the databases and then merge the results.
+	 * (See {@link MegaDbMapperTest#testGetXrefsByAccession()})
+	 */
 	@SuppressWarnings("unchecked")
 	public Collection<XRef> getXrefs(MmDatabase db, String accession,
-			MmDatabase... xDb) {
+			MmDatabase... xDbs) {
 		if (xrefsForAccessionQuery == null){
 			xrefsForAccessionQuery = session.createQuery("from XRef" +
 					" where (fromEntry.dbName = :dbName" +
@@ -163,7 +201,7 @@ public class MegaDbMapper implements MegaMapper {
 		return (List<XRef>) xrefsForAccessionQuery
 				.setString("dbName", db.name())
 				.setString("accession", accession)
-				.setParameterList("xDbNames", xDb)
+				.setParameterList("xDbNames", getDbNames(xDbs))
 				.list();
 	}
 
