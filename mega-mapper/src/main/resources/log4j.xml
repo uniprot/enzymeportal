@@ -4,7 +4,7 @@
 
 	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="conversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
+			<param name="conversionPattern" value="%5p [%d{ISO8601}] (%F:%L) - %m%n"/>
 		</layout>
 	</appender>
 
@@ -15,6 +15,10 @@
 		</layout>
 	</appender>
 
+	<logger name="JUNIT" additivity="false">
+		<level value="DEBUG"/>
+		<appender-ref ref="stdout"/>
+	</logger>
 	<logger name="uk.ac.ebi.ep" additivity="false">
 		<level value="INFO"/>
 		<appender-ref ref="file"/>

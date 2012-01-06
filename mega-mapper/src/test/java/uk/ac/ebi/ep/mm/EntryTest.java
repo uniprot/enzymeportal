@@ -4,19 +4,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/*
+ * Long test times are due to the setup and clean up procedures.
+ */
 public class EntryTest {
 
 	private Entry entry;
 	private SessionFactory sessionFactory;
+	private Logger logger = Logger.getLogger("JUNIT");
 	
 	@Before
 	public void before(){
+        logger.info("Before setting up");
         entry = new Entry();
         entry.setDbName(MmDatabase.UniProt.name());
         entry.setEntryAccession("V01234");
@@ -24,42 +32,51 @@ public class EntryTest {
         entry.setEntryName("vogodiesterase");
 
 		sessionFactory = HibernateUtil.getSessionFactory();
+        logger.info("After setting up");
 	}
 	
 	@After
-	public void after(){
+	public void after() throws Exception{
+        logger.info("Before cleaning up");
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tr = (Transaction) session.beginTransaction();
+		Query q = session.createQuery("delete from Entry where entryAccession = 'V01234'");
+		int n = q.executeUpdate();
+		tr.commit();
+		System.out.println(n + " entries cleaned up");
 		sessionFactory.close();
+        logger.info("After cleaning up");
 	}
 	
 	@Test
 	public void testSaveGetDelete() {
+        logger.info("Before getting session");
 		Session session = sessionFactory.getCurrentSession();
         Entry myEntry = null;
         Integer savedId = null;
 		try {
+            logger.info("Before beginning transaction");
             session.beginTransaction();
+            logger.info("Before saving entry");
 	        savedId = (Integer) session.save(entry);
 	        
+            logger.info("Before getting entry");
 	        myEntry = (Entry) session.get(Entry.class, savedId);
 	        assertEquals("XYZ_VOGON", myEntry.getEntryId());
 	        assertEquals(myEntry.getEntryAccession(), "V01234");
 	        
+            logger.info("Before deleting entry");
 	        session.delete(myEntry);
+            logger.info("Before getting null entry");
 	        myEntry = (Entry) session.get(Entry.class, savedId);
 	        assertNull(myEntry);
+            logger.info("Before committing");
+	        session.getTransaction().commit();
+            logger.info("After committing");
         } catch (Exception e){
         	session.getTransaction().rollback();
         	e.printStackTrace();
         	fail();
-        } finally {
-        	if (savedId != null){
-    	        myEntry = (Entry) session.get(Entry.class, savedId);
-    	        if (myEntry != null){
-    		        session.delete(myEntry);
-    		        session.getTransaction().commit();
-    	        }
-        	}
-        	sessionFactory.close();
         }
 	}
 	
@@ -69,7 +86,6 @@ public class EntryTest {
 		try {
 			session1 = sessionFactory.getCurrentSession();
             session1.beginTransaction();
-	        session1.merge(entry);
 	        
 	        Entry same = new Entry();
 	        same.setDbName(MmDatabase.UniProt.name());
@@ -85,8 +101,6 @@ public class EntryTest {
         	}
         	e.printStackTrace();
         	fail();
-        } finally {
-        	sessionFactory.close();
         }
 	}
 	

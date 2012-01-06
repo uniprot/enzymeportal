@@ -6,9 +6,11 @@
  <class name="uk.ac.ebi.ep.mm.XRef" table="MM_XREF">
   <id name="id"/>
   <many-to-one cascade="all" class="uk.ac.ebi.ep.mm.Entry"
-   column="FROM_ENTRY" name="fromEntry" not-null="true"/>
+   column="FROM_ENTRY" name="fromEntry"
+   not-null="true" index="MM_FROMENTRY_INDEX"/>
   <many-to-one cascade="all" class="uk.ac.ebi.ep.mm.Entry"
-   column="TO_ENTRY" name="toEntry" not-null="true"/>
+   column="TO_ENTRY" name="toEntry"
+   not-null="true" index="MM_TOENTRY_INDEX"/>
   <property column="RELATIONSHIP" generated="never" lazy="false"
    name="relationship" not-null="true"/>
  </class>
