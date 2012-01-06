@@ -161,13 +161,17 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				if (dbKey == null){
 					dbKey = attributes.getValue("", "altkey");
 				}
+				if (dbKey == null){
+					LOGGER.warn("No database key found for "
+							+ entry.getEntryId() + " " + entry.getEntryAccession());
+				}
 				if (MmDatabase.ChEMBL_Target.equals(db)
 						&& MmDatabase.UniProt.equals(refdDb)){
 					// ChEMBL target entries are proteins targeted by drugs:
-					entry = new Entry();
 					entry.setDbName(refdDb.name());
 					entry.setEntryId(null); // remove the ChEMBL ID, now it's a UniProt entry
 					entry.setEntryAccession(dbKey);
+					entry.setEntryName(null); // don't override UniProt's
 					LOGGER.debug("Parsing entry " + entry.getEntryAccession());
 				} else if (isInterestingXref(db, refdDb)){
 					Entry refEntry = new Entry();
