@@ -22,7 +22,10 @@ public enum Relationship {
 	is_drug_for,
 	is_cofactor_of,
 	is_inhibitor_of,
-	is_activator_of;
+	is_activator_of,
+
+	// Relationships to compounds:
+	is_target_of;
 	
 	/**
 	 * Gets the usual relationship between two databases.
@@ -47,11 +50,10 @@ public enum Relationship {
 				break;
 			}
 			break;
-		case ChEMBL:
 		case ChEMBL_Target:
 			switch (to) {
-			case UniProt:
-				result = is_drug_for;
+			case ChEMBL:
+				result = is_target_of;
 				break;
 			}
 			break;

@@ -48,8 +48,8 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		interestingXrefs.put(MmDatabase.ChEBI, chebiInterestingXrefs);
 		interestingXrefs.put(MmDatabase.PDBeChem,
 				new MmDatabase[]{ MmDatabase.PDB });
-		interestingXrefs.put(MmDatabase.ChEMBL,
-				new MmDatabase[]{ MmDatabase.UniProt });
+		interestingXrefs.put(MmDatabase.ChEMBL_Target,
+				new MmDatabase[]{ MmDatabase.ChEMBL });
 	}
 	
 	private static final String DATABASE_NAME = "//database/name";
@@ -160,7 +160,8 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				dbKey = attributes.getValue("", "altkey");
 			}
 			if (MmDatabase.ChEMBL_Target.equals(db)
-					&& MmDatabase.ChEMBL.equals(refdDb)){
+					&& MmDatabase.UniProt.equals(refdDb)){
+				// ChEMBL target entries are proteins targetted by drugs:
 				entry = new Entry();
 				entry.setDbName(refdDb.name());
 				entry.setEntryAccession(dbKey);
