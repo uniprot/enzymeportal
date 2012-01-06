@@ -143,7 +143,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		isXrefs = DATABASE_ENTRIES_ENTRY_XREFS.equals(currentXpath);
 		isRef = DATABASE_ENTRIES_ENTRY_XREFS_REF.equals(currentXpath);
 		
-		if (isEntry && !MmDatabase.ChEMBL_Target.equals(db)){
+		if (isEntry){
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
@@ -166,6 +166,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 					// ChEMBL target entries are proteins targeted by drugs:
 					entry = new Entry();
 					entry.setDbName(refdDb.name());
+					entry.setEntryId(null); // remove the ChEMBL ID, now it's a UniProt entry
 					entry.setEntryAccession(dbKey);
 					LOGGER.debug("Parsing entry " + entry.getEntryAccession());
 				} else if (isInterestingXref(db, refdDb)){
@@ -213,10 +214,16 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		} else if (isEntryName && entry != null){
 			entry.setEntryName(currentChars.toString());
 		} else if (isEntry && entry != null && !xrefs.isEmpty()){
-			try {
-				mm.write(Collections.singleton(entry), xrefs);
-			} catch (IOException e) {
-				throw new RuntimeException("Adding entry to mega-map");
+			if (db.equals(MmDatabase.ChEMBL_Target) &&
+					entry.getDbName().equals(MmDatabase.ChEMBL_Target)){
+				// All ChEMBL-Target entries should have been translated to UniProt.
+				LOGGER.warn("No UniProt xref for " + entry.getEntryId());
+			} else {
+				try {
+					mm.write(Collections.singleton(entry), xrefs);
+				} catch (IOException e) {
+					throw new RuntimeException("Adding entry to mega-map");
+				}
 			}
 		}
 		currentContext.pop();
