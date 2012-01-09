@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ public class XRefTest {
 
 	private SessionFactory sessionFactory;
 	private List<Integer> entityIds = new ArrayList<Integer>();
+	private List<String> putasEntryIds = new ArrayList<String>();
 	private Logger logger = Logger.getLogger("JUNIT");
 	
 	@Before
@@ -29,15 +31,20 @@ public class XRefTest {
 		sessionFactory = HibernateUtil.getSessionFactory();
 		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
+		
 		Entry entity1 = new Entry();
 		entity1.setDbName(MmDatabase.UniProt.name());
 		entity1.setEntryId("ABCD_VOGON");
-		entity1.setEntryAccession("V12345");
+		entity1.setEntryAccessions(Collections.singletonList("V12345"));
 		entityIds.add((Integer) session.save(entity1));
+		putasEntryIds.add(entity1.getEntryId());
+		
 		Entry entity2 = new Entry();
 		entity2.setDbName(MmDatabase.ChEBI.name());
-		entity2.setEntryAccession("CHEBI:XXXXX");
+		entity2.setEntryId("CHEBI:XXXXX");
 		entityIds.add((Integer) session.save(entity2));
+		putasEntryIds.add(entity2.getEntryId());
+		
 		session.getTransaction().commit();
         logger.info("After setting up");
 	}

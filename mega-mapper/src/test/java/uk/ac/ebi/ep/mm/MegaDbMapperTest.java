@@ -7,14 +7,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
+//@Ignore
 public class MegaDbMapperTest {
 
 	private MegaDbMapper mm;
@@ -29,14 +30,15 @@ public class MegaDbMapperTest {
 		
 		Entry entry1 = new Entry();
 		entry1.setDbName(MmDatabase.UniProt.name());
-		entry1.setEntryAccession("V12345");
+		entry1.setEntryAccessions(Collections.singletonList("V12345"));
 		entry1.setEntryId("ABCD_VOGON");
 		mm.writeEntry(entry1);
 		entries.add(entry1.getId());
 		
 		Entry entry2 = new Entry();
 		entry2.setDbName(MmDatabase.ChEBI.name());
-		entry2.setEntryAccession("CHEBI:XXXXX");
+		entry2.setEntryId("CHEBI:XXXXX");
+		entry2.setEntryAccessions(Collections.singletonList("CHEBI:XXXXX"));
 		entry2.setEntryName("vogonate");
 		XRef xref2 = new XRef();
 		xref2.setFromEntry(entry2);
@@ -47,7 +49,8 @@ public class MegaDbMapperTest {
 		
 		Entry entry3 = new Entry();
 		entry3.setDbName(MmDatabase.ChEBI.name());
-		entry3.setEntryAccession("CHEBI:YYYYY");
+		entry3.setEntryId("CHEBI:YYYYY");
+		entry3.setEntryAccessions(Collections.singletonList("CHEBI:YYYYY"));
 		entry3.setEntryName("vogonic acid");
 		XRef xref3 = new XRef();
 		xref3.setFromEntry(entry3);
@@ -58,7 +61,8 @@ public class MegaDbMapperTest {
 		
 		Entry entry4 = new Entry();
 		entry4.setDbName(MmDatabase.ChEMBL.name());
-		entry4.setEntryAccession("CHEMBLZZZZZZ");
+		entry4.setEntryId("CHEMBLZZZZZZ");
+		entry4.setEntryAccessions(Collections.singletonList("CHEMBLZZZZZZ"));
 		entry4.setEntryName("vogozepam");
 		XRef xref4 = new XRef();
 		xref4.setFromEntry(entry4);
@@ -107,7 +111,7 @@ public class MegaDbMapperTest {
 	public void testGetXrefsAllByEntry(){
 		Entry entry = new Entry();
 		entry.setDbName(MmDatabase.UniProt.name());
-		entry.setEntryAccession("V12345");
+		entry.setEntryId("ABCD_VOGON");
 		Collection<XRef> xrefs = mm.getXrefs(entry);
 		assertNotNull(xrefs);
 		assertTrue(!xrefs.isEmpty());
@@ -128,7 +132,7 @@ public class MegaDbMapperTest {
 	public void testGetXrefsByEntry(){
 		Entry entry = new Entry();
 		entry.setDbName(MmDatabase.UniProt.name());
-		entry.setEntryAccession("V12345");
+		entry.setEntryId("ABCD_VOGON");
 		
 		Collection<XRef> xrefs = mm.getXrefs(entry, MmDatabase.ChEBI);
 		assertEquals(2, xrefs.size());
@@ -173,11 +177,11 @@ public class MegaDbMapperTest {
 		
 		xrefs = mm.getXrefs(MmDatabase.ChEBI, "CHEBI:XXXXX");
 		assertEquals(1, xrefs.size());
-		assertEquals("V12345", xrefs.iterator().next().getToEntry().getEntryAccession());
+		assertEquals("ABCD_VOGON", xrefs.iterator().next().getToEntry().getEntryId());
 		
 		xrefs = mm.getXrefs(MmDatabase.ChEMBL, "CHEMBLZZZZZZ");
 		assertEquals(1, xrefs.size());
-		assertEquals("V12345", xrefs.iterator().next().getToEntry().getEntryAccession());
+		assertEquals("ABCD_VOGON", xrefs.iterator().next().getToEntry().getEntryId());
 	}
 	
 	@Test

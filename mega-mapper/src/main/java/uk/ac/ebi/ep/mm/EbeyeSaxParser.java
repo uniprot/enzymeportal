@@ -14,6 +14,7 @@ import java.util.Stack;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
+import org.hibernate.NonUniqueResultException;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -147,8 +148,13 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));
-			entry.setEntryAccession(attributes.getValue("", "acc"));
-			LOGGER.debug("Parsing entry " + entry.getEntryAccession());
+			// ChEBI acc is the id with a 'CHEBI:' prefix
+			// PDBeChem id and acc are identical
+			final String acc = attributes.getValue("", "acc");
+			if (acc != null){
+				entry.setEntryAccessions(Collections.singletonList(acc));
+			}
+			LOGGER.debug("Parsing entry " + entry.getEntryId());
 		} else if (isXrefs){
 			xrefs.clear();
 		} else if (isRef){
@@ -157,32 +163,39 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			// The xref'd database might be unknown to us:
 			if (refdDb != null){
 				String dbKey = attributes.getValue("", "dbkey");
-				// Strange case: PDBeChem refers to PDBe using altkey:
 				if (dbKey == null){
+					// Strange case: PDBeChem refers to PDBe using altkey:
 					dbKey = attributes.getValue("", "altkey");
-				}
-				if (dbKey == null){
-					LOGGER.warn("No database key found for "
-							+ entry.getEntryId() + " " + entry.getEntryAccession());
 				}
 				if (MmDatabase.ChEMBL_Target.equals(db)
 						&& MmDatabase.UniProt.equals(refdDb)){
-					// ChEMBL target entries are proteins targeted by drugs:
-					entry.setDbName(refdDb.name());
-					entry.setEntryId(null); // remove the ChEMBL ID, now it's a UniProt entry
-					entry.setEntryAccession(dbKey);
-					entry.setEntryName(null); // don't override UniProt's
-					LOGGER.debug("Parsing entry " + entry.getEntryAccession());
+					// ChEMBL-Target entries are proteins targeted by drugs:
+					try {
+						entry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
+					} catch (NonUniqueResultException e){
+						LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
+					}
 				} else if (isInterestingXref(db, refdDb)){
-					Entry refEntry = new Entry();
-					refEntry.setDbName(refdDb.name());
-					refEntry.setEntryAccession(dbKey);
-					LOGGER.debug("\tParsing xref to " + refEntry.getEntryAccession());
-					XRef xref = new XRef();
-					xref.setFromEntry(entry);
-					xref.setRelationship(Relationship.between(db, refdDb).name());
-					xref.setToEntry(refEntry);
-					xrefs.add(xref);
+					Entry refEntry = null;
+					if (refdDb.equals(MmDatabase.UniProt)){
+						try {
+							refEntry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
+						} catch (NonUniqueResultException e){
+							LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
+						}
+					} else {
+						refEntry = new Entry();
+						refEntry.setDbName(refdDb.name());
+						refEntry.setEntryId(dbKey);
+					}
+					if (refEntry != null){
+						LOGGER.debug("\tParsing xref to " + refEntry.getEntryId());
+						XRef xref = new XRef();
+						xref.setFromEntry(entry);
+						xref.setRelationship(Relationship.between(db, refdDb).name());
+						xref.setToEntry(refEntry);
+						xrefs.add(xref);
+					}
 				}
 			}
 		}

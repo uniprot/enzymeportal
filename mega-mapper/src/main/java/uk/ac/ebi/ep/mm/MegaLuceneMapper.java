@@ -151,10 +151,10 @@ public class MegaLuceneMapper implements MegaMapper {
 			doc.add(new Field(fieldName, entry.getEntryName(),
 					Field.Store.YES, Field.Index.ANALYZED));
 		}
-		if (entry.getEntryAccession() != null){
+		if (entry.getEntryAccessions() != null){
 			String fieldName = entry.getDbName() + "_ACCESSION";
-			doc.add(new Field(fieldName, entry.getEntryAccession(),
-					Field.Store.YES, Field.Index.ANALYZED));
+//			doc.add(new Field(fieldName, entry.getEntryAccessions(),
+//					Field.Store.YES, Field.Index.ANALYZED));
 		}
 	}
 

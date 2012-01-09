@@ -2,16 +2,19 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 7, 2011 12:48:45 PM by Hibernate Tools 3.4.0.CR1 -->
-<hibernate-mapping>
+<hibernate-mapping default-cascade="delete">
  <class name="uk.ac.ebi.ep.mm.Entry" table="MM_ENTRY">
   <id name="id"/>
   <property column="DB_NAME" generated="never" lazy="false"
-   name="dbName" not-null="true" type="java.lang.String" index="MM_DBACC_INDEX"/>
+   name="dbName" not-null="true" type="java.lang.String"/>
   <property column="ENTRY_ID" generated="never" lazy="false"
-   name="entryId" not-null="false" type="java.lang.String"/>
-  <property column="ENTRY_ACCESSION" generated="never" lazy="false"
-   name="entryAccession" not-null="true" type="java.lang.String" index="MM_DBACC_INDEX"/>
+   name="entryId" type="java.lang.String"/>
   <property column="ENTRY_NAME" generated="never" lazy="false"
    length="1000" name="entryName" type="java.lang.String"/>
+  <list cascade="all" name="entryAccessions" table="MM_ACCESSION">
+   <key column="ID" not-null="true" foreign-key="MM_ENTRY.ID"/>
+   <list-index base="0" column="ACC_INDEX"/>
+   <element column="ACCESSION" not-null="true" type="string"/>
+  </list>
  </class>
 </hibernate-mapping>

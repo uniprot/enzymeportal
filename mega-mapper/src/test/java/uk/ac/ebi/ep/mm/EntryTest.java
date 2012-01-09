@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.util.Collections;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -27,7 +29,7 @@ public class EntryTest {
         logger.info("Before setting up");
         entry = new Entry();
         entry.setDbName(MmDatabase.UniProt.name());
-        entry.setEntryAccession("V01234");
+        entry.setEntryAccessions(Collections.singletonList("V01234"));
         entry.setEntryId("XYZ_VOGON");
         entry.setEntryName("vogodiesterase");
 
@@ -40,7 +42,7 @@ public class EntryTest {
         logger.info("Before cleaning up");
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tr = (Transaction) session.beginTransaction();
-		Query q = session.createQuery("delete from Entry where entryAccession = 'V01234'");
+		Query q = session.createQuery("delete from Entry where entryId = 'XYZ_VOGON'");
 		int n = q.executeUpdate();
 		tr.commit();
 		System.out.println(n + " entries cleaned up");
@@ -63,7 +65,7 @@ public class EntryTest {
             logger.info("Before getting entry");
 	        myEntry = (Entry) session.get(Entry.class, savedId);
 	        assertEquals("XYZ_VOGON", myEntry.getEntryId());
-	        assertEquals(myEntry.getEntryAccession(), "V01234");
+	        assertEquals("V01234", myEntry.getEntryAccessions().get(0));
 	        
             logger.info("Before deleting entry");
 	        session.delete(myEntry);
@@ -89,12 +91,12 @@ public class EntryTest {
 	        
 	        Entry same = new Entry();
 	        same.setDbName(MmDatabase.UniProt.name());
-	        same.setEntryAccession("V01234");
+	        same.setEntryId("XYZ_VOGON");
 	        assertEquals(entry, same);
 	        
 	        session1.merge(same);
 	        session1.getTransaction().commit();
-	        assertEquals(entry.getEntryAccession(), same.getEntryAccession());
+	        assertEquals(entry.getEntryId(), same.getEntryId());
         } catch (Exception e){
         	if (session1 != null && session1.isOpen()){
             	session1.getTransaction().rollback();
@@ -115,7 +117,7 @@ public class EntryTest {
 	        
 	        Entry same = new Entry();
 	        same.setDbName(MmDatabase.UniProt.name());
-	        same.setEntryAccession("V01234");
+	        same.setEntryId("XYZ_VOGON");
 	        assertEquals(entry, same);
 	        
 	        session2 = sessionFactory.getCurrentSession();
