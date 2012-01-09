@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -100,7 +101,7 @@ public class EbeyeParser implements MmParser {
 				Entry ent = new Entry();
 				ent.setEntryId(entry.getId());
 				ent.setEntryName(entry.getName());
-				ent.setEntryAccession(entry.getAcc());
+				ent.setEntryAccessions(Collections.singletonList(entry.getAcc()));
 				ent.setDbName(database.name());
 				mm.writeEntry(ent);
 				

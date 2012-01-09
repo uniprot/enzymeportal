@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Entry implements Serializable {
 
@@ -12,7 +13,7 @@ public class Entry implements Serializable {
 	/*
 	 * Formerly a collection, we are now storing just the primary one.
 	 */
-	private String entryAccession;
+	private List<String> entryAccessions;
 	
 	public int getId() {
 		return hashCode(); // FIXME, possibly not unique
@@ -38,11 +39,11 @@ public class Entry implements Serializable {
 	public void setEntryName(String name) {
 		this.entryName = name;
 	}
-	public String getEntryAccession() {
-		return entryAccession;
+	public List<String> getEntryAccessions() {
+		return entryAccessions;
 	}
-	public void setEntryAccession(String accession) {
-		this.entryAccession = accession;
+	public void setEntryAccessions(List<String> accessions) {
+		this.entryAccessions = accessions;
 	}
 	@Override
 	public int hashCode() {
@@ -51,7 +52,7 @@ public class Entry implements Serializable {
 		result = prime * result
 				+ ((dbName == null) ? 0 : dbName.hashCode());
 		result = prime * result
-				+ ((entryAccession == null) ? 0 : entryAccession.hashCode());
+				+ ((entryId == null) ? 0 : entryId.hashCode());
 		return result;
 	}
 	@Override
@@ -68,10 +69,10 @@ public class Entry implements Serializable {
 				return false;
 		} else if (!dbName.equals(other.dbName))
 			return false;
-		if (entryAccession == null) {
-			if (other.entryAccession != null)
+		if (entryId == null) {
+			if (other.entryId != null)
 				return false;
-		} else if (!entryAccession.equals(other.entryAccession))
+		} else if (!entryId.equals(other.entryId))
 			return false;
 		return true;
 	}
