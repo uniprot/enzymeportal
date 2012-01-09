@@ -99,8 +99,8 @@ public class MegaDbMapper implements MegaMapper {
 	public void writeXref(XRef xref)
 	throws IOException {
 		session.merge(xref); // save or saveOrUpdate does not work!
-		logger.debug(xref.getFromEntry().getEntryAccession()
-				+ "-" + xref.getToEntry().getEntryAccession()
+		logger.debug(xref.getFromEntry().getEntryId()
+				+ "-" + xref.getToEntry().getEntryId()
 				+ " written");
 		checkChunkSize();
 	}
@@ -118,11 +118,12 @@ public class MegaDbMapper implements MegaMapper {
 	public Entry getEntryForAccession(MmDatabase db, String accession) {
 		if (entryForAccessionQuery == null){
 			entryForAccessionQuery = session.createQuery("from Entry where" +
-					" dbName = :dbName and :accession = entryAccession");
+					" dbName = :dbName and :accession in elements(entryAccessions)");
 		}
 		return (Entry) entryForAccessionQuery
 				.setString("dbName", db.name())
-				.setString("accession", accession).uniqueResult();
+				.setString("accession", accession)
+				.uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -168,9 +169,9 @@ public class MegaDbMapper implements MegaMapper {
 		if (allXrefsForAccessionQuery == null){
 			allXrefsForAccessionQuery = session.createQuery("from XRef" +
 					" where (fromEntry.dbName = :dbName" +
-					" and :accession = fromEntry.entryAccession)" +
+					" and :accession in elements(fromEntry.entryAccessions))" +
 					" or (toEntry.dbName = :dbName" +
-					" and :accession = toEntry.entryAccession)");
+					" and :accession in elements(toEntry.entryAccessions))");
 		}
 		return (List<XRef>) allXrefsForAccessionQuery
 				.setString("dbName", db.name())
@@ -192,10 +193,10 @@ public class MegaDbMapper implements MegaMapper {
 		if (xrefsForAccessionQuery == null){
 			xrefsForAccessionQuery = session.createQuery("from XRef" +
 					" where (fromEntry.dbName = :dbName" +
-					" and :accession = fromEntry.entryAccession" +
+					" and :accession in elements(fromEntry.entryAccessions)" +
 					" and toEntry.dbName in (:xDbNames))" +
 					" or (toEntry.dbName = :dbName" +
-					" and :accession = toEntry.entryAccession" +
+					" and :accession in elements(toEntry.entryAccessions)" +
 					" and fromEntry.dbName in (:xDbNames))");
 		}
 		return (List<XRef>) xrefsForAccessionQuery
