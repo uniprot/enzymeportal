@@ -46,7 +46,8 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		final MmDatabase[] chebiInterestingXrefs = new MmDatabase[]{
 			MmDatabase.UniProt,
 			MmDatabase.PDBeChem,
-			MmDatabase.ChEMBL
+			MmDatabase.ChEMBL,
+			MmDatabase.PDB
 		};
 		Arrays.sort(chebiInterestingXrefs);
 		interestingXrefs.put(MmDatabase.ChEBI, chebiInterestingXrefs);
