@@ -80,15 +80,13 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
-		</resources>
-		<testResources>
-			<testResource>
+			<resource>
 				<directory>${ep.config.dir}</directory>
 				<includes>
-					<include>ep-mm-db-dev.properties</include>
+					<include>ep-mm-db-*.properties</include>
 				</includes>
-			</testResource>
-		</testResources>
+			</resource>
+		</resources>
 		<plugins>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
