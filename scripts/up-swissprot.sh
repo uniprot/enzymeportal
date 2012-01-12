@@ -4,7 +4,7 @@
 # $1: runtime environment (dev|test|prod)
 # $2 (optional): Swiss-Prot XML file to import.
 
-. checkParams.sh
+. $(dirname $0)/checkParams.sh
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
