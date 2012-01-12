@@ -96,6 +96,14 @@ public class MegaDbMapper implements MegaMapper {
 		checkChunkSize();
 	}
 
+	public void writeEntries(Collection<Entry> entries) throws IOException {
+		if (entries != null){
+			for (Entry entry : entries) {
+				writeEntry(entry);
+			}
+		}
+	}
+
 	public void writeXref(XRef xref)
 	throws IOException {
 		session.merge(xref); // save or saveOrUpdate does not work!
@@ -105,14 +113,18 @@ public class MegaDbMapper implements MegaMapper {
 		checkChunkSize();
 	}
 
+	public void writeXrefs(Collection<XRef> xrefs) throws IOException {
+		if (xrefs != null){
+			for (XRef xref : xrefs) {
+				writeXref(xref);
+			}
+		}
+	}
+
 	public void write(Collection<Entry> entries,
 			Collection<XRef> xrefs) throws IOException {
-		for (Entry entry : entries) {
-			writeEntry(entry);
-		}
-		for (XRef xref : xrefs) {
-			writeXref(xref);
-		}
+		writeEntries(entries);
+		writeXrefs(xrefs);
 	}
 
 	public Entry getEntryForAccession(MmDatabase db, String accession) {
@@ -215,6 +227,12 @@ public class MegaDbMapper implements MegaMapper {
 		session.flush();
 		session.getTransaction().commit();
 		logger.info("Session committed");
+//		sessionFactory.close();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
 		sessionFactory.close();
 	}
 

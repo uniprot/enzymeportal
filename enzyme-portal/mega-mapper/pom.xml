@@ -61,6 +61,12 @@
 			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>uk.ac.ebi.biobabel</groupId>
+			<artifactId>biobabel-db</artifactId>
+			<version>1.3.5</version>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc5</artifactId>
@@ -76,6 +82,14 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+		<testResources>
+			<testResource>
+				<directory>${ep.config.dir}</directory>
+				<includes>
+					<include>ep-mm-db-dev.properties</include>
+				</includes>
+			</testResource>
+		</testResources>
 		<plugins>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -136,7 +150,7 @@
 						</goals>
 						<configuration>
 							<files>
-								<file>${ep.config.dir}/ep-mm-db${ep.mm.db.config}.properties</file>
+								<file>${ep.config.dir}/ep-mm-db-hib${ep.mm.db.config}.properties</file>
 							</files>
 						</configuration>
 					</execution>

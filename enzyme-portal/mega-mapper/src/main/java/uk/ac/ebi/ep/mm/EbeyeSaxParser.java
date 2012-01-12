@@ -176,24 +176,24 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 						LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
 					}
 				} else if (isInterestingXref(db, refdDb)){
-					Entry refEntry = null;
+					Entry refdEntry = null;
 					if (refdDb.equals(MmDatabase.UniProt)){
 						try {
-							refEntry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
+							refdEntry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
 						} catch (NonUniqueResultException e){
 							LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
 						}
 					} else {
-						refEntry = new Entry();
-						refEntry.setDbName(refdDb.name());
-						refEntry.setEntryId(dbKey);
+						refdEntry = new Entry();
+						refdEntry.setDbName(refdDb.name());
+						refdEntry.setEntryId(dbKey);
 					}
-					if (refEntry != null){
-						LOGGER.debug("\tParsing xref to " + refEntry.getEntryId());
+					if (refdEntry != null){
+						LOGGER.debug("\tParsing xref to " + refdEntry.getEntryId());
 						XRef xref = new XRef();
 						xref.setFromEntry(entry);
 						xref.setRelationship(Relationship.between(db, refdDb).name());
-						xref.setToEntry(refEntry);
+						xref.setToEntry(refdEntry);
 						xrefs.add(xref);
 					}
 				}
@@ -228,20 +228,20 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		if (isDbName){
 			db = MmDatabase.parse(currentChars.toString());
 			LOGGER.info("Parsing EB-Eye file for " + db.name());
-		} else if (isEntryName && entry != null){
+		} else if (isEntryName){
 			entry.setEntryName(currentChars.toString());
-		} else if (isEntry && entry != null && !xrefs.isEmpty()){
-			if (db.equals(MmDatabase.ChEMBL_Target) &&
-					entry.getDbName().equals(MmDatabase.ChEMBL_Target)){
-				// All ChEMBL-Target entries should have been translated to UniProt.
-				LOGGER.warn("No UniProt xref for " + entry.getEntryId());
-			} else {
+		} else if (isEntry && !xrefs.isEmpty()){
+//			if (db.equals(MmDatabase.ChEMBL_Target) &&
+//					entry.getDbName().equals(MmDatabase.ChEMBL_Target)){
+//				// All ChEMBL-Target entries should have been translated to UniProt.
+//				LOGGER.warn("No UniProt xref for " + entry.getEntryId());
+//			} else {
 				try {
 					mm.write(Collections.singleton(entry), xrefs);
 				} catch (IOException e) {
 					throw new RuntimeException("Adding entry to mega-map");
 				}
-			}
+//			}
 		}
 		currentContext.pop();
 		// Update flags:
