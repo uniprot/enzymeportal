@@ -236,4 +236,12 @@ public class MegaDbMapper implements MegaMapper {
 		sessionFactory.close();
 	}
 
+	public void commit() {
+		session.getTransaction().commit();
+	}
+
+	public void rollback() {
+		session.getTransaction().rollback();
+	}
+
 }

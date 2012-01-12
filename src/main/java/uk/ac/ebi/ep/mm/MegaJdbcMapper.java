@@ -311,4 +311,20 @@ public class MegaJdbcMapper implements MegaMapper {
 		}
 	}
 
+	public void commit() throws IOException {
+		try {
+			con.commit();
+		} catch (SQLException e) {
+			throw new IOException(e);
+		}
+	}
+
+	public void rollback() throws IOException {
+		try {
+			con.rollback();
+		} catch (SQLException e) {
+			throw new IOException(e);
+		}
+	}
+
 }

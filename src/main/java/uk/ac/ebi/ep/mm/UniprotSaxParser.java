@@ -101,22 +101,32 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	 * @param args see {@link CliOptionsParser#getCommandLine(String...)}
 	 * @throws Exception in case of error while parsing.
 	 */
-	public static void main(String... args) throws Exception{
+	public static void main(String... args) throws Exception {
         CommandLine cl = CliOptionsParser.getCommandLine(args);
         if (cl != null){
     		MmParser parser = new UniprotSaxParser();
-    		MegaMapper writer = null;
-    		if (cl.hasOption("indexDir")){
-				writer = new MegaLuceneMapper(cl.getOptionValue("indexDir"));
-    		} else {
-        		final String dbConfig = cl.getOptionValue("dbConfig");
-//    			writer = new MegaDbMapper(dbConfig, 1000);
-				Connection con = OracleDatabaseInstance
-						.getInstance(dbConfig).getConnection();
-				writer = new MegaJdbcMapper(con);
+    		MegaMapper mm = null;
+    		Connection con = null;
+    		try {
+        		if (cl.hasOption("indexDir")){
+    				mm = new MegaLuceneMapper(cl.getOptionValue("indexDir"));
+        		} else {
+            		final String dbConfig = cl.getOptionValue("dbConfig");
+//        			writer = new MegaDbMapper(dbConfig, 1000);
+            		con = OracleDatabaseInstance
+    						.getInstance(dbConfig).getConnection();
+    				mm = new MegaJdbcMapper(con);
+        		}
+        		parser.setWriter(mm);
+        		parser.parse(cl.getOptionValue("xmlFile"));
+        		mm.commit();
+    		} catch (Exception e){
+    			mm.rollback();
+    		} finally {
+        		mm.closeMap();
+        		if (con != null) con.close();
     		}
-    		parser.setWriter(writer);
-    		parser.parse(cl.getOptionValue("xmlFile"));
+    		
         }
 	}
 	
