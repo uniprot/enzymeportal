@@ -4,7 +4,7 @@
 # $1: runtime environment (dev|test|prod)
 # $2: EB-Eye XML file (ChEBI/ChEMBL-target)
 
-. checkParams.sh
+. $(dirname $0)/checkParams.sh
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 
