@@ -115,6 +115,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 //        			writer = new MegaDbMapper(dbConfig, 1000);
             		con = OracleDatabaseInstance
     						.getInstance(dbConfig).getConnection();
+            		con.setAutoCommit(false);
     				mm = new MegaJdbcMapper(con);
         		}
         		parser.setWriter(mm);
