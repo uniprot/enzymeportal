@@ -184,4 +184,14 @@ public class MegaLuceneMapper implements MegaMapper {
 		return null;
 	}
 
+	public void writeEntries(Collection<Entry> entries) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void writeXrefs(Collection<XRef> xrefs) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

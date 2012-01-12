@@ -90,8 +90,7 @@ public class UniprotSaxParserTest {
 		parser.characters("bar".toCharArray(), 0, 3);
 		assertEquals(1, parser.accessions.size());
 		parser.endElement(null, "accession", null);
-		// We are taking only the primay accession, the first one, ignoring others:
-		assertEquals(1, parser.accessions.size());
+		assertEquals(2, parser.accessions.size());
 	}
 
 }

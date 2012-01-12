@@ -6,105 +6,98 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.SQLQuery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-//@Ignore
-public class MegaDbMapperTest {
+import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 
-	private MegaDbMapper mm;
-	private Collection<Integer> entries = new HashSet<Integer>();
+//@Ignore
+public class MegaJdbcMapperTest {
+
+	private MegaJdbcMapper mm;
+	private List<Entry> entries = new ArrayList<Entry>();
 	private Logger logger = Logger.getLogger("JUNIT");
+	private Connection con;
 	
 	@Before
-	public void before() throws IOException{
+	public void before() throws IOException, SQLException{
 		logger.info("Before setting up");
-		mm = new MegaDbMapper(null, 100);
-		mm.openMap();
+		try {
+			con = OracleDatabaseInstance.getInstance("ep-mm-db-dev").getConnection();
+			mm = new MegaJdbcMapper(con);
+			mm.openMap();
+			
+			Entry entry1 = new Entry();
+			entry1.setDbName(MmDatabase.UniProt.name());
+			entry1.setEntryAccessions(Collections.singletonList("V12345"));
+			entry1.setEntryId("ABCD_VOGON");
+			entry1.setEntryName("vogonase I");
+			mm.writeEntry(entry1);
+			entries.add(entry1);
+			
+			Entry entry2 = new Entry();
+			entry2.setDbName(MmDatabase.ChEBI.name());
+			entry2.setEntryId("CHEBI:XXXXX");
+			entry2.setEntryAccessions(Collections.singletonList("CHEBI:XXXXX"));
+			entry2.setEntryName("vogonate");
+			XRef xref2 = new XRef();
+			xref2.setFromEntry(entry2);
+			xref2.setRelationship(Relationship.between(MmDatabase.ChEBI, MmDatabase.UniProt).name());
+			xref2.setToEntry(entry1);
+			mm.writeXref(xref2);
+			entries.add(entry2);
+			
+			Entry entry3 = new Entry();
+			entry3.setDbName(MmDatabase.ChEBI.name());
+			entry3.setEntryId("CHEBI:YYYYY");
+			entry3.setEntryAccessions(Collections.singletonList("CHEBI:YYYYY"));
+			entry3.setEntryName("vogonic acid");
+			XRef xref3 = new XRef();
+			xref3.setFromEntry(entry3);
+			xref3.setRelationship(Relationship.between(MmDatabase.ChEBI, MmDatabase.UniProt).name());
+			xref3.setToEntry(entry1);
+			mm.writeXref(xref3);
+			entries.add(entry3);
+			
+			Entry entry4 = new Entry();
+			entry4.setDbName(MmDatabase.ChEMBL.name());
+			entry4.setEntryId("CHEMBLZZZZZZ");
+			entry4.setEntryAccessions(Collections.singletonList("CHEMBLZZZZZZ"));
+			entry4.setEntryName("vogozepam");
+			XRef xref4 = new XRef();
+			xref4.setFromEntry(entry4);
+			xref4.setRelationship(Relationship.between(MmDatabase.ChEMBL, MmDatabase.UniProt).name());
+			xref4.setToEntry(entry1);
+			mm.writeXref(xref4);
+			entries.add(entry4);
 		
-		Entry entry1 = new Entry();
-		entry1.setDbName(MmDatabase.UniProt.name());
-		entry1.setEntryAccessions(Collections.singletonList("V12345"));
-		entry1.setEntryId("ABCD_VOGON");
-		mm.writeEntry(entry1);
-		entries.add(entry1.getId());
-		
-		Entry entry2 = new Entry();
-		entry2.setDbName(MmDatabase.ChEBI.name());
-		entry2.setEntryId("CHEBI:XXXXX");
-		entry2.setEntryAccessions(Collections.singletonList("CHEBI:XXXXX"));
-		entry2.setEntryName("vogonate");
-		XRef xref2 = new XRef();
-		xref2.setFromEntry(entry2);
-		xref2.setRelationship(Relationship.between(MmDatabase.ChEBI, MmDatabase.UniProt).name());
-		xref2.setToEntry(entry1);
-		mm.writeXref(xref2);
-		entries.add(entry2.getId());
-		
-		Entry entry3 = new Entry();
-		entry3.setDbName(MmDatabase.ChEBI.name());
-		entry3.setEntryId("CHEBI:YYYYY");
-		entry3.setEntryAccessions(Collections.singletonList("CHEBI:YYYYY"));
-		entry3.setEntryName("vogonic acid");
-		XRef xref3 = new XRef();
-		xref3.setFromEntry(entry3);
-		xref3.setRelationship(Relationship.between(MmDatabase.ChEBI, MmDatabase.UniProt).name());
-		xref3.setToEntry(entry1);
-		mm.writeXref(xref3);
-		entries.add(entry3.getId());
-		
-		Entry entry4 = new Entry();
-		entry4.setDbName(MmDatabase.ChEMBL.name());
-		entry4.setEntryId("CHEMBLZZZZZZ");
-		entry4.setEntryAccessions(Collections.singletonList("CHEMBLZZZZZZ"));
-		entry4.setEntryName("vogozepam");
-		XRef xref4 = new XRef();
-		xref4.setFromEntry(entry4);
-		xref4.setRelationship(Relationship.between(MmDatabase.ChEMBL, MmDatabase.UniProt).name());
-		xref4.setToEntry(entry1);
-		mm.writeXref(xref4);
-		entries.add(entry4.getId());
-		
-		mm.closeMap();
-		mm.openMap();
+			con.commit();
+		} catch (SQLException e) {
+			if (con != null) con.rollback();
+			throw e;
+		}
 		logger.info("After setting up");
 	}
 	
 	@After
-	public void after() throws IOException{
+	public void after() throws IOException, SQLException{
 		logger.info("Before cleaning up");
-		mm.closeMap();
-		mm.openMap();
-		// Fucking hibernate could not delete the fucking xrefs,
-		// let's try with some fucking plain SQL:
-		String deleteFuckingXrefs = "delete from mm_xref where from_entry = ? or to_entry = ?";
-		String deleteFuckingAccs = "delete from mm_accession where id = ?";
-		String deleteFuckingEntries = "delete from mm_entry where id = ?";
-		
-		SQLQuery dfxQuery = mm.session.createSQLQuery(deleteFuckingXrefs);
-		SQLQuery dfaQuery = mm.session.createSQLQuery(deleteFuckingAccs);
-		SQLQuery dfeQuery = mm.session.createSQLQuery(deleteFuckingEntries);
-		for (Integer id : entries) {
-			dfxQuery.setInteger(0, id);
-			dfxQuery.setInteger(1, id);
-			int n = dfxQuery.executeUpdate();
-			System.out.println(n + " fucking xrefs deleted");
-			dfaQuery.setInteger(0, id);
-			n = dfaQuery.executeUpdate();
-			System.out.println(n + " fucking accessions deleted");
-			dfeQuery.setInteger(0, id);
-			n = dfeQuery.executeUpdate();
-			System.out.println(n + " fucking entries deleted");
+		Collections.reverse(entries); // The first one is xrefd by the others.
+		for (Entry entry : entries) {
+			mm.deleteEntry(entry);
 		}
+		con.commit();
 		mm.closeMap();
-		logger.info("After fucking cleaning up");
+		logger.info("After cleaning up");
 	}
 
 	@Test
@@ -150,6 +143,7 @@ public class MegaDbMapperTest {
 		entry.setEntryId("ABCD_VOGON");
 		
 		Collection<XRef> xrefs = mm.getXrefs(entry, MmDatabase.ChEBI);
+		assertNotNull(xrefs);
 		assertEquals(2, xrefs.size());
 		
 		xrefs = mm.getXrefs(entry, MmDatabase.ChEMBL);
@@ -169,17 +163,18 @@ public class MegaDbMapperTest {
 		assertEquals(1, chembl);
 		
 		xrefs = mm.getXrefs(entry, MmDatabase.PDBeChem);
-		assertTrue(xrefs.isEmpty());
+		assertNull(xrefs);
 	}
 	
 	@Test
 	public void testGetXrefsAllByAccession(){
 		logger.info("Before getting rhea xrefs");
 		Collection<XRef> xrefs = mm.getXrefs(MmDatabase.Rhea, "V12345");
-		assertTrue(xrefs.isEmpty());
+		assertNull(xrefs);
 		
 		logger.info("Before getting vogon xref");
 		xrefs = mm.getXrefs(MmDatabase.UniProt, "V12345");
+		assertNotNull(xrefs);
 		assertEquals(3, xrefs.size());
 		logger.info("Before looping vogon xrefs");
 		int chebi = 0, chembl = 0;
@@ -217,7 +212,7 @@ public class MegaDbMapperTest {
 		
 		logger.info("Before PDBeChem");
 		xrefs = mm.getXrefs(MmDatabase.UniProt, "V12345", MmDatabase.PDBeChem);
-		assertEquals(0, xrefs.size());
+		assertNull(xrefs);
 		
 		logger.info("Before ChEBI+ChEMBL");
 		xrefs = mm.getXrefs(MmDatabase.UniProt, "V12345", MmDatabase.ChEBI, MmDatabase.ChEMBL);

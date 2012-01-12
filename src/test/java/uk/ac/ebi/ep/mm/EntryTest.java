@@ -65,6 +65,7 @@ public class EntryTest {
             logger.info("Before getting entry");
 	        myEntry = (Entry) session.get(Entry.class, savedId);
 	        assertEquals("XYZ_VOGON", myEntry.getEntryId());
+	        assertEquals(1, myEntry.getEntryAccessions().size());
 	        assertEquals("V01234", myEntry.getEntryAccessions().get(0));
 	        
             logger.info("Before deleting entry");

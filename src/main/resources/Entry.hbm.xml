@@ -3,7 +3,7 @@
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Nov 7, 2011 12:48:45 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping default-cascade="delete">
- <class name="uk.ac.ebi.ep.mm.Entry" table="MM_ENTRY">
+ <class name="uk.ac.ebi.ep.mm.Entry" table="MM_ENTRY" lazy="false">
   <id name="id"/>
   <property column="DB_NAME" generated="never" lazy="false"
    name="dbName" not-null="true" type="java.lang.String"/>

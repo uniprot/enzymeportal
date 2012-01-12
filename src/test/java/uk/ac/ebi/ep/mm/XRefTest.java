@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class XRefTest {
 
 	private SessionFactory sessionFactory;
 	private List<Integer> entityIds = new ArrayList<Integer>();
-	private List<String> putasEntryIds = new ArrayList<String>();
+	private List<String> entryIds = new ArrayList<String>();
 	private Logger logger = Logger.getLogger("JUNIT");
 	
 	@Before
@@ -37,13 +38,14 @@ public class XRefTest {
 		entity1.setEntryId("ABCD_VOGON");
 		entity1.setEntryAccessions(Collections.singletonList("V12345"));
 		entityIds.add((Integer) session.save(entity1));
-		putasEntryIds.add(entity1.getEntryId());
+		entryIds.add(entity1.getEntryId());
 		
 		Entry entity2 = new Entry();
 		entity2.setDbName(MmDatabase.ChEBI.name());
 		entity2.setEntryId("CHEBI:XXXXX");
+		entity2.setEntryName("vogonic acid");
 		entityIds.add((Integer) session.save(entity2));
-		putasEntryIds.add(entity2.getEntryId());
+		entryIds.add(entity2.getEntryId());
 		
 		session.getTransaction().commit();
         logger.info("After setting up");
@@ -53,21 +55,24 @@ public class XRefTest {
 	public void after(){
         logger.info("Before cleanig up");
 		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		String relQuery = "DELETE XRef WHERE fromEntry = :fromEnt OR toEntry = :toEnt";
-		String entQuery = "DELETE Entry WHERE id = :theId";
+		Transaction tr = session.beginTransaction();
+		String relQuery = "FROM XRef WHERE fromEntry = :fromEnt OR toEntry = :toEnt";
 		for (Integer id : entityIds) {
-			int n = session.createQuery(relQuery)
-						.setInteger("fromEnt", id)
-						.setInteger("toEnt", id)
-						.executeUpdate();
-			System.out.println(n + " xrefs deleted");
-			int m = session.createQuery(entQuery)
-						.setInteger("theId", id)
-						.executeUpdate();
-			System.out.println(m + " entries deleted");
+			@SuppressWarnings("unchecked")
+			List<XRef> xrefs = session.createQuery(relQuery)
+					.setInteger("fromEnt", id)
+					.setInteger("toEnt", id)
+					.list();
+			for (XRef xRef : xrefs) {
+				session.delete(xRef);
+				System.out.println("XRef removed");
+			}
 		}
-		session.getTransaction().commit();
+		String entQuery = "DELETE FROM Entry" +
+				" WHERE entryId LIKE '%_VOGON' OR entryName LIKE 'vogo%'";
+		int m = session.createQuery(entQuery).executeUpdate();
+		System.out.println(m + " entries deleted");
+		tr.commit();
     	sessionFactory.close();
         logger.info("After cleanig up");
 	}
