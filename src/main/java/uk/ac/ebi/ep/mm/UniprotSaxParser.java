@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +21,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 
 /**
  * UniProt XML parser which takes into account only primary accessions,
@@ -102,9 +105,14 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
         CommandLine cl = CliOptionsParser.getCommandLine(args);
         if (cl != null){
     		MmParser parser = new UniprotSaxParser();
-    		MegaMapper writer = cl.hasOption("indexDir")?
-    				new MegaLuceneMapper(cl.getOptionValue("indexDir")):
-    				new MegaDbMapper(cl.getOptionValue("dbConfig"), 1000);
+    		MegaMapper writer = null;
+    		if (cl.hasOption("indexDir")){
+				writer = new MegaLuceneMapper(cl.getOptionValue("indexDir"));
+    		} else {
+        		Connection con = OracleDatabaseInstance.getInstance(
+        				cl.getOptionValue("dbConfig")).getConnection();
+				writer = new MegaJdbcMapper(con);
+    		}
     		parser.setWriter(writer);
     		parser.parse(cl.getOptionValue("xmlFile"));
         }
