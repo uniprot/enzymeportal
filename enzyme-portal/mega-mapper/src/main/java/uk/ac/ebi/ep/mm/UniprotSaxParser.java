@@ -109,8 +109,10 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
     		if (cl.hasOption("indexDir")){
 				writer = new MegaLuceneMapper(cl.getOptionValue("indexDir"));
     		} else {
-        		Connection con = OracleDatabaseInstance.getInstance(
-        				cl.getOptionValue("dbConfig")).getConnection();
+        		final String dbConfig = cl.getOptionValue("dbConfig");
+//    			writer = new MegaDbMapper(dbConfig, 1000);
+				Connection con = OracleDatabaseInstance
+						.getInstance(dbConfig).getConnection();
 				writer = new MegaJdbcMapper(con);
     		}
     		parser.setWriter(writer);
