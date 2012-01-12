@@ -24,20 +24,24 @@ public interface MegaMapper {
 	 */
 	public void writeEntry(Entry entry) throws IOException;
 	
+	public void writeEntries(Collection<Entry> entries) throws IOException;
+	
 	/**
-	 * Writes one relationship to the mega-map.
-	 * @param relationship
+	 * Writes one cross-reference to the mega-map.
+	 * @param xref
 	 * @throws IOException
 	 */
-	public void writeXref(XRef relationship) throws IOException;
+	public void writeXref(XRef xref) throws IOException;
+	
+	public void writeXrefs(Collection<XRef> xrefs) throws IOException;
 	
 	/**
 	 * Writes entries and relationships to the mega-map.
 	 * @param entries
-	 * @param relationships
+	 * @param xrefs
 	 * @throws IOException
 	 */
-	public void write(Collection<Entry> entries, Collection<XRef> relationships)
+	public void write(Collection<Entry> entries, Collection<XRef> xrefs)
 	throws IOException;
 	
 	/**
