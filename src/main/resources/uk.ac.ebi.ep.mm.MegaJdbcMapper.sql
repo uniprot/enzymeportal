@@ -24,6 +24,9 @@ SELECT mme.db_name, mme.entry_id, mme.entry_name \
 	FROM mm_entry mme, mm_accession mma \
 	WHERE mma.accession = ? AND mma.id = mme.id  AND mme.db_name = ?
 
+--xref.by.id:\
+SELECT * FROM mm_xref WHERE id = ?
+
 --xrefs.all.by.entry:\
 SELECT * FROM mm_xref WHERE from_entry = ? OR to_entry = ?
 
