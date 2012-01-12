@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,6 +22,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 
 /**
  * Parser for EB-Eye XML files to populate a mega-map.
@@ -98,9 +101,14 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
         CommandLine cl = CliOptionsParser.getCommandLine(args);
         if (cl != null){
     		MmParser parser = new EbeyeSaxParser();
-    		MegaMapper writer = cl.hasOption("indexDir")?
-    				new MegaLuceneMapper(cl.getOptionValue("indexDir")):
-    				new MegaDbMapper(cl.getOptionValue("dbConfig"), 1000);
+    		MegaMapper writer = null;
+    		if (cl.hasOption("indexDir")){
+				writer = new MegaLuceneMapper(cl.getOptionValue("indexDir"));
+    		} else {
+        		Connection con = OracleDatabaseInstance.getInstance(
+        				cl.getOptionValue("dbConfig")).getConnection();
+				writer = new MegaJdbcMapper(con);
+    		}
     		parser.setWriter(writer);
     		parser.parse(cl.getOptionValue("xmlFile"));
         }
