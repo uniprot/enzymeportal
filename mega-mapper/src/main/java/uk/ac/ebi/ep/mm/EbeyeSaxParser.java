@@ -111,6 +111,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 //        			writer = new MegaDbMapper(dbConfig, 1000);
             		con = OracleDatabaseInstance
             				.getInstance(dbConfig).getConnection();
+            		con.setAutoCommit(false);
     				mm = new MegaJdbcMapper(con);
         		}
         		parser.setWriter(mm);
@@ -179,13 +180,13 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		} else if (isRef){
 			final MmDatabase refdDb =
 					MmDatabase.parse(attributes.getValue("", "dbname"));
+			String dbKey = attributes.getValue("", "dbkey");
+			if (dbKey == null){
+				// Strange case: PDBeChem refers to PDBe using altkey:
+				dbKey = attributes.getValue("", "altkey");
+			}
 			// The xref'd database might be unknown to us:
-			if (refdDb != null){
-				String dbKey = attributes.getValue("", "dbkey");
-				if (dbKey == null){
-					// Strange case: PDBeChem refers to PDBe using altkey:
-					dbKey = attributes.getValue("", "altkey");
-				}
+			if (refdDb != null && dbKey != null){
 				if (MmDatabase.ChEMBL_Target.equals(db)
 						&& MmDatabase.UniProt.equals(refdDb)){
 					// ChEMBL-Target entries are proteins targeted by drugs:
