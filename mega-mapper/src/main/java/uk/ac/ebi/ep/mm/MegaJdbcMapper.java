@@ -199,6 +199,13 @@ public class MegaJdbcMapper implements MegaMapper {
 		return xrefs;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <br>
+	 * Unlike the hibernate implementation, in case of getting more than
+	 * one result this will will be logged as a warning, returning the
+	 * first entry only.
+	 */
 	public Entry getEntryForAccession(MmDatabase db, String accession){
 		Entry entry = null;
 		try {
