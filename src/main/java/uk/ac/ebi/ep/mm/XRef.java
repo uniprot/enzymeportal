@@ -79,5 +79,15 @@ public class XRef implements Serializable {
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		return new StringBuilder(fromEntry.getEntryId())
+			.append(" (").append(fromEntry.getDbName())
+			.append(") - ").append(relationship.name()).append(" => ")
+			.append(toEntry.getEntryId())
+			.append(" (").append(toEntry.getDbName()).append(")")
+			.toString();
+	}
+	
 	
 }
