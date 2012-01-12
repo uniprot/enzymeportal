@@ -14,7 +14,7 @@ public enum Relationship {
 	/** Is part of a wider group, is found in... */
 	belongs_to,
 	
-	/** Is found in a concrete instance */
+	/** Is found (appears) in a concrete instance or case */
 	is_part_of,
 	
 	// Relationships from compounds:
@@ -48,6 +48,8 @@ public enum Relationship {
 			case PDBeChem:
 				result = same_as;
 				break;
+			case PDB:
+				result = is_part_of;
 			}
 			break;
 		case ChEMBL_Target:
