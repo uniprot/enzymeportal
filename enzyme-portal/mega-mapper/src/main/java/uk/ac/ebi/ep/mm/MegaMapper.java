@@ -118,4 +118,16 @@ public interface MegaMapper {
 	 */
 	public void closeMap() throws IOException;
 
+	/**
+	 * Commits any pending changes to the underlying mega-map.
+	 * @throws IOException 
+	 */
+	public void commit() throws IOException;
+
+	/**
+	 * Rolls back any pending changes to the underlying mega-map.
+	 * @throws IOException 
+	 */
+	public void rollback() throws IOException;
+
 }
