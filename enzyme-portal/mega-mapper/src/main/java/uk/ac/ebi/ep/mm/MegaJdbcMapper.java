@@ -83,6 +83,7 @@ public class MegaJdbcMapper implements MegaMapper {
 	 */
 	public void writeXref(XRef xref) throws IOException {
 		try {
+			if (existsInMegaMap(xref)) return;
 			writeEntry(xref.getFromEntry());
 			writeEntry(xref.getToEntry());
 			PreparedStatement wXrefStm = sqlLoader.getPreparedStatement("--insert.xref");
@@ -136,6 +137,18 @@ public class MegaJdbcMapper implements MegaMapper {
 		PreparedStatement rEntryStm = sqlLoader.getPreparedStatement("--entry.by.id");
 		rEntryStm.setInt(1, entry.getId());
 		return rEntryStm.executeQuery().next();
+	}
+	
+	private boolean existsInMegaMap(XRef xref) throws SQLException{
+		PreparedStatement rXrefStm =
+				sqlLoader.getPreparedStatement("--xref.by.id");
+		rXrefStm.setInt(1, xref.getId());
+		final boolean exists = rXrefStm.executeQuery().next();
+		if (exists){
+			LOGGER.warn("XRefs already exists in the database: "
+					+ xref.toString());
+		}
+		return exists;
 	}
 	
 	/**
