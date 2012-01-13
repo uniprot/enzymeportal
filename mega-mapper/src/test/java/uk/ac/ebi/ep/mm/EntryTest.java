@@ -13,11 +13,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /*
  * Long test times are due to the setup and clean up procedures.
  */
+@Ignore("using hibernate, deprecated in this module")
 public class EntryTest {
 
 	private Entry entry;
