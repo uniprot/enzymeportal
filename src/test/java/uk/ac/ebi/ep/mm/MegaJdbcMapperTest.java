@@ -109,7 +109,7 @@ public class MegaJdbcMapperTest {
 		e1 = mm.getEntryForAccession(MmDatabase.UniProt, "V12345");
 		assertNotNull(e1);
 		assertEquals("ABCD_VOGON", e1.getEntryId());
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < 100; i++) {
 			logger.info("Before good accession again");
 			e1 = mm.getEntryForAccession(MmDatabase.UniProt, "V12345");
 		}

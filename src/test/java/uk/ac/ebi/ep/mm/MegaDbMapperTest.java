@@ -14,9 +14,10 @@ import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-//@Ignore
+@Ignore
 public class MegaDbMapperTest {
 
 	private MegaDbMapper mm;

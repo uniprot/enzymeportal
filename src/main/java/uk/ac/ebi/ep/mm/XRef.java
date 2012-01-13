@@ -11,15 +11,17 @@ public class XRef implements Serializable {
 
 	private static final long serialVersionUID = 6877255103431212096L;
 	
+	private Integer id;
 	private Entry fromEntry;
 	private Relationship relationship;
 	private Entry toEntry;
 	
-	public int getId() {
-		return hashCode(); // FIXME, possibly not unique
+	public Integer getId() {
+		return id;
+//		return hashCode(); // FIXME, possibly not unique
 	}
-	public void setId(int id) {
-		// no-op
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public Entry getFromEntry() {
 		return fromEntry;
@@ -81,11 +83,9 @@ public class XRef implements Serializable {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder(fromEntry.getEntryId())
-			.append(" (").append(fromEntry.getDbName())
-			.append(") - ").append(relationship.name()).append(" => ")
-			.append(toEntry.getEntryId())
-			.append(" (").append(toEntry.getDbName()).append(")")
+		return new StringBuilder(fromEntry.toString())
+			.append(" - ").append(relationship.name()).append(" => ")
+			.append(toEntry.toString())
 			.toString();
 	}
 	

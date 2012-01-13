@@ -7,6 +7,7 @@ public class Entry implements Serializable {
 
 	private static final long serialVersionUID = -4341633305667373550L;
 
+	private Integer id;
 	private String dbName;
 	private String entryId;
 	private String entryName;
@@ -15,11 +16,18 @@ public class Entry implements Serializable {
 	 */
 	private List<String> entryAccessions;
 	
-	public int getId() {
-		return hashCode(); // FIXME, possibly not unique
+	public Integer getId() {
+		return id;
+//		return hashCode(); // FIXME, possibly not unique
 	}
-	public void setId(int id) {
-		// no-op
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	@Override
+	public String toString() {
+		return new StringBuilder(entryId)
+			.append(" (").append(dbName).append(")")
+			.toString();
 	}
 	public String getDbName() {
 		return dbName;
