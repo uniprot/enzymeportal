@@ -145,8 +145,8 @@ public class MegaJdbcMapper implements MegaMapper {
 		rXrefStm.setInt(1, xref.getId());
 		final boolean exists = rXrefStm.executeQuery().next();
 		if (exists){
-			LOGGER.warn("XRefs already exists in the database: "
-					+ xref.toString());
+			LOGGER.warn("XRef already exists in the database: "
+					+ xref.toString() + " as " + xref.getId());
 		}
 		return exists;
 	}
