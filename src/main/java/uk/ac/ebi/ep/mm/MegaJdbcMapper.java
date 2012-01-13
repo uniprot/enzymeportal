@@ -61,6 +61,7 @@ public class MegaJdbcMapper implements MegaMapper {
 			} else {
 				LOGGER.warn("No generated keys!");
 			}
+			generatedKeys.close();
 			if (entry.getEntryAccessions() != null){
 				int index = 0;
 				PreparedStatement wAccStm =
@@ -112,6 +113,7 @@ public class MegaJdbcMapper implements MegaMapper {
 			} else {
 				LOGGER.warn("No generated keys!");
 			}
+			generatedKeys.close();
 		} catch (SQLException e){
 			throw new IOException(e);
 		}
@@ -175,6 +177,7 @@ public class MegaJdbcMapper implements MegaMapper {
 		if (exists){
 			entry.setId(rs.getInt("id"));
 		}
+		rs.close();
 		return exists;
 	}
 	
@@ -189,6 +192,7 @@ public class MegaJdbcMapper implements MegaMapper {
 					+ xref.toString() + " as " + xref.getId());
 			xref.setId(rs.getInt("id"));
 		}
+		rs.close();
 		return exists;
 	}
 	
@@ -220,6 +224,7 @@ public class MegaJdbcMapper implements MegaMapper {
 			entry.setEntryId(rs.getString("entry_id"));
 			entry.setEntryName(rs.getString("entry_name"));
 		}
+		rs.close();
 		return entry;
 	}
 
@@ -240,6 +245,7 @@ public class MegaJdbcMapper implements MegaMapper {
 			xref.setRelationship(rs.getString("relationship"));
 			xrefs.add(xref);
 		}
+		rs.close();
 		return xrefs;
 	}
 
