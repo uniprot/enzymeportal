@@ -14,11 +14,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /*
  * The test is slow mainly because of the setup and cleanup procedures.
  */
+@Ignore("hibernate is deprecated in this module")
 public class XRefTest {
 
 	private SessionFactory sessionFactory;

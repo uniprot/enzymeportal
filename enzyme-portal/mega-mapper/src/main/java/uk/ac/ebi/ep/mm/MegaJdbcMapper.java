@@ -42,23 +42,34 @@ public class MegaJdbcMapper implements MegaMapper {
 	public void writeEntry(Entry entry) throws IOException {
 		try {
 			if (existsInMegaMap(entry)) return;
-			PreparedStatement wEntryStm = sqlLoader.getPreparedStatement("--insert.entry");
-			wEntryStm.setInt(1, entry.getId());
-			wEntryStm.setString(2, entry.getDbName());
-			wEntryStm.setString(3, entry.getEntryId());
+			PreparedStatement wEntryStm = sqlLoader.getPreparedStatement(
+					"--insert.entry", new String[]{ "id" }, (Object) null);
+			int paramNum = 1;
+//			wEntryStm.setInt(paramNum++, entry.getId());
+			wEntryStm.setString(paramNum++, entry.getDbName());
+			wEntryStm.setString(paramNum++, entry.getEntryId());
 			if (entry.getEntryName() != null){
-				wEntryStm.setString(4, entry.getEntryName());
+				wEntryStm.setString(paramNum++, entry.getEntryName());
 			} else {
-				wEntryStm.setNull(4, Types.VARCHAR);
+				wEntryStm.setNull(paramNum++, Types.VARCHAR);
 			}
 			wEntryStm.execute();
+			final ResultSet generatedKeys = wEntryStm.getGeneratedKeys();
+			if (generatedKeys.next()){
+				int id = generatedKeys.getInt(1);
+				entry.setId(id);
+			} else {
+				LOGGER.warn("No generated keys!");
+			}
 			if (entry.getEntryAccessions() != null){
 				int index = 0;
-				PreparedStatement wAccStm = sqlLoader.getPreparedStatement("--insert.accession");;
+				PreparedStatement wAccStm =
+						sqlLoader.getPreparedStatement("--insert.accession");;
 				for (String accession : entry.getEntryAccessions()) {
-					wAccStm.setInt(1, entry.getId());
-					wAccStm.setString(2, accession);
-					wAccStm.setInt(3, index++);
+					paramNum = 1;
+					wAccStm.setInt(paramNum++, entry.getId());
+					wAccStm.setString(paramNum++, accession);
+					wAccStm.setInt(paramNum++, index++);
 					wAccStm.execute();
 				}
 			}
@@ -83,15 +94,24 @@ public class MegaJdbcMapper implements MegaMapper {
 	 */
 	public void writeXref(XRef xref) throws IOException {
 		try {
-			if (existsInMegaMap(xref)) return;
+//			if (existsInMegaMap(xref)) return;
 			writeEntry(xref.getFromEntry());
 			writeEntry(xref.getToEntry());
-			PreparedStatement wXrefStm = sqlLoader.getPreparedStatement("--insert.xref");
-			wXrefStm.setInt(1, xref.getId());
-			wXrefStm.setInt(2, xref.getFromEntry().getId());
-			wXrefStm.setString(3, xref.getRelationship());
-			wXrefStm.setInt(4, xref.getToEntry().getId());
+			PreparedStatement wXrefStm = sqlLoader.getPreparedStatement(
+					"--insert.xref", new String[]{ "id" }, (Object) null);
+			int paramNum = 1;
+//			wXrefStm.setInt(paramNum++, xref.getId());
+			wXrefStm.setInt(paramNum++, xref.getFromEntry().getId());
+			wXrefStm.setString(paramNum++, xref.getRelationship());
+			wXrefStm.setInt(paramNum++, xref.getToEntry().getId());
 			wXrefStm.execute();
+			final ResultSet generatedKeys = wXrefStm.getGeneratedKeys();
+			if (generatedKeys.next()){
+				int id = generatedKeys.getInt(1);
+				xref.setId(id);
+			} else {
+				LOGGER.warn("No generated keys!");
+			}
 		} catch (SQLException e){
 			throw new IOException(e);
 		}
@@ -117,36 +137,57 @@ public class MegaJdbcMapper implements MegaMapper {
 	 */
 	public void deleteEntry(Entry entry){
 		try {
-			PreparedStatement dXrefStm = sqlLoader.getPreparedStatement("--delete.xrefs");
+			PreparedStatement dXrefStm =
+					sqlLoader.getPreparedStatement("--delete.xrefs");
 			dXrefStm .setInt(1, entry.getId());
 			dXrefStm.setInt(2, entry.getId());
 			dXrefStm.execute();
-			PreparedStatement dAccStm = sqlLoader.getPreparedStatement("--delete.accessions");
+			PreparedStatement dAccStm =
+					sqlLoader.getPreparedStatement("--delete.accessions");
 			dAccStm .setInt(1, entry.getId());
 			dAccStm.execute();
-			PreparedStatement dEntryStm = sqlLoader.getPreparedStatement("--delete.entry");
+			PreparedStatement dEntryStm =
+					sqlLoader.getPreparedStatement("--delete.entry");
 			dEntryStm .setInt(1, entry.getId());
 			dEntryStm.execute();
 		} catch (SQLException e) {
-			LOGGER.error(entry.getEntryId() + " (" + entry.getDbName() + ")", e);
+			LOGGER.error(entry.getEntryId()
+					+ " (" + entry.getDbName() + ")", e);
 		}
 		
 	}
 
+	/**
+	 * Checks if an entry already exists in the database. If so, the
+	 * passed {@link Entry} object is updated with the internal id.
+	 * @param entry
+	 * @return <code>true</code> if the entry exists.
+	 * @throws SQLException
+	 */
 	private boolean existsInMegaMap(Entry entry) throws SQLException{
-		PreparedStatement rEntryStm = sqlLoader.getPreparedStatement("--entry.by.id");
-		rEntryStm.setInt(1, entry.getId());
-		return rEntryStm.executeQuery().next();
+		PreparedStatement rEntryStm =
+				sqlLoader.getPreparedStatement("--entry.by.entryid");
+		int paramNum = 1;
+		rEntryStm.setString(paramNum++, entry.getEntryId());
+		rEntryStm.setString(paramNum++, entry.getDbName());
+		final ResultSet rs = rEntryStm.executeQuery();
+		final boolean exists = rs.next();
+		if (exists){
+			entry.setId(rs.getInt("id"));
+		}
+		return exists;
 	}
 	
 	private boolean existsInMegaMap(XRef xref) throws SQLException{
 		PreparedStatement rXrefStm =
 				sqlLoader.getPreparedStatement("--xref.by.id");
 		rXrefStm.setInt(1, xref.getId());
-		final boolean exists = rXrefStm.executeQuery().next();
+		final ResultSet rs = rXrefStm.executeQuery();
+		final boolean exists = rs.next();
 		if (exists){
 			LOGGER.warn("XRef already exists in the database: "
 					+ xref.toString() + " as " + xref.getId());
+			xref.setId(rs.getInt("id"));
 		}
 		return exists;
 	}
@@ -168,11 +209,13 @@ public class MegaJdbcMapper implements MegaMapper {
 
 	private Entry getEntryById(int id) throws SQLException{
 		Entry entry = null;
-		PreparedStatement rEntryStm = sqlLoader.getPreparedStatement("--entry.by.id");
+		PreparedStatement rEntryStm =
+				sqlLoader.getPreparedStatement("--entry.by.id");
 		rEntryStm.setInt(1, id);
 		ResultSet rs = rEntryStm.executeQuery();
 		if (rs.next()){
 			entry = new Entry();
+			entry.setId(id);
 			entry.setDbName(rs.getString("db_name"));
 			entry.setEntryId(rs.getString("entry_id"));
 			entry.setEntryName(rs.getString("entry_name"));
@@ -191,6 +234,7 @@ public class MegaJdbcMapper implements MegaMapper {
 		while (rs.next()){
 			if (xrefs == null) xrefs = new ArrayList<XRef>();
 			XRef xref = new XRef();
+			xref.setId(rs.getInt("id"));
 			xref.setFromEntry(getEntryById(rs.getInt("from_entry")));
 			xref.setToEntry(getEntryById(rs.getInt("to_entry")));
 			xref.setRelationship(rs.getString("relationship"));
@@ -211,22 +255,21 @@ public class MegaJdbcMapper implements MegaMapper {
 		try {
 			PreparedStatement entryForAccessionStm =
 					sqlLoader.getPreparedStatement("--entry.by.accession");
-			entryForAccessionStm .setString(1, accession);
-			entryForAccessionStm.setString(2, db.name());
+			int paramNum = 1;
+			entryForAccessionStm .setString(paramNum++, accession);
+			entryForAccessionStm.setString(paramNum++, db.name());
 			ResultSet rs = entryForAccessionStm.executeQuery();
 			if (rs.next()){
-				String dbName = rs.getString("db_name");
-				String entryId = rs.getString("entry_id");
-				String entryName = rs.getString("entry_name");
+				entry = new Entry();
+				entry.setId(rs.getInt("id"));
+				entry.setDbName(rs.getString("db_name"));
+				entry.setEntryId(rs.getString("entry_id"));
+				entry.setEntryName(rs.getString("entry_name"));
+				// TODO: load accessions?
 				if (rs.next()){
 					LOGGER.error("More than one entry for same accession!"
 							+ accession + " (" + db.name() + ")");
 				}
-				entry = new Entry();
-				entry.setDbName(dbName);
-				entry.setEntryId(entryId);
-				entry.setEntryName(entryName);
-				// TODO: load accessions?
 			}
 		} catch (SQLException e){
 			LOGGER.error(accession + " (" + db.name() + ")", e);
@@ -237,12 +280,20 @@ public class MegaJdbcMapper implements MegaMapper {
 	public Collection<XRef> getXrefs(Entry entry) {
 		Collection<XRef> xrefs = null;
 		try {
-			PreparedStatement allXrefsByEntryStm =
-					sqlLoader.getPreparedStatement("--xrefs.all.by.entry");
-			allXrefsByEntryStm .setInt(1, entry.getId());
-			allXrefsByEntryStm.setInt(2, entry.getId());
-			ResultSet rs = allXrefsByEntryStm.executeQuery();
-			xrefs = buildXref(rs);
+			if (entry.getId() == null){
+				// update with value from the database:
+				existsInMegaMap(entry);
+			}
+			if (entry.getId() != null){
+				PreparedStatement allXrefsByEntryStm =
+						sqlLoader.getPreparedStatement("--xrefs.all.by.entry");
+				allXrefsByEntryStm.setInt(1, entry.getId());
+				allXrefsByEntryStm.setInt(2, entry.getId());
+				ResultSet rs = allXrefsByEntryStm.executeQuery();
+				xrefs = buildXref(rs);
+			} else {
+				LOGGER.warn(entry.toString() + " not known in the mega-map");
+			}
 		} catch (SQLException e){
 			LOGGER.error(entry.getId(), e);
 		}
@@ -252,13 +303,21 @@ public class MegaJdbcMapper implements MegaMapper {
 	public Collection<XRef> getXrefs(Entry entry, MmDatabase... dbs) {
 		Collection<XRef> xrefs = null;
 		try {
-			PreparedStatement ps = sqlLoader.getPreparedStatement(
-					"--xrefs.by.entry", dbArrayForQuery(dbs));
-			int paramNum = 1;
-			ps.setInt(paramNum++, entry.getId());
-			ps.setInt(paramNum++, entry.getId());
-			ResultSet rs = ps.executeQuery();
-			xrefs = buildXref(rs);
+			if (entry.getId() == null){
+				// update with value from the database:
+				existsInMegaMap(entry);
+			}
+			if (entry.getId() != null){
+				PreparedStatement ps = sqlLoader.getPreparedStatement(
+						"--xrefs.by.entry", dbArrayForQuery(dbs));
+				int paramNum = 1;
+				ps.setInt(paramNum++, entry.getId());
+				ps.setInt(paramNum++, entry.getId());
+				ResultSet rs = ps.executeQuery();
+				xrefs = buildXref(rs);
+			} else {
+				LOGGER.warn(entry.toString() + " not known in the mega-map");
+			}
 		} catch (SQLException e){
 			LOGGER.error(entry.getId(), e);
 		}
@@ -298,6 +357,7 @@ public class MegaJdbcMapper implements MegaMapper {
 			PreparedStatement ps = sqlLoader.getPreparedStatement(
 					"--xrefs.by.accession", dbArrayForQuery(xDbs));
 			ps.setString(1, accession);
+			ps.setString(2, db.name());
 			xrefs = buildXref(ps.executeQuery());
 		} catch (SQLException e) {
 			LOGGER.error(accession + " (" + xDbs + ")", e);
