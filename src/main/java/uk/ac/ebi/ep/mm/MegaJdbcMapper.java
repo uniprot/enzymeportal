@@ -59,8 +59,8 @@ public class MegaJdbcMapper implements MegaMapper {
 			if (generatedKeys.next()){
 				int id = generatedKeys.getInt(1);
 				entry.setId(id);
-				Statement checkMe = generatedKeys.getStatement();
-				checkMe.close();
+//				Statement checkMe = generatedKeys.getStatement();
+//				checkMe.close();
 			} else {
 				LOGGER.warn("No generated keys!");
 			}
@@ -68,7 +68,7 @@ public class MegaJdbcMapper implements MegaMapper {
 			if (entry.getEntryAccessions() != null){
 				int index = 0;
 				PreparedStatement wAccStm =
-						sqlLoader.getPreparedStatement("--insert.accession");;
+						sqlLoader.getPreparedStatement("--insert.accession");
 				for (String accession : entry.getEntryAccessions()) {
 					paramNum = 1;
 					wAccStm.setInt(paramNum++, entry.getId());
