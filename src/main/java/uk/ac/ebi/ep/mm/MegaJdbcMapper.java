@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,6 +59,8 @@ public class MegaJdbcMapper implements MegaMapper {
 			if (generatedKeys.next()){
 				int id = generatedKeys.getInt(1);
 				entry.setId(id);
+				Statement checkMe = generatedKeys.getStatement();
+				checkMe.close();
 			} else {
 				LOGGER.warn("No generated keys!");
 			}
