@@ -97,7 +97,7 @@ public class MegaJdbcMapper implements MegaMapper {
 	 */
 	public void writeXref(XRef xref) throws IOException {
 		try {
-//			if (existsInMegaMap(xref)) return;
+			if (existsInMegaMap(xref)) return;
 			writeEntry(xref.getFromEntry());
 			writeEntry(xref.getToEntry());
 			PreparedStatement wXrefStm = sqlLoader.getPreparedStatement(
