@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,6 +117,7 @@ public class MegaJdbcMapper implements MegaMapper {
 			}
 			generatedKeys.close();
 		} catch (SQLException e){
+			LOGGER.error(xref, e);
 			throw new IOException(e);
 		}
 	}
