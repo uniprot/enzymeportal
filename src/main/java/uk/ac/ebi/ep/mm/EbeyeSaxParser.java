@@ -260,7 +260,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 				try {
 					mm.write(Collections.singleton(entry), xrefs);
 				} catch (IOException e) {
-					throw new RuntimeException("Adding entry to mega-map");
+					throw new RuntimeException("Adding entry to mega-map", e);
 				}
 //			}
 		}
