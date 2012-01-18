@@ -45,7 +45,7 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 	}
 	
 	public Set<Citation> call() throws Exception {
-		return getLiterature(featuresCaller.call());
+		return getLiterature(featuresCaller.getSegments());
 	}
 
 	/**
