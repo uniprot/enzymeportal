@@ -144,7 +144,7 @@ public class MegaJdbcMapper implements MegaMapper {
 		try {
 			PreparedStatement dXrefStm =
 					sqlLoader.getPreparedStatement("--delete.xrefs");
-			dXrefStm .setInt(1, entry.getId());
+			dXrefStm.setInt(1, entry.getId());
 			dXrefStm.setInt(2, entry.getId());
 			dXrefStm.execute();
 			PreparedStatement dAccStm =
@@ -188,10 +188,10 @@ public class MegaJdbcMapper implements MegaMapper {
 		PreparedStatement rXrefStm =
 				sqlLoader.getPreparedStatement("--xref.by.entryids");
 		int paramNum = 1;
-		rXrefStm.setInt(paramNum++, xref.getFromEntry().getDbName());
-		rXrefStm.setInt(paramNum++, xref.getFromEntry().getEntryId());
-		rXrefStm.setInt(paramNum++, xref.getToEntry().getDbName());
-		rXrefStm.setInt(paramNum++, xref.getToEntry().getEntryId());
+		rXrefStm.setString(paramNum++, xref.getFromEntry().getDbName());
+		rXrefStm.setString(paramNum++, xref.getFromEntry().getEntryId());
+		rXrefStm.setString(paramNum++, xref.getToEntry().getDbName());
+		rXrefStm.setString(paramNum++, xref.getToEntry().getEntryId());
 		final ResultSet rs = rXrefStm.executeQuery();
 		final boolean exists = rs.next();
 		if (exists){
