@@ -37,7 +37,7 @@ public interface UniprotConfigMBean {
 	public abstract boolean getUseProxy();
 	
 	/**
-	 * Sets the maximum number of terms (accessions, IDs) that canbe used
+	 * Sets the maximum number of terms (accessions, IDs) that can be used
 	 * in a single query as OR'ed terms.
 	 * @param max the maximum number of terms per query.
 	 */
@@ -45,4 +45,12 @@ public interface UniprotConfigMBean {
 	
 	public abstract int getMaxTermsPerQuery();
 
+	/**
+	 * Sets the maximum number of threads to run concurrently in order to
+	 * retrieve data from UniProt.
+	 * @param max
+	 */
+	public abstract void setMaxThreads(int max);
+	
+	public abstract int getMaxThreads();
 }

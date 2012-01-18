@@ -10,6 +10,8 @@ public class UniprotConfig implements UniprotConfigMBean {
 	
 	private int maxTermsPerQuery;
 	
+	private int maxThreads;
+	
 	/**
 	 * http://www.uniprot.org/uniprot/?format=tab&sort=score&query={0}&columns={1}
 	 */
@@ -53,6 +55,14 @@ public class UniprotConfig implements UniprotConfigMBean {
 
 	public int getMaxTermsPerQuery() {
 		return maxTermsPerQuery;
+	}
+
+	public void setMaxThreads(int max) {
+		this.maxThreads = max;
+	}
+
+	public int getMaxThreads() {
+		return maxThreads;
 	}
 
 }
