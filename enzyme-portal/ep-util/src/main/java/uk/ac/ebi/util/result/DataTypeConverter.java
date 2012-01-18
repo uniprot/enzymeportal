@@ -49,13 +49,12 @@ public class DataTypeConverter {
     }
 
     /**
-     * Gets cross references from all of the reactions in an enzyme
+     * Extracts cross references from all of the reactions in an enzyme
      * model/summary.<br>
      * <b>WARNING:</b> returned xrefs are not only to Reactome.
      * @param enzymeModel
      * @return a list of cross references from any of the reactions catalised
-     * 		by the enzyme. Note that the underlying model is updated
-     * 		accordingly.
+     * 		by the enzyme.
      */
     public static List<String> getReactionXrefs(EnzymeModel enzymeModel) {
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
