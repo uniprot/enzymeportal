@@ -53,9 +53,9 @@
 		<property name="maxAccessionsInQuery" value="100"/>
 		<property name="maxResults" value="2000"/>
 		<property name="maxChebiResults" value="30"/>
-		<property name="maxUniprotResults" value="5000"/>
+		<property name="maxUniprotResults" value="1000"/>
 		<property name="maxUniprotResultsFromChebi" value="100"/>
-		<property name="maxUniprotResultsFromOtherDomains" value="2000"/>
+		<property name="maxUniprotResultsFromOtherDomains" value="100"/>
 		<property name="maxThreads" value="50"/>
 		<property name="threadTimeout" value="30000"/>
 	</bean>
@@ -68,6 +68,7 @@
 			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
 		<property name="useProxy" value="true"/>
 		<property name="maxTermsPerQuery" value="100"/>
+		<property name="maxThreads" value="100"/>
 	</bean>
 	
 	<bean name="uk.ac.ebi.ep:name=intenzConfig"
