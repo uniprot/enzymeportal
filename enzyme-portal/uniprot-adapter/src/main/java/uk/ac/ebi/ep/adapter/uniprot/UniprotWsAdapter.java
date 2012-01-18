@@ -75,7 +75,8 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 					"(?: \\(([^()]+)\\))?" +
 					"(?: \\(([^()]+(?:\\([^()]+\\))?)\\))*");
 	
-	public EnzymeSummary getEnzymeSummary(String accession) {
+	public EnzymeSummary getEnzymeSummary(String accession)
+	throws UniprotWsException {
 		return getEnzymeSummary(accession, Field.enzyme);
 	}
 
@@ -85,21 +86,26 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	 * <b>WARNING:</b>This implementation does not currently populate properly the model,
 	 * but just adds Reactome IDs (Pathway objects within one single
 	 * ReactionPathway object).
+	 * @throws UniprotWsException 
 	 * @see UniprotWsSummaryCallable#parseReactionPathways implementation.
 	 */
-	public EnzymeSummary getEnzymeSummaryWithReactionPathway(String accession) {
+	public EnzymeSummary getEnzymeSummaryWithReactionPathway(String accession)
+	throws UniprotWsException {
 		return getEnzymeSummary(accession, Field.reactionsPathways);
 	}
 
-	public EnzymeSummary getEnzymeSummaryWithMolecules(String accession) {
+	public EnzymeSummary getEnzymeSummaryWithMolecules(String accession)
+	throws UniprotWsException {
 		return getEnzymeSummary(accession, Field.molecules);
 	}
 
-	public EnzymeSummary getEnzymeSummaryWithProteinStructure(String accession) {
+	public EnzymeSummary getEnzymeSummaryWithProteinStructure(String accession)
+	throws UniprotWsException {
 		return getEnzymeSummary(accession, Field.proteinStructure);
 	}
 	
-	private EnzymeSummary getEnzymeSummary(String accession, Field field){
+	private EnzymeSummary getEnzymeSummary(String accession, Field field)
+	throws UniprotWsException{
 		return new UniprotWsSummaryCallable(accession, IdType.ACCESSION, field,
 				null, config)
 			.getEnzymeSummary();
@@ -108,8 +114,9 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	public List<EnzymeSummary> getEnzymesByIdPrefixes(List<String> idPrefixes,
 			String defaultSpecies, Collection<String> speciesFilter)
 	throws MultiThreadingException {
-		// TODO use speciesFilter
-	    ExecutorService pool = Executors.newCachedThreadPool();
+//	    ExecutorService pool = Executors.newCachedThreadPool();
+	    ExecutorService pool =
+	    		Executors.newFixedThreadPool(config.getMaxThreads());
 	    CompletionService<EnzymeSummary> ecs =
 	    		new ExecutorCompletionService<EnzymeSummary>(pool);
 	    // We must keep the order of the summaries, the same as the ID prefixes:
@@ -130,6 +137,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    				future2summary.put(future, future.get());
 	    			} else {
 	    				LOGGER.warn("SEARCH job result not retrieved!");
+		            	future2summary.remove(future);
 	    			}
 	    		} catch (Exception e){
 	            	// Don't stop the others
@@ -270,8 +278,8 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	protected static Species parseSpecies(String speciesTxt){
 		Species species = null;
 		Matcher m = SPECIES_PATTERN.matcher(speciesTxt);
+        species = new Species();
 		if (m.matches()){
-	        species = new Species();
 	        String strain = "";
 	        if (m.group(2) != null){
 	        	strain = m.group(2);
@@ -283,6 +291,9 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	        if (m.group(4) != null){
 	        	// What can we do with another scientific name?
 	        }
+		} else {
+			LOGGER.warn("Species text does not match pattern: " + speciesTxt);
+			species.setScientificname(speciesTxt);
 		}
 		return species;
 	}
