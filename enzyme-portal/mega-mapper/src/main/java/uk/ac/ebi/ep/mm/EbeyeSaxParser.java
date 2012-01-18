@@ -193,6 +193,10 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 					// ChEMBL-Target entries are proteins targeted by drugs:
 					try {
 						entry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
+						if (entry == null){
+							// It is not in the mega-map, perhaps not an enzyme:
+							LOGGER.warn(dbKey + " does not exist in the mega-map");
+						}
 					} catch (NonUniqueResultException e){
 						LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
 					}
@@ -251,7 +255,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 			LOGGER.info("Parsing EB-Eye file for " + db.name());
 		} else if (isEntryName){
 			entry.setEntryName(currentChars.toString());
-		} else if (isEntry && !xrefs.isEmpty()){
+		} else if (isEntry && entry != null && !xrefs.isEmpty()){
 //			if (db.equals(MmDatabase.ChEMBL_Target) &&
 //					entry.getDbName().equals(MmDatabase.ChEMBL_Target)){
 //				// All ChEMBL-Target entries should have been translated to UniProt.
