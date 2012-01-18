@@ -35,7 +35,6 @@ import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.SearchModel;
 import uk.ac.ebi.ep.search.model.SearchParams;
 import uk.ac.ebi.ep.search.model.SearchResults;
-import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
@@ -169,13 +168,13 @@ public class SearchController {
             SearchResults resultSet = null;
         	// See if it is already there, perhaps we are paginating:
         	@SuppressWarnings("unchecked")
-    		Map<String, SearchResults> prevSearches =
-        			(Map<String, SearchResults>) session.getAttribute("searches");
+    		Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
+    				session.getServletContext().getAttribute("searches");
     		if (prevSearches != null){
         		resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
     		} else {
     			prevSearches = new HashMap<String, SearchResults>();
-    			session.setAttribute("searches", prevSearches);
+    			session.getServletContext().setAttribute("searches", prevSearches);
     		}
     		if (resultSet == null){
     			// Make a new search:
