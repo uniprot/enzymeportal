@@ -44,30 +44,38 @@ public interface IUniprotAdapter {
      * Gets a basic summary of one entry by UniProt accession.
      * @param accession a UniProt accession.
      * @return an enzyme summary.
+     * @throws UniprotWsException 
      */
-    public EnzymeSummary getEnzymeSummary(String accession);
+    public EnzymeSummary getEnzymeSummary(String accession)
+	throws UniprotWsException;
 
     /**
      * Gets a summary of one entry, including information about reactions and
      * pathways.
      * @param accession a UniProt accession.
      * @return an enzyme summary.
+     * @throws UniprotWsException 
      */
-    public EnzymeSummary getEnzymeSummaryWithReactionPathway(String accession);
+    public EnzymeSummary getEnzymeSummaryWithReactionPathway(String accession)
+	throws UniprotWsException;
 
     /**
      * Gets a summary of one entry, including information about small molecules.
      * @param accession a UniProt accession.
      * @return an enzyme summary.
+     * @throws UniprotWsException 
      */
-    public EnzymeSummary getEnzymeSummaryWithMolecules(String accession);
+    public EnzymeSummary getEnzymeSummaryWithMolecules(String accession)
+	throws UniprotWsException;
 
     /**
      * Gets a summary of one entry, including information about structure.
      * @param accession a UniProt accession.
      * @return an enzyme summary.
+     * @throws UniprotWsException 
      */
-    public EnzymeSummary getEnzymeSummaryWithProteinStructure(String accession);
+    public EnzymeSummary getEnzymeSummaryWithProteinStructure(String accession)
+	throws UniprotWsException;
 
     //public EnzymeSummary getDrugSummary(String accession);
     

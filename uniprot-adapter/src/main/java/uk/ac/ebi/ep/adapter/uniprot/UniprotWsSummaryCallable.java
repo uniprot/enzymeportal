@@ -81,7 +81,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		return getEnzymeSummary();
 	}
 	
-	protected EnzymeSummary getEnzymeSummary(){
+	protected EnzymeSummary getEnzymeSummary() throws UniprotWsException{
 		List<String> enzymeInfo = getEnzymeInfo(accOrId, idType, getColumns());
 		if (enzymeInfo.size() > 1 && idType.equals(IdType.ACCESSION)){
 			// More than one entry for one accession? It has been demerged?
@@ -401,9 +401,11 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	 * @param idType 
 	 * @param columns columns to retrieve.
 	 * @return a list of tab-delimited Strings containing the requested fields
-	 * 		in the same order, or <code>null</code> if some error happened.
+	 * 		in the same order.
+	 * @throws UniprotWsException if some error happens 
 	 */
-	private List<String> getEnzymeInfo(String accOrId, IdType idType, String columns) {
+	private List<String> getEnzymeInfo(String accOrId, IdType idType, String columns)
+	throws UniprotWsException {
 		List<String> enzymeInfo = null;
 		String query = null;
 		switch (idType) {
@@ -441,9 +443,9 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 				enzymeInfo.add(line);
 			}
 		} catch (MalformedURLException e) {
-			LOGGER.error("Bad URL: " + url, e);
+			throw new UniprotWsException("Bad URL: " + url, e);
 		} catch (IOException e) {
-			LOGGER.error("Could not open connection to " + url, e);
+			throw new UniprotWsException("Could not open connection to " + url, e);
 		} finally {
 			if (is != null) try {
 				is.close();
@@ -517,9 +519,10 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	 * @param defaultSpecies the default species to show, if any (can be null).
 	 * @return a list of objects containing information about UniProt
 	 * 		accessions and PDB codes, one object per species.
+	 * @throws UniprotWsException
 	 */
 	private List<EnzymeAccession> getRelatedSpecies(String uniprotIdPrefix,
-			String defaultSpecies) {
+			String defaultSpecies) throws UniprotWsException {
 		List<EnzymeAccession> enzymeAccessions = null;
 		String fields = "id,organism,database(PDB),3d";
 		List<String> enzymeInfo =
