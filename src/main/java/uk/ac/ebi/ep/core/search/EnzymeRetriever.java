@@ -22,6 +22,7 @@ import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
 import uk.ac.ebi.ep.adapter.reactome.IReactomeAdapter;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeAdapter;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeServiceException;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotWsException;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
 import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
@@ -87,13 +88,18 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
 	public EnzymeModel getEnzyme(String uniprotAccession)
 	throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)
-        		uniprotAdapter.getEnzymeSummary(uniprotAccession);
+        EnzymeModel enzymeModel = null;
         try {
+            enzymeModel = (EnzymeModel)
+            		uniprotAdapter.getEnzymeSummary(uniprotAccession);
             intenzAdapter.getEnzymeDetails(enzymeModel);
+        } catch (UniprotWsException e) {
+			throw new EnzymeRetrieverException(
+					"Unable to retrieve from UniProt: " + uniprotAccession);
         } catch (MultiThreadingException ex) {
-            throw new EnzymeRetrieverException("Unable to retrieve the entry details! ", ex);
-        }
+            throw new EnzymeRetrieverException(
+            		"Unable to retrieve entry details! " + uniprotAccession, ex);
+		}
         return enzymeModel;
     }
 
@@ -101,7 +107,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * Searches Rhea for any EC numbers in the model and adds the corresponding
      * reactions if found.
      * <br><b>WARNING:</b> the added reactions have links only to Reactome and
-     * MACiE.
+     * MACiE. The links are strings containing a complete URL.
      * @param enzymeModel
      * @return the same model updated with ReactionPathway objects, one per
      * 		reaction found.
@@ -145,29 +151,21 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         //Choose 2 top pathways to extract from Reactome Website
         // View pathway in reactome should be associated with the reaction.        
         //EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getReactionPathwaySummary(uniprotAccession);
-/* Future fix TODO        
-        EnzymeModel enzymeModel = (EnzymeModel)
-        		uniprotAdapter.getEnzymeSummaryWithReactionPathway(uniprotAccession);
-*/
     	LOGGER.debug(" -RP- before uniprotAdapter.getEnzymeSummary");
-        EnzymeModel enzymeModel = (EnzymeModel)
-        		uniprotAdapter.getEnzymeSummary(uniprotAccession);
+        EnzymeModel enzymeModel = null;
+    	try {
+			enzymeModel = (EnzymeModel)
+					uniprotAdapter.getEnzymeSummary(uniprotAccession);
+		} catch (UniprotWsException e) {
+			throw new EnzymeRetrieverException(
+					"Unable to get enzyme model for " + uniprotAccession, e);
+		}
         // The model comes with Reactome IDs in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
     	LOGGER.debug(" -RP- before queryRheaWsForReactions");
         queryRheaWsForReactions(enzymeModel);
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
         if (!reactionPathways.isEmpty()) {
-/* Future fix TODO
-        	for (ReactionPathway reactionPathway : reactionPathways) {
-        		// These are Reactome IDs from UniProt WS:
-				List<Pathway> pathways = reactionPathway.getPathways();
-				if (pathways != null && !pathways.isEmpty()){
-					// Populate with extra info:
-					// TODO
-				}
-			}
-*/
         	LOGGER.debug(" -RP- before DataTypeConverter.getReactionXrefs");
             List<String> reactomeReactionIds =
             		DataTypeConverter.getReactionXrefs(enzymeModel);
@@ -248,9 +246,15 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             EnzymeReaction reaction = reactionPathway.getReaction();                
             List<Object> xrefs = reaction.getXrefs();
             if (xrefs != null) {
+//            	for (Object xref : xrefs) {
+//					String x = (String) xref;
+//					// Not all of the xrefs are to Reactome:
+//					if (x.indexOf("REACT") == -1) continue;
+//					
+//				}
             	// FIXME: why should the first one be Reactome's??
-                String reactomeReactionId = (String)xrefs.get(0);
-                List<Pathway> pathways = getPathwaysByReactomeReactionsId(reactomeReactionId);
+                String xref = (String)xrefs.get(0);
+                List<Pathway> pathways = getPathwaysByReactomeReactionsId(xref);
                 reactionPathway.setPathways(pathways);
             }
         }                   
@@ -299,25 +303,40 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public EnzymeModel getMolecules(String uniprotAccession)
 	throws EnzymeRetrieverException {
-        EnzymeModel enzymeModel = (EnzymeModel)
-        		uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
+        EnzymeModel enzymeModel = null;
         try {
+            enzymeModel = (EnzymeModel)
+            		uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
         } catch (ChebiFetchDataException ex) {
-            throw new EnzymeRetrieverException("Failed to get small molecule details from Chebi", ex);
-        }
+            throw new EnzymeRetrieverException(
+            		"Failed to get small molecule details from Chebi", ex);
+        } catch (UniprotWsException e) {
+			throw new EnzymeRetrieverException(
+					"Unable to get enzyme summary for " + uniprotAccession, e);
+		}
         return enzymeModel;
     }
 
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
         //EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
-        EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getEnzymeSummaryWithProteinStructure(uniprotAccession);
+    	LOGGER.debug(" -STR- before getEnzymeSummary");
+        EnzymeModel enzymeModel = null;
+		try {
+			enzymeModel = (EnzymeModel) uniprotAdapter
+					.getEnzymeSummaryWithProteinStructure(uniprotAccession);
+		} catch (UniprotWsException e) {
+			throw new EnzymeRetrieverException(
+					"Unable to get enzyme summary for " + uniprotAccession, e);
+		}
 
     	if (pdbeAdapter != null) try {
             List<String> pdbIds = enzymeModel.getPdbeaccession();
+        	LOGGER.debug(" -STR- before getSegments");
 			Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);
             for (SegmentAdapter segment : segments){
+            	LOGGER.debug(" -STR- before adding structure");
                 ProteinStructure structure = new ProteinStructure();
                 structure.setId(segment.getId());
                 for (FeatureAdapter feature : segment.getFeature()){
@@ -347,6 +366,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 		} catch (ValidationException e){
 	        throw new EnzymeRetrieverException("Validation error for DASGGF", e);
         }
+    	LOGGER.debug(" -STR- before returning");
     	return enzymeModel;
     }
 
