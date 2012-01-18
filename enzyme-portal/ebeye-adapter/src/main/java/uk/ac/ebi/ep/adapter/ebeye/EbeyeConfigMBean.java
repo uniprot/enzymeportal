@@ -30,6 +30,9 @@ public interface EbeyeConfigMBean {
 	 */
 	public void setMaxResults(int i); // EP_RESULTS_PER_DOIMAIN_LIMIT
 	
+	/**
+	 * @return the maximum number of results to retrieve for the ChEBI domain.
+	 */
 	public abstract int getMaxChebiResults();
 
 	/**
@@ -37,6 +40,7 @@ public interface EbeyeConfigMBean {
 	 * @param i the maximum number of results to retrieve for the ChEBI domain.
 	 */
 	public void setMaxChebiResults(int i); // EP_CHEBI_RESULTS_LIMIT
+	
 	/**
 	 * @return the maximum number of results to retrieve for the UniProt domain.
 	 */
@@ -48,6 +52,10 @@ public interface EbeyeConfigMBean {
 	 */
 	public void setMaxUniprotResults(int i); // QUERY_ENZYME_DOMAIN_RESULT_LIMIT
 	
+	/**
+	 * @return the maximum number of UniProt accessions to use from a query to
+	 * the ChEBI domain.
+	 */
 	public abstract int getMaxUniprotResultsFromChebi();
 
 	/**
