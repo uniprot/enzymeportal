@@ -179,9 +179,9 @@
                                     <c:set var="totalPages" value="${pagination.lastPage}"/>
                                     <c:set var="maxPages" value="${totalPages}"/>
                                     <div class="resultText">
-                                        <c:out value="${totalfound}"/> results found for <c:out value="${searchText}"/>,
+                                        <b>${totalfound}</b> results found for <i>${searchText}</i>,
                                         <c:if test="${totalfound ne summaryEntriesSize}">
-                                            filtered to ${summaryEntriesSize},
+                                            filtered to <b>${summaryEntriesSize}</b>,
                                         </c:if>
                                         displaying ${pagination.firstResult+1} - ${pagination.lastResult+1}
                                     </div>
