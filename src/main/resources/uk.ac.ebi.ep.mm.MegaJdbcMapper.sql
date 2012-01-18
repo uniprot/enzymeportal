@@ -32,10 +32,10 @@ SELECT mme.* FROM mm_entry mme, mm_accession mma \
 SELECT * FROM mm_xref WHERE id = ?
 
 --xref.by.entryids:\
-SELECT mmx.* from mm_xref mmx, mm_entry mm1, mm_entry m2 \
-    WHERE mm1.db_name = ? AND mm1.entry_id = ? \
-    AND mm1.id = mmx.from_entry AND mmx.to_entry = mm2.id \
-    AND mm2.db_name = ? AND mm2.entry_id = ?
+SELECT mmx.* FROM mm_xref mmx, mm_entry mme1, mm_entry mme2 \
+    WHERE mme1.db_name = ? AND mme1.entry_id = ? \
+    AND mme1.id = mmx.from_entry AND mmx.to_entry = mme2.id \
+    AND mme2.db_name = ? AND mme2.entry_id = ?
 
 --xrefs.all.by.entry:\
 SELECT * FROM mm_xref WHERE from_entry = ? OR to_entry = ?
