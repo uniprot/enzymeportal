@@ -186,8 +186,12 @@ public class MegaJdbcMapper implements MegaMapper {
 	
 	private boolean existsInMegaMap(XRef xref) throws SQLException{
 		PreparedStatement rXrefStm =
-				sqlLoader.getPreparedStatement("--xref.by.id");
-		rXrefStm.setInt(1, xref.getId());
+				sqlLoader.getPreparedStatement("--xref.by.entryids");
+		int paramNum = 1;
+		rXrefStm.setInt(paramNum++, xref.getFromEntry().getDbName());
+		rXrefStm.setInt(paramNum++, xref.getFromEntry().getEntryId());
+		rXrefStm.setInt(paramNum++, xref.getToEntry().getDbName());
+		rXrefStm.setInt(paramNum++, xref.getToEntry().getEntryId());
 		final ResultSet rs = rXrefStm.executeQuery();
 		final boolean exists = rs.next();
 		if (exists){
