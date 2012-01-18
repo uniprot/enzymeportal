@@ -2,15 +2,28 @@ package uk.ac.ebi.ep.adapter.das;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.xml.bind.JAXBException;
+
+import org.apache.log4j.Logger;
 
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 
 public class SimpleDASFeaturesAdapter implements IDASFeaturesAdapter {
 	
+	private final Logger LOGGER =
+			Logger.getLogger(SimpleDASFeaturesAdapter.class);
 	private String dasURL;
 	
 	@Deprecated
@@ -57,11 +70,38 @@ public class SimpleDASFeaturesAdapter implements IDASFeaturesAdapter {
 
 	public Collection<SegmentAdapter> getSegments(List<String> segmentIds)
 	throws MalformedURLException, JAXBException {
-		// No need of multithreading, as we can request all of them at once:
-		SimpleDASFeaturesCaller callable =
-				new SimpleDASFeaturesCaller(dasURL, segmentIds);
-		return callable.getSegments();
+		// jDAS allows sending the whole list, but the response time is
+		// proportional to the size of the list, so we use threads:
+		ExecutorService pool = Executors.newCachedThreadPool();
+		CompletionService<SegmentAdapter> ecs =
+				new ExecutorCompletionService<SegmentAdapter>(pool);
+		Map<Future<SegmentAdapter>, SegmentAdapter> future2segment =
+				new LinkedHashMap<Future<SegmentAdapter>, SegmentAdapter>();
+		try {
+			for (String segmentId : segmentIds) {
+				Callable<SegmentAdapter> callable = new SimpleDASFeaturesCaller(
+						IDASFeaturesAdapter.PDBE_DAS_URL, segmentId);
+				future2segment.put(ecs.submit(callable), null);
+			}
+			for (int i = 0; i < segmentIds.size(); i++) {
+				try {
+					Future<SegmentAdapter> future = ecs.take(); // TODO: add timeout, from config
+					if (future != null){
+						future2segment.put(future, future.get());
+					} else {
+						LOGGER.warn("STRUCTURES job result not retrieved!");
+						future2segment.remove(future);
+					}
+				} catch (Exception e){
+	            	// Don't stop the others
+	            	LOGGER.error("Callable " + (i+1) + " of " + segmentIds.size()
+	            			+ " - " + e.getMessage(), e);
+				}
+			}
+			return new ArrayList<SegmentAdapter>(future2segment.values());
+	    } finally {
+	    	pool.shutdown();
+		}
 	}
-
 
 }
