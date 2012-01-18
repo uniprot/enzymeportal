@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.biomart.adapter;
 
+
 /**
  *
  * @since   1.0
@@ -10,7 +11,9 @@ package uk.ac.ebi.ep.biomart.adapter;
  */
 public class BiomartFetchDataException extends Exception {
 
-    public BiomartFetchDataException(Throwable cause) {
+	private static final long serialVersionUID = 1242325633809788440L;
+
+	public BiomartFetchDataException(Throwable cause) {
         super(cause);
     }
 

@@ -9,6 +9,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.util.result.DataTypeConverter;
@@ -23,23 +26,7 @@ import uk.ac.ebi.util.result.DataTypeConverter;
  */
 public class BiomartAdapter {
 
-//********************************* VARIABLES ********************************//
-
-
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
-
-  public static void main(String[] args) throws MalformedURLException, IOException, BiomartFetchDataException {
-    BiomartAdapter biomartAdapter = new BiomartAdapter();
-    biomartAdapter.getPathwaysByReactionId("REACT_533");
-    System.out.println();
-    
-  }
+	private static final Logger LOGGER = Logger.getLogger(BiomartAdapter.class);
 
   public static List<String> limitResults(List<String> results) {
     List<String> subResults= null;
@@ -99,9 +86,11 @@ public class BiomartAdapter {
             url = DataTypeConverter.createEncodedUrl(baseUrl, query);
             //System.out.println(request);
         } catch (UnsupportedEncodingException ex) {
-             throw new BiomartFetchDataException("Failed to encode the url for Biomart request " +url.toString(), ex);
+             throw new BiomartFetchDataException("Failed to encode the url for Biomart request "
+            		 + baseUrl + " " + query, ex);
         } catch (MalformedURLException ex) {
-            throw new BiomartFetchDataException("Failed to create the url for Biomart request " +url.toString(), ex);
+            throw new BiomartFetchDataException("Failed to create the url for Biomart request "
+           		 + baseUrl + " " + query, ex);
         }
 
         URLConnection uCon = null;
@@ -115,20 +104,34 @@ public class BiomartAdapter {
    }
 
    public static List<String> parsePathwaysResponse(URLConnection uCon) throws BiomartFetchDataException {
-       List<String> resutls = new ArrayList<String>();
+       List<String> results = new ArrayList<String>();
         BufferedReader in = null;
         try {
             in = new BufferedReader(new InputStreamReader(uCon.getInputStream()));
-            String inputLine;
+            String inputLine, errorMsg = "";
             while ((inputLine = in.readLine()) != null) {
-                resutls.add(inputLine.trim());
+            	if (inputLine.indexOf("ERROR") > -1){
+            		errorMsg += inputLine;
+            	} else {
+                    results.add(inputLine.trim());
+            	}
             }
-            in.close();
+            if (errorMsg.length() > 0){
+        		throw new BiomartFetchDataException(errorMsg);
+        	}
+
         } catch (IOException ex) {
-            throw new BiomartFetchDataException("Failed to read the response of the Url connection" +uCon.toString(), ex);
+            throw new BiomartFetchDataException("Failed to read the response of the Url connection"
+            		+ uCon.toString(), ex);
+        } finally {
+            try {
+				in.close();
+			} catch (IOException e) {
+				LOGGER.error("Unable to close BufferedReader", e);
+			}
         }
-        System.out.println(resutls);
-       return resutls;
+        System.out.println(results);
+       return results;
    }
 
    public static List<ReactionPathway> parseReactionsResponse(URLConnection uCon) throws BiomartFetchDataException {
