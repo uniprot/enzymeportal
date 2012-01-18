@@ -48,7 +48,7 @@ public interface MegaMapper {
 	 * Retrieves an entry for a given accession.
 	 * @param db
 	 * @param accession
-	 * @return an {@link Entry}.
+	 * @return an {@link Entry}, or <code>null</code> if not found.
 	 */
 	public Entry getEntryForAccession(MmDatabase db, String accession);
 	
