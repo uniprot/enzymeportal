@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.web;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,6 @@ import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.entry.Field;
-import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -113,13 +112,13 @@ public class SearchController {
                 requestedField = Field.enzyme;
                 break;
             }
+            enzymeModel.setRequestedfield(requestedField.name());
+            model.addAttribute("enzymeModel", enzymeModel);
+            addToHistory(session, accession);
         } catch (Exception ex) {
             LOGGER.error("Unable to retrieve the entry!",  ex);
             responsePage = ResponsePage.ERROR.toString();
         }
-        enzymeModel.setRequestedfield(requestedField.name());
-        model.addAttribute("enzymeModel", enzymeModel);
-        addToHistory(session, accession);
         return responsePage;
     }
 
@@ -179,7 +178,9 @@ public class SearchController {
     		if (prevSearches != null){
         		resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
     		} else {
-    			prevSearches = new HashMap<String, SearchResults>();
+    			// Map implementation which maintains the order of access:
+    			prevSearches = new LinkedHashMap<String, SearchResults>(
+    					searchConfig.getSearchCacheSize(), 1, true);
     			session.getServletContext().setAttribute("searches", prevSearches);
     		}
     		if (resultSet == null){
@@ -190,7 +191,11 @@ public class SearchController {
                 finder.getIntenzAdapter().setConfig(intenzConfig);
                 try {
                     resultSet = finder.getEnzymes(searchParameters);                 
-                    // cache it in the session:
+                    // cache it in the session, making room if necessary:
+                    while (prevSearches.size() >= searchConfig.getSearchCacheSize()){
+                    	// remove the eldest:
+                    	prevSearches.remove(prevSearches.keySet().iterator().next());
+                    }
                     prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
                 } catch (EnzymeFinderException ex) {
                     LOGGER.error("Unable to create the result list because an error " +
