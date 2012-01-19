@@ -46,6 +46,7 @@ public enum Relationship {
 		case ChEBI:
 			switch (to) {
 			case PDBeChem:
+			case ChEMBL:
 				result = same_as;
 				break;
 			case PDB:
