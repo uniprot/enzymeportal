@@ -252,8 +252,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * @throws EnzymeRetrieverException
      */
     private List<ReactionPathway> getPathwaysFromRheaXref(
-    		List<ReactionPathway> reactionPathways)
-	throws EnzymeRetrieverException {
+    		List<ReactionPathway> reactionPathways){
         for (ReactionPathway reactionPathway : reactionPathways) {
             EnzymeReaction reaction = reactionPathway.getReaction();                
             List<Object> xrefs = reaction.getXrefs();
@@ -267,8 +266,14 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 					if (x.indexOf("http://") == 0){
 						x = x.substring(idStart);
 					}
-	                List<Pathway> pathways = getPathwaysByReactomeReactionsId(x);
-	                reactionPathway.getPathways().addAll(pathways);
+					// If this fails, at least we have the reactions:
+					List<Pathway> pathways;
+					try {
+						pathways = getPathwaysByReactomeReactionsId(x);
+		                reactionPathway.getPathways().addAll(pathways);
+					} catch (EnzymeRetrieverException e) {
+						LOGGER.error("Unable to retrieve pathways for " + x, e);
+					}
 				}
             }
         }                   
@@ -280,14 +285,14 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 	throws EnzymeRetrieverException {
         //No Rhea reaction, use Reactome reactions
         String uniprotAccession = enzymeModel.getUniprotaccessions().get(0);
-            List<ReactionPathway> reactionPathwaysFromReactome = null;
-                try {
-                    reactionPathwaysFromReactome = biomartAdapter.getReactionsByUniprotAccession(uniprotAccession);
-                } catch (BiomartFetchDataException ex) {
-                        throw new EnzymeRetrieverException("Failed to get reactome reactions "
-                                + "from Biomart for uniprot accession " + uniprotAccession, ex);
-                }
-                enzymeModel.setReactionpathway(reactionPathwaysFromReactome);
+        List<ReactionPathway> reactionPathwaysFromReactome = null;
+        try {
+            reactionPathwaysFromReactome = biomartAdapter.getReactionsByUniprotAccession(uniprotAccession);
+        } catch (BiomartFetchDataException ex) {
+                throw new EnzymeRetrieverException("Failed to get reactome reactions "
+                        + "from Biomart for uniprot accession " + uniprotAccession, ex);
+        }
+        enzymeModel.setReactionpathway(reactionPathwaysFromReactome);
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
         getPathwaysFromRheaXref(reactionPathways);
         return reactionPathways;
