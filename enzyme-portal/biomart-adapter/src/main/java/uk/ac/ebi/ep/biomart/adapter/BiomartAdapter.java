@@ -28,82 +28,135 @@ public class BiomartAdapter {
 
 	private static final Logger LOGGER = Logger.getLogger(BiomartAdapter.class);
 
-  public static List<String> limitResults(List<String> results) {
-    List<String> subResults= null;
-    if (results.size() > 0) {
-        subResults= results.subList(0, 2);
-    } else {
-        subResults = results;
-    }
-    return subResults;
-  }
-  public List<String> getPathwaysByReactionId(String reactionStableId) throws BiomartFetchDataException{
-    //ResourceBundle messages = ResourceBundle.getBundle("MessageBundle",new Locale("en","UK"));
-    String idWithoutVersion = reactionStableId.split("\\.")[0];
-    Object[] reactionIdArg = {idWithoutVersion};
-    String getPathwaysByReactionIdQuery = Transformer.getMessageTemplate("getPathwaysByReactionIdQuery", reactionIdArg);
-    Object[] getPathwaysByReactionIdQueryArg = {getPathwaysByReactionIdQuery};
-    String query = Transformer.getMessageTemplate("queryTpl", getPathwaysByReactionIdQueryArg);
-    String baseUrl = Transformer.getMessageTemplate("baseUrl");
-    //System.out.println(request);
-    URLConnection uCon = sendRequest(baseUrl,query);
-    List<String> results = parsePathwaysResponse(uCon);
-    //Test Reactome is too slow to handle more than 2
-    //return results;
-    return limitResults(results);
-  }
+	/**
+	 * Limits a list of results to only two.
+	 * @param results
+	 *            a list
+	 * @return Only the first two elements in the list.
+	 */
+	private static List<String> limitResults(List<String> results) {
+		List<String> subResults = null;
+		if (results.size() > 0) {
+			subResults = results.subList(0, 2);
+		} else {
+			subResults = results;
+		}
+		return subResults;
+	}
 
-  public List<ReactionPathway> getReactionsByUniprotAccession(String accession) throws BiomartFetchDataException{
-    Object[] reactionIdArg = {accession};
-    String getReactionsByUniprotIdQuery = Transformer.getMessageTemplate("getReactionsByUniprotIdQuery", reactionIdArg);
-    Object[] getReactionsByUniprotIdQueryArg = {getReactionsByUniprotIdQuery};
-    String query = Transformer.getMessageTemplate("queryTpl", getReactionsByUniprotIdQueryArg);
-    String baseUrl = Transformer.getMessageTemplate("baseUrl");
-    //List<String> resutls = sendRequest(baseUrl,query);
-    URLConnection uCon = sendRequest(baseUrl,query);
-    List<ReactionPathway> results = parseReactionsResponse(uCon);
-    return results;
+	/**
+	 * Retrieves Reactome pathway stable IDs for a given Reactome reaction
+	 * stable ID.
+	 * @param reactionStableId a Reactome reaction stable ID
+	 * @return a list of Reactome pathway stable IDs
+	 * @throws BiomartFetchDataException
+	 */
+	public List<String> getPathwaysByReactionId(String reactionStableId)
+	throws BiomartFetchDataException {
+		String idWithoutVersion = reactionStableId.split("\\.")[0];
+		Object[] reactionIdArg = { idWithoutVersion };
+		String getPathwaysByReactionIdQuery = Transformer.getMessageTemplate(
+				"getPathwaysByReactionIdQuery", reactionIdArg);
+		Object[] getPathwaysByReactionIdQueryArg =
+				{ getPathwaysByReactionIdQuery };
+		String query = Transformer.getMessageTemplate("queryTpl",
+				getPathwaysByReactionIdQueryArg);
+		String baseUrl = Transformer.getMessageTemplate("baseUrl");
+		URLConnection uCon = sendRequest(baseUrl, query);
+		List<String> results = parsePathwaysResponse(uCon);
+		// Test Reactome is too slow to handle more than 2
+		// return results;
+		return limitResults(results);
+	}
 
-  }
+	/**
+	 * Retrieves reactions from Reactome for a given UniProt accession.
+	 * @param accession a UniProt accession
+	 * @return a list of ReactionPathway objects with only reactions, whose
+	 * 		only xrefs will be plain Reactome pathway stable IDs.
+	 * @throws BiomartFetchDataException
+	 */
+	public List<ReactionPathway> getReactionsByUniprotAccession(String accession)
+	throws BiomartFetchDataException {
+		Object[] reactionIdArg = { accession };
+		String getReactionsByUniprotIdQuery = Transformer.getMessageTemplate(
+				"getReactionsByUniprotIdQuery", reactionIdArg);
+		Object[] getReactionsByUniprotIdQueryArg =
+				{ getReactionsByUniprotIdQuery };
+		String query = Transformer.getMessageTemplate("queryTpl",
+				getReactionsByUniprotIdQueryArg);
+		String baseUrl = Transformer.getMessageTemplate("baseUrl");
+		URLConnection uCon = sendRequest(baseUrl, query);
+		List<ReactionPathway> results = parseReactionsResponse(uCon);
+		return results;
 
-  public List<String> getPathwaysByUniprotAccession(String accession) throws BiomartFetchDataException{
-    Object[] uniprotArg = {accession};
-    String getPathwaysByUniprotIdQuery = Transformer.getMessageTemplate("getPathwaysByUniprotIdQuery", uniprotArg);
-    Object[] getPathwaysByUniprotIdQueryArg = {getPathwaysByUniprotIdQuery};
-    String query = Transformer.getMessageTemplate("queryTpl", getPathwaysByUniprotIdQueryArg);
-    String baseUrl = Transformer.getMessageTemplate("baseUrl");
-    //List<String> resutls = sendRequest(baseUrl,query);
-    URLConnection uCon = sendRequest(baseUrl,query);
-    List<String> results = parsePathwaysResponse(uCon);
-    //return resutls;
-    return limitResults(results);
-  }
+	}
 
+	/**
+	 * Retrieves Reactome pathway stable IDs for a given UniProt accession.
+	 * @param accession a UniProt accession
+	 * @return a list of Reactome pathway stable IDs
+	 * @throws BiomartFetchDataException
+	 */
+	public List<String> getPathwaysByUniprotAccession(String accession)
+	throws BiomartFetchDataException {
+		Object[] uniprotArg = { accession };
+		String getPathwaysByUniprotIdQuery = Transformer.getMessageTemplate(
+				"getPathwaysByUniprotIdQuery", uniprotArg);
+		Object[] getPathwaysByUniprotIdQueryArg =
+				{ getPathwaysByUniprotIdQuery };
+		String query = Transformer.getMessageTemplate("queryTpl",
+				getPathwaysByUniprotIdQueryArg);
+		String baseUrl = Transformer.getMessageTemplate("baseUrl");
+		URLConnection uCon = sendRequest(baseUrl, query);
+		List<String> results = parsePathwaysResponse(uCon);
+		return limitResults(results);
+	}
 
-   public URLConnection sendRequest(String baseUrl, String query) throws BiomartFetchDataException {
-    URL url = null;
-        try {
-            url = DataTypeConverter.createEncodedUrl(baseUrl, query);
-            //System.out.println(request);
-        } catch (UnsupportedEncodingException ex) {
-             throw new BiomartFetchDataException("Failed to encode the url for Biomart request "
-            		 + baseUrl + " " + query, ex);
-        } catch (MalformedURLException ex) {
-            throw new BiomartFetchDataException("Failed to create the url for Biomart request "
-           		 + baseUrl + " " + query, ex);
-        }
+	/**
+	 * Prepares the URL and sends a request to BioMart.
+	 * 
+	 * @param baseUrl the BioMart base URL.
+	 * @param query the query (XML) sent to BioMart.
+	 * @return a URLConnection.
+	 * @throws BiomartFetchDataException
+	 *             in case of problem with the URL, its encoding or while
+	 *             opening the connection.
+	 */
+	protected URLConnection sendRequest(String baseUrl, String query)
+	throws BiomartFetchDataException {
+		URL url = null;
+		try {
+			url = DataTypeConverter.createEncodedUrl(baseUrl, query);
+		} catch (UnsupportedEncodingException ex) {
+			throw new BiomartFetchDataException(
+					"Failed to encode the url for Biomart request " + baseUrl
+					+ " " + query, ex);
+		} catch (MalformedURLException ex) {
+			throw new BiomartFetchDataException(
+					"Failed to create the url for Biomart request " + baseUrl
+					+ " " + query, ex);
+		}
+		URLConnection uCon = null;
+		try {
+			uCon = url.openConnection();
+		} catch (IOException ex) {
+			throw new BiomartFetchDataException(
+					"Unable to connect to Biomart service to process request "
+					+ url.toString(), ex);
+		}
+		return uCon;
+	}
 
-        URLConnection uCon = null;
-        try {
-            uCon = url.openConnection();
-        } catch (IOException ex) {
-            throw new BiomartFetchDataException("Unable to connect to Biomart service to process request " +url.toString(), ex);
-        }
-
-       return uCon;
-   }
-
-   public static List<String> parsePathwaysResponse(URLConnection uCon) throws BiomartFetchDataException {
+   /**
+    * Parses the response from BioMart containing pathways info.
+    * @param uCon
+    * @return a list of Reactome pathway stable IDs.
+    * @throws BiomartFetchDataException in case of error reading from the
+    * 		connection, or if BioMart returns an error message.
+    */
+   private static List<String> parsePathwaysResponse(URLConnection uCon) 
+   throws BiomartFetchDataException {
        List<String> results = new ArrayList<String>();
         BufferedReader in = null;
         try {
@@ -117,9 +170,9 @@ public class BiomartAdapter {
             	}
             }
             if (errorMsg.length() > 0){
+            	LOGGER.error(errorMsg);
         		throw new BiomartFetchDataException(errorMsg);
         	}
-
         } catch (IOException ex) {
             throw new BiomartFetchDataException("Failed to read the response of the Url connection"
             		+ uCon.toString(), ex);
@@ -134,7 +187,17 @@ public class BiomartAdapter {
        return results;
    }
 
-   public static List<ReactionPathway> parseReactionsResponse(URLConnection uCon) throws BiomartFetchDataException {
+	/**
+	* Parses the response from BioMart containing reaction info.
+	* @param uCon a connection to BioMart.
+	* @return a list of ReactionPathway objects containing information only
+	* 		about reactions, whose xrefs will be Reactome reaction IDs (not
+	* 		whole URLs).
+	* @throws BiomartFetchDataException in case of problem reading from the
+	* 		connection.
+	*/
+   private static List<ReactionPathway> parseReactionsResponse(URLConnection uCon)
+   throws BiomartFetchDataException {
        List<ReactionPathway> reactionPathways = new ArrayList<ReactionPathway>();
         BufferedReader in = null;
         try {
