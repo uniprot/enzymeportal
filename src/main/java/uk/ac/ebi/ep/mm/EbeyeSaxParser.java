@@ -257,7 +257,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		if (isDbName){
 			db = MmDatabase.parse(currentChars.toString());
 			LOGGER.info("Parsing EB-Eye file for " + db.name());
-		} else if (isEntryName){
+		} else if (isEntryName && entry != null){
 			entry.setEntryName(currentChars.toString());
 		} else if (isEntry && entry != null && !xrefs.isEmpty()){
 //			if (db.equals(MmDatabase.ChEMBL_Target) &&

@@ -3,7 +3,8 @@ package uk.ac.ebi.ep.mm;
 import org.apache.log4j.Logger;
 
 /**
- * Databases included in the mega-map.
+ * Databases included in the mega-map (or encountered in some way during the
+ * process of building it).
  * @author rafa
  *
  */
@@ -18,6 +19,7 @@ public enum MmDatabase {
 	COMe,
 	ChEBI,
 	ChEMBL("ChEMBL COMPOUND", "ChEMBL-Compound"),
+	ChEMBL_Activity("ChEMBL-Activity"),
 	ChEMBL_Target("ChEMBL.Target"),
 	Chinese_Abstracts("Chinese Abstracts citation"),
 	DrugBank,
