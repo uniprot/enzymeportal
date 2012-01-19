@@ -51,6 +51,11 @@ import uk.ac.ebi.ep.search.result.Pagination;
 public class SearchController {
 
     private static final Logger LOGGER = Logger.getLogger(SearchController.class);
+    
+    private enum ResponsePage {
+    	ENTRY, ERROR;
+    	public String toString(){ return name().toLowerCase(); }
+	}
 
     @Autowired
     private EbeyeConfig ebeyeConfig;
@@ -83,9 +88,8 @@ public class SearchController {
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         retriever.getUniprotAdapter().setConfig(uniprotConfig);
         retriever.getIntenzAdapter().setConfig(intenzConfig);
-        retriever.getReactomeAdapter().setConfig(reactomeConfig);
         EnzymeModel enzymeModel = null;
-        String responsePage = "entry";
+        String responsePage = ResponsePage.ENTRY.toString();
         try {
             switch (requestedField) {
             case proteinStructure:
@@ -93,6 +97,7 @@ public class SearchController {
                 break;
             case reactionsPathways:
                 enzymeModel = retriever.getReactionsPathways(accession);
+                retriever.getReactomeAdapter().setConfig(reactomeConfig);
                 break;
             case molecules:
                 enzymeModel = retriever.getMolecules(accession);
@@ -108,8 +113,9 @@ public class SearchController {
                 requestedField = Field.enzyme;
                 break;
             }
-        } catch (EnzymeRetrieverException ex) {
+        } catch (Exception ex) {
             LOGGER.error("Unable to retrieve the entry!",  ex);
+            responsePage = ResponsePage.ERROR.toString();
         }
         enzymeModel.setRequestedfield(requestedField.name());
         model.addAttribute("enzymeModel", enzymeModel);
