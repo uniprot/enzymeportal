@@ -56,7 +56,7 @@ public class EnzymeRetrieverTest {
         ReactomeConfig reactomeConfig = new ReactomeConfig();
         reactomeConfig.setTimeout(30000);
         reactomeConfig.setUseProxy(false);
-        instance.reactomeAdapter.setConfig(reactomeConfig);
+        instance.getReactomeAdapter().setConfig(reactomeConfig);
     }
 
     @After
@@ -69,7 +69,6 @@ public class EnzymeRetrieverTest {
     @Test
     public void testGetMolecules() throws Exception {
         System.out.print("testGetMolecules");        
-        EnzymeModel expResult = null;
         EnzymeModel result = instance.getMolecules(uniprotAccession);
         List<Molecule> drugMols = result.getMolecule().getDrugs();
         assertNotNull(drugMols);
@@ -79,7 +78,6 @@ public class EnzymeRetrieverTest {
     @Test
     public void testGetReactionsPathways() throws Exception {
         System.out.print("testGetReactionsPathways");
-        EnzymeModel expResult = null;
         EnzymeModel result = instance.getReactionsPathways(uniprotAccession);        
         assertNotNull(result);
         System.out.println("testGetReactionsPathways: passed!");
