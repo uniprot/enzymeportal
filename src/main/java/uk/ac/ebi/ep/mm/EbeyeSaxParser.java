@@ -200,6 +200,10 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 						if (entry == null){
 							// It is not in the mega-map, perhaps not an enzyme:
 							LOGGER.warn(dbKey + " does not exist in the mega-map");
+						} else {
+							for (XRef xref : xrefs) {
+								xref.setFromEntry(entry);
+							}
 						}
 					} catch (NonUniqueResultException e){
 						LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
