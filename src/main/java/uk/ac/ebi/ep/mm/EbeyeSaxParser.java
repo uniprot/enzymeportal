@@ -165,7 +165,11 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		isXrefs = DATABASE_ENTRIES_ENTRY_XREFS.equals(currentXpath);
 		isRef = DATABASE_ENTRIES_ENTRY_XREFS_REF.equals(currentXpath);
 		
-		if (isEntry){
+		/*
+		 * ChEMBL_Target entries are proteins, the entry will be set to
+		 * the xref'd Swiss-Prot entry (see below).
+		 */
+		if (isEntry && !MmDatabase.ChEMBL_Target.equals(db)){
 			entry = new Entry();
 			entry.setDbName(db.name());
 			entry.setEntryId(attributes.getValue("", "id"));

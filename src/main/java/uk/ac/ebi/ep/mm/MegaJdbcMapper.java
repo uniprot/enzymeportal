@@ -280,7 +280,7 @@ public class MegaJdbcMapper implements MegaMapper {
 				entry.setEntryName(rs.getString("entry_name"));
 				// TODO: load accessions?
 				if (rs.next()){
-					LOGGER.error("More than one entry for same accession!"
+					LOGGER.error("More than one entry for same accession! "
 							+ accession + " (" + db.name() + ")");
 				}
 			}
