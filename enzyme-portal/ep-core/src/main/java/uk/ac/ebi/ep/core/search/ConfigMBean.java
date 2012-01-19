@@ -15,7 +15,7 @@ public interface ConfigMBean {
 
 	/**
 	 * Sets the resource used to retrieve UniProt entries.
-	 * @param retrieverUniprotSource
+	 * @param retrieverUniprotSource see {@link UniprotSource}
 	 */
 	public abstract void setRetrieverUniprotSource(String retrieverUniprotSource);
 
@@ -23,7 +23,7 @@ public interface ConfigMBean {
 
 	/**
 	 * Sets the resource used to search UniProt entries.
-	 * @param finderUniprotSource
+	 * @param finderUniprotSource see {@link UniprotSource}
 	 */
 	public abstract void setFinderUniprotSource(String finderUniprotSource);
 
@@ -31,10 +31,18 @@ public interface ConfigMBean {
 	
 	/**
 	 * Sets the implementation used to search/retrieve UniProt entries.
-	 * @param imp
+	 * @param imp see {@link UniprotImplementation}
 	 */
 	public abstract void setUniprotImplementation(String imp);
 	
 	public abstract String getUniprotImplementation();
+	
+	/**
+	 * Sets the size of the cache for search results.
+	 * @param size
+	 */
+	public abstract void setSearchCacheSize(int size);
+	
+	public abstract int getSearchCacheSize();
 
 }

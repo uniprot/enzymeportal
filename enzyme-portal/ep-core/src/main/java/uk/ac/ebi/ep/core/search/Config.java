@@ -41,6 +41,8 @@ public class Config implements ConfigMBean {
     
     protected UniprotImplementation uniprotImplementation;
     
+    protected int searchCacheSize;
+    
 	public void initIt() throws Exception {
 	  System.out.println("Init method after properties are set : ");
           loadCacheData();
@@ -82,13 +84,13 @@ public class Config implements ConfigMBean {
         EnzymeRelatedDomains enzymeRelatedDomains = null;
         JAXBContext jaxbContext = JAXBContext.newInstance("uk.ac.ebi.ep.config");
         Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        JAXBElement jaxbElement = (JAXBElement) unmarshaller.unmarshal(inFile);
+        JAXBElement<?> jaxbElement = (JAXBElement<?>) unmarshaller.unmarshal(inFile);
         enzymeRelatedDomains = (EnzymeRelatedDomains) jaxbElement.getValue();
         return enzymeRelatedDomains;
     }
 
     public static Domain getDomain(String domainId) {
-        Iterator it = Config.domainList.iterator();
+        Iterator<Domain> it = Config.domainList.iterator();
         Domain domain = null;
         while (it.hasNext()) {
             domain = (Domain) it.next();
@@ -101,7 +103,7 @@ public class Config implements ConfigMBean {
 
     public static List<String> getResultFields(Domain domain) {
         List<ResultField> fieldList = domain.getResultFieldList().getResultField();
-        Iterator it = fieldList.iterator();
+        Iterator<ResultField> it = fieldList.iterator();
         List<String> resultRefFields = new ArrayList<String>();
         while (it.hasNext()) {
             ResultField field = (ResultField) it.next();
@@ -148,5 +150,19 @@ public class Config implements ConfigMBean {
 
 	public void setUniprotImplementation(String imp) {
 		this.uniprotImplementation = UniprotImplementation.valueOf(imp);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <br>
+	 * This implementation understands size as the number of search terms,
+	 * not their related search results.
+	 */
+	public void setSearchCacheSize(int size) {
+		searchCacheSize = size;
+	}
+
+	public int getSearchCacheSize() {
+		return searchCacheSize;
 	}
 }
