@@ -157,8 +157,7 @@
 	</build>
 	
 	<properties>
-		<!-- default one is empty -->
-		<ep.mm.db.config></ep.mm.db.config>
+		<ep.mm.db.config>-dev</ep.mm.db.config>
 	</properties>
 	
 	<profiles>
@@ -166,6 +165,12 @@
 			<id>dev</id>
 			<properties>
 				<ep.mm.db.config>-dev</ep.mm.db.config>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<ep.mm.db.config>-prod</ep.mm.db.config>
 			</properties>
 		</profile>
 	</profiles>
