@@ -1,21 +1,17 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.log4j.Logger;
 
-import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
-import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
-import uk.ac.ebi.das.jdas.exceptions.ValidationException;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
+import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
+import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.FieldsOfPdbe;
+import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
@@ -29,11 +25,9 @@ import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
 import uk.ac.ebi.ep.chebi.adapter.ChebiFetchDataException;
 import uk.ac.ebi.ep.chebi.adapter.IChebiAdapter;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
-import uk.ac.ebi.ep.enzyme.model.DASSummary;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
-import uk.ac.ebi.ep.enzyme.model.Image;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
@@ -342,17 +336,28 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public EnzymeModel getProteinStructure(String uniprotAccession)
 	throws EnzymeRetrieverException {
-        //EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
     	LOGGER.debug(" -STR- before getEnzymeSummary");
         EnzymeModel enzymeModel = null;
 		try {
 			enzymeModel = (EnzymeModel) uniprotAdapter
-					.getEnzymeSummaryWithProteinStructure(uniprotAccession);
+					.getEnzymeSummary(uniprotAccession);
+	        ParamOfGetResults params = new ParamOfGetResults(
+	        		Domains.pdbe.name(), uniprotAccession,
+	        		FieldsOfPdbe.asStrings());
+			List<List<String>> fields = ebeyeAdapter.getFields(params);
+			if (fields != null){
+				for (int i = 0; i < fields.size(); i++) {
+					ProteinStructure str = new ProteinStructure();
+					str.setId(fields.get(i).get(0));
+					str.setName(fields.get(i).get(1));
+					enzymeModel.getProteinstructure().add(str);
+				}
+			}
 		} catch (UniprotWsException e) {
 			throw new EnzymeRetrieverException(
 					"Unable to get enzyme summary for " + uniprotAccession, e);
 		}
-
+        /*
     	if (pdbeAdapter != null) try {
             List<String> pdbIds = enzymeModel.getPdbeaccession();
         	LOGGER.debug(" -STR- before getSegments");
@@ -388,6 +393,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 		} catch (ValidationException e){
 	        throw new EnzymeRetrieverException("Validation error for DASGGF", e);
         }
+*/
     	LOGGER.debug(" -STR- before returning");
     	return enzymeModel;
     }
