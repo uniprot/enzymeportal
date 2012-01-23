@@ -216,6 +216,20 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 				rawResults, false); // FIXME: VARIABLE #RESULTS
 		return NameList;
 	}
+	
+	public List<List<String>> getFields(ParamOfGetResults params){
+		List<List<String>> results = null;
+		getNumberOfResults(params);
+		if (params.getTotalFound() > 0){
+			GetResultsCallable callable =
+					new GetResultsCallable(params, 0, params.getTotalFound());
+			ArrayOfArrayOfString rawResults = callable.callGetResults(
+					params.getDomain(), params.getQuery(), params.getFields(),
+					0, params.getTotalFound());
+			results = Transformer.transformToList(rawResults);
+		}
+		return results;
+	}
 
     public Map<String, String> getMapOfFieldAndValue(List<ParamOfGetResults> params)
 	throws MultiThreadingException{

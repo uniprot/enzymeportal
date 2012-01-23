@@ -1,11 +1,9 @@
 package uk.ac.ebi.ep.adapter.ebeye;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-//import uk.ac.ebi.ebeye.ParamGetNumberOfResults;
 import java.util.Set;
 
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
@@ -75,6 +73,17 @@ public interface IEbeyeAdapter {
 			return fields;
 		}
 	};
+	
+	public static enum FieldsOfPdbe {
+		id, name;
+		public static List<String> asStrings(){
+			List<String> strings = new ArrayList<String>();
+			for (FieldsOfPdbe field : values()) {
+				strings.add(field.name());
+			}
+			return strings;
+		}
+	}
 
 	/**
 	 * Fields of the {@link Domains#chebi chebi} domain.
@@ -169,5 +178,13 @@ public interface IEbeyeAdapter {
 	 * @return the current configuration for EB-Eye searches.
 	 */
 	public abstract EbeyeConfig getConfig();
+
+	/**
+	 * Queries EB-Eye for some fields from a query.
+	 * @param params parameters (domain, query, fields) to send to EB-Eye.
+	 * @return a List whose items are Lists of strings with the values for the
+	 * 		requested fields, or <code>null</code> if nothing found.
+	 */
+	public abstract List<List<String>> getFields(ParamOfGetResults params);
  
 }
