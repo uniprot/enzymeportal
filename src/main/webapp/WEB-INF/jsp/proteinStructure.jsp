@@ -2,92 +2,79 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<div style="display: none;">
+<div id="loading">
+<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
+	alt="Loading..."/>
+</div>
+</div>
+
+<c:set var="proteinStructures" value="${enzymeModel.proteinstructure}" />
 <c:choose>
-	<c:when test="${fn:length(enzymeModel.pdbeaccession) eq 0}">
+	<c:when test="${fn:length(enzymeModel.proteinstructure) eq 0}">
 		There is no structure information available for this enzyme.
 	</c:when>
 	<c:otherwise>
-        <c:set var="proteinStructures" value="${enzymeModel.proteinstructure}" />
 		<script>
             function showStructure(pdbCode){
-                var children = document.getElementById('proteinStructures').childNodes;
-                for (var i = 0; i < children.length; i++){
-                    if (children[i].nodeName.toLowerCase() == 'div'){
-                    	children[i].style.display = 'none';
+            	var structures = document.getElementById('proteinStructures');
+                var divs = structures.childNodes;
+                for (var i = 0; i < divs.length; i++){
+                    if (divs[i].nodeName.toLowerCase() == 'div'){
+                    	divs[i].style.display = 'none';
                     }
                 }
-                document.getElementById(pdbCode).style.display = 'block';
+            	var divId = '#structure-' + pdbCode;
+                var strDiv = document.getElementById('structure-' + pdbCode);
+                if (strDiv){
+                	strDiv.style.display = 'block';
+                } else {
+                	var newStrDiv = document.createElement('div');
+                	newStrDiv.setAttribute('id', 'structure-' + pdbCode);
+                	newStrDiv.setAttribute('class', 'summary structure');
+                	structures.appendChild(newStrDiv);
+                	$('#loading').clone().appendTo(divId);
+                	var pdbReqUrl = '${pageContext.request.contextPath}/ajax/pdbe/' + pdbCode;
+                	$(divId).load(pdbReqUrl);
+                }
                 return false;
             }
         </script>
         
         <div class="view">
-        	<c:if test="${fn:length(enzymeModel.pdbeaccession) gt 1}">
+        	<c:if test="${fn:length(proteinStructures) gt 1}">
 	        	<div class="references">
-					<div class="button">${fn:length(enzymeModel.pdbeaccession)}
+					<div class="button">${fn:length(proteinStructures)}
 						protein structures available</div>
 		            <table style="display: none;">
 		            <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
 		                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
 		                	onclick="return showStructure('${proteinStructure.id}');">
 		                    <td><a href="#">${proteinStructure.id}</a></td>
-		                    <td>${proteinStructure.description}</td>
+		                    <td>${proteinStructure.name}</td>
 		                </tr>
 		            </c:forEach>
+<%--
+					<c:forEach var="pdbId" items="${enzymeModel.pdbeaccession}"
+						varStatus="vs">
+		                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
+		                	onclick="return showStructure('${pdbId}');">
+		                    <td><a href="#">${pdbId}</a></td>
+		                </tr>
+					</c:forEach>
+ --%>
 		            </table>
 	            </div>
         	</c:if>
             <div id="proteinStructures">
-            <c:forEach var="proteinStructure" items="${proteinStructures}" varStatus="vs">
-			<div class="summary structure" id="${proteinStructure.id}"
-                style="display: ${vs.index eq 0? 'block':'none'}">
-				<div class="summary">
-					<h2>${proteinStructure.description}</td></h2>
-					<div class="main_link">
-						<a rel="external"
-							href="http://www.ebi.ac.uk/pdbe-srv/view/entry/${proteinStructure.id}/summary">View
-							in PDBe</a>
-					</div>
-					<div class="image">
-						<a rel="external" title="Click for an interactive viewer"
-							href="${proteinStructure.image.href}"><img
-							alt="${proteinStructure.image.caption}"
-							src="${proteinStructure.image.source}"/><span
-							class="caption">${proteinStructure.image.caption}</span></a>
-					</div>
-					<dl>
-						<dt>Description</dt>
-						<dd>
-							<ul>
-								<li class="note_${vs.index}">${proteinStructure.description}</li>
-							</ul>
-						</dd>
-					</dl>
-                    <c:forEach var="summary" items="${proteinStructure.summary}"
-                        varStatus="vsSum">
-					<dl>
-						<dt>${summary.label}</dt>
-						<dd>
-							<ul>
-							<c:forEach var="note" items="${summary.note}" varStatus="vsSumNote">
-								<li class="note_${vsSumNote.index}">${note}</li>
-							</c:forEach>
-							</ul>
-						</dd>
-					</dl>
-                    </c:forEach>
-					<div class="image wide"></div>
-					<div class="provenance">
-						<ul>
-                        <c:forEach var="prov" items="${proteinStructure.provenance}"
-                            varStatus="vsProv">
-							<li class="note_${vsProv.index}">${prov}</li>
-                        </c:forEach>
-						</ul>
-					</div>
+				<div class="summary structure" id="structure-${proteinStructures[0].id}">
+					<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
+						alt="Loading..."/>
 				</div>
-			</div>
-            </c:forEach>
+<script>
+$('#structure-${proteinStructures[0].id}')
+	.load("${pageContext.request.contextPath}/ajax/pdbe/${proteinStructures[0].id}");
+</script>
             </div><%-- proteinStructures --%>
 		</div>
 	</c:otherwise>
