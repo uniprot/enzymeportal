@@ -9,10 +9,11 @@
 </div>
 </div>
 
+<h2><c:out value="${enzymeModel.name}"/></h2>
 <c:set var="proteinStructures" value="${enzymeModel.proteinstructure}" />
 <c:choose>
 	<c:when test="${fn:length(enzymeModel.proteinstructure) eq 0}">
-		There is no structure information available for this enzyme.
+		<p>There is no structure information available for this enzyme.</p>
 	</c:when>
 	<c:otherwise>
 		<script>
