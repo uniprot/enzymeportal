@@ -83,19 +83,27 @@ public class ReactomeAdapter implements IReactomeAdapter{
            // for (Pathway pathway: pathways) {
             if (enzymeReaction != null) {
                 //get Reactome reaction id retrieved from Rhea
-            	// FIXME: rhea reactions might come with other xrefs (ex. MACiE)
-                List<Object> rheaReactomeLinks = enzymeReaction.getXrefs();
+                List<Object> reactionLinks = enzymeReaction.getXrefs();
                 String reactomeUrl = null;
-                if (rheaReactomeLinks.size() > 0) {
-                    reactomeUrl = (String)rheaReactomeLinks.get(0);
-                    try {
-                        String reactomeAccession = reactomeUrl.split("=")[1];
-                        String reactionDesc = getReactionDescription(reactomeAccession);
-                        enzymeReaction.setDescription(reactionDesc);
-                    }
-                    catch (ReactomeServiceException ex) {
-                        throw new ReactomeServiceException("Failed to retrieve reaction desciption for " +reactomeUrl, ex);
-                    }
+                if (reactionLinks.size() > 0) {
+                	for (Object reactionLink : reactionLinks) {
+						reactomeUrl = (String) reactionLink;
+						if (!reactomeUrl.contains("REACT_")) continue;
+						// Only Reactome xrefs, as descriptions come from there
+	                    try {
+	                        final String[] split = reactomeUrl.split("=");
+	                        // Some xrefs come as whole URLs, others as plain IDs
+							String reactomeAccession = split.length > 1?
+									split[1] : split[0];
+	                        String reactionDesc = getReactionDescription(reactomeAccession);
+	                        enzymeReaction.setDescription(reactionDesc);
+	                        // XXX: If more than one xref to Reactome, only first description is taken
+	                        break;
+	                    }
+	                    catch (ReactomeServiceException ex) {
+	                        throw new ReactomeServiceException("Failed to retrieve reaction desciption for " +reactomeUrl, ex);
+	                    }
+					}
                 }
             }
         }
