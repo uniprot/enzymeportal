@@ -287,6 +287,11 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                         + "from Biomart for uniprot accession " + uniprotAccession, ex);
         }
         enzymeModel.setReactionpathway(reactionPathwaysFromReactome);
+        try {
+			getReactomeAdapter().addReactionDescriptions(enzymeModel);
+		} catch (ReactomeServiceException e) {
+			LOGGER.error("Unable to retrieve reaction descriptions", e);
+		}
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
         getPathwaysFromRheaXref(reactionPathways);
         return reactionPathways;
