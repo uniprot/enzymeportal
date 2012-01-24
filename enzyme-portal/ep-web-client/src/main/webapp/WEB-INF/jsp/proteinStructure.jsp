@@ -42,9 +42,9 @@
             }
         </script>
         
-        <div class="view">
+        <div class="summary">
         	<c:if test="${fn:length(proteinStructures) gt 1}">
-	        	<div class="references">
+	        	<div class="references" style="margin-top: 1ex;">
 					<div class="button">${fn:length(proteinStructures)}
 						protein structures available</div>
 		            <table style="display: none;">
