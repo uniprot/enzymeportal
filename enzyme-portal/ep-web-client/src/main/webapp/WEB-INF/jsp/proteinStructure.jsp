@@ -56,19 +56,10 @@
 		                    <td>${proteinStructure.name}</td>
 		                </tr>
 		            </c:forEach>
-<%--
-					<c:forEach var="pdbId" items="${enzymeModel.pdbeaccession}"
-						varStatus="vs">
-		                <tr class="${(vs.index % 2) eq 1? 'odd':'even'}"
-		                	onclick="return showStructure('${pdbId}');">
-		                    <td><a href="#">${pdbId}</a></td>
-		                </tr>
-					</c:forEach>
- --%>
 		            </table>
 	            </div>
         	</c:if>
-            <div id="proteinStructures">
+            <div id="proteinStructures" style="margin-top: 1ex;">
 				<div class="summary structure" id="structure-${proteinStructures[0].id}">
 					<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
 						alt="Loading..."/>
