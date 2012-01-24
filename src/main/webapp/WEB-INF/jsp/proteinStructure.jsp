@@ -9,6 +9,7 @@
 </div>
 </div>
 
+<div class="summary">
 <h2><c:out value="${enzymeModel.name}"/></h2>
 <c:set var="proteinStructures" value="${enzymeModel.proteinstructure}" />
 <c:choose>
@@ -42,7 +43,7 @@
             }
         </script>
         
-        <div class="summary">
+        <div class="view">
         	<c:if test="${fn:length(proteinStructures) gt 1}">
 	        	<div class="references" style="margin-top: 1ex;">
 					<div class="button">${fn:length(proteinStructures)}
@@ -80,3 +81,4 @@ $('#structure-${proteinStructures[0].id}')
 		</div>
 	</c:otherwise>
 </c:choose>
+</div>
