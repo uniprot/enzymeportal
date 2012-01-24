@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.mm;
+package uk.ac.ebi.ep.mm.app;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +23,13 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
+import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.mm.MegaJdbcMapper;
+import uk.ac.ebi.ep.mm.MegaLuceneMapper;
+import uk.ac.ebi.ep.mm.MegaMapper;
+import uk.ac.ebi.ep.mm.MmDatabase;
+import uk.ac.ebi.ep.mm.Relationship;
+import uk.ac.ebi.ep.mm.XRef;
 
 /**
  * UniProt XML parser which takes into account only primary accessions,

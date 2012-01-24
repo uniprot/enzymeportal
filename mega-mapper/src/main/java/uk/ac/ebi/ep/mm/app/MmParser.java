@@ -1,4 +1,6 @@
-package uk.ac.ebi.ep.mm;
+package uk.ac.ebi.ep.mm.app;
+
+import uk.ac.ebi.ep.mm.MegaMapper;
 
 /**
  * Interface for objects parsing data for the mega-mapper.

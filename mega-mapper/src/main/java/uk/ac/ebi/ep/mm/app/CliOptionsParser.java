@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.mm;
+package uk.ac.ebi.ep.mm.app;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
