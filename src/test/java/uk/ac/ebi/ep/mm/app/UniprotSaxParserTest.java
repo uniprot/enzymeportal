@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.mm;
+package uk.ac.ebi.ep.mm.app;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import uk.ac.ebi.ep.mm.app.UniprotSaxParser;
 
 public class UniprotSaxParserTest {
 

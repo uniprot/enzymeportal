@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.mm;
+package uk.ac.ebi.ep.mm.app;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,6 +27,11 @@ import uk.ac.ebi.ebinocle.DatabaseType;
 import uk.ac.ebi.ebinocle.EntriesType;
 import uk.ac.ebi.ebinocle.EntryType;
 import uk.ac.ebi.ebinocle.RefType;
+import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.mm.MegaDbMapper;
+import uk.ac.ebi.ep.mm.MegaLuceneMapper;
+import uk.ac.ebi.ep.mm.MegaMapper;
+import uk.ac.ebi.ep.mm.MmDatabase;
 
 /**
  * Indexer for EB-Eye XML files, which parses them and indexes/stores

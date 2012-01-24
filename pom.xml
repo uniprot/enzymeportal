@@ -88,24 +88,6 @@
 			</resource>
 		</resources>
 		<plugins>
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
@@ -161,6 +143,50 @@
 	</properties>
 	
 	<profiles>
+		<profile>
+			<id>noApps</id>
+			<activation><activeByDefault>true</activeByDefault></activation>
+			<build>
+				<plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>uk/ac/ebi/ep/mm/app/*.java</exclude>
+                            </excludes>
+                            <testExcludes>
+                                <exclude>uk/ac/ebi/ep/mm/app/*.java</exclude>
+                            </testExcludes>
+                        </configuration>
+                    </plugin>
+	            </plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>apps</id>
+			<build>
+				<plugins>
+		            <plugin>
+		                <artifactId>maven-dependency-plugin</artifactId>
+		                <executions>
+		                    <execution>
+		                        <id>copy-dependencies</id>
+		                        <phase>package</phase>
+		                        <goals>
+		                            <goal>copy-dependencies</goal>
+		                        </goals>
+		                        <configuration>
+		                            <outputDirectory>${project.build.directory}</outputDirectory>
+		                            <overWriteReleases>false</overWriteReleases>
+		                            <overWriteSnapshots>false</overWriteSnapshots>
+		                            <overWriteIfNewer>true</overWriteIfNewer>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+		            </plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>dev</id>
 			<properties>
