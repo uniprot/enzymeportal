@@ -81,6 +81,8 @@
 		class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
 		<property name="timeout" value="30000"/>
 		<property name="useProxy" value="true"/>
+		<property name="wsBaseUrl"
+			value="http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
 	</bean>
 	
     <!--Start internationalization-->
