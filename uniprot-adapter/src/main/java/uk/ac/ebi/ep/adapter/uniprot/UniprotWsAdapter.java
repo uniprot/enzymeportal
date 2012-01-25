@@ -130,11 +130,17 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 				future2summary.put(ecs.submit(callable), null);
 			}
 	    	for (int i = 0; i < idPrefixes.size(); i++){
+	    		Future<EnzymeSummary> future = null;
 	    		try {
-	    			Future<EnzymeSummary> future =
-	    					ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
+	    			future = ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
 	    			if (future != null){
-	    				future2summary.put(future, future.get());
+	    				final EnzymeSummary summary = future.get();
+	    				if (summary != null){
+	    					future2summary.put(future, summary);
+	    				} else {
+		    				LOGGER.warn("SEARCH null summary!");
+			            	future2summary.remove(future);
+	    				}
 	    			} else {
 	    				LOGGER.warn("SEARCH job result not retrieved!");
 		            	future2summary.remove(future);
@@ -143,6 +149,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	            	// Don't stop the others
 	            	LOGGER.error("Callable " + (i+1) + " of " + idPrefixes.size()
 	            			+ " - " + e.getMessage(), e);
+	            	if (future != null) future2summary.remove(future);
 	    		}
 	    	}
 	    	return new ArrayList<EnzymeSummary>(future2summary.values());

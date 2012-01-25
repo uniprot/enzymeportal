@@ -83,6 +83,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 	
 	protected EnzymeSummary getEnzymeSummary() throws UniprotWsException{
 		List<String> enzymeInfo = getEnzymeInfo(accOrId, idType, getColumns());
+		if (enzymeInfo == null) return null;
 		if (enzymeInfo.size() > 1 && idType.equals(IdType.ACCESSION)){
 			// More than one entry for one accession? It has been demerged?
 			LOGGER.warn("More than one entry for " + accOrId);
@@ -462,6 +463,9 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			} catch (IOException e) {
 				LOGGER.error("Unable to close reader", e);
 			}
+		}
+		if (enzymeInfo == null){
+			throw new UniprotWsException("No enzyme info retrieved for " + accOrId);
 		}
 		return enzymeInfo;
 	}

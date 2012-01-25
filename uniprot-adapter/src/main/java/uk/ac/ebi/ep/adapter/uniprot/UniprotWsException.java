@@ -12,6 +12,10 @@ public class UniprotWsException extends Exception {
 		super(msg, e);
 	}
 
+	public UniprotWsException(String msg) {
+		super(msg);
+	}
+
 	private static final long serialVersionUID = -1047343429428021459L;
 
 }
