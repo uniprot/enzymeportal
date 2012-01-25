@@ -302,9 +302,13 @@ public class EnzymeFinder implements IEnzymeFinder {
 //               start, end);
 
 
-        enzymeSearchResults.setTotalfound(uniprotIdPrefixSet.size());
         enzymeSummaryList = getEnzymeSummaries(idPrefixesList);
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
+        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+        if (uniprotIdPrefixSet.size() != enzymeSummaryList.size()){
+        	LOGGER.warn((uniprotIdPrefixSet.size() - enzymeSummaryList.size())
+        			+ " UniProt ID prefixes have been lost");
+        }
 //
 //        searchParams.setStart(start);
 //        searchParams.setText(userKeywords);
