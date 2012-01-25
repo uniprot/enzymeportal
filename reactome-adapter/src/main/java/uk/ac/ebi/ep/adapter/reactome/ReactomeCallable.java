@@ -16,7 +16,7 @@ import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.rhea.domain.Database;
 
 /**
- *
+ * Class to retrieve pathways from Reactome HTML pages.
  * @since   1.0
  * @version $LastChangedRevision$ <br/>
  *          $LastChangedDate$ <br/>

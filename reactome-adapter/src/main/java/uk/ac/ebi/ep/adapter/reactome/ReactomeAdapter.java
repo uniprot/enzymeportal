@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.adapter.reactome.ReactomeCallable.GetPathwayCaller;
+import uk.ac.ebi.ep.adapter.reactome.ReactomeWsCallable.ReactomeClass;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
@@ -36,37 +37,25 @@ public class ReactomeAdapter implements IReactomeAdapter{
 
     private final Logger logger = Logger.getLogger(ReactomeAdapter.class);
     
+    private ReactomeWsCallable reactomeWsCallable;
+    
+    private ReactomeWsCallable getReactomeWsCallable(){
+    	if (reactomeWsCallable == null){
+    		reactomeWsCallable = new ReactomeWsCallable(config);
+    	}
+    	return reactomeWsCallable;
+    }
+    
     public String getReactionDescription(String reactomeAccession)
 	throws ReactomeServiceException{
-        String reactionDesc = null;
-        //String searchUrl = IReactomeAdapter.REACTOME_SEARCH_URL +reactomeAccession;
-        try {
-            reactionDesc =  ReactomeUtil.parseReactomeHtml(reactomeAccession, "Reaction.gif");
-        } catch (MalformedURLException ex) {
-            throw new ReactomeConnectionException(
-                    "Failed to create the URL for " +reactomeAccession, ex);
-        } catch (IOException ex) {
-            throw new ReactomeFetchDataException(
-                    "Failed to get reaction and pathway ids from Reactome Web site! ", ex);
-        }
-        return reactionDesc;
+        return getReactomeWsCallable().getDescription(
+        		ReactomeClass.Reaction, reactomeAccession);
     }
 
     public String getPathwayDescription(String reactomeAccession)
 	throws ReactomeServiceException {
-        String pathwayDesc = null;
-        //String searchUrl = IReactomeAdapter.REACTOME_SEARCH_URL +reactomeAccession;
-        try {
-            pathwayDesc =  ReactomeUtil.parseReactomeHtml(reactomeAccession, "Pathway.gif");
-        } catch (MalformedURLException ex) {
-            throw new ReactomeConnectionException(
-                    "Failed to create the URL for " +reactomeAccession, ex);
-        } catch (IOException ex) {
-            throw new ReactomeFetchDataException(
-                    "Failed to get pathway id from Reactome Web site! ", ex);
-        }
-        return pathwayDesc;
-
+        return getReactomeWsCallable().getDescription(
+        		ReactomeClass.Pathway, reactomeAccession);
     }
 
     /**
