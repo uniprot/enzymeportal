@@ -12,6 +12,8 @@ public class ReactomeConfig implements ReactomeConfigMBean {
 	 */
 	private int timeout;
 	
+	private String wsBaseUrl;
+	
 	public void setUseProxy(boolean useProxy) {
 		this.useProxy = useProxy;
 	}
@@ -26,6 +28,14 @@ public class ReactomeConfig implements ReactomeConfigMBean {
 
 	public int getTimeout() {
 		return timeout;
+	}
+
+	public void setWsBaseUrl(String wsBaseUrl) {
+		this.wsBaseUrl = wsBaseUrl;
+	}
+
+	public String getWsBaseUrl() {
+		return wsBaseUrl;
 	}
 
 }
