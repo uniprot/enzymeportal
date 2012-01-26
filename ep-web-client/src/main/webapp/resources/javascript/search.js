@@ -81,6 +81,15 @@ $(document).ready(function() {
     $("#filterButton").click(function(event) {
         $('#searchButton').trigger("click");
     });
+    
+//    $(function(){
+//  $('#searchButton').click(function(){
+//    var val = [];
+//    $(':checkbox:checked').each(function(i){
+//      val[i] = $(this).val();
+//    });
+//  });
+//});
      
     /**
      * Save the form parameters for the breadcrumb link

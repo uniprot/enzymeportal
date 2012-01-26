@@ -1,10 +1,20 @@
 package uk.ac.ebi.ep.web;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -21,6 +31,9 @@ import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
+import uk.ac.ebi.ep.adapter.uniprot.EnzymeAccessionWrapper;
+import uk.ac.ebi.ep.core.EnzymeSummaryWrapper;
+import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
 import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
 import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
@@ -30,10 +43,13 @@ import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
+import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.SearchFilters;
 import uk.ac.ebi.ep.search.model.SearchModel;
 import uk.ac.ebi.ep.search.model.SearchParams;
 import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
@@ -44,32 +60,30 @@ import uk.ac.ebi.ep.search.result.Pagination;
  *          $Author$
  * @author  $Author$
  */
-
-
 @Controller
 public class SearchController {
 
     private static final Logger LOGGER = Logger.getLogger(SearchController.class);
-    
-    private enum ResponsePage {
-    	ENTRY, ERROR;
-    	public String toString(){ return name().toLowerCase(); }
-	}
 
+    private enum ResponsePage {
+
+        ENTRY, ERROR;
+
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    }
     @Autowired
     private EbeyeConfig ebeyeConfig;
-    
     @Autowired
     private UniprotConfig uniprotConfig;
-    
     @Autowired
     private Config searchConfig;
-    
     @Autowired
     private IntenzConfig intenzConfig;
-
     @Autowired
-	private ReactomeConfig reactomeConfig;
+    private ReactomeConfig reactomeConfig;
 
     /**
      * Process the entry page,
@@ -78,7 +92,7 @@ public class SearchController {
      * @param model
      * @return 
      */
-    @RequestMapping(value="/search/{accession}/{field}")
+    @RequestMapping(value = "/search/{accession}/{field}")
     protected String getEnzymeModel(Model model,
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
@@ -91,32 +105,32 @@ public class SearchController {
         String responsePage = ResponsePage.ENTRY.toString();
         try {
             switch (requestedField) {
-            case proteinStructure:
-                enzymeModel = retriever.getProteinStructure(accession);
-                break;
-            case reactionsPathways:
-                retriever.getReactomeAdapter().setConfig(reactomeConfig);
-                enzymeModel = retriever.getReactionsPathways(accession);
-                break;
-            case molecules:
-                enzymeModel = retriever.getMolecules(accession);
-                break;
-            case diseaseDrugs:
-                enzymeModel = retriever.getEnzyme(accession);
-                break;
-            case literature:
-                enzymeModel = retriever.getLiterature(accession);
-                break;
-            default:
-                enzymeModel = retriever.getEnzyme(accession);
-                requestedField = Field.enzyme;
-                break;
+                case proteinStructure:
+                    enzymeModel = retriever.getProteinStructure(accession);
+                    break;
+                case reactionsPathways:
+                    enzymeModel = retriever.getReactionsPathways(accession);
+                    retriever.getReactomeAdapter().setConfig(reactomeConfig);
+                    break;
+                case molecules:
+                    enzymeModel = retriever.getMolecules(accession);
+                    break;
+                case diseaseDrugs:
+                    enzymeModel = retriever.getEnzyme(accession);
+                    break;
+                case literature:
+                    enzymeModel = retriever.getLiterature(accession);
+                    break;
+                default:
+                    enzymeModel = retriever.getEnzyme(accession);
+                    requestedField = Field.enzyme;
+                    break;
             }
             enzymeModel.setRequestedfield(requestedField.name());
             model.addAttribute("enzymeModel", enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
-            LOGGER.error("Unable to retrieve the entry!",  ex);
+            LOGGER.error("Unable to retrieve the entry!", ex);
             responsePage = ResponsePage.ERROR.toString();
         }
         return responsePage;
@@ -129,16 +143,16 @@ public class SearchController {
      * @param model
      * @return
      */
-    @RequestMapping(value="/")
+    @RequestMapping(value = "/")
     public String viewSearchHome(Model model, HttpSession session) {
-		SearchModel searchModelForm = new SearchModel();
-		SearchParams searchParams = new SearchParams();
-		searchParams.setText("Enter a name to search");
-		searchParams.setStart(0);
-		searchModelForm.setSearchparams(searchParams);
-		model.addAttribute("searchModel", searchModelForm);
-		clearHistory(session);
-		return "index";
+        SearchModel searchModelForm = new SearchModel();
+        SearchParams searchParams = new SearchParams();
+        searchParams.setText("Enter a name to search");
+        searchParams.setStart(0);
+        searchModelForm.setSearchparams(searchParams);
+        model.addAttribute("searchModel", searchModelForm);
+        clearHistory(session);
+        return "index";
     }
 
     /**
@@ -151,7 +165,7 @@ public class SearchController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String getSearchResult(SearchModel searchModel, BindingResult result,
-    		Model model, HttpSession session) {
+            Model model, HttpSession session) {
         return postSearchResult(searchModel, result, model, session);
     }
 
@@ -165,112 +179,141 @@ public class SearchController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModelForm, BindingResult result,
-    		Model model, HttpSession session) {
-    	String view = "search";
-        if (searchModelForm != null) try {
-            SearchParams searchParameters = searchModelForm.getSearchparams();        
-            searchParameters.setSize(searchConfig.getResultsPerPage());
-            SearchResults resultSet = null;
-        	// See if it is already there, perhaps we are paginating:
-        	@SuppressWarnings("unchecked")
-    		Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
-    				session.getServletContext().getAttribute("searches");
-    		if (prevSearches != null){
-        		resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
-    		} else {
-    			// Map implementation which maintains the order of access:
-    			prevSearches = new LinkedHashMap<String, SearchResults>(
-    					searchConfig.getSearchCacheSize(), 1, true);
-    			session.getServletContext().setAttribute("searches", prevSearches);
-    		}
-    		if (resultSet == null){
-    			// Make a new search:
-                EnzymeFinder finder = new EnzymeFinder(searchConfig);
-                finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-                finder.getUniprotAdapter().setConfig(uniprotConfig);
-                finder.getIntenzAdapter().setConfig(intenzConfig);
-                try {
-                    resultSet = finder.getEnzymes(searchParameters);                 
-                    // cache it in the session, making room if necessary:
-                    while (prevSearches.size() >= searchConfig.getSearchCacheSize()){
-                    	// remove the eldest:
-                    	prevSearches.remove(prevSearches.keySet().iterator().next());
-                    }
-                    prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
-                } catch (EnzymeFinderException ex) {
-                    LOGGER.error("Unable to create the result list because an error " +
-                            "has occurred in the find method! \n", ex);
-                }
-        	}
-    		
-    		// Filter:
-    		List<String> speciesFilter = searchParameters.getSpecies();
-    		List<String> compoundsFilter = searchParameters.getCompounds();
-    		List<String> diseasesFilter = searchParameters.getDiseases();
-    		if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()){
-    			List<EnzymeSummary> filteredResults =
-    					new ArrayList<EnzymeSummary>(resultSet.getSummaryentries());
-        		CollectionUtils.filter(filteredResults,
-	    				new SpeciesPredicate(speciesFilter));
-        		CollectionUtils.filter(filteredResults,
-	    				new CompoundsPredicate(compoundsFilter));
-        		CollectionUtils.filter(filteredResults,
-        				new DiseasesPredicate(diseasesFilter));
-        		// Create a new SearchResults, don't modify the one in session
-        		SearchResults sr = new SearchResults();
-        		sr.setSearchfilters(resultSet.getSearchfilters());
-        		sr.setSummaryentries(filteredResults);
-        		// show the total number of hits (w/o filtering):
-        		sr.setTotalfound(resultSet.getTotalfound());
-        		searchModelForm.setSearchresults(sr);
-    		} else {
-    			// Show all of them:
-        		searchModelForm.setSearchresults(resultSet);
-    		}
-    		
-            model.addAttribute("searchModel", searchModelForm);
-            
-            // Paginate:
-            final int numOfResults =
-            		searchModelForm.getSearchresults().getSummaryentries().size();
-			Pagination pagination = new Pagination(
-                    numOfResults, searchParameters.getSize());
-            pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
-            pagination.setFirstResult(searchParameters.getStart());
-            model.addAttribute("pagination", pagination);
+            Model model, HttpSession session) {
+        String view = "search";
+        
+        List<EnzymeSummary> summaryEntryFilteredResults = new LinkedList<EnzymeSummary>();
 
-            addToHistory(session,
-            		"searchparams.text=" + searchParameters.getText());
-		} catch (Exception e) {
-			LOGGER.error("Failed search", e);
-			view = "error";
-		}
-        return view;
+        if (searchModelForm != null) {
+            try {
+                SearchParams searchParameters = searchModelForm.getSearchparams();
+                searchParameters.setSize(searchConfig.getResultsPerPage());
+                SearchResults resultSet = null;
+                // See if it is already there, perhaps we are paginating:
+                @SuppressWarnings("unchecked")
+                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) session.getServletContext().getAttribute("searches");
+                if (prevSearches != null) {
+
+                    resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
+                } else {
+                    // Map implementation which maintains the order of access:
+                    prevSearches = new LinkedHashMap<String, SearchResults>(
+                            searchConfig.getSearchCacheSize(), 1, true);
+                    session.getServletContext().setAttribute("searches", prevSearches);
+                }
+                if (resultSet == null) {
+                    // Make a new search:
+                    EnzymeFinder finder = new EnzymeFinder(searchConfig);
+                    finder.getEbeyeAdapter().setConfig(ebeyeConfig);
+                    finder.getUniprotAdapter().setConfig(uniprotConfig);
+                    finder.getIntenzAdapter().setConfig(intenzConfig);
+                    try {
+                        resultSet = finder.getEnzymes(searchParameters);
+                        // cache it in the session, making room if necessary:
+                        while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
+                            // remove the eldest:
+                            prevSearches.remove(prevSearches.keySet().iterator().next());
+                        }
+                        prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
+                    } catch (EnzymeFinderException ex) {
+                        LOGGER.error("Unable to create the result list because an error "
+                                + "has occurred in the find method! \n", ex);
+                    }
+                }
+
+                // Filter:
+                List<String> speciesFilter = searchParameters.getSpecies();
+                List<String> compoundsFilter = searchParameters.getCompounds();
+                List<String> diseasesFilter = searchParameters.getDiseases();
+                if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
+                    List<EnzymeSummary> filteredResults =
+                            new LinkedList<EnzymeSummary>(resultSet.getSummaryentries());
+
+                    CollectionUtils.filter(filteredResults,
+                            new SpeciesPredicate(speciesFilter));
+                    CollectionUtils.filter(filteredResults,
+                            new CompoundsPredicate(compoundsFilter));
+                    CollectionUtils.filter(filteredResults,
+                            new DiseasesPredicate(diseasesFilter));
+                    // Create a new SearchResults, don't modify the one in session
+                    SearchResults sr = new SearchResults();
+                
+                    /**
+                     * filter the result based on the species selected by user
+                     */
+              List<String> checkBoxParams = searchParameters.getSpecies();                  
+              for(EnzymeSummary enzymeSummary : filteredResults){
+                 
+                  for(String selected : checkBoxParams ){
+                  for(EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()){
+                     
+                      if(selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())){
+                          enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
+                          // enzymeSummary.setSpecies(enzymeAccession.getSpecies());
+                           enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
+                       }
+                    
+                  }
+              }
+                  // adding the updated enzyme summaries to the filtered result
+                  summaryEntryFilteredResults.add(enzymeSummary);
+              }
+
+                    
+                    sr.setSearchfilters(resultSet.getSearchfilters());
+                    sr.setSummaryentries(summaryEntryFilteredResults);
+                    // show the total number of hits (w/o filtering):
+                    sr.setTotalfound(resultSet.getTotalfound());
+                    searchModelForm.setSearchresults(sr);
+                } else {
+                    // Show all of them:
+                    searchModelForm.setSearchresults(resultSet);
+                }
+                model.addAttribute("searchModel", searchModelForm);
+
+                // Paginate:
+                final int numOfResults =
+                        searchModelForm.getSearchresults().getSummaryentries().size();
+                Pagination pagination = new Pagination(
+                        numOfResults, searchParameters.getSize());
+                pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
+                pagination.setFirstResult(searchParameters.getStart());
+                model.addAttribute("pagination", pagination);
+
+                addToHistory(session,
+                        "searchparams.text=" + searchParameters.getText());
+            } catch (Exception e) {
+                LOGGER.error("Failed search", e);
+                view = "error";
+            }       }
+       return view;
     }
 
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
     public String getSearchResult(Model model) {
         return "underconstruction";
     }
-    
-    private void addToHistory(HttpSession session, String s){
-    	@SuppressWarnings("unchecked")
-		List<String> history = (List<String>) session.getAttribute("history");
-    	if (history == null){
-    		history = new ArrayList<String>();
-    		session.setAttribute("history", history);
-    	}
-    	if (history.isEmpty() || !history.get(history.size()-1).equals(s)){
-        	history.add(s);
-    	}
+
+    private void addToHistory(HttpSession session, String s) {
+        @SuppressWarnings("unchecked")
+        List<String> history = (List<String>) session.getAttribute("history");
+        if (history == null) {
+            history = new ArrayList<String>();
+            session.setAttribute("history", history);
+        }
+        if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
+            history.add(s);
+        }
     }
-    
-    private void clearHistory(HttpSession session){
-    	@SuppressWarnings("unchecked")
-		List<String> history = (List<String>) session.getAttribute("history");
-    	if (history == null){
-    		history = new ArrayList<String>();
-    		session.setAttribute("history", history);
-    	} else history.clear();
+
+    private void clearHistory(HttpSession session) {
+        @SuppressWarnings("unchecked")
+        List<String> history = (List<String>) session.getAttribute("history");
+        if (history == null) {
+            history = new ArrayList<String>();
+            session.setAttribute("history", history);
+        } else {
+            history.clear();
+        }
     }
 }
