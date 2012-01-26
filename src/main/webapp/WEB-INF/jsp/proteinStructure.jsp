@@ -17,7 +17,8 @@
 		<p>There is no structure information available for this enzyme.</p>
 	</c:when>
 	<c:otherwise>
-		<script>
+        <c:set var="wrappers" value="${ProvenanceWrapper.provenance}"/>
+        <script>
             function showStructure(pdbCode){
             	var structures = document.getElementById('proteinStructures');
                 var divs = structures.childNodes;
@@ -42,7 +43,7 @@
                 return false;
             }
         </script>
-        
+
         <div class="view">
         	<c:if test="${fn:length(proteinStructures) gt 1}">
 	        	<div class="references" style="margin-top: 1ex;">
@@ -69,7 +70,7 @@ $('#structure-${proteinStructures[0].id}')
 	.load("${pageContext.request.contextPath}/ajax/pdbe/${proteinStructures[0].id}");
 </script>
             </div><%-- proteinStructures --%>
-		</div>
-	</c:otherwise>
+        </div>
+    </c:otherwise>
 </c:choose>
 </div>

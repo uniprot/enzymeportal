@@ -22,18 +22,18 @@ body, td.contentsarea {
 }
 
 a:link, a:visited {
-    text-decoration: underline;
+    text-decoration: inherit;
 }
 
 .desc a:link, .desc a:visited, .species{
-	/*color: #207a7a;*/
-	text-decoration: underline;
+    /*color: #207a7a;*/
+    text-decoration: underline;
 }
 .showLink{
-	/*color: #207a7a;*/
-	text-decoration: underline;
-	font-style: italic;
-	white-space: nowrap;
+    /*color: #207a7a;*/
+    text-decoration: underline;
+    font-style: italic;
+    white-space: nowrap;
 }
 .ebiHeader {
     min-height: 50px;
@@ -277,12 +277,12 @@ a:link, a:visited {
 }
 
 .proteinImg a{
-	color: white;
+    color: white;
     text-decoration: none;
 }
 
 .imgFooter {
-	font-size: smaller;
+    font-size: smaller;
 }
 
 .desc {
@@ -297,8 +297,8 @@ a:link, a:visited {
 
 
 #speciesContainer{
-     float: left;
-     width: 18%;
+    float: left;
+    width: 18%;
     /*border: 1px solid #ddd;*/
 }
 
@@ -350,9 +350,9 @@ a:link, a:visited {
 }
 
 .iconBox img
-  {   
+{   
     border: none;
-  }
+}
 
 .searchTab {
     padding: 0.5ex 2em;
@@ -361,7 +361,7 @@ a:link, a:visited {
     border-top-right-radius: 2ex;
 }
 .selected.searchTab {
-	color: #000;
+    color: #000;
 }
 .disabled.searchTab {
     background-color: #bbb;
@@ -376,6 +376,34 @@ a:link, a:visited {
     padding: 2ex 1em;
 }
 
+/*sort of tooltip to pop up scientific names*/
+a.popup {
+    position:relative;
+    z-index:24;
+    color: #408C8C;
+    text-decoration:none;
+}
+a.popup:hover {z-index:25; background-color:#FFFFFF;color:#408C8C; }
+a.popup span {display:none; }
+a.popup:hover span {
+    display:block;
+    position:absolute;
+/*    		top:35px; left:15px;*/
+    top:15px;left:0px;
+    width:200px;
+    padding:3px;
+/*    		border:1px solid #000000;*/
+    background-color:#A1C7C7; color:#000000;
+    font-style:italic;
+    font-weight: bolder;
+
+}
+
+a.scienceName span{
+    font-style: italic;
+    color:#000000;
+    font-weight:lighter;
+}
 
 
 
