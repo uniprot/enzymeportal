@@ -32,25 +32,23 @@ $(document).ready(function() {
             the order is always 0
             */
         var idPrefixClicked = idClickedSplit[0];
-        var itemClicked = idClickedSplit[1];
         var orderOfItemClicked = idClickedSplit[2];
         var idOfHiddenText = "#"+idPrefixClicked+"_"+orderOfItemClicked;
         var jqClickedId= "#"+clickedId;
         var linkValue = $(jqClickedId).text();
-        var splitLinkName = linkValue.split(" ");
-        if (jQuery.inArray('more', splitLinkName) > -1){
-            $(idOfHiddenText).show();
-            $(jqClickedId).html(linkValue.replace('more','fewer'));
-        } else if (jQuery.inArray('fewer', splitLinkName) > -1) {
-            $(idOfHiddenText).hide();
-            $(jqClickedId).html(linkValue.replace('fewer','more'));
-        } else if (jQuery.inArray('whole', splitLinkName) > -1){
+        if (linkValue.indexOf(" more about ") > -1){
             $(idOfHiddenText).show();
             $(jqClickedId).html(linkValue
-                .replace('whole','less').replace('... ',''));
-        } else if (jQuery.inArray('less', splitLinkName) > -1) {
+                .replace('more','less').replace('... ',''));
+        } else if (linkValue.indexOf(" less about ") > -1){
             $(idOfHiddenText).hide();
-            $(jqClickedId).html('... ' + linkValue.replace('less','whole'));
+            $(jqClickedId).html('... ' + linkValue.replace('less','more'));
+        } else if (linkValue.indexOf(" more ") > -1){
+            $(idOfHiddenText).show();
+            $(jqClickedId).html(linkValue.replace('more','fewer'));
+        } else if (linkValue.indexOf(" fewer ") > -1) {
+            $(idOfHiddenText).hide();
+            $(jqClickedId).html(linkValue.replace('fewer','more'));
         }
     });
 
