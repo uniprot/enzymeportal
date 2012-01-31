@@ -1,20 +1,11 @@
 package uk.ac.ebi.ep.web;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -31,8 +22,6 @@ import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
-import uk.ac.ebi.ep.adapter.uniprot.EnzymeAccessionWrapper;
-import uk.ac.ebi.ep.core.EnzymeSummaryWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
 import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
@@ -45,11 +34,9 @@ import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
-import uk.ac.ebi.ep.search.model.SearchFilters;
 import uk.ac.ebi.ep.search.model.SearchModel;
 import uk.ac.ebi.ep.search.model.SearchParams;
 import uk.ac.ebi.ep.search.model.SearchResults;
-import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
