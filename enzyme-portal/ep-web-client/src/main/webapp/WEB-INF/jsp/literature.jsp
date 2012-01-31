@@ -13,12 +13,13 @@
 	</c:when>
 	<c:otherwise>
 	
-<div style="position: relative; width: 100%; top: 2ex;">
+<div style="position: relative; width: 100%; top: 2ex; padding-bottom: 6ex;">
 
 <div class="literature" style="position: relative; width: 100%; top: 6ex;">
 <c:set var="allLabels" value="" />
 <c:set var="allLabelCodes" value="" />
-<ol id="citationsList">
+
+<div id="citationsList">
 <c:forEach var="labelledCitation" items="${enzymeModel.literature}">
 	<c:set var="cit" value="${labelledCitation.citation}"/>
 	<c:set var="citationClass" value="" />
@@ -31,8 +32,8 @@
 			<c:set var="allLabelCodes" value="${allLabelCodes}|${label.code}"/>
 		</c:if>
 	</c:forEach>
-        <fieldset>
-	<li class="${citationClass}" style="display: inline;">
+
+	<div class="${citationClass}">
 		<div class="pub_title" style="font-weight: bold;">
 			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.externalId}&amp;dataSource=${cit.dataSource}"
                 title="View ${cit.dataSource} ${cit.externalId} in CiteXplore"
@@ -49,8 +50,7 @@
 	    </div>
 	    </c:if>
 		<div class="pub_authors">
-                    			<c:set var="authors"
-					value=""/>
+            <c:set var="authors" value=""/>
 			<c:forEach var="author" varStatus="avs"
 				items="${cit.authorCollection}">
 				<c:set var="authors"
@@ -71,10 +71,9 @@
             <i>${cit.journalIssue.journal.title}</i>
             <b>${cit.journalIssue.volume}</b>, ${cit.pageInfo}
         </div>		
-	</li>
-        </fieldset>
+    </div>
 </c:forEach>
-</ol>
+</div>
 </div>
 
 <script type="text/javascript">
@@ -98,7 +97,7 @@ function filterCitations(){
 </script>
 
 <div id="literatureFilters" class="subTitle"
-    style="position: absolute; top: 0; width: 100%">
+    style="position: absolute; top: 0; width: 100%;">
 	Filters:
 	<c:set var="splitLabelCodes" value="${fn:split(allLabelCodes, '|')}"/>
 	<c:forEach var="citationLabel" varStatus="clvs"
