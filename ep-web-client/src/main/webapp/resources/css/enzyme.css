@@ -75,3 +75,8 @@ legend {
 .citationsList li {
 	margin-bottom: 2ex;
 }
+
+span.synonyms {
+    margin-right: 5px;
+    text-align:justify;
+}

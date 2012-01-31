@@ -31,7 +31,7 @@
 			<c:set var="allLabelCodes" value="${allLabelCodes}|${label.code}"/>
 		</c:if>
 	</c:forEach>
-	
+        <fieldset>
 	<li class="${citationClass}" style="display: inline;">
 		<div class="pub_title" style="font-weight: bold;">
 			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.externalId}&amp;dataSource=${cit.dataSource}"
@@ -49,6 +49,8 @@
 	    </div>
 	    </c:if>
 		<div class="pub_authors">
+                    			<c:set var="authors"
+					value=""/>
 			<c:forEach var="author" varStatus="avs"
 				items="${cit.authorCollection}">
 				<c:set var="authors"
@@ -70,6 +72,7 @@
             <b>${cit.journalIssue.volume}</b>, ${cit.pageInfo}
         </div>		
 	</li>
+        </fieldset>
 </c:forEach>
 </ol>
 </div>
