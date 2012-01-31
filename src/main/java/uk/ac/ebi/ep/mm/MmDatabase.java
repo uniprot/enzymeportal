@@ -36,9 +36,11 @@ public enum MmDatabase {
 	Linnean, // taxonomy
 	LIPID_MAPS_class("LIPID MAPS class"),
 	LIPID_MAPS_instance("LIPID MAPS instance"),
+	MeSH,
 	MetaCyc,
 	MolBase,
 	NMRShiftDB,
+	OMIM,
 	PDB,
 	PDBeChem("MSDCHEM"),
 	Patent,
