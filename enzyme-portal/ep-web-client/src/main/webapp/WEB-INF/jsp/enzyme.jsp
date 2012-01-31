@@ -88,8 +88,9 @@ This enzyme has been partially classified because its catalytic activity is eith
                     <c:set var="synonymSize" value="${fn:length(synonym)}"/>
                     <c:if test='${synonymSize>0}'>
                         <c:forEach var="i" begin="0" end="${synonymSize-1}">
-                            <c:out value="${synonym[i]}"/><br>
-                        </c:forEach>
+                             
+                             <span class="synonyms" >  <c:out value="${synonym[i]};"/></span>
+                       </c:forEach>
                     </c:if>
                 </li>
             </ul>
@@ -111,5 +112,18 @@ This enzyme has been partially classified because its catalytic activity is eith
         </dd>
         <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in UniProt</a></p>
     </dl>
+    
+                <fieldset>
+                <div class="provenance">
+                    <ul>
+                        <c:set var="provenance" value="${enzyme.provenance}"/>
+                        <c:forEach var="prov" items="${provenance}"
+                                   varStatus="vsProv">
+                            <li class="note_${vsProv.index}">${prov}</li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </fieldset>
+    
 </div>
                                         

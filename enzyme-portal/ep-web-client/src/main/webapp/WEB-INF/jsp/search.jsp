@@ -69,11 +69,11 @@
                                                                 <c:choose>
                                                                     <c:when test="${empty speciesList[i].commonname}">
                                                                         <a href='#'>${speciesList[i].scientificname}</a>
-                                                                        
+
                                                                     </c:when>
                                                                     <c:otherwise>
                                                                         <a class="scienceName" href='#'>${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></a>
-                                                                        
+
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                             </span>
@@ -95,12 +95,12 @@
                                                                 <span>
                                                                     <c:choose>
                                                                         <c:when test="${empty speciesList[i].commonname}">
-                                                                             <a href='#'>${speciesList[i].scientificname}</a>
-                                                                           
+                                                                            <a href='#'>${speciesList[i].scientificname}</a>
+
                                                                         </c:when>
                                                                         <c:otherwise>
-                                                                             <a class="scienceName" href='#'>${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></a>
-                                                                            
+                                                                            <a class="scienceName" href='#'>${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></a>
+
                                                                         </c:otherwise>
                                                                     </c:choose>
                                                                 </span>
@@ -220,7 +220,7 @@
                                                end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
                                         <c:set var="uniprotId" value="${enzyme.uniprotid}"/>                            
                                         <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
-                                         <c:set var="primAcc2" value="${enzyme.relatedspecies[0].species.commonname}"/>  
+
                                         <div class="resultItem">
 
                                             <div class="proteinImg">
@@ -271,8 +271,8 @@
                                                        enzyme.species.scientificname :
                                                        enzyme.species.commonname}]
                                                 </a>
-                                                
-                                                
+
+
 
                                                 <c:if test="${not empty enzyme.function}">
                                                     <div>
@@ -345,21 +345,21 @@
                                                                 <!-- c:if test="${relspecies[i].species.scientificname ne enzyme.species.scientificname}" -->
 <!--                                                                <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                                     [${empty relspecies[i].species.commonname?
-                                                                       relspecies[i].species.scientificname :
-                                                                       relspecies[i].species.commonname}]-->
-                                                                    <!-- ${relspecies[i].pdbCodes} -->
-                                                                    
-                                                                                   <c:choose>
-                                                                        <c:when test="${empty relspecies[i].species.commonname}">
-                                                                             <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
-                                                                           
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                             <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
-                                                                            
-                                                                        </c:otherwise>
-                                                                    </c:choose>
-<!--                                                                </a>-->
+                                                                   relspecies[i].species.scientificname :
+                                                                   relspecies[i].species.commonname}]-->
+                                                                <!-- ${relspecies[i].pdbCodes} -->
+
+                                                                <c:choose>
+                                                                    <c:when test="${empty relspecies[i].species.commonname}">
+                                                                        <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
+
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
+
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                                <!--                                                                </a>-->
                                                                 <!-- /c:if -->                                             
                                                             </c:forEach>
                                                             <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
@@ -367,24 +367,24 @@
                                                                     <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">                                                
 <!--                                                                        <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
                                                                             [${empty relspecies[i].species.commonname?
-                                                                               relspecies[i].species.scientificname :
-                                                                               relspecies[i].species.commonname}]-->
-                                                                            <!-- ${relspecies[i].pdbCodes} -->
-                                                                            
-                                                               
-                                                                    <c:choose>
-                                                                        <c:when test="${empty relspecies[i].species.commonname}">
-                                                                             <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
-                                                                           
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                             <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
-                                                                            
-                                                                        </c:otherwise>
-                                                                    </c:choose>
-                                                                                                                                         
-                                                                            
-<!--                                                                        </a>-->
+                                                                           relspecies[i].species.scientificname :
+                                                                           relspecies[i].species.commonname}]-->
+                                                                        <!-- ${relspecies[i].pdbCodes} -->
+
+
+                                                                        <c:choose>
+                                                                            <c:when test="${empty relspecies[i].species.commonname}">
+                                                                                <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
+
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
+
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+
+
+                                                                        <!--                                                                        </a>-->
                                                                     </c:forEach>
                                                                 </span>
                                                                 <a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>">Show more species</a>
