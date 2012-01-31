@@ -72,7 +72,7 @@ legend {
     text-align: center;
 }
 
-.citationsList li {
+#citationsList > div {
 	margin-bottom: 2ex;
 }
 
