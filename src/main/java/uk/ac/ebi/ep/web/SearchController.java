@@ -108,7 +108,7 @@ public class SearchController {
                 case proteinStructure:
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
-                case reactionsPathways:
+                case reactionsPathways:                 
                     enzymeModel = retriever.getReactionsPathways(accession);
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
                     break;
@@ -181,7 +181,7 @@ public class SearchController {
     public String postSearchResult(SearchModel searchModelForm, BindingResult result,
             Model model, HttpSession session) {
         String view = "search";
-        
+
         List<EnzymeSummary> summaryEntryFilteredResults = new LinkedList<EnzymeSummary>();
 
         if (searchModelForm != null) {
@@ -221,6 +221,11 @@ public class SearchController {
                     }
                 }
 
+                final int numOfResults = resultSet.getSummaryentries().size();
+                                Pagination pagination = new Pagination(
+                        numOfResults, searchParameters.getSize());
+                        pagination.setFirstResult(searchParameters.getStart());
+                                
                 // Filter:
                 List<String> speciesFilter = searchParameters.getSpecies();
                 List<String> compoundsFilter = searchParameters.getCompounds();
@@ -237,56 +242,66 @@ public class SearchController {
                             new DiseasesPredicate(diseasesFilter));
                     // Create a new SearchResults, don't modify the one in session
                     SearchResults sr = new SearchResults();
-                
+
                     /**
                      * filter the result based on the species selected by user
                      */
-              List<String> checkBoxParams = searchParameters.getSpecies();                  
-              for(EnzymeSummary enzymeSummary : filteredResults){
-                 
-                  for(String selected : checkBoxParams ){
-                  for(EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()){
-                     
-                      if(selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())){
-                          enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
-                          // enzymeSummary.setSpecies(enzymeAccession.getSpecies());
-                           enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
-                       }
-                    
-                  }
-              }
-                  // adding the updated enzyme summaries to the filtered result
-                  summaryEntryFilteredResults.add(enzymeSummary);
-              }
+                    List<String> checkBoxParams = searchParameters.getSpecies();
+                    for (EnzymeSummary enzymeSummary : filteredResults) {
 
-                    
+                        for (String selected : checkBoxParams) {
+                            for (EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()) {
+
+                                if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
+                                    enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
+                                    // enzymeSummary.setSpecies(enzymeAccession.getSpecies());
+                                    enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
+                                }
+
+                            }
+                        }
+                        // adding the updated enzyme summaries to the filtered result
+                        summaryEntryFilteredResults.add(enzymeSummary);
+                    }
+                   
+                   pagination = new Pagination(
+                         summaryEntryFilteredResults.size(), searchParameters.getSize());
+                     pagination.setFirstResult(0);
+
                     sr.setSearchfilters(resultSet.getSearchfilters());
                     sr.setSummaryentries(summaryEntryFilteredResults);
                     // show the total number of hits (w/o filtering):
                     sr.setTotalfound(resultSet.getTotalfound());
                     searchModelForm.setSearchresults(sr);
+
+                
+                
                 } else {
                     // Show all of them:
                     searchModelForm.setSearchresults(resultSet);
                 }
+               
                 model.addAttribute("searchModel", searchModelForm);
-
-                // Paginate:
-                final int numOfResults =
-                        searchModelForm.getSearchresults().getSummaryentries().size();
-                Pagination pagination = new Pagination(
-                        numOfResults, searchParameters.getSize());
-                pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
-                pagination.setFirstResult(searchParameters.getStart());
+                
                 model.addAttribute("pagination", pagination);
+
+//                // Paginate:
+//                final int numOfResults =
+//                        searchModelForm.getSearchresults().getSummaryentries().size();
+//                Pagination pagination = new Pagination(
+//                        numOfResults, searchParameters.getSize());
+//               // pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
+//                pagination.setFirstResult(searchParameters.getStart());
+//                model.addAttribute("pagination", pagination);
 
                 addToHistory(session,
                         "searchparams.text=" + searchParameters.getText());
             } catch (Exception e) {
                 LOGGER.error("Failed search", e);
                 view = "error";
-            }       }
-       return view;
+            }
+        }
+        return view;
     }
 
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)

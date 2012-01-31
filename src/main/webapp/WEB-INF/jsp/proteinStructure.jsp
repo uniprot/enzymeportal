@@ -17,7 +17,7 @@
 		<p>There is no structure information available for this enzyme.</p>
 	</c:when>
 	<c:otherwise>
-        <c:set var="wrappers" value="${ProvenanceWrapper.provenance}"/>
+
         <script>
             function showStructure(pdbCode){
             	var structures = document.getElementById('proteinStructures');
