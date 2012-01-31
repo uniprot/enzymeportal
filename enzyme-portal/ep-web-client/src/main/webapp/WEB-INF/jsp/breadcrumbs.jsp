@@ -16,7 +16,7 @@
 							for <i>"${fn:substringAfter(hItem, '=')}"</i></a>
 					</c:when>
 					<c:otherwise>
-						<a href="${pageContext.request.contextPath}/search/${hItem}"><c:out value="${hItem}"/></a>
+						<a href="${pageContext.request.contextPath}/search/${hItem}/enzyme"><c:out value="${hItem}"/></a>
 					</c:otherwise>
 				</c:choose>
 				
