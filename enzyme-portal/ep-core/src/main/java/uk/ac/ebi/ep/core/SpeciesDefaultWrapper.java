@@ -1,5 +1,12 @@
 package uk.ac.ebi.ep.core;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import uk.ac.ebi.ep.search.model.Species;
 
 /**
@@ -16,11 +23,14 @@ import uk.ac.ebi.ep.search.model.Species;
  * @author rafa
  *
  */
-public class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWrapper> {
+public final class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWrapper> {
 
-    private Species species;
+    String[] commonSpecies = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
+    List<String> commonSpecieList = Arrays.asList(commonSpecies);
+    // Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
+    private final Species species;
 
-    public Species getSpecies() {
+    public final Species getSpecies() {
         return species;
     }
 
@@ -50,9 +60,19 @@ public class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWrapper> 
 //		return true;
 //	}
     public int compareTo(SpeciesDefaultWrapper other) {
-        // TODO: put Homo sapiens and others at the top.
-        //return species.getScientificname().compareTo(other.species.getScientificname());
+
+        if (species.getCommonname() == null || other.species.getCommonname() == null) {
+            return species.getScientificname().compareTo(other.species.getScientificname());
+        }
+        if (species.getCommonname() != null && other.species.getCommonname() == null) {
+            return species.getCommonname().compareTo(other.species.getScientificname());
+        }
+        if (species.getCommonname() == null && other.species.getCommonname() != null) {
+            return species.getScientificname().compareTo(other.species.getCommonname());
+        }
         return species.getCommonname().compareTo(other.species.getCommonname());
+        
+
     }
 
     @Override
@@ -67,13 +87,55 @@ public class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWrapper> 
         if (this.species != other.species && (this.species == null || !this.species.equals(other.species))) {
             return false;
         }
+        if (this.species.getCommonname() != other.species.getCommonname() && (this.species.getCommonname() == null || !this.species.getCommonname().equals(other.species.getCommonname()))) {
+            return false;
+        }
+        if (this.species.getScientificname() != other.species.getScientificname() && (this.species.getScientificname() == null || !this.species.getScientificname().equals(other.species.getScientificname()))) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + (this.species != null ? this.species.hashCode() : 0);
+        hash = 37 * hash + (this.species.getScientificname() != null ? this.species.getScientificname().hashCode() : 0);
         return hash;
     }
+    AtomicInteger key = new AtomicInteger(8);
+
+    public List<Species> build() {
+       
+        Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
+        if (commonSpecieList.contains(species.getCommonname())) {
+            // Human, Mouse, Rat, Fly, Worm, Yeast, Ecoli 
+            if (species.getCommonname().equalsIgnoreCase("Human")) {
+                priorityMapper.put(1, species);
+            } else if (species.getCommonname().equalsIgnoreCase("Mouse")) {
+                priorityMapper.put(2, species);
+            } else if (species.getCommonname().equalsIgnoreCase("Rat")) {
+                priorityMapper.put(3, species);
+            } else if (species.getCommonname().equalsIgnoreCase("Fruit fly")) {
+                priorityMapper.put(4, species);
+            } else if (species.getCommonname().equalsIgnoreCase("Worm")) {
+                priorityMapper.put(5, species);
+            } else if (species.getCommonname().equalsIgnoreCase("Yeast")) {
+                priorityMapper.put(6, species);
+            } else if (species.getCommonname().equalsIgnoreCase("Ecoli")) {
+                priorityMapper.put(7, species);
+            }
+        } else {
+
+            priorityMapper.put(key.getAndIncrement(), species);
+
+        }
+             List<Species> speciesFilters = new LinkedList<Species>();
+        for (Map.Entry<Integer, Species> map : priorityMapper.entrySet()) {
+            speciesFilters.add(map.getValue());
+                       
+        }
+
+        return speciesFilters;
+    }
+
 }
