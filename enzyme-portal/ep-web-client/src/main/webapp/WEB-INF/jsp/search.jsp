@@ -41,7 +41,8 @@
                     <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
                     <c:set var="totalfound" value="${searchresults.totalfound}"/>
                     <c:set var="filterSizeDefault" value="${10}"/>
-                    <c:set var="textMaxLength" value="${100}"/>
+                    <%-- maximum length in words for a text field --%>
+                    <c:set var="textMaxLength" value="${60}"/>
                     <div class="grid_12 content">
                         <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
                             <div class="filter">                    
@@ -287,7 +288,7 @@
                                                                                begin="${textMaxLength}">
                                                                         ${word}</c:forEach>
                                                                     </span>
-                                                                    <a class="showLink" id="fun_link_${resultItemId}">... Show whole function</a>
+                                                                    <a class="showLink" id="fun_link_${resultItemId}">... Show more about function</a>
                                                             </c:when>
                                                             <c:otherwise>
                                                                 ${enzyme.function}
