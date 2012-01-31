@@ -28,6 +28,7 @@ public interface IUniprotAdapter {
     public static final String ID_SPLIT_SYMBOL = "_";
 
     public static final String DEFAULT_SPECIES = "Homo sapiens";
+    // public static final String DEFAULT_SPECIES = "none";
     
     /**
      * @return the configuration for this UniProt proxy.

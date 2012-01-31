@@ -12,10 +12,16 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.entry.Field;
@@ -96,6 +102,8 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		regulString = null;
 		Species species = null;
 		List<EnzymeAccession> relSpecies = new ArrayList<EnzymeAccession>();
+                
+                
 
 		int bestSpecies = 0; // the best choice to show
 		String[] colValues = null;
@@ -104,8 +112,8 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 			
 			// some entries don't return a species, ex. Q5D707
 			if (colValues[4].length() == 0) continue;
-			
-			EnzymeAccession ea = new EnzymeAccession();
+			EnzymeAccessionWrapper enzymeAccessionWrapper = new EnzymeAccessionWrapper(new EnzymeAccession());
+			EnzymeAccession ea = enzymeAccessionWrapper.getAccession(); //new EnzymeAccession();
 			// organism is always [4], accession is [0], see getColumns()
 			ea.setSpecies(UniprotWsAdapter.parseSpecies(colValues[4]));
 			ea.getUniprotaccessions().add(colValues[0]);
@@ -120,12 +128,16 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 					.equalsIgnoreCase(defaultSpecies);
 			final boolean noDefSp = relSpecies.isEmpty()
 					|| !relSpecies.get(0).getSpecies().getScientificname().equalsIgnoreCase(defaultSpecies);
-			if (isDefSp || (noDefSp && pdbCodes != null)){
+			
+                        if (isDefSp || (noDefSp && pdbCodes != null)){
 				relSpecies.add(0, ea);
-				bestSpecies = i;
+				bestSpecies = i;                          
 			} else {
 				relSpecies.add(ea);
 			}
+
+                        //relSpecies.add(ea);
+     
 		}
 		species = relSpecies.get(0).getSpecies();
 		
