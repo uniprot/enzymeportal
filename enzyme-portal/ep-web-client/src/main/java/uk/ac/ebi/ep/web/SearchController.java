@@ -96,8 +96,8 @@ public class SearchController {
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
                 case reactionsPathways:                 
-                    enzymeModel = retriever.getReactionsPathways(accession);
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
+                    enzymeModel = retriever.getReactionsPathways(accession);
                     break;
                 case molecules:
                     enzymeModel = retriever.getMolecules(accession);
