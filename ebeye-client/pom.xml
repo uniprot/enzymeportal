@@ -32,6 +32,9 @@
 							<sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
 							<wsdlOptions>
 								<wsdlOption>
+								<!-- 
+									<wsdl>http://www.ebi.ac.uk/ebisearch/service.ebi?wsdl</wsdl>
+								 -->
 									<wsdl>http://wwwdev.ebi.ac.uk/ebisearch/service.ebi?wsdl</wsdl>
 								</wsdlOption>
 							</wsdlOptions>
