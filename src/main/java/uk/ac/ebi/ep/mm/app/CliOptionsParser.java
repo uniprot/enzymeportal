@@ -20,7 +20,7 @@ public class CliOptionsParser {
 	 * 		-xmlFile &lt;xmlFile&gt; (-indexDir &lt;indexDir&gt;|-dbConfig
 	 * 		&lt;dbConfig&gt;)
 	 * <ul>
-	 * 	<li>-xmlFile &lt;xmlFile&gt;: the XML file to parse</li>
+	 * 	<li>-xmlFile &lt;xmlFile&gt;: the XML (or HTML) file to parse</li>
 	 * 	<li>-indexDir &lt;indexDir&gt; (optional): the directory for a lucene
 	 * 		index. If it does not exist, a new one is created.</li>
 	 * 	<li>-dbConfig &lt;dbConfig&gt; (optional): the name of a database
@@ -37,7 +37,7 @@ public class CliOptionsParser {
 		Options options = new Options();
         options.addOption(OptionBuilder.isRequired()
                 .hasArg().withArgName("xmlFile")
-                .withDescription("UniProt XML file")
+                .withDescription("XML (or HTML) file")
                 .create("xmlFile"));
         options.addOption(OptionBuilder
                 .hasArg().withArgName("indexDir")
