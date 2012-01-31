@@ -6,7 +6,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-
+/**
+ * @deprecated use XPathSAXHandler (biobabel-core-0.9.0) instead.
+ * @author rafa
+ *
+ */
 class ReactomeWsHandler extends DefaultHandler {
 	
 	private static final String SUMMATION_DBID = "/summation/dbId";
