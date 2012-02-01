@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +8,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.ebi.ep.adapter.chebi.ChebiAdapter;
+import uk.ac.ebi.ep.adapter.chebi.ChebiFetchDataException;
+import uk.ac.ebi.ep.adapter.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
@@ -23,14 +25,10 @@ import uk.ac.ebi.ep.adapter.reactome.ReactomeServiceException;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotWsException;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
-import uk.ac.ebi.ep.chebi.adapter.ChebiAdapter;
-import uk.ac.ebi.ep.chebi.adapter.ChebiFetchDataException;
-import uk.ac.ebi.ep.chebi.adapter.IChebiAdapter;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
-import uk.ac.ebi.ep.enzyme.model.Literature;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
@@ -84,6 +82,17 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             reactomeAdapter = new ReactomeAdapter();
         }
         return reactomeAdapter;
+    }
+    
+    /**
+     * Lazily constructs a new adapter if needed.
+     * @return a ChEBI adapter.
+     */
+    public IChebiAdapter getChebiAdapter(){
+    	if (chebiAdapter == null){
+    		chebiAdapter = new ChebiAdapter();
+    	}
+    	return chebiAdapter;
     }
 
     public EnzymeModel getEnzyme(String uniprotAccession)
