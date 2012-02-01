@@ -1,11 +1,17 @@
-package uk.ac.ebi.ep.chebi.adapter;
+package uk.ac.ebi.ep.adapter.chebi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import org.apache.log4j.Logger;
 
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
@@ -20,7 +26,6 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
-import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**
  *
@@ -32,28 +37,27 @@ import uk.ac.ebi.util.result.DataTypeConverter;
  */
 public class ChebiAdapter implements IChebiAdapter {
 
-//********************************* VARIABLES ********************************//
-    protected ChebiWebServiceClient client;
+	private static final Logger LOGGER = Logger.getLogger(ChebiAdapter.class);
+    
     public static final int IDS_MAX_SIZE = 10;
+	
+    protected ChebiWebServiceClient client;
 
-     public ChebiAdapter() {
+    private ChebiConfig config;
+    
+    public ChebiAdapter() {
          client = new ChebiWebServiceClient();
     }
-//******************************** CONSTRUCTORS ******************************//
 
-//****************************** GETTER & SETTER *****************************//
-//********************************** METHODS *********************************//
-    public static void main(String[] args) throws ChebiFetchDataException {
-        ChebiAdapter chebiAdapter = new ChebiAdapter();
-        //getCompleteEntityExample ();
-        //List<String> results =
-           //     chebiAdapter.getChebiLiteEntity("DB00277");
-        //chebiAdapter.getChebiCompleteEntity(results.get(0));
-        getOntologyParentsExample ();
-    }
+    public ChebiConfig getConfig() {
+		return config;
+	}
 
+	public void setConfig(ChebiConfig config) {
+		this.config = config;
+	}
 
-    public uk.ac.ebi.ep.enzyme.model.Entity getEpChemicalEntity(
+	public uk.ac.ebi.ep.enzyme.model.Entity getEpChemicalEntity(
             String chebiId) throws ChebiFetchDataException {
         Entity entity = getChebiCompleteEntity(chebiId);
         uk.ac.ebi.ep.enzyme.model.Entity epEntity = Transformer.transformChebiToEpMoleculeEntity(entity);
@@ -96,7 +100,6 @@ public class ChebiAdapter implements IChebiAdapter {
         try {
             List<Entity> results = client.getCompleteEntityByList(ids);
             for (Entity result:results) {
-                String chebiId = result.getChebiId();
                 List<DataItem> synonyms = result.getSynonyms();
                 // List all synonyms
                 for (DataItem dataItem : synonyms) {                    
@@ -199,28 +202,141 @@ public class ChebiAdapter implements IChebiAdapter {
     }
     public EnzymeModel getMoleculeCompleteEntries(EnzymeModel enzymeModel) throws ChebiFetchDataException {
         ChemicalEntity chemicalEntity = enzymeModel.getMolecule();
-        Set<String> uniqueMoleculeNames = new HashSet<String>();
-        List<String> drugNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getDrugs());// FIXME drugbank comes without names
-        List<String> activatorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getActivators());
-        List<String> inhibitorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getInhibitors());
-        uniqueMoleculeNames.addAll(drugNames);
-        uniqueMoleculeNames.addAll(activatorNames);
-        uniqueMoleculeNames.addAll(inhibitorNames);
-        Map<String,Entity> nameIdMap = null;
-        if (uniqueMoleculeNames.size() > 0) {
-            nameIdMap = queryChebiAllNamesForEntities(uniqueMoleculeNames);
-            if (nameIdMap.size() > 0) {
-                List<Molecule> drugMols = setMolecules(drugNames, nameIdMap);
-                enzymeModel.getMolecule().setDrugs(drugMols);
-                List<Molecule> activatorMols = setMolecules(activatorNames, nameIdMap);
-                enzymeModel.getMolecule().setActivators(activatorMols);
-                List<Molecule> inhibitorMols = setMolecules(inhibitorNames, nameIdMap);
-                enzymeModel.getMolecule().setInhibitors(inhibitorMols);
-            }
-        }
-
+//        Set<String> uniqueMoleculeNames = new HashSet<String>();
+//        List<String> drugNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getDrugs());
+//        List<String> activatorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getActivators());
+//        List<String> inhibitorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getInhibitors());
+//        uniqueMoleculeNames.addAll(drugNames);
+//        uniqueMoleculeNames.addAll(activatorNames);
+//        uniqueMoleculeNames.addAll(inhibitorNames);
+//        Map<String,Entity> nameIdMap = null;
+//        if (uniqueMoleculeNames.size() > 0) {
+//            nameIdMap = queryChebiAllNamesForEntities(uniqueMoleculeNames);
+//            if (nameIdMap.size() > 0) {
+//                List<Molecule> drugMols = setMolecules(drugNames, nameIdMap);
+//                enzymeModel.getMolecule().setDrugs(drugMols);
+//                List<Molecule> activatorMols = setMolecules(activatorNames, nameIdMap);
+//                enzymeModel.getMolecule().setActivators(activatorMols);
+//                List<Molecule> inhibitorMols = setMolecules(inhibitorNames, nameIdMap);
+//                enzymeModel.getMolecule().setInhibitors(inhibitorMols);
+//            }
+//        }
+        
+//        ExecutorService pool = Executors.newFixedThreadPool(config.getMaxThreads());
+	    ExecutorService pool = Executors.newCachedThreadPool();
+	    CompletionService<Molecule> ecs =
+	    		new ExecutorCompletionService<Molecule>(pool);
+	    
+	    try {
+	    	Map<Future<Molecule>, Molecule> drugFut =
+	    			new HashMap<Future<Molecule>, Molecule>();
+	        for (Molecule drug : chemicalEntity.getDrugs()) {
+	        	ChebiWsCallable callable = getCallable(drug);
+				if (callable != null){
+					drugFut.put(ecs.submit(callable), drug);
+				}
+			}
+		    Map<Future<Molecule>, Molecule> inhFut =
+		    		new HashMap<Future<Molecule>, Molecule>();
+	        for (Molecule inhibitor : chemicalEntity.getInhibitors()) {
+				ChebiWsCallable callable = getCallable(inhibitor);
+				if (callable != null){
+					inhFut.put(ecs.submit(callable), inhibitor);
+				}
+			}
+	        Map<Future<Molecule>, Molecule> actFut =
+	        		new HashMap<Future<Molecule>, Molecule>();
+	        for (Molecule activator : chemicalEntity.getActivators()) {
+				ChebiWsCallable callable = getCallable(activator);
+				if (callable != null){
+					actFut.put(ecs.submit(callable), activator);
+				}
+			}
+	        Map<Future<Molecule>, Molecule> cofFut =
+	        		new HashMap<Future<Molecule>, Molecule>();
+	        for (Molecule cofactor : chemicalEntity.getCofactors()) {
+				ChebiWsCallable callable = getCallable(cofactor);
+				if (callable != null){
+					cofFut.put(ecs.submit(callable), cofactor);
+				}
+			}
+	        // How many jobs have we sent?
+	        final int numOfMolecules = drugFut.size() + inhFut.size()
+	        		+ actFut.size() + cofFut.size();
+	        // Let's retrieve them:
+			for (int i = 0; i < numOfMolecules; i++){
+	        	Future<Molecule> future = null;
+	        	try {
+	        		future = ecs.take();
+//	        		future = ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
+	        		if (future != null){
+	        			final Molecule molecule = future.get();
+	        			if (molecule != null){
+		        			// Replace the incomplete molecule with the complete one:
+	        				if (drugFut.containsKey(future)){
+	        					drugFut.put(future, molecule);
+	        				} else if (inhFut.containsKey(future)){
+	        					inhFut.put(future, molecule);
+	        				} else if (actFut.containsKey(future)){
+	        					actFut.put(future, molecule);
+	        				} else if (cofFut.containsKey(future)){
+	        					cofFut.put(future, molecule);
+	        				}
+	        			} else {
+		    				LOGGER.warn("Molecule retrieved is null!");
+		    				// FIXME:
+		    				drugFut.remove(future);
+		    				inhFut.remove(future);
+		    				actFut.remove(future);
+		    				cofFut.remove(future);
+	        			}
+	        		} else {
+	    				LOGGER.warn("Job result not retrieved!");
+	        		}
+	        	} catch (Exception e){
+	            	// Don't stop the others
+	        		LOGGER.error("Callable " + (i+1) + " of " + numOfMolecules
+	            			+ " - " + e.getMessage(), e);
+	        	}
+	        }
+			enzymeModel.getMolecule().setDrugs(
+					new ArrayList<Molecule>(drugFut.values()));
+			enzymeModel.getMolecule().setInhibitors(
+					new ArrayList<Molecule>(inhFut.values()));
+			enzymeModel.getMolecule().setActivators(
+					new ArrayList<Molecule>(actFut.values()));
+			enzymeModel.getMolecule().setCofactors(
+					new ArrayList<Molecule>(cofFut.values()));
+	    } finally {
+	    	pool.shutdown();
+	    }
         return enzymeModel;
     }
+
+	/**
+	 * Prepares a callable suitable to retrieve a complete Molecule from ChEBI
+	 * depending on the information available.
+	 * @param molecule an incomplete Molecule.
+	 * @return a callable to retrieve the complete Molecule.
+	 */
+	private ChebiWsCallable getCallable(Molecule molecule) {
+		ChebiWsCallable callable = null;
+		final String drugId = molecule.getId();
+		if (drugId != null){
+			callable = drugId.startsWith("CHEBI:")?
+					new ChebiWsCallable(config, drugId,
+							SearchCategory.CHEBI_ID):
+					new ChebiWsCallable(config, drugId,
+							SearchCategory.DATABASE_LINK_REGISTRY_NUMBER_CITATION);
+		} else if (molecule.getName() != null){
+			callable = new ChebiWsCallable(config, molecule.getName(),
+					SearchCategory.ALL_NAMES);
+		}
+		if (callable == null){
+			LOGGER.warn("The molecule has no id or name");
+		}
+		return callable;
+	}
 
 
   public static void getOntologyParentsExample (){

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.ep.chebi.adapter;
+package uk.ac.ebi.ep.adapter.chebi;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
+import uk.ac.ebi.ep.adapter.chebi.ChebiAdapter;
 import static org.junit.Assert.*;
 
 /**

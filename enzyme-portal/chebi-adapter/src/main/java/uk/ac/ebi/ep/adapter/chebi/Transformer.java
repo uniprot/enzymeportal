@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.chebi.adapter;
+package uk.ac.ebi.ep.adapter.chebi;
 
 import java.util.List;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.DataItem;
