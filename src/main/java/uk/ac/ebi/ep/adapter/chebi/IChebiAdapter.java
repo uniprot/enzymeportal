@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.chebi.adapter;
+package uk.ac.ebi.ep.adapter.chebi;
 
 import java.util.List;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
@@ -13,16 +13,9 @@ import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
  */
 public interface IChebiAdapter {
 
-//********************************* VARIABLES ********************************//
-
- public static enum MoleculeType {drug, inhibitor, activator, cofactor};
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
+	public static enum MoleculeType {drug, inhibitor, activator, cofactor};
+	
+	public void setConfig(ChebiConfig chebiConfig);
 
     public uk.ac.ebi.ep.enzyme.model.Entity getEpChemicalEntity(
             String chebiId) throws ChebiFetchDataException;
@@ -30,4 +23,5 @@ public interface IChebiAdapter {
     public List<String> getChebiLiteEntity(String query) throws ChebiFetchDataException;
 
     public EnzymeModel getMoleculeCompleteEntries(EnzymeModel enzymeModel) throws ChebiFetchDataException;
+
 }

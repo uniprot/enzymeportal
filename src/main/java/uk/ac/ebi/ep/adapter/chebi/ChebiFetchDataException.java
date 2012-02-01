@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.chebi.adapter;
+package uk.ac.ebi.ep.adapter.chebi;
 
 /**
  *
@@ -10,7 +10,9 @@ package uk.ac.ebi.ep.chebi.adapter;
  */
 public class ChebiFetchDataException extends Exception {
 
-    public ChebiFetchDataException(Throwable cause) {
+	private static final long serialVersionUID = 1L;
+
+	public ChebiFetchDataException(Throwable cause) {
         super(cause);
     }
 
