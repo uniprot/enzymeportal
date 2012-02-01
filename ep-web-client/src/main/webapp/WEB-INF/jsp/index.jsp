@@ -29,11 +29,21 @@
         <div class="contents">
             <div class="page container_12">
                 <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
-                <jsp:include page="subHeader.jsp"/>
-                
-                
-                    <jsp:include page="searchBox.jsp"/>
+	                <jsp:include page="subHeader.jsp"/>
+	                <jsp:include page="searchBox.jsp"/>
 
+	                <div style="margin-left: auto; margin-right: auto;
+                        width: 50%; margin-bottom: 10ex;">
+		                <h2>Welcome to the Enzyme Portal</h2>
+	                	The Enzyme Portal is for people who are interested
+	                	in finding out about the biology of enzymes and
+	                	proteins with enzymatic activity.
+		                <div style="text-align: right;">
+			                <a href="about" class="showLink">More about the
+			                	enzyme portal...</a>
+		                </div>
+	                </div>
+<%--
                     <div class="grid_12 content">
                         <div class="iconGroup">
                             <fieldset class="iconField">
@@ -75,6 +85,7 @@
                             </fieldset>
                         </div>
                     </div>
+ --%>
 
                 </form:form>
             </div>
