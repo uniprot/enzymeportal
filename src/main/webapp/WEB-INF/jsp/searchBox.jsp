@@ -11,8 +11,8 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<div class="grid_12">
-    <div  id="keywordSearch" class="searchBackground">
+<div style="width: 70em; margin-left: auto; margin-right: auto;">
+    <div id="keywordSearch" class="searchBackground">
         <div style="width: 65em; margin-left: auto; margin-right: auto; margin-top: 2ex;">
         <!-- 
             <div style="text-align: left !important; margin: 0ex;">
