@@ -348,9 +348,14 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
             List<String> prov = new LinkedList<String>();
-            prov.add("Data Source : ChEBI ");
+            prov.add("Data Sources : ChEBI and ChEMBL");
            // prov.add("RELEASED DATE = " + new Date());
             prov.add("Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on ‘small’ chemical compounds.");
+            prov.add("ChEMBL is a database of bioactive drug-like small" +
+            		" molecules, it contains 2-D structures, calculated" +
+            		" properties (e.g. logP, Molecular Weight, Lipinski" +
+            		" Parameters, etc.) and abstracted bioactivities (e.g." +
+            		" binding constants, pharmacology and ADMET data).");
             if (enzymeModel.getMolecule() != null) {
                 enzymeModel.getMolecule().setProvenance(prov);
             }
