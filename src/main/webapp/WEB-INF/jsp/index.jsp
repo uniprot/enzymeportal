@@ -33,16 +33,24 @@
 	                <jsp:include page="searchBox.jsp"/>
 
 	                <div style="margin-left: auto; margin-right: auto;
-                        width: 50%; margin-bottom: 10ex;">
+                        width: 50%;">
 		                <h2>Welcome to the Enzyme Portal</h2>
 	                	The Enzyme Portal is for people who are interested
-	                	in finding out about the biology of enzymes and
-	                	proteins with enzymatic activity.
+	                	in the biology of enzymes and proteins with enzymatic
+	                	activity.
 		                <div style="text-align: right;">
 			                <a href="about" class="showLink">More about the
 			                	enzyme portal...</a>
 		                </div>
 	                </div>
+
+                    <div style="margin-left: auto; margin-right: auto;
+                        width: 420px; margin-top: 4ex; margin-bottom: 4ex;">
+                        <iframe width="420" height="315"
+                            src="http://www.youtube.com/embed/Kldp0WXcxUM"
+                            frameborder="0"
+                            allowfullscreen></iframe>
+                    </div>
 <%--
                     <div class="grid_12 content">
                         <div class="iconGroup">

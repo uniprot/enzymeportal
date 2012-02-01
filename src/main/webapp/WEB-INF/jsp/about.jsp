@@ -26,12 +26,12 @@
 	<h2>About the Enzyme Portal</h2>
 	<p>
 		The Enzyme Portal is for people who are interested in
-		finding out about the biology of enzymes and proteins with enzymatic
+		the biology of enzymes and proteins with enzymatic
 		activity.
 	</p>
 
 	<p>
-		The Enzyme Portal integrates publicly available
+		It integrates publicly available
 		information about enzymes, such as small-molecule chemistry,
 		biochemical pathways and drug compounds. It provides a concise
 		summary of information from:
@@ -40,17 +40,18 @@
 						knowledge base</a></li>
 			<li><a href="http://www.pdbe.org">Protein Data Bank in
 						Europe</a></li>
-			<li>Rhea, a database
+			<li><a href="http://www.ebi.ac.uk/rhea">Rhea</a>, a database
 					of enzyme-catalyzed reactions</li>
 			<li><a href="http://www.reactome.org">Reactome</a>, a database
 					of biochemical pathways</li>
-			<li>IntEnz, a resource with enzyme nomenclature information</li>
+			<li><a href="http://www.ebi.ac.uk/intenz">IntEnz</a>, a resource
+					with enzyme nomenclature information</li>
 			<li><a href="http://www.ebi.ac.uk/chebi">ChEBI</a> and
 					<a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a>,
 					which contain information about small molecule chemistry and
 					bioactivity</li>
-			<li><a href="http://www.ebi.ac.uk/thornton-srv/databases/CoFactor/">Cofactor</a>
-					and <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/">Macie</a>
+			<li><a href="http://www.ebi.ac.uk/thornton-srv/databases/CoFactor/">CoFactor</a>
+					and <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/">MACiE</a>
 					for highly detailed, curated information about cofactors and reaction
 					mechanisms.</li>
 		</ul>
@@ -66,6 +67,9 @@
 	</p>
 
 	<h2>The Enzyme Portal Team</h2>
+	<img alt="The Enzyme Portal team" width="400"
+		style="float: left; margin: 2ex 2em;"
+		src="resources/images/EP_team_photo_4_web.jpg"/>
 	<p>
 		The Enzyme Portal is designed and developed at the
 			EMBL-European Bioinformatics Institute (<a
@@ -105,10 +109,17 @@
 			Jacobsen</a> from the UniProt Team</li>
 		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=290">Bijay
 			Jassal</a>&nbsp;from the Reactome Team</li>
-		<li>Gemma Holiday and Julia Fischer, previously from the Thornton Team</li>
-		<li>Syed Asad Rahman from the Thornton Team</li>
-		<li>Mickael Goujon and Francis Rowland from the External Services Team</li>
-		<li>James Malone and Helen Parkinson</li>
+		<li>Gemma Holliday and Julia Fischer, previously from the Thornton Team</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=839">Syed
+			Asad Rahman</a> from the Thornton Team</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=793">Mickael
+			Goujon</a> and
+			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1175">Francis
+			Rowland</a> from the External Services Team</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=863">James
+			Malone</a> and
+			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=413">Helen
+			Parkinson</a></li>
 	</ul>
 	</p>
 	
