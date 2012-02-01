@@ -10,10 +10,10 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<div class="grid_12">                
+<div class="grid_12zzz" style="display: table; margin-left: 1em;">
     <%@ include file="breadcrumbs.jsp" %>
 </div>
-<div class="grid_12" style="display: table-row;">
+<div class="grid_12zzz" style="margin-left: 1em;">
 	<div style="display: table-cell;">
 		<h1 style="border: none; background: none;">Enzyme Portal</h1>
 	</div>
