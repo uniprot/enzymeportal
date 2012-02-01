@@ -296,6 +296,11 @@ public class SearchController {
         return "underconstruction";
     }
 
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
+    public String getAbout(Model model) {
+        return "about";
+    }
+
     private void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
         List<String> history = (List<String>) session.getAttribute("history");
