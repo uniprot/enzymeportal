@@ -119,7 +119,6 @@ This enzyme has been partially classified because its catalytic activity is eith
         <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in UniProt</a></p>
     </dl>
     
-                <fieldset>
                 <div class="provenance">
                     <ul>
                         <c:set var="provenance" value="${enzyme.provenance}"/>
@@ -129,7 +128,6 @@ This enzyme has been partially classified because its catalytic activity is eith
                         </c:forEach>
                     </ul>
                 </div>
-            </fieldset>
-    
-</div>
+           
+    </div>
                                         
