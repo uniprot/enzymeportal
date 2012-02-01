@@ -85,6 +85,13 @@
 			value="http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
 	</bean>
 	
+	<bean name="uk.ac.ebi.ep:name=chebiConfig"
+		class="uk.ac.ebi.ep.adapter.chebi.ChebiConfig">
+		<property name="timeout" value="30000"/>
+		<property name="maxThreads" value="10"/>
+		<property name="searchStars" value="ALL"/>
+	</bean>
+	
     <!--Start internationalization-->
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

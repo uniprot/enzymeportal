@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
@@ -71,6 +72,8 @@ public class SearchController {
     private IntenzConfig intenzConfig;
     @Autowired
     private ReactomeConfig reactomeConfig;
+    @Autowired
+    private ChebiConfig chebiConfig;
 
     /**
      * Process the entry page,
@@ -100,6 +103,7 @@ public class SearchController {
                     enzymeModel = retriever.getReactionsPathways(accession);
                     break;
                 case molecules:
+                	retriever.getChebiAdapter().setConfig(chebiConfig);
                     enzymeModel = retriever.getMolecules(accession);
                     break;
                 case diseaseDrugs:
