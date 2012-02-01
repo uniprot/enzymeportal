@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
-import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
-import uk.ac.ebi.webservices.ebeye.EntryReferences;
+import uk.ac.ebi.ebinocle.webservice.ArrayOfEntryReferences;
+import uk.ac.ebi.ebinocle.webservice.EntryReferences;
+import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
+import uk.ac.ebi.ebisearchservice.ArrayOfString;
 
 /**
  *
@@ -89,6 +89,7 @@ public class Transformer {
         while (it.hasNext()) {
             ArrayOfString arrayOfString = (ArrayOfString)it.next();
             String fieldValue = arrayOfString.getString().get(0);
+            if (fieldValue == null) continue;
             if (isUNIPROTfield) {
                 rawResultList.addAll(transformAccessionsString(fieldValue));
             } else {

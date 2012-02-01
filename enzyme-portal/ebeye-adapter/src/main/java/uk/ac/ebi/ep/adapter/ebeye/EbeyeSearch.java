@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
+import uk.ac.ebi.ebisearchservice.ArrayOfString;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetEntriesCallable;
 import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.search.adapter.ISearchAdapter;
-import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
 /**
  *

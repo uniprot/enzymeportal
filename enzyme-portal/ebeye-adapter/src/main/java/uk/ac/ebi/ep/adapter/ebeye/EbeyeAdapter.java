@@ -18,6 +18,9 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.ebi.ebinocle.webservice.ArrayOfEntryReferences;
+import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
+import uk.ac.ebi.ebisearchservice.ArrayOfString;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetEntriesCallable;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetResultsCallable;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.NumberOfResultsCaller;
@@ -25,9 +28,6 @@ import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.result.Pagination;
-import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
-import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
 /**
  *
