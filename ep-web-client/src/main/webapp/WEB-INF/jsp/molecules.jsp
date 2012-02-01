@@ -151,8 +151,7 @@
                     </fieldset>
                 </c:if>
             </div>
-            <fieldset>
-                <div class="provenance">
+                 <div class="provenance">
                     <ul>
                         <c:set var="provenance" value="${molecules.provenance}"/>
 
@@ -162,8 +161,6 @@
                         </c:forEach>
                     </ul>
                 </div>
-            </fieldset>
-
         </div>
     </c:if>
 </div>

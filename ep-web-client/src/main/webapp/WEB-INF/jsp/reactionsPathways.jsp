@@ -125,7 +125,6 @@
                         </c:if>
                     </fieldset>
                 </div>
-            <fieldset>
                 <div class="provenance">
                     <ul>
                         <c:forEach var="prov" items="${reactionpathway.provenance}"
@@ -134,7 +133,6 @@
                         </c:forEach>
                     </ul>
                 </div>
-            </fieldset>
             </c:forEach>
         </c:otherwise>
     </c:choose>                
