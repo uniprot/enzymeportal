@@ -115,7 +115,7 @@
                                                 </c:forEach>
                                                 <c:set var="speciesMoreSize" value="${speciesListSize-filterSizeDefault}"/>
                                             </div>
-                                            <a class="showLink" id="<c:out value='species_link_0'/>"><c:out value="See ${speciesMoreSize} more"/></a> <br/>
+                                                <a class="showLink" onclick="" id="<c:out value='species_link_0'/>"><c:out value="See ${speciesMoreSize} more"/></a> <br/>
                                         </c:if>
                                     </div>
                                 </div>

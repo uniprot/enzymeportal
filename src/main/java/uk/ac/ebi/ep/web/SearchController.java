@@ -254,7 +254,7 @@ public class SearchController {
                    pagination = new Pagination(
                          summaryEntryFilteredResults.size(), searchParameters.getSize());
                      pagination.setFirstResult(0);
-
+                     model.addAttribute("pagination", pagination);
                     sr.setSearchfilters(resultSet.getSearchfilters());
                     sr.setSummaryentries(summaryEntryFilteredResults);
                     // show the total number of hits (w/o filtering):
