@@ -3,13 +3,14 @@ package uk.ac.ebi.util.result;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
+import uk.ac.ebi.ebisearchservice.ArrayOfString;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.ResultField;
 import uk.ac.ebi.ep.config.ResultFieldList;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
-import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
 
 /**
  *
