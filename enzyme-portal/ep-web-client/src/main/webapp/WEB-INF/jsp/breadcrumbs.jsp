@@ -4,8 +4,6 @@
 <div class="breadcrumbs" id="breadcrumbs">
 	<ul>
 	    <li class="first"><a href="http://www.ebi.ac.uk/" class="firstbreadcrumb">EBI</a></li>
-	    <li><a href="http://www.ebi.ac.uk/Databases/">Databases</a></li>
-	    <li><a href="http://www.ebi.ac.uk/Databases/enzymes.html">Enzymes</a></li>
 		<li id="homeBreadcrumb"><a href="/enzymeportal">Enzyme Portal</a></li>
 		<c:if test="${not empty history}">
 			<c:forEach var="hItem" items="${history}">

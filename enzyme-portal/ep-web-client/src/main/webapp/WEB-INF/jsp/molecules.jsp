@@ -43,7 +43,7 @@
                                 <div>
                                     <div>
                                         <a target="blank" href="${drug.url}">
-                                            <img src="${chebiImageBaseUrl}${drug.id}${chebiImageParams}" alt="${drug.name}"/>
+                                            <img src="${chebiImageBaseUrl}${drug.id}" alt="${drug.name}"/>
                                         </a>
                                     </div>
                                     <div>
