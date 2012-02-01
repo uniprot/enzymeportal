@@ -13,17 +13,23 @@
 
 <div id="enzymeContent" class="summary">
     <h2><c:out value="${enzymeModel.name}"/></h2>
-    <c:set var="function" value="${enzymeModel.function}"/>
-    <c:if test='${function!=null || function !=""}'>
     <dl>
         <dt>Function</dt>
         <dd>
             <ul>
-                <li><c:out value="${enzymeModel.function}"/></li>
+                <li>
+                <c:choose>
+                	<c:when test="${empty enzymeModel.function}">
+                	No description has been found for the function of this enzyme.
+                	</c:when>
+                	<c:otherwise>
+               		${enzymeModel.function}
+                	</c:otherwise>
+               	</c:choose>
+                </li>
             </ul>
         </dd>
     </dl>
-    </c:if>
 
     <dl>
         <dt>EC Classification</dt>
