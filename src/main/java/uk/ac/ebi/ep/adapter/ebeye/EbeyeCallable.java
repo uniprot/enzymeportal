@@ -3,14 +3,14 @@ package uk.ac.ebi.ep.adapter.ebeye;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import uk.ac.ebi.ebinocle.webservice.ArrayOfEntryReferences;
+import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
+import uk.ac.ebi.ebisearchservice.ArrayOfString;
+import uk.ac.ebi.ebisearchservice.EBISearchService;
+import uk.ac.ebi.ebisearchservice.EBISearchService_Service;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamGetNumberOfResults;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
-import uk.ac.ebi.webservices.ebeye.ArrayOfArrayOfString;
-import uk.ac.ebi.webservices.ebeye.ArrayOfEntryReferences;
-import uk.ac.ebi.webservices.ebeye.ArrayOfString;
-import uk.ac.ebi.webservices.ebeye.EBISearchService;
-import uk.ac.ebi.webservices.ebeye.EBISearchService_Service;
 
 /**
  *
