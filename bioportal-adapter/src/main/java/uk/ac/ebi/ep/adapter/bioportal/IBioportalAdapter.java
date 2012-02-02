@@ -8,7 +8,7 @@ public interface IBioportalAdapter {
 	 * Retrieves a disease from EFO.
 	 * @param name a disease name
 	 * @return a Disease object whose name in EFO matches exactly the
-	 * 		parameter.
+	 * 		parameter, or <code>null</code> if not found.
 	 * @throws BioportalAdapterException 
 	 */
 	public Disease getDiseaseByName(String name) throws BioportalAdapterException;
