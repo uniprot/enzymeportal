@@ -160,5 +160,6 @@
     <module>literature-adapter</module>
     <module>biomart-adapter</module>
     <module>mega-mapper</module>
+    <module>bioportal-adapter</module>
   </modules>
 </project>
