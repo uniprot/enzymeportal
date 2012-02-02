@@ -88,7 +88,7 @@
                                 <div>
                                     <div>
                                         <a target="blank" href="${inhibitor.url}">
-                                            <img src="${chebiImageBaseUrl}${inhibitor.id}${chebiImageParams}" alt="${inhibitor.name}"/>
+                                            <img src="${chebiImageBaseUrl}${inhibitor.id}" alt="${inhibitor.name}"/>
                                         </a>
                                     </div>
                                     <div>
@@ -132,7 +132,7 @@
                                 <div>
                                     <div>
                                         <a target="blank" href="${activator.url}">
-                                            <img src="${chebiImageBaseUrl}${activator.id}${chebiImageParams}" alt="${activator.name}"/>
+                                            <img src="${chebiImageBaseUrl}${activator.id}" alt="${activator.name}"/>
                                         </a>
                                     </div>
                                     <div>
