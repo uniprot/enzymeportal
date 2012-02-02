@@ -45,11 +45,23 @@
 	                </div>
 
                     <div style="margin-left: auto; margin-right: auto;
-                        width: 420px; margin-top: 4ex; margin-bottom: 4ex;">
-                        <iframe width="420" height="315"
-                            src="http://www.youtube.com/embed/Kldp0WXcxUM"
-                            frameborder="0"
-                            allowfullscreen></iframe>
+                        width: 70em; margin-top: 4ex; margin-bottom: 4ex;">
+                        <table><tr style="text-align: center;">
+	                        <td>
+	                        <b>Welcome to the Enzyme Portal</b>
+	                        <iframe width="320" height="210"
+	                            src="http://www.youtube.com/embed/Kldp0WXcxUM"
+	                            frameborder="0"
+	                            allowfullscreen></iframe>
+	                        </td>
+	                        <td>
+	                        <b>Explore Enzyme Portal</b>
+	                        <iframe width="320" height="210"
+	                            src="http://www.youtube.com/embed/Kldp0WXcxUM"
+	                            frameborder="0"
+	                            allowfullscreen></iframe>
+	                        </td>
+                        </tr></table>
                     </div>
 <%--
                     <div class="grid_12 content">
