@@ -33,5 +33,16 @@
         </ul>
     </c:forEach>
     </c:if>
+
+	<div class="provenance">
+		<ul>
+			<li class="note_0">Data Source:
+				<a href="http://www.uniprot.org">UniProt</a></li>
+			<li class="note_1">UniProt - The mission of UniProt is to provide the
+				scientific community with a comprehensive, high-quality and freely
+				accessible resource of protein sequence and functional information</li>
+		</ul>
 </div>
-                                        
+
+</div>
+
