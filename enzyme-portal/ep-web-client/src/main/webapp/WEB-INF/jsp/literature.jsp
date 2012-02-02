@@ -116,4 +116,14 @@ function filterCitations(){
 	</c:otherwise>
 </c:choose>
 
+
+<div class="provenance">
+	<ul>
+		<li class="note_0">Data Source:
+			<a href="http://www.ebi.ac.uk/citexplore/">CiteXplore</a></li>
+		<li class="note_1">CiteXplore combines literature search with text
+			mining tools for biomedical publications.</li>
+	</ul>
+</div>
+
 </div>
