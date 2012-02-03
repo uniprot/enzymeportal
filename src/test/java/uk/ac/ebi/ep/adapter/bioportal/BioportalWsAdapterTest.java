@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 
@@ -37,7 +38,7 @@ public class BioportalWsAdapterTest {
 	
 	@Test
 	public void testSearchConcept() throws Exception {
-		Entity disease = bwa.searchConcept(BioportalWsAdapter.BIOPORTAL_EFO_ID,
+		Entity disease = bwa.searchConcept(BioportalOntology.EFO,
 				"sarcoidosis", Disease.class, false);
 		assertNotNull(disease);
 		assertEquals("EFO_0000690", disease.getId());
@@ -46,7 +47,7 @@ public class BioportalWsAdapterTest {
 	
 	@Test
 	public void testSearchConceptComplete() throws Exception {
-		Entity disease = bwa.searchConcept(BioportalWsAdapter.BIOPORTAL_EFO_ID,
+		Entity disease = bwa.searchConcept(BioportalOntology.EFO,
 				"sarcoidosis", Disease.class, true);
 		assertNotNull(disease);
 		assertEquals("EFO_0000690", disease.getId());
