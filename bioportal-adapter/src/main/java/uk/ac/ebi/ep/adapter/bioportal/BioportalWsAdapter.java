@@ -18,13 +18,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import uk.ac.ebi.biobabel.util.xml.XPathSAXHandler;
 import uk.ac.ebi.ep.enzyme.model.Disease;
+import uk.ac.ebi.ep.enzyme.model.Entity;
 
 public class BioportalWsAdapter implements IBioportalAdapter {
 
 	private static final Logger LOGGER =
 			Logger.getLogger(BioportalWsAdapter.class);
 	
-	private static final String EFO_ID = "1136";
+	public static final String BIOPORTAL_EFO_ID = "1136";
 
 	/* Interesting XPaths from the search */
 	
@@ -34,22 +35,42 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			"//success/data/page/contents/searchResultList/searchBean/conceptId";
 	private static final String SEARCH_CONCEPTIDSHORT =
 			"//success/data/page/contents/searchResultList/searchBean/conceptIdShort";
+	private static final String SEARCH_ONTOLOGYVERSIONID =
+			"//success/data/page/contents/searchResultList/searchBean/ontologyVersionId";
+
+	/* Interesting XPaths from the get */
+	
+	private static final String GET_LABEL = "/success/data/classBean/label";
+	private static final String GET_DEFINITION =
+			"//success/data/classBean/definitions/string";
+	private static final String GET_FULLID = "/success/data/classBean/fullId";
 	
 	private BioportalConfig config;
-
-	public Disease getDiseaseByName(String name)
-	throws BioportalAdapterException {
-		Disease disease = null;
+	
+	/**
+	 * Searches BioPortal for a concept.
+	 * @param ontologyId The ontology ID in BioPortal.
+	 * @param query The text to search.
+	 * @param clazz The type of the returned entity.
+	 * @param complete query BioPortal again with the concept ID in order to get
+	 * 		additional info? If <code>true</code>, the entity is completed (see
+	 * 		{@link #completeEntity(Entity, String, String)}, otherwise it will
+	 * 		contain just ID, name and URL.
+	 * @return an Entity object of the specified type and the level of detail,
+	 * 		or <code>null</code> if not found. Note that if the search returns
+	 * 		more than one result, only the first one is considered (this fact
+	 * 		will be logged, though).
+	 * @throws BioportalAdapterException
+	 */
+	public Entity searchConcept(String ontologyId, String query,
+			Class<? extends Entity> clazz, boolean complete)
+	throws BioportalAdapterException{
+		Entity entity = null;
 		final String urlString = MessageFormat.format(
-				config.getSearchUrl(), EFO_ID, name, 1);
+				config.getSearchUrl(), ontologyId, query, 1);
 		InputStream is = null;
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
-			XPathSAXHandler handler = new XPathSAXHandler(
-					SEARCH_CONCEPTIDSHORT,
-					SEARCH_CONCEPTID,
-					SEARCH_PREFERREDNAME);
-			xr.setContentHandler(handler);
 			
 			URL url = new URL(urlString);
 			URLConnection urlCon = config.getUseProxy()?
@@ -57,23 +78,35 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 					url.openConnection(Proxy.NO_PROXY);
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
+			XPathSAXHandler handler = new XPathSAXHandler(
+					SEARCH_CONCEPTIDSHORT,
+					SEARCH_PREFERREDNAME,
+					SEARCH_CONCEPTID,
+					SEARCH_ONTOLOGYVERSIONID);
+			xr.setContentHandler(handler);
 			xr.parse(inputSource);
 			
-			Collection<String> efoIds =
+			Collection<String> conceptIds =
 					handler.getResults().get(SEARCH_CONCEPTIDSHORT);
-			if (efoIds != null){
-				if (efoIds.size() > 1){
-					LOGGER.warn("More than one disease found by name: "
-							+ name + " " + efoIds);
+			if (conceptIds != null){
+				if (conceptIds.size() > 1){
+					LOGGER.warn("More than one concept found for: "
+							+ query + " " + conceptIds);
 				}
-				disease = new Disease();
-				// Remove the efo: prefix:
-				disease.setId(efoIds.iterator().next().replace("efo:", ""));
-				disease.setName(handler.getResults().get(SEARCH_PREFERREDNAME)
-						.iterator().next());
-				// XXX: xref to EFO as whole URL
-				disease.withXrefs(Collections.singletonList(handler.getResults()
-						.get(SEARCH_CONCEPTID).iterator().next()));
+				final String conceptId = conceptIds.iterator().next();
+ 				entity = clazz.newInstance();
+ 				// Remove the ontology prefix:
+ 				entity.setId(conceptId.replaceFirst("^\\w+:", ""));
+ 				entity.setName(handler.getResults().get(SEARCH_PREFERREDNAME)
+ 						.iterator().next());
+ 				entity.setUrl(Collections.singletonList(handler.getResults()
+ 						.get(SEARCH_CONCEPTID).iterator().next()));
+
+ 				if (complete){
+ 	 				String ontologyVersionId = handler.getResults()
+ 							.get(SEARCH_ONTOLOGYVERSIONID).iterator().next();
+ 					completeEntity(entity, conceptId, ontologyVersionId);
+ 				}
 			}
 		} catch (MalformedURLException e) {
 			throw new BioportalAdapterException(urlString, e);
@@ -81,15 +114,70 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			throw new BioportalAdapterException(urlString, e);
 		} catch (SAXException e) {
 			throw new BioportalAdapterException(urlString, e);
+		} catch (InstantiationException e) {
+			throw new BioportalAdapterException(urlString, e);
+		} catch (IllegalAccessException e) {
+			throw new BioportalAdapterException(urlString, e);
 		} finally {
-			if (is != null)
+			if (is != null){
 				try {
 					is.close();
 				} catch (IOException e) {
 					LOGGER.error(e);
 				}
+			}
 		}
-		return disease;
+		return entity;
+	}
+
+	/**
+	 * Completes an entity as much as possible by making another request to
+	 * BioPortal in order to get additional info (currently, only definition).
+	 * @param entity the Entity to complete.
+	 * @param conceptId the ID of the concept in BioPortal (including the
+	 * 		ontology prefix).
+	 * @param ontologyVersionId the ontology version ID in BioPortal.
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 * @throws SAXException
+	 */
+	private void completeEntity(Entity entity, final String conceptId,
+			String ontologyVersionId)
+	throws IOException, SAXException {
+		InputStream is = null;
+		try {
+			URL url = new URL(MessageFormat.format(config.getGetUrl(),
+					ontologyVersionId, conceptId, 1));
+			URLConnection urlCon = config.getUseProxy()?
+					url.openConnection():
+					url.openConnection(Proxy.NO_PROXY);
+			is = urlCon.getInputStream();
+			InputSource inputSource = new InputSource(is);
+			XPathSAXHandler handler = new XPathSAXHandler(
+					GET_LABEL, GET_DEFINITION, GET_FULLID);
+			XMLReader xr = XMLReaderFactory.createXMLReader();
+			xr.setContentHandler(handler);
+			xr.parse(inputSource);
+			
+			Collection<String> definitions =
+					handler.getResults().get(GET_DEFINITION);
+			if (definitions != null){
+				entity.setDescription(definitions.iterator().next()); // FIXME: ALL OF THEM?
+			}
+		} finally {
+			if (is != null){
+				try {
+					is.close();
+				} catch (IOException e) {
+					LOGGER.error(e);
+				}
+			}
+		}
+	}
+	
+	public Disease getDiseaseByName(String name)
+	throws BioportalAdapterException {
+		return (Disease) searchConcept(BIOPORTAL_EFO_ID, name, Disease.class, true);
 	}
 
 	public void setConfig(BioportalConfig config) {
