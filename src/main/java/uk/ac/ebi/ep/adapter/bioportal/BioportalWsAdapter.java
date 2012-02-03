@@ -50,7 +50,8 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	/**
 	 * Searches BioPortal for a concept.
 	 * @param ontologyId The ontology ID in BioPortal.
-	 * @param query The text to search.
+	 * @param query The text to search (a name, concept ID without ontology
+	 * 		prefix...).
 	 * @param clazz The type of the returned entity.
 	 * @param complete query BioPortal again with the concept ID in order to get
 	 * 		additional info? If <code>true</code>, the entity is completed (see
