@@ -25,7 +25,13 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	private static final Logger LOGGER =
 			Logger.getLogger(BioportalWsAdapter.class);
 	
-	public static final String BIOPORTAL_EFO_ID = "1136";
+	public static enum BioportalOntology {
+		EFO("1136"),
+		OMIM("1348");
+		private String id;
+		private BioportalOntology(String id){ this.id = id; }
+		public String getId(){ return id; }
+	}
 
 	/* Interesting XPaths from the search */
 	
@@ -49,7 +55,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	
 	/**
 	 * Searches BioPortal for a concept.
-	 * @param ontologyId The ontology ID in BioPortal.
+	 * @param ontology The ontology to be searched in BioPortal.
 	 * @param query The text to search (a name, concept ID without ontology
 	 * 		prefix...).
 	 * @param clazz The type of the returned entity.
@@ -63,12 +69,12 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	 * 		will be logged, though).
 	 * @throws BioportalAdapterException
 	 */
-	public Entity searchConcept(String ontologyId, String query,
+	public Entity searchConcept(BioportalOntology ontology, String query,
 			Class<? extends Entity> clazz, boolean complete)
 	throws BioportalAdapterException{
 		Entity entity = null;
 		final String urlString = MessageFormat.format(
-				config.getSearchUrl(), ontologyId, query, 1);
+				config.getSearchUrl(), ontology.getId(), query, 1);
 		InputStream is = null;
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
@@ -178,7 +184,8 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	
 	public Disease getDiseaseByName(String name)
 	throws BioportalAdapterException {
-		return (Disease) searchConcept(BIOPORTAL_EFO_ID, name, Disease.class, true);
+		return (Disease) searchConcept(BioportalOntology.EFO, name,
+				Disease.class, true);
 	}
 
 	public void setConfig(BioportalConfig config) {
