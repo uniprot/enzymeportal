@@ -18,6 +18,7 @@ import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
@@ -188,13 +189,8 @@ public class Uniprot2DiseaseParser implements MmParser {
 
 			// Now look if the MeSH heading matches an EFO entry:
 			try {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					throw new BioportalAdapterException("trying to sleep", e);// XXX
-				}
 				Disease efoDisease = (Disease) bioportalAdapter.searchConcept(
-						BioportalWsAdapter.BIOPORTAL_EFO_ID,
+						BioportalOntology.EFO,
 						meshHead, Disease.class, false);
 				if (efoDisease != null){
 					Entry efoEntry = new Entry();
