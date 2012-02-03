@@ -24,6 +24,7 @@ public enum MmDatabase {
 	Chinese_Abstracts("Chinese Abstracts citation"),
 	DrugBank,
 	EC,
+	EFO,
 	Gmelin("Gmelin Registry Number"),
 	Golm,
 	HMDB,
