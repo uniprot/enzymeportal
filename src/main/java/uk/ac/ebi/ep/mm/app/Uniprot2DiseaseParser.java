@@ -15,6 +15,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
+import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
 import uk.ac.ebi.ep.mm.MegaMapper;
@@ -37,6 +41,13 @@ public class Uniprot2DiseaseParser implements MmParser {
 	
 	private MegaMapper mm;
 	
+	private BioportalWsAdapter bioportalAdapter;
+	
+	public Uniprot2DiseaseParser() {
+		bioportalAdapter = new BioportalWsAdapter();
+		bioportalAdapter.setConfig(new BioportalConfig()); // defaults
+	}
+
 	/**
 	 * Minimum scores to accept a mapping.
 	 */
@@ -99,15 +110,15 @@ public class Uniprot2DiseaseParser implements MmParser {
 				double[] scores = new double[scoresCell.length];
 				boolean interesting = false;
 				for (int i = 0; i < scoresCell.length; i++) {
-					if (scoresCell[i].equals("exact")){
+					final String scoreString = scoresCell[i].trim();
+					if (scoreString.equals("exact")){
 						scores[i] = Double.MAX_VALUE;
 					} else {
-						scores[i] = Double.valueOf(scoresCell[i]);
+						scores[i] = Double.valueOf(scoreString);
 					}
 					if (scores[i] > minScore) interesting = true;
 				}
 				if (!interesting) continue;
-				
 				LOGGER.debug("Score over " + minScore);
 				
 				String uniprotAcc = m.group(1).replaceAll("<\\/?a[^>]*>", "");
@@ -115,50 +126,19 @@ public class Uniprot2DiseaseParser implements MmParser {
 						MmDatabase.UniProt, uniprotAcc);
 				// XXX: Ignore if not found in the enzymes mega-map:
 				if (uniprotEntry == null) continue;
-				
 				LOGGER.debug("UniProt accession is an enzyme: " + uniprotAcc);
 				
 				Collection<XRef> diseaseXrefs = new ArrayList<XRef>();
 
 				String[] omimCell = m.group(2).replaceAll("<\\/?a[^>]*>", "")
 						.split("\\s");
-				for (int i = 0; i < omimCell.length; i++) {
-					if (omimCell[i].equals("-")) continue;
-					Entry omimEntry = new Entry();
-					omimEntry.setDbName(MmDatabase.OMIM.name());
-					omimEntry.setEntryId(omimCell[i]);
-					XRef omimXref = new XRef();
-					omimXref.setFromEntry(uniprotEntry);
-					omimXref.setRelationship(Relationship.between(
-							MmDatabase.UniProt, MmDatabase.OMIM).name());
-					omimXref.setToEntry(omimEntry);
-					diseaseXrefs.add(omimXref);
-					LOGGER.debug("OMIM xref to " + omimCell[i]);
-									
-				}
+				addOmimXrefs(uniprotEntry, diseaseXrefs, omimCell);
 				
 				String[] meshIdsCell = m.group(3).replaceAll("<\\/?a[^>]*>", "")
 						.split(" / ");
 				String[] meshHeadsCell = m.group(4).split(" / ");
-				// Same number of MeSH IDs, headers and scores
-				for (int i = 0; i < scores.length; i++) {
-					if (scores[i] < minScore) continue;
-					Entry meshEntry = new Entry();
-					meshEntry.setDbName(MmDatabase.MeSH.name());
-					meshEntry.setEntryId(meshIdsCell[i]);
-					meshEntry.setEntryName(meshHeadsCell[i]);
-					XRef meshXref = new XRef();
-					meshXref.setFromEntry(uniprotEntry);
-					meshXref.setRelationship(Relationship.between(
-							MmDatabase.UniProt, MmDatabase.MeSH).name());
-					meshXref.setToEntry(meshEntry);
-					diseaseXrefs.add(meshXref);
-					LOGGER.debug("MeSH xref to " + meshIdsCell[i]);
-				}
-
-				// Now look if the MeSH heading matches an EFO entry:
-				
-				
+				addMeshAndEfoXrefs(uniprotEntry, diseaseXrefs, scores,
+						meshIdsCell, meshHeadsCell);
 //				mm.writeXrefs(diseaseXrefs);
 			}
             LOGGER.info("Parsing end");
@@ -172,7 +152,96 @@ public class Uniprot2DiseaseParser implements MmParser {
 			if (is != null) is.close();
 			if (br != null) br.close();
 		}
-		
+	}
+
+	/**
+	 * Adds xrefs from a UniProt entry to the passed MeSH terms if their score
+	 * is not less than the {@link #minScore}, and to EFO entries whose disease
+	 * name matches exactly the MeSH term.
+	 * @param uniprotEntry the UniProt entry referencing MeSH
+	 * @param diseaseXrefs the collection to update with any cross-references
+	 * 		to MeSH and EFO.
+	 * @param scores the scores of MeSH terms for the UniProt accession.
+	 * @param meshIds the MeSH identifiers.
+	 * @param meshHeads the MeSH headers (terms).
+	 */
+	private void addMeshAndEfoXrefs(Entry uniprotEntry,
+			Collection<XRef> diseaseXrefs, double[] scores,
+			String[] meshIds, String[] meshHeads) {
+		// Same number of MeSH IDs, headers and scores
+		for (int i = 0; i < scores.length; i++) {
+			if (scores[i] < minScore) continue;
+			Entry meshEntry = new Entry();
+			meshEntry.setDbName(MmDatabase.MeSH.name());
+			final String meshId = meshIds[i].trim();
+			meshEntry.setEntryId(meshId);
+			final String meshHead = meshHeads[i].trim();
+			meshEntry.setEntryName(meshHead);
+			
+			XRef meshXref = new XRef();
+			meshXref.setFromEntry(uniprotEntry);
+			meshXref.setRelationship(Relationship.between(
+					MmDatabase.UniProt, MmDatabase.MeSH).name());
+			meshXref.setToEntry(meshEntry);
+			diseaseXrefs.add(meshXref);
+			LOGGER.debug("MeSH xref to " + meshId);
+
+			// Now look if the MeSH heading matches an EFO entry:
+			try {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					throw new BioportalAdapterException("trying to sleep", e);// XXX
+				}
+				Disease efoDisease = (Disease) bioportalAdapter.searchConcept(
+						BioportalWsAdapter.BIOPORTAL_EFO_ID,
+						meshHead, Disease.class, false);
+				if (efoDisease != null){
+					Entry efoEntry = new Entry();
+					efoEntry.setDbName(MmDatabase.EFO.name());
+					efoEntry.setEntryId(efoDisease.getId());
+					efoEntry.setEntryName(efoDisease.getName());
+
+					XRef efoXref = new XRef();
+					efoXref.setFromEntry(uniprotEntry);
+					efoXref.setRelationship(Relationship.between(
+							MmDatabase.UniProt, MmDatabase.EFO).name());
+					efoXref.setToEntry(efoEntry);
+					diseaseXrefs.add(efoXref);
+					LOGGER.debug("EFO xref to " + efoDisease.getId());
+				}
+				
+			} catch (BioportalAdapterException e) {
+				// Don't stop the others just because of BioPortal/EFO problems:
+				LOGGER.error("Unable to get EFO xref for " + meshHead, e);
+			}
+		}
+	}
+
+	/**
+	 * Adds xrefs from a UniProt entry to the passed OMIM identifiers.
+	 * @param uniprotEntry the UniProt entry referencing OMIM
+	 * @param diseaseXrefs the collection to update with any cross-references
+	 * 		to OMIM.
+	 * @param omimIds the OMIM identifiers.
+	 */
+	private void addOmimXrefs(Entry uniprotEntry,
+			Collection<XRef> diseaseXrefs, String[] omimIds) {
+		for (int i = 0; i < omimIds.length; i++) {
+			final String omimString = omimIds[i].trim();
+			if (omimString.equals("-")) continue;
+			Entry omimEntry = new Entry();
+			omimEntry.setDbName(MmDatabase.OMIM.name());
+			omimEntry.setEntryId(omimString);
+			XRef omimXref = new XRef();
+			omimXref.setFromEntry(uniprotEntry);
+			omimXref.setRelationship(Relationship.between(
+					MmDatabase.UniProt, MmDatabase.OMIM).name());
+			omimXref.setToEntry(omimEntry);
+			diseaseXrefs.add(omimXref);
+			LOGGER.debug("OMIM xref to " + omimString);
+							
+		}
 	}
 
 	public void setWriter(MegaMapper mm) {
