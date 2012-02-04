@@ -140,7 +140,7 @@ public class Uniprot2DiseaseParser implements MmParser {
 				String[] meshHeadsCell = m.group(4).split(" / ");
 				addMeshAndEfoXrefs(uniprotEntry, diseaseXrefs, scores,
 						meshIdsCell, meshHeadsCell);
-//				mm.writeXrefs(diseaseXrefs);
+				mm.writeXrefs(diseaseXrefs);
 			}
             LOGGER.info("Parsing end");
             mm.closeMap();
