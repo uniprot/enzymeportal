@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -73,12 +74,14 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			Class<? extends Entity> clazz, boolean complete)
 	throws BioportalAdapterException{
 		Entity entity = null;
-		final String urlString = MessageFormat.format(
-				config.getSearchUrl(), ontology.getId(), query, 1);
 		InputStream is = null;
+		String urlString = null;
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			
+			urlString = MessageFormat.format(
+					config.getSearchUrl(), ontology.getId(),
+					URLEncoder.encode(query, "UTF-8"), 1);
 			URL url = new URL(urlString);
 			URLConnection urlCon = config.getUseProxy()?
 					url.openConnection():
@@ -116,15 +119,15 @@ public class BioportalWsAdapter implements IBioportalAdapter {
  				}
 			}
 		} catch (MalformedURLException e) {
-			throw new BioportalAdapterException(urlString, e);
+			throw new BioportalAdapterException(query, e);
 		} catch (IOException e) {
-			throw new BioportalAdapterException(urlString, e);
+			throw new BioportalAdapterException(query, e);
 		} catch (SAXException e) {
-			throw new BioportalAdapterException(urlString, e);
+			throw new BioportalAdapterException(query, e);
 		} catch (InstantiationException e) {
-			throw new BioportalAdapterException(urlString, e);
+			throw new BioportalAdapterException(query, e);
 		} catch (IllegalAccessException e) {
-			throw new BioportalAdapterException(urlString, e);
+			throw new BioportalAdapterException(query, e);
 		} finally {
 			if (is != null){
 				try {
