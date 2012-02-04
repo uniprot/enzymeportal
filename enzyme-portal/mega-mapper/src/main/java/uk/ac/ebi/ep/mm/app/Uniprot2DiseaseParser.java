@@ -206,7 +206,6 @@ public class Uniprot2DiseaseParser implements MmParser {
 					diseaseXrefs.add(efoXref);
 					LOGGER.debug("EFO xref to " + efoDisease.getId());
 				}
-				
 			} catch (BioportalAdapterException e) {
 				// Don't stop the others just because of BioPortal/EFO problems:
 				LOGGER.error("Unable to get EFO xref for " + meshHead, e);
@@ -220,15 +219,21 @@ public class Uniprot2DiseaseParser implements MmParser {
 	 * @param diseaseXrefs the collection to update with any cross-references
 	 * 		to OMIM.
 	 * @param omimIds the OMIM identifiers.
+	 * @throws BioportalAdapterException
 	 */
 	private void addOmimXrefs(Entry uniprotEntry,
-			Collection<XRef> diseaseXrefs, String[] omimIds) {
+			Collection<XRef> diseaseXrefs, String[] omimIds)
+	throws BioportalAdapterException {
 		for (int i = 0; i < omimIds.length; i++) {
 			final String omimString = omimIds[i].trim();
 			if (omimString.equals("-")) continue;
+			// We need a disease name:
+			Disease omimDisease = (Disease) bioportalAdapter.searchConcept(
+					BioportalOntology.OMIM, omimString, Disease.class, false);
 			Entry omimEntry = new Entry();
 			omimEntry.setDbName(MmDatabase.OMIM.name());
 			omimEntry.setEntryId(omimString);
+			omimEntry.setEntryName(omimDisease.getName());
 			XRef omimXref = new XRef();
 			omimXref.setFromEntry(uniprotEntry);
 			omimXref.setRelationship(Relationship.between(
@@ -236,7 +241,6 @@ public class Uniprot2DiseaseParser implements MmParser {
 			omimXref.setToEntry(omimEntry);
 			diseaseXrefs.add(omimXref);
 			LOGGER.debug("OMIM xref to " + omimString);
-							
 		}
 	}
 
