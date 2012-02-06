@@ -55,7 +55,7 @@ public class CliOptionsParser {
             			" defined, but not both");
 	        }
         } catch (ParseException e){
-            new HelpFormatter().printHelp(UniprotSaxParser.class.getName(), options);
+            new HelpFormatter().printHelp(MmParser.class.getName(), options);
         }
 		return cl;
 	}
