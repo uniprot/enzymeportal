@@ -7,14 +7,7 @@ UNIPROT_DATA=$EBINOCLE_DATA/uniprot/latest
 SWISSPROT=$UNIPROT_DATA/uniprot_sprot.xml
 TREMBL=$UNIPROT_DATA/uniprot_trembl.xml
 
-cd $(dirname $0)/..
-mvn clean package
-
-CP=.
-for JAR in target/*.jar
-do
-    CP=$CP:$JAR
-done
+. $(dirname $0)/mvnBuild.sh
 
 echo "Starting UniProt import - $(date)"
 java -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser -xmlFile $SWISSPROT \
