@@ -227,6 +227,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 						refdEntry = new Entry();
 						refdEntry.setDbName(refdDb.name());
 						refdEntry.setEntryId(dbKey);
+						// TODO: setEntryName, if possible
 					}
 					if (refdEntry != null){
 						LOGGER.debug("\tParsing xref to " + refdEntry.getEntryId());
