@@ -84,7 +84,7 @@ public class XRef implements Serializable {
 	@Override
 	public String toString() {
 		return new StringBuilder(fromEntry.toString())
-			.append(" - ").append(relationship.name()).append(" => ")
+			.append(" =[").append(relationship.name()).append("]=> ")
 			.append(toEntry.toString())
 			.toString();
 	}
