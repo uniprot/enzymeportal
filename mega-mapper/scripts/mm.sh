@@ -11,6 +11,7 @@ SWISSPROT=$UNIPROT_DATA/uniprot_sprot.xml
 TREMBL=$UNIPROT_DATA/uniprot_trembl.xml
 CHEBI=$EBINOCLE_DATA/chebi/latest/chebi_prod.xml
 CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target.xml
+UP_FILE=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 
 . $(dirname $0)/checkParams.sh
 . $(dirname $0)/mvnBuild.sh
@@ -37,5 +38,5 @@ echo "Finished ChEMBL import - $(date)"
 
 echo "Starting UniMed import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
-	-dbConfig ep-mm-db-$1
+	-dbConfig ep-mm-db-$1 -xmlFile $UP_FILE
 echo "Finished UniMed import - $(date)"
