@@ -227,13 +227,15 @@ public class Uniprot2DiseaseParser implements MmParser {
 		for (int i = 0; i < omimIds.length; i++) {
 			final String omimString = omimIds[i].trim();
 			if (omimString.equals("-")) continue;
-			// We need a disease name:
-			Disease omimDisease = (Disease) bioportalAdapter.searchConcept(
-					BioportalOntology.OMIM, omimString, Disease.class, false);
 			Entry omimEntry = new Entry();
 			omimEntry.setDbName(MmDatabase.OMIM.name());
 			omimEntry.setEntryId(omimString);
-			omimEntry.setEntryName(omimDisease.getName());
+			// We need a disease name:
+			Disease omimDisease = (Disease) bioportalAdapter.searchConcept(
+					BioportalOntology.OMIM, omimString, Disease.class, false);
+			if (omimDisease != null){
+				omimEntry.setEntryName(omimDisease.getName());
+			}
 			XRef omimXref = new XRef();
 			omimXref.setFromEntry(uniprotEntry);
 			omimXref.setRelationship(Relationship.between(
