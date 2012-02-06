@@ -1,9 +1,9 @@
 #!/bin/bash
 # Creates a complete mega-map.
-# Indexes UniProt enzymes (both Swiss-Prot and TrEMBL) and then ChEBI and
-# ChEMBL.
+# Indexes UniProt enzymes (both Swiss-Prot and TrEMBL) and then ChEBI, ChEMBL
+# and diseases.
 # Param:
-# $1: directory for the created lucene index.
+# $1: runtime environment (dev|test|prod)
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 UNIPROT_DATA=$EBINOCLE_DATA/uniprot/latest
