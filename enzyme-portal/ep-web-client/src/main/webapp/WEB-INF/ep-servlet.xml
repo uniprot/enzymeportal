@@ -46,6 +46,7 @@
         <property name="retrieverUniprotSource" value="UNIPROT"/>
         <property name="uniprotImplementation" value="WS"/>
         <property name="searchCacheSize" value="50"/>
+        <property name="mmDatasource" value="jdbc/ep/mm"/>
     </bean>
 	
 	<bean name="uk.ac.ebi.ep:name=ebeyeConfig"
