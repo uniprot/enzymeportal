@@ -1,20 +1,21 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.EnzymeRelatedDomains;
 import uk.ac.ebi.ep.config.ResultField;
-import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
+import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
 
 /**
  *
@@ -26,22 +27,28 @@ import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
  */
 public class Config implements ConfigMBean {
 
+	/* <moveThisTo_EbeyeConfig spaghetti="true"> */
     public static List<Domain> domainList;
     public static final String configFile = "/config.xml";
-    public static String resourcePath =
-    		new File(Config.class.getResource(configFile).getPath()).getParent();
+	/* </moveThisTo_EbeyeConfig> */
 
-    protected int resultsPerPage;
+    protected int resultsPerPage = 10;
     
-    protected int maxPages;
+    protected int maxPages = 1;
     
-    protected UniprotSource finderUniprotSource;
+    protected UniprotSource finderUniprotSource = UniprotSource.EBEYE;
     
-    protected UniprotSource retrieverUniprotSource;
+    protected UniprotSource retrieverUniprotSource = UniprotSource.UNIPROT;
     
-    protected UniprotImplementation uniprotImplementation;
+    protected UniprotImplementation uniprotImplementation =
+    		UniprotImplementation.WS;
     
-    protected int searchCacheSize;
+    protected int searchCacheSize = 50;
+    
+    /**
+     * The JNDI name for the mega-mapper data source.
+     */
+    protected String mmDatasource = "jdbc/ep/mm";
     
 	public void initIt() throws Exception {
 	  System.out.println("Init method after properties are set : ");
@@ -95,7 +102,7 @@ public class Config implements ConfigMBean {
         while (it.hasNext()) {
             domain = (Domain) it.next();
             if (domainId.equals(domain.getId())) {
-                return domain;
+                break;
             }
         }
         return domain;
@@ -164,5 +171,13 @@ public class Config implements ConfigMBean {
 
 	public int getSearchCacheSize() {
 		return searchCacheSize;
+	}
+
+	public String getMmDatasource() {
+		return mmDatasource;
+	}
+
+	public void setMmDatasource(String mmDatasource) {
+		this.mmDatasource = mmDatasource;
 	}
 }

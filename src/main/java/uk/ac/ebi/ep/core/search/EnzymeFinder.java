@@ -1,32 +1,32 @@
 package uk.ac.ebi.ep.core.search;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
+import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.adapter.intenz.IintenzAdapter;
 import uk.ac.ebi.ep.adapter.intenz.IntenzAdapter;
@@ -37,6 +37,11 @@ import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.core.CompoundDefaultWrapper;
 import uk.ac.ebi.ep.core.DiseaseDefaultWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
+import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.mm.MegaJdbcMapper;
+import uk.ac.ebi.ep.mm.MegaMapper;
+import uk.ac.ebi.ep.mm.MmDatabase;
+import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
@@ -50,6 +55,7 @@ import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.util.EPUtil;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.util.result.DataTypeConverter;
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * NOTE: the adapters must be configured before using this finder!
@@ -66,6 +72,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     IEbeyeAdapter ebeyeAdapter;
     IUniprotAdapter uniprotAdapter;
     IintenzAdapter intenzAdapter;
+    MegaMapper mm;
     protected SearchParams searchParams;
     SearchResults enzymeSearchResults;
     List<String> uniprotEnzymeIds;
@@ -95,6 +102,22 @@ public class EnzymeFinder implements IEnzymeFinder {
                 uniprotAdapter = new UniprotWsAdapter();
                 break;
         }
+        
+        Context initContext;
+		final String mmDatasource = config.getMmDatasource();
+		try {
+			initContext = new InitialContext();
+	        Context envContext = (Context) initContext.lookup("java:/comp/env");
+	        DataSource ds = (DataSource) envContext.lookup(mmDatasource);
+	        Connection con = ds.getConnection();
+	        mm = new MegaJdbcMapper(con);
+		} catch (NamingException e) {
+			LOGGER.error("Data source not found: " + mmDatasource, e);
+		} catch (SQLException e) {
+			LOGGER.error("Unable to establish connection to " + mmDatasource, e);
+		} catch (IOException e) {
+			LOGGER.error("Unable to create mega-mapper", e);
+		}
     }
 
 //****************************** GETTER & SETTER *****************************//
@@ -225,17 +248,25 @@ public class EnzymeFinder implements IEnzymeFinder {
             if (idsAndSpecies != null) uniprotIds2species.putAll(idsAndSpecies);
             }
              */
+            long now = System.currentTimeMillis();
             LOGGER.debug("UniProt IDs from UniProt: " + uniprotEnzymeIds.size());
-
+            LOGGER.debug(now + "-UniProtAccs-UniProt: \n" + uniprotEnzymeIds);
+            
             /* Search in Ebeye for Uniprot ids that are referenced in Chebi domain
              * This search has to be performed separately, because the results
              * must contain Chebi ids to show in the Compound search filter. */
             queryEbeyeChebiForUniprotIds();
             LOGGER.debug("UniProt IDs from UniProt+ChEBI: " + uniprotEnzymeIds.size());
+            LOGGER.debug(now + "-UniProtAccs-UniProt-ChEBI: \n" + uniprotEnzymeIds);
             /* Search in Intenz, Rhea, Reactome, PDBe for Uniprot ids. 
              * TODO: Process Intenz separately might improve the performance. */
             queryEbeyeOtherDomainForIds();
             LOGGER.debug("UniProt IDs from UniProt+ChEBI+others: " + uniprotEnzymeIds.size());
+            LOGGER.debug(now + "-UniProtAccs-UniProt-ChEBI-others: \n" + uniprotEnzymeIds);
+            queryEbeyeChemblForUniprotIds();
+            LOGGER.debug("UniProt IDs from UniProt+ChEBI+others+ChEMBL: " + uniprotEnzymeIds.size());
+            LOGGER.debug(now + "-UniProtAccs-UniProt-ChEBI-others-ChEMBL: \n" + uniprotEnzymeIds);
+
             uniprotIdPrefixSet.addAll(EPUtil.getIdPrefixes(uniprotEnzymeIds));
             chebiIds = new ArrayList<String>(chebiResults.keySet());
 // NO FILTERING HERE!
@@ -586,7 +617,47 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
     }
 
-    private List<Compound> newCompoundFilter(List<String> chebiIds) {
+    /**
+     * Retrieve UniProt IDs related to a query to ChEMBL-Compound domain.
+     * ChEMBL has split domains in EB-Eye (compound, target, assay), and no
+     * UNIPROT field like ChEBI or Rhea, so we have to get ChEMBL compound IDs
+     * and then relate them to UniProt IDs using the mega-map.
+     */
+    private void queryEbeyeChemblForUniprotIds() {
+    	if (mm == null){
+    		LOGGER.error("No mega-map found");
+    		return;
+    	}
+		final String chembl_compound = Domains.chembl_compound.name()
+				.replace('_', '-');
+        Domain domain = Config.getDomain(chembl_compound);
+        String query = LuceneQueryBuilder.createFieldsQuery(domain, searchParams);
+        ParamOfGetResults params = new ParamOfGetResults(
+				chembl_compound, query, Domains.chembl_compound.getGetFields());
+		List<List<String>> fields = ebeyeAdapter.getFields(params);
+		if (fields != null){
+			List<String> chemblIds = new ArrayList<String>();
+			for (List<String> list : fields) {
+				// We retrieve only one field (id) from chembl-compound, see config.xml:
+				chemblIds.add(list.get(0));
+			}
+			List<String> uniprotIdsFromChembl = new ArrayList<String>();
+			for (String chemblId : chemblIds) {
+				Entry chemblEntry = new Entry();
+				chemblEntry.setDbName(MmDatabase.ChEMBL.name());
+				chemblEntry.setEntryId(chemblId);
+				Collection<XRef> uniprotXrefs =
+						mm.getXrefs(chemblEntry, MmDatabase.UniProt);
+				for (XRef xRef : uniprotXrefs) {
+					// xref is UniProt entry =[is_target_of]=> ChEMBL entry
+					uniprotEnzymeIds.add(xRef.getFromEntry().getEntryId());
+				}
+			}
+			uniprotEnzymeIds.addAll(uniprotIdsFromChembl);
+		}
+	}
+
+	private List<Compound> newCompoundFilter(List<String> chebiIds) {
         Map<String, String> chebiIdNameMap = ebeyeAdapter.getNameMapByAccessions(
                 IEbeyeAdapter.Domains.chebi.name(), chebiIds);
         return DataTypeConverter.mapToCompound(chebiIdNameMap);
