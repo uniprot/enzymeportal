@@ -5,14 +5,15 @@ public class ReactomeConfig implements ReactomeConfigMBean {
 	/**
 	 * Use a proxy for requests to Reactome?
 	 */
-	private boolean useProxy;
+	private boolean useProxy = true;
 	
 	/**
 	 * Timeout for requests to Reactome, in milliseconds.
 	 */
-	private int timeout;
+	private int timeout = 30000;
 	
-	private String wsBaseUrl;
+	private String wsBaseUrl = 
+			"http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
 	
 	public void setUseProxy(boolean useProxy) {
 		this.useProxy = useProxy;
