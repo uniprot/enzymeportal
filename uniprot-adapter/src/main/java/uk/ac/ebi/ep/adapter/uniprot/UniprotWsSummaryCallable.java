@@ -393,12 +393,12 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		if (regulCol.length() > 0){
 			String[] sentences = regulCol.replace("ENZYME REGULATION: ", "").split("\\.");
 			for (String sentence : sentences) {
-				if (sentence.contains("Activated by") || sentence.contains("activated by")){
+				if (sentence.matches(".*"+Transformer.ACTIVATOR_REGEX+".*")){
 	                List<Molecule> activators =
 	                		Transformer.parseTextForActivators(sentence.trim());
 	                chemicalEntity.setActivators(activators);
 	            }
-	            if (sentence.contains("Inhibited by") || sentence.contains("inhibited by")) {
+	            if (sentence.matches(".*"+Transformer.INHIBITOR_REGEX+".*")) {
 	                List<Molecule> inhibitors =
 	                		Transformer.parseTextForInhibitors(sentence.trim());
 	                chemicalEntity.setInhibitors(inhibitors);
