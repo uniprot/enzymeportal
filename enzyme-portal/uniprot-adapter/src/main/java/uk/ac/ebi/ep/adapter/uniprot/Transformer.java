@@ -25,20 +25,9 @@ import uk.ac.ebi.kraken.model.uniprot.comments.FunctionCommentImpl;
  */
 public class Transformer {
 
-//********************************* VARIABLES ********************************//
-    public static final String COMMON_REGEX = "|\\b.ompletely\\b|\\b.artially\\b|[\\s]\\band\\b[\\s]|;|\\bor\\b|\\b.otentially\\b|\\balso\\b|\\bby\\b|\\b.pecifically\\b|\\b.compound[s\\s]\\b|\\(|\\)";
-    public static final String INHIBITOR_REGEX = ".nhibited by"+COMMON_REGEX;
-    public static final String ACTIVATOR_REGEX = ".ctivated by"+COMMON_REGEX;
-    //public static final String INHIBITOR_KEY= "inhibitor";
-    //public static final String ACTIVATOR_KEY= "activator";
-
-//******************************** CONSTRUCTORS ******************************//
-
-
-//****************************** GETTER & SETTER *****************************//
-
-
-//********************************** METHODS *********************************//
+    static final String COMMON_REGEX = "|\\b[Cc]ompletely\\b|\\b[Pp]artially\\b|\\s?\\band\\b\\s?|;|\\bor\\b|\\b[Pp]otentially\\b|\\balso\\b|\\bby\\b|\\b[Ss]pecifically\\b|\\b[Cc]compound[s\\s]\\b|\\(|\\)";
+    static final String INHIBITOR_REGEX = "\\b[Ii]n(hibited|activated) by\\b";
+    static final String ACTIVATOR_REGEX = "\\b[Aa]ctivated by\\b";
 
     public static String getCommentText(List<Comment> commentList) {
         StringBuffer sb = new StringBuffer();
@@ -93,12 +82,12 @@ public class Transformer {
      */
 
     public static List<Molecule> parseTextForInhibitors(String text) {
-        List<Molecule> inhibitors = parseText(text, Transformer.INHIBITOR_REGEX);
+        List<Molecule> inhibitors = parseText(text, INHIBITOR_REGEX + COMMON_REGEX);
         return inhibitors;
     }
 
     public static List<Molecule> parseTextForActivators(String text) {
-        List<Molecule> inhibitors = parseText(text,Transformer.ACTIVATOR_REGEX);
+        List<Molecule> inhibitors = parseText(text, ACTIVATOR_REGEX + COMMON_REGEX);
         return inhibitors;
     }
 
