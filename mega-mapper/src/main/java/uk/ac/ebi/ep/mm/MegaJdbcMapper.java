@@ -28,6 +28,7 @@ public class MegaJdbcMapper implements MegaMapper {
 	
 	public MegaJdbcMapper(Connection con) throws IOException{
 		this.con = con;
+		openMap();
 	}
 	
 	/**
