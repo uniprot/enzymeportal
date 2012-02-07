@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.adapter.ebeye.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -72,7 +73,7 @@ public class Transformer {
         List<List<String>> mergedResults = new ArrayList<List<String>>();
         Iterator<ArrayOfArrayOfString> it = rawResultsList.iterator();
         while (it.hasNext()) {
-            ArrayOfArrayOfString resultLines = (ArrayOfArrayOfString)it.next();
+            ArrayOfArrayOfString resultLines = it.next();
             mergedResults.addAll(transformToList(resultLines));
         }
         return mergedResults;
@@ -105,7 +106,7 @@ public class Transformer {
         LinkedHashSet<String> mergedResults = new LinkedHashSet<String>();
         Iterator<ArrayOfArrayOfString> it = rawResultsList.iterator();
         while (it.hasNext()) {
-            ArrayOfArrayOfString resultLines = (ArrayOfArrayOfString)it.next();
+            ArrayOfArrayOfString resultLines = it.next();
             mergedResults.addAll(transformFieldValueToList(resultLines, isUNIPROTfield));
         }
         return mergedResults;
@@ -177,16 +178,29 @@ public class Transformer {
 
     }
 
-
-
     public static List<String> transformToListOfString(
                                                 ArrayOfArrayOfString arrayOfArrayOfString) {
         List<String> resultList = new ArrayList<String>();
         Iterator<ArrayOfString> it = arrayOfArrayOfString.getArrayOfString().iterator();
         while (it.hasNext()) {
-            ArrayOfString arrayOfString = (ArrayOfString) it.next();
+            ArrayOfString arrayOfString = it.next();
             resultList.addAll(arrayOfString.getString());
         }
         return resultList;
+    }
+    
+    /**
+     * Transforms each of the passed enumeration items into Strings, using
+     * their <code>name</code> method.
+     * @param enumItems
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	public static List<String> transformToListOfString(Enum[] enumItems){
+    	String[] strings = new String[enumItems.length];
+    	for (int i = 0; i < strings.length; i++) {
+			strings[i] = enumItems[i].name();
+		}
+    	return Arrays.asList(strings);
     }
 }

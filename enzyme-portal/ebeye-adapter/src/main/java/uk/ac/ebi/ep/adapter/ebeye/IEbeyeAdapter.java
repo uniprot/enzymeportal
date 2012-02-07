@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**
@@ -19,24 +20,20 @@ import uk.ac.ebi.ep.search.exception.MultiThreadingException;
  */
 public interface IEbeyeAdapter {
 
-//********************************* VARIABLES ********************************//
-    
     public static final String EBEYE_SPECIES_FIELD ="organism_scientific_name";
     
-    //TODO either use this or domains in the config file
+    //FIXME either use this or domains in the config file (
     public static enum Domains {
-    	intenz, uniprot, rhea, reactome, chebi, pdbe
-        //, chembl_compound, chembl_target, omim, mesh
+    	intenz, uniprot, rhea, reactome, chebi, pdbe,
+    	chembl_compound(FieldsOfGetResults.id)
+        //, chembl_target, omim, efo
     	;
-	    public static List<String> getFields() {
-	    	List<String> fields = new ArrayList<String>();
-			fields.add(intenz.name());
-			fields.add(uniprot.name());
-			fields.add(rhea.name());
-			fields.add(reactome.name());
-			fields.add(chebi.name());
-			fields.add(pdbe.name());
-			return fields;
+	    private FieldsOfGetResults[] getFields;
+	    private Domains(FieldsOfGetResults... getFields){
+	    	this.getFields = getFields;
+	    }
+	    public List<String> getGetFields() {
+	    	return Transformer.transformToListOfString(getFields);
 		}
 	};
 
