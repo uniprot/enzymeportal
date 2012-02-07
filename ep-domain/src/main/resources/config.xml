@@ -140,12 +140,11 @@
       </ResultField>
     </ResultFieldList>
   </Domain>
-  <!--
   <Domain>
     <id>chembl-compound</id>
     <SearchFieldList>
       <SearchField>
-        <id>acc</id>
+        <id>compound_synonym</id>
       </SearchField>
       <SearchField>
         <id>id</id>
@@ -155,15 +154,16 @@
       <ResultField>
         <id>id</id>
       </ResultField>
+  <!--
       <ResultField>
         <id>acc</id>
       </ResultField>
       <ResultField>
         <id>UNIPROT</id>
       </ResultField>
+  -->
     </ResultFieldList>
   </Domain>
-  -->
   <Domain>
     <id>pdbe</id>
     <SearchFieldList>

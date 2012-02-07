@@ -45,4 +45,8 @@ public interface ConfigMBean {
 	
 	public abstract int getSearchCacheSize();
 
+	public abstract void setMmDatasource(String mmDatasource);
+
+	public abstract String getMmDatasource();
+
 }
