@@ -99,9 +99,9 @@ public interface MegaMapper {
 	 * @param db the database where the accession is from.
 	 * @param accession the accession number.
 	 * @param xDb the referencing/referenced database(s).
-	 * @return a collection of xrefs in the map. Note that the accession
-	 * 		used in the query may be either the origin or the target of an
-	 * 		xref.
+	 * @return a collection of xrefs in the map, or <code>null</code> if none
+	 * 		found. Note that the accession used in the query may be either the
+	 * 		origin or the target of an xref.
 	 */
 	public Collection<XRef> getXrefs(MmDatabase db, String accession,
 			MmDatabase... xDb);
