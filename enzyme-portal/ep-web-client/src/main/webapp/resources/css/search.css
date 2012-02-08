@@ -34,6 +34,7 @@ a:link, a:visited {
     text-decoration: underline;
     font-style: italic;
     white-space: nowrap;
+    cursor: pointer;
 }
 .ebiHeader {
     min-height: 50px;

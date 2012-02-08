@@ -44,25 +44,25 @@
 		                </div>
 	                </div>
 
-                    <div style="margin-left: auto; margin-right: auto;
-                        width: 70em; margin-top: 4ex; margin-bottom: 4ex;">
-                        <table><tr style="text-align: center;">
+                    <table style="margin-left: auto; margin-right: auto;
+                        width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
+                        <tr style="text-align: center;">
 	                        <td>
-	                        <b>Welcome to the Enzyme Portal</b>
-	                        <iframe width="320" height="210"
+	                        <%-- b>Welcome to the Enzyme Portal</b --%>
+	                        <iframe width="360" height="270"
 	                            src="http://www.youtube.com/embed/Kldp0WXcxUM"
 	                            frameborder="0"
 	                            allowfullscreen></iframe>
 	                        </td>
 	                        <td>
-	                        <b>Explore Enzyme Portal</b>
-	                        <iframe width="320" height="210"
-	                            src="http://www.youtube.com/embed/o_tRr3uMwr0"
+	                        <%-- b>Explore Enzyme Portal</b --%>
+	                        <iframe width="360" height="270"
+	                            src="http://www.youtube.com/embed/b7hFo5iJuoM"
 	                            frameborder="0"
 	                            allowfullscreen></iframe>
 	                        </td>
-                        </tr></table>
-                    </div>
+                        </tr>
+                    </table>
 <%--
                     <div class="grid_12 content">
                         <div class="iconGroup">

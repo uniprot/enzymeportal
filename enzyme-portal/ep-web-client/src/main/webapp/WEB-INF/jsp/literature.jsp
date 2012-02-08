@@ -3,13 +3,15 @@
 		uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.CitationLabel"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div class="summary">
 <h2><c:out value="${enzymeModel.name}"/></h2>
 
 <c:choose>
 	<c:when test="${empty enzymeModel.literature}">
-		There is no literature information available for this enzyme.
+		<p><spring:message code="label.entry.tab.empty"
+			arguments="literature"/></p>
 	</c:when>
 	<c:otherwise>
 	
@@ -113,10 +115,6 @@ function filterCitations(){
 
 </div>
 
-	</c:otherwise>
-</c:choose>
-
-
 <div class="provenance">
 	<ul>
 		<li class="note_0">Data Source:
@@ -125,5 +123,9 @@ function filterCitations(){
 			mining tools for biomedical publications.</li>
 	</ul>
 </div>
+
+	</c:otherwise>
+</c:choose>
+
 
 </div>
