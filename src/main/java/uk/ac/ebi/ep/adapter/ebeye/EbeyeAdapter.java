@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.adapter.ebeye;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -92,37 +93,31 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     private List<ArrayOfArrayOfString> executeCallables(
             List<Callable<ArrayOfArrayOfString>> callables)
 	throws MultiThreadingException {
-        List<ArrayOfArrayOfString> ebeyeResultList = new ArrayList<ArrayOfArrayOfString>();
+    	List<ArrayOfArrayOfString> ebeyeResultList =
+    			new ArrayList<ArrayOfArrayOfString>();
         ExecutorService pool = Executors.newCachedThreadPool();
         CompletionService<ArrayOfArrayOfString> ecs =
         		new ExecutorCompletionService<ArrayOfArrayOfString>(pool);
         try {
-//        	LOGGER.debug("SEARCH before callables loop, size = " + callables.size());
-        	// Just for debugging purposes:
-    		Map<Future<ArrayOfArrayOfString>, Callable<ArrayOfArrayOfString>> futuresCallables =
-    				new HashMap<Future<ArrayOfArrayOfString>, Callable<ArrayOfArrayOfString>>();
+    		Map<Future<ArrayOfArrayOfString>, ArrayOfArrayOfString> future2aoaos =
+    				new LinkedHashMap<Future<ArrayOfArrayOfString>, ArrayOfArrayOfString>();
         	for (Callable<ArrayOfArrayOfString> callable : callables) {
-				futuresCallables.put(ecs.submit(callable), callable);
+				future2aoaos.put(ecs.submit(callable), null);
 			}
-//        	LOGGER.debug("SEARCH before futures loop");
         	for (int i = 0; i < callables.size(); i++) {
 				try {
 					final Future<ArrayOfArrayOfString> taken =
 							ecs.poll(config.getThreadTimeout(),
 									TimeUnit.MILLISECONDS);
-//		        	LOGGER.debug("SEARCH after taken");
-		        	// Just for debugging purposes:
-//	        		final ParamOfGetResults param =
-//	        				((GetResultsCallable) futuresCallables.get(taken)).param;
-//					LOGGER.debug("SEARCH domain: " + param.getDomain());
-//	        		LOGGER.debug("SEARCH query: " + param.getQuery());
-//	        		LOGGER.debug("SEARCH fields: " + param.getFields());
 		        	if (taken != null){
 						ArrayOfArrayOfString rawResults = taken.get();
-//			        	LOGGER.debug("SEARCH after got");
-	                    ebeyeResultList.add(rawResults);
+						if (rawResults != null){
+							future2aoaos.put(taken, rawResults);
+						} else {
+			        		LOGGER.warn("SEACH job result is null!");
+						}
 		        	} else {
-		        		LOGGER.warn("SEACH job result not retrieved!");
+		        		LOGGER.warn("SEACH future not retrieved!");
 		        	}
 				} catch (Exception e) {
                 	// Don't stop the others
@@ -130,9 +125,15 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 			+ " - " + e.getMessage(), e);
 				}
 			}
+        	// Now finished, let's keep only successful futures:
+        	for (Future<ArrayOfArrayOfString> future : future2aoaos.keySet()) {
+				final ArrayOfArrayOfString aoaos = future2aoaos.get(future);
+				if (aoaos != null){
+					ebeyeResultList.add(aoaos);
+				}
+			}
         	LOGGER.debug("SEARCH after futures loop, successful = "
         			+ ebeyeResultList.size() + "/" + callables.size());
-        	/* */
 		} finally {
             pool.shutdown();
         }
@@ -239,7 +240,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         	// FIXME: submit one by one to a CompletionService,
         	// then loop again to take and get the Futures
             for (ParamOfGetResults param: params) {
-                Callable callable = new GetResultsCallable(param, 0,1);
+                Callable<ArrayOfArrayOfString> callable = new GetResultsCallable(param, 0,1);
                 Future<ArrayOfArrayOfString> future  = pool.submit(callable);
                 ArrayOfArrayOfString rawResults;
                 try {
