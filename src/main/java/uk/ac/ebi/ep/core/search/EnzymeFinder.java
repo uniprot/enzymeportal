@@ -248,24 +248,19 @@ public class EnzymeFinder implements IEnzymeFinder {
             if (idsAndSpecies != null) uniprotIds2species.putAll(idsAndSpecies);
             }
              */
-            long now = System.currentTimeMillis();
             LOGGER.debug("UniProt IDs from UniProt: " + uniprotEnzymeIds.size());
-            LOGGER.debug(now + "-UniProtAccs-UniProt: \n" + uniprotEnzymeIds);
             
             /* Search in Ebeye for Uniprot ids that are referenced in Chebi domain
              * This search has to be performed separately, because the results
              * must contain Chebi ids to show in the Compound search filter. */
             queryEbeyeChebiForUniprotIds();
             LOGGER.debug("UniProt IDs from UniProt+ChEBI: " + uniprotEnzymeIds.size());
-            LOGGER.debug(now + "-UniProtAccs-UniProt-ChEBI: \n" + uniprotEnzymeIds);
             /* Search in Intenz, Rhea, Reactome, PDBe for Uniprot ids. 
              * TODO: Process Intenz separately might improve the performance. */
             queryEbeyeOtherDomainForIds();
             LOGGER.debug("UniProt IDs from UniProt+ChEBI+others: " + uniprotEnzymeIds.size());
-            LOGGER.debug(now + "-UniProtAccs-UniProt-ChEBI-others: \n" + uniprotEnzymeIds);
             queryEbeyeChemblForUniprotIds();
             LOGGER.debug("UniProt IDs from UniProt+ChEBI+others+ChEMBL: " + uniprotEnzymeIds.size());
-            LOGGER.debug(now + "-UniProtAccs-UniProt-ChEBI-others-ChEMBL: \n" + uniprotEnzymeIds);
 
             uniprotIdPrefixSet.addAll(EPUtil.getIdPrefixes(uniprotEnzymeIds));
             chebiIds = new ArrayList<String>(chebiResults.keySet());
