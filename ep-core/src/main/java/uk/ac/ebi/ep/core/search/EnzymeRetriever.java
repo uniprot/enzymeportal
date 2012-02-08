@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.core.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,9 +30,12 @@ import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
+import uk.ac.ebi.ep.mm.MmDatabase;
+import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.rhea.ws.client.IRheaAdapter;
@@ -355,6 +359,21 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         EnzymeModel enzymeModel = null;
         try {
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
+            if (mm != null){
+            	// Search the mega-map for xrefs from UniProt to ChEMBL:
+            	Collection<XRef> chemblXrefs = mm.getXrefs(
+            			MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
+            	if (chemblXrefs != null){
+    				Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
+                	for (XRef chemblXref : chemblXrefs) {
+                		Molecule chemblDrug = new Molecule()
+                			.withId(chemblXref.getToEntry().getEntryId())
+                			.withName(chemblXref.getToEntry().getEntryName());
+                		chemblDrugs.add(chemblDrug);
+    				}
+    				enzymeModel.getMolecule().withDrugs(chemblDrugs);
+            	}
+            }
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
             List<String> prov = new LinkedList<String>();
             prov.add("Data Sources : ChEBI and ChEMBL");
