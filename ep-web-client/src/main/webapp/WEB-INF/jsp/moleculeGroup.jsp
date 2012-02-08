@@ -37,18 +37,20 @@
 						</c:otherwise>
 					</c:choose>
 					<div>
-						<c:if test="${not empty molecule.id and fn:startsWith('CHEBI:', molecule.id)}">
+						<c:if test="${not empty molecule.id and fn:startsWith(molecule.id, 'CHEBI:')}">
 							<div>
-								<c:when test="${empty molecule.url}">
-									<img src="${chebiImageBaseUrl}${molecule.id}"
-										alt="${displayName}" />
-								</c:when>
-								<c:otherwise>
-									<a target="blank" href="${molecule.url}">
+								<c:choose>
+									<c:when test="${empty molecule.url}">
 										<img src="${chebiImageBaseUrl}${molecule.id}"
-											alt="${displayName}" />
-									</a>
-								</c:otherwise>
+											alt="(No image available)" />
+									</c:when>
+									<c:otherwise>
+										<a target="blank" href="${molecule.url}">
+											<img src="${chebiImageBaseUrl}${molecule.id}"
+												alt="(No image available)" />
+										</a>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</c:if>
 						<div>

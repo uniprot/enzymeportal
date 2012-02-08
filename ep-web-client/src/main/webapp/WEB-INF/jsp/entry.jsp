@@ -75,7 +75,9 @@
                                             <div class="label">ORGANISMS</div>
                                             <div class='box selected ${fn:replace(relSpecies[0].species.scientificname, " ", "_")}'>
                                                 <span class="name"><c:out value="${relSpecies[0].species.commonname}"/></span>
-                                                <span class="extra"><c:out value="${relSpecies[0].species.scientificname}"/></span>
+                                                <span class="extra"
+                                                	title="${relSpecies[0].species.scientificname}"
+                                                	style="overflow: hidden;">${relSpecies[0].species.scientificname}</span>
                                             </div>
                                         </div>
                                         <div class="selection">
@@ -90,7 +92,9 @@
                                                         <li class="${select}">
                                                             <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
                                                                 <span class="name"><c:out value="${species.commonname}"/></span>
-                                                                <span class="extra"><c:out value="${species.scientificname}"/></span>
+                                                                <span class="extra"
+                                                                	title="${species.scientificname}"
+                                                                	style="overflow: hidden;">${species.scientificname}</span>
                                                             </div>
                                                         </li>
                                                     </a>
