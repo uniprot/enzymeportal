@@ -5,17 +5,20 @@
 
 package uk.ac.ebi.ep.biomart.adapter;
 
-import java.net.URL;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.net.URLConnection;
 import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
-import uk.ac.ebi.util.result.DataTypeConverter;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -53,6 +56,7 @@ public class BiomartAdapterTest {
      * Test of getPathwaysByReactionId method, of class BiomartAdapter.
      */
     @Test
+    @Ignore("BioMart server returns error for this ID")
     public void testGetPathwaysByReactionId() throws Exception {
         System.out.println("getPathwaysByReactionId");                        
         List<String> results = instance.getPathwaysByReactionId(reactionStableId);
