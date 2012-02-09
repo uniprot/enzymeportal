@@ -70,13 +70,15 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
-			<resource>
+		</resources>
+		<testResources>
+			<testResource>
 				<directory>${ep.config.dir}</directory>
 				<includes>
-					<include>ep-mm-db-*.properties</include>
+					<include>ep-mm-db${ep.mm.db.config}.properties</include>
 				</includes>
-			</resource>
-		</resources>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -128,10 +130,6 @@
 		</plugins>
 	</build>
 	
-	<properties>
-		<ep.mm.db.config>-dev</ep.mm.db.config>
-	</properties>
-	
 	<profiles>
 		<profile>
 			<id>noApps</id>
@@ -177,6 +175,14 @@
 		        </dependency>
 			</dependencies>
 			<build>
+				<resources>
+					<resource>
+						<directory>${ep.config.dir}</directory>
+						<includes>
+							<include>ep-mm-db${ep.mm.db.config}.properties</include>
+						</includes>
+					</resource>
+				</resources>
 				<plugins>
 		            <plugin>
 		                <artifactId>maven-dependency-plugin</artifactId>
@@ -200,15 +206,18 @@
 			</build>
 		</profile>
 		<profile>
+			<!-- Profile to work with the development database -->
 			<id>dev</id>
+			<activation><activeByDefault>true</activeByDefault></activation>
 			<properties>
 				<ep.mm.db.config>-dev</ep.mm.db.config>
 			</properties>
 		</profile>
 		<profile>
-			<id>prod</id>
+			<!-- Profile to work with the release database -->
+			<id>rel</id>
 			<properties>
-				<ep.mm.db.config>-prod</ep.mm.db.config>
+				<ep.mm.db.config>-rel</ep.mm.db.config>
 			</properties>
 		</profile>
 	</profiles>

@@ -1,13 +1,13 @@
 #!/bin/bash
 # Imports EB-Eye XML files into an existing mega-map.
 # Params:
-# $1: runtime environment (dev|test|prod)
+# $1: runtime environment (dev|rel)
 # $2: EB-Eye XML file (ChEBI/ChEMBL-target)
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 
 . $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh
+. $(dirname $0)/mvnBuild.sh ${1},apps
 
 echo "Starting EB-Eye import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
