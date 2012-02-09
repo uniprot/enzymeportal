@@ -120,14 +120,7 @@ public class SearchController {
                     break;
             }
             enzymeModel.setRequestedfield(requestedField.name());
-            System.out.println("DISEASE IN MODEL "+ EnzymeFinder.getDiseaseINFO());
             enzymeModel.setDisease(EnzymeFinder.getDiseaseINFO());
-//            for(Disease ds : EnzymeFinder.diseaseINFO){
-//                if(ds != null){
-//                System.out.println("MODEL DSIEASE "+ ds.getName() + " ==> "+ ds.getDescription() + " URL = "+ ds.getUrl());
-//                
-//                }
-//            }
             model.addAttribute("enzymeModel", enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
