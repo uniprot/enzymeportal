@@ -31,6 +31,7 @@ import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.entry.Field;
+import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
@@ -93,6 +94,7 @@ public class SearchController {
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = ResponsePage.ENTRY.toString();
+     
         try {
             switch (requestedField) {
                 case proteinStructure:
@@ -118,6 +120,14 @@ public class SearchController {
                     break;
             }
             enzymeModel.setRequestedfield(requestedField.name());
+            System.out.println("DISEASE IN MODEL "+ EnzymeFinder.getDiseaseINFO());
+            enzymeModel.setDisease(EnzymeFinder.getDiseaseINFO());
+//            for(Disease ds : EnzymeFinder.diseaseINFO){
+//                if(ds != null){
+//                System.out.println("MODEL DSIEASE "+ ds.getName() + " ==> "+ ds.getDescription() + " URL = "+ ds.getUrl());
+//                
+//                }
+//            }
             model.addAttribute("enzymeModel", enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
@@ -245,8 +255,8 @@ public class SearchController {
 
                                 if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
                                     enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
-                                    // enzymeSummary.setSpecies(enzymeAccession.getSpecies());
-                                    enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
+                                     enzymeSummary.setSpecies(enzymeAccession.getSpecies());
+                                    //enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
                                 }
 
                             }
