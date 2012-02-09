@@ -53,6 +53,12 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	private static final String GET_FULLID = "/success/data/classBean/fullId";
 	
 	private BioportalConfig config;
+
+    public BioportalWsAdapter() {
+        config = new BioportalConfig();
+    }
+        
+        
 	
 	/**
 	 * Searches BioPortal for a concept.
