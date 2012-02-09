@@ -4,7 +4,6 @@
  */
 package uk.ac.ebi.ep.core.search;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
