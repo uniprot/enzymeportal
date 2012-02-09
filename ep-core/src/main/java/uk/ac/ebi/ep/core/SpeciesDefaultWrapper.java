@@ -1,12 +1,8 @@
 package uk.ac.ebi.ep.core;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import uk.ac.ebi.ep.core.search.CommonSpecies;
 import uk.ac.ebi.ep.search.model.Species;
 
 /**
@@ -25,8 +21,8 @@ import uk.ac.ebi.ep.search.model.Species;
  */
 public final class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWrapper> {
 
-    String[] commonSpecies = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
-    List<String> commonSpecieList = Arrays.asList(commonSpecies);
+   // String[] commonSpecies = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
+   // List<String> commonSpecieList = Arrays.asList(commonSpecies);
     // Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
     private final Species species;
 
@@ -61,16 +57,20 @@ public final class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWra
 //	}
     public int compareTo(SpeciesDefaultWrapper other) {
 
-        if (species.getCommonname() == null || other.species.getCommonname() == null) {
+        if (species.getCommonname() == null & other.species.getCommonname() == null) {
             return species.getScientificname().compareTo(other.species.getScientificname());
         }
-        if (species.getCommonname() != null && other.species.getCommonname() == null) {
+        if (species.getCommonname() != null & other.species.getCommonname() == null) {
             return species.getCommonname().compareTo(other.species.getScientificname());
         }
-        if (species.getCommonname() == null && other.species.getCommonname() != null) {
+        if (species.getCommonname() == null & other.species.getCommonname() != null) {
             return species.getScientificname().compareTo(other.species.getCommonname());
         }
+        if(species.getCommonname() != null & species.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.species.getCommonname() != null & other.species.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())){
+           return species.getScientificname().compareTo(other.species.getScientificname());
+        }
         return species.getCommonname().compareTo(other.species.getCommonname());
+        //return species.getScientificname().compareTo(other.species.getScientificname());
         
 
     }
@@ -102,40 +102,4 @@ public final class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWra
         hash = 37 * hash + (this.species.getScientificname() != null ? this.species.getScientificname().hashCode() : 0);
         return hash;
     }
-    AtomicInteger key = new AtomicInteger(8);
-
-    public List<Species> build() {
-       
-        Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
-        if (commonSpecieList.contains(species.getCommonname())) {
-            // Human, Mouse, Rat, Fly, Worm, Yeast, Ecoli 
-            if (species.getCommonname().equalsIgnoreCase("Human")) {
-                priorityMapper.put(1, species);
-            } else if (species.getCommonname().equalsIgnoreCase("Mouse")) {
-                priorityMapper.put(2, species);
-            } else if (species.getCommonname().equalsIgnoreCase("Rat")) {
-                priorityMapper.put(3, species);
-            } else if (species.getCommonname().equalsIgnoreCase("Fruit fly")) {
-                priorityMapper.put(4, species);
-            } else if (species.getCommonname().equalsIgnoreCase("Worm")) {
-                priorityMapper.put(5, species);
-            } else if (species.getCommonname().equalsIgnoreCase("Yeast")) {
-                priorityMapper.put(6, species);
-            } else if (species.getCommonname().equalsIgnoreCase("Ecoli")) {
-                priorityMapper.put(7, species);
-            }
-        } else {
-
-            priorityMapper.put(key.getAndIncrement(), species);
-
-        }
-             List<Species> speciesFilters = new LinkedList<Species>();
-        for (Map.Entry<Integer, Species> map : priorityMapper.entrySet()) {
-            speciesFilters.add(map.getValue());
-                       
-        }
-
-        return speciesFilters;
-    }
-
 }
