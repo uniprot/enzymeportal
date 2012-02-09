@@ -1,9 +1,24 @@
 #!/bin/bash
-# Creates a complete mega-map.
+# Creates a complete mega-map, replacing the existing one.
 # Indexes UniProt enzymes (both Swiss-Prot and TrEMBL) and then ChEBI, ChEMBL
 # and diseases.
 # Param:
-# $1: runtime environment (dev|rel)
+# $1: database environment (enzdev|ezprel)
+echo
+echo "**************************** W A R N I N G ****************************"
+echo "THIS WILL OVERWRITE ALL DATA IN $1. ARE YOU SURE?"
+echo "(Ctrl-C to cancel, Enter to continue)"
+read ok
+
+read -p "Password for enzyme_portal@${1}:" -s PASSWORD
+
+WD=$(pwd)
+cd $(dirname $0)/../src/main/sql
+
+echo
+echo "*** Dropping everything in $1..."
+echo sqlplus $1 @drop_all
+echo exit | sqlplus enzyme_portal/${PASSWORD}@${1} @delete_all
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 UNIPROT_DATA=$EBINOCLE_DATA/uniprot/latest
