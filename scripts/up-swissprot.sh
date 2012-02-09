@@ -1,7 +1,7 @@
 #!/bin/bash
 # Creates an initial mega-map with the Swiss-Prot file.
 # Parameter:
-# $1: runtime environment (dev|test|prod)
+# $1: runtime environment (dev|rel)
 # $2 (optional): Swiss-Prot XML file to import.
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
@@ -10,7 +10,7 @@ XML_FILE=${2:-$EBINOCLE_DATA/uniprot/latest/uniprot_sprot.xml}
 #HIBERNATE_OPTS="-Dhibernate.hbm2ddl.auto=create"
 
 . $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh
+. $(dirname $0)/mvnBuild.sh ${1},apps
 
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS $HIBERNATE_OPTS -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
