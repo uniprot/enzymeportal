@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.core.search;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,15 +14,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
-import uk.ac.ebi.core.utility.MegaMapperJdbcConnection;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
+import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
@@ -37,13 +43,13 @@ import uk.ac.ebi.ep.core.DiseaseDefaultWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
+import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
-//import  uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.SearchFilters;
@@ -53,16 +59,6 @@ import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.util.EPUtil;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.util.result.DataTypeConverter;
-import java.sql.SQLException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-//import uk.ac.ebi.ep.adapter.bioportal.BioportalOntology;
-import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
-import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
-import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
-import uk.ac.ebi.ep.mm.MegaMapper;
 
 /**
  * NOTE: the adapters must be configured before using this finder!
@@ -79,7 +75,13 @@ public class EnzymeFinder implements IEnzymeFinder {
     IEbeyeAdapter ebeyeAdapter;
     IUniprotAdapter uniprotAdapter;
     IintenzAdapter intenzAdapter;
+    IBioportalAdapter bioportalAdapter;
+    
+    /** A mega-mapper to get xrefs from. */
     MegaMapper mm;
+    /** The connection used by the mega-mapper. */
+	private Connection mmCon;
+	
     protected SearchParams searchParams;
     SearchResults enzymeSearchResults;
     List<String> uniprotEnzymeIds;
@@ -102,7 +104,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         uniprotIdPrefixSet = new LinkedHashSet<String>();
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
-       
+        bioportalAdapter = new BioportalWsAdapter();
 
         switch (config.uniprotImplementation) {
             case JAPI:
@@ -119,8 +121,8 @@ public class EnzymeFinder implements IEnzymeFinder {
 			initContext = new InitialContext();
 	        Context envContext = (Context) initContext.lookup("java:/comp/env");
 	        DataSource ds = (DataSource) envContext.lookup(mmDatasource);
-	        Connection con = ds.getConnection();
-	        mm = new MegaJdbcMapper(con);
+	        mmCon = ds.getConnection();
+	        mm = new MegaJdbcMapper(mmCon);
 		} catch (NamingException e) {
 			LOGGER.error("Data source not found: " + mmDatasource, e);
 		} catch (SQLException e) {
@@ -130,7 +132,32 @@ public class EnzymeFinder implements IEnzymeFinder {
 		}
     }
 
-//****************************** GETTER & SETTER *****************************//
+    @Override
+	protected void finalize() throws Throwable {
+    	closeResources();
+    }
+    
+    /**
+     * Closes resources: mega-mapper and its database connection.
+     */
+    public void closeResources(){
+		if (mm != null){
+			try {
+				mm.closeMap();
+			} catch (IOException e) {
+				LOGGER.error("Unable to close mega-mapper", e);
+			}
+		}
+		if (mmCon != null){
+			try {
+				if (!mmCon.isClosed()) mmCon.close();
+			} catch (SQLException e) {
+				LOGGER.error("Unable to close connection", e);
+			}
+		}
+	}
+
+	//****************************** GETTER & SETTER *****************************//
     public SearchParams getSearchParams() {
         return searchParams;
     }
@@ -195,7 +222,11 @@ public class EnzymeFinder implements IEnzymeFinder {
         this.intenzAdapter = intenzAdapter;
     }
 
-    public boolean isNewSearch() {
+    public IBioportalAdapter getBioportalAdapter() {
+		return bioportalAdapter;
+	}
+
+	public boolean isNewSearch() {
         return newSearch;
     }
 
@@ -384,16 +415,16 @@ public class EnzymeFinder implements IEnzymeFinder {
         Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
         Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
          
-        MegaJdbcMapper megaMapper = null;
-        IBioportalAdapter bioportalAdapter = new BioportalWsAdapter();
-               // BioportalWsAdapter bioportalAdapter = new BioportalWsAdapter();
-        final Connection connection = MegaMapperJdbcConnection.getINSTANCE().getConnection();
-        System.out.println("Connection "+ connection);
-        try {
-            megaMapper = new MegaJdbcMapper(connection);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        MegaJdbcMapper megaMapper = null;
+//        IBioportalAdapter bioportalAdapter = new BioportalWsAdapter();
+//               // BioportalWsAdapter bioportalAdapter = new BioportalWsAdapter();
+//        final Connection connection = MegaMapperJdbcConnection.getINSTANCE().getConnection();
+//        System.out.println("Connection "+ connection);
+//        try {
+//            megaMapper = new MegaJdbcMapper(connection);
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
 
             // get the uniprot id from the summary entry, then call the megamapper
@@ -403,7 +434,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             String accession = uniprotid.get(0);
            // System.out.println("Accession "+ accession);
            // System.out.println("MegaMapper "+ megaMapper);
-          Collection<XRef> xRefList =  megaMapper.getXrefs(MmDatabase.UniProt, accession, MmDatabase.EFO,MmDatabase.OMIM,MmDatabase.MeSH);
+          Collection<XRef> xRefList =  mm.getXrefs(MmDatabase.UniProt, accession, MmDatabase.EFO,MmDatabase.OMIM,MmDatabase.MeSH);
           if(xRefList != null){
          // System.out.println("XRef List = "+ xRefList);
           for(XRef ref : xRefList){
