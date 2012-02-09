@@ -92,6 +92,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     List<String> compoundFilter;
     List<EnzymeSummary> enzymeSummaryList;
     // private MegaMapper megaMapper;
+    public static List<uk.ac.ebi.ep.enzyme.model.Disease> diseaseINFO = new ArrayList<uk.ac.ebi.ep.enzyme.model.Disease>();
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeFinder(Config config) {
@@ -101,6 +102,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         uniprotIdPrefixSet = new LinkedHashSet<String>();
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
+       
 
         switch (config.uniprotImplementation) {
             case JAPI:
@@ -424,12 +426,9 @@ public class EnzymeFinder implements IEnzymeFinder {
                    // System.out.println("DISEASE = "+ disease);
                     if(disease != null){
                         System.out.println("Data == "+ disease.getName() + " desc "+ disease.getDescription() + " URL "+ disease.getUrl());
-                        
-                        Disease d = new Disease();
-                        d.setName(disease.getName());
-                        d.setDescription(disease.getDescription());
-                        
-                        uniqueDiseases.add(new DiseaseDefaultWrapper(d));
+                        diseaseINFO.add(disease);
+                       
+                       // uniqueDiseases.add(new DiseaseDefaultWrapper(d));
                     }
                     
                  //Compound compound = new Compound();
@@ -530,6 +529,12 @@ public class EnzymeFinder implements IEnzymeFinder {
         searchResults.setSearchfilters(filters);
     }
 
+    public static List<uk.ac.ebi.ep.enzyme.model.Disease> getDiseaseINFO() {
+        return diseaseINFO;
+    }
+
+    
+    
     /**
      * Limit the number of results to the {@code IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT}
      * 
