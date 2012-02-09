@@ -1,7 +1,7 @@
 #!/bin/bash
 # Parses a UniProt-to-OMIM_and_MeSH HTML file into an existing mega-map.
 # Params:
-# $1: runtime environment (dev|rel)
+# $1: runtime environment (enzdev|ezprel)
 # $2: [optional] HTML file containing the UniProt-to-OMIM_and_MeSH table.
 #     Defaults to
 #     http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
