@@ -3,7 +3,7 @@
 # Indexes UniProt enzymes (both Swiss-Prot and TrEMBL) and then ChEBI, ChEMBL
 # and diseases.
 # Param:
-# $1: runtime environment (dev|test|prod)
+# $1: runtime environment (dev|rel)
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 UNIPROT_DATA=$EBINOCLE_DATA/uniprot/latest
@@ -14,7 +14,7 @@ CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target.xml
 UP_FILE=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 
 . $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh
+. $(dirname $0)/mvnBuild.sh ${1},apps
 
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
