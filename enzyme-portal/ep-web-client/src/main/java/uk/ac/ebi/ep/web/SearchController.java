@@ -126,6 +126,8 @@ public class SearchController {
         } catch (Exception ex) {
             LOGGER.error("Unable to retrieve the entry!", ex);
             responsePage = ResponsePage.ERROR.toString();
+        } finally {
+        	retriever.closeResources();
         }
         return responsePage;
     }
@@ -212,8 +214,10 @@ public class SearchController {
                     } catch (EnzymeFinderException ex) {
                         LOGGER.error("Unable to create the result list because an error "
                                 + "has occurred in the find method! \n", ex);
+                    } finally {
+                    	finder.closeResources();
                     }
-                }
+				}
 
                 final int numOfResults = resultSet.getSummaryentries().size();
                                 Pagination pagination = new Pagination(
