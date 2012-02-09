@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.core.search;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,16 +13,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
 import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
+import uk.ac.ebi.core.utility.MegaMapperJdbcConnection;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
@@ -39,13 +37,13 @@ import uk.ac.ebi.ep.core.DiseaseDefaultWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
+//import  uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.SearchFilters;
@@ -55,7 +53,16 @@ import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.util.EPUtil;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.util.result.DataTypeConverter;
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.sql.SQLException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+//import uk.ac.ebi.ep.adapter.bioportal.BioportalOntology;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
+import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
+import uk.ac.ebi.ep.mm.MegaMapper;
 
 /**
  * NOTE: the adapters must be configured before using this finder!
@@ -84,7 +91,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     List<String> speciesFilter;
     List<String> compoundFilter;
     List<EnzymeSummary> enzymeSummaryList;
-    
+    // private MegaMapper megaMapper;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeFinder(Config config) {
@@ -94,6 +101,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         uniprotIdPrefixSet = new LinkedHashSet<String>();
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
+
         switch (config.uniprotImplementation) {
             case JAPI:
                 uniprotAdapter = new UniprotJapiAdapter();
@@ -227,9 +235,14 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public SearchResults getEnzymes(SearchParams searchParams)
             throws EnzymeFinderException {
-        String userKeywords = new String(searchParams.getText());
+        //String userKeywords = new String(searchParams.getText());
+        //System.out.println("SEARCH "+searchParams.getText());
+
+        //megaMapper = new MegaDbMapper(" hibernate configuration",500);
+        // Entry entry = megaMapper.getEntryForAccession(MmDatabase.UniProt, userKeywords);
+
         //setting variable values and validation keywords before being cleaned
-           processInputs(searchParams);
+        processInputs(searchParams);
 
         /* First time search or when user inserts a new keyword, the filter is reset
          * then the search is performed across all domains without considering the
@@ -327,13 +340,12 @@ public class EnzymeFinder implements IEnzymeFinder {
 //        List<String> resultSubList = idPrefixesList.subList(
 //               start, end);
 
-
-        enzymeSummaryList = getEnzymeSummaries(idPrefixesList);
+        enzymeSummaryList = getEnzymeSummaries(idPrefixesList, searchParams.getSpecies());
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
         enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
-        if (uniprotIdPrefixSet.size() != enzymeSummaryList.size()){
-        	LOGGER.warn((uniprotIdPrefixSet.size() - enzymeSummaryList.size())
-        			+ " UniProt ID prefixes have been lost");
+        if (uniprotIdPrefixSet.size() != enzymeSummaryList.size()) {
+            LOGGER.warn((uniprotIdPrefixSet.size() - enzymeSummaryList.size())
+                    + " UniProt ID prefixes have been lost");
         }
 //
 //        searchParams.setStart(start);
@@ -349,82 +361,157 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         return enzymeSearchResults;
     }
-
+//public BioportalWsAdapter.BioportalOntology bioportalOntology;
     /**
      * Builds filters - species, compounds, diseases - from a result list.
      * @param searchResults the result list, which will be modified by setting
      * the relevant filters.
      */
     private void buildFilters(SearchResults searchResults) {
-        String[] commonSpecies = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
-        List<String> commonSpecieList = Arrays.asList(commonSpecies);
+        //  String[] commonSpecie = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
+        // CommonSpecies [] commonSpecie = {"Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","Saccharomyces cerevisiae"};
+        // List<String> commonSpecieList = Arrays.asList(commonSpecie);
+        List<String> commonSpecieList = new ArrayList<String>();
+        for (CommonSpecies commonSpecies : CommonSpecies.values()) {
+            commonSpecieList.add(commonSpecies.getScientificName());
+        }
+        
         Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
-
+       
         Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
         Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
         Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
-         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
-              for (EnzymeAccession ea : summaryEntry.getRelatedspecies()) {
+         
+        MegaJdbcMapper megaMapper = null;
+        IBioportalAdapter bioportalAdapter = new BioportalWsAdapter();
+               // BioportalWsAdapter bioportalAdapter = new BioportalWsAdapter();
+        final Connection connection = MegaMapperJdbcConnection.getINSTANCE().getConnection();
+        System.out.println("Connection "+ connection);
+        try {
+            megaMapper = new MegaJdbcMapper(connection);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
+
+            // get the uniprot id from the summary entry, then call the megamapper
+            // pass the xref entry and enum of database
+
+            List<String> uniprotid = summaryEntry.getUniprotaccessions();
+            String accession = uniprotid.get(0);
+           // System.out.println("Accession "+ accession);
+           // System.out.println("MegaMapper "+ megaMapper);
+          Collection<XRef> xRefList =  megaMapper.getXrefs(MmDatabase.UniProt, accession, MmDatabase.EFO,MmDatabase.OMIM,MmDatabase.MeSH);
+          if(xRefList != null){
+         // System.out.println("XRef List = "+ xRefList);
+          for(XRef ref : xRefList){
+              Entry entry = ref.getToEntry();
+              //System.out.println("Entry = "+ entry);
+              String compoundName = entry.getEntryName();
+             // System.out.println("before getEntry "+ entry.getEntryId() + "compound name "+ compoundName);
+              String efo_id = entry.getEntryId();
+             // System.out.println("entry ID "+ efo_id);
+                try {
+                  //  System.out.println("BioPortal "+ bioportalAdapter);
+                    String ontology = "1136";
+                   // bioportalOntology = BioportalOntology.EFO;
+                   // for(BioportalOntology b : bo){
+                    
+                   // System.out.println("Bio Enum "+ BioportalOntology.EFO);
+                    //(uk.ac.ebi.ep.enzyme.model.Disease)
+                     uk.ac.ebi.ep.enzyme.model.Disease disease =   (uk.ac.ebi.ep.enzyme.model.Disease) bioportalAdapter.getDiseaseByName(efo_id);
+                   // uk.ac.ebi.ep.enzyme.model.Disease disease =   (uk.ac.ebi.ep.enzyme.model.Disease) bioportalAdapter.searchConcept(BioportalWsAdapter.BioportalOntology.EFO, efo_id,uk.ac.ebi.ep.enzyme.model.Disease.class , true);
+                   // System.out.println("DISEASE = "+ disease);
+                    if(disease != null){
+                        System.out.println("Data == "+ disease.getName() + " desc "+ disease.getDescription() + " URL "+ disease.getUrl());
+                        
+                        Disease d = new Disease();
+                        d.setName(disease.getName());
+                        d.setDescription(disease.getDescription());
+                        
+                        uniqueDiseases.add(new DiseaseDefaultWrapper(d));
+                    }
+                    
+                 //Compound compound = new Compound();
+                 //compound.setName(compoundName);
+                // compound.setId(id);
+                } catch (BioportalAdapterException ex) {
+                    java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
+                }
+              
+          }
+          }
+          
+          
+            //Entry entry = new Entry();can we pass the uniprot id etc at contructor?
+            //entry.setEntryId(uniprotid)
+            // megaMapper = new MegaDbMapper(" hibernate configuration",500);
+            // Collection<XRef> xRefList =  megaMapper.getXrefs(entry, MmDatabase.ChEBI, MmDatabase.UniProt);
+
+            for (EnzymeAccession ea : summaryEntry.getRelatedspecies()) {
                 Species sp = ea.getSpecies();
-                if (sp.getCommonname() != null) {
+                if (sp != null) {
                     uniqueSpecies.add(new SpeciesDefaultWrapper(sp));
 
-               }
+                }
                 List<Compound> compounds = ea.getCompounds();
-                  if (compounds != null) {
+                if (compounds != null) {
                     for (Compound compound : compounds) {
-                      uniqueCompounds.add(new CompoundDefaultWrapper(compound));
+                        uniqueCompounds.add(new CompoundDefaultWrapper(compound));
                     }
                 }
                 List<Disease> diseases = ea.getDiseases();
                 if (diseases != null) {
                     for (Disease disease : diseases) {
-                        uniqueDiseases.add(new DiseaseDefaultWrapper(disease));
+                       // uniqueDiseases.add(new DiseaseDefaultWrapper(disease));
+                        System.out.println("SEARCH DISEAS "+ disease.getName());
                     }
                 }
             }
         }
-        AtomicInteger key = new AtomicInteger(8);
+        AtomicInteger key = new AtomicInteger(50);
+        AtomicInteger customKey = new AtomicInteger(6);
         for (SpeciesDefaultWrapper wrapper : uniqueSpecies) {
             Species sp = wrapper.getSpecies();
-            if (commonSpecieList.contains(sp.getCommonname())) {
-                // Human, Mouse, Rat, Fly, Worm, Yeast, Ecoli 
-                if (sp.getCommonname().equalsIgnoreCase("Human")) {
-                    priorityMapper.put(1, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase("Mouse")) {
-                    priorityMapper.put(2, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase("Rat")) {
-                    priorityMapper.put(3, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase("Fruit fly")) {
-                    priorityMapper.put(4, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase("Worm")) {
-                    priorityMapper.put(5, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase("Yeast")) {
-                    priorityMapper.put(6, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase("Ecoli")) {
-                    priorityMapper.put(7, sp);
-                }
-            } else {
 
+            if (commonSpecieList.contains(sp.getScientificname().split("\\(")[0].trim())) {
+                // Human, Mouse, Rat, Fly, Worm, Yeast, Ecoli 
+                // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","Worm","Saccharomyces cerevisiae","Ecoli"
+                if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Human.getScientificName())) {
+                    priorityMapper.put(1, sp);
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Mouse.getScientificName())) {
+                    priorityMapper.put(2, sp);
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Rat.getScientificName())) {
+                    priorityMapper.put(3, sp);
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Fruit_fly.getScientificName())) {
+                    priorityMapper.put(4, sp);
+                } else if (sp.getCommonname().equalsIgnoreCase(CommonSpecies.Worm.getScientificName())) {
+                    priorityMapper.put(5, sp);
+                }else if (sp.getCommonname().equalsIgnoreCase(CommonSpecies.Ecoli.getScientificName())) {
+                    priorityMapper.put(6, sp);
+                }else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
+                   priorityMapper.put(customKey.getAndIncrement(), sp);  
+                  
+                } 
+            } else {
+                
                 priorityMapper.put(key.getAndIncrement(), sp);
 
             }
         }
-        
-        //to use enum check this example
-        
-       // PriorityMapper mapper = new PriorityMapper();//make this singleton
-        //mapper.map(uniqueSpecies);
+
+
         List<Species> speciesFilters = new LinkedList<Species>();
-        for (Map.Entry<Integer, Species> map : priorityMapper.entrySet()) {         
+        for (Map.Entry<Integer, Species> map : priorityMapper.entrySet()) {
             speciesFilters.add(map.getValue());
 
         }
 
-//        List<Species> speciesFilter = new ArrayList<Species>();
+
+//        List<Species> speciesFilters = new LinkedList<Species>();
 //        for (SpeciesDefaultWrapper sw : uniqueSpecies) {
-//            System.out.println("Unique " + sw.getSpecies().getCommonname() + " sci = " + sw.getSpecies().getScientificname());
-//            speciesFilter.add(sw.getSpecies());
+//           // System.out.println("Unique " + sw.getSpecies().getCommonname() + " sci = " + sw.getSpecies().getScientificname());
+//            speciesFilters.add(sw.getSpecies());
 //        }
         List<Compound> compoundFilter = new ArrayList<Compound>();
         for (CompoundDefaultWrapper cw : uniqueCompounds) {
@@ -432,6 +519,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
         List<Disease> diseaseFilter = new ArrayList<Disease>();
         for (DiseaseDefaultWrapper dw : uniqueDiseases) {
+            System.out.println("FINAL DISEASES "+ dw.getDisease().getName());
             diseaseFilter.add(dw.getDisease());
         }
 
@@ -443,7 +531,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 
     /**
-     * Limite the number of results to the {@code IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT}
+     * Limit the number of results to the {@code IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT}
      * 
      * @param params
      */
@@ -797,6 +885,14 @@ public class EnzymeFinder implements IEnzymeFinder {
             searchParams.getCompounds().clear();
         }
 
+
+//        if (!previousText.equalsIgnoreCase(currentText)
+//                || (compoundFilter.isEmpty() && speciesFilter.isEmpty())) {
+//            newSearch = true;
+//            searchParams.getSpecies().clear();
+//            searchParams.getCompounds().clear();
+//        }
+
     }
 
     /**
@@ -838,11 +934,15 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
     }
 
-    public List<EnzymeSummary> getEnzymesFromUniprotAPI(List<String> resultSubList)
+    public List<EnzymeSummary> getEnzymesFromUniprotAPI(List<String> resultSubList, List<String> paramList)
             throws MultiThreadingException {
+
+        // List<EnzymeSummary> enzymeList = null;
         List<EnzymeSummary> enzymeList =
                 uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
                 IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
+
+
         return enzymeList;
     }
 
@@ -852,9 +952,9 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @return a list of enzyme summaries ready to show in a result list.
      * @throws MultiThreadingException
      */
-    private List<EnzymeSummary> getEnzymeSummaries(List<String> uniprotIdPrefixes)
+    private List<EnzymeSummary> getEnzymeSummaries(List<String> uniprotIdPrefixes, List<String> paramList)
             throws MultiThreadingException {
-        List<EnzymeSummary> enzymeList = getEnzymesFromUniprotAPI(uniprotIdPrefixes);
+        List<EnzymeSummary> enzymeList = getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
         if (enzymeList != null) {
             addIntenzSynonyms(enzymeList);
         }
