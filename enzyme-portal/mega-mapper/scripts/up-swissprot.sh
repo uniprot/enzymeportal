@@ -1,7 +1,7 @@
 #!/bin/bash
 # Creates an initial mega-map with the Swiss-Prot file.
 # Parameter:
-# $1: runtime environment (dev|rel)
+# $1: runtime environment (enzdev|ezprel)
 # $2 (optional): Swiss-Prot XML file to import.
 
 #DOWNLOAD_BASE=ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete
