@@ -12,11 +12,10 @@ read ok
 
 read -p "Password for enzyme_portal@${1}:" -s PASSWORD
 
-cd $(dirname $0)/../src/main/sql
-
 echo
 echo "*** Dropping everything in $1..."
 echo sqlplus $1 @drop_all
-echo exit | sqlplus enzyme_portal/${PASSWORD}@${1} @delete_all
+echo exit | sqlplus enzyme_portal/${PASSWORD}@${1} \
+	@$(dirname $0)/../src/main/sql/delete_all
 
 bsub -R "rusage[mem=32000]" -M 32000 -q production-rh6 $(dirname $0)/mm.sh
