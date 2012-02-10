@@ -47,8 +47,22 @@
         <profile>
             <id>prod</id>
             <activation>
-                <activeByDefault/>
+                <activeByDefault>true</activeByDefault>
             </activation>
+            <build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<packagingExcludes>
+								META-INF/context.xml
+							</packagingExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+            </build>
         </profile>
         <profile>
             <id>test</id>
@@ -68,6 +82,25 @@
                         </includes>
                     </resource>
                 </resources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<webResources>
+								<resource>
+									<directory>src/main/webapp/META-INF</directory>
+									<filtering>true</filtering>
+									<targetPath>META-INF</targetPath>
+									<includes>
+										<include>**/context.xml</include>
+									</includes>
+								</resource>
+							</webResources>
+						</configuration>
+					</plugin>
+				</plugins>
             </build>
         </profile>
     </profiles>

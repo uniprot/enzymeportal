@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/enzymeportal"/>
+<Context path="/enzymeportal" antiJARLocking="true">
+
+    <Resource type="javax.sql.DataSource"
+        auth="Container"
+        name="jdbc/ep/mm"
+        driverClassName="oracle.jdbc.OracleDriver"
+        url="${ep.mm.db.dev.url}"
+        username="${ep.mm.db.dev.username}"
+        password="${ep.mm.db.dev.password}"
+        poolPreparedStatements="true"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="SELECT 1 FROM DUAL"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="60">
+    </Resource>
+
+</Context>
