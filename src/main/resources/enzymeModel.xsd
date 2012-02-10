@@ -4,12 +4,19 @@
     <xs:element name="ChemicalEntity" type="epe:ChemicalEntity"/>
     <xs:complexType name="ChemicalEntity">
         <xs:sequence>
-            <xs:element name="reactions" type="epe:EnzymeReaction" minOccurs="1" maxOccurs="unbounded"/>
-            <xs:element name="inhibitors" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="activators" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="cofactors" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="drugs" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="provenance" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+        	<xs:element name="reactions" type="epe:EnzymeReaction"
+        		minOccurs="1" maxOccurs="unbounded" />
+        	<xs:element name="inhibitors" type="epe:Molecule"
+        		minOccurs="0" maxOccurs="unbounded" />
+        	<xs:element name="activators" type="epe:Molecule"
+        		minOccurs="0" maxOccurs="unbounded" />
+        	<xs:element name="cofactors" type="epe:Molecule"
+        		minOccurs="0" maxOccurs="unbounded" />
+        	<xs:element name="drugs" type="epe:Molecule" minOccurs="0"
+        		maxOccurs="unbounded" />
+            <xs:element name="bioactiveLigands" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"></xs:element>
+            <xs:element name="provenance" type="xs:string" minOccurs="1"
+        		maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
     <xs:element name="DASSummary" type="epe:DASSummary"/>
