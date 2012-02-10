@@ -200,6 +200,7 @@ public class ChebiAdapter implements IChebiAdapter {
         }
         return mols;
     }
+    
     public EnzymeModel getMoleculeCompleteEntries(EnzymeModel enzymeModel) throws ChebiFetchDataException {
         ChemicalEntity chemicalEntity = enzymeModel.getMolecule();
 //        Set<String> uniqueMoleculeNames = new HashSet<String>();
@@ -228,6 +229,7 @@ public class ChebiAdapter implements IChebiAdapter {
 	    		new ExecutorCompletionService<Molecule>(pool);
 	    
 	    try {
+        	LOGGER.debug("MOLECULES before submitting drugs");
 	    	Map<Future<Molecule>, Molecule> drugFut =
 	    			new HashMap<Future<Molecule>, Molecule>();
 	        for (Molecule drug : chemicalEntity.getDrugs()) {
@@ -236,6 +238,7 @@ public class ChebiAdapter implements IChebiAdapter {
 					drugFut.put(ecs.submit(callable), drug);
 				}
 			}
+        	LOGGER.debug("MOLECULES before submitting inhibitors");
 		    Map<Future<Molecule>, Molecule> inhFut =
 		    		new HashMap<Future<Molecule>, Molecule>();
 	        for (Molecule inhibitor : chemicalEntity.getInhibitors()) {
@@ -244,6 +247,7 @@ public class ChebiAdapter implements IChebiAdapter {
 					inhFut.put(ecs.submit(callable), inhibitor);
 				}
 			}
+        	LOGGER.debug("MOLECULES before submitting activators");
 	        Map<Future<Molecule>, Molecule> actFut =
 	        		new HashMap<Future<Molecule>, Molecule>();
 	        for (Molecule activator : chemicalEntity.getActivators()) {
@@ -252,6 +256,7 @@ public class ChebiAdapter implements IChebiAdapter {
 					actFut.put(ecs.submit(callable), activator);
 				}
 			}
+        	LOGGER.debug("MOLECULES before submitting cofactors");
 	        Map<Future<Molecule>, Molecule> cofFut =
 	        		new HashMap<Future<Molecule>, Molecule>();
 	        for (Molecule cofactor : chemicalEntity.getCofactors()) {
@@ -260,10 +265,20 @@ public class ChebiAdapter implements IChebiAdapter {
 					cofFut.put(ecs.submit(callable), cofactor);
 				}
 			}
+        	LOGGER.debug("MOLECULES before submitting bioactives");
+	        Map<Future<Molecule>, Molecule> bioactFut =
+	        		new HashMap<Future<Molecule>, Molecule>();
+	        for (Molecule bioactive : chemicalEntity.getBioactiveLigands()) {
+				ChebiWsCallable callable = getCallable(bioactive);
+				if (callable != null){
+					bioactFut.put(ecs.submit(callable), bioactive);
+				}
+			}
 	        // How many jobs have we sent?
 	        final int numOfMolecules = drugFut.size() + inhFut.size()
-	        		+ actFut.size() + cofFut.size();
+	        		+ actFut.size() + cofFut.size() + bioactFut.size();
 	        // Let's retrieve them:
+        	LOGGER.debug("MOLECULES before getting molecules");
 			for (int i = 0; i < numOfMolecules; i++){
 	        	Future<Molecule> future = null;
 	        	try {
@@ -281,6 +296,8 @@ public class ChebiAdapter implements IChebiAdapter {
 	        					actFut.put(future, molecule);
 	        				} else if (cofFut.containsKey(future)){
 	        					cofFut.put(future, molecule);
+	        				} else if (bioactFut.containsKey(future)){
+	        					bioactFut.put(future, molecule);
 	        				}
 	        			} else {
 		    				LOGGER.warn("Molecule retrieved is null!");
@@ -289,6 +306,7 @@ public class ChebiAdapter implements IChebiAdapter {
 		    				inhFut.remove(future);
 		    				actFut.remove(future);
 		    				cofFut.remove(future);
+		    				bioactFut.remove(future);
 	        			}
 	        		} else {
 	    				LOGGER.warn("Job result not retrieved!");
@@ -299,6 +317,7 @@ public class ChebiAdapter implements IChebiAdapter {
 	            			+ " - " + e.getMessage(), e);
 	        	}
 	        }
+        	LOGGER.debug("MOLECULES before setting molecules");
 			enzymeModel.getMolecule().setDrugs(
 					new ArrayList<Molecule>(drugFut.values()));
 			enzymeModel.getMolecule().setInhibitors(
@@ -307,6 +326,8 @@ public class ChebiAdapter implements IChebiAdapter {
 					new ArrayList<Molecule>(actFut.values()));
 			enzymeModel.getMolecule().setCofactors(
 					new ArrayList<Molecule>(cofFut.values()));
+			enzymeModel.getMolecule().setBioactiveLigands(
+					new ArrayList<Molecule>(bioactFut.values()));
 	    } finally {
 	    	pool.shutdown();
 	    }
