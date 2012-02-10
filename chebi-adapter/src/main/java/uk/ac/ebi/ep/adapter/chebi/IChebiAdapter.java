@@ -22,6 +22,14 @@ public interface IChebiAdapter {
 
     public List<String> getChebiLiteEntity(String query) throws ChebiFetchDataException;
 
-    public EnzymeModel getMoleculeCompleteEntries(EnzymeModel enzymeModel) throws ChebiFetchDataException;
+    /**
+     * Completes the information stored in the Molecule objects inside the
+     * enzyme model by querying ChEBI.
+     * @param enzymeModel
+     * @return
+     * @throws ChebiFetchDataException
+     */
+    public EnzymeModel getMoleculeCompleteEntries(EnzymeModel enzymeModel)
+	throws ChebiFetchDataException;
 
 }
