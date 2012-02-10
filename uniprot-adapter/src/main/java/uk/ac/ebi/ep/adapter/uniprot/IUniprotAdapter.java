@@ -61,7 +61,8 @@ public interface IUniprotAdapter {
 	throws UniprotWsException;
 
     /**
-     * Gets a summary of one entry, including information about small molecules.
+     * Gets a summary of one entry, including information about small molecules
+     * (drugs cross referenced in DrugBank, inhibitors and activators).
      * @param accession a UniProt accession.
      * @return an enzyme summary.
      * @throws UniprotWsException 
