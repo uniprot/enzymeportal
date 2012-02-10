@@ -22,11 +22,27 @@
         			arguments="small molecules"/></p>
     		</c:when>
     		<c:otherwise>
+	            <c:set var="moleculeGroup" value="${molecules.bioactiveLigands}"/>
+	            <c:set var="emptyArgs" value="bioactive compounds"/>
+	            <c:set var="titleArgs" value="Bioactive compounds,bind to"/>
+	            <c:set var="explArgs" value="Bioactive compounds,bind to"/>
+	            <div id="bioactiveLigands">
+					<%@include  file="moleculeGroup.jsp" %>
+	            </div>
+
 	            <c:set var="moleculeGroup" value="${molecules.drugs}"/>
 	            <c:set var="emptyArgs" value="drugs"/>
-	            <c:set var="titleArgs" value="Drugs,interact"/>
+	            <c:set var="titleArgs" value="Drugs,interact with"/>
 	            <c:set var="explArgs" value="drugs,interact with"/>
 	            <div id="drugs">
+					<%@include  file="moleculeGroup.jsp" %>
+	            </div>
+	
+	            <c:set var="moleculeGroup" value="${molecules.activators}"/>
+	            <c:set var="emptyArgs" value="activators"/>
+	            <c:set var="titleArgs" value="Activators,activate"/>
+	            <c:set var="explArgs" value="activators,activate"/>
+	            <div id="activators">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
 	
@@ -37,17 +53,15 @@
 	            <div id="inhibitors">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
-	
-	            <c:set var="moleculeGroup" value="${molecules.activators}"/>
-	            <c:set var="emptyArgs" value="activators"/>
-	            <c:set var="titleArgs" value="Activators,activate"/>
-	            <c:set var="explArgs" value="Activators,activate"/>
+<%--
+	            <c:set var="moleculeGroup" value="${molecules.cofactors}"/>
+	            <c:set var="emptyArgs" value="cofactors"/>
+	            <c:set var="titleArgs" value="Cofactors,activate"/>
+	            <c:set var="explArgs" value="cofactors,activate"/>
 	            <div id="activators">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
-	
-				<%-- TODO: cofactors --%>
-				
+ --%>	
 		        <div class="provenance">
 		            <ul>
 		                <c:set var="provenance" value="${molecules.provenance}"/>
