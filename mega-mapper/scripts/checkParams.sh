@@ -2,5 +2,5 @@
 
 case $1 in
 	dev|test|prod);;
-	*) echo 'runtime environment (dev|test|prod) required as $1' && exit 1;;
+	*) echo 'runtime environment (enzdev|ezprel) required as $1' && exit 1;;
 esac
