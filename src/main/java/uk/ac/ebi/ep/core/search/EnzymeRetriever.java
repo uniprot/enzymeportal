@@ -358,11 +358,14 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = null;
         try {
+        	LOGGER.debug("MOLECULES before getting model");
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
             if (mm != null){
             	// Search the mega-map for xrefs from UniProt to ChEMBL:
+            	LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
             	Collection<XRef> chemblXrefs = mm.getXrefs(
             			MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
+            	LOGGER.debug("MOLECULES before getting ChEMBL molecules");
             	if (chemblXrefs != null){
     				Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
                 	for (XRef chemblXref : chemblXrefs) {
@@ -371,10 +374,12 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                 			.withName(chemblXref.getToEntry().getEntryName());
                 		chemblDrugs.add(chemblDrug);
     				}
-    				enzymeModel.getMolecule().withDrugs(chemblDrugs);
+    				enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
             	}
             }
+        	LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
+        	LOGGER.debug("MOLECULES before provenance");
             List<String> prov = new LinkedList<String>();
             prov.add("Data Sources : ChEBI and ChEMBL");
            // prov.add("RELEASED DATE = " + new Date());
