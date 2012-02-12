@@ -5,7 +5,6 @@ import java.util.concurrent.Callable;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
@@ -25,7 +24,6 @@ public class ChebiWsCallable implements Callable<Molecule> {
 	private ChebiConfig config;
 	private String query;
 	private SearchCategory field;
-    private ChebiWebServiceClient client = new ChebiWebServiceClient();
 	
     /**
      * Constructor.
@@ -98,10 +96,12 @@ public class ChebiWsCallable implements Callable<Molecule> {
 	 */
     private Molecule getMolecule(String s) throws ChebiFetchDataException{
 		Molecule molecule = null;
+		ChebiWebServiceClient chebiWsClient = null;
 		try {
 			StarsCategory stars = config != null?
 					config.searchStars : StarsCategory.ALL;
-			LiteEntityList lite = client.getLiteEntity(s, field, 1, stars);
+			chebiWsClient = ChebiWsClientPool.getInstance().borrowObject();
+			LiteEntityList lite = chebiWsClient.getLiteEntity(s, field, 1, stars);
 			if (lite.getListElement().isEmpty()){
 				LOGGER.warn("No ChEBI entity found for " + s);
 			} else {
@@ -109,8 +109,16 @@ public class ChebiWsCallable implements Callable<Molecule> {
 						lite.getListElement().get(0).getChebiId());
 				molecule = Transformer.transformChebiToEpMoleculeEntity(complete);
 			}
-		} catch (ChebiWebServiceFault_Exception e) {
+		} catch (Exception e) {
 			throw new ChebiFetchDataException(e);
+		} finally {
+			if (chebiWsClient != null){
+				try {
+					ChebiWsClientPool.getInstance().returnObject(chebiWsClient);
+				} catch (Exception e) {
+					LOGGER.error("Unable to return chebi WS client", e);
+				}
+			}
 		}
 		return molecule;
 	}
@@ -124,10 +132,20 @@ public class ChebiWsCallable implements Callable<Molecule> {
 	private Entity getChebiCompleteEntity(String chebiId)
 	throws ChebiFetchDataException {
         Entity entity = null;
+        ChebiWebServiceClient chebiWsClient = null;
         try {
-            entity = client.getCompleteEntity(chebiId);
-        } catch (ChebiWebServiceFault_Exception e) {
+        	chebiWsClient = ChebiWsClientPool.getInstance().borrowObject();
+			entity = chebiWsClient.getCompleteEntity(chebiId);
+        } catch (Exception e) {
             throw new ChebiFetchDataException("Failed to retrieve complete entry from Chebi WS ", e);
+		} finally {
+			if (chebiWsClient != null){
+				try {
+					ChebiWsClientPool.getInstance().returnObject(chebiWsClient);
+				} catch (Exception e) {
+					LOGGER.error("Unable to return chebi WS client", e);
+				}
+			}
         }
         return entity;
     }
