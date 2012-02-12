@@ -341,6 +341,7 @@ public class ChebiAdapter implements IChebiAdapter {
 	 * @return a callable to retrieve the complete Molecule.
 	 */
 	private ChebiWsCallable getCallable(Molecule molecule) {
+		LOGGER.debug("before getting ChEBI callable");
 		ChebiWsCallable callable = null;
 		final String drugId = molecule.getId();
 		if (drugId != null){
@@ -356,6 +357,7 @@ public class ChebiAdapter implements IChebiAdapter {
 		if (callable == null){
 			LOGGER.warn("The molecule has no id or name");
 		}
+		LOGGER.debug("after getting ChEBI callable");
 		return callable;
 	}
 
