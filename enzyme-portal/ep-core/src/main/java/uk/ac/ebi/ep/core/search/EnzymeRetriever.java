@@ -360,6 +360,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         try {
         	LOGGER.debug("MOLECULES before getting model");
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
+/* Skip bioactive ligands (ChEMBL xrefs) for now, as most of them are not
+ * found in ChEBI web services afterwards, and there can be many (~1000)
+ * for a single enzyme. This wastes a lot of time and makes the response
+ * very slow.
             if (mm != null){
             	// Search the mega-map for xrefs from UniProt to ChEMBL:
             	LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
@@ -377,6 +381,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     				enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
             	}
             }
+*/
         	LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
         	LOGGER.debug("MOLECULES before provenance");
