@@ -223,8 +223,8 @@ public class ChebiAdapter implements IChebiAdapter {
 //            }
 //        }
         
-//        ExecutorService pool = Executors.newFixedThreadPool(config.getMaxThreads());
-	    ExecutorService pool = Executors.newCachedThreadPool();
+        ExecutorService pool = Executors.newFixedThreadPool(config.getMaxThreads());
+//	    ExecutorService pool = Executors.newCachedThreadPool();
 	    CompletionService<Molecule> ecs =
 	    		new ExecutorCompletionService<Molecule>(pool);
 	    
