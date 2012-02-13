@@ -13,7 +13,7 @@ CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target.xml
 UP_FILE=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 
 . $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh ${1},apps
+. $(dirname $0)/mvnBuild.sh ${1}
 
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \

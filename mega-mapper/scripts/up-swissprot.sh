@@ -10,7 +10,7 @@ XML_FILE=${2:-$EBINOCLE_DATA/uniprot/latest/uniprot_sprot.xml}
 #HIBERNATE_OPTS="-Dhibernate.hbm2ddl.auto=create"
 
 . $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh ${1},apps
+. $(dirname $0)/mvnBuild.sh ${1}
 
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS $HIBERNATE_OPTS -classpath $CP uk.ac.ebi.ep.mm.UniprotSaxParser \
