@@ -210,14 +210,14 @@
 			<id>enzdev</id>
 			<activation><activeByDefault>true</activeByDefault></activation>
 			<properties>
-				<ep.mm.db.config>-dev</ep.mm.db.config>
+				<ep.mm.db.config>-enzdev</ep.mm.db.config>
 			</properties>
 		</profile>
 		<profile>
 			<!-- Profile to work with the release database -->
 			<id>ezprel</id>
 			<properties>
-				<ep.mm.db.config>-rel</ep.mm.db.config>
+				<ep.mm.db.config>-ezprel</ep.mm.db.config>
 			</properties>
 		</profile>
 	</profiles>
