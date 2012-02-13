@@ -6,6 +6,8 @@ public class ChebiConfig implements ChebiConfigMBean {
 
 	int maxThreads = 10;
 	
+	int maxRetrievedMolecules = 3;
+	
 	StarsCategory searchStars = StarsCategory.ALL;
 	
 	int timeout = 30000;
@@ -32,6 +34,14 @@ public class ChebiConfig implements ChebiConfigMBean {
 
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
+	}
+
+	public int getMaxRetrievedMolecules() {
+		return maxRetrievedMolecules;
+	}
+
+	public void setMaxRetrievedMolecules(int maxRetrievedMolecules) {
+		this.maxRetrievedMolecules = maxRetrievedMolecules;
 	}
 	
 }

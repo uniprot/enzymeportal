@@ -35,5 +35,14 @@ public interface ChebiConfigMBean {
 
 	public abstract int getMaxThreads();
 
+	/**
+	 * Sets the maximum number of molecules retrieved for a group (i.e. drugs,
+	 * activators, inhibitors, bioactive compounds).
+	 * @param maxRetrievedMolecules
+	 */
+	public abstract void setMaxRetrievedMolecules(int maxRetrievedMolecules);
+
+	public abstract int getMaxRetrievedMolecules();
+
 
 }
