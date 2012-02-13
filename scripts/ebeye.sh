@@ -7,7 +7,7 @@
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 
 . $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh ${1},apps
+. $(dirname $0)/mvnBuild.sh ${1}
 
 echo "Starting EB-Eye import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
