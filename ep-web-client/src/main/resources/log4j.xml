@@ -9,9 +9,11 @@
 	</appender>
 
 	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.base}/logs/enzymePortal.log"/>
+		<param name="file"
+			value="${catalina.base}/logs/${tomcat.hostname}/enzymePortal.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="conversionPattern" value="[%p]-[%d{ISO8601}]-%c{1}-%t- %m%n"/>
+			<param name="conversionPattern"
+				value="[%p]-[%d{ISO8601}]-%c{1}-%t- %m%n"/>
 		</layout>
 	</appender>
 
