@@ -26,6 +26,8 @@
 	            <c:set var="emptyArgs" value="bioactive compounds"/>
 	            <c:set var="titleArgs" value="Bioactive compounds,bind to"/>
 	            <c:set var="explArgs" value="Bioactive compounds,bind to"/>
+	            <c:set var="moleculeGroupDb" value="ChEMBL"/>
+	            <c:set var="moleculeGroupUrl" value="http://www.ebi.ac.uk/chembl/"/>
 	            <div id="bioactiveLigands">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
@@ -34,6 +36,9 @@
 	            <c:set var="emptyArgs" value="drugs"/>
 	            <c:set var="titleArgs" value="Drugs,interact with"/>
 	            <c:set var="explArgs" value="drugs,interact with"/>
+	            <c:set var="moleculeGroupDb" value="UniProt"/>
+	            <c:set var="moleculeGroupUrl"
+	            	value="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}#section_x-ref_other"/>
 	            <div id="drugs">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
@@ -42,6 +47,9 @@
 	            <c:set var="emptyArgs" value="activators"/>
 	            <c:set var="titleArgs" value="Activators,activate"/>
 	            <c:set var="explArgs" value="activators,activate"/>
+	            <c:set var="moleculeGroupDb" value="UniProt"/>
+	            <c:set var="moleculeGroupUrl"
+	            	value="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}#section_comments"/>
 	            <div id="activators">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
@@ -50,6 +58,9 @@
 	            <c:set var="emptyArgs" value="inhibitors"/>
 	            <c:set var="titleArgs" value="Inhibitors,inhibit"/>
 	            <c:set var="explArgs" value="inhibitors,inhibit"/>
+	            <c:set var="moleculeGroupDb" value="UniProt"/>
+	            <c:set var="moleculeGroupUrl"
+	            	value="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}#section_comments"/>
 	            <div id="inhibitors">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
@@ -58,7 +69,9 @@
 	            <c:set var="emptyArgs" value="cofactors"/>
 	            <c:set var="titleArgs" value="Cofactors,activate"/>
 	            <c:set var="explArgs" value="cofactors,activate"/>
-	            <div id="activators">
+	            <c:set var="moleculeGroupDb" value=""/>
+	            <c:set var="moleculeGroupUrl" value=""/>
+	            <div id="cofactors">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
  --%>	

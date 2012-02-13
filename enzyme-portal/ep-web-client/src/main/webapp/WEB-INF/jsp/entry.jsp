@@ -104,12 +104,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <%--
                             <div class="grid_1 omega">
                                 <div class="menu">
                                     <a href="http://www.ebi.ac.uk/inc/help/search_help.html" class="help">Help</a>
                                     <a href="" wicket:id="print" class="print"><span wicket:id="printLabel">Print</span></a>
                                 </div>
                             </div>
+                             --%>
                         </div>
                     </div>
                 </div>

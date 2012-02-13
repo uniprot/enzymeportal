@@ -65,6 +65,7 @@ legend {
 .epBox {
     width: 46%;
     min-height: 200px;
+    min-width: 200px;
     display: inline;
     float: left;
     margin: 5px 5px 5px 5px;
