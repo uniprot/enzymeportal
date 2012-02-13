@@ -115,8 +115,8 @@ public class BioportalWsAdapter implements IBioportalAdapter {
  				entity.setId(conceptId.replaceFirst("^\\w+:", ""));
  				entity.setName(handler.getResults().get(SEARCH_PREFERREDNAME)
  						.iterator().next());
- 				entity.setUrl(Collections.singletonList(handler.getResults()
- 						.get(SEARCH_CONCEPTID).iterator().next()));
+ 				entity.setUrl(handler.getResults().get(SEARCH_CONCEPTID)
+ 						.iterator().next());
 
  				if (complete){
  	 				String ontologyVersionId = handler.getResults()
