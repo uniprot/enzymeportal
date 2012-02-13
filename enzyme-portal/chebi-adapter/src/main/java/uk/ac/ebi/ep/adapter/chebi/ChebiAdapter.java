@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.adapter.chebi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -203,26 +204,6 @@ public class ChebiAdapter implements IChebiAdapter {
     
     public EnzymeModel getMoleculeCompleteEntries(EnzymeModel enzymeModel) throws ChebiFetchDataException {
         ChemicalEntity chemicalEntity = enzymeModel.getMolecule();
-//        Set<String> uniqueMoleculeNames = new HashSet<String>();
-//        List<String> drugNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getDrugs());
-//        List<String> activatorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getActivators());
-//        List<String> inhibitorNames = DataTypeConverter.getMoleculeNames(chemicalEntity.getInhibitors());
-//        uniqueMoleculeNames.addAll(drugNames);
-//        uniqueMoleculeNames.addAll(activatorNames);
-//        uniqueMoleculeNames.addAll(inhibitorNames);
-//        Map<String,Entity> nameIdMap = null;
-//        if (uniqueMoleculeNames.size() > 0) {
-//            nameIdMap = queryChebiAllNamesForEntities(uniqueMoleculeNames);
-//            if (nameIdMap.size() > 0) {
-//                List<Molecule> drugMols = setMolecules(drugNames, nameIdMap);
-//                enzymeModel.getMolecule().setDrugs(drugMols);
-//                List<Molecule> activatorMols = setMolecules(activatorNames, nameIdMap);
-//                enzymeModel.getMolecule().setActivators(activatorMols);
-//                List<Molecule> inhibitorMols = setMolecules(inhibitorNames, nameIdMap);
-//                enzymeModel.getMolecule().setInhibitors(inhibitorMols);
-//            }
-//        }
-        
         ExecutorService pool = Executors.newFixedThreadPool(config.getMaxThreads());
 //	    ExecutorService pool = Executors.newCachedThreadPool();
 	    CompletionService<Molecule> ecs =
@@ -231,49 +212,19 @@ public class ChebiAdapter implements IChebiAdapter {
 	    try {
         	LOGGER.debug("MOLECULES before submitting drugs");
 	    	Map<Future<Molecule>, Molecule> drugFut =
-	    			new HashMap<Future<Molecule>, Molecule>();
-	        for (Molecule drug : chemicalEntity.getDrugs()) {
-	        	ChebiWsCallable callable = getCallable(drug);
-				if (callable != null){
-					drugFut.put(ecs.submit(callable), drug);
-				}
-			}
+	    			getFuture2MoleculeMap(chemicalEntity.getDrugs(), ecs);
         	LOGGER.debug("MOLECULES before submitting inhibitors");
 		    Map<Future<Molecule>, Molecule> inhFut =
-		    		new HashMap<Future<Molecule>, Molecule>();
-	        for (Molecule inhibitor : chemicalEntity.getInhibitors()) {
-				ChebiWsCallable callable = getCallable(inhibitor);
-				if (callable != null){
-					inhFut.put(ecs.submit(callable), inhibitor);
-				}
-			}
+		    		getFuture2MoleculeMap(chemicalEntity.getInhibitors(), ecs);
         	LOGGER.debug("MOLECULES before submitting activators");
 	        Map<Future<Molecule>, Molecule> actFut =
-	        		new HashMap<Future<Molecule>, Molecule>();
-	        for (Molecule activator : chemicalEntity.getActivators()) {
-				ChebiWsCallable callable = getCallable(activator);
-				if (callable != null){
-					actFut.put(ecs.submit(callable), activator);
-				}
-			}
+	        		getFuture2MoleculeMap(chemicalEntity.getActivators(), ecs);
         	LOGGER.debug("MOLECULES before submitting cofactors");
 	        Map<Future<Molecule>, Molecule> cofFut =
-	        		new HashMap<Future<Molecule>, Molecule>();
-	        for (Molecule cofactor : chemicalEntity.getCofactors()) {
-				ChebiWsCallable callable = getCallable(cofactor);
-				if (callable != null){
-					cofFut.put(ecs.submit(callable), cofactor);
-				}
-			}
+	        		getFuture2MoleculeMap(chemicalEntity.getCofactors(), ecs);
         	LOGGER.debug("MOLECULES before submitting bioactives");
 	        Map<Future<Molecule>, Molecule> bioactFut =
-	        		new HashMap<Future<Molecule>, Molecule>();
-	        for (Molecule bioactive : chemicalEntity.getBioactiveLigands()) {
-				ChebiWsCallable callable = getCallable(bioactive);
-				if (callable != null){
-					bioactFut.put(ecs.submit(callable), bioactive);
-				}
-			}
+	        		getFuture2MoleculeMap(chemicalEntity.getBioactiveLigands(), ecs);
 	        // How many jobs have we sent?
 	        final int numOfMolecules = drugFut.size() + inhFut.size()
 	        		+ actFut.size() + cofFut.size() + bioactFut.size();
@@ -301,12 +252,6 @@ public class ChebiAdapter implements IChebiAdapter {
 	        				}
 	        			} else {
 		    				LOGGER.warn("Molecule retrieved is null!");
-		    				// FIXME:
-		    				drugFut.remove(future);
-		    				inhFut.remove(future);
-		    				actFut.remove(future);
-		    				cofFut.remove(future);
-		    				bioactFut.remove(future);
 	        			}
 	        		} else {
 	    				LOGGER.warn("Job result not retrieved!");
@@ -318,20 +263,48 @@ public class ChebiAdapter implements IChebiAdapter {
 	        	}
 	        }
         	LOGGER.debug("MOLECULES before setting molecules");
-			enzymeModel.getMolecule().setDrugs(
-					new ArrayList<Molecule>(drugFut.values()));
-			enzymeModel.getMolecule().setInhibitors(
-					new ArrayList<Molecule>(inhFut.values()));
-			enzymeModel.getMolecule().setActivators(
-					new ArrayList<Molecule>(actFut.values()));
-			enzymeModel.getMolecule().setCofactors(
-					new ArrayList<Molecule>(cofFut.values()));
-			enzymeModel.getMolecule().setBioactiveLigands(
-					new ArrayList<Molecule>(bioactFut.values()));
+        	// Replace first items in each list with the retrieved ones:
+        	enzymeModel.getMolecule().getDrugs()
+        			.subList(0, drugFut.size()).clear();
+        	enzymeModel.getMolecule().getDrugs().addAll(0, drugFut.values());
+        	enzymeModel.getMolecule().getInhibitors()
+					.subList(0, inhFut.size()).clear();
+    		enzymeModel.getMolecule().getInhibitors().addAll(0, inhFut.values());
+    		enzymeModel.getMolecule().getActivators()
+    				.subList(0, actFut.size()).clear();
+			enzymeModel.getMolecule().getActivators().addAll(0, actFut.values());
+			enzymeModel.getMolecule().getCofactors()
+					.subList(0, cofFut.size()).clear();
+			enzymeModel.getMolecule().getCofactors().addAll(0, cofFut.values());
+			enzymeModel.getMolecule().getBioactiveLigands()
+					.subList(0, bioactFut.size()).clear();
+			enzymeModel.getMolecule().getBioactiveLigands().addAll(0, bioactFut.values());
 	    } finally {
 	    	pool.shutdown();
 	    }
         return enzymeModel;
+    }
+    
+    /**
+     * Prepares callables and sends them to a completion service in order to
+     * retrieve complete entities from ChEBI.
+     * @param molecules the list of molecules to be retrieved from ChEBI.
+     * @param ecs the completion service where the jobs are submitted.
+     * @return a map of <code>Future</code>s to <code>Molecule</code>s
+     */
+    private Map<Future<Molecule>, Molecule> getFuture2MoleculeMap(
+    		List<Molecule> molecules, CompletionService<Molecule> ecs){
+    	Map<Future<Molecule>, Molecule> fut2mol =
+    			new LinkedHashMap<Future<Molecule>, Molecule>();
+        for (Molecule molecule : molecules) {
+        	ChebiWsCallable callable = getCallable(molecule);
+			if (callable != null){
+				fut2mol.put(ecs.submit(callable), molecule);
+			}
+			// Limit to the first few molecules:
+			if (fut2mol.size() >= config.getMaxRetrievedMolecules()) break;
+		}
+        return fut2mol;
     }
 
 	/**
