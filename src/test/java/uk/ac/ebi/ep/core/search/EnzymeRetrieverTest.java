@@ -15,8 +15,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
-import uk.ac.ebi.ep.adapter.reactome.ReactomeConfigMBean;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
@@ -59,6 +59,8 @@ public class EnzymeRetrieverTest {
         reactomeConfig.setUseProxy(false);
         reactomeConfig.setWsBaseUrl("http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/");
         instance.getReactomeAdapter().setConfig(reactomeConfig);
+        ChebiConfig chebiConfig = new ChebiConfig();
+        instance.getChebiAdapter().setConfig(chebiConfig);
     }
 
     @After
