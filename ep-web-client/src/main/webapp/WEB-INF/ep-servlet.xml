@@ -91,6 +91,7 @@
 		<property name="timeout" value="30000"/>
 		<property name="maxThreads" value="10"/>
 		<property name="searchStars" value="ALL"/>
+		<property name="maxRetrievedMolecules" value="3"/>
 	</bean>
 	
     <!--Start internationalization-->

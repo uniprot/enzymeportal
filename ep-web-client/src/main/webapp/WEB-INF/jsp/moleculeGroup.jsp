@@ -24,16 +24,19 @@
 	        </p>
 	        <div style="display: table-row;">
 		        <c:forEach var="molecule" items="${moleculeGroup}"
-                      begin="0" end="${fn:length(moleculeGroup) gt 3?
-                      2 : (fn:length(moleculeGroup)-1)}">
-			        <div style="display: table-cell; vertical-align: top; width: 230px;">
+                      begin="0"
+                      end="${fn:length(moleculeGroup) gt 3?
+                      (2) :
+                      (fn:length(moleculeGroup)-1)}">
+			        <div style="display: table-cell; vertical-align: top;">
 			        	<%@include file="molecule.jsp" %>
 					</div>
 		        </c:forEach>
 		    </div>
 	        <c:if test="${fn:length(moleculeGroup) gt 3}">
 	        <%-- TODO --%>
-	        <a href="">See all ${fn:length(moleculeGroup)} ${emptyArgs} in...</a>
+	        <a href="${moleculeGroupUrl}">See all ${fn:length(moleculeGroup)}
+	        	${emptyArgs} in ${moleculeGroupDb}</a>
 	        </c:if>
 	    </fieldset>
 	</c:otherwise>

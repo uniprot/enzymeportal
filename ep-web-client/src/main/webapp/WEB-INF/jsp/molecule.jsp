@@ -7,14 +7,20 @@
 	value="${empty molecule.name? molecule.id : molecule.name}"/>
 
 <fieldset class="epBox">
-	<c:choose>
-		<c:when test="${empty molecule.url}">
-			${displayName}
-		</c:when>
-		<c:otherwise>
-			<a href="${molecule.url}" target="blank">${displayName}</a>
-		</c:otherwise>
-	</c:choose>
+	<%-- Add URL if we only have ID --%>
+	<c:if test="${empty molecule.url and not empty molecule.id}">
+		<c:choose>
+			<c:when test="${fn:startsWith(molecule.id, 'DB')}">
+				<c:set var="theUrl" value="http://www.drugbank.ca/drugs/${molecule.id}"/>
+			</c:when>
+			<c:when test="${fn:startsWith(molecule.id, 'CHEMBL')}">
+				<c:set var="theUrl"
+					value="https://www.ebi.ac.uk/chembldb/compound/inspect/${molecule.id}"/>
+			</c:when>
+		</c:choose>
+	</c:if>
+	<a href="${empty molecule.url? theUrl : molecule.url}"
+		target="blank">${displayName}</a>
 	<div>
 		<c:if test="${not empty molecule.id and fn:startsWith(molecule.id, 'CHEBI:')}">
 			<div style="width: 200px;">
