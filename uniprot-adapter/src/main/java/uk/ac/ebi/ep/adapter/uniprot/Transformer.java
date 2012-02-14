@@ -25,9 +25,11 @@ import uk.ac.ebi.kraken.model.uniprot.comments.FunctionCommentImpl;
  */
 public class Transformer {
 
-    static final String COMMON_REGEX = "|\\b[Cc]ompletely\\b|\\b[Pp]artially\\b" +
-    		"|\\s?\\band\\b\\s?|;|\\bor\\b|\\b[Pp]otentially\\b|\\b[Aa]lso\\b|" +
-    		"\\bby\\b|\\b[Ss]pecifically\\b|\\b[Cc]compound[s\\s]\\b|\\(|\\)";
+    static final String COMMON_REGEX =
+            "|\\b[Cc]ompletely\\b|\\b[Pp]artially\\b" +
+    		"|\\s?\\band\\b\\s?|;|\\bor\\b|\\b[Pp]otentially\\b|\\b[Aa]lso\\b" +
+    		"|\\bby\\b|\\b[Ss]pecifically\\b|\\b[Aa]llosterically\\b"
+            + "|\\b[Cc]compound[s\\s]\\b|\\(|\\)";
     static final String INHIBITOR_REGEX = "\\b[Ii]n(hibited|activated) by\\b";
     static final String ACTIVATOR_REGEX = "\\b[Aa]ctivated by\\b";
 
