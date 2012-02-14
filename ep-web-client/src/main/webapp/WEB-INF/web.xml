@@ -25,17 +25,14 @@
             index.jsp
         </welcome-file>
     </welcome-file-list>
-    <!--Localtion of Spring config files-->
-        <!--
-      <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/ep-servle.xml</param-value>
-    </context-param>
+    
+	<filter>
+		<filter-name>HealthFilter</filter-name>
+		<filter-class>uk.ac.ebi.es.HealthFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HealthFilter</filter-name>
+		<url-pattern>/jmxproxy/*</url-pattern>
+	</filter-mapping>
 
-    <listener>
-        <listener-class>
-            org.springframework.web.context.ContextLoaderListener
-        </listener-class>
-    </listener>
-    -->
 </web-app>
