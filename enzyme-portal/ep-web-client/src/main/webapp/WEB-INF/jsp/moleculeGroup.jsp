@@ -36,8 +36,7 @@
 	        <c:if test="${fn:length(moleculeGroup) gt 3}">
 		        <c:choose>
 		        	<c:when test="${moleculeGroupDb eq 'ChEMBL'}">
-		        		See all ${fn:length(moleculeGroup)} ${emptyArgs}
-			        	in ${moleculeGroupDb}:
+		        		See all related ${emptyArgs} in ${moleculeGroupDb}:
 						<div id="target_uniprot"
 							style="height:250px; width:400px; clear:both">
 							Loading ChEMBL data...
