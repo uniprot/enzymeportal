@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.web;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +24,6 @@ import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
-import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
 import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
 import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
@@ -31,7 +31,6 @@ import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.entry.Field;
-import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
@@ -187,16 +186,16 @@ public class SearchController {
                 SearchResults resultSet = null;
                 // See if it is already there, perhaps we are paginating:
                 @SuppressWarnings("unchecked")
-                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) session.getServletContext().getAttribute("searches");
-                if (prevSearches != null) {
-
-                    resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
-                } else {
+                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
+                		session.getServletContext().getAttribute("searches");
+                if (prevSearches == null) {
                     // Map implementation which maintains the order of access:
-                    prevSearches = new LinkedHashMap<String, SearchResults>(
-                            searchConfig.getSearchCacheSize(), 1, true);
+                    prevSearches = Collections.synchronizedMap(
+                    		new LinkedHashMap<String, SearchResults>(
+                            searchConfig.getSearchCacheSize(), 1, true));
                     session.getServletContext().setAttribute("searches", prevSearches);
                 }
+                resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
                 if (resultSet == null) {
                     // Make a new search:
                     EnzymeFinder finder = new EnzymeFinder(searchConfig);
@@ -206,11 +205,13 @@ public class SearchController {
                     try {
                         resultSet = finder.getEnzymes(searchParameters);
                         // cache it in the session, making room if necessary:
-                        while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
-                            // remove the eldest:
-                            prevSearches.remove(prevSearches.keySet().iterator().next());
+                        synchronized(prevSearches){
+                            while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
+                                // remove the eldest:
+                                prevSearches.remove(prevSearches.keySet().iterator().next());
+                            }
+                            prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
                         }
-                        prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
                     } catch (EnzymeFinderException ex) {
                         LOGGER.error("Unable to create the result list because an error "
                                 + "has occurred in the find method! \n", ex);

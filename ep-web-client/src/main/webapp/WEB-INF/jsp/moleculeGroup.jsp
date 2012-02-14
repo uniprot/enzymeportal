@@ -34,9 +34,24 @@
 		        </c:forEach>
 		    </div>
 	        <c:if test="${fn:length(moleculeGroup) gt 3}">
-	        <%-- TODO --%>
-	        <a href="${moleculeGroupUrl}">See all ${fn:length(moleculeGroup)}
-	        	${emptyArgs} in ${moleculeGroupDb}</a>
+		        <c:choose>
+		        	<c:when test="${moleculeGroupDb eq 'ChEMBL'}">
+		        		See all ${fn:length(moleculeGroup)} ${emptyArgs}
+			        	in ${moleculeGroupDb}:
+						<div id="target_uniprot"
+							style="height:250px; width:400px; clear:both">
+							Loading ChEMBL data...
+							<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
+							    alt="Loading..."/>
+					    </div>
+						<script type="text/javascript"
+							src='https://www.ebi.ac.uk/chembldb/index.php/widget/create/target_uniprot/target/compound_mw/uniprot:${enzymeModel.uniprotaccessions[0]}'></script>		        	</c:when>
+		        	<c:otherwise>
+				        <a href="${moleculeGroupUrl}">See all
+				        	${fn:length(moleculeGroup)} ${emptyArgs}
+				        	in ${moleculeGroupDb}</a>
+		        	</c:otherwise>
+		        </c:choose>
 	        </c:if>
 	    </fieldset>
 	</c:otherwise>
