@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -86,29 +87,28 @@ public class SearchController {
     protected String getEnzymeModel(Model model,
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
-        Field requestedField = Field.valueOf(field);
+        Field requestedField = Field.valueOf(field);                  
         EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         retriever.getUniprotAdapter().setConfig(uniprotConfig);
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
-        String responsePage = ResponsePage.ENTRY.toString();
-     
+        String responsePage =  ResponsePage.ENTRY.toString();
         try {
             switch (requestedField) {
                 case proteinStructure:
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
-                case reactionsPathways:                 
+                case reactionsPathways:
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
                     enzymeModel = retriever.getReactionsPathways(accession);
                     break;
                 case molecules:
-                	retriever.getChebiAdapter().setConfig(chebiConfig);
+                    retriever.getChebiAdapter().setConfig(chebiConfig);
                     enzymeModel = retriever.getMolecules(accession);
                     break;
                 case diseaseDrugs:
-                    enzymeModel = retriever.getEnzyme(accession);
+                    enzymeModel = retriever.getDiseases(accession);
                     break;
                 case literature:
                     enzymeModel = retriever.getLiterature(accession);
@@ -119,7 +119,6 @@ public class SearchController {
                     break;
             }
             enzymeModel.setRequestedfield(requestedField.name());
-            enzymeModel.setDisease(EnzymeFinder.getDiseaseINFO());
             model.addAttribute("enzymeModel", enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
@@ -221,10 +220,10 @@ public class SearchController {
 				}
 
                 final int numOfResults = resultSet.getSummaryentries().size();
-                                Pagination pagination = new Pagination(
+                Pagination pagination = new Pagination(
                         numOfResults, searchParameters.getSize());
-                        pagination.setFirstResult(searchParameters.getStart());
-                                
+                pagination.setFirstResult(searchParameters.getStart());
+
                 // Filter:
                 List<String> speciesFilter = searchParameters.getSpecies();
                 List<String> compoundsFilter = searchParameters.getCompounds();
@@ -253,7 +252,7 @@ public class SearchController {
 
                                 if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
                                     enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
-                                     enzymeSummary.setSpecies(enzymeAccession.getSpecies());
+                                    enzymeSummary.setSpecies(enzymeAccession.getSpecies());
                                     //enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
                                 }
 
@@ -262,26 +261,26 @@ public class SearchController {
                         // adding the updated enzyme summaries to the filtered result
                         summaryEntryFilteredResults.add(enzymeSummary);
                     }
-                   
-                   pagination = new Pagination(
-                         summaryEntryFilteredResults.size(), searchParameters.getSize());
-                     pagination.setFirstResult(0);
-                     model.addAttribute("pagination", pagination);
+
+                    pagination = new Pagination(
+                            summaryEntryFilteredResults.size(), searchParameters.getSize());
+                    pagination.setFirstResult(0);
+                    model.addAttribute("pagination", pagination);
                     sr.setSearchfilters(resultSet.getSearchfilters());
                     sr.setSummaryentries(summaryEntryFilteredResults);
                     // show the total number of hits (w/o filtering):
                     sr.setTotalfound(resultSet.getTotalfound());
                     searchModelForm.setSearchresults(sr);
 
-                
-                
+
+
                 } else {
                     // Show all of them:
                     searchModelForm.setSearchresults(resultSet);
                 }
-               
+
                 model.addAttribute("searchModel", searchModelForm);
-                
+
                 model.addAttribute("pagination", pagination);
 
 //                // Paginate:
