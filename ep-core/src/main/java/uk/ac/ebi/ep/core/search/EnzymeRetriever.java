@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,8 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
+import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
+import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.adapter.chebi.ChebiFetchDataException;
 import uk.ac.ebi.ep.adapter.chebi.IChebiAdapter;
@@ -27,6 +32,7 @@ import uk.ac.ebi.ep.adapter.uniprot.UniprotWsException;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
+import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
@@ -34,6 +40,9 @@ import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
+import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.mm.MegaJdbcMapper;
+import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
@@ -62,6 +71,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     protected IDASFeaturesAdapter pdbeAdapter;
     protected ILiteratureAdapter litAdapter;
     protected BiomartAdapter biomartAdapter;
+    private IBioportalAdapter bioportalAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever(Config searchConfig) {
@@ -69,6 +79,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         rheaAdapter = new RheasResourceClient();
         chebiAdapter = new ChebiAdapter();
         biomartAdapter = new BiomartAdapter();
+        bioportalAdapter = new BioportalWsAdapter();
         try {
             pdbeAdapter = new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
         } catch (Exception e) {
@@ -87,16 +98,16 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         }
         return reactomeAdapter;
     }
-    
+
     /**
      * Lazily constructs a new adapter if needed.
      * @return a ChEBI adapter.
      */
-    public IChebiAdapter getChebiAdapter(){
-    	if (chebiAdapter == null){
-    		chebiAdapter = new ChebiAdapter();
-    	}
-    	return chebiAdapter;
+    public IChebiAdapter getChebiAdapter() {
+        if (chebiAdapter == null) {
+            chebiAdapter = new ChebiAdapter();
+        }
+        return chebiAdapter;
     }
 
     public EnzymeModel getEnzyme(String uniprotAccession)
@@ -108,7 +119,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             List<String> prov = new LinkedList<String>();
             prov.add("Data Source : IntEnz & UniProt");
             prov.add("IntEnz - (Integrated relational Enzyme database) is a freely available resource focused on enzyme nomenclature.\n");
-           // prov.add("RELEASED DATE = " + new Date());
+            // prov.add("RELEASED DATE = " + new Date());
             prov.add("UniProt - The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information");
 
             enzymeModel.getEnzyme().setProvenance(prov);
@@ -358,37 +369,35 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = null;
         try {
-        	LOGGER.debug("MOLECULES before getting model");
+            LOGGER.debug("MOLECULES before getting model");
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
-            if (mm != null){
-            	// Search the mega-map for xrefs from UniProt to ChEMBL:
-            	LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
-            	Collection<XRef> chemblXrefs = mm.getXrefs(
-            			MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
-            	LOGGER.debug("MOLECULES before getting ChEMBL molecules");
-            	if (chemblXrefs != null){
-    				Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
-                	for (XRef chemblXref : chemblXrefs) {
-                		Molecule chemblDrug = new Molecule()
-                			.withId(chemblXref.getToEntry().getEntryId())
-                			.withName(chemblXref.getToEntry().getEntryName());
-                		chemblDrugs.add(chemblDrug);
-    				}
-    				enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
-            	}
+            if (megaMapperConnection != null) {
+                // Search the mega-map for xrefs from UniProt to ChEMBL:
+                LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
+                Collection<XRef> chemblXrefs = megaMapperConnection.getMegaMapper().getXrefs(
+                        MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
+                LOGGER.debug("MOLECULES before getting ChEMBL molecules");
+                if (chemblXrefs != null) {
+                    Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
+                    for (XRef chemblXref : chemblXrefs) {
+                        Molecule chemblDrug = new Molecule().withId(chemblXref.getToEntry().getEntryId()).withName(chemblXref.getToEntry().getEntryName());
+                        chemblDrugs.add(chemblDrug);
+                    }
+                    enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
+                }
             }
-        	LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
+            LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
-        	LOGGER.debug("MOLECULES before provenance");
+            LOGGER.debug("MOLECULES before provenance");
             List<String> prov = new LinkedList<String>();
             prov.add("Data Sources : ChEBI and ChEMBL");
-           // prov.add("RELEASED DATE = " + new Date());
+            // prov.add("RELEASED DATE = " + new Date());
             prov.add("Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on ‘small’ chemical compounds.");
-            prov.add("ChEMBL is a database of bioactive drug-like small" +
-            		" molecules, it contains 2-D structures, calculated" +
-            		" properties (e.g. logP, Molecular Weight, Lipinski" +
-            		" Parameters, etc.) and abstracted bioactivities (e.g." +
-            		" binding constants, pharmacology and ADMET data).");
+            prov.add("ChEMBL is a database of bioactive drug-like small"
+                    + " molecules, it contains 2-D structures, calculated"
+                    + " properties (e.g. logP, Molecular Weight, Lipinski"
+                    + " Parameters, etc.) and abstracted bioactivities (e.g."
+                    + " binding constants, pharmacology and ADMET data).");
             if (enzymeModel.getMolecule() != null) {
                 enzymeModel.getMolecule().setProvenance(prov);
             }
@@ -466,7 +475,44 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     public EnzymeModel getDiseases(String uniprotAccession) throws EnzymeRetrieverException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        EnzymeModel enzymeModel = null;
+        uk.ac.ebi.ep.enzyme.model.Disease disease = null;
+        List<uk.ac.ebi.ep.enzyme.model.Disease> diseaseList = new LinkedList<Disease>();
+
+        try {
+            enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
+            intenzAdapter.getEnzymeDetails(enzymeModel);
+            Collection<XRef> xRefList = megaMapperConnection.getMegaMapper().getXrefs(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+            if (xRefList != null) {
+                for (XRef ref : xRefList) {
+                    Entry entry = ref.getToEntry();
+                    String efo_id = entry.getEntryId();
+                    try {
+                        disease = (uk.ac.ebi.ep.enzyme.model.Disease) bioportalAdapter.getDiseaseByName(efo_id);
+                        if (disease != null) {
+
+                            for (Disease d : enzymeModel.getDisease()) {
+                                disease.getEvidence().add(d.getDescription());
+                            }
+
+                            diseaseList.add(disease);
+                            enzymeModel.setDisease(diseaseList);
+                        }
+                    } catch (BioportalAdapterException ex) {
+                        LOGGER.error("Error while getting disease using BioPortal adapter", ex);
+                    }
+
+                }
+            }
+
+
+
+        } catch (UniprotWsException ex) {
+            LOGGER.error("Error while getting EnzymeSummary from Uniprot Adapter", ex);
+        } catch (MultiThreadingException ex) {
+           LOGGER.error("Multithreading exception", ex);
+        }
+        return enzymeModel;
     }
 
     public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException {

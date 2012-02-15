@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.apache.commons.collections.Predicate;
 
 import uk.ac.ebi.ep.search.model.Disease;
+//import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 
