@@ -118,14 +118,6 @@ public class IntenzCallable {
             return ecClass;
         }
 
-        public EcClass setEnzymeName(List<Object> nameObject, String ecNumber) {
-            EcClass ecClass = new EcClass();
-            String name = (String) nameObject.get(0);
-            ecClass.setEc(ecNumber);
-            ecClass.setName(name);
-            return ecClass;
-        }
-
         public List<EcClass> getEcClass(Intenz intenz) {
             List<EcClass> ecClasseList = new ArrayList<EcClass>();
             EcClassType levelOne = intenz.getEcClass().get(0);
@@ -133,22 +125,36 @@ public class IntenzCallable {
             EcClass ecClass = setEnzymeName(levelOne.getName(), levelOneEc);
             ecClasseList.add(ecClass);
 
-            EcSubclassType levelTwo = (EcSubclassType) levelOne.getEcSubclass().get(0);
+            EcSubclassType levelTwo =
+            		(EcSubclassType) levelOne.getEcSubclass().get(0);
             String levelTwoEc = levelOneEc +"." +levelTwo.getEc2().toString();
             EcClass ecClass2 = setEnzymeName(levelTwo.getName(), levelTwoEc);
             ecClasseList.add(ecClass2);
 
-            EcSubsubclassType levelThree = (EcSubsubclassType) levelTwo.getEcSubSubclass().get(0);
-            String levelThreeEc =  levelTwoEc+"."  +levelThree.getEc3().toString();
-            EcClass ecClass3 = setEnzymeName(levelThree.getName(), levelThreeEc);
+            EcSubsubclassType levelThree =
+            		(EcSubsubclassType) levelTwo.getEcSubSubclass().get(0);
+            String levelThreeEc =
+            		levelTwoEc+"." + levelThree.getEc3().toString();
+            EcClass ecClass3 =
+            		setEnzymeName(levelThree.getName(), levelThreeEc);
             ecClasseList.add(ecClass3);
 
             EntryType levelFour = (EntryType) levelThree.getEnzyme().get(0);
-            String levelFourEc = levelThreeEc +"." +levelFour.getEc4().toString();
-            EnzymeNameType enzymeNameType = (EnzymeNameType) levelFour.getAcceptedName().get(0);
-            enzymeNameType.getContent();
-            EcClass ecClass4 = setEnzymeName(
-                    enzymeNameType.getContent(), levelFourEc);
+//            String levelFourEc = levelThreeEc +"." +levelFour.getEc4().toString();
+            List<EnzymeNameType> acceptedNames = levelFour.getAcceptedName();
+            String enzymeName = null;
+            if (acceptedNames == null || acceptedNames.isEmpty()){
+            	// transferred or deleted entry?
+            	if (levelFour.getTransferred() != null){
+            		enzymeName = levelFour.getTransferred().getNote();
+            	} else if (levelFour.getDeleted() != null){
+            		enzymeName = levelFour.getDeleted().getNote();
+            	}
+            } else {
+                enzymeName = (String) acceptedNames.get(0).getContent().get(0);
+            }
+            final String ecNumber = levelFour.getEc().replace("EC ", "");
+			EcClass ecClass4 = new EcClass().withEc(ecNumber).withName(enzymeName);
             ecClasseList.add(ecClass4);
 
             return ecClasseList;
