@@ -165,12 +165,6 @@
             <artifactId>biobabel-core</artifactId>
             <version>0.9.0</version>
         </dependency>
-        <dependency>
-        	<groupId>uk.ac.ebi.es</groupId>
-        	<artifactId>healthFilter</artifactId>
-        	<version>1.0-SNAPSHOT</version>
-        	<type>war</type>
-        </dependency>
     </dependencies>
 
 </project>
