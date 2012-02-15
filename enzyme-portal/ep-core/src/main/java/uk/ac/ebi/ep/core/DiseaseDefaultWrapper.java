@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.core;
 
 import uk.ac.ebi.ep.search.model.Disease;
+//import  uk.ac.ebi.ep.enzyme.model.Disease;
 
 /**
  * Wrapper around a Disease object which provides the missing
