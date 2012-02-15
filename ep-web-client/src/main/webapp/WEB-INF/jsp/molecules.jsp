@@ -27,7 +27,8 @@
 	            <c:set var="titleArgs" value="Bioactive compounds,bind to"/>
 	            <c:set var="explArgs" value="Bioactive compounds,bind to"/>
 	            <c:set var="moleculeGroupDb" value="ChEMBL"/>
-	            <c:set var="moleculeGroupUrl" value="http://www.ebi.ac.uk/chembl/"/>
+	            <c:set var="moleculeGroupUrl"
+	            	value="https://www.ebi.ac.uk/chembl/widget/search/target/compound_mw/uniprot:${enzymeModel.uniprotaccessions[0]}"/>
 	            <div id="bioactiveLigands">
 					<%@include  file="moleculeGroup.jsp" %>
 	            </div>
