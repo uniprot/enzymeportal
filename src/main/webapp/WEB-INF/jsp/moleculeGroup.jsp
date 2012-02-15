@@ -34,6 +34,10 @@
 		        </c:forEach>
 		    </div>
 	        <c:if test="${fn:length(moleculeGroup) gt 3}">
+		        <a href="${moleculeGroupUrl}">See all
+		        	${fn:length(moleculeGroup)} ${emptyArgs}
+		        	in ${moleculeGroupDb}</a>
+	        <%--
 		        <c:choose>
 		        	<c:when test="${moleculeGroupDb eq 'ChEMBL'}">
 		        		See all related ${emptyArgs} in ${moleculeGroupDb}:
@@ -51,6 +55,7 @@
 				        	in ${moleculeGroupDb}</a>
 		        	</c:otherwise>
 		        </c:choose>
+	         --%>
 	        </c:if>
 	    </fieldset>
 	</c:otherwise>
