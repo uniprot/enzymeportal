@@ -57,9 +57,9 @@
 						<artifactId>maven-war-plugin</artifactId>
 						<version>2.2</version>
 						<configuration>
-							<packagingExcludes>
+                            <warSourceExcludes>
 								META-INF/context.xml
-							</packagingExcludes>
+                            </warSourceExcludes>
 						</configuration>
 					</plugin>
 				</plugins>
