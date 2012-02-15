@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -25,7 +24,6 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
-import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
@@ -75,13 +73,6 @@ public class EnzymeFinder implements IEnzymeFinder {
     IEbeyeAdapter ebeyeAdapter;
     IUniprotAdapter uniprotAdapter;
     IintenzAdapter intenzAdapter;
-    IBioportalAdapter bioportalAdapter;
-    
-    /** A mega-mapper to get xrefs from. */
-    MegaMapper mm;
-    /** The connection used by the mega-mapper. */
-	private Connection mmCon;
-	
     protected SearchParams searchParams;
     SearchResults enzymeSearchResults;
     List<String> uniprotEnzymeIds;
@@ -93,8 +84,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     List<String> speciesFilter;
     List<String> compoundFilter;
     List<EnzymeSummary> enzymeSummaryList;
-    // private MegaMapper megaMapper;
-    public static List<uk.ac.ebi.ep.enzyme.model.Disease> diseaseINFO = new ArrayList<uk.ac.ebi.ep.enzyme.model.Disease>();
+    MegaMapperConnection megaMapperConnection;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeFinder(Config config) {
@@ -104,7 +94,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         uniprotIdPrefixSet = new LinkedHashSet<String>();
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
-        bioportalAdapter = new BioportalWsAdapter();
 
         switch (config.uniprotImplementation) {
             case JAPI:
@@ -114,50 +103,21 @@ public class EnzymeFinder implements IEnzymeFinder {
                 uniprotAdapter = new UniprotWsAdapter();
                 break;
         }
-        
-        Context initContext;
-		final String mmDatasource = config.getMmDatasource();
-		try {
-			initContext = new InitialContext();
-	        Context envContext = (Context) initContext.lookup("java:/comp/env");
-	        DataSource ds = (DataSource) envContext.lookup(mmDatasource);
-	        mmCon = ds.getConnection();
-	        mm = new MegaJdbcMapper(mmCon);
-		} catch (NamingException e) {
-			LOGGER.error("Data source not found: " + mmDatasource, e);
-		} catch (SQLException e) {
-			LOGGER.error("Unable to establish connection to " + mmDatasource, e);
-		} catch (IOException e) {
-			LOGGER.error("Unable to create mega-mapper", e);
-		}
+
+        megaMapperConnection = new MegaMapperConnection(config.getMmDatasource());
     }
 
     @Override
-	protected void finalize() throws Throwable {
-    	closeResources();
+    protected void finalize() throws Throwable {
+        closeResources();
     }
-    
-    /**
-     * Closes resources: mega-mapper and its database connection.
-     */
-    public void closeResources(){
-		if (mm != null){
-			try {
-				mm.closeMap();
-			} catch (IOException e) {
-				LOGGER.error("Unable to close mega-mapper", e);
-			}
-		}
-		if (mmCon != null){
-			try {
-				if (!mmCon.isClosed()) mmCon.close();
-			} catch (SQLException e) {
-				LOGGER.error("Unable to close connection", e);
-			}
-		}
-	}
 
-	//****************************** GETTER & SETTER *****************************//
+    public void closeResources() {
+        megaMapperConnection.closeMegaMapperConnection();
+
+    }
+
+    //****************************** GETTER & SETTER *****************************//
     public SearchParams getSearchParams() {
         return searchParams;
     }
@@ -222,11 +182,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         this.intenzAdapter = intenzAdapter;
     }
 
-    public IBioportalAdapter getBioportalAdapter() {
-		return bioportalAdapter;
-	}
-
-	public boolean isNewSearch() {
+    public boolean isNewSearch() {
         return newSearch;
     }
 
@@ -295,7 +251,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             }
              */
             LOGGER.debug("UniProt IDs from UniProt: " + uniprotEnzymeIds.size());
-            
+
             /* Search in Ebeye for Uniprot ids that are referenced in Chebi domain
              * This search has to be performed separately, because the results
              * must contain Chebi ids to show in the Compound search filter. */
@@ -394,7 +350,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         return enzymeSearchResults;
     }
-//public BioportalWsAdapter.BioportalOntology bioportalOntology;
+    
     /**
      * Builds filters - species, compounds, diseases - from a result list.
      * @param searchResults the result list, which will be modified by setting
@@ -408,76 +364,14 @@ public class EnzymeFinder implements IEnzymeFinder {
         for (CommonSpecies commonSpecies : CommonSpecies.values()) {
             commonSpecieList.add(commonSpecies.getScientificName());
         }
-        
+
         Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
-       
+
         Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
         Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
         Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
-         
-//        MegaJdbcMapper megaMapper = null;
-//        IBioportalAdapter bioportalAdapter = new BioportalWsAdapter();
-//               // BioportalWsAdapter bioportalAdapter = new BioportalWsAdapter();
-//        final Connection connection = MegaMapperJdbcConnection.getINSTANCE().getConnection();
-//        System.out.println("Connection "+ connection);
-//        try {
-//            megaMapper = new MegaJdbcMapper(connection);
-//        } catch (IOException ex) {
-//            java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
-
-            // get the uniprot id from the summary entry, then call the megamapper
-            // pass the xref entry and enum of database
-
-            List<String> uniprotid = summaryEntry.getUniprotaccessions();
-            String accession = uniprotid.get(0);
-           // System.out.println("Accession "+ accession);
-           // System.out.println("MegaMapper "+ megaMapper);
-          Collection<XRef> xRefList =  mm.getXrefs(MmDatabase.UniProt, accession, MmDatabase.EFO,MmDatabase.OMIM,MmDatabase.MeSH);
-          if(xRefList != null){
-         // System.out.println("XRef List = "+ xRefList);
-          for(XRef ref : xRefList){
-              Entry entry = ref.getToEntry();
-              //System.out.println("Entry = "+ entry);
-              String compoundName = entry.getEntryName();
-             // System.out.println("before getEntry "+ entry.getEntryId() + "compound name "+ compoundName);
-              String efo_id = entry.getEntryId();
-             // System.out.println("entry ID "+ efo_id);
-                try {
-                  //  System.out.println("BioPortal "+ bioportalAdapter);
-                    String ontology = "1136";
-                   // bioportalOntology = BioportalOntology.EFO;
-                   // for(BioportalOntology b : bo){
-                    
-                   // System.out.println("Bio Enum "+ BioportalOntology.EFO);
-                    //(uk.ac.ebi.ep.enzyme.model.Disease)
-                     uk.ac.ebi.ep.enzyme.model.Disease disease =   (uk.ac.ebi.ep.enzyme.model.Disease) bioportalAdapter.getDiseaseByName(efo_id);
-                   // uk.ac.ebi.ep.enzyme.model.Disease disease =   (uk.ac.ebi.ep.enzyme.model.Disease) bioportalAdapter.searchConcept(BioportalWsAdapter.BioportalOntology.EFO, efo_id,uk.ac.ebi.ep.enzyme.model.Disease.class , true);
-                   // System.out.println("DISEASE = "+ disease);
-                    if(disease != null){
-                        System.out.println("Data == "+ disease.getName() + " desc "+ disease.getDescription() + " URL "+ disease.getUrl());
-                        diseaseINFO.add(disease);
-                       
-                       // uniqueDiseases.add(new DiseaseDefaultWrapper(d));
-                    }
-                    
-                 //Compound compound = new Compound();
-                 //compound.setName(compoundName);
-                // compound.setId(id);
-                } catch (BioportalAdapterException ex) {
-                    java.util.logging.Logger.getLogger(EnzymeFinder.class.getName()).log(Level.SEVERE, null, ex);
-                }
-              
-          }
-          }
-          
-          
-            //Entry entry = new Entry();can we pass the uniprot id etc at contructor?
-            //entry.setEntryId(uniprotid)
-            // megaMapper = new MegaDbMapper(" hibernate configuration",500);
-            // Collection<XRef> xRefList =  megaMapper.getXrefs(entry, MmDatabase.ChEBI, MmDatabase.UniProt);
-
             for (EnzymeAccession ea : summaryEntry.getRelatedspecies()) {
                 Species sp = ea.getSpecies();
                 if (sp != null) {
@@ -492,9 +386,9 @@ public class EnzymeFinder implements IEnzymeFinder {
                 }
                 List<Disease> diseases = ea.getDiseases();
                 if (diseases != null) {
-                    for (Disease disease : diseases) {
-                       // uniqueDiseases.add(new DiseaseDefaultWrapper(disease));
-                        System.out.println("SEARCH DISEAS "+ disease.getName());
+                    for (Disease disease2 : diseases) {
+                        uniqueDiseases.add(new DiseaseDefaultWrapper(disease2));
+
                     }
                 }
             }
@@ -517,14 +411,14 @@ public class EnzymeFinder implements IEnzymeFinder {
                     priorityMapper.put(4, sp);
                 } else if (sp.getCommonname().equalsIgnoreCase(CommonSpecies.Worm.getScientificName())) {
                     priorityMapper.put(5, sp);
-                }else if (sp.getCommonname().equalsIgnoreCase(CommonSpecies.Ecoli.getScientificName())) {
+                } else if (sp.getCommonname().equalsIgnoreCase(CommonSpecies.Ecoli.getScientificName())) {
                     priorityMapper.put(6, sp);
-                }else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
-                   priorityMapper.put(customKey.getAndIncrement(), sp);  
-                  
-                } 
+                } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
+                    priorityMapper.put(customKey.getAndIncrement(), sp);
+
+                }
             } else {
-                
+
                 priorityMapper.put(key.getAndIncrement(), sp);
 
             }
@@ -549,7 +443,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
         List<Disease> diseaseFilter = new ArrayList<Disease>();
         for (DiseaseDefaultWrapper dw : uniqueDiseases) {
-            System.out.println("FINAL DISEASES "+ dw.getDisease().getName());
             diseaseFilter.add(dw.getDisease());
         }
 
@@ -560,12 +453,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         searchResults.setSearchfilters(filters);
     }
 
-    public static List<uk.ac.ebi.ep.enzyme.model.Disease> getDiseaseINFO() {
-        return diseaseINFO;
-    }
-
-    
-    
     /**
      * Limit the number of results to the {@code IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT}
      * 
@@ -743,40 +630,39 @@ public class EnzymeFinder implements IEnzymeFinder {
      * and then relate them to UniProt IDs using the mega-map.
      */
     private void queryEbeyeChemblForUniprotIds() {
-    	if (mm == null){
-    		LOGGER.error("No mega-map found");
-    		return;
-    	}
-		final String chembl_compound = Domains.chembl_compound.name()
-				.replace('_', '-');
+        if (megaMapperConnection == null) {
+            LOGGER.error("No mega-map found");
+            return;
+        }
+        final String chembl_compound = Domains.chembl_compound.name().replace('_', '-');
         Domain domain = Config.getDomain(chembl_compound);
         String query = LuceneQueryBuilder.createFieldsQuery(domain, searchParams);
         ParamOfGetResults params = new ParamOfGetResults(
-				chembl_compound, query, Domains.chembl_compound.getGetFields());
-		List<List<String>> fields = ebeyeAdapter.getFields(params);
-		if (fields != null){
-			List<String> chemblIds = new ArrayList<String>();
-			for (List<String> list : fields) {
-				// We retrieve only one field (id) from chembl-compound, see config.xml:
-				chemblIds.add(list.get(0));
-			}
-			List<String> uniprotIdsFromChembl = new ArrayList<String>();
-			for (String chemblId : chemblIds) {
-				Entry chemblEntry = new Entry();
-				chemblEntry.setDbName(MmDatabase.ChEMBL.name());
-				chemblEntry.setEntryId(chemblId);
-				Collection<XRef> uniprotXrefs =
-						mm.getXrefs(chemblEntry, MmDatabase.UniProt);
-				for (XRef xRef : uniprotXrefs) {
-					// xref is UniProt entry =[is_target_of]=> ChEMBL entry
-					uniprotEnzymeIds.add(xRef.getFromEntry().getEntryId());
-				}
-			}
-			uniprotEnzymeIds.addAll(uniprotIdsFromChembl);
-		}
-	}
+                chembl_compound, query, Domains.chembl_compound.getGetFields());
+        List<List<String>> fields = ebeyeAdapter.getFields(params);
+        if (fields != null) {
+            List<String> chemblIds = new ArrayList<String>();
+            for (List<String> list : fields) {
+                // We retrieve only one field (id) from chembl-compound, see config.xml:
+                chemblIds.add(list.get(0));
+            }
+            List<String> uniprotIdsFromChembl = new ArrayList<String>();
+            for (String chemblId : chemblIds) {
+                Entry chemblEntry = new Entry();
+                chemblEntry.setDbName(MmDatabase.ChEMBL.name());
+                chemblEntry.setEntryId(chemblId);
+                Collection<XRef> uniprotXrefs =
+                        megaMapperConnection.getMegaMapper().getXrefs(chemblEntry, MmDatabase.UniProt);
+                for (XRef xRef : uniprotXrefs) {
+                    // xref is UniProt entry =[is_target_of]=> ChEMBL entry
+                    uniprotEnzymeIds.add(xRef.getFromEntry().getEntryId());
+                }
+            }
+            uniprotEnzymeIds.addAll(uniprotIdsFromChembl);
+        }
+    }
 
-	private List<Compound> newCompoundFilter(List<String> chebiIds) {
+    private List<Compound> newCompoundFilter(List<String> chebiIds) {
         Map<String, String> chebiIdNameMap = ebeyeAdapter.getNameMapByAccessions(
                 IEbeyeAdapter.Domains.chebi.name(), chebiIds);
         return DataTypeConverter.mapToCompound(chebiIdNameMap);
