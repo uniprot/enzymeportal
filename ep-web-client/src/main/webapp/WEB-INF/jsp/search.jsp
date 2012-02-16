@@ -119,11 +119,11 @@
                                         </c:if>
                                     </div>
                                 </div>
+<%--
                                 <div class="sublevel1">
                                     <div class="subTitle">
                                         Chemical Compounds
                                     </div>
-                                    <%--
                                     <div class="filterContent">
                                         <c:set var="compoundList" value="${searchFilter.compounds}"/>
                                         <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
@@ -166,13 +166,13 @@
                                          <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
                                         </c:if>
                                     </div>
-                                    --%>
                                 </div>
                                 <div class="sublevel1" >
                                     <div class="subTitle">
                                         Diseases
                                     </div>
                                 </div>              
+--%>
                             </div>
                         </c:if>
                         <div id="keywordSearchResult" class="result">
