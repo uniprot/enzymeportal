@@ -85,9 +85,9 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			
-			urlString = URLEncoder.encode(MessageFormat.format(
+			urlString = MessageFormat.format(
 					config.getSearchUrl(), ontology.getId(),
-					query, 1), "UTF-8");
+					URLEncoder.encode(query, "UTF-8"), 1);
 			LOGGER.debug("[BIOPORTAL URL] " + urlString);
 			URL url = new URL(urlString);
 			URLConnection urlCon = config.getUseProxy()?
@@ -165,11 +165,9 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	throws IOException, SAXException {
 		InputStream is = null;
 		try {
-			String urlString = URLEncoder.encode(
-					MessageFormat.format(config.getGetUrl(),
-					ontologyVersionId, conceptId, 1), "UTF-8");
-			LOGGER.debug("[BIOPORTAL URL] " + urlString);
-			URL url = new URL(urlString);
+			URL url = new URL(MessageFormat.format(config.getGetUrl(),
+					ontologyVersionId, conceptId, 1));
+			LOGGER.debug("[BIOPORTAL URL] " + url);
 			URLConnection urlCon = config.getUseProxy()?
 					url.openConnection():
 					url.openConnection(Proxy.NO_PROXY);
