@@ -11,7 +11,7 @@ public class BioportalConfig implements BioportalConfigMBean {
 
 	private boolean useProxy = false;
 
-	private int timeout;
+	private int timeout = 30000;
 
 	public String getSearchUrl() {
 		return searchUrl;
