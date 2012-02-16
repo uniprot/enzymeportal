@@ -92,6 +92,8 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			URLConnection urlCon = config.getUseProxy()?
 					url.openConnection():
 					url.openConnection(Proxy.NO_PROXY);
+			urlCon.setReadTimeout(config.getTimeout());
+			urlCon.connect();
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
 			XPathSAXHandler handler = new XPathSAXHandler(
