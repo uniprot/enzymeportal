@@ -11,6 +11,8 @@ public class BioportalConfig implements BioportalConfigMBean {
 
 	private boolean useProxy = false;
 
+	private int timeout;
+
 	public String getSearchUrl() {
 		return searchUrl;
 	}
@@ -33,6 +35,14 @@ public class BioportalConfig implements BioportalConfigMBean {
 
 	public void setUseProxy(boolean useProxy) {
 		this.useProxy = useProxy;
+	}
+	
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 }
