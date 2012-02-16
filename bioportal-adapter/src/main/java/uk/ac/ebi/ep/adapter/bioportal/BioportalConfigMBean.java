@@ -34,5 +34,13 @@ public interface BioportalConfigMBean {
 	public abstract void setUseProxy(boolean useProxy);
 
 	public abstract boolean getUseProxy();
+
+	/**
+	 * Sets the timeout for connections to BioPortal web services.
+	 * @param timeout the timeout in milliseconds.
+	 */
+	public abstract void setTimeout(int timeout);
+
+	public abstract int getTimeout();
 	
 }
