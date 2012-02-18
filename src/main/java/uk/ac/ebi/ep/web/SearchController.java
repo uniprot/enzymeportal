@@ -294,7 +294,7 @@ public class SearchController {
 
                 addToHistory(session,
                         "searchparams.text=" + searchParameters.getText());
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 LOGGER.error("Failed search", e);
                 view = "error";
             }
