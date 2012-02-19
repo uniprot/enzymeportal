@@ -88,13 +88,11 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			urlString = MessageFormat.format(
 					config.getSearchUrl(), ontology.getId(),
 					URLEncoder.encode(query, "UTF-8"), 1);
-			LOGGER.debug("[BIOPORTAL URL] " + urlString);
+			LOGGER.debug("[BIOPORTAL] URL=" + urlString);
 			URL url = new URL(urlString);
-			URLConnection urlCon = config.getUseProxy()?
-					url.openConnection():
-					url.openConnection(Proxy.NO_PROXY);
+			URLConnection urlCon = url.openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
-			urlCon.connect();
+			//urlCon.connect();
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
 			XPathSAXHandler handler = new XPathSAXHandler(
@@ -168,9 +166,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			URL url = new URL(MessageFormat.format(config.getGetUrl(),
 					ontologyVersionId, conceptId, 1));
 			LOGGER.debug("[BIOPORTAL URL] " + url);
-			URLConnection urlCon = config.getUseProxy()?
-					url.openConnection():
-					url.openConnection(Proxy.NO_PROXY);
+			URLConnection urlCon = url.openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
 			urlCon.connect();
 			is = urlCon.getInputStream();
