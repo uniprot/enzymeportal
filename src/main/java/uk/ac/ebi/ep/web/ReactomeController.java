@@ -20,16 +20,16 @@ import uk.ac.ebi.ep.enzyme.model.Pathway;
 public class ReactomeController {
 
     @Autowired
-	private ReactomeConfig reactomeConfig;
-    
+    private ReactomeConfig reactomeConfig;
+
     @RequestMapping(value="/ajax/reactome/{reactomePathwayId}")
     protected String getPathway(Model model,
     		@PathVariable String reactomePathwayId) throws Exception{
-    	GetPathwayCaller callable =
-    			new ReactomeCallable.GetPathwayCaller(reactomePathwayId, reactomeConfig);
-    	Pathway pathway = callable.call();
-    	model.addAttribute("pathway", pathway);
-    	return "pathway";
+        GetPathwayCaller callable =
+                new ReactomeCallable.GetPathwayCaller(reactomePathwayId, reactomeConfig);
+        Pathway pathway = callable.call();     
+        model.addAttribute("pathway", pathway);
+        return "pathway";
     }
 
 }
