@@ -24,13 +24,13 @@ public final class MegaMapperConnection {
     private static final Logger LOGGER = Logger.getLogger(MegaMapperConnection.class);
     // public static final MegaMapperConnection INSTANCE = new MegaMapperConnection();
     private Context context;
-      /** The connection used by the mega-mapper. */
+    /** The connection used by the mega-mapper. */
     private Connection connection = null;
-    private String mmDatasource;
+    private final String mmDatasource;
     /** A mega-mapper to get xrefs from. */
     private MegaMapper megaMapper = null;
 
-    public MegaMapperConnection(final String mmDatasource) {
+    public MegaMapperConnection(String mmDatasource) {
         this.mmDatasource = mmDatasource;
         try {
             // Obtain our environment naming context
@@ -104,7 +104,6 @@ public final class MegaMapperConnection {
             }
         }
     }
-
 //    @Override
 //    public void finalize() throws Throwable {
 //        super.finalize();

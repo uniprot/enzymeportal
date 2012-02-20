@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
@@ -41,8 +39,6 @@ import uk.ac.ebi.ep.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
@@ -79,7 +75,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         rheaAdapter = new RheasResourceClient();
         chebiAdapter = new ChebiAdapter();
         biomartAdapter = new BiomartAdapter();
-        bioportalAdapter = new BioportalWsAdapter();
+         bioportalAdapter = new BioportalWsAdapter();
         try {
             pdbeAdapter = new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
         } catch (Exception e) {
@@ -496,8 +492,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                             }
 
                             diseaseList.add(disease);
-                            enzymeModel.setDisease(diseaseList);
-                        }
+                            enzymeModel.setDisease(diseaseList);                           
+                        } 
                     } catch (BioportalAdapterException ex) {
                         LOGGER.error("Error while getting disease using BioPortal adapter", ex);
                     }
@@ -510,7 +506,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         } catch (UniprotWsException ex) {
             LOGGER.error("Error while getting EnzymeSummary from Uniprot Adapter", ex);
         } catch (MultiThreadingException ex) {
-           LOGGER.error("Multithreading exception", ex);
+            LOGGER.error("Multithreading exception", ex);
         }
         return enzymeModel;
     }
