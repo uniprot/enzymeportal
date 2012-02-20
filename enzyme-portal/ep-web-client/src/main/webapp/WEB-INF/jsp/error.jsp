@@ -15,6 +15,7 @@
 <html>
     <head>
         <title>Enzyme Portal</title>
+        <link href="resources/css/enzyme.css" type="text/css" rel="stylesheet" />
         <link rel="stylesheet"  href="http://www.ebi.ac.uk/inc/css/contents.css"     type="text/css" />
         <link media="screen" href="resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
@@ -28,9 +29,9 @@
     <body>
         <jsp:include page="header.jsp"/>
         <div class="contents">
-            <div class="page container_12">
+                    <div class="page container_12">
                 <jsp:include page="subHeader.jsp"/>
-            </div>
+            </div> 
             <div class="grid_12 content">
                 <div class="iconGroup">
                 	<h2>Error</h2>

@@ -77,13 +77,13 @@
                                             <div class='box selected ${fn:replace(relSpecies[0].species.scientificname, " ", "_")}'>
                                                 <span class="name"><c:out value="${relSpecies[0].species.commonname}"/></span>
                                                 <span class="extra"
-                                                	title="${relSpecies[0].species.scientificname}"
-                                                	style="overflow: hidden;">${relSpecies[0].species.scientificname}</span>
+                                                      title="${relSpecies[0].species.scientificname}"
+                                                      style="overflow: hidden;">${relSpecies[0].species.scientificname}</span>
                                             </div>
                                         </div>
                                         <div class="selection">
-                                            <ul>
-                                                <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
+                                            <ul>                                   
+                                                <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
                                                     <c:set var="species" value="${relSpecies[i].species}"/>
                                                     <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
                                                         <c:set var="select" value=""/>
@@ -94,8 +94,8 @@
                                                             <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
                                                                 <span class="name"><c:out value="${species.commonname}"/></span>
                                                                 <span class="extra"
-                                                                	title="${species.scientificname}"
-                                                                	style="overflow: hidden;">${species.scientificname}</span>
+                                                                      title="${species.scientificname}"
+                                                                      style="overflow: hidden;">${species.scientificname}</span>
                                                             </div>
                                                         </li>
                                                     </a>
@@ -112,7 +112,7 @@
                                     <a href="" wicket:id="print" class="print"><span wicket:id="printLabel">Print</span></a>
                                 </div>
                             </div>
-                             --%>
+                            --%>
                         </div>
                     </div>
                 </div>
@@ -212,26 +212,47 @@
 
                                 <!--START SMALL MOLECULES TAB-->
                                 <c:if test='${requestedfield=="molecules"}'>
-                                    <div class="node">
-                                        <div class="view">
-                                            <%@include file="molecules.jsp" %>
+                                    <c:set var="chemEntity" value="${enzymeModel.molecule}"/>
+                                    <c:if test='${chemEntity.drugs[0].name == "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="errors.jsp" %>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </c:if>
+
+                                    <c:if test='${chemEntity.drugs[0].name != "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="molecules.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                 </c:if>
                                 <!--START DISEASE & DRUGS TAB-->
                                 <c:if test='${requestedfield=="diseaseDrugs"}'>
-                                    <div class="node">
-                                        <div class="view">
-                                            <%@include file="disease.jsp" %>
+                                    <c:set var="diseases" value="${enzymeModel.disease}"/>
+                                    <c:if test='${diseases[0].name == "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="errors.jsp" %>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </c:if>
+                                    <c:if test='${diseases[0].name != "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="disease.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                 </c:if>
 
                                 <!--START literature TAB-->
                                 <c:if test='${requestedfield=="literature"}'>
                                     <div class="node">
                                         <div class="view">
-                                        	<%@include file="literature.jsp" %>
+                                            <%@include file="literature.jsp" %>
                                         </div>
                                     </div>
                                 </c:if>
