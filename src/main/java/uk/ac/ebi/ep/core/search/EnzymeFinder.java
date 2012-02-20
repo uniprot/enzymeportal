@@ -1,8 +1,5 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,16 +13,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
-import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
-import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
@@ -40,8 +31,6 @@ import uk.ac.ebi.ep.core.CompoundDefaultWrapper;
 import uk.ac.ebi.ep.core.DiseaseDefaultWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
@@ -94,7 +83,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         uniprotIdPrefixSet = new LinkedHashSet<String>();
         enzymeSummaryList = new ArrayList<EnzymeSummary>();
         intenzAdapter = new IntenzAdapter();
-
+        megaMapperConnection = new MegaMapperConnection(config.getMmDatasource());
         switch (config.uniprotImplementation) {
             case JAPI:
                 uniprotAdapter = new UniprotJapiAdapter();
@@ -103,12 +92,11 @@ public class EnzymeFinder implements IEnzymeFinder {
                 uniprotAdapter = new UniprotWsAdapter();
                 break;
         }
-
-        megaMapperConnection = new MegaMapperConnection(config.getMmDatasource());
     }
 
     @Override
     protected void finalize() throws Throwable {
+        super.finalize();
         closeResources();
     }
 
@@ -350,7 +338,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         return enzymeSearchResults;
     }
-    
+
     /**
      * Builds filters - species, compounds, diseases - from a result list.
      * @param searchResults the result list, which will be modified by setting
