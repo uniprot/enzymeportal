@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.web;
 
+import com.sun.org.apache.bcel.internal.generic.LOOKUPSWITCH;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -32,7 +33,11 @@ import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.entry.Field;
+import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
+import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -87,13 +92,13 @@ public class SearchController {
     protected String getEnzymeModel(Model model,
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
-        Field requestedField = Field.valueOf(field);                  
+        Field requestedField = Field.valueOf(field);
         EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         retriever.getUniprotAdapter().setConfig(uniprotConfig);
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
-        String responsePage =  ResponsePage.ENTRY.toString();
+        String responsePage = ResponsePage.ENTRY.toString();
         try {
             switch (requestedField) {
                 case proteinStructure:
@@ -107,9 +112,9 @@ public class SearchController {
                     retriever.getChebiAdapter().setConfig(chebiConfig);
                     enzymeModel = retriever.getMolecules(accession);
                     break;
-                case diseaseDrugs:
+                case diseaseDrugs: 
                     enzymeModel = retriever.getDiseases(accession);
-                    break;
+                       break;
                 case literature:
                     enzymeModel = retriever.getLiterature(accession);
                     break;
@@ -122,8 +127,28 @@ public class SearchController {
             model.addAttribute("enzymeModel", enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
-            LOGGER.error("Unable to retrieve the entry!", ex);
-            responsePage = ResponsePage.ERROR.toString();
+            LOGGER.error("Unable to retrieve the entry!", ex);          
+           // responsePage = ResponsePage.ERROR.toString();
+            //responsePage = "errors";
+            if(requestedField.getName().equalsIgnoreCase(Field.diseaseDrugs.getName())){
+            enzymeModel = new EnzymeModel();
+            enzymeModel.setRequestedfield(requestedField.name());
+            Disease d = new Disease();d.setName("error");
+            enzymeModel.getDisease().add(0,d);
+            model.addAttribute("enzymeModel", enzymeModel);
+            LOGGER.fatal("Error in retrieving Disease Information");
+            }if(requestedField.getName().equalsIgnoreCase(Field.molecules.getName())){
+                enzymeModel = new EnzymeModel();
+                enzymeModel.setRequestedfield(requestedField.getName());
+                Molecule molecule = new Molecule();
+                molecule.setName("error");
+                ChemicalEntity chemicalEntity = new ChemicalEntity();
+                chemicalEntity.getDrugs().add(0, molecule);
+                enzymeModel.setMolecule(chemicalEntity);
+                model.addAttribute("enzymeModel", enzymeModel);
+                LOGGER.fatal("Error in retrieving Molecules Information");
+            }
+           
         } finally {
         	retriever.closeResources();
         }
@@ -185,12 +210,11 @@ public class SearchController {
                 SearchResults resultSet = null;
                 // See if it is already there, perhaps we are paginating:
                 @SuppressWarnings("unchecked")
-                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
-                		session.getServletContext().getAttribute("searches");
+                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) session.getServletContext().getAttribute("searches");
                 if (prevSearches == null) {
                     // Map implementation which maintains the order of access:
                     prevSearches = Collections.synchronizedMap(
-                    		new LinkedHashMap<String, SearchResults>(
+                            new LinkedHashMap<String, SearchResults>(
                             searchConfig.getSearchCacheSize(), 1, true));
                     session.getServletContext().setAttribute("searches", prevSearches);
                 }
@@ -204,7 +228,7 @@ public class SearchController {
                     try {
                         resultSet = finder.getEnzymes(searchParameters);
                         // cache it in the session, making room if necessary:
-                        synchronized(prevSearches){
+                        synchronized (prevSearches) {
                             while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
                                 // remove the eldest:
                                 prevSearches.remove(prevSearches.keySet().iterator().next());
@@ -215,9 +239,9 @@ public class SearchController {
                         LOGGER.error("Unable to create the result list because an error "
                                 + "has occurred in the find method! \n", ex);
                     } finally {
-                    	finder.closeResources();
+                        finder.closeResources();
                     }
-				}
+                }
 
                 final int numOfResults = resultSet.getSummaryentries().size();
                 Pagination pagination = new Pagination(

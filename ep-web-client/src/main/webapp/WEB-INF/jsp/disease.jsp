@@ -28,25 +28,28 @@
         <c:forEach items="${diseases}" var="disease">
             <b style=" font-size:medium" ><a href="${disease.url}" > <c:out value="${disease.name}"/></a></b><br/>
             <c:out value="${disease.description}"/><br/>
-            
-             <c:set var="ev" value="${disease.evidence}" />
+
+            <c:set var="ev" value="${disease.evidence}" />
         </c:forEach>
-           
+
         <c:forEach items="${ev}" var="v">
             <ul>
                 <li> <c:out value="${v}"/></li>
 
             </ul>
         </c:forEach>
-                <div class="provenance">
-        <ul>
-            <li class="note_0">Data Source:
-                <a href="http://www.uniprot.org">UniProt</a></li>
-            <li class="note_1">UniProt - The mission of UniProt is to provide the
-                scientific community with a comprehensive, high-quality and freely
-                accessible resource of protein sequence and functional information</li>
-        </ul>
-    </div>
+        <div class="note_0">
+            <a class="note_0" href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}.html#section_comments">View disease evidence in UniProt</a>
+        </div><br/>
+        <div class="provenance">
+            <ul>
+                <li class="note_0">Data Source:
+                    <a href="http://www.uniprot.org">UniProt</a></li>
+                <li class="note_1">UniProt - The mission of UniProt is to provide the
+                    scientific community with a comprehensive, high-quality and freely
+                    accessible resource of protein sequence and functional information</li>
+            </ul>
+        </div>
     </c:if>
 
 
