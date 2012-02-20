@@ -9,37 +9,48 @@ public enum Field {
 	/**
 	 * The minimal information to handle result lists and filters internally.
 	 */
-	minimal,
+    minimal("minimal"),
     /**
      * Just a summary to show in the results page.
      */
-    brief,
+    brief("brief"),
     /**
      * Enzyme tab.
      */
-    enzyme,
+    enzyme("enzyme"),
     /**
      * Structure tab.
      */
-    proteinStructure,
+    proteinStructure("proteinStructure"),
     /**
      * Reactions/pathways tab.
      */
-    reactionsPathways,
+    reactionsPathways("reactionsPathways"),
     /**
      * Small molecules tab.
      */
-    molecules,
+    molecules("molecules"),
     /**
      * Diseases/drugs tab.
      */
-    diseaseDrugs,
+    diseaseDrugs("diseaseDrugs"),
     /**
      * Literature tab.
      */
-    literature,
+    literature("literature"),
     /**
      * Full information about the enzyme.
      */
-    full
+    full("full");
+    
+    private Field(String name){
+        this.name = name;
+    }
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+    
+    
 }
