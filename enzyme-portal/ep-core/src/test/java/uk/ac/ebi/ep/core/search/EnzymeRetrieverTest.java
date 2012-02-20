@@ -9,15 +9,22 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
+
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
+import uk.ac.ebi.ep.adapter.uniprot.IUniprotAdapter;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
+import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiAdapter;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
@@ -29,7 +36,7 @@ import uk.ac.ebi.ep.enzyme.model.Molecule;
  */
 public class EnzymeRetrieverTest {
     private EnzymeRetriever instance;
-    String uniprotAccession = "Q08499";
+     String uniprotAccession = "Q08499";
     public EnzymeRetrieverTest() {
     }
 
@@ -66,18 +73,18 @@ public class EnzymeRetrieverTest {
     @After
     public void tearDown() {
     }
-
+    
     /**
      * Test of getEnzyme method, of class EnzymeRetriever.
      */
-    @Test
-    public void testGetMolecules() throws Exception {
-        System.out.print("testGetMolecules");        
-        EnzymeModel result = instance.getMolecules(uniprotAccession);
-        List<Molecule> drugMols = result.getMolecule().getDrugs();
-        assertNotNull(drugMols);
-        System.out.println("testGetMolecules: passed!");
-    }
+//    @Test
+//    public void testGetMolecules() throws Exception {
+//        System.out.print("testGetMolecules");        
+//        EnzymeModel result = instance.getMolecules(uniprotAccession);
+//        List<Molecule> drugMols = result.getMolecule().getDrugs();
+//        assertNotNull(drugMols);
+//        System.out.println("testGetMolecules: passed!");
+//    }
 
     @Test
     public void testGetReactionsPathways() throws Exception {
