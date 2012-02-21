@@ -1,8 +1,3 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 $(document).ready(function() {
     //search default text
     $("#searchbox").live("blur", function(){
@@ -133,3 +128,10 @@ $(document).ready(function() {
         alert(breadcrumb);
     });
 });
+
+function noImage(source){
+	source.src = "resources/images/noStructure-light.png";
+	// disable onerror to prevent endless loop
+	source.onerror = "";
+	return true;
+}
