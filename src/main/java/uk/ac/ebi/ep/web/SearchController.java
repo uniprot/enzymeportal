@@ -33,8 +33,12 @@ import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.Disease;
+import uk.ac.ebi.ep.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -101,17 +105,17 @@ public class SearchController {
                 case proteinStructure:
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
-                case reactionsPathways:
+                case reactionsPathways:              
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
-                    enzymeModel = retriever.getReactionsPathways(accession);
+                    enzymeModel = retriever.getReactionsPathways(accession);                  
                     break;
                 case molecules:
                     retriever.getChebiAdapter().setConfig(chebiConfig);
                     enzymeModel = retriever.getMolecules(accession);
                     break;
-                case diseaseDrugs: 
+                case diseaseDrugs:
                     enzymeModel = retriever.getDiseases(accession);
-                       break;
+                    break;
                 case literature:
                     enzymeModel = retriever.getLiterature(accession);
                     break;
@@ -124,17 +128,19 @@ public class SearchController {
             model.addAttribute("enzymeModel", enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
-            LOGGER.error("Unable to retrieve the entry!", ex);          
-           // responsePage = ResponsePage.ERROR.toString();
+            LOGGER.error("Unable to retrieve the entry!", ex);
+            // responsePage = ResponsePage.ERROR.toString();
             //responsePage = "errors";
-            if(requestedField.getName().equalsIgnoreCase(Field.diseaseDrugs.getName())){
-            enzymeModel = new EnzymeModel();
-            enzymeModel.setRequestedfield(requestedField.name());
-            Disease d = new Disease();d.setName("error");
-            enzymeModel.getDisease().add(0,d);
-            model.addAttribute("enzymeModel", enzymeModel);
-            LOGGER.fatal("Error in retrieving Disease Information");
-            }if(requestedField.getName().equalsIgnoreCase(Field.molecules.getName())){
+            if (requestedField.getName().equalsIgnoreCase(Field.diseaseDrugs.getName())) {
+                enzymeModel = new EnzymeModel();
+                enzymeModel.setRequestedfield(requestedField.name());
+                Disease d = new Disease();
+                d.setName("error");
+                enzymeModel.getDisease().add(0, d);
+                model.addAttribute("enzymeModel", enzymeModel);
+                LOGGER.fatal("Error in retrieving Disease Information");
+            }
+            if (requestedField.getName().equalsIgnoreCase(Field.molecules.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 Molecule molecule = new Molecule();
@@ -145,9 +151,55 @@ public class SearchController {
                 model.addAttribute("enzymeModel", enzymeModel);
                 LOGGER.fatal("Error in retrieving Molecules Information");
             }
-           
+            if (requestedField.getName().equalsIgnoreCase(Field.enzyme.getName())) {
+
+                enzymeModel = new EnzymeModel();
+                enzymeModel.setRequestedfield(requestedField.getName());
+                Enzyme enzyme = new Enzyme();
+                enzyme.getEnzymetype().add(0, "error");
+                enzymeModel.setEnzyme(enzyme);
+
+                model.addAttribute("enzymeModel", enzymeModel);
+                LOGGER.fatal("Error in retrieving Enzymes");
+            }
+            if (requestedField.getName().equalsIgnoreCase(Field.proteinStructure.getName())) {
+                enzymeModel = new EnzymeModel();
+                enzymeModel.setRequestedfield(requestedField.getName());
+                ProteinStructure structure = new ProteinStructure();
+                structure.setName("error");
+                enzymeModel.getProteinstructure().add(0, structure);
+
+                model.addAttribute("enzymeModel", enzymeModel);
+                LOGGER.fatal("Error in retrieving ProteinStructure");
+            }
+            if (requestedField.getName().equalsIgnoreCase(Field.reactionsPathways.getName())) {
+                enzymeModel = new EnzymeModel();
+                System.out.println("entered interface error");
+                enzymeModel.setRequestedfield(requestedField.getName());
+                ReactionPathway pathway = new ReactionPathway();
+                EnzymeReaction reaction = new EnzymeReaction();
+                reaction.setName("error");
+                pathway.setReaction(reaction);
+                enzymeModel.getReactionpathway().add(0, pathway);
+                
+
+                model.addAttribute("enzymeModel", enzymeModel);
+                LOGGER.fatal("Error in retrieving Reaction Pathways");
+
+            }
+            if (requestedField.getName().equalsIgnoreCase(Field.literature.getName())) {
+                enzymeModel = new EnzymeModel();
+                enzymeModel.setRequestedfield(requestedField.getName());
+                
+                enzymeModel.getLiterature().add(0, "error");
+
+                model.addAttribute("enzymeModel", enzymeModel);
+                LOGGER.fatal("Error in retrieving Literature Information");
+
+            }
+
         } finally {
-        	retriever.closeResources();
+            retriever.closeResources();
         }
         return responsePage;
     }
