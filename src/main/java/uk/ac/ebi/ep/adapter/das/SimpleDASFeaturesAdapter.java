@@ -59,7 +59,7 @@ public class SimpleDASFeaturesAdapter implements IDASFeaturesAdapter {
 	}
 	
 	public SegmentAdapter getSegment(String segmentId)
-	throws MalformedURLException, JAXBException {
+	throws MalformedURLException, JAXBException, Exception {
 		SimpleDASFeaturesCaller callable =
 				new SimpleDASFeaturesCaller(dasURL, segmentId);
 		List<SegmentAdapter> adapters = callable.getSegments();
