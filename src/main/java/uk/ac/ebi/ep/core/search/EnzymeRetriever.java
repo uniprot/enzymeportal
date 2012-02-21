@@ -496,7 +496,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                         } 
                     } catch (BioportalAdapterException ex) {
                         LOGGER.error("Error while getting disease using BioPortal adapter", ex);
-                    }
+                     }
 
                 }
             }
