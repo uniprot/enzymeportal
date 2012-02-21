@@ -317,7 +317,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 //        List<String> resultSubList = idPrefixesList.subList(
 //               start, end);
 
-        enzymeSummaryList = getEnzymeSummaries(idPrefixesList, searchParams.getSpecies());
+            enzymeSummaryList = getEnzymeSummaries(idPrefixesList, searchParams.getSpecies());
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
         enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
         if (uniprotIdPrefixSet.size() != enzymeSummaryList.size()) {
@@ -850,7 +850,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         // List<EnzymeSummary> enzymeList = null;
         List<EnzymeSummary> enzymeList =
                 uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
-                IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
+                         IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
 
 
         return enzymeList;
