@@ -133,5 +133,8 @@ function noImage(source){
 	source.src = "resources/images/noStructure-light.png";
 	// disable onerror to prevent endless loop
 	source.onerror = "";
+	source.style.backgroundColor = '#eee';
+    source.style.borderRadius='10px';
+    source.style.opacity='0.5';
 	return true;
 }
