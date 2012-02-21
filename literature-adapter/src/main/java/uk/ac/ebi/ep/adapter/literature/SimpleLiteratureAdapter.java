@@ -9,7 +9,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -91,8 +90,6 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		
 	}
 	
-	private ExecutorService threadPool = Executors.newCachedThreadPool();
-	
 	// Not used, it does not find UniProt IDs easily
 	//private CitexploreLiteratureCaller citexploreCaller;
 	
@@ -100,6 +97,8 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		List<LabelledCitation> citations = null;
 		List<Callable<Set<Citation>>> callables = getCallables(uniprotId, pdbIds);
 		List<Future<Set<Citation>>> futures = null;
+		
+		ExecutorService threadPool = Executors.newCachedThreadPool();
 		try {
 			futures = threadPool.invokeAll(callables);
 			// Collect results:
@@ -153,16 +152,6 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			label = CitationLabel.proteinStructure;
 		}
 		return label;
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		if (threadPool != null){
-			threadPool.shutdownNow();
-			if (!threadPool.awaitTermination(60, TimeUnit.SECONDS)){
-				LOGGER.error("Thread pool did not terminate");
-			}
-		}
 	}
 
 }
