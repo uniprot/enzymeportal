@@ -205,30 +205,63 @@
                                 </ul>
                             </div>
                             <div class="column2">
+                                
                                 <c:if test='${requestedfield=="enzyme"}'>
+                                    <c:set var="_enzyme" value="${enzymeModel.enzyme}"/>
+                                    
+                                    <c:if test='${_enzyme.enzymetype[0] == "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="errors.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                     <c:if test='${_enzyme.enzymetype[0] != "error"}'>
                                     <div class="node">
                                         <div class="view">
                                             <%@include file="enzyme.jsp" %>
                                         </div>
                                     </div>
+                                     </c:if>
                                 </c:if>
 
                                 <!--START PROTEIN STRUCTURE TAB-->
                                 <c:if test='${requestedfield=="proteinStructure"}'>
+                                    <c:set var="structure" value="${enzymeModel.proteinstructure}"/>   
+                                    <c:if test='${structure[0].name == "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="errors.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <c:if test='${structure[0].name != "error"}'>
                                     <div class="node">
                                         <div class="view">
                                             <%@include file="proteinStructure.jsp" %>
                                         </div>
                                     </div>
+                                    </c:if>
                                 </c:if>
 
                                 <!--START REACTIONS & PATHWAYS TAB-->
                                 <c:if test='${requestedfield=="reactionsPathways"}'>
+                                  
+                                   <c:set var="pathway" value="${enzymeModel.reactionpathway}"/>   
+                                    <c:if test='${pathway[0].reaction.name == "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="errors.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <c:if test='${pathway[0].reaction.name != "error"}'>
                                     <div class="node">
                                         <div class="view">
                                             <%@include file="reactionsPathways.jsp" %>
                                         </div>
                                     </div>
+                                    </c:if>
                                 </c:if>
 
                                 <!--START SMALL MOLECULES TAB-->
@@ -271,11 +304,22 @@
 
                                 <!--START literature TAB-->
                                 <c:if test='${requestedfield=="literature"}'>
+                                    
+                                    <c:set var="lit" value="${enzymeModel.literature}"/>   
+                                    <c:if test='${lit[0] == "error"}'>
+                                        <div class="node">
+                                            <div class="view">
+                                                <%@include file="errors.jsp" %>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                    <c:if test='${lit[0] != "error"}'>
                                     <div class="node">
                                         <div class="view">
                                             <%@include file="literature.jsp" %>
                                         </div>
                                     </div>
+                                    </c:if>
                                 </c:if>
                             </div>
                         </div>
