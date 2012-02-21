@@ -107,10 +107,21 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 
 	protected Citation getCitationFromCitexplore(String pubMedId) {
 		Citation citation = null;
+		CitexploreWSClient citexploreClient = null;
 		try {
-			citation = CitexploreWSClient.getCitation(DataSource.MED, pubMedId);
-		} catch (QueryException_Exception e) {
+			citexploreClient =
+					CitexploreWSClientPool.getInstance().borrowObject();
+			citation = citexploreClient.retrieveCitation(DataSource.MED, pubMedId);
+		} catch (Exception e) {
 			LOGGER.error("Unable to get citation from CiteXplore", e);
+		} finally {
+			if (citexploreClient != null){
+				try {
+					CitexploreWSClientPool.getInstance().returnObject(citexploreClient);
+				} catch (Exception e) {
+					LOGGER.error("Unable to return CiteXplore client", e);
+				}
+			}
 		}
 		return citation;
 	}

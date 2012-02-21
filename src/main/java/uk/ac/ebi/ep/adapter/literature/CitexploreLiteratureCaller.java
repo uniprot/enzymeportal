@@ -15,8 +15,17 @@ public class CitexploreLiteratureCaller implements Callable<Collection<Citation>
 		this.query = query;
 	}
 	
-	public Collection<Citation> call() throws QueryException_Exception {
-		return CitexploreWSClient.getCitations(query);
+	public Collection<Citation> call()
+	throws QueryException_Exception, Exception {
+		CitexploreWSClient citexploreClient = null;
+		try {
+			citexploreClient = CitexploreWSClientPool.getInstance().borrowObject();
+			return citexploreClient.searchCitations(query);
+		} finally {
+			if (citexploreClient != null){
+				CitexploreWSClientPool.getInstance().returnObject(citexploreClient);
+			}
+		}
 	}
 
 }

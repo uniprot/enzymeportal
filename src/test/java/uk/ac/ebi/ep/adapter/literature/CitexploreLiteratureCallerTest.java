@@ -8,13 +8,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.ac.ebi.cdb.webservice.Citation;
-import uk.ac.ebi.cdb.webservice.QueryException_Exception;
 
 public class CitexploreLiteratureCallerTest {
 
 	@Test
 	@Ignore("This one does not work")
-	public void testCall() throws QueryException_Exception {
+	public void testCall() throws Exception {
 		CitexploreLiteratureCaller caller = new CitexploreLiteratureCaller("P12345");
 		Collection<Citation> citations = caller.call();
 		assertEquals(1, citations.size());
