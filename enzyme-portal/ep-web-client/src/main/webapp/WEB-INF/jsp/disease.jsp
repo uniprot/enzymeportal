@@ -43,11 +43,15 @@
         </div><br/>
         <div class="provenance">
             <ul>
-                <li class="note_0">Data Source:
+                <li class="note_0">Data Sources:
+                	<a href="http://www.ebi.ac.uk/efo">EFO</a> and
                     <a href="http://www.uniprot.org">UniProt</a></li>
-                <li class="note_1">UniProt - The mission of UniProt is to provide the
+                <li class="note_1">The mission of UniProt is to provide the
                     scientific community with a comprehensive, high-quality and freely
                     accessible resource of protein sequence and functional information</li>
+                <li class="note_2">The Experimental Factor Ontology (EFO) is an
+                	application focused ontology modelling the experimental
+                	factors in ArrayExpress.</li>
             </ul>
         </div>
     </c:if>

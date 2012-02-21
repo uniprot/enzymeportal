@@ -45,7 +45,7 @@
                     <c:set var="textMaxLength" value="${60}"/>
                     <div class="grid_12 content">
                         <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
-                            <div class="filter">                    
+                            <div class="filter" style="width: 25%; float: left;">                    
                                 <div class="title">
                                     Search Filters
                                 </div>
@@ -175,7 +175,8 @@
 --%>
                             </div>
                         </c:if>
-                        <div id="keywordSearchResult" class="result">
+                        <div id="keywordSearchResult" class="result"
+                        	style="width: 70%; float: left;">
                             <c:if test="${totalfound eq 0}">
                                 <spring:message code="label.search.empty"/>
                             </c:if>
@@ -254,7 +255,7 @@
                                                                value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
                                                         <a target="blank" href="${imgLink}">
                                                             <img src="${imgLink}" width="110" height="90"
-                                                                 alt="PDB ${imgFile}"/>
+                                                                 alt="PDB ${imgFile}" onerror="noImage(this);"/>
                                                         </a>
                                                         <div class="imgFooter">${imgFooter}</div>
                                                     </c:otherwise>

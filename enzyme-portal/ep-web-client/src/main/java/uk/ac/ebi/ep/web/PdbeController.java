@@ -1,19 +1,13 @@
 package uk.ac.ebi.ep.web;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import javax.xml.bind.JAXBException;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
-import uk.ac.ebi.das.jdas.exceptions.ValidationException;
+import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.enzyme.model.DASSummary;
@@ -58,22 +52,12 @@ public class PdbeController {
                     structure.getSummary().add(summary);
                 }
             }
-		} catch (MalformedURLException e) {
-			LOGGER.error("Unable to retrieve structure " + pdbId);
-		} catch (IOException e) {
-			LOGGER.error("Unable to retrieve structure " + pdbId);
-		} catch (JAXBException e) {
-			LOGGER.error("Unable to retrieve structure " + pdbId);
-		} catch (ValidationException e) {
-			LOGGER.error("Unable to retrieve structure " + pdbId, e);
-			structure = null;
-		}
-
-		if (structure != null){
     		model.addAttribute("proteinStructure", structure);
-		} else {
+		} catch (Exception e) {
+			LOGGER.error("Unable to retrieve structure " + pdbId, e);
 			retValue = "error";
 		}
+
 		return retValue;
 	}
 }
