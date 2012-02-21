@@ -51,12 +51,23 @@ public class SimpleDASFeaturesCaller implements Callable<SegmentAdapter> {
 	}
 
 	public List<SegmentAdapter> getSegments()
-	throws MalformedURLException, JAXBException {
-		LOGGER.debug(" -STR- before creating featuresClient");
-		FeaturesClient featuresClient = new FeaturesClient();
-		LOGGER.debug(" -STR- before fetching DAS data");
-		DasGFFAdapter dasGFF = featuresClient.fetchData(serverURL, segments);
-		LOGGER.debug(" -STR- before returning");
-		return dasGFF.getGFF().getSegment();
+	throws MalformedURLException, JAXBException, Exception {
+		FeaturesClient featuresClient = null;
+		try {
+			LOGGER.debug(" -STR- before creating featuresClient");
+			featuresClient = FeaturesClientPool.getInstance().borrowObject();
+			LOGGER.debug(" -STR- before fetching DAS data");
+			DasGFFAdapter dasGFF = featuresClient.fetchData(serverURL, segments);
+			LOGGER.debug(" -STR- before returning");
+			return dasGFF.getGFF().getSegment();
+		} finally {
+			if (featuresClient != null){
+				try {
+					FeaturesClientPool.getInstance().returnObject(featuresClient);
+				} catch(Exception e){
+					LOGGER.error("Unable to return DAS client", e);
+				}
+			}
+		}
 	}
 }
