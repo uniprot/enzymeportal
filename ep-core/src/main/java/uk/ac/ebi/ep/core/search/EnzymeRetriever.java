@@ -113,9 +113,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
             intenzAdapter.getEnzymeDetails(enzymeModel);
             List<String> prov = new LinkedList<String>();
-            prov.add("Data Source : IntEnz & UniProt");
+            prov.add("IntEnz");
+            prov.add("UniProt");
             prov.add("IntEnz - (Integrated relational Enzyme database) is a freely available resource focused on enzyme nomenclature.\n");
-            // prov.add("RELEASED DATE = " + new Date());
             prov.add("UniProt - The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information");
 
             enzymeModel.getEnzyme().setProvenance(prov);
@@ -195,13 +195,16 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
          * manually add provenance
          */
         List<String> prov = new LinkedList<String>();
-        prov.add("Data Source : Reactome & Rhea");
+        prov.add("Reactome");
+        prov.add("Rhea");
         //prov.add("RELEASED DATE = " + new Date());
         prov.add("Reactome is an open-source, open access, manually curated and peer-reviewed pathway database");
         prov.add("Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use.");
 
         if (!reactionPathways.isEmpty()) {
-            reactionPathways.get(0).setProvenance(prov);
+            for(ReactionPathway rp : reactionPathways){
+                rp.setProvenance(prov);
+            }
             try {
                 LOGGER.debug(" -RP- before DataTypeConverter.getReactionXrefs");
                 List<String> reactomeReactionIds =
@@ -386,9 +389,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
             LOGGER.debug("MOLECULES before provenance");
             List<String> prov = new LinkedList<String>();
-            prov.add("Data Sources : ChEBI and ChEMBL");
+            prov.add("ChEBI");
+            prov.add("ChEMBL");
             // prov.add("RELEASED DATE = " + new Date());
-            prov.add("Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on ‘small’ chemical compounds.");
+            prov.add("ChEBI - (Chemical Entities of Biological Interest) is a freely available dictionary of molecular entities focused on ‘small’ chemical compounds.");
             prov.add("ChEMBL is a database of bioactive drug-like small"
                     + " molecules, it contains 2-D structures, calculated"
                     + " properties (e.g. logP, Molecular Weight, Lipinski"
