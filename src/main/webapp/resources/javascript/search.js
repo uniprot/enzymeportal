@@ -82,13 +82,17 @@ $(document).ready(function() {
         var nextStart = $("#nextStart").val();
         var prevStart = $("#prevStart").val();
         if (clickedId == "prevButton") {
-            $("#start").val(prevStart);
+            //$("#start").val(prevStart);
+            $("#filtersFormStart").val(prevStart);
             pageClicked = true;
-            $('#searchButton').trigger("click");
+            //$('#searchButton').trigger("click");
+            document.forms.filtersForm.submit();
         } else if (clickedId == "nextButton"){
-            $("#start").val(nextStart);
+            //$("#start").val(nextStart);
+            $("#filtersFormStart").val(nextStart);
             pageClicked = true;
-            $('#searchButton').trigger("click");
+            //$('#searchButton').trigger("click");
+            document.forms['filtersForm'].submit();
         }
     });
 
