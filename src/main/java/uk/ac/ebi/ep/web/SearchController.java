@@ -334,26 +334,20 @@ public class SearchController {
                         // adding the updated enzyme summaries to the filtered result
                         summaryEntryFilteredResults.add(enzymeSummary);
                     }
-
-                    pagination = new Pagination(
-                            summaryEntryFilteredResults.size(), searchParameters.getSize());
-                    pagination.setFirstResult(0);
+                    // Update the number of results to paginate:
+                    pagination.setNumberOfResults(summaryEntryFilteredResults.size());
                     model.addAttribute("pagination", pagination);
                     sr.setSearchfilters(resultSet.getSearchfilters());
                     sr.setSummaryentries(summaryEntryFilteredResults);
                     // show the total number of hits (w/o filtering):
                     sr.setTotalfound(resultSet.getTotalfound());
                     searchModelForm.setSearchresults(sr);
-
-
-
                 } else {
                     // Show all of them:
                     searchModelForm.setSearchresults(resultSet);
                 }
 
                 model.addAttribute("searchModel", searchModelForm);
-
                 model.addAttribute("pagination", pagination);
 
 //                // Paginate:
