@@ -203,8 +203,8 @@ a:link, a:visited {
     float:left;
     vertical-align: bottom;
 }
-#pagination {
-    float:right;
+#paginationNav {
+    text-align: right;
     vertical-align: bottom;
 }
 

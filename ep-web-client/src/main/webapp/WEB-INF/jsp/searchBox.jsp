@@ -28,10 +28,15 @@
             </div>
          -->
             <div class="searchTabContent">
-                <form:input id="searchbox" path="searchparams.text" cssClass="field" rel="Enter a name to search"/>
-                <form:hidden id="start" path="searchparams.start" />
-                <form:hidden path="searchparams.previoustext" />
-                <input id ="searchButton" type="submit" value="Search" class="searchButton" />
+                <form:form id="searchForm" modelAttribute="searchModel"
+                	action="search" method="POST">
+	                <form:input id="searchbox" path="searchparams.text"
+	                	cssClass="field" rel="Enter a name to search"/>
+	                <form:hidden id="start" path="searchparams.start" />
+	                <form:hidden path="searchparams.previoustext" />
+	                <input id ="searchButton" type="submit" value="Search"
+	                	class="searchButton" />
+				</form:form>
                 <br/>
                 <spring:message code="label.search.example"/>
                 <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
