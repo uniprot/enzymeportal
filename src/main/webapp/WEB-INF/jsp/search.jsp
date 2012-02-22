@@ -179,7 +179,7 @@
                             </div>
                         </c:if>
                     </td>
-                    <td>
+                    <td width="70%">
                         <div id="keywordSearchResult" class="result"
                         	style="width: 70%; float: left;">
                             <c:if test="${totalfound eq 0}">
