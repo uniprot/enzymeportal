@@ -49,6 +49,12 @@
                                 Search Filters
                             </div>
                             <div class="line"></div>
+
+	                		<form:form id="filtersForm" modelAttribute="searchModel" action="search" method="POST">
+       						<form:hidden path="searchparams.text" />
+       						<form:hidden path="searchparams.previoustext" />
+       						<input type="hidden" id="filtersFormStart"
+       							name="searchparams.start" value="0"/>
                             <div class="sublevel1">
                                 <div class="subTitle">
                                     Species
@@ -61,9 +67,7 @@
                                         <c:if test="${speciesListSize <= filterSizeDefault}">
                                             <c:set var="limitedDisplay" value="${speciesListSize}"/>
                                         </c:if>
-			                		<form:form id="speciesFilter" modelAttribute="searchModel" action="search" method="POST">
-	             						<form:hidden path="searchparams.text" />
-	             						<form:hidden path="searchparams.previoustext" />
+
 	                                        <c:forEach var="i" begin="0" end="${limitedDisplay-1}">
 	                                            <c:if test='${not empty speciesList[i].scientificname}'>
 	                                                <div class="filterLine">
@@ -116,7 +120,6 @@
 		                                         </div>
 	                                             <a class="showLink" onclick="" id="<c:out value='species_link_0'/>"><c:out value="See ${speciesMoreSize} more"/></a> <br/>
 		                                     </c:if>
-										</form:form>
                                     </c:if>
                                 </div>
                             </div>
@@ -174,6 +177,7 @@
                                     </div>
                                 </div>              
 --%>
+							</form:form>
                         </div><!-- filter -->
                     </c:if>
                     <div id="keywordSearchResult" class="result"
@@ -182,7 +186,7 @@
                             <spring:message code="label.search.empty"/>
                         </c:if>
                         <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
-                            <form:form modelAttribute="pagination">
+                            <form:form modelAttribute="pagination" >
                             <div style="width: 100%;">
                                 <c:set var="totalPages" value="${pagination.lastPage}"/>
                                 <c:set var="maxPages" value="${totalPages}"/>
@@ -215,6 +219,12 @@
                                     </c:if>                         
                                 </div><!-- pagination -->
                             </div>
+                            <%-- Add species filter to this form, don't lose it: --%>
+                            <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
+	                        	<input type="checkbox" style="display: none;" 
+	                        		name="searchparams.species"
+	                        		value="${filterSp.scientificname}" />
+                            </c:forEach>
                             </form:form>
                             <div class="clear"></div>
                             <div class="line"></div>
