@@ -21,31 +21,31 @@ import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
  */
 @Controller
 public class PdbeController {
-	
-	private final Logger LOGGER = Logger.getLogger(PdbeController.class); 
 
-	@RequestMapping(value="/ajax/pdbe/{pdbId}")
-	protected String getStructure(Model model, @PathVariable String pdbId) {
-		String retValue = "proteinStructure-single";
-		ProteinStructure structure = null;
-		try {
-			SimpleDASFeaturesAdapter pdbeAdapter =
-					new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
-			SegmentAdapter segment = pdbeAdapter.getSegment(pdbId);
-			structure = new ProteinStructure();
+    private final Logger LOGGER = Logger.getLogger(PdbeController.class);
+
+    @RequestMapping(value = "/ajax/pdbe/{pdbId}")
+    protected String getStructure(Model model, @PathVariable String pdbId) {
+        String retValue = "proteinStructure-single";
+        ProteinStructure structure = null;
+        try {
+            SimpleDASFeaturesAdapter pdbeAdapter =
+                    new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
+            SegmentAdapter segment = pdbeAdapter.getSegment(pdbId);
+            structure = new ProteinStructure();
             structure.setId(segment.getId());
-            for (FeatureAdapter feature : segment.getFeature()){
-                if (feature.getType().getId().equals("description")){
+            for (FeatureAdapter feature : segment.getFeature()) {
+                if (feature.getType().getId().equals("description")) {
                     structure.setDescription(feature.getNotes().get(0)); // FIXME?
-                } else if (feature.getType().getId().equals("image")){
+                } else if (feature.getType().getId().equals("image")) {
                     Image image = new Image();
                     image.setSource(feature.getLinks().get(0).getHref());
                     image.setCaption(feature.getLinks().get(0).getContent());
                     image.setHref(feature.getLinks().get(1).getHref());
                     structure.setImage(image);
-                } else if (feature.getType().getId().equals("provenance")){
+                } else if (feature.getType().getId().equals("provenance")) {
                     structure.setProvenance(feature.getNotes());
-                } else if (feature.getType().getId().equals("summary")){
+                } else if (feature.getType().getId().equals("summary")) {
                     DASSummary summary = new DASSummary();
                     summary.setLabel(feature.getLabel());
                     summary.setNote(feature.getNotes());

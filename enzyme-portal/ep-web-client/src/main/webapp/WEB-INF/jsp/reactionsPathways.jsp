@@ -125,15 +125,15 @@
                         </c:if>
                     </fieldset>
                 </div>
-                <div class="provenance">
-                    <ul>
-                        <c:forEach var="prov" items="${reactionpathway.provenance}"
-                                   varStatus="vsProv">
-                            <li class="note_${vsProv.index}">${prov}</li>
-                        </c:forEach>
-                    </ul>
-                </div>
             </c:forEach>
+            <div class="provenance">
+                  <ul>
+                    <li class="note_0">Data Source:
+                        <a href="http://www.reactome.org/ReactomeGWT/entrypoint.html">Reactome</a> &AMP; <a href="http://www.ebi.ac.uk/rhea/" >Rhea</a> </li>
+                    <li class="note_1">Reactome is an open-source, open access, manually curated and peer-reviewed pathway database. </li>
+                    <li class="note_2">Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use. </li>
+                </ul>
+            </div>
         </c:otherwise>
     </c:choose>                
 
