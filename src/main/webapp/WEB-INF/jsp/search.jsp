@@ -44,8 +44,11 @@
                     <%-- maximum length in words for a text field --%>
                     <c:set var="textMaxLength" value="${60}"/>
                     <div class="grid_12 content">
+                    <table>
+                    <tr>
+                    <td width="25%">
                         <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
-                            <div class="filter" style="width: 25%; float: left;">                    
+                            <div class="filter">                    
                                 <div class="title">
                                     Search Filters
                                 </div>
@@ -175,6 +178,8 @@
 --%>
                             </div>
                         </c:if>
+                    </td>
+                    <td>
                         <div id="keywordSearchResult" class="result"
                         	style="width: 70%; float: left;">
                             <c:if test="${totalfound eq 0}">
@@ -407,11 +412,17 @@
                                 </div>
                             </c:if>
 
+                    </div><!-- keywordSearchResult -->
+                    </td>
+                    </tr>
+                    </table>
+                    
+
+
+                </div><!-- grid_12 -->
                         </form:form>
-                    </div>
-                </div>
-            </div>
+            </div> <!-- container_12 -->
+            </div> <!-- contents -->
             <jsp:include page="footer.jsp"/>
-        </div> 
     </body>
 </html>
