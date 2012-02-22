@@ -28,7 +28,6 @@
         <jsp:include page="header.jsp"/>
         <div class="contents">
             <div class="page container_12">            
-                <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
                     <jsp:include page="subHeader.jsp"/>
                     <jsp:include page="searchBox.jsp"/>
                     <!--Global variables-->
@@ -80,8 +79,10 @@
                                                             </span>
                                                         </div>                                                          
                                                         <div class="checkItem">
+											                <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
                                                             <form:checkbox path="searchparams.species" value="${speciesList[i].scientificname}" title="${speciesList[i].commonname}"  onclick="submit()" />
-                                                        </div>
+															</form:form>
+	                                                        </div>
                                                         <div class="clear"></div>
                                                     </div>
                                                 </c:if>
@@ -107,7 +108,9 @@
                                                                 </span>
                                                             </div>
                                                             <div class="checkItem" >
+												                <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
                                                                 <form:checkbox path="searchparams.species" value="${speciesList[i].scientificname}" title="${speciesList[i].commonname}"  onclick="submit()" />
+                                                                </form:form>
                                                             </div>                                                            
                                                             <div class="clear"></div>
                                                         </div>
@@ -140,7 +143,9 @@
                                                 </xchars:translate>
                                             </div>
                                             <div class="checkItem">
+								                <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
                                                 <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
+                                                </form:form>
                                              </div>
                                             <div class="clear"></div>
                                             </div>
@@ -156,7 +161,9 @@
                                                     </xchars:translate>
                                                 </div>
                                                 <div class="checkItem">
+									                <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
                                                     <form:checkbox path="searchparams.compounds" value="${compoundList[i].id}"/>
+                                                    </form:form>
                                                  </div>
                                                 <div class="clear"></div>
                                                 </div>
@@ -182,6 +189,7 @@
                             </c:if>
                             <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
                                 <form:form modelAttribute="pagination">
+                                <div style="width: 100%">
                                     <c:set var="totalPages" value="${pagination.lastPage}"/>
                                     <c:set var="maxPages" value="${totalPages}"/>
                                     <div class="resultText">
@@ -212,6 +220,7 @@
                                             </a>
                                         </c:if>                         
                                     </div><!-- pagination -->
+                                </div>
                                 </form:form>
                                 <div class="clear"></div>
                                 <div class="line"></div>
@@ -409,7 +418,6 @@
 
 	                    </div><!-- keywordSearchResult -->
 	                </div><!-- grid_12 content -->
-                </form:form>
             </div><!--  page container_12 -->
             <jsp:include page="footer.jsp"/>
         </div> <!-- contents -->
