@@ -44,11 +44,8 @@
                     <%-- maximum length in words for a text field --%>
                     <c:set var="textMaxLength" value="${60}"/>
                     <div class="grid_12 content">
-                    <table>
-                    <tr>
-                    <td width="25%">
                         <c:if test="${not empty summaryEntries and searchresults.totalfound gt 0}">
-                            <div class="filter">                    
+                            <div class="filter" style="width: 25%; float: left;">                    
                                 <div class="title">
                                     Search Filters
                                 </div>
@@ -176,10 +173,8 @@
                                     </div>
                                 </div>              
 --%>
-                            </div>
+                            </div><!-- filter -->
                         </c:if>
-                    </td>
-                    <td width="70%">
                         <div id="keywordSearchResult" class="result"
                         	style="width: 70%; float: left;">
                             <c:if test="${totalfound eq 0}">
@@ -216,7 +211,7 @@
                                                 Next
                                             </a>
                                         </c:if>                         
-                                    </div>
+                                    </div><!-- pagination -->
                                 </form:form>
                                 <div class="clear"></div>
                                 <div class="line"></div>
@@ -409,20 +404,14 @@
                                         <div class="clear"></div>
                                         <c:set var="resultItemId" value="${resultItemId+1}"/>
                                     </c:forEach>
-                                </div>
+                                </div><!-- resultContent -->
                             </c:if>
 
-                    </div><!-- keywordSearchResult -->
-                    </td>
-                    </tr>
-                    </table>
-                    
-
-
-                </div><!-- grid_12 -->
-                        </form:form>
-            </div> <!-- container_12 -->
-            </div> <!-- contents -->
+	                    </div><!-- keywordSearchResult -->
+	                </div><!-- grid_12 content -->
+                </form:form>
+            </div><!--  page container_12 -->
             <jsp:include page="footer.jsp"/>
+        </div> <!-- contents -->
     </body>
 </html>
