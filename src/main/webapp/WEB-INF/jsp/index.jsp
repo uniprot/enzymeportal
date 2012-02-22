@@ -28,41 +28,40 @@
         <jsp:include page="header.jsp"/>
         <div class="contents">
             <div class="page container_12">
-                <form:form id="searchForm" modelAttribute="searchModel" action="search" method="POST">
-	                <jsp:include page="subHeader.jsp"/>
-	                <jsp:include page="searchBox.jsp"/>
+                <jsp:include page="subHeader.jsp"/>
+                <jsp:include page="searchBox.jsp"/>
 
-	                <div style="margin-left: auto; margin-right: auto;
-                        width: 50%;">
-		                <h2>Welcome to the Enzyme Portal</h2>
-	                	The Enzyme Portal is for people who are interested
-	                	in the biology of enzymes and proteins with enzymatic
-	                	activity.
-		                <div style="text-align: right;">
-			                <a href="about" class="showLink">More about the
-			                	enzyme portal...</a>
-		                </div>
+                <div style="margin-left: auto; margin-right: auto;
+                       width: 50%;">
+	                <h2>Welcome to the Enzyme Portal</h2>
+                	The Enzyme Portal is for people who are interested
+                	in the biology of enzymes and proteins with enzymatic
+                	activity.
+	                <div style="text-align: right;">
+		                <a href="about" class="showLink">More about the
+		                	enzyme portal...</a>
 	                </div>
+                </div>
 
-                    <table style="margin-left: auto; margin-right: auto;
-                        width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
-                        <tr style="text-align: center;">
-	                        <td>
-	                        <%-- b>Welcome to the Enzyme Portal</b --%>
-	                        <iframe width="360" height="270"
-	                            src="http://www.youtube.com/embed/Kldp0WXcxUM"
-	                            frameborder="0"
-	                            allowfullscreen></iframe>
-	                        </td>
-	                        <td>
-	                        <%-- b>Explore Enzyme Portal</b --%>
-	                        <iframe width="360" height="270"
-	                            src="http://www.youtube.com/embed/b7hFo5iJuoM"
-	                            frameborder="0"
-	                            allowfullscreen></iframe>
-	                        </td>
-                        </tr>
-                    </table>
+                   <table style="margin-left: auto; margin-right: auto;
+                       width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
+                       <tr style="text-align: center;">
+                        <td>
+                        <%-- b>Welcome to the Enzyme Portal</b --%>
+                        <iframe width="360" height="270"
+                            src="http://www.youtube.com/embed/Kldp0WXcxUM"
+                            frameborder="0"
+                            allowfullscreen></iframe>
+                        </td>
+                        <td>
+                        <%-- b>Explore Enzyme Portal</b --%>
+                        <iframe width="360" height="270"
+                            src="http://www.youtube.com/embed/b7hFo5iJuoM"
+                            frameborder="0"
+                            allowfullscreen></iframe>
+                        </td>
+                       </tr>
+                   </table>
 <%--
                     <div class="grid_12 content">
                         <div class="iconGroup">
@@ -106,8 +105,6 @@
                         </div>
                     </div>
  --%>
-
-                </form:form>
             </div>
             <jsp:include page="footer.jsp"/>
         </div>

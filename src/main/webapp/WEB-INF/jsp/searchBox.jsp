@@ -14,7 +14,7 @@
 <div style="width: 70em; margin-left: auto; margin-right: auto;">
     <div id="keywordSearch" class="searchBackground">
         <div style="width: 65em; margin-left: auto; margin-right: auto; margin-top: 2ex;">
-        <!-- 
+        <%-- 
             <div style="text-align: left !important; margin: 0ex;">
                 <span class="selected searchTab">
                     Keyword search
@@ -26,7 +26,7 @@
                     Protein sequence search
                 </span>
             </div>
-         -->
+         --%>
             <div class="searchTabContent">
                 <form:form id="searchForm" modelAttribute="searchModel"
                 	action="search" method="POST">
