@@ -8,11 +8,15 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.enzyme.model.Pathway;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.rhea.domain.Database;
 
 /**
@@ -40,6 +44,19 @@ public class ReactomeCallable {
         public Pathway call() throws Exception {
             return parseReactomeEntryPage(this.pathwayId);
         }
+        
+//        public ReactionPathway buildprovenance(){
+//            ReactionPathway reactionPathway = new ReactionPathway();
+//           // reactionPathway.setPathways();
+//            String a = "Data source";
+//            String b = " Released Date";
+//            List<String> list = new LinkedList<String>();
+//            list.add(a);
+//            list.add(b);
+//            reactionPathway.setProvenance(list);
+//            
+//             return reactionPathway;
+//        }
 
         public Pathway parseReactomeEntryPage(String stableId)
 		throws MalformedURLException, IOException {
