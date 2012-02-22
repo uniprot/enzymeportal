@@ -45,7 +45,7 @@
             <ul>
                 <li class="note_0">Data Sources:
                 	<a href="http://www.ebi.ac.uk/efo">EFO</a> and
-                    <a href="http://www.uniprot.org">UniProt</a> &AMP; <a href="http://www.ebi.ac.uk/efo/" >EFO</a></li>
+                    <a href="http://www.uniprot.org">UniProt</a></li>
                 <li class="note_1">The mission of UniProt is to provide the
                     scientific community with a comprehensive, high-quality and freely
                     accessible resource of protein sequence and functional information</li>
