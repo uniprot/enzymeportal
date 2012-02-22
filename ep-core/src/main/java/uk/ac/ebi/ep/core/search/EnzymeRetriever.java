@@ -194,17 +194,17 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         /**
          * manually add provenance
          */
-        List<String> prov = new LinkedList<String>();
-        prov.add("Reactome");
-        prov.add("Rhea");
-        //prov.add("RELEASED DATE = " + new Date());
-        prov.add("Reactome is an open-source, open access, manually curated and peer-reviewed pathway database");
-        prov.add("Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use.");
+//        List<String> prov = new LinkedList<String>();
+//        prov.add("Reactome");
+//        prov.add("Rhea");
+//        //prov.add("RELEASED DATE = " + new Date());
+//        prov.add("Reactome is an open-source, open access, manually curated and peer-reviewed pathway database");
+//        prov.add("Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use.");
 
         if (!reactionPathways.isEmpty()) {
-            for(ReactionPathway rp : reactionPathways){
-                rp.setProvenance(prov);
-            }
+//            for(ReactionPathway rp : reactionPathways){
+//                rp.setProvenance(prov);
+//            }
             try {
                 LOGGER.debug(" -RP- before DataTypeConverter.getReactionXrefs");
                 List<String> reactomeReactionIds =
