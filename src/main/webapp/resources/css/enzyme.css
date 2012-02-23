@@ -26,6 +26,11 @@ img {
     -moz-border-radius: 8px;
 }
 
+#equation {
+	width: 80%;
+	overflow-x: auto;
+}
+
 #equation table {
     text-align: center;
     width: 100%;
@@ -35,7 +40,7 @@ img {
     margin-left: 10px;
     margin-right: 20px;
     margin-top: 10px;
-     margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 /*
 .pathwayDesc
