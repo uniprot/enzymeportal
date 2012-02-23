@@ -109,13 +109,15 @@ public class ReactomeWsCallable implements Callable<ReactionPathway> {
             is = urlCon.getInputStream();
             inputSource = new InputSource(is);
             xr.parse(inputSource);
-            desc = handler.getSummationText();
+            desc = handler.getSummationText();          
             /**
              * to format the url for reactome
              */
+            if(desc != null){
             Pattern pattern = Pattern.compile(PATTERN);
             Matcher matcher = pattern.matcher(desc);
             desc = matcher.replaceAll(REPLACEMENT);
+            }
 
         } catch (MalformedURLException e) {
             throw new ReactomeConnectionException(sb.toString(), e);
