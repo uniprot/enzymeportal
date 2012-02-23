@@ -26,12 +26,21 @@ img {
     -moz-border-radius: 8px;
 }
 
-#equation {
-	width: 80%;
+.reaction.block {
+	border: thin solid grey;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin-top: 2ex;
+    padding: 1ex 1em;
+}
+
+.equation {
+	width: 100%;
 	overflow-x: auto;
 }
 
-#equation table {
+.equation table {
     text-align: center;
     width: 100%;
 }
