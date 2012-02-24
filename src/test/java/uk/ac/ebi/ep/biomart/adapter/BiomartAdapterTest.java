@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.biomart.adapter;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URLConnection;
 import java.util.List;
@@ -58,11 +59,15 @@ public class BiomartAdapterTest {
     @Test
     @Ignore("BioMart server returns error for this ID")
     public void testGetPathwaysByReactionId() throws Exception {
-        System.out.println("getPathwaysByReactionId");                        
         List<String> results = instance.getPathwaysByReactionId(reactionStableId);
         assertArrayEquals(expPathwayResults, results.toArray());
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+    }
+    
+    @Test
+    public void testGetPathwaysByUniprotAccession() throws Exception {
+    	List<String> results = instance.getPathwaysByUniprotAccession("P30613");
+    	assertNotNull(results);
+    	assertTrue(results.size() > 0);
     }
 
     /**
@@ -70,7 +75,6 @@ public class BiomartAdapterTest {
      */
     @Test
     public void testSendRequest() throws Exception {
-        System.out.println("sendRequest");
         String baseUrl = Transformer.getMessageTemplate("baseUrl");
         Object[] objs = {reactionStableId};
         String pwQuery = Transformer.getMessageTemplate("getPathwaysByReactionIdQuery", objs);
@@ -83,10 +87,7 @@ public class BiomartAdapterTest {
 
     @Test
     public void testGetReactionsByUniprotAccession() throws Exception {
-        System.out.println("testGetReactionsByUniprotAccession");
         List<ReactionPathway> results = instance.getReactionsByUniprotAccession(uniprotAccession);
         assertNotNull(results);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
     }
 }

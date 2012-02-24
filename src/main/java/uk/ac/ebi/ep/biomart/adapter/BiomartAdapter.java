@@ -166,7 +166,10 @@ public class BiomartAdapter {
             	if (inputLine.indexOf("ERROR") > -1){
             		errorMsg += inputLine;
             	} else {
-                    results.add(inputLine.trim());
+                    final String pathwayId = inputLine.trim();
+                    if (!results.contains(pathwayId)){
+    					results.add(pathwayId);
+                    }
             	}
             }
             if (errorMsg.length() > 0){
