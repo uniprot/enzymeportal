@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetEcHierarchyCaller;
@@ -118,7 +119,10 @@ public class IntenzAdapter implements IintenzAdapter{
             }
 //            LOGGER.debug("SEARCH after intenzList");
             if (synonyms.size() > 0) {
-                enzymeModel.getSynonym().addAll(synonyms);
+            	@SuppressWarnings("unchecked")
+				Collection<String> newSynonyms = CollectionUtils.subtract(
+						synonyms, enzymeModel.getSynonym());
+                enzymeModel.getSynonym().addAll(newSynonyms);
             }
 
             //Enzyme has previously initiatized to set Sequence info
