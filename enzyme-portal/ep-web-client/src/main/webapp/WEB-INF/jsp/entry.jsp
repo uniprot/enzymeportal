@@ -40,7 +40,7 @@
                     <c:set var="chebiEntryBaseUrl" value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId="/>
                     <c:set var="chebiEntryBaseUrlParam" value=""/>
                     <c:set var="rheaEntryBaseUrl" value="http://www.ebi.ac.uk/rhea/reaction.xhtml?id="/>
-                    <c:set var="intenzEntryBaseUrl" value="http://wwwdev.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
+                    <c:set var="intenzEntryBaseUrl" value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
                     <c:set var="chemblImageBaseUrl" value="https://www.ebi.ac.uk/chembldb/compound/displayimage/"/>
 
                     <c:set var="reactomeImageBaseUrl" value="http://www.reactome.org/"/>
