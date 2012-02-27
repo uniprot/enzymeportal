@@ -103,7 +103,7 @@ public class UniprotJapiAdapter extends AbstractUniprotAdapter{
     }
 
     public List<String> getUniprotIds(String query) {
-		return new UniprotJapiCallable().getUniprotIds(query, config.isReviewed());
+        return new UniprotJapiCallable().getUniprotIds(query, config.isReviewed());
 	}
 
 	/*
@@ -138,4 +138,4 @@ public class UniprotJapiAdapter extends AbstractUniprotAdapter{
 		throw new UnsupportedOperationException("Not implemented"); // FIXME ?
 	}
 
-}
+    }

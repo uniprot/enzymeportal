@@ -12,16 +12,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.entry.Field;
@@ -101,7 +96,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
 		pdbeAccessions = null, pdbMethods = null, rpString = null, drugsString = null,
 		regulString = null;
 		Species species = null;
-		List<EnzymeAccession> relSpecies = new ArrayList<EnzymeAccession>();
+		List<EnzymeAccession> relSpecies = new LinkedList<EnzymeAccession>();
                 
                 
 
@@ -139,6 +134,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
                         //relSpecies.add(ea);
      
 		}
+               
 		species = relSpecies.get(0).getSpecies();
 		
 		// Take the default species or one with structures.
