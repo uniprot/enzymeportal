@@ -634,19 +634,19 @@ public class EnzymeFinder implements IEnzymeFinder {
                 // We retrieve only one field (id) from chembl-compound, see config.xml:
                 chemblIds.add(list.get(0));
             }
-            List<String> uniprotIdsFromChembl = new ArrayList<String>();
             for (String chemblId : chemblIds) {
                 Entry chemblEntry = new Entry();
                 chemblEntry.setDbName(MmDatabase.ChEMBL.name());
                 chemblEntry.setEntryId(chemblId);
                 Collection<XRef> uniprotXrefs =
                         megaMapperConnection.getMegaMapper().getXrefs(chemblEntry, MmDatabase.UniProt);
+                if(uniprotXrefs != null){
                 for (XRef xRef : uniprotXrefs) {
                     // xref is UniProt entry =[is_target_of]=> ChEMBL entry
                     uniprotEnzymeIds.add(xRef.getFromEntry().getEntryId());
                 }
+                }
             }
-            uniprotEnzymeIds.addAll(uniprotIdsFromChembl);
         }
     }
 
