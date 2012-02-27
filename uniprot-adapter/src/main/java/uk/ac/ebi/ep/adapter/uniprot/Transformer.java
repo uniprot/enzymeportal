@@ -108,16 +108,13 @@ public class Transformer {
             return m1.getName().equalsIgnoreCase(m2.getName()) ? 0 : 1;
         }
     };
-    static LinkedList<Molecule> uniqueResult = null;// new LinkedList<Molecule>();
-    static Set<Molecule> theResult = null;// new TreeSet<Molecule>(SORT_MOLECULES);
 
     public static List<Molecule> parseText(String text, String regex) {
-      
-        theResult = new TreeSet<Molecule>(SORT_MOLECULES);
-        uniqueResult = new LinkedList<Molecule>();
+
+        LinkedList<Molecule> molecules = new LinkedList<Molecule>();
+        Set<Molecule> theResult = new TreeSet<Molecule>(SORT_MOLECULES);
         String cleanedText = text.replaceAll(regex, ",");
         StringTokenizer stringTokenizer = new StringTokenizer(cleanedText, ",");
-
         LinkedList<Molecule> results = new LinkedList<Molecule>();
 
         while (stringTokenizer.hasMoreTokens()) {
@@ -152,24 +149,19 @@ public class Transformer {
                     }
 
                 } else {
-
+                    molecule.setName(token);
                     if (!results.contains(molecule)) {
-                        molecule.setName(token);
                         results.add(molecule);
-
                         theResult.addAll(results);
-
                     }
-
-
                 }
 
             }
 
         }
 
-        uniqueResult.addAll(theResult);
-        return uniqueResult;
+        molecules.addAll(theResult);
+        return molecules;
     }
 
     public static String getFullName(Name name) {
