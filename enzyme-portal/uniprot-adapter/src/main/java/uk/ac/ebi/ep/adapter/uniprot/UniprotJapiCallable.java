@@ -218,11 +218,11 @@ public class UniprotJapiCallable {
             for (String sentence : sentences) {
                 if (sentence.contains("Activated by") || sentence.contains("activated by")) {
                     List<Molecule> activators = Transformer.parseTextForActivators(sentence.trim());
-                    chemicalEntity.setActivators(activators);
+                    chemicalEntity.getActivators().addAll(activators);
                 }
                 if (sentence.contains("Inhibited by") || sentence.contains("inhibited by")) {
                     List<Molecule> inhibitors = Transformer.parseTextForInhibitors(sentence.trim());
-                    chemicalEntity.setInhibitors(inhibitors);
+                    chemicalEntity.getInhibitors().addAll(inhibitors);
                 }
             }
 
