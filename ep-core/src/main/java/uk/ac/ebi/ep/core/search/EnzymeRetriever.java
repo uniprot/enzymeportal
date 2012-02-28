@@ -421,12 +421,29 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     Domains.pdbe.name(), uniprotAccession,
                     FieldsOfPdbe.asStrings());
             List<List<String>> fields = ebeyeAdapter.getFields(params);
-            if (fields != null) {
+            if (fields == null) {
+            	if (!enzymeModel.getPdbeaccession().isEmpty()){
+                	// Keep any structures coming from UniProt web services:
+                	// This may happen because of mismatch UniProt-PDB xrefs.
+                	for (String pdbId : enzymeModel.getPdbeaccession()){
+                		ProteinStructure str = new ProteinStructure();
+                		str.setId(pdbId);
+                		str.setName(pdbId);
+                		enzymeModel.getProteinstructure().add(str);
+                	}
+                	LOGGER.warn("No PDB IDs from EB-Eye," +
+                			" using those from UniProt " + uniprotAccession);
+            	}
+            } else {
                 for (int i = 0; i < fields.size(); i++) {
                     ProteinStructure str = new ProteinStructure();
                     str.setId(fields.get(i).get(0));
                     str.setName(fields.get(i).get(1));
                     enzymeModel.getProteinstructure().add(str);
+                }
+                if (enzymeModel.getPdbeaccession().size() != fields.size()){
+                	LOGGER.warn("Different number of PDB IDs from EB-Eye and" +
+                			" UniProt for " + uniprotAccession);
                 }
             }
         } catch (UniprotWsException e) {
