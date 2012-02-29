@@ -75,7 +75,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         rheaAdapter = new RheasResourceClient();
         chebiAdapter = new ChebiAdapter();
         biomartAdapter = new BiomartAdapter();
-         bioportalAdapter = new BioportalWsAdapter();
+        bioportalAdapter = new BioportalWsAdapter();
         try {
             pdbeAdapter = new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
         } catch (Exception e) {
@@ -200,7 +200,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 //        //prov.add("RELEASED DATE = " + new Date());
 //        prov.add("Reactome is an open-source, open access, manually curated and peer-reviewed pathway database");
 //        prov.add("Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use.");
-
         if (!reactionPathways.isEmpty()) {
 //            for(ReactionPathway rp : reactionPathways){
 //                rp.setProvenance(prov);
@@ -242,12 +241,20 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     private List<Pathway> getPathwaysByReactomeReactionsId(String reactomeReactionId)
             throws EnzymeRetrieverException {
         List<Pathway> pathways = null;
-        List<String> reactomeStableIds = null;
+        List<String> reactomeStableIds = null;// new ArrayList<String>();
         try {
             reactomeStableIds = biomartAdapter.getPathwaysByReactionId(reactomeReactionId); // FIXME THROWS EXC. FOR REACT_21342.1
+            System.out.println("stable IDs " + reactomeStableIds);
+            if (reactomeStableIds != null) {
+                for (String id : reactomeStableIds) {
+                    System.out.println("IDs = " + id);
+                }
+            }
         } catch (BiomartFetchDataException ex) {
-            throw new EnzymeRetrieverException("Failed to get reactome pathway stable ids "
-                    + "from Biomart for Reaction " + reactomeReactionId, ex);
+            // throw new EnzymeRetrieverException("Failed to get reactome pathway stable ids "
+            // + "from Biomart for Reaction " + reactomeReactionId, ex);
+            System.out.println("id " + reactomeStableIds);
+            System.out.println("Exception " + ex.getMessage());
         }
         pathways = getPathwayDescFromReactome(reactomeStableIds);
         return pathways;
@@ -304,7 +311,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     List<Pathway> pathways;
                     try {
                         pathways = getPathwaysByReactomeReactionsId(x);
-                        reactionPathway.getPathways().addAll(pathways);
+                        if (pathways != null) {
+                            reactionPathway.getPathways().addAll(pathways);
+                        }
                     } catch (EnzymeRetrieverException e) {
                         LOGGER.error("Unable to retrieve pathways for " + x, e);
                     }
@@ -353,13 +362,15 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
          * For now, we build 'empty' Pathway objects only with their
          * ids, which will be retrieved using ajax from the JSP.
          */
-        for (String id : reactomeStableIds) {
-            if (pathways == null) {
-                pathways = new ArrayList<Pathway>();
+        if (reactomeStableIds != null) {
+            for (String id : reactomeStableIds) {
+                if (pathways == null) {
+                    pathways = new ArrayList<Pathway>();
+                }
+                Pathway pathway = new Pathway();
+                pathway.setId(id);
+                pathways.add(pathway);
             }
-            Pathway pathway = new Pathway();
-            pathway.setId(id);
-            pathways.add(pathway);
         }
         return pathways;
     }
@@ -422,18 +433,18 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     FieldsOfPdbe.asStrings());
             List<List<String>> fields = ebeyeAdapter.getFields(params);
             if (fields == null) {
-            	if (!enzymeModel.getPdbeaccession().isEmpty()){
-                	// Keep any structures coming from UniProt web services:
-                	// This may happen because of mismatch UniProt-PDB xrefs.
-                	for (String pdbId : enzymeModel.getPdbeaccession()){
-                		ProteinStructure str = new ProteinStructure();
-                		str.setId(pdbId);
-                		str.setName(pdbId);
-                		enzymeModel.getProteinstructure().add(str);
-                	}
-                	LOGGER.warn("No PDB IDs from EB-Eye," +
-                			" using those from UniProt " + uniprotAccession);
-            	}
+                if (!enzymeModel.getPdbeaccession().isEmpty()) {
+                    // Keep any structures coming from UniProt web services:
+                    // This may happen because of mismatch UniProt-PDB xrefs.
+                    for (String pdbId : enzymeModel.getPdbeaccession()) {
+                        ProteinStructure str = new ProteinStructure();
+                        str.setId(pdbId);
+                        str.setName(pdbId);
+                        enzymeModel.getProteinstructure().add(str);
+                    }
+                    LOGGER.warn("No PDB IDs from EB-Eye,"
+                            + " using those from UniProt " + uniprotAccession);
+                }
             } else {
                 for (int i = 0; i < fields.size(); i++) {
                     ProteinStructure str = new ProteinStructure();
@@ -441,9 +452,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     str.setName(fields.get(i).get(1));
                     enzymeModel.getProteinstructure().add(str);
                 }
-                if (enzymeModel.getPdbeaccession().size() != fields.size()){
-                	LOGGER.warn("Different number of PDB IDs from EB-Eye and" +
-                			" UniProt for " + uniprotAccession);
+                if (enzymeModel.getPdbeaccession().size() != fields.size()) {
+                    LOGGER.warn("Different number of PDB IDs from EB-Eye and"
+                            + " UniProt for " + uniprotAccession);
                 }
             }
         } catch (UniprotWsException e) {
@@ -513,11 +524,11 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                             }
 
                             diseaseList.add(disease);
-                            enzymeModel.setDisease(diseaseList);                           
-                        } 
+                            enzymeModel.setDisease(diseaseList);
+                        }
                     } catch (BioportalAdapterException ex) {
                         LOGGER.error("Error while getting disease using BioPortal adapter", ex);
-                     }
+                    }
 
                 }
             }
