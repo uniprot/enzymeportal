@@ -249,7 +249,7 @@ public class SearchController {
     public String postSearchResult(SearchModel searchModelForm, BindingResult result,
             Model model, HttpSession session) {
         String view = "search";
-
+        clearHistory(session);
         List<EnzymeSummary> summaryEntryFilteredResults = new LinkedList<EnzymeSummary>();
 
         if (searchModelForm != null) {

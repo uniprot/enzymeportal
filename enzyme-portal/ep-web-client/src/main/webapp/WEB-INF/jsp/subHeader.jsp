@@ -15,7 +15,7 @@
 </div>
 <div class="grid_12zzz" style="margin-left: 1em;">
 	<div style="display: table-cell;">
-		<h1 style="border: none; background: none;">Enzyme Portal</h1>
+            <h1 style="border: none; background: none;"><a href="/enzymeportal" >Enzyme Portal</a></h1>
 	</div>
 	<div style="display: table-cell;">
 		- Your portal to enzyme-related information at the EBI.
