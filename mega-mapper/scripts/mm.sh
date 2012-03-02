@@ -39,3 +39,5 @@ echo "Starting UniMed import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
 	-dbConfig ep-mm-db-$1 -xmlFile $UP_FILE
 echo "Finished UniMed import - $(date)"
+
+# TODO: make a backup of the new mega-map!
