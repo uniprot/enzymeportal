@@ -117,7 +117,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
                 // We already have PDB codes in enzymeInfo as [6], see getColumns()
                 pdbCodes = parsePdbCodes(colValues[6], colValues[7]);
             }
-            ea.setPdbCodes(pdbCodes);
+            ea.setPdbeaccession(pdbCodes);
 
             final boolean isDefSp = ea.getSpecies().getScientificname().equalsIgnoreCase(defaultSpecies);
             final boolean noDefSp = relSpecies.isEmpty()
@@ -506,13 +506,13 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
                 Species sp = UniprotWsAdapter.parseSpecies(split[4]);
                 if (relSps.containsKey(sp.getScientificname()) && pdbCodes != null) {
                     // Just add any new PDB codes:
-                    relSps.get(sp.getScientificname()).getPdbCodes().addAll(pdbCodes);
+                    relSps.get(sp.getScientificname()).getPdbeaccession().addAll(pdbCodes);
                 } else {
                     // Create a new one:
                     EnzymeAccession ea = new EnzymeAccession();
                     ea.setSpecies(sp);
                     ea.getUniprotaccessions().add(split[0]);
-                    ea.setPdbCodes(pdbCodes);
+                    ea.setPdbeaccession(pdbCodes);
                     relSps.put(sp.getScientificname(), ea);
                 }
             }
@@ -551,7 +551,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
             ea.getUniprotaccessions().add(split[0]);
             ea.setSpecies(UniprotWsAdapter.parseSpecies(split[1]));
             if (split[2].length() > 0) {
-                ea.setPdbCodes(parsePdbCodes(split[2], split[3]));
+                ea.setPdbeaccession(parsePdbCodes(split[2], split[3]));
             }
             if (enzymeAccessions == null) {
                 enzymeAccessions = new ArrayList<EnzymeAccession>();
