@@ -88,7 +88,7 @@ public class ReactomeCallable {
 	                    pathwayName =
 	                            new String(inputLine.replaceAll(
 	                            "<TR><TD CLASS=\"eventname\" COLSPAN=\"2\">|</TD></TR>", "").trim());
-	                    System.out.println(pathwayName);
+	                    LOGGER.debug(pathwayName);
 	                }
 	                if (inputLine.contains("\"summation\"")) {
 	                    //Advance 1 line
@@ -96,13 +96,13 @@ public class ReactomeCallable {
 	                    description =
 	                            new String(inputLine.replaceAll(
 	                            "<TR><TD CLASS=\"summation\" COLSPAN=\"2\">|</TD></TR>", "").trim());
-	                    System.out.println(description);
+	                    LOGGER.debug(description);
 	                }
 	                if (inputLine.contains("\"figure\"")) {
 	                    image =
 	                            new String(inputLine.replaceAll(
 	                            "<TR><TD CLASS=\"figure\" COLSPAN=\"2\"><IMG SRC=\"|\" /></TD></TR>", "").trim());
-	                    System.out.println(image);
+	                    LOGGER.debug(image);
 	                    break;
 	                }
 	            }
