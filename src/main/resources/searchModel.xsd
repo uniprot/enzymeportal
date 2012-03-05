@@ -26,10 +26,9 @@
         	<xs:element name="uniprotaccessions" type="xs:string"
         		minOccurs="1" maxOccurs="unbounded" />
         	<xs:element name="species" type="ep:Species" minOccurs="1"
-        		maxOccurs="1" />
-        	<xs:element name="pdbCodes" type="xs:string" minOccurs="0"
-        		maxOccurs="unbounded" />
-        	<xs:element name="compounds" type="ep:Compound"
+        		maxOccurs="1" />
+            <xs:element name="pdbeaccession" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="compounds" type="ep:Compound"
         		minOccurs="0" maxOccurs="unbounded">
         	</xs:element>
         	<xs:element name="diseases" type="ep:Disease"
@@ -44,8 +43,7 @@
 					<xs:element name="ec" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
 					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="function" type="xs:string" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="synonym" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="pdbeaccession" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="synonym" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="uniprotid" type="xs:string" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="relatedspecies" type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded">
 						<xs:annotation>
