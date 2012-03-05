@@ -243,8 +243,8 @@
                                             <c:set var="imgFooter" value=""/>
                                             <c:if test="${empty imgFile}">
                                                 <c:forEach var="relSp" items="${enzyme.relatedspecies}">
-                                                    <c:if test="${empty imgFile and not empty relSp.pdbCodes}">
-                                                        <c:set var="imgFile" value="${relSp.pdbCodes[0]}"/>
+                                                    <c:if test="${empty imgFile and not empty relSp.pdbeaccession}">
+                                                        <c:set var="imgFile" value="${relSp.pdbeaccession[0]}"/>
                                                         <c:set var="imgFooter">
                                                             <spring:message code="label.entry.proteinStructure.other.species"/>
                                                             ${empty relSp.species.commonname?
@@ -363,7 +363,7 @@
                                                                     [${empty relspecies[i].species.commonname?
                                                                    relspecies[i].species.scientificname :
                                                                    relspecies[i].species.commonname}]-->
-                                                            <!-- ${relspecies[i].pdbCodes} -->
+                                                            <!-- ${relspecies[i].pdbeaccession} -->
 
                                                             <c:choose>
                                                                 <c:when test="${empty relspecies[i].species.commonname}">
@@ -385,7 +385,7 @@
                                                                             [${empty relspecies[i].species.commonname?
                                                                            relspecies[i].species.scientificname :
                                                                            relspecies[i].species.commonname}]-->
-                                                                    <!-- ${relspecies[i].pdbCodes} -->
+                                                                    <!-- ${relspecies[i].pdbeaccession} -->
 
 
                                                                     <c:choose>

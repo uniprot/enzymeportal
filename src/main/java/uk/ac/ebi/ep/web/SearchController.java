@@ -326,6 +326,7 @@ public class SearchController {
                                 if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
                                     enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
                                     enzymeSummary.setSpecies(enzymeAccession.getSpecies());
+                                    enzymeSummary.setPdbeaccession(enzymeAccession.getPdbeaccession());
                                     //enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
                                 }
 
