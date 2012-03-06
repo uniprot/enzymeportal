@@ -250,7 +250,6 @@ public class SearchController {
             Model model, HttpSession session) {
         String view = "search";
         clearHistory(session);
-        List<EnzymeSummary> summaryEntryFilteredResults = new LinkedList<EnzymeSummary>();
 
         if (searchModelForm != null) {
             try {
@@ -314,32 +313,11 @@ public class SearchController {
                     // Create a new SearchResults, don't modify the one in session
                     SearchResults sr = new SearchResults();
 
-                    /**
-                     * filter the result based on the species selected by user
-                     */
-                    List<String> checkBoxParams = searchParameters.getSpecies();
-                    for (EnzymeSummary enzymeSummary : filteredResults) {
-
-                        for (String selected : checkBoxParams) {
-                            for (EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()) {
-
-                                if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
-                                    enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
-                                    enzymeSummary.setSpecies(enzymeAccession.getSpecies());
-                                    enzymeSummary.setPdbeaccession(enzymeAccession.getPdbeaccession());
-                                    //enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
-                                }
-
-                            }
-                        }
-                        // adding the updated enzyme summaries to the filtered result
-                        summaryEntryFilteredResults.add(enzymeSummary);
-                    }
                     // Update the number of results to paginate:
-                    pagination.setNumberOfResults(summaryEntryFilteredResults.size());
+                    pagination.setNumberOfResults(filteredResults.size());
                     model.addAttribute("pagination", pagination);
                     sr.setSearchfilters(resultSet.getSearchfilters());
-                    sr.setSummaryentries(summaryEntryFilteredResults);
+                    sr.setSummaryentries(filteredResults);
                     // show the total number of hits (w/o filtering):
                     sr.setTotalfound(resultSet.getTotalfound());
                     searchModelForm.setSearchresults(sr);
@@ -350,15 +328,6 @@ public class SearchController {
 
                 model.addAttribute("searchModel", searchModelForm);
                 model.addAttribute("pagination", pagination);
-
-//                // Paginate:
-//                final int numOfResults =
-//                        searchModelForm.getSearchresults().getSummaryentries().size();
-//                Pagination pagination = new Pagination(
-//                        numOfResults, searchParameters.getSize());
-//               // pagination.setMaxDisplayedPages(searchConfig.getMaxPages());
-//                pagination.setFirstResult(searchParameters.getStart());
-//                model.addAttribute("pagination", pagination);
 
                 addToHistory(session,
                         "searchparams.text=" + searchParameters.getText());
