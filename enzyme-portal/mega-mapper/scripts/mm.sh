@@ -10,10 +10,17 @@ SWISSPROT=$UNIPROT_DATA/uniprot_sprot.xml
 TREMBL=$UNIPROT_DATA/uniprot_trembl.xml
 CHEBI=$EBINOCLE_DATA/chebi/latest/chebi_prod.xml
 CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target.xml
-UP_FILE=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
+UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
+
+EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
 
 . $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh ${1}
+. $(dirname $0)/mvnBuild.sh $1
+
+# Delete previous data:
+. $(dirname $0)/mm-delete.sh $1
+
+# Import all database IDs, accessions and xrefs:
 
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
@@ -37,7 +44,9 @@ echo "Finished ChEMBL import - $(date)"
 
 echo "Starting UniMed import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $UP_FILE
+	-dbConfig ep-mm-db-$1 -xmlFile $UNIMED
 echo "Finished UniMed import - $(date)"
 
-# TODO: make a backup of the new mega-map!
+# Backup the new data:
+. $(dirname $0)/mm-backup.sh $1
+
