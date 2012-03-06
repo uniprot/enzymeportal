@@ -233,13 +233,15 @@
                                 <c:forEach items="${summaryEntries}"
                                            begin="${pagination.firstResult}"
                                            end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
-                                    <c:set var="uniprotId" value="${enzyme.uniprotid}"/>                            
-                                    <c:set var="primAcc" value="${enzyme.uniprotaccessions[0]}"/>
+
+									<%@include file="util/prioritiseSpecies.jsp" %>
+
+                                    <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
                                     <div class="resultItem">
 
                                         <div class="proteinImg">
-                                            <c:set var="imgFile" value='${enzyme.pdbeaccession[0]}'/>
+                                            <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
                                             <c:set var="imgFooter" value=""/>
                                             <c:if test="${empty imgFile}">
                                                 <c:forEach var="relSp" items="${enzyme.relatedspecies}">
@@ -283,9 +285,9 @@
                                                 <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
                                                 <c:out value="${showName}"/>
                                                <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
-                                                [${empty enzyme.species.commonname?
-                                                   enzyme.species.scientificname :
-                                                   enzyme.species.commonname}]
+                                                [${empty theSpecies.species.commonname?
+                                                   theSpecies.species.scientificname :
+                                                   theSpecies.species.commonname}]
                                             </a>
 
 
