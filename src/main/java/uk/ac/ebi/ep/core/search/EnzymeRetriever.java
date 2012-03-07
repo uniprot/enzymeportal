@@ -244,17 +244,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         List<String> reactomeStableIds = null;// new ArrayList<String>();
         try {
             reactomeStableIds = biomartAdapter.getPathwaysByReactionId(reactomeReactionId); // FIXME THROWS EXC. FOR REACT_21342.1
-            System.out.println("stable IDs " + reactomeStableIds);
-            if (reactomeStableIds != null) {
-                for (String id : reactomeStableIds) {
-                    System.out.println("IDs = " + id);
-                }
-            }
         } catch (BiomartFetchDataException ex) {
             // throw new EnzymeRetrieverException("Failed to get reactome pathway stable ids "
             // + "from Biomart for Reaction " + reactomeReactionId, ex);
-            System.out.println("id " + reactomeStableIds);
-            System.out.println("Exception " + ex.getMessage());
+            LOGGER.fatal(ex);
         }
         pathways = getPathwayDescFromReactome(reactomeStableIds);
         return pathways;
