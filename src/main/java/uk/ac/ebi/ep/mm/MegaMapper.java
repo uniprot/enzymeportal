@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface for objects writing/reading entries and cross-references to/from
@@ -129,5 +130,10 @@ public interface MegaMapper {
 	 * @throws IOException 
 	 */
 	public void rollback() throws IOException;
+        
+        
+       List<String> getAllUniProtAccessions(MmDatabase database);
+            
+        
 
 }

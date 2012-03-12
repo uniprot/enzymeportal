@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -203,5 +204,9 @@ public class MegaLuceneMapper implements MegaMapper {
 		// TODO Auto-generated method stub
 		
 	}
+
+    public List<String> getAllUniProtAccessions(MmDatabase database) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }
