@@ -244,4 +244,8 @@ public class MegaDbMapper implements MegaMapper {
 		session.getTransaction().rollback();
 	}
 
+    public List<String> getAllUniProtAccessions(MmDatabase database) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

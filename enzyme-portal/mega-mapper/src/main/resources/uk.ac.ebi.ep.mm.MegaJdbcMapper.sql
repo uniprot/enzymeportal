@@ -24,6 +24,10 @@ SELECT * FROM mm_entry WHERE id = ?
 --entry.by.entryid:\
 SELECT * FROM mm_entry WHERE entry_id = ? AND db_name = ?
 
+--AllUniProtAccessions.accession:\
+SELECT ac.* FROM MM_ACCESSION ac, MM_ENTRY entry \
+ WHERE ac.ID = entry.ID and entry.DB_NAME = ? 
+
 --entry.by.accession:\
 SELECT mme.* FROM mm_entry mme, mm_accession mma \
 	WHERE mma.accession = ? AND mma.id = mme.id  AND mme.db_name = ?
