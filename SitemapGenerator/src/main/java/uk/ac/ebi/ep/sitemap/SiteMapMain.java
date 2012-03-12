@@ -14,15 +14,15 @@ public class SiteMapMain {
     //run this on commandline for maven using this command
     // mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.sitemap.SiteMapMain" -Dexec.args="ep-mm-db-enzdev C:/Users/joseph EnzymePortalSiteMap" 
     //change the dbconfig, filedirectory and filename as required
-    public static void main(String[] arg) throws SiteMapException {
+    public static void main(String[] args) throws SiteMapException {
 
-        String[] args = new String[3];
-        String dbConfig = "ep-mm-db-enzdev";
-        String userHome = System.getProperty("user.home");
-        String filename = "EnzymePortalSiteMap";
-        args[0] = dbConfig;
-        args[1] = userHome;
-        args[2] = filename;
+//        String[] args = new String[3];
+//        String dbConfig = "ep-mm-db-enzdev";
+//        String userHome = System.getProperty("user.home");
+//        String filename = "EnzymePortalSiteMap";
+//        args[0] = dbConfig;
+//        args[1] = userHome;
+//        args[2] = filename;
 
         if (args.length == 0) {
 
