@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -314,21 +316,33 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
     }
 
     /**
-     * Parses the strings returned from the UniProt web service for the PDB codes.
-     * @param pdbAccessions
-     * @param pdbMethods the methods used to resolve the structures. If all
-     * 		of them are theoretical models, no codes are returned.
-     * @return a list of Strings (PDB codes), or <code>null</code> if none is
-     * 		returned by the web service or if all of them are theoretical
-     * 		models. Currently there is no way to distinguish those in case
-     * 		the web service returns also some experimental ones, as the
-     * 		pdbAccessions seem to be ordered alphabetically.
+     * Parses the strings returned from the UniProt web service for the PDB
+     * codes, discarding any theoretical models for which there is no image
+     * available from PDBe website.
+     * @param pdbAccessions the PDB accessions. <i>Note that we are assuming
+     * 		that any theoretical models come always first.</i>
+     * @param pdbMethods the methods used to resolve the structures.
+     * @return a list of Strings (non-theoretical PDB codes), or
+     * 		<code>null</code> if none is returned by the web service or if all
+     * 		of them are theoretical models.
      */
-    private List<String> parsePdbCodes(String pdbAccessions, String pdbMethods) {
-        boolean theor = pdbMethods.matches("Model \\(\\d+\\)");
-        return (theor || pdbAccessions == null || pdbAccessions.length() == 0)
-                ? null
-                : Arrays.asList(pdbAccessions.toLowerCase().split(";"));
+    protected List<String> parsePdbCodes(String pdbAccessions, String pdbMethods) {
+    	List<String> result = null;
+    	if (pdbAccessions != null && pdbAccessions.length() > 0
+    			&& pdbMethods != null){
+        	Pattern p = Pattern.compile(".*Model \\((\\d+)\\).*");
+        	Matcher m = p.matcher(pdbMethods);
+        	int theorNum = 0;
+        	if (m.matches()){
+        		theorNum = Integer.parseInt(m.group(1));
+        	}
+            final String[] split = pdbAccessions.toLowerCase().split(";");
+            if (split.length > theorNum){
+            	// Get rid of the theoretical models, which come first:
+            	result = Arrays.asList(split).subList(theorNum, split.length);
+            }
+    	}
+    	return result;
     }
 
     private List<Disease> parseDiseases(String diseaseColumn) {
