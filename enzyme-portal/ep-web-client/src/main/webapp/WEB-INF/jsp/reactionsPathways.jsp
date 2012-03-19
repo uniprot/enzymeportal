@@ -19,7 +19,8 @@
                 this enzyme.</p>
             </c:when>
             <c:otherwise>
-                <c:forEach items="${reactionpathways}" var="reactionpathway">
+                <c:forEach items="${reactionpathways}" var="reactionpathway"
+                	varStatus="rpVs">
                     <c:set var="reaction" value="${reactionpathway.reaction}"/>
                     <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
                     <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
@@ -81,10 +82,17 @@
                                 </tr>
                             </table>
                         </div>
-                        <div id="reactionDesc">
+                        <div id="reactionDesc-${rpVs.index}">
                             <c:out value="${reaction.description}" escapeXml="false"/>
                         </div>
-                        <div id="rheaExtLinks">
+                        <div id="extLinks-${rpVs.index}">
+                     		<c:if test="${not empty reaction.xrefs}">
+                     			<div class="reactome inlineLinks">
+                                    <a target="blank" href="${reactomeBaseUrl}${reaction.xrefs[0]}">
+                                        <spring:message code="label.entry.reactionsPathways.link.reactome.reaction"/>
+                                    </a>
+                     			</div>
+                     		</c:if>
                             <c:if test="${not empty reaction.id}">
                                 <div class="rhea inlineLinks">
                                     <a target="blank" href="${rheaEntryUrl}">
@@ -107,7 +115,7 @@
                         <c:if test="${reaction != null}">
                             <spring:message code="label.entry.reactionsPathways.found.text" arguments="${pathwaysSize}"/>
                         </c:if>
-                        <div id="pathways">
+                        <div id="pathways-${rpVs.index}">
                             <c:forEach var="pathway" items="${reactionpathway.pathways}">
                                 <div id="pathway-${pathway.id}">
                                     <fieldset>
