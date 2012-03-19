@@ -35,15 +35,23 @@
                 <jsp:include page="subHeader.jsp"/>
                 <form:form id="entryForm" modelAttribute="enzymeModel" action="entry" method="GET">
                     <!--<c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&chebiId="/>-->
-                    <c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId="/>
-                    <c:set var="chebiImageParams" value="&dimensions=200&scaleMolecule=true"/>
-                    <c:set var="chebiEntryBaseUrl" value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId="/>
+                    <c:set var="chebiImageBaseUrl"
+                    	value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId="/>
+                    <c:set var="chebiImageParams"
+                    	value="&dimensions=200&scaleMolecule=true"/>
+                    <c:set var="chebiEntryBaseUrl"
+                    	value="http://www.ebi.ac.uk/chebi/searchId.do?chebiId="/>
                     <c:set var="chebiEntryBaseUrlParam" value=""/>
-                    <c:set var="rheaEntryBaseUrl" value="http://www.ebi.ac.uk/rhea/reaction.xhtml?id="/>
-                    <c:set var="intenzEntryBaseUrl" value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
-                    <c:set var="chemblImageBaseUrl" value="https://www.ebi.ac.uk/chembldb/compound/displayimage/"/>
-
-                    <c:set var="reactomeImageBaseUrl" value="http://www.reactome.org/"/>
+                    <c:set var="rheaEntryBaseUrl"
+                    	value="http://www.ebi.ac.uk/rhea/reaction.xhtml?id="/>
+                    <c:set var="intenzEntryBaseUrl"
+                    	value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
+                    <c:set var="chemblImageBaseUrl"
+                    	value="https://www.ebi.ac.uk/chembldb/compound/displayimage/"/>
+                    <c:set var="reactomeBaseUrl"
+                    	value="http://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID="/>
+                    <c:set var="reactomeImageBaseUrl"
+                    	value="http://www.reactome.org/"/>
 
                     <c:set var="enzyme" value="${enzymeModel.enzyme}"/>
                     <!--requestedfield is an enum type in the controller. Its value has to be one of the values in the Field variable in the controller-->
