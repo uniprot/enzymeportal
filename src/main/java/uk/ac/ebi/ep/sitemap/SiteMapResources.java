@@ -5,14 +5,17 @@
 package uk.ac.ebi.ep.sitemap;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 
 
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
@@ -130,5 +133,21 @@ public abstract class SiteMapResources<T> implements ISiteMap<T> {
             }
         }
 
+    }
+
+    /**
+     * This method is used to read the created sitemap( see JunitTest on how to use it)
+     * @param filePath the directory and filename
+     * @return a bufferedReader that reads the file
+     * @throws FileNotFoundException if the file is nto found
+     * @throws IOException 
+     */
+    protected BufferedReader readZipFile(String filePath) throws FileNotFoundException, IOException {
+
+        FileInputStream fin = new FileInputStream(filePath);
+        GZIPInputStream gzis = new GZIPInputStream(fin);
+        InputStreamReader xover = new InputStreamReader(gzis);
+        BufferedReader bufferedReader = new BufferedReader(xover);
+        return bufferedReader;
     }
 }

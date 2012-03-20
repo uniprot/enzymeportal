@@ -4,7 +4,7 @@
  */
 package uk.ac.ebi.ep.sitemap;
 
-import org.junit.experimental.categories.Category;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Collection;
@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  */
 public class SiteMapImplTest {
 
-    private SiteMapImpl instance = null;//new SiteMapImpl("ep-mm-db-enzdev");
+    private SiteMapImpl instance = null;
 
     public SiteMapImplTest() {
     }
@@ -66,8 +66,28 @@ public class SiteMapImplTest {
         System.out.println("Does File exists : " + outputData.exists());
         assertTrue(outputData.exists());
         System.out.println("Passed!");
-        outputData.delete();
+       // outputData.delete();
 
 
     }
-}
+    
+        /**
+     * Test of readZipFile method, of class SiteMapResources.
+     */
+    @Test
+    public void testReadZipFile() throws Exception {
+        System.out.println("readZipFile");
+                String fileDirectory = System.getProperty("user.home");
+        String filename = "EnzymePortalSiteMapTest";
+        String filePath = String.format("%s\\%s.xml.gz", fileDirectory, filename);
+
+        String line = null;
+        BufferedReader result = instance.readZipFile(filePath);
+        
+        while ((line = result.readLine()) != null) {
+           // System.out.println(line);
+        }
+        assertNotNull(result);
+
+    }
+    }

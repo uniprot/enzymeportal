@@ -4,9 +4,6 @@
  */
 package uk.ac.ebi.ep.sitemap;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -14,6 +11,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -104,6 +105,7 @@ public class SiteMapImpl extends SiteMapResources<File> {
         }
         try {
             marshaller.marshal(urlset, output);
+            makeGzip(output);
         } catch (Exception ex) {
             throw new SiteMapException("JAXBException while marshalling the output", ex, Severity.SYSTEM_AFFECTING);
         }
@@ -121,7 +123,6 @@ public class SiteMapImpl extends SiteMapResources<File> {
             outputStream = exportFile(fileDirectory, filename);
             List<String> input = getAccessions(MmDatabase.UniProt);
             this.generateSitemap(input, outputStream);
-            makeGzip(outputStream);
         } catch (FileNotFoundException ex) {
             LOGGER.error(String.format("This File %s and/or %s cannot be found", fileDirectory, filename), ex);
         } catch (IOException ex) {
@@ -132,7 +133,7 @@ public class SiteMapImpl extends SiteMapResources<File> {
 
         }
     }
-
+   
     private List<String> getAccessions(MmDatabase database) {
         List<String> accessions = null;
         if (accessions == null) {

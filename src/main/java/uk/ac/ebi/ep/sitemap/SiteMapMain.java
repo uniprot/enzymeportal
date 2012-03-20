@@ -1,32 +1,36 @@
 package uk.ac.ebi.ep.sitemap;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.exception.Severity;
 
 /**
- * Hello world!
+ * This is the main class for the sitemapGenerator.
+ * To run with maven, execute the following command.
+ * for example:
+ * mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.sitemap.SiteMapMain" -Dexec.args="ep-mm-db-enzdev C:/Users/joseph SiteMap" 
+ * where ep-mm-db-enzdev C:/Users/joseph SiteMap" are input parameters for DBConfig,
+ * fileDirectory and filename respectively.
  *
  */
 public class SiteMapMain {
 
-    private final static Logger LOGGER = Logger.getLogger(SiteMapResources.class);
+    private final static Logger LOGGER = Logger.getLogger(SiteMapMain.class);
 
-    //run this on commandline for maven using this command
-    // mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.sitemap.SiteMapMain" -Dexec.args="ep-mm-db-enzdev C:/Users/joseph EnzymePortalSiteMap" 
-    //change the dbconfig, filedirectory and filename as required
-    public static void main(String[] args) throws SiteMapException {
+    public static void main(String[] args) throws FileNotFoundException, SiteMapException, IOException {
 
-//        String[] args = new String[3];
+        args = new String[3];
 //        String dbConfig = "ep-mm-db-enzdev";
 //        String userHome = System.getProperty("user.home");
-//        String filename = "EnzymePortalSiteMap";
+//        String filename = "SiteMap";
 //        args[0] = dbConfig;
 //        args[1] = userHome;
 //        args[2] = filename;
 
-        if (args.length == 0) {
+        if (args.length == 0 || args.length > 3) {
 
-            throw new SiteMapException("These arguments are required. DbConfig, fileDirectory, and filename", Severity.WARNING);
+            throw new SiteMapException("Three arguments are required. DbConfig, fileDirectory, and filename", Severity.WARNING);
         } else {
 
 
