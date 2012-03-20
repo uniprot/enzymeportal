@@ -13,7 +13,7 @@
        http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util-2.5.xsd">
-	<context:component-scan base-package="uk.ac.ebi.ep.web" />
+    <context:component-scan base-package="uk.ac.ebi.ep.web" />
     <!--Enable Spring annotation for @Controller and @RequestMapping-->
  <!--
  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -33,9 +33,9 @@
     <util:list id="history" value-type="java.lang.String" scope="session" />
 
 	<!-- MBeans -->
-	<bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
-		<property name="autodetect" value="true"/>
-	</bean>
+    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+        <property name="autodetect" value="true"/>
+    </bean>
 
     <bean name="uk.ac.ebi.ep:name=searchConfig"
     	class="uk.ac.ebi.ep.core.search.Config"
@@ -49,60 +49,60 @@
         <property name="mmDatasource" value="jdbc/ep/mm"/>
     </bean>
 	
-	<bean name="uk.ac.ebi.ep:name=ebeyeConfig"
+    <bean name="uk.ac.ebi.ep:name=ebeyeConfig"
 		class="uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig">
-		<property name="resultsLimit" value="100"/>
-		<property name="maxAccessionsInQuery" value="100"/>
-		<property name="maxResults" value="2000"/>
-		<property name="maxChebiResults" value="30"/>
-		<property name="maxUniprotResults" value="1000"/>
-		<property name="maxUniprotResultsFromChebi" value="100"/>
-		<property name="maxUniprotResultsFromOtherDomains" value="100"/>
-		<property name="maxThreads" value="50"/>
-		<property name="threadTimeout" value="30000"/>
-	</bean>
+        <property name="resultsLimit" value="100"/>
+        <property name="maxAccessionsInQuery" value="100"/>
+        <property name="maxResults" value="2000"/>
+        <property name="maxChebiResults" value="30"/>
+        <property name="maxUniprotResults" value="1000"/>
+        <property name="maxUniprotResultsFromChebi" value="100"/>
+        <property name="maxUniprotResultsFromOtherDomains" value="100"/>
+        <property name="maxThreads" value="50"/>
+        <property name="threadTimeout" value="30000"/>
+    </bean>
 	
-	<bean name="uk.ac.ebi.ep:name=uniprotConfig"
+    <bean name="uk.ac.ebi.ep:name=uniprotConfig"
 		class="uk.ac.ebi.ep.adapter.uniprot.UniprotConfig">
-		<property name="timeout" value="30000"/>
-		<property name="reviewed" value="false"/>
-		<property name="wsUrl"
+        <property name="timeout" value="30000"/>
+        <property name="reviewed" value="false"/>
+        <property name="wsUrl"
 			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
-		<property name="useProxy" value="true"/>
-		<property name="maxTermsPerQuery" value="100"/>
-		<property name="maxThreads" value="100"/>
-	</bean>
+        <property name="useProxy" value="true"/>
+        <property name="maxTermsPerQuery" value="100"/>
+        <property name="maxThreads" value="100"/>
+    </bean>
 	
-	<bean name="uk.ac.ebi.ep:name=intenzConfig"
+    <bean name="uk.ac.ebi.ep:name=intenzConfig"
 		class="uk.ac.ebi.ep.adapter.intenz.IntenzConfig">
-		<property name="timeout" value="30000"/>
-	</bean>
+        <property name="timeout" value="30000"/>
+    </bean>
 	
-	<bean name="uk.ac.ebi.ep:name=reactomeConfig"
+    <bean name="uk.ac.ebi.ep:name=reactomeConfig"
 		class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
-		<property name="timeout" value="30000"/>
-		<property name="useProxy" value="true"/>
-		<property name="wsBaseUrl"
+        <property name="timeout" value="30000"/>
+        <property name="useProxy" value="true"/>
+        <property name="wsBaseUrl"
 			value="http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
-	</bean>
+    </bean>
 	
-	<bean name="uk.ac.ebi.ep:name=chebiConfig"
+    <bean name="uk.ac.ebi.ep:name=chebiConfig"
 		class="uk.ac.ebi.ep.adapter.chebi.ChebiConfig">
-		<property name="timeout" value="30000"/>
-		<property name="maxThreads" value="10"/>
-		<property name="searchStars" value="ALL"/>
-		<property name="maxRetrievedMolecules" value="3"/>
-	</bean>
+        <property name="timeout" value="30000"/>
+        <property name="maxThreads" value="10"/>
+        <property name="searchStars" value="ALL"/>
+        <property name="maxRetrievedMolecules" value="3"/>
+    </bean>
 	
-	<bean name="uk.ac.ebi.ep:name=bioportalConfig"
+    <bean name="uk.ac.ebi.ep:name=bioportalConfig"
 		class="uk.ac.ebi.ep.adapter.bioportal.BioportalConfig">
-		<property name="useProxy" value="true"/>
-		<property name="searchUrl"
+        <property name="useProxy" value="true"/>
+        <property name="searchUrl"
 			value="http://rest.bioontology.org/bioportal/search/?ontologyids={0}&amp;query={1}&amp;isexactmatch={2}&amp;apikey=9f19fdf6-82d0-4335-97a1-f71d3ce156f6"/>
-		<property name="getUrl"
+        <property name="getUrl"
 			value="http://rest.bioontology.org/bioportal/concepts/{0}?conceptid={1}&amp;light=1&amp;apikey=9f19fdf6-82d0-4335-97a1-f71d3ce156f6"/>
-		<property name="timeout" value="30000"/>
-	</bean>
+        <property name="timeout" value="30000"/>
+    </bean>
 	
     <!--Start internationalization-->
     <bean id="messageSource"
