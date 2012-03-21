@@ -20,7 +20,7 @@ public class SiteMapMain {
 
     public static void main(String[] args) throws FileNotFoundException, SiteMapException, IOException {
 
-        args = new String[3];
+//        args = new String[3];
 //        String dbConfig = "ep-mm-db-enzdev";
 //        String userHome = System.getProperty("user.home");
 //        String filename = "SiteMap";

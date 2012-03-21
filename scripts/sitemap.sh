@@ -14,6 +14,8 @@ FILE_NAME=$3
 #build the application using maven
 . $(dirname $0)/mvnBuild.sh
 
+# Increase memory for maven (it's a lot of data):
+export MAVEN_OPTS="-Xms512M -Xmx1G"
 
 # Running the application:
 echo "[INFO] Running siteMap Generator -  $(date)"
