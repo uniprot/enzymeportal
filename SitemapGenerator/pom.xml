@@ -56,7 +56,8 @@
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
-                    <include>ep-mm-db-enzdev.properties</include>
+                    <include>ep-mm-db-enzdev-ro.properties</include>
+                    <include>ep-mm-db-ezprel-ro.properties</include>
                 </includes>
             </resource>
         </resources>
