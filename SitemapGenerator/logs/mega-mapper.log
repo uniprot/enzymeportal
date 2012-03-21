@@ -1,0 +1,338 @@
+[INFO]-[2012-03-12 09:19:05,035]-DatabaseInstance-uk.ac.ebi.ep.sitemap.SiteMapMain.main()- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:19:05,519]-DatabaseInstance-uk.ac.ebi.ep.sitemap.SiteMapMain.main()- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:40:56,457]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:40:57,081]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[FATAL]-[2012-03-12 09:40:57,487]-MegaJdbcMapper-main- Error retrieving accession from UniProt
+java.sql.SQLException: ORA-00933: SQL command not properly ended
+
+	at oracle.jdbc.driver.SQLStateMapping.newSQLException(SQLStateMapping.java:74)
+	at oracle.jdbc.driver.DatabaseError.newSQLException(DatabaseError.java:131)
+	at oracle.jdbc.driver.DatabaseError.throwSqlException(DatabaseError.java:204)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:455)
+	at oracle.jdbc.driver.T4CTTIoer.processError(T4CTTIoer.java:413)
+	at oracle.jdbc.driver.T4C8Oall.receive(T4C8Oall.java:1034)
+	at oracle.jdbc.driver.T4CPreparedStatement.doOall8(T4CPreparedStatement.java:194)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeForDescribe(T4CPreparedStatement.java:791)
+	at oracle.jdbc.driver.T4CPreparedStatement.executeMaybeDescribe(T4CPreparedStatement.java:866)
+	at oracle.jdbc.driver.OracleStatement.doExecuteWithTimeout(OracleStatement.java:1186)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeInternal(OraclePreparedStatement.java:3387)
+	at oracle.jdbc.driver.OraclePreparedStatement.executeQuery(OraclePreparedStatement.java:3431)
+	at oracle.jdbc.driver.OraclePreparedStatementWrapper.executeQuery(OraclePreparedStatementWrapper.java:1203)
+	at uk.ac.ebi.ep.mm.MegaJdbcMapper.getAllUniProtAccessions(MegaJdbcMapper.java:449)
+	at uk.ac.ebi.ep.sitemap.SiteMapImpl.getAccessions(SiteMapImpl.java:147)
+	at uk.ac.ebi.ep.sitemap.SiteMapImpl.generateSitemap(SiteMapImpl.java:128)
+	at uk.ac.ebi.ep.sitemap.SiteMapMain.main(SiteMapMain.java:38)
+[INFO]-[2012-03-12 09:48:28,553]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:48:29,193]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:50:30,686]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:50:31,279]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:54:07,718]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 09:54:08,640]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:01,588]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:02,529]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:03,738]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:03,786]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:03,865]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:03,909]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:03,975]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:05:04,017]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:24,491]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:25,401]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:26,571]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:26,620]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:26,717]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:26,761]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:26,840]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:06:26,884]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:22:56,734]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:22:57,662]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:22:58,809]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:22:58,854]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:26:19,719]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:26:20,631]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:26:21,805]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:26:21,851]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:29:05,376]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:29:06,234]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:29:07,324]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:29:07,371]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:33:23,998]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:33:24,915]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:33:26,074]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:33:26,119]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:34:20,098]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:34:21,023]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:34:22,167]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:34:22,219]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:36:09,254]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:36:10,197]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:36:11,370]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:36:11,422]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:47:07,979]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:47:08,868]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:47:09,960]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:47:10,007]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:48:30,051]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:48:30,940]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:48:32,017]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:48:32,064]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:52:46,325]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:52:47,263]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:52:48,416]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:52:48,464]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:53:40,687]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:53:41,586]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:53:42,739]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:53:42,791]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:58:31,588]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:58:32,508]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:58:33,585]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 10:58:33,631]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:00:09,714]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:00:10,572]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:00:11,648]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:00:11,695]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:33,459]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:34,348]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:35,456]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:35,503]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:54,445]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:55,351]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:56,443]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:07:56,490]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:10:57,635]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:10:58,539]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:10:59,647]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:10:59,694]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:11:42,405]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:11:43,326]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:11:44,418]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:11:44,465]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:13:27,679]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:13:28,600]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:13:29,708]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:13:29,754]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:02,092]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:02,934]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:04,151]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:04,198]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:23,809]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:24,713]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:25,822]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:14:25,869]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:16:13,418]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:16:14,276]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:16:15,340]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:16:15,383]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:17:37,910]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:17:38,783]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:17:39,875]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:17:39,922]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:20:11,465]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:20:12,412]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:30:15,549]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:30:16,173]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:33:52,207]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:33:52,877]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:34:58,702]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:34:59,364]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:35:38,357]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:35:39,020]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:39:06,854]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:39:07,465]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:43:28,951]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:43:29,606]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:46:29,490]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:46:30,130]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:47:55,723]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:47:56,316]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:53:02,558]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:53:03,473]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[ERROR]-[2012-03-12 11:54:22,832]-DatabaseInstance-main- Unable to open configuration file any
+[FATAL]-[2012-03-12 11:54:22,834]-SiteMapResources-main- IOException while creating the megaMapper
+java.io.IOException: Unable to open configuration file any
+	at uk.ac.ebi.biobabel.util.db.DatabaseInstance.loadProperties(DatabaseInstance.java:137)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.loadProperties(OracleDatabaseInstance.java:55)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.getInstance(OracleDatabaseInstance.java:75)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.getConnection(SiteMapResources.java:63)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.initMegaMapper(SiteMapResources.java:50)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.<init>(SiteMapResources.java:39)
+	at uk.ac.ebi.ep.sitemap.SiteMapImpl.<init>(SiteMapImpl.java:57)
+	at uk.ac.ebi.ep.sitemap.SiteMapImplTest.setUp(SiteMapImplTest.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:518)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1052)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:906)
+[ERROR]-[2012-03-12 11:55:42,949]-DatabaseInstance-main- Unable to open configuration file some configuration
+[FATAL]-[2012-03-12 11:55:42,950]-SiteMapResources-main- IOException while creating the megaMapper
+java.io.IOException: Unable to open configuration file some configuration
+	at uk.ac.ebi.biobabel.util.db.DatabaseInstance.loadProperties(DatabaseInstance.java:137)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.loadProperties(OracleDatabaseInstance.java:55)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.getInstance(OracleDatabaseInstance.java:75)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.getConnection(SiteMapResources.java:63)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.initMegaMapper(SiteMapResources.java:50)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.<init>(SiteMapResources.java:39)
+	at uk.ac.ebi.ep.sitemap.SiteMapImpl.<init>(SiteMapImpl.java:57)
+	at uk.ac.ebi.ep.sitemap.SiteMapImplTest.setUp(SiteMapImplTest.java:49)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:518)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1052)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:906)
+[INFO]-[2012-03-12 11:56:30,380]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 11:56:31,033]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[ERROR]-[2012-03-12 12:07:57,897]-DatabaseInstance-main- Unable to open configuration file some configuration
+[FATAL]-[2012-03-12 12:07:57,897]-SiteMapResources-main- IOException while creating the megaMapper
+java.io.IOException: Unable to open configuration file some configuration
+	at uk.ac.ebi.biobabel.util.db.DatabaseInstance.loadProperties(DatabaseInstance.java:137)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.loadProperties(OracleDatabaseInstance.java:55)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.getInstance(OracleDatabaseInstance.java:75)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.getConnection(SiteMapResources.java:63)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.initMegaMapper(SiteMapResources.java:50)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.<init>(SiteMapResources.java:39)
+	at uk.ac.ebi.ep.sitemap.SiteMapImpl.<init>(SiteMapImpl.java:57)
+	at uk.ac.ebi.ep.sitemap.SiteMapImplTest.setUp(SiteMapImplTest.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:518)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1052)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:906)
+[ERROR]-[2012-03-12 12:10:49,932]-DatabaseInstance-main- Unable to open configuration file some configuration
+[FATAL]-[2012-03-12 12:10:49,932]-SiteMapResources-main- IOException while creating the megaMapper
+java.io.IOException: Unable to open configuration file some configuration
+	at uk.ac.ebi.biobabel.util.db.DatabaseInstance.loadProperties(DatabaseInstance.java:137)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.loadProperties(OracleDatabaseInstance.java:55)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.getInstance(OracleDatabaseInstance.java:75)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.getConnection(SiteMapResources.java:63)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.initMegaMapper(SiteMapResources.java:50)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.<init>(SiteMapResources.java:39)
+	at uk.ac.ebi.ep.sitemap.SiteMapImpl.<init>(SiteMapImpl.java:57)
+	at uk.ac.ebi.ep.sitemap.SiteMapImplTest.setUp(SiteMapImplTest.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:518)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1052)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:906)
+[ERROR]-[2012-03-12 12:14:08,476]-DatabaseInstance-main- Unable to open configuration file some configuration
+[FATAL]-[2012-03-12 12:14:08,476]-SiteMapResources-main- IOException while creating the megaMapper
+java.io.IOException: Unable to open configuration file some configuration
+	at uk.ac.ebi.biobabel.util.db.DatabaseInstance.loadProperties(DatabaseInstance.java:137)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.loadProperties(OracleDatabaseInstance.java:55)
+	at uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance.getInstance(OracleDatabaseInstance.java:75)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.getConnection(SiteMapResources.java:63)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.initMegaMapper(SiteMapResources.java:50)
+	at uk.ac.ebi.ep.sitemap.SiteMapResources.<init>(SiteMapResources.java:39)
+	at uk.ac.ebi.ep.sitemap.SiteMapImpl.<init>(SiteMapImpl.java:57)
+	at uk.ac.ebi.ep.sitemap.SiteMapImplTest.setUp(SiteMapImplTest.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:27)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:76)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:50)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:39)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:518)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1052)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:906)
+[INFO]-[2012-03-12 12:23:22,603]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 12:23:23,477]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 12:28:40,375]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 12:28:41,313]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 12:28:42,498]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 12:28:42,529]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 12:30:04,758]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 12:30:05,476]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:27:17,850]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:27:18,755]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:28:58,914]-DatabaseInstance-main- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:28:59,585]-DatabaseInstance-main- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:35:32,408]-DatabaseInstance-uk.ac.ebi.ep.sitemap.SiteMapMain.main()- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:35:32,728]-DatabaseInstance-uk.ac.ebi.ep.sitemap.SiteMapMain.main()- Connected to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:45:44,796]-DatabaseInstance-uk.ac.ebi.ep.sitemap.SiteMapMain.main()- Connecting to enzyme_portal@ENZDEV
+[INFO]-[2012-03-12 13:45:45,123]-DatabaseInstance-uk.ac.ebi.ep.sitemap.SiteMapMain.main()- Connected to enzyme_portal@ENZDEV
