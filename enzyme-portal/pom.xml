@@ -176,5 +176,6 @@
     <module>biomart-adapter</module>
     <module>mega-mapper</module>
     <module>bioportal-adapter</module>
+    <module>SitemapGenerator</module>
   </modules>
 </project>
