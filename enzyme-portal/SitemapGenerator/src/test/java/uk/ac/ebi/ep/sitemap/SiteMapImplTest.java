@@ -79,7 +79,7 @@ public class SiteMapImplTest {
         System.out.println("readZipFile");
                 String fileDirectory = System.getProperty("user.home");
         String filename = "EnzymePortalSiteMapTest";
-        String filePath = String.format("%s\\%s.xml.gz", fileDirectory, filename);
+        String filePath = String.format("%s/%s.xml.gz", fileDirectory, filename);
 
         String line = null;
         BufferedReader result = instance.readZipFile(filePath);
