@@ -26,6 +26,8 @@ import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
 import uk.ac.ebi.ep.adapter.reactome.IReactomeAdapter;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeAdapter;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeServiceException;
+import uk.ac.ebi.ep.adapter.rhea.IRheaAdapter;
+import uk.ac.ebi.ep.adapter.rhea.RheaWsAdapter;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotWsException;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
@@ -43,9 +45,7 @@ import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
-import uk.ac.ebi.rhea.ws.client.IRheaAdapter;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
-import uk.ac.ebi.rhea.ws.client.RheasResourceClient;
 import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 import uk.ac.ebi.util.result.DataTypeConverter;
 
@@ -72,7 +72,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever(Config searchConfig) {
         super(searchConfig);
-        rheaAdapter = new RheasResourceClient();
+        rheaAdapter = new RheaWsAdapter();
         chebiAdapter = new ChebiAdapter();
         biomartAdapter = new BiomartAdapter();
         bioportalAdapter = new BioportalWsAdapter();
