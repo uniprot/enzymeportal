@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
 public class SiteMapImplTest {
 
     private SiteMapImpl instance = null;
+    private String fileDirectory = System.getProperty("user.home");
+    private String filename = "EnzymePortalSiteMapTest";
 
     public SiteMapImplTest() {
     }
@@ -56,8 +58,6 @@ public class SiteMapImplTest {
         inputData.add("A8ADR3");
         inputData.add("B3R112");
 
-        String fileDirectory = System.getProperty("user.home");
-        String filename = "EnzymePortalSiteMapTest";
         String output = String.format("%s/%s.xml", fileDirectory, filename);
 
         File outputData = new File(output);
@@ -66,28 +66,28 @@ public class SiteMapImplTest {
         System.out.println("Does File exists : " + outputData.exists());
         assertTrue(outputData.exists());
         System.out.println("Passed!");
-       // outputData.delete();
+        outputData.delete();
 
 
     }
-    
-        /**
+
+    /**
      * Test of readZipFile method, of class SiteMapResources.
      */
     @Test
     public void testReadZipFile() throws Exception {
         System.out.println("readZipFile");
-                String fileDirectory = System.getProperty("user.home");
-        String filename = "EnzymePortalSiteMapTest";
+
         String filePath = String.format("%s/%s.xml.gz", fileDirectory, filename);
 
         String line = null;
         BufferedReader result = instance.readZipFile(filePath);
-        
+
         while ((line = result.readLine()) != null) {
-           // System.out.println(line);
+            // System.out.println(line);
         }
         assertNotNull(result);
+        System.out.println("PASSED!");
 
     }
-    }
+}
