@@ -38,12 +38,6 @@
             <artifactId>mega-mapper</artifactId>
             <version>${project.version}</version>
         </dependency>
-<!--        <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>ep-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>-->
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc5</artifactId>
