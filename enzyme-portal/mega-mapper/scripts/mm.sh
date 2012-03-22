@@ -50,3 +50,6 @@ echo "Finished UniMed import - $(date)"
 # Backup the new data:
 . $(dirname $0)/mm-backup.sh $1
 
+# Generate statistics:
+. $(dirname $0)/mm-statistics.sh $1
+
