@@ -9,5 +9,7 @@
 STATS_SQL=$(dirname $0)/../src/main/sql/util/statistics
 TSV_FILE=$(dirname $0)/../src/site/resources/statistics/stats-${NOW}.tsv
 
-sqlplus ${DB_USER}/${DB_PASSWD}@${1} @${STATS_SQL} > ${TSV_FILE}
+echo "Generating statistics..."
+sqlplus ${DB_USER}/${DB_PASSWD}@${1} @${STATS_SQL} ${TSV_FILE}
+echo "Statistics dumped to file $TSV_FILE"
 
