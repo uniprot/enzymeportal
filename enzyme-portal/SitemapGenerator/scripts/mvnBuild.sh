@@ -2,4 +2,4 @@
 # Build the SiteMapgenerator using maven 
 
 cd $(dirname $0)/..
-mvn -DskipTests=true clean package
+mvn -DskipTests=false clean package
