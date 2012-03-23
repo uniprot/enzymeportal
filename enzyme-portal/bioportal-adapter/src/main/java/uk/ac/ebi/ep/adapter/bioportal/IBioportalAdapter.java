@@ -2,6 +2,11 @@ package uk.ac.ebi.ep.adapter.bioportal;
 
 import uk.ac.ebi.ep.enzyme.model.Disease;
 
+/**
+ * Proxy to get data from BioPortal.
+ * @author rafa
+ *
+ */
 public interface IBioportalAdapter {
 	
 	/**

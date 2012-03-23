@@ -9,12 +9,11 @@
 	</properties>
 	
 	<body>
-		<section name="Enzyme Portal">
-
-			<subsection name="">
-				<p></p>
-			</subsection>
-			
+		<section name="BioPortal adapter">
+			<p>
+				A module providing proxy functionality to <a
+				href="http://bioportal.bioontology.org/resources">BioPortal</a>.
+			</p>
 		</section>
 	</body>
 </document>

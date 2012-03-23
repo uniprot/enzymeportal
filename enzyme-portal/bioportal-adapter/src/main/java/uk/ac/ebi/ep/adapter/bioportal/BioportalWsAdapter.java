@@ -21,11 +21,22 @@ import uk.ac.ebi.biobabel.util.xml.XPathSAXHandler;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 
+/**
+ * Implementation of {@link IBioportalAdapter} using the
+ * <a href="http://www.bioontology.org/wiki/index.php/NCBO_REST_services">NCBO
+ * Bioportal web services</a>.
+ * @author rafa
+ *
+ */
 public class BioportalWsAdapter implements IBioportalAdapter {
 
 	private static final Logger LOGGER =
 			Logger.getLogger(BioportalWsAdapter.class);
 	
+	/**
+	 * Ontologies available from BioPortal and used by Enzyme Portal.
+	 * @author rafa
+	 */
 	public static enum BioportalOntology {
 		EFO("1136"),
 		OMIM("1348");
