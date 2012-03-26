@@ -6,5 +6,5 @@
 . $(dirname $0)/readDbConfig.sh
 
 echo 'commit; exit' | sqlplus ${DB_USER}/${DB_PASSWD}@${1} \
-    $(dirname $0)/../src/main/sql/delete_all
+    @$(dirname $0)/../src/main/sql/delete_all
 
