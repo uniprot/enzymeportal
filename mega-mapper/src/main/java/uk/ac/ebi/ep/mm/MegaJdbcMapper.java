@@ -391,6 +391,59 @@ public class MegaJdbcMapper implements MegaMapper {
         return xrefs;
     }
 
+    /**
+     * retrieves a List of XRef with database name as ChEMBL.
+     * @param db database where the accession is found
+     * @param accession the accession number
+     * @param xDbs chEMBL database
+     * @return a List of XRef with database name as chEMBL. 
+     * Note: the maximum number of XRef retrieved is 5.
+     */
+    public List<XRef> getChMBLXrefs(MmDatabase db, String accession,
+            MmDatabase... xDbs) {
+        List<XRef> xrefs = null;
+        try {
+            if (xrefs == null) {
+                xrefs = new ArrayList<XRef>();
+            }
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--xrefs.by.ChEMBL", dbArrayForQuery(xDbs));
+            ps.setString(1, accession);
+            ps.setString(2, db.name());
+            xrefs = buildXref(ps.executeQuery());
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + xDbs + ")", e);
+        }
+
+        return xrefs;
+    }
+
+    /**
+     * retrieves the total number of Xrefs found for a given accession.
+     * @param db the database where the accession is found
+     * @param accession the accession number
+     * @param xDb the referencing/referenced database(s).
+     * @return the total number of Xrefs found or 0 if none was found.
+     */
+    public int getXrefsSize(MmDatabase db, String accession,
+            MmDatabase... xDbs) {
+        int total = 0;
+        try {
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--xrefs.by.accession.total", dbArrayForQuery(xDbs));
+            ps.setString(1, accession);
+            ps.setString(2, db.name());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                total = rs.getInt("rowcount");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + xDbs + ")", e);
+        }
+
+        return total;
+    }
+
     public void handleError() throws IOException {
         closeStatements();
     }

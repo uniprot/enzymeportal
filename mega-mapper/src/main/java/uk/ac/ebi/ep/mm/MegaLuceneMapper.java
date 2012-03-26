@@ -209,4 +209,12 @@ public class MegaLuceneMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public List<XRef> getChMBLXrefs(MmDatabase db, String accession, MmDatabase... xDb) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int getXrefsSize(MmDatabase db, String accession, MmDatabase... xDb) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }
