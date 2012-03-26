@@ -16,7 +16,8 @@
         		maxOccurs="unbounded" />
             <xs:element name="bioactiveLigands" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"></xs:element>
             <xs:element name="provenance" type="xs:string" minOccurs="1"
-        		maxOccurs="unbounded" />
+        		maxOccurs="unbounded" />
+      <xs:element name="totalFound" type="xs:int"/>
         </xs:sequence>
     </xs:complexType>
     <xs:element name="DASSummary" type="epe:DASSummary"/>
