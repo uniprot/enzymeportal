@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.core.search;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -377,8 +378,13 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             if (megaMapperConnection != null) {
                 // Search the mega-map for xrefs from UniProt to ChEMBL:
                 LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
-                Collection<XRef> chemblXrefs = megaMapperConnection.getMegaMapper().getXrefs(
+                //this is the total number of CheMBL molecules found
+                int totalFound = megaMapperConnection.getMegaMapper().getXrefsSize(
                         MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
+                List<XRef> chemblXrefs = new ArrayList<XRef>(totalFound);
+                List<XRef> chembl = megaMapperConnection.getMegaMapper().getChMBLXrefs(
+                        MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
+                chemblXrefs.addAll(chembl);
                 LOGGER.debug("MOLECULES before getting ChEMBL molecules");
                 if (chemblXrefs != null) {
                     Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
@@ -387,6 +393,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                         chemblDrugs.add(chemblDrug);
                     }
                     enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
+                    enzymeModel.getMolecule().setTotalFound(totalFound);
                 }
             }
             LOGGER.debug("MOLECULES before getting complete entries from ChEBI");

@@ -53,7 +53,7 @@ public final class MegaMapperConnection {
      * 
      * @return the created connection
      */
-    public final Connection getConnection() {
+    public Connection getConnection() {
         if (connection == null) {
             try {
                 connection = getConnection(mmDatasource);
@@ -71,7 +71,7 @@ public final class MegaMapperConnection {
      * 
      * @return an instance of the MegaMapper
      */
-    public final MegaMapper getMegaMapper() {
+    public MegaMapper getMegaMapper() {
         final Connection conn = this.getConnection();
         try {
             if (megaMapper == null) {
