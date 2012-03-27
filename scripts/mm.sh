@@ -18,9 +18,11 @@ EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
 . $(dirname $0)/mvnBuild.sh $1
 
 # Delete previous data:
+echo -e "\n*************************************************************\n"
 . $(dirname $0)/mm-delete.sh $1
 
 # Import all database IDs, accessions and xrefs:
+echo -e "\n*************************************************************\n"
 
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
@@ -48,8 +50,10 @@ java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
 echo "Finished UniMed import - $(date)"
 
 # Backup the new data:
+echo -e "\n*************************************************************\n"
 . $(dirname $0)/mm-backup.sh $1
 
 # Generate statistics:
+echo -e "\n*************************************************************\n"
 . $(dirname $0)/mm-statistics.sh $1
 
