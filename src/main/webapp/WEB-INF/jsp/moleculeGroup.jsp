@@ -34,13 +34,18 @@
                 </c:forEach>
             </div>
             <c:if test="${fn:length(moleculeGroup) gt 3}">
-<!--		        <a href="${moleculeGroupUrl}">See all
-                ${fn:length(moleculeGroup)} ${emptyArgs}
-                in ${moleculeGroupDb}</a>-->
-
-                <a href="${moleculeGroupUrl}">See all
-                    ${molecules.totalFound} ${emptyArgs}
-                    in ${moleculeGroupDb}</a>
+                <c:choose>
+                    <c:when test='${emptyArgs== "bioactive compounds"}'>
+                        <a href="${moleculeGroupUrl}">See all
+                            ${molecules.totalFound} ${emptyArgs}
+                            in ${moleculeGroupDb}</a>
+                        </c:when>
+                        <c:otherwise>
+                        <a href="${moleculeGroupUrl}">See all
+                            ${fn:length(moleculeGroup)} ${emptyArgs}
+                            in ${moleculeGroupDb}</a>
+                        </c:otherwise>
+                    </c:choose>
 
                 <%--
                         <c:choose>
