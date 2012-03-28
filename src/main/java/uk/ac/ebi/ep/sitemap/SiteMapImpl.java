@@ -90,7 +90,7 @@ public class SiteMapImpl extends SiteMapResources<File> {
         enzymePortalUrl.setLoc(ENZYME_PORTAL_URL);
         enzymePortalUrl.setLastmod(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         enzymePortalUrl.setChangefreq(CHANGE_FREQ);
-        enzymePortalUrl.setPriority(new BigDecimal(0.8).setScale(1, BigDecimal.ROUND_DOWN));
+        enzymePortalUrl.setPriority(new BigDecimal("0.8").setScale(1, BigDecimal.ROUND_DOWN));
         urlset.getUrl().add(enzymePortalUrl);
 
         for (Object input : inputData) {
