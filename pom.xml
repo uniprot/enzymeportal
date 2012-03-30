@@ -4,7 +4,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>EnzymePortalProject</name>
     <url>http://enzymeportal.sf.net</url>
     <organization>
@@ -59,7 +59,7 @@
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
         </repository>
         <repository>
-            <releases />
+            <releases/>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -71,7 +71,7 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
-            <snapshots />
+            <snapshots/>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
