@@ -113,12 +113,12 @@
     </issueManagement>
     <scm>
         <connection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk/enzyme-portal
         </connection>
         <developerConnection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk/enzyme-portal
         </developerConnection>
-        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/trunk/</url>
+        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/trunk/enzyme-portal/</url>
     </scm>
     <build>
         <plugins>
