@@ -4,7 +4,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>EnzymePortalProject</name>
     <url>http://enzymeportal.sf.net</url>
     <organization>
@@ -113,12 +113,12 @@
     </issueManagement>
     <scm>
         <connection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-1.0
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk
         </connection>
         <developerConnection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-1.0
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk
         </developerConnection>
-        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/ep-1.0</url>
+        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/trunk/</url>
     </scm>
     <build>
         <plugins>
