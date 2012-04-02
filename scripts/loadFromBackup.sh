@@ -15,19 +15,19 @@ read ok
 [ ! -e "$2" ] && echo "Please especify an oracle dump file" && exit 1
 
 # Check if dump file is gzipped, unpack if needed:
-if [ "$(file $1 | grep -c 'gzip compressed data')" == 1 ]
+if [ "$(file $2 | grep -c 'gzip compressed data')" == 1 ]
 then
-    echo "$1 - dump file is gzipped"
+    echo "$2 - Unpacking gzipped dump file..."
     # Unpack dump file
     TMP_DMP=$$.dmp
-    gunzip -c $1 > $TMP_DMP
+    gunzip -c $2 > $TMP_DMP
     DMP=$TMP_DMP
 fi
 
-. $(dirname $0)/mm-delete.sh $1
+. $(dirname $0)/mm-drop.sh $1
 
 echo "Importing from backup..."
-$ORACLE_HOME/bin/imp ${DB_USER}/${DB_PASSWD}@enzdev \
+$ORACLE_HOME/bin/imp ${DB_USER}/${DB_PASSWD}@$1 \
     file=$DMP log=$(dirname $0)/ep-mm-imp.log
 
 # Clean up:
