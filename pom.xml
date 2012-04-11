@@ -4,6 +4,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
+        <relativePath/>
         <version>1.0</version>
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
