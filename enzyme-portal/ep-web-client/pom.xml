@@ -13,6 +13,18 @@
     <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 	
+    <repositories>
+        <repository>
+            <releases />
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>ebi-repo</id>
+            <name>EBI maven repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+    </repositories>
+
     <organization>
         <name>EMBL-EBI</name>
         <url>http://www.ebi.ac.uk</url>
