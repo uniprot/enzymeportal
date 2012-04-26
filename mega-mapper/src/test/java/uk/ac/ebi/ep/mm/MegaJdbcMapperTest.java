@@ -17,11 +17,12 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 
-//@Ignore
+@Ignore
 public class MegaJdbcMapperTest {
 
     private MegaJdbcMapper mm;
