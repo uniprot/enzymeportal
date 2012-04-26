@@ -224,18 +224,18 @@ public class MegaJdbcMapperTest {
         logger.info("After xrefsByAccession");
     }
 
-    /**
-     * Test of getAllUniProtAccessions method, of class MegaJdbcMapper.
-     */
-    @Test
-    public void testGetAllUniProtAccessions() {
-        System.out.println("getAllUniProtAccessions");
-        MmDatabase database = MmDatabase.UniProt;
-
-        List result = mm.getAllUniProtAccessions(database);
-        //assertNotNull(result);
-
-    }
+//    /**
+//     * Test of getAllUniProtAccessions method, of class MegaJdbcMapper.
+//     */
+//    @Test
+//    public void testGetAllUniProtAccessions() {
+//        System.out.println("getAllUniProtAccessions");
+//        MmDatabase database = MmDatabase.UniProt;
+//
+//        List result = mm.getAllUniProtAccessions(database);
+//        //assertNotNull(result);
+//
+//    }
     
 //    @Test
 //    public void getCompounds() {
