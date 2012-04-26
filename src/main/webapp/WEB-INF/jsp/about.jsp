@@ -65,6 +65,9 @@
 		<a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/">let
 		us know</a> what you think!
 	</p>
+        	                <div style="text-align: right;">
+                                    <a href="faq.jsp" class="showLink">Frequently asked questions ....</a>
+	                </div>
 
 	<h2>The Enzyme Portal Team</h2>
 	<img alt="The Enzyme Portal team" width="400"
