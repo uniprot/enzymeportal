@@ -4,7 +4,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>EnzymePortalProject</name>
     <url>http://enzymeportal.sf.net</url>
     <organization>
@@ -113,12 +113,12 @@
     </issueManagement>
     <scm>
         <connection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk/enzyme-portal
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-1.0.1
         </connection>
         <developerConnection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk/enzyme-portal
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-1.0.1
         </developerConnection>
-        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/trunk/enzyme-portal/</url>
+        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/ep-1.0.1</url>
     </scm>
     <build>
         <plugins>
@@ -159,9 +159,6 @@
     </build>
     
     <reporting>
-    	<!-- MOVE THESE PLUGINS TO
-    	build/plugins/plugin(maven-site-plugin v3.0)/configuration/reportPlugins
-    	-->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
