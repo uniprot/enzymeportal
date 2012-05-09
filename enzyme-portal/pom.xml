@@ -6,8 +6,7 @@
     <packaging>pom</packaging>
     <version>1.0.2-SNAPSHOT</version>
     <name>EnzymePortalProject</name>
-     <relativePath>../pom.xml</relativePath>
-    <url>http://enzymeportal.sf.net</url>
+     <url>http://enzymeportal.sf.net</url>
     <organization>
         <name>EMBL-EBI</name>
         <url>http://www.ebi.ac.uk</url>
@@ -31,7 +30,7 @@
                 <role>Developer</role>
             </roles>
         </developer>
-                <developer>
+        <developer>
             <id>joseph</id>
             <name>Joseph Onwubiko</name>
             <email>joseph@ebi.ac.uk</email>
