@@ -30,9 +30,10 @@ public class ChebiWsCallableTest {
 				config, "caffeine", SearchCategory.ALL_NAMES);
 		Molecule molecule = callable.call();
 		assertNotNull(molecule);
-		assertEquals("caffeine", molecule.getName());
-		assertEquals("C8H10N4O2", molecule.getFormula());
-		assertEquals("CHEBI:27732", molecule.getId());
+		//assertEquals("caffeine", molecule.getName());
+                assertEquals("CAFFEINE CITRATE", molecule.getName());
+		assertEquals("C14H18N4O9", molecule.getFormula());
+		assertEquals("CHEBI:774520", molecule.getId());
 	}
 
 	@Test
