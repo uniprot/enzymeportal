@@ -30,6 +30,15 @@
                 <role>Developer</role>
             </roles>
         </developer>
+                <developer>
+            <id>joseph</id>
+            <name>Joseph Onwubiko</name>
+            <email>joseph@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
         <developer>
             <id>pmatos</id>
             <name>Paula de Matos</name>
@@ -160,8 +169,7 @@
                 <version>1.0-beta-7</version>
             </extension>
         </extensions>
-    </build>
-    
+    </build>  
     <reporting>
         <plugins>
             <plugin>
