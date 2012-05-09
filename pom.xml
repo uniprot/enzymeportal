@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <version>1.0.2-SNAPSHOT</version>
     <name>EnzymePortalProject</name>
-    <relativePath></relativePath>
+     <relativePath>../pom.xml</relativePath>
     <url>http://enzymeportal.sf.net</url>
     <organization>
         <name>EMBL-EBI</name>
