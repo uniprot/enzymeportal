@@ -4,9 +4,9 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>EnzymePortalProject</name>
-     <url>http://enzymeportal.sf.net</url>
+    <url>http://enzymeportal.sf.net</url>
     <organization>
         <name>EMBL-EBI</name>
         <url>http://www.ebi.ac.uk</url>
@@ -25,15 +25,6 @@
             <id>rafalcan</id>
             <name>Rafael Alcántara</name>
             <email>rafalcan@ebi.ac.uk</email>
-            <organization>EMBL-EBI</organization>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>joseph</id>
-            <name>Joseph Onwubiko</name>
-            <email>joseph@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
                 <role>Developer</role>
@@ -116,22 +107,18 @@
             </url>
         </site>
     </distributionManagement>
-<!--    <ciManagement>
-        <system>hudson</system>
-        <url>http://localhost:8080/hudson/job/ep/</url>
-    </ciManagement>-->
     <issueManagement>
-        <system>Trac</system>
-        <url>https://sourceforge.net/apps/trac/enzymeportal/</url>
+    	<system>Trac</system>
+    	<url>https://sourceforge.net/apps/trac/enzymeportal/</url>
     </issueManagement>
     <scm>
         <connection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-1.0.1
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk/enzyme-portal
         </connection>
         <developerConnection>
-            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-1.0.1
+            scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/trunk/enzyme-portal
         </developerConnection>
-        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/ep-1.0.1</url>
+        <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/trunk/enzyme-portal/</url>
     </scm>
     <build>
         <plugins>
@@ -153,14 +140,14 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12</version>
-                <configuration>
-                    <argLine>-Xmx512m</argLine>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12</version>
+				<configuration>
+					<argLine>-Xmx512m</argLine>
+				</configuration>
+			</plugin>
         </plugins>
         <extensions>
             <extension>
@@ -169,8 +156,12 @@
                 <version>1.0-beta-7</version>
             </extension>
         </extensions>
-    </build>  
+    </build>
+    
     <reporting>
+    	<!-- MOVE THESE PLUGINS TO
+    	build/plugins/plugin(maven-site-plugin v3.0)/configuration/reportPlugins
+    	-->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -220,20 +211,20 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>1.3.1</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>dependency-updates-report</report>
-                            <report>plugin-updates-report</report>
-                            <report>property-updates-report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
+		    <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>1.3.1</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependency-updates-report</report>
+							<report>plugin-updates-report</report>
+							<report>property-updates-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
         </plugins>
     </reporting>
 
@@ -241,24 +232,24 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
-    <modules>
-        <module>ep-domain</module>
-        <module>ep-web-client</module>
-        <module>ep-core</module>
-        <module>ep-util</module>
-        <module>ebeye-client</module>
-        <module>ebeye-adapter</module>
-        <module>uniprot-adapter</module>
-        <module>intenz-adapter</module>
-        <module>reactome-adapter</module>
-        <module>das-adapter</module>
-        <module>chebi-adapter</module>
-        <module>literature-adapter</module>
-        <module>biomart-adapter</module>
-        <module>mega-mapper</module>
-        <module>bioportal-adapter</module>
-        <module>SitemapGenerator</module>
-        <module>rhea-adapter</module>
-    </modules>
+	<modules>
+		<module>ep-domain</module>
+		<module>ep-web-client</module>
+		<module>ep-core</module>
+		<module>ep-util</module>
+		<module>ebeye-client</module>
+		<module>ebeye-adapter</module>
+		<module>uniprot-adapter</module>
+		<module>intenz-adapter</module>
+		<module>reactome-adapter</module>
+		<module>das-adapter</module>
+		<module>chebi-adapter</module>
+		<module>literature-adapter</module>
+		<module>biomart-adapter</module>
+		<module>mega-mapper</module>
+		<module>bioportal-adapter</module>
+		<module>SitemapGenerator</module>
+		<module>rhea-adapter</module>
+	</modules>
 
 </project>

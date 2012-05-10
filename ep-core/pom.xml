@@ -3,15 +3,16 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>EnzymePortalCore</name>
     <url>http://maven.apache.org</url>
 
     <parent>
         <groupId>uk.ac.ebi.ep</groupId>
         <artifactId>ep</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
+
     <build>
         <plugins>
             <plugin>
@@ -139,6 +140,11 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mega-mapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
         	<groupId>commons-collections</groupId>
         	<artifactId>commons-collections</artifactId>
         	<version>3.2.1</version>
@@ -149,14 +155,12 @@
             <version>1.0.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>mega-mapper</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
+
+
+:w
+
