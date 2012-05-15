@@ -6,6 +6,7 @@
 		<groupId>uk.ac.ebi.ep</groupId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
+<!--        updated-->
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>rhea-adapter</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
