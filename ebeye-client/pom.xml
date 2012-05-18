@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>ep</artifactId>
 		<groupId>uk.ac.ebi.ep</groupId>
-		<version>1.0.1</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>ebeye-client</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>ebeye-client</name>
 	<url>http://maven.apache.org</url>
 
