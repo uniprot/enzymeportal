@@ -4,7 +4,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>EnzymePortalProject</name>
     <url>http://enzymeportal.sf.net</url>
     <organization>
@@ -25,6 +25,15 @@
             <id>rafalcan</id>
             <name>Rafael Alcántara</name>
             <email>rafalcan@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+                <developer>
+            <id>joseph</id>
+            <name>Joseph Onwubiko</name>
+            <email>joseph@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
                 <role>Developer</role>
