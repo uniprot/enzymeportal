@@ -4,11 +4,11 @@
   <parent>
     <artifactId>ep</artifactId>
     <groupId>uk.ac.ebi.ep</groupId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
   </parent>
   <groupId>uk.ac.ebi.ep</groupId>
   <artifactId>ep-util</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <name>EnzymePortalUtil</name>
   <url>http://maven.apache.org</url>
   <dependencies>
