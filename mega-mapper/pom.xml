@@ -5,11 +5,11 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>EP mega mapper</name>
 	
     <dependencies>
