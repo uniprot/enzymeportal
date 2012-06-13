@@ -23,6 +23,7 @@
         <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>
         <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <script src="resources/javascript/search.js" type="text/javascript"></script>
+        <meta name="google-site-verification" content="tXBo-O4mKKZgv__6QG6iyjqDJibhSb3ZAQtXQGjo86I" />
     </head>
     <body>
         <jsp:include page="header.jsp"/>
