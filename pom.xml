@@ -5,7 +5,7 @@
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
         <relativePath />
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-web-client</artifactId>
