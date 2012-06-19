@@ -9,7 +9,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-web-client</artifactId>
     <name>enzymeportal</name>
-    <version>1.0.2</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>war</packaging>
 	
     <repositories>
@@ -180,10 +180,4 @@
             <version>1.2.16</version>
         </dependency>
     </dependencies>
-
-  <scm>
-    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-web-client-1.0.2</connection>
-    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-web-client-1.0.2</developerConnection>
-    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/ep-web-client-1.0.2</url>
-  </scm>
 </project>
