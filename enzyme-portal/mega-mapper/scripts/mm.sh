@@ -4,6 +4,8 @@
 # Param:
 # $1: database environment (enzdev|ezprel)
 
+MM_SCRIPTS=$(cd $(dirname $0) && pwd)
+
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 UNIPROT_DATA=$EBINOCLE_DATA/uniprot/latest
 SWISSPROT=$UNIPROT_DATA/uniprot_sprot.xml
@@ -14,12 +16,12 @@ UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 
 EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
 
-. $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh $1
+. $MM_SCRIPTS/checkParams.sh
+. $MM_SCRIPTS/mvnBuild.sh $1
 
 # Delete previous data:
 echo -e "\n*************************************************************\n"
-. $(dirname $0)/mm-delete.sh $1
+. $MM_SCRIPTS/mm-delete.sh $1
 
 # Import all database IDs, accessions and xrefs:
 echo -e "\n*************************************************************\n"
@@ -51,9 +53,9 @@ echo "Finished UniMed import - $(date)"
 
 # Backup the new data:
 echo -e "\n*************************************************************\n"
-. $(dirname $0)/mm-backup.sh $1
+. $MM_SCRIPTS/mm-backup.sh $1
 
 # Generate statistics:
 echo -e "\n*************************************************************\n"
-. $(dirname $0)/mm-statistics.sh $1
+. $MM_SCRIPTS/mm-statistics.sh $1
 
