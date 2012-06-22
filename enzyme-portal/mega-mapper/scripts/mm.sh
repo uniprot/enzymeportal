@@ -17,11 +17,11 @@ UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
 
 . $MM_SCRIPTS/checkParams.sh
-. $MM_SCRIPTS/mvnBuild.sh $1
+. $MM_SCRIPTS/mvnBuild.sh
 
 # Delete previous data:
 echo -e "\n*************************************************************\n"
-. $MM_SCRIPTS/mm-delete.sh $1
+. $MM_SCRIPTS/mm-delete.sh
 
 # Import all database IDs, accessions and xrefs:
 echo -e "\n*************************************************************\n"
@@ -53,9 +53,9 @@ echo "Finished UniMed import - $(date)"
 
 # Backup the new data:
 echo -e "\n*************************************************************\n"
-. $MM_SCRIPTS/mm-backup.sh $1
+. $MM_SCRIPTS/mm-backup.sh
 
 # Generate statistics:
 echo -e "\n*************************************************************\n"
-. $MM_SCRIPTS/mm-statistics.sh $1
+. $MM_SCRIPTS/mm-statistics.sh
 
