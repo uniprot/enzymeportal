@@ -22,13 +22,9 @@ import uk.ac.ebi.ep.search.model.Species;
  */
 public class EBeyeDataTypeConverter extends DataTypeConverter {
 
-//********************************* VARIABLES ********************************//
-//******************************** CONSTRUCTORS ******************************//
-//****************************** GETTER & SETTER *****************************//
-//********************************** METHODS *********************************//
     public static ArrayOfString createEbeyeFieldArray(Domain domain) {
         List<ResultField> fieldList = domain.getResultFieldList().getResultField();
-        Iterator it = fieldList.iterator();
+        Iterator<ResultField> it = fieldList.iterator();
         ArrayOfString resultRefFields = new ArrayOfString();
         while (it.hasNext()) {
             ResultField field = (ResultField) it.next();
@@ -42,7 +38,7 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
             return null;
         }
         List<String> list = arrayOfString.getString();
-        Iterator it = list.iterator();
+        Iterator<String> it = list.iterator();
         StringBuffer sb = new StringBuffer();
         int counter = 0;
         while (it.hasNext()) {
@@ -54,8 +50,6 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         }
         return sb.toString();
     }
-
-
 
     /**
      * @deprecated see transform
@@ -86,7 +80,7 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
                                         .uniprotAccessionsToXLinks(resultFieldValue);
                      *
                      */
-                    List accessionList =DataTypeConverter
+                    List<String> accessionList =DataTypeConverter
                                             .accessionsToList(resultFieldValue.split("\\s"));
                     enzymeSummary.getUniprotaccessions().addAll(accessionList);
                     break;
@@ -138,7 +132,7 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
         //ResultFieldList resultFieldList = domain.getResultFieldList();
         List<ResultFieldList> resultsValues = new ArrayList<ResultFieldList>();
         List<ArrayOfString> resultList = results.getArrayOfString();
-        Iterator it = resultList.iterator();
+        Iterator<ArrayOfString> it = resultList.iterator();
         while (it.hasNext()) {
             ArrayOfString result = (ArrayOfString)it.next();
             ResultFieldList clonedObj =
@@ -152,8 +146,8 @@ public class EBeyeDataTypeConverter extends DataTypeConverter {
     public static void setResultValues(ResultFieldList resultFieldList
             , ArrayOfString result) {
         List<String> values = result.getString();
-        Iterator itField = resultFieldList.getResultField().iterator();
-        Iterator itResult = values.iterator();
+        Iterator<?> itField = resultFieldList.getResultField().iterator();
+        Iterator<String> itResult = values.iterator();
         while (itField.hasNext() && itResult.hasNext()) {
             ResultField resultField = (ResultField)itField.next();
             String value = (String)itResult.next();
