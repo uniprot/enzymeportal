@@ -44,11 +44,18 @@
                                     <c:set var="productsSize" value="${fn:length(products)}"/>
                                     <c:set var="counter" value="${1}"/>
                                     <c:forEach items="${reactants}" var="reactant">
+                                    	<c:if test="${reactant.count gt 1}">
+                                   		<th><fmt:formatNumber
+                                   			value="${reactant.count}"
+                                   			type="number"
+                                   			maxFractionDigits="0"/>
+                                  		</th>
+                                    	</c:if>
                                         <td>
-                                            <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${reactant.id}${chebiImageParams}"/>
-                                            <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${reactant.id}${chebiEntryBaseUrlParam}"/>
+                                            <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${reactant.molecule.id}${chebiImageParams}"/>
+                                            <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${reactant.molecule.id}${chebiEntryBaseUrlParam}"/>
                                             <a target="blank" href="${chebiEntryUrl}">
-                                                <img src="${chebiImageUrl}" alt="${reactant.title}"/>
+                                                <img src="${chebiImageUrl}" alt="${reactant.molecule.title}"/>
                                             </a>
                                         </td>
                                         <c:if test="${counter < reactantsSize}">
@@ -65,11 +72,18 @@
 
                                     <c:set var="counter" value="${1}"/>
                                     <c:forEach items="${products}" var="product">
+                                    	<c:if test="${product.count gt 1}">
+                                   		<th><fmt:formatNumber
+                                   			value="${product.count}"
+                                   			type="number"
+                                   			maxFractionDigits="0"/>
+                                  		</th>
+                                    	</c:if>
                                         <td>
-                                            <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${product.id}${chebiImageParams}"/>
-                                            <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${product.id}${chebiEntryBaseUrlParam}"/>
+                                            <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${product.molecule.id}${chebiImageParams}"/>
+                                            <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${product.molecule.id}${chebiEntryBaseUrlParam}"/>
                                             <a target="blank" href="${chebiEntryUrl}">
-                                                <img src="${chebiImageUrl}" alt="${product.title}"/>
+                                                <img src="${chebiImageUrl}" alt="${product.molecule.title}"/>
                                             </a>
                                         </td>
                                         <c:if test="${counter < productsSize}">

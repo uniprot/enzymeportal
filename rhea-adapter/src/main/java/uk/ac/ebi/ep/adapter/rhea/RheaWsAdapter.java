@@ -46,7 +46,7 @@ public class RheaWsAdapter implements IRheaAdapter {
         List<Object> reactionElements = reaction.getReactiveCentreAndMechanismAndReactantList();
         ReactionPathway reactionPathway = new ReactionPathway();
         EnzymeReaction enzymeReaction = new EnzymeReaction();
-        reactionElements.get(0);
+//        reactionElements.get(0);
         Equation equation = new Equation();
         equation.setDirection(createEquationSymbol(reaction));
         List<Link> linkList = new ArrayList<Link>();
@@ -56,16 +56,14 @@ public class RheaWsAdapter implements IRheaAdapter {
                 linkList.addAll(xRefs.getLink());
             }
             if (reactionElement instanceof ReactantList) {
-                ReactantList reactantList = (ReactantList) reactionElement;
-                List<Object> molObjList = reactantList.getReactantListOrReactant();
-                List<Molecule> reactantMolList = getMolecules(molObjList);
-                equation.getReactantlist().addAll(reactantMolList);
+                List<Object> reactantList = ((ReactantList) reactionElement)
+                		.getReactantListOrReactant();
+                equation.getReactantlist().addAll(reactantList);
             }
             if (reactionElement instanceof ProductList) {
-                ProductList productList = (ProductList) reactionElement;
-                List<Object> molObjList = productList.getProductListOrProduct();
-                List<Molecule> productMolList = getMolecules(molObjList);
-                equation.getProductlist().addAll(productMolList);
+                List<Object> productList = ((ProductList) reactionElement)
+                		.getProductListOrProduct();
+                equation.getProductlist().addAll(productList);
 
             }
         }
@@ -135,10 +133,24 @@ public class RheaWsAdapter implements IRheaAdapter {
     private String createParticipantString(List<Object> molList) {
         StringBuffer sb = new StringBuffer();
          int counter = 1;
-        for (Object molObj : molList) {
-            Molecule molecule = (Molecule) molObj;
-            String molName = molecule.getTitle();
-            sb.append(molName);
+        for (Object participant : molList) {
+        	Molecule molecule = null;
+        	Double coef = null;
+        	if (participant instanceof Reactant){
+        		final Reactant reactant = (Reactant) participant;
+				molecule = reactant.getMolecule();
+				coef = reactant.getCount();
+        	} else if (participant instanceof Product){
+        		final Product product = (Product) participant;
+				molecule = product.getMolecule();
+				coef = product.getCount();
+        	} else {
+        		throw new IllegalArgumentException("");
+        	}
+        	if (coef > 1){
+        		sb.append(coef.intValue()).append(' ');
+        	}
+            sb.append(molecule.getTitle());
             if (counter < molList.size()) {
                 sb.append(" + ");
             }
