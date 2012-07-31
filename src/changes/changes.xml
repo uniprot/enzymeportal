@@ -9,8 +9,16 @@
 </properties>
 
 <body>
+	<release version="1.0.3" date="" description="Bug fix">
+		<action dev="rafalcan" type="fix" issue="90">
+			Updated to latest version of rhea-adapter, which fixes coefficients
+			of reaction participants. Fixed also in the JSP.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of ep-core and log4j
+		</action>
+	</release>
 	<release version="1.0" date="in SVN" description="First release">
-		
 	</release>
 </body>
 
