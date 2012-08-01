@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>literature-adapter</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<name>Literature adapter</name>
 	<description>
 		A module to retrieve bibliography on enzymes from different sources.
@@ -50,4 +50,10 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+  <scm>
+    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/literature-adapter-1.0.2</connection>
+    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/literature-adapter-1.0.2</developerConnection>
+    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/literature-adapter-1.0.2</url>
+  </scm>
 </project>
