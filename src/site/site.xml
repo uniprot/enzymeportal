@@ -26,6 +26,7 @@
 				name="Enzyme Portal website"/>
 		</links>
 		<breadcrumbs>
+			<item name="Enzyme Portal" href="./index.html"/>
 		</breadcrumbs>
 
         <menu name="Enzyme Portal">
