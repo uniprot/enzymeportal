@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.citations.CitexploreWSClient;
 import uk.ac.ebi.biobabel.citations.DataSource;
 import uk.ac.ebi.cdb.webservice.Journal;
-import uk.ac.ebi.cdb.webservice.JournalIssue;
+import uk.ac.ebi.cdb.webservice.JournalInfo;
 import uk.ac.ebi.cdb.webservice.QueryException_Exception;
 import uk.ac.ebi.kraken.interfaces.uniprot.Citation;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
@@ -47,7 +47,7 @@ import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
  *
  */
 public class UniprotJapiLiteratureCaller
-implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
+implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 
 	private static final Logger LOGGER = Logger.getLogger(UniprotJapiLiteratureCaller.class);
 	
@@ -61,10 +61,10 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		this.uniprotId = uniprotId;
 	}
 	
-	public Set<uk.ac.ebi.cdb.webservice.Citation> call()
+	public Set<uk.ac.ebi.cdb.webservice.Result> call()
 	throws Exception {
 		// CiteXplore citations:
-		HashSet<uk.ac.ebi.cdb.webservice.Citation> cxCits = null;
+		HashSet<uk.ac.ebi.cdb.webservice.Result> cxCits = null;
 		UniProtQueryService uniProtQueryService =
 				UniProtJAPI.factory.getUniProtQueryService();
 		Query query = UniProtQueryBuilder.buildIDListQuery(
@@ -72,13 +72,13 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		AttributeIterator<UniProtEntry> it =
 				uniProtQueryService.getAttributes(query, "ognl:citations");
 		if (it.hasNext()){
-			cxCits = new HashSet<uk.ac.ebi.cdb.webservice.Citation>();
+			cxCits = new HashSet<uk.ac.ebi.cdb.webservice.Result>();
 			for (Attribute att: it){
 				// UniProt citations:
 				@SuppressWarnings("unchecked")
 				List<Citation> upCits = (List<Citation>) att.getValue();
 				for (Citation upCit :upCits){
-					uk.ac.ebi.cdb.webservice.Citation cxCit = null;
+					uk.ac.ebi.cdb.webservice.Result cxCit = null;
 					// Try to get it from CiteXplore:
 					cxCit = getCitationFromCitexplore(upCit);
 					if (cxCit == null){
@@ -96,13 +96,13 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		return cxCits;
 	}
 
-	private uk.ac.ebi.cdb.webservice.Citation buildCitation(Citation upCit) {
-		uk.ac.ebi.cdb.webservice.Citation cxCit =
-				new uk.ac.ebi.cdb.webservice.Citation();
-		JournalIssue issue = new JournalIssue();
+	private uk.ac.ebi.cdb.webservice.Result buildCitation(Citation upCit) {
+		uk.ac.ebi.cdb.webservice.Result cxCit =
+				new uk.ac.ebi.cdb.webservice.Result();
+		JournalInfo issue = new JournalInfo();
 		Journal journal = new Journal();
 		issue.setJournal(journal);
-		cxCit.setJournalIssue(issue);
+		cxCit.setJournalInfo(issue);
 		loadCoreMetadata(upCit, cxCit);
 		loadXrefs(upCit, cxCit);
 		// Special bits:
@@ -127,7 +127,7 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 	 * @param cxCit
 	 */
 	private void loadCoreMetadata(Citation upCit,
-			uk.ac.ebi.cdb.webservice.Citation cxCit) {
+			uk.ac.ebi.cdb.webservice.Result cxCit) {
 		// Title:
 		if (upCit instanceof HasTitle){
 			cxCit.setTitle(((HasTitle) upCit).getTitle().getValue());
@@ -142,10 +142,10 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		// Authors:
 		if (upCit instanceof HasAuthors){
 			for (Author upAuthor: ((HasAuthors) upCit).getAuthors()){
-				uk.ac.ebi.cdb.webservice.Author cxAuthor =
-						new uk.ac.ebi.cdb.webservice.Author();
+				uk.ac.ebi.cdb.webservice.Authors cxAuthor =
+						new uk.ac.ebi.cdb.webservice.Authors();
 				cxAuthor.setFullName(upAuthor.getValue());
-				cxCit.getAuthorCollection().add(cxAuthor);
+				cxCit.getAuthorList().getAuthor().add(cxAuthor);
 			}
 		}
 		// Year:
@@ -156,7 +156,7 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 					.getPublicationDate().getValue();
 			Matcher m = p.matcher(upDate);
 			if (m.matches()){
-				cxCit.getJournalIssue().setYearOfPublication(Short.valueOf(m.group(1)));
+				cxCit.getJournalInfo().setYearOfPublication(Short.valueOf(m.group(1)));
 			} else {
 				LOGGER.warn("Date pattern not recognised: " + upDate);
 			}
@@ -165,12 +165,12 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 		if (upCit instanceof HasVolume){
 			Volume volume = ((HasVolume) upCit).getVolume();
 			if (volume != null){
-				cxCit.getJournalIssue().setVolume(volume.getValue());
+				cxCit.getJournalInfo().setVolume(volume.getValue());
 			}
 		}
 		// Journal name:
 		if (upCit instanceof HasJournalName){
-			cxCit.getJournalIssue().getJournal().setTitle(
+			cxCit.getJournalInfo().getJournal().setTitle(
 					((HasJournalName) upCit).getJournalName().getValue());
 		}
 		// Pages:
@@ -182,48 +182,49 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 
 	/**
 	 * Loads metadata from a UniProt Book object
-	 * into a CiteXplore Citation object.
-	 * @param cxCit The CiteXplore Citation to load metadata into.
+	 * into a CiteXplore Result object.
+	 * @param cxCit The CiteXplore Result to load metadata into.
 	 * @param book The UniProt object to get metadata from.
 	 */
-	private void load(uk.ac.ebi.cdb.webservice.Citation cxCit, Book book) {
+	private void load(uk.ac.ebi.cdb.webservice.Result cxCit, Book book) {
 		// Book name:
-		cxCit.getJournalIssue().getJournal()
+		cxCit.getJournalInfo().getJournal()
 				.setTitle(book.getBookName().getValue());
 	}
 
 	/**
 	 * Loads metadata from a UniProt ElectronicArticle object
-	 * into a CiteXplore Citation object.
-	 * @param cxCit The CiteXplore Citation to load metadata into.
+	 * into a CiteXplore Result object.
+	 * @param cxCit The CiteXplore Result to load metadata into.
 	 * @param eArticle The UniProt object to get metadata from.
 	 */
-	private void load(uk.ac.ebi.cdb.webservice.Citation cxCit,
+	private void load(uk.ac.ebi.cdb.webservice.Result cxCit,
 			ElectronicArticle eArticle) {
 	}
 
 	/**
 	 * Loads metadata from a UniProt JournalArticle object
-	 * into a CiteXplore Citation object.
-	 * @param cxCit The CiteXplore Citation to load metadata into.
+	 * into a CiteXplore Result object.
+	 * @param cxCit The CiteXplore Result to load metadata into.
 	 * @param jArticle The UniProt object to get metadata from.
 	 */
-	private void load(uk.ac.ebi.cdb.webservice.Citation cxCit,
+	private void load(uk.ac.ebi.cdb.webservice.Result cxCit,
 			JournalArticle jArticle) {
 	}
 
 	/**
 	 * Loads metadata from a UniProt Patent object
-	 * into a CiteXplore Citation object.
-	 * @param cxCit The CiteXplore Citation to load metadata into.
+	 * into a CiteXplore Result object.
+	 * @param cxCit The CiteXplore Result to load metadata into.
 	 * @param patent The UniProt object to get metadata from.
 	 */
-	private void load(uk.ac.ebi.cdb.webservice.Citation cxCit, Patent patent) {
-		cxCit.getPatentDetails().setPatentDetailId(
-				Integer.valueOf(patent.getPatentNumber().getValue()));
+	private void load(uk.ac.ebi.cdb.webservice.Result cxCit, Patent patent) {
+		// How to handle this?
+//		cxCit.getPatentDetails().setPatentDetailId(
+//				Integer.valueOf(patent.getPatentNumber().getValue()));
 	}
 
-	private void setPages(uk.ac.ebi.cdb.webservice.Citation cxCit, Page firstPage,
+	private void setPages(uk.ac.ebi.cdb.webservice.Result cxCit, Page firstPage,
 			Page lastPage) {
 		if (firstPage != null){
 			StringBuilder pages = new StringBuilder(firstPage.getValue());
@@ -242,31 +243,34 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 	 * @param cxCit
 	 */
 	private void loadXrefs(Citation upCit,
-			uk.ac.ebi.cdb.webservice.Citation cxCit) {
+			uk.ac.ebi.cdb.webservice.Result cxCit) {
 		if (upCit instanceof HasPubMedId){
 			PubMedId pubmedId = ((HasPubMedId) upCit).getPubMedId();
 			if (pubmedId != null){
-				cxCit.setDataSource(DataSource.MED.name());
-				cxCit.setExternalId(pubmedId.getValue());
+				cxCit.setSource(DataSource.MED.name());
+				cxCit.setId(pubmedId.getValue());
 			}
 		} else if (upCit instanceof HasAgricolaId){
 			AgricolaId agricolaId = ((HasAgricolaId) upCit).getAgricolaId();
 			if (agricolaId != null){
-				cxCit.setDataSource(DataSource.AGR.name());
-				cxCit.setExternalId(agricolaId.getValue());
+				cxCit.setSource(DataSource.AGR.name());
+				cxCit.setId(agricolaId.getValue());
 			}
 		}
 	}
 	
-	private uk.ac.ebi.cdb.webservice.Citation getCitationFromCitexplore(Citation upCit){
-		uk.ac.ebi.cdb.webservice.Citation cxCit = null;
+	private uk.ac.ebi.cdb.webservice.Result getCitationFromCitexplore(Citation upCit){
+		uk.ac.ebi.cdb.webservice.Result cxCit = null;
+		CitexploreWSClient citexploreClient = null;
 		try {
+			citexploreClient =
+					CitexploreWSClientPool.getInstance().borrowObject();
 			if (upCit instanceof HasPubMedId){
 				PubMedId pubmedId = ((HasPubMedId) upCit).getPubMedId();
 				if (pubmedId != null){
 					String val = pubmedId.getValue();
 					if (val != null && val.length() > 0){
-						cxCit = CitexploreWSClient.getCitation(
+						cxCit = citexploreClient.retrieveCitation(
 								DataSource.MED, pubmedId.getValue());
 					}
 				}
@@ -275,13 +279,22 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Citation>> {
 				if (agricolaId != null){
 					String val = agricolaId.getValue();
 					if (val != null && val.length() > 0){
-						cxCit = CitexploreWSClient.getCitation(
+						cxCit = citexploreClient.retrieveCitation(
 								DataSource.AGR, agricolaId.getValue());
 					}
 				}
 			}
-		} catch (QueryException_Exception e) {
+		} catch (Exception e) {
 			LOGGER.error("Unable to get citation from CiteXplore", e);
+		} finally {
+			if (citexploreClient != null){
+				try {
+					CitexploreWSClientPool.getInstance()
+							.returnObject(citexploreClient);
+				} catch (Exception e) {
+					LOGGER.error("Unable to return CiteXplore client", e);
+				}
+			}
 		}
 		return cxCit;
 	}

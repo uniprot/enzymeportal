@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.citations.CitexploreWSClient;
 import uk.ac.ebi.biobabel.citations.DataSource;
-import uk.ac.ebi.cdb.webservice.Citation;
+import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.cdb.webservice.Journal;
-import uk.ac.ebi.cdb.webservice.JournalIssue;
+import uk.ac.ebi.cdb.webservice.JournalInfo;
 import uk.ac.ebi.cdb.webservice.QueryException_Exception;
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
@@ -30,7 +30,7 @@ import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesCaller;
  * @author rafa
  *
  */
-public class DASLiteratureCaller implements Callable<Set<Citation>> {
+public class DASLiteratureCaller implements Callable<Set<Result>> {
 
 	private static Logger LOGGER = Logger.getLogger(DASLiteratureCaller.class);
 	
@@ -44,7 +44,7 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 		featuresCaller = new SimpleDASFeaturesCaller(serverURL, segments);
 	}
 	
-	public Set<Citation> call() throws Exception {
+	public Set<Result> call() throws Exception {
 		return getLiterature(featuresCaller.getSegments());
 	}
 
@@ -53,8 +53,8 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 	 * @param segments
 	 * @return
 	 */
-	protected Set<Citation> getLiterature(List<SegmentAdapter> segments) {
-		Set<Citation> citations = new HashSet<Citation>();
+	protected Set<Result> getLiterature(List<SegmentAdapter> segments) {
+		Set<Result> citations = new HashSet<Result>();
 		segmentsLoop: for (SegmentAdapter segment : segments) {
 			try {
 				for (FeatureAdapter feature : segment.getFeature()) {
@@ -64,7 +64,7 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 							LOGGER.warn("Citation is not available for " + segment.getId());
 							continue segmentsLoop;
 						}
-						Citation citation = null;
+						Result citation = null;
 						String pubMedId = getPubMedId(feature.getLinks().get(0).getHref());
 						if (pubMedId != null && pubMedId.length() > 0){
 							// Try to get from CiteXplore with the PubMed ID:
@@ -90,23 +90,23 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 		return citations;
 	}
 
-	private Citation buildCitation(FeatureAdapter feature, String pubMedId) {
-		Citation citation;
-		citation = new Citation();
-		JournalIssue issue = new JournalIssue();
+	private Result buildCitation(FeatureAdapter feature, String pubMedId) {
+		Result citation;
+		citation = new Result();
+		JournalInfo issue = new JournalInfo();
 		Journal journal = new Journal();
 		issue.setJournal(journal);
-		citation.setJournalIssue(issue);
+		citation.setJournalInfo(issue);
 		citation.setTitle(feature.getNotes().get(0));
 		parseJournal(feature.getNotes().get(1), citation);
 		//parseAuthors(feature.getNotes().get(2), citation);
-		citation.setDataSource(DataSource.MED.name());
-		citation.setExternalId(pubMedId);
+		citation.setSource(DataSource.MED.name());
+		citation.setId(pubMedId);
 		return citation;
 	}
 
-	protected Citation getCitationFromCitexplore(String pubMedId) {
-		Citation citation = null;
+	protected Result getCitationFromCitexplore(String pubMedId) {
+		Result citation = null;
 		CitexploreWSClient citexploreClient = null;
 		try {
 			citexploreClient =
@@ -140,7 +140,7 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 	}
 
 	/* No authors from DAS' GFF!!
-	protected void parseAuthors(String authors, Citation citation){
+	protected void parseAuthors(String authors, Result citation){
 		for (String sAuthor : authors.split(",")) {
 			Author author = new Author();
 			author.setFullName(sAuthor);
@@ -150,20 +150,20 @@ public class DASLiteratureCaller implements Callable<Set<Citation>> {
 	*/
 
 	/**
-	 * Populates a Citation with journal data from a string.
+	 * Populates a Result with journal data from a string.
 	 * @param journal String with the standard notation of the publication,
 	 * 		which comes from DAS as
 	 * 		<code>[journal] vol:[volume] page:[pages] ([year])</code>
 	 * @param citation A CiteXplore citation.
 	 */
-	protected void parseJournal(String journal, Citation citation) {
+	protected void parseJournal(String journal, Result citation) {
 		Pattern p = Pattern.compile("(.+) vol:(\\d+) page:(\\d+-\\d+) \\((\\d{4})\\)");
 		Matcher m = p.matcher(journal);
 		if (m.matches()){
-			citation.getJournalIssue().getJournal().setTitle(m.group(1));
-			citation.getJournalIssue().setVolume(m.group(2));
+			citation.getJournalInfo().getJournal().setTitle(m.group(1));
+			citation.getJournalInfo().setVolume(m.group(2));
 			citation.setPageInfo(m.group(3));
-			citation.getJournalIssue().setYearOfPublication(
+			citation.getJournalInfo().setYearOfPublication(
 					Short.valueOf(m.group(4)));
 		} else {
 			LOGGER.error("Format not recognised for DAS citation: " + journal);

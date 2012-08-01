@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.concurrent.Callable;
 
 import uk.ac.ebi.biobabel.citations.CitexploreWSClient;
-import uk.ac.ebi.cdb.webservice.Citation;
+import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.cdb.webservice.QueryException_Exception;
 
-public class CitexploreLiteratureCaller implements Callable<Collection<Citation>> {
+public class CitexploreLiteratureCaller implements Callable<Collection<Result>> {
 
 	private String query;
 
@@ -15,7 +15,7 @@ public class CitexploreLiteratureCaller implements Callable<Collection<Citation>
 		this.query = query;
 	}
 	
-	public Collection<Citation> call()
+	public Collection<Result> call()
 	throws QueryException_Exception, Exception {
 		CitexploreWSClient citexploreClient = null;
 		try {
