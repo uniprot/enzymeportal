@@ -8,9 +8,9 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.ac.ebi.cdb.webservice.Citation;
+import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.cdb.webservice.Journal;
-import uk.ac.ebi.cdb.webservice.JournalIssue;
+import uk.ac.ebi.cdb.webservice.JournalInfo;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
 
 public class DASLiteratureCallerTest {
@@ -24,21 +24,21 @@ public class DASLiteratureCallerTest {
 	
 	@Test
 	public void testCall() throws Exception {
-		Set<Citation> citations = dasCaller.call();
+		Set<Result> citations = dasCaller.call();
 		assertTrue(citations.size() >= 1);
-		Citation cit = citations.iterator().next();
-		assertEquals("MED", cit.getDataSource());
-		assertEquals("7278969", cit.getExternalId());
+		Result cit = citations.iterator().next();
+		assertEquals("MED", cit.getSource());
+		assertEquals("7278969", cit.getId());
 		assertEquals("Neutron diffraction reveals oxygen-histidine hydrogen bond in oxymyoglobin.",
 				cit.getTitle());
-		assertEquals("Nature", cit.getJournalIssue().getJournal().getTitle());
-		assertEquals("292", cit.getJournalIssue().getVolume());
+		assertEquals("Nature", cit.getJournalInfo().getJournal().getTitle());
+		assertEquals("292", cit.getJournalInfo().getVolume());
 	}
 	
 	@Test
 	public void testGetCitationFromCitexplore() throws Exception {
 		// No assertions, just to measure time (testCall is slow because of DAS)
-		Citation citation = dasCaller.getCitationFromCitexplore("7278969");
+		Result citation = dasCaller.getCitationFromCitexplore("7278969");
 	}
 
 	@Test
@@ -50,15 +50,15 @@ public class DASLiteratureCallerTest {
 	@Test
 	public void testParseJournal() {
 		String journal = "NATURE vol:292 page:81-82 (1981)";
-		Citation citation = new Citation();
-		JournalIssue jIssue = new JournalIssue();
+		Result citation = new Result();
+		JournalInfo jIssue = new JournalInfo();
 		jIssue.setJournal(new Journal());
-		citation.setJournalIssue(jIssue);
+		citation.setJournalInfo(jIssue);
 		dasCaller.parseJournal(journal, citation);
-		assertEquals("NATURE", citation.getJournalIssue().getJournal().getTitle());
-		assertEquals("292", citation.getJournalIssue().getVolume());
+		assertEquals("NATURE", citation.getJournalInfo().getJournal().getTitle());
+		assertEquals("292", citation.getJournalInfo().getVolume());
 		assertEquals("81-82", citation.getPageInfo());
-		assertEquals("1981", citation.getJournalIssue().getYearOfPublication().toString());
+		assertEquals("1981", citation.getJournalInfo().getYearOfPublication().toString());
 	}
 
 }

@@ -4,17 +4,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
-		<title>EBI Enzyme Portal</title>
+		<title>EP literature adapter</title>
 		<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
 	</properties>
 	
 	<body>
-		<section name="Enzyme Portal">
-
-			<subsection name="">
-				<p></p>
-			</subsection>
-			
+		<section name="Enzyme Portal literature adapter">
+			<p>
+				This module acts as proxy to other resources which provide
+				bibliography on enzymes.
+			</p>
 		</section>
 	</body>
 </document>
