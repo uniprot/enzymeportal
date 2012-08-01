@@ -9,9 +9,17 @@
 </properties>
 
 <body>
-	<release version="1.0.2" date="" description="Bug fix">
-		<action dev="rafalcan" type="fix" issue="90">
+	<release version="1.0.2" date="2012-08-01" description="Bug fix">
+		<action dev="rafalcan" type="fix">
 			Fixed population of the model, so that we don't lose coefficients.
+			<fixes issue="90"/>
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to most recent version of ep-domain, rhea-ws-domain and
+			rhea-domain.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added configuration for doc site generation.
 		</action>
 	</release>
 </body>
