@@ -27,7 +27,6 @@
 				name="Enzyme Portal website"/>
 		</links>
 		<breadcrumbs>
-			<item name="Enzyme Portal" href=".."/>
 			<item name="Literature adapter" href="./index.html"/>
 		</breadcrumbs>
 		<menu ref="parent" />
