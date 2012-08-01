@@ -19,7 +19,7 @@ public class LuceneQueryBuilder {
     public static final String LUCENE_EQUAL = ":";
     public static final String LUCENE_QUOTE = "\"";
     //FOr EBeye EC must be in upper case
-    public static final String ENZYME_FILTER = "EC:[1.1 TO 9.99]";
+    public static final String ENZYME_FILTER = "EC:[1 TO 9]";
     public static final String UNIPROT_ID_FIELD ="id";
     //public static final String UNIPROT_NAME_FIELD ="name";
     //public static final String ACCESSION_FIELD ="acc";
