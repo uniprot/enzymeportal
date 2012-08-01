@@ -5,7 +5,11 @@
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
     <version>1.0.2</version>
-    <name>EnzymePortalProject</name>
+    <name>Enzyme Portal</name>
+    <description>
+    	The Enzyme Portal is for people who are interested in the biology of
+    	enzymes and proteins with enzymatic activity.
+   	</description>
     <url>http://enzymeportal.sf.net</url>
     <organization>
         <name>EMBL-EBI</name>
@@ -18,7 +22,7 @@
             <email>hongcao@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
-                <role>Developer</role>
+                <role>Ex-developer</role>
             </roles>
         </developer>
         <developer>
@@ -41,6 +45,15 @@
         </developer>
         <developer>
             <id>pmatos</id>
+            <name>Paula de Matos</name>
+            <email>pmatos@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <roles>
+                <role>Ex-coordinator</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>hastings</id>
             <name>Janna Hastings</name>
             <email>hastings@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>

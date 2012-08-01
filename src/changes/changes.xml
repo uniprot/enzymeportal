@@ -9,8 +9,15 @@
 </properties>
 
 <body>
-	<release version="1.0" date="in SVN" description="First release">
-		
+	<release version="1.0.2" date="2012-08-01" description="Plugin updates">
+		<action dev="rafalcan" type="update">
+			Updated pom file with pluginmanagement section, latest versions
+			of plugins and new coordinator.
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
 	</release>
 </body>
 
