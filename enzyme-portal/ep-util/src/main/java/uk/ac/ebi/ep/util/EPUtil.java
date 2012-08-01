@@ -9,7 +9,7 @@ import java.util.Set;
 public class EPUtil {
 
     /**
-     * Extracts the prefix from a UniProt ID (i.e. strips the species suffix).
+     * Extracts the prefix from a UniProt ID (strips the species suffix).
      * @param id a UniProt ID.
      * @return an ID without the species suffix.
      */
@@ -18,7 +18,7 @@ public class EPUtil {
     }
 
     /**
-     * Extracts the prefixes from UniProt IDs (i.e. strips the species suffixes).
+     * Extracts the prefixes from UniProt IDs (strips the species suffixes).
      * @param ids a collection of UniProt IDs.
      * @return a list of distinct UniProt IDs without the species suffix.
      */
@@ -32,7 +32,7 @@ public class EPUtil {
 
 	/**
 	 * Converts the UniProt IDs to prefixes with a wildcard (<code>_*</code>)
-	 * at the end, which should match homologs.
+	 * at the end, which should match orthologs.
 	 * @param ids a collection of UniProt IDs, either complete (ex. ALR1_YEAST)
 	 * 		or just prefixes without wildcard (ex. ALR1).
 	 * @return a list of distinct UniProt IDs with the species suffix replaced
