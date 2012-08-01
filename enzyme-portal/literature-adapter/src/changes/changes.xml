@@ -9,8 +9,18 @@
 </properties>
 
 <body>
-	<release version="1.0" date="in SVN" description="First release">
-		
+	<release version="1.0.2" date="2012-08-01"
+		description="Upgrade to CiteXplore WS v3">
+		<action dev="rafalcan" type="update">
+			Updated to last version of parent, biobabel-citations, uniprotjapi
+			- set to use always the latest one - and log4j.
+			<fixes issue="89"/>
+			<fixes issue="98"/>
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
 	</release>
 </body>
 

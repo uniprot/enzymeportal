@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 
-import uk.ac.ebi.cdb.webservice.Citation;
+import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
 
 public class SimpleLiteratureAdapter implements ILiteratureAdapter {
@@ -39,13 +39,13 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 	 * @author rafa
 	 */
 	public class LabelledCitation {
-		private Citation citation;
+		private Result citation;
 		private EnumSet<CitationLabel> labels;
-		public LabelledCitation(Citation citation, CitationLabel label){
+		public LabelledCitation(Result citation, CitationLabel label){
 			this.citation = citation;
 			this.labels = EnumSet.of(label);
 		}
-		public Citation getCitation() {
+		public Result getCitation() {
 			return citation;
 		}
 		public EnumSet<CitationLabel> getLabels() {
@@ -63,12 +63,12 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			if (!(o instanceof LabelledCitation)) return false;
 			if (o == this) return true;
 			LabelledCitation other = (LabelledCitation) o;
-			String tcei = this.citation.getExternalId();
-			String ocei = other.citation.getExternalId();
+			String tcei = this.citation.getId();
+			String ocei = other.citation.getId();
 			if (tcei == null ^ ocei == null) return false;
 			if (tcei != null && ocei != null){
-				String tcds = this.citation.getDataSource();
-				String ocds = other.citation.getDataSource();
+				String tcds = this.citation.getSource();
+				String ocds = other.citation.getSource();
 				return tcei.equals(ocei) && tcds.equals(ocds);
 			}
 			return this.citation.getTitle().equals(other.citation.getTitle());
@@ -77,12 +77,12 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		public int hashCode() {
 			int hash = 17;
 			hash = hash * 17;
-			if (citation.getDataSource() != null){
-				hash += citation.getDataSource().hashCode();
+			if (citation.getSource() != null){
+				hash += citation.getSource().hashCode();
 			}
 			hash = hash * 17;
-			if (citation.getExternalId() != null){
-				hash += citation.getExternalId().hashCode();
+			if (citation.getId() != null){
+				hash += citation.getId().hashCode();
 			}
 			hash = hash * 17 + citation.getTitle().hashCode();
 			return hash;
@@ -95,20 +95,20 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 	
 	public List<LabelledCitation> getCitations(String uniprotId, List<String> pdbIds) {
 		List<LabelledCitation> citations = null;
-		List<Callable<Set<Citation>>> callables = getCallables(uniprotId, pdbIds);
-		List<Future<Set<Citation>>> futures = null;
+		List<Callable<Set<Result>>> callables = getCallables(uniprotId, pdbIds);
+		List<Future<Set<Result>>> futures = null;
 		
 		ExecutorService threadPool = Executors.newCachedThreadPool();
 		try {
 			futures = threadPool.invokeAll(callables);
 			// Collect results:
 			citations = new ArrayList<LabelledCitation>();
-			for (Future<Set<Citation>> future : futures) {
+			for (Future<Set<Result>> future : futures) {
 				try {
-					Set<Citation> cits = future.get();
+					Set<Result> cits = future.get();
 					if (cits != null){
 						CitationLabel label = getLabel(callables.get(futures.indexOf(future)));
-						for (Citation cit : cits) {
+						for (Result cit : cits) {
 							LabelledCitation citation = new LabelledCitation(cit, label);
 							if (citations.contains(citation)){
 								citations.get(citations.indexOf(citation)).addLabel(label);
@@ -134,17 +134,17 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		return citations;
 	}
 
-	private List<Callable<Set<Citation>>> getCallables(String uniprotId,
+	private List<Callable<Set<Result>>> getCallables(String uniprotId,
 			List<String> pdbIds) {
-		List<Callable<Set<Citation>>> callables =
-				new ArrayList<Callable<Set<Citation>>>();
+		List<Callable<Set<Result>>> callables =
+				new ArrayList<Callable<Set<Result>>>();
 		callables.add(new UniprotJapiLiteratureCaller(uniprotId));
 		callables.add(new DASLiteratureCaller(IDASFeaturesAdapter.PDBE_DAS_URL, pdbIds));
 		return callables;
 	}
 	
 	/* FIXME: odd job! */
-	private CitationLabel getLabel(Callable<Set<Citation>> callable){
+	private CitationLabel getLabel(Callable<Set<Result>> callable){
 		CitationLabel label = null;
 		if (callable.getClass().equals(UniprotJapiLiteratureCaller.class)){
 			label = CitationLabel.enzyme;
