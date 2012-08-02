@@ -37,42 +37,42 @@
 
 	<div class="${citationClass}">
 		<div class="pub_title" style="font-weight: bold;">
-			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.externalId}&amp;dataSource=${cit.dataSource}"
-                title="View ${cit.dataSource} ${cit.externalId} in CiteXplore"
-                target="_blank" class="extLink ${cit.dataSource}"
-                >${empty cit.titleNonAscii? cit.title : cit.titleNonAscii}</a>
+			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.id}&amp;dataSource=${cit.source}"
+                title="View ${cit.source} ${cit.id} in CiteXplore"
+                target="_blank" class="extLink ${cit.source}"
+                >${cit.title}</a>
 	    </div>
-	    <c:if test="${not empty cit.abstractText}">
-	    <div class="pub_abstract" style="display: table-row;">
-	    	<div onclick="$('#cit-${cit.externalId}').toggle()"
-	    		style="display: table-cell; white-space: nowrap; cursor: pointer; font-size: smaller;">
-	    		Toggle abstract &gt; </div>
-			<div id="cit-${cit.externalId}" style="display: none; margin-left: 1em;">
-				${cit.abstractText}</div>
-	    </div>
-	    </c:if>
 		<div class="pub_authors">
             <c:set var="authors" value=""/>
 			<c:forEach var="author" varStatus="avs"
-				items="${cit.authorCollection}">
+				items="${cit.authorList.author}">
 				<c:set var="authors"
 					value="${authors}${avs.index gt 0? ',' : '' } ${author.fullName}"/>
 			</c:forEach>
 			<c:choose>
-				<c:when test="${fn:length(cit.authorCollection) gt 10}">
-					${cit.authorCollection[0].fullName}
+				<c:when test="${fn:length(cit.authorList.author) gt 10}">
+					${cit.authorList.author[0].fullName}
 					<span title="${authors}">et al.</span>
 				</c:when>
 				<c:otherwise>
 					${authors}
 				</c:otherwise>
 			</c:choose>
-			(${cit.journalIssue.yearOfPublication})
+			(${cit.journalInfo.yearOfPublication})
 		</div>
         <div class="pub_info">
-            <i>${cit.journalIssue.journal.title}</i>
-            <b>${cit.journalIssue.volume}</b>, ${cit.pageInfo}
+            <i>${cit.journalInfo.journal.title}</i>
+            <b>${cit.journalInfo.volume}</b>, ${cit.pageInfo}
         </div>		
+	    <c:if test="${not empty cit.abstractText}">
+	    <div class="pub_abstract" style="display: table-row;">
+	    	<div onclick="$('#cit-${cit.id}').toggle()"
+	    		style="display: table-cell; white-space: nowrap; cursor: pointer; font-size: smaller;">
+	    		Toggle abstract &gt; </div>
+			<div id="cit-${cit.id}" style="display: none; margin-left: 1em;">
+				${cit.abstractText}</div>
+	    </div>
+	    </c:if>
     </div>
 </c:forEach>
 </div>
