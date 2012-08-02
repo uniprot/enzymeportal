@@ -12,7 +12,7 @@
     <description>
     	The Enzyme Portal web application.
     </description>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>war</packaging>
 	
     <repositories>
@@ -193,10 +193,4 @@
             <version>1.2.17</version>
         </dependency>
     </dependencies>
-
-  <scm>
-    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-web-client-1.0.3</connection>
-    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-web-client-1.0.3</developerConnection>
-    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/ep-web-client-1.0.3</url>
-  </scm>
 </project>
