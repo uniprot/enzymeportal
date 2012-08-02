@@ -9,16 +9,34 @@
 </properties>
 
 <body>
-	<release version="1.0.3" date="" description="Bug fix">
-		<action dev="rafalcan" type="fix" issue="90">
-			Updated to latest version of rhea-adapter, which fixes coefficients
-			of reaction participants. Fixed also in the JSP.
+	<release version="1.0.3" date="2012-08-02" description="Bug fixes">
+		<action dev="rafalcan" type="fix">
+			Forced version of rhea-adapter to override the transitive
+			dependency, which fixes coefficients of reaction participants.
+			Fixed also in the JSP.
+			<fixes issue="90"/>
+		</action>
+		<action dev="rafalcan" type="fix">
+			Forced version of literature-adapter, which fixes issues with the
+			CiteXplore web service resulting in missing literature filters or
+			even no citations at all.
+			<fixes issue="89"/>
+			<fixes issue="98"/>
+		</action>
+		<action dev="rafalcan" type="fix">
+			Forced versions of ep-util, which fixes serious issue with searches
+			resulting in no results at all.
+			<fixes issue="103"/>
 		</action>
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of ep-core and log4j
 		</action>
 	</release>
-	<release version="1.0" date="in SVN" description="First release">
+	<release version="1.0.2" date="2012-06-19" description="">
+	</release>
+	<release version="1.0.1" date="2012-06-18" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
 	</release>
 </body>
 
