@@ -48,11 +48,11 @@
                     	value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
                     <c:set var="chemblImageBaseUrl"
                     	value="https://www.ebi.ac.uk/chembldb/compound/displayimage/"/>
-                    <c:set var="reactomeBaseUrl"
+                     <c:set var="reactomeBaseUrl"
                     	value="http://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID="/>
                     <c:set var="reactomeImageBaseUrl"
                     	value="http://www.reactome.org/"/>
-
+                 
                     <c:set var="enzyme" value="${enzymeModel.enzyme}"/>
                     <!--requestedfield is an enum type in the controller. Its value has to be one of the values in the Field variable in the controller-->
                     <c:set var="requestedfield" value="${enzymeModel.requestedfield}"/>

@@ -1,11 +1,7 @@
 package uk.ac.ebi.ep.web;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,9 +20,7 @@ import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
-import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
-import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
-import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
+import uk.ac.ebi.ep.core.filter.*;
 import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
@@ -40,19 +34,15 @@ import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.model.EnzymeSummary;
-import uk.ac.ebi.ep.search.model.SearchModel;
-import uk.ac.ebi.ep.search.model.SearchParams;
-import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.model.*;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
  *
- * @since   1.0
- * @version $LastChangedRevision$ <br/>
- *          $LastChangedDate$ <br/>
- *          $Author$
- * @author  $Author$
+ * @since 1.0
+ * @version $LastChangedRevision$ <br/> $LastChangedDate: 2012-03-26
+ * 11:53:57 +0100 (Mon, 26 Mar 2012) $ <br/> $Author$
+ * @author $Author$
  */
 @Controller
 public class SearchController {
@@ -83,10 +73,11 @@ public class SearchController {
 
     /**
      * Process the entry page,
+     *
      * @param accession The UniProt accession of the enzyme.
      * @param field the requested tab.
      * @param model
-     * @return 
+     * @return
      */
     @RequestMapping(value = "/search/{accession}/{field}")
     protected String getEnzymeModel(Model model,
@@ -104,9 +95,9 @@ public class SearchController {
                 case proteinStructure:
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
-                case reactionsPathways:              
+                case reactionsPathways:
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
-                    enzymeModel = retriever.getReactionsPathways(accession);                  
+                    enzymeModel = retriever.getReactionsPathways(accession);
                     break;
                 case molecules:
                     retriever.getChebiAdapter().setConfig(chebiConfig);
@@ -173,14 +164,14 @@ public class SearchController {
             }
             if (requestedField.getName().equalsIgnoreCase(Field.reactionsPathways.getName())) {
                 enzymeModel = new EnzymeModel();
-                System.out.println("entered interface error");
+
                 enzymeModel.setRequestedfield(requestedField.getName());
                 ReactionPathway pathway = new ReactionPathway();
                 EnzymeReaction reaction = new EnzymeReaction();
                 reaction.setName("error");
                 pathway.setReaction(reaction);
                 enzymeModel.getReactionpathway().add(0, pathway);
-                
+
 
                 model.addAttribute("enzymeModel", enzymeModel);
                 LOGGER.fatal("Error in retrieving Reaction Pathways");
@@ -189,7 +180,7 @@ public class SearchController {
             if (requestedField.getName().equalsIgnoreCase(Field.literature.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
-                
+
                 enzymeModel.getLiterature().add(0, "error");
 
                 model.addAttribute("enzymeModel", enzymeModel);
@@ -204,8 +195,8 @@ public class SearchController {
     }
 
     /**
-     * This method is an entry point that accepts the request when the search home
-     * page is loaded. It then forwards the request to the search page.
+     * This method is an entry point that accepts the request when the search
+     * home page is loaded. It then forwards the request to the search page.
      *
      * @param model
      * @return
@@ -223,8 +214,9 @@ public class SearchController {
     }
 
     /**
-     * A wrapper of {@code postSearchResult} method, created to accept the search
-     * request using GET.
+     * A wrapper of {@code postSearchResult} method, created to accept the
+     * search request using GET.
+     *
      * @param searchModel
      * @param result
      * @param model
@@ -239,6 +231,7 @@ public class SearchController {
     /**
      * Processes the search request. When user enters a search text and presses
      * the submit button the request is processed here.
+     *
      * @param searchModelForm
      * @param result
      * @param model
@@ -296,12 +289,94 @@ public class SearchController {
                 pagination.setFirstResult(searchParameters.getStart());
 
                 // Filter:
-                List<String> speciesFilter = searchParameters.getSpecies();
-                List<String> compoundsFilter = searchParameters.getCompounds();
-                List<String> diseasesFilter = searchParameters.getDiseases();
-                if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
+                //List<String> speciesFilter = searchParameters.getSpecies();
+                //List<String> compoundsFilter = searchParameters.getCompounds();
+                //List<String> diseasesFilter = searchParameters.getDiseases();
+
+
+                Set<String> speciesFilter = new TreeSet<String>();
+                for (String s : searchParameters.getSpecies()) {
+                    if (s != null || !s.isEmpty() || s.equals("") || s.equals(" ")) {
+                        speciesFilter.add(s);
+                    }
+                }
+                Set<String> diseasesFilter = new TreeSet<String>();
+                for (String d : searchParameters.getDiseases()) {
+                    if (d == null || d.equals("") || d.equals(" ") || d.isEmpty()) {
+                        //System.out.println("the filters DIS " + d);
+                    } else {
+                        // System.out.println("now adding " + d);
+                        diseasesFilter.add(d);
+                    }
+                }
+
+
+                //same fro comp
+                Set<String> compoundsFilter = new TreeSet<String>();
+                for (String c : searchParameters.getCompounds()) {
+                    if (c == null || c.equals("") || c.equals(" ") || c.isEmpty()) {
+                        //System.out.println("the filters COMP " + c);
+                    } else {
+                        // System.out.println("now adding com " + c);
+                        compoundsFilter.add(c);
+                    }
+                }
+
+
+//AUTO COMPLETE STARTS HERE
+                //selected species via auto complete
+                //List<String> selectedSpecies_autoComplete = searchParameters.getSelectedSpecies();
+                List<String> selectedCompounds_autocomplete = searchParameters.getSelectedCompounds();
+                List<String> selectedDisease_autocomplete = searchParameters.getSelectedDiseases();
+
+                Set<String> selectedSpecies_autoComplete = new TreeSet<String>();
+                for (String selectedSp : searchParameters.getSelectedSpecies()) {
+                    if (selectedSp != null || !selectedSp.isEmpty() || selectedSp.equals("") || selectedSp.equals(" ")) {
+                        selectedSpecies_autoComplete.add(selectedSp);
+                    }
+                }
+
+                // list to hold all selected species both from the specie list and auto-complete
+                Set<String> allSelectedSpecies = new TreeSet<String>();
+
+                Species specie_to_tempList;// = null;
+
+                //compound to be held temporary
+                Compound compound_to_tempList;// = null;
+
+                //disease to be held temporary
+                uk.ac.ebi.ep.search.model.Disease disease_to_tempList;
+
+                //a temp list to hold species selected from the auto-complete
+
+                List<Species> tempSpecieList = resultSet.getSearchfilters().getTempSpecies();
+
+
+                //a temporary list to hold all selected compounds from auto-complete
+                List<Compound> tempCompoundList = resultSet.getSearchfilters().getTempCompounds();
+
+                //a temporary List to hold all selected disease from auto complete
+                List<uk.ac.ebi.ep.search.model.Disease> tempDiseaseList = resultSet.getSearchfilters().getTempDiseases();
+
+                SearchResults searchResults = resultSet;
+                // the default species in the specie List
+                List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
+
+                //default compound list
+                List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
+
+
+                List<uk.ac.ebi.ep.search.model.Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
+
+                //if an item is seleted, then filter the list
+                if (!selectedDisease_autocomplete.isEmpty() || !selectedCompounds_autocomplete.isEmpty() || !selectedSpecies_autoComplete.isEmpty() || !speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
                     List<EnzymeSummary> filteredResults =
                             new LinkedList<EnzymeSummary>(resultSet.getSummaryentries());
+
+
+                    speciesFilter.addAll(selectedSpecies_autoComplete);
+                    compoundsFilter.addAll(selectedCompounds_autocomplete);
+                    diseasesFilter.addAll(selectedDisease_autocomplete);
 
                     CollectionUtils.filter(filteredResults,
                             new SpeciesPredicate(speciesFilter));
@@ -309,6 +384,128 @@ public class SearchController {
                             new CompoundsPredicate(compoundsFilter));
                     CollectionUtils.filter(filteredResults,
                             new DiseasesPredicate(diseasesFilter));
+
+
+
+
+
+                    allSelectedSpecies.addAll(compoundsFilter);
+
+
+                    allSelectedSpecies.addAll(diseasesFilter);
+
+
+                    allSelectedSpecies.addAll(speciesFilter);
+
+
+
+                    //auto complete filtering
+                    //if specie(s) is selected from auto-complete, then the following executes.
+                    if (selectedSpecies_autoComplete.size() > 0) {
+                        List<String> selections = new LinkedList<String>();
+                        for (String scienceName : selectedSpecies_autoComplete) {
+
+                            //loop thru the species and see if the science name matches with the selected item
+                            for (Species species_in_defaultList : defaultSpeciesList) {
+                                if (!scienceName.isEmpty() && scienceName.equalsIgnoreCase(species_in_defaultList.getScientificname()) || scienceName.equalsIgnoreCase(species_in_defaultList.getCommonname())) {
+
+                                    //create a specie based on the scienctific name selected
+                                    specie_to_tempList = species_in_defaultList;
+
+                                    //if the specie is not already in the temp List, then add it and filter the enzyme summary list based on the selected species.
+                                    if (!tempSpecieList.contains(specie_to_tempList)) {
+
+                                        tempSpecieList.add(specie_to_tempList);
+
+
+
+                                    }
+
+
+
+                                }
+                            }
+
+                        }
+
+
+
+                    }
+
+                    //same as above for compounds
+
+                    if (selectedCompounds_autocomplete.size() > 0) {
+                        List<String> selections = new LinkedList<String>();
+                        for (String compoundName : selectedCompounds_autocomplete) {
+
+                            //loop thru the species and see if the science name matches with the selected item
+                            for (Compound compounds_in_defaultList : defaultCompoundList) {
+                                if (!compoundName.isEmpty() && compoundName.equalsIgnoreCase(compounds_in_defaultList.getName())) {
+
+                                    //create a specie based on the scienctific name selected
+                                    compound_to_tempList = compounds_in_defaultList;
+
+                                    //if the specie is not already in the temp List, then add it and filter the enzyme summary list based on the selected species.
+                                    if (!tempCompoundList.contains(compound_to_tempList)) {
+
+                                        tempCompoundList.add(compound_to_tempList);
+
+                                    }
+
+
+
+                                }
+                            }
+
+                        }
+
+
+                    }
+
+
+                    //same as above for disease
+
+                    if (selectedDisease_autocomplete.size() > 0) {
+
+                        for (String diseaseName : selectedDisease_autocomplete) {
+
+                            //loop thru the species and see if the science name matches with the selected item
+                            for (uk.ac.ebi.ep.search.model.Disease disease_in_defaultList : defaultDiseaseList) {
+                                if (!diseaseName.isEmpty() && diseaseName.equalsIgnoreCase(disease_in_defaultList.getName())) {
+
+                                    //create a specie based on the scienctific name selected
+                                    disease_to_tempList = disease_in_defaultList;
+
+                                    //if the specie is not already in the temp List, then add it and filter the enzyme summary list based on the selected species.
+                                    if (!tempDiseaseList.contains(disease_to_tempList)) {
+
+                                        tempDiseaseList.add(disease_to_tempList);
+
+                                    }
+
+
+
+                                }
+                            }
+
+                        }
+
+                    }
+
+
+
+
+                    CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedSpecies));
+
+                    //a check so that we don't get an empty page. so if the result is null, we display a no result found for the selection to the end user
+                    if (filteredResults.size() <= 0) {
+                        EnzymeSummary es = new EnzymeSummary();
+
+                        filteredResults.add(es);
+                    }
+
+                    //AUTO-COMPLETE ENDS.................
+
                     // Create a new SearchResults, don't modify the one in session
                     SearchResults sr = new SearchResults();
 
@@ -337,6 +534,19 @@ public class SearchController {
         }
         return view;
     }
+    static final Comparator<Species> SORT_SPECIES = new Comparator<Species>() {
+
+        public int compare(Species sp1, Species sp2) {
+            if (sp1.getCommonname() == null && sp2.getCommonname() == null) {
+
+                return sp1.getScientificname().compareTo(sp2.getScientificname());
+            }
+            int compare = sp1.getScientificname().compareTo(sp2.getScientificname());
+
+            return ((compare == 0) ? sp1.getScientificname().compareTo(sp2.getScientificname()) : compare);
+
+        }
+    };
 
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
     public String getSearchResult(Model model) {

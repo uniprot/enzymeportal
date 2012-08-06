@@ -22,7 +22,7 @@ is selected and exported as a 'theSpecies'.
 	</c:forEach>
 
 	<c:if test="${fixSp}">
-		<c:set var="theSpecies" value="" />
+		
 		<c:forEach var="filterSp" items="${searchModel.searchparams.species}">
 			<c:forEach var="sp" items="${enzyme.relatedspecies}">
 				<c:if test="${empty theSpecies
@@ -34,3 +34,26 @@ is selected and exported as a 'theSpecies'.
 	</c:if>
 
 </c:if>
+
+<%--<c:if test="${not empty searchModel.searchparams.selectedSpecies}">
+
+	<c:set var="fixSp" value="true" />
+	<c:forEach var="filterSp" items="${searchModel.searchparams.selectedSpecies}">
+		<c:if test="${filterSp eq enzyme.species.scientificname}">
+			<c:set var="fixSp" value="false" />
+		</c:if>
+	</c:forEach>
+
+	<c:if test="${fixSp}">
+		<c:set var="theSpecies" value="" />
+		<c:forEach var="filterSp" items="${searchModel.searchparams.selectedSpecies}">
+			<c:forEach var="sp" items="${enzyme.relatedspecies}">
+				<c:if test="${empty theSpecies
+					and sp.species.scientificname eq filterSp}">
+					<c:set var="theSpecies" value="${sp}" />
+				</c:if>
+			</c:forEach>
+		</c:forEach>
+	</c:if>
+
+</c:if>--%>

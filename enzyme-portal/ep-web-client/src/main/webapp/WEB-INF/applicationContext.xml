@@ -10,11 +10,11 @@
 -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc-2.5.xsd
        http://www.springframework.org/schema/beans
@@ -36,7 +36,7 @@
         <property name="locations" value="WEB-INF/sitemapLoc.properties"/>
     </bean>
     
-      <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
         <property name="beans">
             <map>
                 <entry key="SitemapBean:name=sitemapConfig" value-ref="sitemapConfig"/>
@@ -47,12 +47,12 @@
 
 
     <bean id="sitemapConfig"
-		class="uk.ac.ebi.ep.mBean.SitemapConfig">
+          class="uk.ac.ebi.ep.mBean.SitemapConfig">
 <!--       <property name="sitemapUrl"
 			value="C:\Users\joseph\EnzymePortalSiteMap.xml.gz"/>-->
               
         <property name="sitemapUrl"
-			value="${sitemapLoc.sitemapUrl}"/>
+                  value="${sitemapLoc.sitemapUrl}"/>
     </bean>
    
     
