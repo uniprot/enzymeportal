@@ -132,7 +132,8 @@ a:link, a:visited {
     margin-left: 2px;
     margin-right: 2px;
 }
-
+.sublevel1 { border:1px thin #ddd; width:inherit; height: 400px; overflow:auto }
+/*.sublevel1 { overflow:auto ;border:1px thin #ddd;width: 260px; height:400px }*/
 .filterContent {
     margin-left: 5px;
     padding-bottom: 2px;
@@ -161,7 +162,7 @@ a:link, a:visited {
     margin-bottom: 8px;
     vertical-align: top;
 }
-
+.container { border:2px solid #ccc; width:300px; height: 300px; overflow-y: scroll; }
 /*The container of result items on the right side of the filter*/
 .result  {
     float:left;
@@ -404,9 +405,7 @@ a.popup:hover span {
 
 a.scienceName span{
     font-style: italic;
-    color:#000000;
-    font-weight:lighter;
+   color:#000000;
+     font-weight:lighter;
 }
-
-
 

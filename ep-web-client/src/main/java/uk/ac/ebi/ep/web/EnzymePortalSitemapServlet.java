@@ -17,17 +17,16 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import uk.ac.ebi.ep.mBean.SitemapConfig;
 
-
-
 /**
- *This Servlet reads and serves the generated SiteMap
+ * This Servlet reads and serves the generated SiteMap
+ *
  * @author joseph
  */
 //
 public class EnzymePortalSitemapServlet extends HttpServlet {
 
     public Logger LOGGER = Logger.getLogger(EnzymePortalSitemapServlet.class);
-     private SitemapConfig sitemapConfig;
+    private SitemapConfig sitemapConfig;
 
     public SitemapConfig getSitemapConfig() {
         return sitemapConfig;
@@ -41,37 +40,37 @@ public class EnzymePortalSitemapServlet extends HttpServlet {
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/gzip");
+        //response.setContentType("application/gzip");
+         response.setContentType("application/xml");
         LOGGER.info("Getting URL connection to sitemap...");
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());//.getWebApplicationContext(getServletContext());
         // ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
         //SitemapConfig sitemapConfig = (SitemapConfig) context.getBean("sitemapConfig");
-          sitemapConfig = (SitemapConfig) context.getBean(SitemapConfig.class);
+        sitemapConfig = (SitemapConfig) context.getBean(SitemapConfig.class);
 
 
         URL url = new URL(sitemapConfig.getSitemapUrl());
 
-         LOGGER.info("Connecting to sitemap...");
+        LOGGER.info("Connecting to sitemap...");
         URLConnection con = url.openConnection(java.net.Proxy.NO_PROXY);
-       
+
         LOGGER.info("Connected to sitemap...");
-         InputStream inputStream = null;
+        InputStream inputStream = null;
         try {
-             inputStream = con.getInputStream();
-             int r = -1;
+            inputStream = con.getInputStream();
+            int r = -1;
             LOGGER.debug("Starting to read sitemap...");
-             while ((r = inputStream.read()) != -1) {
-             response.getOutputStream().write(r);
-             }
+            while ((r = inputStream.read()) != -1) {
+                response.getOutputStream().write(r);
+            }
 
             response.getOutputStream().flush();
             response.flushBuffer();
             LOGGER.debug("... Read and served");
         } finally {
-            if(inputStream != null){
+            if (inputStream != null) {
                 inputStream.close();
             }
         }
     }
-
 }

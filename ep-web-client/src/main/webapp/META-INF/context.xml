@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/enzymeportal" antiJARLocking="true">
-
-    <Resource type="javax.sql.DataSource"
-        auth="Container"
-        name="jdbc/ep/mm"
-        driverClassName="oracle.jdbc.OracleDriver"
-        url="jdbc:oracle:thin:@///ENZDEV"
-        username="enzyme_portal"
-        password="epsilon"
-        poolPreparedStatements="true"
-        maxWait="15000"
-        testOnBorrow="true"
-        validationQuery="SELECT 1 FROM DUAL"
-        removeAbandoned="true"
-        logAbandoned="true"
-        removeAbandonedTimeout="60">
+<Context antiJARLocking="true" path="/enzymeportal">
+  <Resource auth="Container" driverClassName="oracle.jdbc.OracleDriver" logAbandoned="true" maxWait="15000" name="jdbc/ep/mm" password="epsilon" poolPreparedStatements="true" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:oracle:thin:@//kava.ebi.ac.uk:1561/ENZDEV" username="enzyme_portal" validationQuery="SELECT 1 FROM DUAL">
     </Resource>
-
 </Context>
