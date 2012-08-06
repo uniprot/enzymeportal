@@ -1,9 +1,7 @@
 package uk.ac.ebi.ep.core.filter;
 
 import java.util.Collection;
-
 import org.apache.commons.collections.Predicate;
-
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -41,8 +39,8 @@ public class CompoundsPredicate implements Predicate {
 		if (obj instanceof EnzymeSummary){
 			EnzymeSummary es = (EnzymeSummary) obj;
 			for (EnzymeAccession ea : es.getRelatedspecies()){
-				for (Compound compound : ea.getCompounds()) {
-					String id = compound.getId();
+				for (Compound compound : ea.getSpecies().getCompounds()) {
+					String id = compound.getName();
 					if (compoundsFilter.contains(id)){
 						eval = true;
 						break;

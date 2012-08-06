@@ -7,11 +7,11 @@ package uk.ac.ebi.ep.core.search;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import org.apache.log4j.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
 import uk.ac.ebi.ep.mm.MegaMapper;
 
@@ -111,4 +111,4 @@ public final class MegaMapperConnection {
 //        
 //
 //    }
-}
+    }
