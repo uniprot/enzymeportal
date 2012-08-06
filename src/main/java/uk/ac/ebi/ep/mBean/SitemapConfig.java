@@ -10,10 +10,10 @@ package uk.ac.ebi.ep.mBean;
  */
 public class SitemapConfig implements SitemapConfigMBean {
 
-
     private String userHome = System.getProperty("user.home");
-    private String filename = "SiteMap";
-    private String output = String.format("%s\\%s.xml.gz", userHome, filename);
+    private String filename = "sitemap_index";
+    //private String output = String.format("%s\\%s.xml.gz", userHome, filename);
+    private String output = String.format("%s/%s.xml", userHome, filename);
     private String sitemapUrl = output;
 
     public String getSitemapUrl() {
@@ -23,5 +23,4 @@ public class SitemapConfig implements SitemapConfigMBean {
     public void setSitemapUrl(String sitemapUrl) {
         this.sitemapUrl = sitemapUrl;
     }
-
 }

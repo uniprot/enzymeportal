@@ -102,6 +102,7 @@
                         <div id="extLinks-${rpVs.index}">
                      		<c:if test="${not empty reaction.xrefs}">
                      			<div class="reactome inlineLinks">
+                                            <c:out value="${reactomeBaseUrl}${reaction.xrefs[0]}"> PLEASE DELETE LATER</c:out>
                                     <a target="blank" href="${reactomeBaseUrl}${reaction.xrefs[0]}">
                                         <spring:message code="label.entry.reactionsPathways.link.reactome.reaction"/>
                                     </a>
