@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="uk.ac.ebi.ep.mm.app.Reference" batch-size="200" table="CHEBI.REFERENCE">
+         <id name= "id" column="ID" />
+        <property name= "compound_id" column = "COMPOUND_ID" />
+        <property name="location_in_ref" column="LOCATION_IN_REF" />
+        <property name="reference_name" column="REFERENCE_NAME" />
+      <property name="reference_id" column="REFERENCE_ID" />
+  </class>
+</hibernate-mapping>

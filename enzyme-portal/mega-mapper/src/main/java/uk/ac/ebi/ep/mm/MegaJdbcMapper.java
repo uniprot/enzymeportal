@@ -1,21 +1,14 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import java.sql.*;
+import java.util.*;
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 
 /**
  * Plain JDBC implementation of {@link MegaMapper}.
+ *
  * @author rafa
  *
  */
@@ -31,9 +24,7 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     * {@inheritDoc}
-     * <br>
-     * This implementation prepares the required statements.
+     * {@inheritDoc} <br> This implementation prepares the required statements.
      */
     public final void openMap() throws IOException {
         sqlLoader = new SQLLoader(this.getClass(), con);
@@ -92,10 +83,8 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     * {@inheritDoc}
-     * <br>
-     * This implementation writes any (or both) of the two linked
-     * entries in case they don't already exist in the database.
+     * {@inheritDoc} <br> This implementation writes any (or both) of the two
+     * linked entries in case they don't already exist in the database.
      */
     public void writeXref(XRef xref) throws IOException {
         try {
@@ -142,14 +131,17 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Deletes one entry <i>and all the associated accessions and xrefs</i>.
+     *
      * @param entry
      */
     public void deleteEntry(Entry entry) {
         try {
             PreparedStatement dXrefStm =
                     sqlLoader.getPreparedStatement("--delete.xrefs");
-            dXrefStm.setInt(1, entry.getId());
-            dXrefStm.setInt(2, entry.getId());
+            //dXrefStm.setInt(1, entry.getId());
+            // dXrefStm.setInt(2, entry.getId());
+            dXrefStm.setString(1, entry.getEntryId());
+            dXrefStm.setString(2, entry.getEntryId());
             dXrefStm.execute();
             PreparedStatement dAccStm =
                     sqlLoader.getPreparedStatement("--delete.accessions");
@@ -167,13 +159,16 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     * Checks if an entry already exists in the database. If so, the
-     * passed {@link Entry} object is updated with the internal id.
+     * Checks if an entry already exists in the database. If so, the passed {@link Entry}
+     * object is updated with the internal id.
+     *
      * @param entry
-     * @return <code>true</code> if the entry exists.
+     * @return
+     * <code>true</code> if the entry exists.
      * @throws SQLException
      */
     private boolean existsInMegaMap(Entry entry) throws SQLException {
+        
         PreparedStatement rEntryStm =
                 sqlLoader.getPreparedStatement("--entry.by.entryid");
         int paramNum = 1;
@@ -211,6 +206,7 @@ public class MegaJdbcMapper implements MegaMapper {
     /**
      * Converts an array of database objects into a comma-delimited list of
      * single-quoted database names
+     *
      * @param dbs
      * @return
      */
@@ -244,6 +240,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Builds a list of XRef objects from a result set.
+     *
      * @param rs
      * @return
      * @throws SQLException
@@ -266,11 +263,9 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     * {@inheritDoc}
-     * <br>
-     * Unlike the hibernate implementation, in case of getting more than
-     * one result this will will be logged as a warning, returning the
-     * first entry only.
+     * {@inheritDoc} <br> Unlike the hibernate implementation, in case of
+     * getting more than one result this will will be logged as a warning,
+     * returning the first entry only.
      */
     public Entry getEntryForAccession(MmDatabase db, String accession) {
         Entry entry = null;
@@ -393,11 +388,12 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * retrieves a List of XRef with database name as ChEMBL.
+     *
      * @param db database where the accession is found
      * @param accession the accession number
      * @param xDbs chEMBL database
-     * @return a List of XRef with database name as chEMBL. 
-     * Note: the maximum number of XRef retrieved is 5.
+     * @return a List of XRef with database name as chEMBL. Note: the maximum
+     * number of XRef retrieved is 5.
      */
     public List<XRef> getChMBLXrefs(MmDatabase db, String accession,
             MmDatabase... xDbs) {
@@ -420,6 +416,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * retrieves the total number of Xrefs found for a given accession.
+     *
      * @param db the database where the accession is found
      * @param accession the accession number
      * @param xDb the referencing/referenced database(s).
@@ -449,10 +446,9 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     * {@inheritDoc}
-     * <br>
-     * This implementation just closes the prepared statements. Note that the
-     * connection is not closed, that is the client's responsibility.
+     * {@inheritDoc} <br> This implementation just closes the prepared
+     * statements. Note that the connection is not closed, that is the client's
+     * responsibility.
      */
     public void closeMap() throws IOException {
         closeStatements();
@@ -487,6 +483,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * to retrieve all accessions for the given database
+     *
      * @param database the database with accessions
      * @return list of accessions from a given database
      */
@@ -511,5 +508,269 @@ public class MegaJdbcMapper implements MegaMapper {
         }
 
         return accessionList;
+    }
+
+    //get disease using list of accessions
+     public Map<String, String> getDiseaseNew(MmDatabase db, String accession,
+            MmDatabase... xDbs) {
+        Map<String, String> diseasesEntryMap = null;
+        ResultSet resultSet = null;
+        PreparedStatement ps = null;
+        //String[] acc = accessions.split("_");
+        //String accession = acc[0].concat("_%");
+
+        try {
+            if (diseasesEntryMap == null) {
+                diseasesEntryMap = new HashMap<String, String>();
+            }
+
+            String queryOld = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? "
+                    + "and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or "
+                    + "(e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name is not null ";
+            
+            
+            String query = "select DISTINCT e.db_name, e.entry_id, e.entry_name from mm_entry e, mm_accession a, mm_xref x "
+                    + "where a.accession = ? and a.id = x.from_entry and x.to_entry = e.id and e.db_name in (?,?,?)";
+
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+
+                ps.setString(1, accession);
+                ps.setString(2, xDbs[0].name());
+                ps.setString(3, xDbs[1].name());
+                ps.setString(4, xDbs[2].name());
+
+
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+
+                    String entryId = resultSet.getString("ENTRY_ID");
+                    String entryName = resultSet.getString("ENTRY_NAME");
+                    if (entryId != null && entryName != null) {
+                        diseasesEntryMap.put(entryId, entryName);
+                    }
+
+                }
+
+                resultSet.close();
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + xDbs + ")", e);
+        }
+
+        return diseasesEntryMap;
+    }
+     
+     
+         public Map<String, String> getCompoundsNew(MmDatabase db, String accession,
+            MmDatabase... xDbs) {
+        //List<CompoundEntry> compoundList = null;
+        Map<String, String> compoundEntryMap = null;
+        //String[] acc = accessions.split("_");
+        //String accession = acc[0].concat("_%");
+        // String x = "pablo_conesa";
+        // String  acc = accession.;
+        // String [] s = x.split("_");
+        // String y = s[0].concat("_%");
+
+
+
+        try {
+            // if (compoundList == null) {
+            //compoundList = new ArrayList<CompoundEntry>();
+            // }
+
+            if (compoundEntryMap == null) {
+                compoundEntryMap = new HashMap<String, String>();
+            }
+            
+            String query = "select DISTINCT e.db_name, e.entry_id, e.entry_name from mm_entry e, mm_accession a, mm_xref x"
+                    + " where a.accession = ? and a.id = x.from_entry and x.to_entry = e.id and e.db_name = ? union "
+                    + "select e.db_name, e.entry_id, e.entry_name from mm_entry e, mm_accession a, mm_xref x where"
+                    + " a.accession = ? and a.id = x.to_entry and x.from_entry = e.id and e.db_name = ?";
+                    
+                    
+            String queryOLD = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null";
+            // PreparedStatement ps = sqlLoader.getPreparedStatement(
+            //"--compounds.by.accession", dbArrayForQuery(xDbs));
+            // compounds.by.accession
+            // System.out.println("The ACCESSION "+ accession);
+           // String s = "  select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = 'UniProt' and e1.entry_id like 'PDE6B_%' and ( (e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in ('ChEBI','ChEMBL')";
+            PreparedStatement ps = null;
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+                ps.setString(1, accession);
+                ps.setString(3, accession);
+                ps.setString(2, xDbs[0].name());
+                ps.setString(4, xDbs[1].name());
+
+
+
+                ResultSet resultSet = ps.executeQuery();
+                while (resultSet.next()) {
+
+                    String entryId = resultSet.getString("ENTRY_ID");
+                    String entryName = resultSet.getString("ENTRY_NAME");
+                    if (entryId != null && entryName != null) {
+                        // System.out.println("data "+ entryName);
+                        compoundEntryMap.put(entryId, entryName);
+                    }
+
+                    // CompoundEntry compoundEntry = new CompoundEntry(entryId, entryName);
+
+                    // compoundList.add(compoundEntry);
+                }
+                // System.out.println("size of result from MegaMapper " + compoundEntryMap.size());
+                resultSet.close();
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + xDbs + ")", e);
+        }
+        return compoundEntryMap;
+    }
+
+    //working version
+
+    public Map<String, String> getDisease(MmDatabase db, String accessions,
+            MmDatabase... xDbs) {
+        Map<String, String> diseasesEntryMap = null;
+        ResultSet resultSet = null;
+        PreparedStatement ps = null;
+        String[] acc = accessions.split("_");
+        String accession = acc[0].concat("_%");
+
+        try {
+            if (diseasesEntryMap == null) {
+                diseasesEntryMap = new HashMap<String, String>();
+            }
+
+            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? "
+                    + "and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or "
+                    + "(e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name is not null ";
+
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+
+                ps.setString(1, db.name());
+                ps.setString(2, accession);
+                ps.setString(3, xDbs[0].name());
+                ps.setString(4, xDbs[1].name());
+                ps.setString(5, xDbs[2].name());
+
+
+
+
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+
+                    String entryId = resultSet.getString("ENTRY_ID");
+                    String entryName = resultSet.getString("ENTRY_NAME");
+                    if (entryId != null && entryName != null) {
+                        diseasesEntryMap.put(entryId, entryName);
+                    }
+
+                }
+
+                resultSet.close();
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + xDbs + ")", e);
+        }
+
+        return diseasesEntryMap;
+    }
+
+    public Map<String, String> getCompounds(MmDatabase db, String accessions,
+            MmDatabase... xDbs) {
+        //List<CompoundEntry> compoundList = null;
+        Map<String, String> compoundEntryMap = null;
+        String[] acc = accessions.split("_");
+        String accession = acc[0].concat("_%");
+        // String x = "pablo_conesa";
+        // String  acc = accession.;
+        // String [] s = x.split("_");
+        // String y = s[0].concat("_%");
+
+
+
+        try {
+            // if (compoundList == null) {
+            //compoundList = new ArrayList<CompoundEntry>();
+            // }
+
+            if (compoundEntryMap == null) {
+                compoundEntryMap = new HashMap<String, String>();
+            }
+            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null";
+            // PreparedStatement ps = sqlLoader.getPreparedStatement(
+            //"--compounds.by.accession", dbArrayForQuery(xDbs));
+            // compounds.by.accession
+            // System.out.println("The ACCESSION "+ accession);
+            String s = "  select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = 'UniProt' and e1.entry_id like 'PDE6B_%' and ( (e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in ('ChEBI','ChEMBL')";
+            PreparedStatement ps = null;
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+                ps.setString(2, accession);
+                ps.setString(1, db.name());
+                ps.setString(3, xDbs[0].name());
+                ps.setString(4, xDbs[1].name());
+
+
+
+                ResultSet resultSet = ps.executeQuery();
+                while (resultSet.next()) {
+
+                    String entryId = resultSet.getString("ENTRY_ID");
+                    String entryName = resultSet.getString("ENTRY_NAME");
+                    if (entryId != null && entryName != null) {
+                        // System.out.println("data "+ entryName);
+                        compoundEntryMap.put(entryId, entryName);
+                    }
+
+                    // CompoundEntry compoundEntry = new CompoundEntry(entryId, entryName);
+
+                    // compoundList.add(compoundEntry);
+                }
+                // System.out.println("size of result from MegaMapper " + compoundEntryMap.size());
+                resultSet.close();
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + xDbs + ")", e);
+        }
+        return compoundEntryMap;
+    }
+
+    /**
+     * Builds a list of XRef objects from a result set.
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    private List<XRef> buildCompound(ResultSet rs) throws SQLException {
+        List<XRef> xrefs = null;
+        while (rs.next()) {
+            if (xrefs == null) {
+                xrefs = new ArrayList<XRef>();
+            }
+            XRef xref = new XRef();
+            xref.setId(rs.getInt("id"));
+            xref.setFromEntry(getEntryById(rs.getInt("from_entry")));
+            xref.setToEntry(getEntryById(rs.getInt("to_entry")));
+            xref.setRelationship(rs.getString("relationship"));
+            xrefs.add(xref);
+        }
+        rs.close();
+        return xrefs;
     }
 }

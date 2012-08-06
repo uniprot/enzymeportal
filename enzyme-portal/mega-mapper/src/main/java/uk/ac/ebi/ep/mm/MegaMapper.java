@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.mm;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for objects writing/reading entries and cross-references to/from
@@ -156,4 +157,10 @@ public interface MegaMapper {
     public void rollback() throws IOException;
 
     List<String> getAllUniProtAccessions(MmDatabase database);
+      
+     Map<?,?> getCompounds(MmDatabase db, String accession,
+            MmDatabase... xDbs);
+     
+     Map<String, String> getDisease(MmDatabase db, String accessions,
+            MmDatabase... xDbs);
 }

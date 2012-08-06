@@ -25,7 +25,10 @@ public enum Relationship {
 	is_activator_of,
 
 	// Relationships to compounds:
-	is_target_of;
+	is_target_of,
+        
+        //Description of the reaction(s) catalyzed by an enzyme.
+        is_substrate_or_product_of;
 	
 	/**
 	 * Gets the usual relationship between two databases.
