@@ -9,7 +9,7 @@ package uk.ac.ebi.ep.exception;
  * The Severity class is used to specify the severity of an exception that has occurred
  * within the project. This is used to allow the catching component to act upon the caught
  * exception in the most appropriate manner.
- * @author etorbett
+ * @author Joseph
  */
 public enum Severity {
     /**
@@ -29,7 +29,7 @@ public enum Severity {
      */
     COMPONENT_AFFECTING,
     /**
-     * SYSTEM AFFECTING exceptions indicate that the IPTNEM is unable to continue
+     * SYSTEM AFFECTING exceptions indicate that the Application is unable to continue
      * functioning. To rectify the problem, a software restart or complete hardware
      * shutdown/reboot may be required.
      */
