@@ -6,37 +6,22 @@
 package uk.ac.ebi.ep.core.search;
 
 import static org.junit.Assert.assertNotNull;
-
-import java.util.List;
-
-import junit.framework.Assert;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
-
+import org.junit.*;
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
-import uk.ac.ebi.ep.adapter.uniprot.IUniprotAdapter;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
-import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiAdapter;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
 import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.enzyme.model.Molecule;
 
 /**
  *
  * @author hongcao
  */
+@Ignore
 public class EnzymeRetrieverTest {
     private EnzymeRetriever instance;
-     String uniprotAccession = "Q08499";
+     String uniprotAccession ="Q9NP56";// "Q08499";
     public EnzymeRetrieverTest() {
     }
 
