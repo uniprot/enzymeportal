@@ -13,10 +13,7 @@
 
     <name>SitemapGenerator</name>
     <url>http://maven.apache.org</url>
-<!--    <ciManagement>
-        <system>hudson</system>
-        <url>http://localhost:8080/hudson/job/SitemapGenerator/</url>
-    </ciManagement>-->
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -35,7 +32,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mega-mapper</artifactId>
-            <version>1.0</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.oracle</groupId>
@@ -45,10 +42,30 @@
         </dependency>
     </dependencies>
     <build>
-        <resources>
+<!--        <resources>
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
+                    <include>ep-mm-db-enzdev-ro.properties</include>
+                    <include>ep-mm-db-ezprel-ro.properties</include>
+                </includes>
+            </resource>
+        </resources>-->
+                <testResources>
+            <testResource>
+                <directory>${ep.config.dir}</directory>
+                <includes>
+                    <include>ep-mm-db-enzdev.properties</include>
+                </includes>
+            </testResource>
+        </testResources>
+                <resources>
+            <resource>
+                <directory>${ep.config.dir}</directory>
+                <includes>
+                    <include>ep-mm-db-enzdev.properties</include>
+                    <include>ep-mm-db-ezprel.properties</include>
+                    
                     <include>ep-mm-db-enzdev-ro.properties</include>
                     <include>ep-mm-db-ezprel-ro.properties</include>
                 </includes>
