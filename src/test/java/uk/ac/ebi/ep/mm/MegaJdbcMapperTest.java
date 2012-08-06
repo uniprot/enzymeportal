@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 
-@Ignore
+//@Ignore
 public class MegaJdbcMapperTest {
 
     private MegaJdbcMapper mm;
@@ -225,65 +225,65 @@ public class MegaJdbcMapperTest {
         logger.info("After xrefsByAccession");
     }
 
-//    /**
-//     * Test of getAllUniProtAccessions method, of class MegaJdbcMapper.
-//     */
-//    @Test
-//    public void testGetAllUniProtAccessions() {
-//        System.out.println("getAllUniProtAccessions");
-//        MmDatabase database = MmDatabase.UniProt;
-//
-//        List result = mm.getAllUniProtAccessions(database);
-//        //assertNotNull(result);
-//
-//    }
+/**
+     * Test of getAllUniProtAccessions method, of class MegaJdbcMapper.
+     */
+    @Test
+    public void testGetAllUniProtAccessions() {
+        System.out.println("getAllUniProtAccessions");
+        MmDatabase database = MmDatabase.UniProt;
+
+        List result = mm.getAllUniProtAccessions(database);
+        assertNotNull(result);
+
+    }
     
-//    @Test
-//    public void getCompounds() {
-//        System.out.println("get Compounds");
-//        Map<String, String> compoundMap = null;
-//        MmDatabase db = MmDatabase.UniProt;
-//        String accession = "PDE5A_HUMAN";
-//         //String [] acc = accessions.split("_");
-//        //String accession = acc[0].concat("_%");
-//        //String accession = "PDE6B_%";
-//  
-//        MmDatabase[] xDbs = new MmDatabase[3];
-//        xDbs[1] = MmDatabase.ChEBI;
-//        xDbs[0] = MmDatabase.ChEMBL;
-//
-//        compoundMap = mm.getCompounds(db, accession, xDbs);
-//
-//        assertNotNull(compoundMap);
-//       // for (Map.Entry<String, String> m : compoundMap.entrySet()) {
-//            //System.out.println("Result : " + m.getKey() + ": " + m.getValue());
+    @Test
+    public void getCompounds() {
+        System.out.println("get Compounds");
+        Map<String, String> compoundMap = null;
+        MmDatabase db = MmDatabase.UniProt;
+        String accession = "PDE5A_HUMAN";
+         //String [] acc = accessions.split("_");
+        //String accession = acc[0].concat("_%");
+        //String accession = "PDE6B_%";
+  
+        MmDatabase[] xDbs = new MmDatabase[3];
+        xDbs[1] = MmDatabase.ChEBI;
+        xDbs[0] = MmDatabase.ChEMBL;
+
+        compoundMap = mm.getCompounds(db, accession, xDbs);
+
+        assertNotNull(compoundMap);
+//        for (Map.Entry<String, String> m : compoundMap.entrySet()) {
+//            System.out.println("Result : " + m.getKey() + ": " + m.getValue());
 //            //logger.info("Result : " + m.getKey() + ": " + m.getValue());
-//       // }
-//        
-//    }
-//    
-//        @Test
-//    public void getDisease() {
-//        System.out.println("get Disease");
-//        Map<String, String> diseaseMap = null;
-//        MmDatabase db = MmDatabase.UniProt;
-//        String accession = "CFTR_HUMAN";
-//
-//  
-//        MmDatabase[] xDbs = new MmDatabase[3];
-//  
-//           
-//        xDbs[0] = MmDatabase.OMIM;
-//         xDbs[1] = MmDatabase.EFO;
-//        xDbs[2] = MmDatabase.MeSH;
-//  
-//        
-//        diseaseMap = mm.getDisease(db, accession, xDbs);
-//        assertNotNull(diseaseMap);
-//        //for (Map.Entry<String, String> m : diseaseMap.entrySet()) {
-//           // System.out.println("Result : " + m.getKey() + ": " + m.getValue());
+//        }
+        
+    }
+    
+        @Test
+    public void getDisease() {
+        System.out.println("get Disease");
+        Map<String, String> diseaseMap = null;
+        MmDatabase db = MmDatabase.UniProt;
+        String accession = "CFTR_HUMAN";
+
+  
+        MmDatabase[] xDbs = new MmDatabase[3];
+  
+           
+        xDbs[0] = MmDatabase.OMIM;
+         xDbs[1] = MmDatabase.EFO;
+        xDbs[2] = MmDatabase.MeSH;
+  
+        
+        diseaseMap = mm.getDisease(db, accession, xDbs);
+        assertNotNull(diseaseMap);
+//        for (Map.Entry<String, String> m : diseaseMap.entrySet()) {
+//            System.out.println("Result : " + m.getKey() + ": " + m.getValue());
 //            //logger.info("Result : " + m.getKey() + ": " + m.getValue());
-//        //}
-//        
-//    }
+//        }
+        
+    }
 }

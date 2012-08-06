@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -214,6 +215,14 @@ public class MegaLuceneMapper implements MegaMapper {
     }
 
     public int getXrefsSize(MmDatabase db, String accession, MmDatabase... xDb) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Map<?, ?> getCompounds(MmDatabase db, String accession, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Map<String, String> getDisease(MmDatabase db, String accessions, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
