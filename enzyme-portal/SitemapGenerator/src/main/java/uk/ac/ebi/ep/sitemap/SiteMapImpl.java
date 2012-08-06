@@ -4,6 +4,9 @@
  */
 package uk.ac.ebi.ep.sitemap;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -11,11 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -27,14 +25,17 @@ import org.sitemaps.ObjectFactory;
 import org.sitemaps.Url;
 import org.sitemaps.Urlset;
 import org.xml.sax.SAXException;
-import uk.ac.ebi.ep.exception.*;
+import uk.ac.ebi.ep.exception.EnzymePortalException;
+import uk.ac.ebi.ep.exception.Severity;
 import uk.ac.ebi.ep.mm.MmDatabase;
 
 /**
  *This class is the implementation of the ISiteMap. it uses the Resources from the 
  * super class to retrieve relevant data from the database to generate a siteMap.
+ * ** THIS CLASS IS DEPRECATED**
  * @author joseph
  */
+@Deprecated
 public class SiteMapImpl extends SiteMapResources<File> {
 
     private final Logger LOGGER = Logger.getLogger(SiteMapImpl.class);
@@ -65,7 +66,7 @@ public class SiteMapImpl extends SiteMapResources<File> {
             JAXBContext context = JAXBContext.newInstance("org.sitemaps");
             marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            Schema sitemapXsd = SchemaFactory.newInstance(
+                        Schema sitemapXsd = SchemaFactory.newInstance(
                     XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(
                     SiteMapImpl.class.getClassLoader().getResource("sitemap.xsd"));
             marshaller.setSchema(sitemapXsd);
@@ -83,7 +84,7 @@ public class SiteMapImpl extends SiteMapResources<File> {
      * @param output  the siteMap generated
      * @throws EnzymePortalException while generating or writing the siteMap
      */
-    public void generateSitemap(Collection<?> inputData, File output) throws SiteMapException {
+    public void generateSitemap(Collection<?> inputData, File output,String name,boolean testMode) throws SiteMapException {
 
         Urlset urlset = objectFactory.createUrlset();
         Url enzymePortalUrl = objectFactory.createUrl();
@@ -92,16 +93,16 @@ public class SiteMapImpl extends SiteMapResources<File> {
         enzymePortalUrl.setChangefreq(CHANGE_FREQ);
         enzymePortalUrl.setPriority(new BigDecimal("0.8").setScale(1, BigDecimal.ROUND_DOWN));
         urlset.getUrl().add(enzymePortalUrl);
-
+       
         for (Object input : inputData) {
             for (String entry_tab : tabs) {
                 Url pageUrl = objectFactory.createUrl();
                 pageUrl.setLoc(MessageFormat.format(entry_tab,
                         new Object[]{input}));
-
+         
                 pageUrl.setChangefreq(CHANGE_FREQ);
                 urlset.getUrl().add(pageUrl);
-            }
+          }
         }
         try {
             marshaller.marshal(urlset, output);
@@ -117,23 +118,23 @@ public class SiteMapImpl extends SiteMapResources<File> {
      * @param filename the filename of the generated siteMap
      * @throws SiteMapException if the siteMap cannot be generated.
      */
-    public void generateSitemap(String fileDirectory, String filename) throws SiteMapException {
+    public void generateSitemap(String fileDirectory, String filename,boolean testing) throws SiteMapException {
         File outputStream = null;
         try {
             outputStream = exportFile(fileDirectory, filename);
             List<String> input = getAccessions(MmDatabase.UniProt);
-            this.generateSitemap(input, outputStream);
+            this.generateSitemap(input, outputStream,filename,testing);
         } catch (FileNotFoundException ex) {
             LOGGER.error(String.format("This File %s and/or %s cannot be found", fileDirectory, filename), ex);
         } catch (IOException ex) {
 
             LOGGER.error(String.format("Error in creacting these Files %s and/or %s ", fileDirectory, filename), ex);
         } finally {
-            outputStream.delete();
+            //outputStream.delete();
 
-        }
     }
-   
+    }
+
     private List<String> getAccessions(MmDatabase database) {
         List<String> accessions = null;
         if (accessions == null) {
@@ -152,7 +153,7 @@ public class SiteMapImpl extends SiteMapResources<File> {
      * @throws FileNotFoundException if file cannot be found in the directory
      * @throws IOException if siteMap cannot be exported to the directory
      */
-    @Override
+   
     public File exportFile(String fileDirectory, String filename) throws FileNotFoundException, IOException {
         try {
 

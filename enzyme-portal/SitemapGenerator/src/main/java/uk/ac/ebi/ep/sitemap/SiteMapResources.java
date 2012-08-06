@@ -4,17 +4,8 @@
  */
 package uk.ac.ebi.ep.sitemap;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Connection;
-
-
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.apache.log4j.Logger;
@@ -81,16 +72,16 @@ public abstract class SiteMapResources<T> implements ISiteMap<T> {
      * @throws FileNotFoundException if the file was not found
      * @throws IOException 
      */
-    public abstract T exportFile(String fileDirectory, String filename) throws FileNotFoundException, IOException;
-
+    //public abstract T exportFile(String fileDirectory, String filename) throws FileNotFoundException, IOException;
+    
     /**
      * abstract method to generated siteMap from the specified database
      * @param fileLocation the directory where the generated siteMap will be saved
      * @param filename the filename of the generated siteMap
      * @throws SiteMapException if the siteMap cannot be generated.
      */
-    public abstract void generateSitemap(String fileDirectory, String filename) throws SiteMapException;
-
+    public abstract void generateSitemap(String fileDirectory, String filename, boolean testMode) throws SiteMapException;
+    
     protected void checkWriteableDirectory(String dirName) throws SiteMapException {
         File dir = new File(dirName);
         if (!dir.exists()) {
@@ -134,7 +125,7 @@ public abstract class SiteMapResources<T> implements ISiteMap<T> {
         }
 
     }
-
+    
     /**
      * This method is used to read the created sitemap( see JunitTest on how to use it)
      * @param filePath the directory and filename
