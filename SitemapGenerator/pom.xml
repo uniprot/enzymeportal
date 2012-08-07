@@ -8,7 +8,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>SitemapGenerator</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>SitemapGenerator</name>
@@ -122,4 +122,10 @@
             </plugin>
         </plugins>
     </build>
+
+  <scm>
+    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/SitemapGenerator-1.0.2</connection>
+    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/SitemapGenerator-1.0.2</developerConnection>
+    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/SitemapGenerator-1.0.2</url>
+  </scm>
 </project>
