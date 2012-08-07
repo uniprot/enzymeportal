@@ -71,7 +71,7 @@
                 </includes>
             </resource>
         </resources>
-        <plugins>
+       <!-- <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
@@ -120,6 +120,6 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
-        </plugins>
+        </plugins>!-->
     </build>
 </project>
