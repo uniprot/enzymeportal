@@ -21,6 +21,10 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ep</servlet-name>
+        <url-pattern>/noaccesslog/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>EnzymePortalSitemapServlet</servlet-name>
         <url-pattern>/sitemap</url-pattern>
     </servlet-mapping>
@@ -35,7 +39,7 @@
     </filter>
     <filter-mapping>
         <filter-name>HealthFilter</filter-name>
-        <url-pattern>/jmxproxy/*</url-pattern>
+        <url-pattern>/noaccesslog/*</url-pattern>
     </filter-mapping>
     <resource-ref>
         <description>Oracle Datasource for enzymePortal</description>
