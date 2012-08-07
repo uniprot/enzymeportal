@@ -9,6 +9,13 @@
 </properties>
 
 <body>
+	<release version="1.0.5" date="" description="Fixes">
+		<action dev="rafalcan" type="fix">
+			Fixed the health check filter configuration.
+		</action>
+    </release>
+	<release version="1.0.4" date="2012-08-07" description="">
+	</release>
 	<release version="1.0.3" date="2012-08-02" description="Bug fixes">
 		<action dev="rafalcan" type="fix">
 			Forced version of rhea-adapter to override the transitive
