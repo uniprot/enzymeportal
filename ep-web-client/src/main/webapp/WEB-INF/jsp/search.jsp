@@ -29,23 +29,7 @@
        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-        
-   
-
-
        <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
-        
-   <script src="resources/lib/jquery-ui/js/jquery-1.7.2.min.js" type="text/javascript"></script>
-   <script src="resources/lib/jquery-ui/js/jquery-ui-1.8.19.custom.min.js" type="text/javascript"></script>
-        
-
-        <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
-        <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-        <script>!window.jQuery && document.write('<script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js"><\/script>')</script>-->
-
-      
-        
-        
     </head>
     <body>
         <jsp:include page="header.jsp"/>
