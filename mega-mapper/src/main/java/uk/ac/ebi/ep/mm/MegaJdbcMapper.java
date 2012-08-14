@@ -567,22 +567,14 @@ public class MegaJdbcMapper implements MegaMapper {
      
          public Map<String, String> getCompoundsNew(MmDatabase db, String accession,
             MmDatabase... xDbs) {
-        //List<CompoundEntry> compoundList = null;
+      
         Map<String, String> compoundEntryMap = null;
-        //String[] acc = accessions.split("_");
-        //String accession = acc[0].concat("_%");
-        // String x = "pablo_conesa";
-        // String  acc = accession.;
-        // String [] s = x.split("_");
-        // String y = s[0].concat("_%");
+ 
 
 
 
         try {
-            // if (compoundList == null) {
-            //compoundList = new ArrayList<CompoundEntry>();
-            // }
-
+      
             if (compoundEntryMap == null) {
                 compoundEntryMap = new HashMap<String, String>();
             }
@@ -594,11 +586,7 @@ public class MegaJdbcMapper implements MegaMapper {
                     
                     
             String queryOLD = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null";
-            // PreparedStatement ps = sqlLoader.getPreparedStatement(
-            //"--compounds.by.accession", dbArrayForQuery(xDbs));
-            // compounds.by.accession
-            // System.out.println("The ACCESSION "+ accession);
-           // String s = "  select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = 'UniProt' and e1.entry_id like 'PDE6B_%' and ( (e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in ('ChEBI','ChEMBL')";
+  
             PreparedStatement ps = null;
             if (con != null) {
                 ps = con.prepareStatement(query);
@@ -616,15 +604,13 @@ public class MegaJdbcMapper implements MegaMapper {
                     String entryId = resultSet.getString("ENTRY_ID");
                     String entryName = resultSet.getString("ENTRY_NAME");
                     if (entryId != null && entryName != null) {
-                        // System.out.println("data "+ entryName);
+                    
                         compoundEntryMap.put(entryId, entryName);
                     }
 
-                    // CompoundEntry compoundEntry = new CompoundEntry(entryId, entryName);
-
-                    // compoundList.add(compoundEntry);
+     
                 }
-                // System.out.println("size of result from MegaMapper " + compoundEntryMap.size());
+               
                 resultSet.close();
             }
 
@@ -688,33 +674,29 @@ public class MegaJdbcMapper implements MegaMapper {
         return diseasesEntryMap;
     }
 
-    public Map<String, String> getCompounds(MmDatabase db, String accessions,
+    private static final String ILLEGAL_COMPOUND = "water";
+     public Map<String, String> getCompounds(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
         //List<CompoundEntry> compoundList = null;
         Map<String, String> compoundEntryMap = null;
         String[] acc = accessions.split("_");
         String accession = acc[0].concat("_%");
-        // String x = "pablo_conesa";
+        // String x = "some_example";
         // String  acc = accession.;
         // String [] s = x.split("_");
         // String y = s[0].concat("_%");
 
 
-
         try {
-            // if (compoundList == null) {
-            //compoundList = new ArrayList<CompoundEntry>();
-            // }
+       
 
             if (compoundEntryMap == null) {
                 compoundEntryMap = new HashMap<String, String>();
             }
-            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null";
-            // PreparedStatement ps = sqlLoader.getPreparedStatement(
-            //"--compounds.by.accession", dbArrayForQuery(xDbs));
-            // compounds.by.accession
-            // System.out.println("The ACCESSION "+ accession);
-            String s = "  select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = 'UniProt' and e1.entry_id like 'PDE6B_%' and ( (e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in ('ChEBI','ChEMBL')";
+            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
+                    + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
+                    + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name != ?";
+            
             PreparedStatement ps = null;
             if (con != null) {
                 ps = con.prepareStatement(query);
@@ -723,6 +705,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 ps.setString(1, db.name());
                 ps.setString(3, xDbs[0].name());
                 ps.setString(4, xDbs[1].name());
+                ps.setString(5, ILLEGAL_COMPOUND);
 
 
 
@@ -736,11 +719,9 @@ public class MegaJdbcMapper implements MegaMapper {
                         compoundEntryMap.put(entryId, entryName);
                     }
 
-                    // CompoundEntry compoundEntry = new CompoundEntry(entryId, entryName);
-
-                    // compoundList.add(compoundEntry);
+             
                 }
-                // System.out.println("size of result from MegaMapper " + compoundEntryMap.size());
+            
                 resultSet.close();
             }
 
