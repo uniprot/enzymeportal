@@ -46,7 +46,7 @@
                 <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
                 <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
                 <c:set var="totalfound" value="${searchresults.totalfound}"/>
-                <c:set var="filterSizeDefault" value="${50}"/>
+                <c:set var="filterSizeDefault" value="${500}"/>
                 <%-- maximum length in words for a text field --%>
                 <c:set var="textMaxLength" value="${60}"/>
                 
@@ -77,18 +77,35 @@
                                 <form:hidden path="searchparams.previoustext" />
                                <input type="hidden" id="filtersFormStart"
                                        name="searchparams.start" value="0"/>
-<!--auto-complete search box-->
+
+
+               <div class="sublevel1"> 
+
+ 
+       <div class="subTitle">
+                                     Species: 
+       </div>  
+                   
+         <!--auto-complete search box-->
  <div class="ui-widget">
    
-     <input id="specieAT" itemtype="text" style="width:100%; size: auto; border-style:ridge; " class="filterSearchBox" placeholder="Search here" />
+<!--     <input id="specieAT" itemtype="text" style="width:100%; border-style:ridge; " class="filterSearchBox" placeholder="Search here" />-->
+<input id="specieAT" itemtype="text"   class="filterSearchBox" placeholder="Search here" />
 
 <form:checkbox path="searchparams.selectedSpecies" id="_ctempList_selected" value='' type="hidden"></form:checkbox>
 
         
 </div> 
 
-               <div class="sublevel1"> 
-<!--            check if the specie was selected, and if selected, display them.-->
+      <div class="filterContent">
+                                    <c:set var="speciesList" value="${searchFilter.species}"/>
+                                    <c:set var="speciesListSize" value="${fn:length(speciesList)}"/>
+                                    <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+                                    
+                                    
+                                
+                                    
+ <!--            check if the specie was selected, and if selected, display them.-->
                       <span>
                                         
                 <div >
@@ -101,7 +118,6 @@
                <c:set var="science" value="${spTempList[x].scientificname}"/> 
   
              <c:if test="${Fn:contains(checkedSpecies, science) }">
-                 
                          
                     <c:choose>
                                 <c:when test="${empty spTempList[x].commonname}">
@@ -115,11 +131,10 @@
                           
                     <div class="checkItem">
                     <form:checkbox path="searchparams.selectedSpecies"  onclick="submit()" value="${spTempList[x].scientificname}" />
-                       
 
                      </div>
                 <div class="clear"></div>
-                   
+                
              </c:if>
              
         </c:if>       
@@ -130,15 +145,9 @@
                        </div>
                         
                         </span>  
-<!--                   end of selected species filter-->
- 
-       <div class="subTitle">
-                                     Species: 
-       </div>         
-      <div class="filterContent">
-                                    <c:set var="speciesList" value="${searchFilter.species}"/>
-                                    <c:set var="speciesListSize" value="${fn:length(speciesList)}"/>
-                                    <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+<!--                   end of selected species filter-->                                   
+                                                             
+                                    
     <c:if test="${speciesListSize > 0}">
         <c:if test="${speciesListSize <= filterSizeDefault}">
             <c:set var="limitedDisplay" value="${speciesListSize}"/>
@@ -221,7 +230,7 @@
                       		select: function( event, ui ) {
 
                                  //$( "#_ctempList" ).val( ui.item.value );
-				// $( "#ctempList" ).val( ui.item.value );
+				 $( "#ctempList" ).val( ui.item.value );
                                  //$( "#ctempList_init" ).val( ui.item.value );
                                  //$( "#_ctempList_selected" ).val( ui.item.value );
                                  $( "#_ctempList_selected" ).val( ui.item.value );
@@ -290,15 +299,35 @@
 </div>
                                 <%-- The Start of Compounds  --%>
 <BR/>
-                                 <div class="ui-widget">
 
-                                     <input id="compounds_AUTOCOMPLETE" class="filterSearchBox" style="border-style:ridge;width:100%;" placeholder="Search here"  />
-        <form:checkbox path="searchparams.selectedCompounds" id="comptempList" value="" type="hidden" onclick="submit()"></form:checkbox>
-</div> 
 
     <div class="sublevel1">
         
-                    <span>
+   
+        
+        
+        
+        
+        
+        
+                                    <div class="subTitle">
+                                        Chemical Compounds
+                                    </div>
+        
+                                     <div class="ui-widget">
+
+                                     <input id="compounds_AUTOCOMPLETE" class="filterSearchBox" placeholder="Search here"  />
+        <form:checkbox path="searchparams.selectedCompounds" id="comptempList" value="" type="hidden" onclick="submit()"></form:checkbox>
+</div>     
+        
+        
+                                    <div class="filterContent">
+                                        <c:set var="compoundList" value="${searchFilter.compounds}"/>
+                                        <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
+                                        <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+                                        
+                                        
+                         <span>
                                         
                 <div >
                  
@@ -332,20 +361,10 @@
                            
                        </div>
                         
-                        </span>     
-        
-        
-        
-        
-        
-        
-                                    <div class="subTitle">
-                                        Chemical Compounds
-                                    </div>
-                                    <div class="filterContent">
-                                        <c:set var="compoundList" value="${searchFilter.compounds}"/>
-                                        <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
-                                        <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+                        </span>                                     
+                                        
+          
+                                        
                                         <c:if test="${compoundListSize > 0}">
                                             <c:if test="${compoundListSize <= filterSizeDefault}">
                                                 <c:set var="limitedDisplay" value="${compoundListSize}"/>
@@ -451,17 +470,30 @@
                                         </c:if>
                                     </div>
                                 </div>
-                                        
-  <div class="ui-widget">
-      <br/>
+                                        <br/> <br/>     
 
-      <input id="diseases_AUTOCOMPLETE" class="filterSearchBox" style="border-style:ridge; color:#006666;width:100%;" placeholder="Search here" />
-        <form:checkbox path="searchparams.selectedDiseases" id="DtempList" value="" type="hidden" onclick="submit()"></form:checkbox>
-</div> 
                                 <div class="sublevel1" >
                                     
           
-                    <span>
+  
+                                    <div class="subTitle">
+                                        Diseases
+                                    </div>
+                                    
+    <div class="ui-widget">
+     
+
+      <input id="diseases_AUTOCOMPLETE" class="filterSearchBox"  placeholder="Search here" />
+        <form:checkbox path="searchparams.selectedDiseases" id="DtempList" value="" type="hidden" onclick="submit()"></form:checkbox>
+</div>                                   
+                                                         
+                                    
+                                    <div class="filterContent">
+                                        <c:set var="diseasesList" value="${searchFilter.diseases}"/>
+                                        <c:set var="diseasesListSize" value="${fn:length(diseasesList)}"/>
+                                        <c:set var="diseasesLimitedDisplay" value="${filterSizeDefault}"/>
+                                        
+                      <span>
                                         
                 <div >
                  
@@ -477,8 +509,8 @@
                          
                   
                                     <a href='#'>${dTempList[x].name}</a>
+                                    
 
-                                                   
                     <div class="checkItem">
                     <form:checkbox path="searchparams.selectedDiseases"  onclick="submit()" value="${dTempList[x].name}" />
                        
@@ -495,14 +527,8 @@
                            
                        </div>
                         
-                        </span>  
-                                    <div class="subTitle">
-                                        Diseases
-                                    </div>
-                                    <div class="filterContent">
-                                        <c:set var="diseasesList" value="${searchFilter.diseases}"/>
-                                        <c:set var="diseasesListSize" value="${fn:length(diseasesList)}"/>
-                                        <c:set var="diseasesLimitedDisplay" value="${filterSizeDefault}"/>
+                        </span>                                      
+                                        
                                         <c:if test="${diseasesListSize > 0}">
                                             <c:if test="${diseasesListSize <= filterSizeDefault}">
                                                 <c:set var="diseasesLimitedDisplay" value="${diseasesListSize}"/>
@@ -582,7 +608,7 @@
                                                     
                                                     <div class="text" id="content-block">
                                                         <xchars:translate>
-                                                            <c:out value="${diseasesList[d].name}" escapeXml="false"/>
+                                                            <a class="diseaseName" href="#"> <c:out value="${diseasesList[d].name}" escapeXml="false"/></a>
                                                         </xchars:translate>
                                                     </div>                                                  
                                                     
@@ -684,7 +710,7 @@
                                     <%@include file="util/prioritiseSpecies.jsp" %>
 
                                     <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
-                                    
+                                   
                                     <div class="resultItem">
                                         <c:choose>
                                       <c:when test="${empty enzyme.relatedspecies}">
