@@ -296,30 +296,24 @@ public class SearchController {
 
                 Set<String> speciesFilter = new TreeSet<String>();
                 for (String s : searchParameters.getSpecies()) {
-                    if (s != null || !s.isEmpty() || s.equals("") || s.equals(" ")) {
+                    if (s != null || !s.isEmpty() || !s.equals("") || !s.equals(" ")) {
                         speciesFilter.add(s);
                     }
                 }
                 Set<String> diseasesFilter = new TreeSet<String>();
                 for (String d : searchParameters.getDiseases()) {
-                    if (d == null || d.equals("") || d.equals(" ") || d.isEmpty()) {
-                        //System.out.println("the filters DIS " + d);
-                    } else {
-                        // System.out.println("now adding " + d);
+                    if (d != null || !d.isEmpty() || !d.equals("") || !d.equals(" ") ) {
                         diseasesFilter.add(d);
-                    }
+                    } 
                 }
 
 
-                //same fro comp
+             
                 Set<String> compoundsFilter = new TreeSet<String>();
                 for (String c : searchParameters.getCompounds()) {
-                    if (c == null || c.equals("") || c.equals(" ") || c.isEmpty()) {
-                        //System.out.println("the filters COMP " + c);
-                    } else {
-                        // System.out.println("now adding com " + c);
-                        compoundsFilter.add(c);
-                    }
+                    if (c != null || !c.isEmpty() || !c.equals("") || !c.equals(" ") ) {
+                       compoundsFilter.add(c);
+                    } 
                 }
 
 
@@ -331,13 +325,13 @@ public class SearchController {
 
                 Set<String> selectedSpecies_autoComplete = new TreeSet<String>();
                 for (String selectedSp : searchParameters.getSelectedSpecies()) {
-                    if (selectedSp != null || !selectedSp.isEmpty() || selectedSp.equals("") || selectedSp.equals(" ")) {
+                    if (selectedSp != null || !selectedSp.isEmpty() || !selectedSp.equals("") || !selectedSp.equals(" ")) {
                         selectedSpecies_autoComplete.add(selectedSp);
                     }
                 }
 
                 // list to hold all selected species both from the specie list and auto-complete
-                Set<String> allSelectedSpecies = new TreeSet<String>();
+                Set<String> allSelectedItems = new TreeSet<String>();
 
                 Species specie_to_tempList;// = null;
 
@@ -364,10 +358,10 @@ public class SearchController {
 
                 //default compound list
                 List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
-
+                
 
                 List<uk.ac.ebi.ep.search.model.Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
-
+                
                 //if an item is seleted, then filter the list
                 if (!selectedDisease_autocomplete.isEmpty() || !selectedCompounds_autocomplete.isEmpty() || !selectedSpecies_autoComplete.isEmpty() || !speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
                     List<EnzymeSummary> filteredResults =
@@ -377,7 +371,7 @@ public class SearchController {
                     speciesFilter.addAll(selectedSpecies_autoComplete);
                     compoundsFilter.addAll(selectedCompounds_autocomplete);
                     diseasesFilter.addAll(selectedDisease_autocomplete);
-
+                    
                     CollectionUtils.filter(filteredResults,
                             new SpeciesPredicate(speciesFilter));
                     CollectionUtils.filter(filteredResults,
@@ -389,26 +383,26 @@ public class SearchController {
 
 
 
-                    allSelectedSpecies.addAll(compoundsFilter);
+                    allSelectedItems.addAll(compoundsFilter);
 
 
-                    allSelectedSpecies.addAll(diseasesFilter);
+                    allSelectedItems.addAll(diseasesFilter);
 
 
-                    allSelectedSpecies.addAll(speciesFilter);
-
-
+                    allSelectedItems.addAll(speciesFilter);
+                    
+                    
 
                     //auto complete filtering
                     //if specie(s) is selected from auto-complete, then the following executes.
                     if (selectedSpecies_autoComplete.size() > 0) {
-                        List<String> selections = new LinkedList<String>();
+                       
                         for (String scienceName : selectedSpecies_autoComplete) {
-
+        
                             //loop thru the species and see if the science name matches with the selected item
                             for (Species species_in_defaultList : defaultSpeciesList) {
                                 if (!scienceName.isEmpty() && scienceName.equalsIgnoreCase(species_in_defaultList.getScientificname()) || scienceName.equalsIgnoreCase(species_in_defaultList.getCommonname())) {
-
+                                
                                     //create a specie based on the scienctific name selected
                                     specie_to_tempList = species_in_defaultList;
 
@@ -416,8 +410,7 @@ public class SearchController {
                                     if (!tempSpecieList.contains(specie_to_tempList)) {
 
                                         tempSpecieList.add(specie_to_tempList);
-
-
+                                       
 
                                     }
 
@@ -425,10 +418,9 @@ public class SearchController {
 
                                 }
                             }
-
+                            
                         }
-
-
+                          
 
                     }
 
@@ -495,8 +487,8 @@ public class SearchController {
 
 
 
-                    CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedSpecies));
-
+                    CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedItems));
+                    
                     //a check so that we don't get an empty page. so if the result is null, we display a no result found for the selection to the end user
                     if (filteredResults.size() <= 0) {
                         EnzymeSummary es = new EnzymeSummary();

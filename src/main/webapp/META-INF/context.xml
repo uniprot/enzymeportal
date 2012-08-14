@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/enzymeportal">
-  <Resource auth="Container" driverClassName="oracle.jdbc.OracleDriver" logAbandoned="true" maxWait="15000" name="jdbc/ep/mm" password="epsilon" poolPreparedStatements="true" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" type="javax.sql.DataSource" url="jdbc:oracle:thin:@//kava.ebi.ac.uk:1561/ENZDEV" username="enzyme_portal" validationQuery="SELECT 1 FROM DUAL">
-    </Resource>
-</Context>
