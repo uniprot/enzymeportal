@@ -131,8 +131,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     /**
-     * Searches Rhea for any EC numbers in the model and adds the corresponding
-     * reactions if found.
+     * Searches Rhea for the primary UniProt accession in the model and adds the
+     * corresponding reactions if found.
      * <br><b>WARNING:</b> the added reactions have links only to Reactome and
      * MACiE. The links are strings containing a complete URL.
      * @param enzymeModel
@@ -140,20 +140,18 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * 		reaction found.
      * @throws EnzymeRetrieverException
      */
-    public EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel)
+    private EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel)
             throws EnzymeRetrieverException {
         List<ReactionPathway> reactionPathways = new ArrayList<ReactionPathway>();
-        List<String> ecList = enzymeModel.getEc();
-        String query = LuceneQueryBuilder.createQueryIN(
-                IRheaAdapter.RheaQueryFields.EC.name(), false, ecList);
         List<Reaction> reactions;
         try {
-            reactions = rheaAdapter.getRheasInCmlreact(query);
+            reactions = rheaAdapter.getRheasInCmlreact(enzymeModel
+            		.getUniprotaccessions().get(0));
         } catch (RheaFetchDataException ex) {
             throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
         }
         for (Reaction reaction : reactions) {
-            // This adapted reaction will have links only to Reactome and MACiE!:
+            // XXX This adapted reaction will have links only to Reactome and MACiE!:
             ReactionPathway reactionPathway = rheaAdapter.getReactionPathway(reaction);
             reactionPathways.add(reactionPathway);
         }
@@ -162,7 +160,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     }
 
-    public Map<String, String> getReactomeAccQueriedFromUniprot(List<Pathway> reactomeUniprotLinks) {
+    private Map<String, String> getReactomeAccQueriedFromUniprot(List<Pathway> reactomeUniprotLinks) {
         Map<String, String> idNameMap = new HashMap<String, String>();
         for (Entity pathway : reactomeUniprotLinks) {
             idNameMap.put(pathway.getId(), pathway.getName());
