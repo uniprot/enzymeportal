@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
+import org.apache.commons.lang.StringEscapeUtils;
 
 
 import org.apache.log4j.Logger;
@@ -213,13 +214,11 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public SearchResults getEnzymes(SearchParams searchParams)
             throws EnzymeFinderException {
-        //String userKeywords = new String(searchParams.getText());
-        //System.out.println("SEARCH "+searchParams.getText());
+ 
 
-        //megaMapper = new MegaDbMapper(" hibernate configuration",500);
-        // Entry entry = megaMapper.getEntryForAccession(MmDatabase.UniProt, userKeywords);
-
-        //setting variable values and validation keywords before being cleaned
+             String escapedText = StringEscapeUtils.escapeJava(searchParams.getText());
+            searchParams.setText(escapedText);
+     
         processInputs(searchParams);
 
         /*
