@@ -15,6 +15,7 @@
 		</action>
 		<action dev="rafalcan" type="fix">
 			Fixed href to Reactome reactions.
+			<fixes issue="97"/>
 		</action>
     </release>
 	<release version="1.0.4" date="2012-08-07" description="">
