@@ -9,7 +9,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
     <name>Mega mapper</name>
 	
     <dependencies>
@@ -276,7 +276,7 @@
         								</goals>
         							</pluginExecutionFilter>
         							<action>
-        								<ignore></ignore>
+        								<ignore />
         							</action>
         						</pluginExecution>
         						<pluginExecution>
@@ -297,7 +297,7 @@
         								</goals>
         							</pluginExecutionFilter>
         							<action>
-        								<ignore></ignore>
+        								<ignore />
         							</action>
         						</pluginExecution>
         					</pluginExecutions>
@@ -412,4 +412,10 @@
             <name>Repository for library Library[hibernate-support]</name>
         </repository>
     </repositories>
+
+  <scm>
+    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/mega-mapper-1.0.4</connection>
+    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/mega-mapper-1.0.4</developerConnection>
+    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/mega-mapper-1.0.4</url>
+  </scm>
 </project>
