@@ -228,6 +228,7 @@ public class EnzymeFinder implements IEnzymeFinder {
          */
         if (newSearch) {
             // Search in EBEye for Uniprot ids, the search is filtered by ec:*
+        	LOGGER.debug("Starting new search");
             queryEbeyeForUniprotIds();
             /*
              * replacing EB-Eye with UniProt ws here: uniprotIds2species = new
@@ -267,7 +268,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         List<String> idPrefixesList =
                 new ArrayList<String>(uniprotIdPrefixSet);
 
-        
+        LOGGER.debug("Getting enzyme summaries...");
         enzymeSummaryList = getEnzymeSummaries(idPrefixesList, searchParams.getSpecies());
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
         enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
@@ -275,9 +276,9 @@ public class EnzymeFinder implements IEnzymeFinder {
             LOGGER.warn((uniprotIdPrefixSet.size() - enzymeSummaryList.size())
                     + " UniProt ID prefixes have been lost");
         }
-
+        LOGGER.debug("Building filters...");
         buildFilters(enzymeSearchResults);
-
+        LOGGER.debug("Finished search");
         return enzymeSearchResults;
     }
 
