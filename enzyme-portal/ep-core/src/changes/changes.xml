@@ -4,23 +4,29 @@
 	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
 
 <properties>
-	<title>EBI enzyme portal change log</title>
+	<title>Change log</title>
 	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
 </properties>
 
 <body>
-	<release version="1.0.4" date="2012-06-18" description="">
+	<release version="1.0.4" date="2012-08-15" description="Bug fix">
 		<action dev="rafalcan" type="fix">
 			Fixed query to Rhea web services (retrieving reactions by UniProt
 			accession now, instead of EC number).
 			<fixes issue="104"/>
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of rhea-adapter, biomart-adapter,
+			uniprot-adapter, intenz-adapter, ebeye-adapter, reactome-adapter,
+			das-adapter, chebi-adapter, literature-adapter, mega-mapper,
+			ep-domain, rhea-domain, xchars and log4j.
 		</action>
 	</release>
 
 	<release version="1.0.3" date="2012-08-14" description="">
 	</release>
 
-	<release version="1.0.2" date="" description="">
+	<release version="1.0.2" date="2012-08-07" description="">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent, rhea-adapter, intenz-adapter,
 			ebeye-adapter, ep-domain (removed duplicate dependency declaration,
