@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Home</title>
+		<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+	</properties>
+	
+	<body>
+		<section name="Mega mapper">
+			<p>
+				This module creates and queries a database containing basically
+				cross references to/from UniProt entries to other databases
+				used by the Enzyme Portal.
+			</p>
+			<img src="img/mm.png" alt="DBs in the mega-map"
+				style="width: 600px"/>
+			<p>
+				Note the direction of the arrows. The mega-map stores whenever
+				possible the concrete
+				<a href="apidocs/uk/ac/ebi/ep/mm/Relationship.html">relationship</a>
+				between two entries.
+			</p>
+			<subsection name="Statistics">
+				<ul>
+					<li><a href="statistics/ep-stats-2012.ods">2012</a></li>
+				</ul>
+			</subsection>
+		</section>
+	</body>
+</document>
