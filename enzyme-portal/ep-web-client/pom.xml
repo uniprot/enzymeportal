@@ -194,7 +194,14 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-core</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4</version>
+            <exclusions>
+            	<!--  using biobabel's from ep-util-1.0.2 -->
+            	<exclusion>
+		            <groupId>uk.ac.ebi.ep</groupId>
+		            <artifactId>ebeye-client</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
 <!--        	 overriding ep-core's -->
@@ -211,6 +218,12 @@
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>literature-adapter</artifactId>
             <version>1.0.2</version>
+        </dependency>
+        <dependency>
+	        <!-- Override any other version of mega-mapper -->
+        	<groupId>uk.ac.ebi.ep</groupId>
+        	<artifactId>mega-mapper</artifactId>
+        	<version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.xchars</groupId>

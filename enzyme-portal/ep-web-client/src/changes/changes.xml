@@ -17,6 +17,11 @@
 			Fixed href to Reactome reactions.
 			<fixes issue="97"/>
 		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versionso of ep-core - which fixes bug related to
+			extra reactions shown - and mega-mapper - which fixes 'too many open
+			cursors' issue.
+		</action>
     </release>
 	<release version="1.0.4" date="2012-08-07" description="">
 	</release>
