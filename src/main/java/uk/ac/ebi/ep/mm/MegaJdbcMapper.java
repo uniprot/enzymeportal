@@ -239,10 +239,10 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     * Builds a list of XRef objects from a result set.
+     * Builds a list of XRef objects from a result set, and closes it.
      *
      * @param rs
-     * @return
+     * @return a list of {@link XRef}s, or <code>null</code> if none found.
      * @throws SQLException
      */
     private List<XRef> buildXref(ResultSet rs) throws SQLException {
@@ -269,13 +269,14 @@ public class MegaJdbcMapper implements MegaMapper {
      */
     public Entry getEntryForAccession(MmDatabase db, String accession) {
         Entry entry = null;
+        ResultSet rs = null;
         try {
             PreparedStatement entryForAccessionStm =
                     sqlLoader.getPreparedStatement("--entry.by.accession");
             int paramNum = 1;
             entryForAccessionStm.setString(paramNum++, accession);
             entryForAccessionStm.setString(paramNum++, db.name());
-            ResultSet rs = entryForAccessionStm.executeQuery();
+            rs = entryForAccessionStm.executeQuery();
             if (rs.next()) {
                 entry = new Entry();
                 entry.setId(rs.getInt("id"));
@@ -290,6 +291,8 @@ public class MegaJdbcMapper implements MegaMapper {
             }
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + db.name() + ")", e);
+        } finally {
+        	closeResultSet(rs);
         }
         return entry;
     }
@@ -425,17 +428,20 @@ public class MegaJdbcMapper implements MegaMapper {
     public int getXrefsSize(MmDatabase db, String accession,
             MmDatabase... xDbs) {
         int total = 0;
+        ResultSet rs = null;
         try {
             PreparedStatement ps = sqlLoader.getPreparedStatement(
                     "--xrefs.by.accession.total", dbArrayForQuery(xDbs));
             ps.setString(1, accession);
             ps.setString(2, db.name());
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             while (rs.next()) {
                 total = rs.getInt("rowcount");
             }
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
+        } finally {
+        	closeResultSet(rs);
         }
 
         return total;
@@ -489,22 +495,25 @@ public class MegaJdbcMapper implements MegaMapper {
      */
     public List<String> getAllUniProtAccessions(MmDatabase database) {
         List<String> accessionList = null;
+        ResultSet resultSet = null;
         try {
             if (accessionList == null) {
                 accessionList = new ArrayList<String>();
             }
 
-            PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--AllUniProtAccessions.accession");
+            PreparedStatement preparedStatement = sqlLoader
+            		.getPreparedStatement("--AllUniProtAccessions.accession");
             preparedStatement.setString(1, database.name());
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 String accession = resultSet.getString("ACCESSION");
                 accessionList.add(accession);
 
             }
-            resultSet.close();
         } catch (SQLException ex) {
             LOGGER.fatal(String.format("Error retrieving accession from %s", database.name()), ex);
+        } finally {
+        	closeResultSet(resultSet);
         }
 
         return accessionList;
@@ -553,16 +562,45 @@ public class MegaJdbcMapper implements MegaMapper {
                     }
 
                 }
-
-                resultSet.close();
             }
 
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
+        } finally {
+        	closeResultSet(resultSet);
+        	closePreparedStatement(ps);
         }
 
         return diseasesEntryMap;
     }
+
+	/**
+	 * Closes safely a ResultSet, logging in case of error.
+	 * @param resultSet
+	 */
+	private void closeResultSet(ResultSet resultSet) {
+		if (resultSet != null){
+		    try {
+				resultSet.close();
+			} catch (SQLException e) {
+				LOGGER.error("Unable to close ResultSet", e);
+			}
+		}
+	}
+	
+	/**
+	 * Closes safely a PreparedStatement, logging in case of error.
+	 * @param ps
+	 */
+	private void closePreparedStatement(PreparedStatement ps){
+		if (ps != null){
+			try {
+				ps.close();
+			} catch (SQLException e){
+				LOGGER.error("Unable to close PreparedStatement");
+			}
+		}
+	}
      
      
          public Map<String, String> getCompoundsNew(MmDatabase db, String accession,
@@ -573,6 +611,8 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
 
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
       
             if (compoundEntryMap == null) {
@@ -587,7 +627,6 @@ public class MegaJdbcMapper implements MegaMapper {
                     
             String queryOLD = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null";
   
-            PreparedStatement ps = null;
             if (con != null) {
                 ps = con.prepareStatement(query);
 
@@ -598,7 +637,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
 
-                ResultSet resultSet = ps.executeQuery();
+                resultSet = ps.executeQuery();
                 while (resultSet.next()) {
 
                     String entryId = resultSet.getString("ENTRY_ID");
@@ -610,12 +649,13 @@ public class MegaJdbcMapper implements MegaMapper {
 
      
                 }
-               
-                resultSet.close();
             }
 
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
+        } finally {
+        	closeResultSet(resultSet);
+        	closePreparedStatement(ps);
         }
         return compoundEntryMap;
     }
@@ -663,12 +703,13 @@ public class MegaJdbcMapper implements MegaMapper {
                     }
 
                 }
-
-                resultSet.close();
             }
 
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
+        } finally {
+        	closeResultSet(resultSet);
+        	closePreparedStatement(ps);
         }
 
         return diseasesEntryMap;
@@ -687,6 +728,8 @@ public class MegaJdbcMapper implements MegaMapper {
         // String y = s[0].concat("_%");
 
 
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         try {
        
 
@@ -697,7 +740,6 @@ public class MegaJdbcMapper implements MegaMapper {
                     + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
                     + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name != ?";
             
-            PreparedStatement ps = null;
             if (con != null) {
                 ps = con.prepareStatement(query);
 
@@ -709,7 +751,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
 
-                ResultSet resultSet = ps.executeQuery();
+                resultSet = ps.executeQuery();
                 while (resultSet.next()) {
 
                     String entryId = resultSet.getString("ENTRY_ID");
@@ -721,12 +763,13 @@ public class MegaJdbcMapper implements MegaMapper {
 
              
                 }
-            
-                resultSet.close();
             }
 
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
+        } finally {
+        	closeResultSet(resultSet);
+        	closePreparedStatement(ps);
         }
         return compoundEntryMap;
     }
