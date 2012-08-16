@@ -48,6 +48,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
         gzip = options.gzip;
         this.renderer = renderer;
         fileNameSuffix = gzip ? ".xml.gz" : ".xml";
+         //fileNameSuffix = gzip ? ".txt.gz" : ".txt";//seems google prefers the data to be in .txt extention.
     }
 
     /**
@@ -328,11 +329,11 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
 
     private void writeSiteMap(OutputStreamWriter out) throws IOException {
         out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        //out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ");
+        out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ");
 
 
-        out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" " + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + " xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9"
-                + "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\"");
+        //out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" " + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + " xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9"
+                //+ "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\"");
 
         if (renderer.getXmlNamespaces() != null) {
             out.write(renderer.getXmlNamespaces());
