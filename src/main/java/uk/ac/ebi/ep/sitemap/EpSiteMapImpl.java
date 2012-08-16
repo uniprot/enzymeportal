@@ -71,7 +71,7 @@ public class EpSiteMapImpl extends SiteMapResources<File> {
 
         try {
             indexGenerator = new SitemapIndexGenerator(ENZYME_TAB, output);
-            sitemapGenerator = WebSitemapGenerator.builder(ENZYME_PORTAL_URL, output).fileNamePrefix(filename_prefix).gzip(true).dateFormat(dateFormat).build();
+            sitemapGenerator = WebSitemapGenerator.builder(ENZYME_PORTAL_URL, output).fileNamePrefix(filename_prefix).gzip(false).dateFormat(dateFormat).build();
             // sitemapGenerator = WebSitemapGenerator.builder(ENZYME_PORTAL_URL, output).fileNamePrefix(FILENAME_PREFIX).gzip(true).dateFormat(dateFormat).build();
             for (Object input : inputData) {
 
