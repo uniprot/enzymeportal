@@ -63,7 +63,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
         if (finished) {
             throw new RuntimeException("Sitemap already printed; you must create a new generator to make more sitemaps");
         }
-        UrlUtils.checkUrl(url.getUrl().toString(), baseUrl);
+       // UrlUtils.checkUrl(url.getUrl().toString(), baseUrl);
         if (urls.size() == maxUrls) {
             if (!allowMultipleSitemaps) {
                 throw new RuntimeException("More than " + maxUrls + " urls, but allowMultipleSitemaps is false.  Enable allowMultipleSitemaps to split the sitemap into multiple files with a sitemap index.");
