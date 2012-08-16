@@ -27,7 +27,8 @@ public class EpSiteMapImpl extends SiteMapResources<File> {
 
     private final Logger LOGGER = Logger.getLogger(EpSiteMapImpl.class);
     private static final String SITEMAP_INDEX = "sitemap_index.xml";
-    private static final String ENZYME_PORTAL_URL = "http://www.ebi.ac.uk/enzymeportal";
+    private static final String SITEMAP_LOCATION = "file:/nfs/public/rw/cm/ep/sitemap";
+    private static final String ENZYME_PORTAL_URL = "http://www.ebi.ac.uk/enzymeportal"; 
     private static final String ENZYME_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/enzyme");
     private static final String PROTEIN_STRUCTURE_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/proteinStructure");
     private static final String REACTION_PATHWAYS_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/reactionsPathways");
@@ -63,15 +64,15 @@ public class EpSiteMapImpl extends SiteMapResources<File> {
     public void generateSitemap(Collection<?> inputData, File output, String filename_prefix, boolean testMode) throws SiteMapException {
         WebSitemapGenerator sitemapGenerator;
         WebSitemapUrl url = null;
-        SitemapIndexGenerator indexGenerator;
+        //SitemapIndexGenerator indexGenerator;
 
         // Use DAY pattern (2012-07-13), Greenwich Mean Time timezone
         W3CDateFormat dateFormat = new W3CDateFormat(Pattern.DAY);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
-            indexGenerator = new SitemapIndexGenerator(ENZYME_TAB, output);
-            sitemapGenerator = WebSitemapGenerator.builder(ENZYME_PORTAL_URL, output).fileNamePrefix(filename_prefix).gzip(false).dateFormat(dateFormat).build();
+            //indexGenerator = new SitemapIndexGenerator(SITEMAP_LOCATION, output);
+            sitemapGenerator = WebSitemapGenerator.builder(SITEMAP_LOCATION, output).allowMultipleSitemaps(true).fileNamePrefix(filename_prefix).gzip(false).dateFormat(dateFormat).build();
             // sitemapGenerator = WebSitemapGenerator.builder(ENZYME_PORTAL_URL, output).fileNamePrefix(FILENAME_PREFIX).gzip(true).dateFormat(dateFormat).build();
             for (Object input : inputData) {
 
