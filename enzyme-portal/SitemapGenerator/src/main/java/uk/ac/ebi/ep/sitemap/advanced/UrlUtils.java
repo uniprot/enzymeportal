@@ -9,7 +9,7 @@ public class UrlUtils {
 		if (!url.startsWith(baseUrl)) {
 			throw new RuntimeException("Url " + url + " doesn't start with base URL " + baseUrl);
                     
-		}
+	}
 	}
 
 	public static <K,V> HashMap<K,V> newHashMap() {
