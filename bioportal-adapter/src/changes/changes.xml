@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
 
 <properties>
-	<title>EBI enzyme portal change log</title>
+	<title>BioPortal adapter change log</title>
 	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
 </properties>
 
