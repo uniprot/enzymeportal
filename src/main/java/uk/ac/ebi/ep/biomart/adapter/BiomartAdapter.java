@@ -186,7 +186,7 @@ public class BiomartAdapter {
 				LOGGER.error("Unable to close BufferedReader", e);
 			}
         }
-        System.out.println(results);
+        LOGGER.debug("Pathways parsed: " + results);
        return results;
    }
 
