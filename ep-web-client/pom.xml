@@ -194,14 +194,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-core</artifactId>
-            <version>1.0.4</version>
-            <exclusions>
-            	<!--  using biobabel's from ep-util-1.0.2 -->
-            	<exclusion>
-		            <groupId>uk.ac.ebi.ep</groupId>
-		            <artifactId>ebeye-client</artifactId>
-            	</exclusion>
-            </exclusions>
+            <version>1.0.5-SNAPSHOT</version>
         </dependency>
         <dependency>
 <!--        	 overriding ep-core's -->
