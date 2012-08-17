@@ -27,7 +27,7 @@
 				name="Enzyme Portal website"/>
 		</links>
 		<breadcrumbs>
-			<item name="Eb-Eye adapter" href="./index.html"/>
+			<item name="EB-Eye adapter" href="./index.html"/>
 		</breadcrumbs>
 		<menu ref="parent" />
 		<menu name="Eb-Eye adapter">

@@ -11,7 +11,7 @@
 	</properties>
 	
 	<body>
-		<section name="Eb-Eye adapter">
+		<section name="EB-Eye adapter">
 			<p>
 				A module providing proxies to the EB-Eye search engine.
 			</p>
