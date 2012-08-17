@@ -9,8 +9,15 @@
 </properties>
 
 <body>
-	<release version="1.0" date="in SVN" description="First release">
-		
+	<release version="1.0.2" date="" description="">
+		<action dev="rafalcan" type="fix">
+			Removed System.out.println's from the code. Using a proper Logger
+			not to clutter catalina.out.
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
 	</release>
 </body>
 

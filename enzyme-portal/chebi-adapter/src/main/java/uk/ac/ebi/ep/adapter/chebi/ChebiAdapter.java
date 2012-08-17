@@ -79,12 +79,12 @@ public class ChebiAdapter implements IChebiAdapter {
     public List<String> getChebiLiteEntity(String query) throws ChebiFetchDataException {
         List<String> results = new ArrayList<String>();
         try {
-            System.out.println("Invoking getLiteEntity");
+            LOGGER.debug("Invoking getLiteEntity");
             LiteEntityList entities = client.getLiteEntity(query, SearchCategory.ALL, 50, StarsCategory.ALL);
             List<LiteEntity> resultList = entities.getListElement();
             for (LiteEntity liteEntity : resultList) {
                 results.add(liteEntity.getChebiId());
-                System.out.println("CHEBI ID: " + liteEntity.getChebiId());
+                LOGGER.debug("CHEBI ID: " + liteEntity.getChebiId());
             }
 
         } catch (ChebiWebServiceFault_Exception e) {
@@ -341,7 +341,7 @@ public class ChebiAdapter implements IChebiAdapter {
 
       // Create client
       ChebiWebServiceClient client = new ChebiWebServiceClient();
-      System.out.println("Invoking getOntologyParents");
+      LOGGER.debug("Invoking getOntologyParents");
       //OntologyDataItemList parents = client.getOntologyParents("CHEBI:17012");
       //OntologyDataItemList parents = client.getOntologyParents("CHEBI:28714");
       OntologyDataItemList parents = client.getOntologyParents("CHEBI:22526");
@@ -355,36 +355,16 @@ public class ChebiAdapter implements IChebiAdapter {
   public static void getOntologyParentsResursively (List<OntologyDataItem> parentList, boolean stop){
       for ( OntologyDataItem ontologyDataItem : parentList ) {
         String relType = ontologyDataItem.getType();
-               // System.out.println("CHEBI names: " + ontologyDataItem.getChebiName());
-                //System.out.println("CHEBI names: " + ontologyDataItem.getType());
 
         if (relType.equalsIgnoreCase("has role")) {
             String chebName = ontologyDataItem.getChebiName();
             //IChebiAdapter.MoleculeType.valueOf(chebName)
             if (chebName.contains("drug") || chebName.contains("inhibitor") || chebName.contains("activator")) {
-                System.out.println("CHEBI names: " + ontologyDataItem.getChebiName());
-                System.out.println("CHEBI names: " + ontologyDataItem.getType());
+                LOGGER.debug("CHEBI names: " + ontologyDataItem.getChebiName());
+                LOGGER.debug("CHEBI names: " + ontologyDataItem.getType());
             }
         }
       }
 
   }
 }
-
-/*
- Invoking getOntologyParents
-CHEBI names: monocarboxylic acid
-CHEBI names: is a
-CHEBI names: non-steroidal anti-inflammatory drug
-CHEBI names: has role
-CHEBI names: non-steroidal anti-inflammatory drug
-CHEBI names: has role
-CHEBI names: indoles
-CHEBI names: is a
-CHEBI names: cyclooxygenase 2 inhibitor
-CHEBI names: has role
-CHEBI names: cyclooxygenase 2 inhibitor
-CHEBI names: has role
-CHEBI names: non-narcotic analgesic
-CHEBI names: has role
- */
