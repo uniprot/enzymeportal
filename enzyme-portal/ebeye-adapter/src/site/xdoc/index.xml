@@ -2,19 +2,19 @@
 
 <document xmlns="http://maven.apache.org/XDOC/2.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0
+		http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
 	<properties>
-		<title>EBI Enzyme Portal</title>
+		<title>Home</title>
 		<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
 	</properties>
 	
 	<body>
-		<section name="Enzyme Portal">
-
-			<subsection name="">
-				<p></p>
-			</subsection>
-			
+		<section name="Eb-Eye adapter">
+			<p>
+				A module providing proxies to the EB-Eye search engine.
+			</p>
 		</section>
 	</body>
 </document>
