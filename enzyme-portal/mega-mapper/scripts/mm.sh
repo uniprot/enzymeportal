@@ -37,8 +37,7 @@ echo "Finished Swiss-Prot import - $(date)"
 #echo "Finished TrEMBL import - $(date)"
 
 echo "Starting ChEBI import - $(date)"
-java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $CHEBI
+. $MM_SCRIPTS/loadChEBICompounds.sh
 echo "Finished ChEBI import - $(date)"
 
 echo "Starting ChEMBL import - $(date)"
