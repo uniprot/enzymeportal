@@ -11,6 +11,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.log4j.Logger;
+
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.EnzymeRelatedDomains;
 import uk.ac.ebi.ep.config.ResultField;
@@ -26,6 +28,8 @@ import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
  * @author  $Author$
  */
 public class Config implements ConfigMBean {
+
+    private static final Logger LOGGER = Logger.getLogger(ConfigMBean.class);
 
 	/* <moveThisTo_EbeyeConfig spaghetti="true"> */
     public static List<Domain> domainList;
@@ -51,12 +55,12 @@ public class Config implements ConfigMBean {
     protected String mmDatasource = "jdbc/ep/mm";
     
 	public void initIt() throws Exception {
-	  System.out.println("Init method after properties are set : ");
+	  LOGGER.debug("Init method after properties are set : ");
           loadCacheData();
 	}
 
 	public void cleanUp() throws Exception {
-	  System.out.println("Spring Container is destroy! Customer clean up");
+	  LOGGER.debug("Spring Container is destroy! Customer clean up");
           
 	}
 
