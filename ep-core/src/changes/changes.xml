@@ -4,12 +4,13 @@
 	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
 
 <properties>
-	<title>Change log</title>
+	<title>EP core change log</title>
 	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
 </properties>
 
 <body>
-	<release version="1.0.5" date="" description="">
+	<release version="1.0.5" date="2012-08-20"
+		description="Removed System.out.println; dependency updates">
 		<action dev="rafalcan" type="fix">
 			Removed System.out.println's from the code. Using a proper Logger
 			not to clutter catalina.out.
@@ -17,6 +18,10 @@
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of biomart-adapter, chebi-adapter and
 			ep-util, which also get rid of System.out.println's.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of intenz-adapter, ep-domain,
+			ebeye-adapter, biobabel-lucene and junit.
 		</action>
 	</release>
 	<release version="1.0.4" date="2012-08-15" description="Bug fix">
