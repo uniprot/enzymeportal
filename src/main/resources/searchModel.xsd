@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://ebi.ac.uk/ep/search/model" xmlns:ep="http://ebi.ac.uk/ep/search/model" xmlns:epe="http://ebi.ac.uk/ep/enzyme/model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:import namespace="http://ebi.ac.uk/ep/enzyme/model"/>
-	<xs:element name="Compound" type="ep:Compound"/>
+<xs:schema targetNamespace="http://ebi.ac.uk/ep/search/model"
+	xmlns:ep="http://ebi.ac.uk/ep/search/model"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Compound" type="ep:Compound"/>
 	<xs:complexType name="Compound">
 		<xs:sequence>
 			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
