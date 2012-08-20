@@ -87,32 +87,6 @@
 						        </reportSet>
 						    </reportSets>
 						</plugin>
-			            <plugin>
-			                <!-- This plugin requires plenty of memory:
-			                        export MAVEN_OPTS="-Xms256M -Xmx512M"
-			                    and also a ${docflexHome} property set somewhere
-			                    (settings.xml) -->
-			                <groupId>docflex</groupId>
-			                <artifactId>docflex-xml-maven-plugin</artifactId>
-			                <version>1.0</version>
-			                <configuration>
-			                    <generatorParams>
-			                        <param>-template</param>
-			                        <param>${docflexHome}/templates/XSDDoc/FramedDoc.tpl</param>
-			                        <param>-format</param>
-			                        <param>HTML</param>
-			                        <param>-nodialog</param>
-			                        <param>-quiet</param>
-			                        <param>${basedir}/src/main/resources/config.xsd</param>
-			                        <param>${basedir}/src/main/resources/ebeyeResult.xsd</param>
-			                        <param>${basedir}/src/main/resources/enzymeModel.xsd</param>
-			                        <param>${basedir}/src/main/resources/searchModel.xsd</param>
-			                    </generatorParams>
-			                    <outputFolder>xsdocs</outputFolder>
-			                    <name>XSDoc</name>
-			                    <description>XML schema for IntEnz</description>
-			                </configuration>
-			            </plugin>
                     </reportPlugins>
                 </configuration>
             </plugin>
