@@ -11,9 +11,10 @@
 <body>
 	<release version="1.0.6" date="" description="Fixes">
 		<action dev="rafalcan" type="update">
-			Updated to latest versionso of ep-core - which fixes bug related to
-			extra reactions shown - and mega-mapper - which fixes 'too many open
-			cursors' issue.
+			Updated to latest versions of ep-core - which fixes bug related to
+			extra reactions shown -, ep-util, mega-mapper - which fixes 'too
+			many open cursors' issue - and junit (in case we write some tests
+			at some point).
 		</action>
     </release>
 	<release version="1.0.5" date="2012-08-14" description="Fixes">
