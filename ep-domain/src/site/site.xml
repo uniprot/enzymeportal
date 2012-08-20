@@ -22,6 +22,10 @@
 	</poweredBy>
 
 	<body>
+		<links>
+			<item href="http://www.ebi.ac.uk/enzymeportal"
+				name="Enzyme Portal website"/>
+		</links>
 		<breadcrumbs>
 			<item name="EP domain" href="./index.html"/>
 		</breadcrumbs>
