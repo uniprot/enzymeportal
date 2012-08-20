@@ -127,7 +127,9 @@
 			                    </generatorParams>
 			                    <outputFolder>xsdocs</outputFolder>
 			                    <name>XSDoc</name>
-			                    <description>XML schema for IntEnz</description>
+			                    <description>
+			                    	XML schemas for the Enzyme Portal.
+		                    	</description>
 			                </configuration>
 			            </plugin>
                     </reportPlugins>
