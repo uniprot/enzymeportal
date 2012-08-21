@@ -9,7 +9,7 @@
 </properties>
 
 <body>
-	<release version="1.0.6" date="" description="Bug fix">
+	<release version="1.0.6" date="2012-08-21" description="Bug fix">
 		<action dev="rafalcan" type="fix">
 			Pathways related to a Rhea reaction are not redundant any more.
 			<fixes issue="105"/>
