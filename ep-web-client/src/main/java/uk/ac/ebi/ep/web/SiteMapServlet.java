@@ -18,14 +18,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import uk.ac.ebi.ep.mBean.SitemapConfig;
 
 /**
- * This Servlet reads and serves the generated SiteMap
  *
  * @author joseph
  */
-//
-public class EnzymePortalSitemapServlet extends HttpServlet {
-
-    public Logger LOGGER = Logger.getLogger(EnzymePortalSitemapServlet.class);
+public class SiteMapServlet extends HttpServlet {
+    //SiteMapServlet?sitemaps=sitemapTest1.xml
+    public Logger LOGGER = Logger.getLogger(SiteMapServlet.class);
     private SitemapConfig sitemapConfig;
     
     public SitemapConfig getSitemapConfig() {
@@ -36,41 +34,53 @@ public class EnzymePortalSitemapServlet extends HttpServlet {
         this.sitemapConfig = sitemapConfig;
     }
     
-
-    @Override
+   @Override
     public void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("application/gzip");
-        response.setContentType("application/xml");
+       String sitemaps = request.getParameter("sitemaps");
+        response.setContentType("text/xml");
         LOGGER.info("Getting URL connection to sitemap...");
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());//.getWebApplicationContext(getServletContext());
         // ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
         //SitemapConfig sitemapConfig = (SitemapConfig) context.getBean("sitemapConfig");
         sitemapConfig = (SitemapConfig) context.getBean(SitemapConfig.class);
 
-       
-        URL url = new URL(sitemapConfig.getSitemapIndex());
 
+   
+                    String output = String.format("%s/%s", sitemapConfig.getSitemapUrl(), sitemaps);
+                  
+                    
+                   URL url = new URL(output);
+      
                     LOGGER.info("Connecting to sitemap...");
-        URLConnection con = url.openConnection(java.net.Proxy.NO_PROXY);
+                  URLConnection con = url.openConnection(java.net.Proxy.NO_PROXY);
                     
                     LOGGER.info("Connected to sitemap...");
-        InputStream inputStream = null;
-        try {
+                     InputStream inputStream = null;
+                  
                     inputStream = con.getInputStream();
+                
                     int r = -1;
                     LOGGER.debug("Starting to read sitemap...");
                     while ((r = inputStream.read()) != -1) {
                         response.getOutputStream().write(r);
                     }
-
+                
+           
+                try {
                     response.getOutputStream().flush();
                     response.flushBuffer();
+                   
                     LOGGER.debug("... Read and served");
+                    
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
                     }
                 }
                 }
+            
+    
+    
+
 }
