@@ -269,7 +269,8 @@ public class SitemapIndexGenerator {
         for (int i = 1; i <= count; i++) {
             String fileName = prefix + i + suffix;
             try {
-                   String customURL = String.format("%s/%s", baseUrl,fileName);
+                   String customURL = String.format("%s%s", baseUrl,fileName);
+                 
                 addUrl(customURL);
                         
             } catch (MalformedURLException e) {
@@ -280,24 +281,27 @@ public class SitemapIndexGenerator {
             try {
                  
                String customURL = String.format("%s/%s%s", baseUrl,prefix,suffix);
+               
                 addUrl(customURL);
              
               } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            for (int i = 1; i <= count; i++) {
-                String fileName = prefix + i + suffix;
-                try {
-                    
-                        String customURL = String.format("%s/%s", baseUrl,fileName);
-                addUrl(customURL);
-             
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+        } 
+//        else {
+//            for (int i = 1; i <= count; i++) {
+//                String fileName = prefix + i + suffix;
+//                try {
+//                    
+//                        String customURL = String.format("%s/%s", baseUrl,fileName);
+//                        System.out.println("custom c"+ customURL);
+//                addUrl(customURL);
+//             
+//                } catch (MalformedURLException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
         return this;
     }
 
