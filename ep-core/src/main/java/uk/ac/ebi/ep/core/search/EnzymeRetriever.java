@@ -282,7 +282,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * @return the same list of ReactionPathway objects with any added pathways.
      * @throws EnzymeRetrieverException
      */
-    private List<ReactionPathway> getPathwaysFromRheaXref(
+    protected List<ReactionPathway> getPathwaysFromRheaXref(
             List<ReactionPathway> reactionPathways) {
         for (ReactionPathway reactionPathway : reactionPathways) {
             EnzymeReaction reaction = reactionPathway.getReaction();
@@ -300,11 +300,23 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                         x = x.substring(idStart);
                     }
                     // If this fails, at least we have the reactions:
-                    List<Pathway> pathways;
                     try {
-                        pathways = getPathwaysByReactomeReactionsId(x);
+                        List<Pathway> pathways = getPathwaysByReactomeReactionsId(x);
                         if (pathways != null) {
-                            reactionPathway.getPathways().addAll(pathways);
+                        	// Check that the retrieved pathway IDs
+                        	// are not there already:
+                        	List<Pathway> newPathways = new ArrayList<Pathway>();
+                        	for (Pathway pathway : pathways) {
+                        		boolean exists = false;
+								for (Pathway existingPathway : reactionPathway.getPathways()) {
+									if (existingPathway.getId().equals(pathway.getId())){
+										exists = true;
+										break;
+									}
+								}
+								if (!exists) newPathways.add(pathway);
+							}
+                            reactionPathway.getPathways().addAll(newPathways);
                         }
                     } catch (EnzymeRetrieverException e) {
                         LOGGER.error("Unable to retrieve pathways for " + x, e);
