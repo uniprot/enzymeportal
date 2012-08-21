@@ -53,6 +53,9 @@
               
         <property name="sitemapUrl"
                   value="${sitemapLoc.sitemapUrl}"/>
+                  
+                  <property name="sitemapIndex"
+                  value="${sitemapLoc.sitemapIndex}"/>
     </bean>
    
     
@@ -60,4 +63,5 @@
 <!--        <property name="sitemapConfig" ref="sitemapConfig"/>-->
     </bean>
  
+ <bean id="SiteMapServlet" class="uk.ac.ebi.ep.web.SiteMapServlet" ></bean>
 </beans>
