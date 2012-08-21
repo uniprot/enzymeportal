@@ -20,6 +20,7 @@ import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
+import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.core.filter.*;
 import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
@@ -293,6 +294,7 @@ public class SearchController {
                 //List<String> compoundsFilter = searchParameters.getCompounds();
                 //List<String> diseasesFilter = searchParameters.getDiseases();
 
+                List<EnzymeSummary> summaryEntryFilteredResults = new LinkedList<EnzymeSummary>();
 
                 Set<String> speciesFilter = new TreeSet<String>();
                 for (String s : searchParameters.getSpecies()) {
@@ -302,18 +304,18 @@ public class SearchController {
                 }
                 Set<String> diseasesFilter = new TreeSet<String>();
                 for (String d : searchParameters.getDiseases()) {
-                    if (d != null || !d.isEmpty() || !d.equals("") || !d.equals(" ") ) {
+                    if (d != null || !d.isEmpty() || !d.equals("") || !d.equals(" ")) {
                         diseasesFilter.add(d);
-                    } 
+                    }
                 }
 
 
-             
+
                 Set<String> compoundsFilter = new TreeSet<String>();
                 for (String c : searchParameters.getCompounds()) {
-                    if (c != null || !c.isEmpty() || !c.equals("") || !c.equals(" ") ) {
-                       compoundsFilter.add(c);
-                    } 
+                    if (c != null || !c.isEmpty() || !c.equals("") || !c.equals(" ")) {
+                        compoundsFilter.add(c);
+                    }
                 }
 
 
@@ -358,10 +360,10 @@ public class SearchController {
 
                 //default compound list
                 List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
-                
+
 
                 List<uk.ac.ebi.ep.search.model.Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
-                
+
                 //if an item is seleted, then filter the list
                 if (!selectedDisease_autocomplete.isEmpty() || !selectedCompounds_autocomplete.isEmpty() || !selectedSpecies_autoComplete.isEmpty() || !speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
                     List<EnzymeSummary> filteredResults =
@@ -371,7 +373,7 @@ public class SearchController {
                     speciesFilter.addAll(selectedSpecies_autoComplete);
                     compoundsFilter.addAll(selectedCompounds_autocomplete);
                     diseasesFilter.addAll(selectedDisease_autocomplete);
-                    
+
                     CollectionUtils.filter(filteredResults,
                             new SpeciesPredicate(speciesFilter));
                     CollectionUtils.filter(filteredResults,
@@ -390,19 +392,19 @@ public class SearchController {
 
 
                     allSelectedItems.addAll(speciesFilter);
-                    
-                    
+
+
 
                     //auto complete filtering
                     //if specie(s) is selected from auto-complete, then the following executes.
                     if (selectedSpecies_autoComplete.size() > 0) {
-                       
+
                         for (String scienceName : selectedSpecies_autoComplete) {
-        
+
                             //loop thru the species and see if the science name matches with the selected item
                             for (Species species_in_defaultList : defaultSpeciesList) {
                                 if (!scienceName.isEmpty() && scienceName.equalsIgnoreCase(species_in_defaultList.getScientificname()) || scienceName.equalsIgnoreCase(species_in_defaultList.getCommonname())) {
-                                
+
                                     //create a specie based on the scienctific name selected
                                     specie_to_tempList = species_in_defaultList;
 
@@ -410,7 +412,7 @@ public class SearchController {
                                     if (!tempSpecieList.contains(specie_to_tempList)) {
 
                                         tempSpecieList.add(specie_to_tempList);
-                                       
+
 
                                     }
 
@@ -418,9 +420,9 @@ public class SearchController {
 
                                 }
                             }
-                            
+
                         }
-                          
+
 
                     }
 
@@ -488,7 +490,7 @@ public class SearchController {
 
 
                     CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedItems));
-                    
+
                     //a check so that we don't get an empty page. so if the result is null, we display a no result found for the selection to the end user
                     if (filteredResults.size() <= 0) {
                         EnzymeSummary es = new EnzymeSummary();
@@ -501,11 +503,53 @@ public class SearchController {
                     // Create a new SearchResults, don't modify the one in session
                     SearchResults sr = new SearchResults();
 
+                    /**
+                     * filter the result based on the species selected by user
+                     */
+                    LinkedList<String> checkBoxParams = new LinkedList<String>(searchParameters.getSpecies());
+                    LinkedList<String> checkBoxParamsAuto = new LinkedList<String>(searchParameters.getSelectedSpecies());
+                    for (EnzymeSummary enzymeSummary : filteredResults) {
+
+                        if(checkBoxParams != null && !checkBoxParams.isEmpty() && checkBoxParams.size() > 0){
+                       
+                            String selected = checkBoxParams.getFirst();
+                              for (EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()) {
+
+                                if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
+                                    enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
+                                    //enzymeSummary.setSpecies(enzymeAccession.getSpecies());
+                                    enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
+                                }
+
+                            }
+                        
+                    }
+                      if(checkBoxParamsAuto != null && checkBoxParamsAuto.size() > 0){
+                       
+                          String selected = checkBoxParamsAuto.getFirst();
+                        
+                            for (EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()) {
+
+                                if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
+                                    enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
+                                    //enzymeSummary.setSpecies(enzymeAccession.getSpecies());
+                                    enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
+                                }
+
+                            }
+                        //}
+                    }
+                        // adding the updated enzyme summaries to the filtered result
+                        summaryEntryFilteredResults.add(enzymeSummary);
+                    }
+
+
                     // Update the number of results to paginate:
                     pagination.setNumberOfResults(filteredResults.size());
                     model.addAttribute("pagination", pagination);
                     sr.setSearchfilters(resultSet.getSearchfilters());
-                    sr.setSummaryentries(filteredResults);
+                    //sr.setSummaryentries(filteredResults);
+                    sr.setSummaryentries(summaryEntryFilteredResults);
                     // show the total number of hits (w/o filtering):
                     sr.setTotalfound(resultSet.getTotalfound());
                     searchModelForm.setSearchresults(sr);
