@@ -328,8 +328,10 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
     }
 
     private void writeSiteMap(OutputStreamWriter out) throws IOException {
-        out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" ");
+          out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+        //out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        //out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"");
 
 
         //out.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" " + " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + " xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -339,7 +341,7 @@ abstract class SitemapGenerator<U extends ISitemapUrl, THIS extends SitemapGener
             out.write(renderer.getXmlNamespaces());
             out.write(' ');
         }
-        out.write(">\n");
+        //out.write(">\n");
         for (U url : urls) {
             renderer.render(url, out, dateFormat);
         }
