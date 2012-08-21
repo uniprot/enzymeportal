@@ -27,7 +27,7 @@ public class EpSiteMapImpl extends SiteMapResources<File> {
 
     private final Logger LOGGER = Logger.getLogger(EpSiteMapImpl.class);
     private static final String SITEMAP_INDEX = "sitemap_index.xml";
-    private static final String SITEMAP_LOCATION = "http://www.ebi.ac.uk/enzymeportal/SiteMapServlet?sitemap=";
+    private static final String SITEMAP_LOCATION = "http://www.ebi.ac.uk/enzymeportal/SiteMapServlet?sitemaps=";
     private static final String ENZYME_PORTAL_URL ="http://www.ebi.ac.uk/enzymeportal"; 
     private static final String ENZYME_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/enzyme");
     private static final String PROTEIN_STRUCTURE_TAB = String.format("%s/%s", ENZYME_PORTAL_URL, "search/{0}/proteinStructure");
