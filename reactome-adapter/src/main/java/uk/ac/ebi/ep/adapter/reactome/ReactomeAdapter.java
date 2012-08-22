@@ -37,9 +37,14 @@ public class ReactomeAdapter implements IReactomeAdapter{
     
     private ReactomeWsCallable reactomeWsCallable;
     
+    /**
+     * Lazy getter.
+     * @return a {@link ReactomeWsCallable} without any Reactome ID set, as
+     * 		it will not be used anyway.
+     */
     private ReactomeWsCallable getReactomeWsCallable(){
     	if (reactomeWsCallable == null){
-    		reactomeWsCallable = new ReactomeWsCallable(config);
+    		reactomeWsCallable = new ReactomeWsCallable(config, null);
     	}
     	return reactomeWsCallable;
     }
