@@ -6,9 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import uk.ac.ebi.ep.adapter.reactome.ReactomeCallable;
-import uk.ac.ebi.ep.adapter.reactome.ReactomeCallable.GetPathwayCaller;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
+import uk.ac.ebi.ep.adapter.reactome.ReactomeWsCallable;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
 
 /**
@@ -24,9 +23,10 @@ public class ReactomeController {
 
     @RequestMapping(value="/ajax/reactome/{reactomePathwayId}")
     protected String getPathway(Model model,
-    		@PathVariable String reactomePathwayId) throws Exception{
-        GetPathwayCaller callable =
-                new ReactomeCallable.GetPathwayCaller(reactomePathwayId, reactomeConfig);
+    		@PathVariable String reactomePathwayId)
+	throws Exception{
+    	ReactomeWsCallable callable =
+    			new ReactomeWsCallable(reactomeConfig, reactomePathwayId);
         Pathway pathway = callable.call();     
         model.addAttribute("pathway", pathway);
         return "pathway";
