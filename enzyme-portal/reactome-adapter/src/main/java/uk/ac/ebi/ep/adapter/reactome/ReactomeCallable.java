@@ -31,6 +31,9 @@ public class ReactomeCallable {
 
 	private static final Logger LOGGER = Logger.getLogger(ReactomeCallable.class);
 	
+	/**
+	 * @deprecated Use {@link ReactomeWsCallable} instead of parsing HTML.
+	 */
     public static class GetPathwayCaller implements Callable<Pathway> {
         protected String pathwayId;
         protected ReactomeConfig config;
