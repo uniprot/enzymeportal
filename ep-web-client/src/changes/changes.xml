@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
+		http://maven.apache.org/changes/1.0.0 ">
 
 <properties>
 	<title>EP webapp change log</title>
@@ -9,10 +10,11 @@
 </properties>
 
 <body>
-	<release version="1.0.7" date="" description="Bug fixes">
+	<release version="1.0.7" date="2012-08-23" description="Bug fixes">
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of ep-core - which fixes bug related to
 			redundant pathways - and reactome-adapter.
+			<fixes issue="105"/>
 		</action>
 		<action dev="rafalcan" type="fix">
 			Fixed issue with missing pathway descriptions.
