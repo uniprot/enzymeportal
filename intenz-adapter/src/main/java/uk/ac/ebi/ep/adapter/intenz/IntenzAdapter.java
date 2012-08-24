@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 
+import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetCofactorsCaller;
 import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetEcHierarchyCaller;
 import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetIntenzCaller;
 import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetSynonymsCaller;
@@ -26,6 +27,7 @@ import uk.ac.ebi.ep.adapter.intenz.util.IntenzUtil;
 import uk.ac.ebi.ep.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.enzyme.model.EnzymeHierarchy;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.intenz.xml.jaxb.Intenz;
 import uk.ac.ebi.util.result.DataTypeConverter;
@@ -178,5 +180,29 @@ public class IntenzAdapter implements IintenzAdapter{
          return results;
      }
 
+	public Collection<Molecule> getCofactors(String ec) {
+		Collection<Molecule> cofactors = null;
+		GetCofactorsCaller cofactorsCaller = new GetCofactorsCaller(
+				IntenzUtil.createIntenzEntryUrl(ec));
+		try {
+			cofactors = cofactorsCaller.call();
+		} catch (Exception e) {
+			LOGGER.error("Unable to retrieve cofactors for " + ec, e);
+		}
+		return cofactors;
+	}
+
+	public Collection<Molecule> getCofactors(Collection<String> ecs) {
+		Collection<Molecule> cofactors = null;
+		for (String ec : ecs) {
+			final Collection<Molecule> newCofactors = getCofactors(ec);
+			if (cofactors == null){
+				cofactors = newCofactors;
+			} else if (newCofactors != null){
+				cofactors.addAll(newCofactors);
+			}
+		}
+		return cofactors;
+	}
 
 }
