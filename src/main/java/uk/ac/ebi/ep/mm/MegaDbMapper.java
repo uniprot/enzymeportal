@@ -13,7 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
- * Objects of this class write the mega-map to a database.
+ * Objects of this class write the mega-map to a database managed via hibernate.
  * @author rafa
  *
  */
@@ -265,5 +265,10 @@ public class MegaDbMapper implements MegaMapper {
     public Map<String, String> getDisease(MmDatabase db, String accessions, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+	public Collection<XRef> getXrefs(MmDatabase db, String accession,
+			Relationship relationship) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 }

@@ -1,9 +1,19 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
+
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 
 /**
@@ -389,7 +399,23 @@ public class MegaJdbcMapper implements MegaMapper {
         return xrefs;
     }
 
-    /**
+    public Collection<XRef> getXrefs(MmDatabase db, String accession,
+			Relationship relationship) {
+		Collection<XRef> xrefs = null;
+        try {
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--xrefs.by.accession.and.relationship");
+            ps.setString(1, accession);
+            ps.setString(2, db.name());
+            ps.setString(3, relationship.name());
+            xrefs = buildXref(ps.executeQuery());
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + relationship + ")", e);
+        }
+        return xrefs;
+	}
+
+	/**
      * retrieves a List of XRef with database name as ChEMBL.
      *
      * @param db database where the accession is found

@@ -224,6 +224,14 @@ public class MegaJdbcMapperTest {
 
         logger.info("After xrefsByAccession");
     }
+    
+    @Test
+    public void testGetXrefsByAccessionAndRelationship(){
+    	Collection<XRef> xrefs = mm.getXrefs(MmDatabase.UniProt, "P07327",
+				Relationship.is_cofactor_of);
+    	assertNotNull(xrefs);
+    	assertEquals(4, xrefs.size());
+    }
 
 /**
      * Test of getAllUniProtAccessions method, of class MegaJdbcMapper.
