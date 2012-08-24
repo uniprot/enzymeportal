@@ -20,15 +20,15 @@
             <c:when test="${empty molecules}">
                 <p><spring:message code="label.entry.tab.empty"
                                 arguments="small molecules"/></p>
-                </c:when>
-                <c:otherwise>
-                    <c:set var="moleculeGroup" value="${molecules.bioactiveLigands}"/>
-                    <c:set var="emptyArgs" value="bioactive compounds"/>
-                    <c:set var="titleArgs" value="Bioactive compounds,bind to"/>
-                    <c:set var="explArgs" value="Bioactive compounds,bind to"/>
-                    <c:set var="moleculeGroupDb" value="ChEMBL"/>
-                    <c:set var="moleculeGroupUrl"
-                           value="https://www.ebi.ac.uk/chembl/widget/search/target/compound_mw/uniprot:${enzymeModel.uniprotaccessions[0]}"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="moleculeGroup" value="${molecules.bioactiveLigands}"/>
+                <c:set var="emptyArgs" value="bioactive compounds"/>
+                <c:set var="titleArgs" value="Bioactive compounds,bind to"/>
+                <c:set var="explArgs" value="Bioactive compounds,bind to"/>
+                <c:set var="moleculeGroupDb" value="ChEMBL"/>
+                <c:set var="moleculeGroupUrl"
+                       value="https://www.ebi.ac.uk/chembl/widget/search/target/compound_mw/uniprot:${enzymeModel.uniprotaccessions[0]}"/>
                 <div id="bioactiveLigands">
                     <%@include  file="moleculeGroup.jsp" %>
                 </div>
@@ -65,17 +65,17 @@
                 <div id="inhibitors">
                     <%@include  file="moleculeGroup.jsp" %>
                 </div>
-                <%--
-                                    <c:set var="moleculeGroup" value="${molecules.cofactors}"/>
-                                    <c:set var="emptyArgs" value="cofactors"/>
-                                    <c:set var="titleArgs" value="Cofactors,activate"/>
-                                    <c:set var="explArgs" value="cofactors,activate"/>
-                                    <c:set var="moleculeGroupDb" value=""/>
-                                    <c:set var="moleculeGroupUrl" value=""/>
-                                    <div id="cofactors">
-                                                        <%@include  file="moleculeGroup.jsp" %>
-                                    </div>
-                --%>	
+                
+                <c:set var="moleculeGroup" value="${molecules.cofactors}"/>
+                <c:set var="emptyArgs" value="cofactors"/>
+                <c:set var="titleArgs" value="Cofactors,activate"/>
+                <c:set var="explArgs" value="cofactors,activate"/>
+                <c:set var="moleculeGroupDb" value=""/>
+                <c:set var="moleculeGroupUrl" value=""/>
+                <div id="cofactors">
+                	<%@include  file="moleculeGroup.jsp" %>
+                </div>
+                
                 <c:set var="provenance" value="${molecules.provenance}"/>
                 <div class="provenance">
                     <ul>
