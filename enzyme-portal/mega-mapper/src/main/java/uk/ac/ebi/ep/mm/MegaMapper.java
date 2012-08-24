@@ -97,7 +97,7 @@ public interface MegaMapper {
 
     /**
      * Retrieves cross references from the mega-map for a given accession
-     * (not ID).
+     * (not ID) to/from the given database(s).
      * @param db the database where the accession is from.
      * @param accession the accession number.
      * @param xDb the referencing/referenced database(s).
@@ -107,6 +107,20 @@ public interface MegaMapper {
      */
     public Collection<XRef> getXrefs(MmDatabase db, String accession,
             MmDatabase... xDb);
+    
+    /**
+     * Retrieves cross references from the mega-map for a given accession (not
+     * ID) given a concrete relationship.
+     * @param db the database where the accession is from.
+     * @param accession the accession number.
+     * @param relationship the relationship between the given accession and its
+     * 		cross references.
+     * @return a collection of xrefs in the map, or <code>null</code> if none
+     * 		found. Note that the accession used in the query may be either the
+     * 		origin or the target of an xref.
+     */
+    public Collection<XRef> getXrefs(MmDatabase db, String accession,
+    		Relationship relationship);
 
     /**
      * Retrieves cross references from the mega-map for a given accession

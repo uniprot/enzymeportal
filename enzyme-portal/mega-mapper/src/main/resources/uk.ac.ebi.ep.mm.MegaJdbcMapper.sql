@@ -60,6 +60,11 @@ SELECT mmx.*,mme1.* FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref
 		AND ((mma.id = mmx.from_entry AND mmx.to_entry = mme2.id AND mme2.db_name IN ({0})) \
 		OR (mma.id = mmx.to_entry AND mmx.from_entry = mme2.id AND mme2.db_name IN ({0})))
 
+--xrefs.by.accession.and.relationship:\
+SELECT mmx.* FROM mm_accession mma, mm_xref mmx, mm_entry mme \
+		WHERE mma.accession = ? AND mma.id = mme.id AND mme.db_name = ? \
+		AND (mma.id = mmx.from_entry OR mma.id = mmx.to_entry) \
+		AND mmx.relationship = ?
 
 --xrefs.by.ChEMBL:\
 SELECT mmx.* FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref mmx \

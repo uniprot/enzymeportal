@@ -9,6 +9,17 @@
 </properties>
 
 <body>
+	<release version="1.0.5" date="" description="">
+		<action dev="rafalcan" type="add">
+			Added method to retrieve xrefs by relationship.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of ep-domain and junit.
+		</action>
+		<action dev="rafalcan" type="remove">
+			Removed strange unused dependencies.
+		</action>
+	</release>
 	<release version="1.0.4" date="2012-08-15" description="Bug fix">
 		<action dev="rafalcan" type="fix">
 			Prepared statements were not closed, which resulted in lots of
