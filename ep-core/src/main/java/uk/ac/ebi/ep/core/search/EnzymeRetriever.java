@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,6 +20,8 @@ import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.FieldsOfPdbe;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
+import uk.ac.ebi.ep.adapter.intenz.IintenzAdapter;
+import uk.ac.ebi.ep.adapter.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
@@ -45,7 +46,6 @@ import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
-import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
 import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 import uk.ac.ebi.util.result.DataTypeConverter;
@@ -69,6 +69,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     protected ILiteratureAdapter litAdapter;
     protected BiomartAdapter biomartAdapter;
     private IBioportalAdapter bioportalAdapter;
+    private IintenzAdapter intenzAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever(Config searchConfig) {
@@ -83,6 +84,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             LOGGER.error("Unable to create a PDBe adapter", e);
         }
         litAdapter = new SimpleLiteratureAdapter();
+        intenzAdapter = new IntenzAdapter();
     }
 
     /**
@@ -385,7 +387,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         try {
             LOGGER.debug("MOLECULES before getting model");
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
+            // The model contains now only drugs, activators and inhibitors.
             if (megaMapperConnection != null) {
+            	// Get bioactive compounds from ChEMBL:
                 // Search the mega-map for xrefs from UniProt to ChEMBL:
                 LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
                 //this is the total number of CheMBL molecules found
@@ -404,6 +408,12 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     enzymeModel.getMolecule().setTotalFound(totalFound);
                 }
             }
+            // Get cofactors from IntEnz:
+            enzymeModel.getMolecule().withCofactors(
+            		intenzAdapter.getCofactors(enzymeModel.getEc()));
+            // XXX cofactors are mixed if several EC numbers per UniProt acc
+            // XXX wrong cofactors if OR'ed (ex. EC 1.1.1.1 and P07327)
+            
             LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
             chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
             LOGGER.debug("MOLECULES before provenance");
