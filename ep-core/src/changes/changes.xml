@@ -9,7 +9,7 @@
 </properties>
 
 <body>
-	<release version="1.0.7" date="" description="Cofactors">
+	<release version="1.0.7" date="2012-08-24" description="Cofactors">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of intenz-adapter, which provides
 			cofactors.
