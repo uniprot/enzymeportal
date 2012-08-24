@@ -39,11 +39,6 @@
             <version>3.2.4.GA</version>
         </dependency>
         <dependency>
-            <groupId>javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.12.1.GA</version>
-        </dependency>
-        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
@@ -51,7 +46,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>4.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -69,7 +64,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-domain</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -79,21 +74,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>cdk</groupId>
-            <artifactId>cdk</artifactId>
-            <version>1.0.4</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-lucene</artifactId>
             <version>1.0.6</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi</groupId>
-            <artifactId>ebinocle</artifactId>
-            <version>1.0.4</version>
             <type>jar</type>
         </dependency>
         <dependency>
