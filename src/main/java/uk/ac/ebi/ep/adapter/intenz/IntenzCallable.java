@@ -2,17 +2,20 @@ package uk.ac.ebi.ep.adapter.intenz;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
@@ -20,6 +23,9 @@ import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.enzyme.model.EcClass;
 import uk.ac.ebi.ep.enzyme.model.EnzymeHierarchy;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.intenz.xml.jaxb.CofactorType;
+import uk.ac.ebi.intenz.xml.jaxb.Cofactors;
 import uk.ac.ebi.intenz.xml.jaxb.EcClassType;
 import uk.ac.ebi.intenz.xml.jaxb.EcSubclassType;
 import uk.ac.ebi.intenz.xml.jaxb.EcSubsubclassType;
@@ -28,6 +34,7 @@ import uk.ac.ebi.intenz.xml.jaxb.EnzymeNameType;
 import uk.ac.ebi.intenz.xml.jaxb.Intenz;
 import uk.ac.ebi.intenz.xml.jaxb.Synonyms;
 import uk.ac.ebi.intenz.xml.jaxb.XmlContentType;
+import uk.ac.ebi.rhea.domain.Database;
 
 /**
  *
@@ -154,7 +161,8 @@ public class IntenzCallable {
                 enzymeName = (String) acceptedNames.get(0).getContent().get(0);
             }
             final String ecNumber = levelFour.getEc().replace("EC ", "");
-			EcClass ecClass4 = new EcClass().withEc(ecNumber).withName(enzymeName);
+			EcClass ecClass4 = new EcClass().withEc(ecNumber)
+					.withName(enzymeName);
             ecClasseList.add(ecClass4);
 
             return ecClasseList;
@@ -187,8 +195,9 @@ public class IntenzCallable {
 
         public Set<String> getSynonyms(Intenz intenz) {
             Set<String> names = new LinkedHashSet<String>();
-            Synonyms synonymsType =
-                    intenz.getEcClass().get(0).getEcSubclass().get(0).getEcSubSubclass().get(0).getEnzyme().get(0).getSynonyms();
+            Synonyms synonymsType = intenz.getEcClass().get(0)
+            		.getEcSubclass().get(0).getEcSubSubclass().get(0)
+            		.getEnzyme().get(0).getSynonyms();
             if (synonymsType != null) {
                 List<EnzymeNameType> synonyms = synonymsType.getSynonym();
                 if (synonyms.size() > 0) {
@@ -197,15 +206,14 @@ public class IntenzCallable {
                         String name = (String) objList.get(0);
                         names.add(name);
                     }
-
                 }
-
             }
             return names;
         }
     }
 
-    public static class GetEcHierarchyCaller implements Callable<EnzymeHierarchy> {
+    public static class GetEcHierarchyCaller
+    implements Callable<EnzymeHierarchy> {
 
         protected GetIntenzCaller intenzCaller;
 
@@ -229,4 +237,58 @@ public class IntenzCallable {
             return enzymeHierarchy;
         }
     }
+    
+    /**
+     * Caller to retrieve cofactors from IntEnz.
+     * @author rafa
+     *
+     */
+    public static class GetCofactorsCaller
+    implements Callable<Collection<Molecule>>{
+
+        protected GetIntenzCaller intenzCaller;
+
+		public GetCofactorsCaller(String ecUrl) {
+            intenzCaller = new GetIntenzCaller(ecUrl);
+		}
+
+		public Collection<Molecule> call() {
+            Intenz intenz = intenzCaller.getData();
+			return getCofactors(intenz);
+		}
+
+		protected Collection<Molecule> getCofactors(Intenz intenz) {
+			Collection<Molecule> cofactors = null;
+			Cofactors intenzCofactors = intenz.getEcClass().get(0)
+					.getEcSubclass().get(0).getEcSubSubclass().get(0)
+					.getEnzyme().get(0).getCofactors();
+			if (intenzCofactors != null){
+				serLoop: for (Serializable ser :intenzCofactors.getContent()) {
+					if (ser instanceof JAXBElement<?>){
+						@SuppressWarnings("unchecked")
+						CofactorType ct = (CofactorType)
+								((JAXBElement<CofactorType>) ser).getValue();
+						if (cofactors == null){
+							cofactors = new ArrayList<Molecule>();
+						}
+						// Check that the cofactor is not already there:
+						for (Molecule molecule : cofactors) {
+							if (molecule.getId().equals(ct.getAccession())){
+								continue serLoop;
+							}
+						}
+						StringBuilder cofName = new StringBuilder();
+						for (Object o : ct.getContent()) cofName.append(o);
+						String cofUrl =
+								Database.CHEBI.getEntryUrl(ct.getAccession());
+						cofactors.add(new Molecule().withId(ct.getAccession())
+								.withUrl(cofUrl).withName(cofName.toString()));
+					}
+				}
+			}
+			return cofactors;
+		}
+		
+    }
+    
 }
