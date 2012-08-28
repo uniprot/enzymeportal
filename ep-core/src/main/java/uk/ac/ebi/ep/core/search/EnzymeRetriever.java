@@ -75,7 +75,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public EnzymeRetriever(Config searchConfig) {
         super(searchConfig);
         rheaAdapter = new RheaWsAdapter();
-        chebiAdapter = new ChebiAdapter();
         biomartAdapter = new BiomartAdapter();
         bioportalAdapter = new BioportalWsAdapter();
         try {
@@ -415,7 +414,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             // XXX wrong cofactors if OR'ed (ex. EC 1.1.1.1 and P07327)
             
             LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
-            chebiAdapter.getMoleculeCompleteEntries(enzymeModel);
+            getChebiAdapter().getMoleculeCompleteEntries(enzymeModel);
             LOGGER.debug("MOLECULES before provenance");
             List<String> prov = new LinkedList<String>();
             prov.add("ChEBI");
