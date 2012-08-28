@@ -46,7 +46,7 @@
                 <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
                 <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
                 <c:set var="totalfound" value="${searchresults.totalfound}"/>
-                <c:set var="filterSizeDefault" value="${500}"/>
+                <c:set var="filterSizeDefault" value="${2000}"/>
                 <%-- maximum length in words for a text field --%>
                 <c:set var="textMaxLength" value="${60}"/>
                 
