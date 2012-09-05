@@ -9,12 +9,20 @@
 </properties>
 
 <body>
-	<release version="1.0.5" date="" description="">
+	<release version="1.0.5" date=""
+		description="PDB structure names; xref retrieval by relationship.">
+		<action dev="rafalcan" type="add">
+			Added PDBe structure names to the mega-map.
+		</action>
 		<action dev="rafalcan" type="add">
 			Added method to retrieve xrefs by relationship.
 		</action>
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of ep-domain and junit.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added dependency on ebeye-client to retrieve PDB structure names
+			(not present in UniProt XML file).
 		</action>
 		<action dev="rafalcan" type="remove">
 			Removed strange unused dependencies.
