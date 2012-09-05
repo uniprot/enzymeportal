@@ -13,8 +13,8 @@ DB_CONFIG="ep-mm-db-$1"
 
 # These two lines are only needed if the script is called standalone,
 # if called from mm.sh the mvn project is already built:
-. $(dirname $0)/checkParams.sh
-. $(dirname $0)/mvnBuild.sh ${1}
+#. $(dirname $0)/checkParams.sh
+#. $(dirname $0)/mvnBuild.sh ${1}
 
 # Increase memory for maven (it's a lot of data):
 export MAVEN_OPTS="-Xms512M -Xmx1G"
