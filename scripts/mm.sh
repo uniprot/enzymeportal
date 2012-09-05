@@ -50,11 +50,13 @@ java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
 	-dbConfig ep-mm-db-$1 -xmlFile $UNIMED
 echo "Finished UniMed import - $(date)"
 
-# Backup the new data:
-echo -e "\n*************************************************************\n"
-. $MM_SCRIPTS/mm-backup.sh
-
-# Generate statistics:
-echo -e "\n*************************************************************\n"
-. $MM_SCRIPTS/mm-statistics.sh
-
+if [ "$1" = "ezprel" ]
+then
+	# Backup the new data:
+	echo -e "\n*************************************************************\n"
+	. $MM_SCRIPTS/mm-backup.sh
+	
+	# Generate statistics:
+	echo -e "\n*************************************************************\n"
+	. $MM_SCRIPTS/mm-statistics.sh
+fi
