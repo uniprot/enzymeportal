@@ -23,6 +23,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
+import uk.ac.ebi.ebisearchservice.ArrayOfString;
+import uk.ac.ebi.ebisearchservice.EBISearchService;
+import uk.ac.ebi.ebisearchservice.EBISearchService_Service;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
 import uk.ac.ebi.ep.mm.MegaLuceneMapper;
@@ -51,8 +54,11 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	private static final String UNIPROT_ENTRY_ACCESSION =
 			"//uniprot/entry/accession";
 
-	private static final Object UNIPROT_ENTRY_DBREFERENCE =
+	private static final String UNIPROT_ENTRY_DBREFERENCE =
 			"//uniprot/entry/dbReference";
+
+	private static final String UNIPROT_ENTRY_DBREFERENCE_PROPERTY =
+			"//uniprot/entry/dbReference/property";
 
 	private static final String UNIPROT_ENTRY_ORGANISM_NAME =
 			"//uniprot/entry/organism/name";
@@ -84,6 +90,8 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	
 	protected boolean isDbRef;
 	
+	protected boolean isProperty;
+	
 	protected boolean isProtRecName;
 
 	private MegaMapper mm;
@@ -101,6 +109,9 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	protected List<String> pdbCodes = new ArrayList<String>();
 
 	protected String protRecName;
+	
+	private EBISearchService ebeyeService =
+			new EBISearchService_Service().getEBISearchServiceHttpPort();
 
 	/**
 	 * Parses a UniProt XML file and indexes/stores the UniProt accessions,
@@ -202,21 +213,32 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 		isEntryName = UNIPROT_ENTRY_NAME.equals(currentXpath);
 		final String typeAttr = attributes == null?
 				null : attributes.getValue("", "type");
+		final String valueAttr = attributes == null?
+				null : attributes.getValue("", "value");
 		isOrgSciName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
 				&& "scientific".equals(typeAttr);
 		isOrgComName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
 				&& "common".equals(typeAttr);
 		isDbRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath);
+		isProperty = UNIPROT_ENTRY_DBREFERENCE_PROPERTY.equals(currentXpath);
 		isProtRecName = UNIPROT_ENTRY_PROTEIN_REC_NAME.equals(currentXpath);
 		// Clear placeholder:
 		if (currentChars.length() > 0){
 			currentChars.delete(0, currentChars.length());
 		}
 		if (isDbRef){
-			if ("EC".equals(typeAttr)){
+			if ("EC".equalsIgnoreCase(typeAttr)){
 				ecs.add(attributes.getValue("", "id"));
 			} else if ("PDB".equals(typeAttr)){
 				pdbCodes.add(attributes.getValue("", "id"));
+			}
+		} else if (isProperty){
+			if ("method".equalsIgnoreCase(typeAttr)
+					&& "Model".equalsIgnoreCase(valueAttr)){
+				// Ignore xrefs to PDB theoretical models (which are deprecated)
+				// Remove the last added xref to PDB:
+				String model = pdbCodes.remove(pdbCodes.size() - 1);
+				LOGGER.warn("Ignoring PDB theoretical model " + model);
 			}
 		}
 	}
@@ -290,7 +312,18 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 						Entry pdbEntry = new Entry();
 						pdbEntry.setDbName(MmDatabase.PDB.name());
 						pdbEntry.setEntryId(pdbCode);
-						entries.add(pdbEntry);
+						// Add structure name:
+						try {
+							ArrayOfString fields = new ArrayOfString();
+							fields.getString().add("name");
+							String name = ebeyeService
+									.getEntry("pdbe", pdbCode, fields)
+									.getString().get(0);
+							pdbEntry.setEntryName(name);
+							entries.add(pdbEntry);
+						} catch (Exception e){
+							LOGGER.error("Couldn't get name for " + pdbCode, e);
+						}
 						
 						XRef up2pdb = new XRef();
 						up2pdb.setFromEntry(uniprotEntry);
