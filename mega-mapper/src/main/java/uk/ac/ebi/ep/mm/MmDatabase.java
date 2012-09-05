@@ -42,7 +42,7 @@ public enum MmDatabase {
 	MolBase,
 	NMRShiftDB,
 	OMIM,
-	PDB,
+	PDB("PDBe"),
 	PDBeChem("MSDCHEM"),
 	Patent,
 	PubChem,
