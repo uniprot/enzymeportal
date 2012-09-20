@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
+        http://maven.apache.org/changes/1.0.0 ">
 
 <properties>
 	<title>Mega-mapper change log</title>
@@ -9,6 +10,13 @@
 </properties>
 
 <body>
+	<release version="1.0.6" date="2012-09-20"
+		description="Scripts modifications.">
+		<action dev="rafalcan" type="fix">
+			Modified scripts for releases: removed unnecesary build and
+            added svn command to copy generated statistics to the trunk..
+		</action>
+    </release>
 	<release version="1.0.5" date="2012-09-05"
 		description="PDB structure names in the mega-map;
 		xref retrieval by relationship.">
