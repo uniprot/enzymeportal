@@ -33,7 +33,7 @@ function submitForm(type, search){
 	    <li class="first"><a
 	    	href="http://www.ebi.ac.uk/" class="firstbreadcrumb">EBI</a></li>
 		<li id="homeBreadcrumb"><a
-			href="${pageContext.request.contextPath}/enzymeportal">Enzyme Portal</a></li>
+			href="${pageContext.request.contextPath}">Enzyme Portal</a></li>
 		<c:if test="${not empty history}">
 			<c:forEach var="hItem" items="${history}">
 				<li>
