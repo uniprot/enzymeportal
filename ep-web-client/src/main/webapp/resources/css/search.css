@@ -81,6 +81,7 @@ a:link, a:visited {
     margin: 2px auto 5px auto;
     padding: 4px 5px;
     font-size: 130%;
+    vertical-align: bottom;
 }
 
 .filterButton {
@@ -358,26 +359,36 @@ a:link, a:visited {
     border: none;
 }
 
+#search-tabs {
+	margin-bottom: 0ex;
+}
+
 .searchTab {
     padding: 0.5ex 2em;
     margin: 0ex 1em;
     border-top-left-radius: 2ex;
     border-top-right-radius: 2ex;
+    display: inline;
+    color: #fff;
+    background-color: #808080;
+    cursor: pointer;
 }
 .selected.searchTab {
     color: #000;
+    background-color: #dedede;
+    cursor: default;
 }
 .disabled.searchTab {
     background-color: #bbb;
     color: #eee;
 }
-.selected.searchTab, .searchTabContent {
-    background-color: #fff;
-    /*border: thin solid #fd0;*/
-}
 .searchTabContent {
     margin-top: 0.3ex;
     padding: 2ex 1em;
+}
+
+a.formSubmit {
+	cursor: pointer;
 }
 
 /*sort of tooltip to pop up scientific names*/

@@ -1,6 +1,6 @@
 $(document).ready(function() {
     //search default text
-    $("#searchbox").live("blur", function(){
+    $("#search-keyword").live("blur", function(){
         var default_value = $(this).attr("rel");
         if ($(this).val() == ""){
             $(this).val(default_value);

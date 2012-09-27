@@ -1,19 +1,25 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
+
 import org.apache.commons.lang.StringEscapeUtils;
-
-
 import org.apache.log4j.Logger;
-//import org.springframework.jdbc.core.RowMapper;
-//import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-//
-//import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
+import uk.ac.ebi.biobabel.blast.Hit;
+import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
+import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
@@ -75,6 +81,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     List<EnzymeSummary> enzymeSummaryList;
     MegaMapperConnection megaMapperConnection;
     //private SimpleJdbcTemplate simpleJdbcTemplate;
+	private NcbiBlastClient blastClient;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeFinder(Config config) {
@@ -947,14 +954,41 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @return a list of enzyme summaries ready to show in a result list.
      * @throws MultiThreadingException
      */
-    private List<EnzymeSummary> getEnzymeSummaries(List<String> uniprotIdPrefixes, List<String> paramList)
-            throws MultiThreadingException {
-        List<EnzymeSummary> enzymeList = getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
-        if (enzymeList != null) {
-            addIntenzSynonyms(enzymeList);
-        }
-        return enzymeList;
-    }
+	private List<EnzymeSummary> getEnzymeSummaries(
+			List<String> uniprotIdPrefixes, List<String> paramList)
+	throws MultiThreadingException {
+		List<EnzymeSummary> enzymeList =
+				getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
+		if (enzymeList != null) {
+			addIntenzSynonyms(enzymeList);
+		}
+		/* DON'T DELETE: this untested block retrieves 
+		 * PDBe xrefs (non-theoretical models) from the mega-map:
+		for (EnzymeSummary enzymeSummary : enzymeList) {
+			String theId = enzymeSummary.getUniprotid();
+			LOGGER.debug(theId);
+			for (EnzymeAccession ea : enzymeSummary.getRelatedspecies()) {
+				List<String> accs = ea.getUniprotaccessions();
+				LOGGER.debug("\t" + accs + " "
+						+ ea.getSpecies().getScientificname());
+				Collection<XRef> pdbXrefs = megaMapperConnection
+						.getMegaMapper().getXrefs(MmDatabase.UniProt,
+								accs.get(0), MmDatabase.PDB);
+				if (pdbXrefs != null){
+					List<String> pdbeaccessions = new ArrayList<String>();
+					for (XRef xRef : pdbXrefs) {
+						pdbeaccessions.add(xRef.getToEntry().getEntryId());
+					}
+					LOGGER.debug("\t\t" + pdbeaccessions);
+					ea.setPdbeaccession(pdbeaccessions);
+				} else {
+					ea.setPdbeaccession(null);
+				}
+			}
+		}
+		*/
+		return enzymeList;
+	}
 
     /*
      * public List<ParamOfGetResults> prepareQueryForPdbeAccs(Collection<String>
@@ -1138,5 +1172,49 @@ public class EnzymeFinder implements IEnzymeFinder {
         ParamOfGetResults paramOfGetAllResults =
                 new ParamOfGetResults(IEbeyeAdapter.Domains.chebi.name(), query, resultFields);
         return paramOfGetAllResults;
+    }
+    
+    private NcbiBlastClient getBlastClient() {
+    	if (blastClient == null){
+    		blastClient = new NcbiBlastClient();
+    		blastClient.setEmail("enzymeportal-devel@lists.sourceforge.net");
+    	}
+		return blastClient;
+	}
+
+	public String blast(String sequence) throws NcbiBlastClientException{
+    	return getBlastClient().run(sequence);
+    }
+
+	public NcbiBlastClient.Status getBlastStatus(String jobId)
+	throws NcbiBlastClientException{
+    	return getBlastClient().getStatus(jobId);
+    }
+    
+    public SearchResults getBlastResult(String jobId)
+	throws NcbiBlastClientException, MultiThreadingException{
+    	List<Hit> hits = getBlastClient().getResults(jobId);
+    	List<String> uniprotIdPrefixes = filterBlastResults(hits);
+    	enzymeSummaryList = getEnzymeSummaries(uniprotIdPrefixes, null);
+        enzymeSearchResults.setSummaryentries(enzymeSummaryList);
+        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+        LOGGER.debug("Building filters...");
+        buildFilters(enzymeSearchResults);
+    	return enzymeSearchResults;
+    }
+    
+    /**
+     * Filters the hits returned by the Blast client to get only enzymes.
+     * @param hits Hits returned by the Blast client.
+     * @return a list of unique UniProt ID prefixes (species stripped).
+     * @throws MultiThreadingException
+     */
+    private List<String> filterBlastResults(List<Hit> hits)
+	throws MultiThreadingException{
+    	List<String> accs = new ArrayList<String>();
+    	for (Hit hit : hits) {
+    		accs.add(hit.getUniprotAccession());
+		}
+    	return EPUtil.getIdPrefixes(filterEnzymes(accs));
     }
 }

@@ -1,11 +1,20 @@
 package uk.ac.ebi.ep.web;
 
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +23,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
+import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
-import uk.ac.ebi.ep.core.filter.*;
+import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
+import uk.ac.ebi.ep.core.filter.DefaultPredicate;
+import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
+import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
 import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
@@ -35,7 +50,13 @@ import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.model.*;
+import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.EnzymeAccession;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.SearchModel;
+import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
@@ -226,68 +247,94 @@ public class SearchController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String getSearchResult(SearchModel searchModel, BindingResult result,
             Model model, HttpSession session) {
-        return postSearchResult(searchModel, result, model, session);
+        return postSearchResult(searchModel, model, session);
     }
 
     /**
      * Processes the search request. When user enters a search text and presses
      * the submit button the request is processed here.
      *
-     * @param searchModelForm
+     * @param searchModel
      * @param result
      * @param model
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String postSearchResult(SearchModel searchModelForm, BindingResult result,
-            Model model, HttpSession session) {
-        String view = "search";
-        clearHistory(session);
-
-        if (searchModelForm != null) {
-            try {
-                SearchParams searchParameters = searchModelForm.getSearchparams();
+    public String postSearchResult(SearchModel searchModel, Model model,
+    		HttpSession session) {
+        String view = "error";
+        try {
+	        // See if it is already there, perhaps we are paginating:
+	        Map<String, SearchResults> prevSearches =
+	        		getPreviousSearches(session.getServletContext());
+	        String searchKey = getSearchKey(searchModel.getSearchparams());
+	        SearchResults results = prevSearches.get(searchKey);
+	        if (results == null){
+	        	// New search:
+	            clearHistory(session);
+	            switch (searchModel.getSearchparams().getType()) {
+	    		case KEYWORD:
+	            	results = searchKeyword(searchModel.getSearchparams());
+	                cacheSearch(session.getServletContext(), searchKey, results);
+	                addToHistory(session, "searchparams.text=" + searchKey);
+	    			break;
+	    		case SEQUENCE:
+	            	view = searchSequence(model, searchModel);
+	    			break;
+	    		case COMPOUND:
+	//            	view = postCompoundSearch(model, searchModel);
+	    			break;
+	    		}
+	         }
+	        if (results != null) { // something to show
+	        	searchModel.setSearchresults(results);
+	        	applyFilters(searchModel);
+	        	model.addAttribute("searchModel", searchModel);
+	        	model.addAttribute("pagination", getPagination(searchModel));
+	        	view = "search";
+	        }
+        } catch (Throwable t){
+        	LOGGER.error("Unable to search:\ntype="
+        			+ searchModel.getSearchparams().getType().name()
+        			+ "\ntext="
+        			+ searchModel.getSearchparams().getText()
+        			+ "\nsequence="
+        			+ searchModel.getSearchparams().getSequence(), t);
+        }
+        return view;
+    }
+    
+    /**
+     * Searches by keyword.
+     * @param searchParameters the search parameteres.
+     * @return the search results.
+     */
+    private SearchResults searchKeyword(SearchParams searchParameters){
+    	SearchResults results = null;
+        EnzymeFinder finder = new EnzymeFinder(searchConfig);
+        finder.getEbeyeAdapter().setConfig(ebeyeConfig);
+        finder.getUniprotAdapter().setConfig(uniprotConfig);
+        finder.getIntenzAdapter().setConfig(intenzConfig);
+        try {
+            results = finder.getEnzymes(searchParameters);
+        } catch (EnzymeFinderException ex) {
+            LOGGER.error("Unable to create the result list because an error "
+                    + "has occurred in the find method! \n", ex);
+        } finally {
+            finder.closeResources();
+        }
+    	return results;
+    }
+    
+    /**
+     * Applies filters taken from the search parameters to the search results.
+     * @param searchModel
+     */
+    /* THIS IS computingfacts ZONE */
+    private void applyFilters(SearchModel searchModel){
+                SearchParams searchParameters = searchModel.getSearchparams();
                 searchParameters.setSize(searchConfig.getResultsPerPage());
-                SearchResults resultSet = null;
-                // See if it is already there, perhaps we are paginating:
-                @SuppressWarnings("unchecked")
-                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) session.getServletContext().getAttribute("searches");
-                if (prevSearches == null) {
-                    // Map implementation which maintains the order of access:
-                    prevSearches = Collections.synchronizedMap(
-                            new LinkedHashMap<String, SearchResults>(
-                            searchConfig.getSearchCacheSize(), 1, true));
-                    session.getServletContext().setAttribute("searches", prevSearches);
-                }
-                resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
-                if (resultSet == null) {
-                    // Make a new search:
-                    EnzymeFinder finder = new EnzymeFinder(searchConfig);
-                    finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-                    finder.getUniprotAdapter().setConfig(uniprotConfig);
-                    finder.getIntenzAdapter().setConfig(intenzConfig);
-                    try {
-                        resultSet = finder.getEnzymes(searchParameters);
-                        // cache it in the session, making room if necessary:
-                        synchronized (prevSearches) {
-                            while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
-                                // remove the eldest:
-                                prevSearches.remove(prevSearches.keySet().iterator().next());
-                            }
-                            prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
-                        }
-                    } catch (EnzymeFinderException ex) {
-                        LOGGER.error("Unable to create the result list because an error "
-                                + "has occurred in the find method! \n", ex);
-                    } finally {
-                        finder.closeResources();
-                    }
-                }
-
-                final int numOfResults = resultSet.getSummaryentries().size();
-                Pagination pagination = new Pagination(
-                        numOfResults, searchParameters.getSize());
-                pagination.setFirstResult(searchParameters.getStart());
+                SearchResults resultSet = searchModel.getSearchresults();
 
                 // Filter:
                 //List<String> speciesFilter = searchParameters.getSpecies();
@@ -544,32 +591,59 @@ public class SearchController {
                     }
 
 
-                    // Update the number of results to paginate:
-                    pagination.setNumberOfResults(filteredResults.size());
-                    model.addAttribute("pagination", pagination);
                     sr.setSearchfilters(resultSet.getSearchfilters());
                     //sr.setSummaryentries(filteredResults);
                     sr.setSummaryentries(summaryEntryFilteredResults);
                     // show the total number of hits (w/o filtering):
                     sr.setTotalfound(resultSet.getTotalfound());
-                    searchModelForm.setSearchresults(sr);
+                    searchModel.setSearchresults(sr);
                 } else {
                     // Show all of them:
-                    searchModelForm.setSearchresults(resultSet);
+                    searchModel.setSearchresults(resultSet);
                 }
 
-                model.addAttribute("searchModel", searchModelForm);
-                model.addAttribute("pagination", pagination);
-
-                addToHistory(session,
-                        "searchparams.text=" + searchParameters.getText());
-            } catch (Throwable e) {
-                LOGGER.error("Failed search", e);
-                view = "error";
-            }
-        }
-        return view;
     }
+    
+    /**
+     * Retrieves any previous searches stored in the application context.
+     * @param servletContext the application context.
+     * @return a map of searches to results.
+     */
+    @SuppressWarnings("unchecked")
+	private Map<String, SearchResults> getPreviousSearches(
+			ServletContext servletContext){
+        Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
+        		servletContext.getAttribute("searches");
+        if (prevSearches == null) {
+            // Map implementation which maintains the order of access:
+            prevSearches = Collections.synchronizedMap(
+                    new LinkedHashMap<String, SearchResults>(
+                    searchConfig.getSearchCacheSize(), 1, true));
+            servletContext.setAttribute("searches", prevSearches);
+        }
+        return prevSearches;
+    }
+    
+    /**
+     * Stores a search result in the application context.
+     * @param servletContext the application context.
+     * @param searchKey the key to use for the search results in the table.
+     * @param searchResult the search results.
+     */
+    private void cacheSearch(ServletContext servletContext, String searchKey,
+    		SearchResults searchResult){
+        Map<String, SearchResults> prevSearches =
+        		getPreviousSearches(servletContext);
+    	synchronized (prevSearches) {
+            while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
+                // remove the eldest:
+                prevSearches.remove(prevSearches.keySet().iterator().next());
+            }
+            prevSearches.put(searchKey, searchResult);
+    	}
+    }
+
+    
     static final Comparator<Species> SORT_SPECIES = new Comparator<Species>() {
 
         public int compare(Species sp1, Species sp2) {
@@ -593,6 +667,113 @@ public class SearchController {
     public String getAbout(Model model) {
         return "about";
     }
+    
+    /**
+     * Sends a search to a BLAST server. The job ID returned is stored in the
+     * model as <code>jobId</code> attribute.
+     * @param model the Spring model.
+     * @param searchModel the EP search model.
+     * @return the view according to the search: <code>running</code> if
+     * 		everything went ok and the search job is running, <code>error</code>
+     * 		otherwise.
+     */
+    private String searchSequence(Model model, SearchModel searchModel){
+    	String view = "error";
+    	try {
+        	EnzymeFinder finder = new EnzymeFinder(searchConfig);
+			String sequence = searchModel.getSearchparams().getSequence()
+					.trim().toUpperCase();
+			String jobId = finder.blast(sequence);
+			searchModel.getSearchparams().setPrevioustext(sequence);
+			model.addAttribute("jobId", jobId);
+			LOGGER.debug("BLAST job running: " + jobId);
+			view = "running";
+		} catch (NcbiBlastClientException e) {
+			LOGGER.error(e);
+		}
+    	return view;
+    }
+    
+    @RequestMapping(value = "/checkJob", method = RequestMethod.POST)
+    public String checkJob (@RequestParam String jobId, Model model,
+    		SearchModel searchModel, HttpSession session){
+    	String view = null;
+    	try {
+	    	EnzymeFinder enzymeFinder = new EnzymeFinder(searchConfig);
+            enzymeFinder.getEbeyeAdapter().setConfig(ebeyeConfig);
+            enzymeFinder.getUniprotAdapter().setConfig(uniprotConfig);
+            enzymeFinder.getIntenzAdapter().setConfig(intenzConfig);
+			NcbiBlastClient.Status status = enzymeFinder.getBlastStatus(jobId);
+	    	switch (status) {
+			case ERROR:
+			case FAILURE:
+			case NOT_FOUND:
+				LOGGER.error("Blast job returned status " + status);
+				view = "error";
+				break;
+			case FINISHED:
+				LOGGER.debug("BLAST job finished");
+				SearchResults results = enzymeFinder.getBlastResult(jobId);
+                SearchParams searchParams = searchModel.getSearchparams();
+				String resultKey = getSearchKey(searchParams);
+				cacheSearch(session.getServletContext(), resultKey, results);
+                addToHistory(session, "searchparams.sequence=" + resultKey);
+                searchParams.setSize(searchConfig.getResultsPerPage());
+//                searchModel.setSearchparams(searchParams);
+                searchModel.setSearchresults(results);
+                model.addAttribute("searchModel", searchModel);
+                model.addAttribute("pagination", getPagination(searchModel));
+				view = "search";
+				break;
+			case RUNNING:
+				model.addAttribute("jobId", jobId);
+				view = "running";
+				break;
+			}
+    	} catch (Throwable t){
+    		LOGGER.error("While checking BLAST job", t);
+    		view = "error";
+    	}
+    	return view;
+    }
+    
+    /**
+     * Processes a string to normalise it to use as a key in the application
+     * cache.
+     * @param searchParams the search parameters, including the original search
+     * 		text from the user.
+     * @return A normalised string.
+     */
+    private String getSearchKey(SearchParams searchParams){
+    	String key = null;
+    	switch (searchParams.getType()) {
+		case KEYWORD:
+			key = searchParams.getText().trim().toLowerCase();
+			break;
+		case SEQUENCE:
+			key = searchParams.getSequence().trim().toUpperCase()
+					.replaceAll("[\n\r]", "");
+			break;
+		case COMPOUND:
+			throw new NotImplementedException("Compound structure search");
+		}
+    	return key;
+    }
+
+    /**
+     * Adds a pagination object to the model, suitable to the search results and
+     * search parameters.
+     * @param searchModel the search model including the search parameters
+     * 		(including pagination start).
+     * @return a pagination.
+     */
+	private Pagination getPagination(SearchModel searchModel) {
+        Pagination pagination = new Pagination(
+		        searchModel.getSearchresults().getSummaryentries().size(),
+		        searchConfig.getResultsPerPage());
+		pagination.setFirstResult(searchModel.getSearchparams().getStart());
+		return pagination;
+	}
 
     private void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
