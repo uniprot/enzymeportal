@@ -10,6 +10,13 @@
 </properties>
 
 <body>
+	<release version="1.0.7" date=""
+		description="Bug fix.">
+		<action dev="rafalcan" type="fix">
+            Organism common name is reset after every UniProt entry (it wasn't,
+            which resulted in many species having 'Human' as common name.
+		</action>
+    </release>
 	<release version="1.0.6" date="2012-09-20"
 		description="Scripts modifications.">
 		<action dev="rafalcan" type="fix">

@@ -344,6 +344,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 			ecs.clear();
 			pdbCodes.clear();
 			orgSciName = null;
+            orgComName = null;
 		}
 		currentContext.pop();
 		// Update flags:
