@@ -49,7 +49,7 @@ public class DiseaseDefaultWrapper implements Comparable<DiseaseDefaultWrapper> 
 	}
 
 	public int compareTo(DiseaseDefaultWrapper o) {
-		return disease.getName().compareTo(o.disease.getName());
+		return disease.getName().compareToIgnoreCase(o.disease.getName());
 	}
 
 }

@@ -1,19 +1,9 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 import org.apache.commons.lang.StringEscapeUtils;
-
-
 import org.apache.log4j.Logger;
-//import org.springframework.jdbc.core.RowMapper;
-//import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-//
-//import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
-
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
@@ -33,14 +23,7 @@ import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
-import uk.ac.ebi.ep.search.model.Compound;
-import uk.ac.ebi.ep.search.model.Disease;
-import uk.ac.ebi.ep.search.model.EnzymeAccession;
-import uk.ac.ebi.ep.search.model.EnzymeSummary;
-import uk.ac.ebi.ep.search.model.SearchFilters;
-import uk.ac.ebi.ep.search.model.SearchParams;
-import uk.ac.ebi.ep.search.model.SearchResults;
-import uk.ac.ebi.ep.search.model.Species;
+import uk.ac.ebi.ep.search.model.*;
 import uk.ac.ebi.ep.util.EPUtil;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 import uk.ac.ebi.util.result.DataTypeConverter;
@@ -74,6 +57,8 @@ public class EnzymeFinder implements IEnzymeFinder {
     List<String> compoundFilter;
     List<EnzymeSummary> enzymeSummaryList;
     MegaMapperConnection megaMapperConnection;
+    private Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
+    private Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
     //private SimpleJdbcTemplate simpleJdbcTemplate;
 
 //******************************** CONSTRUCTORS ******************************//
@@ -300,34 +285,40 @@ public class EnzymeFinder implements IEnzymeFinder {
         Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
 
         Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
-        Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
-        Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
+       // Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
+       // Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
      
 
         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
 
- 
-             CompoundDefaultWrapper compoundDefaultWrapper = computeCompound(summaryEntry.getUniprotid());
-               DiseaseDefaultWrapper wrapper = computeDisease(summaryEntry.getUniprotid());
+             computeCompound(summaryEntry.getUniprotid());
+              computeDisease(summaryEntry.getUniprotid());
 
-                
-               if(wrapper != null){
-                   summaryEntry.getDiseases().add(wrapper.getDisease());
-               }
+               
+              
+                 if(!uniqueDiseases.isEmpty() && uniqueDiseases.size() >0){
+                        for(DiseaseDefaultWrapper ddw : uniqueDiseases){
+                            summaryEntry.getDiseases().add(ddw.getDisease());
+                        }
+                    }
+              
             for (EnzymeAccession ea : summaryEntry.getRelatedspecies()) {
                 Species sp = ea.getSpecies();
+               
                 if (sp != null) {
-                   
-                        if(wrapper != null){
-                           
-                            sp.getDiseases().add(wrapper.getDisease());
-                          
-                            uniqueDiseases.add(wrapper);
+
+                    if(!uniqueDiseases.isEmpty() && uniqueDiseases.size() >0){
+                        for(DiseaseDefaultWrapper ddw : uniqueDiseases){
+                            sp.getDiseases().add(ddw.getDisease());
+                        
                         }
+                    }
                        
-                        if(compoundDefaultWrapper != null){
-                            sp.getCompounds().add(compoundDefaultWrapper.getCompound());
-                            uniqueCompounds.add(compoundDefaultWrapper);
+
+                        if(!uniqueCompounds.isEmpty() && uniqueCompounds.size() > 0){
+                            for(CompoundDefaultWrapper comp : uniqueCompounds){
+                                sp.getCompounds().add(comp.getCompound());
+                            }
                         }
                         
                    
@@ -395,16 +386,13 @@ public class EnzymeFinder implements IEnzymeFinder {
         searchResults.setSearchfilters(filters);
     }
 
-    private CompoundDefaultWrapper computeCompound(String uniprotAccession) {
+    private void computeCompound(String uniprotAccession) {
 
 
-        Map<String, String> xRefList = null;
-        CompoundDefaultWrapper compoundDefaultWrapper = null;
-        Set<CompoundDefaultWrapper> uniqueCompound = new TreeSet<CompoundDefaultWrapper>();
 
       
-        xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL, MmDatabase.ChEBI);
-
+         Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL, MmDatabase.ChEBI);
+  
         if (xRefList != null) {
             for (Map.Entry<String, String> ref : xRefList.entrySet()) {
              
@@ -413,27 +401,19 @@ public class EnzymeFinder implements IEnzymeFinder {
                  String compoundName = resolveSpecialCharacters(ref.getValue());
                     com.setName(compoundName.replaceAll(",", ""));
 
-                compoundDefaultWrapper = new CompoundDefaultWrapper(com);
-                uniqueCompound.add(compoundDefaultWrapper);
+               CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(com);
+                uniqueCompounds.add(compoundDefaultWrapper);
  
 
             }
         }
 
-      
-        return compoundDefaultWrapper;
-
 
     }
 
-    public DiseaseDefaultWrapper computeDisease(String uniprotAccession) {
+    public void computeDisease(String uniprotAccession) {
 
-        DiseaseDefaultWrapper diseaseDefaultWrapper = null;
-
-        Map<String, String> xRefList = null;
-       
-
-        xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+        Map<String, String>  xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
 
         if (xRefList != null) {
 
@@ -447,26 +427,24 @@ public class EnzymeFinder implements IEnzymeFinder {
                     disease.setName(diseaseName.replaceAll(",", ""));
                     disease.setId(diseaseMap.getKey());
                   
-                    diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
+                  DiseaseDefaultWrapper  diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
+                    uniqueDiseases.add(diseaseDefaultWrapper);
                 }
 
             }
         }
        
-
-        return diseaseDefaultWrapper;
     }
     
     
-       public Disease computeOnlyDisease(String uniprotAccession) {
+       public void computeOnlyDisease(List<String> uniprotAccessions) {
 
         DiseaseDefaultWrapper diseaseDefaultWrapper = null;
          Disease disease = null;
         Map<String, String> xRefList = null;
-        
-
+        for(String uniprotAccession : uniprotAccessions){
+           
         xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
-
         if (xRefList != null) {
 
             for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
@@ -475,16 +453,19 @@ public class EnzymeFinder implements IEnzymeFinder {
                 disease = new Disease();
                 if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
                     String diseaseName = resolveSpecialCharacters(diseaseMap.getValue());
+                    disease.setName(diseaseName.replaceAll(",", ""));
                     disease.setName(diseaseName);
                     disease.setId(diseaseMap.getKey());
+                    
+                       diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
+                    uniqueDiseases.add(diseaseDefaultWrapper);
       
                 }
 
             }
         }
+        }
       
-
-        return disease;
     }
        
        
