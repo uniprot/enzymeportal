@@ -68,7 +68,8 @@ public class IntenzAdapter implements IintenzAdapter{
 	        	// Avoid dashes, there are no IntEnzXML files for those:
 	        	if (ecNumber.indexOf('-') > -1) continue;
 	            Callable<Set<String>> callable = new GetSynonymsCaller(
-	                    IntenzUtil.createIntenzEntryUrl(ecNumber));
+	                    IntenzUtil.createIntenzEntryUrl(
+	                    		config.getIntenzXmlUrl(), ecNumber));
 	            future2ec.put(ecs.submit(callable), ecNumber);
 	        }
 	        for (int i = 0; i < future2ec.size(); i++){
@@ -77,7 +78,7 @@ public class IntenzAdapter implements IintenzAdapter{
 	        				ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
 	        		String ec = future2ec.get(future);
 	        		if (future != null){
-			            Set<String> synonyms = (Set<String>) future.get();
+			            Set<String> synonyms = future.get();
 		                if (synonyms.size() > 0) {
 		                    resultMap.put(ec, synonyms);
 		                }
@@ -142,9 +143,7 @@ public class IntenzAdapter implements IintenzAdapter{
         return enzymeModel;
     }
 
-
-     public List<Intenz> getIntenz(Collection<String> ecList)
-	 throws MultiThreadingException {
+     public List<Intenz> getIntenz(Collection<String> ecList) {
          List<Intenz> results = new ArrayList<Intenz>();
          ExecutorService pool = Executors.newCachedThreadPool();
          CompletionService<Intenz> ecs =
@@ -152,8 +151,9 @@ public class IntenzAdapter implements IintenzAdapter{
          try {
 //        	 LOGGER.debug("SEARCH before callables loop");
              for (String ec : ecList) {
-                Callable<Intenz> callable =
-                		new GetIntenzCaller(IntenzUtil.createIntenzEntryUrl(ec));
+                Callable<Intenz> callable = new GetIntenzCaller(
+                		IntenzUtil.createIntenzEntryUrl(
+                				config.getIntenzXmlUrl(), ec));
                 ecs.submit(callable);
              }
 //        	 LOGGER.debug("SEARCH before futures loop");

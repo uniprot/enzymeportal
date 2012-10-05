@@ -132,22 +132,19 @@ public class IntenzCallable {
             EcClass ecClass = setEnzymeName(levelOne.getName(), levelOneEc);
             ecClasseList.add(ecClass);
 
-            EcSubclassType levelTwo =
-            		(EcSubclassType) levelOne.getEcSubclass().get(0);
+            EcSubclassType levelTwo = levelOne.getEcSubclass().get(0);
             String levelTwoEc = levelOneEc +"." +levelTwo.getEc2().toString();
             EcClass ecClass2 = setEnzymeName(levelTwo.getName(), levelTwoEc);
             ecClasseList.add(ecClass2);
 
-            EcSubsubclassType levelThree =
-            		(EcSubsubclassType) levelTwo.getEcSubSubclass().get(0);
+            EcSubsubclassType levelThree = levelTwo.getEcSubSubclass().get(0);
             String levelThreeEc =
             		levelTwoEc+"." + levelThree.getEc3().toString();
             EcClass ecClass3 =
             		setEnzymeName(levelThree.getName(), levelThreeEc);
             ecClasseList.add(ecClass3);
 
-            EntryType levelFour = (EntryType) levelThree.getEnzyme().get(0);
-//            String levelFourEc = levelThreeEc +"." +levelFour.getEc4().toString();
+            EntryType levelFour = levelThree.getEnzyme().get(0);
             List<EnzymeNameType> acceptedNames = levelFour.getAcceptedName();
             String enzymeName = null;
             if (acceptedNames == null || acceptedNames.isEmpty()){
@@ -266,8 +263,7 @@ public class IntenzCallable {
 				serLoop: for (Serializable ser :intenzCofactors.getContent()) {
 					if (ser instanceof JAXBElement<?>){
 						@SuppressWarnings("unchecked")
-						CofactorType ct = (CofactorType)
-								((JAXBElement<CofactorType>) ser).getValue();
+						CofactorType ct = ((JAXBElement<CofactorType>) ser).getValue();
 						if (cofactors == null){
 							cofactors = new ArrayList<Molecule>();
 						}
