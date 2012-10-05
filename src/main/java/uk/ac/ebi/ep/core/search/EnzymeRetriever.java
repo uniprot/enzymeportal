@@ -69,7 +69,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     protected ILiteratureAdapter litAdapter;
     protected BiomartAdapter biomartAdapter;
     private IBioportalAdapter bioportalAdapter;
-    private IintenzAdapter intenzAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever(Config searchConfig) {
@@ -83,7 +82,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             LOGGER.error("Unable to create a PDBe adapter", e);
         }
         litAdapter = new SimpleLiteratureAdapter();
-        intenzAdapter = new IntenzAdapter();
     }
 
     /**
