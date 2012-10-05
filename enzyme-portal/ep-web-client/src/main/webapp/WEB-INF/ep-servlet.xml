@@ -76,6 +76,8 @@
     <bean name="uk.ac.ebi.ep:name=intenzConfig"
 		class="uk.ac.ebi.ep.adapter.intenz.IntenzConfig">
         <property name="timeout" value="30000"/>
+        <property name="intenzXmlUrl"
+        	value="http://wwwdev.ebi.ac.uk/intenz/ws/EC/{0}.{1}.{2}.{3}.xml"/>
     </bean>
 	
     <bean name="uk.ac.ebi.ep:name=reactomeConfig"
