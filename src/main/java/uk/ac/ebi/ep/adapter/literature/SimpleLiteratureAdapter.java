@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.adapter.literature;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 	 * labels it according to the source it came from.
 	 * @author rafa
 	 */
-	public class LabelledCitation {
+	public class LabelledCitation implements Comparable {
 		private Result citation;
 		private EnumSet<CitationLabel> labels;
 		public LabelledCitation(Result citation, CitationLabel label){
@@ -89,11 +90,24 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			hash = hash * 17 + citation.getTitle().hashCode();
 			return hash;
 		}
+		/**
+		 * By default, citations are sorted by creation date.
+		 */
+		public int compareTo(Object o) {
+			if (!(o instanceof LabelledCitation)){
+				return Integer.MAX_VALUE;
+			}
+			if (o == this) return 0;
+			LabelledCitation other = (LabelledCitation) o;
+			return this.citation.getDateOfCreation()
+					.compare(other.citation.getDateOfCreation());
+		}
 		
 	}
 
 	private LiteratureConfig config;
 	
+	@SuppressWarnings("unchecked")
 	public List<LabelledCitation> getCitations(String uniprotId, List<String> pdbIds) {
 		List<LabelledCitation> citations = null;
 		LOGGER.debug("Before getting lit. callables");
@@ -142,6 +156,7 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			pool.shutdown();
 		}
 		LOGGER.debug("After getting citations");
+		Collections.sort(citations, Collections.reverseOrder());
 		return citations;
 	}
 

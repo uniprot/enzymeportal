@@ -10,7 +10,7 @@
 
 <body>
 	<release version="1.0.3" date="2012-08-01"
-		description="Faster searches.">
+		description="Faster searches. Citations sorted by date.">
 		<action dev="rafalcan" type="update">
 			Updated to last version of das-adapter.
 		</action>
@@ -18,6 +18,9 @@
 			Split callables for every PDB identifier, in order to thread the
 			search.
 			<fixes issue="120"/>
+		</action>
+		<action dev="rafalcan" type="fix">
+			Citations are now sorted by creation date by default.
 		</action>
 		<action dev="rafalcan" type="add">
 			Added configuration to the module.
