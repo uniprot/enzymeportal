@@ -6,6 +6,8 @@ import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
 
 public interface ILiteratureAdapter {
 
-	public List<LabelledCitation> getCitations(String uniprotId, List<String> pdbIds);
+	public List<LabelledCitation> getCitations(String uniprotId,
+			List<String> pdbIds);
 	
+	public void setConfig(LiteratureConfig config);
 }

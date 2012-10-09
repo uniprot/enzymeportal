@@ -9,6 +9,20 @@
 </properties>
 
 <body>
+	<release version="1.0.3" date="2012-08-01"
+		description="Faster searches.">
+		<action dev="rafalcan" type="update">
+			Updated to last version of das-adapter.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Split callables for every PDB identifier, in order to thread the
+			search.
+			<fixes issue="120"/>
+		</action>
+		<action dev="rafalcan" type="add">
+			Added configuration to the module.
+		</action>
+	</release>
 	<release version="1.0.2" date="2012-08-01"
 		description="Upgrade to CiteXplore WS v3">
 		<action dev="rafalcan" type="update">
