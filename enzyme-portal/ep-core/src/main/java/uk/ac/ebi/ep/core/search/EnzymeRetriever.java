@@ -20,8 +20,6 @@ import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.FieldsOfPdbe;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ep.adapter.intenz.IintenzAdapter;
-import uk.ac.ebi.ep.adapter.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
@@ -81,7 +79,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         } catch (Exception e) {
             LOGGER.error("Unable to create a PDBe adapter", e);
         }
-        litAdapter = new SimpleLiteratureAdapter();
     }
 
     /**
@@ -106,7 +103,14 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         return chebiAdapter;
     }
 
-    public EnzymeModel getEnzyme(String uniprotAccession)
+    public ILiteratureAdapter getLiteratureAdapter() {
+    	if (litAdapter == null){
+            litAdapter = new SimpleLiteratureAdapter();
+    	}
+		return litAdapter;
+	}
+
+	public EnzymeModel getEnzyme(String uniprotAccession)
             throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = null;
         try {
@@ -531,7 +535,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     Entry entry = ref.getToEntry();
                     String efo_id = entry.getEntryId();
                     try {
-                        disease = (uk.ac.ebi.ep.enzyme.model.Disease) bioportalAdapter.getDiseaseByName(efo_id);
+                        disease = bioportalAdapter.getDiseaseByName(efo_id);
                         if (disease != null) {
 
                             for (Disease d : enzymeModel.getDisease()) {
@@ -560,8 +564,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
-        List<LabelledCitation> citations =
-                litAdapter.getCitations(uniprotAccession, enzymeModel.getPdbeaccession());
+        List<LabelledCitation> citations = getLiteratureAdapter().getCitations(
+        		uniprotAccession, enzymeModel.getPdbeaccession());
         enzymeModel.setLiterature(new ArrayList<Object>(citations)); // FIXME and also the schema!           
         return enzymeModel;
     }
