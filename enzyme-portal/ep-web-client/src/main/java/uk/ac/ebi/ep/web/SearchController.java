@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
+import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
@@ -71,6 +72,8 @@ public class SearchController {
     private ReactomeConfig reactomeConfig;
     @Autowired
     private ChebiConfig chebiConfig;
+    @Autowired
+    private LiteratureConfig literatureConfig;
 
     /**
      * Process the entry page,
@@ -108,6 +111,7 @@ public class SearchController {
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case literature:
+                	retriever.getLiteratureAdapter().setConfig(literatureConfig);
                     enzymeModel = retriever.getLiterature(accession);
                     break;
                 default:
