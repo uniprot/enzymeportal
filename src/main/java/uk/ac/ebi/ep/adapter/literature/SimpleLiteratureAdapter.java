@@ -5,7 +5,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -89,48 +91,57 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		}
 		
 	}
-	
-	// Not used, it does not find UniProt IDs easily
-	//private CitexploreLiteratureCaller citexploreCaller;
+
+	private LiteratureConfig config;
 	
 	public List<LabelledCitation> getCitations(String uniprotId, List<String> pdbIds) {
 		List<LabelledCitation> citations = null;
+		LOGGER.debug("Before getting lit. callables");
 		List<Callable<Set<Result>>> callables = getCallables(uniprotId, pdbIds);
-		List<Future<Set<Result>>> futures = null;
-		
-		ExecutorService threadPool = Executors.newCachedThreadPool();
+		List<Future<Set<Result>>> futures = new ArrayList<Future<Set<Result>>>();
+		LOGGER.debug("Before creating thread pool");
+
+		ExecutorService pool =
+				Executors.newFixedThreadPool(config.getMaxThreads());
+		CompletionService<Set<Result>> ecs =
+				new ExecutorCompletionService<Set<Result>>(pool);
 		try {
-			futures = threadPool.invokeAll(callables);
-			// Collect results:
-			citations = new ArrayList<LabelledCitation>();
-			for (Future<Set<Result>> future : futures) {
+			for (Callable<Set<Result>> callable : callables) {
+				futures.add(ecs.submit(callable));
+			}
+			for (int i = 0; i < callables.size(); i++){
+				Future<Set<Result>> future = null;
 				try {
-					Set<Result> cits = future.get();
-					if (cits != null){
-						CitationLabel label = getLabel(callables.get(futures.indexOf(future)));
-						for (Result cit : cits) {
-							LabelledCitation citation = new LabelledCitation(cit, label);
-							if (citations.contains(citation)){
-								citations.get(citations.indexOf(citation)).addLabel(label);
-							} else {
-								citations.add(citation);
+					future = ecs.take();
+					if (future == null){
+						LOGGER.error("No citations retrieved for...");
+					} else {
+						Set<Result> cits = future.get();
+						if (cits != null){
+							CitationLabel label = getLabel(
+									callables.get(futures.indexOf(future)));
+							for (Result cit : cits) {
+								LabelledCitation citation =
+										new LabelledCitation(cit, label);
+								if (citations == null){
+									citations = new ArrayList<LabelledCitation>();
+								} else if (citations.contains(citation)){
+									citations.get(citations.indexOf(citation))
+											.addLabel(label);
+								} else {
+									citations.add(citation);
+								}
 							}
 						}
 					}
-				} catch (InterruptedException e) {
-					LOGGER.error(getLabel(callables.get(futures.indexOf(future))), e);
-				} catch (ExecutionException e) {
-					LOGGER.error(getLabel(callables.get(futures.indexOf(future))), e);
+				} catch (Exception e) {
+					LOGGER.error("Unable to send requests for citations", e);
 				}
-			}		
-		} catch (InterruptedException e) {
-			LOGGER.error("Unable to send requests for citations", e);
-		} finally {
-			List<Runnable> notExecuted = threadPool.shutdownNow();
-			if (!notExecuted.isEmpty()){
-				LOGGER.error(notExecuted.size() + " jobs not sent!");
 			}
+		} finally {
+			pool.shutdown();
 		}
+		LOGGER.debug("After getting citations");
 		return citations;
 	}
 
@@ -139,7 +150,10 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		List<Callable<Set<Result>>> callables =
 				new ArrayList<Callable<Set<Result>>>();
 		callables.add(new UniprotJapiLiteratureCaller(uniprotId));
-		callables.add(new DASLiteratureCaller(IDASFeaturesAdapter.PDBE_DAS_URL, pdbIds));
+		for (String pdbId : pdbIds) {
+			callables.add(new DASLiteratureCaller(
+					IDASFeaturesAdapter.PDBE_DAS_URL, pdbId));
+		}
 		return callables;
 	}
 	
@@ -152,6 +166,10 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 			label = CitationLabel.proteinStructure;
 		}
 		return label;
+	}
+
+	public void setConfig(LiteratureConfig config) {
+		this.config = config;
 	}
 
 }
