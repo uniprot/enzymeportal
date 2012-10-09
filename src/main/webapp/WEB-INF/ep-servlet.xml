@@ -95,6 +95,11 @@
         <property name="searchStars" value="ALL"/>
         <property name="maxRetrievedMolecules" value="3"/>
     </bean>
+    
+    <bean name="uk.ac.ebi.ep:name=literatureConfig"
+    	class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">
+   		<property name="maxThreads" value="4" />
+   	</bean>
 	
     <bean name="uk.ac.ebi.ep:name=bioportalConfig"
 		class="uk.ac.ebi.ep.adapter.bioportal.BioportalConfig">

@@ -13,8 +13,10 @@
 	<release version="1.0.8" date="" description="Cofactors">
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of ep-core - which allows retrieval of
-			cofactors.
+			cofactors -, intenz-adapter - which can take data from the new
+			IntEnz web service - and literature-adapter - which is faster now.
 			<fixes issue="34"/>
+			<fixes issue="120"/>
 		</action>
 		<action dev="rafalcan" type="add">
 			Added section for cofactors in small molecules tab.
