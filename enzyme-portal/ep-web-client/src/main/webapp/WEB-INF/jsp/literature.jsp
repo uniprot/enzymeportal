@@ -100,6 +100,8 @@ function filterCitations(){
 
 <div id="literatureFilters" class="subTitle"
     style="position: absolute; top: 0; width: 100%;">
+    <span style="color: black;">${fn:length(enzymeModel.literature)}
+    <span style="font-weight: normal;">references.</span></span>
 	Filters:
 	<c:set var="splitLabelCodes" value="${fn:split(allLabelCodes, '|')}"/>
 	<c:forEach var="citationLabel" varStatus="clvs"
