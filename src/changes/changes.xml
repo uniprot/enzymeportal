@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-	<release version="1.0.8" date="" description="Cofactors">
+	<release version="1.0.8" date="" description="Cofactors; citation types">
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of ep-core - which allows retrieval of
 			cofactors -, intenz-adapter - which can take data from the new
@@ -20,6 +20,16 @@
 		</action>
 		<action dev="rafalcan" type="add">
 			Added section for cofactors in small molecules tab.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Fixed JSP for citation types other than journal article.
+			</action>
+		<action dev="rafalcan" type="add">
+			Added number of citations per tab/type.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added filters for citation types (only visible when there are more
+			than journal articles).
 		</action>
     </release>
 	<release version="1.0.7" date="2012-08-23" description="Bug fixes">
