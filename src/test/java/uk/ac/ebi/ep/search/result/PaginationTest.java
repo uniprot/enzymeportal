@@ -34,4 +34,12 @@ public class PaginationTest {
 		assertEquals(3, pagination.getLastPage());
 	}
 
+	@Test
+	public void testEmptyResults(){
+		Pagination pagination = new Pagination(0, 10);
+		assertEquals(-1, pagination.getFirstResult());
+		assertEquals(-1, pagination.getLastResult());
+		assertEquals(0, pagination.getCurrentPage());
+		assertEquals(0, pagination.getLastPage());
+	}
 }
