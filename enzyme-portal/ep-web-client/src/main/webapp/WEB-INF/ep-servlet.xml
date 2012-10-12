@@ -45,7 +45,7 @@
         <property name="finderUniprotSource" value="EBEYE"/>
         <property name="retrieverUniprotSource" value="UNIPROT"/>
         <property name="uniprotImplementation" value="WS"/>
-        <property name="searchCacheSize" value="50"/>
+        <property name="searchCacheSize" value="100"/>
         <property name="mmDatasource" value="jdbc/ep/mm"/>
     </bean>
 	
@@ -53,9 +53,9 @@
 		class="uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig">
         <property name="resultsLimit" value="100"/>
         <property name="maxAccessionsInQuery" value="100"/>
-        <property name="maxResults" value="2000"/>
+        <property name="maxResults" value="500"/>
         <property name="maxChebiResults" value="30"/>
-        <property name="maxUniprotResults" value="1000"/>
+        <property name="maxUniprotResults" value="500"/>
         <property name="maxUniprotResultsFromChebi" value="100"/>
         <property name="maxUniprotResultsFromOtherDomains" value="100"/>
         <property name="maxThreads" value="50"/>
