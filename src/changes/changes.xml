@@ -22,8 +22,17 @@
 			Added section for cofactors in small molecules tab.
 		</action>
 		<action dev="rafalcan" type="fix">
+			Cache size increased to 100 (open sessions are usually around 70).
+		</action>
+		<action dev="rafalcan" type="fix">
+			Fixed configuration for searches: maxUniprotResults down to 500,
+			maxResults down to 500 (users won't be bothered if they get 500
+			results instead of 1000).
+			<fixes issue="121"/>
+		</action>
+		<action dev="rafalcan" type="fix">
 			Fixed JSP for citation types other than journal article.
-			</action>
+		</action>
 		<action dev="rafalcan" type="add">
 			Added number of citations per tab/type.
 		</action>
