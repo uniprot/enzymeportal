@@ -13,9 +13,14 @@ import java.util.List;
  */
 public enum CommonSpecies {
 
-    Human("Homo sapiens"), Mouse("Mus musculus"), Rat("Rattus norvegicus"), Fruit_fly("Drosophila melanogaster"), Worm("Worm"), Baker_Yeast("Saccharomyces cerevisiae"), Ecoli("Ecoli");
+    Human("Homo sapiens"),
+    Mouse("Mus musculus"),
+    Rat("Rattus norvegicus"),
+    Fruit_fly("Drosophila melanogaster"),
+    Worm("Caenorhabditis elegans"),
+    Baker_Yeast("Saccharomyces cerevisiae"),
+    Ecoli("Escherichia coli");
 
-//    Human, Mouse, Rat, Fruit_fly, Worm, Yeast, Ecoli ;
     private CommonSpecies(String name) {
         this.scientificName = name;
         commonSpecieList.add(scientificName);
