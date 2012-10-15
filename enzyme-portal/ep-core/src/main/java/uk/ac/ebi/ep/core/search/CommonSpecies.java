@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.core.search;
 
 import java.util.LinkedList;
@@ -23,24 +19,17 @@ public enum CommonSpecies {
 
     private CommonSpecies(String name) {
         this.scientificName = name;
-        commonSpecieList.add(scientificName);
+        commonSpeciesList.add(scientificName);
     }
     private String scientificName;
-    private List<String> commonSpecieList = new LinkedList<String>();
-    private CommonSpecies commonSpecies;
+    private List<String> commonSpeciesList = new LinkedList<String>();
 
     public String getScientificName() {
         return scientificName;
     }
 
-    public List<String> getCommonSpecies1() {
-        return commonSpecieList;
-
+    public List<String> getCommonSpecies() {
+        return commonSpeciesList;
     }
 
-    public CommonSpecies getCommonSpecies() {
-        return commonSpecies;
-    }
-    
-    
 }
