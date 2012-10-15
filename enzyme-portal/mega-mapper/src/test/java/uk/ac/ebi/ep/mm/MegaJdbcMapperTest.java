@@ -21,6 +21,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
+import uk.ac.ebi.ep.mm.MegaMapper.Constraint;
 
 //@Ignore
 public class MegaJdbcMapperTest {
@@ -53,7 +54,7 @@ public class MegaJdbcMapperTest {
             entry2.setEntryName("vogonate");
             XRef xref2 = new XRef();
             xref2.setFromEntry(entry2);
-            xref2.setRelationship(Relationship.between(MmDatabase.ChEBI, MmDatabase.UniProt).name());
+            xref2.setRelationship(Relationship.is_cofactor_of.name());
             xref2.setToEntry(entry1);
             mm.writeXref(xref2);
             entries.add(entry2);
@@ -65,7 +66,7 @@ public class MegaJdbcMapperTest {
             entry3.setEntryName("vogonic acid");
             XRef xref3 = new XRef();
             xref3.setFromEntry(entry3);
-            xref3.setRelationship(Relationship.between(MmDatabase.ChEBI, MmDatabase.UniProt).name());
+            xref3.setRelationship(Relationship.is_substrate_or_product_of.name());
             xref3.setToEntry(entry1);
             mm.writeXref(xref3);
             entries.add(entry3);
@@ -232,11 +233,39 @@ public class MegaJdbcMapperTest {
     	assertNotNull(xrefs);
     	assertEquals(4, xrefs.size());
     }
+    
+    @Test
+    public void testGetXrefsByIdFragment(){
+    	Collection<XRef> xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
+    			Constraint.STARTS_WITH, Relationship.is_cofactor_of);
+    	assertNotNull(xrefs);
+    	assertEquals(1, xrefs.size());
+    	XRef xref = xrefs.iterator().next();
+		assertEquals(MmDatabase.ChEBI.name(), xref.getFromEntry().getDbName());
+		assertEquals("vogonate", xref.getFromEntry().getEntryName());
+    	assertEquals("CHEBI:XXXXX", xref.getFromEntry().getEntryId());
+		assertEquals(MmDatabase.UniProt.name(), xref.getToEntry().getDbName());
+		assertEquals("vogonase I", xref.getToEntry().getEntryName());
+    	assertEquals("ABCD_VOGON", xref.getToEntry().getEntryId());
+    	
+    	xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
+    			Constraint.STARTS_WITH, Relationship.is_substrate_or_product_of);
+    	assertNotNull(xrefs);
+    	assertEquals(1, xrefs.size());
+    	xref = xrefs.iterator().next();
+		assertEquals(MmDatabase.ChEBI.name(), xref.getFromEntry().getDbName());
+		assertEquals("vogonic acid", xref.getFromEntry().getEntryName());
+    	assertEquals("CHEBI:YYYYY", xref.getFromEntry().getEntryId());
+		assertEquals(MmDatabase.UniProt.name(), xref.getToEntry().getDbName());
+		assertEquals("vogonase I", xref.getToEntry().getEntryName());
+    	assertEquals("ABCD_VOGON", xref.getToEntry().getEntryId());
+    }
 
 /**
      * Test of getAllUniProtAccessions method, of class MegaJdbcMapper.
      */
     @Test
+    @Ignore("This one takes ages")
     public void testGetAllUniProtAccessions() {
         System.out.println("getAllUniProtAccessions");
         MmDatabase database = MmDatabase.UniProt;

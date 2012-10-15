@@ -415,6 +415,46 @@ public class MegaJdbcMapper implements MegaMapper {
         return xrefs;
 	}
 
+	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+			Constraint constraint, Relationship rel) {
+		Collection<XRef> xrefs = null;
+		String idConst = null;
+		switch (constraint) {
+		case EQUALS:
+			idConst = "--constraint.equals";
+			break;
+		case STARTS_WITH:
+			idConst = "--constraint.like";
+			idFragment = idFragment + "%";
+			break;
+		case CONTAINS:
+			idConst = "--constraint.like";
+			idFragment = "%" + idFragment + "%";
+			break;
+		case ENDS_WITH:
+			idConst = "--constraint.like";
+			idFragment = "%" + idFragment;
+			break;
+		}
+		String dbConst = db == null? "" : "--constraint.db";
+		String relConst = rel == null? "" : "--constraint.relationship";
+		try {
+			PreparedStatement ps = sqlLoader.getPreparedStatement(
+					"--xrefs.by.id.fragment", idConst, dbConst, relConst);
+			int n = 1;
+			ps.setString(n++, idFragment);
+			if (db != null) ps.setString(n++, db.name());
+			ps.setString(n++, idFragment);
+			if (db != null) ps.setString(n++, db.name());
+			if (rel != null) ps.setString(n++, rel.name());
+            xrefs = buildXref(ps.executeQuery());
+		} catch (SQLException e) {
+			LOGGER.error(db + " - " + idFragment + " - " + constraint
+					+ " - " + rel, e);
+		}
+		return xrefs;
+	}
+
 	/**
      * retrieves a List of XRef with database name as ChEMBL.
      *

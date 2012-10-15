@@ -13,6 +13,8 @@ import java.util.Map;
  */
 public interface MegaMapper {
 
+	public enum Constraint { EQUALS, STARTS_WITH, CONTAINS, ENDS_WITH }
+	
     /**
      * Opens the mega-map for writing.
      * @throws IOException
@@ -122,6 +124,28 @@ public interface MegaMapper {
     public Collection<XRef> getXrefs(MmDatabase db, String accession,
     		Relationship relationship);
 
+    /**
+     * Retrieves cross references from the mega-map for a given text which
+     * matches an entry ID, who has a given relationship (if any).<br>
+     * This method is provided in order to search for UniProt ID prefixes (ex.
+     * "CFTR_") but can be used for other purposes as well.
+     * @param db the Database providing IDs matching <code>idFragment</code>. If
+     * 		<code>null</code>, all databases will be considered.
+     * @param idFragment A text which matches entry IDs. Please note that when
+     * 		searching for UniProt ID prefixes it is advisable to include the
+     * 		underscore (_) character, so that "DHSA" won't return xrefs for
+     * 		"DHSA1".
+     * @param constraint the constraint to use with the given
+     * 		<code>idFragment</code>.
+     * @param relationship The relationship searched, if any (can be
+     * 		<code>null</code>).
+     * @return a collection of xrefs in the map, or <code>null</code> if none
+     * 		found. Note that the entries corresponding to the query may be
+     * 		either the origin or the target of an xref.
+     */
+    public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+    		Constraint constraint, Relationship relationship);
+    
     /**
      * Retrieves cross references from the mega-map for a given accession
      * where database name is CheMBL.
