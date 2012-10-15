@@ -80,14 +80,22 @@ SELECT COUNT(*)as rowcount FROM mm_accession mma, mm_entry mme1, mm_entry mme2, 
 
 --xrefs.by.id.fragment:\
 SELECT mmx.* FROM mm_xref mmx /*\
-	*/WHERE from_entry = (SELECT id FROM mm_entry WHERE entry_id {0} {1}) /*\
-	*/OR to_entry = (SELECT id FROM mm_entry WHERE entry_id {0} {1}) {2}
+	*/WHERE from_entry = (SELECT id FROM mm_entry mme1 WHERE entry_id {0} {1}) /*\
+	*/OR to_entry = (SELECT id FROM mm_entry mme1 WHERE entry_id {0} {1}) {2}
+
+--xrefs.by.id.fragment.and.db:\
+select mmx.* from mm_xref mmx, mm_entry mme1, mm_entry mme2 /*\
+	*/where (mme1.entry_id {0} {1} and mme2.db_name in ({2})) and ( /*\
+	*/	(mme1.id = mmx.from_entry and mmx.to_entry = mme2.id) /*\
+	*/	or /*\
+	*/	(mme2.id = mmx.from_entry and mmx.to_entry = mme1.id) /*\
+	*/)
 
 --constraint.equals:\
 = ?
 --constraint.like:\
 LIKE ?
 --constraint.db:\
-AND db_name = ?
+AND mme1.db_name = ?
 --constraint.relationship:\
 AND mmx.relationship = ?

@@ -418,24 +418,8 @@ public class MegaJdbcMapper implements MegaMapper {
 	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
 			Constraint constraint, Relationship rel) {
 		Collection<XRef> xrefs = null;
-		String idConst = null;
-		switch (constraint) {
-		case EQUALS:
-			idConst = "--constraint.equals";
-			break;
-		case STARTS_WITH:
-			idConst = "--constraint.like";
-			idFragment = idFragment + "%";
-			break;
-		case CONTAINS:
-			idConst = "--constraint.like";
-			idFragment = "%" + idFragment + "%";
-			break;
-		case ENDS_WITH:
-			idConst = "--constraint.like";
-			idFragment = "%" + idFragment;
-			break;
-		}
+		String idConst = getSqlConstraint(constraint);
+		idFragment = getIdParameter(constraint, idFragment);
 		String dbConst = db == null? "" : "--constraint.db";
 		String relConst = rel == null? "" : "--constraint.relationship";
 		try {
@@ -453,6 +437,69 @@ public class MegaJdbcMapper implements MegaMapper {
 					+ " - " + rel, e);
 		}
 		return xrefs;
+	}
+
+	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+			Constraint constraint, MmDatabase... xDbs) {
+		Collection<XRef> xrefs = null;
+		String idConst = getSqlConstraint(constraint);
+		idFragment = getIdParameter(constraint, idFragment);
+		String dbConst = db == null? "" : "--constraint.db";
+		String inClause = dbArrayForQuery(xDbs);
+		try {
+			PreparedStatement ps = sqlLoader.getPreparedStatement(
+					"--xrefs.by.id.fragment.and.db",
+					idConst, dbConst, inClause);
+			int n = 1;
+			ps.setString(n++, idFragment);
+			if (db != null) ps.setString(n++, db.name());
+			xrefs = buildXref(ps.executeQuery());
+		} catch (SQLException e) {
+			LOGGER.error(db + " - " + idFragment + " - " + constraint
+					+ " - " + xDbs, e);
+		}
+		return xrefs;
+	}
+	
+	/**
+	 * Converts an enumerated value into a SQLLoader constraint key.
+	 * @param constraint the constraint to apply.
+	 * @return the key to be used by the SQLLoader.
+	 */
+	private String getSqlConstraint(Constraint constraint){
+		switch (constraint) {
+		case EQUALS:
+			return "--constraint.equals";
+		case STARTS_WITH:
+		case CONTAINS:
+		case ENDS_WITH:
+			return "--constraint.like";
+		default:
+			throw new IllegalArgumentException("constraint not supported: "
+					+ constraint);
+		}
+	}
+	
+	/**
+	 * Builds the appropriate oracle query string for the constraint.
+	 * @param constraint a constraint.
+	 * @param idFragment a fragment of the string to match.
+	 * @return a string with the wildcard % in the appropriate place(s).
+	 */
+	private String getIdParameter(Constraint constraint, String idFragment){
+		switch (constraint) {
+		case EQUALS:
+			return idFragment;
+		case STARTS_WITH:
+			return idFragment + "%";
+		case CONTAINS:
+			return "%" + idFragment + "%";
+		case ENDS_WITH:
+			return "%" + idFragment;
+		default:
+			throw new IllegalArgumentException("constraint not supported: "
+					+ constraint);
+		}
 	}
 
 	/**
