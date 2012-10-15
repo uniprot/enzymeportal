@@ -236,4 +236,9 @@ public class MegaLuceneMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+			Constraint constraint, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 }

@@ -11,9 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -259,6 +261,26 @@ public class MegaJdbcMapperTest {
 		assertEquals(MmDatabase.UniProt.name(), xref.getToEntry().getDbName());
 		assertEquals("vogonase I", xref.getToEntry().getEntryName());
     	assertEquals("ABCD_VOGON", xref.getToEntry().getEntryId());
+    	
+    	xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
+    			Constraint.STARTS_WITH,
+    			new MmDatabase[]{ MmDatabase.ChEBI, MmDatabase.ChEMBL });
+    	assertNotNull(xrefs);
+    	assertEquals(3, xrefs.size());
+    	for (Iterator<XRef> it = xrefs.iterator(); it.hasNext();) {
+			xref = it.next();
+			switch (Relationship.valueOf(xref.getRelationship())) {
+			case is_cofactor_of:
+				assertEquals("CHEBI:XXXXX", xref.getFromEntry().getEntryId());
+				break;
+			case is_substrate_or_product_of:
+				assertEquals("CHEBI:YYYYY", xref.getFromEntry().getEntryId());
+				break;
+			default:
+				assertEquals("CHEMBLZZZZZZ", xref.getFromEntry().getEntryId());
+				break;
+			}
+		}
     }
 
 /**
