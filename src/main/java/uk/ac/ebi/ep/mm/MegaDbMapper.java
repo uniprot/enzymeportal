@@ -271,4 +271,9 @@ public class MegaDbMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+			Constraint constraint, Relationship relationship) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 }

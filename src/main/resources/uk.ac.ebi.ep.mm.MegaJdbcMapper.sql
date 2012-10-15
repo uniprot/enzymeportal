@@ -72,13 +72,22 @@ SELECT mmx.* FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref mmx \
 		AND ((mma.id = mmx.from_entry AND mmx.to_entry = mme2.id AND mme2.db_name IN ({0})) \
 		OR (mma.id = mmx.to_entry AND mmx.from_entry = mme2.id AND mme2.db_name IN ({0}))) and rownum <= 5
 
-
-
 --xrefs.by.accession.total:\
 SELECT COUNT(*)as rowcount FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref mmx \
 		WHERE mma.accession = ? AND mma.id = mme1.id AND mme1.db_name = ? \
 		AND ((mma.id = mmx.from_entry AND mmx.to_entry = mme2.id AND mme2.db_name IN ({0})) \
 		OR (mma.id = mmx.to_entry AND mmx.from_entry = mme2.id AND mme2.db_name IN ({0})))
 
+--xrefs.by.id.fragment:\
+SELECT mmx.* FROM mm_xref mmx /*\
+	*/WHERE from_entry = (SELECT id FROM mm_entry WHERE entry_id {0} {1}) /*\
+	*/OR to_entry = (SELECT id FROM mm_entry WHERE entry_id {0} {1}) {2}
 
-
+--constraint.equals:\
+= ?
+--constraint.like:\
+LIKE ?
+--constraint.db:\
+AND db_name = ?
+--constraint.relationship:\
+AND mmx.relationship = ?
