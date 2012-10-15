@@ -16,20 +16,29 @@ public enum CommonSpecies {
     Worm("Caenorhabditis elegans"),
     Baker_Yeast("Saccharomyces cerevisiae"),
     Ecoli("Escherichia coli");
+    
+    private static List<String> allScientificNames = new LinkedList<String>();
+    static {
+    	for (CommonSpecies cs : CommonSpecies.values()) {
+            allScientificNames.add(cs.scientificName);
+		}
+    }
 
     private CommonSpecies(String name) {
         this.scientificName = name;
-        commonSpeciesList.add(scientificName);
     }
     private String scientificName;
-    private List<String> commonSpeciesList = new LinkedList<String>();
 
     public String getScientificName() {
         return scientificName;
     }
 
-    public List<String> getCommonSpecies() {
-        return commonSpeciesList;
+    /**
+     * List of most common species <i>scientific names</i>
+     * @return
+     */
+    public static List<String> getScientificNames() {
+        return allScientificNames;
     }
 
 }
