@@ -48,7 +48,7 @@ public class IntenzUtil {
     /**
      * Generates a valid URL to retrieve IntEnzXML.
      * @param format the URL format as defined in
-     * {@link IntenzConfig#setIntenzXmlUrlFormat(String)}.
+     * {@link IntenzConfig#setIntenzXmlUrl(String)}.
      * @param ecNumber
      * @return
      */
