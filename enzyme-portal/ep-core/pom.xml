@@ -3,7 +3,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.8</version>
+    <version>1.0.9-SNAPSHOT</version>
     <name>EP core</name>
 
     <parent>
@@ -201,12 +201,6 @@
             </plugin>
     	</plugins>
     </build>
-
-  <scm>
-    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-core-1.0.8</connection>
-    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-core-1.0.8</developerConnection>
-    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/ep-core-1.0.8</url>
-  </scm>
 </project>
 
 
