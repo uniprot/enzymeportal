@@ -182,12 +182,15 @@ public class IntenzAdapter implements IintenzAdapter{
 
 	public Collection<Molecule> getCofactors(String ec) {
 		Collection<Molecule> cofactors = null;
-		GetCofactorsCaller cofactorsCaller = new GetCofactorsCaller(
-				IntenzUtil.createIntenzEntryUrl(ec));
-		try {
-			cofactors = cofactorsCaller.call();
-		} catch (Exception e) {
-			LOGGER.error("Unable to retrieve cofactors for " + ec, e);
+		// Incomplete EC numbers won't get anything from IntEnzXML:
+		if (!ec.endsWith("-")){
+			GetCofactorsCaller cofactorsCaller = new GetCofactorsCaller(
+				IntenzUtil.createIntenzEntryUrl(config.getIntenzXmlUrl(), ec));
+			try {
+				cofactors = cofactorsCaller.call();
+			} catch (Exception e) {
+				LOGGER.error("Unable to retrieve cofactors for " + ec, e);
+			}
 		}
 		return cofactors;
 	}
