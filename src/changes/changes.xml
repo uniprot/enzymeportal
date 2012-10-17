@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-	<release version="1.0.4" date=""
+	<release version="1.0.4" date="2012-10-17"
 		description="IntEnzXML from web service">
 		<action dev="rafalcan" type="add">
 			Added new configuration parameter - format of URL to retrieve
