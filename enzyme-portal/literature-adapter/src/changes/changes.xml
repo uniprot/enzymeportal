@@ -9,7 +9,7 @@
 </properties>
 
 <body>
-	<release version="1.0.3" date="2012-08-01"
+	<release version="1.0.3" date="2012-10-17"
 		description="Faster searches. Citations sorted by date.">
 		<action dev="rafalcan" type="update">
 			Updated to last version of das-adapter.
