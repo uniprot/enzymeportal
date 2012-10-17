@@ -9,7 +9,11 @@
 </properties>
 
 <body>
-	<release version="1.0.8" date="" description="Bug fix">
+	<release version="1.0.8" date="2012-10-17" description="Bug fix">
+		<action dev="rafalcan" type="fix">
+			Removed line which killed tomcat.
+            <fixes issue"110"/>
+		</action>
 		<action dev="rafalcan" type="fix">
 			Removed duplicate declaration of intenzAdapter field, which was
 			hiding the superclass'.
@@ -17,7 +21,8 @@
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of intenz-adapter - which can be
 			configured now with a URL to retrieve IntEnzXML, namely web
-			services - and literature-adapter - with faster searches.
+			services -, literature-adapter - with faster searches -,
+            reactome-adapter and mega-mapper.
 		</action>
 	</release>
 	<release version="1.0.7" date="2012-08-24" description="Cofactors">
