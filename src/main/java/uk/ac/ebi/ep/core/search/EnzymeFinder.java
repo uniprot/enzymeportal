@@ -346,9 +346,9 @@ public class EnzymeFinder implements IEnzymeFinder {
                     priorityMapper.put(3, sp);
                 } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Fruit_fly.getScientificName())) {
                     priorityMapper.put(4, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase(CommonSpecies.Worm.getScientificName())) {
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Worm.getScientificName())) {
                     priorityMapper.put(5, sp);
-                } else if (sp.getCommonname().equalsIgnoreCase(CommonSpecies.Ecoli.getScientificName())) {
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Ecoli.getScientificName())) {
                     priorityMapper.put(6, sp);
                 } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
                     priorityMapper.put(customKey.getAndIncrement(), sp);
@@ -485,8 +485,9 @@ public class EnzymeFinder implements IEnzymeFinder {
 		
 		if (!xchars.validate(data)){
                     LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!");
-			System.err.println("This is not a valid xchars string!");
-			System.exit(2);
+			//System.err.println("This is not a valid xchars string!");
+			// WHAT THE HELL IS THIS? BE CAREFUL WHEN COPY/PASTING!
+            //System.exit(2);
 		}
 
                 
