@@ -528,7 +528,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
         try {
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
-            intenzAdapter.getEnzymeDetails(enzymeModel);
             Collection<XRef> xRefList = megaMapperConnection.getMegaMapper().getXrefs(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
             if (xRefList != null) {
                 for (XRef ref : xRefList) {
@@ -556,8 +555,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
         } catch (UniprotWsException ex) {
             LOGGER.error("Error while getting EnzymeSummary from Uniprot Adapter", ex);
-        } catch (MultiThreadingException ex) {
-            LOGGER.error("Multithreading exception", ex);
         }
         return enzymeModel;
     }
