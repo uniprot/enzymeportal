@@ -10,12 +10,15 @@
 </properties>
 
 <body>
-	<release version="1.0.4" date="2012-10-17"
+	<release version="1.0.4" date="2012-10-18"
 		description="IntEnzXML from web service">
 		<action dev="rafalcan" type="add">
 			Added new configuration parameter - format of URL to retrieve
 			IntEnzXML from - which will be used instead of the hardcoded FTP
 			URL, and can be set to a web service URL.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Incomplete EC numbers are now ignored.
 		</action>
 	</release>
 	<release version="1.0.3" date="2012-08-24" description="Cofactors">
