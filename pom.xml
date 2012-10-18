@@ -27,7 +27,6 @@
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>uniprot-adapter</artifactId>
             <version>1.0.1</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
