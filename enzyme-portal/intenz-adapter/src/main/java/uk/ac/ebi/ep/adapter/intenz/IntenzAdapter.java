@@ -150,14 +150,24 @@ public class IntenzAdapter implements IintenzAdapter{
         		 new ExecutorCompletionService<Intenz>(pool);
          try {
 //        	 LOGGER.debug("SEARCH before callables loop");
+        	 List<String> incompleteEcs = new ArrayList<String>();
              for (String ec : ecList) {
+            	 if (ec.indexOf('-') > -1){
+            		 incompleteEcs.add(ec);
+            		 continue; // ignore incomplete ECs
+            	 }
                 Callable<Intenz> callable = new GetIntenzCaller(
                 		IntenzUtil.createIntenzEntryUrl(
                 				config.getIntenzXmlUrl(), ec));
                 ecs.submit(callable);
              }
+             if (!incompleteEcs.isEmpty()){
+            	 LOGGER.warn("Unable to retrieve info from IntEnz on " +
+            	 		incompleteEcs);
+             }
 //        	 LOGGER.debug("SEARCH before futures loop");
-             for (int i = 0; i < ecList.size(); i++) {
+             int completeEcs = ecList.size() - incompleteEcs.size();
+             for (int i = 0; i < completeEcs; i++) {
             	 try {
                 	 Future<Intenz> future =
                 			 ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
@@ -169,7 +179,7 @@ public class IntenzAdapter implements IintenzAdapter{
                      }
             	 } catch (Exception e){
             		 // Don't stop the others
- 	            	LOGGER.error("Callable " + (i+1) + " of " + ecList.size()
+ 	            	LOGGER.error("Callable " + (i+1) + " of " + completeEcs
 	            			+ " - " + e.getMessage(), e);
             	 }
              }
@@ -181,16 +191,15 @@ public class IntenzAdapter implements IintenzAdapter{
      }
 
 	public Collection<Molecule> getCofactors(String ec) {
-		Collection<Molecule> cofactors = null;
 		// Incomplete EC numbers won't get anything from IntEnzXML:
-		if (!ec.endsWith("-")){
-			GetCofactorsCaller cofactorsCaller = new GetCofactorsCaller(
-				IntenzUtil.createIntenzEntryUrl(config.getIntenzXmlUrl(), ec));
-			try {
-				cofactors = cofactorsCaller.call();
-			} catch (Exception e) {
-				LOGGER.error("Unable to retrieve cofactors for " + ec, e);
-			}
+		if (ec.indexOf('-') > -1) return null;
+		Collection<Molecule> cofactors = null;
+		GetCofactorsCaller cofactorsCaller = new GetCofactorsCaller(
+			IntenzUtil.createIntenzEntryUrl(config.getIntenzXmlUrl(), ec));
+		try {
+			cofactors = cofactorsCaller.call();
+		} catch (Exception e) {
+			LOGGER.error("Unable to retrieve cofactors for " + ec, e);
 		}
 		return cofactors;
 	}
@@ -198,6 +207,7 @@ public class IntenzAdapter implements IintenzAdapter{
 	public Collection<Molecule> getCofactors(Collection<String> ecs) {
 		Collection<Molecule> cofactors = null;
 		for (String ec : ecs) {
+			if (ec.indexOf('-') > -1) continue;
 			final Collection<Molecule> newCofactors = getCofactors(ec);
 			if (cofactors == null){
 				cofactors = newCofactors;
