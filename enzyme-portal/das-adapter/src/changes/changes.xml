@@ -9,6 +9,15 @@
 </properties>
 
 <body>
+	<release version="1.0.2" date="2012-10-19"
+		description="Added configuration.">
+		<action dev="rafalcan" type="add">
+			Added configuration class, JMX-enabled.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of log4j and junit.
+		</action>
+	</release>
 	<release version="1.0" date="in SVN" description="First release">
 		
 	</release>
