@@ -14,7 +14,6 @@ import uk.ac.ebi.biobabel.citations.DataSource;
 import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.cdb.webservice.Journal;
 import uk.ac.ebi.cdb.webservice.JournalInfo;
-import uk.ac.ebi.cdb.webservice.QueryException_Exception;
 import uk.ac.ebi.das.jdas.adapters.features.DasGFFAdapter.SegmentAdapter;
 import uk.ac.ebi.das.jdas.adapters.features.FeatureAdapter;
 import uk.ac.ebi.das.jdas.exceptions.ValidationException;

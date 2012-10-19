@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,7 +40,7 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 	 * labels it according to the source it came from.
 	 * @author rafa
 	 */
-	public class LabelledCitation implements Comparable {
+	public class LabelledCitation implements Comparable<LabelledCitation> {
 		private Result citation;
 		private EnumSet<CitationLabel> labels;
 		public LabelledCitation(Result citation, CitationLabel label){
@@ -93,12 +92,8 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 		/**
 		 * By default, citations are sorted by creation date.
 		 */
-		public int compareTo(Object o) {
-			if (!(o instanceof LabelledCitation)){
-				return Integer.MAX_VALUE;
-			}
-			if (o == this) return 0;
-			LabelledCitation other = (LabelledCitation) o;
+		public int compareTo(LabelledCitation other) {
+			if (other == this) return 0;
 			return this.citation.getDateOfCreation()
 					.compare(other.citation.getDateOfCreation());
 		}
@@ -107,7 +102,6 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 
 	private LiteratureConfig config;
 	
-	@SuppressWarnings("unchecked")
 	public List<LabelledCitation> getCitations(String uniprotId, List<String> pdbIds) {
 		List<LabelledCitation> citations = null;
 		LOGGER.debug("Before getting lit. callables");

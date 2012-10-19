@@ -14,7 +14,6 @@ import uk.ac.ebi.biobabel.citations.CitexploreWSClient;
 import uk.ac.ebi.biobabel.citations.DataSource;
 import uk.ac.ebi.cdb.webservice.Journal;
 import uk.ac.ebi.cdb.webservice.JournalInfo;
-import uk.ac.ebi.cdb.webservice.QueryException_Exception;
 import uk.ac.ebi.kraken.interfaces.uniprot.Citation;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.citations.AgricolaId;
