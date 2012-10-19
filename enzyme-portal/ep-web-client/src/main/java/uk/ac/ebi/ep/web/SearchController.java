@@ -1,8 +1,16 @@
 package uk.ac.ebi.ep.web;
 
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -18,11 +26,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
+import uk.ac.ebi.ep.adapter.literature.CitexploreWSClientPool;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
-import uk.ac.ebi.ep.core.filter.*;
+import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
+import uk.ac.ebi.ep.core.filter.DefaultPredicate;
+import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
+import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
 import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
@@ -36,7 +48,13 @@ import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.model.*;
+import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.EnzymeAccession;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.SearchModel;
+import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
@@ -75,6 +93,17 @@ public class SearchController {
     @Autowired
     private LiteratureConfig literatureConfig;
 
+    @PostConstruct
+    public void init(){
+    	try {
+			CitexploreWSClientPool.setSize(
+					literatureConfig.getCitexploreClientPoolSize());
+			LOGGER.info("CiteXplore client pool size set successfuly");
+		} catch (Exception e) {
+			LOGGER.error("Unable to set CiteXplore client pool size", e);
+		}
+    }
+    
     /**
      * Process the entry page,
      *

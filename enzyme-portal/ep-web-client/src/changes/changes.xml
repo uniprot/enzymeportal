@@ -10,12 +10,16 @@
 </properties>
 
 <body>
-	<release version="1.0.8" date="" description="Cofactors; citation types">
+	<release version="1.0.8" date="2012-10-17"
+		description="Cofactors; citation types">
 		<action dev="rafalcan" type="update">
 			Updated to latest versions of ep-core - which allows retrieval of
-			cofactors -, intenz-adapter - which can take data from the new
-			IntEnz web service - and literature-adapter - which is faster now.
+			cofactors and fixes tomcat suicides -, intenz-adapter - which can
+			take data from the new IntEnz web service -, literature-adapter -
+			which is faster now - and das-adapter - with partially implemented
+			JMX configuration.
 			<fixes issue="34"/>
+			<fixes issue="110"/>
 			<fixes issue="120"/>
 		</action>
 		<action dev="rafalcan" type="add">

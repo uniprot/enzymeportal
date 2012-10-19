@@ -99,6 +99,7 @@
     <bean name="uk.ac.ebi.ep:name=literatureConfig"
     	class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">
    		<property name="maxThreads" value="4" />
+   		<property name="citexploreClientPoolSize" value="8"/>
    	</bean>
 	
     <bean name="uk.ac.ebi.ep:name=bioportalConfig"
@@ -110,6 +111,11 @@
 			value="http://rest.bioontology.org/bioportal/concepts/{0}?conceptid={1}&amp;light=1&amp;apikey=9f19fdf6-82d0-4335-97a1-f71d3ce156f6"/>
         <property name="timeout" value="30000"/>
     </bean>
+    
+    <bean name="uk.ac.ebi.ep:name=dasConfig"
+    	class="uk.ac.ebi.ep.adapter.das.DASConfig">
+   		<property name="clientPoolSize" value="4" />
+   	</bean>
 	
     <!--Start internationalization-->
     <bean id="messageSource"
