@@ -1,11 +1,7 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -178,7 +174,7 @@ public class MegaJdbcMapper implements MegaMapper {
      * @throws SQLException
      */
     private boolean existsInMegaMap(Entry entry) throws SQLException {
-        
+
         PreparedStatement rEntryStm =
                 sqlLoader.getPreparedStatement("--entry.by.entryid");
         int paramNum = 1;
@@ -252,7 +248,8 @@ public class MegaJdbcMapper implements MegaMapper {
      * Builds a list of XRef objects from a result set, and closes it.
      *
      * @param rs
-     * @return a list of {@link XRef}s, or <code>null</code> if none found.
+     * @return a list of {@link XRef}s, or
+     * <code>null</code> if none found.
      * @throws SQLException
      */
     private List<XRef> buildXref(ResultSet rs) throws SQLException {
@@ -302,7 +299,7 @@ public class MegaJdbcMapper implements MegaMapper {
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + db.name() + ")", e);
         } finally {
-        	closeResultSet(rs);
+            closeResultSet(rs);
         }
         return entry;
     }
@@ -400,8 +397,8 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     public Collection<XRef> getXrefs(MmDatabase db, String accession,
-			Relationship relationship) {
-		Collection<XRef> xrefs = null;
+            Relationship relationship) {
+        Collection<XRef> xrefs = null;
         try {
             PreparedStatement ps = sqlLoader.getPreparedStatement(
                     "--xrefs.by.accession.and.relationship");
@@ -413,7 +410,7 @@ public class MegaJdbcMapper implements MegaMapper {
             LOGGER.error(accession + " (" + relationship + ")", e);
         }
         return xrefs;
-	}
+    }
 
 	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
 			Constraint constraint, Relationship rel) {
@@ -554,7 +551,7 @@ public class MegaJdbcMapper implements MegaMapper {
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
         } finally {
-        	closeResultSet(rs);
+            closeResultSet(rs);
         }
 
         return total;
@@ -614,8 +611,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 accessionList = new ArrayList<String>();
             }
 
-            PreparedStatement preparedStatement = sqlLoader
-            		.getPreparedStatement("--AllUniProtAccessions.accession");
+            PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--AllUniProtAccessions.accession");
             preparedStatement.setString(1, database.name());
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -626,14 +622,14 @@ public class MegaJdbcMapper implements MegaMapper {
         } catch (SQLException ex) {
             LOGGER.fatal(String.format("Error retrieving accession from %s", database.name()), ex);
         } finally {
-        	closeResultSet(resultSet);
+            closeResultSet(resultSet);
         }
 
         return accessionList;
     }
 
     //get disease using list of accessions
-     public Map<String, String> getDiseaseNew(MmDatabase db, String accession,
+    public Map<String, String> getDiseaseNew(MmDatabase db, String accession,
             MmDatabase... xDbs) {
         Map<String, String> diseasesEntryMap = null;
         ResultSet resultSet = null;
@@ -649,8 +645,8 @@ public class MegaJdbcMapper implements MegaMapper {
             String queryOld = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? "
                     + "and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or "
                     + "(e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name is not null ";
-            
-            
+
+
             String query = "select DISTINCT e.db_name, e.entry_id, e.entry_name from mm_entry e, mm_accession a, mm_xref x "
                     + "where a.accession = ? and a.id = x.from_entry and x.to_entry = e.id and e.db_name in (?,?,?)";
 
@@ -680,66 +676,67 @@ public class MegaJdbcMapper implements MegaMapper {
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
         } finally {
-        	closeResultSet(resultSet);
-        	closePreparedStatement(ps);
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
         }
 
         return diseasesEntryMap;
     }
 
-	/**
-	 * Closes safely a ResultSet, logging in case of error.
-	 * @param resultSet
-	 */
-	private void closeResultSet(ResultSet resultSet) {
-		if (resultSet != null){
-		    try {
-				resultSet.close();
-			} catch (SQLException e) {
-				LOGGER.error("Unable to close ResultSet", e);
-			}
-		}
-	}
-	
-	/**
-	 * Closes safely a PreparedStatement, logging in case of error.
-	 * @param ps
-	 */
-	private void closePreparedStatement(PreparedStatement ps){
-		if (ps != null){
-			try {
-				ps.close();
-			} catch (SQLException e){
-				LOGGER.error("Unable to close PreparedStatement");
-			}
-		}
-	}
-     
-     
-         public Map<String, String> getCompoundsNew(MmDatabase db, String accession,
+    /**
+     * Closes safely a ResultSet, logging in case of error.
+     *
+     * @param resultSet
+     */
+    private void closeResultSet(ResultSet resultSet) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                LOGGER.error("Unable to close ResultSet", e);
+            }
+        }
+    }
+
+    /**
+     * Closes safely a PreparedStatement, logging in case of error.
+     *
+     * @param ps
+     */
+    private void closePreparedStatement(PreparedStatement ps) {
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                LOGGER.error("Unable to close PreparedStatement");
+            }
+        }
+    }
+
+    public Map<String, String> getCompoundsNew(MmDatabase db, String accession,
             MmDatabase... xDbs) {
-      
+
         Map<String, String> compoundEntryMap = null;
- 
+
 
 
 
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         try {
-      
+
             if (compoundEntryMap == null) {
                 compoundEntryMap = new HashMap<String, String>();
             }
-            
+
             String query = "select DISTINCT e.db_name, e.entry_id, e.entry_name from mm_entry e, mm_accession a, mm_xref x"
                     + " where a.accession = ? and a.id = x.from_entry and x.to_entry = e.id and e.db_name = ? union "
                     + "select e.db_name, e.entry_id, e.entry_name from mm_entry e, mm_accession a, mm_xref x where"
                     + " a.accession = ? and a.id = x.to_entry and x.from_entry = e.id and e.db_name = ?";
-                    
-                    
-            String queryOLD = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null";
-  
+
+
+            //String queryOLD = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null";
+
             if (con != null) {
                 ps = con.prepareStatement(query);
 
@@ -756,25 +753,24 @@ public class MegaJdbcMapper implements MegaMapper {
                     String entryId = resultSet.getString("ENTRY_ID");
                     String entryName = resultSet.getString("ENTRY_NAME");
                     if (entryId != null && entryName != null) {
-                    
+
                         compoundEntryMap.put(entryId, entryName);
                     }
 
-     
+
                 }
             }
 
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
         } finally {
-        	closeResultSet(resultSet);
-        	closePreparedStatement(ps);
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
         }
         return compoundEntryMap;
     }
 
     //working version
-
     public Map<String, String> getDisease(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
         Map<String, String> diseasesEntryMap = null;
@@ -821,68 +817,101 @@ public class MegaJdbcMapper implements MegaMapper {
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
         } finally {
-        	closeResultSet(resultSet);
-        	closePreparedStatement(ps);
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
         }
 
         return diseasesEntryMap;
     }
+   
+    public static final String[] ILLEGAL_COMPOUND = {"sample","sample","example","Water", "Acid","acid","water"};
 
-    private static final String ILLEGAL_COMPOUND = "water";
-     public Map<String, String> getCompounds(MmDatabase db, String accessions,
+    public Map<String, String> getCompounds(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
-        //List<CompoundEntry> compoundList = null;
+        
         Map<String, String> compoundEntryMap = null;
         String[] acc = accessions.split("_");
         String accession = acc[0].concat("_%");
-        // String x = "some_example";
-        // String  acc = accession.;
-        // String [] s = x.split("_");
-        // String y = s[0].concat("_%");
 
 
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         try {
-       
 
-            if (compoundEntryMap == null) {
-                compoundEntryMap = new HashMap<String, String>();
-            }
-            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
-                    + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
-                    + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name != ?";
             
-            if (con != null) {
-                ps = con.prepareStatement(query);
+            StringBuilder queryClauseBuilder = new StringBuilder();
+            
+//            boolean firstValue = true;
+//            for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
+//                //queryClauseBuilder.append('?');
+//                if (firstValue) {
+//                   
+//                    firstValue = false;
+//                } else {
+//                    queryClauseBuilder.append(',');
+//                }
+//                queryClauseBuilder.append('?');
+//            }
 
-                ps.setString(2, accession);
-                ps.setString(1, db.name());
-                ps.setString(3, xDbs[0].name());
-                ps.setString(4, xDbs[1].name());
-                ps.setString(5, ILLEGAL_COMPOUND);
+                for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
+                //queryClauseBuilder.append(ILLEGAL_COMPOUND[i]);
+                 queryClauseBuilder.append("?");
+                if (i < ILLEGAL_COMPOUND.length - 1) {
+                    queryClauseBuilder.append(",");
+                }
+                }
+
+                if (compoundEntryMap == null) {
+                    compoundEntryMap = new HashMap<String, String>();
+                }
+                
+//            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
+//                    + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
+//                    + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name != ?";
+//            
 
 
+                String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
+                        + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
+                        + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name not in (" + queryClauseBuilder.toString() + ')';
+
+                if (con != null) {
+                    ps = con.prepareStatement(query);
+                   
+                    ps.setString(2, accession);
+                    ps.setString(1, db.name());
+                    ps.setString(3, xDbs[0].name());
+                    ps.setString(4, xDbs[1].name());
+                    //ps.setString(5, ILLEGAL_COMPOUND);
+                   
+ 
+                    for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
+                        ps.setString(i, ILLEGAL_COMPOUND[i]);
+                         
+                    }
+
+                
 
                 resultSet = ps.executeQuery();
+                
                 while (resultSet.next()) {
 
                     String entryId = resultSet.getString("ENTRY_ID");
                     String entryName = resultSet.getString("ENTRY_NAME");
                     if (entryId != null && entryName != null) {
-                        // System.out.println("data "+ entryName);
+
                         compoundEntryMap.put(entryId, entryName);
                     }
 
-             
+
                 }
             }
 
         } catch (SQLException e) {
             LOGGER.error(accession + " (" + xDbs + ")", e);
         } finally {
-        	closeResultSet(resultSet);
-        	closePreparedStatement(ps);
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
         }
         return compoundEntryMap;
     }
