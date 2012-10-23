@@ -485,9 +485,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 		
 		if (!xchars.validate(data)){
                     LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!");
-			//System.err.println("This is not a valid xchars string!");
-			// WHAT THE HELL IS THIS? BE CAREFUL WHEN COPY/PASTING!
-            //System.exit(2);
+
 		}
 
                 
