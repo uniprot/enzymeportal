@@ -8,6 +8,7 @@
 			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="selected" type="xs:boolean"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Disease" type="ep:Disease"/>
@@ -16,6 +17,7 @@
 			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="selected" type="xs:boolean"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="EnzymeAccession" type="ep:EnzymeAccession"/>
@@ -62,9 +64,6 @@
 			<xs:element name="diseases" type="ep:Disease" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="compounds" type="ep:Compound" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="species" type="ep:Species" minOccurs="0" maxOccurs="unbounded"/>
-                          <xs:element name="tempSpecies" type="ep:Species" minOccurs="0" maxOccurs="unbounded"/>
-                           <xs:element name="tempCompounds" type="ep:Compound" minOccurs="0" maxOccurs="unbounded"/>
-                           <xs:element name="tempDiseases" type="ep:Disease" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="SearchModel" type="ep:SearchModel"/>
@@ -84,9 +83,6 @@
 			<xs:element name="compounds" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="diseases" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="species" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-                           <xs:element name="selectedSpecies" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-                           <xs:element name="selectedCompounds" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-                           <xs:element name="selectedDiseases" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="SearchResults" type="ep:SearchResults"/>
@@ -102,8 +98,9 @@
 		<xs:sequence>
 			<xs:element name="scientificname" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="commonname" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        <xs:element name="selected" type="xs:boolean"/>
                         
-                                   <xs:element name="compounds" type="ep:Compound"
+                        <xs:element name="compounds" type="ep:Compound"
         		minOccurs="0" maxOccurs="unbounded">
         	</xs:element>
         	<xs:element name="diseases" type="ep:Disease"

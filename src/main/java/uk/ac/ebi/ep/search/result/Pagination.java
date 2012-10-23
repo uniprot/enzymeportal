@@ -105,7 +105,7 @@ public class Pagination implements Serializable {
         return lastPage;
     }
     
-    private void recalculate(){
+        private void recalculate(){
     	if (numberOfResults == 0) firstResult = -1;
     	calculateLastPage();
     	paginate();
