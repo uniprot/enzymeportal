@@ -10,11 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
 import uk.ac.ebi.ep.adapter.chebi.ChebiAdapter;
 import static org.junit.Assert.*;
@@ -23,6 +19,7 @@ import static org.junit.Assert.*;
  *
  * @author hongcao
  */
+//@Ignore
 public class ChebiAdapterTest {
     private ChebiAdapter instance;
     public ChebiAdapterTest() {

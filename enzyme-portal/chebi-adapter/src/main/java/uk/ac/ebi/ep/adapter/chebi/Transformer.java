@@ -28,7 +28,7 @@ public class Transformer {
         molecule.setDescription(chebiEntity.getDefinition());
         molecule.setName(chebiEntity.getChebiAsciiName());
         List<DataItem> dataItems = chebiEntity.getFormulae();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (DataItem dataItem : dataItems) {
             sb.append(dataItem.getData());
             if (dataItems.size() > 1) {

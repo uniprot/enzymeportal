@@ -110,7 +110,8 @@ public class ChebiWsCallable implements Callable<Molecule> {
 				molecule = Transformer.transformChebiToEpMoleculeEntity(complete);
 			}
 		} catch (Exception e) {
-			throw new ChebiFetchDataException(e);
+			
+                    LOGGER.error("ChebiFetchDataException", e);
 		} finally {
 			if (chebiWsClient != null){
 				try {
