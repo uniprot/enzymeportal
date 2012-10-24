@@ -8,7 +8,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-domain</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5-SNAPSHOT</version>
     <name>EnzymePortalDomain</name>
     <build>
         <plugins>
@@ -146,13 +146,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
-  <scm>
-    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-domain-1.0.4</connection>
-    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/ep-domain-1.0.4</developerConnection>
-    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/ep-domain-1.0.4</url>
-  </scm>
 </project>
 
 
