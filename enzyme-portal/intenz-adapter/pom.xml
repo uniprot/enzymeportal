@@ -4,7 +4,7 @@
 
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>intenz-adapter</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.6-SNAPSHOT</version>
 	<name>IntEnz adapter</name>
 
 	<parent>
@@ -115,11 +115,5 @@
             </plugin>
 		</plugins>
 	</build>
-
-  <scm>
-    <connection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/intenz-adapter-1.0.5</connection>
-    <developerConnection>scm:svn:https://enzymeportal.svn.sourceforge.net/svnroot/enzymeportal/tags/intenz-adapter-1.0.5</developerConnection>
-    <url>http://enzymeportal.svn.sourceforge.net/viewvc/enzymeportal/tags/intenz-adapter-1.0.5</url>
-  </scm>
 </project>
 
