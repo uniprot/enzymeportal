@@ -37,7 +37,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>intenz-adapter</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-domain</artifactId>
-            <version>1.0.4-SNAPSHOT</version>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -112,12 +112,12 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>literature-adapter</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>mega-mapper</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.8</version>
         </dependency>
         <dependency>
         	<groupId>commons-collections</groupId>
