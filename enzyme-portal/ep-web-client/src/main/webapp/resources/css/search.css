@@ -132,7 +132,7 @@ a:link, a:visited {
     margin-left: 2px;
     margin-right: 2px;
 }
-.sublevel1 { border:1px thin #ddd; width:inherit; height: 400px; overflow:auto }
+.sublevel1 { border:1px thin #ddd; width:inherit; max-height: 400px; overflow:auto }
 /*.sublevel1 { overflow:auto ;border:1px thin #ddd;width: 260px; height:400px }*/
 .filterContent {
     margin-left: 5px;

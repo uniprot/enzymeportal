@@ -955,7 +955,8 @@
                                 </c:if>
 
                             </div><!-- keywordSearchResult -->
-                                           </div> grid_12 content 
+                                           </div>
+<!--                                           grid_12 content -->
                         </div><!--  page container_12 -->
 <jsp:include page="footer.jsp"/>
                     </div> <!--contents -->
