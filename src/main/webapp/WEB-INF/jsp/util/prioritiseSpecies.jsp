@@ -22,7 +22,7 @@ is selected and exported as a 'theSpecies'.
 	</c:forEach>
 
 	<c:if test="${fixSp}">
-		
+		<c:set var="theSpecies" value="" />
 		<c:forEach var="filterSp" items="${searchModel.searchparams.species}">
 			<c:forEach var="sp" items="${enzyme.relatedspecies}">
 				<c:if test="${empty theSpecies
