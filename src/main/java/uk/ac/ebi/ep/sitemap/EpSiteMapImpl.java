@@ -73,7 +73,7 @@ public class EpSiteMapImpl extends SiteMapResources<File> {
         try {
             //indexGenerator = new SitemapIndexGenerator(SITEMAP_LOCATION, output);
             //sitemapGenerator = WebSitemapGenerator.builder(SITEMAP_LOCATION, output).allowMultipleSitemaps(true).fileNamePrefix(filename_prefix).gzip(false).dateFormat(dateFormat).build();
-             sitemapGenerator = WebSitemapGenerator.builder(SITEMAP_LOCATION, output).fileNamePrefix(filename_prefix).gzip(true).dateFormat(dateFormat).build();
+             sitemapGenerator = WebSitemapGenerator.builder(SITEMAP_LOCATION, output).fileNamePrefix(filename_prefix).gzip(false).dateFormat(dateFormat).build();
             for (Object input : inputData) {
 
                 for (String entry_tab : tabs) {
