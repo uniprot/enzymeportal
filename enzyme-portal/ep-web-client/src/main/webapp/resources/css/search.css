@@ -420,3 +420,7 @@ a.scienceName span{
     -webkit-border-radius: 10px;
 }
 
+.hrLine{
+    border-style: ridge;
+    
+}
