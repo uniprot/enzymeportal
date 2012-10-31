@@ -142,3 +142,55 @@ function noImage(source){
     source.style.opacity='0.5';
 	return true;
 }
+
+
+/**
+ * Auto complete for species, compounds and diseases filters
+ */
+function ResultAutoComplete(id, dataArray,theForm,hiddenCheckbox) {
+    
+ $( "#"+id ).autocomplete({
+            source: dataArray,
+            minLength: 1,
+                    
+
+                    
+            width: 200,
+            max: 10,
+            highlight: true,
+            scroll: true,
+            scrollHeight: 300,
+            autoFill: true,
+            // mustMatch: true,
+            matchContains: false,
+            formatItem: function(data, i, n, value) {
+                return value;
+            },
+            formatResult: function(data, value) {
+                return value;
+            },
+              
+              
+            focus: function( event, ui ) {
+                       
+                               
+                return true;
+                       
+            },
+                      
+            select: function( event, ui ) {
+
+      
+                $( "#"+hiddenCheckbox ).val( ui.item.value );
+                                  
+                                       
+                $("#"+theForm).submit();
+
+                                
+                return true;
+            }
+ 
+                        
+        });
+
+}
