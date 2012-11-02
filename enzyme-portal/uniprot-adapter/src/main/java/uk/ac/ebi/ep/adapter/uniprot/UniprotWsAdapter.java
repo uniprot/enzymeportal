@@ -123,18 +123,23 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    Map<Future<EnzymeSummary>, EnzymeSummary> future2summary =
 	    		new LinkedHashMap<Future<EnzymeSummary>, EnzymeSummary>();
 	    try {
+	    	LOGGER.debug("Submitting summary callables...");
 	    	for (String query : idPrefixes) {
 				Callable<EnzymeSummary> callable = new UniprotWsSummaryCallable(
 						query+"_*", IdType.ENTRY_NAME, Field.brief,
 						defaultSpecies, config);
 				future2summary.put(ecs.submit(callable), null);
 			}
+			LOGGER.debug("Polling EnzymeSummary Futures...");
 	    	for (int i = 0; i < idPrefixes.size(); i++){
 	    		Future<EnzymeSummary> future = null;
 	    		try {
+	    			LOGGER.debug("Polling EnzymeSummary Future...");
 	    			future = ecs.poll(config.getTimeout(), TimeUnit.MILLISECONDS);
 	    			if (future != null){
+	    				LOGGER.debug("Getting summary from future...");
 	    				final EnzymeSummary summary = future.get();
+	    				LOGGER.debug("Got summary from future");
 	    				if (summary != null){
 	    					future2summary.put(future, summary);
 	    				} else {
@@ -143,7 +148,6 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    				}
 	    			} else {
 	    				LOGGER.warn("SEARCH job result not retrieved!");
-		            	future2summary.remove(future);
 	    			}
 	    		} catch (Exception e){
 	            	// Don't stop the others
@@ -152,6 +156,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	            	if (future != null) future2summary.remove(future);
 	    		}
 	    	}
+	    	LOGGER.debug("Polled all futures");
 	    	return new ArrayList<EnzymeSummary>(future2summary.values());
 	    } finally {
 	    	pool.shutdown();
