@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.adapter.ebeye;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ebinocle.webservice.ArrayOfEntryReferences;
 import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
@@ -43,7 +44,7 @@ public class EbeyeCallable {
      */
     public static class NumberOfResultsCaller
 	implements Callable<Integer> {
-    	
+    	public static Logger LOGGER = Logger.getLogger(NumberOfResultsCaller.class);
         protected ParamGetNumberOfResults paramGetNumberOfResults;
 
         public NumberOfResultsCaller() {}
@@ -69,7 +70,16 @@ public class EbeyeCallable {
         }
 
         public Integer getNumberOfResults(String domain, String query) {
-            return eBISearchService.getNumberOfResults(domain, query);
+            LOGGER.info("DOMAIN ..........."+ domain);
+            LOGGER.info("THE QUERY "+ query);
+            LOGGER.info("EBEYE SERVICE "+ eBISearchService);
+            System.out.println("DOMAIN AND QUERYSTRING "+ domain + " :  "+ query);
+            System.out.println("EBI SERVICE "+ eBISearchService);
+           // return eBISearchService.getNumberOfResults(domain, query);
+            //int x = eBISearchService.getNumberOfResults(domain, query);
+            //LOGGER.info("NUMBER RETIRNED "+ x);
+            return 2000;
+            
         }
 
         public Integer call() throws Exception {

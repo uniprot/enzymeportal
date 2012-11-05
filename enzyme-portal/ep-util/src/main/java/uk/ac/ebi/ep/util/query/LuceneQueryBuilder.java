@@ -50,7 +50,7 @@ public class LuceneQueryBuilder {
      * @return a Lucene query
      */
     public static String createFieldsQuery(Domain domain, SearchParams searchParams) {
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
         List<SearchField> SearchFieldList = domain.getSearchFieldList().getSearchField();
         List<String> fieldNames = new ArrayList<String>();
         for (SearchField field: SearchFieldList) {
@@ -87,7 +87,7 @@ public class LuceneQueryBuilder {
      * @return a Lucene query OR
      */
     public static String createFieldsQuery(List<String> fieldNames, String fieldValue) {
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
         int listLength = fieldNames.size();
         int counter = 1;
         query.append("(");
@@ -111,7 +111,7 @@ public class LuceneQueryBuilder {
     }
 
     public static String createFieldValueQuery(String field, String value) {
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
         query.append(field);
         query.append(":");
         query.append("\"");
@@ -121,7 +121,7 @@ public class LuceneQueryBuilder {
     }
 
     public static String createWildcardFieldValueQuery(String field, String value) {
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
         query.append(field);
         query.append(":");
         query.append(value);
@@ -131,7 +131,7 @@ public class LuceneQueryBuilder {
 
     public static String addSpeciesFilterQuery(String simpleQuery
             , String speciesField, Collection<String> speciesList) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (speciesList == null) {
             return simpleQuery;
         } else {
@@ -190,7 +190,7 @@ public class LuceneQueryBuilder {
             escapedSpeciesFilter = escapeSpecies(speciesFilter);
         }
         for (String idPrefix : idPrefixes) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(UNIPROT_ID_FIELD);
             sb.append(LUCENE_EQUAL);
             sb.append(idPrefix);
@@ -209,7 +209,7 @@ public class LuceneQueryBuilder {
  
     public static String createQueryIN(
             String fieldName, boolean wildcard, Collection<String> fieldValues) {
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
         query.append(fieldName);
         query.append(LUCENE_EQUAL);
         query.append("(");
@@ -248,7 +248,7 @@ public class LuceneQueryBuilder {
         List<List<String>> subLists = DataTypeConverter
                 .createSubLists(fieldValues, subListSize);
         for (List<String> subList: subLists) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append(createQueryIN(queryField, wildcard, subList));
             sb.append( " AND ");
             sb.append(ENZYME_FILTER);

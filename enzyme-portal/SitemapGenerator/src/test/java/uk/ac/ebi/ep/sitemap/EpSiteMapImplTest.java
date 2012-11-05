@@ -58,7 +58,7 @@ public class EpSiteMapImplTest {
 
         File output = new File(fileDirectory);
 
-        instance.generateSitemap(inputData, output, filename_prefix,true);
+        instance.generateSitemap(inputData, output, filename_prefix,false);
 
 
         System.out.println("Does File exists : " + output.exists());

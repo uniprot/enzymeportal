@@ -314,10 +314,10 @@ public class MegaJdbcMapperTest {
         compoundMap = mm.getCompounds(db, accession, xDbs);
 
         assertNotNull(compoundMap);
-//        for (Map.Entry<String, String> m : compoundMap.entrySet()) {
-//            System.out.println("Result : " + m.getKey() + ": " + m.getValue());
+        for (Map.Entry<String, String> m : compoundMap.entrySet()) {
+            //System.out.println("Result : " + m.getKey() + ": " + m.getValue());
 //            //logger.info("Result : " + m.getKey() + ": " + m.getValue());
-//        }
+        }
         
     }
     

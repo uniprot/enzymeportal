@@ -1,11 +1,7 @@
 package uk.ac.ebi.ep.mm.app;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+
+import org.apache.commons.cli.*;
 
 /**
  * A parser of the command line options for the mega-mapper parsers.

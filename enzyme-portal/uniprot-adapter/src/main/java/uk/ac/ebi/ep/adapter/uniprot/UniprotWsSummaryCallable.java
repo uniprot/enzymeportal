@@ -109,8 +109,9 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
             if (colValues[4].length() == 0) {
                 continue;
             }
-            EnzymeAccessionWrapper enzymeAccessionWrapper = new EnzymeAccessionWrapper(new EnzymeAccession());
-            EnzymeAccession ea = enzymeAccessionWrapper.getAccession(); //new EnzymeAccession();
+            //EnzymeAccessionWrapper enzymeAccessionWrapper = new EnzymeAccessionWrapper(new EnzymeAccession());
+           // EnzymeAccession ea = enzymeAccessionWrapper.getAccession(); 
+             EnzymeAccession ea = new EnzymeAccession();
             // organism is always [4], accession is [0], see getColumns()
             ea.setSpecies(UniprotWsAdapter.parseSpecies(colValues[4]));
             ea.getUniprotaccessions().add(colValues[0]);
