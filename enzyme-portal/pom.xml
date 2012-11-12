@@ -81,7 +81,7 @@
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
         </repository>
         <repository>
-            <releases />
+            <releases/>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -93,7 +93,7 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
-            <snapshots />
+            <snapshots/>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
@@ -281,6 +281,6 @@
 		<module>bioportal-adapter</module>
 		<module>SitemapGenerator</module>
 		<module>rhea-adapter</module>
-	</modules>
+  </modules>
 
 </project>
