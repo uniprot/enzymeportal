@@ -132,13 +132,12 @@ a:link, a:visited {
     margin-left: 2px;
     margin-right: 2px;
 }
-.sublevel1 { border:1px thin #ddd; width:inherit; max-height: 400px; overflow:auto }
+.sublevel1 { border:1px thin #ddd; width:inherit; height: 400px; overflow:auto }
 /*.sublevel1 { overflow:auto ;border:1px thin #ddd;width: 260px; height:400px }*/
 .filterContent {
     margin-left: 5px;
     padding-bottom: 2px;
     line-height:16pt;
-/*    margin-right: 5px;*/
 }
 .text {
     float: left;
@@ -160,7 +159,7 @@ a:link, a:visited {
 }
 
 .filterLine {
-    margin-bottom: 9px;
+    margin-bottom: 8px;
     vertical-align: top;
 }
 .container { border:2px solid #ccc; width:300px; height: 300px; overflow-y: scroll; }
@@ -420,7 +419,3 @@ a.scienceName span{
     -webkit-border-radius: 10px;
 }
 
-.hrLine{
-    border-style: ridge;
-    
-}

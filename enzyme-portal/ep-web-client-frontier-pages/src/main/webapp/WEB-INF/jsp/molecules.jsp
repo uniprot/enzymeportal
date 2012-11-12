@@ -69,7 +69,7 @@
                 <c:set var="moleculeGroup" value="${molecules.cofactors}"/>
                 <c:set var="emptyArgs" value="cofactors"/>
                 <c:set var="titleArgs" value="Cofactors,activate"/>
-                <c:set var="explArgs" value="cofactors of the enzyme EC number(s),activate"/>
+                <c:set var="explArgs" value="cofactors,activate"/>
                 <c:set var="moleculeGroupDb" value=""/>
                 <c:set var="moleculeGroupUrl" value=""/>
                 <div id="cofactors">

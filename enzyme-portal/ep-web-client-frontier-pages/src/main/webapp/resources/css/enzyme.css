@@ -90,13 +90,12 @@ legend {
 	margin-bottom: 2ex;
 }
 
-label.citationFilter {
-	font-weight: normal;
-	color: black;
-	margin-right: 1em;
-}
-
 span.synonyms {
     margin-right: 5px;
+    text-align:justify;
+}
+
+span.enzymeDisease{
+     margin-right: 5px;
     text-align:justify;
 }
