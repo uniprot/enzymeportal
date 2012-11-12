@@ -1,0 +1,162 @@
+/* 
+    Document   : enzyme-portal-colours
+    Created on : Sep 3, 2012, 3:28:12 PM
+    Author     : joseph
+    Description:
+        Purpose of the stylesheet follows.
+
+        Colour palette: Enzyme portal - hex code : A1C7C7
+        Details: Accented Analogic from ColourSchemeDesigner
+                 http://colorschemedesigner.com/#3i61TnBpxw0w0
+
+*/
+
+
+
+
+
+/*
+#####  Color Palette by Color Scheme Designer
+#####  Palette URL: http://colorschemedesigner.com/#3i61v67Jrw0w0
+#####  Color Space: RGB; */
+
+
+
+/**** Primary Color:*/
+
+/*   var. 1 = #A1C7C7 = rgb(161,199,199)
+   var. 2 = #809595 = rgb(128,149,149)
+   var. 3 = #348181 = rgb(52,129,129)
+   var. 4 = #C2E3E3 = rgb(194,227,227)
+   var. 5 = #CBE3E3 = rgb(203,227,227)
+
+*** Secondary Color A:
+
+   var. 1 = #A4C3CA = rgb(164,195,202)
+   var. 2 = #829397 = rgb(130,147,151)
+   var. 3 = #357483 = rgb(53,116,131)
+   var. 4 = #C5DEE4 = rgb(197,222,228)
+   var. 5 = #CDE0E4 = rgb(205,224,228)
+
+*** Secondary Color B:
+
+   var. 1 = #A5CCC5 = rgb(165,204,197)
+   var. 2 = #839995 = rgb(131,153,149)
+   var. 3 = #368477 = rgb(54,132,119)
+   var. 4 = #C4E5E0 = rgb(196,229,224)
+   var. 5 = #CDE5E1 = rgb(205,229,225)
+
+*** Complementary Color:
+
+   var. 1 = #FFE4CE = rgb(255,228,206)
+   var. 2 = #BFB0A4 = rgb(191,176,164)
+   var. 3 = #A67043 = rgb(166,112,67)
+   var. 4 = #FFEBDA = rgb(255,235,218)
+   var. 5 = #FFF0E4 = rgb(255,240,228)*/
+
+
+/* Color
+===================================================*/
+
+/* These style rules will over-ride the core EBI styles and apply 
+    your custom colour palette in a consistent manner */
+
+
+/* topbar detail on the styleguide */
+
+
+*/
+
+
+/* Color
+===================================================*/
+
+/* These style rules will over-ride the core EBI styles and apply 
+    your custom colour palette in a consistent manner */
+
+
+/* topbar detail on the styleguide */
+div#topbar { 
+    background-color: #A1C7C7;
+    border-bottom: 1px solid #222;
+}
+
+
+/* Links */
+a:link,
+a:visited { border-bottom-color: #A1C7C7; }
+
+a:hover,
+a:focus,
+a:active {
+    color: #A1C7C7;
+    border-bottom: 1px solid #A1C7C7;
+}
+
+a.special:hover,
+a.special:focus,
+a.special:active {
+    color:#A1C7C7;
+    border-bottom: 3px double #A1C7C7;
+}
+
+
+a:link { color: #357483; }
+
+a:hover,
+a:focus,
+a:active { color: #368477; }
+
+a.special { background-color: #CDE5E1; }
+
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 { color: #222222; }
+
+
+
+/*h1 { color: #FFE4CE; }*/
+h1 { color: #A1C7C7; }
+
+h2 { color: #BFB0A4; }
+
+h1 a:link,
+h2 a:link,
+h3 a:link,
+h4 a:link,
+h5 a:link,
+h6 a:link,
+h1 a:visited,
+h2 a:visited,
+h3 a:visited,
+h4 a:visited,
+h5 a:visited,
+h6 a:visited {
+    border-bottom-color: #A1C7C7;
+}
+
+
+/* Table heading cells */
+th { background-color: #A5CCC5; }
+
+
+/* Form submission button */
+input.submit {
+    /* colours */	
+    color: #fff;
+    text-shadow: #348181 1px 1px;
+    border-top: 1px solid #CBE3E3;    
+    border-left: 1px solid #CBE3E3;
+    border-right: 1px solid #348181;
+    border-bottom: 1px solid #348181;
+
+    background-image: -moz-linear-gradient(top, #A1C7C7, #809595); 
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #ccc),color-stop(1, #809595)); 
+    background-image: -webkit-linear-gradient(#A1C7C7, #809595); 
+    background-image: linear-gradient(top, #A1C7C7, #809595);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#A1C7C7', EndColorStr='#809595');
+}
+
+/* Display box */
+div.box { border: 10px solid #CDE5E1; }
+
