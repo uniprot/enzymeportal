@@ -33,12 +33,12 @@
     <body>
         <div class="grid_12 content">
             <div class="iconGroup">
-                <h2 style="color: red" >Service Error</h2>
+                <h2 style="color: red;text-align:center" >Service Error</h2>
                 There has been an error with your request. Please try again later.
             </div>
             <div class="clear"></div>
         </div>
-<jsp:include page="footer.jsp"/>
+<%--<jsp:include page="footer.jsp"/>--%>
     </div>
 </body>
 </html>

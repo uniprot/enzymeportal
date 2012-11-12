@@ -1,6 +1,6 @@
 <%-- 
-    Document   : error
-    Created on : Sep 5, 2012, 2:18:11 PM
+    Document   : faq
+    Created on : Sep 5, 2012, 1:49:51 PM
     Author     : joseph
 --%>
 
@@ -13,7 +13,6 @@
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -50,12 +49,12 @@
                 <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">  you can replace this with [projectname]-colours.css. See http://frontier.ebi.ac.uk/web/style/colour for details of how to do this -->
 
 
-        <!--                <link media="screen" href="resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
-                        <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
-                        <link media="screen" href="resources/lib/spineconcept/css/identification.css" type="text/css" rel="stylesheet" />
-                        <link media="screen" href="resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
-                        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-                        <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
+<!--                <link media="screen" href="resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
+                <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
+                <link media="screen" href="resources/lib/spineconcept/css/identification.css" type="text/css" rel="stylesheet" />
+                <link media="screen" href="resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
+                <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+                <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
 
         <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
 
@@ -130,46 +129,45 @@
 
                     <div class="grid_12 omega">
 
-                        <!--                        <form id="local-search" name="local-search" action="#" method="post">
-                        
-                                                    <fieldset>
-                        
-                                                        <label>
-                                                            <input type="text" name="first" id="local-searchbox" />
-                                                        </label>	
-                        
-                                                        <input type="submit" name="submit" value="Search" class="submit" />	
-                                                    </fieldset>
-                        
-                                                </form>-->
+<!--                        <form id="local-search" name="local-search" action="#" method="post">
 
-                        <form:form id="local-search" modelAttribute="searchModel"
-                                   action="search" method="POST">
+                            <fieldset>
+
+                                <label>
+                                    <input type="text" name="first" id="local-searchbox" />
+                                </label>	
+
+                                <input type="submit" name="submit" value="Search" class="submit" />	
+                            </fieldset>
+
+                        </form>-->
+
+<form:form id="local-search"  modelAttribute="searchModel" action="search" method="POST">
                             <fieldset> 
                                 <label>     
-                                    <form:input id="local-searchbox" path="searchparams.text"
-                                                cssClass="field" name="first" rel="Enter a name to search"/>
+	               <form:input id="local-searchbox" path="searchparams.text"
+                                   cssClass="field" name="first" rel="Enter a name to search"/>
                                 </label>
-                                <form:hidden id="start" path="searchparams.start" />
-                                <form:hidden path="searchparams.previoustext" />
-                                <input  type="submit" value="Search"
-                                        class="submit" /><br/>
-                                <div>
-                                    <!--                            <div id="examples">Examples: <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a> -->
-                                    <spring:message code="label.search.example"/>
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
-                                    <!--                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,-->
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-
-                                    <!--                            </div>-->
-                                </div>
-                            </fieldset>
-                        </form:form>
+	                <form:hidden id="start" path="searchparams.start" />
+	                <form:hidden path="searchparams.previoustext" />
+	                <input  type="submit" value="Search"
+                                class="submit" /><br/>
+                        <div>
+<!--                            <div id="examples">Examples: <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a> -->
+                              <spring:message code="label.search.example"/>
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
+<!--                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,-->
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
+                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
+                            
+<!--                            </div>-->
+                        </div>
+                        </fieldset>
+				</form:form>
 
 
 
@@ -189,10 +187,10 @@
 
                     <nav>
                         <ul class="grid_24" id="local-nav">
-                            <li class="first" class="active"><a href="/enzymeportal" title="">Home</a></li>
-                            <!--                            <li><a href="#" title="">TODO 2</a></li>
-                                                        <li class="active"><a href="#" title="">TODO 3</a></li>-->
-                            <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
+                            <li class="first" ><a href="/enzymeportal" title="">Home</a></li>
+<!--                            <li><a href="#" title="">TODO 2</a></li>
+                            <li class="active"><a href="#" title="">TODO 3</a></li>-->
+                            <li><a href="faq.jsp" class="active" title="Frequently Asked questions">FAQ</a></li>
                             <li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
                         </ul>
                     </nav>	
@@ -204,18 +202,41 @@
                 <!-- Suggested layout containers -->  
                 <section>
                     <div class="grid_12zzz" style="display: table; margin-left: 1em;">
-                        <%@ include file="breadcrumbs.jsp" %>
+                       
+                         <%@ include file="breadcrumbs.jsp" %>
                     </div>
-                   
-                    <div style="display: table-cell;">
-                        <h4 style="color: red">Error</h4>
-                    </div>
-                    <div style="display: table-cell;">
-                        - There has been an error with your request. Please try again later.
-                    </div>
-                 
+<!--                                    <div class="grid_12zzz" style="margin-left: 1em;">
+                                        <div style="display: table-cell;">
+                                            <h2 ><a href="/enzymeportal" >Enzyme Portal</a></h2>
+                                        </div>
+                                        <div style="display: table-cell;">
+                                            - Your portal to enzyme-related information at the EBI.
+                                        </div>
+                                    </div>-->
+                </section>
+                <section>
+                    
+                <h3>Frequently Asked Questions</h3>
+                <ul>
+                    <li><a href="faq#01">How is the EnzymePortal different from BRENDA?</a></li>
+                </ul>
+                <a name="01"></a><h2>How is the EnzymePortal different from BRENDA?</h2>
+                <p>The <a href="/enzymeportal" class="showLink" >EnzymePortal</a>  is a one-stop shop for enzyme-related information in resources developed at the EBI. It accumulated this information and aims to present it to the scientist with a unified user experience. The EnzymePortal team does not curate enzyme information and therefore is a secondary information resource or portal. At some point, a user interested in more detail will always leave the EP pages and refer to the information in the underlying primary database (Uniprot, PDB, etc.) directly.
+                </p><p><a href="http://www.brenda-enzymes.info/" >BRENDA</a>  is the most comprehensive resource about enzymes world-wide and has invested a great amount into the abstraction and curation about enzymes and their related information. BRENDA contains valuable information that can not be found in the EnzymePortal at the moment, such as kinetic, specifity, stability, application, disease-related and engineering data. As a primary resource, BRENDA could be a candidate for an information source for the EP in the future.</p>
+
                 </section>
 
+                <!--                <section>
+                
+                
+                                    <h2>Enzyme Portal</h2>
+                                    <p>Your content</p>										
+                                </section> 
+                
+                                <section>
+                                    <h3>[Another title]</h3>
+                                    <p>More content in a full-width container.</p>
+                                </section>-->
                 <!-- End suggested layout containers -->
 
             </div>
@@ -277,7 +298,7 @@
         <!-- JavaScript at the bottom for fast page loading -->
         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
-
+            
 
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
         <!--
