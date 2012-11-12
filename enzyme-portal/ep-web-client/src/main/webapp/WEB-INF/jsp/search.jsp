@@ -27,7 +27,7 @@
              More info: h5bp.com/b/378 -->
         <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->	<!-- Not yet implemented -->
 
-        <title>[Page title] &lt; [Section title] &lt; EMBL-EBI</title>
+        <title>Enzyme Portal &lt; Search Result Page &gt; &lt; EMBL-EBI</title>
         <meta name="description" content="EMBL-EBI"><!-- Describe what this page is about -->
         <meta name="keywords" content="bioinformatics, europe, institute"><!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
         <meta name="author" content="EMBL-EBI"><!-- Your [project-name] here -->
@@ -241,8 +241,7 @@
                     <div class="contents">
                         <div class="page container_12">            
             <div class="page container_12">            
-                <jsp:include page="subHeader.jsp"/>
-                <jsp:include page="searchBox.jsp"/>
+              
                 <!--Global variables-->
                 <c:set var="showButton" value="Show more"/>
                 <c:set var="searchText" value="${searchModel.searchparams.text}"/>
@@ -263,7 +262,7 @@
                 </script>
 
 
-                <div class="grid_12 content">
+<!--                <div class="grid_12 content">-->
                     <c:if test="${ searchresults.totalfound gt 0}">
                         <div class="filter" style="width: 25%; float: left;">                    
                             <div class="title">
@@ -904,7 +903,7 @@
                         </c:if>
 
                     </div><!-- keywordSearchResult -->
-                </div>
+<!--                </div>-->
                 <!--                                           grid_12 content -->
             </div><!--  page container_12 -->
                     </div>
