@@ -25,12 +25,12 @@ a:link, a:visited {
     text-decoration: inherit;
 }
 
-.desc a:link, .desc a:visited, .species{
-    /*color: #207a7a;*/
+/*.desc a:link, .desc a:visited, .species{
+    color: #207a7a;
     text-decoration: underline;
-}
+}*/
 .showLink{
-    /*color: #207a7a;*/
+    color: #207a7a;
     text-decoration: underline;
     font-style: italic;
     white-space: nowrap;
@@ -108,9 +108,9 @@ a:link, a:visited {
     margin-right:2px;
     /*min-width:150px;*/
     min-width: 15%;
-    max-width: 20%;
-    padding: 4px 4px;
-    margin-top: 5px;
+/*    max-width: 20%;*/
+/*    padding: 4px 4px;
+    margin-top: 5px;*/
     /*border: 2px solid #ddd;*/
     /*
     -moz-border-radius: 15px 15px 15px 15px;
@@ -244,7 +244,9 @@ a:link, a:visited {
     padding-bottom: 2px;
     max-width: 99%
 }
-
+/*.resultContent a:link{
+   color: #408C8C; 
+}*/
 
 .line {
     margin-bottom: 5px;
@@ -271,19 +273,24 @@ a:link, a:visited {
 }
 
 .proteinImg {
-    float: left;
-    width:110px;
+/*    float: left;
+    width:110px;*/
     /*height:90px;*/
     text-align: center;    
-    margin-right: 5px;
+/*    margin-right: 5px;*/
     /*border: none;*/
     /*border: 1px solid #ddd;*/
     display: table-cell;
 }
-
+a.noLine {
+    
+    border-bottom-style: none;
+    
+} 
 .proteinImg a{
     color: white;
     text-decoration: none;
+     border-bottom-style: none; 
 }
 
 .imgFooter {
@@ -291,11 +298,11 @@ a:link, a:visited {
 }
 
 .desc {
-    float: left;
+/*    float: left;*/
     text-align: left;
     /*for smaller resolution
     width: 55%;*/
-    width: 65%;
+/*    width: 65%;*/
     /*border: 1px solid #ddd;*/
     display: table-cell;
 }
@@ -403,6 +410,9 @@ a.popup:hover span {
     font-weight: bolder;
 
 }
+#filtersForm{
+    padding: 0 0px;
+}
 
 a.scienceName span{
     font-style: italic;
@@ -423,4 +433,14 @@ a.scienceName span{
 .hrLine{
     border-style: ridge;
     
+}
+
+a.scienceName{
+   color: #207a7a; 
+}
+a.compoundName{
+  color: #207a7a;  
+}
+a.diseaseName{
+    color: #207a7a;
 }

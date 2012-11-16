@@ -113,18 +113,16 @@
                 <div id="local-masthead" class="masthead grid_24 nomenu">
 
                     <!-- CHOOSE -->
-                    <!--
 <div class="grid_12 alpha" id="local-title-logo">
-                            <h1>[title]</h1>
-                            <p>[logo]<img src="" alt="" width="" height="" class="logo" /></p>
+                            <h1>Enzyme Portal</h1>
+                            <p><img src="resources/images/EnzymePortal_v1.png" alt="Enzyme Portal" width="400" height="72" class="logo" /></p>
                     </div>
-                    -->
 
                     <!-- OR... -->
 
-                    <div class="grid_12 alpha" id="local-title">
+<!--                    <div class="grid_12 alpha" id="local-title">
                         <h1>Enzyme Portal</h1>
-                    </div>
+                    </div>-->
                     <!-- -->
 
                     <div class="grid_12 omega">
@@ -190,7 +188,7 @@
                             <li class="first" ><a href="/enzymeportal" title="">Home</a></li>
 <!--                            <li><a href="#" title="">TODO 2</a></li>
                             <li class="active"><a href="#" title="">TODO 3</a></li>-->
-                            <li><a href="faq.jsp" class="active" title="Frequently Asked questions">FAQ</a></li>
+                            <li><a href="faq" class="active" title="Frequently Asked questions">FAQ</a></li>
                             <li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
                         </ul>
                     </nav>	

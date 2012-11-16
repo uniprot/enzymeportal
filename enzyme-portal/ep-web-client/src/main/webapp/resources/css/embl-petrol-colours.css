@@ -14,9 +14,12 @@ div#topbar {
 	background-color: #207a7a;
 	border-bottom: 1px solid #222;
 }
+ 
 
 a:link {
-  color: #0f2559;
+/*  color: #0f2559;*/
+/*  color:  #408C8C;*/
+  color: #207a7a;
 }
 
 a:hover,

@@ -59,7 +59,7 @@
                 <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
 
 
-        <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
+       
 
         <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
 
@@ -67,9 +67,10 @@
 
         <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
         <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />
+        <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
-
+         
 
         <!--        javascript was placed here for auto complete otherwise should be place at the bottom for faster page loading-->
 
@@ -131,18 +132,17 @@
                 <div id="local-masthead" class="masthead grid_24 nomenu">
 
                     <!-- CHOOSE -->
-                    <!--
-<div class="grid_12 alpha" id="local-title-logo">
-                            <h1>[title]</h1>
-                            <p>[logo]<img src="" alt="" width="" height="" class="logo" /></p>
+
+                    <div class="grid_12 alpha" id="local-title-logo">
+                            <h1>Enzyme Portal</h1>
+                            <p><img src="resources/images/EnzymePortal_v2.png" alt="Enzyme Portal" width="400" height="72" class="logo" /></p>
                     </div>
-                    -->
 
                     <!-- OR... -->
 
-                    <div class="grid_12 alpha" id="local-title">
+<!--                    <div class="grid_12 alpha" id="local-title">
                         <h1>Enzyme Portal</h1>
-                    </div>
+                    </div>-->
                     <!-- -->
 
                     <div class="grid_12 omega">
@@ -160,10 +160,9 @@
                         
                                                 </form>-->
 
-
                         <form:form id="local-search" modelAttribute="searchModel"
                                    action="search" method="POST">
-                            <fieldset> 
+                            <fieldset class="grid_24"> 
                                 <label>     
                                     <form:input id="local-searchbox" path="searchparams.text"
                                                 cssClass="field" name="first" rel="Enter a name to search"/>
@@ -216,6 +215,41 @@
                     </nav>	
                 </div>
             </header>
+                          
+<!--    <div id="content" role="main" class="grid_24 clearfix">
+    	
+    	<h2>[Page title]</h2>
+     Suggested layout containers 
+	   
+	   <section class="grid_14 push_6" id="search-results">
+    		<p>Search results (primary content)</p>
+    		<ul>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+    		</ul>									
+		</section> 
+		
+		<section class="grid_6 pull_14 alpha" id="search-filters">
+			<p>Data facets, search filters, etc</p>
+    		<ul>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+    		</ul>
+		</section>
+		
+		<section class="grid_4 omega" id="search-extras">
+    		<p>EBI global search results</p>
+    		<ul>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+    		</ul>
+		</section>
+		 End suggested layout containers 
+			
+    </div>-->
 
             <div id="content" role="main" class="grid_24 clearfix">
 
@@ -232,15 +266,15 @@
                     </div>
 
                 </section>
-                <section>
+<!--                <section>-->
 
 
-
-
-
+<section class="grid_6" id="search-results">
+     
+<!--
                     <div class="contents">
                         <div class="page container_12">            
-            <div class="page container_12">            
+            <div class="page container_12">            -->
               
                 <!--Global variables-->
                 <c:set var="showButton" value="Show more"/>
@@ -261,10 +295,10 @@
                     var diseaseAutoCompleteDataSource = [];
                 </script>
 
-
 <!--                <div class="grid_12 content">-->
                     <c:if test="${ searchresults.totalfound gt 0}">
-                        <div class="filter" style="width: 25%; float: left;">                    
+                        <div class="filter">
+<!--                        <div class="filter" style="width: 25%; float: left;">                    -->
                             <div class="title">
                                 Search Filters
                             </div>
@@ -602,10 +636,13 @@
 
 
                             </form:form>
-                        </div><!-- filter -->
+                      </div> 
+                        <%--filter --%>
                     </c:if>
-                    <div id="keywordSearchResult" class="result"
-                         style="width: 70%; float: left;">
+                    </section>
+               <section class="grid_14" id="keywordSearchResult">
+<!--                    <div id="keywordSearchResult" class="result"
+                         style="width: 70%; float: left;">-->
                         <c:if test="${totalfound eq 0}">
                             <spring:message code="label.search.empty"/>
                         </c:if>
@@ -677,7 +714,7 @@
 
                                             </c:when>
                                             <c:otherwise>
-                                                <div class="proteinImg">
+                                                <div class="grid_3 ">
                                                     <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
                                                     <c:set var="imgFooter" value=""/>
                                                     <c:if test="${empty imgFile}">
@@ -695,7 +732,7 @@
                                                     <c:choose>
                                                         <c:when test="${empty imgFile}">
                                                             <div style="position: absolute; width: 110px; height: 90px;
-                                                                 background-color: #fff;
+                                                                 background-color: #fff;text-align: center;
                                                                  opacity: 0.6; vertical-align: middle;
                                                                  margin-top: 0px; padding: 0px;">No structure available</div>
                                                             <img src="resources/images/noStructure-light.png"
@@ -706,7 +743,7 @@
                                                         <c:otherwise>
                                                             <c:set var="imgLink"
                                                                    value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
-                                                            <a target="blank" href="${imgLink}">
+                                                            <a class="noLine" target="blank" href="${imgLink}">
                                                                 <img src="${imgLink}" width="110" height="90"
                                                                      alt="PDB ${imgFile}" onerror="noImage(this);"/>
                                                             </a>
@@ -718,7 +755,7 @@
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>
-                                        <div class="desc">
+                                        <div class="grid_21 desc">
                                             <c:if test='${not empty enzyme.name }'>
                                                 <a href="search/${primAcc}/enzyme">
                                                     <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
@@ -901,15 +938,23 @@
                                 </c:forEach>
                             </div><!-- resultContent -->
                         </c:if>
-
-                    </div><!-- keywordSearchResult -->
+                 </section>
+<!--                    </div> keywordSearchResult -->
 <!--                </div>-->
                 <!--                                           grid_12 content -->
-            </div><!--  page container_12 -->
-                    </div>
+<!--            </div>  page container_12 -->
+<!--                    </div>-->
+	<section class="grid_4 omega" id="search-extras">
+    		<p>EBI global search results</p>
+    		<ul>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+	    		<li><a href="#">text</a></li>
+    		</ul>
+		</section>
 
-                </section>
-
+<!--                </section>-->
+                
                 <!--                <section>
                 
                 
