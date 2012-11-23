@@ -4,6 +4,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.biobabel.blast.Hit;
+import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
+import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
@@ -59,7 +62,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     MegaMapperConnection megaMapperConnection;
     private Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
     private Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
-    //private SimpleJdbcTemplate simpleJdbcTemplate;
+      private NcbiBlastClient blastClient;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeFinder(Config config) {
@@ -1118,5 +1121,49 @@ public class EnzymeFinder implements IEnzymeFinder {
         ParamOfGetResults paramOfGetAllResults =
                 new ParamOfGetResults(IEbeyeAdapter.Domains.chebi.name(), query, resultFields);
         return paramOfGetAllResults;
+    }
+    
+      private NcbiBlastClient getBlastClient() {
+    	if (blastClient == null){
+    		blastClient = new NcbiBlastClient();
+    		blastClient.setEmail("enzymeportal-devel@lists.sourceforge.net");
+    	}
+		return blastClient;
+	}
+
+	public String blast(String sequence) throws NcbiBlastClientException{
+    	return getBlastClient().run(sequence);
+    }
+
+	public NcbiBlastClient.Status getBlastStatus(String jobId)
+	throws NcbiBlastClientException{
+    	return getBlastClient().getStatus(jobId);
+    }
+    
+    public SearchResults getBlastResult(String jobId)
+	throws NcbiBlastClientException, MultiThreadingException{
+    	List<Hit> hits = getBlastClient().getResults(jobId);
+    	List<String> uniprotIdPrefixes = filterBlastResults(hits);
+    	enzymeSummaryList = getEnzymeSummaries(uniprotIdPrefixes, null);
+        enzymeSearchResults.setSummaryentries(enzymeSummaryList);
+        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+        LOGGER.debug("Building filters...");
+        buildFilters(enzymeSearchResults);
+    	return enzymeSearchResults;
+    }
+    
+    /**
+     * Filters the hits returned by the Blast client to get only enzymes.
+     * @param hits Hits returned by the Blast client.
+     * @return a list of unique UniProt ID prefixes (species stripped).
+     * @throws MultiThreadingException
+     */
+    private List<String> filterBlastResults(List<Hit> hits)
+	throws MultiThreadingException{
+    	List<String> accs = new ArrayList<String>();
+    	for (Hit hit : hits) {
+    		accs.add(hit.getUniprotAccession());
+		}
+    	return EPUtil.getIdPrefixes(filterEnzymes(accs));
     }
 }
