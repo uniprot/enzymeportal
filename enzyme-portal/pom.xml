@@ -123,7 +123,7 @@
         </snapshotRepository>
         <site>
             <id>github</id>
-            <url>site/${project.version}</url>
+            <url>site/</url>
         </site>
     </distributionManagement>
     <issueManagement>
