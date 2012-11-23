@@ -1,4 +1,0 @@
-                ChEMBL-Activity
-                ChEMBL-Compound
-                SWISS-PROT
-                TREMBL
