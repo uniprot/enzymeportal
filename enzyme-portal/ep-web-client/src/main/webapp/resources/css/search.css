@@ -108,9 +108,9 @@ a:link, a:visited {
     margin-right:2px;
     /*min-width:150px;*/
     min-width: 15%;
-/*    max-width: 20%;*/
-/*    padding: 4px 4px;
-    margin-top: 5px;*/
+    /*    max-width: 20%;*/
+    /*    padding: 4px 4px;
+        margin-top: 5px;*/
     /*border: 2px solid #ddd;*/
     /*
     -moz-border-radius: 15px 15px 15px 15px;
@@ -138,7 +138,7 @@ a:link, a:visited {
     margin-left: 5px;
     padding-bottom: 2px;
     line-height:16pt;
-/*    margin-right: 5px;*/
+    /*    margin-right: 5px;*/
 }
 .text {
     float: left;
@@ -273,36 +273,37 @@ a:link, a:visited {
 }
 
 .proteinImg {
-/*    float: left;
-    width:110px;*/
+    /*    float: left;
+        width:110px;*/
     /*height:90px;*/
     text-align: center;    
-/*    margin-right: 5px;*/
+    /*    margin-right: 5px;*/
     /*border: none;*/
     /*border: 1px solid #ddd;*/
     display: table-cell;
 }
 a.noLine {
-    
+
     border-bottom-style: none;
-    
+
 } 
 .proteinImg a{
     color: white;
     text-decoration: none;
-     border-bottom-style: none; 
+    border-bottom-style: none; 
 }
 
 .imgFooter {
     font-size: smaller;
+    text-align: center;
 }
 
 .desc {
-/*    float: left;*/
+    /*    float: left;*/
     text-align: left;
     /*for smaller resolution
     width: 55%;*/
-/*    width: 65%;*/
+    /*    width: 65%;*/
     /*border: 1px solid #ddd;*/
     display: table-cell;
 }
@@ -400,11 +401,11 @@ a.popup span {display:none; }
 a.popup:hover span {
     display:block;
     position:absolute;
-/*    		top:35px; left:15px;*/
+    /*    		top:35px; left:15px;*/
     top:15px;left:0px;
     width:200px;
     padding:3px;
-/*    		border:1px solid #000000;*/
+    /*    		border:1px solid #000000;*/
     background-color:#A1C7C7; color:#000000;
     font-style:italic;
     font-weight: bolder;
@@ -416,14 +417,14 @@ a.popup:hover span {
 
 a.scienceName span{
     font-style: italic;
-   color:#000000;
-     font-weight:lighter;
+    color:#000000;
+    font-weight:lighter;
 }
 .sublevel1 .filterSearchBox{
     width:96%;
-        display: inline-block;
-/*        border-color: #A1C7C7;*/
-   padding: 2px 3px;
+    display: inline-block;
+    /*        border-color: #A1C7C7;*/
+    padding: 2px 3px;
     margin: 2px auto 5px auto;
     border-radius: 10px;
     -moz-border-radius: 10px;
@@ -432,15 +433,54 @@ a.scienceName span{
 
 .hrLine{
     border-style: ridge;
-    
+
 }
 
 a.scienceName{
-   color: #207a7a; 
+    color: #207a7a; 
 }
 a.compoundName{
-  color: #207a7a;  
+    color: #207a7a;  
 }
 a.diseaseName{
     color: #207a7a;
+}
+
+/*for sequence search*/
+
+a.formSubmit {
+
+    cursor: pointer;
+
+}
+
+#search-tabs {
+
+    margin-bottom: 0ex;
+
+}
+
+.searchTab {	
+    padding: 0.5ex 2em;
+    margin: 0ex 1em;	
+    border-top-left-radius: 2ex;	
+    border-top-right-radius: 2ex;
+    display: inline;
+
+    color: #fff;
+
+    background-color: #808080;
+
+    cursor: pointer;
+
+}
+
+.selected.searchTab {
+
+    color: #000;
+
+    background-color: #dedede;
+
+    cursor: default;
+
 }

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : Sep 3, 2012, 12:11:34 PM
+    Document   : blastSearch
+    Created on : Nov 19, 2012, 10:55:37 AM
     Author     : joseph
 --%>
 
@@ -61,6 +61,7 @@
 
         <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
         <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />
+        <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
 
@@ -139,44 +140,7 @@
 
                         </form>-->
 
-                          <c:choose>
- 	                  <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
-                   <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
-                 </c:when>
-	
-                 <c:otherwise>
-	                   <c:set var="searchText"
-	                     value="${searchModel.searchparams.text}"/>
-	                 </c:otherwise>
-	               </c:choose>
 
-                                        <form:form id="local-search" modelAttribute="searchModel"
-                	action="search" method="POST">
-                            <fieldset> 
-                                <label>     
-	               <form:input id="local-searchbox" path="searchparams.text"
-                                   cssClass="field" name="first" rel="Enter a name to search"/>
-                                </label>
-	                <form:hidden id="start" path="searchparams.start" />
-	                <form:hidden path="searchparams.previoustext" />
-	                <input  type="submit" value="Search"
-                                class="submit" /><br/>
-                        <div>
-<!--                            <div id="examples">Examples: <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a> -->
-                              <spring:message code="label.search.example"/>
-                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
-                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
-<!--                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
-                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
-                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,-->
-                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
-                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-                            
-<!--                            </div>-->
-                        </div>
-                        </fieldset>
-				</form:form>
 
 
 
@@ -206,6 +170,7 @@
                 </div>
             </header>
 
+            
             <div id="content" role="main" class="grid_24 clearfix">
 
                 <!-- Suggested layout containers -->  
@@ -213,16 +178,18 @@
                     <div class="grid_12zzz" style="display: table; margin-left: 1em;">
                         <%@ include file="breadcrumbs.jsp" %>
                     </div>
-<!--                                    <div class="grid_12zzz" style="margin-left: 1em;">
-                                        <div style="display: table-cell;">
-                                            <h2 ><a href="/enzymeportal" >Enzyme Portal</a></h2>
-                                        </div>
-                                        <div style="display: table-cell;">
-                                            - Your portal to enzyme-related information at the EBI.
-                                        </div>
-                                    </div>-->
                 </section>
-                <section>
+
+            
+            <section>
+                                    <div class="contents">
+            <div class="page container_12"> 
+                 <jsp:include page="searchBox.jsp"/>
+            </div>
+                     </div>
+            </section>
+<!--                <section>
+                      
                     <div style="margin-left: auto; margin-right: auto;
                          width: 50%;">
 
@@ -230,10 +197,6 @@
                         The Enzyme Portal is for people who are interested
                         in the biology of enzymes and proteins with enzymatic
                         activity.
-                         <div style="text-align: left">
-                            <a href="blastSearch" class="showLink" >Testing 
-                                Blast Search...</a>
-                        </div>
                         <div style="text-align: right;">
                             <a href="about" class="showLink" >More about the
                                 enzyme portal...</a>
@@ -259,7 +222,7 @@
                             </td>
                         </tr>
                     </table>
-                </section>
+                </section>-->
 
                 <!--                <section>
                 

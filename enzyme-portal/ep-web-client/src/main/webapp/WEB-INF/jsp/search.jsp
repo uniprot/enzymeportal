@@ -159,6 +159,17 @@
                                                     </fieldset>
                         
                                                 </form>-->
+                        
+                                                  <c:choose>
+ 	                  <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                   <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
+                 </c:when>
+	
+                 <c:otherwise>
+	                   <c:set var="searchText"
+	                     value="${searchModel.searchparams.text}"/>
+	                 </c:otherwise>
+	               </c:choose>
 
                         <form:form id="local-search" modelAttribute="searchModel"
                                    action="search" method="POST">
@@ -304,7 +315,9 @@
                             </div>
                             <div class="line"></div>
                             <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="search" method="POST">
-                                <form:hidden path="searchparams.text" />
+                               <form:hidden path="searchparams.type" />	
+                                 <form:hidden path="searchparams.text" />
+                              <form:hidden path="searchparams.sequence" />
                                 <form:hidden path="searchparams.previoustext" />
                                 <input type="hidden" id="filtersFormStart"
                                        name="searchparams.start" value="0"/>
@@ -657,7 +670,8 @@
                                     <c:set var="totalPages" value="${pagination.lastPage}"/>
                                     <c:set var="maxPages" value="${totalPages}"/>
                                     <div class="resultText">
-                                        <b>${totalfound}</b> results found for <i>${searchText}</i>,
+                                          <b>${totalfound}</b> results found for
+                                        <i>${fn:substring(searchText, 0, 30)}${fn:length(searchText) gt 30? '...':''}</i>,
                                         <c:if test="${totalfound ne summaryEntriesSize}">
                                             filtered to <b>${summaryEntriesSize}</b>,
                                         </c:if>

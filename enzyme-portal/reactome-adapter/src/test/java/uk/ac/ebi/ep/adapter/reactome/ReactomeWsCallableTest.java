@@ -5,11 +5,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.ac.ebi.ep.adapter.reactome.ReactomeWsCallable.ReactomeClass;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
-
+@Ignore
 public class ReactomeWsCallableTest {
 
 	private ReactomeWsCallable rwc;
