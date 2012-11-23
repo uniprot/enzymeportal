@@ -131,16 +131,16 @@
     </distributionManagement>
     <issueManagement>
     	<system>GitHub</system>
-    	<url>https://github.com/rafael-alcantara/enzymeportal/issues</url>
+    	<url>https://github.com/ebi-cheminf/enzymeportal/issues</url>
     </issueManagement>
     <scm>
         <connection>
-            scm:git:https://github.com/rafael-alcantara/enzymeportal.git
+            scm:git:https://github.com/ebi-cheminf/enzymeportal.git
         </connection>
         <developerConnection>
-            scm:git:https://github.com/rafael-alcantara/enzymeportal.git
+            scm:git:https://github.com/ebi-cheminf/enzymeportal.git
         </developerConnection>
-        <url>https://github.com/rafael-alcantara/enzymeportal</url>
+        <url>https://github.com/ebi-cheminf/enzymeportal</url>
     </scm>
     <build>
     	<pluginManagement>
