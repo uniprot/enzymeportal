@@ -121,13 +121,6 @@
             <url>${ebi.maven.repo.snapshots.deploy.url}</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
-        <site>
-            <id>enzymeportal.sf.net</id>
-            <name>Enzyme Portal SourceForge web site</name>
-            <url>
-                scp://shell.sourceforge.net/home/project-web/enzymeportal/htdocs
-            </url>
-        </site>
     </distributionManagement>
     <issueManagement>
     	<system>GitHub</system>
