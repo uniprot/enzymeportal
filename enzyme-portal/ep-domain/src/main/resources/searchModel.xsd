@@ -77,12 +77,43 @@
 	<xs:complexType name="SearchParams">
 		<xs:sequence>
 			<xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        
+                        <xs:element name="sequence" type="xs:string" maxOccurs="1"
+				minOccurs="1">
+                <xs:annotation>
+                	<xs:documentation>A protein sequence to search using a BLAST service.</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="compound" type="xs:string" maxOccurs="1"
+				minOccurs="1">
+                <xs:annotation>
+                	<xs:documentation>A compound structure (MOL) to search using ChEBI.</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+                        
+                        
 			<xs:element name="previoustext" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="start" type="xs:int" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="size" type="xs:int" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="compounds" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="diseases" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="species" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                        
+                 <xs:element name="type">
+                <xs:annotation>
+               <xs:documentation>The type of search to perform: KEYWORD | SEQUENCE | COMPOUND, which will use the properties text | sequence | compound respectively.
+               </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+		<xs:restriction base="xs:string">
+				<xs:enumeration value="KEYWORD"></xs:enumeration>
+				<xs:enumeration value="SEQUENCE"></xs:enumeration>
+				<xs:enumeration value="COMPOUND"></xs:enumeration>
+		</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+                        
+                        
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="SearchResults" type="ep:SearchResults"/>
