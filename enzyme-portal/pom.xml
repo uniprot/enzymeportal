@@ -169,26 +169,6 @@
 	                    <outputDirectory>${basedir}/target/site</outputDirectory>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>com.github.github</groupId>
-					<artifactId>site-maven-plugin</artifactId>
-					<version>0.7</version>
-					<configuration>
-						<message>
-							Creating site for ${project.name} ${project.version}
-						</message>
-                        <path>${project.distributionManagement.site.url}</path>
-                        <merge>true</merge>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>site</goal>
-							</goals>
-							<phase>site-deploy</phase>
-						</execution>
-					</executions>
-				</plugin>
 	            <plugin>
 	                <groupId>org.apache.maven.plugins</groupId>
 	                <artifactId>maven-site-plugin</artifactId>
@@ -238,7 +218,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
-                    <skipDeploy>false</skipDeploy>
+                    <skipDeploy>true</skipDeploy>
                     <reportPlugins>
 			            <plugin>
 			                <groupId>org.apache.maven.plugins</groupId>
@@ -267,6 +247,26 @@
 			             -->
                     </reportPlugins>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.7</version>
+                <configuration>
+                    <message>
+                        Creating site for ${project.name} ${project.version}
+                    </message>
+                    <path>${project.distributionManagement.site.url}</path>
+                    <merge>false</merge>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site-deploy</phase>
+                    </execution>
+                </executions>
             </plugin>
     	</plugins>
         <extensions>
