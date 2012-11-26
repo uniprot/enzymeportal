@@ -123,7 +123,7 @@
         </snapshotRepository>
         <site>
             <id>github</id>
-            <url>site/</url>
+            <url>http://ebi-cheminf.github.com/enzymeportal/</url>
         </site>
     </distributionManagement>
     <issueManagement>
@@ -256,8 +256,8 @@
                     <message>
                         Creating site for ${project.name} ${project.version}
                     </message>
-                    <path>${project.distributionManagement.site.url}</path>
-                    <merge>false</merge>
+                    <path>${project.artifactId}</path>
+                    <merge>true</merge>
                 </configuration>
                 <executions>
                     <execution>
