@@ -11,8 +11,7 @@
 	<artifactId>das-adapter</artifactId>
 	<version>1.0.4-SNAPSHOT</version>
 	
-	<name>das-adapter</name>
-	<url>http://maven.apache.org</url>
+	<name>DAS adapter</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

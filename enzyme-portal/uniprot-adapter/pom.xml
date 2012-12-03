@@ -9,8 +9,7 @@
   <groupId>uk.ac.ebi.ep</groupId>
   <artifactId>uniprot-adapter</artifactId>
   <version>1.0.2-SNAPSHOT</version>
-  <name>uniprot-adapter</name>
-  <url>http://maven.apache.org</url>
+  <name>UniProt adapter</name>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
