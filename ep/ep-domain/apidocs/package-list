@@ -1,0 +1,10 @@
+uk.ac.ebi.ep.config
+uk.ac.ebi.ep.domain.mesh
+uk.ac.ebi.ep.ebeye.result
+uk.ac.ebi.ep.entry
+uk.ac.ebi.ep.entry.exception
+uk.ac.ebi.ep.enzyme.model
+uk.ac.ebi.ep.search.adapter
+uk.ac.ebi.ep.search.exception
+uk.ac.ebi.ep.search.model
+uk.ac.ebi.ep.search.result
