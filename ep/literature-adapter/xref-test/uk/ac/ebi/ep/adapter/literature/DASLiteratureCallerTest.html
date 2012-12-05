@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>DASLiteratureCallerTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/uk/ac/ebi/ep/adapter/literature/DASLiteratureCallerTest.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> uk.ac.ebi.ep.adapter.literature;
+<a class="jxr_linenumber" name="2" href="#2">2</a>   
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> java.util.Set;
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> org.junit.Before;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> org.junit.Ignore;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> uk.ac.ebi.cdb.webservice.Journal;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> uk.ac.ebi.cdb.webservice.JournalInfo;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> uk.ac.ebi.cdb.webservice.Result;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  @Ignore
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../uk/ac/ebi/ep/adapter/literature/DASLiteratureCallerTest.html">DASLiteratureCallerTest</a> {
+<a class="jxr_linenumber" name="15" href="#15">15</a>  
+<a class="jxr_linenumber" name="16" href="#16">16</a>  	<strong class="jxr_keyword">private</strong> DASLiteratureCaller dasCaller;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  	
+<a class="jxr_linenumber" name="18" href="#18">18</a>  	@Before
+<a class="jxr_linenumber" name="19" href="#19">19</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> init(){
+<a class="jxr_linenumber" name="20" href="#20">20</a>  		dasCaller = <strong class="jxr_keyword">new</strong> DASLiteratureCaller(IDASFeaturesAdapter.PDBE_DAS_URL, <span class="jxr_string">"1mbd"</span>);
+<a class="jxr_linenumber" name="21" href="#21">21</a>  	}
+<a class="jxr_linenumber" name="22" href="#22">22</a>  	
+<a class="jxr_linenumber" name="23" href="#23">23</a>  	@Test
+<a class="jxr_linenumber" name="24" href="#24">24</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testCall() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="25" href="#25">25</a>  		Set&lt;Result&gt; citations = dasCaller.call();
+<a class="jxr_linenumber" name="26" href="#26">26</a>  		assertTrue(citations.size() &gt;= 1);
+<a class="jxr_linenumber" name="27" href="#27">27</a>  		Result cit = citations.iterator().next();
+<a class="jxr_linenumber" name="28" href="#28">28</a>  		assertEquals(<span class="jxr_string">"MED"</span>, cit.getSource());
+<a class="jxr_linenumber" name="29" href="#29">29</a>  		assertEquals(<span class="jxr_string">"7278969"</span>, cit.getId());
+<a class="jxr_linenumber" name="30" href="#30">30</a>  		assertEquals(<span class="jxr_string">"Neutron diffraction reveals oxygen-histidine hydrogen bond in oxymyoglobin."</span>,
+<a class="jxr_linenumber" name="31" href="#31">31</a>  				cit.getTitle());
+<a class="jxr_linenumber" name="32" href="#32">32</a>  		assertEquals(<span class="jxr_string">"Nature"</span>, cit.getJournalInfo().getJournal().getTitle());
+<a class="jxr_linenumber" name="33" href="#33">33</a>  		assertEquals(<span class="jxr_string">"292"</span>, cit.getJournalInfo().getVolume());
+<a class="jxr_linenumber" name="34" href="#34">34</a>  	}
+<a class="jxr_linenumber" name="35" href="#35">35</a>  	
+<a class="jxr_linenumber" name="36" href="#36">36</a>  	@Test
+<a class="jxr_linenumber" name="37" href="#37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetCitationFromCitexplore() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="38" href="#38">38</a>  		<em class="jxr_comment">// No assertions, just to measure time (testCall is slow because of DAS)</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  		Result citation = dasCaller.getCitationFromCitexplore(<span class="jxr_string">"7278969"</span>);
+<a class="jxr_linenumber" name="40" href="#40">40</a>  	}
+<a class="jxr_linenumber" name="41" href="#41">41</a>  
+<a class="jxr_linenumber" name="42" href="#42">42</a>  	@Test
+<a class="jxr_linenumber" name="43" href="#43">43</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGetPubmedId() {
+<a class="jxr_linenumber" name="44" href="#44">44</a>  		String url = <span class="jxr_string">"http://www.ebi.ac.uk/pdbe-srv/view/search/index/?Citation_pubmed_id=7278969"</span>;
+<a class="jxr_linenumber" name="45" href="#45">45</a>  		assertEquals(<span class="jxr_string">"7278969"</span>, dasCaller.getPubMedId(url));
+<a class="jxr_linenumber" name="46" href="#46">46</a>  	}
+<a class="jxr_linenumber" name="47" href="#47">47</a>  
+<a class="jxr_linenumber" name="48" href="#48">48</a>  	@Test
+<a class="jxr_linenumber" name="49" href="#49">49</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseJournal() {
+<a class="jxr_linenumber" name="50" href="#50">50</a>  		String journal = <span class="jxr_string">"NATURE vol:292 page:81-82 (1981)"</span>;
+<a class="jxr_linenumber" name="51" href="#51">51</a>  		Result citation = <strong class="jxr_keyword">new</strong> Result();
+<a class="jxr_linenumber" name="52" href="#52">52</a>  		JournalInfo jIssue = <strong class="jxr_keyword">new</strong> JournalInfo();
+<a class="jxr_linenumber" name="53" href="#53">53</a>  		jIssue.setJournal(<strong class="jxr_keyword">new</strong> Journal());
+<a class="jxr_linenumber" name="54" href="#54">54</a>  		citation.setJournalInfo(jIssue);
+<a class="jxr_linenumber" name="55" href="#55">55</a>  		dasCaller.parseJournal(journal, citation);
+<a class="jxr_linenumber" name="56" href="#56">56</a>  		assertEquals(<span class="jxr_string">"NATURE"</span>, citation.getJournalInfo().getJournal().getTitle());
+<a class="jxr_linenumber" name="57" href="#57">57</a>  		assertEquals(<span class="jxr_string">"292"</span>, citation.getJournalInfo().getVolume());
+<a class="jxr_linenumber" name="58" href="#58">58</a>  		assertEquals(<span class="jxr_string">"81-82"</span>, citation.getPageInfo());
+<a class="jxr_linenumber" name="59" href="#59">59</a>  		assertEquals(<span class="jxr_string">"1981"</span>, citation.getJournalInfo().getYearOfPublication().toString());
+<a class="jxr_linenumber" name="60" href="#60">60</a>  	}
+<a class="jxr_linenumber" name="61" href="#61">61</a>  
+<a class="jxr_linenumber" name="62" href="#62">62</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
