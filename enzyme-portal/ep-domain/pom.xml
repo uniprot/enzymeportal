@@ -4,12 +4,16 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-domain</artifactId>
     <version>1.0.5-SNAPSHOT</version>
-    <name>EnzymePortalDomain</name>
+    <name>EP domain</name>
+    <description>
+    	The domain model of the Enzyme Portal and its searches are defined in
+    	XML schemas.
+   	</description>
     <build>
         <plugins>
             <plugin>
@@ -135,6 +139,15 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <configuration>
+                    <path>
+                    	${project.parent.artifactId}/${project.artifactId}
+                    </path>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -142,7 +155,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

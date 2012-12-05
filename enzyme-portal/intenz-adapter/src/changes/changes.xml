@@ -10,6 +10,13 @@
 </properties>
 
 <body>
+	<release version="1.0.6" date="(Not yet released)">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub),
+			intenz-xml, ep-domain and junit.
+		</action>
+	</release>
+	<release version="1.0.5" date="2012-10-25"/>
 	<release version="1.0.4" date="2012-10-18"
 		description="IntEnzXML from web service">
 		<action dev="rafalcan" type="add">

@@ -9,7 +9,12 @@
 </properties>
 
 <body>
-	<release version="1.0.4" date="">
+	<release version="1.0.5" date="(Not yet released)">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub).
+		</action>
+	</release>
+	<release version="1.0.4" date="2012-10-24">
 		<action dev="rafalcan" type="fix">
 			Fixed pagination for empty results.
 		</action>

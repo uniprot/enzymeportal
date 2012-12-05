@@ -9,8 +9,17 @@
 </properties>
 
 <body>
-	<release version="1.0" date="in SVN" description="First release">
-		
+	<release version="1.0.3" date="(Not yet released)">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub),
+			ep-domain, biobabel-core and junit.
+		</action>
+	</release>
+	<release version="1.0.2" date="2012-08-07">
+	</release>
+	<release version="1.0.1" date="2012-05-21">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
 	</release>
 </body>
 

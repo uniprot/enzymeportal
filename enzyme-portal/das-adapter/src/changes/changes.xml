@@ -9,6 +9,14 @@
 </properties>
 
 <body>
+	<release version="1.0.4" date="(Not yet released)">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub) and
+			junit.
+		</action>
+	</release>
+	<release version="1.0.3" date="2012-10-25">
+	</release>
 	<release version="1.0.2" date="2012-10-19"
 		description="Added configuration.">
 		<action dev="rafalcan" type="add">
@@ -18,8 +26,9 @@
 			Updated to latest versions of log4j and junit.
 		</action>
 	</release>
-	<release version="1.0" date="in SVN" description="First release">
-		
+	<release version="1.0.1" date="2012-05-21" description="First release">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
 	</release>
 </body>
 

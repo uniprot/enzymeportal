@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>ep</artifactId>
 		<groupId>uk.ac.ebi.ep</groupId>
-		<version>1.0.2</version>
+		<version>1.0.3</version>
 	</parent>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>literature-adapter</artifactId>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>uk.ac.ebi.ep</groupId>
 			<artifactId>das-adapter</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -112,6 +112,15 @@
 						    </reportSets>
 						</plugin>
                     </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <configuration>
+                    <path>
+                    	${project.parent.artifactId}/${project.artifactId}
+                    </path>
                 </configuration>
             </plugin>
 		</plugins>

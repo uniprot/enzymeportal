@@ -10,6 +10,12 @@
 </properties>
 
 <body>
+	<release version="1.0.3" date="(Not yet released)">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub),
+			ep-domain, biobabel-core and junit.
+		</action>
+	</release>
 	<release version="1.0.2" date="2012-08-22" description="Bug fix">
 		<action dev="rafalcan" type="fix">
 			Pathways without a description won't display a weird text, as was
@@ -23,9 +29,9 @@
 			Updated to latest versions of ep-domain, rhea-domain and junit.
 		</action>
 	</release>
-	<release version="1.0.1" date="" description="">
+	<release version="1.0.1" date="2012-05-21" description="">
 	</release>
-	<release version="1.0" date="" description="First release">
+	<release version="1.0" date="2012-03-30" description="First release">
 	</release>
 </body>
 

@@ -12,25 +12,8 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
-	
-    <repositories>
-        <repository>
-            <releases />
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>ebi-repo</id>
-            <name>EBI maven repository</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
-        </repository>
-    </repositories>
-
-    <organization>
-        <name>EMBL-EBI</name>
-        <url>http://www.ebi.ac.uk</url>
-    </organization>
 	
     <properties>
         <java-version>1.5</java-version>
@@ -101,6 +84,15 @@
 						    </reportSets>
 						</plugin>
                     </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <configuration>
+                    <path>
+                    	${project.parent.artifactId}/${project.artifactId}
+                    </path>
                 </configuration>
             </plugin>
 		</plugins>
@@ -174,7 +166,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -261,7 +253,7 @@
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-core</artifactId>
-            <version>0.9.0</version>
+            <version>0.13</version>
         </dependency>
         <dependency>
         	<!-- override rhea-domain's -->

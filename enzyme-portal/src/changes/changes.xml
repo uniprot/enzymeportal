@@ -9,6 +9,14 @@
 </properties>
 
 <body>
+	<release version="1.0.3" date="" description="Using GitHub">
+		<action dev="rafalcan" type="fix">
+			Modified scm and distributionManagement configuration to use GitHub.
+		</action>
+		<action dev="rafalcan" type="remove">
+			Removed ebeye-client module (we are using biobabel's).
+		</action>
+	</release>
 	<release version="1.0.2" date="2012-08-01" description="Plugin updates">
 		<action dev="rafalcan" type="update">
 			Updated pom file with pluginmanagement section, latest versions

@@ -6,18 +6,21 @@
 	<artifactId>intenz-adapter</artifactId>
 	<version>1.0.6-SNAPSHOT</version>
 	<name>IntEnz adapter</name>
+	<description>
+		A module providing proxies to IntEnz.
+	</description>
 
 	<parent>
 		<artifactId>ep</artifactId>
 		<groupId>uk.ac.ebi.ep</groupId>
-		<version>1.0.2</version>
+		<version>1.0.3</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>uk.ac.ebi.intenz</groupId>
 			<artifactId>intenz-xml</artifactId>
-			<version>1.0.4</version>
+			<version>1.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -27,7 +30,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ep-domain</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -42,7 +45,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>4.11</version>
 		</dependency>
 	</dependencies>
 	
@@ -111,6 +114,15 @@
 						    </reportSets>
 						</plugin>
                     </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <configuration>
+                    <path>
+                    	${project.parent.artifactId}/${project.artifactId}
+                    </path>
                 </configuration>
             </plugin>
 		</plugins>
