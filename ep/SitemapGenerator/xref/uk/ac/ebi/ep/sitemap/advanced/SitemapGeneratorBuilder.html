@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SitemapGeneratorBuilder xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/uk/ac/ebi/ep/sitemap/advanced/SitemapGeneratorBuilder.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <strong class="jxr_keyword">package</strong> uk.ac.ebi.ep.sitemap.advanced;
+<a class="jxr_linenumber" name="2" href="#2">2</a>   
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> java.net.MalformedURLException;
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.net.URL;
+<a class="jxr_linenumber" name="6" href="#6">6</a>   
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> A convenience class to let you configure options straightforwardly; don't instantiate by hand.</em>
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <em class="jxr_javadoccomment"> * &lt;p&gt;Instead, get one statically from a SitemapGenerator class.  For example: &lt;code&gt;WebSitemapGenerator g =&lt;br&gt;</em>
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_javadoccomment"> * WebSitemapGenerator.builder("<a href="http://example.com" target="alexandria_uri">http://example.com</a>", myDir).gzip(true).autoValidate(true).build()&lt;/code&gt;&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <em class="jxr_javadoccomment"> * @author Dan Fabulich</em>
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_javadoccomment"> * @param &lt;G&gt;</em>
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_comment">//that weird thing with generics is so sub-classed objects will return themselves</em>
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_comment">//It makes sense, I swear! http://madbean.com/2004/mb2004-3/</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> SitemapGeneratorBuilder&lt;G <strong class="jxr_keyword">extends</strong> SitemapGenerator&lt;?,?&gt;&gt; <strong class="jxr_keyword">extends</strong> AbstractSitemapGeneratorOptions&lt;SitemapGeneratorBuilder&lt;G&gt;&gt; {
+<a class="jxr_linenumber" name="20" href="#20">20</a>  
+<a class="jxr_linenumber" name="21" href="#21">21</a>  	Class&lt;G&gt; sitemapGeneratorClass;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  	
+<a class="jxr_linenumber" name="23" href="#23">23</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment">Configures the generator with a base URL and directory to write the sitemap files.</em>
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment">	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment">	 * @param baseDir Sitemap files will be generated in this directory as either "sitemap.xml" or "sitemap1.xml" "sitemap2.xml" and so on.</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">	 * @param sitemapGeneratorClass the class of the generator the builder will create</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../uk/ac/ebi/ep/sitemap/advanced/SitemapGeneratorBuilder.html">SitemapGeneratorBuilder</a>(URL baseUrl, File baseDir, Class&lt;G&gt; sitemapGeneratorClass) {
+<a class="jxr_linenumber" name="30" href="#30">30</a>  		<strong class="jxr_keyword">super</strong>(baseUrl, baseDir);
+<a class="jxr_linenumber" name="31" href="#31">31</a>  		<strong class="jxr_keyword">this</strong>.sitemapGeneratorClass = sitemapGeneratorClass;
+<a class="jxr_linenumber" name="32" href="#32">32</a>  	}
+<a class="jxr_linenumber" name="33" href="#33">33</a>  	
+<a class="jxr_linenumber" name="34" href="#34">34</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment">Configures the generator with a base URL and directory to write the sitemap files.</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment">	 * @param baseUrl All URLs in the generated sitemap(s) should appear under this base URL</em>
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment">	 * @param baseDir Sitemap files will be generated in this directory as either "sitemap.xml" or "sitemap1.xml" "sitemap2.xml" and so on.</em>
+<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">	 * @param sitemapGeneratorClass the class of the generator the builder will create</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="40" href="#40">40</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../../uk/ac/ebi/ep/sitemap/advanced/SitemapGeneratorBuilder.html">SitemapGeneratorBuilder</a>(String baseUrl, File baseDir, Class&lt;G&gt; sitemapGeneratorClass) <strong class="jxr_keyword">throws</strong> MalformedURLException {
+<a class="jxr_linenumber" name="41" href="#41">41</a>  		<strong class="jxr_keyword">this</strong>(<strong class="jxr_keyword">new</strong> URL(baseUrl), baseDir, sitemapGeneratorClass);
+<a class="jxr_linenumber" name="42" href="#42">42</a>  	}
+<a class="jxr_linenumber" name="43" href="#43">43</a>  	
+<a class="jxr_linenumber" name="44" href="#44">44</a>  	<em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> Constructs a sitemap generator configured with the options you specified */</em>
+<a class="jxr_linenumber" name="45" href="#45">45</a>  	<strong class="jxr_keyword">public</strong> G build() {
+<a class="jxr_linenumber" name="46" href="#46">46</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="47" href="#47">47</a>  			<strong class="jxr_keyword">return</strong> sitemapGeneratorClass.getDeclaredConstructor(AbstractSitemapGeneratorOptions.<strong class="jxr_keyword">class</strong>).newInstance(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="48" href="#48">48</a>  		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="49" href="#49">49</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="50" href="#50">50</a>  		}
+<a class="jxr_linenumber" name="51" href="#51">51</a>  	}
+<a class="jxr_linenumber" name="52" href="#52">52</a>  
+<a class="jxr_linenumber" name="53" href="#53">53</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
