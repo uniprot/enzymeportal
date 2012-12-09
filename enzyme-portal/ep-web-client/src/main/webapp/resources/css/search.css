@@ -218,11 +218,11 @@ a:link, a:visited {
     width:19%;    
 }
 
-#allButtons {
+/*#allButtons {
     margin-top: -4px;
     margin-bottom: -6px;
     float: right;
-}
+}*/
 
 #buttonItems {
     float: right;
@@ -484,3 +484,9 @@ a.formSubmit {
     cursor: default;
 
 }
+/*check auto complete code in js*/
+.ui-menu-item-highlight{
+    color: #207a7a;
+    font-weight: bolder;
+}
+

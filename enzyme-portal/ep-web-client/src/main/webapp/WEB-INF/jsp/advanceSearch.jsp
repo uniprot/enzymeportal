@@ -1,5 +1,5 @@
 <%-- 
-    Document   : blastSearch
+    Document   : advanceSearch
     Created on : Nov 19, 2012, 10:55:37 AM
     Author     : joseph
 --%>
@@ -113,21 +113,21 @@
                 <div id="local-masthead" class="masthead grid_24 nomenu">
 
                     <!-- CHOOSE -->
-<div class="grid_12 alpha" id="local-title-logo">
+<!--<div class="grid_12 alpha" id="local-title-logo">
                             <h1>Enzyme Portal</h1>
                             <p><img src="resources/images/EnzymePortal_v2.png" alt="Enzyme Portal" width="400" height="72" class="logo" /></p>
-                    </div>
+                    </div>-->
 
                     <!-- OR... -->
 
-<!--                    <div class="grid_12 alpha" id="local-title">
+                    <div class="grid_12 alpha" id="local-title">
                         <h1>Enzyme Portal</h1>
-                    </div>-->
+                    </div>
                     <!-- -->
 
-                    <div class="grid_12 omega">
+<!--                    <div class="grid_12 omega">
 
-<!--                        <form id="local-search" name="local-search" action="#" method="post">
+                        <form id="local-search" name="local-search" action="#" method="post">
 
                             <fieldset>
 
@@ -138,13 +138,13 @@
                                 <input type="submit" name="submit" value="Search" class="submit" />	
                             </fieldset>
 
-                        </form>-->
+                        </form>
 
 
 
 
 
-                        <!--                        <form id="local-search" name="local-search" action="#" method="post">
+                                                <form id="local-search" name="local-search" action="#" method="post">
                         
                                                     <fieldset>
                         
@@ -155,12 +155,12 @@
                                                         <input type="submit" name="submit" value="Search" class="submit" />	
                                                     </fieldset>
                         
-                                                </form>-->
-                    </div>
+                                                </form>
+                    </div>-->
 
                     <nav>
                         <ul class="grid_24" id="local-nav">
-                            <li class="first" class="active"><a href="/enzymeportal" title="">Home</a></li>
+                            <li class="first" ><a href="/enzymeportal" title="">Home</a></li>
 <!--                            <li><a href="#" title="">TODO 2</a></li>
                             <li class="active"><a href="#" title="">TODO 3</a></li>-->
                             <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
@@ -173,56 +173,27 @@
             
             <div id="content" role="main" class="grid_24 clearfix">
 
-                <!-- Suggested layout containers -->  
-                <section>
-                    <div class="grid_12zzz" style="display: table; margin-left: 1em;">
-                        <%@ include file="breadcrumbs.jsp" %>
-                    </div>
-                </section>
+                <!-- Suggested layout containers --> 
+          <nav id="breadcrumb">
+     	<p>
+		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
+		    Advance Search
+			</p>
+  	</nav>
+    
 
             
             <section>
-                                    <div class="contents">
+             <div class="contents">
             <div class="page container_12"> 
                  <jsp:include page="searchBox.jsp"/>
             </div>
                      </div>
             </section>
-<!--                <section>
-                      
-                    <div style="margin-left: auto; margin-right: auto;
-                         width: 50%;">
-
-                        <h2>Welcome to the Enzyme Portal</h2> 
-                        The Enzyme Portal is for people who are interested
-                        in the biology of enzymes and proteins with enzymatic
-                        activity.
-                        <div style="text-align: right;">
-                            <a href="about" class="showLink" >More about the
-                                enzyme portal...</a>
-                        </div>
-                    </div>
-
-                    <table style="margin-left: auto; margin-right: auto;
-                           width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
-                        <tr style="text-align: center;">
-                            <td>
-                                <%-- b>Welcome to the Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/Kldp0WXcxUM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                            <td>
-                                <%-- b>Explore Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                        </tr>
-                    </table>
-                </section>-->
+<!--            <section>
+                <h3>Sequence Search guideline</h3>
+                <p>How To's of Sequence Search goes here. [TODO]</p>
+            </section>-->
 
                 <!--                <section>
                 
@@ -292,6 +263,9 @@
             </footer>
         </div> <!--! end of #wrapper -->
 
+                <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
+    <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
+</c:if>
 
         <!-- JavaScript at the bottom for fast page loading -->
         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>

@@ -57,12 +57,13 @@
                         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
                         <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
 
-        <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
+         <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
+<!--        <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
 
         <link rel="stylesheet" href="resources/css/ebi-global.css" type="text/css" media="screen" />
 
         <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
-        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />-->
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
 
@@ -129,6 +130,7 @@
                     <!-- -->
 
                     <div class="grid_12 omega">
+                          <%@ include file="frontierSearchBox.jsp" %>
 
                         <!--                        <form id="local-search" name="local-search" action="#" method="post">
                         
@@ -143,33 +145,7 @@
                         
                                                 </form>-->
 
-                        <form:form id="local-search" modelAttribute="searchModel"
-                                   action="search" method="POST">
-                            <fieldset> 
-                                <label>     
-                                    <form:input id="local-searchbox" path="searchparams.text"
-                                                cssClass="field" name="first" rel="Enter a name to search"/>
-                                </label>
-                                <form:hidden id="start" path="searchparams.start" />
-                                <form:hidden path="searchparams.previoustext" />
-                                <input  type="submit" value="Search"
-                                        class="submit" /><br/>
-                                <div>
-                                    <!--                            <div id="examples">Examples: <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a> -->
-                                    <spring:message code="label.search.example"/>
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
-                                    <!--                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,-->
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-
-                                    <!--                            </div>-->
-                                </div>
-                            </fieldset>
-                        </form:form>
+                
 
 
 
@@ -187,15 +163,21 @@
                                                 </form>-->
                     </div>
 
-                    <nav>
-                        <ul class="grid_24" id="local-nav">
-                            <li class="first" class="active"><a href="/enzymeportal" title="">Home</a></li>
-                            <!--                            <li><a href="#" title="">TODO 2</a></li>
-                                                        <li class="active"><a href="#" title="">TODO 3</a></li>-->
-                            <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
-                            <li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
-                        </ul>
-                    </nav>	
+           		<nav>
+				<ul class="grid_24" id="local-nav">
+					<li  class="first"><a href="/enzymeportal" title="">Home</a></li>
+					<li><a href="#">Documentation</a></li>
+					<li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
+					<li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
+					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
+					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
+					     whichever one will show up last... 
+					     For example: -->
+					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>
+					<li class="functional"><a href="#" class="icon icon-static" data-icon="f">Feedback</a></li>
+					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
+				</ul>
+			</nav>		
                 </div>
             </header>
 
@@ -273,6 +255,9 @@
             </footer>
         </div> <!--! end of #wrapper -->
 
+                <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
+    <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
+</c:if>
 
         <!-- JavaScript at the bottom for fast page loading -->
         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>

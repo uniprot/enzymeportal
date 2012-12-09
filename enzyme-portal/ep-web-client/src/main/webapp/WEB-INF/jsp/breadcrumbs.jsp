@@ -28,36 +28,32 @@ function submitForm(type, search){
 }
 </script>
 
-<div class="breadcrumbs" id="breadcrumbs">
-	<ul>
-	    <li class="first"><a
-	    	href="http://www.ebi.ac.uk/" class="firstbreadcrumb">EBI</a></li>
-		<li id="homeBreadcrumb"><a
-			href="${pageContext.request.contextPath}">Enzyme Portal</a></li>
-		<c:if test="${not empty history}">
+<nav id="breadcrumb">
+     	<p>
+                <a href="${pageContext.request.contextPath}">Enzyme Portal</a> 
+
+                    <c:if test="${not empty history}">
 			<c:forEach var="hItem" items="${history}">
-				<li>
+				&gt;
 				<c:choose>
 					<c:when test="${fn:startsWith(hItem, 'searchparams.text=')}">
-						<a class="formSubmit"
-							onclick="submitForm('KEYWORD', '${fn:substringAfter(hItem, '=')}')"
+						<a onclick="submitForm('KEYWORD', '${fn:substringAfter(hItem, '=')}')"
 							>Search for
 							<i>"${fn:substringAfter(hItem, '=')}"</i></a>
 					</c:when>
 					<c:when test="${fn:startsWith(hItem, 'searchparams.sequence=')}">
-						<a class="formSubmit"
-							onclick="submitForm('SEQUENCE', '${fn:substringAfter(hItem, '=')}')"
+						<a onclick="submitForm('SEQUENCE', '${fn:substringAfter(hItem, '=')}')"
 							>Search for
 							<i>"${fn:substring(fn:substringAfter(hItem, '='), 0, 20)}${fn:length(hItem) gt 20? '...':''}"</i></a>
 					</c:when>
 					<c:otherwise>
-						<a class="formSubmit"
-							href="${pageContext.request.contextPath}/search/${hItem}/enzyme"><c:out value="${hItem}"/></a>
+						<a href="${pageContext.request.contextPath}/search/${hItem}/enzyme"><c:out value="${hItem}"/></a>
 					</c:otherwise>
 				</c:choose>
 				
 				</li>
 			</c:forEach>
 		</c:if>
-	</ul>
-</div>
+
+	</p>
+</nav>

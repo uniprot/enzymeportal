@@ -10,7 +10,7 @@
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+ <script src="resources/javascript/search.js" type="text/javascript"></script>
 <script>
 function showCard(tabId){
 	var s = tabId.split('-tab-');
@@ -85,6 +85,14 @@ function submitKeywordForm(text){
 			onclick="submitKeywordForm('Q13423')">Q13423</a>,
 		<a class="formSubmit"
 			onclick="submitKeywordForm('REACT_1400.4')">REACT_1400.4</a>
+                        
+                        <hr/>
+                        <br/>
+                            <section>
+                <h3 style="text-align: left">Keyword Search guideline</h3>
+                <p>How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]</p>
+                 <p>How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]</p>
+            </section>
 	</div>
 
 	<div id="search-sequence" class="searchBackground searchTabContent"
@@ -96,6 +104,13 @@ function submitKeywordForm(text){
 		<button id="search-sequence-submit" type="submit"
 			name="searchparams.type" value="SEQUENCE"
 	      	class="searchButton">Search</button>
+                
+                <br/>
+                    <section>
+                        <h3 style="text-align: left">Sequence Search guideline</h3>
+                <p>How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]</p>
+                <p>How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]</p>
+            </section>
 	</div>
 </div>
 

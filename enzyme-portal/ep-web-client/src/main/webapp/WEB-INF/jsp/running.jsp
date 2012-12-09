@@ -18,19 +18,29 @@
         <script type="text/javascript"
         	src="resources/javascript/search.js"></script>
     </head>
-    <body>
+   <body>
     	<script type="text/javascript">
     		function checkJob(){
     			document.forms['check-job'].submit();
     		}
     		setTimeout(checkJob, 5000);
     	</script>
-        <jsp:include page="header.jsp"/>
-        <div class="contents">
-            <div class="page container_12">
-                <jsp:include page="subHeader.jsp"/>
-
-				<form:form id="check-job" modelAttribute="searchModel"
+       
+   <jsp:include page="frontierHeader.jsp"/>
+  
+                
+            <div id="content" role="main" class="grid_24 clearfix">
+    
+    <!-- If you require a breadcrumb trail, its root should be your service.
+     	   You don't need a breadcrumb trail on the homepage of your service... -->
+    <nav id="breadcrumb">
+     	<p>
+		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
+		    Sequence search in progress ....
+			</p>
+  	</nav>
+    
+    	<form:form id="check-job" modelAttribute="searchModel"
 			    	action="checkJob" method="POST">
 			    	<form:hidden path="searchparams.text" />
 			    	<form:hidden path="searchparams.sequence" />
@@ -38,17 +48,28 @@
 				    <form:hidden path="searchparams.start" />
 				    <form:hidden path="searchparams.type" />
 				    <input type="hidden" name="jobId" value="${jobId}"/>
-				</form:form>
-                
-                <div style="margin: 4ex 4em;">
+	</form:form>
+    	
+                                    <section>
+                                                  <div style="margin: 4ex 4em;">
                 <!-- Job ID: ${jobId} -->
                 <img alt="Searching..." src="resources/images/loading.gif"
                 	style="margin: 0ex 1em"/>
                 Searching protein sequence...
                 </div>
+                                        
+                                    </section>
+    
+	   
+  			
+    </div>      
                 
-            </div>
-        </div>
-		<jsp:include page="footer.jsp"/>
+         <jsp:include page="footer.jsp"/>        
+           
+         
+                
+                
+                
+		
     </body>
 </html>

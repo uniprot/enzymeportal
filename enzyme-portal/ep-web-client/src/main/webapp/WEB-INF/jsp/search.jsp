@@ -58,15 +58,15 @@
         <!--        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
                 <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
 
-
+<link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
        
-
+<!--
         <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
 
         <link rel="stylesheet" href="resources/css/ebi-global.css" type="text/css" media="screen" />
 
         <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
-        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />-->
         <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
@@ -101,42 +101,46 @@
 
     </head>
 
-    <body class="level2">
+    <body class="level2"><!-- add any of your classes or IDs -->
+	<div id="skip-to">
+		<ul>
+			<li><a href="#content">Skip to main content</a></li>
+			<li><a href="#local-nav">Skip to local navigation</a></li>
+			<li><a href="#global-nav">Skip to EBI global navigation menu</a></li>
+			<li><a href="#global-nav-expanded">Skip to expanded EBI global navigation menu (includes all sub-sections)</a></li>
+		</ul>
+	</div>
 
-        <div id="skip-to">
-            <ul>
-                <li><a href="#content" title="">Skip to main content</a></li>
-                <li><a href="#local-nav" title="">Skip to local navigation</a></li>
-                <li><a href="#global-nav" title="">Skip to EBI global navigation menu</a></li>
-                <li><a href="#global-nav-expanded" title="">Skip to expanded EBI global navigation menu (includes all sub-sections)</a></li>
-            </ul>
-        </div>
+  <div id="wrapper" class="container_24">
+    <header>
+    	<div id="global-masthead" class="masthead grid_24">
+      <!--This has to be one line and no newline characters-->
+			<a href="/" title="Go to the EMBL-EBI homepage"><img src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png" alt="EMBL European Bioinformatics Institute"></a>
 
-        <div id="wrapper" class="container_24">
-            <header>
-                <div id="global-masthead" class="masthead grid_24">
-                    <p><!-- EMBL-EBI  --><img src="http://frontier.ebi.ac.uk/sites/ebi.ac.uk/themes/custom/ebiomega/logo.png" alt="European Bioinformatics Institute"></p>
+			<nav>
+				<ul id="global-nav">
+          <!-- set active class as appropriate -->
+          <li class="first active" id="services"><a href="/services">Services</a></li>
+					<li id="research"><a href="/research">Research</a></li>
+					<li id="training"><a href="/training">Training</a></li>
+					<li id="industry"><a href="/industry">Industry</a></li>
+					<li id="about" class="last"><a href="/about">About us</a></li>
+				</ul>
+			</nav>
+			
+		</div>
+		
+		<div id="local-masthead" class="masthead grid_24 nomenu">
+			
+      <!-- local-title -->
 
-                    <nav>
-                        <ul id="global-nav">
-                            <li class="first" id="services"><a href="#" title="">Services</a></li>
-                            <li id="research"><a href="#" title="">Research</a></li>
-                            <li id="training"><a href="#" title="">Training</a></li>
-                            <li id="funding"><a href="#" title="">Funding</a></li>
-                            <li id="about" class="last"><a href="#" title="">About us</a></li>
-                        </ul>
-                    </nav>
-
-                </div>
-
-                <div id="local-masthead" class="masthead grid_24 nomenu">
-
-                    <!-- CHOOSE -->
-
-                    <div class="grid_12 alpha" id="local-title-logo">
+<div class="grid_12 alpha" id="local-title">
+				<h1><a href="/enzymeportal" title="Back to Enzyme Portal homepage">Enzyme Portal</a></h1>
+			</div>
+<!--      <div class="grid_12 alpha" id="local-title-logo">
                             <h1>Enzyme Portal</h1>
                             <p><img src="resources/images/EnzymePortal_v2.png" alt="Enzyme Portal" width="400" height="72" class="logo" /></p>
-                    </div>
+                    </div>-->
 
                     <!-- OR... -->
 
@@ -146,20 +150,8 @@
                     <!-- -->
 
                     <div class="grid_12 omega">
-
-                        <!--                        <form id="local-search" name="local-search" action="#" method="post">
-                        
-                                                    <fieldset>
-                        
-                                                        <label>
-                                                            <input type="text" name="first" id="local-searchbox" />
-                                                        </label>	
-                        
-                                                        <input type="submit" name="submit" value="Search" class="submit" />	
-                                                    </fieldset>
-                        
-                                                </form>-->
-                        
+                     
+                         
                                                   <c:choose>
  	                  <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
                    <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
@@ -170,60 +162,26 @@
 	                     value="${searchModel.searchparams.text}"/>
 	                 </c:otherwise>
 	               </c:choose>
-
-                        <form:form id="local-search" modelAttribute="searchModel"
-                                   action="search" method="POST">
-                            <fieldset class="grid_24"> 
-                                <label>     
-                                    <form:input id="local-searchbox" path="searchparams.text"
-                                                cssClass="field" name="first" rel="Enter a name to search"/>
-                                </label>
-                                <form:hidden id="start" path="searchparams.start" />
-                                <form:hidden path="searchparams.previoustext" />
-                                <input  type="submit" value="Search"
-                                        class="submit" /><br/>
-                                <div>
-                                    <!--                            <div id="examples">Examples: <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a> -->
-                                    <spring:message code="label.search.example"/>
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
-                                    <!--                <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,-->
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-
-                                    <!--                            </div>-->
-                                </div>
-                            </fieldset>
-                        </form:form>
-
-
-
-                        <!--                        <form id="local-search" name="local-search" action="#" method="post">
                         
-                                                    <fieldset>
-                        
-                                                        <label>
-                                                            <input type="text" name="first" id="local-searchbox" />
-                                                        </label>	
-                        
-                                                        <input type="submit" name="submit" value="Search" class="submit" />	
-                                                    </fieldset>
-                        
-                                                </form>-->
-                    </div>
+                            <%@ include file="frontierSearchBox.jsp" %>
+                      </div>
 
-                    <nav>
-                        <ul class="grid_24" id="local-nav">
-                            <li class="first" class="active"><a href="/enzymeportal" title="">Home</a></li>
-                            <!--                            <li><a href="#" title="">TODO 2</a></li>
-                                                        <li class="active"><a href="#" title="">TODO 3</a></li>-->
-                            <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
-                            <li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
-                        </ul>
-                    </nav>	
+                       
+			<nav>
+				<ul class="grid_24" id="local-nav">
+					<li  class="first"><a href="/enzymeportal" title="">Home</a></li>
+					<li><a href="#">Documentation</a></li>
+					<li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
+					<li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
+					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
+					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
+					     whichever one will show up last... 
+					     For example: -->
+					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>
+					<li class="functional"><a href="#" class="icon icon-static" data-icon="f">Feedback</a></li>
+					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
+				</ul>
+			</nav>
                 </div>
             </header>
                           
@@ -269,12 +227,12 @@
                     <div class="grid_12zzz" style="display: table; margin-left: 1em;">
                         <%@ include file="breadcrumbs.jsp" %>
                     </div>
-                    <div style="display: table-cell;">
+<!--                    <div style="display: table-cell;">
                         <h5 ><a href="/enzymeportal" >Enzyme Portal</a></h5>
                     </div>
                     <div style="display: table-cell;">
                         - Your portal to enzyme-related information at the EBI.
-                    </div>
+                    </div>-->
 
                 </section>
 <!--                <section>-->
@@ -659,9 +617,9 @@
                         <c:if test="${totalfound eq 0}">
                             <spring:message code="label.search.empty"/>
                         </c:if>
-                        <c:if test="${summaryEntriesSize == 0}">
+                        <c:if test="${summaryEntriesSize == 0 and ( speciesListSize gt 0 or compoundListSize gt 0 or diseasesListSize gt 0)}">
                             <div class="resultItem">
-                                <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a> 
+                                <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this selection.</span></a> 
                             </div>
                         </c:if>
                         <c:if test="${summaryEntriesSize gt 0 and searchresults.totalfound gt 0}">
@@ -951,7 +909,7 @@
                                     <c:set var="resultItemId" value="${resultItemId+1}"/>
                                 </c:forEach>
                             </div><!-- resultContent -->
-                        </c:if>
+                       
                  </section>
 <!--                    </div> keywordSearchResult -->
 <!--                </div>-->
@@ -966,7 +924,7 @@
 	    		<li><a href="#">text</a></li>
     		</ul>
 		</section>
-
+ </c:if>
 <!--                </section>-->
                 
                 <!--                <section>
@@ -1040,8 +998,13 @@
 
         <!-- JavaScript at the bottom for fast page loading -->
 
+                <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
+    <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
+</c:if>
 
-
+ <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="resources/javascript/search.js" type="text/javascript"></script>
+        
 
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 
