@@ -98,9 +98,14 @@
       <!-- local-title -->
       <!-- NB: for additional title style patterns, see http://frontier.ebi.ac.uk/web/style/patterns -->
 
-			<div class="grid_12 alpha" id="local-title">
+<!--			<div class="grid_12 alpha" id="local-title">
 				<h1><a href="/enzymeportal" title="Back to Enzyme Portal homepage">Enzyme Portal</a></h1>
-			</div>
+			</div>-->
+
+ <div id="local-title" class="grid_12 alpha logo-title"> 
+     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
+         <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
+     </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
       
       <!-- /local-title -->
 

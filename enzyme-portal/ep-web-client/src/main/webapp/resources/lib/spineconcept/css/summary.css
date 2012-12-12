@@ -56,7 +56,9 @@
 	font-weight: bold;
 	text-align: center;
 }
-
+div.box{
+    border: none;
+}
 .box {
 	display: block;
 	padding-left: 43px;

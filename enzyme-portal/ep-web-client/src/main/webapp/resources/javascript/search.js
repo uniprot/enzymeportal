@@ -169,17 +169,17 @@ function noImage(source){
  */
 function ResultAutoComplete(id, dataArray,theForm,hiddenCheckbox) {
     
-    $[ "ui" ][ "autocomplete" ].prototype["_renderItem"] = function( ul, item) {
-        var keywords = $.trim(this.term).split(' ').join('|');
-        var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<span class="ui-menu-item-highlight">$1</span>');
-        //var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<strong>$1</strong>');
-
-        
-        return $( "<li></li>" ) 
-        .data( "item.autocomplete", item )
-        .append( $( "<a></a>" ).html( output ) )
-        .appendTo( ul );
-    };  
+//    $[ "ui" ][ "autocomplete" ].prototype["_renderItem"] = function( ul, item) {
+//        var keywords = $.trim(this.term).split(' ').join('|');
+//        var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<span class="ui-menu-item-highlight">$1</span>');
+//        //var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<strong>$1</strong>');
+//
+//
+//        return $( "<li></li>" ) 
+//        .data( "item.autocomplete", item )
+//        .append( $( "<a></a>" ).html( output ) )
+//        .appendTo( ul );
+//    };  
     
     
     

@@ -25,7 +25,7 @@
              More info: h5bp.com/b/378 -->
         <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->	<!-- Not yet implemented -->
 
-        <title>[Page title] &lt; [Section title] &lt; EMBL-EBI</title>
+        <title>Enzyme Portal &lt;Advance Search &lt; EMBL-EBI</title>
         <meta name="description" content="EMBL-EBI"><!-- Describe what this page is about -->
         <meta name="keywords" content="bioinformatics, europe, institute"><!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
         <meta name="author" content="EMBL-EBI"><!-- Your [project-name] here -->
@@ -39,6 +39,8 @@
         <!-- CSS: implied media=all -->
         <!-- CSS concatenated and minified via ant build script-->	<!-- Not yet implemented -->
 
+         <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
+  
         <!--        <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/boilerplate-style.css">  
         
                 <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/ebi-global.css" type="text/css" media="screen" />
@@ -55,12 +57,12 @@
                 <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
                 <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
 
-        <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
+<!--        <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
 
         <link rel="stylesheet" href="resources/css/ebi-global.css" type="text/css" media="screen" />
 
         <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
-        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />-->
         <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
@@ -113,16 +115,16 @@
                 <div id="local-masthead" class="masthead grid_24 nomenu">
 
                     <!-- CHOOSE -->
-<!--<div class="grid_12 alpha" id="local-title-logo">
-                            <h1>Enzyme Portal</h1>
-                            <p><img src="resources/images/EnzymePortal_v2.png" alt="Enzyme Portal" width="400" height="72" class="logo" /></p>
-                    </div>-->
+ <div id="local-title" class="grid_12 alpha logo-title"> 
+     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
+         <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
+     </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
 
                     <!-- OR... -->
 
-                    <div class="grid_12 alpha" id="local-title">
+<!--                    <div class="grid_12 alpha" id="local-title">
                         <h1>Enzyme Portal</h1>
-                    </div>
+                    </div>-->
                     <!-- -->
 
 <!--                    <div class="grid_12 omega">

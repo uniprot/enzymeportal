@@ -26,7 +26,7 @@
              More info: h5bp.com/b/378 -->
         <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->	<!-- Not yet implemented -->
 
-        <title>[Page title] &lt; [Section title] &lt; EMBL-EBI</title>
+        <title>Entry Page &lt; Enzyme Portal &lt; EMBL-EBI</title>
         <meta name="description" content="EMBL-EBI"><!-- Describe what this page is about -->
         <meta name="keywords" content="bioinformatics, europe, institute"><!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
         <meta name="author" content="EMBL-EBI"><!-- Your [project-name] here -->
@@ -78,7 +78,7 @@
         <script src="../../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="../../resources/lib/spineconcept/javascript/jquery-ui/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
         <script src="../../resources/lib/spineconcept/javascript/summary.js" type="text/javascript"></script>
-
+          
 
         <!-- end CSS-->
 
@@ -128,18 +128,16 @@
                 <div id="local-masthead" class="masthead grid_24 nomenu">
 
                     <!-- CHOOSE -->
-                    <!--
-<div class="grid_12 alpha" id="local-title-logo">
-                            <h1>[title]</h1>
-                            <p>[logo]<img src="" alt="" width="" height="" class="logo" /></p>
-                    </div>
-                    -->
+ <div id="local-title" class="grid_12 alpha logo-title"> 
+     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
+         <img src="/enzymeportal/resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
+     </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
 
                     <!-- OR... -->
 
-                    <div class="grid_12 alpha" id="local-title">
+<!--                    <div class="grid_12 alpha" id="local-title">
                         <h1>Enzyme Portal</h1>
-                    </div>
+                    </div>-->
                     <!-- -->
 
                     <div class="grid_12 omega">
