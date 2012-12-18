@@ -591,12 +591,13 @@ public class SearchController {
 	        	view = "search";
 	        }
         } catch (Throwable t){
-        	LOGGER.error("Unable to search:\ntype="
-        			+ searchModel.getSearchparams().getType().name()
-        			+ "\ntext="
-        			+ searchModel.getSearchparams().getText()
-        			+ "\nsequence="
-        			+ searchModel.getSearchparams().getSequence(), t);
+            LOGGER.error("one of the search params (Text or Sequence is :", t);
+//        	LOGGER.error("Unable to search:\ntype="
+//        			+ searchModel.getSearchparams().getType().name()
+//        			+ "\ntext="
+//        			+ searchModel.getSearchparams().getText()
+//        			+ "\nsequence="
+//        			+ searchModel.getSearchparams().getSequence(), t);
         }
         return view;
     }

@@ -426,7 +426,7 @@ public class EnzymeFinder implements IEnzymeFinder {
                 Disease disease = new Disease();
                 if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
 
-                     String diseaseName = resolveSpecialCharacters(diseaseMap.getValue());
+                     String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
                     disease.setName(diseaseName.replaceAll(",", ""));
                     disease.setId(diseaseMap.getKey());
                   
@@ -439,37 +439,37 @@ public class EnzymeFinder implements IEnzymeFinder {
        
     }
     
-    
-       public void computeOnlyDisease(List<String> uniprotAccessions) {
-
-        DiseaseDefaultWrapper diseaseDefaultWrapper = null;
-         Disease disease = null;
-        Map<String, String> xRefList = null;
-        for(String uniprotAccession : uniprotAccessions){
-           
-        xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
-        if (xRefList != null) {
-
-            for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
-
-
-                disease = new Disease();
-                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
-                    String diseaseName = resolveSpecialCharacters(diseaseMap.getValue());
-                    disease.setName(diseaseName.replaceAll(",", ""));
-                    disease.setName(diseaseName);
-                    disease.setId(diseaseMap.getKey());
-                    
-                       diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
-                    uniqueDiseases.add(diseaseDefaultWrapper);
-      
-                }
-
-            }
-        }
-        }
-      
-    }
+//    
+//       public void computeOnlyDisease(List<String> uniprotAccessions) {
+//
+//        DiseaseDefaultWrapper diseaseDefaultWrapper = null;
+//         Disease disease = null;
+//        Map<String, String> xRefList = null;
+//        for(String uniprotAccession : uniprotAccessions){
+//           
+//        xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+//        if (xRefList != null) {
+//
+//            for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
+//
+//
+//                disease = new Disease();
+//                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
+//                    String diseaseName = resolveSpecialCharacters(diseaseMap.getValue());
+//                    disease.setName(diseaseName.replaceAll(",", ""));
+//                    disease.setName(diseaseName);
+//                    disease.setId(diseaseMap.getKey());
+//                    
+//                       diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
+//                    uniqueDiseases.add(diseaseDefaultWrapper);
+//      
+//                }
+//
+//            }
+//        }
+//        }
+//      
+//    }
        
        
     public String resolveSpecialCharacters(String data){

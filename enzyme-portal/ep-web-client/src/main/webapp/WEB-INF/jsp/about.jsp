@@ -40,9 +40,9 @@
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
   
   <!-- for production the above can be replaced with -->
-  
+  <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-  
+   
 
   <style type="text/css">
   	/* You have the option of setting a maximum width for your page, and making sure everything is centered */
@@ -153,20 +153,277 @@
     	
     <!-- Example layout containers -->
 	   
-<!--    <section>
-   		<h2>[page-title]</h2>
-   		<p>Your content</p>										
-		</section> -->
-		
-<!--		<section>
-			<h3>Level 3 heading</h3>
-			<p>More content in a full-width container.</p>
-		
-			<h4>Level 4 heading</h4>
-			<p>More content in a full-width container.</p>
-		</section>-->
+ <!-- Suggested layout containers -->
+ 
+<!-- <div class="content">
+    <div class="panel-flexible panels-flexible-about_us clearfix" >
+<div class="panel-flexible-inside panels-flexible-about_us-inside">-->
+<!--<div class="panels-flexible-row panels-flexible-row-about_us-main-row panels-flexible-row-first clearfix">
+  <div class="inside panels-flexible-row-inside panels-flexible-row-about_us-main-row-inside panels-flexible-row-inside-first clearfix">-->
+   
+	   <section class="grid_18 alpha"> 
+<!--<div class="panels-flexible-region panels-flexible-region-about_us-center panels-flexible-region-first ">
+  <div class="inside panels-flexible-region-inside panels-flexible-region-about_us-center-inside panels-flexible-region-inside-first">-->
 
- <section>
+<div id="intro"><div class="panel-pane pane-custom pane-3 clearfix">
+  
+        <h3 class="pane-title">About Enzyme Portal</h3>
+    
+  
+<!--   <div class="pane-content"> -->
+    
+<p></p>
+<div class="caption caption-right"><div class="caption-inner" style="width: 301px;">
+                                <%-- b>Welcome to the Enzyme Portal</b --%>
+                                <iframe width="301" height="224"
+                                        src="http://www.youtube.com/embed/Kldp0WXcxUM"
+                                        frameborder="0"
+                                        allowfullscreen></iframe>
+ </div>
+Enzyme Portal - Intro</div>
+<p></p>
+<!--<p>The European Bioinformatics Institute is part of <a href="http://www.embl.org/" class=" external">EMBL</a>, Europe?s flagship laboratory for the life sciences. EMBL-EBI provides freely available&nbsp;<a href="http://www.ebi.ac.uk/services">data from life science experiments</a> covering the full spectrum of molecular biology. About 20% of our institute is devoted to <a href="http://www.ebi.ac.uk/research">investigator-led research</a> using computational approaches to unravel the secrets of life. Our extensive <a href="http://www.ebi.ac.uk/training/">training</a> programme helps researchers in academia and <a href="http://www.ebi.ac.uk/industry/">industry</a> to make the most of the incredible amount of data being produced every day in life science experiments.</p>
+<p>We are a non-profit, intergovernmental organisation funded by <a href="http://www.embl.de/aboutus/general_information/organisation/member_states/index.html" class=" external">EMBL member states</a>. Our 520 staff hail from 43 countries, and we welcome a regular stream of visiting scientists throughout the year. We are located on the <a href="http://frontier.ebi.ac.uk/about/visit-us">Wellcome Trust Genome Campus</a> in Hinxton, Cambridge in the United Kingdom.</p>-->
+
+	<p>
+		The Enzyme Portal is for those interested in
+		the biology of enzymes and proteins with enzymatic
+		activity.
+<!--	</p>
+
+	<p>-->
+		It integrates publicly available
+		information about enzymes, such as small-molecule chemistry,
+		biochemical pathways and drug compounds. It provides a concise
+		summary of information from:
+		<ul>
+			<li><a href="http://www.uniprot.org/help/uniprotkb">UniProt
+						Knowledgebase</a></li>
+			<li><a href="http://www.pdbe.org">Protein Data Bank in
+						Europe</a></li>
+			<li><a href="http://www.ebi.ac.uk/rhea">Rhea</a>, a database
+					of enzyme-catalyzed reactions</li>
+			<li><a href="http://www.reactome.org">Reactome</a>, a database
+					of biochemical pathways</li>
+			<li><a href="http://www.ebi.ac.uk/intenz">IntEnz</a>, a resource
+					with enzyme nomenclature information</li>
+			<li><a href="http://www.ebi.ac.uk/chebi">ChEBI</a> and
+					<a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a>,
+					which contain information about small molecule chemistry and
+					bioactivity</li>
+			<li><a href="http://www.ebi.ac.uk/thornton-srv/databases/CoFactor/">CoFactor</a>
+					and <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/">MACiE</a>
+					for highly detailed, curated information about cofactors and reaction
+					mechanisms.</li>
+                </ul>
+		The Enzyme Portal brings together lots of diverse
+		information about enzymes and displays it in an organised overview.
+		It covers a large number of species including the key model
+		organisms, and provides a simple way to compare orthologues.
+	</p>
+<!--   </div> -->
+
+  
+  </div>
+</div>
+                                
+ <div class="panel-separator"></div>
+<!--  </div>
+</div> -->
+
+                                <section>
+                                                                  
+                                    <p>
+                                    	<h3>The Enzyme Portal Team</h3>
+	<img alt="The Enzyme Portal team" width="450"
+		style="float: left; margin: 2ex 2em;"
+		src="resources/images/EP_team_photo_4_web.jpg"/>
+	<p>
+		The Enzyme Portal is designed and developed at the
+			EMBL-European Bioinformatics Institute (<a
+			href="http://www.ebi.ac.uk/information">EMBL-EBI</a>)
+			in the UK. Part of the <a
+			href="http://www.embl.org">EMBL Outstation - The European Bioinformatics Institute</a>,
+			EMBL-EBI is the hub of excellence for bioinformatics in Europe. We
+			provide freely available life science data and <a
+			href="http://www.ebi.ac.uk">services</a>, and
+			perform basic <a href="http://www.ebi.ac.uk/research">research</a>
+			in computational biology.
+	</p>
+
+	<p>
+		The Enzyme Portal was created by the <a
+		href="http://www.ebi.ac.uk/steinbeck/">Cheminformatics and Metabolism
+		Team</a> at EMBL-EBI, which is led by
+		<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=922">Christoph
+		Steinbeck</a>. Some of the key contributors are:
+		<ul>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=265">Paula
+			de Matos</a>, Project Coordinator and User Experience
+			Analyst</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=690">Rafael
+			Alcántara</a>, Hong Cao and
+			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1518">Joseph
+			Onwubiko</a>, Software Developers</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1195">Jenny
+			Cham</a>, User Experience Consultant</li>
+		</ul>
+	</p>
+
+	<p>
+		We also have the invaluable support of 
+	<ul>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=467">Jules
+			Jacobsen</a> from the UniProt Team</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=290">Bijay
+			Jassal</a>&nbsp;from the Reactome Team</li>
+		<li>Gemma Holliday and Julia Fischer, previously from the Thornton Team</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=839">Syed
+			Asad Rahman</a> from the Thornton Team</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=793">Mickael
+			Goujon</a> and
+			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1175">Francis
+			Rowland</a> from the External Services Team</li>
+		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=863">James
+			Malone</a> and
+			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=413">Helen
+			Parkinson</a></li>
+	</ul>
+	</p>
+                                
+                                </section>
+           </section>
+		
+		<section class="grid_6 omega">
+
+	<div class="panels-flexible-region panels-flexible-region-about_us-right_ panels-flexible-region-last ">
+  <div class="inside panels-flexible-region-inside panels-flexible-region-about_us-right_-inside panels-flexible-region-inside-last">
+      
+<div class="shortcuts"><div class="panel-pane pane-custom pane-8 clearfix">
+  
+        <h3 class="pane-title">Popular</h3>
+    
+  
+<!--   <div class="pane-content"> -->
+
+    
+<ul class="split">
+ <li><a href="http://www.ebi.ac.uk/training/online/course/enzyme-portal-quick-tour" class="icon icon-generic icon-c1" data-icon="+">Quick Tour</a></li>
+<!-- <li><a href="http://frontier.ebi.ac.uk/about/travel" class="icon icon-generic" data-icon="4">Find us</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/funding" class="icon icon-generic" data-icon="F">Funding</a></li>
+ <li class="icon icon-generic" data-icon="O">Open Day</li>-->
+</ul>
+<ul class="split">
+<!-- <li><a href="http://frontier.ebi.ac.uk/industry" class="icon icon-generic" data-icon="I">Industry</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/jobs" class="icon icon-generic" data-icon="!">Jobs</a></li>
+ <li><a href="http://www.embl.org/" class="icon icon-generic icon-c8 external" data-icon="&amp;">EMBL</a></li>-->
+ <li><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-generic" data-icon="C">Contacts</a><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"></a></li>
+</ul>
+<!--   </div> -->
+
+  
+  </div>
+</div>
+<!--      first video-->
+      <div class="panel-separator"></div>
+      <div class="shortcuts"><div class="panel-pane pane-custom pane-9 clearfix">
+  
+        <h3 class="pane-title"> Learn more about Enzyme Portal</h3>
+    
+  
+<!--   <div class="pane-content"> -->
+<!--    <img src="/sites/ebi.ac.uk/files/images/banner_ads/Publications_BannerAD.jpg" alt="EMBL-EBI brochures" title="EMBL-EBI brochures" width="300" height="121" style="border: 0px;">   </div> -->
+<table>
+    <tr>
+
+                            <td>
+                                <%-- b>Explore Enzyme Portal</b --%>
+                                <iframe width="360" height="270"
+                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
+                                        frameborder="0"
+                                        allowfullscreen></iframe>
+                            </td>
+                        </tr>
+                    </table>
+  
+  </div>
+</div>
+         <div class="panel-separator"></div>
+         
+         <div class="panel-pane pane-custom pane-10 clearfix">
+  
+      
+  
+<!--   <div class="pane-content"> -->
+    
+<h3><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents<br>
+</span></h3>
+<p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source file is freely available and can be downloaded from <a>GitHub </a>, an online project hosting service. </span></p>
+<!--<p><span>EMBL-EBI provides a unique environment for <a href="http://frontier.ebi.ac.uk/research/home">bioinformatics research</a>, and our broad palette of research interests&nbsp;compliments our data resources. In the era of personal genomics, our research is increasingly translational and related to problems of direct significance to medicine and the environment.</span></p>
+<p><span>Our research leaders train emerging computational biologists in the <a href="http://www.embl.de/training/eipp/" class=" external">EMBL International PhD Programme</a>, and offer many different opportunities for <a href="http://www.ebi.ac.uk/training/postdoc/">postdocts</a> and <a href="http://frontier.ebi.ac.uk/visitors-and-scholars">visiting scholars</a>.&nbsp;</span><a href="http://www.ebi.ac.uk/research"></a></p>-->
+
+<!--   </div> -->
+
+  
+  </div>
+  </div>
+</div>		
+		</section>
+		
+<!--    </div>
+  </div>
+    </div>
+  </div>-->
+
+                             
+                                
+
+
+
+
+
+
+
+<!--   <section class="grid_18 alpha">
+                            <div style="margin-left: auto; margin-right: auto;
+                         width: 50%;">
+<h3>About the Enzyme Portal</h3>
+                        <h2>Welcome to the Enzyme Portal</h2> 
+                        <p> The Enzyme Portal is for those interested
+                        in the biology of enzymes and proteins with enzymatic
+                        activity.</p> 
+                        <p>Watch the videos below for a more insight on how to use the Enzyme Portal.</p>
+                 
+                        <div style="text-align: right;">
+                            <a href="about" class="showLink" >More about the
+                                Enzyme Portal...</a>
+                        </div>
+                    </div>
+
+                    <table style="margin-left: auto; margin-right: auto;
+                           width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
+                        <tr style="text-align: center;">
+<table>
+    <tr>
+                            <td>
+                                <%-- b>Welcome to the Enzyme Portal</b --%>
+                                <iframe width="360" height="270"
+                                        src="http://www.youtube.com/embed/Kldp0WXcxUM"
+                                        frameborder="0"
+                                        allowfullscreen></iframe>
+                            </td>
+                            <td>
+                                <%-- b>Explore Enzyme Portal</b --%>
+                                <iframe width="360" height="270"
+                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
+                                        frameborder="0"
+                                        allowfullscreen></iframe>
+                            </td>
+                        </tr>
+                    </table>
+    </section>-->
+
+<!-- <section>
                    
 	<h3>About the Enzyme Portal</h3>
 	<p>
@@ -182,7 +439,7 @@
 		summary of information from:
 		<ul>
 			<li><a href="http://www.uniprot.org/help/uniprotkb">UniProt
-						knowledge base</a></li>
+						Knowledgebase</a></li>
 			<li><a href="http://www.pdbe.org">Protein Data Bank in
 						Europe</a></li>
 			<li><a href="http://www.ebi.ac.uk/rhea">Rhea</a>, a database
@@ -209,11 +466,11 @@
 		Give it a try and 
 		<a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/">let
 		us know</a> what you think!
-	</p>
+	</p>-->
 <!--        	                <div style="text-align: right;">
                                     <a href="faq" class="showLink">Frequently asked questions ...</a>
 	                </div>-->
-
+<!--<section class="grid_18 alpha">
 	<h4>The Enzyme Portal Team</h4>
 	<img alt="The Enzyme Portal team" width="450"
 		style="float: left; margin: 2ex 2em;"
@@ -223,7 +480,7 @@
 			EMBL-European Bioinformatics Institute (<a
 			href="http://www.ebi.ac.uk/information">EMBL-EBI</a>)
 			in the UK. Part of the <a
-			href="http://www.embl.org">European Molecular Biology Laboratory</a>,
+			href="http://www.embl.org">EMBL Outstation - The European Bioinformatics Institute</a>,
 			EMBL-EBI is the hub of excellence for bioinformatics in Europe. We
 			provide freely available life science data and <a
 			href="http://www.ebi.ac.uk">services</a>, and
@@ -272,7 +529,7 @@
 	</p>
 	 
 
-                </section>
+                </section>-->
 
 		<!-- End example layout containers -->
 			

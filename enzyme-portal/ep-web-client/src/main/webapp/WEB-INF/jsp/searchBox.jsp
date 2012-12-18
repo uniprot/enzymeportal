@@ -10,6 +10,7 @@
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<link href="resources/css/search.css" type="text/css" rel="stylesheet" />
  <script src="resources/javascript/search.js" type="text/javascript"></script>
 <script>
 function showCard(tabId){
@@ -90,8 +91,8 @@ function submitKeywordForm(text){
                         <br/>
                             <section>
                 <h3 style="text-align: left">Keyword Search guideline</h3>
-                <p>How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]</p>
-                 <p>How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]. How To's of Keyword Search goes here. [TODO]</p>
+                <p>To use the keyword search, simply enter a search term and click on the search button. For example you can enter <a class="formSubmit"
+			onclick="submitKeywordForm('sildenafil')">sildenafil</a> as a keyword in the search field provided.</p>
             </section>
 	</div>
 
@@ -104,12 +105,51 @@ function submitKeywordForm(text){
 		<button id="search-sequence-submit" type="submit"
 			name="searchparams.type" value="SEQUENCE"
 	      	class="searchButton">Search</button>
-                
-                <br/>
+                  <br/>
                     <section>
                         <h3 style="text-align: left">Sequence Search guideline</h3>
-                <p>How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]</p>
-                <p>How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]. How To's of Sequence Search goes here. [TODO]</p>
+                
+                <p>In order to use the sequence search, the search term must be in FASTA format as shown in the example below:</p>
+                <pre style="color: #996a44; background-color:whitesmoke "><span> >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
+                MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
+                LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
+                IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
+                VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
+                GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
+                YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
+                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK
+
+                </span></pre>
+                <p>However, the header <pre style="color: #996a44; background-color:white;">  >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
+                <h4>More about FASTA Format:</h4>
+<a   name="fasta" id="fasta"></a>
+<ul>
+  <li>This format contains a single header line providing the sequence 
+    name, and optionally a description, followed by lines of sequence data.</li>
+  <li>Sequences in FASTA formatted files are preceded by a line 
+    starting with a &quot; &gt;&quot; symbol.</li>
+  <li>The first word on this line is the name of the sequence. The rest 
+    of the line is a description of the sequence.</li>
+</ul>
+<div class="commentsbox">
+  <pre style="color: #996a44; background-color:white;"><span class="insidecommentsbox">
+       Term 	Entry Name 	Molecule Type 	Gene Name 	Sequence Length
+       e.g. 	FOSB_MOUSE 	Protein 	fosB 	338 bp
+</span></pre>
+</div>
+<ul>
+  <li>The remaining lines contain the sequence itself, usually formated 
+    to 60 characters per line.</li>
+  <li>Depending on the application blank lines in a FASTA file are 
+    ignored or treated as terminating the sequence </li>
+  <li>Depending on the application spaces or other non-sequence symbols 
+    (dashes, underscores, periods) in a sequence are either ignored or 
+    treated as gaps.</li>
+  <li>FASTA files containing multiple sequences are just the same, with 
+    one sequence listed right after another. This format is accepted for 
+    many multiple sequence alignment programs.</li>
+</ul>
+             
             </section>
 	</div>
 </div>

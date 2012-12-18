@@ -197,7 +197,7 @@
                  <h3>Frequently Asked Questions</h3>
                 <ul>
                     <li><a href="faq#01">How is the EnzymePortal different from BRENDA?</a></li>
-                    <li><a href="faq#02">Other questions about the Enzyme Portal</a></li>
+                    <li><a href="faq#02">What is the meaning of those compounds used as filters for the search results?</a></li>
                     <li><a href="faq#03">More questions about the Enzyme Portal</a></li>
                 </ul>
                 <a name="01"></a><h4>How is the EnzymePortal different from BRENDA?</h4>
@@ -205,12 +205,11 @@
                 <p>The <a href="/enzymeportal" class="showLink" >EnzymePortal</a>  is a one-stop shop for enzyme-related information in resources developed at the EBI. It accumulated this information and aims to present it to the scientist with a unified user experience. The EnzymePortal team does not curate enzyme information and therefore is a secondary information resource or portal. At some point, a user interested in more detail will always leave the EP pages and refer to the information in the underlying primary database (Uniprot, PDB, etc.) directly.
                 </p><p><a href="http://www.brenda-enzymes.info/" >BRENDA</a>  is the most comprehensive resource about enzymes world-wide and has invested a great amount into the abstraction and curation about enzymes and their related information. BRENDA contains valuable information that can not be found in the EnzymePortal at the moment, such as kinetic, specifity, stability, application, disease-related and engineering data. As a primary resource, BRENDA could be a candidate for an information source for the EP in the future.</p>
                 </fieldset>
-                <a name="02"></a><h4>Other questions about the Enzyme Portal [TODO]</h4>
+                <a name="02"></a><h4>What is the meaning of those compounds used as filters for the search results?</h4>
                 <fieldset>
-                    <p>other questions about the enzyme portal goes here.other questions about the enzyme portal goes here.other questions about the enzyme portal goes here. other questions about the enzyme portal goes here.. other questions about the enzyme portal goes here.</p>
-                     <p>other questions about the enzyme portal goes here.other questions about the enzyme portal goes here.other questions about the enzyme portal goes here</p>
+                    <p>The compounds listed along the search results are any small molecules which are related to them, be it as reactants, products, activators, inhibitors or cofactors of those enzymes. They can be used as filters to narrow your search if you are particularly interested in the biochemistry of concrete chemicals, for example enzymes using manganese as a cofactor.</p>
                 </fieldset>
-                 <a name="03"></a><h4>more questions about the Enzyme Portal [TODO]</h4>
+                <a name="03"></a><h4 style="color: #cd0a0a">more questions about the Enzyme Portal [TODO]</h4>
                 <fieldset>
                     <p>more questions about the enzyme portal goes here.more questions about the enzyme portal goes here.more questions about the enzyme portal goes here.more questions about the enzyme portal goes here. more questions about the enzyme portal goes here. more questions about the enzyme portal goes here</p>
                                         <p>more questions about the enzyme portal goes here.more questions about the enzyme portal goes here.more questions about the enzyme portal goes here. more questions about the enzyme portal goes here. more questions about the enzyme portal goes here</p>

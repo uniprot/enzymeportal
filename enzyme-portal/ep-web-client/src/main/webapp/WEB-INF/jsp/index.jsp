@@ -38,7 +38,7 @@
   <!-- you can replace this with [projectname]-colours.css. See http://frontier.ebi.ac.uk/web/style/colour for details of how to do this -->
   <!-- also inform ES so we can host your colour palette file -->
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
-  
+  <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
   <!-- for production the above can be replaced with -->
   
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
@@ -168,30 +168,130 @@
     </header>
                
     <div id="content" role="main" class="grid_24 clearfix">
-    
-    <!-- If you require a breadcrumb trail, its root should be your service.
-     	   You don't need a breadcrumb trail on the homepage of your service... -->
-<!--    <nav id="breadcrumb">
-     	<p>
-		    <a href="[service-url]">[service-name]</a> &gt; 
-		    [page-title]
-			</p>
-  	</nav>-->
-    	
-    <!-- Example layout containers -->
-    
-    <section>
+        
+            <section>
                             <div style="margin-left: auto; margin-right: auto;
                          width: 50%;">
 
                         <h2>Welcome to the Enzyme Portal</h2> 
-                        <p> The Enzyme Portal is for people who are interested
+                        <p>You can search this integrated resource to find information about the biology of an enzyme or a protein with enzymatic activity.</p>
+                        <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds. It brings together lots of diverse information about enzymes, and covers a large number of species including the key model organisms. 
+                          The search results are displayed as a summary, and give you a simple way to compare orthologues.
+                        </p>
+                    <p>
+		Give it a try and 
+		<a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/">let
+		us know</a> what you think!</p>
+<!--                        <p> The Enzyme Portal is for those interested
+                        in the biology of enzymes and proteins with enzymatic
+                        activity.</p>-->
+                 
+                        <div style="text-align: right;">
+                            <a href="about" class="showLink" >More about the
+                                Enzyme Portal...</a>
+                        </div>
+                    </div>
+                <div style="margin-left: auto; margin-right: auto;
+                          width: 50%;">
+                <div class="shortcuts"><div class="panel-pane pane-custom pane-8 clearfix" >
+  
+        <h3 class="pane-title">Enzyme Portal Resources</h3>
+        
+
+
+
+
+
+
+
+
+        
+                              <ul class="split">
+                                  <li>UniProt</li>
+                                  <li>ChEBI</li>
+                                  <li>ChEMBL</li>
+                                  <li>PDBe</li>
+<!-- <li><a href="http://frontier.ebi.ac.uk/about/news" class='icon icon-generic' data-icon='N'>News</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/travel" class='icon icon-generic' data-icon='4'>Find us</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/funding" class='icon icon-generic' data-icon='F'>Funding</a></li>
+ <li class='icon icon-generic' data-icon='O'>Open Day</li>-->
+</ul>
+<ul class="split">
+    <li>Reactome</li>
+    <li>Rhea</li>
+    <li>IntEnz</li>
+    <li>CoFactor</li>
+    <li>MACiE</li>
+<!-- <li><a href="http://frontier.ebi.ac.uk/industry" class='icon icon-generic' data-icon='I'>Industry</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/jobs" class='icon icon-generic' data-icon='!'>Jobs</a></li>
+ <li><a href="http://www.embl.org/" class='icon icon-generic icon-c8' data-icon='&'>EMBL</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/people" class='icon icon-generic' data-icon='C'>Contacts</a><a href="http://frontier.ebi.ac.uk/about/contact"></a>
+ </li>-->
+</ul> 
+        
+                    </div></div>
+                
+                </div>
+                
+                
+                
+                
+                
+<!--                     <div style="margin-left: auto; margin-right: auto;
+                          width: 50%;">
+                         <h3>Enzyme Portal Resources</h3>
+                     </div>
+                    <table style="margin-left: auto; margin-right: auto;
+                           width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
+                        <tr style="text-align: center;">
+                        
+                            <td>
+                               <ul class="split">
+ <li><a href="http://frontier.ebi.ac.uk/about/news" class='icon icon-generic' data-icon='N'>News</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/travel" class='icon icon-generic' data-icon='4'>Find us</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/funding" class='icon icon-generic' data-icon='F'>Funding</a></li>
+ <li class='icon icon-generic' data-icon='O'>Open Day</li>
+</ul>
+<ul class="split">
+ <li><a href="http://frontier.ebi.ac.uk/industry" class='icon icon-generic' data-icon='I'>Industry</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/jobs" class='icon icon-generic' data-icon='!'>Jobs</a></li>
+ <li><a href="http://www.embl.org/" class='icon icon-generic icon-c8' data-icon='&'>EMBL</a></li>
+ <li><a href="http://frontier.ebi.ac.uk/about/people" class='icon icon-generic' data-icon='C'>Contacts</a><a href="http://frontier.ebi.ac.uk/about/contact"></a></li>
+</ul> 
+                            </td>
+                            <td>
+                                <%-- b>Welcome to the Enzyme Portal</b --%>
+                                <iframe width="360" height="270"
+                                        src="http://www.youtube.com/embed/Kldp0WXcxUM"
+                                        frameborder="0"
+                                        allowfullscreen></iframe>
+                            </td>
+                            <td>
+                                <%-- b>Explore Enzyme Portal</b --%>
+                                <iframe width="360" height="270"
+                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
+                                        frameborder="0"
+                                        allowfullscreen></iframe>
+                            </td>
+                        </tr>
+                    </table>-->
+    </section>
+        
+        
+ 
+    
+<!--    <section>
+                            <div style="margin-left: auto; margin-right: auto;
+                         width: 50%;">
+
+                        <h2>Welcome to the Enzyme Portal</h2> 
+                        <p> The Enzyme Portal is for those interested
                         in the biology of enzymes and proteins with enzymatic
                         activity.</p>
                  
                         <div style="text-align: right;">
                             <a href="about" class="showLink" >More about the
-                                enzyme portal...</a>
+                                Enzyme Portal...</a>
                         </div>
                     </div>
 
@@ -214,7 +314,7 @@
                             </td>
                         </tr>
                     </table>
-    </section>
+    </section>-->
     
 	   
 <!--    <section>

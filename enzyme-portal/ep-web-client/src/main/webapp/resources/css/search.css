@@ -484,9 +484,156 @@ a.formSubmit {
     cursor: default;
 
 }
-/*check auto complete code in js*/
+/*see auto complete code in js*/
 .ui-menu-item-highlight{
     color: #207a7a;
     font-weight: bolder;
 }
+
+/*for home page EP resources box*/
+
+.shortcuts>div ul.split { 
+	float: left; 
+	width: 40%;
+	margin: 0 1%;
+	
+	list-style: none;
+	padding: 9px 0 9px 9px;	/* Add some breathing space */
+}
+
+.shortcuts>div ul li a { display: block; border-bottom-color: #ccc; }
+
+
+/*css for about us page*/
+
+/*#intro h2,
+.shortcuts h3,
+#outro h3,
+div.highlight h3 { color: #333; }*/
+
+/*  Intro, Outro
+	These are arguably special kinds of highlight areas.
+	They are usually only featured on the main pages of top-level parts of the website.
+*/
+/*#intro,
+#outro {
+	background-color: #ededed;
+	display: block;
+	padding-bottom: 9px;
+	
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}*/
+
+
+#intro h2 {
+	line-height: 2;
+	margin-bottom: 0;
+	margin-top: 9px;
+}
+
+/* Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/* http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack */
+
+.clearfix:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+.clearfix {
+	display: block;
+}
+
+/**
+ * @file
+ * Caption filter default styling for displaying image captions.
+ */
+
+div.caption-inner {
+  border: 1px solid #CCC;
+  padding: 4px;
+  background: #F3F3F3;
+  font-size: 0.857em; /* assuming you have a base font size of 14px, this is 12px */
+  text-align: center;
+}
+
+div.caption p {
+  margin: .25em 0;
+}
+
+div.caption img,
+div.caption object {
+  margin-bottom: 5px;
+  display: block;
+}
+
+/** aligned captions **/
+div.caption-left {
+  float: left;
+  margin: 10px 10px 10px 0;
+}
+
+div.caption-right {
+  float: right;
+  margin: 10px 0 10px 10px;
+}
+
+div.caption-center {
+  display: block;
+  text-align: center;
+}
+
+div.caption-center .caption-inner {
+  display: inline-block;
+}
+
+
+/*see example sequence search in advance search page*/
+
+/*pre.commentsbox {
+	font-size: 9pt;
+	font-weight: bold;
+	color: #000000;
+
+	padding: 12px;
+	background-color: #edf5ea;
+        background-color: #0C4452;
+	border: 1px solid #d9dadc;
+	margin: 5px 0;
+	display: block;
+	overflow: auto;
+}*/
+
+/*pre {
+	display: block;
+}*/
 
