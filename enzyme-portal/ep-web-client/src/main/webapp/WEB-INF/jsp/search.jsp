@@ -97,7 +97,17 @@
         <!-- custom build (lacks most of the "advanced" HTML5 support -->
         <script src="http://wwwdev.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
         <!--  <script src="/web_guidelines/js/libs/modernizr.custom.49274.js"></script>		-->
+        
+        
+<!--<! --------------------------------
+    GLOBAL SEARCH TEMPLATE - START
+   -------------------------------- >-->-->
 
+	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
+
+<!--<! --------------------------------
+    GLOBAL SEARCH TEMPLATE - END-->
 
     </head>
 
@@ -170,15 +180,15 @@
 			<nav>
 				<ul class="grid_24" id="local-nav">
 					<li  class="first"><a href="/enzymeportal" title="">Home</a></li>
-					<li><a href="#">Documentation</a></li>
+<!--					<li><a href="#">Documentation</a></li>-->
 					<li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
 					<li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
 					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
 					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
 					     whichever one will show up last... 
 					     For example: -->
-					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>
-					<li class="functional"><a href="#" class="icon icon-static" data-icon="f">Feedback</a></li>
+<!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
+					<li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
 					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
 				</ul>
 			</nav>
@@ -916,14 +926,83 @@
                 <!--                                           grid_12 content -->
 <!--            </div>  page container_12 -->
 <!--                    </div>-->
-	<section class="grid_4 omega" id="search-extras">
+<!--
+<! --------------------------------
+    GLOBAL SEARCH TEMPLATE - START
+   -------------------------------- >-->
+		
+		<script type="text/javascript">
+			function renderMenu(elem, items, baseURL) {
+		        var ul = $("<ul>").appendTo(elem);
+		        $.each(items, function(index, item) {
+		            renderItem(ul, item, baseURL);
+		        });
+		    }
+			
+		    function renderItem(ul, item, baseURL) {
+		    	$( "<li>" )
+			    	.append( $( "<a>" ).attr("href", baseURL+item.url)
+			    					   .text( item.name + " ("+item.numberOfResults+")" )
+			    	).appendTo( ul );
+		    }
+
+			function updateSummary() {
+				var query = $("#local-searchbox").val();
+				if (query) {
+					var searchBaseURL = "/ebisearch/";
+					var thisElem = $.find("#search-extras");
+					$(thisElem).text("Loading other results");
+					$(thisElem).addClass("loading");
+
+					$.ajax({
+					  searchBaseURL: searchBaseURL, 
+					  url: searchBaseURL+"globalsearchsummary.ebi?query="+query,
+					  context: thisElem,
+					  dataType: "json",
+					  crossdoamin: true,
+					  error: function(request, error) {
+						  //console.log(arguments);
+						  alert("error occurred: "+error);
+					  },
+					  success: function (data, textStatus, jqHXR) {
+						  //alert("success");
+					  }
+					}).done(function( response ) {
+					  var obj = response;
+					  $(this).text("");
+					  $(this).removeClass("loading");
+					  $(this).append("<p>EBI global search results</p>");
+					  //$(this).blink({delay: 500});
+					  $("#page-title").text('Search results for ').append($("<span>").attr("class", "searchterm").text(query));
+					  renderMenu(this, obj, searchBaseURL);
+					});
+				}
+			}
+			
+		</script>
+		
+<!--<! ------------------------------
+    GLOBAL SEARCH TEMPLATE - END
+   ------------------------------ >-->
+		
+		<section class="grid_4 omega" id="search-extras">
+    		<p>EBI global search results</p>
+		</section>
+
+
+
+
+
+
+
+<!--	<section class="grid_4 omega" id="search-extras">
     		<p>EBI global search results</p>
     		<ul>
 	    		<li><a href="#">text</a></li>
 	    		<li><a href="#">text</a></li>
 	    		<li><a href="#">text</a></li>
     		</ul>
-		</section>
+		</section>-->
  </c:if>
 <!--                </section>-->
                 

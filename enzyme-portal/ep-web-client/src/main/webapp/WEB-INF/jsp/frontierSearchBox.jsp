@@ -11,6 +11,16 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
  <script src="resources/javascript/search.js" type="text/javascript"></script>
+<!-- <! --------------------------------
+    GLOBAL SEARCH TEMPLATE - START
+   -------------------------------- >-->
+
+	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
+
+<!--<! --------------------------------
+    GLOBAL SEARCH TEMPLATE - END
+   -------------------------------- >-->
 <script>
 //function showCard(tabId){
 //	var s = tabId.split('-tab-');

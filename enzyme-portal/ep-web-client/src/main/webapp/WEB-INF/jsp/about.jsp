@@ -122,19 +122,24 @@
 			<nav>
 				<ul class="grid_24" id="local-nav">
 					<li class="first"><a href="/enzymeportal">Home</a></li>
-					<li class=""><a href="#">Documentation</a></li>
+<!--					<li class=""><a href="#">Documentation</a></li>-->
 					<li><a href="faq">FAQ</a></li>
 					<li class="active"><a href="about">About Enzyme Portal</a></li>
 					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
 					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
 					     whichever one will show up last... 
 					     For example: -->
-					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>
-					<li class="functional"><a href="#" class="icon icon-generic" data-icon="\">Feedback</a></li>
+<!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
+					<li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
 					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
+<!--                                        <li class="functional"><a href="https://twitter.com/share" class="icon icon-functional" data-icon="r">Share</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+                                        -->
 				</ul>
 			</nav>		
   
+      
+      
       <!-- /local-nav -->
 
     </div>
@@ -165,7 +170,8 @@
 <!--<div class="panels-flexible-region panels-flexible-region-about_us-center panels-flexible-region-first ">
   <div class="inside panels-flexible-region-inside panels-flexible-region-about_us-center-inside panels-flexible-region-inside-first">-->
 
-<div id="intro"><div class="panel-pane pane-custom pane-3 clearfix">
+<div id="intro" style="background-color: white;">
+    <div class="panel-pane pane-custom pane-3 clearfix">
   
         <h3 class="pane-title">About Enzyme Portal</h3>
     
@@ -180,7 +186,7 @@
                                         frameborder="0"
                                         allowfullscreen></iframe>
  </div>
-Enzyme Portal - Intro</div>
+Enzyme Portal - An Introduction</div>
 <p></p>
 <!--<p>The European Bioinformatics Institute is part of <a href="http://www.embl.org/" class=" external">EMBL</a>, Europe?s flagship laboratory for the life sciences. EMBL-EBI provides freely available&nbsp;<a href="http://www.ebi.ac.uk/services">data from life science experiments</a> covering the full spectrum of molecular biology. About 20% of our institute is devoted to <a href="http://www.ebi.ac.uk/research">investigator-led research</a> using computational approaches to unravel the secrets of life. Our extensive <a href="http://www.ebi.ac.uk/training/">training</a> programme helps researchers in academia and <a href="http://www.ebi.ac.uk/industry/">industry</a> to make the most of the incredible amount of data being produced every day in life science experiments.</p>
 <p>We are a non-profit, intergovernmental organisation funded by <a href="http://www.embl.de/aboutus/general_information/organisation/member_states/index.html" class=" external">EMBL member states</a>. Our 520 staff hail from 43 countries, and we welcome a regular stream of visiting scientists throughout the year. We are located on the <a href="http://frontier.ebi.ac.uk/about/visit-us">Wellcome Trust Genome Campus</a> in Hinxton, Cambridge in the United Kingdom.</p>-->
@@ -235,8 +241,8 @@ Enzyme Portal - Intro</div>
                                                                   
                                     <p>
                                     	<h3>The Enzyme Portal Team</h3>
-	<img alt="The Enzyme Portal team" width="450"
-		style="float: left; margin: 2ex 2em;"
+                                        <img alt="The Enzyme Portal team" width="450"
+		style="float: left; margin: 2ex 2em; height: 340px "
 		src="resources/images/EP_team_photo_4_web.jpg"/>
 	<p>
 		The Enzyme Portal is designed and developed at the
@@ -271,7 +277,7 @@ Enzyme Portal - Intro</div>
 	</p>
 
 	<p>
-		We also have the invaluable support of 
+            We also have the invaluable support of
 	<ul>
 		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=467">Jules
 			Jacobsen</a> from the UniProt Team</li>
@@ -307,17 +313,15 @@ Enzyme Portal - Intro</div>
 <!--   <div class="pane-content"> -->
 
     
+
 <ul class="split">
  <li><a href="http://www.ebi.ac.uk/training/online/course/enzyme-portal-quick-tour" class="icon icon-generic icon-c1" data-icon="+">Quick Tour</a></li>
-<!-- <li><a href="http://frontier.ebi.ac.uk/about/travel" class="icon icon-generic" data-icon="4">Find us</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/funding" class="icon icon-generic" data-icon="F">Funding</a></li>
- <li class="icon icon-generic" data-icon="O">Open Day</li>-->
+   <li><a href="http://nar.oxfordjournals.org/content/41/D1/D773.full" class="icon icon-conceptual icon-c8" data-icon="l">Publications</a></li>
 </ul>
 <ul class="split">
-<!-- <li><a href="http://frontier.ebi.ac.uk/industry" class="icon icon-generic" data-icon="I">Industry</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/jobs" class="icon icon-generic" data-icon="!">Jobs</a></li>
- <li><a href="http://www.embl.org/" class="icon icon-generic icon-c8 external" data-icon="&amp;">EMBL</a></li>-->
- <li><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-generic" data-icon="C">Contacts</a><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"></a></li>
+
+ <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic" data-icon="l">Documentations</a></li>
+<!-- <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic" data-icon="C">Contacts</a><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"></a></li>-->
 </ul>
 <!--   </div> -->
 
@@ -326,43 +330,39 @@ Enzyme Portal - Intro</div>
 </div>
 <!--      first video-->
       <div class="panel-separator"></div>
-      <div class="shortcuts"><div class="panel-pane pane-custom pane-9 clearfix">
+ 
+      <div class="shortcuts">
+          <div class="panel-pane pane-custom pane-9 clearfix">
   
         <h3 class="pane-title"> Learn more about Enzyme Portal</h3>
     
   
-<!--   <div class="pane-content"> -->
-<!--    <img src="/sites/ebi.ac.uk/files/images/banner_ads/Publications_BannerAD.jpg" alt="EMBL-EBI brochures" title="EMBL-EBI brochures" width="300" height="121" style="border: 0px;">   </div> -->
-<table>
-    <tr>
+   <div class="pane-content"> 
 
-                            <td>
                                 <%-- b>Explore Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
+
+                                   <iframe style=" width: 344.5px; height:200px;" 
                                         src="http://www.youtube.com/embed/b7hFo5iJuoM"
                                         frameborder="0"
                                         allowfullscreen></iframe>
-                            </td>
-                        </tr>
-                    </table>
   
   </div>
 </div>
+      </div>  
          <div class="panel-separator"></div>
          
          <div class="panel-pane pane-custom pane-10 clearfix">
   
       
   
-<!--   <div class="pane-content"> -->
+   <div class="pane-content"> 
     
 <h3><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents<br>
 </span></h3>
-<p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source file is freely available and can be downloaded from <a>GitHub </a>, an online project hosting service. </span></p>
-<!--<p><span>EMBL-EBI provides a unique environment for <a href="http://frontier.ebi.ac.uk/research/home">bioinformatics research</a>, and our broad palette of research interests&nbsp;compliments our data resources. In the era of personal genomics, our research is increasingly translational and related to problems of direct significance to medicine and the environment.</span></p>
-<p><span>Our research leaders train emerging computational biologists in the <a href="http://www.embl.de/training/eipp/" class=" external">EMBL International PhD Programme</a>, and offer many different opportunities for <a href="http://www.ebi.ac.uk/training/postdoc/">postdocts</a> and <a href="http://frontier.ebi.ac.uk/visitors-and-scholars">visiting scholars</a>.&nbsp;</span><a href="http://www.ebi.ac.uk/research"></a></p>-->
+<p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub </a>, an online project hosting service. </span></p>
+<p><span>Additionally, the technical documentations (Javadoc, project information) are available from this <a href="http://ebi-cheminf.github.com/enzymeportal/ep/">web link </a>. </span></p>
 
-<!--   </div> -->
+   </div> 
 
   
   </div>
@@ -370,10 +370,6 @@ Enzyme Portal - Intro</div>
 </div>		
 		</section>
 		
-<!--    </div>
-  </div>
-    </div>
-  </div>-->
 
                              
                                 

@@ -149,15 +149,15 @@
 			<nav>
 				<ul class="grid_24" id="local-nav">
 					<li  class="active"><a href="/enzymeportal" title="">Home</a></li>
-					<li><a href="#">Documentation</a></li>
+<!--					<li><a href="#">Documentation</a></li>-->
 					<li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
 					<li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
 					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
 					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
 					     whichever one will show up last... 
 					     For example: -->
-					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>
-					<li class="functional"><a href="#" class="icon icon-static" data-icon="f">Feedback</a></li>
+<!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
+					<li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
 					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
 				</ul>
 			</nav>		
@@ -174,7 +174,7 @@
                          width: 50%;">
 
                         <h2>Welcome to the Enzyme Portal</h2> 
-                        <p>You can search this integrated resource to find information about the biology of an enzyme or a protein with enzymatic activity.</p>
+                        <p>You can search this integrated resource to find information about the biology of a protein with enzymatic activity.</p>
                         <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds. It brings together lots of diverse information about enzymes, and covers a large number of species including the key model organisms. 
                           The search results are displayed as a summary, and give you a simple way to compare orthologues.
                         </p>
@@ -220,7 +220,6 @@
     <li>Reactome</li>
     <li>Rhea</li>
     <li>IntEnz</li>
-    <li>CoFactor</li>
     <li>MACiE</li>
 <!-- <li><a href="http://frontier.ebi.ac.uk/industry" class='icon icon-generic' data-icon='I'>Industry</a></li>
  <li><a href="http://frontier.ebi.ac.uk/about/jobs" class='icon icon-generic' data-icon='!'>Jobs</a></li>

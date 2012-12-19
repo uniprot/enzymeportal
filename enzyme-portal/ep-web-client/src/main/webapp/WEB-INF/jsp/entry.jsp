@@ -205,15 +205,15 @@
                			<nav>
 				<ul class="grid_24" id="local-nav">
 					<li  class="first"><a href="/enzymeportal" title="">Home</a></li>
-					<li><a href="#">Documentation</a></li>
+<!--					<li><a href="#">Documentation</a></li>-->
 					<li><a href="/enzymeportal/faq" title="Frequently Asked questions">FAQ</a></li>
 					<li class="last"><a href="/enzymeportal/about" title="About Enzyme Portal">About Enzyme Portal</a></li>
 					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
 					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
 					     whichever one will show up last... 
 					     For example: -->
-					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>
-					<li class="functional"><a href="#" class="icon icon-static" data-icon="f">Feedback</a></li>
+<!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
+					<li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
 					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
 				</ul>
 			</nav>	

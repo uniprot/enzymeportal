@@ -167,6 +167,8 @@
                             <li class="active"><a href="#" title="">TODO 3</a></li>-->
                             <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
                             <li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
+                            <li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
+					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
                         </ul>
                     </nav>	
                 </div>

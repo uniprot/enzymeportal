@@ -121,8 +121,8 @@ function submitKeywordForm(text){
 
                 </span></pre>
                 <p>However, the header <pre style="color: #996a44; background-color:white;">  >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
-                <h4>More about FASTA Format:</h4>
-<a   name="fasta" id="fasta"></a>
+                    <p><a href="http://www.ebi.ac.uk/help/formats.html#fasta"><h5 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h5></a></p>
+<!--<a   name="fasta" id="fasta"></a>
 <ul>
   <li>This format contains a single header line providing the sequence 
     name, and optionally a description, followed by lines of sequence data.</li>
@@ -148,7 +148,7 @@ function submitKeywordForm(text){
   <li>FASTA files containing multiple sequences are just the same, with 
     one sequence listed right after another. This format is accepted for 
     many multiple sequence alignment programs.</li>
-</ul>
+</ul>-->
              
             </section>
 	</div>
