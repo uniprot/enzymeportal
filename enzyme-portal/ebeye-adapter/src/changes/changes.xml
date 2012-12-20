@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
+		http://maven.apache.org/changes/1.0.0 ">
+
+<properties>
+	<title>EB-Eye adapter change log</title>
+	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+</properties>
+
+<body>
+	<release version="1.0.2" date="2012-08-20" description="Dependency updates">
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of parent, ep-domain, ep-util and log4j.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Using the shared uk.ac.ebi.biobabel:ebeye-client artifact instead
+			of uk.ac.ebi.ep:ebeye-client (deprecated).
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
+	</release>
+</body>
+
+</document>

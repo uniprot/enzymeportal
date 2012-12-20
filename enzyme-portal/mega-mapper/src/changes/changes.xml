@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
+        http://maven.apache.org/changes/1.0.0 ">
+
+<properties>
+	<title>Mega-mapper change log</title>
+	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+</properties>
+
+<body>
+	<release version="1.0.6" date="2012-09-20"
+		description="Scripts modifications.">
+		<action dev="rafalcan" type="fix">
+			Modified scripts for releases: removed unnecesary build and
+            added svn command to copy generated statistics to the trunk..
+		</action>
+    </release>
+	<release version="1.0.5" date="2012-09-05"
+		description="PDB structure names in the mega-map;
+		xref retrieval by relationship.">
+		<action dev="rafalcan" type="add">
+			Added PDBe structure names to the mega-map.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added method to retrieve xrefs by relationship.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of ep-domain and junit.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added dependency on ebeye-client to retrieve PDB structure names
+			(not present in UniProt XML file).
+		</action>
+		<action dev="rafalcan" type="remove">
+			Removed strange unused dependencies.
+		</action>
+	</release>
+	<release version="1.0.4" date="2012-08-15" description="Bug fix">
+		<action dev="rafalcan" type="fix">
+			Prepared statements were not closed, which resulted in lots of
+			'too many open cursors' exceptions in the webapp log.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of biobabel-db and log4j.
+		</action>
+	</release>
+	<release version="1.0.3" date="2012-08-14" description="">
+	</release>
+	<release version="1.0.2" date="2012-08-07" description="">
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
+	</release>
+</body>
+
+</document>

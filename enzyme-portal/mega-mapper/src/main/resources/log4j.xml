@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//Apache Software Foundation//DTD log4j Configuration 1.0//EN" "log4j.dtd" >
+<log4j:configuration>
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="conversionPattern" value="%5p [%d{ISO8601}] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="logs/mega-mapper.log"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="conversionPattern" value="[%p]-[%d{ISO8601}]-%c{1}-%t- %m%n"/>
+		</layout>
+	</appender>
+
+	<logger name="JUNIT" additivity="false">
+		<level value="DEBUG"/>
+		<appender-ref ref="stdout"/>
+	</logger>
+	<logger name="uk.ac.ebi.ep" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="file"/>
+	</logger>
+	<logger name="uk.ac.ebi.ep.mm" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="file"/>
+	</logger>
+	<logger name="uk.ac.ebi.ep.mm.app" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="file"/>
+	</logger>
+	<root>
+		<level value="INFO"/>
+		<appender-ref ref="file"/>
+	</root>
+
+</log4j:configuration>

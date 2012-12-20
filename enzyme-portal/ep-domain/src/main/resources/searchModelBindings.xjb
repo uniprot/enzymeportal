@@ -1,0 +1,15 @@
+<jaxb:bindings 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+    jaxb:extensionBindingPrefixes="xjc"
+    version="2.1">
+    <jaxb:globalBindings fixedAttributeAsConstantProperty="true">
+        <xjc:serializable />
+    </jaxb:globalBindings>
+    <jaxb:bindings schemaLocation="searchModel.xsd">
+        <jaxb:bindings node="//xs:element[@name='type']/xs:simpleType">
+			<jaxb:typesafeEnumClass name="SearchType" />
+        </jaxb:bindings>
+   </jaxb:bindings>
+</jaxb:bindings>

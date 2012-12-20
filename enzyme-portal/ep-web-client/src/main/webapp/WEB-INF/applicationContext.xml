@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : applicationContext.xml
+    Created on : 17 March 2012, 14:28
+    Author     : joseph
+    Description:
+        The purpose of this config file is to enable the spring beans to be injected
+        in the Servlet.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-2.5.xsd
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+ 
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+<!--<property name="locations" value="classpath:WEB-INF/sitemapLoc.properties"/>-->
+<!--    <property name="locations">
+            <list>
+                <value>file://${APP_PROP_HOME}/application.properties</value>
+            </list>
+        </property>-->
+        <property name="locations" value="WEB-INF/sitemapLoc.properties"/>
+    </bean>
+    
+    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+        <property name="beans">
+            <map>
+                <entry key="SitemapBean:name=sitemapConfig" value-ref="sitemapConfig"/>
+            </map>
+        </property>
+        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
+    </bean>
+
+
+    <bean id="sitemapConfig"
+          class="uk.ac.ebi.ep.mBean.SitemapConfig">
+<!--       <property name="sitemapUrl"
+			value="C:\Users\joseph\EnzymePortalSiteMap.xml.gz"/>-->
+              
+        <property name="sitemapUrl"
+                  value="${sitemapLoc.sitemapUrl}"/>
+                  
+                  <property name="sitemapIndex"
+                  value="${sitemapLoc.sitemapIndex}"/>
+    </bean>
+   
+    
+    <bean id="EnzymePortalSitemapServlet" class="uk.ac.ebi.ep.web.EnzymePortalSitemapServlet">
+<!--        <property name="sitemapConfig" ref="sitemapConfig"/>-->
+    </bean>
+ 
+ <bean id="SiteMapServlet" class="uk.ac.ebi.ep.web.SiteMapServlet" ></bean>
+</beans>
