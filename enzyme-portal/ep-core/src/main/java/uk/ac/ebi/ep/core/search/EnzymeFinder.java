@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.biobabel.blast.Hit;
+import uk.ac.ebi.biobabel.blast.Hsp;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
@@ -1194,8 +1195,18 @@ public class EnzymeFinder implements IEnzymeFinder {
     public SearchResults getBlastResult(String jobId)
 	throws NcbiBlastClientException, MultiThreadingException{
     	List<Hit> hits = getBlastClient().getResults(jobId);
+    	Map<String, Hsp> scorings = new HashMap<String, Hsp>();
+    	for (Hit hit : hits) {
+			scorings.put(hit.getUniprotAccession(), hit.getHsps().get(0));
+		}
     	List<String> uniprotIdPrefixes = filterBlastResults(hits);
     	enzymeSummaryList = getEnzymeSummaries(uniprotIdPrefixes, null);
+    	for (EnzymeSummary es : enzymeSummaryList) {
+			for (EnzymeAccession ea : es.getRelatedspecies()) {
+	    		String hitAcc = ea.getUniprotaccessions().get(0);
+	    		ea.setScoring(scorings.get(hitAcc));
+			}
+		}
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
         enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
         LOGGER.debug("Building filters...");

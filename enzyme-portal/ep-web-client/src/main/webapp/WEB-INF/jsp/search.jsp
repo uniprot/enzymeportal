@@ -884,12 +884,26 @@
                                                    
                                                             <c:choose>
                                                                 <c:when test="${empty relspecies[i].species.commonname}">
-                                                                    <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
-
+                                                                    [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                    	>${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                    ><c:if test="${not empty relspecies[i].scoring}">
+                                                                   		<span class="score S${
+                                                                   			relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                   			fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+							                                        		title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+							                                        		>${relspecies[i].scoring.bitScore}</span></c:if
+						                                        	>]
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
-
+                                                                    [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                    	>${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                   	><c:if test="${not empty relspecies[i].scoring}">
+                                                                   		<span class="score S${
+                                                                   			relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                   			fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+							                                        		title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+							                                        		>${relspecies[i].scoring.bitScore}</span></c:if
+						                                        	>]
                                                                 </c:otherwise>
                                                             </c:choose>
                                                             <!--                                                                </a>-->
@@ -907,12 +921,26 @@
 
                                                                     <c:choose>
                                                                         <c:when test="${empty relspecies[i].species.commonname}">
-                                                                            <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
-
+                                                                            [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                            	>${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                           	><c:if test="${not empty relspecies[i].scoring}">
+		                                                                   		<span class="score S${
+                                                                   					relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                   					fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+								                                        			title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+								                                        			>${relspecies[i].scoring.bitScore}</span></c:if
+						                                        			>]
                                                                         </c:when>
                                                                         <c:otherwise>
-                                                                            <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
-
+                                                                            [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                            	>${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                           	><c:if test="${not empty relspecies[i].scoring}">
+                                                                   				<span class="score S${
+                                                                   					relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                   					fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+							                                        				title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+							                                        				>${relspecies[i].scoring.bitScore}</span></c:if
+						                                        			>]
                                                                         </c:otherwise>
                                                                     </c:choose>
 

@@ -430,3 +430,39 @@ a.scienceName span{
     -webkit-border-radius: 10px;
 }
 
+/* Search scores (BLAST) */
+.score {
+	background-color: #cdf;
+	padding: 0ex 0.1em;
+	border: thin solid #bbb;
+}
+.score.S1 {
+	background-color: #bcf;
+}
+.score.S2 {
+	background-color: #bdc;
+}
+.score.S3 {
+	background-color: #ada;
+}
+.score.S4 {
+	background-color: #ce6;
+}
+.score.S5 {
+	background-color: #ee2;
+}
+.score.S6 {
+	background-color: #fd4;
+}
+.score.S7 {
+	background-color: #fc6;
+}
+.score.S8 {
+	background-color: #fb7;
+}
+.score.S9 {
+	background-color: #faa;
+}
+.score.S10 {
+	background-color: #f88;
+}

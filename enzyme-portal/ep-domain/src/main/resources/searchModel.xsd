@@ -35,6 +35,15 @@
         	</xs:element>
         	<xs:element name="diseases" type="ep:Disease"
         		maxOccurs="unbounded" minOccurs="0"></xs:element>
+			<xs:element name="scoring" type="xs:anySimpleType"
+				maxOccurs="1" minOccurs="0">
+                      <xs:annotation>
+                      	<xs:documentation>
+                      		The search score (BLAST, for instance) for the
+                      		result.
+                     		</xs:documentation>
+                      </xs:annotation>
+			</xs:element>
         </xs:sequence>
 	</xs:complexType>
 	<xs:element name="EnzymeSummary" type="ep:EnzymeSummary"/>
@@ -42,16 +51,26 @@
 		<xs:complexContent>
 			<xs:extension base="ep:EnzymeAccession">
 				<xs:sequence>
-					<xs:element name="ec" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="function" type="xs:string" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="synonym" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-
-					<xs:element name="uniprotid" type="xs:string" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="relatedspecies" type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="ec" type="xs:string" minOccurs="1"
+						maxOccurs="unbounded" />
+					<xs:element name="name" type="xs:string"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="function" type="xs:string"
+						minOccurs="0" maxOccurs="1" />
+					<xs:element name="synonym" type="xs:string"
+						minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="uniprotid" type="xs:string"
+						minOccurs="1" maxOccurs="1" />
+					<xs:element name="relatedspecies"
+						type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded">
 						<xs:annotation>
-							<xs:documentation>Any species related to the one described by the EnzymeSummary, each one represented by one EnzymeAccession.</xs:documentation>
-						</xs:annotation></xs:element>
+							<xs:documentation>
+								Any species related to the one described
+								by the EnzymeSummary, each one
+								represented by one EnzymeAccession.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
