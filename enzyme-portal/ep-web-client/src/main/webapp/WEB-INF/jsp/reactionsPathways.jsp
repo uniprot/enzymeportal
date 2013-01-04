@@ -131,7 +131,7 @@
                         </c:if>
                         <div id="pathways-${rpVs.index}">
                             <c:forEach var="pathway" items="${reactionpathway.pathways}">
-                                <div id="pathway-${pathway.id}">
+                                <div id="pathway-${rpVs.index}-${pathway.id}">
                                     <fieldset>
                                         <legend>Loading pathway (${pathway.id})...</legend>
                                         <img src="${pageContext.request.contextPath}/resources/images/loading.gif"
@@ -139,7 +139,15 @@
                                     </fieldset> 
                                 </div>
                                 <script>
-                                    $('#pathway-${pathway.id}').load("${pageContext.request.contextPath}/ajax/reactome/${pathway.id}");
+                                	if (document.getElementById('${pathway.id}')){
+                                        $('#pathway-${rpVs.index}-${pathway.id}')
+                                            .html('<fieldset><legend>${pathway.id}</legend>See <a href="#${pathway.id}">above</a>.</fieldset>');
+                                	} else {
+                                        $('#pathway-${rpVs.index}-${pathway.id}')
+                                        	.load("${pageContext.request.contextPath}/ajax/reactome/${pathway.id}");
+                                        $('#pathway-${rpVs.index}-${pathway.id}')
+                                        	.before('<span id="${pathway.id}"></span>')
+                                	}
                                 </script>
                             </c:forEach>
                         </div>
