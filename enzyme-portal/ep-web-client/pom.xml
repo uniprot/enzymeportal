@@ -215,6 +215,11 @@
             <artifactId>das-adapter</artifactId>
             <version>1.0.3</version>
         </dependency>
+        <dependency>
+        	<groupId>uk.ac.ebi.ep</groupId>
+        	<artifactId>biomart-adapter</artifactId>
+        	<version>1.0.3-SNAPSHOT</version>
+        </dependency>
         <!-- Override any other version of mega-mapper -->
 <!-- 
         <dependency>

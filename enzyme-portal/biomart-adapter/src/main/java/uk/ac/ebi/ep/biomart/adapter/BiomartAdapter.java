@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
+import uk.ac.ebi.rhea.domain.Database;
 import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**
@@ -212,7 +213,7 @@ public class BiomartAdapter {
                 EnzymeReaction enzymeReaction = new EnzymeReaction();
                 String reactionId = fieldValues[0].trim();
                 List<Object> reactomeReactionId = new ArrayList<Object>();
-                reactomeReactionId.add(reactionId);
+                reactomeReactionId.add(Database.REACTOME.getEntryUrl(reactionId));
                 enzymeReaction.setXrefs(reactomeReactionId);
                 String reactionName = fieldValues[1].trim();                
                 enzymeReaction.setName(reactionName);
