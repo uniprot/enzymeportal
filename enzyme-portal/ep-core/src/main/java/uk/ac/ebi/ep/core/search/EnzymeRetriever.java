@@ -187,7 +187,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             throw new EnzymeRetrieverException(
                     "Unable to get enzyme model for " + uniprotAccession, e);
         }
-        // The model comes with Reactome IDs in one ReactionPathway object, no more.
+        // The model comes with any available Reactome pathway IDs
+        // in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
         LOGGER.debug(" -RP- before queryRheaWsForReactions");
         queryRheaWsForReactions(enzymeModel);
