@@ -78,7 +78,7 @@
 
 	<div class="${citationClass}">
 		<div class="pub_title" style="font-weight: bold;">
-			<a href="http://www.ebi.ac.uk/citexplore/citationDetails.do?externalId=${cit.id}&amp;dataSource=${cit.source}"
+			<a href="http://europepmc.org/abstract/${cit.source}/${cit.id}"
                 title="View ${cit.source} ${cit.id} in CiteXplore"
                 target="_blank" class="extLink ${cit.source}"
                 >${cit.title}</a>
