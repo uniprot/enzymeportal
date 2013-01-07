@@ -85,7 +85,7 @@
         <property name="timeout" value="30000"/>
         <property name="useProxy" value="true"/>
         <property name="wsBaseUrl"
-			value="http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
+			value="http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
     </bean>
 	
     <bean name="uk.ac.ebi.ep:name=chebiConfig"
