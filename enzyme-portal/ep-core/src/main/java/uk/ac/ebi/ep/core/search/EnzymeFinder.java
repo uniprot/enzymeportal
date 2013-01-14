@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.core.search;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -1206,6 +1207,17 @@ public class EnzymeFinder implements IEnzymeFinder {
 	    		String hitAcc = ea.getUniprotaccessions().get(0);
 	    		ea.setScoring(scorings.get(hitAcc));
 			}
+			Collections.sort(es.getRelatedspecies(),
+				new Comparator<EnzymeAccession>(){
+					@SuppressWarnings({ "unchecked", "rawtypes" })
+					public int compare(EnzymeAccession o1, EnzymeAccession o2){
+						if (o1.getScoring() == null) return 1;
+						if (o2.getScoring() == null) return -1;
+						return ((Comparable) o1.getScoring())
+								.compareTo(o2.getScoring());
+					}
+				}
+			);
 		}
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
         enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
