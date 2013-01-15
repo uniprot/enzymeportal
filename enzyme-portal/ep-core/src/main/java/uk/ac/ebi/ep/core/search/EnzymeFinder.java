@@ -1211,6 +1211,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 				new Comparator<EnzymeAccession>(){
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					public int compare(EnzymeAccession o1, EnzymeAccession o2){
+						if (o1.getScoring() == o2.getScoring()) return 0;
 						if (o1.getScoring() == null) return 1;
 						if (o2.getScoring() == null) return -1;
 						return ((Comparable) o1.getScoring())
