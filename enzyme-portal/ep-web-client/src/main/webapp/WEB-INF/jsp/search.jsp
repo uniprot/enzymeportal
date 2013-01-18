@@ -1145,6 +1145,12 @@
         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
+       
+<!--        this is to temporally fix the bug in frontier js-->
+  <script src="resources/javascript/ebi-global-search-run.js" type="text/javascript"></script>
+    <script src="resources/javascript/ebi-global-search.js" type="text/javascript"></script>
+    
+<!--    now the frontier js for ebi global result-->
 <!--        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
         <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>-->
 

@@ -18,7 +18,7 @@
        More info: h5bp.com/b/378 -->
   <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> --> <!-- Not yet implemented -->
 
-  <title>About Us &lt; Enzyme Portal &lt; EMBL-EBI</title>
+  <title>About Us &lt; Enzyme Portal &gt; EMBL-EBI</title>
   <meta name="description" content="EMBL-EBI"><!-- Describe what this page is about -->
   <meta name="keywords" content="bioinformatics, europe, institute"><!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
   <meta name="author" content="EMBL-EBI"><!-- Your [project-name] here -->
@@ -589,6 +589,11 @@ Enzyme Portal - An Introduction</div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
   -->
+   <!-- Your custom JavaScript file scan go here... change names accordingly -->
+    
+  <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="resources/javascript/search.js" type="text/javascript"></script>
+        
         <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
     <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
               <script>
@@ -602,9 +607,7 @@ Enzyme Portal - An Introduction</div>
         </script>
         </c:if>
 
-  <!-- Your custom JavaScript file scan go here... change names accordingly -->
-    <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="resources/javascript/search.js" type="text/javascript"></script>
+
   <!--
   <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>
   <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/script.js"></script>

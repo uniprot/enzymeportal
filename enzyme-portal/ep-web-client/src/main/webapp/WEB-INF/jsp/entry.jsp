@@ -143,37 +143,6 @@
                     <div class="grid_12 omega">
 
 
-<!--
-                        <form:form id="local-search" modelAttribute="searchModel"
-                                   action="/enzymeportal/search" method="POST">
-                            <fieldset> 
-                                <label>     
-                                    <form:input id="local-searchbox" path="searchparams.text"
-                                                cssClass="field" name="first" rel="Enter a name to search"/>
-                                </label>
-                                <form:hidden id="start" path="searchparams.start" />
-                                <form:hidden path="searchparams.previoustext" />
-                                <input  type="submit" value="Search"
-                                        class="submit" /><br/>
-                                <div>
-                                                                <div id="examples">Examples: <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a> 
-                                    <spring:message code="label.search.example"/>
-                                    <a href="/enzymeportal/search?searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
-                                    <a href="/enzymeportal/search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
-                                                    <a href="search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,
-                                    <a href="/enzymeportal/search?searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
-                                    <a href="/enzymeportal/search?searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                                    <a href="/enzymeportal/search?searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-
-                                                                </div>
-                                </div>
-                            </fieldset>
-                        </form:form>
--->
-
-
                                    <c:choose>
  	                  <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
                    <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
@@ -212,7 +181,7 @@
 
                 <!-- Suggested layout containers -->  
                 <section>
-                    <div class="grid_12zzz" style="display: table; margin-left: 1em;">
+                    <div class="grid_12zzz" style="display: table; margin-left: 0em;">
                         <%@ include file="breadcrumbs.jsp" %>
                     </div>
                     <!--                                    <div class="grid_12zzz" style="margin-left: 1em;">
@@ -600,6 +569,10 @@
             </footer>
         </div> <!--! end of #wrapper -->
 
+                <!-- JavaScript at the bottom for fast page loading -->
+        <script src="../../resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="../../resources/javascript/search.js" type="text/javascript"></script>
+
         <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
     <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
               <script>
@@ -612,9 +585,6 @@
             });
         </script>
         </c:if>
-        <!-- JavaScript at the bottom for fast page loading -->
-        <script src="../../resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="../../resources/javascript/search.js" type="text/javascript"></script>
 
 
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
