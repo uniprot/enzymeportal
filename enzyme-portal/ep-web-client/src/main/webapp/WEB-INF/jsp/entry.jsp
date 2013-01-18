@@ -52,15 +52,15 @@
  <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
 
 
-
+<!--
         <link rel="stylesheet" href="../../resources/css/boilerplate-style.css"> 
 
         <link rel="stylesheet" href="../../resources/css/ebi-global.css" type="text/css" media="screen" />
 
         <link rel="stylesheet" href="../../resources/css/ebi-visual.css" type="text/css" media="screen">
         <link rel="stylesheet" href="../../resources/css/984-24-col-fluid.css" type="text/css" media="screen" />
-        <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
-        <link rel="stylesheet" href="../../resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
+     
+        <link rel="stylesheet" href="../../resources/css/embl-petrol-colours.css" type="text/css" media="screen" />-->
         
         
         
@@ -142,20 +142,8 @@
 
                     <div class="grid_12 omega">
 
-<!--                                                <form id="local-search" name="local-search" action="#" method="post">
-                        
-                                                    <fieldset>
-                        
-                                                        <label>
-                                                            <input type="text" name="first" id="local-searchbox" />
-                                                        </label>	
-                        
-                                                        <input type="submit" name="submit" value="Search" class="submit" />	
-                                                    </fieldset>
-                        
-                                                </form>
 
-
+<!--
                         <form:form id="local-search" modelAttribute="searchModel"
                                    action="/enzymeportal/search" method="POST">
                             <fieldset> 
@@ -236,9 +224,9 @@
                                                             </div>
                                                         </div>-->
                 </section>
-                <section>
+                    <section class="grid_24">
                     <div class="contents">
-                        <div class="container_12">
+                        <div class="container_24">
                 
                             <form:form id="entryForm" modelAttribute="enzymeModel" action="entry" method="GET">
                                 <!--<c:set var="chebiImageBaseUrl" value="http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&chebiId="/>-->
@@ -282,9 +270,9 @@
                                     <c:set var="literatureSelected" value="selected"/>
                                 </c:if>
                                 <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
-                                <div class="grid_12 header"  style="">
-                                    <div class="container_12">
-                                        <div class="grid_4 prefix_4 suffix_3 alpha">
+                                <div class="grid_24 header"  style="">
+                                    <div class="container_24">
+                                        <div class="grid_4 prefix_10 suffix_3 alpha">
                                             <div class="panel">
                                                 <div wicket:id="classification">
                                                     <div class="classification">
@@ -352,8 +340,8 @@
                                 </div>
                             </div>
                 </div>
-                            <div class="container_12 gradient">
-                                <div class="grid_12">
+                            <div class="container_24 gradient">
+                                <div class="grid_24">
                                     <div wicket:id="reference" class="content">
                                         <div class="column1">
                                             <ul>                                    
@@ -537,7 +525,6 @@
                                                 </c:if>
                                             </c:if>
                                         </div>
-                                    </div>
                                 </div>
                             </form:form>
                             <div class="clear"></div>
@@ -615,7 +602,16 @@
 
         <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
     <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
-</c:if>
+              <script>
+            $(document).ready(function() {
+                setTimeout(function(){
+                    // Handler for .ready() called.
+                    $("#redline_side_car").css("background-image","url(/enzymeportal/resources/images/redline_left_button.png)");
+                    $("#redline_side_car").css("display", "block");
+                },1000);
+            });
+        </script>
+        </c:if>
         <!-- JavaScript at the bottom for fast page loading -->
         <script src="../../resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="../../resources/javascript/search.js" type="text/javascript"></script>

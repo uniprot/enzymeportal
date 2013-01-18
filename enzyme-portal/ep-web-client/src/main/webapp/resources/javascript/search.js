@@ -189,14 +189,14 @@ function ResultAutoComplete(id, dataArray,theForm,hiddenCheckbox) {
         source: dataArray,
         minLength: 1,
         delay : 0,     
-
+        
                     
         width: 200,
         max: 10,
         highlight: true,
         scroll: true,
         scrollHeight: 300,
-        autoFill: true,
+        //autoFill: true,
         // mustMatch: true,
         matchContains: false,
         formatItem: function(data, i, n, value) {

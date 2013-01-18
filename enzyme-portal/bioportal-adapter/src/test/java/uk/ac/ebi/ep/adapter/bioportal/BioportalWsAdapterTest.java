@@ -7,12 +7,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 
+@Ignore
 public class BioportalWsAdapterTest {
 
 	private BioportalWsAdapter bwa;

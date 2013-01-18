@@ -10,18 +10,16 @@
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
- <script src="resources/javascript/search.js" type="text/javascript"></script>
-<!-- <! --------------------------------
-    GLOBAL SEARCH TEMPLATE - START
-   -------------------------------- >-->
 
-	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
-	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
 
-<!--<! --------------------------------
-    GLOBAL SEARCH TEMPLATE - END
-   -------------------------------- >-->
-<script>
+<!-- <script src="resources/javascript/search.js" type="text/javascript"></script>
+   <link href="resources/css/search.css" type="text/css" rel="stylesheet" />-->
+<!--<link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">-->
+<!--   <link media="screen" href="../../resources/css/enzyme.css" type="text/css" rel="stylesheet" />-->
+ 
+   
+    
+    <script>
 //function showCard(tabId){
 //	var s = tabId.split('-tab-');
 //	var cardsId = '#' + s[0];
@@ -40,57 +38,7 @@ function submitKeywordForm(text){
 }
 </script>
 
-<!--<ul id="search-tabs"
-	style="width: 70em; margin-left: auto; margin-right: auto;">
-	<li id="search-tab-keyword"
-		class="searchTab ${empty searchModel.searchparams.type or
-			searchModel.searchparams.type eq 'KEYWORD'? 'selected':'' }"
-		onclick="showCard(this.id);">
-		<spring:message code="label.search.tab.keyword"/>
-	</li>
-	<li id="search-tab-sequence"
-		class="searchTab ${searchModel.searchparams.type eq 'SEQUENCE'?
-			'selected':'' }"
-		onclick="showCard(this.id);">
-		<spring:message code="label.search.tab.sequence"/>
-	</li>
-	
-	<li><a href="#compoundSearch"><spring:message
-		code="label.search.tab.compound"/></a></li> 
-	 
-</ul>-->
-                
-                
-                
-    
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-         
-     
+
 
 				<form:form id="local-search" name="local-search" modelAttribute="searchModel"
                                       action="${pageContext.request.contextPath}/search" method="POST">
@@ -100,7 +48,7 @@ function submitKeywordForm(text){
                                             <div class="left" > 
 
 						<label>
-<!--						<input type="text" name="first" id="local-searchbox">-->
+
                                    <form:input id="local-searchbox" name="first" path="searchparams.text"
 			                         rel="Enter a name to search" />
 

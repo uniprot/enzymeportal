@@ -43,8 +43,9 @@ function submitForm(type, search){
 					</c:when>
 					<c:when test="${fn:startsWith(hItem, 'searchparams.sequence=')}">
 						<a onclick="submitForm('SEQUENCE', '${fn:substringAfter(hItem, '=')}')"
-							>Search for
-							<i>"${fn:substring(fn:substringAfter(hItem, '='), 0, 20)}${fn:length(hItem) gt 20? '...':''}"</i></a>
+							>Search for sequence
+<!--							<i>"${fn:substring(fn:substringAfter(hItem, '='), 0, 20)}${fn:length(hItem) gt 20? '...':''}"</i>-->
+                                                </a>
 					</c:when>
 					<c:otherwise>
 						<a href="${pageContext.request.contextPath}/search/${hItem}/enzyme"><c:out value="${hItem}"/></a>

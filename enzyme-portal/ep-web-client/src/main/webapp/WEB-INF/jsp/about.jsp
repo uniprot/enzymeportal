@@ -591,7 +591,16 @@ Enzyme Portal - An Introduction</div>
   -->
         <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
     <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
-</c:if>
+              <script>
+            $(document).ready(function() {
+                setTimeout(function(){
+                    // Handler for .ready() called.
+                    $("#redline_side_car").css("background-image","url(resources/images/redline_left_button.png)");
+                    $("#redline_side_car").css("display", "block");
+                },1000);
+            });
+        </script>
+        </c:if>
 
   <!-- Your custom JavaScript file scan go here... change names accordingly -->
     <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>

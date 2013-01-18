@@ -119,7 +119,7 @@
             <id>ebi-repo-snapshots</id>
             <name>EBI Maven Snapshots Repository</name>
             <url>${ebi.maven.repo.snapshots.deploy.url}</url>
-            <uniqueVersion>false</uniqueVersion>
+                <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
             <id>enzymeportal.sf.net</id>

@@ -31,7 +31,7 @@ a:link, a:visited {
 }*/
 .showLink{
     color: #207a7a;
-    text-decoration: underline;
+/*    text-decoration: underline;*/
     font-style: italic;
     white-space: nowrap;
     cursor: pointer;
@@ -66,8 +66,9 @@ a:link, a:visited {
 .filterButton, .searchButton, .button {
     /*position: relative;*/
     /*background: #ddd;*/
-    background: #72B55F;
+/*    background: #72B55F;*/
     /*color: #72B55F;*/
+    background: #207a7a;
     color: white;
     border: 1px solid #777;
     border-radius: 12px;
@@ -132,37 +133,59 @@ a:link, a:visited {
     margin-left: 2px;
     margin-right: 2px;
 }
-.sublevel1 { border:1px thin #ddd; width:inherit; max-height: 400px; overflow:auto }
+.sublevel1 { border:1px thin #ddd; width:inherit;   }
 /*.sublevel1 { overflow:auto ;border:1px thin #ddd;width: 260px; height:400px }*/
 .filterContent {
     margin-left: 5px;
     padding-bottom: 2px;
     line-height:16pt;
+    overflow:auto;
+    max-height: 400px;
     /*    margin-right: 5px;*/
 }
-.text {
+
+/*.text {
     float: left;
     width: 82%;
-    /*border: 1px solid #ddd;*/
-}
+    border: 1px solid #ddd;comment
+}*/
 
 .otherName {
     font-size: 8pt;
     font-style: italic;    
 }
-.checkItem {
+/*.checkItem {
     vertical-align: top;
     margin-right: 5px;
     float: right;
     width: 10%;
     text-align: right;
-    /*border: 1px solid #ddd;*/
+    border: 1px solid #ddd;
 }
 
+*/
 .filterLine {
     margin-bottom: 9px;
     vertical-align: top;
 }
+
+/*css to achieve the frontier checkbox alignment starts here*/
+.text {
+    float: right;
+    width: 90%;
+}
+
+.checkItem {
+   
+vertical-align: top;
+/*    margin-right: 0px;*/
+    float: left;
+    width: 10%;
+    text-align: left;
+}
+
+/*frontier checkbox alignment ends here*/
+
 .container { border:2px solid #ccc; width:300px; height: 300px; overflow-y: scroll; }
 /*The container of result items on the right side of the filter*/
 .result  {
@@ -287,6 +310,14 @@ a.noLine {
     border-bottom-style: none;
 
 } 
+/* css to end underline in auto complete terms*/
+
+a.ui-corner-all{
+    border-bottom-style: none; 
+}
+
+
+
 .proteinImg a{
     color: white;
     text-decoration: none;
@@ -445,6 +476,12 @@ a.compoundName{
 a.diseaseName{
     color: #207a7a;
 }
+a.resultPageDisease{
+   color:  #207a7a; 
+}
+a.formSubmit{
+    color:  #207a7a; 
+}
 
 /*for sequence search*/
 
@@ -483,6 +520,78 @@ a.formSubmit {
 
     cursor: default;
 
+}
+
+/* Search scores (BLAST) */
+	
+.score {
+	
+ background-color: #cdf;
+	
+ padding: 0ex 0.1em;
+	
+ border: thin solid #bbb;
+	
+}
+	
+.score.S1 {
+	
+  background-color: #bcf;
+	
+}
+	
+.score.S2 {
+	
+ background-color: #bdc;
+	
+}
+	
+.score.S3 {
+	
+ background-color: #ada;
+	
+}
+	
+.score.S4 {
+	
+  background-color: #ce6;
+	
+}
+	
+.score.S5 {
+	
+  background-color: #ee2;
+	
+}
+	
+.score.S6 {
+	
+  background-color: #fd4;
+	
+}
+	
+.score.S7 {
+	
+  background-color: #fc6;
+	
+}
+	
+.score.S8 {
+	
+  background-color: #fb7;
+	
+}
+	
+.score.S9 {
+	
+  background-color: #faa;
+	
+}
+	
+.score.S10 {
+	
+  background-color: #f88;
+	
 }
 /*see auto complete code in js*/
 .ui-menu-item-highlight{

@@ -198,7 +198,7 @@
                 <ul>
                     <li><a href="faq#01">How is the EnzymePortal different from BRENDA?</a></li>
                     <li><a href="faq#02">What is the meaning of those compounds used as filters for the search results?</a></li>
-                    <li><a href="faq#03">More questions about the Enzyme Portal</a></li>
+                    <li><a href="faq#03">What are the figures in colourful labels which appear with the results of a protein sequence search?</a></li>
                 </ul>
                 <a name="01"></a><h4>How is the EnzymePortal different from BRENDA?</h4>
                 <fieldset>
@@ -209,10 +209,10 @@
                 <fieldset>
                     <p>The compounds listed along the search results are any small molecules which are related to them, be it as reactants, products, activators, inhibitors or cofactors of those enzymes. They can be used as filters to narrow your search if you are particularly interested in the biochemistry of concrete chemicals, for example enzymes using manganese as a cofactor.</p>
                 </fieldset>
-                <a name="03"></a><h4 style="color: #cd0a0a">more questions about the Enzyme Portal [TODO]</h4>
+                <a name="03"></a><h4>What are the figures in colourful labels which appear with the results of a protein sequence search?</h4>
                 <fieldset>
-                    <p>more questions about the enzyme portal goes here.more questions about the enzyme portal goes here.more questions about the enzyme portal goes here.more questions about the enzyme portal goes here. more questions about the enzyme portal goes here. more questions about the enzyme portal goes here</p>
-                                        <p>more questions about the enzyme portal goes here.more questions about the enzyme portal goes here.more questions about the enzyme portal goes here. more questions about the enzyme portal goes here. more questions about the enzyme portal goes here</p>
+                    <p>The figures are <a href="http://www.ncbi.nlm.nih.gov/books/NBK21097/#A614">bit scores</a> for the blast search of the given sequence against the shown enzyme. The colour is a hint for the match: red means a close match, blue a loose one. It helps to locate best results at first sight.</p><p>For more information about scores, please refer to the <a href="http://www.ncbi.nlm.nih.gov/books/NBK21097/">BLAST documentation</a>.</p>
+                    
                 </fieldset>
             </section>
 		<!-- End example layout containers -->
@@ -280,7 +280,16 @@
 
           <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
     <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
-</c:if>
+              <script>
+            $(document).ready(function() {
+                setTimeout(function(){
+                    // Handler for .ready() called.
+                    $("#redline_side_car").css("background-image","url(resources/images/redline_left_button.png)");
+                    $("#redline_side_car").css("display", "block");
+                },1000);
+            });
+        </script>
+          </c:if>
 
   <!-- Your custom JavaScript file scan go here... change names accordingly -->
   <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>

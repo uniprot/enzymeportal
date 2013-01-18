@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -517,8 +518,8 @@ public class SearchController {
         if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
             history.add(s);
         }
-    }
-
+          }
+        
     private void clearHistory(HttpSession session) {
         @SuppressWarnings("unchecked")
         List<String> history = (List<String>) session.getAttribute("history");
@@ -550,11 +551,7 @@ public class SearchController {
 	        // See if it is already there, perhaps we are paginating:
 	        Map<String, SearchResults> prevSearches =
 	        		getPreviousSearches(session.getServletContext());
-                //System.out.println("SEARCH MODEL "+ searchModel);
-               // System.out.println("getparam "+ searchModel.getSearchparams());
-                //SearchType t = searchModel.getSearchparams().getType();
-               // System.out.println("the T "+ t.name());
-                 
+                                
 	        String searchKey = getSearchKey(searchModel.getSearchparams());
                 
                
@@ -562,8 +559,7 @@ public class SearchController {
 	        if (results == null){
 	        	// New search:
 	            clearHistory(session);
-                    //SearchParams.SearchType type = searchModel.getSearchparams().getType();
-                   // System.out.println("second type "+ type.name());
+                 
 	            switch (searchModel.getSearchparams().getType()) {
                          
 	    		case KEYWORD:

@@ -58,19 +58,19 @@
         <!--        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
                 <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
 
-<link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-       
-<!--
-        <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
+        <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
 
-        <link rel="stylesheet" href="resources/css/ebi-global.css" type="text/css" media="screen" />
-
-        <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
-        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />-->
+        <!--
+                <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
+        
+                <link rel="stylesheet" href="resources/css/ebi-global.css" type="text/css" media="screen" />
+        
+                <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
+                <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />-->
         <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
-         
+
 
         <!--        javascript was placed here for auto complete otherwise should be place at the bottom for faster page loading-->
 
@@ -82,7 +82,33 @@
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-        <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
+        <!--        <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>-->
+
+        <!-- end CSS-->
+
+
+        <style type="text/css">
+            /* You have the option of setting a maximum width for your page, and making sure everything is centered */
+            /* body { max-width: 1600px; margin: 0 auto; } */
+
+            /* --------------------------------
+                GLOBAL SEARCH TEMPLATE - START
+               -------------------------------- */
+            .loading {
+                background: url("http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/ajax-loader.gif") no-repeat right;
+            }
+
+            span.searchterm {
+                font-weight: bold;
+                font-style: italic;
+                padding: 0.2em 0.5em;
+                background-color: rgb(238, 238, 238);
+                border-radius: 5px 5px 5px 5px;
+            }
+            /* --------------------------------
+                GLOBAL SEARCH TEMPLATE - END
+               -------------------------------- */
+        </style>
 
         <!-- end CSS-->
 
@@ -92,169 +118,117 @@
              For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
 
         <!-- Full build -->
-        <!-- <script src="../js/libs/modernizr.minified.2.1.6.js"></script> -->
+        <!-- <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script> -->
 
         <!-- custom build (lacks most of the "advanced" HTML5 support -->
-        <script src="http://wwwdev.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
-        <!--  <script src="/web_guidelines/js/libs/modernizr.custom.49274.js"></script>		-->
-        
-        
-<!--<! --------------------------------
-    GLOBAL SEARCH TEMPLATE - START
-   -------------------------------- >-->-->
+        <script src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/modernizr.js"></script>		
 
-	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
-	<script type="text/javascript" src="ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
+        <!--<! --------------------------------
+        GLOBAL SEARCH TEMPLATE - START
+       -------------------------------- >-->
 
-<!--<! --------------------------------
-    GLOBAL SEARCH TEMPLATE - END-->
+        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
+
+        <!--<! --------------------------------
+        GLOBAL SEARCH TEMPLATE - END
+       -------------------------------- >-->
+
+        <!--<style type="text/css">       #cookie-banner{position:absolute;top:-9999px;background-color:#222;width:100%;border-bottom:5px solid #222;left:0;}
+               #cookie-banner p{margin:5px 0;color:#eee}
+               #cookie-banner a{color:#fff}
+               #cookie-banner a#cookie-dismiss{margin:0.5em 0;padding:3px 9px;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;font-size:108%;border-width:1px;box-shadow:0px 2px 2px #adadad;-moz-box-shadow:0px 2px 2px #adadad;-khtml-box-shadow:0px 2px 2px #adadad;-webkit-box-shadow:0px 2px 2px #adadad;width:auto;padding-top:0px;padding-bottom:0px;border-color:#295c5c;background-color:#207a7a;background-image:-moz-linear-gradient(top, #54bdbd, #207a7a);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0, #54bdbd),color-stop(1, #207a7a));background-image:-webkit-linear-gradient(#54bdbd, #207a7a);background-image:linear-gradient(top, #54bdbd, #207a7a);filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#54bdbd', EndColorStr='#207a7a');color:#f8f8f8;text-shadow:#145251 0 1px 1px;display:inline;text-decoration:none;}
+             </style>-->
 
     </head>
 
     <body class="level2"><!-- add any of your classes or IDs -->
-	<div id="skip-to">
-		<ul>
-			<li><a href="#content">Skip to main content</a></li>
-			<li><a href="#local-nav">Skip to local navigation</a></li>
-			<li><a href="#global-nav">Skip to EBI global navigation menu</a></li>
-			<li><a href="#global-nav-expanded">Skip to expanded EBI global navigation menu (includes all sub-sections)</a></li>
-		</ul>
-	</div>
+        <div id="skip-to">
+            <ul>
+                <li><a href="#content">Skip to main content</a></li>
+                <li><a href="#local-nav">Skip to local navigation</a></li>
+                <li><a href="#global-nav">Skip to EBI global navigation menu</a></li>
+                <li><a href="#global-nav-expanded">Skip to expanded EBI global navigation menu (includes all sub-sections)</a></li>
+            </ul>
+        </div>
 
-  <div id="wrapper" class="container_24">
-    <header>
-    	<div id="global-masthead" class="masthead grid_24">
-      <!--This has to be one line and no newline characters-->
-			<a href="/" title="Go to the EMBL-EBI homepage"><img src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png" alt="EMBL European Bioinformatics Institute"></a>
+        <div id="wrapper" class="container_24">
+            <header>
+                <div id="global-masthead" class="masthead grid_24">
+                    <!--This has to be one line and no newline characters-->
+                    <a href="/" title="Go to the EMBL-EBI homepage"><img src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png" alt="EMBL European Bioinformatics Institute"></a>
 
-			<nav>
-				<ul id="global-nav">
-          <!-- set active class as appropriate -->
-          <li class="first active" id="services"><a href="/services">Services</a></li>
-					<li id="research"><a href="/research">Research</a></li>
-					<li id="training"><a href="/training">Training</a></li>
-					<li id="industry"><a href="/industry">Industry</a></li>
-					<li id="about" class="last"><a href="/about">About us</a></li>
-				</ul>
-			</nav>
-			
-		</div>
-		
-		<div id="local-masthead" class="masthead grid_24 nomenu">
-			
-      <!-- local-title -->
+                    <nav>
+                        <ul id="global-nav">
+                            <!-- set active class as appropriate -->
+                            <li class="first active" id="services"><a href="/services">Services</a></li>
+                            <li id="research"><a href="/research">Research</a></li>
+                            <li id="training"><a href="/training">Training</a></li>
+                            <li id="industry"><a href="/industry">Industry</a></li>
+                            <li id="about" class="last"><a href="/about">About us</a></li>
+                        </ul>
+                    </nav>
 
-<!--<div class="grid_12 alpha" id="local-title">
-				<h1><a href="/enzymeportal" title="Back to Enzyme Portal homepage">Enzyme Portal</a></h1>
-			</div>-->
- <div id="local-title" class="grid_12 alpha logo-title"> 
-     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
-         <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
-     </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
+                </div>
+
+                <div id="local-masthead" class="masthead grid_24 nomenu">
+
+                    <!-- local-title -->
+
+                    <!--<div class="grid_12 alpha" id="local-title">
+                                                    <h1><a href="/enzymeportal" title="Back to Enzyme Portal homepage">Enzyme Portal</a></h1>
+                                            </div>-->
+                    <div id="local-title" class="grid_12 alpha logo-title"> 
+                        <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
+                            <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
+                        </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
 
                     <!-- OR... -->
 
-<!--                    <div class="grid_12 alpha" id="local-title">
-                        <h1>Enzyme Portal</h1>
-                    </div>-->
+                    <!--                    <div class="grid_12 alpha" id="local-title">
+                                            <h1>Enzyme Portal</h1>
+                                        </div>-->
                     <!-- -->
 
                     <div class="grid_12 omega">
-                     
-                         
-                                                  <c:choose>
- 	                  <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
-                   <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
-                 </c:when>
-	
-                 <c:otherwise>
-	                   <c:set var="searchText"
-	                     value="${searchModel.searchparams.text}"/>
-	                 </c:otherwise>
-	               </c:choose>
-                        
-                            <%@ include file="frontierSearchBox.jsp" %>
-                      </div>
 
-                       
-			<nav>
-				<ul class="grid_24" id="local-nav">
-					<li  class="first"><a href="/enzymeportal" title="">Home</a></li>
-<!--					<li><a href="#">Documentation</a></li>-->
-					<li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
-					<li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
-					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
-					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
-					     whichever one will show up last... 
-					     For example: -->
-<!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
-					<li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
-					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
-				</ul>
-			</nav>
+
+                        <c:choose>
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                                <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
+                            </c:when>
+
+                            <c:otherwise>
+                                <c:set var="searchText"
+                                       value="${searchModel.searchparams.text}"/>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <%@ include file="frontierSearchBox.jsp" %>
+                    </div>
+
+
+                    <nav>
+                        <ul class="grid_24" id="local-nav">
+                            <li  class="first"><a href="/enzymeportal" title="">Home</a></li>
+                            <!--					<li><a href="#">Documentation</a></li>-->
+                            <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
+                            <li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
+                            <!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
+                                 add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
+                                 whichever one will show up last... 
+                                 For example: -->
+                            <!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
+                            <li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
+                            <li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </header>
-                          
-<!--    <div id="content" role="main" class="grid_24 clearfix">
-    	
-    	<h2>[Page title]</h2>
-     Suggested layout containers 
-	   
-	   <section class="grid_14 push_6" id="search-results">
-    		<p>Search results (primary content)</p>
-    		<ul>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-    		</ul>									
-		</section> 
-		
-		<section class="grid_6 pull_14 alpha" id="search-filters">
-			<p>Data facets, search filters, etc</p>
-    		<ul>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-    		</ul>
-		</section>
-		
-		<section class="grid_4 omega" id="search-extras">
-    		<p>EBI global search results</p>
-    		<ul>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-    		</ul>
-		</section>
-		 End suggested layout containers 
-			
-    </div>-->
+
 
             <div id="content" role="main" class="grid_24 clearfix">
 
-                <!-- Suggested layout containers -->  
-                <section>
-                    <div class="grid_12zzz" style="display: table; margin-left: 1em;">
-                        <%@ include file="breadcrumbs.jsp" %>
-                    </div>
-<!--                    <div style="display: table-cell;">
-                        <h5 ><a href="/enzymeportal" >Enzyme Portal</a></h5>
-                    </div>
-                    <div style="display: table-cell;">
-                        - Your portal to enzyme-related information at the EBI.
-                    </div>-->
-
-                </section>
-<!--                <section>-->
-
-
-<section class="grid_6" id="search-results">
-     
-<!--
-                    <div class="contents">
-                        <div class="page container_12">            
-            <div class="page container_12">            -->
-              
                 <!--Global variables-->
                 <c:set var="showButton" value="Show more"/>
                 <c:set var="searchText" value="${searchModel.searchparams.text}"/>
@@ -274,18 +248,80 @@
                     var diseaseAutoCompleteDataSource = [];
                 </script>
 
-<!--                <div class="grid_12 content">-->
+                <!-- Suggested layout containers -->  
+                <section >
+                    <div class="grid_12zzz" style="display: table; margin-left: 0em;">
+                        <%@ include file="breadcrumbs.jsp" %>
+                    </div>
+
+
+                </section>
+
+                <section class="grid_24 clearfix">
+                    <section class="grid_18 alpha"  >
+
+                        <c:if test="${totalfound eq 0}">
+                            <h2>No Enzyme Portal results found</h2>
+                            <p class="alert">We?re sorry but we couldn?t find anything that matched your search for ${searchText}</p>
+                            <script>
+                                $(document).ready(function() {
+                                    try {
+                                        /* The simplest implementation, used on your zero search results pages */
+                                        updateSummary({noResults: true});	       
+                                    } catch (except_1) {}
+                                });
+                            </script>
+                        </c:if>
+                        <c:if test="${totalfound gt 0}">
+                            <h2>Enzyme Portal results for <span class="searchterm">${searchText}</span></h2>
+                            <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
+                        </c:if>
+                    </section>
+                    <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
+                        <div id="ebi_search_results"><h3 class="slideToggle icon icon-functional" data-icon="u">Show more data from EMBL-EBI</h3>
+                        </div>
+                    </aside>
+
+                </section>
+
+                <section class="grid_6" id="search-results">
+
+                    <!--
+                                        <div class="contents">
+                                            <div class="page container_12">            
+                                <div class="page container_12">            -->
+
+                    <!--Global variables-->
+                    <!--                <c:set var="showButton" value="Show more"/>
+                    <c:set var="searchText" value="${searchModel.searchparams.text}"/>
+                    <c:set var="startRecord" value="${pagination.firstResult}"/>
+                    <c:set var="searchresults" value="${searchModel.searchresults}"/>
+                    <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
+                    <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
+                    <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
+                    <c:set var="totalfound" value="${searchresults.totalfound}"/>
+                    <c:set var="filterSizeDefault" value="${50}"/>
+                    <%-- maximum length in words for a text field --%>
+                    <c:set var="textMaxLength" value="${60}"/>
+                    <script>
+    
+                        var  speciesAutocompleteDataSource = [];
+                        var compoundsAutoCompleteDataSource = [];
+                        var diseaseAutoCompleteDataSource = [];
+                    </script>-->
+
+                    <!--                <div class="grid_12 content">-->
                     <c:if test="${ searchresults.totalfound gt 0}">
                         <div class="filter">
-<!--                        <div class="filter" style="width: 25%; float: left;">                    -->
+                            <!--                        <div class="filter" style="width: 25%; float: left;">                    -->
                             <div class="title">
                                 Search Filters
                             </div>
                             <div class="line"></div>
                             <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="search" method="POST">
-                               <form:hidden path="searchparams.type" />	
-                                 <form:hidden path="searchparams.text" />
-                              <form:hidden path="searchparams.sequence" />
+                                <form:hidden path="searchparams.type" />	
+                                <form:hidden path="searchparams.text" />
+                                <form:hidden path="searchparams.sequence" />
                                 <form:hidden path="searchparams.previoustext" />
                                 <input type="hidden" id="filtersFormStart"
                                        name="searchparams.start" value="0"/>
@@ -301,7 +337,7 @@
                                         <!--auto-complete search box-->
                                         <div class="ui-widget">
 
-                                            <input id="specieAT" itemtype="text"   class="filterSearchBox" placeholder="Search here" />
+                                            <input id="specieAT" itemtype="text"   class="filterSearchBox" placeholder="Type a Specie to filter" />
 
                                             <form:checkbox path="searchparams.species" id="_ctempList_selected" value='' type="hidden"></form:checkbox>
 
@@ -343,16 +379,16 @@
                                                                     <div class="text">
                                                                         <c:choose>
                                                                             <c:when test="${empty speciesList[i].commonname}">
-                                                                                <a href='#'>${speciesList[i].scientificname}</a>
+                                                                                <a class="scienceName" style="border-bottom-style:none " >${speciesList[i].scientificname}</a>
                                                                                 <script>
-                                                                            speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");
+                                                                                    speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");
                                                                                 </script>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <a class="scienceName" href='#'>${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></a>
+                                                                                <a class="scienceName" style="border-bottom-style:none ">${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></a>
                                                                                 <script>
            
-                                                                            speciesAutocompleteDataSource.push({label:"${speciesList[i].commonname}",value:"${speciesList[i].scientificname}"});
+                                                                                    speciesAutocompleteDataSource.push({label:"${speciesList[i].commonname}",value:"${speciesList[i].scientificname}"});
                                                                                 </script>
                                                                             </c:otherwise>
                                                                         </c:choose> 
@@ -420,7 +456,7 @@
                                     <c:if test="${fn:length(searchFilter.compounds) gt 12}"> 
                                         <div class="ui-widget">
 
-                                            <input id="compounds_AUTOCOMPLETE" class="filterSearchBox" placeholder="Search here"  />
+                                            <input id="compounds_AUTOCOMPLETE" class="filterSearchBox" placeholder="Type a Compound to filter"  />
                                             <form:checkbox path="searchparams.compounds" id="comptempList" value="" type="hidden" onclick="submit()"></form:checkbox>
                                             </div>     
 
@@ -462,7 +498,7 @@
                                                                 <div class="filterLine">
                                                                     <div class="text">
                                                                         <xchars:translate>
-                                                                            <a class="compoundName" href='#'><c:out value="${compoundList[i].name}" escapeXml="false"/></a>
+                                                                            <a class="compoundName" style="border-bottom-style:none " ><c:out value="${compoundList[i].name}" escapeXml="false"/></a>
                                                                             <script> compoundsAutoCompleteDataSource.push({label:"${compoundList[i].name} ",value:"${compoundList[i].name}"});</script>
                                                                         </xchars:translate>
                                                                     </div>
@@ -520,7 +556,7 @@
                                         <div class="ui-widget">
 
 
-                                            <input id="diseases_AUTOCOMPLETE" class="filterSearchBox"  placeholder="Search here" />
+                                            <input id="diseases_AUTOCOMPLETE" class="filterSearchBox"  placeholder="Type a Disease to filter" />
                                             <form:checkbox path="searchparams.diseases" id="DtempList" value="" type="hidden" onclick="submit()"></form:checkbox>
                                             </div>                                   
 
@@ -561,17 +597,18 @@
 
 
                                                                 <div class="filterLine">
+                                                                    <div class="checkItem">
+                                                                        <form:checkbox path="searchparams.diseases" value="${diseasesList[i].name}" onclick="submit()"/>
+                                                                    </div>
                                                                     <div class="text">
                                                                         <xchars:translate>
-                                                                            <a class="diseaseName" href="#"> <c:out value="${diseasesList[i].name}" escapeXml="false"/></a>
+                                                                            <a class="diseaseName" style="border-bottom-style:none "> <c:out value="${diseasesList[i].name}" escapeXml="false"/></a>
                                                                             <script>diseaseAutoCompleteDataSource.push({label:"${diseasesList[i].name} ",value:"${diseasesList[i].name}"});</script>
                                                                         </xchars:translate>
                                                                     </div>                                                  
 
 
-                                                                    <div class="checkItem">
-                                                                        <form:checkbox path="searchparams.diseases" value="${diseasesList[i].name}" onclick="submit()"/>
-                                                                    </div>
+
                                                                     <div class="clear"></div>
                                                                 </div>
 
@@ -617,407 +654,420 @@
 
 
                             </form:form>
-                      </div> 
+                        </div> 
                         <%--filter --%>
                     </c:if>
-                    </section>
-               <section class="grid_14" id="keywordSearchResult">
-<!--                    <div id="keywordSearchResult" class="result"
-                         style="width: 70%; float: left;">-->
-                        <c:if test="${totalfound eq 0}">
-                            <spring:message code="label.search.empty"/>
-                        </c:if>
-                        <c:if test="${summaryEntriesSize == 0 and ( speciesListSize gt 0 or compoundListSize gt 0 or diseasesListSize gt 0)}">
-                            <div class="resultItem">
-                                <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this selection.</span></a> 
-                            </div>
-                        </c:if>
-                        <c:if test="${summaryEntriesSize gt 0 and searchresults.totalfound gt 0}">
-                            <form:form modelAttribute="pagination" >
-                                <div style="width: 100%;">
-                                    <c:set var="totalPages" value="${pagination.lastPage}"/>
-                                    <c:set var="maxPages" value="${totalPages}"/>
-                                    <div class="resultText">
-                                          <b>${totalfound}</b> results found for
-                                        <i>${fn:substring(searchText, 0, 30)}${fn:length(searchText) gt 30? '...':''}</i>,
-                                        <c:if test="${totalfound ne summaryEntriesSize}">
-                                            filtered to <b>${summaryEntriesSize}</b>,
-                                        </c:if>
-                                        displaying ${pagination.firstResult+1} - ${pagination.lastResult+1}
-                                    </div>
-                                    <div id="paginationNav" style="text-align: right;">
-                                        <c:if test="${totalPages gt pagination.maxDisplayedPages}">
-                                            <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
-                                            <c:set var="showNextButton" value="${true}"/>
-                                        </c:if>
-                                        <input id="prevStart" type="hidden"
-                                               value="${pagination.firstResult - pagination.numberOfResultsPerPage}">
-                                        <a id="prevButton" href="javascript:void(0);"
-                                           style="display:${pagination.currentPage eq 1? 'none' : 'inline'}">
-                                            Previous
-                                        </a>
-                                        Page ${pagination.currentPage} of ${totalPages}
-
-                                        <c:if test="${pagination.lastResult+1 lt summaryEntriesSize}">
-                                            <input id ="nextStart" type="hidden"
-                                                   value="${startRecord + pagination.numberOfResultsPerPage}">                                    
-                                            <a id="nextButton" href="javascript:void(0);">
-                                                Next
-                                            </a>
-                                        </c:if>                         
-                                    </div><!-- pagination -->
+                </section>
+                <section class="grid_18" id="keywordSearchResult">
+                    <!--                    <div id="keywordSearchResult" class="result"
+                                             style="width: 70%; float: left;">-->
+                    <c:if test="${totalfound eq -100}">
+                        <spring:message code="label.search.empty"/>
+                    </c:if>
+                    <c:if test="${summaryEntriesSize == 0 and ( speciesListSize gt 0 or compoundListSize gt 0 or diseasesListSize gt 0)}">
+                        <div class="resultItem">
+                            <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this selection.</span></a> 
+                        </div>
+                    </c:if>
+                    <c:if test="${summaryEntriesSize gt 0 and searchresults.totalfound gt 0}">
+                        <form:form modelAttribute="pagination" >
+                            <div style="width: 100%;">
+                                <c:set var="totalPages" value="${pagination.lastPage}"/>
+                                <c:set var="maxPages" value="${totalPages}"/>
+                                <div class="resultText">
+                                    <b>${totalfound}</b> results found for
+                                    <i>${fn:substring(searchText, 0, 30)}${fn:length(searchText) gt 30? '...':''}</i>,
+                                    <c:if test="${totalfound ne summaryEntriesSize}">
+                                        filtered to <b>${summaryEntriesSize}</b>,
+                                    </c:if>
+                                    displaying ${pagination.firstResult+1} - ${pagination.lastResult+1}
                                 </div>
-                                <%-- Add species filter to this form, don't lose it: --%>
-                                <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
-                                    <input type="checkbox" style="display: none;" 
-                                           name="searchparams.species"
-                                           value="${filterSp.scientificname}" />
-                                </c:forEach>
+                                <div id="paginationNav" style="text-align: right;">
+                                    <c:if test="${totalPages gt pagination.maxDisplayedPages}">
+                                        <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
+                                        <c:set var="showNextButton" value="${true}"/>
+                                    </c:if>
+                                    <input id="prevStart" type="hidden"
+                                           value="${pagination.firstResult - pagination.numberOfResultsPerPage}">
+                                    <a id="prevButton" href="javascript:void(0);"
+                                       style="display:${pagination.currentPage eq 1? 'none' : 'inline'}">
+                                        Previous
+                                    </a>
+                                    Page ${pagination.currentPage} of ${totalPages}
 
-                            </form:form>
-                            <div class="clear"></div>
-                            <div class="line"></div>
-                            <div class="resultContent">
-                                <c:set var="resultItemId" value="${0}"/>
-                                <c:forEach items="${summaryEntries}"
-                                           begin="${pagination.firstResult}"
-                                           end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
+                                    <c:if test="${pagination.lastResult+1 lt summaryEntriesSize}">
+                                        <input id ="nextStart" type="hidden"
+                                               value="${startRecord + pagination.numberOfResultsPerPage}">                                    
+                                        <a id="nextButton" href="javascript:void(0);">
+                                            Next
+                                        </a>
+                                    </c:if>                         
+                                </div><!-- pagination -->
+                            </div>
+                            <%-- Add species filter to this form, don't lose it: --%>
+                            <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
+                                <input type="checkbox" style="display: none;" 
+                                       name="searchparams.species"
+                                       value="${filterSp.scientificname}" />
+                            </c:forEach>
 
-                                    <%@include file="util/prioritiseSpecies.jsp" %>
+                        </form:form>
+                        <div class="clear"></div>
+                        <div class="line"></div>
+                        <div class="resultContent">
+                            <c:set var="resultItemId" value="${0}"/>
+                            <c:forEach items="${summaryEntries}"
+                                       begin="${pagination.firstResult}"
+                                       end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
 
-                                    <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
+                                <%@include file="util/prioritiseSpecies.jsp" %>
 
-                                    <div class="resultItem">
+                                <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
-                                        <c:choose>
-                                            <c:when test="${empty enzyme.relatedspecies}">
+                                <div class="resultItem">
 
-                                                <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a> 
+                                    <c:choose>
+                                        <c:when test="${empty enzyme.relatedspecies}">
 
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="grid_3 ">
-                                                    <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
-                                                    <c:set var="imgFooter" value=""/>
-                                                    <c:if test="${empty imgFile}">
-                                                        <c:forEach var="relSp" items="${enzyme.relatedspecies}">
-                                                            <c:if test="${empty imgFile and not empty relSp.pdbeaccession}">
-                                                                <c:set var="imgFile" value="${relSp.pdbeaccession[0]}"/>
-                                                                <c:set var="imgFooter">
-                                                                    <spring:message code="label.entry.proteinStructure.other.species"/>
-                                                                    ${empty relSp.species.commonname?
-                                                                      relSp.species.scientificname : relSp.species.commonname}
-                                                                </c:set>
-                                                            </c:if>
-                                                        </c:forEach>
-                                                    </c:if>
-                                                    <c:choose>
-                                                        <c:when test="${empty imgFile}">
-                                                            <div style="position: absolute; width: 110px; height: 90px;
-                                                                 background-color: #fff;text-align: center;
-                                                                 opacity: 0.6; vertical-align: middle;
-                                                                 margin-top: 0px; padding: 0px;">No structure available</div>
-                                                            <img src="resources/images/noStructure-light.png"
-                                                                 width="110" height="90" style="border-radius: 10px;"
-                                                                 alt="No structure available"
-                                                                 title="No structure available"/>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <c:set var="imgLink"
-                                                                   value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
-                                                            <a class="noLine" target="blank" href="${imgLink}">
-                                                                <img src="${imgLink}" width="110" height="90"
-                                                                     alt="PDB ${imgFile}" onerror="noImage(this);"/>
-                                                            </a>
-                                                            <div class="imgFooter">${imgFooter}</div>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                    <c:if test='${imgFile != "" && imgFile != null}'>
-                                                    </c:if>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <div class="grid_21 desc">
-                                            <c:if test='${not empty enzyme.name }'>
-                                                <a href="search/${primAcc}/enzyme">
-                                                    <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
-                                                    <c:out value="${showName}"/>
-                                                   <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
-                                                    [${empty theSpecies.species.commonname?
-                                                       theSpecies.species.scientificname :
-                                                       theSpecies.species.commonname}]
-                                                </a>
+                                            <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a> 
 
-                                            </c:if>
-
-                                            <c:if test="${not empty enzyme.function}">
-                                                <div>
-                                                    <b>Function</b>:
-                                                    <c:choose>
-                                                        <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt textMaxLength}">
-                                                            <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
-                                                                       begin="0" end="${textMaxLength-1}">
-                                                                ${word}</c:forEach>
-                                                            <span id="fun_${resultItemId}" style="display: none">
-                                                                <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
-                                                                           begin="${textMaxLength}">
-                                                                    ${word}</c:forEach>
-                                                                </span>
-                                                                <a class="showLink" id="fun_link_${resultItemId}">... Show more about function</a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            ${enzyme.function}
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                            </c:if>
-                                            <c:set var="synonym" value="${enzyme.synonym}"/>
-                                            <c:set var="synonymSize" value="${fn:length(synonym)}"/>
-                                            <c:set var="synLimitedDisplayDefault" value="${5}"/>
-                                            <c:set var="synLimitedDisplay" value="${synLimitedDisplayDefault}"/>
-                                            <c:if test='${synonymSize>0}'>
-                                                <div id ="synonym">
-                                                    <b>Synonyms</b>:
-                                                    <c:if test="${synonymSize > 0 && synonymSize <= synLimitedDisplay}">
-                                                        <c:set var="synLimitedDisplay" value="${synonymSize}"/>
-                                                    </c:if>
-
-                                                    <c:set var="hiddenSyns" value=""/>                                        
-                                                    <c:forEach var="i" begin="0" end="${synLimitedDisplay-1}">
-                                                        <c:out value="${synonym[i]}"/>;
-                                                    </c:forEach>                                        
-                                                    <c:if test="${synonymSize>synLimitedDisplay}">
-                                                        <span id='syn_${resultItemId}' style="display: none">
-                                                            <c:forEach var="i" begin="${synLimitedDisplay}" end="${synonymSize-1}">
-                                                                <c:out value="${synonym[i]}"/>;
-                                                            </c:forEach>
-                                                        </span>
-                                                        <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>">Show more synonyms</a>
-                                                    </c:if>
-                                                </div>
-                                            </c:if>
-
-
-                                            <!-- disease begins here-->
-                                            <c:set var="enzymeDisease" value="${enzyme.diseases}"/>
-                                            <c:set var="enzymeDiseaseSize" value="${fn:length(enzymeDisease)}"/>
-                                            <c:set var="disLimitedDisplayDefault" value="${5}"/>
-                                            <c:set var="disLimitedDisplay" value="${disLimitedDisplayDefault}"/>
-
-                                            <div id="enzymeDisease">
-                                                <c:if test="${ enzymeDiseaseSize >0}">
-                                                    <b>Disease :</b> 
-                                                    <c:if test="${enzymeDiseaseSize > 0 && enzymeDiseaseSize <= disLimitedDisplay}">
-                                                        <c:set var="disLimitedDisplay" value="${enzymeDiseaseSize}"/>
-                                                    </c:if>
-
-                                                    <c:set var="hiddenDis" value=""/> 
-                                                    <c:forEach var="i" begin="0" end="${disLimitedDisplay-1}">
-                                                        <xchars:translate>
-                                                            <a href="#" ><span>${enzymeDisease[i].name}</span></a>;
-                                                        </xchars:translate>
-
-                                                    </c:forEach> 
-
-
-                                                    <c:if test="${enzymeDiseaseSize>disLimitedDisplay}">
-                                                        <span id='dis_${resultItemId}' style="display: none">
-                                                            <c:forEach var="i" begin="${disLimitedDisplay}" end="${enzymeDiseaseSize-1}">
-                                                                <xchars:translate>
-                                                                    <a href="#" ><span>${enzymeDisease[i].name}</span></a>;
-                                                                </xchars:translate>
-                                                            </c:forEach>
-                                                        </span>
-                                                        <a class="showLink" id="<c:out value='dis_link_${resultItemId}'/>">Show more diseases</a>
-                                                    </c:if>
-                                                </c:if>     
-
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="grid_3 ">
+                                                <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
+                                                <c:set var="imgFooter" value=""/>
+                                                <c:if test="${empty imgFile}">
+                                                    <c:forEach var="relSp" items="${enzyme.relatedspecies}">
+                                                        <c:if test="${empty imgFile and not empty relSp.pdbeaccession}">
+                                                            <c:set var="imgFile" value="${relSp.pdbeaccession[0]}"/>
+                                                            <c:set var="imgFooter">
+                                                                <spring:message code="label.entry.proteinStructure.other.species"/>
+                                                                ${empty relSp.species.commonname?
+                                                                  relSp.species.scientificname : relSp.species.commonname}
+                                                            </c:set>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:choose>
+                                                    <c:when test="${empty imgFile}">
+                                                        <div style="position: absolute; width: 110px; height: 90px;
+                                                             background-color: #fff;text-align: center;
+                                                             opacity: 0.6; vertical-align: middle;
+                                                             margin-top: 0px; padding: 0px;">No structure available</div>
+                                                        <img src="resources/images/noStructure-light.png"
+                                                             width="110" height="90" style="border-radius: 10px;"
+                                                             alt="No structure available"
+                                                             title="No structure available"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:set var="imgLink"
+                                                               value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
+                                                        <a class="noLine" target="blank" href="${imgLink}">
+                                                            <img src="${imgLink}" width="110" height="90"
+                                                                 alt="PDB ${imgFile}" onerror="noImage(this);"/>
+                                                        </a>
+                                                        <div class="imgFooter">${imgFooter}</div>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <c:if test='${imgFile != "" && imgFile != null}'>
+                                                </c:if>
                                             </div>
-                                            <!--                                                disease ends here-->   
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <div class="grid_21 desc">
+                                        <c:if test='${not empty enzyme.name }'>
+                                            <a href="search/${primAcc}/enzyme">
+                                                <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
+                                                <c:out value="${showName}"/>
+                                               <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
+                                                [${empty theSpecies.species.commonname?
+                                                   theSpecies.species.scientificname :
+                                                   theSpecies.species.commonname}]
+                                            </a>
 
+                                        </c:if>
+
+                                        <c:if test="${not empty enzyme.function}">
                                             <div>
-                                                <!-- div id="in">in</div -->
-                                                <div>
-
-                                                    <%--
-                                                    <a href="search/${primAcc}/enzyme">
-                                                            [${empty enzyme.species.commonname?
-                                                                    enzyme.species.scientificname :
-                                                                    enzyme.species.commonname}]
-                                                            <!-- ${enzyme.pdbeaccession} -->
-                                                    </a>
-                                                    --%>
-                                                    <!--display = 3 = 2 related species + 1 default species -->
-                                                    <c:set var="relSpeciesMaxDisplay" value="${5}"/>
-                                                    <c:set var="relspecies" value="${enzyme.relatedspecies}"/>                                        
-                                                    <c:set var="relSpeciesSize" value="${fn:length(relspecies)}"/>
-                                                    <c:if test="${relSpeciesSize gt 0}">
-                                                        <b>Species:</b>
-                                                        <c:if test="${relSpeciesSize <= relSpeciesMaxDisplay}">
-                                                            <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
-                                                        </c:if>
-                                                        <c:forEach var="i" begin="0" end="${relSpeciesMaxDisplay-1}">
-                                                            <!-- c:if test="${relspecies[i].species.scientificname ne enzyme.species.scientificname}" -->
-<!--                                                                <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
-                                                                    [${empty relspecies[i].species.commonname?
-                                                               relspecies[i].species.scientificname :
-                                                               relspecies[i].species.commonname}]-->
-                                                            <!-- ${relspecies[i].pdbeaccession} -->
-
-
-
-                                                            <c:choose>
-                                                                <c:when test="${empty relspecies[i].species.commonname}">
-                                                                    <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
-
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
-
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                            <!--                                                                </a>-->
-                                                            <!-- /c:if -->                                             
-                                                        </c:forEach>
-                                                        <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
-                                                            <span id="relSpecies_${resultItemId}" style="display: none">
-                                                                <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">                                                
-<!--                                                                        <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
-                                                                            [${empty relspecies[i].species.commonname?
-                                                                       relspecies[i].species.scientificname :
-                                                                       relspecies[i].species.commonname}]-->
-                                                                    <!-- ${relspecies[i].pdbeaccession} -->
-
-
-                                                                    <c:choose>
-                                                                        <c:when test="${empty relspecies[i].species.commonname}">
-                                                                            <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.scientificname}]<span>${relspecies[i].species.scientificname}</span></a>
-
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>[${relspecies[i].species.commonname}]<span>${relspecies[i].species.scientificname}</span></a>
-
-                                                                        </c:otherwise>
-                                                                    </c:choose>
-
-
-                                                                    <!--                                                                        </a>-->
-                                                                </c:forEach>
+                                                <b>Function</b>:
+                                                <c:choose>
+                                                    <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt textMaxLength}">
+                                                        <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
+                                                                   begin="0" end="${textMaxLength-1}">
+                                                            ${word}</c:forEach>
+                                                        <span id="fun_${resultItemId}" style="display: none">
+                                                            <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
+                                                                       begin="${textMaxLength}">
+                                                                ${word}</c:forEach>
                                                             </span>
-                                                            <a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>">Show more species</a>
-                                                        </c:if>
-                                                    </c:if>
-                                                </div>
+                                                            <a class="showLink" id="fun_link_${resultItemId}">... Show more about function</a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ${enzyme.function}
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </div>
+                                        </c:if>
+                                        <c:set var="synonym" value="${enzyme.synonym}"/>
+                                        <c:set var="synonymSize" value="${fn:length(synonym)}"/>
+                                        <c:set var="synLimitedDisplayDefault" value="${5}"/>
+                                        <c:set var="synLimitedDisplay" value="${synLimitedDisplayDefault}"/>
+                                        <c:if test='${synonymSize>0}'>
+                                            <div id ="synonym">
+                                                <b>Synonyms</b>:
+                                                <c:if test="${synonymSize > 0 && synonymSize <= synLimitedDisplay}">
+                                                    <c:set var="synLimitedDisplay" value="${synonymSize}"/>
+                                                </c:if>
+
+                                                <c:set var="hiddenSyns" value=""/>                                        
+                                                <c:forEach var="i" begin="0" end="${synLimitedDisplay-1}">
+                                                    <c:out value="${synonym[i]}"/>;
+                                                </c:forEach>                                        
+                                                <c:if test="${synonymSize>synLimitedDisplay}">
+                                                    <span id='syn_${resultItemId}' style="display: none">
+                                                        <c:forEach var="i" begin="${synLimitedDisplay}" end="${synonymSize-1}">
+                                                            <c:out value="${synonym[i]}"/>;
+                                                        </c:forEach>
+                                                    </span>
+                                                    <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>">Show more synonyms</a>
+                                                </c:if>
+                                            </div>
+                                        </c:if>
 
 
+                                        <!-- disease begins here-->
+                                        <c:set var="enzymeDisease" value="${enzyme.diseases}"/>
+                                        <c:set var="enzymeDiseaseSize" value="${fn:length(enzymeDisease)}"/>
+                                        <c:set var="disLimitedDisplayDefault" value="${5}"/>
+                                        <c:set var="disLimitedDisplay" value="${disLimitedDisplayDefault}"/>
 
+                                        <div id="enzymeDisease">
+                                            <c:if test="${ enzymeDiseaseSize >0}">
+                                                <b>Disease :</b> 
+                                                <c:if test="${enzymeDiseaseSize > 0 && enzymeDiseaseSize <= disLimitedDisplay}">
+                                                    <c:set var="disLimitedDisplay" value="${enzymeDiseaseSize}"/>
+                                                </c:if>
+
+                                                <c:set var="hiddenDis" value=""/> 
+                                                <c:forEach var="i" begin="0" end="${disLimitedDisplay-1}">
+                                                    <xchars:translate>
+                                                        <a class="resultPageDisease"  style="border-bottom-style:none" ><span>${enzymeDisease[i].name}</span></a>;
+                                                    </xchars:translate>
+
+                                                </c:forEach> 
+
+
+                                                <c:if test="${enzymeDiseaseSize>disLimitedDisplay}">
+                                                    <span id='dis_${resultItemId}' style="display: none">
+                                                        <c:forEach var="i" begin="${disLimitedDisplay}" end="${enzymeDiseaseSize-1}">
+                                                            <xchars:translate>
+                                                                <a  class="resultPageDisease" style="border-bottom-style:none"><span>${enzymeDisease[i].name}</span></a>;
+                                                            </xchars:translate>
+                                                        </c:forEach>
+                                                    </span>
+                                                    <a class="showLink" id="<c:out value='dis_link_${resultItemId}'/>">Show more diseases</a>
+                                                </c:if>
+                                            </c:if>     
 
                                         </div>
+                                        <!--                                                disease ends here-->   
+
+                                        <div>
+                                            <!-- div id="in">in</div -->
+                                            <div>
+
+
+                                                <!--display = 3 = 2 related species + 1 default species -->
+                                                <c:set var="relSpeciesMaxDisplay" value="${5}"/>
+                                                <c:set var="relspecies" value="${enzyme.relatedspecies}"/>                                        
+                                                <c:set var="relSpeciesSize" value="${fn:length(relspecies)}"/>
+                                                <c:if test="${relSpeciesSize gt 0}">
+                                                    <b>Species:</b>
+                                                    <c:if test="${relSpeciesSize <= relSpeciesMaxDisplay}">
+                                                        <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
+                                                    </c:if>
+                                                    <c:forEach var="i" begin="0" end="${relSpeciesMaxDisplay-1}">
+                                                        <!-- c:if test="${relspecies[i].species.scientificname ne enzyme.species.scientificname}" -->
+<!--                                                                <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
+                                                                [${empty relspecies[i].species.commonname?
+                                                           relspecies[i].species.scientificname :
+                                                           relspecies[i].species.commonname}]-->
+                                                        <!-- ${relspecies[i].pdbeaccession} -->
+
+
+
+
+                                                        <c:choose>
+                                                            <c:when test="${empty relspecies[i].species.commonname}">
+                                                                [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                    >${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                ><c:if test="${not empty relspecies[i].scoring}">
+                                                                    <span class="score S${
+                                                                          relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                              fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+                                                                          title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+                                                                          >${relspecies[i].scoring.bitScore}</span></c:if
+                                                                >]
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                    >${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                ><c:if test="${not empty relspecies[i].scoring}">
+                                                                    <span class="score S${
+                                                                          relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                              fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+                                                                          title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+                                                                          >${relspecies[i].scoring.bitScore}</span></c:if
+                                                                >]
+                                                            </c:otherwise>
+                                                        </c:choose>                                                            <!--                                                                </a>-->
+                                                        <!-- /c:if -->                                             
+                                                    </c:forEach>
+                                                    <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
+                                                        <span id="relSpecies_${resultItemId}" style="display: none">
+                                                            <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">                                                
+<!--                                                                        <a href="search/${relspecies[i].uniprotaccessions[0]}/enzyme">
+                                                                        [${empty relspecies[i].species.commonname?
+                                                                   relspecies[i].species.scientificname :
+                                                                   relspecies[i].species.commonname}]-->
+                                                                <!-- ${relspecies[i].pdbeaccession} -->
+
+
+                                                                <c:choose>
+                                                                    <c:when test="${empty relspecies[i].species.commonname}">
+                                                                        [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                            >${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                        ><c:if test="${not empty relspecies[i].scoring}">
+                                                                            <span class="score S${
+                                                                                  relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                                      fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+                                                                                  title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+                                                                                  >${relspecies[i].scoring.bitScore}</span></c:if
+                                                                        >]
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
+                                                                            >${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a
+                                                                        ><c:if test="${not empty relspecies[i].scoring}">
+                                                                            <span class="score S${
+                                                                                  relspecies[i].scoring.bitScore gt 1000? '10':
+                                                                                      fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
+                                                                                  title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
+                                                                                  >${relspecies[i].scoring.bitScore}</span></c:if
+                                                                        >]
+                                                                    </c:otherwise>
+                                                                </c:choose>
+
+                                                                <!--                                                                        </a>-->
+                                                            </c:forEach>
+                                                        </span>
+                                                        <a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>">Show more species</a>
+                                                    </c:if>
+                                                </c:if>
+                                            </div>
+                                        </div>
+
+
+
+
                                     </div>
-                                    <div class="clear"></div>
-                                    <c:set var="resultItemId" value="${resultItemId+1}"/>
-                                </c:forEach>
-                            </div><!-- resultContent -->
-                       
-                 </section>
-<!--                    </div> keywordSearchResult -->
-<!--                </div>-->
-                <!--                                           grid_12 content -->
-<!--            </div>  page container_12 -->
-<!--                    </div>-->
+                                </div>
+                                <div class="clear"></div>
+                                <c:set var="resultItemId" value="${resultItemId+1}"/>
+                            </c:forEach>
+                        </div><!-- resultContent -->
+
+                    </section>
+                    <!--                    </div> keywordSearchResult -->
+                    <!--                </div>-->
+                    <!--                                           grid_12 content -->
+                    <!--            </div>  page container_12 -->
+                    <!--                    </div>-->
+                    <!--
+                    <! --------------------------------
+                        GLOBAL SEARCH TEMPLATE - START
+                       -------------------------------- >-->
+
 <!--
-<! --------------------------------
-    GLOBAL SEARCH TEMPLATE - START
-   -------------------------------- >-->
-		
-		<script type="text/javascript">
-			function renderMenu(elem, items, baseURL) {
-		        var ul = $("<ul>").appendTo(elem);
-		        $.each(items, function(index, item) {
-		            renderItem(ul, item, baseURL);
-		        });
-		    }
-			
-		    function renderItem(ul, item, baseURL) {
-		    	$( "<li>" )
-			    	.append( $( "<a>" ).attr("href", baseURL+item.url)
-			    					   .text( item.name + " ("+item.numberOfResults+")" )
-			    	).appendTo( ul );
-		    }
+                    
+                                    
+                                    <script type="text/javascript">
+                                            function renderMenu(elem, items, baseURL) {
+                                            var ul = $("<ul>").appendTo(elem);
+                                            $.each(items, function(index, item) {
+                                                renderItem(ul, item, baseURL);
+                                            });
+                                        }
+                                            
+                                        function renderItem(ul, item, baseURL) {
+                                            $( "<li>" )
+                                                    .append( $( "<a>" ).attr("href", baseURL+item.url)
+                                                                                       .text( item.name + " ("+item.numberOfResults+")" )
+                                                    ).appendTo( ul );
+                                        }
+                    
+                                            function updateSummary() {
+                                                    var query = $("#local-searchbox").val();
+                                                    if (query) {
+                                                            var searchBaseURL = "http://frontier.ebi.ac.uk/ebisearch/";
+                                                            var thisElem = $.find("#search-extras");
+                                                            $(thisElem).text("Loading other results");
+                                                            $(thisElem).addClass("loading");
+                    
+                                                            $.ajax({
+                                                              searchBaseURL: searchBaseURL, 
+                                                              url: searchBaseURL+"globalsearchsummary.ebi?query="+query,
+                                                              context: thisElem,
+                                                              dataType: "json",
+                                                              crossdoamin: true,
+                                                              error: function(request, error) {
+                                                                      //console.log(arguments);
+                                                                      //alert("error occurred: "+error);
+                                                              },
+                                                              success: function (data, textStatus, jqHXR) {
+                                                                      //alert("success");
+                                                              }
+                                                            }
+                                                            
+                                                            
+                                                            ).done(function( response ) {
+                                                              var obj = response;
+                                                              $(this).text("");
+                                                              $(this).removeClass("loading");
+                                                              $(this).append("<p>EBI global search results</p>");
+                                                              //$(this).blink({delay: 500});
+                                                              $("#page-title").text('Search results for ').append($("<span>").attr("class", "searchterm").text(query));
+                                                              renderMenu(this, obj, searchBaseURL);
+                                                            });
+                                                    }
+                                            }
+                                            
+                                            
+                     
+                          
+                        
+                          
+                        </script>-->
+<!--                     Related results - end -->
 
-			function updateSummary() {
-				var query = $("#local-searchbox").val();
-				if (query) {
-					var searchBaseURL = "/ebisearch/";
-					var thisElem = $.find("#search-extras");
-					$(thisElem).text("Loading other results");
-					$(thisElem).addClass("loading");
+                    <!--<! ------------------------------
+                    GLOBAL SEARCH TEMPLATE - END
+                   ------------------------------ >-->
+                    <!--		
+                                    <section class="grid_4 omega" id="search-extras">
+                                    <p>EBI global search results</p>
+                                    </section>-->
 
-					$.ajax({
-					  searchBaseURL: searchBaseURL, 
-					  url: searchBaseURL+"globalsearchsummary.ebi?query="+query,
-					  context: thisElem,
-					  dataType: "json",
-					  crossdoamin: true,
-					  error: function(request, error) {
-						  //console.log(arguments);
-						  alert("error occurred: "+error);
-					  },
-					  success: function (data, textStatus, jqHXR) {
-						  //alert("success");
-					  }
-					}).done(function( response ) {
-					  var obj = response;
-					  $(this).text("");
-					  $(this).removeClass("loading");
-					  $(this).append("<p>EBI global search results</p>");
-					  //$(this).blink({delay: 500});
-					  $("#page-title").text('Search results for ').append($("<span>").attr("class", "searchterm").text(query));
-					  renderMenu(this, obj, searchBaseURL);
-					});
-				}
-			}
-			
-		</script>
-		
-<!--<! ------------------------------
-    GLOBAL SEARCH TEMPLATE - END
-   ------------------------------ >-->
-		
-		<section class="grid_4 omega" id="search-extras">
-    		<p>EBI global search results</p>
-		</section>
+                    <!--<aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
+                                    <div id="ebi_search_results"><h3 class="slideToggle icon icon-functional" data-icon="u">Show more data from EMBL-EBI</h3>
+                                    </div>
+                                    </aside>-->
 
 
 
 
 
-
-
-<!--	<section class="grid_4 omega" id="search-extras">
-    		<p>EBI global search results</p>
-    		<ul>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-	    		<li><a href="#">text</a></li>
-    		</ul>
-		</section>-->
- </c:if>
-<!--                </section>-->
-                
-                <!--                <section>
-                
-                
-                                    <h2>Enzyme Portal</h2>
-                                    <p>Your content</p>										
-                                </section> 
-                
-                                <section>
-                                    <h3>[Another title]</h3>
-                                    <p>More content in a full-width container.</p>
-                                </section>-->
-                <!-- End suggested layout containers -->
+                </c:if>
 
             </div>
 
@@ -1077,13 +1127,27 @@
 
         <!-- JavaScript at the bottom for fast page loading -->
 
-                <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
-    <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
-</c:if>
+        <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
+            <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript">
+                
+            </script>
+               <script>
+            $(document).ready(function() {
+                setTimeout(function(){
+                    // Handler for .ready() called.
+                    $("#redline_side_car").css("background-image","url(resources/images/redline_left_button.png)");
+                    $("#redline_side_car").css("display", "block");
+                },1000);
+            });
+        </script>
+        </c:if>
 
- <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
-        
+<!--        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
+        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>-->
+
 
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 
@@ -1119,5 +1183,8 @@
           <![endif]-->
 
     </body>
+    <script>
+        updateSummary();
+    </script>
 </html>
 

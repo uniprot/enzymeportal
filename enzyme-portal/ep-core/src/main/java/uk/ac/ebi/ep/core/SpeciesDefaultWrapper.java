@@ -66,6 +66,10 @@ public final class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWra
         if (species.getCommonname() == null & other.species.getCommonname() != null) {
             return species.getScientificname().compareTo(other.species.getCommonname());
         }
+        //to avoid empty string in the list ( for auto complete filtering)
+//        if(species.getCommonname().equals("") & other.species.getCommonname().equals("")){
+//            return species.getScientificname().compareTo(other.species.getScientificname());
+//        }
         if(species.getCommonname() != null & species.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.species.getCommonname() != null & other.species.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())){
            return species.getScientificname().compareTo(other.species.getScientificname());
         }
