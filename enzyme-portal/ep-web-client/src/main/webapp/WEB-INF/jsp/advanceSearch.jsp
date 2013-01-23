@@ -168,7 +168,9 @@
                             <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
                             <li class="last"><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
                             <li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
-					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
+<!--					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>-->
+                             <li class="functional"> <a href="https://twitter.com/share" class="icon icon-functional" data-icon="r" data-dnt="true" data-count="none" data-via="twitterapi">Share</a></li>
+                        
                         </ul>
                     </nav>	
                 </div>
@@ -284,6 +286,9 @@
             });
         </script>
         </c:if> 
+
+        <!--        add twitter script for twitterapi-->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
         <!--

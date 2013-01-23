@@ -82,11 +82,11 @@
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-        <!--        <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>-->
+                <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
 
         <!-- end CSS-->
 
-
+<!--
         <style type="text/css">
             /* You have the option of setting a maximum width for your page, and making sure everything is centered */
             /* body { max-width: 1600px; margin: 0 auto; } */
@@ -108,7 +108,7 @@
             /* --------------------------------
                 GLOBAL SEARCH TEMPLATE - END
                -------------------------------- */
-        </style>
+        </style>-->
 
         <!-- end CSS-->
 
@@ -193,18 +193,12 @@
                     <div class="grid_12 omega">
 
 
-                        <c:choose>
-                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
-                                <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
-                            </c:when>
 
-                            <c:otherwise>
-                                <c:set var="searchText"
-                                       value="${searchModel.searchparams.text}"/>
-                            </c:otherwise>
-                        </c:choose>
 
                         <%@ include file="frontierSearchBox.jsp" %>
+                        
+                        
+              
                     </div>
 
 
@@ -220,7 +214,9 @@
                                  For example: -->
                             <!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
                             <li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
-                            <li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
+<!--                            <li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>-->
+                            <li class="functional"> <a href="https://twitter.com/share" class="icon icon-functional" data-icon="r" data-dnt="true" data-count="none" data-via="twitterapi">Share</a></li>
+                        
                         </ul>
                     </nav>
                 </div>
@@ -232,6 +228,7 @@
                 <!--Global variables-->
                 <c:set var="showButton" value="Show more"/>
                 <c:set var="searchText" value="${searchModel.searchparams.text}"/>
+                <c:set var="searchSequence" value="${searchModel.searchparams.sequence}"/>
                 <c:set var="startRecord" value="${pagination.firstResult}"/>
                 <c:set var="searchresults" value="${searchModel.searchresults}"/>
                 <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
@@ -247,6 +244,18 @@
                     var compoundsAutoCompleteDataSource = [];
                     var diseaseAutoCompleteDataSource = [];
                 </script>
+                
+                
+                       <c:choose>
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                                <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
+                            </c:when>
+
+                            <c:otherwise>
+                                <c:set var="searchText"
+                                       value="${searchModel.searchparams.text}"/>
+                            </c:otherwise>
+                        </c:choose>
 
                 <!-- Suggested layout containers -->  
                 <section >
@@ -261,8 +270,12 @@
                     <section class="grid_18 alpha"  >
 
                         <c:if test="${totalfound eq 0}">
+                            <c:if test="${searchText eq ''}">
+                               <c:set var="searchText"
+                                       value="empty searchbox"/> 
+                            </c:if>
                             <h2>No Enzyme Portal results found</h2>
-                            <p class="alert">We?re sorry but we couldn?t find anything that matched your search for ${searchText}</p>
+                            <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} "</p>
                             <script>
                                 $(document).ready(function() {
                                     try {
@@ -273,42 +286,23 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                            <h2>Enzyme Portal results for <span class="searchterm">${searchText}</span></h2>
+                            <h2>Enzyme Portal results for <span class="searchterm"><i>"${fn:substring(searchText, 0, 10)}${fn:length(searchText) gt 10? '...':''}"</i>
+                                    </span></h2>
+                                              
                             <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
                         </c:if>
                     </section>
+                    <c:if test="${searchModel.searchparams.type eq 'KEYWORD'}">
                     <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
                         <div id="ebi_search_results"><h3 class="slideToggle icon icon-functional" data-icon="u">Show more data from EMBL-EBI</h3>
                         </div>
                     </aside>
+                    </c:if>
 
                 </section>
 
                 <section class="grid_6" id="search-results">
 
-                    <!--
-                                        <div class="contents">
-                                            <div class="page container_12">            
-                                <div class="page container_12">            -->
-
-                    <!--Global variables-->
-                    <!--                <c:set var="showButton" value="Show more"/>
-                    <c:set var="searchText" value="${searchModel.searchparams.text}"/>
-                    <c:set var="startRecord" value="${pagination.firstResult}"/>
-                    <c:set var="searchresults" value="${searchModel.searchresults}"/>
-                    <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
-                    <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
-                    <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
-                    <c:set var="totalfound" value="${searchresults.totalfound}"/>
-                    <c:set var="filterSizeDefault" value="${50}"/>
-                    <%-- maximum length in words for a text field --%>
-                    <c:set var="textMaxLength" value="${60}"/>
-                    <script>
-    
-                        var  speciesAutocompleteDataSource = [];
-                        var compoundsAutoCompleteDataSource = [];
-                        var diseaseAutoCompleteDataSource = [];
-                    </script>-->
 
                     <!--                <div class="grid_12 content">-->
                     <c:if test="${ searchresults.totalfound gt 0}">
@@ -335,9 +329,9 @@
                                         </div>  
                                     <c:if test="${fn:length(searchFilter.species) gt 12}">           
                                         <!--auto-complete search box-->
-                                        <div class="ui-widget">
+                                        <div class="ui-widget grid_12zzz">
 
-                                            <input id="specieAT" itemtype="text"   class="filterSearchBox" placeholder="Type a Specie to filter" />
+                                            <input id="specieAT" itemtype="text"   class="filterSearchBox" placeholder="Enter Species to filter" />
 
                                             <form:checkbox path="searchparams.species" id="_ctempList_selected" value='' type="hidden"></form:checkbox>
 
@@ -1141,19 +1135,23 @@
             });
         </script>
         </c:if>
+        
+        <!--        add twitter script for twitterapi-->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
-        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+
+<!--        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
-       
+       -->
 <!--        this is to temporally fix the bug in frontier js-->
   <script src="resources/javascript/ebi-global-search-run.js" type="text/javascript"></script>
     <script src="resources/javascript/ebi-global-search.js" type="text/javascript"></script>
     
 <!--    now the frontier js for ebi global result-->
 <!--        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
-        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>-->
-
+        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>
+-->
 
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 

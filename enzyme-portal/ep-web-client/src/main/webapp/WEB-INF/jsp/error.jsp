@@ -132,35 +132,7 @@
                     <div class="grid_12 omega">
                           <%@ include file="frontierSearchBox.jsp" %>
 
-                        <!--                        <form id="local-search" name="local-search" action="#" method="post">
-                        
-                                                    <fieldset>
-                        
-                                                        <label>
-                                                            <input type="text" name="first" id="local-searchbox" />
-                                                        </label>	
-                        
-                                                        <input type="submit" name="submit" value="Search" class="submit" />	
-                                                    </fieldset>
-                        
-                                                </form>-->
-
-                
-
-
-
-                        <!--                        <form id="local-search" name="local-search" action="#" method="post">
-                        
-                                                    <fieldset>
-                        
-                                                        <label>
-                                                            <input type="text" name="first" id="local-searchbox" />
-                                                        </label>	
-                        
-                                                        <input type="submit" name="submit" value="Search" class="submit" />	
-                                                    </fieldset>
-                        
-                                                </form>-->
+         
                     </div>
 
            		<nav>
@@ -173,10 +145,12 @@
 					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
 					     whichever one will show up last... 
 					     For example: -->
-					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>
+<!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
 					<li class="functional"><a href="#" class="icon icon-static" data-icon="f">Feedback</a></li>
-					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
-				</ul>
+<!--					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>-->
+            				<li class="functional"> <a href="https://twitter.com/share" class="icon icon-functional" data-icon="r" data-dnt="true" data-count="none" data-via="twitterapi">Share</a></li>
+                        
+                                </ul>
 			</nav>		
                 </div>
             </header>
@@ -255,14 +229,29 @@
             </footer>
         </div> <!--! end of #wrapper -->
 
-                <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
-    <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
-</c:if>
+  
 
         <!-- JavaScript at the bottom for fast page loading -->
         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
 
+
+                <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
+    <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
+              <script>
+            $(document).ready(function() {
+                setTimeout(function(){
+                    // Handler for .ready() called.
+                    $("#redline_side_car").css("background-image","url(resources/images/redline_left_button.png)");
+                    $("#redline_side_car").css("display", "block");
+                },1000);
+            });
+        </script>
+        </c:if>
+        
+        
+        <!--        add twitter script for twitterapi-->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
         <!--

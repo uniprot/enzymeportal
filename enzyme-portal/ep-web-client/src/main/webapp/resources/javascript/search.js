@@ -1,31 +1,31 @@
 $(document).ready(function() {
     //search default text
     //    $("#searchbox").live("blur", function(){
-    $("#local-searchbox").live("blur", function(){
-        var default_value = $(this).attr("rel");
-        if ($(this).val() == ""){
-            $(this).val(default_value);
-        }
-    }).live("focus", function(){
-        var default_value = $(this).attr("rel");
-        if ($(this).val() == default_value){
-            $(this).val("");
-        }
-    });
-    
-   
-    //    for blast search text box
-    $("#search-keyword-text").live("blur", function(){
-        var default_value = $(this).attr("rel");
-        if ($(this).val() == ""){
-            $(this).val(default_value);
-        }
-    }).live("focus", function(){
-        var default_value = $(this).attr("rel");
-        if ($(this).val() == default_value){
-            $(this).val("");
-        }
-    });
+//    $("#local-searchbox").live("blur", function(){
+//        var default_value = $(this).attr("rel");
+//        if ($(this).val() == ""){
+//            $(this).val(default_value);
+//        }});
+//    }).live("focus", function(){
+//        var default_value = $(this).attr("rel");
+//        if ($(this).val() == default_value){
+//            $(this).val("");
+//        }
+//    });
+//    
+//   
+//    //    for blast search text box
+//    $("#search-keyword-text").live("blur", function(){
+//        var default_value = $(this).attr("rel");
+//        if ($(this).val() == ""){
+//            $(this).val(default_value);
+//        }
+//    }).live("focus", function(){
+//        var default_value = $(this).attr("rel");
+//        if ($(this).val() == default_value){
+//            $(this).val("");
+//        }
+//    });
 
 
 

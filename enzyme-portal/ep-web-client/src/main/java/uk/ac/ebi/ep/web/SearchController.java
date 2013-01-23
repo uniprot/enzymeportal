@@ -238,7 +238,7 @@ public class SearchController {
     public String viewSearchHome(Model model, HttpSession session) {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
-        searchParams.setText("Enter a name to search");
+        //searchParams.setText("Enter a name to search");
         searchParams.setStart(0);
         searchModelForm.setSearchparams(searchParams);
         model.addAttribute("searchModel", searchModelForm);
@@ -272,7 +272,7 @@ public class SearchController {
     public SearchModel searchform() {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
-        searchParams.setText("Enter a name to search");
+        //searchParams.setText("Enter a name to search");
         searchParams.setStart(0);
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
@@ -569,6 +569,8 @@ public class SearchController {
 	    			break;
 	    		case SEQUENCE:
 	            	view = searchSequence(model, searchModel);
+                        // cacheSearch(session.getServletContext(), searchKey, results);
+	                addToHistory(session, "searchparams.sequence=" + searchKey);
 	    			break;
 	    		case COMPOUND:
 	//            	view = postCompoundSearch(model, searchModel);
@@ -583,7 +585,13 @@ public class SearchController {
 	        	model.addAttribute("searchModel", searchModel);
 	        	model.addAttribute("pagination", getPagination(searchModel));
                         clearHistory(session);
-                        addToHistory(session, "searchparams.text=" + searchKey);
+                        if(searchModel.getSearchparams().getType().equals(SearchParams.SearchType.KEYWORD)){
+                           addToHistory(session, "searchparams.text=" + searchKey); 
+                        }
+                         if(searchModel.getSearchparams().getType().equals(SearchParams.SearchType.SEQUENCE)){
+                           addToHistory(session, "searchparams.sequence=" + searchKey); 
+                        }
+                        //addToHistory(session, "searchparams.text=" + searchKey);
 	        	view = "search";
 	        }
         } catch (Throwable t){

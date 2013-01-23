@@ -49,8 +49,7 @@ function submitKeywordForm(text){
 
 						<label>
 
-                                   <form:input id="local-searchbox" name="first" path="searchparams.text"
-			                         rel="Enter a name to search" />
+                                   <form:input id="local-searchbox" name="first" path="searchparams.text" />
 
 						</label>
 						<!-- Include some example searchterms - keep them short and few! -->

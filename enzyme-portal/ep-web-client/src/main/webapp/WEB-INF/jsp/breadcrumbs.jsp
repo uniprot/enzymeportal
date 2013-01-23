@@ -34,7 +34,7 @@ function submitForm(type, search){
 
                     <c:if test="${not empty history}">
 			<c:forEach var="hItem" items="${history}">
-				&gt;
+                       	&gt;
 				<c:choose>
 					<c:when test="${fn:startsWith(hItem, 'searchparams.text=')}">
 						<a onclick="submitForm('KEYWORD', '${fn:substringAfter(hItem, '=')}')"
@@ -43,8 +43,8 @@ function submitForm(type, search){
 					</c:when>
 					<c:when test="${fn:startsWith(hItem, 'searchparams.sequence=')}">
 						<a onclick="submitForm('SEQUENCE', '${fn:substringAfter(hItem, '=')}')"
-							>Search for sequence
-<!--							<i>"${fn:substring(fn:substringAfter(hItem, '='), 0, 20)}${fn:length(hItem) gt 20? '...':''}"</i>-->
+							>Search for
+							<i>"${fn:substring(fn:substringAfter(hItem, '='), 0, 18)}${fn:length(hItem) gt 18? '...':''}"</i>
                                                 </a>
 					</c:when>
 					<c:otherwise>

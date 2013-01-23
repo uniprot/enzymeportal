@@ -95,12 +95,7 @@
 		
 		<div id="local-masthead" class="masthead grid_24 nomenu">
 			
-      <!-- local-title -->
-      <!-- NB: for additional title style patterns, see http://frontier.ebi.ac.uk/web/style/patterns -->
-
-<!--			<div class="grid_12 alpha" id="local-title">
-				<h1><a href="/enzymeportal" title="Back to Enzyme Portal homepage">Enzyme Portal</a></h1>
-			</div>-->
+   
  <div id="local-title" class="grid_12 alpha logo-title"> 
      <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
          <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
@@ -131,10 +126,9 @@
 					     For example: -->
 <!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
 					<li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
-					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
-<!--                                        <li class="functional"><a href="https://twitter.com/share" class="icon icon-functional" data-icon="r">Share</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
-                                        -->
+<!--					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>-->
+                                        <li class="functional"> <a href="https://twitter.com/share" class="icon icon-functional" data-icon="r" data-dnt="true" data-count="none" data-via="twitterapi">Share</a></li>
+
 				</ul>
 			</nav>		
   
@@ -181,7 +175,7 @@
 <p></p>
 <div class="caption caption-right"><div class="caption-inner" style="width: 301px;">
                                 <%-- b>Welcome to the Enzyme Portal</b --%>
-                                <iframe width="301" height="224"
+                                <iframe class="grid_24"
                                         src="http://www.youtube.com/embed/Kldp0WXcxUM"
                                         frameborder="0"
                                         allowfullscreen></iframe>
@@ -341,7 +335,7 @@ Enzyme Portal - An Introduction</div>
 
                                 <%-- b>Explore Enzyme Portal</b --%>
 
-                                   <iframe style=" width: 344.5px; height:200px;" 
+                                <iframe class="grid_24" 
                                         src="http://www.youtube.com/embed/b7hFo5iJuoM"
                                         frameborder="0"
                                         allowfullscreen></iframe>
@@ -359,8 +353,8 @@ Enzyme Portal - An Introduction</div>
     
 <h3><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents<br>
 </span></h3>
-<p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub </a>, an online project hosting service. </span></p>
-<p><span>Additionally, the technical documentations (Javadoc, project information) are available from this <a href="http://ebi-cheminf.github.com/enzymeportal/ep/">web link </a>. </span></p>
+<p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub,</a>an online project hosting service. </span></p>
+<p><span>Additionally, the technical documentations (Javadoc, project information) are available from this <a href="http://ebi-cheminf.github.com/enzymeportal/ep/">web link.</a> </span></p>
 
    </div> 
 
@@ -607,6 +601,8 @@ Enzyme Portal - An Introduction</div>
         </script>
         </c:if>
 
+<!--        add twitter script for twitterapi-->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
   <!--
   <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>

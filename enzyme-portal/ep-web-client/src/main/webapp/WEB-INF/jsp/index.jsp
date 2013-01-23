@@ -62,6 +62,7 @@
   <!-- custom build (lacks most of the "advanced" HTML5 support -->
   <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
   
+<!--  <script id="redline_js" type="text/javascript">var redline = {}; redline.project_id = 33249186;var b,d;b=document.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===document.location.protocol?"https://data":"http://www")+'.redline.cc/assets/button.js';d=document.getElementsByTagName("script")[0];d.parentNode.insertBefore(b,d);</script>-->
 
 </head>
 
@@ -116,28 +117,6 @@
       
 			<div class="grid_12 omega">
                             <%@ include file="frontierSearchBox.jsp" %>
-<!--				<form id="local-search" name="local-search" action="[search-action]" method="post">
-								
-					<fieldset>
-					
-					<div class="left">
-						<label>
-						<input type="text" name="first" id="local-searchbox">
-						</label>
-						 Include some example searchterms - keep them short and few! 
-						<span class="examples">Examples: <a href="[search-url-1]">[search-text-1]</a>, <a href="[search-url-1]">[search-text-2]</a>, <a href="[search-url-1]">[search-text-3]</a></span>
-					</div>
-					
-					<div class="right">
-						<input type="submit" name="submit" value="Search" class="submit">					
-						 If your search is more complex than just a keyword search, you can link to an Advanced Search,
-						     with whatever features you want available 
-						<span class="adv"><a href="../search" id="adv-search" title="Advanced">Advanced</a></span>
-					</div>									
-					
-					</fieldset>
-					
-				</form>-->
 			</div>
 
       <!-- /local-search -->
@@ -158,8 +137,11 @@
 					     For example: -->
 <!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
 					<li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
-					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>
-				</ul>
+<!--					<li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>-->
+                                        <li class="functional"> <a href="https://twitter.com/share" class="icon icon-functional" data-icon="r" data-dnt="true" data-count="none" data-via="twitterapi">Share</a></li>
+<!--<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>-->
+				
+                                </ul>
 			</nav>		
   
       <!-- /local-nav -->
@@ -181,15 +163,15 @@
                     <p>
 		Give it a try and 
 		<a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/">let
-		us know</a> what you think!</p>
+                    us know</a> what you think!</p>
 <!--                        <p> The Enzyme Portal is for those interested
                         in the biology of enzymes and proteins with enzymatic
                         activity.</p>-->
                  
-                        <div style="text-align: right;">
-                            <a href="about" class="showLink" >More about the
-                                Enzyme Portal...</a>
-                        </div>
+<!--                        <div style="text-align: right;">-->
+<p><p style="text-align: right;"><a href="about" class="showLink" >More about the
+                                Enzyme Portal...</a></p>
+<!--                    </div>-->
                     </div>
                 <div style="margin-left: auto; margin-right: auto;
                           width: 50%;">
@@ -235,7 +217,6 @@
                 
                 
                 
-                
 <!--                     <div style="margin-left: auto; margin-right: auto;
                           width: 50%;">
                          <h3>Enzyme Portal Resources</h3>
@@ -274,7 +255,7 @@
                             </td>
                         </tr>
                     </table>-->
-    </section>
+<!--    </section>-->
         
         
  
@@ -408,6 +389,10 @@
             });
         </script>
         </c:if>
+        
+<!--        add twitter script for twitterapi-->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
   <!--
   <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>
   <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/script.js"></script>

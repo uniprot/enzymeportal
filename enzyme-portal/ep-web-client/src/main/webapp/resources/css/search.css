@@ -455,11 +455,11 @@ a.scienceName span{
     width:96%;
     display: inline-block;
     /*        border-color: #A1C7C7;*/
-    padding: 2px 3px;
+/*    padding: 2px 3px;
     margin: 2px auto 5px auto;
     border-radius: 10px;
     -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
+    -webkit-border-radius: 10px;*/
 }
 
 .hrLine{
