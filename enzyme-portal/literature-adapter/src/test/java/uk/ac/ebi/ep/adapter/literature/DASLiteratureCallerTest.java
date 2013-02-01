@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.adapter.literature;
 
 import java.util.Set;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -10,7 +11,7 @@ import uk.ac.ebi.cdb.webservice.Journal;
 import uk.ac.ebi.cdb.webservice.JournalInfo;
 import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
-@Ignore
+//@Ignore
 public class DASLiteratureCallerTest {
 
 	private DASLiteratureCaller dasCaller;
@@ -59,4 +60,21 @@ public class DASLiteratureCallerTest {
 		assertEquals("1981", citation.getJournalInfo().getYearOfPublication().toString());
 	}
 
+	@Test
+	public void testCallUniProtId() throws Exception {
+		DASLiteratureCaller caller = new DASLiteratureCaller(
+				IDASFeaturesAdapter.PDBE_DAS_URL, "P13569");
+		Set<Result> citations = caller.call();
+		assertFalse(citations.isEmpty());
+		for (Result cit : citations) {
+			if (cit.getId() != "20351101") continue;
+			// we only focus on this one:
+			assertEquals("MED", cit.getSource());
+			assertEquals("Biochemical basis of the interaction between cystic fibrosis transmembrane conductance regulator and immunoglobulin-like repeats of filamin.",
+					cit.getTitle());
+			// note this is not "J.BIOL.CHEM." as from the GFF:
+			assertEquals("The Journal of biological chemistry", cit.getJournalInfo().getJournal().getTitle());
+			assertEquals("285", cit.getJournalInfo().getVolume());
+		}
+	}
 }

@@ -25,6 +25,11 @@
 			element in the DOM.
 			<fixes issue="106"/>
 		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest version of literature-adapter, which speeds up
+			the literature tab.
+			<fixes issue="121"/>
+		</action>
 	</release>
 	<release version="1.0.12" date="2012-10-31"/>
 	<release version="1.0.11" date="2012-10-25"/>

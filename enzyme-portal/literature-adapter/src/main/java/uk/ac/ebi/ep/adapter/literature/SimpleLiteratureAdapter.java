@@ -102,7 +102,8 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 
 	private LiteratureConfig config;
 	
-	public List<LabelledCitation> getCitations(String uniprotId, List<String> pdbIds) {
+	public List<LabelledCitation> getCitations(String uniprotId,
+			List<String> pdbIds) {
 		List<LabelledCitation> citations = null;
 		LOGGER.debug("Before getting lit. callables");
 		List<Callable<Set<Result>>> callables = getCallables(uniprotId, pdbIds);
@@ -155,14 +156,12 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 	}
 
 	private List<Callable<Set<Result>>> getCallables(String uniprotId,
-			List<String> pdbIds) {
+			@SuppressWarnings("unused") List<String> pdbIds) {
 		List<Callable<Set<Result>>> callables =
 				new ArrayList<Callable<Set<Result>>>();
 		callables.add(new UniprotJapiLiteratureCaller(uniprotId));
-		for (String pdbId : pdbIds) {
-			callables.add(new DASLiteratureCaller(
-					IDASFeaturesAdapter.PDBE_DAS_URL, pdbId));
-		}
+		callables.add(new DASLiteratureCaller(
+				IDASFeaturesAdapter.PDBE_DAS_URL, uniprotId));
 		return callables;
 	}
 	

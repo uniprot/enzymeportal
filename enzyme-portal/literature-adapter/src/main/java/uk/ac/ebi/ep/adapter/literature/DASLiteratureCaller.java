@@ -54,17 +54,19 @@ public class DASLiteratureCaller implements Callable<Set<Result>> {
 	 */
 	protected Set<Result> getLiterature(List<SegmentAdapter> segments) {
 		Set<Result> citations = new HashSet<Result>();
-		segmentsLoop: for (SegmentAdapter segment : segments) {
+		for (SegmentAdapter segment : segments) {
 			try {
 				for (FeatureAdapter feature : segment.getFeature()) {
 					if (feature.getType().getId().equals("summary")
 							&& feature.getLabel().equals("Primary Citation")){
 						if (feature.getLinks().size() == 0){
-							LOGGER.warn("Citation is not available for " + segment.getId());
-							continue segmentsLoop;
+							LOGGER.warn(feature.getId()
+									+ ": link not available");
+							continue;
 						}
 						Result citation = null;
-						String pubMedId = getPubMedId(feature.getLinks().get(0).getHref());
+						String pubMedId = getPubMedId(
+								feature.getLinks().get(0).getHref());
 						if (pubMedId != null && pubMedId.length() > 0){
 							// Try to get from CiteXplore with the PubMed ID:
 							citation = getCitationFromCitexplore(pubMedId);
@@ -73,17 +75,15 @@ public class DASLiteratureCaller implements Callable<Set<Result>> {
 						}
 						if (citation == null){
 							// Build a citation with data from DAS:
-							//citation = buildCitation(feature, pubMedId);
+							citation = buildCitation(feature, pubMedId);
 						} else {
 							citations.add(citation);
 						}
 					}
 				}
-				if (citations == null){
-					LOGGER.warn("No citations retrieved for " +  segment.getId());
-				}
 			} catch (ValidationException e) {
-				LOGGER.error("Unable to get citations from DAS for " + segment.getId(), e);
+				LOGGER.error("Unable to get citations from DAS for "
+						+ segment.getId(), e);
 			}
 		}
 		return citations;
