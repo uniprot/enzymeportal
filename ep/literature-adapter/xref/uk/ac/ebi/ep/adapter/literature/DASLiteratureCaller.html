@@ -64,36 +64,36 @@
 <a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="55" href="#55">55</a>  	<strong class="jxr_keyword">protected</strong> Set&lt;Result&gt; getLiterature(List&lt;SegmentAdapter&gt; segments) {
 <a class="jxr_linenumber" name="56" href="#56">56</a>  		Set&lt;Result&gt; citations = <strong class="jxr_keyword">new</strong> HashSet&lt;Result&gt;();
-<a class="jxr_linenumber" name="57" href="#57">57</a>  		segmentsLoop: <strong class="jxr_keyword">for</strong> (SegmentAdapter segment : segments) {
+<a class="jxr_linenumber" name="57" href="#57">57</a>  		<strong class="jxr_keyword">for</strong> (SegmentAdapter segment : segments) {
 <a class="jxr_linenumber" name="58" href="#58">58</a>  			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="59" href="#59">59</a>  				<strong class="jxr_keyword">for</strong> (FeatureAdapter feature : segment.getFeature()) {
 <a class="jxr_linenumber" name="60" href="#60">60</a>  					<strong class="jxr_keyword">if</strong> (feature.getType().getId().equals(<span class="jxr_string">"summary"</span>)
 <a class="jxr_linenumber" name="61" href="#61">61</a>  							&amp;&amp; feature.getLabel().equals(<span class="jxr_string">"Primary Citation"</span>)){
 <a class="jxr_linenumber" name="62" href="#62">62</a>  						<strong class="jxr_keyword">if</strong> (feature.getLinks().size() == 0){
-<a class="jxr_linenumber" name="63" href="#63">63</a>  							LOGGER.warn(<span class="jxr_string">"Citation is not available for "</span> + segment.getId());
-<a class="jxr_linenumber" name="64" href="#64">64</a>  							<strong class="jxr_keyword">continue</strong> segmentsLoop;
-<a class="jxr_linenumber" name="65" href="#65">65</a>  						}
-<a class="jxr_linenumber" name="66" href="#66">66</a>  						Result citation = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="67" href="#67">67</a>  						String pubMedId = getPubMedId(feature.getLinks().get(0).getHref());
-<a class="jxr_linenumber" name="68" href="#68">68</a>  						<strong class="jxr_keyword">if</strong> (pubMedId != <strong class="jxr_keyword">null</strong> &amp;&amp; pubMedId.length() &gt; 0){
-<a class="jxr_linenumber" name="69" href="#69">69</a>  							<em class="jxr_comment">// Try to get from CiteXplore with the PubMed ID:</em>
-<a class="jxr_linenumber" name="70" href="#70">70</a>  							citation = getCitationFromCitexplore(pubMedId);
-<a class="jxr_linenumber" name="71" href="#71">71</a>  						} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="72" href="#72">72</a>  							LOGGER.warn(<span class="jxr_string">"No PubMed ID found for "</span> + segment.getId());
-<a class="jxr_linenumber" name="73" href="#73">73</a>  						}
-<a class="jxr_linenumber" name="74" href="#74">74</a>  						<strong class="jxr_keyword">if</strong> (citation == <strong class="jxr_keyword">null</strong>){
-<a class="jxr_linenumber" name="75" href="#75">75</a>  							<em class="jxr_comment">// Build a citation with data from DAS:</em>
-<a class="jxr_linenumber" name="76" href="#76">76</a>  							<em class="jxr_comment">//citation = buildCitation(feature, pubMedId);</em>
-<a class="jxr_linenumber" name="77" href="#77">77</a>  						} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="78" href="#78">78</a>  							citations.add(citation);
-<a class="jxr_linenumber" name="79" href="#79">79</a>  						}
-<a class="jxr_linenumber" name="80" href="#80">80</a>  					}
-<a class="jxr_linenumber" name="81" href="#81">81</a>  				}
-<a class="jxr_linenumber" name="82" href="#82">82</a>  				<strong class="jxr_keyword">if</strong> (citations == <strong class="jxr_keyword">null</strong>){
-<a class="jxr_linenumber" name="83" href="#83">83</a>  					LOGGER.warn(<span class="jxr_string">"No citations retrieved for "</span> +  segment.getId());
-<a class="jxr_linenumber" name="84" href="#84">84</a>  				}
-<a class="jxr_linenumber" name="85" href="#85">85</a>  			} <strong class="jxr_keyword">catch</strong> (ValidationException e) {
-<a class="jxr_linenumber" name="86" href="#86">86</a>  				LOGGER.error(<span class="jxr_string">"Unable to get citations from DAS for "</span> + segment.getId(), e);
+<a class="jxr_linenumber" name="63" href="#63">63</a>  							LOGGER.warn(feature.getId()
+<a class="jxr_linenumber" name="64" href="#64">64</a>  									+ <span class="jxr_string">": link not available"</span>);
+<a class="jxr_linenumber" name="65" href="#65">65</a>  							<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="66" href="#66">66</a>  						}
+<a class="jxr_linenumber" name="67" href="#67">67</a>  						Result citation = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="68" href="#68">68</a>  						String pubMedId = getPubMedId(
+<a class="jxr_linenumber" name="69" href="#69">69</a>  								feature.getLinks().get(0).getHref());
+<a class="jxr_linenumber" name="70" href="#70">70</a>  						<strong class="jxr_keyword">if</strong> (pubMedId != <strong class="jxr_keyword">null</strong> &amp;&amp; pubMedId.length() &gt; 0){
+<a class="jxr_linenumber" name="71" href="#71">71</a>  							<em class="jxr_comment">// Try to get from CiteXplore with the PubMed ID:</em>
+<a class="jxr_linenumber" name="72" href="#72">72</a>  							citation = getCitationFromCitexplore(pubMedId);
+<a class="jxr_linenumber" name="73" href="#73">73</a>  						} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="74" href="#74">74</a>  							LOGGER.warn(<span class="jxr_string">"No PubMed ID found for "</span> + segment.getId());
+<a class="jxr_linenumber" name="75" href="#75">75</a>  						}
+<a class="jxr_linenumber" name="76" href="#76">76</a>  						<strong class="jxr_keyword">if</strong> (citation == <strong class="jxr_keyword">null</strong>){
+<a class="jxr_linenumber" name="77" href="#77">77</a>  							<em class="jxr_comment">// Build a citation with data from DAS:</em>
+<a class="jxr_linenumber" name="78" href="#78">78</a>  							citation = buildCitation(feature, pubMedId);
+<a class="jxr_linenumber" name="79" href="#79">79</a>  						} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="80" href="#80">80</a>  							citations.add(citation);
+<a class="jxr_linenumber" name="81" href="#81">81</a>  						}
+<a class="jxr_linenumber" name="82" href="#82">82</a>  					}
+<a class="jxr_linenumber" name="83" href="#83">83</a>  				}
+<a class="jxr_linenumber" name="84" href="#84">84</a>  			} <strong class="jxr_keyword">catch</strong> (ValidationException e) {
+<a class="jxr_linenumber" name="85" href="#85">85</a>  				LOGGER.error(<span class="jxr_string">"Unable to get citations from DAS for "</span>
+<a class="jxr_linenumber" name="86" href="#86">86</a>  						+ segment.getId(), e);
 <a class="jxr_linenumber" name="87" href="#87">87</a>  			}
 <a class="jxr_linenumber" name="88" href="#88">88</a>  		}
 <a class="jxr_linenumber" name="89" href="#89">89</a>  		<strong class="jxr_keyword">return</strong> citations;
