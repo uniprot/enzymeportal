@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>literature-adapter</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.7-SNAPSHOT</version>
 	<name>Literature adapter</name>
 	<description>
 		A module to retrieve bibliography on enzymes from different sources.
