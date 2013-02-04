@@ -39,37 +39,14 @@
         <!-- CSS: implied media=all -->
         <!-- CSS concatenated and minified via ant build script-->	<!-- Not yet implemented -->
 
-         <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-  
-        <!--        <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/boilerplate-style.css">  
-        
-                <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/ebi-global.css" type="text/css" media="screen" />
-                <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/ebi-visual.css" type="text/css" media="screen">
-                <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/984-24-col-fluid.css" type="text/css" media="screen" />
-        
-                <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">  you can replace this with [projectname]-colours.css. See http://frontier.ebi.ac.uk/web/style/colour for details of how to do this -->
 
-
-<!--                <link media="screen" href="resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
-                <link media="screen" href="resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
-                <link media="screen" href="resources/lib/spineconcept/css/identification.css" type="text/css" rel="stylesheet" />
-                <link media="screen" href="resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
-                <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-                <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
-
-<!--        <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
-
-        <link rel="stylesheet" href="resources/css/ebi-global.css" type="text/css" media="screen" />
-
-        <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
-        <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />-->
         <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
 
         <!-- end CSS-->
 
-
+  <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
         <!-- All JavaScript at the bottom, except for Modernizr / Respond.
              Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
              For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
@@ -120,45 +97,6 @@
          <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
      </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
 
-                    <!-- OR... -->
-
-<!--                    <div class="grid_12 alpha" id="local-title">
-                        <h1>Enzyme Portal</h1>
-                    </div>-->
-                    <!-- -->
-
-<!--                    <div class="grid_12 omega">
-
-                        <form id="local-search" name="local-search" action="#" method="post">
-
-                            <fieldset>
-
-                                <label>
-                                    <input type="text" name="first" id="local-searchbox" />
-                                </label>	
-
-                                <input type="submit" name="submit" value="Search" class="submit" />	
-                            </fieldset>
-
-                        </form>
-
-
-
-
-
-                                                <form id="local-search" name="local-search" action="#" method="post">
-                        
-                                                    <fieldset>
-                        
-                                                        <label>
-                                                            <input type="text" name="first" id="local-searchbox" />
-                                                        </label>	
-                        
-                                                        <input type="submit" name="submit" value="Search" class="submit" />	
-                                                    </fieldset>
-                        
-                                                </form>
-                    </div>-->
 
                     <nav>
                         <ul class="grid_24" id="local-nav">
@@ -196,22 +134,6 @@
             </div>
                      </div>
             </section>
-<!--            <section>
-                <h3>Sequence Search guideline</h3>
-                <p>How To's of Sequence Search goes here. [TODO]</p>
-            </section>-->
-
-                <!--                <section>
-                
-                
-                                    <h2>Enzyme Portal</h2>
-                                    <p>Your content</p>										
-                                </section> 
-                
-                                <section>
-                                    <h3>[Another title]</h3>
-                                    <p>More content in a full-width container.</p>
-                                </section>-->
                 <!-- End suggested layout containers -->
 
             </div>

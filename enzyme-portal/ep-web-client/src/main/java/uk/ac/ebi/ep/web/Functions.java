@@ -21,4 +21,39 @@ public final class Functions {
     public static boolean contains(List collection, Object item) {
         return collection.contains(item);
     }
+    public static boolean alphaOmegaIsNotNull(Object alpha, Object omega){
+        boolean eval = true;
+        if( alpha == null | omega == null){
+            
+                    eval = false;
+        }
+ 
+        return eval;
+        
+    }
+    
+    public static boolean omegaIsNull(Object alpha, Object omega){
+        boolean eval = false;
+        if(alpha == null){
+         
+            eval = false;
+        }
+        
+        if(alpha != null && omega == null){
+          
+            eval = true;
+        }
+        
+        if((alpha != null & !alpha.equals("") & !alpha.equals(" ")) && (omega == null || omega.equals("") || omega.equals(" "))){
+          
+            eval = true;
+        }
+        
+   
+        
+        return eval;
+    }
+    
+     
+
 }

@@ -383,14 +383,14 @@
                                                 <c:set var="_enzyme" value="${enzymeModel.enzyme}"/>
 
                                                 <c:if test='${_enzyme.enzymetype[0] == "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${_enzyme.enzymetype[0] != "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="enzyme.jsp" %>
                                                         </div>
@@ -402,14 +402,14 @@
                                             <c:if test='${requestedfield=="proteinStructure"}'>
                                                 <c:set var="structure" value="${enzymeModel.proteinstructure}"/>   
                                                 <c:if test='${structure[0].name == "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${structure[0].name != "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="proteinStructure.jsp" %>
                                                         </div>
@@ -422,14 +422,14 @@
 
                                                 <c:set var="pathway" value="${enzymeModel.reactionpathway}"/>   
                                                 <c:if test='${pathway[0].reaction.name == "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${pathway[0].reaction.name != "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="reactionsPathways.jsp" %>
                                                         </div>
@@ -441,7 +441,7 @@
                                             <c:if test='${requestedfield=="molecules"}'>
                                                 <c:set var="chemEntity" value="${enzymeModel.molecule}"/>
                                                 <c:if test='${chemEntity.drugs[0].name == "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
@@ -449,7 +449,7 @@
                                                 </c:if>
 
                                                 <c:if test='${chemEntity.drugs[0].name != "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="molecules.jsp" %>
                                                         </div>
@@ -460,14 +460,14 @@
                                             <c:if test='${requestedfield=="diseaseDrugs"}'>
                                                 <c:set var="diseases" value="${enzymeModel.disease}"/>
                                                 <c:if test='${diseases[0].name == "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${diseases[0].name != "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="disease.jsp" %>
                                                         </div>
@@ -480,14 +480,14 @@
 
                                                 <c:set var="lit" value="${enzymeModel.literature}"/>   
                                                 <c:if test='${lit[0] == "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${lit[0] != "error"}'>
-                                                    <div class="node">
+                                                    <div class="node grid_23">
                                                         <div class="view">
                                                             <%@include file="literature.jsp" %>
                                                         </div>

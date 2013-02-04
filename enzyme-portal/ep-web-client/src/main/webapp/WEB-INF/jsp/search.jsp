@@ -58,7 +58,7 @@
         <!--        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
                 <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
 
-        <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
+<!--        <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">-->
 
         <!--
                 <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
@@ -71,6 +71,8 @@
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
 
+<!--        for production-->
+          <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
 
         <!--        javascript was placed here for auto complete otherwise should be place at the bottom for faster page loading-->
 
@@ -272,10 +274,10 @@
                         <c:if test="${totalfound eq 0}">
                             <c:if test="${searchText eq ''}">
                                <c:set var="searchText"
-                                       value="empty searchbox"/> 
+                                       value=" "/> 
                             </c:if>
                             <h2>No Enzyme Portal results found</h2>
-                            <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} "</p>
+                            <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} ". Please try another search keyword or use the <a href="advanceSearch">advanced search</a></p>
                             <script>
                                 $(document).ready(function() {
                                     try {
@@ -286,7 +288,7 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                            <h2>Enzyme Portal results for <span class="searchterm"><i>"${fn:substring(searchText, 0, 10)}${fn:length(searchText) gt 10? '...':''}"</i>
+                            <h2>Enzyme Portal results for <span class="searchterm"><i>${fn:substring(searchText, 0, 10)}${fn:length(searchText) gt 10? '...':''}</i>
                                     </span></h2>
                                               
                             <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
@@ -300,7 +302,8 @@
                     </c:if>
 
                 </section>
-
+            </div>
+                    <div id="content" role="main" class="grid_24 clearfix">
                 <section class="grid_6" id="search-results">
 
 
@@ -371,8 +374,17 @@
 
                                                                 <div class="filterLine">
                                                                     <div class="text">
+                                                                         
+                                                                        <c:if test="${Fn:alphaOmegaIsNotNull(speciesList[i].scientificname, speciesList[i].commonname)}">
+                                                                             <script>
+                                                                                    speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");
+                                                                           </script>
+                                                                         </c:if>
+                                                                         
+
                                                                         <c:choose>
-                                                                            <c:when test="${empty speciesList[i].commonname}">
+                                                                           
+                                                                            <c:when test="${Fn:omegaIsNull(speciesList[i].scientificname, speciesList[i].commonname)}">
                                                                                 <a class="scienceName" style="border-bottom-style:none " >${speciesList[i].scientificname}</a>
                                                                                 <script>
                                                                                     speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");
@@ -384,6 +396,11 @@
            
                                                                                     speciesAutocompleteDataSource.push({label:"${speciesList[i].commonname}",value:"${speciesList[i].scientificname}"});
                                                                                 </script>
+                                                                                  <script>
+                                                                                    speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");
+                                                                                </script>
+
+                                                                                
                                                                             </c:otherwise>
                                                                         </c:choose> 
 
@@ -756,7 +773,7 @@
                                                     <c:otherwise>
                                                         <c:set var="imgLink"
                                                                value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
-                                                        <a class="noLine" target="blank" href="${imgLink}">
+                                                        <a class="noLine" style="border-bottom-style: none" target="blank" href="${imgLink}">
                                                             <img src="${imgLink}" width="110" height="90"
                                                                  alt="PDB ${imgFile}" onerror="noImage(this);"/>
                                                         </a>
@@ -1144,15 +1161,15 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
        -->
-<!--        this is to temporally fix the bug in frontier js-->
-<!--  <script src="resources/javascript/ebi-global-search-run.js" type="text/javascript"></script>
-    <script src="resources/javascript/ebi-global-search.js" type="text/javascript"></script>
-    -->
+
 <!--    now the frontier js for ebi global result-->
-        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
-        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>
+<!--        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
+        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>-->
 
-
+<!--        To be able to run locally as frontier impl only works when deployed to ebi domain-->
+  <script src="resources/javascript/ebi-global-search-run.js" type="text/javascript"></script>
+    <script src="resources/javascript/ebi-global-search.js" type="text/javascript"></script>
+    
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 
         <!--      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -1187,8 +1204,8 @@
           <![endif]-->
 
     </body>
-    <script>
+<!--    <script>
         updateSummary();
-    </script>
+    </script>-->
 </html>
 

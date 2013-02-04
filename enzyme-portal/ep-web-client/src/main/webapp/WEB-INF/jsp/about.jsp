@@ -169,11 +169,11 @@
   
         <h3 class="pane-title">About Enzyme Portal</h3>
     
-  
+        
 <!--   <div class="pane-content"> -->
     
 <p></p>
-<div class="caption caption-right"><div class="caption-inner" style="width: 301px;">
+<div class="caption caption-right"><div  style="width: 301px;">
                                 <%-- b>Welcome to the Enzyme Portal</b --%>
                                 <iframe class="grid_24"
                                         src="http://www.youtube.com/embed/Kldp0WXcxUM"
@@ -374,152 +374,7 @@ Enzyme Portal - An Introduction</div>
 
 
 
-<!--   <section class="grid_18 alpha">
-                            <div style="margin-left: auto; margin-right: auto;
-                         width: 50%;">
-<h3>About the Enzyme Portal</h3>
-                        <h2>Welcome to the Enzyme Portal</h2> 
-                        <p> The Enzyme Portal is for those interested
-                        in the biology of enzymes and proteins with enzymatic
-                        activity.</p> 
-                        <p>Watch the videos below for a more insight on how to use the Enzyme Portal.</p>
-                 
-                        <div style="text-align: right;">
-                            <a href="about" class="showLink" >More about the
-                                Enzyme Portal...</a>
-                        </div>
-                    </div>
 
-                    <table style="margin-left: auto; margin-right: auto;
-                           width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
-                        <tr style="text-align: center;">
-<table>
-    <tr>
-                            <td>
-                                <%-- b>Welcome to the Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/Kldp0WXcxUM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                            <td>
-                                <%-- b>Explore Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                        </tr>
-                    </table>
-    </section>-->
-
-<!-- <section>
-                   
-	<h3>About the Enzyme Portal</h3>
-	<p>
-		The Enzyme Portal is for people who are interested in
-		the biology of enzymes and proteins with enzymatic
-		activity.
-	</p>
-
-	<p>
-		It integrates publicly available
-		information about enzymes, such as small-molecule chemistry,
-		biochemical pathways and drug compounds. It provides a concise
-		summary of information from:
-		<ul>
-			<li><a href="http://www.uniprot.org/help/uniprotkb">UniProt
-						Knowledgebase</a></li>
-			<li><a href="http://www.pdbe.org">Protein Data Bank in
-						Europe</a></li>
-			<li><a href="http://www.ebi.ac.uk/rhea">Rhea</a>, a database
-					of enzyme-catalyzed reactions</li>
-			<li><a href="http://www.reactome.org">Reactome</a>, a database
-					of biochemical pathways</li>
-			<li><a href="http://www.ebi.ac.uk/intenz">IntEnz</a>, a resource
-					with enzyme nomenclature information</li>
-			<li><a href="http://www.ebi.ac.uk/chebi">ChEBI</a> and
-					<a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a>,
-					which contain information about small molecule chemistry and
-					bioactivity</li>
-			<li><a href="http://www.ebi.ac.uk/thornton-srv/databases/CoFactor/">CoFactor</a>
-					and <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/">MACiE</a>
-					for highly detailed, curated information about cofactors and reaction
-					mechanisms.</li>
-		</ul>
-		The Enzyme Portal brings together lots of diverse
-		information about enzymes and displays it in an organised overview.
-		It covers a large number of species including the key model
-		organisms, and provides a simple way to compare orthologues.
-	</p>
-	<p>
-		Give it a try and 
-		<a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/">let
-		us know</a> what you think!
-	</p>-->
-<!--        	                <div style="text-align: right;">
-                                    <a href="faq" class="showLink">Frequently asked questions ...</a>
-	                </div>-->
-<!--<section class="grid_18 alpha">
-	<h4>The Enzyme Portal Team</h4>
-	<img alt="The Enzyme Portal team" width="450"
-		style="float: left; margin: 2ex 2em;"
-		src="resources/images/EP_team_photo_4_web.jpg"/>
-	<p>
-		The Enzyme Portal is designed and developed at the
-			EMBL-European Bioinformatics Institute (<a
-			href="http://www.ebi.ac.uk/information">EMBL-EBI</a>)
-			in the UK. Part of the <a
-			href="http://www.embl.org">EMBL Outstation - The European Bioinformatics Institute</a>,
-			EMBL-EBI is the hub of excellence for bioinformatics in Europe. We
-			provide freely available life science data and <a
-			href="http://www.ebi.ac.uk">services</a>, and
-			perform basic <a href="http://www.ebi.ac.uk/research">research</a>
-			in computational biology.
-	</p>
-
-	<p>
-		The Enzyme Portal was created by the <a
-		href="http://www.ebi.ac.uk/steinbeck/">Cheminformatics and Metabolism
-		Team</a> at EMBL-EBI, which is led by
-		<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=922">Christoph
-		Steinbeck</a>. Some of the key contributors are:
-		<ul>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=265">Paula
-			de Matos</a>, Project Coordinator and User Experience
-			Analyst</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=690">Rafael
-			Alcántara</a>, Hong Cao and
-			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1518">Joseph
-			Onwubiko</a>, Software Developers</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1195">Jenny
-			Cham</a>, User Experience Consultant</li>
-		</ul>
-	</p>
-
-	<p>
-		We also have the invaluable support of 
-	<ul>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=467">Jules
-			Jacobsen</a> from the UniProt Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=290">Bijay
-			Jassal</a>&nbsp;from the Reactome Team</li>
-		<li>Gemma Holliday and Julia Fischer, previously from the Thornton Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=839">Syed
-			Asad Rahman</a> from the Thornton Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=793">Mickael
-			Goujon</a> and
-			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1175">Francis
-			Rowland</a> from the External Services Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=863">James
-			Malone</a> and
-			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=413">Helen
-			Parkinson</a></li>
-	</ul>
-	</p>
-	 
-
-                </section>-->
 
 		<!-- End example layout containers -->
 			

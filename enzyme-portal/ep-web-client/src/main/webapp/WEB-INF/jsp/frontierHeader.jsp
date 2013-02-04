@@ -114,8 +114,9 @@
       
 			<div class="grid_12 omega">
                             <%@ include file="frontierSearchBox.jsp" %>
-<!--		
+		
 			</div>
+                            <!--
 
       <!-- /local-search -->
 

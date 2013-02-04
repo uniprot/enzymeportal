@@ -69,6 +69,8 @@ import uk.ac.ebi.ep.search.result.Pagination;
 public class SearchController {
 
     private static final Logger LOGGER = Logger.getLogger(SearchController.class);
+    private static final String ENZYME_MODEL = "enzymeModel";
+    private static final String ERROR ="error";
 
     private enum ResponsePage {
 
@@ -150,7 +152,7 @@ public class SearchController {
                     break;
             }
             enzymeModel.setRequestedfield(requestedField.name());
-            model.addAttribute("enzymeModel", enzymeModel);
+            model.addAttribute(ENZYME_MODEL, enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
             LOGGER.error("Unable to retrieve the entry!", ex);
@@ -158,7 +160,7 @@ public class SearchController {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.name());
                 Disease d = new Disease();
-                d.setName("error");
+                d.setName(ERROR);
                 enzymeModel.getDisease().add(0, d);
                 model.addAttribute("enzymeModel", enzymeModel);
                 LOGGER.fatal("Error in retrieving Disease Information");
@@ -167,11 +169,11 @@ public class SearchController {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 Molecule molecule = new Molecule();
-                molecule.setName("error");
+                molecule.setName(ERROR);
                 ChemicalEntity chemicalEntity = new ChemicalEntity();
                 chemicalEntity.getDrugs().add(0, molecule);
                 enzymeModel.setMolecule(chemicalEntity);
-                model.addAttribute("enzymeModel", enzymeModel);
+                model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.fatal("Error in retrieving Molecules Information");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.enzyme.getName())) {
@@ -179,20 +181,20 @@ public class SearchController {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 Enzyme enzyme = new Enzyme();
-                enzyme.getEnzymetype().add(0, "error");
+                enzyme.getEnzymetype().add(0, ERROR);
                 enzymeModel.setEnzyme(enzyme);
 
-                model.addAttribute("enzymeModel", enzymeModel);
+                model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.fatal("Error in retrieving Enzymes");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.proteinStructure.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 ProteinStructure structure = new ProteinStructure();
-                structure.setName("error");
+                structure.setName(ERROR);
                 enzymeModel.getProteinstructure().add(0, structure);
 
-                model.addAttribute("enzymeModel", enzymeModel);
+                model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.fatal("Error in retrieving ProteinStructure");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.reactionsPathways.getName())) {
@@ -201,12 +203,12 @@ public class SearchController {
                 enzymeModel.setRequestedfield(requestedField.getName());
                 ReactionPathway pathway = new ReactionPathway();
                 EnzymeReaction reaction = new EnzymeReaction();
-                reaction.setName("error");
+                reaction.setName(ERROR);
                 pathway.setReaction(reaction);
                 enzymeModel.getReactionpathway().add(0, pathway);
 
 
-                model.addAttribute("enzymeModel", enzymeModel);
+                model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.fatal("Error in retrieving Reaction Pathways");
 
             }
@@ -214,9 +216,9 @@ public class SearchController {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
 
-                enzymeModel.getLiterature().add(0, "error");
+                enzymeModel.getLiterature().add(0, ERROR);
 
-                model.addAttribute("enzymeModel", enzymeModel);
+                model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.fatal("Error in retrieving Literature Information");
 
             }
@@ -253,6 +255,7 @@ public class SearchController {
         return new SearchModel();
     }
 
+
     @RequestMapping(value = "/faq")
     public SearchModel getfaq(Model model) {
 
@@ -278,200 +281,6 @@ public class SearchController {
         return searchModelForm;
     }
 
-//    /**
-//     * A wrapper of {@code postSearchResult} method, created to accept the
-//     * search request using GET.
-//     *
-//     * @param searchModel
-//     * @param result
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "/search", method = RequestMethod.GET)
-//    public String getSearchResult(SearchModel searchModel, BindingResult result,
-//            Model model, HttpSession session) {
-//        return postSearchResult(searchModel, result, model, session);
-//    }
-//
-//    /**
-//     * Processes the search request. When user enters a search text and presses
-//     * the submit button the request is processed here.
-//     *
-//     * @param searchModelForm
-//     * @param result
-//     * @param model
-//     * @return
-//     */
-//    @RequestMapping(value = "/search", method = RequestMethod.POST)
-//    public String postSearchResult(SearchModel searchModelForm, BindingResult result,
-//            Model model, HttpSession session) {
-//        String view = "search";
-//        clearHistory(session);
-//
-//        if (searchModelForm != null) {
-//            try {
-//                SearchParams searchParameters = searchModelForm.getSearchparams();
-//                searchParameters.setSize(searchConfig.getResultsPerPage());
-//                SearchResults resultSet = null;
-//                // See if it is already there, perhaps we are paginating:
-//                @SuppressWarnings("unchecked")
-//                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) session.getServletContext().getAttribute("searches");
-//                if (prevSearches == null) {
-//                    // Map implementation which maintains the order of access:
-//                    prevSearches = Collections.synchronizedMap(
-//                            new LinkedHashMap<String, SearchResults>(
-//                            searchConfig.getSearchCacheSize(), 1, true));
-//                    session.getServletContext().setAttribute("searches", prevSearches);
-//                }
-//                resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
-//                if (resultSet == null) {
-//                    // Make a new search:
-//                    EnzymeFinder finder = new EnzymeFinder(searchConfig);
-//                    finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-//                    finder.getUniprotAdapter().setConfig(uniprotConfig);
-//                    finder.getIntenzAdapter().setConfig(intenzConfig);
-//                    try {
-//                        resultSet = finder.getEnzymes(searchParameters);
-//                        // cache it in the session, making room if necessary:
-//                        synchronized (prevSearches) {
-//                            while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
-//                                // remove the eldest:
-//                                prevSearches.remove(prevSearches.keySet().iterator().next());
-//                            }
-//                            prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
-//                        }
-//                    } catch (EnzymeFinderException ex) {
-//                        LOGGER.error("Unable to create the result list because an error "
-//                                + "has occurred in the find method! \n", ex);
-//                    } finally {
-//                        finder.closeResources();
-//                    }
-//                }
-//
-//                final int numOfResults = resultSet.getSummaryentries().size();
-//                Pagination pagination = new Pagination(
-//                        numOfResults, searchParameters.getSize());
-//                pagination.setFirstResult(searchParameters.getStart());
-//
-//                // Filter:
-//                List<String> speciesFilter = searchParameters.getSpecies();
-//                List<String> compoundsFilter = searchParameters.getCompounds();
-//                List<String> diseasesFilter = searchParameters.getDiseases();
-//
-////both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
-//                SearchResults searchResults = resultSet;
-//                List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
-//                resetSelectedSpecies(defaultSpeciesList);
-//
-//                for (String selectedItems : searchParameters.getSpecies()) {
-//
-//                    for (Species theSpecies : defaultSpeciesList) {
-//                        if (selectedItems.equals(theSpecies.getScientificname())) {
-//                            theSpecies.setSelected(true);
-//                        }
-//
-//                    }
-//                }
-//
-//                List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
-//                resetSelectedCompounds(defaultCompoundList);
-//
-//                for (String SelectedCompounds : searchParameters.getCompounds()) {
-//                    for (Compound theCompound : defaultCompoundList) {
-//                        if (SelectedCompounds.equals(theCompound.getName())) {
-//                            theCompound.setSelected(true);
-//                        }
-//                    }
-//                }
-//
-//                List<uk.ac.ebi.ep.search.model.Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
-//                resetSelectedDisease(defaultDiseaseList);
-//
-//                for (String selectedDisease : searchParameters.getDiseases()) {
-//                    for (uk.ac.ebi.ep.search.model.Disease disease : defaultDiseaseList) {
-//                        if (selectedDisease.equals(disease.getName())) {
-//                            disease.setSelected(true);
-//                        }
-//                    }
-//                }
-//
-//
-//
-//                // list to hold all selected species both from the specie list and auto-complete
-//                Set<String> allSelectedItems = new TreeSet<String>();
-//
-//                //if an item is seleted, then filter the list
-//                if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
-//                    List<EnzymeSummary> filteredResults =
-//                            new LinkedList<EnzymeSummary>(resultSet.getSummaryentries());
-//
-//
-//                    CollectionUtils.filter(filteredResults,
-//                            new SpeciesPredicate(speciesFilter));
-//                    CollectionUtils.filter(filteredResults,
-//                            new CompoundsPredicate(compoundsFilter));
-//                    CollectionUtils.filter(filteredResults,
-//                            new DiseasesPredicate(diseasesFilter));
-//
-//
-//
-//
-//
-//                    allSelectedItems.addAll(compoundsFilter);
-//
-//
-//                    allSelectedItems.addAll(diseasesFilter);
-//
-//
-//                    allSelectedItems.addAll(speciesFilter);
-//
-//
-//                    CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedItems));
-//
-////filtering ends here
-//
-//                    // Create a new SearchResults, don't modify the one in session
-//                    SearchResults sr = new SearchResults();
-//
-//                    // Update the number of results to paginate:
-//                    pagination.setNumberOfResults(filteredResults.size());
-//
-//                    model.addAttribute("pagination", pagination);
-//                    sr.setSearchfilters(resultSet.getSearchfilters());
-//                    sr.setSummaryentries(filteredResults);
-//                    // show the total number of hits (w/o filtering):
-//                    sr.setTotalfound(resultSet.getTotalfound());
-//                    searchModelForm.setSearchresults(sr);
-//                } else {
-//                    // Show all of them:
-//                    searchModelForm.setSearchresults(resultSet);
-//                }
-//
-//                model.addAttribute("searchModel", searchModelForm);
-//                model.addAttribute("pagination", pagination);
-//
-//                addToHistory(session,
-//                        "searchparams.text=" + searchParameters.getText());
-//            } catch (Throwable e) {
-//                LOGGER.error("Failed search", e);
-//                view = "error";
-//            }
-//        }
-//        return view;
-//    }
-//    static final Comparator<Species> SORT_SPECIES = new Comparator<Species>() {
-//
-//        public int compare(Species sp1, Species sp2) {
-//            if (sp1.getCommonname() == null && sp2.getCommonname() == null) {
-//
-//                return sp1.getScientificname().compareTo(sp2.getScientificname());
-//            }
-//            int compare = sp1.getScientificname().compareTo(sp2.getScientificname());
-//
-//            return ((compare == 0) ? sp1.getScientificname().compareTo(sp2.getScientificname()) : compare);
-//
-//        }
-//    };
 
     private void resetSelectedSpecies(List<Species> speciesList) {
         for (Species sp : speciesList) {
@@ -498,15 +307,6 @@ public class SearchController {
 //        return "underconstruction";
 //    }
 //
-//    @RequestMapping(value = "/about", method = RequestMethod.GET)
-//    public String getAbout(Model model) {
-//        return "about";
-//    }
-//
-//       @RequestMapping(value = "/blastSearch", method = RequestMethod.GET)
-//    public String getBlastSearch(Model model) {
-//        return "blastSearch";
-//    }
  
     private void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
@@ -531,8 +331,7 @@ public class SearchController {
         }
     }
     
-    // use working code and adapt the sequence search to it. 
-    ////modfications
+
     
     /**
      * Processes the search request. When user enters a search text and presses
@@ -649,60 +448,22 @@ public class SearchController {
         return "advanceSearch";
     }
     
-//    @RequestMapping(value = "/search", method = RequestMethod.GET)
-//    public String getSearch(Model model) {
-//        return "search";
-//    }
+
     
     /**
      * Applies filters taken from the search parameters to the search results.
      * @param searchModel
      */
-    /* THIS IS computingfacts ZONE */
+
     private void applyFilters(SearchModel searchModel){
-//                SearchParams searchParameters = searchModel.getSearchparams();
-//                searchParameters.setSize(searchConfig.getResultsPerPage());
-//                SearchResults resultSet = searchModel.getSearchresults();
+
                 
                        if (searchModel != null) {
-            //try {
+        
                 SearchParams searchParameters = searchModel.getSearchparams();
                 searchParameters.setSize(searchConfig.getResultsPerPage());
                 SearchResults resultSet = searchModel.getSearchresults();
-                // See if it is already there, perhaps we are paginating:
-//                @SuppressWarnings("unchecked")
-//                Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) session.getServletContext().getAttribute("searches");
-//                if (prevSearches == null) {
-//                    // Map implementation which maintains the order of access:
-//                    prevSearches = Collections.synchronizedMap(
-//                            new LinkedHashMap<String, SearchResults>(
-//                            searchConfig.getSearchCacheSize(), 1, true));
-//                    session.getServletContext().setAttribute("searches", prevSearches);
-//                }
-//                resultSet = prevSearches.get(searchParameters.getText().toLowerCase());
-//                if (resultSet == null) {
-//                    // Make a new search:
-//                    EnzymeFinder finder = new EnzymeFinder(searchConfig);
-//                    finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-//                    finder.getUniprotAdapter().setConfig(uniprotConfig);
-//                    finder.getIntenzAdapter().setConfig(intenzConfig);
-//                    try {
-//                        resultSet = finder.getEnzymes(searchParameters);
-//                        // cache it in the session, making room if necessary:
-//                        synchronized (prevSearches) {
-//                            while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
-//                                // remove the eldest:
-//                                prevSearches.remove(prevSearches.keySet().iterator().next());
-//                            }
-//                            prevSearches.put(searchParameters.getText().toLowerCase(), resultSet);
-//                        }
-//                    } catch (EnzymeFinderException ex) {
-//                        LOGGER.error("Unable to create the result list because an error "
-//                                + "has occurred in the find method! \n", ex);
-//                    } finally {
-//                        finder.closeResources();
-//                    }
-//                }
+
 
                 final int numOfResults = resultSet.getSummaryentries().size();
                 Pagination pagination = new Pagination(
@@ -802,299 +563,9 @@ public class SearchController {
 
 //filtering ends here
 
-//                    // Create a new SearchResults, don't modify the one in session
-//                    SearchResults sr = new SearchResults();
-//
-//                    // Update the number of results to paginate:
-//                    pagination.setNumberOfResults(filteredResults.size());
-//
-//                    model.addAttribute("pagination", pagination);
-//                    sr.setSearchfilters(resultSet.getSearchfilters());
-//                    sr.setSummaryentries(filteredResults);
-//                    // show the total number of hits (w/o filtering):
-//                    sr.setTotalfound(resultSet.getTotalfound());
-//                    searchModelForm.setSearchresults(sr);
-//                } else {
-//                    // Show all of them:
-//                    searchModelForm.setSearchresults(resultSet);
-//                }
-//
-//                model.addAttribute("searchModel", searchModelForm);
-//                model.addAttribute("pagination", pagination);
-//
-//                addToHistory(session,
-//                        "searchparams.text=" + searchParameters.getText());
-//            } catch (Throwable e) {
-//                LOGGER.error("Failed search", e);
-//                view = "error";
-//            }
         }
                 
 
-//                // Filter:
-//                //List<String> speciesFilter = searchParameters.getSpecies();
-//                //List<String> compoundsFilter = searchParameters.getCompounds();
-//                //List<String> diseasesFilter = searchParameters.getDiseases();
-//
-//                List<EnzymeSummary> summaryEntryFilteredResults = new LinkedList<EnzymeSummary>();
-//
-//                Set<String> speciesFilter = new TreeSet<String>();
-//                for (String s : searchParameters.getSpecies()) {
-//                    if (s != null || !s.isEmpty() || !s.equals("") || !s.equals(" ")) {
-//                        speciesFilter.add(s);
-//                    }
-//                }
-//                Set<String> diseasesFilter = new TreeSet<String>();
-//                for (String d : searchParameters.getDiseases()) {
-//                    if (d != null || !d.isEmpty() || !d.equals("") || !d.equals(" ")) {
-//                        diseasesFilter.add(d);
-//                    }
-//                }
-//
-//
-//
-//                Set<String> compoundsFilter = new TreeSet<String>();
-//                for (String c : searchParameters.getCompounds()) {
-//                    if (c != null || !c.isEmpty() || !c.equals("") || !c.equals(" ")) {
-//                        compoundsFilter.add(c);
-//                    }
-//                }
-//
-//
-////AUTO COMPLETE STARTS HERE
-//                //selected species via auto complete
-//                //List<String> selectedSpecies_autoComplete = searchParameters.getSelectedSpecies();
-//                List<String> selectedCompounds_autocomplete = searchParameters.getSelectedCompounds();
-//                List<String> selectedDisease_autocomplete = searchParameters.getSelectedDiseases();
-//
-//                Set<String> selectedSpecies_autoComplete = new TreeSet<String>();
-//                for (String selectedSp : searchParameters.getSelectedSpecies()) {
-//                    if (selectedSp != null || !selectedSp.isEmpty() || !selectedSp.equals("") || !selectedSp.equals(" ")) {
-//                        selectedSpecies_autoComplete.add(selectedSp);
-//                    }
-//                }
-//
-//                // list to hold all selected species both from the specie list and auto-complete
-//                Set<String> allSelectedItems = new TreeSet<String>();
-//
-//                Species specie_to_tempList;// = null;
-//
-//                //compound to be held temporary
-//                Compound compound_to_tempList;// = null;
-//
-//                //disease to be held temporary
-//                uk.ac.ebi.ep.search.model.Disease disease_to_tempList;
-//
-//                //a temp list to hold species selected from the auto-complete
-//
-//                List<Species> tempSpecieList = resultSet.getSearchfilters().getTempSpecies();
-//
-//
-//                //a temporary list to hold all selected compounds from auto-complete
-//                List<Compound> tempCompoundList = resultSet.getSearchfilters().getTempCompounds();
-//
-//                //a temporary List to hold all selected disease from auto complete
-//                List<uk.ac.ebi.ep.search.model.Disease> tempDiseaseList = resultSet.getSearchfilters().getTempDiseases();
-//
-//                SearchResults searchResults = resultSet;
-//                // the default species in the specie List
-//                List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
-//
-//                //default compound list
-//                List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
-//
-//
-//                List<uk.ac.ebi.ep.search.model.Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
-//
-//                //if an item is seleted, then filter the list
-//                if (!selectedDisease_autocomplete.isEmpty() || !selectedCompounds_autocomplete.isEmpty() || !selectedSpecies_autoComplete.isEmpty() || !speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
-//                    List<EnzymeSummary> filteredResults =
-//                            new LinkedList<EnzymeSummary>(resultSet.getSummaryentries());
-//
-//
-//                    speciesFilter.addAll(selectedSpecies_autoComplete);
-//                    compoundsFilter.addAll(selectedCompounds_autocomplete);
-//                    diseasesFilter.addAll(selectedDisease_autocomplete);
-//
-//                    CollectionUtils.filter(filteredResults,
-//                            new SpeciesPredicate(speciesFilter));
-//                    CollectionUtils.filter(filteredResults,
-//                            new CompoundsPredicate(compoundsFilter));
-//                    CollectionUtils.filter(filteredResults,
-//                            new DiseasesPredicate(diseasesFilter));
-//
-//
-//
-//
-//
-//                    allSelectedItems.addAll(compoundsFilter);
-//
-//
-//                    allSelectedItems.addAll(diseasesFilter);
-//
-//
-//                    allSelectedItems.addAll(speciesFilter);
-//
-//
-//
-//                    //auto complete filtering
-//                    //if specie(s) is selected from auto-complete, then the following executes.
-//                    if (selectedSpecies_autoComplete.size() > 0) {
-//
-//                        for (String scienceName : selectedSpecies_autoComplete) {
-//
-//                            //loop thru the species and see if the science name matches with the selected item
-//                            for (Species species_in_defaultList : defaultSpeciesList) {
-//                                if (!scienceName.isEmpty() && scienceName.equalsIgnoreCase(species_in_defaultList.getScientificname()) || scienceName.equalsIgnoreCase(species_in_defaultList.getCommonname())) {
-//
-//                                    //create a specie based on the scienctific name selected
-//                                    specie_to_tempList = species_in_defaultList;
-//
-//                                    //if the specie is not already in the temp List, then add it and filter the enzyme summary list based on the selected species.
-//                                    if (!tempSpecieList.contains(specie_to_tempList)) {
-//
-//                                        tempSpecieList.add(specie_to_tempList);
-//
-//
-//                                    }
-//
-//
-//
-//                                }
-//                            }
-//
-//                        }
-//
-//
-//                    }
-//
-//                    //same as above for compounds
-//
-//                    if (selectedCompounds_autocomplete.size() > 0) {
-//                        List<String> selections = new LinkedList<String>();
-//                        for (String compoundName : selectedCompounds_autocomplete) {
-//
-//                            //loop thru the species and see if the science name matches with the selected item
-//                            for (Compound compounds_in_defaultList : defaultCompoundList) {
-//                                if (!compoundName.isEmpty() && compoundName.equalsIgnoreCase(compounds_in_defaultList.getName())) {
-//
-//                                    //create a specie based on the scienctific name selected
-//                                    compound_to_tempList = compounds_in_defaultList;
-//
-//                                    //if the specie is not already in the temp List, then add it and filter the enzyme summary list based on the selected species.
-//                                    if (!tempCompoundList.contains(compound_to_tempList)) {
-//
-//                                        tempCompoundList.add(compound_to_tempList);
-//
-//                                    }
-//
-//
-//
-//                                }
-//                            }
-//
-//                        }
-//
-//
-//                    }
-//
-//
-//                    //same as above for disease
-//
-//                    if (selectedDisease_autocomplete.size() > 0) {
-//
-//                        for (String diseaseName : selectedDisease_autocomplete) {
-//
-//                            //loop thru the species and see if the science name matches with the selected item
-//                            for (uk.ac.ebi.ep.search.model.Disease disease_in_defaultList : defaultDiseaseList) {
-//                                if (!diseaseName.isEmpty() && diseaseName.equalsIgnoreCase(disease_in_defaultList.getName())) {
-//
-//                                    //create a specie based on the scienctific name selected
-//                                    disease_to_tempList = disease_in_defaultList;
-//
-//                                    //if the specie is not already in the temp List, then add it and filter the enzyme summary list based on the selected species.
-//                                    if (!tempDiseaseList.contains(disease_to_tempList)) {
-//
-//                                        tempDiseaseList.add(disease_to_tempList);
-//
-//                                    }
-//
-//
-//
-//                                }
-//                            }
-//
-//                        }
-//
-//                    }
-//
-//
-//
-//
-//                    CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedItems));
-//
-//                    //a check so that we don't get an empty page. so if the result is null, we display a no result found for the selection to the end user
-//                    if (filteredResults.size() <= 0) {
-//                        EnzymeSummary es = new EnzymeSummary();
-//
-//                        filteredResults.add(es);
-//                    }
-//
-//                    //AUTO-COMPLETE ENDS.................
-//
-//                    // Create a new SearchResults, don't modify the one in session
-//                    SearchResults sr = new SearchResults();
-//
-//                    /**
-//                     * filter the result based on the species selected by user
-//                     */
-//                    LinkedList<String> checkBoxParams = new LinkedList<String>(searchParameters.getSpecies());
-//                    LinkedList<String> checkBoxParamsAuto = new LinkedList<String>(searchParameters.getSelectedSpecies());
-//                    for (EnzymeSummary enzymeSummary : filteredResults) {
-//
-//                        if(checkBoxParams != null && !checkBoxParams.isEmpty() && checkBoxParams.size() > 0){
-//                       
-//                            String selected = checkBoxParams.getFirst();
-//                              for (EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()) {
-//
-//                                if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
-//                                    enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
-//                                    //enzymeSummary.setSpecies(enzymeAccession.getSpecies());
-//                                    enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
-//                                }
-//
-//                            }
-//                        
-//                    }
-//                      if(checkBoxParamsAuto != null && checkBoxParamsAuto.size() > 0){
-//                       
-//                          String selected = checkBoxParamsAuto.getFirst();
-//                        
-//                            for (EnzymeAccession enzymeAccession : enzymeSummary.getRelatedspecies()) {
-//
-//                                if (selected.equalsIgnoreCase(enzymeAccession.getSpecies().getScientificname())) {
-//                                    enzymeSummary.getUniprotaccessions().add(0, enzymeAccession.getUniprotaccessions().get(0));
-//                                    //enzymeSummary.setSpecies(enzymeAccession.getSpecies());
-//                                    enzymeSummary.setSpecies(new SpeciesDefaultWrapper(enzymeAccession.getSpecies()).getSpecies());
-//                                }
-//
-//                            }
-//                        //}
-//                    }
-//                        // adding the updated enzyme summaries to the filtered result
-//                        summaryEntryFilteredResults.add(enzymeSummary);
-//                    }
-//
-//
-//                    sr.setSearchfilters(resultSet.getSearchfilters());
-//                    //sr.setSummaryentries(filteredResults);
-//                    sr.setSummaryentries(summaryEntryFilteredResults);
-//                    // show the total number of hits (w/o filtering):
-//                    sr.setTotalfound(resultSet.getTotalfound());
-//                    searchModel.setSearchresults(sr);
-//                } else {
-//                    // Show all of them:
-//                    searchModel.setSearchresults(resultSet);
                 }
 
     }
@@ -1139,21 +610,21 @@ public class SearchController {
     }
 
     
-    static final Comparator<Species> SORT_SPECIES = new Comparator<Species>() {
-
-        public int compare(Species sp1, Species sp2) {
-            
-            if (sp1.getCommonname() == null && sp2.getCommonname() == null) {
-
-                return sp1.getScientificname().compareTo(sp2.getScientificname());
-            }
-            int compare = sp1.getScientificname().compareTo(sp2.getScientificname());
-
-            return ((compare == 0) ? sp1.getScientificname().compareTo(sp2.getScientificname()) : compare);
-
-        }
-        
-    };
+//    static final Comparator<Species> SORT_SPECIES = new Comparator<Species>() {
+//
+//        public int compare(Species sp1, Species sp2) {
+//            
+//            if (sp1.getCommonname() == null && sp2.getCommonname() == null) {
+//
+//                return sp1.getScientificname().compareTo(sp2.getScientificname());
+//            }
+//            int compare = sp1.getScientificname().compareTo(sp2.getScientificname());
+//
+//            return ((compare == 0) ? sp1.getScientificname().compareTo(sp2.getScientificname()) : compare);
+//
+//        }
+//        
+//    };
 
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
     public String getSearchResult(Model model) {
@@ -1279,28 +750,7 @@ public class SearchController {
 		return pagination;
 	}
 
-//    private void addToHistory(HttpSession session, String s) {
-//        @SuppressWarnings("unchecked")
-//        List<String> history = (List<String>) session.getAttribute("history");
-//        if (history == null) {
-//            history = new ArrayList<String>();
-//            session.setAttribute("history", history);
-//        }
-//        if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
-//            history.add(s);
-//        }
-//    }
-//
-//    private void clearHistory(HttpSession session) {
-//        @SuppressWarnings("unchecked")
-//        List<String> history = (List<String>) session.getAttribute("history");
-//        if (history == null) {
-//            history = new ArrayList<String>();
-//            session.setAttribute("history", history);
-//        } else {
-//            history.clear();
-//        }
-//    }
+
         
         
         

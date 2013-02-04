@@ -49,6 +49,14 @@
         <filter-name>HealthFilter</filter-name>
         <url-pattern>/noaccesslog/*</url-pattern>
     </filter-mapping>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
     <resource-ref>
         <description>Oracle Datasource for enzymePortal</description>
         <res-ref-name>jdbc/ep/mm</res-ref-name>

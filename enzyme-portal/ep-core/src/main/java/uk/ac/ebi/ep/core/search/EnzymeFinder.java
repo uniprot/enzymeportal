@@ -289,8 +289,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
 
         Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
-        // Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
-        // Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
+      
 
 
         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {

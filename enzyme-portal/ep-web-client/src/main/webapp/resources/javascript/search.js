@@ -182,11 +182,34 @@ function ResultAutoComplete(id, dataArray,theForm,hiddenCheckbox) {
 //    };  
     
     
+
     
-    
+//    to get unique element in the array list
+    $.extend({
+    distinct : function(anArray) {
+       var result = [];
+       $.each(anArray, function(i,v){
+           if ($.inArray(v, result) == -1) result.push(v);
+       });
+       return result;
+    }
+});
+
+
+var unique = $.distinct(dataArray);
+
+
+
+  // to remove null values from the array list
+  unique = $.grep(unique,function(n){
+    //return(n);
+    return (n !== " " && n != null);
+});
+  
+//auto complete function
     
     $( "#"+id ).autocomplete({
-        source: dataArray,
+        source: unique,
         minLength: 1,
         delay : 0,     
         

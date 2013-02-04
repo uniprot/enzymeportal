@@ -114,15 +114,7 @@
 
                 <div id="local-masthead" class="masthead grid_24 nomenu">
 
-                    <!-- CHOOSE -->
-                    <!--
-<div class="grid_12 alpha" id="local-title-logo">
-                            <h1>[title]</h1>
-                            <p>[logo]<img src="" alt="" width="" height="" class="logo" /></p>
-                    </div>
-                    -->
 
-                    <!-- OR... -->
 
                     <div class="grid_12 alpha" id="local-title">
                         <h1>Enzyme Portal</h1>
@@ -156,22 +148,34 @@
             </header>
 
             <div id="content" role="main" class="grid_24 clearfix">
-
-                <!-- Suggested layout containers -->  
-                <section>
-                    <div class="grid_12zzz" style="display: table; margin-left: 1em;">
-                        <%@ include file="breadcrumbs.jsp" %>
-                    </div>
-                   
-                    <div style="display: table-cell;">
-                        <h4 style="color: red">Error</h4>
-                    </div>
-                    <div style="display: table-cell;">
-                        - There has been an error with your request. Please try again later.
-                    </div>
+                
+                   <nav id="breadcrumb">
+     	<p>
+		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
+		    Error
+			</p>
+  	</nav>
+                
+                 <c:set var="searchText" value="${searchModel.searchparams.text}"/>
                  
-                </section>
+                       <c:choose>
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                                <c:set var="searchText" value="your sequence search"/>	
+                            </c:when>
 
+                            <c:otherwise>
+                                <c:set var="searchText"
+                                       value="your search for ${searchModel.searchparams.text}"/>
+                            </c:otherwise>
+                        </c:choose>
+
+                <!-- Suggested layout containers --> 
+                <section>
+                        <h2>No Enzyme Portal results found</h2>
+                            <p class="alert">We're sorry but we couldn't find anything that matched  ${searchText} . Please try again later or use the <a href="advanceSearch">advanced search</a></p>
+                            
+                </section>
+        
                 <!-- End suggested layout containers -->
 
             </div>

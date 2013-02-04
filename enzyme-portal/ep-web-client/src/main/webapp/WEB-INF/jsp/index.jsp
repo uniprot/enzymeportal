@@ -38,7 +38,7 @@
   <!-- you can replace this with [projectname]-colours.css. See http://frontier.ebi.ac.uk/web/style/colour for details of how to do this -->
   <!-- also inform ES so we can host your colour palette file -->
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
-  <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
+<!--  <link href="resources/css/search.css" type="text/css" rel="stylesheet" />-->
   <!-- for production the above can be replaced with -->
   
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
@@ -63,6 +63,15 @@
   <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
   
 <!--  <script id="redline_js" type="text/javascript">var redline = {}; redline.project_id = 33249186;var b,d;b=document.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===document.location.protocol?"https://data":"http://www")+'.redline.cc/assets/button.js';d=document.getElementsByTagName("script")[0];d.parentNode.insertBefore(b,d);</script>-->
+
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>-->
+<!--      <script type="text/javascript" src="javascripts/lib/jquery.jcarousel.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="/enzymeportal/images/skins/default/skin2.css" />-->
+<!--      <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />-->
+
+<link rel="stylesheet" type="text/css" href="resources/skins/default/skin2.css" />
+
+
 
 </head>
 
@@ -176,11 +185,105 @@
                 <div style="margin-left: auto; margin-right: auto;
                           width: 50%;">
                 <div class="shortcuts"><div class="panel-pane pane-custom pane-8 clearfix" >
-  
+
         <h3 class="pane-title">Enzyme Portal Resources</h3>
         
-
-
+ 
+  <div class="containers">
+      <section>
+         <ul id="mycarousel" class="jcarousel-skin-aqua">
+            <li>
+               <div>
+                  <img src="resources/images/inc/uniprot_logo.gif" />
+                  <span>
+                     <h4>UniProtKB</h4>
+                     <p>The UniProt Knowledgebase (UniProtKB) is the central hub for the collection of functional information on proteins, with accurate, consistent and rich annotation.</p>
+                     <p>The UniProt databases are the UniProt Knowledgebase (UniProtKB), the UniProt Reference Clusters (UniRef), and the UniProt Archive (UniParc).</p>
+                  </span>
+               </div>
+            </li>
+            <li>
+               <div>
+                  <img src="resources/images/inc/pdbe_logo.png" />
+                  <span>
+                     <h4>PDBe</h4>
+                     <p> PDBe is the European resource for the collection, organisation and dissemination of data on biological macromolecular structures. In collaboration with the other worldwide Protein Data Bank (wwPDB) partners - the Research Collaboratory for Structural Bioinformatics (RCSB) and BioMagResBank (BMRB) in the USA and the Protein Data Bank of Japan (PDBj) - we work to collate, maintain and provide access to the global repository of macromolecular structure data.</p> 
+<!--                     <a href="/" title="Link">Click this Link</a>-->
+                  </span>
+               </div>
+            </li>
+            <li>
+               <div>
+                  <img src="resources/images/inc/chembl_logo.png" />
+                  <span>
+                     <h4>ChEMBL</h4>
+                     <p>ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data).</p>
+                     <p>The data is abstracted and curated from the primary scientific literature, and cover a significant fraction of the SAR and discovery of modern drugs</p>
+                  </span>
+              </div>
+            </li>  
+                     <li>
+               <div>
+                  <img src="resources/images/inc/ChEBI_logo.gif" />
+                  <span>
+                     <h4>ChEBI</h4>
+                     <p>Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on ?small? chemical compounds. The term ?molecular entity? refers to any constitutionally or isotopically distinct atom, molecule, ion, ion pair, radical, radical ion, complex, conformer, etc., identifiable as a separately distinguishable entity. The molecular entities in question are either products of nature or synthetic products used to intervene in the processes of living organisms.</p>
+                  </span>
+              </div>
+            </li> 
+                     <li>
+               <div>
+                  <img src="resources/images/inc/reactome.png" />
+                  <span>
+                     <h4>REACTOME</h4>
+                     <p>REACTOME is an open-source, open access, manually curated and peer-reviewed pathway database. Pathway annotations are authored by expert biologists, in collaboration with Reactome editorial staff and cross-referenced to many bioinformatics databases. These include NCBI Entrez Gene, Ensembl and UniProt databases, the UCSC and HapMap Genome Browsers, the KEGG Compound and ChEBI small molecule databases, PubMed, and Gene Ontology.</p>
+                  </span>
+              </div>
+            </li> 
+               <li>
+               <div>
+                  <img src="resources/images/inc/noImage.png" />
+                  <span>
+                     <h4>MACiE</h4>
+                     <p>MACiE, which stands for Mechanism, Annotation and Classification in Enzymes, is a collaborative project between the Thornton Group at the European Bioinformatics Institute and the Mitchell Group at the University of St Andrews (initially within the Unilever Centre for Molecular Informatics part of the University of Cambridge). Metal MACiE, a database of catalytic metal ions, with a view to understanding the functions of the roles and activity of catalytic metals in enzymes.</p>
+                  </span>
+              </div>
+            </li> 
+                          <li>
+               <div>
+                  <img src="resources/images/inc/rhea.png" />
+                  <span>
+                     <h4>Rhea</h4>
+                     <p>Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).
+All data in Rhea is freely accessible and available for anyone to use.</p>
+                  </span>
+              </div>
+            </li> 
+              <li>
+               <div>
+                  <img src="resources/images/inc/intenz.gif" />
+                  <span>
+                     <h4>IntEnz</h4>
+                     <p>IntEnz (Integrated relational Enzyme database) is a freely available resource focused on enzyme nomenclature. IntEnz is created in collaboration with the Swiss Institute of Bioinformatics (SIB). This collaboration is responsible for the production of the ENZYME resource. 
+IntEnz contains the recommendations of the Nomenclature Committee of the International Union of Biochemistry and Molecular Biology (NC-IUBMB) on the nomenclature and classification of enzyme-catalysed reactions.</p>
+                  </span>
+              </div>
+            </li> 
+         </ul>
+      </section>
+    
+         <div class="jcarousel-control">
+            <a href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">6</a>
+            <a href="#">7</a>
+            <a href="#">8</a>
+         </div>
+    
+      </div>
 
 
 
@@ -188,128 +291,28 @@
 
 
         
-                              <ul class="split">
+<!--                              <ul class="split">
                                   <li>UniProt</li>
                                   <li>ChEBI</li>
                                   <li>ChEMBL</li>
                                   <li>PDBe</li>
-<!-- <li><a href="http://frontier.ebi.ac.uk/about/news" class='icon icon-generic' data-icon='N'>News</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/travel" class='icon icon-generic' data-icon='4'>Find us</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/funding" class='icon icon-generic' data-icon='F'>Funding</a></li>
- <li class='icon icon-generic' data-icon='O'>Open Day</li>-->
-</ul>
-<ul class="split">
-    <li>Reactome</li>
-    <li>Rhea</li>
-    <li>IntEnz</li>
-    <li>MACiE</li>
-<!-- <li><a href="http://frontier.ebi.ac.uk/industry" class='icon icon-generic' data-icon='I'>Industry</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/jobs" class='icon icon-generic' data-icon='!'>Jobs</a></li>
- <li><a href="http://www.embl.org/" class='icon icon-generic icon-c8' data-icon='&'>EMBL</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/people" class='icon icon-generic' data-icon='C'>Contacts</a><a href="http://frontier.ebi.ac.uk/about/contact"></a>
- </li>-->
-</ul> 
+                                </ul>
+                                <ul class="split">
+                                    <li>Reactome</li>
+                                    <li>Rhea</li>
+                                    <li>IntEnz</li>
+                                    <li>MACiE</li>
+                                </ul> -->
         
+                   
+                    
                     </div></div>
                 
                 </div>
                 
                 
+            </section>
                 
-                
-<!--                     <div style="margin-left: auto; margin-right: auto;
-                          width: 50%;">
-                         <h3>Enzyme Portal Resources</h3>
-                     </div>
-                    <table style="margin-left: auto; margin-right: auto;
-                           width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
-                        <tr style="text-align: center;">
-                        
-                            <td>
-                               <ul class="split">
- <li><a href="http://frontier.ebi.ac.uk/about/news" class='icon icon-generic' data-icon='N'>News</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/travel" class='icon icon-generic' data-icon='4'>Find us</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/funding" class='icon icon-generic' data-icon='F'>Funding</a></li>
- <li class='icon icon-generic' data-icon='O'>Open Day</li>
-</ul>
-<ul class="split">
- <li><a href="http://frontier.ebi.ac.uk/industry" class='icon icon-generic' data-icon='I'>Industry</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/jobs" class='icon icon-generic' data-icon='!'>Jobs</a></li>
- <li><a href="http://www.embl.org/" class='icon icon-generic icon-c8' data-icon='&'>EMBL</a></li>
- <li><a href="http://frontier.ebi.ac.uk/about/people" class='icon icon-generic' data-icon='C'>Contacts</a><a href="http://frontier.ebi.ac.uk/about/contact"></a></li>
-</ul> 
-                            </td>
-                            <td>
-                                <%-- b>Welcome to the Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/Kldp0WXcxUM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                            <td>
-                                <%-- b>Explore Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                        </tr>
-                    </table>-->
-<!--    </section>-->
-        
-        
- 
-    
-<!--    <section>
-                            <div style="margin-left: auto; margin-right: auto;
-                         width: 50%;">
-
-                        <h2>Welcome to the Enzyme Portal</h2> 
-                        <p> The Enzyme Portal is for those interested
-                        in the biology of enzymes and proteins with enzymatic
-                        activity.</p>
-                 
-                        <div style="text-align: right;">
-                            <a href="about" class="showLink" >More about the
-                                Enzyme Portal...</a>
-                        </div>
-                    </div>
-
-                    <table style="margin-left: auto; margin-right: auto;
-                           width: 75em; margin-top: 4ex; margin-bottom: 4ex;">
-                        <tr style="text-align: center;">
-                            <td>
-                                <%-- b>Welcome to the Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/Kldp0WXcxUM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                            <td>
-                                <%-- b>Explore Enzyme Portal</b --%>
-                                <iframe width="360" height="270"
-                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-                            </td>
-                        </tr>
-                    </table>
-    </section>-->
-    
-	   
-<!--    <section>
-   		<h2>[page-title]</h2>
-   		<p>Your content</p>										
-</section> -->
-		
-<!--		<section>
-			<h3>Level 3 heading</h3>
-			<p>More content in a full-width container.</p>
-		
-			<h4>Level 4 heading</h4>
-			<p>More content in a full-width container.</p>
-		</section>-->
-		<!-- End example layout containers -->
 			
     </div>
     
@@ -374,8 +377,11 @@
 
 
   <!-- Your custom JavaScript file scan go here... change names accordingly -->
-   <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+<!--   <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>-->
         <script src="resources/javascript/search.js" type="text/javascript"></script>
+         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+        <script src="resources/javascript/jquery.jcarousel.min.js" type="text/javascript"></script>
+       
         
         <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
     <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript"></script>
@@ -419,6 +425,54 @@
     <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
     <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
   <![endif]-->
+  
+  
+  
+       <script type="text/javascript">
+            /**
+            * We use the initCallback callback
+            * to assign functionality to the controls
+            */
+            function mycarousel_initCallback(carousel) {
+                jQuery('.jcarousel-control a').bind('click', function () {
+                    carousel.scroll(jQuery.jcarousel.intval(jQuery(this).text()));
+                    return false; 
+                });
+
+                jQuery('#mycarousel-next').bind('click', function () {
+                    carousel.next();
+                    return false;
+                });
+
+                jQuery('#mycarousel-prev').bind('click', function () {
+                    carousel.prev();
+                    return false;
+                });
+
+                // Pause autoscrolling if the user moves with the cursor over the clip.
+        	    carousel.clip.hover(function() {
+        	        carousel.stopAuto();
+        	    }, function() {
+        	        carousel.startAuto();
+        	    });
+
+            };
+
+            // Ride the carousel...
+            jQuery(document).ready(function() {
+              jQuery('#mycarousel').jcarousel({
+              scroll: 1, animation:700, visible:1, auto:5, wrap:"both",
+                    initCallback: mycarousel_initCallback,
+                    itemVisibleInCallback: {
+                        onAfterAnimation: function (c, o, i, s) {
+                            i = (i - 1) % $('#mycarousel li').size();
+                            jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+                            jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+                        }
+                    }
+          });  
+      });
+      </script>
   
 </body>
 </html>
