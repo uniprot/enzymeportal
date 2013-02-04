@@ -412,6 +412,12 @@ public class MegaJdbcMapper implements MegaMapper {
         return xrefs;
     }
 
+    /**
+     * {@inheritDoc}
+     * <br>Please note that this implementation uses backslash (\) as escape
+     * character for any underscore (_) present in the idFragment, so that it
+     * is taken as part of the ID instead of an oracle wildcard.
+     */
 	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
 			Constraint constraint, Relationship rel) {
 		Collection<XRef> xrefs = null;
@@ -488,11 +494,11 @@ public class MegaJdbcMapper implements MegaMapper {
 		case EQUALS:
 			return idFragment;
 		case STARTS_WITH:
-			return idFragment + "%";
+			return idFragment.replace("_", "\\_") + "%";
 		case CONTAINS:
-			return "%" + idFragment + "%";
+			return "%" + idFragment.replace("_", "\\_") + "%";
 		case ENDS_WITH:
-			return "%" + idFragment;
+			return "%" + idFragment.replace("_", "\\_");
 		default:
 			throw new IllegalArgumentException("constraint not supported: "
 					+ constraint);

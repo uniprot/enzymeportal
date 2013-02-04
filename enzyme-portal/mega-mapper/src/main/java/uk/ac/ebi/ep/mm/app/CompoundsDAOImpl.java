@@ -122,6 +122,10 @@ public class CompoundsDAOImpl extends DatabaseResources implements ICompoundsDAO
                 processData(allCompounds);
                 allCompounds.clear();
             }
+            
+            // Process the ones put into allCompounds from 5000·n to the end.
+            // I am sure there are some, unless we have exactly 5000·n results.
+            if (!allCompounds.isEmpty()) processData(allCompounds);
 
             session.evict(entity);
             session.evict(chebiEntry);

@@ -281,6 +281,10 @@ public class MegaJdbcMapperTest {
 				break;
 			}
 		}
+    	
+    	xrefs = mm.getXrefs(MmDatabase.UniProt, "AB_",
+    			Constraint.STARTS_WITH, MmDatabase.ChEBI);
+    	assertNull(xrefs); // underscore not taken as oracle wildcard
     }
 
 /**
