@@ -277,7 +277,7 @@
                                        value=" "/> 
                             </c:if>
                             <h2>No Enzyme Portal results found</h2>
-                            <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} ". Please try another search keyword or use the <a href="advanceSearch">advanced search</a></p>
+                            <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} ". Please try another search or use the<a href="advanceSearch"> advanced search</a></p>
                             <script>
                                 $(document).ready(function() {
                                     try {
@@ -288,8 +288,18 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                            <h2>Enzyme Portal results for <span class="searchterm"><i>${fn:substring(searchText, 0, 10)}${fn:length(searchText) gt 10? '...':''}</i>
+                                  <c:choose>
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                               <h2>Enzyme Portal results for <span class="searchterm"><i>${fn:substring(searchText, 0, 20)}${fn:length(searchText) gt 20? '...':''}</i>
+                                    </span></h2>	
+                            </c:when>
+
+                            <c:otherwise>
+                                <h2>Enzyme Portal results for <span class="searchterm"><i>${searchText}</i>
                                     </span></h2>
+                            </c:otherwise>
+                        </c:choose>
+                            
                                               
                             <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
                         </c:if>

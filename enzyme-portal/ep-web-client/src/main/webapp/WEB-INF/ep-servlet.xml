@@ -24,11 +24,7 @@
 
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
-    <mvc:resources mapping="/stylesheets/**" location="/stylesheets/" />
-    <mvc:resources mapping="/javascripts/**" location="/javascripts/" />
-    <mvc:resources mapping="/dummy-images/**" location="/dummy-images/" />
-    <mvc:resources mapping="/images/**" location="/images/" />
-
+  
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp" />
@@ -88,8 +84,8 @@
 		class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
         <property name="timeout" value="30000"/>
         <property name="useProxy" value="true"/>
-        <property name="wsBaseUrl"
-			value="http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
+                <property name="wsBaseUrl"
+			value="http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
     </bean>
 	
     <bean name="uk.ac.ebi.ep:name=chebiConfig"
