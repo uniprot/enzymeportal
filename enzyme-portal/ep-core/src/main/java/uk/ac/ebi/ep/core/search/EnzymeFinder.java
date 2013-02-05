@@ -18,6 +18,9 @@ import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.core.CompoundDefaultWrapper;
 import uk.ac.ebi.ep.core.DiseaseDefaultWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
+import uk.ac.ebi.ep.core.search.util.EnzymeSummaryProcessor;
+import uk.ac.ebi.ep.core.search.util.SynonymsProcessor;
+import uk.ac.ebi.ep.core.search.util.StructuresProcessor;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
@@ -925,28 +928,28 @@ public class EnzymeFinder implements IEnzymeFinder {
      *
      * @param uniprotIdPrefixes a list of UniProt ID prefixes.
      * @return a list of enzyme summaries ready to show in a result list.
-     * @throws MultiThreadingException
+     * @throws MultiThreadingException problem getting the original summaries,
+     * 		or creating a processor to add synonyms to them.
      */
-    private List<EnzymeSummary> getEnzymeSummaries(List<String> uniprotIdPrefixes, List<String> paramList)
-            throws MultiThreadingException {
-        List<EnzymeSummary> enzymeList = getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
-        if (enzymeList != null) {
-            addIntenzSynonyms(enzymeList);
+    private List<EnzymeSummary> getEnzymeSummaries(
+    		List<String> uniprotIdPrefixes, List<String> paramList)
+    throws MultiThreadingException {
+        List<EnzymeSummary> summaries =
+        		getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
+        if (summaries != null) {
+        	EnzymeSummaryProcessor[] processors = {
+    			new StructuresProcessor(megaMapperConnection.getMegaMapper()),
+    			new SynonymsProcessor(summaries, intenzAdapter)
+        	};
+        	for (EnzymeSummary summary : summaries) {
+				for (EnzymeSummaryProcessor processor : processors) {
+					processor.process(summary);
+				}
+			}
         }
-        return enzymeList;
+        return summaries;
     }
 
-    /*
-     * public List<ParamOfGetResults> prepareQueryForPdbeAccs(Collection<String>
-     * pdbeAccs) { List<ParamOfGetResults> params = new
-     * ArrayList<ParamOfGetResults>(); for (String ec: pdbeAccs) { List<String>
-     * field = new ArrayList<String>();
-     * field.add(IEbeyeAdapter.FieldsOfGetResults.acc.name()); String query =
-     * LuceneQueryBuilder .createFieldValueQuery(
-     * IEbeyeAdapter.FieldsOfGetResults.acc.name(), ec); ParamOfGetResults
-     * pdbeParam = new ParamOfGetResults( IEbeyeAdapter.Domains.pdbe.name(),
-     * query, field); params.add(pdbeParam); } return params; }
-     */
     public static int calTotalResultsFound(
             List<ParamOfGetResults> resultList) {
         if (resultList == null) {
@@ -959,42 +962,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         return counter;
     }
 
-    public void addIntenzSynonyms(
-            List<EnzymeSummary> enzymeSummaryList) throws MultiThreadingException {
-
-        Set<String> ecSet = DataTypeConverter.getUniprotEcs(enzymeSummaryList);
-//        LOGGER.debug("SEARCH before intenzAdapter.getSynonyms");
-        Map<String, Set<String>> intenzSynonyms = intenzAdapter.getSynonyms(ecSet);
-//        LOGGER.debug("SEARCH before enzymeSummary loop, size = " + ecSet.size());
-        for (EnzymeSummary enzymeSummary : enzymeSummaryList) {
-            List<String> ecList = enzymeSummary.getEc();
-            List<String> uniprotSyns = enzymeSummary.getSynonym();
-            Set<String> intenzUniqueSyns = new TreeSet<String>();
-            for (String ec : ecList) {
-                Set<String> ecSynonyms = intenzSynonyms.get(ec);
-                if (ecSynonyms != null) {
-                    intenzUniqueSyns.addAll(ecSynonyms);
-                }
-
-            }
-
-            intenzUniqueSyns.addAll(uniprotSyns);
-
-            //Remove the synonyms from uniprot because they have been merged with
-            //synonyms from intenz
-            enzymeSummary.getSynonym().clear();
-
-            enzymeSummary.getSynonym().addAll(intenzUniqueSyns);
-        }
-//        LOGGER.debug("SEARCH after  enzymeSummary loop");
-    }
-
-    /*
-     * public void setPdbeAccession(Map<String,String> pdbeAccs) { for
-     * (EnzymeSummary enzymeSummary:enzymeSummaryList) { String uniprotId =
-     * enzymeSummary.getUniprotid(); String pdbeAcc = pdbeAccs.get(uniprotId);
-     * enzymeSummary.getPdbeaccession().add(pdbeAcc); } }
-     */
     public void setPdbeAccession(Map<String, String> pdbeAccs) {
         for (EnzymeSummary enzymeSummary : enzymeSummaryList) {
             List<String> ecList = enzymeSummary.getEc();
