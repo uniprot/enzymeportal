@@ -501,7 +501,7 @@
                                                         </c:when>
                                                         <c:otherwise>
                                                             <c:set var="imgLink"
-                                                                   value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
+                                                                   value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc600.png"/>
                                                             <a target="blank" href="${imgLink}">
                                                                 <img src="${imgLink}" width="110" height="90"
                                                                      alt="PDB ${imgFile}" onerror="noImage(this);"/>

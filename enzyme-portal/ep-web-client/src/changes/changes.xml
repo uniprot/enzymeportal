@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-	<release version="1.0.13" date="(Not yet released)">
+	<release version="1.0.13" date="2013-02-05">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
 			biobabel-core and junit.
@@ -29,6 +29,12 @@
 			Updated to latest version of literature-adapter, which speeds up
 			the literature tab.
 			<fixes issue="121"/>
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest version of ep-core, which fixes issue with
+			missing structure thumbnails (when there are theoretical models
+			involved).
+			<fixes issue="83"/>
 		</action>
 	</release>
 	<release version="1.0.12" date="2012-10-31"/>
