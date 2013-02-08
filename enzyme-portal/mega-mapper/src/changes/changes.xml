@@ -10,12 +10,17 @@
 </properties>
 
 <body>
-	<release version="1.0.10" date="" description="">
+	<release version="1.0.10" date="" description="Bug fixes">
 		<action dev="rafalcan" type="fix">
 			Fixed query in MegaJdbcMapper.getCompounds and
 			MegaJdbcMapper.getDisease so that underscores are taken as part of
 			the UniProt ID prefix and not as oracle wildcards.
 		</action>
+		<action dev="rafalcan" type="fix">
+			PDBe entries with no names (obsolete or redirected) are not added
+			to the mega-map any longer.
+			<fixes issue="144"/>
+			</action>
 	</release>
 	<release version="1.0.9" date="2013-02-04"
 		description="Bug fixes; updates.">

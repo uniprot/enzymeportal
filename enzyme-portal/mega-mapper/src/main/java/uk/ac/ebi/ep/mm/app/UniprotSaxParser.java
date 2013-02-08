@@ -320,10 +320,16 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 									.getEntry("pdbe", pdbCode, fields)
 									.getString().get(0);
 							pdbEntry.setEntryName(name);
-							entries.add(pdbEntry);
 						} catch (Exception e){
 							LOGGER.error("Couldn't get name for " + pdbCode, e);
 						}
+						
+						if (pdbEntry.getEntryName() == null){
+							// Happens with obsolete/redirected PDB entries:
+							continue;
+						}
+						
+						entries.add(pdbEntry);
 						
 						XRef up2pdb = new XRef();
 						up2pdb.setFromEntry(uniprotEntry);
