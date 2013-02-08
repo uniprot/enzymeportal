@@ -10,6 +10,12 @@
 </properties>
 
 <body>
+	<release version="1.0.14" date="" description="">
+		<action dev="rafalcan" type="fix">
+			Reduced size of requested images (thumbnails) in search results
+			from 600 to 120 (width) in order to make the page lighter.
+		</action>
+	</release>
 	<release version="1.0.13" date="2013-02-05" description="Bug fixes">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
