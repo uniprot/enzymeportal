@@ -494,16 +494,16 @@
                                                                  background-color: #fff;
                                                                  opacity: 0.6; vertical-align: middle;
                                                                  margin-top: 0px; padding: 0px;">No structure available</div>
-                                                            <img src="resources/images/noStructure-light.png"
-                                                                 width="110" height="90" style="border-radius: 10px;"
+                                                            <img src="resources/images/noStructure-light-small.png"
+                                                                 width="120" height="90" style="border-radius: 10px;"
                                                                  alt="No structure available"
                                                                  title="No structure available"/>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <c:set var="imgLink"
-                                                                   value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc600.png"/>
+                                                                   value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
                                                             <a target="blank" href="${imgLink}">
-                                                                <img src="${imgLink}" width="110" height="90"
+                                                                <img src="${imgLink}" width="120" height="90"
                                                                      alt="PDB ${imgFile}" onerror="noImage(this);"/>
                                                             </a>
                                                             <div class="imgFooter">${imgFooter}</div>
