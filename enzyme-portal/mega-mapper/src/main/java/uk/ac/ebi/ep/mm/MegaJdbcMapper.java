@@ -783,14 +783,14 @@ public class MegaJdbcMapper implements MegaMapper {
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         String[] acc = accessions.split("_");
-        String accession = acc[0].concat("_%");
+        String accession = acc[0].concat("\\_%");
 
         try {
             if (diseasesEntryMap == null) {
                 diseasesEntryMap = new HashMap<String, String>();
             }
 
-            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? "
+            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? escape '\\' "
                     + "and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or "
                     + "(e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name is not null ";
 
@@ -837,7 +837,7 @@ public class MegaJdbcMapper implements MegaMapper {
         
         Map<String, String> compoundEntryMap = null;
         String[] acc = accessions.split("_");
-        String accession = acc[0].concat("_%");
+        String accession = acc[0].concat("\\_%");
 
 
         PreparedStatement ps = null;
@@ -878,7 +878,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
                 String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
-                        + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
+                        + " where e1.db_name = ? and e1.entry_id like ? escape '\\' and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
                         + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name not in (" + queryClauseBuilder.toString() + ')';
 
                 if (con != null) {

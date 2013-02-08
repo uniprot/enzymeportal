@@ -10,6 +10,13 @@
 </properties>
 
 <body>
+	<release version="1.0.10" date="" description="">
+		<action dev="rafalcan" type="fix">
+			Fixed query in MegaJdbcMapper.getCompounds and
+			MegaJdbcMapper.getDisease so that underscores are taken as part of
+			the UniProt ID prefix and not as oracle wildcards.
+		</action>
+	</release>
 	<release version="1.0.9" date="2013-02-04"
 		description="Bug fixes; updates.">
 		<action dev="rafalcan" type="fix">
