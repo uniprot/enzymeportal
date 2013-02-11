@@ -20,7 +20,11 @@
 			PDBe entries with no names (obsolete or redirected) are not added
 			to the mega-map any longer.
 			<fixes issue="144"/>
-			</action>
+		</action>
+		<action dev="rafalcan" type="add">
+			Added implementation to parse tab file from UniMed, which will
+			replace the original HTML.
+		</action>
 	</release>
 	<release version="1.0.9" date="2013-02-04"
 		description="Bug fixes; updates.">

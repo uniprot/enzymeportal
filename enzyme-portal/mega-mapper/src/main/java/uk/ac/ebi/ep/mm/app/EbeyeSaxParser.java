@@ -123,7 +123,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
     				mm = new MegaJdbcMapper(con);
         		}
         		parser.setWriter(mm);
-        		parser.parse(cl.getOptionValue("xmlFile"));
+        		parser.parse(cl.getOptionValue("file"));
         		mm.commit();
     		} catch (Exception e){
     			mm.rollback();

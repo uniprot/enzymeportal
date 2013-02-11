@@ -39,6 +39,12 @@ import uk.ac.ebi.ep.mm.XRef;
  */
 public class Uniprot2DiseaseParser implements MmParser {
 
+	/**
+	 * The format of the provided file to parse.
+	 * @author rafa
+	 */
+	private enum Format { html, tab }
+	
 	private static final Logger LOGGER =
 			Logger.getLogger(Uniprot2DiseaseParser.class);
 	
@@ -46,18 +52,23 @@ public class Uniprot2DiseaseParser implements MmParser {
 	
 	private BioportalWsAdapter bioportalAdapter;
 	
+	/**
+	 * Minimum scores to accept a mapping.
+	 */
+	private final double minScore = 2.5;
+
+	private final Pattern htmlTablePattern = Pattern.compile(
+			"^(?:</TR>)?<TR><TD>(.*?)<\\/TD>" +
+			"<TD>(.*?)<\\/TD><TD>(.*?)<\\/TD><TD>(.*?)<\\/TD>" +
+			"<TD>(.*?)<\\/TD>");
+
 	public Uniprot2DiseaseParser() {
 		bioportalAdapter = new BioportalWsAdapter();
 		bioportalAdapter.setConfig(new BioportalConfig()); // defaults
 	}
 
 	/**
-	 * Minimum scores to accept a mapping.
-	 */
-	private final double minScore = 2.5;
-	
-	/**
-	 * Parses the HTML file and stores in the mega-map the xrefs from UniProt
+	 * Parses the UniMed file and stores in the mega-map the xrefs from UniProt
 	 * accessions to OMIM and MeSH terms, but only if the scores is equal or
 	 * greater than {@link #minScore}.
 	 * @param args see {@link CliOptionsParser#getCommandLine(String...)}
@@ -76,7 +87,7 @@ public class Uniprot2DiseaseParser implements MmParser {
         		con.setAutoCommit(false);
         		mm = new MegaJdbcMapper(con);
             	parser.setWriter(mm);
-        		parser.parse(cl.getOptionValue("xmlFile"));
+        		parser.parse(cl.getOptionValue("file"));
         		mm.commit();
     		} catch (Exception e){
     			mm.rollback();
@@ -87,29 +98,28 @@ public class Uniprot2DiseaseParser implements MmParser {
         }
 	}
 
-	public void parse(String htmlFile) throws Exception {
+	public void parse(String file) throws Exception {
+		// Check the extension of the file:
+		Format format = Format.valueOf(file.substring(file.lastIndexOf('.')+1));
 		BufferedReader br = null;
 		InputStreamReader isr = null;
 		InputStream is = null;
 		try {
 			mm.openMap();
-			is = htmlFile.startsWith("http://")?
-					new URL(htmlFile).openStream():
-					new FileInputStream(htmlFile);
+			is = file.startsWith("http://")?
+					new URL(file).openStream():
+					new FileInputStream(file);
 			isr = new InputStreamReader(is);
 			br = new BufferedReader(isr);
-			Pattern p = Pattern.compile("^(?:</TR>)?<TR><TD>(.*?)<\\/TD>" +
-					"<TD>(.*?)<\\/TD><TD>(.*?)<\\/TD><TD>(.*?)<\\/TD>" +
-					"<TD>(.*?)<\\/TD>");
-            LOGGER.info("Parsing start");
+			LOGGER.info("Parsing start");
 			String line;
 			while ((line = br.readLine()) != null){
-				Matcher m = p.matcher(line);
-				if (!m.matches()) continue;
+				String[] fields = getFields(format, line);
+				if (fields == null) continue; // header lines
 				
-				// Start with the scores, discard immediately if not interesting,
-				// otherwise keep for the MeSH terms (see below):
-				String[] scoresCell = m.group(5).split(" / ");
+				// Start with the scores, discard immediately if not
+				// interesting, otherwise keep for the MeSH terms (see below):
+				String[] scoresCell = fields[4].split(" ?/ ?");
 				double[] scores = new double[scoresCell.length];
 				boolean interesting = false;
 				for (int i = 0; i < scoresCell.length; i++) {
@@ -124,7 +134,7 @@ public class Uniprot2DiseaseParser implements MmParser {
 				if (!interesting) continue;
 				LOGGER.debug("Score over " + minScore);
 				
-				String uniprotAcc = m.group(1).replaceAll("<\\/?a[^>]*>", "");
+				String uniprotAcc = fields[0];
 				Entry uniprotEntry = mm.getEntryForAccession(
 						MmDatabase.UniProt, uniprotAcc);
 				// XXX: Ignore if not found in the enzymes mega-map:
@@ -133,13 +143,11 @@ public class Uniprot2DiseaseParser implements MmParser {
 				
 				Collection<XRef> diseaseXrefs = new ArrayList<XRef>();
 
-				String[] omimCell = m.group(2).replaceAll("<\\/?a[^>]*>", "")
-						.split("\\s");
+				String[] omimCell = fields[1].split("\\s");
 				addOmimXrefs(uniprotEntry, diseaseXrefs, omimCell);
 				
-				String[] meshIdsCell = m.group(3).replaceAll("<\\/?a[^>]*>", "")
-						.split(" / ");
-				String[] meshHeadsCell = m.group(4).split(" / ");
+				String[] meshIdsCell = fields[2].split(" ?/ ?");
+				String[] meshHeadsCell = fields[3].split(" / ");
 				addMeshAndEfoXrefs(uniprotEntry, diseaseXrefs, scores,
 						meshIdsCell, meshHeadsCell);
 				mm.writeXrefs(diseaseXrefs);
@@ -155,6 +163,43 @@ public class Uniprot2DiseaseParser implements MmParser {
 			if (is != null) is.close();
 			if (br != null) br.close();
 		}
+	}
+
+	/**
+	 * Splits the fields in one line of the file, namely:
+	 * <ul>
+	 * <li>[0] - UniProt accession</li>
+	 * <li>[1] - MIM number(s)</li>
+	 * <li>[2] - MeSH ID(s)</li>
+	 * <li>[3] - MeSH heading(s)</li>
+	 * <li>[4] - Score(s)</li>
+	 * </ul>
+	 * @param format the {@link Format} of the file.
+	 * @param line one line read from the file.
+	 * @return the split fields in the line, or <code>null</code> if it is a
+	 * 		header line. Note that multi-valued fields must be split further.
+	 */
+	private String[] getFields(Format format, String line) {
+		String[] fields = null;
+		switch (format) {
+		case html:
+			Matcher m = htmlTablePattern.matcher(line);
+			// Discard header lines:
+			if (!m.matches()) return null;
+			fields = new String[5];
+			fields[0] = m.group(1).replaceAll("<\\/?a[^>]*>", "");
+			fields[1] = m.group(2).replaceAll("<\\/?a[^>]*>", "");
+			fields[2] = m.group(3).replaceAll("<\\/?a[^>]*>", "");
+			fields[3] = m.group(4);
+			fields[4] = m.group(5);
+			break;
+		case tab:
+			// Discard header lines:
+			if (line.startsWith("Swiss-Prot")) return null;
+			fields = line.split("\t");
+			break;
+		}
+		return fields;
 	}
 
 	/**

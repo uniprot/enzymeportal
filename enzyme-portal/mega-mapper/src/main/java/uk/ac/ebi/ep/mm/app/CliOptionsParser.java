@@ -13,14 +13,15 @@ public class CliOptionsParser {
 	/**
 	 * Processes the command line options.
 	 * @param args (order does not matter):
-	 * 		-xmlFile &lt;xmlFile&gt; (-indexDir &lt;indexDir&gt;|-dbConfig
+	 * 		-file &lt;file&gt; (-indexDir &lt;indexDir&gt;|-dbConfig
 	 * 		&lt;dbConfig&gt;)
 	 * <ul>
-	 * 	<li>-xmlFile &lt;xmlFile&gt;: the XML (or HTML) file to parse</li>
+	 * 	<li>-file &lt;file&gt;: the file to parse (XML, HTML, tab-delimited...).
+	 * 		</li>
 	 * 	<li>-indexDir &lt;indexDir&gt; (optional): the directory for a lucene
 	 * 		index. If it does not exist, a new one is created.</li>
 	 * 	<li>-dbConfig &lt;dbConfig&gt; (optional): the name of a database
-	 * 		configuration (hibernate configuration file).</li>
+	 * 		configuration file.</li>
 	 * </ul>
 	 * Either <code>-indexDir</code> or <code>-dbConfig</code> must be defined,
 	 * but not both. If none of them is defined, the default hibernate config
@@ -32,9 +33,9 @@ public class CliOptionsParser {
 	static CommandLine getCommandLine(String... args) {
 		Options options = new Options();
         options.addOption(OptionBuilder.isRequired()
-                .hasArg().withArgName("xmlFile")
+                .hasArg().withArgName("file")
                 .withDescription("XML (or HTML) file")
-                .create("xmlFile"));
+                .create("file"));
         options.addOption(OptionBuilder
                 .hasArg().withArgName("indexDir")
                 .withDescription("Lucene index directory")
