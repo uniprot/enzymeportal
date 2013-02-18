@@ -310,9 +310,11 @@ public class SearchController {
  
     private void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
-        List<String> history = (List<String>) session.getAttribute("history");
+       //List<String> history = (List<String>) session.getAttribute("history");
+       LinkedList<String> history =  (LinkedList<String>) session.getAttribute("history");
         if (history == null) {
-            history = new ArrayList<String>();
+            //history = new ArrayList<String>();
+             history = new LinkedList<String>();
             session.setAttribute("history", history);
         }
         if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
@@ -322,9 +324,11 @@ public class SearchController {
         
     private void clearHistory(HttpSession session) {
         @SuppressWarnings("unchecked")
-        List<String> history = (List<String>) session.getAttribute("history");
+       // List<String> history = (List<String>) session.getAttribute("history");
+         LinkedList<String> history =  (LinkedList<String>) session.getAttribute("history");
         if (history == null) {
-            history = new ArrayList<String>();
+            //history = new ArrayList<String>();
+            history = new LinkedList<String>();
             session.setAttribute("history", history);
         } else {
             history.clear();

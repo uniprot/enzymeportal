@@ -243,7 +243,7 @@ Enzyme Portal - An Introduction</div>
 			EMBL-European Bioinformatics Institute (<a
 			href="http://www.ebi.ac.uk/information">EMBL-EBI</a>)
 			in the UK. Part of the <a
-			href="http://www.embl.org">EMBL Outstation - The European Bioinformatics Institute</a>,
+			href="http://www.embl.org">the European Molecular Biology Laboratory</a>,
 			EMBL-EBI is the hub of excellence for bioinformatics in Europe. We
 			provide freely available life science data and <a
 			href="http://www.ebi.ac.uk">services</a>, and
@@ -314,8 +314,8 @@ Enzyme Portal - An Introduction</div>
 </ul>
 <ul class="split">
 
- <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic" data-icon="l">Documentations</a></li>
-<!-- <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic" data-icon="C">Contacts</a><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"></a></li>-->
+ <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic icon-c8" data-icon="l">Documentation</a></li>
+
 </ul>
 <!--   </div> -->
 
@@ -354,7 +354,7 @@ Enzyme Portal - An Introduction</div>
 <h3><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents<br>
 </span></h3>
 <p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub,</a>an online project hosting service. </span></p>
-<p><span>Additionally, the technical documentations (Javadoc, project information) are available from this <a href="http://ebi-cheminf.github.com/enzymeportal/ep/">web link.</a> </span></p>
+<p><span>Additionally, the technical documentation (Javadoc, project information) is also <a href="http://ebi-cheminf.github.com/enzymeportal/ep/">available online</a> </span></p>
 
    </div> 
 

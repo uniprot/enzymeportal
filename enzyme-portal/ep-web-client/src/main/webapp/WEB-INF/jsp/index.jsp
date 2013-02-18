@@ -160,7 +160,7 @@
                
     <div id="content" role="main" class="grid_24 clearfix">
         
-            <section>
+        <section class="grid_24">
                             <div style="margin-left: auto; margin-right: auto;
                          width: 50%;">
 
@@ -189,8 +189,8 @@
         <h3 class="pane-title">Enzyme Portal Resources</h3>
         
  
-  <div class="containers">
-      <section>
+  <div class="containers grid_24">
+      <section class="grid_24">
          <ul id="mycarousel" class="jcarousel-skin-aqua">
             <li>
                <div>
@@ -242,7 +242,7 @@
             </li> 
                <li>
                <div>
-                  <img src="resources/images/inc/noImage.png" />
+                  <img src="resources/images/inc/no-image.jpeg" />
                   <span>
                      <h4>MACiE</h4>
                      <p>MACiE, which stands for Mechanism, Annotation and Classification in Enzymes, is a collaborative project between the Thornton Group at the European Bioinformatics Institute and the Mitchell Group at the University of St Andrews (initially within the Unilever Centre for Molecular Informatics part of the University of Cambridge). Metal MACiE, a database of catalytic metal ions, with a view to understanding the functions of the roles and activity of catalytic metals in enzymes.</p>
