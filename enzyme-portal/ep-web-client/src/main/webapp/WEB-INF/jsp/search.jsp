@@ -679,7 +679,7 @@
                         <%--filter --%>
                     </c:if>
                 </section>
-                <section class="grid_17" id="keywordSearchResult">
+                <section class="grid_18" id="keywordSearchResult">
                     <!--                    <div id="keywordSearchResult" class="result"
                                              style="width: 70%; float: left;">-->
                     <c:if test="${totalfound eq -100}">
@@ -1170,12 +1170,12 @@
        -->
 
 <!--    now the frontier js for ebi global result-->
-<!--        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
-        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>-->
+        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
+        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>
 
 <!--        To be able to run locally as frontier impl only works when deployed to ebi domain-->
-  <script src="resources/javascript/ebi-global-search-run.js" type="text/javascript"></script>
-    <script src="resources/javascript/ebi-global-search.js" type="text/javascript"></script>
+<!--  <script src="resources/javascript/ebi-global-search-run.js" type="text/javascript"></script>
+    <script src="resources/javascript/ebi-global-search.js" type="text/javascript"></script>-->
     
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 

@@ -46,9 +46,15 @@
     width:  75px;
     height: 245px;
 }
-
+/*
 .jcarousel-skin-aqua .jcarousel-item {
     width: 760px;
+    height: 250px;
+}*/
+
+
+.jcarousel-skin-aqua .jcarousel-item {
+    width: 600px;
     height: 250px;
 }
 

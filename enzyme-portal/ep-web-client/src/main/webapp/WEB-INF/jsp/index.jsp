@@ -190,7 +190,7 @@
         
  
   <div class="containers grid_24">
-      <section class="grid_24">
+<!--      <section class="grid_24">-->
          <ul id="mycarousel" class="jcarousel-skin-aqua">
             <li>
                <div>
@@ -270,7 +270,7 @@ IntEnz contains the recommendations of the Nomenclature Committee of the Interna
               </div>
             </li> 
          </ul>
-      </section>
+<!--      </section>-->
     
          <div class="jcarousel-control">
             <a href="#">1</a>
