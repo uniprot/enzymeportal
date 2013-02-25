@@ -15,6 +15,10 @@
 			Reduced size of requested images (thumbnails) in search results
 			from 600 to 120 (width) in order to make the page lighter.
 		</action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of ep-core.
+            <fixes issue="145"/>
+        </action>
 	</release>
 	<release version="1.0.13" date="2013-02-05" description="Bug fixes">
 		<action dev="rafalcan" type="update">
