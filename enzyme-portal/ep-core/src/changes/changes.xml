@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
+        http://maven.apache.org/changes/1.0.0 ">
 
 <properties>
 	<title>EP core change log</title>
@@ -9,6 +10,16 @@
 </properties>
 
 <body>
+    <release version="1.0.11" date="2013-02-25" description="Bug fix">
+        <action dev="rafalcan" type="fix">
+            Fixed 'connection already closed' issue caused by the
+            Connection.close() method being called twice: one actively, then
+            lazily from finalize().
+            <fixes issue="145"/>
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of biomart-adapter.
+        </action>
 	<release version="1.0.10" date="2013-02-05" description="Bug fixes">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
