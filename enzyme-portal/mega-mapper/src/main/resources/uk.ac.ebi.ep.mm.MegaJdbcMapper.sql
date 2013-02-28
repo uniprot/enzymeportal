@@ -8,6 +8,8 @@ INSERT INTO mm_accession (id, accession, acc_index) VALUES (?, ?, ?)
 --insert.xref:\
 INSERT INTO mm_xref (id, from_entry, relationship, to_entry) \
 	VALUES (s_xref_id.nextval, ?, ?, ?)
+--update.entry:\
+UPDATE MM_ENTRY SET ENTRY_NAME=? WHERE ENTRY_ID=?
 
 --delete.entry:\
 DELETE FROM mm_entry WHERE ID = ?
@@ -27,7 +29,8 @@ SELECT * FROM mm_entry WHERE entry_id = ? AND db_name = ?
 --AllUniProtAccessions.accession:\
 SELECT ac.* FROM MM_ACCESSION ac, MM_ENTRY entry \
  WHERE ac.ID = entry.ID and entry.DB_NAME = ? 
-
+--allEntry.by.dbName:\
+SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ?
 --entry.by.accession:\
 SELECT mme.* FROM mm_entry mme, mm_accession mma \
 	WHERE mma.accession = ? AND mma.id = mme.id  AND mme.db_name = ?

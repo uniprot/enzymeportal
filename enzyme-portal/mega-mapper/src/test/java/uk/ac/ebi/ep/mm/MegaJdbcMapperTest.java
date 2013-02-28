@@ -315,7 +315,7 @@ public class MegaJdbcMapperTest {
 
         assertNotNull(compoundMap);
         for (Map.Entry<String, String> m : compoundMap.entrySet()) {
-            //System.out.println("Result : " + m.getKey() + ": " + m.getValue());
+            System.out.println("Result : " + m.getKey() + ": " + m.getValue());
 //            //logger.info("Result : " + m.getKey() + ": " + m.getValue());
         }
         
@@ -335,6 +335,7 @@ public class MegaJdbcMapperTest {
         xDbs[0] = MmDatabase.OMIM;
          xDbs[1] = MmDatabase.EFO;
         xDbs[2] = MmDatabase.MeSH;
+        //xDbs[3] = MmDatabase.ChEBI;
   
         
         diseaseMap = mm.getDisease(db, accession, xDbs);

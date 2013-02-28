@@ -6,23 +6,31 @@ package uk.ac.ebi.ep.mm.app;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
-import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
 import uk.ac.ebi.ep.mm.MegaMapper;
-import uk.ac.ebi.ep.mm.XRef;
 
 /**
  *
  * @author joseph
  */
-public abstract class DatabaseResources {
+public class DatabaseResources {
 
     private final Logger LOGGER = Logger.getLogger(DatabaseResources.class);
     private MegaMapper megaMapper;
     private Connection connection;
+    private int threadPoolSize = 64;
+    //private ExecutorService executorService =  Executors.newFixedThreadPool(threadPoolSize);
+
+    public int getThreadPoolSize() {
+        return threadPoolSize;
+    }
+
+//    public ExecutorService getExecutorService() {
+//        return executorService;
+//    }
+
 
     /**
      *
@@ -43,7 +51,9 @@ public abstract class DatabaseResources {
         try {
             connection = getConnection(dbConfig);
             if (connection == null) {
-                //throw new SiteMapException(String.format("No Database connection due to invalid config %s", dbConfig), Severity.SYSTEM_AFFECTING);
+                
+                LOGGER.fatal("No Database connection due to invalid config : "+ dbConfig);
+               
             }
             megaMapper = new MegaJdbcMapper(connection);
             megaMapper.openMap();
@@ -62,25 +72,13 @@ public abstract class DatabaseResources {
     public MegaMapper getMegaMapper() {
         return megaMapper;
     }
-
-    public void writeEntry(Entry entry) throws IOException{
-        MegaMapper mapper = this.getMegaMapper();
-        mapper.writeEntry(entry);
-    }
-    public void writeEntries(Collection<Entry> entries) throws IOException {
-        MegaMapper mapper = this.getMegaMapper();
-        mapper.writeEntries(entries);
-    }
     
-    public void writeXref(XRef ref) throws IOException{
-        MegaMapper mapper = this.getMegaMapper();
-        mapper.writeXref(ref);
-    }
+//       public Future<?> executeQuery(String query) {
+//                return this.executorService.submit(new QueryRequest(this, query));
+//        } 
+        
+//        public Future<ResultSet> executeQueryResult(String query, MmDatabase mmDatabase) {
+//                return this.executorService.submit(new CallableResultSet(this, query,mmDatabase));
+//        }
 
-    public void writeXrefs(Collection<XRef> xRefs) throws IOException {
-        MegaMapper mapper = this.getMegaMapper();
-        mapper.writeXrefs(xRefs);
-    }
-
-    abstract void writeChebiCompounds(Collection<Entry> entries, Collection<XRef> xRefs) throws IOException;
 }

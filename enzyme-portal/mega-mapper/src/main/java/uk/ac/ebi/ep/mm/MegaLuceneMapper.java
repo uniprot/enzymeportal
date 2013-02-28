@@ -2,7 +2,9 @@ package uk.ac.ebi.ep.mm;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import java.util.List;
 import java.util.Map;
@@ -240,5 +242,17 @@ public class MegaLuceneMapper implements MegaMapper {
 			Constraint constraint, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
 	}
+
+    public int updateEntry(Entry entry) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public List<String> getAllEntryIds(MmDatabase database) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public ResultSet getAllEntryIds(MmDatabase database, String query) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }

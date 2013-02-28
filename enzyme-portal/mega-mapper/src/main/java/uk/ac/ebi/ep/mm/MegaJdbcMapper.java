@@ -5,8 +5,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
@@ -165,12 +167,11 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     * Checks if an entry already exists in the database. If so, the passed {@link Entry}
-     * object is updated with the internal id.
+     * Checks if an entry already exists in the database. If so, the passed
+     * {@link Entry} object is updated with the internal id.
      *
      * @param entry
-     * @return
-     * <code>true</code> if the entry exists.
+     * @return <code>true</code> if the entry exists.
      * @throws SQLException
      */
     private boolean existsInMegaMap(Entry entry) throws SQLException {
@@ -248,8 +249,7 @@ public class MegaJdbcMapper implements MegaMapper {
      * Builds a list of XRef objects from a result set, and closes it.
      *
      * @param rs
-     * @return a list of {@link XRef}s, or
-     * <code>null</code> if none found.
+     * @return a list of {@link XRef}s, or <code>null</code> if none found.
      * @throws SQLException
      */
     private List<XRef> buildXref(ResultSet rs) throws SQLException {
@@ -412,94 +412,104 @@ public class MegaJdbcMapper implements MegaMapper {
         return xrefs;
     }
 
-	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
-			Constraint constraint, Relationship rel) {
-		Collection<XRef> xrefs = null;
-		String idConst = getSqlConstraint(constraint);
-		idFragment = getIdParameter(constraint, idFragment);
-		String dbConst = db == null? "" : "--constraint.db";
-		String relConst = rel == null? "" : "--constraint.relationship";
-		try {
-			PreparedStatement ps = sqlLoader.getPreparedStatement(
-					"--xrefs.by.id.fragment", idConst, dbConst, relConst);
-			int n = 1;
-			ps.setString(n++, idFragment);
-			if (db != null) ps.setString(n++, db.name());
-			ps.setString(n++, idFragment);
-			if (db != null) ps.setString(n++, db.name());
-			if (rel != null) ps.setString(n++, rel.name());
+    public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+            Constraint constraint, Relationship rel) {
+        Collection<XRef> xrefs = null;
+        String idConst = getSqlConstraint(constraint);
+        idFragment = getIdParameter(constraint, idFragment);
+        String dbConst = db == null ? "" : "--constraint.db";
+        String relConst = rel == null ? "" : "--constraint.relationship";
+        try {
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--xrefs.by.id.fragment", idConst, dbConst, relConst);
+            int n = 1;
+            ps.setString(n++, idFragment);
+            if (db != null) {
+                ps.setString(n++, db.name());
+            }
+            ps.setString(n++, idFragment);
+            if (db != null) {
+                ps.setString(n++, db.name());
+            }
+            if (rel != null) {
+                ps.setString(n++, rel.name());
+            }
             xrefs = buildXref(ps.executeQuery());
-		} catch (SQLException e) {
-			LOGGER.error(db + " - " + idFragment + " - " + constraint
-					+ " - " + rel, e);
-		}
-		return xrefs;
-	}
+        } catch (SQLException e) {
+            LOGGER.error(db + " - " + idFragment + " - " + constraint
+                    + " - " + rel, e);
+        }
+        return xrefs;
+    }
 
-	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
-			Constraint constraint, MmDatabase... xDbs) {
-		Collection<XRef> xrefs = null;
-		String idConst = getSqlConstraint(constraint);
-		idFragment = getIdParameter(constraint, idFragment);
-		String dbConst = db == null? "" : "--constraint.db";
-		String inClause = dbArrayForQuery(xDbs);
-		try {
-			PreparedStatement ps = sqlLoader.getPreparedStatement(
-					"--xrefs.by.id.fragment.and.db",
-					idConst, dbConst, inClause);
-			int n = 1;
-			ps.setString(n++, idFragment);
-			if (db != null) ps.setString(n++, db.name());
-			xrefs = buildXref(ps.executeQuery());
-		} catch (SQLException e) {
-			LOGGER.error(db + " - " + idFragment + " - " + constraint
-					+ " - " + xDbs, e);
-		}
-		return xrefs;
-	}
-	
-	/**
-	 * Converts an enumerated value into a SQLLoader constraint key.
-	 * @param constraint the constraint to apply.
-	 * @return the key to be used by the SQLLoader.
-	 */
-	private String getSqlConstraint(Constraint constraint){
-		switch (constraint) {
-		case EQUALS:
-			return "--constraint.equals";
-		case STARTS_WITH:
-		case CONTAINS:
-		case ENDS_WITH:
-			return "--constraint.like";
-		default:
-			throw new IllegalArgumentException("constraint not supported: "
-					+ constraint);
-		}
-	}
-	
-	/**
-	 * Builds the appropriate oracle query string for the constraint.
-	 * @param constraint a constraint.
-	 * @param idFragment a fragment of the string to match.
-	 * @return a string with the wildcard % in the appropriate place(s).
-	 */
-	private String getIdParameter(Constraint constraint, String idFragment){
-		switch (constraint) {
-		case EQUALS:
-			return idFragment;
-		case STARTS_WITH:
-			return idFragment + "%";
-		case CONTAINS:
-			return "%" + idFragment + "%";
-		case ENDS_WITH:
-			return "%" + idFragment;
-		default:
-			throw new IllegalArgumentException("constraint not supported: "
-					+ constraint);
-		}
-	}
+    public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+            Constraint constraint, MmDatabase... xDbs) {
+        Collection<XRef> xrefs = null;
+        String idConst = getSqlConstraint(constraint);
+        idFragment = getIdParameter(constraint, idFragment);
+        String dbConst = db == null ? "" : "--constraint.db";
+        String inClause = dbArrayForQuery(xDbs);
+        try {
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--xrefs.by.id.fragment.and.db",
+                    idConst, dbConst, inClause);
+            int n = 1;
+            ps.setString(n++, idFragment);
+            if (db != null) {
+                ps.setString(n++, db.name());
+            }
+            xrefs = buildXref(ps.executeQuery());
+        } catch (SQLException e) {
+            LOGGER.error(db + " - " + idFragment + " - " + constraint
+                    + " - " + xDbs, e);
+        }
+        return xrefs;
+    }
 
-	/**
+    /**
+     * Converts an enumerated value into a SQLLoader constraint key.
+     *
+     * @param constraint the constraint to apply.
+     * @return the key to be used by the SQLLoader.
+     */
+    private String getSqlConstraint(Constraint constraint) {
+        switch (constraint) {
+            case EQUALS:
+                return "--constraint.equals";
+            case STARTS_WITH:
+            case CONTAINS:
+            case ENDS_WITH:
+                return "--constraint.like";
+            default:
+                throw new IllegalArgumentException("constraint not supported: "
+                        + constraint);
+        }
+    }
+
+    /**
+     * Builds the appropriate oracle query string for the constraint.
+     *
+     * @param constraint a constraint.
+     * @param idFragment a fragment of the string to match.
+     * @return a string with the wildcard % in the appropriate place(s).
+     */
+    private String getIdParameter(Constraint constraint, String idFragment) {
+        switch (constraint) {
+            case EQUALS:
+                return idFragment;
+            case STARTS_WITH:
+                return idFragment + "%";
+            case CONTAINS:
+                return "%" + idFragment + "%";
+            case ENDS_WITH:
+                return "%" + idFragment;
+            default:
+                throw new IllegalArgumentException("constraint not supported: "
+                        + constraint);
+        }
+    }
+
+    /**
      * retrieves a List of XRef with database name as ChEMBL.
      *
      * @param db database where the accession is found
@@ -797,6 +807,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 ps.setString(3, xDbs[0].name());
                 ps.setString(4, xDbs[1].name());
                 ps.setString(5, xDbs[2].name());
+                //ps.setString(6, xDbs[3].name());
 
 
 
@@ -823,12 +834,11 @@ public class MegaJdbcMapper implements MegaMapper {
 
         return diseasesEntryMap;
     }
-   
-    public static final String[] ILLEGAL_COMPOUND = {"sample","sample","example","Water", "Acid","acid","water"};
+    public static final String[] ILLEGAL_COMPOUND = {"sample", "sample", "example", "Water", "Acid", "acid", "water"};
 
     public Map<String, String> getCompounds(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
-        
+
         Map<String, String> compoundEntryMap = null;
         String[] acc = accessions.split("_");
         String accession = acc[0].concat("_%");
@@ -838,9 +848,9 @@ public class MegaJdbcMapper implements MegaMapper {
         ResultSet resultSet = null;
         try {
 
-            
+
             StringBuilder queryClauseBuilder = new StringBuilder();
-            
+
 //            boolean firstValue = true;
 //            for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
 //                //queryClauseBuilder.append('?');
@@ -853,47 +863,47 @@ public class MegaJdbcMapper implements MegaMapper {
 //                queryClauseBuilder.append('?');
 //            }
 
-                for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
+            for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
                 //queryClauseBuilder.append(ILLEGAL_COMPOUND[i]);
-                 queryClauseBuilder.append("?");
+                queryClauseBuilder.append("?");
                 if (i < ILLEGAL_COMPOUND.length - 1) {
                     queryClauseBuilder.append(",");
                 }
-                }
+            }
 
-                if (compoundEntryMap == null) {
-                    compoundEntryMap = new HashMap<String, String>();
-                }
-                
+            if (compoundEntryMap == null) {
+                compoundEntryMap = new HashMap<String, String>();
+            }
+
 //            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
 //                    + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
 //                    + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name != ?";
 //            
 
 
-                String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
-                        + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
-                        + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name not in (" + queryClauseBuilder.toString() + ')';
+            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
+                    + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
+                    + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name not in (" + queryClauseBuilder.toString() + ')';
 
-                if (con != null) {
-                    ps = con.prepareStatement(query);
-                   
-                    ps.setString(2, accession);
-                    ps.setString(1, db.name());
-                    ps.setString(3, xDbs[0].name());
-                    ps.setString(4, xDbs[1].name());
-                    //ps.setString(5, ILLEGAL_COMPOUND);
-                   
- 
-                    for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
-                        ps.setString(i, ILLEGAL_COMPOUND[i]);
-                         
-                    }
+            if (con != null) {
+                ps = con.prepareStatement(query);
 
-                
+                ps.setString(2, accession);
+                ps.setString(1, db.name());
+                ps.setString(3, xDbs[0].name());
+                ps.setString(4, xDbs[1].name());
+                //ps.setString(5, ILLEGAL_COMPOUND);
+
+
+                for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
+                    ps.setString(i, ILLEGAL_COMPOUND[i]);
+
+                }
+
+
 
                 resultSet = ps.executeQuery();
-                
+
                 while (resultSet.next()) {
 
                     String entryId = resultSet.getString("ENTRY_ID");
@@ -939,4 +949,220 @@ public class MegaJdbcMapper implements MegaMapper {
         rs.close();
         return xrefs;
     }
+
+    /**
+     *
+     * @param entry
+     * @return number of rows affected by the update operation
+     * @throws IOException
+     */
+    public int updateEntry(Entry entry) throws IOException {
+        int num_row_affected = 0;
+         String query = "UPDATE MM_ENTRY SET ENTRY_NAME=? WHERE ENTRY_ID=?";
+            PreparedStatement preparedStatement = null;
+        try {
+            con.setAutoCommit(false);
+           // String query = "UPDATE MM_ENTRY SET ENTRY_NAME=? WHERE ENTRY_ID=?";
+             preparedStatement = con.prepareStatement(query);
+
+            //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--update.entry");
+
+            preparedStatement.setString(1, entry.getEntryName());
+            preparedStatement.setString(2, entry.getEntryId());
+
+            preparedStatement.addBatch();
+
+            // Execute the batch
+            int[] updateCounts = preparedStatement.executeBatch();
+
+            // All statements were successfully executed.
+            // updateCounts contains one element for each batched statement.
+            // updateCounts[i] contains the number of rows affected by that statement.
+            num_row_affected = processUpdateCounts(updateCounts);
+
+
+            // Since there were no errors, commit
+            con.commit();
+          
+
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                
+                preparedStatement.close();
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return num_row_affected;
+    }
+
+    private static int processUpdateCounts(int[] updateCounts) {
+        int num_rows_affected = 0;
+        for (int i = 0; i < updateCounts.length; i++) {
+            if (updateCounts[i] >= 0) {
+                // Successfully executed; the number represents number of affected rows
+                num_rows_affected = updateCounts[i];
+            } else if (updateCounts[i] == Statement.SUCCESS_NO_INFO) {
+                // Successfully executed; number of affected rows not available
+                num_rows_affected = updateCounts[i];
+            } else if (updateCounts[i] == Statement.EXECUTE_FAILED) {
+                // Failed to execute
+               
+                num_rows_affected = updateCounts[i];
+            }
+        }
+        return num_rows_affected;
+    }
+
+    /**
+     * 
+     * @param database the database to get the entry id's from
+     * @return all entry ID's
+     */
+    public List<String> getAllEntryIds(MmDatabase database) {
+        List<String> entryIdList = null;
+        ResultSet resultSet = null;
+        if (entryIdList == null) {
+            entryIdList = new LinkedList<String>();
+        }
+        try {
+            String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL";
+            PreparedStatement preparedStatement = con.prepareStatement(query);  
+            //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");
+           //and rownum <= 700000
+            preparedStatement.setString(1, database.name());
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String accession = resultSet.getString("ENTRY_ID");
+                //System.out.println("ACCESSION "+ accession);
+                entryIdList.add(accession);
+                //entryIdList.push(accession);
+
+
+            }
+
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(resultSet);
+        }
+
+        return entryIdList;
+
+
+    }
+    
+    /**
+     * 
+     * @param database the database to get the entry id's from
+     * @return resultSet
+     */
+    public ResultSet getAllEntryIds(MmDatabase database, String query) {
+
+        ResultSet resultSet = null;
+
+        try {
+            //String query1 = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? and rownum <= 700000";
+            //query = query1;
+            PreparedStatement preparedStatement = con.prepareStatement(query);  
+            //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");
+           
+            preparedStatement.setString(1, database.name());
+            resultSet = preparedStatement.executeQuery();
+
+
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+
+
+        return resultSet;
+
+
+    }
+    
+    
+//     public void writeEntry(Entry entry) throws IOException {
+//        try {
+//            if (existsInMegaMap(entry)) {
+//                return;
+//            }
+//            PreparedStatement wEntryStm = sqlLoader.getPreparedStatement(
+//                    "--insert.entry", new String[]{"id"}, (Object) null);
+//            int paramNum = 1;
+////			wEntryStm.setInt(paramNum++, entry.getId());
+//            wEntryStm.setString(paramNum++, entry.getDbName());
+//            wEntryStm.setString(paramNum++, entry.getEntryId());
+//            if (entry.getEntryName() != null) {
+//                wEntryStm.setString(paramNum++, entry.getEntryName());
+//            } else {
+//                wEntryStm.setNull(paramNum++, Types.VARCHAR);
+//            }
+//            wEntryStm.execute();
+//            final ResultSet generatedKeys = wEntryStm.getGeneratedKeys();
+//            if (generatedKeys.next()) {
+//                int id = generatedKeys.getInt(1);
+//                entry.setId(id);
+////				Statement checkMe = generatedKeys.getStatement();
+////				checkMe.close();
+//            } else {
+//                LOGGER.warn("No generated keys!");
+//            }
+//            generatedKeys.close();
+//            if (entry.getEntryAccessions() != null) {
+//                int index = 0;
+//                PreparedStatement wAccStm =
+//                        sqlLoader.getPreparedStatement("--insert.accession");
+//                for (String accession : entry.getEntryAccessions()) {
+//                    paramNum = 1;
+//                    wAccStm.setInt(paramNum++, entry.getId());
+//                    wAccStm.setString(paramNum++, accession);
+//                    wAccStm.setInt(paramNum++, index++);
+//                    wAccStm.execute();
+//                }
+//            }
+//        } catch (SQLException e) {
+//            throw new IOException(e);
+//        }
+//    }
+//     
+//     try {
+//    // Disable auto-commit
+//    connection.setAutoCommit(false);
+//
+//    // Create a prepared statement
+//    String sql = "INSERT INTO my_table VALUES(?)";
+//    PreparedStatement pstmt = connection.prepareStatement(sql);
+//
+//    // Insert 10 rows of data
+//    for (int i=0; i<10; i++) {
+//    	pstmt.setString(1, ""+i);
+//    	pstmt.addBatch();
+//    }
+//
+//    // Execute the batch
+//    int [] updateCounts = pstmt.executeBatch();
+//
+//    // All statements were successfully executed.
+//    // updateCounts contains one element for each batched statement.
+//    // updateCounts[i] contains the number of rows affected by that statement.
+//    processUpdateCounts(updateCounts);
+//
+//    // Since there were no errors, commit
+//    connection.commit();
+//} catch (BatchUpdateException e) {
+//    // Not all of the statements were successfully executed
+//    int[] updateCounts = e.getUpdateCounts();
+//
+//    // Some databases will continue to execute after one fails.
+//    // If so, updateCounts.length will equal the number of batched statements.
+//    // If not, updateCounts.length will equal the number of successfully executed statements
+//    processUpdateCounts(updateCounts);
+//
+//    // Either commit the successfully executed statements or rollback the entire batch
+//    connection.rollback();
+//} catch (SQLException e) {
+//}
 }

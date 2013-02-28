@@ -1,7 +1,9 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,15 @@ public interface MegaMapper {
     public void writeEntry(Entry entry) throws IOException;
 
     public void writeEntries(Collection<Entry> entries) throws IOException;
+    
+  
+    /**
+     * Update entry (with reference to the entry_name)
+     * @param entry
+     * @return number of rows affected
+     * @throws IOException 
+     */
+    int updateEntry(Entry entry) throws IOException;
 
     /**
      * Writes one cross-reference to the mega-map.
@@ -223,4 +234,13 @@ public interface MegaMapper {
      
      Map<String, String> getDisease(MmDatabase db, String accessions,
             MmDatabase... xDbs);
+    
+     /**
+      * 
+      * @param database the database to get the entry ids from
+      * @return all entry Id's
+      */
+    List<String> getAllEntryIds(MmDatabase database);
+    
+    ResultSet getAllEntryIds(MmDatabase database, String query);
 }

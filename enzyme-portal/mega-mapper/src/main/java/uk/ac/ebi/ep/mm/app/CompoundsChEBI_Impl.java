@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.*;
 import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.Relationship;
 import uk.ac.ebi.ep.mm.XRef;
@@ -18,9 +19,9 @@ import uk.ac.ebi.ep.mm.XRef;
  *This class is to retrieve compounds from chebi database and write them to the mega mapper
  * @author joseph
  */
-public class CompoundsDAOImpl extends DatabaseResources implements ICompoundsDAO {
+public class CompoundsChEBI_Impl  implements ICompoundsDAO {
 
-    private final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(DatabaseResources.class);
+    private final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CompoundsChEBI_Impl.class);
     private SessionFactory sessionFactory;
     private Session session = null;
     //private StatelessSession session = null;
@@ -28,6 +29,11 @@ public class CompoundsDAOImpl extends DatabaseResources implements ICompoundsDAO
     private Entry chebiEntry;
     private Entry uniprotEntry;
     private XRef xRef;
+    private DatabaseResources databaseResources;
+  
+
+   
+  
 
     private enum MEGA_RELATIONSHIP {
 
@@ -58,23 +64,21 @@ public class CompoundsDAOImpl extends DatabaseResources implements ICompoundsDAO
         }
     }
 
-    public CompoundsDAOImpl(String dbConfig) {
-        super(dbConfig);
-        this.init();
+    public CompoundsChEBI_Impl(String dbConfig) {
+       this.init(dbConfig);
+        
     }
+    
 
-    private void init() {
+    private void init(String dbConfig) {
+         databaseResources = new DatabaseResources(dbConfig);
         sessionFactory = HibernateUtil.getSessionFactory();
     }
 
-    public void getCHEBI_Compounds() {
+        public void buildCompound(){
 
 
         Set<CustomEntity> allCompounds = new HashSet<CustomEntity>();
-        List<XRef> xRefList = new ArrayList<XRef>();
-        Compounds compounds = null;
-        Reference reference = null;
-
 
         session = sessionFactory.openSession();
         transaction = session.beginTransaction();
@@ -157,7 +161,7 @@ public class CompoundsDAOImpl extends DatabaseResources implements ICompoundsDAO
             this.writeXrefs(xRefList);
             LOGGER.info("Done writing.");
         } catch (IOException ex) {
-            Logger.getLogger(CompoundsDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CompoundsChEBI_Impl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -241,13 +245,35 @@ public class CompoundsDAOImpl extends DatabaseResources implements ICompoundsDAO
         return ref;
     }
 
-    @Override
-    void writeChebiCompounds(Collection<Entry> entries, Collection<XRef> xRefs) {
-        try {
+  
+    public void writeEntriesAndXrefs(Collection<Entry> entries, Collection<XRef> xRefs) throws IOException{
+             try {
             this.writeEntries(entries);
             this.writeXrefs(xRefs);
         } catch (IOException ex) {
             LOGGER.fatal("Error while writing Chebi Compounds to Mega Mapper", ex);
         }
     }
+    
+      public void writeEntry(Entry entry) throws IOException{
+        MegaMapper mapper = databaseResources.getMegaMapper();
+        mapper.writeEntry(entry);
+    }
+    public void writeEntries(Collection<Entry> entries) throws IOException {
+        MegaMapper mapper = databaseResources.getMegaMapper();
+        mapper.writeEntries(entries);
+    }
+    
+    public void writeXref(XRef ref) throws IOException{
+        MegaMapper mapper = databaseResources.getMegaMapper();
+        mapper.writeXref(ref);
+    }
+
+    public void writeXrefs(Collection<XRef> xRefs) throws IOException {
+  
+        MegaMapper mapper = databaseResources.getMegaMapper();
+        mapper.writeXrefs(xRefs);
+    }
+
+   
 }

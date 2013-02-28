@@ -8,9 +8,9 @@ package uk.ac.ebi.ep.mm.app;
  *
  * @author joseph
  */
-public class ChebiCompounds {
-
-    public static void main(String... args) {
+public class ChemblCompounds {
+    
+        public static void main(String... args) {
         String dbConfig = "ep-mm-db-enzdev";
 
         if (args == null) {
@@ -19,10 +19,11 @@ public class ChebiCompounds {
 
 
 
-        //ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(args[0]);
-        ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(dbConfig);
-        //dAOImpl.getCHEBI_Compounds();
+        //ICompoundsDAO dAOImpl = new CompoundsChEMBL_Impl(args[0]);
+        ICompoundsDAO dAOImpl = new CompoundsChEMBL_Impl(dbConfig);
+       
         dAOImpl.buildCompound();
 
     }
+    
 }
