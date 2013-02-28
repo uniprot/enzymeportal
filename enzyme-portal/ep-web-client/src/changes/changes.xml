@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-	<release version="1.0.14" date="" description="">
+	<release version="1.0.14" date="2013-02-28" description="Bug fix">
 		<action dev="rafalcan" type="fix">
 			Reduced size of requested images (thumbnails) in search results
 			from 600 to 120 (width) in order to make the page lighter.
