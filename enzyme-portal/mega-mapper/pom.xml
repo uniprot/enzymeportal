@@ -122,6 +122,11 @@
             <version>1.0.4</version>
             <type>jar</type>
         </dependency>
+         <dependency>
+       <groupId>uk.ac.ebi.chemblws</groupId>
+       <artifactId>chemblApi</artifactId>
+       <version>1.0.5</version>
+  </dependency>
     </dependencies>
 	
     <build>
@@ -174,9 +179,8 @@
                         </goals>
                         <configuration>
                             <files>
-
+    
                                 <file>${ep.config.dir}/ep-mm-db${ep.mm.db.config}.properties</file>
-
                                 <file>${ep.config.dir}/ep-mm-db-hib${ep.mm.db.config}.properties</file>
 
                             </files>
@@ -360,7 +364,6 @@
                         <directory>${ep.config.dir}</directory>
                         <includes>
                      <include>ep-mm-db${ep.mm.db.config}.properties</include>
-                            <include>ep-mm-db-enzdev.properties</include>
                         </includes>
                     </resource>
                 </resources>
