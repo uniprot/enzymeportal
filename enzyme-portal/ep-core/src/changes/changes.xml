@@ -20,6 +20,7 @@
         <action dev="rafalcan" type="update">
             Updated to latest version of biomart-adapter.
         </action>
+	</release>
 	<release version="1.0.10" date="2013-02-05" description="Bug fixes">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
