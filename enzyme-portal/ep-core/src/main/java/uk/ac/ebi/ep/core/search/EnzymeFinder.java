@@ -4,6 +4,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.biobabel.blast.Hit;
+import uk.ac.ebi.biobabel.blast.Hsp;
+import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
+import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
@@ -34,8 +38,8 @@ import uk.ac.ebi.xchars.domain.EncodingType;
  * NOTE: the adapters must be configured before using this finder!
  *
  * @since 1.0
- * @version $LastChangedRevision$ <br/> $LastChangedDate: 2012-02-27
- * 17:03:08 +0000 (Mon, 27 Feb 2012) $ <br/> $Author$
+ * @version $LastChangedRevision$ <br/> $LastChangedDate: 2012-02-27 17:03:08
+ * +0000 (Mon, 27 Feb 2012) $ <br/> $Author$
  * @author $Author$
  */
 public class EnzymeFinder implements IEnzymeFinder {
@@ -59,7 +63,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     MegaMapperConnection megaMapperConnection;
     private Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
     private Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
-    //private SimpleJdbcTemplate simpleJdbcTemplate;
+    private NcbiBlastClient blastClient;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeFinder(Config config) {
@@ -199,11 +203,11 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public SearchResults getEnzymes(SearchParams searchParams)
             throws EnzymeFinderException {
- 
 
-             String escapedText = StringEscapeUtils.escapeJava(searchParams.getText());
-            searchParams.setText(escapedText);
-     
+
+        String escapedText = StringEscapeUtils.escapeJava(searchParams.getText());
+        searchParams.setText(escapedText);
+
         processInputs(searchParams);
 
         /*
@@ -213,7 +217,7 @@ public class EnzymeFinder implements IEnzymeFinder {
          */
         if (newSearch) {
             // Search in EBEye for Uniprot ids, the search is filtered by ec:*
-        	LOGGER.debug("Starting new search");
+            LOGGER.debug("Starting new search");
             queryEbeyeForUniprotIds();
             /*
              * replacing EB-Eye with UniProt ws here: uniprotIds2species = new
@@ -285,44 +289,43 @@ public class EnzymeFinder implements IEnzymeFinder {
         Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
 
         Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
-       // Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
-       // Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
-     
+      
+
 
         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
 
-             computeCompound(summaryEntry.getUniprotid());
-              computeDisease(summaryEntry.getUniprotid());
+            computeCompound(summaryEntry.getUniprotid());
+            computeDisease(summaryEntry.getUniprotid());
 
-               
-              
-                 if(!uniqueDiseases.isEmpty() && uniqueDiseases.size() >0){
-                        for(DiseaseDefaultWrapper ddw : uniqueDiseases){
-                            summaryEntry.getDiseases().add(ddw.getDisease());
-                        }
-                    }
-              
+
+
+            if (!uniqueDiseases.isEmpty() && uniqueDiseases.size() > 0) {
+                for (DiseaseDefaultWrapper ddw : uniqueDiseases) {
+                    summaryEntry.getDiseases().add(ddw.getDisease());
+                }
+            }
+
             for (EnzymeAccession ea : summaryEntry.getRelatedspecies()) {
                 Species sp = ea.getSpecies();
-               
+
                 if (sp != null) {
 
-                    if(!uniqueDiseases.isEmpty() && uniqueDiseases.size() >0){
-                        for(DiseaseDefaultWrapper ddw : uniqueDiseases){
+                    if (!uniqueDiseases.isEmpty() && uniqueDiseases.size() > 0) {
+                        for (DiseaseDefaultWrapper ddw : uniqueDiseases) {
                             sp.getDiseases().add(ddw.getDisease());
-                        
+
                         }
                     }
-                       
 
-                        if(!uniqueCompounds.isEmpty() && uniqueCompounds.size() > 0){
-                            for(CompoundDefaultWrapper comp : uniqueCompounds){
-                                sp.getCompounds().add(comp.getCompound());
-                            }
+
+                    if (!uniqueCompounds.isEmpty() && uniqueCompounds.size() > 0) {
+                        for (CompoundDefaultWrapper comp : uniqueCompounds) {
+                            sp.getCompounds().add(comp.getCompound());
                         }
-                        
-                   
-                    
+                    }
+
+
+
                     uniqueSpecies.add(new SpeciesDefaultWrapper(sp));
 
                 }
@@ -378,7 +381,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         for (DiseaseDefaultWrapper dw : uniqueDiseases) {
             diseaseFilter.add(dw.getDisease());
         }
-      
+
         SearchFilters filters = new SearchFilters();
         filters.setSpecies(speciesFilters);
         filters.setCompounds(compoundFilters);
@@ -390,20 +393,20 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 
 
-      
-         Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL, MmDatabase.ChEBI);
-  
+
+        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL, MmDatabase.ChEBI);
+
         if (xRefList != null) {
             for (Map.Entry<String, String> ref : xRefList.entrySet()) {
-             
+
                 Compound com = new Compound();
                 com.setId(ref.getKey());
-                 String compoundName = resolveSpecialCharacters(ref.getValue());
-                    com.setName(compoundName.replaceAll(",", ""));
+                String compoundName = resolveSpecialCharacters(ref.getValue());
+                com.setName(compoundName.replaceAll(",", ""));
 
-               CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(com);
+                CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(com);
                 uniqueCompounds.add(compoundDefaultWrapper);
- 
+
 
             }
         }
@@ -413,7 +416,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public void computeDisease(String uniprotAccession) {
 
-        Map<String, String>  xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+        Map<String, String> xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
 
         if (xRefList != null) {
 
@@ -423,77 +426,76 @@ public class EnzymeFinder implements IEnzymeFinder {
                 Disease disease = new Disease();
                 if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
 
-                     String diseaseName = resolveSpecialCharacters(diseaseMap.getValue());
+                    String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
                     disease.setName(diseaseName.replaceAll(",", ""));
                     disease.setId(diseaseMap.getKey());
-                  
-                  DiseaseDefaultWrapper  diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
+
+                    DiseaseDefaultWrapper diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
                     uniqueDiseases.add(diseaseDefaultWrapper);
                 }
 
             }
         }
-       
+
     }
-    
-    
-       public void computeOnlyDisease(List<String> uniprotAccessions) {
 
-        DiseaseDefaultWrapper diseaseDefaultWrapper = null;
-         Disease disease = null;
-        Map<String, String> xRefList = null;
-        for(String uniprotAccession : uniprotAccessions){
-           
-        xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
-        if (xRefList != null) {
+//    
+//       public void computeOnlyDisease(List<String> uniprotAccessions) {
+//
+//        DiseaseDefaultWrapper diseaseDefaultWrapper = null;
+//         Disease disease = null;
+//        Map<String, String> xRefList = null;
+//        for(String uniprotAccession : uniprotAccessions){
+//           
+//        xRefList = megaMapperConnection.getMegaMapper().getDisease(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+//        if (xRefList != null) {
+//
+//            for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
+//
+//
+//                disease = new Disease();
+//                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
+//                    String diseaseName = resolveSpecialCharacters(diseaseMap.getValue());
+//                    disease.setName(diseaseName.replaceAll(",", ""));
+//                    disease.setName(diseaseName);
+//                    disease.setId(diseaseMap.getKey());
+//                    
+//                       diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
+//                    uniqueDiseases.add(diseaseDefaultWrapper);
+//      
+//                }
+//
+//            }
+//        }
+//        }
+//      
+//    }
+    public String resolveSpecialCharacters(String data) {
+        SpecialCharacters xchars = SpecialCharacters.getInstance(null);
+        EncodingType[] encodings = {
+            EncodingType.CHEBI_CODE,
+            EncodingType.COMPOSED,
+            EncodingType.EXTENDED_HTML,
+            EncodingType.GIF,
+            EncodingType.HTML,
+            EncodingType.HTML_CODE,
+            EncodingType.JPG,
+            EncodingType.SWISSPROT_CODE,
+            EncodingType.UNICODE
+        };
 
-            for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
+        if (!xchars.validate(data)) {
+            LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!");
 
-
-                disease = new Disease();
-                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
-                    String diseaseName = resolveSpecialCharacters(diseaseMap.getValue());
-                    disease.setName(diseaseName.replaceAll(",", ""));
-                    disease.setName(diseaseName);
-                    disease.setId(diseaseMap.getKey());
-                    
-                       diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
-                    uniqueDiseases.add(diseaseDefaultWrapper);
-      
-                }
-
-            }
         }
-        }
-      
-    }
-       
-       
-    public String resolveSpecialCharacters(String data){
-        		SpecialCharacters xchars = SpecialCharacters.getInstance(null);
-		EncodingType[] encodings = {
-				EncodingType.CHEBI_CODE,
-				EncodingType.COMPOSED,
-				EncodingType.EXTENDED_HTML,
-				EncodingType.GIF,
-				EncodingType.HTML,
-				EncodingType.HTML_CODE,
-				EncodingType.JPG,
-				EncodingType.SWISSPROT_CODE,
-				EncodingType.UNICODE
-		};
-		
-		if (!xchars.validate(data)){
-                    LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!");
 
-		}
 
-                
-                return xchars.xml2Display(data,EncodingType.CHEBI_CODE);
+        return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
 
     /**
-     * Limit the number of results to the {@code IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT}
+     * Limit the number of results to the
+     * {@code IEbeyeAdapter.EP_RESULTS_PER_DOIMAIN_LIMIT}
      *
      * @param params
      */
@@ -915,7 +917,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         List<EnzymeSummary> enzymeList =
                 uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
                 IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
-        
+
 
         return enzymeList;
     }
@@ -1118,5 +1120,110 @@ public class EnzymeFinder implements IEnzymeFinder {
         ParamOfGetResults paramOfGetAllResults =
                 new ParamOfGetResults(IEbeyeAdapter.Domains.chebi.name(), query, resultFields);
         return paramOfGetAllResults;
+    }
+
+    private NcbiBlastClient getBlastClient() {
+        if (blastClient == null) {
+            blastClient = new NcbiBlastClient();
+            blastClient.setEmail("enzymeportal-devel@lists.sourceforge.net");
+        }
+        return blastClient;
+    }
+
+    public String blast(String sequence) throws NcbiBlastClientException {
+        return getBlastClient().run(sequence);
+    }
+
+    public NcbiBlastClient.Status getBlastStatus(String jobId)
+            throws NcbiBlastClientException {
+        return getBlastClient().getStatus(jobId);
+    }
+
+    public SearchResults getBlastResult(String jobId)
+            throws NcbiBlastClientException, MultiThreadingException {
+        List<Hit> hits = getBlastClient().getResults(jobId);
+        Map<String, Hsp> scorings = new HashMap<String, Hsp>();
+
+        for (Hit hit : hits) {
+
+            scorings.put(hit.getUniprotAccession(), hit.getHsps().get(0));
+
+        }
+
+        List<String> uniprotIdPrefixes = filterBlastResults(hits);
+
+        enzymeSummaryList = getEnzymeSummaries(uniprotIdPrefixes, null);
+
+        for (EnzymeSummary es : enzymeSummaryList) {
+
+            for (EnzymeAccession ea : es.getRelatedspecies()) {
+
+                String hitAcc = ea.getUniprotaccessions().get(0);
+
+                ea.setScoring(scorings.get(hitAcc));
+
+            }
+            //Collections.sort(es.getRelatedspecies(), SEQSCORE);
+            Collections.sort(es.getRelatedspecies(),
+                    new Comparator<EnzymeAccession>() {
+                        @SuppressWarnings({"unchecked", "rawtypes"})
+                        public int compare(EnzymeAccession o1, EnzymeAccession o2) {
+                            if(o1.getScoring() == null && o2.getScoring() == null){
+                                return 0;
+                            }
+                            if (o1.getScoring() == null) {
+                                return 1;
+                            }
+
+                            if (o2.getScoring() == null) {
+                                return -1;
+                            }
+
+                            return ((Comparable) o1.getScoring())
+                                    .compareTo(o2.getScoring());
+
+                        }
+                    });
+
+        }
+        //List<String> uniprotIdPrefixes = filterBlastResults(hits);
+        //enzymeSummaryList = getEnzymeSummaries(uniprotIdPrefixes, null);
+        enzymeSearchResults.setSummaryentries(enzymeSummaryList);
+        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+        LOGGER.debug("Building filters...");
+        buildFilters(enzymeSearchResults);
+        return enzymeSearchResults;
+    }
+    
+       static final Comparator<EnzymeAccession> SEQSCORE = new Comparator<EnzymeAccession>() {
+
+        public int compare(EnzymeAccession e1, EnzymeAccession e2) {
+            
+            if (e1.getScoring() == null && e2.getScoring() == null) {
+                return ((Comparable)e1.getScoring()).compareTo(e2.getScoring());
+                
+            }
+            int compare = ((Comparable)e1.getScoring()).compareTo(e2.getScoring());
+
+            return ((compare == 0) ? ((Comparable)e1.getScoring()).compareTo(e2.getScoring()) : compare);
+
+        }
+        
+    };
+
+    /**
+     * Filters the hits returned by the Blast client to get only enzymes.
+     *
+     * @param hits Hits returned by the Blast client.
+     * @return a list of unique UniProt ID prefixes (species stripped).
+     * @throws MultiThreadingException
+     */
+    private List<String> filterBlastResults(List<Hit> hits)
+            throws MultiThreadingException {
+        List<String> accs = new ArrayList<String>();
+        for (Hit hit : hits) {
+            accs.add(hit.getUniprotAccession());
+        }
+        return EPUtil.getIdPrefixes(filterEnzymes(accs));
     }
 }

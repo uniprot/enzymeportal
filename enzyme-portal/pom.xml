@@ -34,7 +34,7 @@
         </developer>
         <developer>
             <id>rafalcan</id>
-            <name>Rafael Alcántara</name>
+            <name>Rafael Alc?ntara</name>
             <email>rafalcan@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
@@ -88,7 +88,7 @@
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
         </repository>
         <repository>
-            <releases />
+            <releases/>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -100,7 +100,7 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
-            <snapshots />
+            <snapshots/>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
@@ -126,7 +126,7 @@
             <id>ebi-repo-snapshots</id>
             <name>EBI Maven Snapshots Repository</name>
             <url>${ebi.maven.repo.snapshots.deploy.url}</url>
-            <uniqueVersion>false</uniqueVersion>
+                <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
             <id>github</id>
@@ -369,6 +369,6 @@
 		<module>bioportal-adapter</module>
 		<module>SitemapGenerator</module>
 		<module>rhea-adapter</module>
-	</modules>
+  </modules>
 
 </project>

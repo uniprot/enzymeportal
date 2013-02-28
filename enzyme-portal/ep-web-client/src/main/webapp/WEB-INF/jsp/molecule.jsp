@@ -57,7 +57,7 @@
 							alt="(No image available)" />
 					</c:when>
 					<c:otherwise>
-						<a target="blank" href="${compoundUrl}">
+						<a style="border-bottom-style: none" target="blank" href="${compoundUrl}">
 							<img src="${compoundImgUrl}"
 								alt="(No image available)" />
 						</a>

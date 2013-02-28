@@ -11,7 +11,7 @@
 .container_12,
 .container_16
 {
-	width: 100%%;
+	width: 100%;
 	margin-left: 0%;
 	margin-right: 0%;
 }
@@ -19,7 +19,7 @@
 /* =Grid >> Global
 --------------------------------------------------------------------------------*/
 
-.grid_1,
+/*.grid_1,
 .grid_2,
 .grid_3,
 .grid_4,
@@ -40,7 +40,7 @@
 	float: left;
 	margin-left: 1%;
 	margin-right: 1%;
-}
+}*/
 
 .container_12 .grid_3,
 .container_16 .grid_4
@@ -69,10 +69,10 @@
 /* =Grid >> Children (Alpha ~ First, Omega ~ Last)
 --------------------------------------------------------------------------------*/
 
-.alpha
+/*.alpha
 {
 	margin-left: 0;
-}
+}*/
 
 .omega
 {

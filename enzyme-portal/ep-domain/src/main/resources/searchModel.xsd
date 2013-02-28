@@ -37,6 +37,23 @@
         	</xs:element>
         	<xs:element name="diseases" type="ep:Disease"
         		maxOccurs="unbounded" minOccurs="0"></xs:element>
+     <xs:element name="scoring" type="xs:anySimpleType"
+	
+        maxOccurs="1" minOccurs="0">
+	
+                     <xs:annotation>
+	
+                       <xs:documentation>
+	
+                         The search score (BLAST, for instance) for the
+	
+                          result.
+ 	
+                        </xs:documentation>
+	
+                      </xs:annotation>
+	
+     </xs:element>
         </xs:sequence>
 	</xs:complexType>
 	<xs:element name="EnzymeSummary" type="ep:EnzymeSummary"/>
@@ -44,17 +61,48 @@
 		<xs:complexContent>
 			<xs:extension base="ep:EnzymeAccession">
 				<xs:sequence>
-					<xs:element name="ec" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+<!--					<xs:element name="ec" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
 					<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="function" type="xs:string" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="synonym" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 
 					<xs:element name="uniprotid" type="xs:string" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="relatedspecies" type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded">
-						<xs:annotation>
-							<xs:documentation>Any species related to the one described by the EnzymeSummary, each one represented by one EnzymeAccession.</xs:documentation>
-						</xs:annotation></xs:element>
-				</xs:sequence>
+					<xs:element name="relatedspecies" type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded">-->
+                                        
+          <xs:element name="ec" type="xs:string" minOccurs="1"
+	
+            maxOccurs="unbounded" />
+	
+          <xs:element name="name" type="xs:string"
+	
+            minOccurs="1" maxOccurs="1" />
+	
+          <xs:element name="function" type="xs:string"
+	
+            minOccurs="0" maxOccurs="1" />
+	
+         <xs:element name="synonym" type="xs:string"
+	
+            minOccurs="0" maxOccurs="unbounded" />
+	
+          <xs:element name="uniprotid" type="xs:string"
+	
+            minOccurs="1" maxOccurs="1" />
+	
+          <xs:element name="relatedspecies"
+           type="ep:EnzymeAccession" minOccurs="0" maxOccurs="unbounded">
+              <xs:annotation>
+<!--                <xs:annotation>
+                        <xs:documentation>Any species related to the one described by the EnzymeSummary, each one represented by one EnzymeAccession.</xs:documentation>
+                </xs:annotation></xs:element>-->
+             <xs:documentation>
+               Any species related to the one described
+                by the EnzymeSummary, each one
+               represented by one EnzymeAccession.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>			
+         </xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -77,12 +125,43 @@
 	<xs:complexType name="SearchParams">
 		<xs:sequence>
 			<xs:element name="text" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                        
+                        <xs:element name="sequence" type="xs:string" maxOccurs="1"
+				minOccurs="1">
+                <xs:annotation>
+                	<xs:documentation>A protein sequence to search using a BLAST service.</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+			<xs:element name="compound" type="xs:string" maxOccurs="1"
+				minOccurs="1">
+                <xs:annotation>
+                	<xs:documentation>A compound structure (MOL) to search using ChEBI.</xs:documentation>
+                </xs:annotation>
+			</xs:element>
+                        
+                        
 			<xs:element name="previoustext" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="start" type="xs:int" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="size" type="xs:int" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="compounds" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="diseases" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="species" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                        
+                 <xs:element name="type">
+                <xs:annotation>
+               <xs:documentation>The type of search to perform: KEYWORD | SEQUENCE | COMPOUND, which will use the properties text | sequence | compound respectively.
+               </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+		<xs:restriction base="xs:string">
+				<xs:enumeration value="KEYWORD"></xs:enumeration>
+				<xs:enumeration value="SEQUENCE"></xs:enumeration>
+				<xs:enumeration value="COMPOUND"></xs:enumeration>
+		</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+                        
+                        
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="SearchResults" type="ep:SearchResults"/>

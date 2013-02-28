@@ -25,13 +25,13 @@ a:link, a:visited {
     text-decoration: inherit;
 }
 
-.desc a:link, .desc a:visited, .species{
-    /*color: #207a7a;*/
+/*.desc a:link, .desc a:visited, .species{
+    color: #207a7a;
     text-decoration: underline;
-}
+}*/
 .showLink{
-    /*color: #207a7a;*/
-    text-decoration: underline;
+    color: #207a7a;
+/*    text-decoration: underline;*/
     font-style: italic;
     white-space: nowrap;
     cursor: pointer;
@@ -66,8 +66,9 @@ a:link, a:visited {
 .filterButton, .searchButton, .button {
     /*position: relative;*/
     /*background: #ddd;*/
-    background: #72B55F;
+/*    background: #72B55F;*/
     /*color: #72B55F;*/
+    background: #207a7a;
     color: white;
     border: 1px solid #777;
     border-radius: 12px;
@@ -108,9 +109,9 @@ a:link, a:visited {
     margin-right:2px;
     /*min-width:150px;*/
     min-width: 15%;
-    max-width: 20%;
-    padding: 4px 4px;
-    margin-top: 5px;
+    /*    max-width: 20%;*/
+    /*    padding: 4px 4px;
+        margin-top: 5px;*/
     /*border: 2px solid #ddd;*/
     /*
     -moz-border-radius: 15px 15px 15px 15px;
@@ -132,37 +133,59 @@ a:link, a:visited {
     margin-left: 2px;
     margin-right: 2px;
 }
-.sublevel1 { border:1px thin #ddd; width:inherit; max-height: 400px; overflow:auto }
+.sublevel1 { border:1px thin #ddd; width:inherit;   }
 /*.sublevel1 { overflow:auto ;border:1px thin #ddd;width: 260px; height:400px }*/
 .filterContent {
     margin-left: 5px;
     padding-bottom: 2px;
     line-height:16pt;
-/*    margin-right: 5px;*/
+    overflow:auto;
+    max-height: 400px;
+    /*    margin-right: 5px;*/
 }
-.text {
+
+/*.text {
     float: left;
     width: 82%;
-    /*border: 1px solid #ddd;*/
-}
+    border: 1px solid #ddd;comment
+}*/
 
 .otherName {
     font-size: 8pt;
     font-style: italic;    
 }
-.checkItem {
+/*.checkItem {
     vertical-align: top;
     margin-right: 5px;
     float: right;
     width: 10%;
     text-align: right;
-    /*border: 1px solid #ddd;*/
+    border: 1px solid #ddd;
 }
 
+*/
 .filterLine {
     margin-bottom: 9px;
     vertical-align: top;
 }
+
+/*css to achieve the frontier checkbox alignment starts here*/
+.text {
+    float: right;
+    width: 90%;
+}
+
+.checkItem {
+   
+vertical-align: top;
+/*    margin-right: 0px;*/
+    float: left;
+    width: 10%;
+    text-align: left;
+}
+
+/*frontier checkbox alignment ends here*/
+
 .container { border:2px solid #ccc; width:300px; height: 300px; overflow-y: scroll; }
 /*The container of result items on the right side of the filter*/
 .result  {
@@ -218,11 +241,11 @@ a:link, a:visited {
     width:19%;    
 }
 
-#allButtons {
+/*#allButtons {
     margin-top: -4px;
     margin-bottom: -6px;
     float: right;
-}
+}*/
 
 #buttonItems {
     float: right;
@@ -244,7 +267,9 @@ a:link, a:visited {
     padding-bottom: 2px;
     max-width: 99%
 }
-
+/*.resultContent a:link{
+   color: #408C8C; 
+}*/
 
 .line {
     margin-bottom: 5px;
@@ -271,31 +296,45 @@ a:link, a:visited {
 }
 
 .proteinImg {
-    float: left;
-    width:110px;
+    /*    float: left;
+        width:110px;*/
     /*height:90px;*/
     text-align: center;    
-    margin-right: 5px;
+    /*    margin-right: 5px;*/
     /*border: none;*/
     /*border: 1px solid #ddd;*/
     display: table-cell;
 }
+a.noLine {
+
+    border-bottom-style: none;
+
+} 
+/* css to end underline in auto complete terms*/
+
+a.ui-corner-all{
+    border-bottom-style: none; 
+}
+
+
 
 .proteinImg a{
     color: white;
     text-decoration: none;
+    border-bottom-style: none; 
 }
 
 .imgFooter {
     font-size: smaller;
+    text-align: center;
 }
 
 .desc {
-    float: left;
+    /*    float: left;*/
     text-align: left;
     /*for smaller resolution
     width: 55%;*/
-    width: 65%;
+    /*    width: 65%;*/
     /*border: 1px solid #ddd;*/
     display: table-cell;
 }
@@ -393,34 +432,317 @@ a.popup span {display:none; }
 a.popup:hover span {
     display:block;
     position:absolute;
-/*    		top:35px; left:15px;*/
+    /*    		top:35px; left:15px;*/
     top:15px;left:0px;
     width:200px;
     padding:3px;
-/*    		border:1px solid #000000;*/
+    /*    		border:1px solid #000000;*/
     background-color:#A1C7C7; color:#000000;
     font-style:italic;
     font-weight: bolder;
 
 }
+#filtersForm{
+    padding: 0 0px;
+}
 
-a.scienceName span{
+.scienceName span{
     font-style: italic;
-   color:#000000;
-     font-weight:lighter;
+    color:#000000;
+    font-weight:lighter;
 }
 .sublevel1 .filterSearchBox{
     width:96%;
-        display: inline-block;
-/*        border-color: #A1C7C7;*/
-   padding: 2px 3px;
+    display: inline-block;
+    /*        border-color: #A1C7C7;*/
+/*    padding: 2px 3px;
     margin: 2px auto 5px auto;
     border-radius: 10px;
     -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
+    -webkit-border-radius: 10px;*/
 }
 
 .hrLine{
     border-style: ridge;
-    
+
 }
+
+span.scienceName{
+    color: #207a7a; 
+}
+span.compoundName{
+    color: #207a7a;  
+}
+.diseaseName{
+    color: #207a7a;
+}
+span.resultPageDisease{
+   color:  #207a7a; 
+}
+a.formSubmit{
+    color:  #207a7a; 
+}
+
+/*for sequence search*/
+
+a.formSubmit {
+
+    cursor: pointer;
+
+}
+
+#search-tabs {
+
+    margin-bottom: 0ex;
+
+}
+
+.searchTab {	
+    padding: 0.5ex 2em;
+    margin: 0ex 1em;	
+    border-top-left-radius: 2ex;	
+    border-top-right-radius: 2ex;
+    display: inline;
+
+    color: #fff;
+
+    background-color: #808080;
+
+    cursor: pointer;
+
+}
+
+.selected.searchTab {
+
+    color: #000;
+
+    background-color: #dedede;
+
+    cursor: default;
+
+}
+
+/* Search scores (BLAST) */
+	
+.score {
+	
+ background-color: #cdf;
+	
+ padding: 0ex 0.1em;
+	
+ border: thin solid #bbb;
+	
+}
+	
+.score.S1 {
+	
+  background-color: #bcf;
+	
+}
+	
+.score.S2 {
+	
+ background-color: #bdc;
+	
+}
+	
+.score.S3 {
+	
+ background-color: #ada;
+	
+}
+	
+.score.S4 {
+	
+  background-color: #ce6;
+	
+}
+	
+.score.S5 {
+	
+  background-color: #ee2;
+	
+}
+	
+.score.S6 {
+	
+  background-color: #fd4;
+	
+}
+	
+.score.S7 {
+	
+  background-color: #fc6;
+	
+}
+	
+.score.S8 {
+	
+  background-color: #fb7;
+	
+}
+	
+.score.S9 {
+	
+  background-color: #faa;
+	
+}
+	
+.score.S10 {
+	
+  background-color: #f88;
+	
+}
+/*see auto complete code in js*/
+.ui-menu-item-highlight{
+    color: #207a7a;
+    font-weight: bolder;
+}
+
+/*for home page EP resources box*/
+
+.shortcuts>div ul.split { 
+	float: left; 
+	width: 40%;
+	margin: 0 1%;
+	
+	list-style: none;
+	padding: 9px 0 9px 9px;	/* Add some breathing space */
+}
+
+.shortcuts>div ul li a { display: block; border-bottom-color: #ccc; }
+
+
+/*css for about us page*/
+
+/*#intro h2,
+.shortcuts h3,
+#outro h3,
+div.highlight h3 { color: #333; }*/
+
+/*  Intro, Outro
+	These are arguably special kinds of highlight areas.
+	They are usually only featured on the main pages of top-level parts of the website.
+*/
+/*#intro,
+#outro {
+	background-color: #ededed;
+	display: block;
+	padding-bottom: 9px;
+	
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+
+#intro h2 {
+	line-height: 2;
+	margin-bottom: 0;
+	margin-top: 9px;
+}*/
+
+/* Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/* http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack */
+
+.clearfix:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+.clearfix {
+	display: block;
+}
+
+/**
+ * @file
+ * Caption filter default styling for displaying image captions.
+ */
+
+div.caption-inner {
+  border: 1px solid #CCC;
+  padding: 4px;
+  background: #F3F3F3;
+  font-size: 0.857em; /* assuming you have a base font size of 14px, this is 12px */
+  text-align: center;
+}
+
+div.caption p {
+  margin: .25em 0;
+}
+
+div.caption img,
+div.caption object {
+  margin-bottom: 5px;
+  display: block;
+}
+
+/** aligned captions **/
+div.caption-left {
+  float: left;
+  margin: 10px 10px 10px 0;
+}
+
+div.caption-right {
+  float: right;
+  margin: 10px 0 10px 10px;
+}
+
+div.caption-center {
+  display: block;
+  text-align: center;
+}
+
+div.caption-center .caption-inner {
+  display: inline-block;
+}
+
+
+/*see example sequence search in advance search page*/
+
+/*pre.commentsbox {
+	font-size: 9pt;
+	font-weight: bold;
+	color: #000000;
+
+	padding: 12px;
+	background-color: #edf5ea;
+        background-color: #0C4452;
+	border: 1px solid #d9dadc;
+	margin: 5px 0;
+	display: block;
+	overflow: auto;
+}*/
+
+/*pre {
+	display: block;
+}*/
+

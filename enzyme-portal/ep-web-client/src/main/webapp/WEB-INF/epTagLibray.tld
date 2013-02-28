@@ -21,11 +21,25 @@
      </listener>
    -->
    
- 
-    
+   
        <function>
         <name>contains</name>
         <function-class>uk.ac.ebi.ep.web.Functions</function-class>
         <function-signature>boolean contains(java.util.List, java.lang.Object)</function-signature>
+    </function>
+      <function>
+        <name>alphaOmegaIsNotNull</name>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>boolean alphaOmegaIsNotNull(java.lang.Object, java.lang.Object)</function-signature>
+    </function>
+      <function>
+        <name>omegaIsNull</name>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>boolean omegaIsNull(java.lang.Object, java.lang.Object)</function-signature>
+    </function>
+        <function>
+        <name>lastInList</name>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>boolean lastInList(java.util.List, java.lang.Object)</function-signature>
     </function>
 </taglib>

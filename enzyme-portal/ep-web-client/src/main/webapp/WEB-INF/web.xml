@@ -49,7 +49,7 @@
         <filter-name>HealthFilter</filter-name>
         <url-pattern>/noaccesslog/*</url-pattern>
     </filter-mapping>
-    <resource-ref>
+     <resource-ref>
         <description>Oracle Datasource for enzymePortal</description>
         <res-ref-name>jdbc/ep/mm</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>

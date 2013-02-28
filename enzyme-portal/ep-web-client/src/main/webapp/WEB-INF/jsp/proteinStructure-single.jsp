@@ -11,8 +11,8 @@
                 in PDBe</a>
         </div>
         <div class="image">
-            <a rel="external" title="Click for an interactive viewer"
-               href="${proteinStructure.image.href}"><img
+                        <a rel="external" title="Click for an interactive viewer" 
+                           href="${proteinStructure.image.href}"><img
                     alt="${proteinStructure.image.caption}"
                     src="${proteinStructure.image.source}"/><span
                     class="caption">${proteinStructure.image.caption}</span></a>
