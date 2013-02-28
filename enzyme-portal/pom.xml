@@ -135,7 +135,7 @@
     </distributionManagement>
     <issueManagement>
     	<system>GitHub</system>
-    	<url>https://github.com/ebi-cheminf/enzymeportal/issues</url>
+    	<url>https://github.com/ebi-cheminf/enzymeportal/issues/</url>
     </issueManagement>
     <scm>
         <connection>
