@@ -69,7 +69,7 @@
             <artifactId>ncbi-blast-client</artifactId>
             <version>1.0.2</version>
         </dependency>
-              
+   
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-lucene</artifactId>
@@ -204,7 +204,6 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
@@ -215,7 +214,6 @@
                 </configuration>
             </plugin>
     	</plugins>
-
     </build>
 </project>
 
