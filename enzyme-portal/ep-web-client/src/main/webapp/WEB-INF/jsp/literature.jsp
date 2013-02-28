@@ -79,7 +79,7 @@
 	<div class="${citationClass}">
 		<div class="pub_title" style="font-weight: bold;">
 			<a href="http://europepmc.org/abstract/${cit.source}/${cit.id}"
-                title="View ${cit.source} ${cit.id} in CiteXplore"
+                title="View ${cit.source} ${cit.id} in Europe PubMed Central"
                 target="_blank" class="extLink ${cit.source}"
                 >${cit.title}</a>
 	    </div>

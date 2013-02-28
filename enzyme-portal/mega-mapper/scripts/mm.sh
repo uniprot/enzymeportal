@@ -12,7 +12,8 @@ SWISSPROT=$UNIPROT_DATA/uniprot_sprot.xml
 TREMBL=$UNIPROT_DATA/uniprot_trembl.xml
 CHEBI=$EBINOCLE_DATA/chebi/latest/chebi_prod.xml
 CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target.xml
-UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
+#UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
+UNIMED=http://research.isb-sib.ch/unimed/SP_MeSH.tab
 
 EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
 
@@ -28,12 +29,12 @@ echo -e "\n*************************************************************\n"
 
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $SWISSPROT
+	-dbConfig ep-mm-db-$1 -file $SWISSPROT
 echo "Finished Swiss-Prot import - $(date)"
 
 #echo "Starting TrEMBL import - $(date)"
 #java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
-#	-dbConfig ep-mm-db-$1 -xmlFile $TREMBL
+#	-dbConfig ep-mm-db-$1 -file $TREMBL
 #echo "Finished TrEMBL import - $(date)"
 
 echo "Starting ChEBI import - $(date)"
@@ -42,12 +43,12 @@ echo "Finished ChEBI import - $(date)"
 
 echo "Starting ChEMBL import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $CHEMBL_TARGET
+	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
 echo "Finished ChEMBL import - $(date)"
 
 echo "Starting UniMed import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $UNIMED
+	-dbConfig ep-mm-db-$1 -file $UNIMED
 echo "Finished UniMed import - $(date)"
 
 if [ "$1" = "ezprel" ]

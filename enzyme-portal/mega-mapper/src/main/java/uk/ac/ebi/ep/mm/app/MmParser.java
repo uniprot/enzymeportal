@@ -10,11 +10,11 @@ import uk.ac.ebi.ep.mm.MegaMapper;
 public interface MmParser {
 
 	/**
-	 * Parses a XML file and extracts interesting data into a mega-map.
-	 * @param xmlFile an XML file.
+	 * Parses a file and extracts interesting data into a mega-map.
+	 * @param file a file (XML, HTML, tab).
 	 * @throws Exception 
 	 */
-	public void parse(String xmlFile) throws Exception;
+	public void parse(String file) throws Exception;
 
 	/**
 	 * Sets a writer to make the mega-map persistent.

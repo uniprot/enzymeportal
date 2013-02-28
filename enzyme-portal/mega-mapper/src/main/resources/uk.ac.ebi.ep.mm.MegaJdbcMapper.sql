@@ -97,7 +97,7 @@ select mmx.* from mm_xref mmx, mm_entry mme1, mm_entry mme2 /*\
 --constraint.equals:\
 = ?
 --constraint.like:\
-LIKE ?
+LIKE ? ESCAPE '\\'
 --constraint.db:\
 AND mme1.db_name = ?
 --constraint.relationship:\

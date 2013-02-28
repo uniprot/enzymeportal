@@ -412,104 +412,105 @@ public class MegaJdbcMapper implements MegaMapper {
         return xrefs;
     }
 
-    public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
-            Constraint constraint, Relationship rel) {
-        Collection<XRef> xrefs = null;
-        String idConst = getSqlConstraint(constraint);
-        idFragment = getIdParameter(constraint, idFragment);
-        String dbConst = db == null ? "" : "--constraint.db";
-        String relConst = rel == null ? "" : "--constraint.relationship";
-        try {
-            PreparedStatement ps = sqlLoader.getPreparedStatement(
-                    "--xrefs.by.id.fragment", idConst, dbConst, relConst);
-            int n = 1;
-            ps.setString(n++, idFragment);
-            if (db != null) {
-                ps.setString(n++, db.name());
-            }
-            ps.setString(n++, idFragment);
-            if (db != null) {
-                ps.setString(n++, db.name());
-            }
-            if (rel != null) {
-                ps.setString(n++, rel.name());
-            }
-            xrefs = buildXref(ps.executeQuery());
-        } catch (SQLException e) {
-            LOGGER.error(db + " - " + idFragment + " - " + constraint
-                    + " - " + rel, e);
-        }
-        return xrefs;
-    }
 
-    public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
-            Constraint constraint, MmDatabase... xDbs) {
-        Collection<XRef> xrefs = null;
-        String idConst = getSqlConstraint(constraint);
-        idFragment = getIdParameter(constraint, idFragment);
-        String dbConst = db == null ? "" : "--constraint.db";
-        String inClause = dbArrayForQuery(xDbs);
-        try {
-            PreparedStatement ps = sqlLoader.getPreparedStatement(
-                    "--xrefs.by.id.fragment.and.db",
-                    idConst, dbConst, inClause);
-            int n = 1;
-            ps.setString(n++, idFragment);
-            if (db != null) {
-                ps.setString(n++, db.name());
-            }
-            xrefs = buildXref(ps.executeQuery());
-        } catch (SQLException e) {
-            LOGGER.error(db + " - " + idFragment + " - " + constraint
-                    + " - " + xDbs, e);
-        }
-        return xrefs;
-    }
 
     /**
-     * Converts an enumerated value into a SQLLoader constraint key.
-     *
-     * @param constraint the constraint to apply.
-     * @return the key to be used by the SQLLoader.
+=======
+    /**
+     * {@inheritDoc}
+     * <br>Please note that this implementation uses backslash (\) as escape
+     * character for any underscore (_) present in the idFragment, so that it
+     * is taken as part of the ID instead of an oracle wildcard.
      */
-    private String getSqlConstraint(Constraint constraint) {
-        switch (constraint) {
-            case EQUALS:
-                return "--constraint.equals";
-            case STARTS_WITH:
-            case CONTAINS:
-            case ENDS_WITH:
-                return "--constraint.like";
-            default:
-                throw new IllegalArgumentException("constraint not supported: "
-                        + constraint);
-        }
-    }
+	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+			Constraint constraint, Relationship rel) {
+		Collection<XRef> xrefs = null;
+		String idConst = getSqlConstraint(constraint);
+		idFragment = getIdParameter(constraint, idFragment);
+		String dbConst = db == null? "" : "--constraint.db";
+		String relConst = rel == null? "" : "--constraint.relationship";
+		try {
+			PreparedStatement ps = sqlLoader.getPreparedStatement(
+					"--xrefs.by.id.fragment", idConst, dbConst, relConst);
+			int n = 1;
+			ps.setString(n++, idFragment);
+			if (db != null) ps.setString(n++, db.name());
+			ps.setString(n++, idFragment);
+			if (db != null) ps.setString(n++, db.name());
+			if (rel != null) ps.setString(n++, rel.name());
+            xrefs = buildXref(ps.executeQuery());
+		} catch (SQLException e) {
+			LOGGER.error(db + " - " + idFragment + " - " + constraint
+					+ " - " + rel, e);
+		}
+		return xrefs;
+	}
 
-    /**
-     * Builds the appropriate oracle query string for the constraint.
-     *
-     * @param constraint a constraint.
-     * @param idFragment a fragment of the string to match.
-     * @return a string with the wildcard % in the appropriate place(s).
-     */
-    private String getIdParameter(Constraint constraint, String idFragment) {
-        switch (constraint) {
-            case EQUALS:
-                return idFragment;
-            case STARTS_WITH:
-                return idFragment + "%";
-            case CONTAINS:
-                return "%" + idFragment + "%";
-            case ENDS_WITH:
-                return "%" + idFragment;
-            default:
-                throw new IllegalArgumentException("constraint not supported: "
-                        + constraint);
-        }
-    }
+	public Collection<XRef> getXrefs(MmDatabase db, String idFragment,
+			Constraint constraint, MmDatabase... xDbs) {
+		Collection<XRef> xrefs = null;
+		String idConst = getSqlConstraint(constraint);
+		idFragment = getIdParameter(constraint, idFragment);
+		String dbConst = db == null? "" : "--constraint.db";
+		String inClause = dbArrayForQuery(xDbs);
+		try {
+			PreparedStatement ps = sqlLoader.getPreparedStatement(
+					"--xrefs.by.id.fragment.and.db",
+					idConst, dbConst, inClause);
+			int n = 1;
+			ps.setString(n++, idFragment);
+			if (db != null) ps.setString(n++, db.name());
+			xrefs = buildXref(ps.executeQuery());
+		} catch (SQLException e) {
+			LOGGER.error(db + " - " + idFragment + " - " + constraint
+					+ " - " + xDbs, e);
+		}
+		return xrefs;
+	}
+	
+	/**
+	 * Converts an enumerated value into a SQLLoader constraint key.
+	 * @param constraint the constraint to apply.
+	 * @return the key to be used by the SQLLoader.
+	 */
+	private String getSqlConstraint(Constraint constraint){
+		switch (constraint) {
+		case EQUALS:
+			return "--constraint.equals";
+		case STARTS_WITH:
+		case CONTAINS:
+		case ENDS_WITH:
+			return "--constraint.like";
+		default:
+			throw new IllegalArgumentException("constraint not supported: "
+					+ constraint);
+		}
+	}
+	
+	/**
+	 * Builds the appropriate oracle query string for the constraint.
+	 * @param constraint a constraint.
+	 * @param idFragment a fragment of the string to match.
+	 * @return a string with the wildcard % in the appropriate place(s).
+	 */
+	private String getIdParameter(Constraint constraint, String idFragment){
+		switch (constraint) {
+		case EQUALS:
+			return idFragment;
+		case STARTS_WITH:
+			return idFragment.replace("_", "\\_") + "%";
+		case CONTAINS:
+			return "%" + idFragment.replace("_", "\\_") + "%";
+		case ENDS_WITH:
+			return "%" + idFragment.replace("_", "\\_");
+		default:
+			throw new IllegalArgumentException("constraint not supported: "
+					+ constraint);
+		}
+	}
 
-    /**
+	/**
+>>>>>>> 5a58a8dbc73ad57eac346d1d217ac661f41fc064
      * retrieves a List of XRef with database name as ChEMBL.
      *
      * @param db database where the accession is found
@@ -787,14 +788,14 @@ public class MegaJdbcMapper implements MegaMapper {
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         String[] acc = accessions.split("_");
-        String accession = acc[0].concat("_%");
+        String accession = acc[0].concat("\\_%");
 
         try {
             if (diseasesEntryMap == null) {
                 diseasesEntryMap = new HashMap<String, String>();
             }
 
-            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? "
+            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? escape '\\' "
                     + "and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or "
                     + "(e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name is not null ";
 
@@ -841,7 +842,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
         Map<String, String> compoundEntryMap = null;
         String[] acc = accessions.split("_");
-        String accession = acc[0].concat("_%");
+        String accession = acc[0].concat("\\_%");
 
 
         PreparedStatement ps = null;
@@ -881,24 +882,24 @@ public class MegaJdbcMapper implements MegaMapper {
 //            
 
 
-            String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
-                    + " where e1.db_name = ? and e1.entry_id like ? and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
-                    + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name not in (" + queryClauseBuilder.toString() + ')';
+                String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1, mm_xref xr, mm_entry e2"
+                        + " where e1.db_name = ? and e1.entry_id like ? escape '\\' and ((e1.id = xr.from_entry and xr.to_entry = e2.id) "
+                        + "or (e1.id = xr.to_entry and xr.from_entry = e2.id))and e2.db_name in (?,?) and e2.entry_name is not null and e2.entry_name not in (" + queryClauseBuilder.toString() + ')';
 
-            if (con != null) {
-                ps = con.prepareStatement(query);
-
-                ps.setString(2, accession);
-                ps.setString(1, db.name());
-                ps.setString(3, xDbs[0].name());
-                ps.setString(4, xDbs[1].name());
-                //ps.setString(5, ILLEGAL_COMPOUND);
-
-
-                for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
-                    ps.setString(i, ILLEGAL_COMPOUND[i]);
-
-                }
+                if (con != null) {
+                    ps = con.prepareStatement(query);
+                   
+                    ps.setString(2, accession);
+                    ps.setString(1, db.name());
+                    ps.setString(3, xDbs[0].name());
+                    ps.setString(4, xDbs[1].name());
+                    //ps.setString(5, ILLEGAL_COMPOUND);
+                   
+ 
+                    for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
+                        ps.setString(i, ILLEGAL_COMPOUND[i]);
+                         
+                    }
 
 
 

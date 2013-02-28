@@ -731,79 +731,80 @@
                                        value="${filterSp.scientificname}" />
                             </c:forEach>
 
-                        </form:form>
-                        <div class="clear"></div>
-                        <div class="line"></div>
-                        <div class="resultContent grid_24">
-                            <c:set var="resultItemId" value="${0}"/>
-                            <c:forEach items="${summaryEntries}"
-                                       begin="${pagination.firstResult}"
-                                       end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
+                        </form:form>                        
+                            <div class="clear"></div>
+                            <div class="line"></div>
+                            <div class="resultContent">
+                                <c:set var="resultItemId" value="${0}"/>
+                                <c:forEach items="${summaryEntries}"
+                                           begin="${pagination.firstResult}"
+                                           end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
 
-                                <%@include file="util/prioritiseSpecies.jsp" %>
+                                    <%@include file="util/prioritiseSpecies.jsp" %>
 
-                                <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
+                                    <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
-                                <div class="resultItem">
+                                    <div class="resultItem">
 
-                                    <c:choose>
-                                        <c:when test="${empty enzyme.relatedspecies}">
+                                        <c:choose>
+                                            <c:when test="${empty enzyme.relatedspecies}">
 
-                                            <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a> 
+                                                <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a> 
 
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="grid_3 ">
-                                                <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
-                                                <c:set var="imgFooter" value=""/>
-                                                <c:if test="${empty imgFile}">
-                                                    <c:forEach var="relSp" items="${enzyme.relatedspecies}">
-                                                        <c:if test="${empty imgFile and not empty relSp.pdbeaccession}">
-                                                            <c:set var="imgFile" value="${relSp.pdbeaccession[0]}"/>
-                                                            <c:set var="imgFooter">
-                                                                <spring:message code="label.entry.proteinStructure.other.species"/>
-                                                                ${empty relSp.species.commonname?
-                                                                  relSp.species.scientificname : relSp.species.commonname}
-                                                            </c:set>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </c:if>
-                                                <c:choose>
-                                                    <c:when test="${empty imgFile}">
-                                                        <div style="position: absolute; width: 110px; height: 90px;
-                                                             background-color: #fff;text-align: center;
-                                                             opacity: 0.6; vertical-align: middle;
-                                                             margin-top: 0px; padding: 0px;">No structure available</div>
-                                                        <img src="resources/images/noStructure-light.png"
-                                                             width="110" height="90" style="border-radius: 10px;"
-                                                             alt="No structure available"
-                                                             title="No structure available"/>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <c:set var="imgLink"
-                                                               value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${imgFile}_cbc600.png"/>
-                                                        <a class="noLine" style="border-bottom-style: none" target="blank" href="${imgLink}">
-                                                            <img src="${imgLink}" width="110" height="90"
-                                                                 alt="PDB ${imgFile}" onerror="noImage(this);"/>
-                                                        </a>
-                                                        <div class="imgFooter">${imgFooter}</div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <c:if test='${imgFile != "" && imgFile != null}'>
-                                                </c:if>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <div class="grid_21 desc">
-                                        <c:if test='${not empty enzyme.name }'>
-                                            <a href="search/${primAcc}/enzyme">
-                                                <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
-                                                <c:out value="${showName}"/>
-                                               <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
-                                                [${empty theSpecies.species.commonname?
-                                                   theSpecies.species.scientificname :
-                                                   theSpecies.species.commonname}]
-                                            </a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="proteinImg">
+                                                    <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
+                                                    <c:set var="imgFooter" value=""/>
+                                                    <c:if test="${empty imgFile}">
+                                                        <c:forEach var="relSp" items="${enzyme.relatedspecies}">
+                                                            <c:if test="${empty imgFile and not empty relSp.pdbeaccession}">
+                                                                <c:set var="imgFile" value="${relSp.pdbeaccession[0]}"/>
+                                                                <c:set var="imgFooter">
+                                                                    <spring:message code="label.entry.proteinStructure.other.species"/>
+                                                                    ${empty relSp.species.commonname?
+                                                                      relSp.species.scientificname : relSp.species.commonname}
+                                                                </c:set>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                    <c:choose>
+                                                        <c:when test="${empty imgFile}">
+                                                            <div style="position: absolute; width: 110px; height: 90px;
+                                                                 background-color: #fff;
+                                                                 opacity: 0.6; vertical-align: middle;
+                                                                 margin-top: 0px; padding: 0px;">No structure available</div>
+                                                            <img src="resources/images/noStructure-light-small.png"
+                                                                 width="120" height="90" style="border-radius: 10px;"
+                                                                 alt="No structure available"
+                                                                 title="No structure available"/>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:set var="imgLink"
+                                                                   value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
+                                                            <a target="blank" href="${imgLink}">
+                                                                <img src="${imgLink}" width="120" height="90"
+                                                                     alt="PDB ${imgFile}" onerror="noImage(this);"/>
+                                                            </a>
+                                                            <div class="imgFooter">${imgFooter}</div>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <c:if test='${imgFile != "" && imgFile != null}'>
+                                                    </c:if>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <div class="desc">
+                                            <c:if test='${not empty enzyme.name }'>
+                                                <a href="search/${primAcc}/enzyme">
+                                                    <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
+                                                    <c:out value="${showName}"/>
+                                                   <!-- [<c:out value="${enzyme.uniprotid}"/>]-->
+                                                    [${empty theSpecies.species.commonname?
+                                                       theSpecies.species.scientificname :
+                                                       theSpecies.species.commonname}]
+                                                </a>
+
 
                                         </c:if>
 

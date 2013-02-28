@@ -10,7 +10,35 @@
 </properties>
 
 <body>
-	<release version="1.0.9" date="(Not yet released)">
+	<release version="1.0.10" date="" description="Bug fixes">
+		<action dev="rafalcan" type="fix">
+			Fixed query in MegaJdbcMapper.getCompounds and
+			MegaJdbcMapper.getDisease so that underscores are taken as part of
+			the UniProt ID prefix and not as oracle wildcards.
+		</action>
+		<action dev="rafalcan" type="fix">
+			PDBe entries with no names (obsolete or redirected) are not added
+			to the mega-map any longer.
+			<fixes issue="144"/>
+		</action>
+		<action dev="rafalcan" type="add">
+			Added implementation to parse tab file from UniMed, which will
+			replace the original HTML.
+		</action>
+	</release>
+	<release version="1.0.9" date="2013-02-04"
+		description="Bug fixes; updates.">
+		<action dev="rafalcan" type="fix">
+			Fixed JDBC query so that underscores in UniProt prefixes are not
+			taken as wildcards by oracle.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Fixed scope of oracle dependency.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Last compounds retrieved from ChEBI are not left out of the
+			mega-map (CompoundsDAOImpl).
+		</action>
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
 			biobabel-core and junit.

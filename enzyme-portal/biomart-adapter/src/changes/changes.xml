@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-	<release version="1.0.3" date="(Not yet released)">
+	<release version="1.0.3" date="2013-02-05">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub) and
 			junit.

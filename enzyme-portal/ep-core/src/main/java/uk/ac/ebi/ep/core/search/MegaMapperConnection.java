@@ -22,7 +22,7 @@ import uk.ac.ebi.ep.mm.MegaMapper;
 public final class MegaMapperConnection {
 
     private static final Logger LOGGER = Logger.getLogger(MegaMapperConnection.class);
-    // public static final MegaMapperConnection INSTANCE = new MegaMapperConnection();
+
     private Context context;
     /** The connection used by the mega-mapper. */
     private Connection connection = null;
@@ -93,6 +93,7 @@ public final class MegaMapperConnection {
             } catch (IOException e) {
                 LOGGER.error("Unable to close mega-mapper", e);
             }
+            megaMapper = null;
         }
         if (connection != null) {
             try {
@@ -102,13 +103,8 @@ public final class MegaMapperConnection {
             } catch (SQLException e) {
                 LOGGER.error("Unable to close connection", e);
             }
+            connection = null;
         }
     }
-//    @Override
-//    public void finalize() throws Throwable {
-//        super.finalize();
-//        closeMegaMapperConnection();
-//        
-//
-//    }
-    }
+
+}
