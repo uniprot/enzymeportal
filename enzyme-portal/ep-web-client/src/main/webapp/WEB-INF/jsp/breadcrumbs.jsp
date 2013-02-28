@@ -12,7 +12,7 @@
     <input type="hidden" name="searchparams.start" value="0" />
 </form>
 
-<script type="text/javascript">
+<!--<script type="text/javascript">
     /**
      * Sends the form associated to breadcrumbs with the proper values.
      * @param search The keyword/sequence search
@@ -27,7 +27,7 @@
         }
         document.forms['breadcrumbs-form'].submit();
     }
-</script>
+</script>-->
 
 <nav id="breadcrumb">
     <p>
@@ -36,12 +36,13 @@
         <c:if test="${not empty history}">
             <c:forEach var="hItem" items="${history}">
                 &gt;
-                <c:choose>
+                <c:choose>                                      
                     <c:when test="${fn:startsWith(hItem, 'searchparams.text=')}">
                         <c:if test="${not Fn:lastInList(history, hItem)}">
-                            <a onclick="submitForm('KEYWORD', '${fn:substringAfter(hItem, '=')}')"
-                               >Search for
-                                <i>"${fn:substringAfter(hItem, '=')}"</i></a>
+                      
+                                
+                                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&${hItem}&searchparams.start=0&searchparams.previoustext=">Search
+							for <i>"${fn:substringAfter(hItem, '=')}"</i></a>
                             </c:if>
 
 
@@ -51,7 +52,7 @@
                     </c:when>
                     <c:when test="${fn:startsWith(hItem, 'searchparams.sequence=')}">
                         <c:if test="${not Fn:lastInList(history, hItem)}">
-                            <a onclick="submitForm('SEQUENCE', '${fn:substringAfter(hItem, '=')}')"
+                             <a href="${pageContext.request.contextPath}/search?searchparams.type=SEQUENCE&${hItem}"
                                >Search for
                                 <i>"${fn:substring(fn:substringAfter(hItem, '='), 0, 18)}${fn:length(hItem) gt 18? '...':''}"</i>
                             </a>

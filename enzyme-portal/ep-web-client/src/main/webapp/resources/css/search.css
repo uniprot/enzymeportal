@@ -446,7 +446,7 @@ a.popup:hover span {
     padding: 0 0px;
 }
 
-a.scienceName span{
+.scienceName span{
     font-style: italic;
     color:#000000;
     font-weight:lighter;
@@ -467,16 +467,16 @@ a.scienceName span{
 
 }
 
-a.scienceName{
+span.scienceName{
     color: #207a7a; 
 }
-a.compoundName{
+span.compoundName{
     color: #207a7a;  
 }
-a.diseaseName{
+.diseaseName{
     color: #207a7a;
 }
-a.resultPageDisease{
+span.resultPageDisease{
    color:  #207a7a; 
 }
 a.formSubmit{

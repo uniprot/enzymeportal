@@ -143,16 +143,7 @@
                     <div class="grid_12 omega">
 
 
-                                   <c:choose>
- 	                  <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
-                   <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
-                 </c:when>
-	
-                 <c:otherwise>
-	                   <c:set var="searchText"
-	                     value="${searchModel.searchparams.text}"/>
-	                 </c:otherwise>
-	               </c:choose>
+ 
                         
                             <%@ include file="frontierSearchBox.jsp" %>
 
@@ -181,7 +172,7 @@
             <div id="content" role="main" class="grid_24 clearfix">
 
                 <!-- Suggested layout containers -->  
-                <section>
+                <section class="grid_24">
                     <div class="grid_12zzz" style="display: table; margin-left: 0em;">
                         <%@ include file="breadcrumbs.jsp" %>
                     </div>

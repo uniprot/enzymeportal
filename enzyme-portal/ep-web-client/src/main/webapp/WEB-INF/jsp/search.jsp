@@ -312,8 +312,7 @@
                     </c:if>
 
                 </section>
-            </div>
-                    <div id="content" role="main" class="grid_24 clearfix">
+
                 <section class="grid_6 alpha" id="search-results">
 
 
@@ -395,13 +394,13 @@
                                                                         <c:choose>
                                                                            
                                                                             <c:when test="${Fn:omegaIsNull(speciesList[i].scientificname, speciesList[i].commonname)}">
-                                                                                <a class="scienceName" style="border-bottom-style:none " >${speciesList[i].scientificname}</a>
+                                                                                <span class="scienceName" style="border-bottom-style:none " >${speciesList[i].scientificname}</span>
                                                                                 <script>
                                                                                     speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");
                                                                                 </script>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <a class="scienceName" style="border-bottom-style:none ">${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></a>
+                                                                                <span class="scienceName" style="border-bottom-style:none ">${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></span>
                                                                                 <script>
            
                                                                                     speciesAutocompleteDataSource.push({label:"${speciesList[i].commonname}",value:"${speciesList[i].scientificname}"});
@@ -519,7 +518,7 @@
                                                                 <div class="filterLine">
                                                                     <div class="text">
                                                                         <xchars:translate>
-                                                                            <a class="compoundName" style="border-bottom-style:none " ><c:out value="${compoundList[i].name}" escapeXml="false"/></a>
+                                                                            <span class="compoundName" style="border-bottom-style:none " ><c:out value="${compoundList[i].name}" escapeXml="false"/></span>
                                                                             <script> compoundsAutoCompleteDataSource.push({label:"${compoundList[i].name} ",value:"${compoundList[i].name}"});</script>
                                                                         </xchars:translate>
                                                                     </div>
@@ -623,7 +622,7 @@
                                                                     </div>
                                                                     <div class="text">
                                                                         <xchars:translate>
-                                                                            <a class="diseaseName" style="border-bottom-style:none "> <c:out value="${diseasesList[i].name}" escapeXml="false"/></a>
+                                                                            <span class="diseaseName" style="border-bottom-style:none "> <c:out value="${diseasesList[i].name}" escapeXml="false"/></span>
                                                                             <script>diseaseAutoCompleteDataSource.push({label:"${diseasesList[i].name} ",value:"${diseasesList[i].name}"});</script>
                                                                         </xchars:translate>
                                                                     </div>                                                  
@@ -872,7 +871,7 @@
                                                 <c:set var="hiddenDis" value=""/> 
                                                 <c:forEach var="i" begin="0" end="${disLimitedDisplay-1}">
                                                     <xchars:translate>
-                                                        <a class="resultPageDisease"  style="border-bottom-style:none" ><span>${enzymeDisease[i].name}</span></a>;
+                                                        <span class="resultPageDisease"  style="border-bottom-style:none" >${enzymeDisease[i].name}</span>;
                                                     </xchars:translate>
 
                                                 </c:forEach> 
@@ -882,7 +881,7 @@
                                                     <span id='dis_${resultItemId}' style="display: none">
                                                         <c:forEach var="i" begin="${disLimitedDisplay}" end="${enzymeDiseaseSize-1}">
                                                             <xchars:translate>
-                                                                <a  class="resultPageDisease" style="border-bottom-style:none"><span>${enzymeDisease[i].name}</span></a>;
+                                                                <span  class="resultPageDisease" style="border-bottom-style:none">${enzymeDisease[i].name}</span>;
                                                             </xchars:translate>
                                                         </c:forEach>
                                                     </span>

@@ -19,7 +19,7 @@
  
    
     
-    <script>
+<!--    <script>
 //function showCard(tabId){
 //	var s = tabId.split('-tab-');
 //	var cardsId = '#' + s[0];
@@ -36,7 +36,7 @@ function submitKeywordForm(text){
 	$('#local-searchbox').val(text);
 	$('#search-keyword-submit').click();
 }
-</script>
+</script>-->
 
 
 
@@ -51,9 +51,9 @@ function submitKeywordForm(text){
 
                                    <form:input id="local-searchbox" name="first" path="searchparams.text" />
 
-						</label>
+						</label>                                                                           
 						<!-- Include some example searchterms - keep them short and few! -->
-                                                <span class="examples">Examples: <a class="formSubmit" onclick="submitKeywordForm('sildenafil')">Sildenafil</a>, <a class="formSubmit" onclick="submitKeywordForm('CFTR')">CFTR</a>, <a class="formSubmit" onclick="submitKeywordForm('REACT_1400.4')">REACT_1400.4</a>, <a class="formSubmit" onclick="submitKeywordForm('Q13423')">Q13423</a></span>
+                                                <span class="examples">Examples:  <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>, <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,  <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>, <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a></span>
 					</div>
 					
 					<div class="right">

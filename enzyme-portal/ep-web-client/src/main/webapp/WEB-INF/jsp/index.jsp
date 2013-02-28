@@ -182,20 +182,23 @@
                                 Enzyme Portal...</a></p>
 <!--                    </div>-->
                     </div>
-                <div style="margin-left: auto; margin-right: auto;
+            <div style="margin-left: auto; margin-right: auto;
                           width: 50%;">
-                <div class="shortcuts"><div class="panel-pane pane-custom pane-8 clearfix" >
+ <h3 class="pane-title">Enzyme Portal Resources</h3>
+                <div class="shortcuts grid_24">
 
-        <h3 class="pane-title">Enzyme Portal Resources</h3>
-        
+               <div class="panel-pane pane-custom pane-8 clearfix" >
+
+<!--        <h3 class="pane-title">Enzyme Portal Resources</h3>-->
+
  
   <div class="containers grid_24">
 <!--      <section class="grid_24">-->
-         <ul id="mycarousel" class="jcarousel-skin-aqua">
+         <ul id="mycarousel" class="jcarousel-skin-aqua grid_24">
             <li>
-               <div>
-                  <img src="resources/images/inc/uniprot_logo.gif" />
-                  <span>
+                <div class="grid_24">
+                    <img class="grid_3 alpha" src="resources/images/inc/uniprot_logo.gif" />
+                    <span class="grid_21 omega">
                      <h4>UniProtKB</h4>
                      <p>The UniProt Knowledgebase (UniProtKB) is the central hub for the collection of functional information on proteins, with accurate, consistent and rich annotation.</p>
                      <p>The UniProt databases are the UniProt Knowledgebase (UniProtKB), the UniProt Reference Clusters (UniRef), and the UniProt Archive (UniParc).</p>
@@ -204,8 +207,8 @@
             </li>
             <li>
                <div>
-                  <img src="resources/images/inc/pdbe_logo.png" />
-                  <span>
+                   <img class="grid_3 alpha" src="resources/images/inc/pdbe_logo.png" />
+                   <span class="grid_21 omega">
                      <h4>PDBe</h4>
                      <p> PDBe is the European resource for the collection, organisation and dissemination of data on biological macromolecular structures. In collaboration with the other worldwide Protein Data Bank (wwPDB) partners - the Research Collaboratory for Structural Bioinformatics (RCSB) and BioMagResBank (BMRB) in the USA and the Protein Data Bank of Japan (PDBj) - we work to collate, maintain and provide access to the global repository of macromolecular structure data.</p> 
 <!--                     <a href="/" title="Link">Click this Link</a>-->
@@ -214,8 +217,8 @@
             </li>
             <li>
                <div>
-                  <img src="resources/images/inc/chembl_logo.png" />
-                  <span>
+                  <img class="grid_3 alpha" src="resources/images/inc/chembl_logo.png" />
+                  <span class="grid_21 omega">
                      <h4>ChEMBL</h4>
                      <p>ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data).</p>
                      <p>The data is abstracted and curated from the primary scientific literature, and cover a significant fraction of the SAR and discovery of modern drugs</p>
@@ -224,8 +227,8 @@
             </li>  
                      <li>
                <div>
-                  <img src="resources/images/inc/ChEBI_logo.gif" />
-                  <span>
+                  <img class="grid_3 alpha" src="resources/images/inc/ChEBI_logo.gif" />
+                  <span class="grid_21 omega">
                      <h4>ChEBI</h4>
                      <p>Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on ?small? chemical compounds. The term ?molecular entity? refers to any constitutionally or isotopically distinct atom, molecule, ion, ion pair, radical, radical ion, complex, conformer, etc., identifiable as a separately distinguishable entity. The molecular entities in question are either products of nature or synthetic products used to intervene in the processes of living organisms.</p>
                   </span>
@@ -233,8 +236,8 @@
             </li> 
                      <li>
                <div>
-                  <img src="resources/images/inc/reactome.png" />
-                  <span>
+                  <img class="grid_3 alpha" src="resources/images/inc/reactome.png" />
+                  <span class="grid_21 omega">
                      <h4>REACTOME</h4>
                      <p>REACTOME is an open-source, open access, manually curated and peer-reviewed pathway database. Pathway annotations are authored by expert biologists, in collaboration with Reactome editorial staff and cross-referenced to many bioinformatics databases. These include NCBI Entrez Gene, Ensembl and UniProt databases, the UCSC and HapMap Genome Browsers, the KEGG Compound and ChEBI small molecule databases, PubMed, and Gene Ontology.</p>
                   </span>
@@ -242,8 +245,8 @@
             </li> 
                <li>
                <div>
-                  <img src="resources/images/inc/no-image.jpeg" />
-                  <span>
+                  <img class="grid_3 alpha" src="resources/images/inc/no-image.jpeg" />
+                  <span class="grid_21 omega">
                      <h4>MACiE</h4>
                      <p>MACiE, which stands for Mechanism, Annotation and Classification in Enzymes, is a collaborative project between the Thornton Group at the European Bioinformatics Institute and the Mitchell Group at the University of St Andrews (initially within the Unilever Centre for Molecular Informatics part of the University of Cambridge). Metal MACiE, a database of catalytic metal ions, with a view to understanding the functions of the roles and activity of catalytic metals in enzymes.</p>
                   </span>
@@ -251,8 +254,8 @@
             </li> 
                           <li>
                <div>
-                  <img src="resources/images/inc/rhea.png" />
-                  <span>
+                  <img class="grid_3 alpha" src="resources/images/inc/rhea.png" />
+                  <span class="grid_21 omega">
                      <h4>Rhea</h4>
                      <p>Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).
 All data in Rhea is freely accessible and available for anyone to use.</p>
@@ -261,8 +264,8 @@ All data in Rhea is freely accessible and available for anyone to use.</p>
             </li> 
               <li>
                <div>
-                  <img src="resources/images/inc/intenz.gif" />
-                  <span>
+                  <img class="grid_3 alpha" src="resources/images/inc/intenz.gif" />
+                  <span class="grid_21 omega">
                      <h4>IntEnz</h4>
                      <p>IntEnz (Integrated relational Enzyme database) is a freely available resource focused on enzyme nomenclature. IntEnz is created in collaboration with the Swiss Institute of Bioinformatics (SIB). This collaboration is responsible for the production of the ENZYME resource. 
 IntEnz contains the recommendations of the Nomenclature Committee of the International Union of Biochemistry and Molecular Biology (NC-IUBMB) on the nomenclature and classification of enzyme-catalysed reactions.</p>
@@ -283,7 +286,7 @@ IntEnz contains the recommendations of the Nomenclature Committee of the Interna
             <a href="#">8</a>
          </div>
     
-      </div>
+<!--      </div>-->
 
 
 

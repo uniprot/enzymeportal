@@ -19,6 +19,28 @@
 img {
     border: none;
 }
+/*overidding frontier css*/
+dt{
+  clear: none;  
+  padding: 0em 0em;
+  font-family: inherit;
+}
+
+th,td{
+border:none;
+}
+td{
+    vertical-align: inherit;
+}
+th{
+    background-color:inherit;
+}
+
+table{
+    border: none;
+}
+
+/*frontier overridding ends*/
 
 .epBox , fieldset {
     border-radius: 8px;
