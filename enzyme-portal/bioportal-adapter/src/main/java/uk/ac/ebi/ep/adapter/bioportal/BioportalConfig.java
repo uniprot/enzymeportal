@@ -1,6 +1,6 @@
 package uk.ac.ebi.ep.adapter.bioportal;
 
-import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalOntology;
 
 /**
  * Configuration object for
@@ -58,8 +58,8 @@ public class BioportalConfig implements BioportalConfigMBean {
 		return searchUrl;
 	}
 
-	public void setSearchUrl(String efoSearchUrl) {
-		this.searchUrl = efoSearchUrl;
+	public void setSearchUrl(String searchUrl) {
+		this.searchUrl = searchUrl;
 	}
 
 	public String getGetUrl() {

@@ -1,20 +1,19 @@
 package uk.ac.ebi.ep.adapter.bioportal;
 
+import java.util.Collection;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
 
-@Ignore
 public class BioportalWsAdapterTest {
 
 	private BioportalWsAdapter bwa;
@@ -30,14 +29,15 @@ public class BioportalWsAdapterTest {
 	}
 
 	@Test
-	public void testGetDiseaseByName() throws BioportalAdapterException {
-		Disease disease = bwa.getDiseaseByName("sarcoidosis");
+	public void testGetDisease() throws BioportalAdapterException {
+		Disease disease = bwa.getDisease("sarcoidosis");
 		assertNotNull(disease);
-		assertEquals("EFO_0000690", disease.getId());
-		assertNotNull(disease.getDescription());
-		assertTrue(disease.getDescription().length() > 0);
+        // Some EFO IDs point now to http://www.orphanet.org/rdfns#pat_id_###
+//		assertEquals("EFO_0000690", disease.getId());
+//		assertNotNull(disease.getDescription());
+//		assertTrue(disease.getDescription().length() > 0);
 		
-		disease = bwa.getDiseaseByName("inflammatory bowel diseases");
+		disease = bwa.getDisease("inflammatory bowel diseases");
 		assertNotNull(disease);
 		assertEquals("EFO_0003767", disease.getId());
 		assertNotNull(disease.getDescription());
@@ -49,7 +49,8 @@ public class BioportalWsAdapterTest {
 		Entity disease = bwa.searchConcept(BioportalOntology.EFO,
 				"sarcoidosis", Disease.class, false);
 		assertNotNull(disease);
-		assertEquals("EFO_0000690", disease.getId());
+        // Some EFO IDs point now to http://www.orphanet.org/rdfns#pat_id_###
+//		assertEquals("EFO_0000690", disease.getId());
 		assertNull(disease.getDescription());
 	}
 	
@@ -58,9 +59,25 @@ public class BioportalWsAdapterTest {
 		Entity disease = bwa.searchConcept(BioportalOntology.EFO,
 				"sarcoidosis", Disease.class, true);
 		assertNotNull(disease);
-		assertEquals("EFO_0000690", disease.getId());
-		assertNotNull(disease.getDescription());
-		assertTrue(disease.getDescription().length() > 0);
+        // Some EFO IDs point now to http://www.orphanet.org/rdfns#pat_id_###
+//		assertEquals("EFO_0000690", disease.getId());
+//		assertNotNull(disease.getDescription());
+//		assertTrue(disease.getDescription().length() > 0);
 	}
+    
+    @Test
+    public void testSearchConcept2() throws Exception {
+        Collection<Entity> diseases = bwa.searchConcept(
+                BioportalOntology.forDiseases(), "Piebaldism",
+                Disease.class, false);
+        assertNotNull(diseases);
+        assertTrue(diseases.size() > 1); // 3 of them from EFO, OMIM and MeSH
+        
+        diseases = bwa.searchConcept(
+                BioportalOntology.forDiseases(), "D016116",
+                Disease.class, false);
+        assertNotNull(diseases);
+        assertFalse(diseases.size() > 1); // only 1 from MeSH
+    }
 
 }
