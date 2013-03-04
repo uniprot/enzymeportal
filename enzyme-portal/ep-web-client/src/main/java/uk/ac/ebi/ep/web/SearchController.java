@@ -516,8 +516,6 @@ public class SearchController {
                     }
                 }
 
-
-
                 // list to hold all selected species both from the specie list and auto-complete
                 Set<String> allSelectedItems = new TreeSet<String>();
 

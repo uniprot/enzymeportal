@@ -344,8 +344,9 @@
                                         <div class="ui-widget grid_12zzz">
 
                                             <input id="specieAT" itemtype="text"   class="filterSearchBox" placeholder="Enter Species to filter" />
-
-                                            <form:checkbox path="searchparams.species" id="_ctempList_selected" value='' type="hidden"></form:checkbox>
+                                            <input id="_ctempList_selected" name="searchparams.species" type="hidden" value=""/>
+                                           
+                                            
 
 
                                             </div> 
@@ -477,7 +478,7 @@
                                         <div class="ui-widget">
 
                                             <input id="compounds_AUTOCOMPLETE" class="filterSearchBox" placeholder="Type a Compound to filter"  />
-                                            <form:checkbox path="searchparams.compounds" id="comptempList" value="" type="hidden" onclick="submit()"></form:checkbox>
+                                            <input name="searchparams.compounds" id="comptempList" value="" type="hidden"/>
                                             </div>     
 
                                     </c:if>
@@ -495,8 +496,8 @@
 
                                             <!--  keep track of checked and displayed items.-->
 
-                                            <c:set var="checkedItems" value="0"/> 
-                                            <c:set var="displayedItems" value="0"/> 
+                                            <c:set var="checkedItems_c" value="0"/> 
+                                            <c:set var="displayedItems_c" value="0"/> 
 
 
                                             <c:forEach var="times" begin="1" end="2" step="1">                                                  
@@ -507,11 +508,11 @@
                                                         <c:if test='${(compoundList[i].selected eq true and (times == 1)) or (compoundList[i].selected eq false and (times == 2))}'>                                                       
 
                                                             <c:if test='${(compoundList[i].selected eq true and (times == 1))}'>
-                                                                <c:set var="checkedItems" value="${checkedItems + 1}"/>
+                                                                <c:set var="checkedItems_c" value="${checkedItems_c + 1}"/>
                                                             </c:if> 
 
 
-                                                            <c:if test='${displayedItems == limitedDisplay}'>
+                                                            <c:if test='${displayedItems_c == limitedDisplay}'>
                                                                 <div id="compound_0" style="display: none">
                                                                 </c:if> 
 
@@ -528,14 +529,14 @@
                                                                     <div class="clear"></div>
                                                                 </div>
 
-                                                                <c:set var="displayedItems" value="${displayedItems + 1}"/>
+                                                                <c:set var="displayedItems_c" value="${displayedItems_c + 1}"/>
                                                             </c:if>
 
                                                         </c:if>
 
 
                                                     </c:forEach>
-                                                    <c:if test='${checkedItems gt 0 and checkedItems < compoundListSize}'><hr class="hrLine" /></c:if>
+                                                    <c:if test='${checkedItems_c gt 0 and checkedItems_c < compoundListSize}'><hr class="hrLine" /></c:if>
 
 
                                                 </c:forEach> 
@@ -544,7 +545,7 @@
 
                                                 <c:set var="compoundMoreSize" value="${compoundListSize - limitedDisplay}"/>
 
-                                                <c:if test='${displayedItems >= limitedDisplay }'>
+                                                <c:if test='${displayedItems_c >= limitedDisplay }'>
 
                                                 </div>  
                                                 <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
@@ -577,7 +578,7 @@
 
 
                                             <input id="diseases_AUTOCOMPLETE" class="filterSearchBox"  placeholder="Type a Disease to filter" />
-                                            <form:checkbox path="searchparams.diseases" id="DtempList" value="" type="hidden" onclick="submit()"></form:checkbox>
+                                            <input id="_DtempList_selected" name="searchparams.diseases" type="hidden" value="" />
                                             </div>                                   
 
                                     </c:if>                                
@@ -655,7 +656,7 @@
                                             <c:if test="${diseasesListSize gt 12}">
                                                 <!--    then add auto complete-->
                                                 <script>
-                                                    ResultAutoComplete('diseases_AUTOCOMPLETE', diseaseAutoCompleteDataSource,'filtersForm','DtempList')
+                                                    ResultAutoComplete('diseases_AUTOCOMPLETE', diseaseAutoCompleteDataSource,'filtersForm','_DtempList_selected')
                                                 </script>
 
                                             </c:if>
@@ -782,7 +783,7 @@
                                                         <c:otherwise>
                                                             <c:set var="imgLink"
                                                                    value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
-                                                            <a target="blank" href="${imgLink}">
+                                                            <a class="noLine" style="border-bottom-style: none" target="blank" href="${imgLink}">
                                                                 <img src="${imgLink}" width="120" height="90"
                                                                      alt="PDB ${imgFile}" onerror="noImage(this);"/>
                                                             </a>
