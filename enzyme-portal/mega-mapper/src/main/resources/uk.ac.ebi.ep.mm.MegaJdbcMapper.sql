@@ -70,10 +70,10 @@ SELECT mmx.* FROM mm_accession mma, mm_xref mmx, mm_entry mme \
 		AND mmx.relationship = ?
 
 --xrefs.by.ChEMBL:\
-SELECT mmx.* FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref mmx \
+SELECT mme2.* FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref mmx \ 
 		WHERE mma.accession = ? AND mma.id = mme1.id AND mme1.db_name = ? \
-		AND ((mma.id = mmx.from_entry AND mmx.to_entry = mme2.id AND mme2.db_name IN ({0})) \
-		OR (mma.id = mmx.to_entry AND mmx.from_entry = mme2.id AND mme2.db_name IN ({0}))) and rownum <= 5
+AND ((mme1.id = mmx.from_entry AND mmx.to_entry = mme2.id AND mme2.db_name IN ({0}) \
+and mme2.entry_name is not null)) and rownum <= 5 order by mme2.entry_name asc
 
 --xrefs.by.accession.total:\
 SELECT COUNT(*)as rowcount FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref mmx \
