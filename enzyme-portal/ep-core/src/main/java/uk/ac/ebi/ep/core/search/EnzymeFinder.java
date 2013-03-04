@@ -397,7 +397,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 
 
-        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL, MmDatabase.ChEBI);
+        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEBI, MmDatabase.ChEBI);
 
         if (xRefList != null) {
             for (Map.Entry<String, String> ref : xRefList.entrySet()) {
@@ -488,12 +488,12 @@ public class EnzymeFinder implements IEnzymeFinder {
         };
 
         if (!xchars.validate(data)) {
-            LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!");
+            LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
 
         }
 
 
-        return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
+        return xchars.xml2Display(data, EncodingType.COMPOSED);
     }
 
     /**
