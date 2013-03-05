@@ -14,6 +14,8 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util-2.5.xsd">
     <context:component-scan base-package="uk.ac.ebi.ep.web" />
+    <context:property-placeholder
+            location="classpath:/ep-web-client.properties"/>
     <!--Enable Spring annotation for @Controller and @RequestMapping-->
  <!--
  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -104,12 +106,7 @@
 	
     <bean name="uk.ac.ebi.ep:name=bioportalConfig"
 		class="uk.ac.ebi.ep.adapter.bioportal.BioportalConfig">
-        <property name="useProxy" value="true"/>
-        <property name="searchUrl"
-			value="http://rest.bioontology.org/bioportal/search/?ontologyids={0}&amp;query={1}&amp;isexactmatch={2}&amp;apikey=9f19fdf6-82d0-4335-97a1-f71d3ce156f6"/>
-        <property name="getUrl"
-			value="http://rest.bioontology.org/bioportal/concepts/{0}?conceptid={1}&amp;light=1&amp;apikey=9f19fdf6-82d0-4335-97a1-f71d3ce156f6"/>
-        <property name="timeout" value="30000"/>
+        <property name="apiKey" value="${bioportal.api.key}"/>
     </bean>
     
     <bean name="uk.ac.ebi.ep:name=dasConfig"
