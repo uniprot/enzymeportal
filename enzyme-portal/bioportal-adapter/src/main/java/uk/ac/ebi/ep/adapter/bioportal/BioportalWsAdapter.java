@@ -131,14 +131,13 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 		try {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			
-			urlString = MessageFormat.format(
-					config.getSearchUrl(), getOntologiesIds(ontologies),
-					URLEncoder.encode(query, "UTF-8"), 1);
+			urlString = MessageFormat.format(config.getSearchUrl(),
+                    getOntologiesIds(ontologies),
+                    URLEncoder.encode(query, "UTF-8"), config.getApiKey(), 1);
 			LOGGER.debug("[BIOPORTAL] URL=" + urlString);
 			URL url = new URL(urlString);
 			URLConnection urlCon = url.openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
-			//urlCon.connect();
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
 			XPathSAXHandler handler = new XPathSAXHandler(
@@ -213,7 +212,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 		InputStream is = null;
 		try {
 			URL url = new URL(MessageFormat.format(config.getGetUrl(),
-					ontologyVersionId, conceptId, 1));
+					ontologyVersionId, conceptId, config.getApiKey()));
 			LOGGER.debug("[BIOPORTAL URL] " + url);
 			URLConnection urlCon = url.openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
@@ -242,7 +241,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			}
 		}
 	}
-	
+
 	public Disease getDiseaseByName(String name)
 	throws BioportalAdapterException {
 		return (Disease) searchConcept(BioportalOntology.EFO, name,
@@ -252,7 +251,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
     public Disease getDisease(String nameOrId) throws BioportalAdapterException{
         Entity disease = null;
         Collection<Entity> diseases = searchConcept(
-                BioportalOntology.forDiseases(), nameOrId, Disease.class, true);
+                BioportalOntology.FOR_DISEASES, nameOrId, Disease.class, true);
         if (diseases != null){
             String others = null;
             for (Entity e : diseases) {

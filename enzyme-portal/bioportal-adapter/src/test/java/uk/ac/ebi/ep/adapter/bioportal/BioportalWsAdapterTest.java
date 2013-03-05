@@ -1,18 +1,15 @@
 package uk.ac.ebi.ep.adapter.bioportal;
 
-import java.util.Collection;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
+
+import java.util.Collection;
+import java.util.Properties;
+
+import static org.junit.Assert.*;
 
 public class BioportalWsAdapterTest {
 
@@ -21,7 +18,12 @@ public class BioportalWsAdapterTest {
 	@Before
 	public void setUp() throws Exception {
 		bwa = new BioportalWsAdapter();
-		bwa.setConfig(new BioportalConfig()); // defaults
+        Properties configProps = new Properties();
+        configProps.load(BioportalWsAdapterTest.class.getClassLoader()
+                .getResourceAsStream("ep-web-client.properties"));
+        BioportalConfig config = new BioportalConfig(); // defaults
+        config.setApiKey(configProps.getProperty("bioportal.api.key"));
+        bwa.setConfig(config);
 	}
 
 	@After
@@ -68,13 +70,13 @@ public class BioportalWsAdapterTest {
     @Test
     public void testSearchConcept2() throws Exception {
         Collection<Entity> diseases = bwa.searchConcept(
-                BioportalOntology.forDiseases(), "Piebaldism",
+                BioportalOntology.FOR_DISEASES, "Piebaldism",
                 Disease.class, false);
         assertNotNull(diseases);
         assertTrue(diseases.size() > 1); // 3 of them from EFO, OMIM and MeSH
         
         diseases = bwa.searchConcept(
-                BioportalOntology.forDiseases(), "D016116",
+                BioportalOntology.FOR_DISEASES, "D016116",
                 Disease.class, false);
         assertNotNull(diseases);
         assertFalse(diseases.size() > 1); // only 1 from MeSH

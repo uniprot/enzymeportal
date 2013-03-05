@@ -18,6 +18,7 @@ public interface IBioportalAdapter {
      * @deprecated use the generic method {@link #getDisease(java.lang.String)}
      *      instead, as this one can search also by ID (misleading method name).
 	 */
+    @Deprecated
 	public Disease getDiseaseByName(String name)
     throws BioportalAdapterException;
 

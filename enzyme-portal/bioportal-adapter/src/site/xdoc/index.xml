@@ -2,7 +2,8 @@
 
 <document xmlns="http://maven.apache.org/XDOC/2.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0
+	    http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Home</title>
 		<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
@@ -16,6 +17,10 @@
 				to <a
 				href="http://bioportal.bioontology.org/resources">BioPortal</a>.
 			</p>
+            <p>
+                Please note that in order to use the BioPortal web services
+                you need to get an API key.
+            </p>
 		</section>
 	</body>
 </document>
