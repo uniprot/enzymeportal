@@ -808,8 +808,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 ps.setString(3, xDbs[0].name());
                 ps.setString(4, xDbs[1].name());
                 ps.setString(5, xDbs[2].name());
-                //ps.setString(6, xDbs[3].name());
-
+                
 
 
 
@@ -888,11 +887,11 @@ public class MegaJdbcMapper implements MegaMapper {
 
                 if (con != null) {
                     ps = con.prepareStatement(query);
-                   
+
                     ps.setString(2, accession);
                     ps.setString(1, db.name());
                     ps.setString(3, xDbs[0].name());
-                    ps.setString(4, xDbs[1].name());
+                    ps.setString(4, xDbs[1].name());//ignore ChEBI
                     //ps.setString(5, ILLEGAL_COMPOUND);
                    
  

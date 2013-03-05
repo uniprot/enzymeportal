@@ -533,9 +533,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             if (xRefList != null) {
                 for (XRef ref : xRefList) {
                     Entry entry = ref.getToEntry();
-                    String efo_id = entry.getEntryId();
+                    String entryName = entry.getEntryName();
                     try {
-                        disease = bioportalAdapter.getDiseaseByName(efo_id);
+                        disease = bioportalAdapter.getDiseaseByName(entryName);
                         if (disease != null) {
 
                             for (Disease d : enzymeModel.getDisease()) {
