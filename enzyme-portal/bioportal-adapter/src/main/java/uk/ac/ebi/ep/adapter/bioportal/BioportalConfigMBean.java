@@ -42,5 +42,12 @@ public interface BioportalConfigMBean {
 	public abstract void setTimeout(int timeout);
 
 	public abstract int getTimeout();
-	
+
+    /**
+     * Sets the API key required to use the BioPortal web services.
+     * @param apiKey the API key provided by BioPortal.
+     */
+    public void setApiKey(String apiKey);
+
+    public String getApiKey();
 }
