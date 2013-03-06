@@ -97,6 +97,14 @@
                 </configuration>
             </plugin>
 		</plugins>
+        <resources>
+            <resource>
+                <directory>${ep.config.dir}</directory>
+                <includes>
+                    <include>ep-web-client.properties</include>
+                </includes>
+            </resource>
+        </resources>
 	</build>
 	
     <profiles>
