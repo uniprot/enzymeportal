@@ -49,22 +49,27 @@ public class BioportalWsAdapterTest {
 	@Test
 	public void testSearchConcept() throws Exception {
 		Entity disease = bwa.searchConcept(BioportalOntology.EFO,
-				"sarcoidosis", Disease.class, false);
-		assertNotNull(disease);
-        // Some EFO IDs point now to http://www.orphanet.org/rdfns#pat_id_###
-//		assertEquals("EFO_0000690", disease.getId());
+				"cystic fibrosis", Disease.class, false);
+        // Some EFO entries like this (EFO_0000690) are obsolete:
+		assertNull(disease);
+
+        disease = bwa.searchConcept(BioportalOntology.OMIM,
+                "cystic fibrosis", Disease.class, false);
+		assertEquals("219700", disease.getId());
 		assertNull(disease.getDescription());
+
+        disease = bwa.searchConcept(BioportalOntology.MESH,
+                "cystic fibrosis", Disease.class, false);
+        assertEquals("D003550", disease.getId());
+        assertNull(disease.getDescription());
 	}
 	
 	@Test
 	public void testSearchConceptComplete() throws Exception {
-		Entity disease = bwa.searchConcept(BioportalOntology.EFO,
-				"sarcoidosis", Disease.class, true);
+		Entity disease = bwa.searchConcept(BioportalOntology.MESH,
+				"cystic fibrosis", Disease.class, true);
 		assertNotNull(disease);
-        // Some EFO IDs point now to http://www.orphanet.org/rdfns#pat_id_###
-//		assertEquals("EFO_0000690", disease.getId());
-//		assertNotNull(disease.getDescription());
-//		assertTrue(disease.getDescription().length() > 0);
+        assertNotNull(disease.getDescription());
 	}
     
     @Test
@@ -73,7 +78,7 @@ public class BioportalWsAdapterTest {
                 BioportalOntology.FOR_DISEASES, "Piebaldism",
                 Disease.class, false);
         assertNotNull(diseases);
-        assertTrue(diseases.size() > 1); // 3 of them from EFO, OMIM and MeSH
+        assertEquals(2, diseases.size()); // [1 obsolete EFO], 1 OMIM and 1 MeSH
         
         diseases = bwa.searchConcept(
                 BioportalOntology.FOR_DISEASES, "D016116",

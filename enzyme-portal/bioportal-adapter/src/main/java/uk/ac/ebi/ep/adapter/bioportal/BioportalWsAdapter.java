@@ -135,8 +135,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
                     getOntologiesIds(ontologies),
                     URLEncoder.encode(query, "UTF-8"), config.getApiKey(), 1);
 			LOGGER.debug("[BIOPORTAL] URL=" + urlString);
-			URL url = new URL(urlString);
-			URLConnection urlCon = url.openConnection();
+			URLConnection urlCon = new URL(urlString).openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
@@ -151,7 +150,6 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			Collection<String> conceptIds = handler.getResults()
                     .get(SEARCH_CONCEPTIDSHORT);
 			if (conceptIds != null){
-                entities = new ArrayList<Entity>();
                 // the internal implementation of these collections in the
                 // handler are Lists, so we can rely on their iterators:
                 final Iterator<String> preferredNames = handler.getResults()
@@ -161,15 +159,18 @@ public class BioportalWsAdapter implements IBioportalAdapter {
                 final Iterator<String> versionIds = handler.getResults()
                                  .get(SEARCH_ONTOLOGYVERSIONID).iterator();
                 for (String conceptId : conceptIds) {
+                    String preferredName = preferredNames.next();
+                    String url = urls.next();
+                    String versionId = versionIds.next();
+                    // Workaround for obsolete EFO entries:
+                    if (conceptId.startsWith("rdfns:pat_id_")) continue;
                     Entity entity = clazz.newInstance();
                     // Remove the ontology prefix:
                     entity.setId(conceptId.replaceFirst("^\\w+:", ""));
-                    entity.setName(preferredNames.next());
-                    entity.setUrl(urls.next());
-                    if (complete){
-                        String ontologyVersionId = versionIds.next();
-                        completeEntity(entity, conceptId, ontologyVersionId);
-                    }
+                    entity.setName(preferredName);
+                    entity.setUrl(url);
+                    if (complete) completeEntity(entity, conceptId, versionId);
+                    if (entities == null) entities = new ArrayList<Entity>();
                     entities.add(entity);
                 }
 			}
