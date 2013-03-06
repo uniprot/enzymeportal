@@ -3,7 +3,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.12-SNAPSHOT</version>
+    <version>1.0.12</version>
     <name>EP core</name>
 
     <parent>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-domain</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>mega-mapper</artifactId>
-            <version>1.0.10-SNAPSHOT</version>
+            <version>1.0.10</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
