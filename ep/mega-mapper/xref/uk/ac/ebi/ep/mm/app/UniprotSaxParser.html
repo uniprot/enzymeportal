@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="137" href="#137">137</a>     				mm = <strong class="jxr_keyword">new</strong> <a href="../../../../../../uk/ac/ebi/ep/mm/MegaJdbcMapper.html">MegaJdbcMapper</a>(con);
 <a class="jxr_linenumber" name="138" href="#138">138</a>         		}
 <a class="jxr_linenumber" name="139" href="#139">139</a>         		parser.setWriter(mm);
-<a class="jxr_linenumber" name="140" href="#140">140</a>         		parser.parse(cl.getOptionValue(<span class="jxr_string">"xmlFile"</span>));
+<a class="jxr_linenumber" name="140" href="#140">140</a>         		parser.parse(cl.getOptionValue(<span class="jxr_string">"file"</span>));
 <a class="jxr_linenumber" name="141" href="#141">141</a>         		mm.commit();
 <a class="jxr_linenumber" name="142" href="#142">142</a>     		} <strong class="jxr_keyword">catch</strong> (Exception e){
 <a class="jxr_linenumber" name="143" href="#143">143</a>     			mm.rollback();
@@ -330,50 +330,56 @@
 <a class="jxr_linenumber" name="320" href="#320">320</a> 									.getEntry(<span class="jxr_string">"pdbe"</span>, pdbCode, fields)
 <a class="jxr_linenumber" name="321" href="#321">321</a> 									.getString().get(0);
 <a class="jxr_linenumber" name="322" href="#322">322</a> 							pdbEntry.setEntryName(name);
-<a class="jxr_linenumber" name="323" href="#323">323</a> 							entries.add(pdbEntry);
-<a class="jxr_linenumber" name="324" href="#324">324</a> 						} <strong class="jxr_keyword">catch</strong> (Exception e){
-<a class="jxr_linenumber" name="325" href="#325">325</a> 							LOGGER.error(<span class="jxr_string">"Couldn't get name for "</span> + pdbCode, e);
-<a class="jxr_linenumber" name="326" href="#326">326</a> 						}
-<a class="jxr_linenumber" name="327" href="#327">327</a> 						
-<a class="jxr_linenumber" name="328" href="#328">328</a> 						XRef up2pdb = <strong class="jxr_keyword">new</strong> <a href="../../../../../../uk/ac/ebi/ep/mm/XRef.html">XRef</a>();
-<a class="jxr_linenumber" name="329" href="#329">329</a> 						up2pdb.setFromEntry(uniprotEntry);
-<a class="jxr_linenumber" name="330" href="#330">330</a> 						up2pdb.setRelationship(Relationship.between(
-<a class="jxr_linenumber" name="331" href="#331">331</a> 								MmDatabase.UniProt, MmDatabase.PDB).name());
-<a class="jxr_linenumber" name="332" href="#332">332</a> 						up2pdb.setToEntry(pdbEntry);
-<a class="jxr_linenumber" name="333" href="#333">333</a> 						xrefs.add(up2pdb);
-<a class="jxr_linenumber" name="334" href="#334">334</a> 					}
-<a class="jxr_linenumber" name="335" href="#335">335</a> 					
-<a class="jxr_linenumber" name="336" href="#336">336</a> 					mm.write(entries, xrefs);
-<a class="jxr_linenumber" name="337" href="#337">337</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="338" href="#338">338</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Adding entry to mega-map"</span>, e);
-<a class="jxr_linenumber" name="339" href="#339">339</a> 				}
-<a class="jxr_linenumber" name="340" href="#340">340</a> 			}
-<a class="jxr_linenumber" name="341" href="#341">341</a> 			<em class="jxr_comment">// Clean up:</em>
-<a class="jxr_linenumber" name="342" href="#342">342</a> 			accessions.clear();
-<a class="jxr_linenumber" name="343" href="#343">343</a> 			entryNames.clear();
-<a class="jxr_linenumber" name="344" href="#344">344</a> 			ecs.clear();
-<a class="jxr_linenumber" name="345" href="#345">345</a> 			pdbCodes.clear();
-<a class="jxr_linenumber" name="346" href="#346">346</a> 			orgSciName = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="347" href="#347">347</a>             orgComName = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="348" href="#348">348</a> 		}
-<a class="jxr_linenumber" name="349" href="#349">349</a> 		currentContext.pop();
-<a class="jxr_linenumber" name="350" href="#350">350</a> 		<em class="jxr_comment">// Update flags:</em>
-<a class="jxr_linenumber" name="351" href="#351">351</a> 		String currentXpath = getCurrentXpath();
-<a class="jxr_linenumber" name="352" href="#352">352</a> 		isEntry = UNIPROT_ENTRY.equals(currentXpath);
-<a class="jxr_linenumber" name="353" href="#353">353</a> 		isAccession = false;
-<a class="jxr_linenumber" name="354" href="#354">354</a> 		isEntryName = false;
-<a class="jxr_linenumber" name="355" href="#355">355</a> 		isOrgSciName = false;
-<a class="jxr_linenumber" name="356" href="#356">356</a> 	}
-<a class="jxr_linenumber" name="357" href="#357">357</a> 
-<a class="jxr_linenumber" name="358" href="#358">358</a> 	<strong class="jxr_keyword">protected</strong> String getCurrentXpath() {
-<a class="jxr_linenumber" name="359" href="#359">359</a> 		StringBuilder xpath = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/"</span>);
-<a class="jxr_linenumber" name="360" href="#360">360</a> 		<strong class="jxr_keyword">for</strong> (String string : currentContext) {
-<a class="jxr_linenumber" name="361" href="#361">361</a> 			xpath.append('/').append(string);
-<a class="jxr_linenumber" name="362" href="#362">362</a> 		}
-<a class="jxr_linenumber" name="363" href="#363">363</a> 		<strong class="jxr_keyword">return</strong> xpath.toString();
-<a class="jxr_linenumber" name="364" href="#364">364</a> 	}
-<a class="jxr_linenumber" name="365" href="#365">365</a> 
-<a class="jxr_linenumber" name="366" href="#366">366</a> }
+<a class="jxr_linenumber" name="323" href="#323">323</a> 						} <strong class="jxr_keyword">catch</strong> (Exception e){
+<a class="jxr_linenumber" name="324" href="#324">324</a> 							LOGGER.error(<span class="jxr_string">"Couldn't get name for "</span> + pdbCode, e);
+<a class="jxr_linenumber" name="325" href="#325">325</a> 						}
+<a class="jxr_linenumber" name="326" href="#326">326</a> 						
+<a class="jxr_linenumber" name="327" href="#327">327</a> 						<strong class="jxr_keyword">if</strong> (pdbEntry.getEntryName() == <strong class="jxr_keyword">null</strong>){
+<a class="jxr_linenumber" name="328" href="#328">328</a> 							<em class="jxr_comment">// Happens with obsolete/redirected PDB entries:</em>
+<a class="jxr_linenumber" name="329" href="#329">329</a> 							<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="330" href="#330">330</a> 						}
+<a class="jxr_linenumber" name="331" href="#331">331</a> 						
+<a class="jxr_linenumber" name="332" href="#332">332</a> 						entries.add(pdbEntry);
+<a class="jxr_linenumber" name="333" href="#333">333</a> 						
+<a class="jxr_linenumber" name="334" href="#334">334</a> 						XRef up2pdb = <strong class="jxr_keyword">new</strong> <a href="../../../../../../uk/ac/ebi/ep/mm/XRef.html">XRef</a>();
+<a class="jxr_linenumber" name="335" href="#335">335</a> 						up2pdb.setFromEntry(uniprotEntry);
+<a class="jxr_linenumber" name="336" href="#336">336</a> 						up2pdb.setRelationship(Relationship.between(
+<a class="jxr_linenumber" name="337" href="#337">337</a> 								MmDatabase.UniProt, MmDatabase.PDB).name());
+<a class="jxr_linenumber" name="338" href="#338">338</a> 						up2pdb.setToEntry(pdbEntry);
+<a class="jxr_linenumber" name="339" href="#339">339</a> 						xrefs.add(up2pdb);
+<a class="jxr_linenumber" name="340" href="#340">340</a> 					}
+<a class="jxr_linenumber" name="341" href="#341">341</a> 					
+<a class="jxr_linenumber" name="342" href="#342">342</a> 					mm.write(entries, xrefs);
+<a class="jxr_linenumber" name="343" href="#343">343</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="344" href="#344">344</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Adding entry to mega-map"</span>, e);
+<a class="jxr_linenumber" name="345" href="#345">345</a> 				}
+<a class="jxr_linenumber" name="346" href="#346">346</a> 			}
+<a class="jxr_linenumber" name="347" href="#347">347</a> 			<em class="jxr_comment">// Clean up:</em>
+<a class="jxr_linenumber" name="348" href="#348">348</a> 			accessions.clear();
+<a class="jxr_linenumber" name="349" href="#349">349</a> 			entryNames.clear();
+<a class="jxr_linenumber" name="350" href="#350">350</a> 			ecs.clear();
+<a class="jxr_linenumber" name="351" href="#351">351</a> 			pdbCodes.clear();
+<a class="jxr_linenumber" name="352" href="#352">352</a> 			orgSciName = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="353" href="#353">353</a>             orgComName = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="354" href="#354">354</a> 		}
+<a class="jxr_linenumber" name="355" href="#355">355</a> 		currentContext.pop();
+<a class="jxr_linenumber" name="356" href="#356">356</a> 		<em class="jxr_comment">// Update flags:</em>
+<a class="jxr_linenumber" name="357" href="#357">357</a> 		String currentXpath = getCurrentXpath();
+<a class="jxr_linenumber" name="358" href="#358">358</a> 		isEntry = UNIPROT_ENTRY.equals(currentXpath);
+<a class="jxr_linenumber" name="359" href="#359">359</a> 		isAccession = false;
+<a class="jxr_linenumber" name="360" href="#360">360</a> 		isEntryName = false;
+<a class="jxr_linenumber" name="361" href="#361">361</a> 		isOrgSciName = false;
+<a class="jxr_linenumber" name="362" href="#362">362</a> 	}
+<a class="jxr_linenumber" name="363" href="#363">363</a> 
+<a class="jxr_linenumber" name="364" href="#364">364</a> 	<strong class="jxr_keyword">protected</strong> String getCurrentXpath() {
+<a class="jxr_linenumber" name="365" href="#365">365</a> 		StringBuilder xpath = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="366" href="#366">366</a> 		<strong class="jxr_keyword">for</strong> (String string : currentContext) {
+<a class="jxr_linenumber" name="367" href="#367">367</a> 			xpath.append('/').append(string);
+<a class="jxr_linenumber" name="368" href="#368">368</a> 		}
+<a class="jxr_linenumber" name="369" href="#369">369</a> 		<strong class="jxr_keyword">return</strong> xpath.toString();
+<a class="jxr_linenumber" name="370" href="#370">370</a> 	}
+<a class="jxr_linenumber" name="371" href="#371">371</a> 
+<a class="jxr_linenumber" name="372" href="#372">372</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
