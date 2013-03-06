@@ -14,8 +14,8 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util-2.5.xsd">
     <context:component-scan base-package="uk.ac.ebi.ep.web" />
-    <context:property-placeholder
-            location="classpath:/ep-web-client.properties"/>
+<!--    <context:property-placeholder
+            location="classpath:/ep-web-client.properties"/>-->
     <!--Enable Spring annotation for @Controller and @RequestMapping-->
  <!--
  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -106,7 +106,7 @@
 	
     <bean name="uk.ac.ebi.ep:name=bioportalConfig"
 		class="uk.ac.ebi.ep.adapter.bioportal.BioportalConfig">
-        <property name="apiKey" value="${bioportal.api.key}"/>
+<!--        <property name="apiKey" value="${bioportal.api.key}"/>-->
     </bean>
     
     <bean name="uk.ac.ebi.ep:name=dasConfig"
