@@ -322,11 +322,21 @@ a.ui-corner-all{
     color: white;
     text-decoration: none;
     border-bottom-style: none; 
+    max-width: 120px;
+    max-height: 90px;
 }
 
 .imgFooter {
     font-size: smaller;
     text-align: center;
+}
+.structureImage{
+   max-height: 90px;
+   max-width: 100px;
+}
+.img{
+    max-width: 120px;
+    max-height: 90px;
 }
 
 .desc {
