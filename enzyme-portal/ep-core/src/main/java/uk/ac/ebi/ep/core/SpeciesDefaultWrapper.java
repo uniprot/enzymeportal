@@ -1,7 +1,5 @@
 package uk.ac.ebi.ep.core;
 
-import java.util.Arrays;
-import java.util.List;
 import uk.ac.ebi.ep.core.search.CommonSpecies;
 import uk.ac.ebi.ep.search.model.Species;
 
@@ -21,9 +19,7 @@ import uk.ac.ebi.ep.search.model.Species;
  */
 public final class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWrapper> {
 
-   // String[] commonSpecies = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
-   // List<String> commonSpecieList = Arrays.asList(commonSpecies);
-    // Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
+ 
     private final Species species;
 
     public final Species getSpecies() {
@@ -37,24 +33,7 @@ public final class SpeciesDefaultWrapper implements Comparable<SpeciesDefaultWra
         this.species = species;
     }
 
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + species.getScientificname().hashCode();
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj) return true;
-//		if (obj == null) return false;
-//		if (getClass() != obj.getClass()) return false;
-//		SpeciesDefaultWrapper other = (SpeciesDefaultWrapper) obj;
-//		if (!species.getScientificname().equals(other.species.getScientificname()))
-//			return false;
-//		return true;
-//	}
+
     public int compareTo(SpeciesDefaultWrapper other) {
 
         if (species.getCommonname() == null & other.species.getCommonname() == null) {

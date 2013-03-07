@@ -401,7 +401,8 @@ public class EnzymeFinder implements IEnzymeFinder {
 
         if (xRefList != null) {
             for (Map.Entry<String, String> ref : xRefList.entrySet()) {
-
+                
+                if(ref.getKey() != null && !ref.getValue().equals(" ") && ref.getValue() != null && !ref.getValue().equals("")){
                 Compound com = new Compound();
                 com.setId(ref.getKey());
                 String compoundName = resolveSpecialCharacters(ref.getValue());
@@ -409,7 +410,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
                 CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(com);
                 uniqueCompounds.add(compoundDefaultWrapper);
-
+                }
 
             }
         }
@@ -426,9 +427,9 @@ public class EnzymeFinder implements IEnzymeFinder {
             for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
 
 
-                Disease disease = new Disease();
-                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null) {
-
+                
+                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
+                    Disease disease = new Disease();
                     String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
                     disease.setName(diseaseName.replaceAll(",", ""));
                     disease.setId(diseaseMap.getKey());
@@ -474,6 +475,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 //      
 //    }
     public String resolveSpecialCharacters(String data) {
+        
         SpecialCharacters xchars = SpecialCharacters.getInstance(null);
         EncodingType[] encodings = {
             EncodingType.CHEBI_CODE,
@@ -493,7 +495,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
 
 
-        return xchars.xml2Display(data, EncodingType.COMPOSED);
+        return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
 
     /**

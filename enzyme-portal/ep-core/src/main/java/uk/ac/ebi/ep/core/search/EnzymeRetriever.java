@@ -529,7 +529,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
         try {
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
-            Collection<XRef> xRefList = megaMapperConnection.getMegaMapper().getXrefs(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+            Collection<XRef> xRefList = megaMapperConnection.getMegaMapper().getXrefs(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO);
             if (xRefList != null) {
                 for (XRef ref : xRefList) {
                     Entry entry = ref.getToEntry();
