@@ -136,11 +136,6 @@
         GLOBAL SEARCH TEMPLATE - END
        -------------------------------- >-->
 
-        <!--<style type="text/css">       #cookie-banner{position:absolute;top:-9999px;background-color:#222;width:100%;border-bottom:5px solid #222;left:0;}
-               #cookie-banner p{margin:5px 0;color:#eee}
-               #cookie-banner a{color:#fff}
-               #cookie-banner a#cookie-dismiss{margin:0.5em 0;padding:3px 9px;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;font-size:108%;border-width:1px;box-shadow:0px 2px 2px #adadad;-moz-box-shadow:0px 2px 2px #adadad;-khtml-box-shadow:0px 2px 2px #adadad;-webkit-box-shadow:0px 2px 2px #adadad;width:auto;padding-top:0px;padding-bottom:0px;border-color:#295c5c;background-color:#207a7a;background-image:-moz-linear-gradient(top, #54bdbd, #207a7a);background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0, #54bdbd),color-stop(1, #207a7a));background-image:-webkit-linear-gradient(#54bdbd, #207a7a);background-image:linear-gradient(top, #54bdbd, #207a7a);filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#54bdbd', EndColorStr='#207a7a');color:#f8f8f8;text-shadow:#145251 0 1px 1px;display:inline;text-decoration:none;}
-             </style>-->
 
     </head>
 
@@ -615,8 +610,6 @@
                                                                 <div id="diseases_0" style="display: none">
                                                                 </c:if> 
 
-
-
                                                                 <div class="filterLine">
                                                                     <div class="checkItem">
                                                                         <form:checkbox path="searchparams.diseases" value="${diseasesList[i].name}" onclick="submit()"/>
@@ -999,95 +992,6 @@
                         </div><!-- resultContent -->
 
                     </section>
-                    <!--                    </div> keywordSearchResult -->
-                    <!--                </div>-->
-                    <!--                                           grid_12 content -->
-                    <!--            </div>  page container_12 -->
-                    <!--                    </div>-->
-                    <!--
-                    <! --------------------------------
-                        GLOBAL SEARCH TEMPLATE - START
-                       -------------------------------- >-->
-
-<!--
-                    
-                                    
-                                    <script type="text/javascript">
-                                            function renderMenu(elem, items, baseURL) {
-                                            var ul = $("<ul>").appendTo(elem);
-                                            $.each(items, function(index, item) {
-                                                renderItem(ul, item, baseURL);
-                                            });
-                                        }
-                                            
-                                        function renderItem(ul, item, baseURL) {
-                                            $( "<li>" )
-                                                    .append( $( "<a>" ).attr("href", baseURL+item.url)
-                                                                                       .text( item.name + " ("+item.numberOfResults+")" )
-                                                    ).appendTo( ul );
-                                        }
-                    
-                                            function updateSummary() {
-                                                    var query = $("#local-searchbox").val();
-                                                    if (query) {
-                                                            var searchBaseURL = "http://frontier.ebi.ac.uk/ebisearch/";
-                                                            var thisElem = $.find("#search-extras");
-                                                            $(thisElem).text("Loading other results");
-                                                            $(thisElem).addClass("loading");
-                    
-                                                            $.ajax({
-                                                              searchBaseURL: searchBaseURL, 
-                                                              url: searchBaseURL+"globalsearchsummary.ebi?query="+query,
-                                                              context: thisElem,
-                                                              dataType: "json",
-                                                              crossdoamin: true,
-                                                              error: function(request, error) {
-                                                                      //console.log(arguments);
-                                                                      //alert("error occurred: "+error);
-                                                              },
-                                                              success: function (data, textStatus, jqHXR) {
-                                                                      //alert("success");
-                                                              }
-                                                            }
-                                                            
-                                                            
-                                                            ).done(function( response ) {
-                                                              var obj = response;
-                                                              $(this).text("");
-                                                              $(this).removeClass("loading");
-                                                              $(this).append("<p>EBI global search results</p>");
-                                                              //$(this).blink({delay: 500});
-                                                              $("#page-title").text('Search results for ').append($("<span>").attr("class", "searchterm").text(query));
-                                                              renderMenu(this, obj, searchBaseURL);
-                                                            });
-                                                    }
-                                            }
-                                            
-                                            
-                     
-                          
-                        
-                          
-                        </script>-->
-<!--                     Related results - end -->
-
-                    <!--<! ------------------------------
-                    GLOBAL SEARCH TEMPLATE - END
-                   ------------------------------ >-->
-                    <!--		
-                                    <section class="grid_4 omega" id="search-extras">
-                                    <p>EBI global search results</p>
-                                    </section>-->
-
-                    <!--<aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
-                                    <div id="ebi_search_results"><h3 class="slideToggle icon icon-functional" data-icon="u">Show more data from EMBL-EBI</h3>
-                                    </div>
-                                    </aside>-->
-
-
-
-
-
                 </c:if>
 
             </div>
