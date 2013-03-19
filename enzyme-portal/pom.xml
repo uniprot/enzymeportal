@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+        http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
@@ -34,7 +37,7 @@
         </developer>
         <developer>
             <id>rafalcan</id>
-            <name>Rafael Alc?ntara</name>
+            <name>Rafael Alcántara</name>
             <email>rafalcan@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
@@ -173,7 +176,6 @@
 					<version>2.12.4</version>
 					<configuration>
 						<argLine>-Xmx512m</argLine>
-	                    <outputDirectory>${basedir}/target/site</outputDirectory>
 					</configuration>
 				</plugin>
 	            <plugin>
