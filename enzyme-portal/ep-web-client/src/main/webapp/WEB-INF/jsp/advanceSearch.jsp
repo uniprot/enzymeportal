@@ -74,22 +74,20 @@
 
         <div id="wrapper" class="container_24">
             <header>
-    	<div id="global-masthead" class="masthead grid_24">
-      <!--This has to be one line and no newline characters-->
-			<a href="/" title="Go to the EMBL-EBI homepage"><img src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png" alt="EMBL European Bioinformatics Institute"></a>
+                <div id="global-masthead" class="masthead grid_24">
+                    <p><!-- EMBL-EBI  --><img src="http://frontier.ebi.ac.uk/sites/ebi.ac.uk/themes/custom/ebiomega/logo.png" alt="European Bioinformatics Institute"></p>
 
-			<nav>
-				<ul id="global-nav">
-          <!-- set active class as appropriate -->
-          <li class="first active" id="services"><a href="/services">Services</a></li>
-					<li id="research"><a href="/research">Research</a></li>
-					<li id="training"><a href="/training">Training</a></li>
-					<li id="industry"><a href="/industry">Industry</a></li>
-					<li id="about" class="last"><a href="/about">About us</a></li>
-				</ul>
-			</nav>
-			
-		</div>
+                    <nav>
+                        <ul id="global-nav">
+                            <li class="first" id="services"><a href="#" title="">Services</a></li>
+                            <li id="research"><a href="#" title="">Research</a></li>
+                            <li id="training"><a href="#" title="">Training</a></li>
+                            <li id="funding"><a href="#" title="">Funding</a></li>
+                            <li id="about" class="last"><a href="#" title="">About us</a></li>
+                        </ul>
+                    </nav>
+
+                </div>
 
                 <div id="local-masthead" class="masthead grid_24 nomenu">
 

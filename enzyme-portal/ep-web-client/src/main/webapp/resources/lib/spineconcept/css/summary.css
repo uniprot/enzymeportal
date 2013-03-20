@@ -17,7 +17,6 @@
 .classification .box {
 	position: relative;
 	width: 256px;
-	border: none;
 	border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomLeft: 5px;
 	-webkit-border-bottom-left-radius: 5px;
@@ -42,7 +41,6 @@
 
 .classification:hover .box {
 	background-color: #FFD98F;
-	border: none;
 }
 
 .classification .label {
@@ -58,14 +56,15 @@
 	font-weight: bold;
 	text-align: center;
 }
-
+div.box{
+    border: none;
+}
 .box {
 	display: block;
 	padding-left: 43px;
 	width: 235px;
 	cursor: pointer;
 	color: #000;
-        
 }
 
 .box .name {
@@ -255,16 +254,6 @@
 
 .content {
 	min-height: 500px;
-/*	padding: 10px 0 0 0;*/
-}
-
-.summary dl dt {
-   clear: none;
-   padding-left: 0;
-}
-
-.gradient {
-  background: #fff;
 }
 
 .gradient {
@@ -308,7 +297,7 @@
 
 .column2 {
 	padding-left: 160px;
-	width: auto;
+       	width: auto;
 	display: block;
 	position: relative;
 	margin-bottom: 10px;
@@ -318,6 +307,7 @@
 .tab {
 	width: 150px;
 	display: block;
+	margin-top: 10px;
 	border: 1px solid rgb(167, 184, 193);
 	background: none repeat scroll 0% 0% rgb(32, 122, 122);
 	border-radius: 8px 8px 8px 8px;
@@ -363,7 +353,24 @@
 }
 
 .tab .inner_tab .icon {
-	display: none;
+	display: block;
+	margin: 7px;
+	height: 25px;
+	width: auto;
+	background-position: center center;
+	background-color: #FFF;
+	background-repeat: no-repeat;
+	border-radius: 5px 5px 5px 5px;
+	border: 1px solid #FFF;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	box-shadow: 0px 0px 30px #FFF;
+	-moz-box-shadow: 0px 0px 30px #FFF;
+	-webkit-box-shadow: 0px 0px 30px #FFF;
+}
+
+.tab:hover .inner_tab .icon {
+	border: 1px solid #FEBA12;
 }
 
 .tab.selected .inner_tab .icon {
@@ -373,6 +380,7 @@
 
 .tab .inner_tab .label {
 	display: block;
+	text-align: right;
 	margin: 5px 10px;
 	color: white;
 	font-size: 9pt;
@@ -391,11 +399,9 @@
 	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 	-webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-/*	padding: 10px;*/
-        padding-left:6px;
-        padding-right: 5px;
+	padding: 10px;
 	min-height: 500px;
-        
+        display:inline-block;
 }
 
 .networks {
@@ -478,7 +484,6 @@
 	overflow: auto;
 	display: block;
 	background: #fff;
-	border : none;
 	border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomLeft: 5px;
 	-webkit-border-bottom-left-radius: 5px;
@@ -486,8 +491,6 @@
 	-moz-border-radius-bottomRight: 5px;
 	-webkit-border-bottom-right-radius: 5px;
 	border-collapse: collapse;
-	margin-bottom: 20px;
-	width: auto;
 }
 
 .references table tr {
@@ -506,13 +509,18 @@
 }
 
 .references table td {
-	border: none;
 	padding: 2px 4px;
 }
 
-.summary h3 {
-	margin: 0;
-	clear: none;
+.summary h2 {
+	border-bottom: 1px solid #408c8c;
+	font-size: 14pt;
+	color: #408c8c;
+	margin: 0px;
+	text-shadow: 1px 1px 2px rgba(64, 140, 140, 0.55);
+	/*text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;*/
 }
 
 .summary .main_link {
@@ -601,7 +609,7 @@
 	margin: 0px auto; 
 	display: block;
 	position: relative;
-	max-width: 100%;
+	max-width: none;
 }
 
 .summary .provenance {
@@ -631,6 +639,22 @@
 	background-image: url('../images/external-link-red.png');
 }
 
+.tab.gene .inner_tab .icon {
+	background-image: url("../images/tabs/gene.png");
+}
+
+.tab.expression .inner_tab .icon {
+	background-image: url("../images/tabs/expression.png");
+}
+
+.tab.protein .inner_tab .icon {
+	background-image: url("../images/tabs/protein.png");
+}
+
+.tab.structure .inner_tab .icon {
+	background-image: url("../images/tabs/structure.png");
+}
+
 .tab.literature {
 	background-color: #366999;
 }
@@ -639,7 +663,7 @@
 	background-color: #FFF;
 }
 
-div#content {
-	padding-bottom: 0px;
-	min-height: 0px;
+.tab.literature .inner_tab .icon {
+	background-image: url("../images/tabs/literature.png");
 }
+
