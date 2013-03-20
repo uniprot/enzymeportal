@@ -69,7 +69,7 @@ SELECT mmx.* FROM mm_accession mma, mm_xref mmx, mm_entry mme \
 		AND (mma.id = mmx.from_entry OR mma.id = mmx.to_entry) \
 		AND mmx.relationship = ?
 
---xrefs.by.ChEMBL:\
+--entries.by.ChEMBL:\
 SELECT mme2.* FROM mm_accession mma, mm_entry mme1, mm_entry mme2, mm_xref mmx \ 
 		WHERE mma.accession = ? AND mma.id = mme1.id AND mme1.db_name = ? \
 AND ((mme1.id = mmx.from_entry AND mmx.to_entry = mme2.id AND mme2.db_name IN ({0}) \

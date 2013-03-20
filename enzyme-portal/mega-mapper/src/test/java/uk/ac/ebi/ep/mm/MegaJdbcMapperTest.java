@@ -303,7 +303,7 @@ public class MegaJdbcMapperTest {
     
     @Test
     public void getCompounds() {
-        System.out.println("get Compounds");
+        //System.out.println("get Compounds");
         Map<String, String> compoundMap = null;
         MmDatabase db = MmDatabase.UniProt;
         String accession = "PDE5A_HUMAN";
@@ -327,7 +327,7 @@ public class MegaJdbcMapperTest {
     
         @Test
     public void getDisease() {
-        System.out.println("get Disease");
+        //System.out.println("get Disease");
         Map<String, String> diseaseMap = null;
         MmDatabase db = MmDatabase.UniProt;
         String accession = "CFTR_HUMAN";
@@ -344,9 +344,23 @@ public class MegaJdbcMapperTest {
         diseaseMap = mm.getDisease(db, accession, xDbs);
         assertNotNull(diseaseMap);
         for (Map.Entry<String, String> m : diseaseMap.entrySet()) {
-            System.out.println("Result : " + m.getKey() + ": " + m.getValue());
+            //System.out.println("Result : " + m.getKey() + ": " + m.getValue());
             logger.info("Result for disease: " + m.getKey() + ": " + m.getValue());
         }
         
     }
+    
+        @Test
+        public void getChMBLEntries(){
+            
+            String accession = "P55789";
+           List<Entry> entryList = mm.getChMBLEntries(MmDatabase.UniProt, accession, MmDatabase.ChEMBL);
+           assertNotNull(entryList);
+            for(Entry entry : entryList){
+                System.out.println("entry"+ entry.getEntryName());
+                logger.info("Entries found for Accession ("+ accession +") : "+ entry.getEntryName());
+            }
+        }
+        
+      
 }

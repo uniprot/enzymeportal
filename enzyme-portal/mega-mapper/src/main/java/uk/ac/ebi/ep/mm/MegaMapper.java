@@ -180,17 +180,17 @@ public interface MegaMapper {
 			Constraint constraint, MmDatabase... xDbs);
     
     /**
-     * Retrieves cross references from the mega-map for a given accession
+     * Retrieves Entries from the mega-map for a given accession
      * where database name is CheMBL.
      * (not ID).
      * @param db the database where the accession is from.
      * @param accession the accession number.
      * @param xDb the referencing/referenced database(s).
-     * @return a List of xrefs in the map, or <code>null</code> if none
+     * @return a List of entries in the map, or <code>null</code> if none
      * 		found. Note that the accession used in the query may be either the
      * 		origin or the target of an xref.
      */
-    public List<XRef> getChMBLXrefs(MmDatabase db, String accession,
+    public List<Entry> getChMBLEntries(MmDatabase db, String accession,
             MmDatabase... xDb);
 
     /**

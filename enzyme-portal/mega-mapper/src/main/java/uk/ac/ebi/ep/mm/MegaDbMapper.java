@@ -252,7 +252,7 @@ public class MegaDbMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public List<XRef> getChMBLXrefs(MmDatabase db, String accession, MmDatabase... xDb) {
+    public List<Entry> getChMBLEntries(MmDatabase db, String accession, MmDatabase... xDb) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
