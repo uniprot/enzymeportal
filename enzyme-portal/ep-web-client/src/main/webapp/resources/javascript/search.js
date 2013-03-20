@@ -89,11 +89,14 @@ $(document).ready(function() {
         var splitLinkName = linkValue.split(" ");
         if (jQuery.inArray('more', splitLinkName) > -1){
             $(idOfHiddenText).show();
-            $(jqClickedId).html(linkValue.replace('more','less'));
+            if (jQuery.inArray('function', splitLinkName) > -1){
+                $(jqClickedId).html(linkValue.replace('more','less'));
+            } else {
+                $(jqClickedId).html(linkValue.replace('more','fewer'));
+            }
         } else {
             $(idOfHiddenText).hide();
-            $(jqClickedId).html(linkValue.replace('less','more'));
-        }
+            $(jqClickedId).html(linkValue.replace(/less|fewer/g,'more'));        }
     });
 
     var pageClicked = false;
