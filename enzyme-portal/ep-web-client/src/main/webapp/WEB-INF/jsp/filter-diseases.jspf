@@ -1,0 +1,65 @@
+<%-- Indentation in this page is broken in purpose, in order to minimise the
+    amount of white space (which multiplies with these big loops). Empty lines
+    have been also been avoided. --%>
+<div class="sublevel1" >
+    <div class="subTitle">
+        Diseases (<c:out value="${fn:length(searchFilter.diseases)}"></c:out>)
+    </div>
+    <c:if test="${fn:length(searchFilter.diseases) gt 12}">
+        <div class="ui-widget">
+            <input id="diseases_AUTOCOMPLETE" class="filterSearchBox"  placeholder="Type a Disease to filter" />
+            <input id="_DtempList_selected" name="searchparams.diseases" type="hidden" value="" />
+        </div>
+    </c:if>
+    <div class="filterContent">
+        <c:set var="diseasesList" value="${searchFilter.diseases}"/>
+        <c:set var="diseasesListSize" value="${fn:length(diseasesList)}"/>
+        <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+        <c:if test="${diseasesListSize > 0}">
+
+            <!--  keep track of checked and displayed items.-->
+
+            <c:set var="checkedItems" value="0"/>
+            <c:set var="displayedItems" value="0"/>
+            <c:forEach var="times" begin="1" end="2" step="1">
+                <c:forEach var="i" begin="0" end="${diseasesListSize}">
+                    <c:if test='${not empty diseasesList[i].name}'>
+                        <c:if test='${(diseasesList[i].selected eq true and (times == 1)) or (diseasesList[i].selected eq false and (times == 2))}'>
+                            <c:if test='${(diseasesList[i].selected eq true and (times == 1))}'>
+                                <c:set var="checkedItems" value="${checkedItems + 1}"/>
+                            </c:if>
+                            <c:if test='${displayedItems == limitedDisplay}'>
+                                <div id="diseases_0" style="display: none">
+                            </c:if>
+                            <div class="filterLine">
+                                <div class="checkItem">
+                                    <form:checkbox path="searchparams.diseases" value="${diseasesList[i].name}" onclick="submit()"/>
+                                </div>
+                                <div class="text">
+                                    <xchars:translate>
+                                        <span class="diseaseName" style="border-bottom-style:none "> <c:out value="${diseasesList[i].name}" escapeXml="false"/></span>
+                                        <script>diseaseAutoCompleteDataSource.push({label:"${diseasesList[i].name} ",value:"${diseasesList[i].name}"});</script>
+                                    </xchars:translate>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <c:set var="displayedItems" value="${displayedItems + 1}"/>
+                        </c:if>
+                    </c:if>
+                </c:forEach>
+                <c:if test='${checkedItems gt 0 and checkedItems < diseasesListSize}'><hr class="hrLine" /></c:if>
+            </c:forEach>
+            <c:set var="diseasesMoreSize" value="${diseasesListSize - limitedDisplay}"/>
+            <c:if test='${displayedItems >= limitedDisplay }'>
+                </div>
+                <a class="showLink" id="<c:out value='diseases_link_0'/>"><c:out value="See ${diseasesMoreSize} more"/></a> <br/>
+            </c:if>
+            <c:if test="${diseasesListSize gt 12}">
+                <!--    then add auto complete-->
+                <script>
+                    ResultAutoComplete('diseases_AUTOCOMPLETE', diseaseAutoCompleteDataSource,'filtersForm','_DtempList_selected')
+                </script>
+            </c:if>
+        </c:if>
+    </div>
+</div>

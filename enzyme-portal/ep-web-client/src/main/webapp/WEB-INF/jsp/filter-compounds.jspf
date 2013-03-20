@@ -1,0 +1,65 @@
+<%-- Indentation in this page is broken in purpose, in order to minimise the
+    amount of white space (which multiplies with these big loops). Empty lines
+    have been also been avoided. --%>
+<div class="sublevel1">
+    <div class="subTitle">
+        Chemical Compounds (<c:out value="${fn:length(searchFilter.compounds)}"></c:out>)
+    </div>
+    <c:if test="${fn:length(searchFilter.compounds) gt 12}">
+        <div class="ui-widget">
+            <input id="compounds_AUTOCOMPLETE" class="filterSearchBox" placeholder="Type a Compound to filter"  />
+            <input name="searchparams.compounds" id="comptempList" value="" type="hidden"/>
+        </div>
+    </c:if>
+    <div class="filterContent">
+        <c:set var="compoundList" value="${searchFilter.compounds}"/>
+        <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
+        <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+        <c:if test="${compoundListSize > 0}">
+
+            <!--  keep track of checked and displayed items.-->
+
+            <c:set var="checkedItems_c" value="0"/>
+            <c:set var="displayedItems_c" value="0"/>
+            <c:forEach var="times" begin="1" end="2" step="1">
+                <c:forEach var="i" begin="0" end="${compoundListSize}">
+                    <c:if test='${not empty compoundList[i].name}'>
+                        <c:if test='${(compoundList[i].selected eq true and (times == 1)) or (compoundList[i].selected eq false and (times == 2))}'>
+                            <c:if test='${(compoundList[i].selected eq true and (times == 1))}'>
+                                <c:set var="checkedItems_c" value="${checkedItems_c + 1}"/>
+                            </c:if>
+                            <c:if test='${displayedItems_c == limitedDisplay}'>
+                                <div id="compound_0" style="display: none">
+                            </c:if>
+                            <div class="filterLine">
+                                <div class="text">
+                                    <xchars:translate>
+<span class="compoundName" style="border-bottom-style:none " ><c:out value="${compoundList[i].name}" escapeXml="false"/></span>
+<script> compoundsAutoCompleteDataSource.push({label:"${compoundList[i].name} ",value:"${compoundList[i].name}"});</script>
+                                    </xchars:translate>
+                                </div>
+                                <div class="checkItem">
+                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}" onclick="submit()"/>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <c:set var="displayedItems_c" value="${displayedItems_c + 1}"/>
+                        </c:if>
+                    </c:if>
+                </c:forEach>
+                <c:if test='${checkedItems_c gt 0 and checkedItems_c < compoundListSize}'><hr class="hrLine" /></c:if>
+            </c:forEach>
+            <c:set var="compoundMoreSize" value="${compoundListSize - limitedDisplay}"/>
+            <c:if test='${displayedItems_c >= limitedDisplay }'>
+                </div>
+                <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
+            </c:if>
+            <c:if test="${compoundListSize gt 12}">
+                <!--    then add auto complete-->
+                <script>
+                    ResultAutoComplete('compounds_AUTOCOMPLETE', compoundsAutoCompleteDataSource,'filtersForm','comptempList')
+                </script>
+            </c:if>
+        </c:if>
+    </div>
+</div>
