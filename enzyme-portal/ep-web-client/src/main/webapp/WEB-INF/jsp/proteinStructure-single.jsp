@@ -4,7 +4,7 @@
 
 <div class="summary structure" id="${proteinStructure.id}">
     <div class="summary">
-        <h2>${proteinStructure.description}</h2>
+        <h3><span>${proteinStructure.description}</span></h3>
         <div class="main_link">
             <a rel="external"
                href="http://www.ebi.ac.uk/pdbe-srv/view/entry/${proteinStructure.id}/summary">View

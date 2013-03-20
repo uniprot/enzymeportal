@@ -40,9 +40,8 @@
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
 <!--  <link href="resources/css/search.css" type="text/css" rel="stylesheet" />-->
   <!-- for production the above can be replaced with -->
-  
+   <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-  
 
   <style type="text/css">
   	/* You have the option of setting a maximum width for your page, and making sure everything is centered */
@@ -227,7 +226,7 @@
             </li>  
                      <li>
                <div>
-                  <img class="grid_3 alpha" src="resources/images/inc/ChEBI_logo.gif" />
+                  <img class="grid_3 alpha" src="resources/images/inc/ChEBI_logo.png" />
                   <span class="grid_21 omega">
                      <h4>ChEBI</h4>
                      <p>Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on ?small? chemical compounds. The term ?molecular entity? refers to any constitutionally or isotopically distinct atom, molecule, ion, ion pair, radical, radical ion, complex, conformer, etc., identifiable as a separately distinguishable entity. The molecular entities in question are either products of nature or synthetic products used to intervene in the processes of living organisms.</p>

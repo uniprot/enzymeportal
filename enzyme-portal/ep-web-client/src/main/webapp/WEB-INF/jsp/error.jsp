@@ -98,7 +98,7 @@
         <div id="wrapper" class="container_24">
             <header>
                 <div id="global-masthead" class="masthead grid_24">
-                    <p><!-- EMBL-EBI  --><img src="http://frontier.ebi.ac.uk/sites/ebi.ac.uk/themes/custom/ebiomega/logo.png" alt="European Bioinformatics Institute"></p>
+                  <a href="/" title="Go to the EMBL-EBI homepage"><img src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png" alt="EMBL European Bioinformatics Institute"></a>
 
                     <nav>
                         <ul id="global-nav">
