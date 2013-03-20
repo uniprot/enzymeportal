@@ -42,9 +42,8 @@
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
   
   <!-- for production the above can be replaced with -->
-  
+   <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-  
 
   <style type="text/css">
   	/* You have the option of setting a maximum width for your page, and making sure everything is centered */

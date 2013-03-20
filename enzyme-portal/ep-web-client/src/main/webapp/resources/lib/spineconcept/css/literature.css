@@ -34,7 +34,6 @@ margin: 0 10px;
 }
 
 .literature .category  .pub_title a {
-	text-decoration: underline;
 	font-weight: bold;
 }
 
@@ -57,7 +56,6 @@ margin: 0 10px;
 }
 
 .literature .category h2 {
-	/*background: 2px 0px url('../../images/pin.png') no-repeat;*/
 	border-bottom: 1px solid #aaa;
 	padding: 3px 0 7px 0px;
 	margin: 0px 10px 10px 10px;
