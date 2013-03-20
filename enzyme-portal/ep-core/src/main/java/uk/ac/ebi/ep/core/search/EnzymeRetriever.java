@@ -397,13 +397,13 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                 //this is the total number of CheMBL molecules found
                 int totalFound = megaMapperConnection.getMegaMapper().getXrefsSize(
                         MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
-                List<XRef> chemblXrefs = megaMapperConnection.getMegaMapper().getChMBLXrefs(
+                List<Entry> chemblEntries = megaMapperConnection.getMegaMapper().getChMBLEntries(
                         MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
                            LOGGER.debug("MOLECULES before getting ChEMBL molecules");
-                if (chemblXrefs != null) {
+                if (chemblEntries != null) {
                     Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
-                    for (XRef chemblXref : chemblXrefs) {
-                        Molecule chemblDrug = new Molecule().withId(chemblXref.getToEntry().getEntryId()).withName(chemblXref.getToEntry().getEntryName());
+                    for (Entry chemblEntry : chemblEntries) {
+                        Molecule chemblDrug = new Molecule().withId(chemblEntry.getEntryId()).withName(chemblEntry.getEntryName());
                         chemblDrugs.add(chemblDrug);
                     }
                     enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
