@@ -309,14 +309,16 @@ Enzyme Portal - An Introduction</div>
     
 
 <ul class="split">
- <li><a href="http://www.ebi.ac.uk/training/online/course/enzyme-portal-quick-tour" class="icon icon-generic icon-c1" data-icon="+">Quick Tour</a></li>
+ <li><a href="http://www.ebi.ac.uk/training/online/course/enzyme-portal-quick-tour" class="icon icon-generic icon-c1" data-icon="t">Quick Tour</a></li>
    <li><a href="http://nar.oxfordjournals.org/content/41/D1/D773.full" class="icon icon-conceptual icon-c8" data-icon="l">Publications</a></li>
-</ul>
-<ul class="split">
-
- <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic icon-c8" data-icon="l">Documentation</a></li>
+    <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic icon-c8" data-icon=";">Documentation</a></li>
 
 </ul>
+<!--<ul class="split">
+
+ <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic icon-c8" data-icon=";">Documentation</a></li>
+
+</ul>-->
 <!--   </div> -->
 
   
