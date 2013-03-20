@@ -1,542 +1,443 @@
 .Aedes_aegypti {
 	background-image: url('../images/species/thumb_Aedes_aegypti.png');
-        background-repeat: no-repeat;
 }
 
 .Anolis_carolinensis {
-	background-image: url('../images/species/thumb_Anolis_carolinensis.png');
-        background-repeat: no-repeat;
+	background-image: url('../images/species/thumb_Anolis_carolinensis.png')
+		;
 }
 
 .Anopheles_gambiae {
 	background-image: url('../images/species/thumb_Anopheles_gambiae.png');
-        background-repeat: no-repeat;
 }
 
 .Arabidopsis_lyrata {
 	background-image: url('../images/species/thumb_Arabidopsis_lyrata.png');
-        background-repeat: no-repeat;
 }
 
 .Arabidopsis_thaliana {
 	background-image:
 		url('../images/species/thumb_Arabidopsis_thaliana.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_clavatus {
 	background-image:
 		url('../images/species/thumb_Aspergillus_clavatus.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_flavus {
 	background-image: url('../images/species/thumb_Aspergillus_flavus.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_fumigatus {
 	background-image:
 		url('../images/species/thumb_Aspergillus_fumigatus.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_fumigatusa1163 {
 	background-image:
 		url('../images/species/thumb_Aspergillus_fumigatusa1163.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_nidulans {
 	background-image:
 		url('../images/species/thumb_Aspergillus_nidulans.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_niger {
 	background-image: url('../images/species/thumb_Aspergillus_niger.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_oryzae {
 	background-image: url('../images/species/thumb_Aspergillus_oryzae.png');
-        background-repeat: no-repeat;
 }
 
 .Aspergillus_terreus {
 	background-image: url('../images/species/thumb_Aspergillus_terreus.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Bos_taurus {
 	background-image: url('../images/species/thumb_Bos_taurus.png');
-        background-repeat: no-repeat;
 }
 
 .Brachypodium_distachyon {
 	background-image:
 		url('../images/species/thumb_Brachypodium_distachyon.png');
-        background-repeat: no-repeat;
 }
 
 .Caenorhabditis_brenneri {
 	background-image:
 		url('../images/species/thumb_Caenorhabditis_brenneri.png');
-        background-repeat: no-repeat;
 }
 
 .Caenorhabditis_briggsae {
 	background-image:
 		url('../images/species/thumb_Caenorhabditis_briggsae.png');
-        background-repeat: no-repeat;
 }
 
 .Caenorhabditis_elegans {
 	background-image:
 		url('../images/species/thumb_Caenorhabditis_elegans.png');
-        background-repeat: no-repeat;
 }
 
 .Caenorhabditis_japonica {
 	background-image:
 		url('../images/species/thumb_Caenorhabditis_japonica.png');
-        background-repeat: no-repeat;
 }
 
 .Caenorhabditis_remanei {
 	background-image:
 		url('../images/species/thumb_Caenorhabditis_remanei.png');
-        background-repeat: no-repeat;
 }
 
 .Callithrix_jacchus {
 	background-image: url('../images/species/thumb_Callithrix_jacchus.png');
-        background-repeat: no-repeat;
 }
 
 .Canis_lupus_familiaris {
 	background-image: url('../images/species/thumb_Canis_familiaris.png');
-        background-repeat: no-repeat;
 }
 
 .Cavia_porcellus {
 	background-image: url('../images/species/thumb_Cavia_porcellus.png');
-        background-repeat: no-repeat;
 }
 
 .Choloepus_hoffmanni {
 	background-image: url('../images/species/thumb_Choloepus_hoffmanni.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Ciona_intestinalis {
 	background-image: url('../images/species/thumb_Ciona_intestinalis.png');
-        background-repeat: no-repeat;
 }
 
 .Ciona_savignyi {
 	background-image: url('../images/species/thumb_Ciona_savignyi.png');
-        background-repeat: no-repeat;
 }
 
 .Culex_quinquefasciatus {
 	background-image:
 		url('../images/species/thumb_Culex_quinquefasciatus.png');
-        background-repeat: no-repeat;
 }
 
 .Danio_rerio {
 	background-image: url('../images/species/thumb_Danio_rerio.png');
-        background-repeat: no-repeat;
 }
 
 .Dasypus_novemcinctus {
 	background-image:
 		url('../images/species/thumb_Dasypus_novemcinctus.png');
-        background-repeat: no-repeat;
 }
 
 .Dictyostelium_discoideum {
 	background-image:
 		url('../images/species/thumb_Dictyostelium_discoideum.png');
-        background-repeat: no-repeat;
 }
 
 .Dipodomys_ordii {
 	background-image: url('../images/species/thumb_Dipodomys_ordii.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_ananassae {
 	background-image:
 		url('../images/species/thumb_Drosophila_ananassae.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_erecta {
 	background-image: url('../images/species/thumb_Drosophila_erecta.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_grimshawi {
 	background-image:
 		url('../images/species/thumb_Drosophila_grimshawi.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_melanogaster {
 	background-image:
 		url('../images/species/thumb_Drosophila_melanogaster.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_mojavensis {
 	background-image:
 		url('../images/species/thumb_Drosophila_mojavensis.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_persimilis {
 	background-image:
 		url('../images/species/thumb_Drosophila_persimilis.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_pseudoobscura {
 	background-image:
 		url('../images/species/thumb_Drosophila_pseudoobscura.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_sechellia {
 	background-image:
 		url('../images/species/thumb_Drosophila_sechellia.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_simulans {
 	background-image: url('../images/species/thumb_Drosophila_simulans.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Drosophila_virilis {
 	background-image: url('../images/species/thumb_Drosophila_virilis.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_willistoni {
 	background-image:
 		url('../images/species/thumb_Drosophila_willistoni.png');
-        background-repeat: no-repeat;
 }
 
 .Drosophila_yakuba {
 	background-image: url('../images/species/thumb_Drosophila_yakuba.png');
-        background-repeat: no-repeat;
 }
 
 .Echinops_telfairi {
 	background-image: url('../images/species/thumb_Echinops_telfairi.png');
-        background-repeat: no-repeat;
 }
 
 .Equus_caballus {
 	background-image: url('../images/species/thumb_Equus_caballus.png');
-        background-repeat: no-repeat;
 }
 
 .Erinaceus_europaeus {
 	background-image: url('../images/species/thumb_Erinaceus_europaeus.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Felis_catus {
 	background-image: url('../images/species/thumb_Felis_catus.png');
-        background-repeat: no-repeat;
 }
 
 .Gallus_gallus {
 	background-image: url('../images/species/thumb_Gallus_gallus.png');
-        background-repeat: no-repeat;
 }
 
 .Gasterosteus_aculeatus {
 	background-image:
 		url('../images/species/thumb_Gasterosteus_aculeatus.png');
-        background-repeat: no-repeat;
 }
 
 .Gorilla_gorilla {
 	background-image: url('../images/species/thumb_Gorilla_gorilla.png');
-        background-repeat: no-repeat;
 }
 
 .Homo_sapiens {
 	background-image: url('../images/species/thumb_Homo_sapiens.png');
-        background-repeat: no-repeat;
 }
 
 .Ixodes_scapularis {
 	background-image: url('../images/species/thumb_Ixodes_scapularis.png');
-        background-repeat: no-repeat;
 }
 
 .Loxodonta_africana {
 	background-image: url('../images/species/thumb_Loxodonta_africana.png');
-        background-repeat: no-repeat;
 }
 
 .Macaca_mulatta {
 	background-image: url('../images/species/thumb_Macaca_mulatta.png');
-        background-repeat: no-repeat;
 }
 
 .Macropus_eugenii {
 	background-image: url('../images/species/thumb_Macropus_eugenii.png');
-        background-repeat: no-repeat;
 }
 
 .Microcebus_murinus {
 	background-image: url('../images/species/thumb_Microcebus_murinus.png');
-        background-repeat: no-repeat;
 }
 
 .Monodelphis_domestica {
 	background-image:
 		url('../images/species/thumb_Monodelphis_domestica.png');
-        background-repeat: no-repeat;
 }
 
 .Mus_musculus {
 	background-image: url('../images/species/thumb_Mus_musculus.png');
-        background-repeat: no-repeat;
 }
 
 .Myotis_lucifugus {
 	background-image: url('../images/species/thumb_Myotis_lucifugus.png');
-        background-repeat: no-repeat;
 }
 
 .Neosartorya_fischeri {
 	background-image:
 		url('../images/species/thumb_Neosartorya_fischeri.png');
-        background-repeat: no-repeat;
 }
 
 .Neurospora_crassa {
 	background-image: url('../images/species/thumb_Neurospora_crassa.png');
-        background-repeat: no-repeat;
 }
 
 .Ochotona_princeps {
 	background-image: url('../images/species/thumb_Ochotona_princeps.png');
-        background-repeat: no-repeat;
 }
 
 .Ornithorhynchus_anatinus {
 	background-image:
 		url('../images/species/thumb_Ornithorhynchus_anatinus.png');
-        background-repeat: no-repeat;
 }
 
 .Oryctolagus_cuniculus {
 	background-image:
 		url('../images/species/thumb_Oryctolagus_cuniculus.png');
-        background-repeat: no-repeat;
 }
 
 .Oryza_indica {
 	background-image: url('../images/species/thumb_Oryza_indica.png');
-        background-repeat: no-repeat;
 }
 
 .Oryza_sativa {
 	background-image: url('../images/species/thumb_Oryza_sativa.png');
-        background-repeat: no-repeat;
 }
 
 .Oryzias_latipes {
 	background-image: url('../images/species/thumb_Oryzias_latipes.png');
-        background-repeat: no-repeat;
 }
 
 .Otolemur_garnettii {
 	background-image: url('../images/species/thumb_Otolemur_garnettii.png');
-        background-repeat: no-repeat;
 }
 
 .Pan_troglodytes {
 	background-image: url('../images/species/thumb_Pan_troglodytes.png');
-        background-repeat: no-repeat;
 }
 
 .Pediculus_humanus {
 	background-image: url('../images/species/thumb_Pediculus_humanus.png');
-        background-repeat: no-repeat;
 }
 
 .Petromyzon_marinus {
 	background-image: url('../images/species/thumb_Petromyzon_marinus.png');
-        background-repeat: no-repeat;
 }
 
 .Phaeodactylum_tricornutum {
 	background-image:
 		url('../images/species/thumb_Phaeodactylum_tricornutum.png');
-        background-repeat: no-repeat;
 }
 
 .Plasmodium_berghei {
 	background-image: url('../images/species/thumb_Plasmodium_berghei.png');
-        background-repeat: no-repeat;
 }
 
 .Plasmodium_chabaudi {
 	background-image: url('../images/species/thumb_Plasmodium_chabaudi.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Plasmodium_falciparum {
 	background-image:
 		url('../images/species/thumb_Plasmodium_falciparum.png');
-        background-repeat: no-repeat;
 }
 
 .Plasmodium_knowlesi {
 	background-image: url('../images/species/thumb_Plasmodium_knowlesi.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Plasmodium_vivax {
 	background-image: url('../images/species/thumb_Plasmodium_vivax.png');
-        background-repeat: no-repeat;
 }
 
 .Pongo_pygmaeus {
 	background-image: url('../images/species/thumb_Pongo_pygmaeus.png');
-        background-repeat: no-repeat;
 }
 
 .Populus_trichocarpa {
 	background-image: url('../images/species/thumb_Populus_trichocarpa.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Pristionchus_pacificus {
 	background-image:
 		url('../images/species/thumb_Pristionchus_pacificus.png');
-        background-repeat: no-repeat;
 }
 
 .Procavia_capensis {
 	background-image: url('../images/species/thumb_Procavia_capensis.png');
-        background-repeat: no-repeat;
 }
 
 .Pteropus_vampyrus {
 	background-image: url('../images/species/thumb_Pteropus_vampyrus.png');
-        background-repeat: no-repeat;
 }
 
 .Rattus_norvegicus {
 	background-image: url('../images/species/thumb_Rattus_norvegicus.png');
-        background-repeat: no-repeat;
 }
 
 .Saccharomyces_cerevisiae, .Saccharomyces_cerevisiae_S288c {
         background-image:
                 url('../images/species/thumb_Saccharomyces_cerevisiae.png');
-        background-repeat: no-repeat;
 }
 
 .Schizosaccharomyces_pombe {
 	background-image:
 		url('../images/species/thumb_Schizosaccharomyces_pombe.png');
-        background-repeat: no-repeat;
 }
 
 .Sorex_araneus {
 	background-image: url('../images/species/thumb_Sorex_araneus.png');
-        background-repeat: no-repeat;
 }
 
 .Sorghum_bicolor {
 	background-image: url('../images/species/thumb_Sorghum_bicolor.png');
-        background-repeat: no-repeat;
 }
 
 .Spermophilus_tridecemlineatus {
 	background-image:
 		url('../images/species/thumb_Spermophilus_tridecemlineatus.png');
-        background-repeat: no-repeat;
 }
 
 .Sus_scrofa {
 	background-image: url('../images/species/thumb_Sus_scrofa.png');
-        background-repeat: no-repeat;
 }
 
 .Taeniopygia_guttata {
 	background-image: url('../images/species/thumb_Taeniopygia_guttata.png')
 		;
-        background-repeat: no-repeat;
 }
 
 .Takifugu_rubripes {
 	background-image: url('../images/species/thumb_Takifugu_rubripes.png');
-        background-repeat: no-repeat;
 }
 
 .Tarsius_syrichta {
 	background-image: url('../images/species/thumb_Tarsius_syrichta.png');
-        background-repeat: no-repeat;
 }
 
 .Tetraodon_nigroviridis {
 	background-image:
 		url('../images/species/thumb_Tetraodon_nigroviridis.png');
-        background-repeat: no-repeat;
 }
 
 .Thalassiosira_pseudonana {
 	background-image:
 		url('../images/species/thumb_Thalassiosira_pseudonana.png');
-        background-repeat: no-repeat;
 }
 
 .Tupaia_belangeri {
 	background-image: url('../images/species/thumb_Tupaia_belangeri.png');
-        background-repeat: no-repeat;
 }
 
 .Tursiops_truncatus {
 	background-image: url('../images/species/thumb_Tursiops_truncatus.png');
-        background-repeat: no-repeat;
 }
 
 .Vicugna_pacos {
 	background-image: url('../images/species/thumb_Vicugna_pacos.png');
-        background-repeat: no-repeat;
 }
 
 .Vitis_vinifera {
 	background-image: url('../images/species/thumb_Vitis_vinifera.png');
-        background-repeat: no-repeat;
 }
 
 .Xenopus_tropicalis {
 	background-image: url('../images/species/thumb_Xenopus_tropicalis.png');
-        background-repeat: no-repeat;
 }
 
 .moreSpecies {
 	background-image: url('../images/species/more.png');
-        background-repeat: no-repeat;
 }
