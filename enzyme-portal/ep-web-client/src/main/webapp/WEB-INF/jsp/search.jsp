@@ -123,14 +123,14 @@
         <!-- <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script> -->
 
         <!-- custom build (lacks most of the "advanced" HTML5 support -->
-        <script src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/modernizr.js"></script>		
+<!--        <script src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/modernizr.js"></script>		-->
 
         <!--<! --------------------------------
         GLOBAL SEARCH TEMPLATE - START
        -------------------------------- >-->
 
-        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
-        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
+<!--        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>-->
 
         <!--<! --------------------------------
         GLOBAL SEARCH TEMPLATE - END
@@ -326,22 +326,23 @@
                                 <input type="hidden" id="filtersFormStart"
                                        name="searchparams.start" value="0"/>
 
-<<<<<<< HEAD
+                                
+                                
                                 <%@ include file="filter-species.jspf"%>
                                 <br/>
                                 <%@ include file="filter-compounds.jspf"%>
                                 <br/>
                                 <%@ include file="filter-diseases.jspf"%>
-=======
 
-                                <div class="sublevel1"> 
+
+<!--                                <div class="sublevel1"> 
 
 
                                     <div class="subTitle">
                                         Species (<c:out value="${fn:length(searchFilter.species)}"></c:out>) 
                                         </div>  
                                     <c:if test="${fn:length(searchFilter.species) gt 12}">           
-                                        <!--auto-complete search box-->
+                                        auto-complete search box
                                         <div class="ui-widget grid_12zzz">
 
                                             <input id="specieAT" itemtype="text"   class="filterSearchBox" placeholder="Enter Species to filter" />
@@ -357,11 +358,11 @@
                                         <c:set var="speciesListSize" value="${fn:length(speciesList)}"/>
                                         <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
 
-                                        <!--to ensure that the specie list is not empty-->
+                                        to ensure that the specie list is not empty
                                         <c:if test="${speciesListSize > 0}">
 
 
-                                            <!--  keep track of checked and displayed items.-->
+                                              keep track of checked and displayed items.
 
                                             <c:set var="checkedItems" value="0"/> 
                                             <c:set var="displayedItems" value="0"/> 
@@ -448,7 +449,7 @@
                                             </c:if> 
 
                                             <c:if test="${speciesListSize gt 12}">
-                                                <!--    then add auto complete-->
+                                                    then add auto complete
                                                 <script>
                                                     ResultAutoComplete('specieAT', speciesAutocompleteDataSource,'filtersForm','_ctempList_selected')
                                                 </script>
@@ -495,7 +496,7 @@
                                         <c:if test="${compoundListSize > 0}">
 
 
-                                            <!--  keep track of checked and displayed items.-->
+                                              keep track of checked and displayed items.
 
                                             <c:set var="checkedItems_c" value="0"/> 
                                             <c:set var="displayedItems_c" value="0"/> 
@@ -553,7 +554,7 @@
                                             </c:if> 
 
                                             <c:if test="${compoundListSize gt 12}">
-                                                <!--    then add auto complete-->
+                                                    then add auto complete
                                                 <script>
                                                     ResultAutoComplete('compounds_AUTOCOMPLETE', compoundsAutoCompleteDataSource,'filtersForm','comptempList')
                                                 </script>
@@ -594,7 +595,7 @@
                                         <c:if test="${diseasesListSize > 0}">
 
 
-                                            <!--  keep track of checked and displayed items.-->
+                                              keep track of checked and displayed items.
 
                                             <c:set var="checkedItems" value="0"/> 
                                             <c:set var="displayedItems" value="0"/> 
@@ -653,7 +654,7 @@
                                             </c:if> 
 
                                             <c:if test="${diseasesListSize gt 12}">
-                                                <!--    then add auto complete-->
+                                                    then add auto complete
                                                 <script>
                                                     ResultAutoComplete('diseases_AUTOCOMPLETE', diseaseAutoCompleteDataSource,'filtersForm','_DtempList_selected')
                                                 </script>
@@ -665,14 +666,14 @@
                                     </div>
                                 </div>
 
-
+-->
 
                                 <%-- The end of disease --%>
 
 
 
 
->>>>>>> updating ep website with bug fixes on chembl compounds, carousel, ui-related issues with reference to the entry page
+
 
                             </form:form>
                         </div> 
