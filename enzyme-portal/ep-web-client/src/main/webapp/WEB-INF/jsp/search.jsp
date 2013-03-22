@@ -72,7 +72,7 @@
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
 
 <!--        for production-->
-          <link rel="stylesheet" href="http://www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
+          <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
 
         <!--        javascript was placed here for auto complete otherwise should be place at the bottom for faster page loading-->
 
