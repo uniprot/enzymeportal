@@ -123,14 +123,14 @@
         <!-- <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script> -->
 
         <!-- custom build (lacks most of the "advanced" HTML5 support -->
-<!--        <script src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/modernizr.js"></script>		-->
+        <script src="//www.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/modernizr.js"></script>		
 
         <!--<! --------------------------------
         GLOBAL SEARCH TEMPLATE - START
        -------------------------------- >-->
 
-<!--        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
-        <script type="text/javascript" src="http://frontier.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>-->
+        <script type="text/javascript" src="//www.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="//www.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
 
         <!--<! --------------------------------
         GLOBAL SEARCH TEMPLATE - END
