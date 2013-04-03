@@ -9,9 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 
 /**
@@ -516,6 +514,35 @@ public class MegaJdbcMapper implements MegaMapper {
                 throw new IllegalArgumentException("constraint not supported: "
                         + constraint);
         }
+    }
+    
+    	/**
+>>>>>>> 5a58a8dbc73ad57eac346d1d217ac661f41fc064
+     * retrieves a List of XRef with database name as ChEMBL.
+     *
+     * @param db database where the accession is found
+     * @param accession the accession number
+     * @param xDbs chEMBL database
+     * @return a List of XRef with database name as chEMBL. Note: the maximum
+     * number of XRef retrieved is 5.
+     */
+    public List<XRef> getChMBLXrefs(MmDatabase db, String accession,
+            MmDatabase... xDbs) {
+        List<XRef> xrefs = null;
+        try {
+            if (xrefs == null) {
+                xrefs = new ArrayList<XRef>();
+            }
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--xrefs.by.ChEMBL", dbArrayForQuery(xDbs));
+            ps.setString(1, accession);
+            ps.setString(2, db.name());
+            xrefs = buildXref(ps.executeQuery());
+        } catch (SQLException e) {
+            LOGGER.error(accession + " (" + xDbs + ")", e);
+        }
+
+        return xrefs;
     }
 
     /**
