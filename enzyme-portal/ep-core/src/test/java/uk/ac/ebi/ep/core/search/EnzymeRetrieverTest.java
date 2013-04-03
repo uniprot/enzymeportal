@@ -32,7 +32,7 @@ import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
  *
  * @author hongcao
  */
-//@Ignore
+@Ignore
 public class EnzymeRetrieverTest {
     private EnzymeRetriever instance;
      String uniprotAccession ="Q9NP56";// "Q08499";
