@@ -407,13 +407,13 @@
 <a class="jxr_linenumber" name="397" href="#397">397</a>                 <em class="jxr_comment">//this is the total number of CheMBL molecules found</em>
 <a class="jxr_linenumber" name="398" href="#398">398</a>                 <strong class="jxr_keyword">int</strong> totalFound = megaMapperConnection.getMegaMapper().getXrefsSize(
 <a class="jxr_linenumber" name="399" href="#399">399</a>                         MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
-<a class="jxr_linenumber" name="400" href="#400">400</a>                 List&lt;XRef&gt; chemblXrefs = megaMapperConnection.getMegaMapper().getChMBLXrefs(
+<a class="jxr_linenumber" name="400" href="#400">400</a>                 List&lt;Entry&gt; chemblEntries = megaMapperConnection.getMegaMapper().getChMBLEntries(
 <a class="jxr_linenumber" name="401" href="#401">401</a>                         MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
 <a class="jxr_linenumber" name="402" href="#402">402</a>                            LOGGER.debug(<span class="jxr_string">"MOLECULES before getting ChEMBL molecules"</span>);
-<a class="jxr_linenumber" name="403" href="#403">403</a>                 <strong class="jxr_keyword">if</strong> (chemblXrefs != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="403" href="#403">403</a>                 <strong class="jxr_keyword">if</strong> (chemblEntries != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="404" href="#404">404</a>                     Collection&lt;Molecule&gt; chemblDrugs = <strong class="jxr_keyword">new</strong> ArrayList&lt;Molecule&gt;();
-<a class="jxr_linenumber" name="405" href="#405">405</a>                     <strong class="jxr_keyword">for</strong> (XRef chemblXref : chemblXrefs) {
-<a class="jxr_linenumber" name="406" href="#406">406</a>                         Molecule chemblDrug = <strong class="jxr_keyword">new</strong> Molecule().withId(chemblXref.getToEntry().getEntryId()).withName(chemblXref.getToEntry().getEntryName());
+<a class="jxr_linenumber" name="405" href="#405">405</a>                     <strong class="jxr_keyword">for</strong> (Entry chemblEntry : chemblEntries) {
+<a class="jxr_linenumber" name="406" href="#406">406</a>                         Molecule chemblDrug = <strong class="jxr_keyword">new</strong> Molecule().withId(chemblEntry.getEntryId()).withName(chemblEntry.getEntryName());
 <a class="jxr_linenumber" name="407" href="#407">407</a>                         chemblDrugs.add(chemblDrug);
 <a class="jxr_linenumber" name="408" href="#408">408</a>                     }
 <a class="jxr_linenumber" name="409" href="#409">409</a>                     enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
@@ -539,7 +539,7 @@
 <a class="jxr_linenumber" name="529" href="#529">529</a> 
 <a class="jxr_linenumber" name="530" href="#530">530</a>         <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="531" href="#531">531</a>             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
-<a class="jxr_linenumber" name="532" href="#532">532</a>             Collection&lt;XRef&gt; xRefList = megaMapperConnection.getMegaMapper().getXrefs(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+<a class="jxr_linenumber" name="532" href="#532">532</a>             Collection&lt;XRef&gt; xRefList = megaMapperConnection.getMegaMapper().getXrefs(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO);
 <a class="jxr_linenumber" name="533" href="#533">533</a>             <strong class="jxr_keyword">if</strong> (xRefList != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="534" href="#534">534</a>                 <strong class="jxr_keyword">for</strong> (XRef ref : xRefList) {
 <a class="jxr_linenumber" name="535" href="#535">535</a>                     Entry entry = ref.getToEntry();
