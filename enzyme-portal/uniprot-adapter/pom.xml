@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>uniprot-adapter</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>UniProt adapter</name>
 	<description>
 		A module providing proxies to UniProt.
