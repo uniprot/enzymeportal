@@ -10,6 +10,21 @@
 </properties>
 
 <body>
+    <release version="1.0.13" date="2013-04-05" description="Bug fix">
+        <action dev="rafalcan" type="fix">
+            Processed PDB IDs for every related species in the summary
+            (StructuresProcessor). Now the processing is not done after getting
+            all of the summaries, and not only for the default species, but
+            delegated to uniprot-adapter which can do it in paralel for every
+            ortholog. The class StructuresProcessor is now deprecated.
+            <fixes issue="146"/>
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of uniprot-adapter - which allows fixing
+            of PDB xrefs using the mega-map - and mega-mapper.
+        </action>
+    </release>
+    <release version="1.0.12"></release>
     <release version="1.0.11" date="2013-02-25" description="Bug fix">
         <action dev="rafalcan" type="fix">
             Fixed 'connection already closed' issue caused by the
