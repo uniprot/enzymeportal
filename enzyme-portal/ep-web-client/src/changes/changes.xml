@@ -10,6 +10,16 @@
 </properties>
 
 <body>
+    <release version="1.0.15" date="" description="">
+        <action dev="rafalcan" type="fix">
+            Fixed issue with structures thumbnails.
+            <fixes issue="146"/>
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of ep-core - which allows the fix for
+            structures thumbnails.
+        </action>
+    </release>
 	<release version="1.0.14" date="2013-02-28" description="Bug fix">
 		<action dev="rafalcan" type="fix">
 			Reduced size of requested images (thumbnails) in search results
