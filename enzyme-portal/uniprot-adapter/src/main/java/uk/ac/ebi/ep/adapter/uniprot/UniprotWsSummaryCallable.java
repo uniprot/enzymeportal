@@ -15,21 +15,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.ep.entry.Field;
-import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
-import uk.ac.ebi.ep.enzyme.model.Disease;
-import uk.ac.ebi.ep.enzyme.model.Enzyme;
-import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.enzyme.model.Molecule;
-import uk.ac.ebi.ep.enzyme.model.Pathway;
-import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
-import uk.ac.ebi.ep.enzyme.model.Sequence;
+import uk.ac.ebi.ep.enzyme.model.*;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
@@ -40,7 +31,7 @@ import uk.ac.ebi.ep.search.model.Species;
  * @author rafa
  *
  */
-public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
+public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
 
     private static final Logger LOGGER = Logger.getLogger(UniprotWsSummaryCallable.class);
 
@@ -98,8 +89,6 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
         Species species = null;
         List<EnzymeAccession> relSpecies = new LinkedList<EnzymeAccession>();
 
-
-
         int bestSpecies = 0; // the best choice to show
         String[] colValues = null;
         for (int i = 0; i < enzymeInfo.size(); i++) {
@@ -132,9 +121,6 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
             } else {
                 relSpecies.add(ea);
             }
-
-            //relSpecies.add(ea);
-
         }
 
         species = relSpecies.get(0).getSpecies();
@@ -286,7 +272,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
         if (drugsString != null || regulString != null) {
             summary.setMolecule(parseChemicalEntity(drugsString, regulString));
         }
-        return summary;
+        return fixPdbXrefs(summary);
     }
 
     /**
@@ -322,6 +308,7 @@ public class UniprotWsSummaryCallable implements Callable<EnzymeSummary> {
      * available from PDBe website.
      * @param pdbAccessions the PDB accessions. <i>Note that we are assuming
      * 		that any theoretical models come always first.</i>
+     * 	    FIXME this is not always true!
      * @param pdbMethods the methods used to resolve the structures.
      * @return a list of Strings (non-theoretical PDB codes), or
      * 		<code>null</code> if none is returned by the web service or if all

@@ -1,5 +1,7 @@
 package uk.ac.ebi.ep.adapter.uniprot;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,7 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.ep.adapter.uniprot.UniprotWsSummaryCallable.IdType;
 import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
@@ -74,8 +75,8 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 					"( \\((?:strain|isolate) [^()]+(?:\\([^()]+\\))?[^()]*\\))?" +
 					"(?: \\(([^()]+)\\))?" +
 					"(?: \\(([^()]+(?:\\([^()]+\\))?)\\))*");
-	
-	public EnzymeSummary getEnzymeSummary(String accession)
+
+    public EnzymeSummary getEnzymeSummary(String accession)
 	throws UniprotWsException {
 		return getEnzymeSummary(accession, Field.enzyme);
 	}
@@ -83,8 +84,8 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	/**
 	 * {@inheritDoc}
 	 * <br>
-	 * <b>WARNING:</b>This implementation does not currently populate properly the model,
-	 * but just adds Reactome IDs (Pathway objects within one single
+	 * <b>WARNING:</b>This implementation does not currently populate properly
+     * the model, but just adds Reactome IDs (Pathway objects within one single
 	 * ReactionPathway object).
 	 * @throws UniprotWsException 
 	 * @see UniprotWsSummaryCallable#parseReactionPathways implementation.
@@ -113,8 +114,7 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 
 	public List<EnzymeSummary> getEnzymesByIdPrefixes(List<String> idPrefixes,
 			String defaultSpecies, Collection<String> speciesFilter)
-	throws MultiThreadingException {
-//	    ExecutorService pool = Executors.newCachedThreadPool();
+    throws MultiThreadingException {
 	    ExecutorService pool =
 	    		Executors.newFixedThreadPool(config.getMaxThreads());
 	    CompletionService<EnzymeSummary> ecs =
@@ -122,13 +122,16 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    // We must keep the order of the summaries, the same as the ID prefixes:
 	    Map<Future<EnzymeSummary>, EnzymeSummary> future2summary =
 	    		new LinkedHashMap<Future<EnzymeSummary>, EnzymeSummary>();
+	    Connection mmConnection = getMmConnection();
 	    try {
 	    	LOGGER.debug("Submitting summary callables...");
 	    	for (String query : idPrefixes) {
-				Callable<EnzymeSummary> callable = new UniprotWsSummaryCallable(
-						query+"_*", IdType.ENTRY_NAME, Field.brief,
+                UniprotWsSummaryCallable callable =
+                        new UniprotWsSummaryCallable(query+"_*",
+                        IdType.ENTRY_NAME, Field.brief,
 						defaultSpecies, config);
-				future2summary.put(ecs.submit(callable), null);
+                callable.setMmConnection(mmConnection);
+                future2summary.put(ecs.submit(callable), null);
 			}
 			LOGGER.debug("Polling EnzymeSummary Futures...");
 	    	for (int i = 0; i < idPrefixes.size(); i++){
@@ -159,7 +162,12 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    	LOGGER.debug("Polled all futures");
 	    	return new ArrayList<EnzymeSummary>(future2summary.values());
 	    } finally {
-	    	pool.shutdown();
+	        if (mmConnection != null) try {
+                mmConnection.close();
+            } catch (SQLException e) {
+                LOGGER.error("Unable to close connection to mega-map", e);
+            }
+            pool.shutdown();
 	    }
 	}
 	

@@ -10,7 +10,15 @@
 </properties>
 
 <body>
-	<release version="1.0.2" date="(Not yet released)">
+	<release version="1.0.2" date="2013-04-05" description="Bug fix">
+	    <action dev="rafalcan" type="fix">
+	        Now this module uses mega-mapper (added dependency) to retrieve
+	        PDB xrefs from there and replace the ones coming from UniProt, which
+	        include theoretical models. The previous solution was buggy, as it
+	        retrieved PDB xrefs for all of the orthologs, mixing them and
+	        resulting sometimes in the wrong thumbnail being displayed.
+            <fixes issue="146"/>
+	    </action>
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
 			ep-domain, ep-util, uniprotjapi - to use always the latest release -
