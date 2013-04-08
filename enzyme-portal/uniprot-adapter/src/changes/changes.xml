@@ -10,6 +10,12 @@
 </properties>
 
 <body>
+    <release version="1.0.3" date="" description="Bug fix">
+        <action dev="rafalcan" type="fix">
+            Closing mega-mapper after using it avoids more than likely problems
+            (too many open cursors).
+        </action>
+    </release>
 	<release version="1.0.2" date="2013-04-05" description="Bug fix">
 	    <action dev="rafalcan" type="fix">
 	        Now this module uses mega-mapper (added dependency) to retrieve

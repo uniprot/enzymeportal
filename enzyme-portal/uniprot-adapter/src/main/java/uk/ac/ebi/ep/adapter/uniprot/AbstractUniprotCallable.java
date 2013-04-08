@@ -67,6 +67,11 @@ implements Callable<EnzymeSummary> {
                 }
             }
             // TODO: fix also the default species?
+            try {
+                mm.closeMap();
+            } catch (IOException e) {
+                LOGGER.error("Unable to close the mega-map", e);
+            }
         }
         return summary;
     }
