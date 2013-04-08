@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.core.search;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.blast.Hit;
@@ -23,7 +24,6 @@ import uk.ac.ebi.ep.core.CompoundDefaultWrapper;
 import uk.ac.ebi.ep.core.DiseaseDefaultWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.core.search.util.EnzymeSummaryProcessor;
-import uk.ac.ebi.ep.core.search.util.StructuresProcessor;
 import uk.ac.ebi.ep.core.search.util.SynonymsProcessor;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
@@ -86,6 +86,7 @@ public class EnzymeFinder implements IEnzymeFinder {
                 uniprotAdapter = new UniprotWsAdapter();
                 break;
         }
+        uniprotAdapter.setMmDatasource(config.getMmDatasource());
     }
 
     @Override
@@ -96,7 +97,6 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public void closeResources() {
         megaMapperConnection.closeMegaMapperConnection();
-
     }
 
     //****************************** GETTER & SETTER *****************************//
@@ -915,15 +915,12 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
     }
 
-    public List<EnzymeSummary> getEnzymesFromUniprotAPI(List<String> resultSubList, List<String> paramList)
-            throws MultiThreadingException {
-
-        // List<EnzymeSummary> enzymeList = null;
+    public List<EnzymeSummary> getEnzymesFromUniprotAPI(
+            List<String> resultSubList, List<String> paramList)
+    throws MultiThreadingException {
         List<EnzymeSummary> enzymeList =
                 uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
                 IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
-
-
         return enzymeList;
     }
 
@@ -942,7 +939,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         		getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
         if (summaries != null) {
         	EnzymeSummaryProcessor[] processors = {
-    			new StructuresProcessor(megaMapperConnection.getMegaMapper()),
     			new SynonymsProcessor(summaries, intenzAdapter)
         	};
         	for (EnzymeSummary summary : summaries) {
