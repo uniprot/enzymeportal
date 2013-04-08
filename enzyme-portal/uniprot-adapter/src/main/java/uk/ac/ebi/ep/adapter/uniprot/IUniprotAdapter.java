@@ -40,7 +40,13 @@ public interface IUniprotAdapter {
      * @param config
      */
     public void setConfig(UniprotConfig config);
-    
+
+    /**
+     * Sets the data source for the mega-map to fix cross-references (ex. PDB
+     * entries for theoretical models which come from UniProt).
+     */
+    void setMmDatasource(String mmDatasource);
+
     /**
      * Gets a basic summary of one entry by UniProt accession.
      * @param accession a UniProt accession.
@@ -121,7 +127,7 @@ public interface IUniprotAdapter {
 	 * @param idPrefixes the prefixes of UniProt IDs.
 	 * @return a collection of Species.
 	 */
-	public Collection<Species> getSpecies(Collection<String> idPrefixes); 
+	public Collection<Species> getSpecies(Collection<String> idPrefixes);
 }
 
 
