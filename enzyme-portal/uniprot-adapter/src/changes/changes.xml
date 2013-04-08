@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-    <release version="1.0.3" date="" description="Bug fix">
+    <release version="1.0.3" date="2013-04-08" description="Bug fix">
         <action dev="rafalcan" type="fix">
             Closing mega-mapper after using it avoids more than likely problems
             (too many open cursors).
