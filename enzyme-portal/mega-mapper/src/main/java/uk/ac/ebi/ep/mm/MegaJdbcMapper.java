@@ -911,6 +911,8 @@ public class MegaJdbcMapper implements MegaMapper {
     public Map<String, String> getCompounds(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
 
+        LOGGER.info("ACCESSIONS = "+ accessions);
+        System.out.println("ACCESSIONS = "+ accessions);
         Map<String, String> compoundEntryMap = null;
         String[] acc = accessions.split("_");
         String accession = acc[0].concat("\\_%");
