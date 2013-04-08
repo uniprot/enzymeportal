@@ -397,7 +397,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 
 
-        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL, MmDatabase.ChEMBL);
+        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEBI, MmDatabase.ChEMBL);
 
         if (xRefList != null) {
             for (Map.Entry<String, String> ref : xRefList.entrySet()) {

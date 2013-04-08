@@ -12,13 +12,13 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.12-SNAPSHOT</version>
+    <version>1.0.12</version>
     <name>Mega mapper</name>
     <description>
     	A module to keep track of cross references between the databases used
     	by the Enzyme Portal.
     </description>
-	
+
     <dependencies>
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
