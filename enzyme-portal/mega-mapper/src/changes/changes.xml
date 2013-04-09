@@ -7,9 +7,15 @@
 <properties>
 	<title>Mega-mapper change log</title>
 	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+        <author email="joseph@ebi.ac.uk">Joseph Onwubiko</author>
 </properties>
 
 <body>
+    	<release version="1.0.13" date="" description="Bug fixes and enhancements.">
+		<action dev="joseph" type="fix">
+                ChEMBL compounds with names were added to the Mega Mapper
+		</action>
+	</release>
 	<release version="1.0.10" date="" description="Bug fixes">
 		<action dev="rafalcan" type="fix">
 			Fixed query in MegaJdbcMapper.getCompounds and

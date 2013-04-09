@@ -42,8 +42,7 @@ echo "Starting ChEBI import - $(date)"
 echo "Finished ChEBI import - $(date)"
 
 echo "Starting ChEMBL import - $(date)"
-java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
-	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
+. $MM_SCRIPTS/loadChEMBLCompounds.sh
 echo "Finished ChEMBL import - $(date)"
 
 echo "Starting UniMed import - $(date)"
