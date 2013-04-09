@@ -204,7 +204,7 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     private void updateEntry(Entry entry) throws IOException {
         MegaMapper mapper = databaseResources.getMegaMapper();
         int num_row_affected = mapper.updateEntry(entry);
-        //System.out.println("number of rows affected " + num_row_affected);
+        System.out.println("number of rows affected " + num_row_affected);
         LOGGER.info("Number of rows affected during an update operation = " + num_row_affected);
     }
 }

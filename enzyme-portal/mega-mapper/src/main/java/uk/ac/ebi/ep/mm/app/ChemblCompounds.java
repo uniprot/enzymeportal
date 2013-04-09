@@ -11,7 +11,7 @@ package uk.ac.ebi.ep.mm.app;
 public class ChemblCompounds {
     
         public static void main(String... args) {
-        String dbConfig = "ep-mm-db-enzdev";
+        //String dbConfig = "ep-mm-db-enzdev";
 
         if (args == null) {
             System.exit(1);
@@ -19,8 +19,8 @@ public class ChemblCompounds {
 
 
 
-        //ICompoundsDAO dAOImpl = new CompoundsChEMBL_Impl(args[0]);
-        ICompoundsDAO dAOImpl = new CompoundsChEMBL_Impl(dbConfig);
+        ICompoundsDAO dAOImpl = new CompoundsChEMBL_Impl(args[0]);
+        //ICompoundsDAO dAOImpl = new CompoundsChEMBL_Impl(dbConfig);
        
         dAOImpl.buildCompound();
 
