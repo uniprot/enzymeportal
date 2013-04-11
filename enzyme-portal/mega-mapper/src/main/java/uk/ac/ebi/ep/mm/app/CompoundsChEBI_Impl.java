@@ -5,11 +5,16 @@
 package uk.ac.ebi.ep.mm.app;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.*;
+import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.mm.MegaJdbcMapper;
 import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.Relationship;
@@ -19,7 +24,7 @@ import uk.ac.ebi.ep.mm.XRef;
  *This class is to retrieve compounds from chebi database and write them to the mega mapper
  * @author joseph
  */
-public class CompoundsChEBI_Impl  implements ICompoundsDAO {
+public class CompoundsChEBI_Impl   implements ICompoundsDAO {
 
     private final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CompoundsChEBI_Impl.class);
     private SessionFactory sessionFactory;
@@ -30,11 +35,12 @@ public class CompoundsChEBI_Impl  implements ICompoundsDAO {
     private Entry uniprotEntry;
     private XRef xRef;
     private DatabaseResources databaseResources;
+    private String dbConfig;
+    
   
 
    
   
-
     private enum MEGA_RELATIONSHIP {
 
         COFACTOR("CC - COFACTOR"), CATALYTIC_ACTIVITY("CC - CATALYTIC ACTIVITY"), ENZYME_REGULATION("CC - ENZYME REGULATION"), INDUCTION("CC - INDUCTION"),
@@ -66,13 +72,14 @@ public class CompoundsChEBI_Impl  implements ICompoundsDAO {
 
     public CompoundsChEBI_Impl(String dbConfig) {
        this.init(dbConfig);
+       this.dbConfig = dbConfig;
+                
+            }
         
-    }
     
-
     private void init(String dbConfig) {
          databaseResources = new DatabaseResources(dbConfig);
-        sessionFactory = HibernateUtil.getSessionFactory();
+       sessionFactory = HibernateUtil.getSessionFactory();
     }
 
         public void buildCompound(){
@@ -164,7 +171,7 @@ public class CompoundsChEBI_Impl  implements ICompoundsDAO {
             LOGGER.info("About to Write to Mega Mapper Database....");
             this.writeXrefs(xRefList);
             LOGGER.info("Done writing.");
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(CompoundsChEBI_Impl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -254,7 +261,7 @@ public class CompoundsChEBI_Impl  implements ICompoundsDAO {
              try {
             this.writeEntries(entries);
             this.writeXrefs(xRefs);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOGGER.fatal("Error while writing Chebi Compounds to Mega Mapper", ex);
         }
     }
@@ -273,11 +280,16 @@ public class CompoundsChEBI_Impl  implements ICompoundsDAO {
         mapper.writeXref(ref);
     }
 
-    public void writeXrefs(Collection<XRef> xRefs) throws IOException {
-  
-        MegaMapper mapper = databaseResources.getMegaMapper();
-        mapper.writeXrefs(xRefs);
-    }
+    public void writeXrefs(Collection<XRef> xRefs) throws Exception {
 
-   
-}
+           Connection con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
+
+            MegaMapper    mapper = new MegaJdbcMapper(con);
+                mapper.openMap();
+            mapper.writeXrefs(xRefs);
+          
+     
+            }
+
+
+    }

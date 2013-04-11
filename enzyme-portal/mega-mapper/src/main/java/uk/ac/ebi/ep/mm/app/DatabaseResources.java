@@ -6,6 +6,8 @@ package uk.ac.ebi.ep.mm.app;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.mm.MegaJdbcMapper;
@@ -57,7 +59,7 @@ public class DatabaseResources {
             }
             megaMapper = new MegaJdbcMapper(connection);
             megaMapper.openMap();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOGGER.fatal("IOException while creating the megaMapper", ex);
         }
     }
@@ -81,4 +83,4 @@ public class DatabaseResources {
 //                return this.executorService.submit(new CallableResultSet(this, query,mmDatabase));
 //        }
 
-}
+    }
