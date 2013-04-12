@@ -12,7 +12,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.14</version>
     <name>Mega mapper</name>
     <description>
     	A module to keep track of cross references between the databases used
