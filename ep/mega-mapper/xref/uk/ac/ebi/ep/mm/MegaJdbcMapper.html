@@ -1112,61 +1112,62 @@
 <a class="jxr_linenumber" name="1102" href="#1102">1102</a>             entryIdList = <strong class="jxr_keyword">new</strong> LinkedList&lt;String&gt;();
 <a class="jxr_linenumber" name="1103" href="#1103">1103</a>         }
 <a class="jxr_linenumber" name="1104" href="#1104">1104</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="1105" href="#1105">1105</a>             String query = <span class="jxr_string">"SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL"</span>;
-<a class="jxr_linenumber" name="1106" href="#1106">1106</a>             PreparedStatement preparedStatement = con.prepareStatement(query);
-<a class="jxr_linenumber" name="1107" href="#1107">1107</a>             <em class="jxr_comment">//PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");</em>
-<a class="jxr_linenumber" name="1108" href="#1108">1108</a>             <em class="jxr_comment">//and rownum &lt;= 700000</em>
-<a class="jxr_linenumber" name="1109" href="#1109">1109</a>             preparedStatement.setString(1, database.name());
-<a class="jxr_linenumber" name="1110" href="#1110">1110</a>             resultSet = preparedStatement.executeQuery();
-<a class="jxr_linenumber" name="1111" href="#1111">1111</a>             <strong class="jxr_keyword">while</strong> (resultSet.next()) {
-<a class="jxr_linenumber" name="1112" href="#1112">1112</a>                 String accession = resultSet.getString(ENTRY_ID);
-<a class="jxr_linenumber" name="1113" href="#1113">1113</a> 
-<a class="jxr_linenumber" name="1114" href="#1114">1114</a>                 entryIdList.add(accession);
-<a class="jxr_linenumber" name="1115" href="#1115">1115</a> 
+<a class="jxr_linenumber" name="1105" href="#1105">1105</a>             System.out.println(<span class="jxr_string">"connection in mega mapper jdbc "</span>+ con);
+<a class="jxr_linenumber" name="1106" href="#1106">1106</a>             String query = <span class="jxr_string">"SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL"</span>;
+<a class="jxr_linenumber" name="1107" href="#1107">1107</a>             PreparedStatement preparedStatement = con.prepareStatement(query);
+<a class="jxr_linenumber" name="1108" href="#1108">1108</a>             <em class="jxr_comment">//PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");</em>
+<a class="jxr_linenumber" name="1109" href="#1109">1109</a>             <em class="jxr_comment">//and rownum &lt;= 700000</em>
+<a class="jxr_linenumber" name="1110" href="#1110">1110</a>             preparedStatement.setString(1, database.name());
+<a class="jxr_linenumber" name="1111" href="#1111">1111</a>             resultSet = preparedStatement.executeQuery();
+<a class="jxr_linenumber" name="1112" href="#1112">1112</a>             <strong class="jxr_keyword">while</strong> (resultSet.next()) {
+<a class="jxr_linenumber" name="1113" href="#1113">1113</a>                 String accession = resultSet.getString(ENTRY_ID);
+<a class="jxr_linenumber" name="1114" href="#1114">1114</a> 
+<a class="jxr_linenumber" name="1115" href="#1115">1115</a>                 entryIdList.add(accession);
 <a class="jxr_linenumber" name="1116" href="#1116">1116</a> 
 <a class="jxr_linenumber" name="1117" href="#1117">1117</a> 
-<a class="jxr_linenumber" name="1118" href="#1118">1118</a>             }
-<a class="jxr_linenumber" name="1119" href="#1119">1119</a> 
-<a class="jxr_linenumber" name="1120" href="#1120">1120</a>         } <strong class="jxr_keyword">catch</strong> (SQLException ex) {
-<a class="jxr_linenumber" name="1121" href="#1121">1121</a>             java.util.logging.Logger.getLogger(MegaJdbcMapper.<strong class="jxr_keyword">class</strong>.getName()).log(Level.SEVERE, <strong class="jxr_keyword">null</strong>, ex);
-<a class="jxr_linenumber" name="1122" href="#1122">1122</a>         } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="1123" href="#1123">1123</a>             closeResultSet(resultSet);
-<a class="jxr_linenumber" name="1124" href="#1124">1124</a>         }
-<a class="jxr_linenumber" name="1125" href="#1125">1125</a> 
-<a class="jxr_linenumber" name="1126" href="#1126">1126</a>         <strong class="jxr_keyword">return</strong> entryIdList;
-<a class="jxr_linenumber" name="1127" href="#1127">1127</a> 
+<a class="jxr_linenumber" name="1118" href="#1118">1118</a> 
+<a class="jxr_linenumber" name="1119" href="#1119">1119</a>             }
+<a class="jxr_linenumber" name="1120" href="#1120">1120</a> 
+<a class="jxr_linenumber" name="1121" href="#1121">1121</a>         } <strong class="jxr_keyword">catch</strong> (SQLException ex) {
+<a class="jxr_linenumber" name="1122" href="#1122">1122</a>             java.util.logging.Logger.getLogger(MegaJdbcMapper.<strong class="jxr_keyword">class</strong>.getName()).log(Level.SEVERE, <strong class="jxr_keyword">null</strong>, ex);
+<a class="jxr_linenumber" name="1123" href="#1123">1123</a>         } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="1124" href="#1124">1124</a>             closeResultSet(resultSet);
+<a class="jxr_linenumber" name="1125" href="#1125">1125</a>         }
+<a class="jxr_linenumber" name="1126" href="#1126">1126</a> 
+<a class="jxr_linenumber" name="1127" href="#1127">1127</a>         <strong class="jxr_keyword">return</strong> entryIdList;
 <a class="jxr_linenumber" name="1128" href="#1128">1128</a> 
-<a class="jxr_linenumber" name="1129" href="#1129">1129</a>     }
-<a class="jxr_linenumber" name="1130" href="#1130">1130</a> 
-<a class="jxr_linenumber" name="1131" href="#1131">1131</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="1132" href="#1132">1132</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="1133" href="#1133">1133</a> <em class="jxr_javadoccomment">     * @param database the database to get the entry id's from</em>
-<a class="jxr_linenumber" name="1134" href="#1134">1134</a> <em class="jxr_javadoccomment">     * @return resultSet</em>
-<a class="jxr_linenumber" name="1135" href="#1135">1135</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="1136" href="#1136">1136</a>     <strong class="jxr_keyword">public</strong> ResultSet getAllEntryIds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> database, String query) {
-<a class="jxr_linenumber" name="1137" href="#1137">1137</a> 
-<a class="jxr_linenumber" name="1138" href="#1138">1138</a>         ResultSet resultSet = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1139" href="#1139">1139</a> 
-<a class="jxr_linenumber" name="1140" href="#1140">1140</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="1141" href="#1141">1141</a>             <em class="jxr_comment">//String query1 = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? and rownum &lt;= 700000";</em>
-<a class="jxr_linenumber" name="1142" href="#1142">1142</a>             <em class="jxr_comment">//query = query1;</em>
-<a class="jxr_linenumber" name="1143" href="#1143">1143</a>             PreparedStatement preparedStatement = con.prepareStatement(query);
-<a class="jxr_linenumber" name="1144" href="#1144">1144</a>             <em class="jxr_comment">//PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");</em>
-<a class="jxr_linenumber" name="1145" href="#1145">1145</a> 
-<a class="jxr_linenumber" name="1146" href="#1146">1146</a>             preparedStatement.setString(1, database.name());
-<a class="jxr_linenumber" name="1147" href="#1147">1147</a>             resultSet = preparedStatement.executeQuery();
-<a class="jxr_linenumber" name="1148" href="#1148">1148</a> 
+<a class="jxr_linenumber" name="1129" href="#1129">1129</a> 
+<a class="jxr_linenumber" name="1130" href="#1130">1130</a>     }
+<a class="jxr_linenumber" name="1131" href="#1131">1131</a> 
+<a class="jxr_linenumber" name="1132" href="#1132">1132</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="1133" href="#1133">1133</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="1134" href="#1134">1134</a> <em class="jxr_javadoccomment">     * @param database the database to get the entry id's from</em>
+<a class="jxr_linenumber" name="1135" href="#1135">1135</a> <em class="jxr_javadoccomment">     * @return resultSet</em>
+<a class="jxr_linenumber" name="1136" href="#1136">1136</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="1137" href="#1137">1137</a>     <strong class="jxr_keyword">public</strong> ResultSet getAllEntryIds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> database, String query) {
+<a class="jxr_linenumber" name="1138" href="#1138">1138</a> 
+<a class="jxr_linenumber" name="1139" href="#1139">1139</a>         ResultSet resultSet = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1140" href="#1140">1140</a> 
+<a class="jxr_linenumber" name="1141" href="#1141">1141</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="1142" href="#1142">1142</a>             <em class="jxr_comment">//String query1 = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? and rownum &lt;= 700000";</em>
+<a class="jxr_linenumber" name="1143" href="#1143">1143</a>             <em class="jxr_comment">//query = query1;</em>
+<a class="jxr_linenumber" name="1144" href="#1144">1144</a>             PreparedStatement preparedStatement = con.prepareStatement(query);
+<a class="jxr_linenumber" name="1145" href="#1145">1145</a>             <em class="jxr_comment">//PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");</em>
+<a class="jxr_linenumber" name="1146" href="#1146">1146</a> 
+<a class="jxr_linenumber" name="1147" href="#1147">1147</a>             preparedStatement.setString(1, database.name());
+<a class="jxr_linenumber" name="1148" href="#1148">1148</a>             resultSet = preparedStatement.executeQuery();
 <a class="jxr_linenumber" name="1149" href="#1149">1149</a> 
-<a class="jxr_linenumber" name="1150" href="#1150">1150</a>         } <strong class="jxr_keyword">catch</strong> (SQLException ex) {
-<a class="jxr_linenumber" name="1151" href="#1151">1151</a>             java.util.logging.Logger.getLogger(MegaJdbcMapper.<strong class="jxr_keyword">class</strong>.getName()).log(Level.SEVERE, <strong class="jxr_keyword">null</strong>, ex);
-<a class="jxr_linenumber" name="1152" href="#1152">1152</a>         }
-<a class="jxr_linenumber" name="1153" href="#1153">1153</a> 
+<a class="jxr_linenumber" name="1150" href="#1150">1150</a> 
+<a class="jxr_linenumber" name="1151" href="#1151">1151</a>         } <strong class="jxr_keyword">catch</strong> (SQLException ex) {
+<a class="jxr_linenumber" name="1152" href="#1152">1152</a>             java.util.logging.Logger.getLogger(MegaJdbcMapper.<strong class="jxr_keyword">class</strong>.getName()).log(Level.SEVERE, <strong class="jxr_keyword">null</strong>, ex);
+<a class="jxr_linenumber" name="1153" href="#1153">1153</a>         }
 <a class="jxr_linenumber" name="1154" href="#1154">1154</a> 
-<a class="jxr_linenumber" name="1155" href="#1155">1155</a>         <strong class="jxr_keyword">return</strong> resultSet;
-<a class="jxr_linenumber" name="1156" href="#1156">1156</a> 
+<a class="jxr_linenumber" name="1155" href="#1155">1155</a> 
+<a class="jxr_linenumber" name="1156" href="#1156">1156</a>         <strong class="jxr_keyword">return</strong> resultSet;
 <a class="jxr_linenumber" name="1157" href="#1157">1157</a> 
-<a class="jxr_linenumber" name="1158" href="#1158">1158</a>     }
-<a class="jxr_linenumber" name="1159" href="#1159">1159</a> }
+<a class="jxr_linenumber" name="1158" href="#1158">1158</a> 
+<a class="jxr_linenumber" name="1159" href="#1159">1159</a>     }
+<a class="jxr_linenumber" name="1160" href="#1160">1160</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
