@@ -174,9 +174,10 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
             Connection con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
         MegaMapper    mapper = new MegaJdbcMapper(con);
             mapper.openMap();
+            mapper.updateEntry(entry);
         
-        int num_row_affected = mapper.updateEntry(entry);
-        System.out.println("number of rows affected " + num_row_affected);
-        LOGGER.info("Number of rows affected during an update operation = " + num_row_affected);
+        //int num_row_affected = mapper.updateEntry(entry);
+        //System.out.println("number of rows affected " + num_row_affected);
+        //LOGGER.info("Number of rows affected during an update operation = " + num_row_affected);
     }
 }

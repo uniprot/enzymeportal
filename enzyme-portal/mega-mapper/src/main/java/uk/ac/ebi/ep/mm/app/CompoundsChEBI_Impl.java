@@ -6,8 +6,6 @@ package uk.ac.ebi.ep.mm.app;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -136,7 +134,9 @@ public class CompoundsChEBI_Impl   implements ICompoundsDAO {
             
             // Process the ones put into allCompounds from 5000·n to the end.
             // I am sure there are some, unless we have exactly 5000·n results.
-            if (!allCompounds.isEmpty()) processData(allCompounds);
+            if (!allCompounds.isEmpty()) {
+                processData(allCompounds);
+            }
 
             session.evict(entity);
             session.evict(chebiEntry);
