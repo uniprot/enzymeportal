@@ -5,7 +5,15 @@ public class LiteratureConfig implements LiteratureConfigMBean {
 	private int maxThreads = 4;
 	
 	private int citexploreClientPoolSize = 8;
-	
+
+	private int citexploreConnectTimeout = 0;
+
+    private int citexploreReadTimeout = 0;
+
+	private boolean useCitexploreWs = true;
+
+	private int maxCitations = 50;
+
 	/* (non-Javadoc)
 	 * @see uk.ac.ebi.ep.adapter.literature.LiteratureConfigMBean#getMaxThreads()
 	 */
@@ -33,5 +41,36 @@ public class LiteratureConfig implements LiteratureConfigMBean {
 	public void setCitexploreClientPoolSize(int size) {
 		this.citexploreClientPoolSize = size;
 	}
-	
+
+    public int getCitexploreConnectTimeout() {
+        return citexploreConnectTimeout;
+    }
+
+    public void setCitexploreConnectTimeout(int citexploreConnectTimeout) {
+        this.citexploreConnectTimeout = citexploreConnectTimeout;
+    }
+
+    public int getCitexploreReadTimeout() {
+        return citexploreReadTimeout;
+    }
+
+    public void setCitexploreReadTimeout(int citexploreReadTimeout) {
+        this.citexploreReadTimeout = citexploreReadTimeout;
+    }
+
+    public boolean isUseCitexploreWs() {
+        return useCitexploreWs;
+    }
+
+    public void setUseCitexploreWs(boolean useCitexploreWs) {
+        this.useCitexploreWs = useCitexploreWs;
+    }
+
+    public int getMaxCitations() {
+        return maxCitations;
+    }
+
+    public void setMaxCitations(int maxCitations) {
+        this.maxCitations = maxCitations;
+    }
 }
