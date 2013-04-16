@@ -11,7 +11,8 @@ package uk.ac.ebi.ep.mm.app;
 public class ChebiCompounds {
 
     public static void main(String... args) {
-        String dbConfig = "ep-mm-db-enzdev";
+       // String dbConfig = "ep-mm-db-enzdev";
+        //String dbConfig = "ep-mm-db-ezprel";
 
         if (args == null) {
             System.exit(1);
@@ -19,10 +20,11 @@ public class ChebiCompounds {
 
 
 
-        //ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(args[0]);
-        ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(dbConfig);
-        //dAOImpl.getCHEBI_Compounds();
+        ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(args[0]);
+        //ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(dbConfig);
         dAOImpl.buildCompound();
+        
+
 
     }
 }

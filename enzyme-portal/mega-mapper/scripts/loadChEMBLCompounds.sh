@@ -25,7 +25,7 @@ echo "[INFO] You are about to load ChEMBL Compounds to Mega Mapper using this Da
 echo "[INFO] *******************************************************************"
 echo "[INFO] " $DB_CONFIG
 echo "[INFO] *******************************************************************"
-echo "[INFO] *********** Aout to start loading ChEMBL compounds to the database *******"
+echo "[INFO] *********** About to start loading ChEMBL compounds to the database *******"
 WD=$(pwd)
 cd $(dirname $0)/..
 mvn -P !noApps,apps,$1 exec:java -Dexec.mainClass="uk.ac.ebi.ep.mm.app.ChemblCompounds" -Dexec.args="$DB_CONFIG"

@@ -23,7 +23,7 @@ public interface ICompoundsDAO {
     void writeXref(XRef ref) throws IOException;
 
 
-     void writeXrefs(Collection<XRef> xRefs) throws IOException ;
+     void writeXrefs(Collection<XRef> xRefs) throws Exception ;
    
 
      void writeEntriesAndXrefs(Collection<Entry> entries, Collection<XRef> xRefs) throws IOException;

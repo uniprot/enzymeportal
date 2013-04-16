@@ -203,8 +203,8 @@ public class MegaJdbcMapper implements MegaMapper {
         final boolean exists = rs.next();
         if (exists) {
             final int xrefId = rs.getInt("id");
-            LOGGER.warn("XRef already exists in the database: "
-                    + xref.toString() + " as " + xrefId);
+            //LOGGER.warn("XRef already exists in the database: "
+                   // + xref.toString() + " as " + xrefId);
             xref.setId(xrefId);
         }
         rs.close();
@@ -1102,6 +1102,7 @@ public class MegaJdbcMapper implements MegaMapper {
             entryIdList = new LinkedList<String>();
         }
         try {
+            System.out.println("connection in mega mapper jdbc "+ con);
             String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");

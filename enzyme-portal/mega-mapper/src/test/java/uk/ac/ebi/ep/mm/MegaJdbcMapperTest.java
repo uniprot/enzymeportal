@@ -312,16 +312,16 @@ public class MegaJdbcMapperTest {
         //String accession = "PDE6B_%";
   
         MmDatabase[] xDbs = new MmDatabase[3];
-        xDbs[1] = MmDatabase.ChEMBL;
-        xDbs[0] = MmDatabase.ChEMBL;
+        xDbs[1] = MmDatabase.ChEBI;
+        xDbs[0] = MmDatabase.ChEBI;
 
         compoundMap = mm.getCompounds(db, accession, xDbs);
 
         assertNotNull(compoundMap);
-         System.out.println("SIZE "+ compoundMap.size());
+         System.out.println("num compounds found "+ compoundMap.size());
         for (Map.Entry<String, String> m : compoundMap.entrySet()) {
            
-            System.out.println("Result for compound : " + m.getKey() + ": " + m.getValue());
+            //System.out.println("Result for compound : " + m.getKey() + ": " + m.getValue());
             logger.info("Result for compounds: " + m.getKey() + ": " + m.getValue());
         }
         
