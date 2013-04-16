@@ -30,6 +30,7 @@
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp" />
+        <property name="exposeContextBeansAsAttributes" value="true" />
     </bean>
 
     <util:list id="history" value-type="java.lang.String" scope="session" />
@@ -101,7 +102,11 @@
     <bean name="uk.ac.ebi.ep:name=literatureConfig"
     	class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">
    		<property name="maxThreads" value="4" />
+        <property name="useCitexploreWs" value="true" />
+        <property name="maxCitations" value="50" />
    		<property name="citexploreClientPoolSize" value="8"/>
+   		<property name="citexploreConnectTimeout" value="10000"/>
+   		<property name="citexploreReadTimeout" value="10000" />
    	</bean>
 	
     <bean name="uk.ac.ebi.ep:name=bioportalConfig"
