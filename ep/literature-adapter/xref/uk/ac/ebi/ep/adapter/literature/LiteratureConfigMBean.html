@@ -21,17 +21,62 @@
 <a class="jxr_linenumber" name="11" href="#11">11</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> setMaxThreads(<strong class="jxr_keyword">int</strong> maxThreads);
 <a class="jxr_linenumber" name="12" href="#12">12</a>  
 <a class="jxr_linenumber" name="13" href="#13">13</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">int</strong> getCitexploreClientPoolSize();
-<a class="jxr_linenumber" name="14" href="#14">14</a>  	
-<a class="jxr_linenumber" name="15" href="#15">15</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_javadoccomment">	 * Sets the size of the pool with CiteXplore clients.</em>
-<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_javadoccomment">	 * @param size</em>
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="19" href="#19">19</a>  	<em class="jxr_comment">/*<em class="jxr_comment"> This method won't be exposed via JMX until its implementation notifies</em></em>
+<a class="jxr_linenumber" name="14" href="#14">14</a>  
+<a class="jxr_linenumber" name="15" href="#15">15</a>      <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_comment">	 * Sets the size of the pool with CiteXplore clients.</em>
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_comment">	 * @param size</em>
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_comment">	 *</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_comment">	 * This method won't be exposed via JMX until its implementation notifies</em>
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_comment">	 * the pool.</em>
 <a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_comment">	public abstract void setCitexploreClientPoolSize(int size);</em>
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_comment">	*/</em>
 <a class="jxr_linenumber" name="23" href="#23">23</a>  
-<a class="jxr_linenumber" name="24" href="#24">24</a>  }
+<a class="jxr_linenumber" name="24" href="#24">24</a>      <strong class="jxr_keyword">int</strong> getCitexploreConnectTimeout();
+<a class="jxr_linenumber" name="25" href="#25">25</a>  
+<a class="jxr_linenumber" name="26" href="#26">26</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">     * Sets the timeout to get a connection to the CiteXplore web service.</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment">     * @param citexploreConnectTimeout the timeout in ms</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">     * @since 1.0.7</em>
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>      <strong class="jxr_keyword">void</strong> setCitexploreConnectTimeout(<strong class="jxr_keyword">int</strong> citexploreConnectTimeout);
+<a class="jxr_linenumber" name="32" href="#32">32</a>  
+<a class="jxr_linenumber" name="33" href="#33">33</a>      <strong class="jxr_keyword">int</strong> getCitexploreReadTimeout();
+<a class="jxr_linenumber" name="34" href="#34">34</a>  
+<a class="jxr_linenumber" name="35" href="#35">35</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment">     * Sets the timeout to read data since the connection to the CiteXplore web</em>
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment">     * service has been established.</em>
+<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">     * @param citexploreReadTimeout the timeout in ms</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">     * @since 1.0.7</em>
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="41" href="#41">41</a>      <strong class="jxr_keyword">void</strong> setCitexploreReadTimeout(<strong class="jxr_keyword">int</strong> citexploreReadTimeout);
+<a class="jxr_linenumber" name="42" href="#42">42</a>  
+<a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">boolean</strong> isUseCitexploreWs();
+<a class="jxr_linenumber" name="44" href="#44">44</a>  
+<a class="jxr_linenumber" name="45" href="#45">45</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment">     * Whether to use CiteXplore to get the list of citations for a given</em>
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">     * enzyme, or only to retrieve the nitty-gritty details</em>
+<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment">     * of them.&lt;br/&gt;</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>  <em class="jxr_javadoccomment">     * Set this to &lt;code&gt;false&lt;/code&gt; in case of trouble with CiteXplore web</em>
+<a class="jxr_linenumber" name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     * service. The details will be then retrieved from other sources after</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment">     * the timeouts have expired.</em>
+<a class="jxr_linenumber" name="52" href="#52">52</a>  <em class="jxr_javadoccomment">     * @param useCitexploreWs &lt;code&gt;true&lt;/code&gt; to retrieve the list of</em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">     *      citations from CiteXplore (one single request), &lt;code&gt;false&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">     *      to retrieve it from the different resources (one request per tab -</em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">     *      enzyme|structure|molecules|diseases - plus one request more per</em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">     *      citation).</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">     * @since 1.0.7</em>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="59" href="#59">59</a>      <strong class="jxr_keyword">void</strong> setUseCitexploreWs(<strong class="jxr_keyword">boolean</strong> useCitexploreWs);
+<a class="jxr_linenumber" name="60" href="#60">60</a>  
+<a class="jxr_linenumber" name="61" href="#61">61</a>      <strong class="jxr_keyword">int</strong> getMaxCitations();
+<a class="jxr_linenumber" name="62" href="#62">62</a>  
+<a class="jxr_linenumber" name="63" href="#63">63</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment">     * Sets the maximum number of citations to be retrieved and displayed.</em>
+<a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment">     * @param maxCitations the maximum number of citations.</em>
+<a class="jxr_linenumber" name="66" href="#66">66</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>      <strong class="jxr_keyword">void</strong> setMaxCitations(<strong class="jxr_keyword">int</strong> maxCitations);
+<a class="jxr_linenumber" name="68" href="#68">68</a>  
+<a class="jxr_linenumber" name="69" href="#69">69</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
