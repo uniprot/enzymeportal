@@ -9,39 +9,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.citations.CitexploreWSClient;
 import uk.ac.ebi.biobabel.citations.DataSource;
+import uk.ac.ebi.cdb.webservice.AuthorsList;
 import uk.ac.ebi.cdb.webservice.Journal;
 import uk.ac.ebi.cdb.webservice.JournalInfo;
+import uk.ac.ebi.cdb.webservice.PatentApplication;
 import uk.ac.ebi.kraken.interfaces.uniprot.Citation;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.AgricolaId;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.Author;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.Book;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.ElectronicArticle;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasAgricolaId;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasAuthors;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasJournalName;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasPages;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasPubMedId;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasPublicationDate;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasTitle;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.HasVolume;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.JournalArticle;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.Page;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.Patent;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.PubMedId;
-import uk.ac.ebi.kraken.interfaces.uniprot.citations.Volume;
-import uk.ac.ebi.kraken.uuw.services.remoting.Attribute;
-import uk.ac.ebi.kraken.uuw.services.remoting.AttributeIterator;
-import uk.ac.ebi.kraken.uuw.services.remoting.Query;
-import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
-import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
-import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
+import uk.ac.ebi.kraken.interfaces.uniprot.citations.*;
+import uk.ac.ebi.kraken.uuw.services.remoting.*;
 
 /**
  * Caller to retrieve citations from UniProt using the UniProtJAPI.
+ * Citations are "filled" with data from CiteXplore web services whenever
+ * possible, otherwise (in case of connection timeouts, for example) with the
+ * data available from UniProt.
  * @author rafa
  *
  */
@@ -51,23 +34,39 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 	private static final Logger LOGGER = Logger.getLogger(UniprotJapiLiteratureCaller.class);
 	
 	private String uniprotId;
+	private Integer connectTimeout;
+	private Integer readTimeout;
 	
 	/**
 	 * Constructor with a UniProt ID to search.
 	 * @param uniprotId The UniProt ID to get citations from.
 	 */
 	public UniprotJapiLiteratureCaller(String uniprotId){
-		this.uniprotId = uniprotId;
+		this(uniprotId, 0, 0);
 	}
-	
-	public Set<uk.ac.ebi.cdb.webservice.Result> call()
+
+    /**
+     * Complete constructor.
+     * @param uniprotId The UniProt ID to search.
+     * @param connectTimeout the connection timeout for CiteXplore WS.
+     * @param readTimeout the read timeout for CiteXplore WS.
+     * @since 1.0.7
+     */
+    public UniprotJapiLiteratureCaller(String uniprotId,
+            Integer connectTimeout, Integer readTimeout) {
+        this.uniprotId = uniprotId;
+        this.connectTimeout = connectTimeout;
+        this.readTimeout = readTimeout;
+    }
+
+    public Set<uk.ac.ebi.cdb.webservice.Result> call()
 	throws Exception {
 		// CiteXplore citations:
 		HashSet<uk.ac.ebi.cdb.webservice.Result> cxCits = null;
 		UniProtQueryService uniProtQueryService =
 				UniProtJAPI.factory.getUniProtQueryService();
-		Query query = UniProtQueryBuilder.buildIDListQuery(
-				Arrays.asList(new String[]{ uniprotId }));
+		Query query = UniProtQueryBuilder
+		        .buildIDListQuery(Arrays.asList(uniprotId));
 		AttributeIterator<UniProtEntry> it =
 				uniProtQueryService.getAttributes(query, "ognl:citations");
 		if (it.hasNext()){
@@ -77,16 +76,9 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 				@SuppressWarnings("unchecked")
 				List<Citation> upCits = (List<Citation>) att.getValue();
 				for (Citation upCit :upCits){
-					uk.ac.ebi.cdb.webservice.Result cxCit = null;
-					// Try to get it from CiteXplore:
-					cxCit = getCitationFromCitexplore(upCit);
-					if (cxCit == null){
-						// Otherwise, build one:
-						LOGGER.warn("No literature identifier found for one citation: " + uniprotId);
-						//cxCit = buildCitation(upCit);
-					} else {
-						cxCits.add(cxCit);
-					}
+					uk.ac.ebi.cdb.webservice.Result cxCit
+					        = buildCitation(upCit);
+                    if (cxCit != null) cxCits.add(cxCit);
 				}
 			}
 		} else {
@@ -95,15 +87,24 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 		return cxCits;
 	}
 
+    /**
+     * Builds a citation (citeXplore model) from a UniProt citation.
+     * @param upCit the UniProt citation.
+     * @return a citation in the citeXplore model, or <code>null</code> if the
+     *      citation from UniProt lacks of a database ID (see {@link
+     *      #loadXrefs(uk.ac.ebi.kraken.interfaces.uniprot.Citation, uk.ac.ebi.cdb.webservice.Result)}).
+     */
 	private uk.ac.ebi.cdb.webservice.Result buildCitation(Citation upCit) {
 		uk.ac.ebi.cdb.webservice.Result cxCit =
 				new uk.ac.ebi.cdb.webservice.Result();
+        loadXrefs(upCit, cxCit);
+        // Some UniProt citations - ex. submissions - don't have PMIDs:
+        if (cxCit.getId() == null) return null;
 		JournalInfo issue = new JournalInfo();
 		Journal journal = new Journal();
 		issue.setJournal(journal);
 		cxCit.setJournalInfo(issue);
 		loadCoreMetadata(upCit, cxCit);
-		loadXrefs(upCit, cxCit);
 		// Special bits:
 		switch (upCit.getCitationType()){
 		case BOOK:
@@ -140,6 +141,7 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 		*/
 		// Authors:
 		if (upCit instanceof HasAuthors){
+		    cxCit.setAuthorList(new AuthorsList());
 			for (Author upAuthor: ((HasAuthors) upCit).getAuthors()){
 				uk.ac.ebi.cdb.webservice.Authors cxAuthor =
 						new uk.ac.ebi.cdb.webservice.Authors();
@@ -155,7 +157,10 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 					.getPublicationDate().getValue();
 			Matcher m = p.matcher(upDate);
 			if (m.matches()){
-				cxCit.getJournalInfo().setYearOfPublication(Short.valueOf(m.group(1)));
+                final String pubYear = m.group(1);
+                cxCit.getJournalInfo().setYearOfPublication(
+                        Short.valueOf(pubYear));
+				cxCit.setPubYear(pubYear);
 			} else {
 				LOGGER.warn("Date pattern not recognised: " + upDate);
 			}
@@ -186,9 +191,9 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 	 * @param book The UniProt object to get metadata from.
 	 */
 	private void load(uk.ac.ebi.cdb.webservice.Result cxCit, Book book) {
-		// Book name:
-		cxCit.getJournalInfo().getJournal()
-				.setTitle(book.getBookName().getValue());
+		cxCit.setTitle(book.getBookName().getValue());
+		cxCit.getBookOrReportDetails().setPublisher(
+                book.getPublisher().getValue());
 	}
 
 	/**
@@ -199,6 +204,7 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 	 */
 	private void load(uk.ac.ebi.cdb.webservice.Result cxCit,
 			ElectronicArticle eArticle) {
+		// TODO
 	}
 
 	/**
@@ -209,6 +215,7 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 	 */
 	private void load(uk.ac.ebi.cdb.webservice.Result cxCit,
 			JournalArticle jArticle) {
+        // TODO
 	}
 
 	/**
@@ -218,9 +225,9 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 	 * @param patent The UniProt object to get metadata from.
 	 */
 	private void load(uk.ac.ebi.cdb.webservice.Result cxCit, Patent patent) {
-		// How to handle this?
-//		cxCit.getPatentDetails().setPatentDetailId(
-//				Integer.valueOf(patent.getPatentNumber().getValue()));
+		PatentApplication app = new PatentApplication();
+        app.setApplicationNumber(patent.getPatentNumber().getValue());
+        cxCit.getPatentDetails().setApplication(app);
 	}
 
 	private void setPages(uk.ac.ebi.cdb.webservice.Result cxCit, Page firstPage,
@@ -261,30 +268,33 @@ implements Callable<Set<uk.ac.ebi.cdb.webservice.Result>> {
 	private uk.ac.ebi.cdb.webservice.Result getCitationFromCitexplore(Citation upCit){
 		uk.ac.ebi.cdb.webservice.Result cxCit = null;
 		CitexploreWSClient citexploreClient = null;
+		String citId = null;
 		try {
 			citexploreClient =
 					CitexploreWSClientPool.getInstance().borrowObject();
+			citexploreClient.setConnectTimeout(connectTimeout);
+			citexploreClient.setReadTimeout(readTimeout);
 			if (upCit instanceof HasPubMedId){
 				PubMedId pubmedId = ((HasPubMedId) upCit).getPubMedId();
 				if (pubmedId != null){
-					String val = pubmedId.getValue();
-					if (val != null && val.length() > 0){
+					citId = pubmedId.getValue();
+					if (citId != null && citId.length() > 0){
 						cxCit = citexploreClient.retrieveCitation(
-								DataSource.MED, pubmedId.getValue());
+								DataSource.MED, citId);
 					}
 				}
 			} else if (upCit instanceof HasAgricolaId){
 				AgricolaId agricolaId = ((HasAgricolaId) upCit).getAgricolaId();
 				if (agricolaId != null){
-					String val = agricolaId.getValue();
-					if (val != null && val.length() > 0){
+					citId = agricolaId.getValue();
+					if (citId != null && citId.length() > 0){
 						cxCit = citexploreClient.retrieveCitation(
-								DataSource.AGR, agricolaId.getValue());
+								DataSource.AGR, citId);
 					}
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.error("Unable to get citation from CiteXplore", e);
+			LOGGER.error("Unable to get citation from CiteXplore: " + citId, e);
 		} finally {
 			if (citexploreClient != null){
 				try {

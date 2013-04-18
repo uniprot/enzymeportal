@@ -9,6 +9,23 @@
 </properties>
 
 <body>
+    <release version="1.0.7" date="2013-04-16"
+        description="More performant, more configurable">
+        <action dev="rafalcan" type="add">
+            Added fields to the literature configuration (JMX enabled) to switch
+            on/off the use of CiteXplore web service, and (when on) to set the
+            timeouts and the maximum number of citations retrieved.
+        </action>
+        <action dev="rafalcan" type="fix">
+            When using the citexplore web service, only one request is sent (for
+            the UniProt accession) instead of many (for every citation). When
+            not using it, citations are retrieved from UniProt and PDB as before
+            but no further requests to citexplore are sent.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Fixed NPE when trying to sort citations by date.
+        </action>
+    </release>
 	<release version="1.0.6" date="2013-02-01"
         description="Faster citation retrieval (PDBe)">
 		<action dev="rafalcan" type="update">

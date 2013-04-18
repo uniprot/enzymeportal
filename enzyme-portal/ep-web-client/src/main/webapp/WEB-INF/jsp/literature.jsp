@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
 	import="java.util.EnumSet,
-		uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.CitationLabel"%>
+		uk.ac.ebi.ep.adapter.literature.CitationLabel"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -15,9 +15,9 @@
 	</c:when>
 	<c:otherwise>
 	
-<div style="position: relative; width: 100%; top: 2ex; padding-bottom: 6ex;">
+<div style="position: relative; width: 100%; top: 2ex; padding-bottom: 10ex;">
 
-<div class="literature" style="position: relative; width: 100%; top: 6ex;">
+<div class="literature" style="position: relative; width: 100%; top: 10ex;">
 <c:set var="allLabels" value="" />
 <c:set var="allLabelCodes" value="" />
 
@@ -115,7 +115,8 @@
 			<c:choose>
 				<c:when test="${not empty cit.journalInfo}">
 		            <i>${cit.journalInfo.journal.title}</i>
-		            <b>${cit.journalInfo.volume}</b>, ${cit.pageInfo}
+		            <b>${cit.journalInfo.volume}</b>
+                    ${empty cit.pageInfo? '':','} ${cit.pageInfo}
 				</c:when>
 				<c:when test="${not empty cit.bookOrReportDetails}">
 					${cit.brSummary}
@@ -176,7 +177,16 @@ function filterCitations(){
 <div id="literatureFilters" class="subTitle"
     style="position: absolute; top: 0; width: 100%;">
     <span style="color: black;">${fn:length(enzymeModel.literature)}
-    <span style="font-weight: normal;">references.</span></span>
+    <span style="font-weight: normal;">references.</span>
+    <c:if test="${fn:length(enzymeModel.literature)
+        eq requestScope['uk.ac.ebi.ep:name=literatureConfig'].maxCitations}"><a
+        title="Europe PubMed Central"
+        href="http://europepmc.org/search/?page=1&query=UNIPROT_PUBS:${enzymeModel.uniprotaccessions[0]}">
+        See more in EPMC...</a>
+    </c:if>
+    </span>
+
+    <br/>
 
     <span id="tabFilters">
 	Filters:
@@ -186,15 +196,21 @@ function filterCitations(){
 		<label class="citationFilter">
 			<c:set var="labelCode"
 				value="${fn:substringBefore(splitLabelCodes[clvs.index], '#')}"/>
+			<c:set var="dataIcon" value="${
+			    labelCode eq 'ENZYME'? 'P':
+			    labelCode eq 'PROTEIN_STRUCTURE'? 's':
+			    labelCode eq 'SMALL_MOLECULES'? 'b':
+			    labelCode eq 'DISEASES'? '': ''
+			    }"/>
             <input type="checkbox" checked="checked"
                 value="cit-${labelCode}"
 			    onclick="filterCitations();"/>
-            ${citationLabel}
+            <span data-icon="${dataIcon}" class="label icon icon-conceptual">
+                ${citationLabel}</span>
             (${fn:length(splitLabelCodes[clvs.index])-fn:length(labelCode)})
         </label>
 	</c:forEach>
     </span>
-
 	<span id="citTypeFilters"
 		style="display: ${fn:length(enzymeModel.literature) gt numOfJournals?
 		'inline' : 'none'}">
@@ -239,9 +255,9 @@ function filterCitations(){
 <div class="provenance">
 	<ul>
 		<li class="note_0">Data Source:
-			<a href="http://www.ebi.ac.uk/citexplore/">CiteXplore</a></li>
-		<li class="note_1">CiteXplore combines literature search with text
-			mining tools for biomedical publications.</li>
+			<a href="http://europepmc.org/">Europe PMC</a></li>
+		<li class="note_1">Europe PubMed Central (Europe PMC) offers free access
+		    to biomedical literature resources.</li>
 	</ul>
 </div>
 
