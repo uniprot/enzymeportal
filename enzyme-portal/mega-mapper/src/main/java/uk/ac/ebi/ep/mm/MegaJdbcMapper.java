@@ -911,8 +911,7 @@ public class MegaJdbcMapper implements MegaMapper {
     public Map<String, String> getCompounds(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
 
-        LOGGER.info("ACCESSIONS = "+ accessions);
-        System.out.println("ACCESSIONS = "+ accessions);
+                
         Map<String, String> compoundEntryMap = null;
         String[] acc = accessions.split("_");
         String accession = acc[0].concat("\\_%");
@@ -1102,8 +1101,7 @@ public class MegaJdbcMapper implements MegaMapper {
             entryIdList = new LinkedList<String>();
         }
         try {
-            System.out.println("connection in mega mapper jdbc "+ con);
-            String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL";
+                        String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");
             //and rownum <= 700000
