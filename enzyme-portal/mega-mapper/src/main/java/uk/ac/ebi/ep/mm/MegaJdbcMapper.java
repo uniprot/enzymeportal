@@ -1137,11 +1137,9 @@ public class MegaJdbcMapper implements MegaMapper {
         ResultSet resultSet = null;
 
         try {
-            //String query1 = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? and rownum <= 700000";
-            //query = query1;
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");
-
+            //String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? and rownum <= 700000";
+              PreparedStatement preparedStatement = con.prepareStatement(query);
+           
             preparedStatement.setString(1, database.name());
             resultSet = preparedStatement.executeQuery();
 

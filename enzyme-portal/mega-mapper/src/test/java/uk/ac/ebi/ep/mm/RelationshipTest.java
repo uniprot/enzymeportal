@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.mm;
 
 import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class RelationshipTest {

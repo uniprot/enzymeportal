@@ -41,8 +41,7 @@ public class ChemblService implements Callable<Compound> {
             Compound chemblCompound = chemblRestClient.getCompound(chemblId);
             if (chemblCompound != null ) {
                 compound = chemblCompound;
-                // System.out.println("returned compound from client "+ compound.getPreferredCompoundName() );
-            }
+                }
 
            
         } catch (CompoundNotFoundException e) {

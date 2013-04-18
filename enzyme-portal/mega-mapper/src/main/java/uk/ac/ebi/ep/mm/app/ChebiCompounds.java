@@ -18,8 +18,6 @@ public class ChebiCompounds {
             System.exit(1);
         }
 
-
-
         ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(args[0]);
         //ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(dbConfig);
         dAOImpl.buildCompound();

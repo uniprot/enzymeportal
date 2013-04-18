@@ -18,8 +18,6 @@ public class ChemblCompounds {
             System.exit(1);
         }
 
-
-
         ICompoundsDAO dAOImpl = new CompoundsChEMBL_Impl(args[0]);
         //CompoundsChEMBL_Impl dAOImpl = new CompoundsChEMBL_Impl(dbConfig);
         dAOImpl.buildCompound();
