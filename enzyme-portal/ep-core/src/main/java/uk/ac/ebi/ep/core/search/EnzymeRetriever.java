@@ -564,7 +564,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
         List<LabelledCitation> citations = getLiteratureAdapter().getCitations(
         		uniprotAccession, enzymeModel.getPdbeaccession());
-        enzymeModel.setLiterature(new ArrayList<Object>(citations)); // FIXME and also the schema!           
+        if (citations != null){
+            enzymeModel.setLiterature(new ArrayList<Object>(citations));
+        }
         return enzymeModel;
     }
 }
