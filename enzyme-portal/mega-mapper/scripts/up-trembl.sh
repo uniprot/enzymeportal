@@ -10,6 +10,6 @@ TREMBL=$EBINOCLE_DATA/uniprot/latest/uniprot_trembl.xml
 
 echo "Starting TrEMBL import - $(date)"
 java -Xms512M -Xmx1G -classpath $CP \
-	uk.ac.ebi.ep.mm.UniprotSaxParser \
+	uk.ac.ebi.ep.mm.app.UniprotSaxParser \
 	-dbConfig ep-mm-db-$1 -xmlFile $TREMBL
 echo "Finished TrEMBL import - $(date)"
