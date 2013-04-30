@@ -15,5 +15,5 @@ XML_FILE=${2:-$EBINOCLE_DATA/uniprot/latest/uniprot_sprot.xml}
 echo "Starting Swiss-Prot import - $(date)"
 java $JAVA_OPTS $HIBERNATE_OPTS -classpath $CP \
     uk.ac.ebi.ep.mm.app.UniprotSaxParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $XML_FILE
+	-dbConfig ep-mm-db-$1 -file $XML_FILE
 echo "Finished Swiss-Prot import - $(date)"
