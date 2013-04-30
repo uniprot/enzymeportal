@@ -7,11 +7,22 @@
 <properties>
 	<title>Mega-mapper change log</title>
 	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
-        <author email="joseph@ebi.ac.uk">Joseph Onwubiko</author>
+    <author email="joseph@ebi.ac.uk" >Joseph Onwubiko</author>
 </properties>
 
 <body>
-    	<release version="1.0.13" date="" description="Bug fixes and enhancements.">
+    <release version="1.0.16" date=""
+        description="Cross-references for small molecules taken from IntEnz">
+        <action dev="rafalcan" type="add">
+            Added concrete relationships "is_substrate_of" and "is_product_of".
+        </action>
+        <action dev="rafalcan" type="add">
+            Added application to retrieve cross-references from IntEnz:
+            EC-reactions, EC-substrates/products, EC-cofactors,
+            Rhea-reactants/products.
+        </action>
+    </release>
+    <release version="1.0.13" date="" description="Bug fixes and enhancements.">
 		<action dev="joseph" type="fix">
                 ChEMBL compounds with names were added to the Mega Mapper
 		</action>

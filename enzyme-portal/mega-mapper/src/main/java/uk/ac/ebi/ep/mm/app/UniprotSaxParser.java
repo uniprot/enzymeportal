@@ -1,35 +1,15 @@
 package uk.ac.ebi.ep.mm.app;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ebisearchservice.ArrayOfString;
 import uk.ac.ebi.ebisearchservice.EBISearchService;
 import uk.ac.ebi.ebisearchservice.EBISearchService_Service;
 import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaLuceneMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.Relationship;
 import uk.ac.ebi.ep.mm.XRef;
@@ -43,7 +23,7 @@ import uk.ac.ebi.ep.mm.XRef;
  * @author rafa
  *
  */
-public class UniprotSaxParser extends DefaultHandler implements MmParser {
+public class UniprotSaxParser extends MmSaxParser {
 
 	private static final String UNIPROT_ENTRY =
 			"//uniprot/entry";
@@ -68,17 +48,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	
 	private final Logger LOGGER = Logger.getLogger(UniprotSaxParser.class);
 
-	/**
-	 * The current element (tree path) being parsed.
-	 */
-	private Stack<String> currentContext = new Stack<String>();
-	
-	/**
-	 * The text value of the current element being parsed.
-	 */
-	protected StringBuilder currentChars = new StringBuilder();
-
-	protected boolean isEntry;
+    protected boolean isEntry;
 
 	protected boolean isAccession;
 
@@ -94,9 +64,7 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	
 	protected boolean isProtRecName;
 
-	private MegaMapper mm;
-
-	protected List<String> accessions = new ArrayList<String>();
+    protected List<String> accessions = new ArrayList<String>();
 
 	protected List<String> entryNames = new ArrayList<String>();
 
@@ -121,93 +89,16 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 	 */
 	public static void main(String... args) throws Exception {
         CommandLine cl = CliOptionsParser.getCommandLine(args);
-        if (cl != null){
-    		MmParser parser = new UniprotSaxParser();
-    		MegaMapper mm = null;
-    		Connection con = null;
-    		try {
-        		if (cl.hasOption("indexDir")){
-    				mm = new MegaLuceneMapper(cl.getOptionValue("indexDir"));
-        		} else {
-            		final String dbConfig = cl.getOptionValue("dbConfig");
-//        			writer = new MegaDbMapper(dbConfig, 1000);
-            		con = OracleDatabaseInstance
-    						.getInstance(dbConfig).getConnection();
-            		con.setAutoCommit(false);
-    				mm = new MegaJdbcMapper(con);
-        		}
-        		parser.setWriter(mm);
-        		parser.parse(cl.getOptionValue("file"));
-        		mm.commit();
-    		} catch (Exception e){
-    			mm.rollback();
-    		} finally {
-        		mm.closeMap();
-        		if (con != null) con.close();
-    		}
-    		
-        }
-	}
-	
-	public void setWriter(MegaMapper mmWriter){
-		this.mm = mmWriter;
-	}
-	
-	/**
-	 * Parses a UniProt XML file and indexes/stores the UniProt accessions,
-	 * IDs and organisms into a lucene index.<br>
-	 * This method is not thread safe.
-	 * @param uniprotXml the XML file to parse
-	 * @throws FileNotFoundException if the UniProt XML file is not found
-	 * 		or not readable.
-	 * @throws SAXException if no default XMLReader can be found or
-	 * 		instantiated, or exception during parsing.
-	 * @throws IOException if the lucene index cannot be opened/created,
-	 * 		or from the parser.
-	 */
-	public void parse(String uniprotXml)
-	throws Exception {
-		if (mm == null){
-			// Don't go ahead:
-			throw new NullPointerException("A MegaMapper must be configured");
-		}
-		File uniprotXmlFile = new File(uniprotXml);
-		LOGGER.info("Mega-map open to import UniProt entries");
-		try {
-        	mm.openMap();
-            XMLReader xr = XMLReaderFactory.createXMLReader();
-            xr.setContentHandler(this);
-            xr.setErrorHandler(this);
-            InputStream is = new FileInputStream(uniprotXmlFile);
-            InputSource source = new InputSource(is);
-            LOGGER.info("Parsing start");
-            xr.parse(source);
-            LOGGER.info("Parsing end");
-            mm.closeMap();
-            LOGGER.info("Map closed");
-        } catch (Exception e){
-            LOGGER.error("During parsing", e);
-            mm.handleError();
-            throw e;
-        }
-	}
-
-	@Override
-	public void startDocument() throws SAXException {
-		super.startDocument();
-	}
-
-	@Override
-	public void endDocument() throws SAXException {
-		super.endDocument();
+        if (cl != null) mainParse(cl, new UniprotSaxParser());
 	}
 
 	@Override
 	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
-		currentContext.push(localName);
-		// Update flags:
-		String currentXpath = getCurrentXpath();
+			Attributes attributes)
+    throws SAXException {
+        currentContext.push(localName);
+        // Update flags:
+        String currentXpath = getCurrentXpath();
 		isEntry = UNIPROT_ENTRY.equals(currentXpath);
 		isAccession = UNIPROT_ENTRY_ACCESSION.equals(currentXpath);
 		isEntryName = UNIPROT_ENTRY_NAME.equals(currentXpath);
@@ -359,14 +250,6 @@ public class UniprotSaxParser extends DefaultHandler implements MmParser {
 		isAccession = false;
 		isEntryName = false;
 		isOrgSciName = false;
-	}
-
-	protected String getCurrentXpath() {
-		StringBuilder xpath = new StringBuilder("/");
-		for (String string : currentContext) {
-			xpath.append('/').append(string);
-		}
-		return xpath.toString();
 	}
 
 }
