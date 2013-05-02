@@ -11,5 +11,5 @@ EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 
 echo "Starting EB-Eye import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $2
+	-dbConfig ep-mm-db-$1 -file $2
 echo "Finished EB-Eye import - $(date)"
