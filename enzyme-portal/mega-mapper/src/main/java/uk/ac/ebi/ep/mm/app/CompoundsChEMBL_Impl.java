@@ -6,13 +6,11 @@ package uk.ac.ebi.ep.mm.app;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
@@ -21,11 +19,7 @@ import uk.ac.ebi.chemblws.exception.ChemblServiceException;
 import uk.ac.ebi.chemblws.exception.CompoundNotFoundException;
 import uk.ac.ebi.chemblws.exception.InvalidCompoundIdentifierException;
 import uk.ac.ebi.chemblws.restclient.ChemblRestClient;
-import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
-import uk.ac.ebi.ep.mm.MmDatabase;
-import uk.ac.ebi.ep.mm.XRef;
+import uk.ac.ebi.ep.mm.*;
 
 /**
  *
@@ -175,7 +169,8 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
         MegaMapper    mapper = new MegaJdbcMapper(con);
             mapper.openMap();
             mapper.updateEntry(entry);
-        
+        mapper.closeMap();
+        con.close();
         //int num_row_affected = mapper.updateEntry(entry);
         //System.out.println("number of rows affected " + num_row_affected);
         //LOGGER.info("Number of rows affected during an update operation = " + num_row_affected);

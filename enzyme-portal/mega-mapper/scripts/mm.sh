@@ -11,6 +11,7 @@ UNIPROT_DATA=$EBINOCLE_DATA/uniprot/latest
 SWISSPROT=$UNIPROT_DATA/uniprot_sprot.xml
 TREMBL=$UNIPROT_DATA/uniprot_trembl.xml
 CHEBI=$EBINOCLE_DATA/chebi/latest/chebi_prod.xml
+INTENZ_XML=$EBINOCLE_DATA/intenz/latest/intenz.xml
 CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target.xml
 #UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 UNIMED=http://research.isb-sib.ch/unimed/SP_MeSH.tab
@@ -37,17 +38,18 @@ echo "Finished Swiss-Prot import - $(date)"
 #	-dbConfig ep-mm-db-$1 -file $TREMBL
 #echo "Finished TrEMBL import - $(date)"
 
-echo "Starting ChEBI import - $(date)"
-. $MM_SCRIPTS/loadChEBICompounds.sh
-echo "Finished ChEBI import - $(date)"
+echo "Starting IntEnz import - $(date)"
+java ${JAVA_OPTS} -classpath $CP uk.ac.ebi.ep.mm.app.IntenzSaxParser \
+	-dbConfig ep-mm-db-$1 -file $INTENZ_XML
+echo "Finished IntEnz import - $(date)"
 
 echo "Starting ChEMBL import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
-	-dbConfig ep-mm-db-$1 -xmlFile $CHEMBL_TARGET
+	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
 echo "Finished ChEMBL import - $(date)"
 
 echo "Starting ChEMBL import - $(date)"
-. $MM_SCRIPTS/loadChEMBLCompounds.sh
+. $MM_SCRIPTS/loadChEMBLNames.sh
 echo "Finished ChEMBL import - $(date)"
 
 echo "Starting UniMed import - $(date)"

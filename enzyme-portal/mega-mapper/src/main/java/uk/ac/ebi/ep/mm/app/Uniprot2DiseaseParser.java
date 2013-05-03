@@ -13,21 +13,15 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
-//import uk.ac.ebi.ep.adapter.bioportal.BioportalOntology;
-import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalOntology;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
-//import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
 import uk.ac.ebi.ep.enzyme.model.Disease;
-import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
-import uk.ac.ebi.ep.mm.MmDatabase;
-import uk.ac.ebi.ep.mm.Relationship;
-import uk.ac.ebi.ep.mm.XRef;
+import uk.ac.ebi.ep.mm.*;
+
+//import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter.BioportalOntology;
 
 /**
  * Class to parse the HTML

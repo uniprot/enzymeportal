@@ -76,6 +76,12 @@ public class UniprotSaxParser extends MmSaxParser {
 	
 	protected List<String> pdbCodes = new ArrayList<String>();
 
+	/* DrugBank IDs */
+	protected List<String> dbIds = new ArrayList<String>();
+
+    /* DrugBank names */
+    protected List<String> dbNames = new ArrayList<String>();
+
 	protected String protRecName;
 	
 	private EBISearchService ebeyeService =
@@ -104,8 +110,6 @@ public class UniprotSaxParser extends MmSaxParser {
 		isEntryName = UNIPROT_ENTRY_NAME.equals(currentXpath);
 		final String typeAttr = attributes == null?
 				null : attributes.getValue("", "type");
-		final String valueAttr = attributes == null?
-				null : attributes.getValue("", "value");
 		isOrgSciName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
 				&& "scientific".equals(typeAttr);
 		isOrgComName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
@@ -118,19 +122,27 @@ public class UniprotSaxParser extends MmSaxParser {
 			currentChars.delete(0, currentChars.length());
 		}
 		if (isDbRef){
-			if ("EC".equalsIgnoreCase(typeAttr)){
-				ecs.add(attributes.getValue("", "id"));
-			} else if ("PDB".equals(typeAttr)){
-				pdbCodes.add(attributes.getValue("", "id"));
-			}
+            final String idAttr = attributes == null?
+                    null : attributes.getValue("", "id");
+			if (MmDatabase.EC.name().equalsIgnoreCase(typeAttr)){
+				ecs.add(idAttr);
+			} else if (MmDatabase.PDB.name().equalsIgnoreCase(typeAttr)){
+				pdbCodes.add(idAttr);
+			} else if (MmDatabase.DrugBank.name().equalsIgnoreCase(typeAttr)){
+                dbIds.add(idAttr);
+            }
 		} else if (isProperty){
+            final String valueAttr = attributes == null?
+                    null : attributes.getValue("", "value");
 			if ("method".equalsIgnoreCase(typeAttr)
 					&& "Model".equalsIgnoreCase(valueAttr)){
 				// Ignore xrefs to PDB theoretical models (which are deprecated)
 				// Remove the last added xref to PDB:
 				String model = pdbCodes.remove(pdbCodes.size() - 1);
 				LOGGER.warn("Ignoring PDB theoretical model " + model);
-			}
+			} else if ("generic name".equalsIgnoreCase(typeAttr)){
+                dbNames.add(valueAttr);
+            }
 		}
 	}
 
@@ -229,8 +241,24 @@ public class UniprotSaxParser extends MmSaxParser {
 						up2pdb.setToEntry(pdbEntry);
 						xrefs.add(up2pdb);
 					}
-					
-					mm.write(entries, xrefs);
+
+                    int dbNameIndex = 0;
+                    for (String dbId : dbIds) {
+                        Entry dbEntry = new Entry();
+                        dbEntry.setDbName(MmDatabase.DrugBank.name());
+                        dbEntry.setEntryId(dbId);
+                        dbEntry.setEntryName(dbNames.get(dbNameIndex++));
+                        entries.add(dbEntry);
+
+                        XRef up2db = new XRef();
+                        up2db.setFromEntry(uniprotEntry);
+                        up2db.setRelationship(Relationship.between(
+                            MmDatabase.UniProt, MmDatabase.DrugBank).name());
+                        up2db.setToEntry(dbEntry);
+                        xrefs.add(up2db);
+                    }
+
+                    mm.write(entries, xrefs);
 				} catch (Exception e) {
 					throw new RuntimeException("Adding entry to mega-map", e);
 				}
