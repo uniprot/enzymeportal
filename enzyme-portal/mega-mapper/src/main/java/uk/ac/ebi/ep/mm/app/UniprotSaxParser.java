@@ -6,13 +6,17 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
 import uk.ac.ebi.ebisearchservice.ArrayOfString;
 import uk.ac.ebi.ebisearchservice.EBISearchService;
 import uk.ac.ebi.ebisearchservice.EBISearchService_Service;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.Relationship;
 import uk.ac.ebi.ep.mm.XRef;
+import uk.ac.ebi.ep.util.EPUtil;
 
 /**
  * UniProt XML parser which takes into account only primary accessions,
@@ -45,6 +49,9 @@ public class UniprotSaxParser extends MmSaxParser {
 
 	private static final String UNIPROT_ENTRY_PROTEIN_REC_NAME =
 			"//uniprot/entry/protein/recommendedName/fullName";
+
+    private static final String UNIPROT_ENTRY_COMMENT =
+            "//uniprot/entry/comment";
 	
 	private final Logger LOGGER = Logger.getLogger(UniprotSaxParser.class);
 
@@ -63,6 +70,8 @@ public class UniprotSaxParser extends MmSaxParser {
 	protected boolean isProperty;
 	
 	protected boolean isProtRecName;
+
+	protected boolean isEnzymeRegulation;
 
     protected List<String> accessions = new ArrayList<String>();
 
@@ -83,9 +92,13 @@ public class UniprotSaxParser extends MmSaxParser {
     protected List<String> dbNames = new ArrayList<String>();
 
 	protected String protRecName;
-	
-	private EBISearchService ebeyeService =
+
+    List<Molecule> inhibitors = new ArrayList<Molecule>();
+    List<Molecule> activators = new ArrayList<Molecule>();
+
+    private EBISearchService ebeyeService =
 			new EBISearchService_Service().getEBISearchServiceHttpPort();
+	private ChebiWebServiceClient chebiWsClient = new ChebiWebServiceClient();
 
 	/**
 	 * Parses a UniProt XML file and indexes/stores the UniProt accessions,
@@ -117,6 +130,8 @@ public class UniprotSaxParser extends MmSaxParser {
 		isDbRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath);
 		isProperty = UNIPROT_ENTRY_DBREFERENCE_PROPERTY.equals(currentXpath);
 		isProtRecName = UNIPROT_ENTRY_PROTEIN_REC_NAME.equals(currentXpath);
+		isEnzymeRegulation = UNIPROT_ENTRY_COMMENT.equals(currentXpath)
+		        && "enzyme regulation".equals(typeAttr);
 		// Clear placeholder:
 		if (currentChars.length() > 0){
 			currentChars.delete(0, currentChars.length());
@@ -150,7 +165,8 @@ public class UniprotSaxParser extends MmSaxParser {
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		// Check whether we need to do something:
-		if (isAccession || isEntryName || isOrgSciName || isOrgComName || isProtRecName){
+		if (isAccession || isEntryName || isOrgSciName || isOrgComName
+		        || isProtRecName || isEnzymeRegulation){
 			currentChars.append(Arrays.copyOfRange(ch, start, start+length));
 		}
 	}
@@ -171,7 +187,11 @@ public class UniprotSaxParser extends MmSaxParser {
 			orgComName = currentChars.toString();
 		} else if (isProtRecName){
 			protRecName = currentChars.toString();
-		} else if (isEntry){
+        } else if (isEnzymeRegulation){
+            String er = currentChars.toString();
+            inhibitors = EPUtil.parseTextForInhibitors(er);
+            activators = EPUtil.parseTextForActivators(er);
+        } else if (isEntry){
 			if (!ecs.isEmpty()){ // XXX here is the enzyme filter
 				try {
 					Collection<Entry> entries = new HashSet<Entry>();
@@ -258,6 +278,30 @@ public class UniprotSaxParser extends MmSaxParser {
                         xrefs.add(up2db);
                     }
 
+                    for (Molecule inhibitor : inhibitors) {
+                        Entry inhEntry = searchMoleculeInChEBI(inhibitor.getName());
+                        if (inhEntry != null){
+                            XRef up2inh = new XRef();
+                            up2inh.setFromEntry(inhEntry);
+                            up2inh.setRelationship(
+                                    Relationship.is_inhibitor_of.name());
+                            up2inh.setToEntry(uniprotEntry);
+                            xrefs.add(up2inh);
+                        }
+                    }
+
+                    for (Molecule activator : activators) {
+                        Entry actEntry = searchMoleculeInChEBI(activator.getName());
+                        if (actEntry != null){
+                            XRef up2inh = new XRef();
+                            up2inh.setFromEntry(actEntry);
+                            up2inh.setRelationship(
+                                    Relationship.is_activator_of.name());
+                            up2inh.setToEntry(uniprotEntry);
+                            xrefs.add(up2inh);
+                        }
+                    }
+
                     mm.write(entries, xrefs);
 				} catch (Exception e) {
 					throw new RuntimeException("Adding entry to mega-map", e);
@@ -268,8 +312,12 @@ public class UniprotSaxParser extends MmSaxParser {
 			entryNames.clear();
 			ecs.clear();
 			pdbCodes.clear();
+			dbIds.clear();
+			dbNames.clear();
 			orgSciName = null;
             orgComName = null;
+            inhibitors.clear();
+            activators.clear();
 		}
 		currentContext.pop();
 		// Update flags:
@@ -278,6 +326,40 @@ public class UniprotSaxParser extends MmSaxParser {
 		isAccession = false;
 		isEntryName = false;
 		isOrgSciName = false;
+		isEnzymeRegulation = false;
+	}
+
+	private Entry searchMoleculeInChEBI(String moleculeName){
+	    Entry entry = null;
+        try {
+            LiteEntityList lites = chebiWsClient.getLiteEntity(
+                    moleculeName, SearchCategory.ALL_NAMES, 25,
+                    StarsCategory.ALL);
+            String chebiId = null;
+            for (LiteEntity lite : lites.getListElement()) {
+                Entity completeEntity = chebiWsClient
+                        .getCompleteEntity(lite.getChebiId());
+                List<String> synonyms = new ArrayList<String>();
+                for (DataItem dataItem : completeEntity.getSynonyms()) {
+                    synonyms.add(dataItem.getData().toLowerCase());
+                }
+                if (completeEntity.getChebiAsciiName().equalsIgnoreCase(moleculeName)){
+                    chebiId = completeEntity.getChebiId();
+                    break;
+                } else if (synonyms.contains(moleculeName.toLowerCase()) || chebiId == null){
+                    chebiId = completeEntity.getChebiId();
+                }
+            }
+            if (chebiId != null){
+                entry = new Entry();
+                entry.setDbName(MmDatabase.ChEBI.name());
+                entry.setEntryId(chebiId);
+                entry.setEntryName(moleculeName);
+            }
+        } catch (ChebiWebServiceFault_Exception e) {
+            LOGGER.error("", e);
+        }
+        return entry;
 	}
 
 }
