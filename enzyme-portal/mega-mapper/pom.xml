@@ -274,6 +274,11 @@
                     <type>jar</type>
                 </dependency>
                 <dependency>
+                    <groupId>uk.ac.ebi.ep</groupId>
+                    <artifactId>ep-util</artifactId>
+                    <version>1.0.4-SNAPSHOT</version>
+                </dependency>
+                <dependency>
                     <groupId>uk.ac.ebi.biobabel</groupId>
                     <artifactId>biobabel-lucene</artifactId>
                     <version>1.0.6</version>
@@ -283,6 +288,11 @@
                     <artifactId>chemblApi</artifactId>
                     <version>1.1.0</version>
                     <type>jar</type>
+                </dependency>
+                <dependency>
+                    <groupId>uk.ac.ebi.ep</groupId>
+                    <artifactId>chebi-adapter</artifactId>
+                    <version>1.0.2</version>
                 </dependency>
             </dependencies>
             <build>

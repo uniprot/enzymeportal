@@ -1,36 +1,14 @@
 package uk.ac.ebi.ep.mm.app;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
-
-import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
-import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaLuceneMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
-import uk.ac.ebi.ep.mm.MmDatabase;
-import uk.ac.ebi.ep.mm.Relationship;
-import uk.ac.ebi.ep.mm.XRef;
+import uk.ac.ebi.ep.mm.*;
 
 /**
  * Parser for EB-Eye XML files to populate a mega-map.
@@ -40,7 +18,7 @@ import uk.ac.ebi.ep.mm.XRef;
  * @author rafa
  *
  */
-public class EbeyeSaxParser extends DefaultHandler implements MmParser {
+public class EbeyeSaxParser extends MmSaxParser {
 
 	/**
 	 * Cross-references to be extracted from the EB-Eye XML file, which depend
@@ -77,16 +55,6 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 	
 	private final Logger LOGGER = Logger.getLogger(EbeyeSaxParser.class);
 
-	/**
-	 * The current element (tree path) being parsed.
-	 */
-	private Stack<String> currentContext = new Stack<String>();
-	
-	/**
-	 * The text value of the current element being parsed.
-	 */
-	private StringBuilder currentChars = new StringBuilder();
-
 	private boolean isDbName;
 	private boolean isEntry;
 	private boolean isEntryName;
@@ -96,9 +64,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 	private MmDatabase db;
 	private Entry entry;
 	private Collection<XRef> xrefs = new HashSet<XRef>();
-	
-	private MegaMapper mm;
-	
+
 	/**
 	 * Parses a EB-Eye XML file and indexes/stores the entry IDs, accessions
 	 * and xrefs into a mega-map.
@@ -107,57 +73,7 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 	 */
 	public static void main(String... args) throws Exception {
         CommandLine cl = CliOptionsParser.getCommandLine(args);
-        if (cl != null){
-    		MmParser parser = new EbeyeSaxParser();
-    		MegaMapper mm = null;
-    		Connection con = null;
-    		try {
-        		if (cl.hasOption("indexDir")){
-    				mm = new MegaLuceneMapper(cl.getOptionValue("indexDir"));
-        		} else {
-            		final String dbConfig = cl.getOptionValue("dbConfig");
-//        			writer = new MegaDbMapper(dbConfig, 1000);
-            		con = OracleDatabaseInstance
-            				.getInstance(dbConfig).getConnection();
-            		con.setAutoCommit(false);
-    				mm = new MegaJdbcMapper(con);
-        		}
-        		parser.setWriter(mm);
-        		parser.parse(cl.getOptionValue("file"));
-        		mm.commit();
-    		} catch (Exception e){
-    			mm.rollback();
-    		} finally {
-    			mm.closeMap();
-    			if (con != null) con.close();
-    		}
-        }
-	}
-	
-	public void parse(String xmlFile) throws Exception {
-		if (mm == null){
-			// Don't go ahead:
-			throw new NullPointerException("A MegaMapper must be configured");
-		}
-		File ebeyeFile = new File(xmlFile);
-		LOGGER.info("Mega-map open to import EB-Eye entries");
-		try {
-        	mm.openMap();
-            XMLReader xr = XMLReaderFactory.createXMLReader();
-            xr.setContentHandler(this);
-            xr.setErrorHandler(this);
-            InputStream is = new FileInputStream(ebeyeFile);
-            InputSource source = new InputSource(is);
-            LOGGER.info("Parsing start");
-            xr.parse(source);
-            LOGGER.info("Parsing end");
-            mm.closeMap();
-            LOGGER.info("Map closed");
-        } catch (Exception e){
-            LOGGER.error("During parsing", e);
-            mm.handleError();
-            throw e;
-        }
+        if (cl != null) mainParse(cl, new EbeyeSaxParser());
 	}
 
 	@Override
@@ -292,18 +208,6 @@ public class EbeyeSaxParser extends DefaultHandler implements MmParser {
 		isDbName = false;
 		isEntryName = false;
 		isRef = false;
-	}
-
-	public void setWriter(MegaMapper writer) {
-		this.mm = writer;
-	}
-
-	protected String getCurrentXpath() {
-		StringBuilder xpath = new StringBuilder("/");
-		for (String string : currentContext) {
-			xpath.append('/').append(string);
-		}
-		return xpath.toString();
 	}
 
 }

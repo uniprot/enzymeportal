@@ -95,7 +95,7 @@ public abstract class MmSaxParser extends DefaultHandler implements MmParser {
             // Don't go ahead:
             throw new NullPointerException("A MegaMapper must be configured");
         }
-        LOGGER.info("Mega-map open to import UniProt entries");
+        LOGGER.info("Mega-map open to import entries/xrefs");
         try {
             mm.openMap();
             XMLReader xr = XMLReaderFactory.createXMLReader();

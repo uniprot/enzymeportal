@@ -19,8 +19,8 @@ public class DummyMegaMapper implements MegaMapper {
     private Collection<XRef> xrefs;
 
     public void openMap() throws IOException {
-        entries = new HashSet<Entry>();
-        xrefs = new HashSet<XRef>();
+        if (entries == null) entries = new HashSet<Entry>();
+        if (xrefs == null) xrefs = new HashSet<XRef>();
     }
 
     public void writeEntry(Entry entry) throws IOException {
@@ -51,8 +51,12 @@ public class DummyMegaMapper implements MegaMapper {
     }
 
     public Entry getEntryForAccession(MmDatabase db, String accession) {
-        throw new UnsupportedOperationException(
-                "This is just a dummy implementation");
+        for (Entry entry : entries) {
+            if (entry.getEntryAccessions().contains(accession)){
+                return entry;
+            }
+        }
+        return null;
     }
 
     public Collection<XRef> getXrefs(Entry entry) {
