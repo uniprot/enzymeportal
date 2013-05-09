@@ -76,6 +76,8 @@ public class IntenzSaxParser extends MmSaxParser {
     private boolean isEnzyme, isEc, isAcceptedName, isCmlReaction,
             isReactionName, isRheaId, isCofactor, isReactant, isProduct,
             isReversibleReaction;
+    // Cross-references to write to the mega-map:
+    Collection<XRef> xrefs = new ArrayList<XRef>();
 
     /**
      * Parses an IntEnzXML file and stores cross-references from EC numbers to
@@ -155,8 +157,6 @@ public class IntenzSaxParser extends MmSaxParser {
     @Override
     public void endElement(String uri, String localName, String qName)
     throws SAXException {
-        // Cross-references to write to the mega-map:
-        Collection<XRef> xrefs = new ArrayList<XRef>();
         if (isEc){
             ecEntry.setEntryId(currentChars.toString().replace("EC ", ""));
         } else if (isAcceptedName){
@@ -165,44 +165,44 @@ public class IntenzSaxParser extends MmSaxParser {
             rheaEntry.setEntryName(currentChars.toString());
         } else if (isCmlReaction){
             // Cross-reference EC-Rhea:
-            XRef xref = new XRef();
-            xref.setFromEntry(ecEntry);
-            xref.setToEntry(rheaEntry);
-            xref.setRelationship(Relationship.between(
+            XRef ecRheaXref = new XRef();
+            ecRheaXref.setFromEntry(ecEntry);
+            ecRheaXref.setToEntry(rheaEntry);
+            ecRheaXref.setRelationship(Relationship.between(
                     MmDatabase.EC, MmDatabase.Rhea).name());
-            xrefs.add(xref);
+            xrefs.add(ecRheaXref);
             // Cross-references ChEBI-Rhea and ChEBI-EC:
             for (Entry reactant : reactants) {
-                xref = new XRef();
-                xref.setFromEntry(reactant);
-                xref.setToEntry(rheaEntry);
-                xref.setRelationship(isReversibleReaction?
+                XRef chebiRheaXref = new XRef();
+                chebiRheaXref.setFromEntry(reactant);
+                chebiRheaXref.setToEntry(rheaEntry);
+                chebiRheaXref.setRelationship(isReversibleReaction?
                     Relationship.is_reactant_or_product_of.name():
                     Relationship.is_reactant_of.name());
-                xrefs.add(xref);
-                xref = new XRef();
-                xref.setFromEntry(reactant);
-                xref.setToEntry(ecEntry);
-                xref.setRelationship(isReversibleReaction?
+                xrefs.add(chebiRheaXref);
+                XRef chebiEcXref = new XRef();
+                chebiEcXref.setFromEntry(reactant);
+                chebiEcXref.setToEntry(ecEntry);
+                chebiEcXref.setRelationship(isReversibleReaction?
                         Relationship.is_substrate_or_product_of.name():
                         Relationship.is_substrate_of.name());
-                xrefs.add(xref);
+                xrefs.add(chebiEcXref);
             }
             for (Entry product : products) {
-                xref = new XRef();
-                xref.setFromEntry(product);
-                xref.setToEntry(rheaEntry);
-                xref.setRelationship(isReversibleReaction?
+                XRef chebiRheaXref = new XRef();
+                chebiRheaXref.setFromEntry(product);
+                chebiRheaXref.setToEntry(rheaEntry);
+                chebiRheaXref.setRelationship(isReversibleReaction?
                         Relationship.is_reactant_or_product_of.name():
                         Relationship.is_product_of.name());
-                xrefs.add(xref);
-                xref = new XRef();
-                xref.setFromEntry(product);
-                xref.setToEntry(ecEntry);
-                xref.setRelationship(isReversibleReaction?
+                xrefs.add(chebiRheaXref);
+                XRef chebiEcXref = new XRef();
+                chebiEcXref.setFromEntry(product);
+                chebiEcXref.setToEntry(ecEntry);
+                chebiEcXref.setRelationship(isReversibleReaction?
                         Relationship.is_substrate_or_product_of.name():
                         Relationship.is_product_of.name());
-                xrefs.add(xref);
+                xrefs.add(chebiEcXref);
             }
             // Clean up:
             rheaEntry = null;
@@ -220,14 +220,15 @@ public class IntenzSaxParser extends MmSaxParser {
                 xref.setRelationship(Relationship.is_cofactor_of.name());
                 xrefs.add(xref);
             }
+            if (!xrefs.isEmpty()) try {
+                mm.writeXrefs(xrefs);
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to add xrefs", e);
+            }
             // Clean up:
+            xrefs.clear();
             ecEntry = null;
             cofactors.clear();
-        }
-        if (!xrefs.isEmpty()) try {
-            mm.writeXrefs(xrefs);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to add xrefs", e);
         }
 
         currentContext.pop();

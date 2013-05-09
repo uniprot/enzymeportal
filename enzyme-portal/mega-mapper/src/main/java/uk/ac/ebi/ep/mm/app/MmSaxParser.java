@@ -24,7 +24,7 @@ import uk.ac.ebi.ep.mm.MegaMapper;
  */
 public abstract class MmSaxParser extends DefaultHandler implements MmParser {
 
-    private final Logger LOGGER = Logger.getLogger(MmSaxParser.class);
+    private static final Logger LOGGER = Logger.getLogger(MmSaxParser.class);
 
     /**
      * The current element (tree path) being parsed.
@@ -64,6 +64,7 @@ public abstract class MmSaxParser extends DefaultHandler implements MmParser {
             mm.commit();
         } catch (Exception e){
             if (mm != null) mm.rollback();
+            LOGGER.error("Unable to parse", e);
         } finally {
             if (mm != null) mm.closeMap();
             if (con != null) con.close();

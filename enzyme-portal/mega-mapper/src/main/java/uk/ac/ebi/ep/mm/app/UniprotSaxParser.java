@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.mm.app;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 import org.apache.commons.cli.CommandLine;
@@ -52,26 +53,16 @@ public class UniprotSaxParser extends MmSaxParser {
 
     private static final String UNIPROT_ENTRY_COMMENT =
             "//uniprot/entry/comment";
-	
+
+    private static final String UNIPROT_ENTRY_COMMENT_TEXT =
+            "//uniprot/entry/comment/text";
+
 	private final Logger LOGGER = Logger.getLogger(UniprotSaxParser.class);
 
-    protected boolean isEntry;
-
-	protected boolean isAccession;
-
-	protected boolean isEntryName;
-
-	protected boolean isOrgSciName;
-
-	protected boolean isOrgComName;
-	
-	protected boolean isDbRef;
-	
-	protected boolean isProperty;
-	
-	protected boolean isProtRecName;
-
-	protected boolean isEnzymeRegulation;
+    /* Flags used during the parsing: */
+    protected boolean isEntry, isAccession, isEntryName, isOrgSciName,
+            isOrgComName, isDbRef, isDbRefProperty, isProtRecName,
+            isEnzymeRegulation, isEnzymeRegulationTxt;
 
     protected List<String> accessions = new ArrayList<String>();
 
@@ -127,9 +118,12 @@ public class UniprotSaxParser extends MmSaxParser {
 				&& "scientific".equals(typeAttr);
 		isOrgComName = UNIPROT_ENTRY_ORGANISM_NAME.equals(currentXpath)
 				&& "common".equals(typeAttr);
-		isDbRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath);
-		isProperty = UNIPROT_ENTRY_DBREFERENCE_PROPERTY.equals(currentXpath);
+        isDbRef = UNIPROT_ENTRY_DBREFERENCE.equals(currentXpath);
+		isDbRefProperty =
+		        UNIPROT_ENTRY_DBREFERENCE_PROPERTY.equals(currentXpath);
 		isProtRecName = UNIPROT_ENTRY_PROTEIN_REC_NAME.equals(currentXpath);
+        isEnzymeRegulationTxt = isEnzymeRegulation
+                && UNIPROT_ENTRY_COMMENT_TEXT.equals(currentXpath);
 		isEnzymeRegulation = UNIPROT_ENTRY_COMMENT.equals(currentXpath)
 		        && "enzyme regulation".equals(typeAttr);
 		// Clear placeholder:
@@ -146,7 +140,7 @@ public class UniprotSaxParser extends MmSaxParser {
 			} else if (MmDatabase.DrugBank.name().equalsIgnoreCase(typeAttr)){
                 dbIds.add(idAttr);
             }
-		} else if (isProperty){
+		} else if (isDbRefProperty){
             final String valueAttr = attributes == null?
                     null : attributes.getValue("", "value");
 			if ("method".equalsIgnoreCase(typeAttr)
@@ -158,7 +152,9 @@ public class UniprotSaxParser extends MmSaxParser {
 			} else if ("generic name".equalsIgnoreCase(typeAttr)){
                 dbNames.add(valueAttr);
             }
-		}
+		} else if (isEntry){
+            LOGGER.debug("Entry start");
+        }
 	}
 
 	@Override
@@ -166,7 +162,7 @@ public class UniprotSaxParser extends MmSaxParser {
 			throws SAXException {
 		// Check whether we need to do something:
 		if (isAccession || isEntryName || isOrgSciName || isOrgComName
-		        || isProtRecName || isEnzymeRegulation){
+		        || isProtRecName || isEnzymeRegulationTxt){
 			currentChars.append(Arrays.copyOfRange(ch, start, start+length));
 		}
 	}
@@ -187,14 +183,14 @@ public class UniprotSaxParser extends MmSaxParser {
 			orgComName = currentChars.toString();
 		} else if (isProtRecName){
 			protRecName = currentChars.toString();
-        } else if (isEnzymeRegulation){
+        } else if (isEnzymeRegulationTxt){
             String er = currentChars.toString();
-            inhibitors = EPUtil.parseTextForInhibitors(er);
-            activators = EPUtil.parseTextForActivators(er);
+            inhibitors.addAll(EPUtil.parseTextForInhibitors(er));
+            activators.addAll(EPUtil.parseTextForActivators(er));
         } else if (isEntry){
 			if (!ecs.isEmpty()){ // XXX here is the enzyme filter
 				try {
-					Collection<Entry> entries = new HashSet<Entry>();
+//					Collection<Entry> entries = new HashSet<Entry>();
 					Collection<XRef> xrefs = new HashSet<XRef>();
 
 					Entry uniprotEntry = new Entry();
@@ -202,13 +198,13 @@ public class UniprotSaxParser extends MmSaxParser {
 					uniprotEntry.setEntryAccessions(accessions);
 					uniprotEntry.setEntryId(entryNames.get(0)); // take first one
 					uniprotEntry.setEntryName(protRecName);
-					entries.add(uniprotEntry);
+//					entries.add(uniprotEntry);
 					
 					Entry speciesEntry = new Entry();
 					speciesEntry.setDbName(MmDatabase.Linnean.name());
 					speciesEntry.setEntryId(orgSciName);
 					speciesEntry.setEntryName(orgComName);
-					entries.add(speciesEntry);
+//					entries.add(speciesEntry);
 					
 					XRef up2sp = new XRef();
 					up2sp.setFromEntry(uniprotEntry);
@@ -216,12 +212,12 @@ public class UniprotSaxParser extends MmSaxParser {
 							MmDatabase.UniProt, MmDatabase.Linnean).name());
 					up2sp.setToEntry(speciesEntry);
 					xrefs.add(up2sp);
-					
+
 					for (String ec: ecs){
 						Entry ecEntry = new Entry();
 						ecEntry.setDbName(MmDatabase.EC.name());
 						ecEntry.setEntryId(ec);
-						entries.add(ecEntry);
+//						entries.add(ecEntry);
 						
 						XRef up2ec = new XRef();
 						up2ec.setFromEntry(uniprotEntry);
@@ -246,13 +242,11 @@ public class UniprotSaxParser extends MmSaxParser {
 						} catch (Exception e){
 							LOGGER.error("Couldn't get name for " + pdbCode, e);
 						}
-						
+                        // This happens with obsolete/redirected PDB entries:
 						if (pdbEntry.getEntryName() == null){
-							// Happens with obsolete/redirected PDB entries:
 							continue;
 						}
-						
-						entries.add(pdbEntry);
+//						entries.add(pdbEntry);
 						
 						XRef up2pdb = new XRef();
 						up2pdb.setFromEntry(uniprotEntry);
@@ -262,13 +256,17 @@ public class UniprotSaxParser extends MmSaxParser {
 						xrefs.add(up2pdb);
 					}
 
+                    if (dbIds.size() != dbNames.size()){
+                        LOGGER.warn("DrugBank mismatch: " + dbIds.size()
+                                + " IDs, " + dbNames + " names.");
+                    }
                     int dbNameIndex = 0;
                     for (String dbId : dbIds) {
                         Entry dbEntry = new Entry();
                         dbEntry.setDbName(MmDatabase.DrugBank.name());
                         dbEntry.setEntryId(dbId);
                         dbEntry.setEntryName(dbNames.get(dbNameIndex++));
-                        entries.add(dbEntry);
+//                        entries.add(dbEntry);
 
                         XRef up2db = new XRef();
                         up2db.setFromEntry(uniprotEntry);
@@ -302,7 +300,12 @@ public class UniprotSaxParser extends MmSaxParser {
                         }
                     }
 
-                    mm.write(entries, xrefs);
+                    LOGGER.debug("Writing to mega-map...");
+                    mm.writeXrefs(xrefs);
+                    LOGGER.debug(MessageFormat.format(
+                            "Entry end: {0} ECs, {1} PDBs, {2} DBs, {3} inhs, {4} activs",
+                            ecs.size(), pdbCodes.size(), dbIds.size(),
+                            inhibitors.size(), activators.size()));
 				} catch (Exception e) {
 					throw new RuntimeException("Adding entry to mega-map", e);
 				}
@@ -326,9 +329,16 @@ public class UniprotSaxParser extends MmSaxParser {
 		isAccession = false;
 		isEntryName = false;
 		isOrgSciName = false;
-		isEnzymeRegulation = false;
+		isEnzymeRegulationTxt = false;
 	}
 
+    /**
+     * Searches a compound name in ChEBI. Please note that if the name does not
+     * match exactly any names/synonyms returned by ChEBI, the first result (if
+     * any) will be taken, which might be wrong in some cases.
+     * @param moleculeName the compound name.
+     * @return an entry with a ChEBI ID, or <code>null</code> if not found.
+     */
 	private Entry searchMoleculeInChEBI(String moleculeName){
 	    Entry entry = null;
         try {
@@ -336,18 +346,27 @@ public class UniprotSaxParser extends MmSaxParser {
                     moleculeName, SearchCategory.ALL_NAMES, 25,
                     StarsCategory.ALL);
             String chebiId = null;
-            for (LiteEntity lite : lites.getListElement()) {
+            String defaultFirstChebiName = null;
+            if (lites != null) for (LiteEntity lite : lites.getListElement()) {
                 Entity completeEntity = chebiWsClient
                         .getCompleteEntity(lite.getChebiId());
+                if (completeEntity.getChebiAsciiName().equalsIgnoreCase(moleculeName)){
+                    chebiId = completeEntity.getChebiId();
+                    defaultFirstChebiName = null;
+                    break;
+                }
                 List<String> synonyms = new ArrayList<String>();
                 for (DataItem dataItem : completeEntity.getSynonyms()) {
                     synonyms.add(dataItem.getData().toLowerCase());
                 }
-                if (completeEntity.getChebiAsciiName().equalsIgnoreCase(moleculeName)){
+                if (synonyms.contains(moleculeName.toLowerCase())){
                     chebiId = completeEntity.getChebiId();
-                    break;
-                } else if (synonyms.contains(moleculeName.toLowerCase()) || chebiId == null){
+                    defaultFirstChebiName = null;
+                } else if (chebiId == null){
+                    // default to the first one in the list of results
+                    // XXX dangerous!
                     chebiId = completeEntity.getChebiId();
+                    defaultFirstChebiName = completeEntity.getChebiAsciiName();
                 }
             }
             if (chebiId != null){
@@ -355,6 +374,15 @@ public class UniprotSaxParser extends MmSaxParser {
                 entry.setDbName(MmDatabase.ChEBI.name());
                 entry.setEntryId(chebiId);
                 entry.setEntryName(moleculeName);
+                if (defaultFirstChebiName != null){
+                    LOGGER.warn(MessageFormat.format(
+                            "No name/synonym exact match for {0} ->" +
+                                " Defaulting to first ChEBI result: {1} [{2}]",
+                            moleculeName,
+                            defaultFirstChebiName, chebiId));
+                }
+            } else {
+                LOGGER.warn("Not found in ChEBI: " + moleculeName);
             }
         } catch (ChebiWebServiceFault_Exception e) {
             LOGGER.error("", e);
