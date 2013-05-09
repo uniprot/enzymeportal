@@ -55,7 +55,7 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
 
         try {
             chemblCompound = chemblRestClient.getCompound(chemblId);
-             System.out.println("returned comp from client "+ chemblCompound.getPreferredCompoundName());
+//             System.out.println("returned comp from client "+ chemblCompound.getPreferredCompoundName());
         } catch (CompoundNotFoundException e) {
             LOGGER.fatal("CompoundNotFoundException thrown", e);
 

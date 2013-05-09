@@ -20,12 +20,12 @@ DB_CONFIG="ep-mm-db-$1"
 export MAVEN_OPTS="-Xms512M -Xmx1G"
 
 # Running the application:
-echo "[INFO] Running Mega Mapper - ChEMBL Compounds -  $(date)"
-echo "[INFO] You are about to load ChEMBL Compounds to Mega Mapper using this Database config :"
+echo "[INFO] Running Mega Mapper - ChEMBL Names -  $(date)"
+echo "[INFO] You are about to load ChEMBL Names to Mega Mapper using this Database config :"
 echo "[INFO] *******************************************************************"
 echo "[INFO] " $DB_CONFIG
 echo "[INFO] *******************************************************************"
-echo "[INFO] *********** About to start loading ChEMBL compounds to the database *******"
+echo "[INFO] *********** About to start loading ChEMBL names to the database *******"
 WD=$(pwd)
 cd $(dirname $0)/..
 mvn -P !noApps,apps,$1 exec:java -Dexec.mainClass="uk.ac.ebi.ep.mm.app.ChemblCompounds" -Dexec.args="$DB_CONFIG"
