@@ -10,7 +10,6 @@
         <groupId>uk.ac.ebi.ep</groupId>
         <version>1.0.3</version>
     </parent>
-    <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
     <version>1.0.16-SNAPSHOT</version>
     <name>Mega mapper</name>
@@ -290,9 +289,9 @@
                     <type>jar</type>
                 </dependency>
                 <dependency>
-                    <groupId>uk.ac.ebi.ep</groupId>
-                    <artifactId>chebi-adapter</artifactId>
-                    <version>1.0.2</version>
+                    <groupId>uk.ac.ebi.chebi.webapps.chebiWS.client</groupId>
+                    <artifactId>chebiWS-client</artifactId>
+                    <version>2.0</version>
                 </dependency>
             </dependencies>
             <build>
@@ -300,7 +299,12 @@
                     <resource>
                         <directory>${ep.config.dir}</directory>
                         <includes>
-                     <include>ep-mm-db${ep.mm.db.config}.properties</include>
+                            <include>
+                                ep-mm-db${ep.mm.db.config}.properties
+                            </include>
+                            <!-- This contains the BioPortal API key needed for
+                                 resolving EFO IDs: -->
+                            <include>ep-web-client.properties</include>
                         </includes>
                     </resource>
                 </resources>
@@ -329,9 +333,6 @@
         <profile>
 			<!-- Profile to work with the development database -->
             <id>enzdev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <ep.mm.db.config>-enzdev</ep.mm.db.config>
             </properties>
