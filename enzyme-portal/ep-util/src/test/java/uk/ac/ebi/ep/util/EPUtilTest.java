@@ -138,7 +138,7 @@ public class EPUtilTest {
                 " hydro-xylamine, phenylhydrazine, semicarbazide, cysteamine," +
                 " alpha,alpha-dipyridyl and urea.";
         inhibitors = EPUtil.parseTextForInhibitors(text);
-        names = new String[]{ "Ag2SO4", "CuCl2", "DTNB", "HgCl2",
+        names = new String[]{"Ag2SO4", "CuCl2", "DTNB", "HgCl2",
                 "N-ethylmaleimide", "nicotinic acid",
                 "p-chloromercuribenzoate" };
         assertEquals(names.length, inhibitors.size());
@@ -226,7 +226,7 @@ public class EPUtilTest {
         assertEquals(0, inhibitors.size());
 
         text = "Activated by calcium/calmodulin. Inhibited by the G protein" +
-                " beta and gamma subunit complex.\n";
+                " beta and gamma subunit complex.";
         inhibitors = EPUtil.parseTextForInhibitors(text);
         assertEquals(0, inhibitors.size());
 

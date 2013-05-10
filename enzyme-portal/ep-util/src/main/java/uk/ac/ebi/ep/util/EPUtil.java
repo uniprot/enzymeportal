@@ -12,9 +12,9 @@ public class EPUtil {
             "(?: with low affinity| competitively)?";
     private static final String REGEXP_PROHIB =
             "(?!(?:auto|de)?phosphorylation|(?:de)?acetylation|substrate|the " +
-                    "|[\\w\\s-]+?binding)";
+                    "|[\\w\\s-]+?(?:binding|cleavage|phosphorylation))";
     private static final String REGEXP_REL_CONC =
-            "(?:(?:high|low) levels? of )?";
+            "(?:(?:.+?) (?:concentration|level)s? of |\\d+% )?";
     private static final String REGEXP_COMP_GRP =
             "(?:thiol-specific compounds |reductants such as |.*?antibiotics " +
                     "|.*?drugs? |.*?ions, such as " +
@@ -23,13 +23,13 @@ public class EPUtil {
 //                    "(?: |,? such as |,? including ))?";
     private static final String REGEXP_EXPLANATION =
             "(?:,? an? .+?|,? whose .+?|,? which .+?|,? irrespective .+?" +
-                    "| to .+?| with a .+?| at .+?|, this [^\\.]+" +
-                    "|(?: while)? in .+?| binding)?";
+                    "| to .+?| with .+?| at .+?| concentrations .+?" +
+                    "|, this [^\\.]+| during .+?|(?: while)? in .+?| binding)?";
     private static final String INH_REGEXP_OTHERS_LESS =
-            ",? and(?! activated by)" +
+            ",? (?:and(?! activated by)|as well as)" +
             "(?:, to a (?:lower|lesser) extent, by| slightly inhibited by| by)?";
     private static final String ACT_REGEXP_OTHERS_LESS =
-            ",? and(?! in(?:hibited|activated) by)" +
+            ",? (?:and(?! in(?:hibited|activated) by)|as well as)" +
             "(?:, to a (?:lower|lesser) extent, by| slightly activated by| by)?";
     private static final String INH_REGEXP_DONT_CONTINUE =
             "(?! (?:and )?activated by| but not | the )";
@@ -127,7 +127,8 @@ public class EPUtil {
     /**
      * Parses a text to get a list of molecules acting as inhibitors.
      * @param text an enzyme regulation comment from UniProt.
-     * @return A list of molecules with just a name (no ID).
+     * @return A list of molecules with just a name (no ID). It can be empty,
+     *      but never <code>null</code>.
      */
     public static List<Molecule> parseTextForInhibitors(String text){
         return getMolecules(INHIBITOR_PATTERN.matcher(text));
@@ -136,7 +137,8 @@ public class EPUtil {
     /**
      * Parses a text to get a list of molecules acting as activators.
      * @param text an enzyme regulation comment from UniProt.
-     * @return A list of molecules with just a name (no ID).
+     * @return A list of molecules with just a name (no ID). It can be empty,
+     *      but never <code>null</code>.
      */
     public static List<Molecule> parseTextForActivators(String text){
         return getMolecules(ACTIVATOR_PATTERN.matcher(text));
