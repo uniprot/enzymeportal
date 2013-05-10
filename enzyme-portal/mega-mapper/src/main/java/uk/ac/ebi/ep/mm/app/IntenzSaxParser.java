@@ -222,6 +222,8 @@ public class IntenzSaxParser extends MmSaxParser {
             }
             if (!xrefs.isEmpty()) try {
                 mm.writeXrefs(xrefs);
+                // Update enzyme name from EC:
+                mm.updateEntry(ecEntry);
             } catch (IOException e) {
                 throw new RuntimeException("Unable to add xrefs", e);
             }

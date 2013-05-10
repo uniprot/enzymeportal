@@ -2,6 +2,8 @@ package uk.ac.ebi.ep.mm.app;
 
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
@@ -57,7 +59,10 @@ public class UniprotSaxParser extends MmSaxParser {
     private static final String UNIPROT_ENTRY_COMMENT_TEXT =
             "//uniprot/entry/comment/text";
 
-	private final Logger LOGGER = Logger.getLogger(UniprotSaxParser.class);
+    private static final Pattern COMPOUND_NAME_PATTERN =
+            Pattern.compile("(.*?)(?: \\((.*?)\\))?");
+
+    private final Logger LOGGER = Logger.getLogger(UniprotSaxParser.class);
 
     /* Flags used during the parsing: */
     protected boolean isEntry, isAccession, isEntryName, isOrgSciName,
@@ -334,58 +339,58 @@ public class UniprotSaxParser extends MmSaxParser {
 
     /**
      * Searches a compound name in ChEBI. Please note that if the name does not
-     * match exactly any names/synonyms returned by ChEBI, the first result (if
-     * any) will be taken, which might be wrong in some cases.
+     * match <i>exactly</i> any names/synonyms returned by ChEBI, the result
+     * will be <code>null</code>.
      * @param moleculeName the compound name.
      * @return an entry with a ChEBI ID, or <code>null</code> if not found.
      */
-	private Entry searchMoleculeInChEBI(String moleculeName){
+	protected Entry searchMoleculeInChEBI(String moleculeName){
 	    Entry entry = null;
-        try {
-            LiteEntityList lites = chebiWsClient.getLiteEntity(
-                    moleculeName, SearchCategory.ALL_NAMES, 25,
-                    StarsCategory.ALL);
-            String chebiId = null;
-            String defaultFirstChebiName = null;
-            if (lites != null) for (LiteEntity lite : lites.getListElement()) {
-                Entity completeEntity = chebiWsClient
-                        .getCompleteEntity(lite.getChebiId());
-                if (completeEntity.getChebiAsciiName().equalsIgnoreCase(moleculeName)){
-                    chebiId = completeEntity.getChebiId();
-                    defaultFirstChebiName = null;
-                    break;
+	    // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
+	    // sometimes as "moleculeName (concentration)":
+        Matcher m = COMPOUND_NAME_PATTERN.matcher(moleculeName);
+        m.matches(); // always
+        String[] nameAcronym = { m.group(1), m.group(2) };
+        // first name, then acronym (if any):
+        nameLoop: for (String name : nameAcronym) {
+            if (name == null) continue; // acronym, usually
+            try {
+                LiteEntityList lites = chebiWsClient.getLiteEntity(
+                        name, SearchCategory.ALL_NAMES, 25, StarsCategory.ALL);
+                String chebiId = null;
+                if (lites != null){
+                    liteLoop: for (LiteEntity lite : lites.getListElement()){
+                        Entity completeEntity = chebiWsClient
+                                .getCompleteEntity(lite.getChebiId());
+                        List<String> synonyms = new ArrayList<String>();
+                        for (DataItem dataItem : completeEntity.getSynonyms()){
+                            synonyms.add(dataItem.getData().toLowerCase());
+                        }
+                        List<String> formulae = new ArrayList<String>();
+                        for (DataItem formula : completeEntity.getFormulae()) {
+                            formulae.add(formula.getData());
+                        }
+                        if (completeEntity.getChebiAsciiName()
+                                .equalsIgnoreCase(name)
+                                || synonyms.contains(name.toLowerCase())
+                                || formulae.contains(name)){
+                            chebiId = completeEntity.getChebiId();
+                        }
+                        if (chebiId != null) break liteLoop;
+                    }
                 }
-                List<String> synonyms = new ArrayList<String>();
-                for (DataItem dataItem : completeEntity.getSynonyms()) {
-                    synonyms.add(dataItem.getData().toLowerCase());
+                if (chebiId != null){
+                    entry = new Entry();
+                    entry.setDbName(MmDatabase.ChEBI.name());
+                    entry.setEntryId(chebiId);
+                    entry.setEntryName(name);
+                    break nameLoop;
+                } else {
+                    LOGGER.warn("Not found in ChEBI: " + name);
                 }
-                if (synonyms.contains(moleculeName.toLowerCase())){
-                    chebiId = completeEntity.getChebiId();
-                    defaultFirstChebiName = null;
-                } else if (chebiId == null){
-                    // default to the first one in the list of results
-                    // XXX dangerous!
-                    chebiId = completeEntity.getChebiId();
-                    defaultFirstChebiName = completeEntity.getChebiAsciiName();
-                }
+            } catch (ChebiWebServiceFault_Exception e) {
+                LOGGER.error("Searching for " + name, e);
             }
-            if (chebiId != null){
-                entry = new Entry();
-                entry.setDbName(MmDatabase.ChEBI.name());
-                entry.setEntryId(chebiId);
-                entry.setEntryName(moleculeName);
-                if (defaultFirstChebiName != null){
-                    LOGGER.warn(MessageFormat.format(
-                            "No name/synonym exact match for {0} ->" +
-                                " Defaulting to first ChEBI result: {1} [{2}]",
-                            moleculeName,
-                            defaultFirstChebiName, chebiId));
-                }
-            } else {
-                LOGGER.warn("Not found in ChEBI: " + moleculeName);
-            }
-        } catch (ChebiWebServiceFault_Exception e) {
-            LOGGER.error("", e);
         }
         return entry;
 	}
