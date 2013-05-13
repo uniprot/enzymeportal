@@ -31,6 +31,7 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     private ChemblRestClient chemblRestClient;
     private DatabaseResources databaseResources;
     private String dbConfig;
+    private MegaMapper mapper;
 
     //private ExecutorService executorService = Executors.newCachedThreadPool();
     public CompoundsChEMBL_Impl(String dbConfig) {
@@ -41,9 +42,12 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     }
 
     private void init() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        chemblRestClient = applicationContext.getBean("chemblRestClient", ChemblRestClient.class);
-      
+        ApplicationContext applicationContext =
+                new ClassPathXmlApplicationContext("applicationContext.xml");
+        chemblRestClient = applicationContext.getBean(
+                "chemblRestClient", ChemblRestClient.class);
+        // FIXME:
+        chemblRestClient.setChemblServiceUrl("http://www.ebi.ac.uk/chemblws/");
     }
   
 
@@ -156,21 +160,37 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     }
 
     public void buildCompound() {
+        Connection con = null;
         try {
+            con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
+            con.setAutoCommit(false);
+            mapper = new MegaJdbcMapper(con);
+            mapper.openMap();
             updateChemblCompounds();
+            con.commit();
         } catch (Exception ex) {
              LOGGER.fatal("ERROR while building ChEMBL compounds", ex);
-            //Logger.getLogger(CompoundsChEMBL_Impl.class.getName()).log(Level.SEVERE, null, ex);
+             if (con != null) try {
+                 con.rollback();
+             } catch (SQLException e) {
+                LOGGER.error("Unable to roll connection back", e);
+             }
+        } finally {
+            if (mapper != null) try {
+                mapper.closeMap();
+            } catch (IOException e) {
+                LOGGER.error("Unable to close mega-map", e);
+            }
+            if (con != null) try {
+                con.close();
+            } catch (SQLException e) {
+                LOGGER.error("Unable to close connection", e);
+            }
         }
     }
 
     private void updateEntry(Entry entry) throws Exception {
-            Connection con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
-        MegaMapper    mapper = new MegaJdbcMapper(con);
-            mapper.openMap();
-            mapper.updateEntry(entry);
-        mapper.closeMap();
-        con.close();
+        mapper.updateEntry(entry);
         //int num_row_affected = mapper.updateEntry(entry);
         //System.out.println("number of rows affected " + num_row_affected);
         //LOGGER.info("Number of rows affected during an update operation = " + num_row_affected);
