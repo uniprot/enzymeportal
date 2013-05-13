@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
+import uk.ac.ebi.ep.search.model.Compound;
 
 /**
  * Plain JDBC implementation of {@link MegaMapper}.
@@ -781,8 +782,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Closes safely a ResultSet, logging in case of error.
-     *
-     * @param resultSet
+     * @param resultSet a ResultSet. Can be <code>null</code>.
      */
     private void closeResultSet(ResultSet resultSet) {
         if (resultSet != null) {
@@ -796,8 +796,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Closes safely a PreparedStatement, logging in case of error.
-     *
-     * @param ps
+     * @param ps a PreparedStatement. Can be <code>null</code>.
      */
     private void closePreparedStatement(PreparedStatement ps) {
         if (ps != null) {
@@ -919,14 +918,47 @@ public class MegaJdbcMapper implements MegaMapper {
 
         return diseasesEntryMap;
     }
+
+    public Collection<Compound> getCompounds(String uniprotId) {
+        Collection<Compound> compounds = null;
+        ResultSet rs = null;
+        String query = null, constraint = null;
+        if (uniprotId.endsWith("_")){
+            query = uniprotId.replace("_", "\\_%");
+            constraint = "--constraint.like";
+        } else {
+            query = uniprotId;
+            constraint = "--constraint.equals";
+        }
+        try {
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--compounds.by.uniprot.id", constraint);
+            ps.setString(1, query);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                Compound compound = new Compound();
+                compound.setId(rs.getString("compound_id"));
+                compound.setName(rs.getString("compound_name"));
+                // TODO: modify search model and add relationship as role
+                if (compounds == null) compounds = new ArrayList<Compound>();
+                compounds.add(compound);
+            }
+        } catch (SQLException e){
+            LOGGER.error("Unable to get compounds for " + uniprotId, e);
+        } finally {
+            closeResultSet(rs);
+        }
+        return compounds;
+    }
+
     public static final String[] ILLEGAL_COMPOUND = {"sample", "sample", "example", "Water", "Acid", "acid", "water"};
 
-    public Map<String, String> getCompounds(MmDatabase db, String accessions,
+    public Map<String, String> getCompounds(MmDatabase db, String uniprotId,
             MmDatabase... xDbs) {
 
                 
         Map<String, String> compoundEntryMap = null;
-        String[] acc = accessions.split("_");
+        String[] acc = uniprotId.split("_");
         String accession = acc[0].concat("\\_%");
 
 

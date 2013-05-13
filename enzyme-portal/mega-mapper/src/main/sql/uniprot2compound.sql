@@ -1,4 +1,9 @@
-/* Table for quich retrieval of compounds related to UniProt entries. */
+-- Table for quick retrieval of compounds related to UniProt entries.
+
+-- Drop previous data:
+drop table uniprot2compound;
+drop index uniprot2compound_ind_upacc;
+drop index uniprot2compound_ind_upid;
 
 create table uniprot2compound as
 SELECT DISTINCT MM_ENTRY2.ENTRY_NAME AS COMPOUND_NAME,
