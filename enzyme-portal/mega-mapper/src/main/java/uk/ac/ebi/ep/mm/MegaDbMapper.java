@@ -13,6 +13,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import uk.ac.ebi.ep.search.model.Compound;
 
 /**
  * Objects of this class write the mega-map to a database managed via hibernate.
@@ -249,6 +250,10 @@ public class MegaDbMapper implements MegaMapper {
 	}
 
     public List<String> getAllUniProtAccessions(MmDatabase database) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Collection<Compound> getCompounds(String uniprotId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

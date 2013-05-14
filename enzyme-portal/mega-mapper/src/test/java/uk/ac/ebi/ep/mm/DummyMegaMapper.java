@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import uk.ac.ebi.ep.search.model.Compound;
+
 /**
  * A dummy implementation of MegaMapper which stores a few entries and xrefs in
  * memory, just for JUnit tests.
@@ -144,6 +146,11 @@ public class DummyMegaMapper implements MegaMapper {
     }
 
     public List<String> getAllUniProtAccessions(MmDatabase database) {
+        throw new UnsupportedOperationException(
+                "This is just a dummy implementation");
+    }
+
+    public Collection<Compound> getCompounds(String uniprotId) {
         throw new UnsupportedOperationException(
                 "This is just a dummy implementation");
     }
