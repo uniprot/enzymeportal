@@ -46,7 +46,7 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
                 new ClassPathXmlApplicationContext("applicationContext.xml");
         chemblRestClient = applicationContext.getBean(
                 "chemblRestClient", ChemblRestClient.class);
-        // FIXME:
+        // FIXME: this is hardcoded!
         chemblRestClient.setChemblServiceUrl("http://www.ebi.ac.uk/chemblws/");
     }
   
@@ -94,39 +94,19 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
 
     }
 
-    public void updateChemblCompounds() throws IOException, InterruptedException, ExecutionException, SQLException {
-         Connection con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
- 
-        MegaMapper    mapper = new MegaJdbcMapper(con);
-            mapper.openMap();
-        
-        
-        //MegaMapper mapper = databaseResources.getMegaMapper();
-      
+    public void updateChemblCompounds()
+    throws IOException, InterruptedException, ExecutionException, SQLException {
         List<String> chemblIds = mapper.getAllEntryIds(MmDatabase.ChEMBL);
         Compound chembl_compound;
-  
-        // if (chemblIds.size() >= 5000) {
         for (String chemblId : chemblIds) {
-
             chembl_compound = getCompoundById(chemblId);
             try {
-
                 computeAndUpdateEntry(chembl_compound);
             } catch (Exception ex) {
                 LOGGER.error( ex);
             }
-
-        
-                
         }
-        
-        
-
     }
-    
-    
-
 
     public void writeEntriesAndXrefs(Collection<Entry> entries, Collection<XRef> xRefs) throws IOException {
         try {

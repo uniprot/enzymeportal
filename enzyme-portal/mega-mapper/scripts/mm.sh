@@ -48,14 +48,16 @@ java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
 	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
 echo "Finished ChEMBL import - $(date)"
 
-echo "Starting ChEMBL import - $(date)"
+echo "Starting ChEMBL names import - $(date)"
 . $MM_SCRIPTS/loadChEMBLNames.sh
-echo "Finished ChEMBL import - $(date)"
+echo "Finished ChEMBL names import - $(date)"
 
 echo "Starting UniMed import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
 	-dbConfig ep-mm-db-$1 -file $UNIMED
 echo "Finished UniMed import - $(date)"
+
+. $MM_SCRIPTS/mm-uniprot2compound.sh
 
 if [ "$1" = "ezprel" ]
 then
