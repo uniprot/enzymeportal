@@ -5,7 +5,8 @@ import org.junit.Test;
 import uk.ac.ebi.ep.mm.Entry;
 
 import static org.junit.Assert.*;
-
+import org.junit.Ignore;
+@Ignore
 public class UniprotSaxParserTest {
 
 	UniprotSaxParser parser;

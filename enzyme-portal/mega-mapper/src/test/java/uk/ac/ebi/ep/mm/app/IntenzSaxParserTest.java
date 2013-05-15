@@ -9,11 +9,13 @@ import uk.ac.ebi.ep.mm.*;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import org.junit.Ignore;
 
 /**
  * @author rafa
  * @since 1.0.16
  */
+@Ignore
 public class IntenzSaxParserTest {
 
     IntenzSaxParser parser;

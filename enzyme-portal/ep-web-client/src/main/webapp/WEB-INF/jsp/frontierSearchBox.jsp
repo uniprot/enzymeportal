@@ -11,32 +11,8 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%@ page language="java" pageEncoding="UTF-8"%>
 
-<!-- <script src="resources/javascript/search.js" type="text/javascript"></script>
-   <link href="resources/css/search.css" type="text/css" rel="stylesheet" />-->
-<!--<link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">-->
-<!--   <link media="screen" href="../../resources/css/enzyme.css" type="text/css" rel="stylesheet" />-->
- 
-   
-    
-<!--    <script>
-//function showCard(tabId){
-//	var s = tabId.split('-tab-');
-//	var cardsId = '#' + s[0];
-//	var tabsId = '#' + s[0] + '-tabs';
-//	var theCardId = '#' + s[0] + '-' + s[1];
-//	var theTabId = '#' + s[0] + '-tab-' + s[1];
-//	$(cardsId).children().css('display', 'none');
-//	$(tabsId).children().removeClass('selected');
-//	$(theCardId).css('display', 'block');
-//	$(theTabId).addClass('selected');
-//}
-
-function submitKeywordForm(text){
-	$('#local-searchbox').val(text);
-	$('#search-keyword-submit').click();
-}
-</script>-->
 
 
 
@@ -48,9 +24,9 @@ function submitKeywordForm(text){
                                             <div class="left" > 
 
 						<label>
-
+                                   
                                    <form:input id="local-searchbox" name="first" path="searchparams.text" />
-
+                                 
 						</label>                                                                           
 						<!-- Include some example searchterms - keep them short and few! -->
                                                 <span class="examples">Examples:  <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>, <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,  <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>, <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a></span>

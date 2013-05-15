@@ -269,9 +269,6 @@ public class MegaDbMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Map<String, String> getDisease(MmDatabase db, String accessions, MmDatabase... xDbs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
 	public Collection<XRef> getXrefs(MmDatabase db, String accession,
 			Relationship relationship) {
@@ -297,6 +294,14 @@ public class MegaDbMapper implements MegaMapper {
     }
 
     public ResultSet getAllEntryIds(MmDatabase database, String query) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

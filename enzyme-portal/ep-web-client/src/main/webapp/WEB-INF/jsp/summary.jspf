@@ -112,10 +112,10 @@
     <c:set var="enzymeDiseaseSize" value="${fn:length(enzymeDisease)}"/>
     <c:set var="disLimitedDisplayDefault" value="${5}"/>
     <c:set var="disLimitedDisplay" value="${disLimitedDisplayDefault}"/>
-
+    
     <div id="enzymeDisease">
         <c:if test="${ enzymeDiseaseSize >0}">
-            <b>Disease :</b>
+            <b>Diseases :</b>
             <c:if test="${enzymeDiseaseSize > 0 && enzymeDiseaseSize <= disLimitedDisplay}">
                 <c:set var="disLimitedDisplay" value="${enzymeDiseaseSize}"/>
             </c:if>
@@ -138,7 +138,7 @@
             </c:if>
         </c:if>
     </div>
-    <!-- disease ends here-->
+          <!-- disease ends here-->
 
     <div>
         <div>

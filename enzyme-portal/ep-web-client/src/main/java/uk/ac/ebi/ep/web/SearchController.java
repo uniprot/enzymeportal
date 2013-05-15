@@ -3,11 +3,8 @@ package uk.ac.ebi.ep.web;
 
 
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
@@ -40,6 +38,7 @@ import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
 import uk.ac.ebi.ep.core.search.Config;
 import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
+import uk.ac.ebi.ep.core.search.HtmlUtility;
 import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.enzyme.model.Disease;
@@ -95,6 +94,9 @@ public class SearchController {
     private ChebiConfig chebiConfig;
     @Autowired
     private LiteratureConfig literatureConfig;
+    
+    @Autowired
+    private BioportalConfig bioportalConfig;
 
     @PostConstruct
     public void init(){
@@ -140,6 +142,7 @@ public class SearchController {
                     enzymeModel = retriever.getMolecules(accession);
                     break;
                 case diseaseDrugs:
+                    retriever.getBioportalAdapter().setConfig(bioportalConfig);
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case literature:
@@ -318,7 +321,8 @@ public class SearchController {
             session.setAttribute("history", history);
         }
         if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
-            history.add(s);
+            String cleanedText  = HtmlUtility.cleanText(s);
+            history.add(cleanedText);
         }
           }
         
@@ -399,19 +403,13 @@ public class SearchController {
 	        }
         } catch (Throwable t){
             LOGGER.error("one of the search params (Text or Sequence is :", t);
-//        	LOGGER.error("Unable to search:\ntype="
-//        			+ searchModel.getSearchparams().getType().name()
-//        			+ "\ntext="
-//        			+ searchModel.getSearchparams().getText()
-//        			+ "\nsequence="
-//        			+ searchModel.getSearchparams().getSequence(), t);
         }
         return view;
     }
     
     /**
      * Searches by keyword.
-     * @param searchParameters the search parameteres.
+     * @param searchParameters the search parameters.
      * @return the search results.
      */
     private SearchResults searchKeyword(SearchParams searchParameters){

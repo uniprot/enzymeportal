@@ -15,7 +15,7 @@ import uk.ac.ebi.ep.mm.MegaMapper.Constraint;
 
 import static org.junit.Assert.*;
 
-//@Ignore
+@Ignore
 public class MegaJdbcMapperTest {
 
     private MegaJdbcMapper mm;
@@ -311,7 +311,6 @@ public class MegaJdbcMapperTest {
          System.out.println("num compounds found "+ compoundMap.size());
         for (Map.Entry<String, String> m : compoundMap.entrySet()) {
            
-            //System.out.println("Result for compound : " + m.getKey() + ": " + m.getValue());
             logger.info("Result for compounds: " + m.getKey() + ": " + m.getValue());
         }
         
@@ -333,7 +332,7 @@ public class MegaJdbcMapperTest {
         xDbs[2] = MmDatabase.MeSH;
         
          
-        diseaseMap = mm.getDisease(db, accession, xDbs);
+        diseaseMap = mm.getDiseaseByUniprotId(db, accession, xDbs);
         assertNotNull(diseaseMap);
         for (Map.Entry<String, String> m : diseaseMap.entrySet()) {
             //System.out.println("Result : " + m.getKey() + ": " + m.getValue());

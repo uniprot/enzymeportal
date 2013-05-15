@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import org.junit.Ignore;
 
 import uk.ac.ebi.ep.search.model.Compound;
 
@@ -15,7 +16,8 @@ import uk.ac.ebi.ep.search.model.Compound;
  * @author rafa
  * @since 2013-04-29
  */
-public class DummyMegaMapper implements MegaMapper {
+
+public class DummyMegaMapper implements MegaMapper{
 
     private Collection<Entry> entries;
     private Collection<XRef> xrefs;
@@ -33,6 +35,7 @@ public class DummyMegaMapper implements MegaMapper {
         this.entries.addAll(entries);
     }
 
+   
     public int updateEntry(Entry entry) throws IOException {
         int n = 0;
         for (Entry e : entries) {
@@ -181,5 +184,13 @@ public class DummyMegaMapper implements MegaMapper {
     public ResultSet getAllEntryIds(MmDatabase database, String query) {
         throw new UnsupportedOperationException(
                 "This is just a dummy implementation");
+    }
+
+    public Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

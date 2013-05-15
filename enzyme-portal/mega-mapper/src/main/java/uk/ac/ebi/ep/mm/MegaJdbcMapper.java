@@ -726,7 +726,7 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     //get disease using list of accessions
-    public Map<String, String> getDiseaseNew(MmDatabase db, String accession,
+    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accession,
             MmDatabase... xDbs) {
         Map<String, String> diseasesEntryMap = null;
         ResultSet resultSet = null;
@@ -866,7 +866,7 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     //working version
-    public Map<String, String> getDisease(MmDatabase db, String accessions,
+    public Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
         Map<String, String> diseasesEntryMap = null;
         ResultSet resultSet = null;
@@ -888,7 +888,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
                 ps.setString(1, db.name());
-                ps.setString(2, accession);
+                ps.setString(2, accessions);
                 ps.setString(3, xDbs[0].name());
                 ps.setString(4, xDbs[1].name());
                 ps.setString(5, xDbs[2].name());

@@ -12,6 +12,8 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -21,7 +23,7 @@
 <!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
     <head>
-        <meta charset="utf-8">
+<!--        <meta charset="utf-8">-->
 
         <!-- Use the .htaccess and remove these lines to avoid edge case issues.
              More info: h5bp.com/b/378 -->
@@ -250,7 +252,7 @@
 
                             <c:otherwise>
                                 <c:set var="searchText"
-                                       value="${searchModel.searchparams.text}"/>
+                                       value="${Fn:escapeHTML(searchModel.searchparams.text)}"/>
                             </c:otherwise>
                         </c:choose>
 

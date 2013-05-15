@@ -15,7 +15,10 @@ import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalOntology;
+
+
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
+
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.mm.*;
 
