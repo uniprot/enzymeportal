@@ -37,8 +37,16 @@ public class DummyMegaMapper implements MegaMapper{
 
    
     public int updateEntry(Entry entry) throws IOException {
-        throw new UnsupportedOperationException(
-                "This is just a dummy implementation");
+        int n = 0;
+        for (Entry e : entries) {
+            if (e.getDbName().equals(entry.getDbName())
+                    && e.getEntryId().equals(entry.getDbName())){
+                e.setEntryName(entry.getEntryName());
+                n = 1;
+                break;
+            }
+        }
+        return n;
     }
 
     public void writeXref(XRef xref) throws IOException {
