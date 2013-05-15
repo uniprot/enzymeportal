@@ -6,13 +6,11 @@ package uk.ac.ebi.ep.mm.app;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
@@ -21,11 +19,7 @@ import uk.ac.ebi.chemblws.exception.ChemblServiceException;
 import uk.ac.ebi.chemblws.exception.CompoundNotFoundException;
 import uk.ac.ebi.chemblws.exception.InvalidCompoundIdentifierException;
 import uk.ac.ebi.chemblws.restclient.ChemblRestClient;
-import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
-import uk.ac.ebi.ep.mm.MmDatabase;
-import uk.ac.ebi.ep.mm.XRef;
+import uk.ac.ebi.ep.mm.*;
 
 /**
  *
@@ -37,6 +31,7 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     private ChemblRestClient chemblRestClient;
     private DatabaseResources databaseResources;
     private String dbConfig;
+    private MegaMapper mapper;
 
     //private ExecutorService executorService = Executors.newCachedThreadPool();
     public CompoundsChEMBL_Impl(String dbConfig) {
@@ -47,9 +42,12 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     }
 
     private void init() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        chemblRestClient = applicationContext.getBean("chemblRestClient", ChemblRestClient.class);
-      
+        ApplicationContext applicationContext =
+                new ClassPathXmlApplicationContext("applicationContext.xml");
+        chemblRestClient = applicationContext.getBean(
+                "chemblRestClient", ChemblRestClient.class);
+        // FIXME: this is hardcoded!
+        chemblRestClient.setChemblServiceUrl("https://www.ebi.ac.uk/chemblws/");
     }
   
 
@@ -61,7 +59,7 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
 
         try {
             chemblCompound = chemblRestClient.getCompound(chemblId);
-             System.out.println("returned comp from client "+ chemblCompound.getPreferredCompoundName());
+//             System.out.println("returned comp from client "+ chemblCompound.getPreferredCompoundName());
         } catch (CompoundNotFoundException e) {
             LOGGER.fatal("CompoundNotFoundException thrown", e);
 
@@ -81,54 +79,33 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     }
 
     private void computeAndUpdateEntry(Compound compound) throws Exception {
-        if (compound != null) {
+        if (compound != null
+                && compound.getPreferredCompoundName() != null) {
             Entry entry = new Entry();
             entry.setDbName(MmDatabase.ChEMBL.name());
             entry.setEntryId(compound.getChemblId());
             //TODO computation if there is no preferred name
-            if (compound.getPreferredCompoundName() != null) {
-                //System.out.println("pref comp "+ compound.getPreferredCompoundName());
-                entry.setEntryName(compound.getPreferredCompoundName());
-                this.updateEntry(entry);
-            }
- 
+            LOGGER.info(compound.getChemblId() + " name: "
+                    + compound.getPreferredCompoundName());
+            entry.setEntryName(compound.getPreferredCompoundName());
+            updateEntry(entry);
         }
-
     }
 
-    public void updateChemblCompounds() throws IOException, InterruptedException, ExecutionException, SQLException {
-         Connection con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
- 
-        MegaMapper    mapper = new MegaJdbcMapper(con);
-            mapper.openMap();
-        
-        
-        //MegaMapper mapper = databaseResources.getMegaMapper();
-      
+    public void updateChemblCompounds()
+    throws IOException, InterruptedException, ExecutionException, SQLException {
         List<String> chemblIds = mapper.getAllEntryIds(MmDatabase.ChEMBL);
+        LOGGER.info(chemblIds.size() + " ChEMBL compounds in the mega-map");
         Compound chembl_compound;
-  
-        // if (chemblIds.size() >= 5000) {
         for (String chemblId : chemblIds) {
-
             chembl_compound = getCompoundById(chemblId);
             try {
-
                 computeAndUpdateEntry(chembl_compound);
             } catch (Exception ex) {
-                LOGGER.error( ex);
+                LOGGER.error(chemblId, ex);
             }
-
-        
-                
         }
-        
-        
-
     }
-    
-    
-
 
     public void writeEntriesAndXrefs(Collection<Entry> entries, Collection<XRef> xRefs) throws IOException {
         try {
@@ -162,20 +139,37 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     }
 
     public void buildCompound() {
+        Connection con = null;
         try {
+            con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
+            con.setAutoCommit(false);
+            mapper = new MegaJdbcMapper(con);
+            mapper.openMap();
             updateChemblCompounds();
+            con.commit();
         } catch (Exception ex) {
              LOGGER.fatal("ERROR while building ChEMBL compounds", ex);
-            //Logger.getLogger(CompoundsChEMBL_Impl.class.getName()).log(Level.SEVERE, null, ex);
+             if (con != null) try {
+                 con.rollback();
+             } catch (SQLException e) {
+                LOGGER.error("Unable to roll connection back", e);
+             }
+        } finally {
+            if (mapper != null) try {
+                mapper.closeMap();
+            } catch (IOException e) {
+                LOGGER.error("Unable to close mega-map", e);
+            }
+            if (con != null) try {
+                con.close();
+            } catch (SQLException e) {
+                LOGGER.error("Unable to close connection", e);
+            }
         }
     }
 
     private void updateEntry(Entry entry) throws Exception {
-            Connection con = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
-        MegaMapper    mapper = new MegaJdbcMapper(con);
-            mapper.openMap();
-            mapper.updateEntry(entry);
-        
+        mapper.updateEntry(entry);
         //int num_row_affected = mapper.updateEntry(entry);
         //System.out.println("number of rows affected " + num_row_affected);
         //LOGGER.info("Number of rows affected during an update operation = " + num_row_affected);

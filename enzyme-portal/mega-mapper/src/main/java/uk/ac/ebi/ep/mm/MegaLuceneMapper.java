@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Collection;
-import java.util.LinkedList;
-
 import java.util.List;
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -20,11 +19,12 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
+import uk.ac.ebi.ep.search.model.Compound;
 
 /**
  * Mega-mapper writing/reading to/from a lucene index.
  * <br>
- * <b>Use {@link MegaDbMapper} if possible, as a Lucene index does store
+ * <b>Use {@link MegaJdbcMapper} if possible, as a Lucene index does store
  * information horizontally.</b>
  * @author rafa
  */
@@ -209,6 +209,10 @@ public class MegaLuceneMapper implements MegaMapper {
 	}
 
     public List<String> getAllUniProtAccessions(MmDatabase database) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Collection<Compound> getCompounds(String uniprotId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

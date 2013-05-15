@@ -3,9 +3,10 @@ package uk.ac.ebi.ep.mm;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import uk.ac.ebi.ep.search.model.Compound;
 
 /**
  * Interface for objects writing/reading entries and cross-references to/from
@@ -228,10 +229,30 @@ public interface MegaMapper {
     public void rollback() throws IOException;
 
     List<String> getAllUniProtAccessions(MmDatabase database);
-      
-     Map<?,?> getCompounds(MmDatabase db, String accession,
+
+    /**
+     * Retrieves compounds related to a UniProt ID.
+     * @param uniprotId A UniProt ID (name). If it ends with underscore ('_') it
+     *      is treated as a prefix in order to get compounds for all of the
+     *      orthologs.
+     * @return a collection of compounds related to the UniProt entry -
+     *      activators, inhibitors, cofactors, drugs, bioactive compounds,
+     *      reaction participants - or <code>null</code> if none found.
+     */
+    Collection<Compound> getCompounds(String uniprotId);
+
+    /**
+     *
+     * @param db
+     * @param uniprotId
+     * @param xDbs
+     * @return
+     * @deprecated db is always UniProt. Use {@link #getCompounds(String)}
+     *      instead.
+     */
+    Map<?,?> getCompounds(MmDatabase db, String uniprotId,
             MmDatabase... xDbs);
-     
+   
      Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions,
             MmDatabase... xDbs);
         Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions,

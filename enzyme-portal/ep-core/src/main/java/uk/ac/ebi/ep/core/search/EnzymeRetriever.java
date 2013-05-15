@@ -1,22 +1,15 @@
 package uk.ac.ebi.ep.core.search;
 
-import uk.ac.ebi.ep.core.DiseaseComparator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
-import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.chebi.ChebiAdapter;
@@ -38,6 +31,7 @@ import uk.ac.ebi.ep.adapter.rhea.RheaWsAdapter;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotWsException;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
+import uk.ac.ebi.ep.core.DiseaseComparator;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
@@ -49,7 +43,6 @@ import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
-import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
 import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
@@ -85,6 +78,13 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             LOGGER.error("Unable to create a PDBe adapter", e);
         }
     }
+
+    public IBioportalAdapter getBioportalAdapter() {
+        return bioportalAdapter;
+    }
+
+
+    
 
     /**
      * Lazily constructs a new adapter if needed.
@@ -603,7 +603,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
         List<LabelledCitation> citations = getLiteratureAdapter().getCitations(
                 uniprotAccession, enzymeModel.getPdbeaccession());
-        enzymeModel.setLiterature(new ArrayList<Object>(citations)); // FIXME and also the schema!           
+        if (citations != null) {
+            enzymeModel.setLiterature(new ArrayList<Object>(citations));
+        }
+
         return enzymeModel;
     }
 }

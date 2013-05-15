@@ -1,14 +1,10 @@
 package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
@@ -37,6 +33,45 @@ public class Transformer {
             + "|\\b[Ss]trongly\\b|\\b[Mm]oderately\\b|\\b[Ss]lightly\\b|[^(\\w\\d\\+\\-(\\sacid)]";
     static final String INHIBITOR_REGEX = "\\b[Ii]n(hibited|activated) by\\b";
     static final String ACTIVATOR_REGEX = "\\b[Aa]ctivated by\\b";
+
+    private static final String INH_REG_HOW =
+        "(?: with low affinity| competitively)?";
+    private static final String INH_REG_PROHIB =
+        "(?!acetylation|substrate|the )";
+    private static final String INH_REG_REL_CONC =
+        "(?:(?:high|low) levels? of )?";
+    private static final String INH_REG_COMP_GRP =
+        "(?:thiol-specific compounds |.*? antibiotics )?";
+    private static final String INH_REG_EXPLANATION =
+        "(?:, an? .+?,|,? whose .+?|,? which .+?| with a .+?|, this [^\\.]+" +
+        "| in the presence of .+?)?";
+    private static final String INH_REG_END =
+        "(?:\\.?$|[\\.;] |, and activated by|, but not by)";
+    private static final String INH_REG_OTHERS_LESS =
+        "(?:, to a (?:lower|lesser) extent, by| slightly inhibited by| by)?";
+    private static final String INH_REG_DONT_CONTINUE =
+        "(?! and activated by| but not by)";
+    /**
+     * This regexp has got 2 capturing groups.
+     */
+    static final String INHIBITOR_REGEXP =
+            "(?<![Nn]ot )\\b[Ii]n(?:hibited|activated)" +
+            INH_REG_HOW +
+            " by " +
+            INH_REG_PROHIB +
+            INH_REG_REL_CONC +
+            INH_REG_COMP_GRP +
+            "(.+?)" +
+            INH_REG_EXPLANATION +
+            "(?:" +
+            "(?:,"+ INH_REG_DONT_CONTINUE +"| and"+ INH_REG_OTHERS_LESS +"| or) " +
+            "(.+?)" +
+            INH_REG_EXPLANATION +
+            ")?" +
+            INH_REG_END;
+
+    private static final Pattern INHIBITOR_PATTERN =
+            Pattern.compile(INHIBITOR_REGEXP);
 
     public static String getCommentText(List<Comment> commentList) {
         StringBuilder sb = new StringBuilder();
@@ -83,13 +118,36 @@ public class Transformer {
     }
 
     /**
-     * parses a free text to get a list of molecules and groups these molecules into
-     * inhibitor, activator. <br/>
-     * Eg.: "Completely inhibited by ADP and ADP-glucose, and partially inhibited by ATP and NADH"
-     * will be grouped as inhibitor->[ADP, ADP-glucose, ATP, NADH]
+     * Parses a free text to get a list of molecules acting as inhibitors.<br/>
+     * @return A list of molecules with just a name (no ID). Please note that
+     *      some of them can be repeated.
      */
     public static List<Molecule> parseTextForInhibitors(String text) {
-        List<Molecule> inhibitors = parseText(text, INHIBITOR_REGEX + COMMON_REGEX);
+        List<Molecule> inhibitors = new ArrayList<Molecule>();
+        Matcher m = INHIBITOR_PATTERN.matcher(text);
+        while (m.find()){
+            for (int i = 1; i <= m.groupCount(); i++){
+                if (m.group(i) == null) continue;
+                String[] names = m.group(i)
+                        // remove concentrations (ex: 1 mM, 0.5 nM)
+                        .replaceAll("\\d+(\\.\\d+)? .M ", "")
+                        // remove stop words
+                        .replaceAll(",? and|,? or", ",")
+                        .split(", ");
+                for (String name: names){
+                    // XXX What to do with synonyms in parentheses?
+                    // (ex: "AIM-100 (4-amino-5,6-biaryl-furo[2,3-d]pyrimidine)")
+                    Molecule inhibitor = new Molecule();
+                    inhibitor.setName(name);
+                    inhibitors.add(inhibitor);
+                }
+            }
+        }
+        Collections.sort(inhibitors, new Comparator<Molecule>() {
+            public int compare(Molecule m1, Molecule m2) {
+                return m1.getName().compareToIgnoreCase(m2.getName());
+            }
+        });
         return inhibitors;
     }
 
@@ -97,6 +155,7 @@ public class Transformer {
         List<Molecule> inhibitors = parseText(text, ACTIVATOR_REGEX + COMMON_REGEX);
         return inhibitors;
     }
+
     static final Comparator<Molecule> SORT_MOLECULES = new Comparator<Molecule>() {
 
         public int compare(Molecule m1, Molecule m2) {
@@ -109,7 +168,7 @@ public class Transformer {
         }
     };
 
-    public static List<Molecule> parseText(String text, String regex) {
+    private static List<Molecule> parseText(String text, String regex) {
 
         LinkedList<Molecule> molecules = new LinkedList<Molecule>();
         Set<Molecule> theResult = new TreeSet<Molecule>(SORT_MOLECULES);

@@ -94,6 +94,10 @@ select mmx.* from mm_xref mmx, mm_entry mme1, mm_entry mme2 /*\
 	*/	(mme2.id = mmx.from_entry and mmx.to_entry = mme1.id) /*\
 	*/)
 
+--compounds.by.uniprot.id:\
+select compound_name, compound_id, relationship from uniprot2compound /*\
+  */where uniprot_id {0} and compound_name is not null order by relationship
+
 --constraint.equals:\
 = ?
 --constraint.like:\

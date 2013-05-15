@@ -1,41 +1,35 @@
 package uk.ac.ebi.ep.mm.app;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalOntology;
 
+
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 
 import uk.ac.ebi.ep.enzyme.model.Disease;
-import uk.ac.ebi.ep.mm.Entry;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
-import uk.ac.ebi.ep.mm.MmDatabase;
-import uk.ac.ebi.ep.mm.Relationship;
-import uk.ac.ebi.ep.mm.XRef;
+import uk.ac.ebi.ep.mm.*;
+
 
 /**
- * Class to parse the HTML
- * <a href="http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html">file</a>
- * containing a table of equivalences from UniProt accessions to OMIM IDs and
+ * Class to parse the file - either
+ * <a href="http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html">HTML</a>
+ * or <a href="http://research.isb-sib.ch/unimed/SP_MeSH.tab">tab-delimited</a>
+ * - containing a table of equivalences from UniProt accessions to OMIM IDs and
  * MeSH terms.
  * @author rafa
- *
  */
 public class Uniprot2DiseaseParser implements MmParser {
 
@@ -62,9 +56,19 @@ public class Uniprot2DiseaseParser implements MmParser {
 			"<TD>(.*?)<\\/TD><TD>(.*?)<\\/TD><TD>(.*?)<\\/TD>" +
 			"<TD>(.*?)<\\/TD>");
 
-	public Uniprot2DiseaseParser() {
+    /**
+     * Constructor.
+     * @throws IOException in case of problem loading the properties file which
+     *      contains the BioPortal API key.
+     */
+	public Uniprot2DiseaseParser() throws IOException {
 		bioportalAdapter = new BioportalWsAdapter();
-		bioportalAdapter.setConfig(new BioportalConfig()); // defaults
+        final BioportalConfig bioportalConfig = new BioportalConfig();
+        Properties props = new Properties();
+        props.load(Uniprot2DiseaseParser.class.getClassLoader()
+                .getResourceAsStream("ep-web-client.properties"));
+        bioportalConfig.setApiKey(props.getProperty("bioportal.api.key"));
+        bioportalAdapter.setConfig(bioportalConfig); // defaults
 	}
 
 	/**
@@ -90,9 +94,9 @@ public class Uniprot2DiseaseParser implements MmParser {
         		parser.parse(cl.getOptionValue("file"));
         		mm.commit();
     		} catch (Exception e){
-    			mm.rollback();
+    			if (mm != null) mm.rollback();
     		} finally {
-    			mm.closeMap();
+                if (mm != null) mm.closeMap();
     			if (con != null) con.close();
         	}
         }
@@ -229,7 +233,7 @@ public class Uniprot2DiseaseParser implements MmParser {
 			XRef meshXref = new XRef();
 			meshXref.setFromEntry(uniprotEntry);
 			meshXref.setRelationship(Relationship.between(
-					MmDatabase.UniProt, MmDatabase.MeSH).name());
+                    MmDatabase.UniProt, MmDatabase.MeSH).name());
 			meshXref.setToEntry(meshEntry);
 			diseaseXrefs.add(meshXref);
 			LOGGER.debug("MeSH xref to " + meshId);

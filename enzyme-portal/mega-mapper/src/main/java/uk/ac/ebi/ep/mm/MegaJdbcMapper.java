@@ -2,15 +2,13 @@ package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
+import uk.ac.ebi.ep.search.model.Compound;
 
 /**
  * Plain JDBC implementation of {@link MegaMapper}.
@@ -169,9 +167,10 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Checks if an entry already exists in the database. If so, the passed
-     * {@link Entry} object is updated with the internal id.
-     *
-     * @param entry
+     * {@link Entry} object is updated with the internal id. Additionally, if
+     * the passed entry has got a name but the one stored in the mega-map does
+     * not, the latter is updated.
+     * @param entry the entry whose existance is checked.
      * @return <code>true</code> if the entry exists.
      * @throws SQLException
      */
@@ -186,6 +185,21 @@ public class MegaJdbcMapper implements MegaMapper {
         final boolean exists = rs.next();
         if (exists) {
             entry.setId(rs.getInt("id"));
+            // Check whether the stored name is the same:
+            String nameInDb = rs.getString("entry_name");
+            if (nameInDb == null && entry.getEntryName() != null){
+                updateEntry(entry);
+                LOGGER.info(MessageFormat.format(
+                        "Added name {0} to {1} entry {2}",
+                        entry.getEntryName(), entry.getDbName(),
+                        entry.getEntryId()));
+            } else if (nameInDb != null && entry.getEntryName() != null
+                    && !nameInDb.equals(entry.getEntryName())){
+                LOGGER.warn(MessageFormat.format(
+                        "{0} entry {1} exists with a name {2} != {3}",
+                        entry.getDbName(), entry.getEntryId(), nameInDb,
+                        entry.getEntryName()));
+            }
         }
         rs.close();
         return exists;
@@ -615,7 +629,7 @@ public class MegaJdbcMapper implements MegaMapper {
      *
      * @param db the database where the accession is found
      * @param accession the accession number
-     * @param xDb the referencing/referenced database(s).
+     * @param xDbs the referencing/referenced database(s).
      * @return the total number of Xrefs found or 0 if none was found.
      */
     public int getXrefsSize(MmDatabase db, String accession,
@@ -768,8 +782,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Closes safely a ResultSet, logging in case of error.
-     *
-     * @param resultSet
+     * @param resultSet a ResultSet. Can be <code>null</code>.
      */
     private void closeResultSet(ResultSet resultSet) {
         if (resultSet != null) {
@@ -783,8 +796,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Closes safely a PreparedStatement, logging in case of error.
-     *
-     * @param ps
+     * @param ps a PreparedStatement. Can be <code>null</code>.
      */
     private void closePreparedStatement(PreparedStatement ps) {
         if (ps != null) {
@@ -906,14 +918,47 @@ public class MegaJdbcMapper implements MegaMapper {
 
         return diseasesEntryMap;
     }
+
+    public Collection<Compound> getCompounds(String uniprotId) {
+        Collection<Compound> compounds = null;
+        ResultSet rs = null;
+        String query = null, constraint = null;
+        if (uniprotId.endsWith("_")){
+            query = uniprotId.replace("_", "\\_%");
+            constraint = "--constraint.like";
+        } else {
+            query = uniprotId;
+            constraint = "--constraint.equals";
+        }
+        try {
+            PreparedStatement ps = sqlLoader.getPreparedStatement(
+                    "--compounds.by.uniprot.id", constraint);
+            ps.setString(1, query);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                Compound compound = new Compound();
+                compound.setId(rs.getString("compound_id"));
+                compound.setName(rs.getString("compound_name"));
+                // TODO: modify search model and add relationship as role
+                if (compounds == null) compounds = new ArrayList<Compound>();
+                compounds.add(compound);
+            }
+        } catch (SQLException e){
+            LOGGER.error("Unable to get compounds for " + uniprotId, e);
+        } finally {
+            closeResultSet(rs);
+        }
+        return compounds;
+    }
+
     public static final String[] ILLEGAL_COMPOUND = {"sample", "sample", "example", "Water", "Acid", "acid", "water"};
 
-    public Map<String, String> getCompounds(MmDatabase db, String accessions,
+    public Map<String, String> getCompounds(MmDatabase db, String uniprotId,
             MmDatabase... xDbs) {
 
                 
         Map<String, String> compoundEntryMap = null;
-        String[] acc = accessions.split("_");
+        String[] acc = uniprotId.split("_");
         String accession = acc[0].concat("\\_%");
 
 
@@ -1024,14 +1069,13 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     /**
-     *
-     * @param entry
+     * Updates an entry name in the database, leaving the rest unchanged.
+     * @param entry the entry with an updated name.
      * @return number of rows affected by the update operation
-     * @throws IOException
      */
-    public int updateEntry(Entry entry) throws IOException {
+    public int updateEntry(Entry entry) {
         int num_row_affected = 0;
-        String query = "UPDATE MM_ENTRY SET ENTRY_NAME=? WHERE ENTRY_ID=?";
+        String query = "UPDATE MM_ENTRY SET ENTRY_NAME=? WHERE ENTRY_ID=? and db_name = ?";
         PreparedStatement preparedStatement = null;
         try {
             con.setAutoCommit(false);
@@ -1042,6 +1086,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
             preparedStatement.setString(1, entry.getEntryName());
             preparedStatement.setString(2, entry.getEntryId());
+            preparedStatement.setString(3, entry.getDbName());
 
             preparedStatement.addBatch();
 
@@ -1059,14 +1104,9 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Updating " + entry.getEntryId(), ex);
         } finally {
-            try {
-
-                preparedStatement.close();
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            closePreparedStatement(preparedStatement);
         }
         return num_row_affected;
     }

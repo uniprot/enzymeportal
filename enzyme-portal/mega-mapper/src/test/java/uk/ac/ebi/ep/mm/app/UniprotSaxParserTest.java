@@ -1,13 +1,10 @@
 package uk.ac.ebi.ep.mm.app;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Before;
 import org.junit.Test;
+import uk.ac.ebi.ep.mm.Entry;
 
+import static org.junit.Assert.*;
 
 public class UniprotSaxParserTest {
 
@@ -94,4 +91,30 @@ public class UniprotSaxParserTest {
 		assertEquals(2, parser.accessions.size());
 	}
 
+    @Test
+    public void testSearchMoleculeInChEBI(){
+        Entry molecule = null;
+
+        molecule = parser.searchMoleculeInChEBI("foo");
+        assertNull(molecule);
+
+        molecule = parser.searchMoleculeInChEBI("foo (ZZZ)");
+        assertNull(molecule);
+
+        molecule = parser.searchMoleculeInChEBI("ATP");
+        assertNotNull(molecule);
+        assertEquals("CHEBI:30616", molecule.getEntryId());
+
+        // name matches:
+        molecule =
+                parser.searchMoleculeInChEBI("3,4-dichloroisocoumarin (DCI)");
+        assertNotNull(molecule);
+        assertEquals("CHEBI:132349", molecule.getEntryId());
+
+        // only acronym matches:
+        molecule = parser.searchMoleculeInChEBI("foo zzz (ATP)");
+        assertNotNull(molecule);
+        assertEquals("CHEBI:30616", molecule.getEntryId());
+
+    }
 }

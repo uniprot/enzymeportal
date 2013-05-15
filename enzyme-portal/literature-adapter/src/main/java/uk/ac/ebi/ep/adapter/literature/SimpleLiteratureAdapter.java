@@ -23,7 +23,8 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
      *      This is the only parameter required when using the CiteXplore web
      *      service.
      * @param pdbIds the PDB identifiers to search.
-     * @return a list of citations sorted by descending publication date.
+     * @return a list of citations sorted by descending publication date, or
+     *      <code>null</code> if none found.
      */
 	public List<LabelledCitation> getCitations(String uniprotId,
 			List<String> pdbIds) {
@@ -83,7 +84,8 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
      * </ul>
      * @param uniprotId the UniProt accession of the enzyme.
      * @param pdbIds the PDB IDs for the enzyme.
-     * @return a list of citations related to the provided IDs.
+     * @return a list of citations related to the provided IDs, or
+     *      <code>null</code> if none found.
      */
     private List<LabelledCitation> getCitationsFromResources(String uniprotId,
             List<String> pdbIds) {
