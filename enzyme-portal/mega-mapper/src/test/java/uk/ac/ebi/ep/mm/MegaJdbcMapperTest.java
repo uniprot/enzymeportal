@@ -1,29 +1,19 @@
 package uk.ac.ebi.ep.mm;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import java.util.Map;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.mm.MegaMapper.Constraint;
+
+import static org.junit.Assert.*;
 
 //@Ignore
 public class MegaJdbcMapperTest {
@@ -231,9 +221,9 @@ public class MegaJdbcMapperTest {
     @Test
     public void testGetXrefsByAccessionAndRelationship(){
     	Collection<XRef> xrefs = mm.getXrefs(MmDatabase.UniProt, "P07327",
-				Relationship.is_cofactor_of);
+				Relationship.belongs_to);
     	assertNotNull(xrefs);
-    	assertEquals(4, xrefs.size());
+    	assertEquals(2, xrefs.size()); // EC 1.1.1.1, Homo sapiens
     }
     
     @Test
