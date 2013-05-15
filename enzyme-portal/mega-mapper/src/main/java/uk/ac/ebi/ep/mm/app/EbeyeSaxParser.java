@@ -8,7 +8,10 @@ import org.apache.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import uk.ac.ebi.ep.mm.*;
+import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.mm.MmDatabase;
+import uk.ac.ebi.ep.mm.Relationship;
+import uk.ac.ebi.ep.mm.XRef;
 
 /**
  * Parser for EB-Eye XML files to populate a mega-map.
@@ -103,8 +106,6 @@ public class EbeyeSaxParser extends MmSaxParser {
 				entry.setEntryAccessions(Collections.singletonList(acc));
 			}
 			LOGGER.debug("Parsing entry " + entry.getEntryId());
-		} else if (isXrefs){
-			xrefs.clear();
 		} else if (isRef){
 			final MmDatabase refdDb =
 					MmDatabase.parse(attributes.getValue("", "dbname"));
@@ -120,10 +121,8 @@ public class EbeyeSaxParser extends MmSaxParser {
 					// ChEMBL-Target entries are proteins targeted by drugs:
 					try {
 						entry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
-						if (entry == null){
-							// It is not in the mega-map, perhaps not an enzyme:
-							LOGGER.warn(dbKey + " does not exist in the mega-map");
-						} else {
+						if (entry != null){
+							LOGGER.info(dbKey + " is enzyme.");
 							for (XRef xref : xrefs) {
 								xref.setFromEntry(entry);
 							}
@@ -173,7 +172,7 @@ public class EbeyeSaxParser extends MmSaxParser {
 
 	@Override
 	public void characters(char[] ch, int start, int length)
-			throws SAXException {
+    throws SAXException {
 		if (isDbName || isEntryName){
 			currentChars.append(Arrays.copyOfRange(ch, start, start+length));
 		}
@@ -181,25 +180,24 @@ public class EbeyeSaxParser extends MmSaxParser {
 
 	@Override
 	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
+    throws SAXException {
 		if (isDbName){
 			db = MmDatabase.parse(currentChars.toString());
 			LOGGER.info("Parsing EB-Eye file for " + db.name());
 		} else if (isEntryName && entry != null){
 			entry.setEntryName(currentChars.toString());
-		} else if (isEntry && entry != null && !xrefs.isEmpty()){
-//			if (db.equals(MmDatabase.ChEMBL_Target) &&
-//					entry.getDbName().equals(MmDatabase.ChEMBL_Target)){
-//				// All ChEMBL-Target entries should have been translated to UniProt.
-//				LOGGER.warn("No UniProt xref for " + entry.getEntryId());
-//			} else {
-				try {
-					mm.write(Collections.singleton(entry), xrefs);
-				} catch (IOException e) {
-					throw new RuntimeException("Adding entry to mega-map", e);
-				}
-//			}
-		}
+		} else if (isEntry){
+            try {
+                if (entry != null && !xrefs.isEmpty()){
+                    mm.write(Collections.singleton(entry), xrefs);
+                }
+            } catch (IOException e) {
+                throw new SAXException("Adding entry to mega-map", e);
+            } finally {
+                entry = null;
+                xrefs.clear();
+            }
+	    }
 		currentContext.pop();
 		// Update flags:
 		String currentXpath = getCurrentXpath();
