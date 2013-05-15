@@ -8,8 +8,9 @@ INSERT INTO mm_accession (id, accession, acc_index) VALUES (?, ?, ?)
 --insert.xref:\
 INSERT INTO mm_xref (id, from_entry, relationship, to_entry) \
 	VALUES (s_xref_id.nextval, ?, ?, ?)
+
 --update.entry:\
-UPDATE MM_ENTRY SET ENTRY_NAME=? WHERE ENTRY_ID=?
+UPDATE MM_ENTRY SET ENTRY_NAME = ? WHERE ENTRY_ID = ? AND db_name = ?
 
 --delete.entry:\
 DELETE FROM mm_entry WHERE ID = ?
