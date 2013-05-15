@@ -1104,14 +1104,9 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Updating " + entry.getEntryId(), ex);
         } finally {
-            try {
-
-                preparedStatement.close();
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            closePreparedStatement(preparedStatement);
         }
         return num_row_affected;
     }
