@@ -47,7 +47,7 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
         chemblRestClient = applicationContext.getBean(
                 "chemblRestClient", ChemblRestClient.class);
         // FIXME: this is hardcoded!
-        chemblRestClient.setChemblServiceUrl("http://www.ebi.ac.uk/chemblws/");
+        chemblRestClient.setChemblServiceUrl("https://www.ebi.ac.uk/chemblws/");
     }
   
     private Compound getCompoundById(String chemblId) {
@@ -65,31 +65,30 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
     }
 
     private void computeAndUpdateEntry(Compound compound) throws Exception {
-        if (compound != null) {
+        if (compound != null
+                && compound.getPreferredCompoundName() != null) {
             Entry entry = new Entry();
             entry.setDbName(MmDatabase.ChEMBL.name());
             entry.setEntryId(compound.getChemblId());
             //TODO computation if there is no preferred name
-            if (compound.getPreferredCompoundName() != null) {
-                //System.out.println("pref comp "+ compound.getPreferredCompoundName());
-                entry.setEntryName(compound.getPreferredCompoundName());
-                this.updateEntry(entry);
-            }
- 
+            LOGGER.info(compound.getChemblId() + " name: "
+                    + compound.getPreferredCompoundName());
+            entry.setEntryName(compound.getPreferredCompoundName());
+            updateEntry(entry);
         }
-
     }
 
     public void updateChemblCompounds()
     throws IOException, InterruptedException, ExecutionException, SQLException {
         List<String> chemblIds = mapper.getAllEntryIds(MmDatabase.ChEMBL);
+        LOGGER.info(chemblIds.size() + " ChEMBL compounds in the mega-map");
         Compound chembl_compound;
         for (String chemblId : chemblIds) {
             chembl_compound = getCompoundById(chemblId);
             try {
                 computeAndUpdateEntry(chembl_compound);
             } catch (Exception ex) {
-                LOGGER.error( ex);
+                LOGGER.error(chemblId, ex);
             }
         }
     }
