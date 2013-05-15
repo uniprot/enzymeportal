@@ -77,18 +77,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc5</artifactId>
-            <version>11.1.0.7.0</version>
-            <!--            <scope>provided</scope>-->
-        </dependency>
-        <!--              <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.3.0</version>
-            <scope>provided</scope>
-        </dependency>-->
-        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>bioportal-adapter</artifactId>
             <version>1.0.4-SNAPSHOT</version>
