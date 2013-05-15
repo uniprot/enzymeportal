@@ -11,7 +11,7 @@
 </properties>
 
 <body>
-    <release version="1.0.16" date="2013-05-03"
+    <release version="1.0.16" date=""
         description="Cross-references for small molecules taken from IntEnz">
         <action dev="rafalcan" type="add">
             Added concrete relationships "is_substrate_of" and "is_product_of"
@@ -26,6 +26,14 @@
         </action>
         <action dev="rafalcan" type="add">
             Added UniProt-DrugBank cross-references to the mega-map.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Fixed import of ChEMBL cross references. There were some extra - and
+            wrong - due to a bug in EbeyeSaxParser.
+            <fixes issue="168"/>
+        </action>
+        <action dev="rafalcan" type="add">
+            Added table uniprot2compound to be used for quick lookups.
         </action>
     </release>
     <release version="1.0.13" date="" description="Bug fixes and enhancements.">

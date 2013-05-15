@@ -306,6 +306,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 entry.setEntryId(rs.getString("entry_id"));
                 entry.setEntryName(rs.getString("entry_name"));
                 // TODO: load accessions?
+                // This happens with UniProt demerged entries:
                 if (rs.next()) {
                     LOGGER.error("More than one entry for same accession! "
                             + accession + " (" + db.name() + ")");
