@@ -97,14 +97,19 @@
                 </configuration>
             </plugin>
 		</plugins>
-<!--        <resources>
+        <resources>
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
                     <include>ep-web-client.properties</include>
                 </includes>
             </resource>
-        </resources>-->
+                <resource>
+                <directory>src/main/resources</directory>
+
+            </resource>
+            
+        </resources>
 	</build>
 	
     <profiles>
@@ -196,7 +201,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-core</artifactId>
-            <version>1.0.15</version>
+            <version>1.0.16-SNAPSHOT</version>
         </dependency>
         <dependency>
 			<!-- overriding ep-core's -->

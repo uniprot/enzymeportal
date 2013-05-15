@@ -5,51 +5,60 @@ import uk.ac.ebi.ep.search.model.Disease;
 
 /**
  * Wrapper around a Disease object which provides the missing
- * <code>equals</code> and <code>hashCode</code> methods (the class
- * <code>Disease</code> is auto-generated from a XML schema and does not
- * provide them).
- * <br>
- * The implemented methods are based exclusively on the disease ID.
- * <br>
- * It also implements <code>Comparable</code> to provide a 'natural' order for
- * Disease objects, based on their names.
+ * <code>equals</code> and
+ * <code>hashCode</code> methods (the class
+ * <code>Disease</code> is auto-generated from a XML schema and does not provide
+ * them). <br> The implemented methods are based exclusively on the disease Name.
+ * <br> It also implements
+ * <code>Comparable</code> to provide a 'natural' order for Disease objects,
+ * based on their names.
+ *
  * @author rafa
  *
  */
 public class DiseaseDefaultWrapper implements Comparable<DiseaseDefaultWrapper> {
 
-	private Disease disease;
-	
-	public Disease getDisease(){
-		return disease;
-	}
-	
-	public DiseaseDefaultWrapper(Disease disease) {
-		if (disease == null) throw new NullPointerException();
-		this.disease = disease;
-	}
+    private Disease disease;
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + disease.getId().hashCode();
-		return result;
-	}
+    public Disease getDisease() {
+        return disease;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		DiseaseDefaultWrapper other = (DiseaseDefaultWrapper) obj;
-		if (!disease.getId().equals(other.disease.getId()))
-			return false;
-		return true;
-	}
+    public DiseaseDefaultWrapper(Disease disease) {
+        if (disease == null) {
+            throw new NullPointerException();
+        }
+        this.disease = disease;
+    }
 
-	public int compareTo(DiseaseDefaultWrapper o) {
-		return disease.getName().compareToIgnoreCase(o.disease.getName());
-	}
+    public int compareTo(DiseaseDefaultWrapper o) {
+        int result = disease.getName().compareToIgnoreCase(o.disease.getName());
 
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + (this.disease.getName() != null ? this.disease.getName().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DiseaseDefaultWrapper other = (DiseaseDefaultWrapper) obj;
+        if (this.disease != other.disease && (this.disease == null || !this.disease.equals(other.disease))) {
+            return false;
+        }
+        if ((this.disease.getName() == null ? other.disease.getName() != null : !this.disease.getName().equals(other.disease.getName())) && (this.disease.getName() == null || !this.disease.getName().equalsIgnoreCase(other.disease.getName()))) {
+            return false;
+        }
+        return true;
+    }
 }

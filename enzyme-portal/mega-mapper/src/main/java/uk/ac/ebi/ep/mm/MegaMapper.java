@@ -232,7 +232,9 @@ public interface MegaMapper {
      Map<?,?> getCompounds(MmDatabase db, String accession,
             MmDatabase... xDbs);
      
-     Map<String, String> getDisease(MmDatabase db, String accessions,
+     Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions,
+            MmDatabase... xDbs);
+        Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions,
             MmDatabase... xDbs);
     
      /**

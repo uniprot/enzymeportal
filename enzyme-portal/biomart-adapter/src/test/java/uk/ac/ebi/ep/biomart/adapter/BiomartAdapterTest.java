@@ -64,6 +64,7 @@ public class BiomartAdapterTest {
     }
     
     @Test
+    @Ignore("BioMart Server returns nothing for this accession")
     public void testGetPathwaysByUniprotAccession() throws Exception {
     	List<String> results = instance.getPathwaysByUniprotAccession("P30613");
     	assertNotNull(results);

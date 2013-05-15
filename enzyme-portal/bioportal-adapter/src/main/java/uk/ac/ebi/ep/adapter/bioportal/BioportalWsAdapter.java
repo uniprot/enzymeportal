@@ -9,8 +9,12 @@ import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -54,8 +58,24 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 
     public BioportalWsAdapter() {
         config = new BioportalConfig();
-    }
+        }
 	
+    
+//      public BioportalWsAdapter() {
+//        config = new BioportalConfig();
+//         Properties configProps = new Properties();
+//        try {
+//            configProps.load(BioportalWsAdapter.class.getClassLoader()
+//                    .getResourceAsStream("ep-web-client.properties"));
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(BioportalWsAdapter.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        //BioportalConfig config = new BioportalConfig(); // defaults
+//        config.setApiKey(configProps.getProperty("bioportal.api.key"));
+//        //bwa.setConfig(config);
+//    }  
+    
+    
     /**
      * Prepares a list of ontologies IDs as one parameter for BioPortal.
      * @param ontologies the ontologies to search.
@@ -122,10 +142,10 @@ public class BioportalWsAdapter implements IBioportalAdapter {
      *      if none found.
 	 * @throws BioportalAdapterException
 	 */
-	public Collection<Entity> searchConcept(BioportalOntology[] ontologies,
+	public Set<Entity> searchConcept(BioportalOntology[] ontologies,
             String query, Class<? extends Entity> clazz, boolean complete)
 	throws BioportalAdapterException{
-		Collection<Entity> entities = null;
+		Set<Entity> entities = null;
 		InputStream is = null;
 		String urlString = null;
 		try {
@@ -163,14 +183,20 @@ public class BioportalWsAdapter implements IBioportalAdapter {
                     String url = urls.next();
                     String versionId = versionIds.next();
                     // Workaround for obsolete EFO entries:
-                    if (conceptId.startsWith("rdfns:pat_id_")) continue;
+                    if (conceptId.startsWith("rdfns:pat_id_")) {
+                        continue;
+                    }
                     Entity entity = clazz.newInstance();
                     // Remove the ontology prefix:
                     entity.setId(conceptId.replaceFirst("^\\w+:", ""));
                     entity.setName(preferredName);
                     entity.setUrl(url);
-                    if (complete) completeEntity(entity, conceptId, versionId);
-                    if (entities == null) entities = new ArrayList<Entity>();
+                    if (complete) {
+                        completeEntity(entity, conceptId, versionId);
+                    }
+                    if (entities == null) {
+                        entities = new HashSet<Entity>();//new ArrayList<Entity>();
+                    }
                     entities.add(entity);
                 }
 			}
@@ -242,7 +268,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			}
 		}
 	}
-
+        
 	public Disease getDiseaseByName(String name)
 	throws BioportalAdapterException {
 		return (Disease) searchConcept(BioportalOntology.EFO, name,
@@ -251,14 +277,14 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 
     public Disease getDisease(String nameOrId) throws BioportalAdapterException{
         Entity disease = null;
-        Collection<Entity> diseases = searchConcept(
+        Set<Entity> diseases = searchConcept(
                 BioportalOntology.FOR_DISEASES, nameOrId, Disease.class, true);
         if (diseases != null){
             String others = null;
             for (Entity e : diseases) {
                 if (disease == null) disease = e;
                 else others += " ["+e.getId()+"]";
-            }
+    }
             if (others != null){
                 LOGGER.warn("More than one disease found for " + nameOrId
                         + others);
@@ -267,7 +293,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
         }
         return (Disease) disease;
     }
-
+    
 	public void setConfig(BioportalConfig config) {
 		this.config = config;
 	}

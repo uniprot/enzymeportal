@@ -42,4 +42,12 @@
         <function-class>uk.ac.ebi.ep.web.Functions</function-class>
         <function-signature>boolean lastInList(java.util.List, java.lang.Object)</function-signature>
     </function>
+     <function>
+    <description>
+        Enzyme Portal HTML Escape function
+    </description>
+    <name>escapeHTML</name>
+    <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+    <function-signature>java.lang.String escapeHTML(java.lang.String)</function-signature>
+  </function>
 </taglib>

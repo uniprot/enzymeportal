@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 		http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 	
@@ -12,11 +12,11 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.15</version>
+    <version>1.0.16-SNAPSHOT</version>
     <name>Mega mapper</name>
     <description>
-    	A module to keep track of cross references between the databases used
-    	by the Enzyme Portal.
+        A module to keep track of cross references between the databases used
+        by the Enzyme Portal.
     </description>
 
     <dependencies>
@@ -61,13 +61,13 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-      <dependency>
+        <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc5</artifactId>
             <version>11.1.0.7.0</version>
-			<scope>provided</scope>
+<!--            <scope>provided</scope>-->
         </dependency>
-<!--      <dependency>
+<!--              <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0.3.0</version>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>bioportal-adapter</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -241,17 +241,17 @@
                                 </reportSet>
                             </reportSets>
                         </plugin>
-						<plugin>
-						    <groupId>org.apache.maven.plugins</groupId>
-						    <artifactId>maven-changes-plugin</artifactId>
-						    <reportSets>
-						        <reportSet>
-						            <reports>
-						                <report>changes-report</report>
-						            </reports>
-						        </reportSet>
-						    </reportSets>
-						</plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-changes-plugin</artifactId>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>changes-report</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
                     </reportPlugins>
                 </configuration>
             </plugin>
@@ -260,7 +260,7 @@
                 <artifactId>site-maven-plugin</artifactId>
                 <configuration>
                     <path>
-                    	${project.parent.artifactId}/${project.artifactId}
+                        ${project.parent.artifactId}/${project.artifactId}
                     </path>
                 </configuration>
             </plugin>
@@ -297,20 +297,15 @@
                     <artifactId>commons-cli</artifactId>
                     <version>1.2</version>
                 </dependency>
-		        <dependency>
-		            <groupId>com.oracle</groupId>
-		            <artifactId>ojdbc5</artifactId>
-		            <version>11.1.0.7.0</version>
-		        </dependency>
+                <dependency>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>ojdbc5</artifactId>
+                    <version>11.1.0.7.0</version>
+                </dependency>
                 <dependency>
                     <groupId>uk.ac.ebi</groupId>
                     <artifactId>ebinocle</artifactId>
                     <version>1.0.4</version>
-                </dependency>
-                <dependency>
-                    <groupId>uk.ac.ebi.ep</groupId>
-                    <artifactId>bioportal-adapter</artifactId>
-                    <version>1.0.2</version>
                 </dependency>
                 <dependency>
                     <groupId>uk.ac.ebi.biobabel</groupId>
@@ -323,7 +318,7 @@
                     <resource>
                         <directory>${ep.config.dir}</directory>
                         <includes>
-                     <include>ep-mm-db${ep.mm.db.config}.properties</include>
+                            <include>ep-mm-db${ep.mm.db.config}.properties</include>
                         </includes>
                     </resource>
                 </resources>
@@ -350,7 +345,7 @@
             </build>
         </profile>
         <profile>
-			<!-- Profile to work with the development database -->
+            <!-- Profile to work with the development database -->
             <id>enzdev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -360,7 +355,7 @@
             </properties>
         </profile>
         <profile>
-			<!-- Profile to work with the release database -->
+            <!-- Profile to work with the release database -->
             <id>ezprel</id>
             <properties>
                 <ep.mm.db.config>-ezprel</ep.mm.db.config>

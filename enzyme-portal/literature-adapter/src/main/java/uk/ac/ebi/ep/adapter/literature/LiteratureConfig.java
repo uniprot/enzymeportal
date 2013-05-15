@@ -65,7 +65,7 @@ public class LiteratureConfig implements LiteratureConfigMBean {
     public void setUseCitexploreWs(boolean useCitexploreWs) {
         this.useCitexploreWs = useCitexploreWs;
     }
-
+    
     public int getMaxCitations() {
         return maxCitations;
     }

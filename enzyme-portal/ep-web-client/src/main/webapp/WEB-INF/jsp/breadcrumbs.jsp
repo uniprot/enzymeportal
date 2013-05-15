@@ -41,7 +41,7 @@
                         <c:if test="${not Fn:lastInList(history, hItem)}">
                       
                                 
-                                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&${hItem}&searchparams.start=0&searchparams.previoustext=">Search
+                            <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&${hItem}&searchparams.start=0&searchparams.previoustext=">Search
 							for <i>"${fn:substringAfter(hItem, '=')}"</i></a>
                             </c:if>
 

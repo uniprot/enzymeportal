@@ -1,15 +1,22 @@
 package uk.ac.ebi.ep.core.search;
 
+import uk.ac.ebi.ep.core.DiseaseComparator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.chebi.ChebiAdapter;
@@ -50,11 +57,9 @@ import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**
  *
- * @since   1.0
- * @version $LastChangedRevision$ <br/>
- *          $LastChangedDate$ <br/>
- *          $Author$
- * @author  $Author$
+ * @since 1.0
+ * @version $LastChangedRevision$ <br/> $LastChangedDate$ <br/> $Author$
+ * @author $Author$
  */
 public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
@@ -83,6 +88,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     /**
      * Lazily constructs a new adapter if needed.
+     *
      * @return a Reactome adapter.
      */
     public IReactomeAdapter getReactomeAdapter() {
@@ -94,6 +100,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     /**
      * Lazily constructs a new adapter if needed.
+     *
      * @return a ChEBI adapter.
      */
     public IChebiAdapter getChebiAdapter() {
@@ -104,13 +111,13 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     public ILiteratureAdapter getLiteratureAdapter() {
-    	if (litAdapter == null){
+        if (litAdapter == null) {
             litAdapter = new SimpleLiteratureAdapter();
-    	}
-		return litAdapter;
-	}
+        }
+        return litAdapter;
+    }
 
-	public EnzymeModel getEnzyme(String uniprotAccession)
+    public EnzymeModel getEnzyme(String uniprotAccession)
             throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = null;
         try {
@@ -135,12 +142,13 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     /**
      * Searches Rhea for the primary UniProt accession in the model and adds the
-     * corresponding reactions if found.
-     * <br><b>WARNING:</b> the added reactions have links only to Reactome and
-     * MACiE. The links are strings containing a complete URL.
+     * corresponding reactions if found. <br><b>WARNING:</b> the added reactions
+     * have links only to Reactome and MACiE. The links are strings containing a
+     * complete URL.
+     *
      * @param enzymeModel
      * @return the same model updated with ReactionPathway objects, one per
-     * 		reaction found.
+     * reaction found.
      * @throws EnzymeRetrieverException
      */
     private EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel)
@@ -149,7 +157,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         List<Reaction> reactions;
         try {
             reactions = rheaAdapter.getRheasInCmlreact(enzymeModel
-            		.getUniprotaccessions().get(0));
+                    .getUniprotaccessions().get(0));
         } catch (RheaFetchDataException ex) {
             throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
         }
@@ -259,11 +267,13 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     /**
      * Populates an enzyme model with information related to the catalysed
      * reactions: descriptions, any related pathways.
+     *
      * @param enzymeModel
      * @return A list of ReactionPathway objects - the ones from the model -
-     * 		with updated information. Note that the underlying model (the
-     * 		passed parameter) is also updated.
-     * @throws EnzymeRetrieverException if there is any problem querying Reactome.
+     * with updated information. Note that the underlying model (the passed
+     * parameter) is also updated.
+     * @throws EnzymeRetrieverException if there is any problem querying
+     * Reactome.
      */
     private List<ReactionPathway> getReactionPathwaysByRheaResults(
             EnzymeModel enzymeModel)
@@ -280,8 +290,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     /**
-     * Gets pathways for the enzymatic reactions on the base of xrefs from
-     * Rhea to Reactome.
+     * Gets pathways for the enzymatic reactions on the base of xrefs from Rhea
+     * to Reactome.
+     *
      * @param reactionPathways objects containing reactions.
      * @return the same list of ReactionPathway objects with any added pathways.
      * @throws EnzymeRetrieverException
@@ -307,19 +318,21 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     try {
                         List<Pathway> pathways = getPathwaysByReactomeReactionsId(x);
                         if (pathways != null) {
-                        	// Check that the retrieved pathway IDs
-                        	// are not there already:
-                        	List<Pathway> newPathways = new ArrayList<Pathway>();
-                        	for (Pathway pathway : pathways) {
-                        		boolean exists = false;
-								for (Pathway existingPathway : reactionPathway.getPathways()) {
-									if (existingPathway.getId().equals(pathway.getId())){
-										exists = true;
-										break;
-									}
-								}
-								if (!exists) newPathways.add(pathway);
-							}
+                            // Check that the retrieved pathway IDs
+                            // are not there already:
+                            List<Pathway> newPathways = new ArrayList<Pathway>();
+                            for (Pathway pathway : pathways) {
+                                boolean exists = false;
+                                for (Pathway existingPathway : reactionPathway.getPathways()) {
+                                    if (existingPathway.getId().equals(pathway.getId())) {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                                if (!exists) {
+                                    newPathways.add(pathway);
+                                }
+                            }
                             reactionPathway.getPathways().addAll(newPathways);
                         }
                     } catch (EnzymeRetrieverException e) {
@@ -360,12 +373,12 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         /*
          * Ajaxified: disabled until Reactome provides a performant ws.
         
-        try {
-        pathways = reactomeAdapter.getPathways(reactomeStableIds);
-        } catch (ReactomeServiceException ex) {
-        throw new EnzymeRetrieverException("Failed to get reactome description "
-        + "from Reactome for pathways " + reactomeStableIds, ex);
-        }
+         try {
+         pathways = reactomeAdapter.getPathways(reactomeStableIds);
+         } catch (ReactomeServiceException ex) {
+         throw new EnzymeRetrieverException("Failed to get reactome description "
+         + "from Reactome for pathways " + reactomeStableIds, ex);
+         }
         
          * For now, we build 'empty' Pathway objects only with their
          * ids, which will be retrieved using ajax from the JSP.
@@ -391,7 +404,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
             // The model contains now only drugs, activators and inhibitors.
             if (megaMapperConnection != null) {
-            	// Get bioactive compounds from ChEMBL:
+                // Get bioactive compounds from ChEMBL:
                 // Search the mega-map for xrefs from UniProt to ChEMBL:
                 LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
                 //this is the total number of CheMBL molecules found
@@ -399,7 +412,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                         MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
                 List<Entry> chemblEntries = megaMapperConnection.getMegaMapper().getChMBLEntries(
                         MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
-                           LOGGER.debug("MOLECULES before getting ChEMBL molecules");
+                LOGGER.debug("MOLECULES before getting ChEMBL molecules");
                 if (chemblEntries != null) {
                     Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
                     for (Entry chemblEntry : chemblEntries) {
@@ -412,10 +425,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             }
             // Get cofactors from IntEnz:
             enzymeModel.getMolecule().withCofactors(
-            		intenzAdapter.getCofactors(enzymeModel.getEc()));
+                    intenzAdapter.getCofactors(enzymeModel.getEc()));
             // XXX cofactors are mixed if several EC numbers per UniProt acc
             // XXX wrong cofactors if OR'ed (ex. EC 1.1.1.1 and P07327)
-            
+
             LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
             getChebiAdapter().getMoleculeCompleteEntries(enzymeModel);
             LOGGER.debug("MOLECULES before provenance");
@@ -482,41 +495,41 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     "Unable to get enzyme summary for " + uniprotAccession, e);
         }
         /*
-        if (pdbeAdapter != null) try {
-        List<String> pdbIds = enzymeModel.getPdbeaccession();
-        LOGGER.debug(" -STR- before getSegments");
-        Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);
-        for (SegmentAdapter segment : segments){
-        LOGGER.debug(" -STR- before adding structure");
-        ProteinStructure structure = new ProteinStructure();
-        structure.setId(segment.getId());
-        for (FeatureAdapter feature : segment.getFeature()){
-        if (feature.getType().getId().equals("description")){
-        structure.setDescription(feature.getNotes().get(0)); // FIXME?
-        } else if (feature.getType().getId().equals("image")){
-        Image image = new Image();
-        image.setSource(feature.getLinks().get(0).getHref());
-        image.setCaption(feature.getLinks().get(0).getContent());
-        image.setHref(feature.getLinks().get(1).getHref());
-        structure.setImage(image);
-        } else if (feature.getType().getId().equals("provenance")){
-        structure.setProvenance(feature.getNotes());
-        } else if (feature.getType().getId().equals("summary")){
-        DASSummary summary = new DASSummary();
-        summary.setLabel(feature.getLabel());
-        summary.setNote(feature.getNotes());
-        structure.getSummary().add(summary);
-        }
-        }
-        enzymeModel.getProteinstructure().add(structure);
-        }
-        } catch (MalformedURLException e) {
-        throw new EnzymeRetrieverException("Wrong URL", e);
-        } catch (JAXBException e) {
-        throw new EnzymeRetrieverException("Unable to get data from DAS server", e);
-        } catch (ValidationException e){
-        throw new EnzymeRetrieverException("Validation error for DASGGF", e);
-        }
+         if (pdbeAdapter != null) try {
+         List<String> pdbIds = enzymeModel.getPdbeaccession();
+         LOGGER.debug(" -STR- before getSegments");
+         Collection<SegmentAdapter> segments = pdbeAdapter.getSegments(pdbIds);
+         for (SegmentAdapter segment : segments){
+         LOGGER.debug(" -STR- before adding structure");
+         ProteinStructure structure = new ProteinStructure();
+         structure.setId(segment.getId());
+         for (FeatureAdapter feature : segment.getFeature()){
+         if (feature.getType().getId().equals("description")){
+         structure.setDescription(feature.getNotes().get(0)); // FIXME?
+         } else if (feature.getType().getId().equals("image")){
+         Image image = new Image();
+         image.setSource(feature.getLinks().get(0).getHref());
+         image.setCaption(feature.getLinks().get(0).getContent());
+         image.setHref(feature.getLinks().get(1).getHref());
+         structure.setImage(image);
+         } else if (feature.getType().getId().equals("provenance")){
+         structure.setProvenance(feature.getNotes());
+         } else if (feature.getType().getId().equals("summary")){
+         DASSummary summary = new DASSummary();
+         summary.setLabel(feature.getLabel());
+         summary.setNote(feature.getNotes());
+         structure.getSummary().add(summary);
+         }
+         }
+         enzymeModel.getProteinstructure().add(structure);
+         }
+         } catch (MalformedURLException e) {
+         throw new EnzymeRetrieverException("Wrong URL", e);
+         } catch (JAXBException e) {
+         throw new EnzymeRetrieverException("Unable to get data from DAS server", e);
+         } catch (ValidationException e){
+         throw new EnzymeRetrieverException("Validation error for DASGGF", e);
+         }
          */
         LOGGER.debug(" -STR- before returning");
         return enzymeModel;
@@ -524,46 +537,72 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     public EnzymeModel getDiseases(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = null;
-        uk.ac.ebi.ep.enzyme.model.Disease disease = null;
-        List<uk.ac.ebi.ep.enzyme.model.Disease> diseaseList = new LinkedList<Disease>();
+
+        List<uk.ac.ebi.ep.enzyme.model.Disease> diseaseList = new LinkedList<uk.ac.ebi.ep.enzyme.model.Disease>();
+        Set<DiseaseComparator> uniDisease = new TreeSet<DiseaseComparator>();
 
         try {
+
             enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
-            Collection<XRef> xRefList = megaMapperConnection.getMegaMapper().getXrefs(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO);
-            if (xRefList != null) {
-                for (XRef ref : xRefList) {
-                    Entry entry = ref.getToEntry();
-                    String entryName = entry.getEntryName();
+
+
+            Map<String, String> diseaseFromMegaMapper = megaMapperConnection.getMegaMapper()
+                    .getDiseaseByAccession(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.MeSH, MmDatabase.OMIM);
+
+            for (Map.Entry<String, String> diseaseMap : diseaseFromMegaMapper.entrySet()) {
+                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
+
+
                     try {
-                        disease = bioportalAdapter.getDiseaseByName(entryName);
-                        if (disease != null) {
+
+
+                        Disease disease_from_bioportal = bioportalAdapter.getDisease(diseaseMap.getKey());
+
+
+                        if (disease_from_bioportal != null) {
+
 
                             for (Disease d : enzymeModel.getDisease()) {
-                                disease.getEvidence().add(d.getDescription());
+
+                                disease_from_bioportal.getEvidence().add(d.getDescription());
+
+
+                                DiseaseComparator dc = new DiseaseComparator(disease_from_bioportal);
+                                uniDisease.add(dc);
+
                             }
 
-                            diseaseList.add(disease);
-                            enzymeModel.setDisease(diseaseList);
+
                         }
+
+
                     } catch (BioportalAdapterException ex) {
                         LOGGER.error("Error while getting disease using BioPortal adapter", ex);
                     }
 
+
                 }
+
             }
 
+            for (DiseaseComparator disease : uniDisease) {
+                diseaseList.add(disease.getDisease());
+            }
+
+            enzymeModel.setDisease(diseaseList);
 
 
         } catch (UniprotWsException ex) {
             LOGGER.error("Error while getting EnzymeSummary from Uniprot Adapter", ex);
         }
+
         return enzymeModel;
     }
 
     public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = this.getEnzyme(uniprotAccession);
         List<LabelledCitation> citations = getLiteratureAdapter().getCitations(
-        		uniprotAccession, enzymeModel.getPdbeaccession());
+                uniprotAccession, enzymeModel.getPdbeaccession());
         enzymeModel.setLiterature(new ArrayList<Object>(citations)); // FIXME and also the schema!           
         return enzymeModel;
     }

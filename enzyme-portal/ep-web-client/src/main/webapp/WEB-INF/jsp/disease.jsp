@@ -25,13 +25,17 @@
     </c:if>
     <c:if test='${diseasesSize > 0}'>
         <p><spring:message code="label.entry.disease.found" arguments="${diseasesSize},${plural}"/></p>
-        <c:forEach items="${diseases}" var="disease">
-            <b style=" font-size:medium" ><a href="${disease.url}" > <c:out value="${disease.name}"/></a></b><br/>
+        <c:forEach items="${diseases}" var="disease" varStatus="count">
+           <br/><b style=" font-size:medium" ><a href="${disease.url}" > <c:out value="${disease.name}"/></a></b><br/>
             <c:out value="${disease.description}"/><br/>
 
             <c:set var="ev" value="${disease.evidence}" />
         </c:forEach>
-
+            <hr/>
+            <br/>
+            <section>
+            <h3>Disease Evidence</h3>
+           
         <c:forEach items="${ev}" var="v">
             <ul>
                 <li> <c:out value="${v}"/></li>
@@ -40,7 +44,11 @@
         </c:forEach>
         <div class="note_0">
             <a class="note_0" href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}.html#section_comments">View disease evidence in UniProt</a>
-        </div><br/>
+        </div>
+                
+            </section>
+        <br/>
+        
         <div class="provenance">
             <ul>
                 <li class="note_0">Data Sources:
