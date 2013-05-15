@@ -10,11 +10,13 @@ import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 
 import static junit.framework.Assert.assertEquals;
+import org.junit.Ignore;
 
 /**
  * @author rafa
  * @since 2013-05-07
  */
+@Ignore
 public class EbeyeSaxParserTest {
 
     private EbeyeSaxParser parser;

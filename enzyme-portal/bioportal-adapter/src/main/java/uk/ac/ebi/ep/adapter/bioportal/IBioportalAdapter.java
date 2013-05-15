@@ -31,5 +31,7 @@ public interface IBioportalAdapter {
      */
 	public Disease getDisease(String nameOrId)
     throws BioportalAdapterException;
+        
+    void setConfig(BioportalConfig config);
     
 }

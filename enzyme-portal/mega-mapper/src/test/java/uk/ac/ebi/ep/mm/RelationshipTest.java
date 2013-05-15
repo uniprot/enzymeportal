@@ -1,8 +1,9 @@
 package uk.ac.ebi.ep.mm;
 
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.Test;
-
+@Ignore
 public class RelationshipTest {
 
 	@Test

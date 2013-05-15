@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
 import uk.ac.ebi.ep.search.model.Compound;
 
 /**

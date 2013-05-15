@@ -63,6 +63,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
     
 //      public BioportalWsAdapter() {
 //        config = new BioportalConfig();
+//          System.out.println("config "+ config.getApiKey());
 //         Properties configProps = new Properties();
 //        try {
 //            configProps.load(BioportalWsAdapter.class.getClassLoader()

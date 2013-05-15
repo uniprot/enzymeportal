@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
+import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
 import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
@@ -93,6 +94,9 @@ public class SearchController {
     private ChebiConfig chebiConfig;
     @Autowired
     private LiteratureConfig literatureConfig;
+    
+    @Autowired
+    private BioportalConfig bioportalConfig;
 
     @PostConstruct
     public void init(){
@@ -138,6 +142,7 @@ public class SearchController {
                     enzymeModel = retriever.getMolecules(accession);
                     break;
                 case diseaseDrugs:
+                    retriever.getBioportalAdapter().setConfig(bioportalConfig);
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case literature:

@@ -10,6 +10,7 @@
         <groupId>uk.ac.ebi.ep</groupId>
         <version>1.0.3</version>
     </parent>
+    <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
     <version>1.0.16-SNAPSHOT</version>
     <name>Mega mapper</name>

@@ -389,22 +389,46 @@ public class EnzymeFinder implements IEnzymeFinder {
         searchResults.setSearchfilters(filters);
     }
 
-    private Set<CompoundDefaultWrapper> computeCompound(String uniprotAccession) {
+//    //this method is deprecated
+//    private Set<CompoundDefaultWrapper> computeCompound(String uniprotAccession) {
+//
+//        Set<CompoundDefaultWrapper> related_compounds = new TreeSet<CompoundDefaultWrapper>();
+//
+//        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEBI, MmDatabase.ChEBI);
+//        
+//        if (xRefList != null) {
+//            for (Map.Entry<String, String> ref : xRefList.entrySet()) {
+//
+//                if (ref.getKey() != null && !ref.getValue().equals(" ") && ref.getValue() != null && !ref.getValue().equals("")) {
+//                    Compound com = new Compound();
+//                    com.setId(ref.getKey());
+//                    String compoundName = resolveSpecialCharacters(ref.getValue());
+//                    com.setName(compoundName.replaceAll(",", ""));
+//
+//                    CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(com);
+//                    uniqueCompounds.add(compoundDefaultWrapper);
+//                    related_compounds.add(compoundDefaultWrapper);
+//
+//                }
+//
+//            }
+//        }
+//
+//        return related_compounds;
+//    }
+    
+    
+    
+        private Set<CompoundDefaultWrapper> computeCompound(String uniprotAccession) {
 
         Set<CompoundDefaultWrapper> related_compounds = new TreeSet<CompoundDefaultWrapper>();
 
-        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEBI, MmDatabase.ChEBI);
-
-        if (xRefList != null) {
-            for (Map.Entry<String, String> ref : xRefList.entrySet()) {
-
-                if (ref.getKey() != null && !ref.getValue().equals(" ") && ref.getValue() != null && !ref.getValue().equals("")) {
-                    Compound com = new Compound();
-                    com.setId(ref.getKey());
-                    String compoundName = resolveSpecialCharacters(ref.getValue());
-                    com.setName(compoundName.replaceAll(",", ""));
-
-                    CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(com);
+        Collection<Compound> compoundList = megaMapperConnection.getMegaMapper().getCompounds(uniprotAccession);
+        
+         if (compoundList != null) {
+                for (Compound compound : compoundList) {
+                     if (compound != null ) {
+                    CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(compound);
                     uniqueCompounds.add(compoundDefaultWrapper);
                     related_compounds.add(compoundDefaultWrapper);
 
