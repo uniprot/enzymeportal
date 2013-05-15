@@ -50,31 +50,17 @@ public class CompoundsChEMBL_Impl implements ICompoundsDAO {
         chemblRestClient.setChemblServiceUrl("http://www.ebi.ac.uk/chemblws/");
     }
   
-
     private Compound getCompoundById(String chemblId) {
-       
-        //Compound chemblCompound = chemblRestClient.getCompound(chemblId);
         Compound chemblCompound = null;
-
-
         try {
             chemblCompound = chemblRestClient.getCompound(chemblId);
-//             System.out.println("returned comp from client "+ chemblCompound.getPreferredCompoundName());
         } catch (CompoundNotFoundException e) {
-            LOGGER.fatal("CompoundNotFoundException thrown", e);
-
-            //Do something
+            LOGGER.error("Not found: " + chemblId);
         } catch (ChemblServiceException e) {
-            LOGGER.fatal("ChemblServiceException thrown", e);
-
-            //Do something
+            LOGGER.error("For " + chemblId, e);
         } catch (InvalidCompoundIdentifierException ex) {
-            LOGGER.error("InvalidCompoundIdentifierException thrown", ex);
-
+            LOGGER.error(chemblId + " is not a valid compound identifier", ex);
         }
-
-
-
         return chemblCompound;
     }
 

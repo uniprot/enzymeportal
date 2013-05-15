@@ -31,6 +31,10 @@
 		<level value="INFO"/>
 		<appender-ref ref="file"/>
 	</logger>
+	<logger name="uk.ac.ebi.chemblws">
+        <level value="ERROR"/>
+        <appender-ref ref="file"/>
+	</logger>
 	<root>
 		<level value="INFO"/>
 		<appender-ref ref="file"/>
