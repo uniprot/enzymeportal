@@ -50,14 +50,31 @@ comment on table uniprot2compound is
 'Created from MM_ENTRY, MM_ACCESSION and MM_XREF for quick retrieval of
 compounds related to a UniProt entry.';
 
-comment on column uniprot2compound.uniprot_accession is
-'The UniProt accession is the primary one.';
-
 comment on column uniprot2compound.compound_db is
 'Cross references from ChEBI are either direct (inhibitors/activators) or
 inferred from the EC classification (cofactors, reaction participants in
 Rhea). Other databases - DrugBank, ChEMBL - are cross referenced with no
 intermediate step.';
+
+comment on column uniprot2compound.compound_id is
+'The ID of the compound in the source database.';
+
+comment on column uniprot2compound.compound_name is
+'The name of the compound in the source database.';
+
+comment on column uniprot2compound.relationship is
+'The relationship between the compound and the UniProt entry (CV).';
+
+comment on column uniprot2compound.uniprot_id is
+'The UniProt ID ("entry name").';
+
+comment on column uniprot2compound.uniprot_name is
+'The recommended name of the UniProt entry.';
+
+comment on column uniprot2compound.uniprot_accession is
+'The UniProt accession (the primary one).';
+
+-- Indexes to speed up selects:
 
 CREATE index uniprot2compound_ind_upacc
 ON UNIPROT2COMPOUND (UNIPROT_ACCESSION ASC);

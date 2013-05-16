@@ -13,7 +13,7 @@
 			<p>
 				This module creates and queries a database containing basically
 				cross references to/from UniProt entries to other databases
-				used by the Enzyme Portal.
+				used by the Enzyme Portal:
 			</p>
 			<img src="img/mm.png" alt="DBs in the mega-map"
 				style="width: 600px"/>
@@ -23,9 +23,25 @@
 				<a href="apidocs/uk/ac/ebi/ep/mm/Relationship.html">relationship</a>
 				between two entries.
 			</p>
+			<p>
+			    Please note that cross-references between UniProt entries and
+			    substrates/products/cofactors are not direct, but through the
+			    EC classification of the protein.<br/>
+			    Note also that inhibitors/activators are text-mined from the
+			    <i>Enzyme regulation</i> comments in UniProt, so it is likely
+			    some are missing, and some might even be wrong.
+			</p>
+			<img src="img/schema.png"
+			    alt="Diagram of the Enzyme Portal mega-map schema"/>
+			<p style="font-size: small">
+			    Diagram of the Enzyme Portal mega-map
+			    <a href="dbDoc/index.html">schema</a>. Also available as
+			    <a href="img/schema.svg">SVG</a>.
+			</p>
 			<subsection name="Statistics">
 				<ul>
 					<li><a href="statistics/ep-stats-2012.ods">2012</a></li>
+                    <li><a href="statistics/ep-stats-2013.ods">2013</a></li>
 				</ul>
 			</subsection>
 		</section>

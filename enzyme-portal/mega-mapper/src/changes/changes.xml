@@ -12,11 +12,8 @@
 
 <body>
     <release version="1.0.16" date=""
-        description="Cross-references for small molecules taken from IntEnz">
-        <action dev="rafalcan" type="add">
-            Added concrete relationships "is_substrate_of" and "is_product_of"
-            for ChEBI-EC cross-references.
-        </action>
+        description="Cross-references for small molecules taken from IntEnz
+            and UniProt. Fix for ChEMBL parsing. UNIPROT2COMPOUND table.">
         <action dev="rafalcan" type="add">
             Added application to retrieve cross-references from IntEnzXML:
             EC-reactions, EC-substrates/products, EC-cofactors,
@@ -25,7 +22,15 @@
             text mining.
         </action>
         <action dev="rafalcan" type="add">
+            Added concrete relationships "is_substrate_of" and "is_product_of"
+            for ChEBI-EC cross-references.
+        </action>
+        <action dev="rafalcan" type="add">
             Added UniProt-DrugBank cross-references to the mega-map.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added UniProt-ChEBI cross-references for activators and inhibitors
+            to the mega-map.
         </action>
         <action dev="rafalcan" type="fix">
             Fixed import of ChEMBL cross references. There were some extra - and
@@ -35,13 +40,18 @@
         <action dev="rafalcan" type="add">
             Added table uniprot2compound to be used for quick lookups.
         </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of ep-util, which provides extraction of
+            inhibitors and activators from UniProt.
+        </action>
     </release>
-    <release version="1.0.13" date="" description="Bug fixes and enhancements.">
+    <release version="1.0.13" date="2013-04-09"
+            description="Bug fixes and enhancements.">
 		<action dev="joseph" type="fix">
                 ChEMBL compounds with names were added to the Mega Mapper
 		</action>
 	</release>
-	<release version="1.0.10" date="" description="Bug fixes">
+	<release version="1.0.10" date="2013-03-06" description="Bug fixes">
 		<action dev="rafalcan" type="fix">
 			Fixed query in MegaJdbcMapper.getCompounds and
 			MegaJdbcMapper.getDisease so that underscores are taken as part of
