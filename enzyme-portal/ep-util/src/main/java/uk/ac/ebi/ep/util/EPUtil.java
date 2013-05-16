@@ -6,6 +6,9 @@ import java.util.regex.Pattern;
 
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 
+/**
+ * Utility class for the Enzyme Portal. Its main use is text processing.
+ */
 public class EPUtil {
 
     private static final String REGEXP_HOW =
@@ -43,7 +46,8 @@ public class EPUtil {
                     "|,?(?: and)?(?: \\w+ly)? in(?:hibited|activated) by)";
 
     /**
-     * This regexp has got 2 capturing groups.
+     * Regular expression for inhibitor compounds. This regexp has got 2
+     * capturing groups.
      */
     private static final String INHIBITOR_REGEXP =
             "(?<![Nn]ot )\\b[Ii]n(?:hibited|activated)" +
@@ -62,6 +66,10 @@ public class EPUtil {
                     ")?" +
                     INH_REGEXP_END;
 
+    /**
+     * Regular expression for activator compounds. This regexp has got 2
+     * capturing groups.
+     */
     private static final String ACTIVATOR_REGEXP =
             "(?<![Nn]ot )\\b[Aa]ctivated" +
                     REGEXP_HOW +
