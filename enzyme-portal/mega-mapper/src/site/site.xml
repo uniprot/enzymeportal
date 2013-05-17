@@ -32,6 +32,7 @@
 		<menu ref="parent" />
 		<menu name="Mega-mapper">
 			<item name="Home" href="index.html"/>
+            <item name="DbDoc" href="dbDoc/index.html"/>
 		</menu>
 		<menu ref="reports" />
 	</body>
