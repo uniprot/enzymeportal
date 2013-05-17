@@ -1,9 +1,9 @@
 package uk.ac.ebi.ep.mm;
 
-import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Test;
-@Ignore
+
+import static org.junit.Assert.assertEquals;
+
 public class RelationshipTest {
 
 	@Test
