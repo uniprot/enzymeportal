@@ -32,13 +32,17 @@
             Added UniProt-ChEBI cross-references for activators and inhibitors
             to the mega-map.
         </action>
+        <action dev="rafalcan" type="add">
+            Added table uniprot2compound to be used for quick lookups.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added method to MegaMapper to get compounds related to UniProt IDs
+            as Compound objects.
+        </action>
         <action dev="rafalcan" type="fix">
             Fixed import of ChEMBL cross references. There were some extra - and
             wrong - due to a bug in EbeyeSaxParser.
             <fixes issue="168"/>
-        </action>
-        <action dev="rafalcan" type="add">
-            Added table uniprot2compound to be used for quick lookups.
         </action>
         <action dev="rafalcan" type="update">
             Updated to latest version of ep-util, which provides extraction of
