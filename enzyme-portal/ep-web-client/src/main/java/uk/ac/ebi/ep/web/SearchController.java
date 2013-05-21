@@ -56,6 +56,8 @@ import uk.ac.ebi.ep.search.model.SearchParams;
 import uk.ac.ebi.ep.search.model.SearchResults;
 import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
+import uk.ac.ebi.xchars.SpecialCharacters;
+import uk.ac.ebi.xchars.domain.EncodingType;
 
 /**
  *
@@ -161,6 +163,7 @@ public class SearchController {
             LOGGER.error("Unable to retrieve the entry!", ex);
             if (requestedField.getName().equalsIgnoreCase(Field.diseaseDrugs.getName())) {
                 enzymeModel = new EnzymeModel();
+                enzymeModel.setName("Diseases");
                 enzymeModel.setRequestedfield(requestedField.name());
                 Disease d = new Disease();
                 d.setName(ERROR);
@@ -171,6 +174,7 @@ public class SearchController {
             if (requestedField.getName().equalsIgnoreCase(Field.molecules.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
+                 enzymeModel.setName("Small Molecues");
                 Molecule molecule = new Molecule();
                 molecule.setName(ERROR);
                 ChemicalEntity chemicalEntity = new ChemicalEntity();
@@ -183,6 +187,7 @@ public class SearchController {
 
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
+                 enzymeModel.setName("Enzymes");
                 Enzyme enzyme = new Enzyme();
                 enzyme.getEnzymetype().add(0, ERROR);
                 enzymeModel.setEnzyme(enzyme);
@@ -193,6 +198,7 @@ public class SearchController {
             if (requestedField.getName().equalsIgnoreCase(Field.proteinStructure.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
+                 enzymeModel.setName("Protein Structures");
                 ProteinStructure structure = new ProteinStructure();
                 structure.setName(ERROR);
                 enzymeModel.getProteinstructure().add(0, structure);
@@ -204,6 +210,7 @@ public class SearchController {
                 enzymeModel = new EnzymeModel();
 
                 enzymeModel.setRequestedfield(requestedField.getName());
+                 enzymeModel.setName("Reactions and Pathways");
                 ReactionPathway pathway = new ReactionPathway();
                 EnzymeReaction reaction = new EnzymeReaction();
                 reaction.setName(ERROR);
@@ -218,6 +225,7 @@ public class SearchController {
             if (requestedField.getName().equalsIgnoreCase(Field.literature.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
+                 enzymeModel.setName("Literatures");
 
                 enzymeModel.getLiterature().add(0, ERROR);
 
@@ -450,6 +458,29 @@ public class SearchController {
         return "advanceSearch";
     }
     
+            public String resolveSpecialCharacters(String data) {
+
+        SpecialCharacters xchars = SpecialCharacters.getInstance(null);
+        EncodingType[] encodings = {
+            EncodingType.CHEBI_CODE,
+            EncodingType.COMPOSED,
+            EncodingType.EXTENDED_HTML,
+            EncodingType.GIF,
+            EncodingType.HTML,
+            EncodingType.HTML_CODE,
+            EncodingType.JPG,
+            EncodingType.SWISSPROT_CODE,
+            EncodingType.UNICODE
+        };
+
+        if (!xchars.validate(data)) {
+            LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
+
+        }
+
+
+        return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
+    }
 
     
     /**
@@ -496,9 +527,12 @@ public class SearchController {
                 resetSelectedCompounds(defaultCompoundList);
 
                 for (String SelectedCompounds : searchParameters.getCompounds()) {
+                    System.out.println("selected compound "+ SelectedCompounds);
                     for (Compound theCompound : defaultCompoundList) {
+                        System.out.println("default compound "+ theCompound.getName());
                         if (SelectedCompounds.equals(theCompound.getName())) {
                             theCompound.setSelected(true);
+                            System.out.println("TRUE");
                         }
                     }
                 }

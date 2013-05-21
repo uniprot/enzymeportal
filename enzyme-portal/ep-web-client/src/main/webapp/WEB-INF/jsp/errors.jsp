@@ -17,13 +17,23 @@
     </head>
     <body>
         <div class="grid_24 content">
-            <div class="iconGroup">
+<!--            <div class="iconGroup">
                 <h2 style="color: red;text-align:center" >Service Error</h2>
                 <p style="text-align: center">There has been an error with your request. Please try again later.</p>
-            </div>
+            </div>-->
+
+                <!-- Suggested layout containers --> 
+                <section>
+                   
+                    <h2 style="text-align: center">Enzyme Portal Service Error</h2>
+                            <p class="alert">We're sorry but there was an error in your search for ${enzymeModel.name} . Please try again later or use the <a href="/enzymeportal/advanceSearch">advanced search</a></p>
+                            
+                </section>
+        
+                <!-- End suggested layout containers -->
             <div class="clear"></div>
         </div>
 
-    </div>
+<!--    </div>-->
 </body>
 </html>

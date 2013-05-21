@@ -22,7 +22,7 @@
 
   <title>FAQ &lt; Enzyme Portal &gt; EMBL-EBI</title>
   <meta name="description" content="EMBL-EBI"><!-- Describe what this page is about -->
-  <meta name="keywords" content="bioinformatics, europe, institute"><!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
+  <meta name="keywords" content="bioinformatics, europe, institute, enzyme, EBI"><!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
   <meta name="author" content="EMBL-EBI"><!-- Your [project-name] here -->
 
   <!-- Mobile viewport optimized: j.mp/bplateviewport -->

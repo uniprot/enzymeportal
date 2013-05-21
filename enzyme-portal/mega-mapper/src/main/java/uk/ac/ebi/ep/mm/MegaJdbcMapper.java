@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.xchars.SpecialCharacters;
+import uk.ac.ebi.xchars.domain.EncodingType;
 
 /**
  * Plain JDBC implementation of {@link MegaMapper}.
@@ -918,6 +920,30 @@ public class MegaJdbcMapper implements MegaMapper {
 
         return diseasesEntryMap;
     }
+   
+    private String resolveSpecialCharacters(String data) {
+
+        SpecialCharacters xchars = SpecialCharacters.getInstance(null);
+        EncodingType[] encodings = {
+            EncodingType.CHEBI_CODE,
+            EncodingType.COMPOSED,
+            EncodingType.EXTENDED_HTML,
+            EncodingType.GIF,
+            EncodingType.HTML,
+            EncodingType.HTML_CODE,
+            EncodingType.JPG,
+            EncodingType.SWISSPROT_CODE,
+            EncodingType.UNICODE
+        };
+
+        if (!xchars.validate(data)) {
+            LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
+
+        }
+
+
+        return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
+    }
 
     public Collection<Compound> getCompounds(String uniprotId) {
         Collection<Compound> compounds = null;
@@ -938,9 +964,12 @@ public class MegaJdbcMapper implements MegaMapper {
             while (rs.next()){
                 Compound compound = new Compound();
                 compound.setId(rs.getString("compound_id"));
-                compound.setName(rs.getString("compound_name"));
+                //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH).replace(",", "")));
+                compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH)));
                 // TODO: modify search model and add relationship as role
-                if (compounds == null) compounds = new ArrayList<Compound>();
+                if (compounds == null) {
+                    compounds = new ArrayList<Compound>();
+                }
                 compounds.add(compound);
             }
         } catch (SQLException e){

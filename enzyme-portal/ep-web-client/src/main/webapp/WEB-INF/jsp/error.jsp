@@ -56,7 +56,7 @@
                         <link media="screen" href="resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />
                         <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
                         <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>-->
-
+<link href="resources/css/search.css" type="text/css" rel="stylesheet" />
          <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
 <!--        <link rel="stylesheet" href="resources/css/boilerplate-style.css"> 
 
@@ -65,6 +65,7 @@
         <link rel="stylesheet" href="resources/css/ebi-visual.css" type="text/css" media="screen">
         <link rel="stylesheet" href="resources/css/984-24-col-fluid.css" type="text/css" media="screen" />-->
         <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
+         
         <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
 
         <!-- end CSS-->
@@ -116,10 +117,14 @@
 
 
 
-                    <div class="grid_12 alpha" id="local-title">
+<!--                    <div class="grid_12 alpha" id="local-title">
                         <h1>Enzyme Portal</h1>
-                    </div>
+                    </div>-->
                     <!-- -->
+                     <div id="local-title" class="grid_12 alpha logo-title"> 
+     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
+         <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
+     </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
 
                     <div class="grid_12 omega">
                           <%@ include file="frontierSearchBox.jsp" %>
