@@ -11,5 +11,8 @@
         <jaxb:bindings node="//xs:element[@name='type']/xs:simpleType">
 			<jaxb:typesafeEnumClass name="SearchType" />
         </jaxb:bindings>
+        <jaxb:bindings node="//xs:element[@name='role']/xs:simpleType">
+            <jaxb:typesafeEnumClass name="Role" />
+        </jaxb:bindings>
    </jaxb:bindings>
 </jaxb:bindings>

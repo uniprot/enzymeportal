@@ -9,6 +9,16 @@
 </properties>
 
 <body>
+    <release version="1.0.6" date=""
+        description="Added compound roles and counts.">
+        <action dev="rafalcan" type="add">
+            Added role to compounds in the search model.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added independent counts for total results for every group of
+            molecules (activators, inhibitors, drugs, bioactive, cofactors).
+        </action>
+    </release>
 	<release version="1.0.5" date="2013-03-06">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub).

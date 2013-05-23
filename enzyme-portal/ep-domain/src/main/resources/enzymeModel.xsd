@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://ebi.ac.uk/ep/enzyme/model" xmlns:epe="http://ebi.ac.uk/ep/enzyme/model" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ep="http://ebi.ac.uk/ep/search/model">
-    <xs:import namespace="http://ebi.ac.uk/ep/search/model" schemaLocation="searchModel.xsd"/>
+<xs:schema targetNamespace="http://ebi.ac.uk/ep/enzyme/model"
+    xmlns:epe="http://ebi.ac.uk/ep/enzyme/model"
+    xmlns:ep="http://ebi.ac.uk/ep/search/model"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import namespace="http://ebi.ac.uk/ep/search/model"
+        schemaLocation="searchModel.xsd"/>
     <xs:element name="ChemicalEntity" type="epe:ChemicalEntity"/>
     <xs:complexType name="ChemicalEntity">
         <xs:sequence>
         	<xs:element name="reactions" type="epe:EnzymeReaction"
         		minOccurs="1" maxOccurs="unbounded" />
-        	<xs:element name="inhibitors" type="epe:Molecule"
-        		minOccurs="0" maxOccurs="unbounded" />
-        	<xs:element name="activators" type="epe:Molecule"
-        		minOccurs="0" maxOccurs="unbounded" />
-        	<xs:element name="cofactors" type="epe:Molecule"
-        		minOccurs="0" maxOccurs="unbounded" />
-        	<xs:element name="drugs" type="epe:Molecule" minOccurs="0"
-        		maxOccurs="unbounded" />
-            <xs:element name="bioactiveLigands" type="epe:Molecule" minOccurs="0" maxOccurs="unbounded"></xs:element>
+        	<xs:element name="inhibitors" type="epe:countableMolecules"
+        		minOccurs="0" maxOccurs="1" />
+        	<xs:element name="activators" type="epe:countableMolecules"
+        		minOccurs="0" maxOccurs="1" />
+        	<xs:element name="cofactors" type="epe:countableMolecules"
+        		minOccurs="0" maxOccurs="1" />
+        	<xs:element name="drugs" type="epe:countableMolecules"
+        	    minOccurs="0" maxOccurs="1" />
+            <xs:element name="bioactiveLigands" type="epe:countableMolecules"
+                minOccurs="0" maxOccurs="1"/>
             <xs:element name="provenance" type="xs:string" minOccurs="1"
         		maxOccurs="unbounded" />
-      <xs:element name="totalFound" type="xs:int"/>
+            <xs:element name="totalFound" type="xs:int"/>
         </xs:sequence>
     </xs:complexType>
     <xs:element name="DASSummary" type="epe:DASSummary"/>
@@ -82,7 +87,6 @@
             <xs:element name="notes" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
-    
     <xs:element name="EnzymeModel" type="epe:EnzymeModel"/>
     <xs:complexType name="EnzymeModel">
         <xs:complexContent>
@@ -126,13 +130,18 @@
             <xs:element name="href" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
+    <xs:complexType name="countableMolecules">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="epe:Molecule"/>
+        </xs:sequence>
+        <xs:attribute name="totalFound" type="xs:int"/>
+    </xs:complexType>
     <xs:element name="Molecule" type="epe:Molecule"/>
     <xs:complexType name="Molecule">
         <xs:complexContent>
             <xs:extension base="epe:Entity">
                 <xs:sequence>
                     <xs:element name="formula" type="xs:string" minOccurs="1" maxOccurs="1"/>
-                    
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
