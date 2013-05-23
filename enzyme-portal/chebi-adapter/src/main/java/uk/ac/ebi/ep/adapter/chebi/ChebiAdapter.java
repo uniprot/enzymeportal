@@ -25,6 +25,7 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.OntologyDataItemList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.CountableMolecules;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 
@@ -208,23 +209,29 @@ public class ChebiAdapter implements IChebiAdapter {
 //	    ExecutorService pool = Executors.newCachedThreadPool();
 	    CompletionService<Molecule> ecs =
 	    		new ExecutorCompletionService<Molecule>(pool);
-	    
+
+        final CountableMolecules drugs = chemicalEntity.getDrugs();
+        final CountableMolecules inhibitors = chemicalEntity.getInhibitors();
+        final CountableMolecules activators = chemicalEntity.getActivators();
+        final CountableMolecules cofactors = chemicalEntity.getCofactors();
+        final CountableMolecules bioactive =
+                chemicalEntity.getBioactiveLigands();
 	    try {
         	LOGGER.debug("MOLECULES before submitting drugs");
-	    	Map<Future<Molecule>, Molecule> drugFut =
-	    			getFuture2MoleculeMap(chemicalEntity.getDrugs(), ecs);
+            Map<Future<Molecule>, Molecule> drugFut =
+	    			getFuture2MoleculeMap(drugs, ecs);
         	LOGGER.debug("MOLECULES before submitting inhibitors");
-		    Map<Future<Molecule>, Molecule> inhFut =
-		    		getFuture2MoleculeMap(chemicalEntity.getInhibitors(), ecs);
+            Map<Future<Molecule>, Molecule> inhFut =
+		    		getFuture2MoleculeMap(inhibitors, ecs);
         	LOGGER.debug("MOLECULES before submitting activators");
-	        Map<Future<Molecule>, Molecule> actFut =
-	        		getFuture2MoleculeMap(chemicalEntity.getActivators(), ecs);
+            Map<Future<Molecule>, Molecule> actFut =
+	        		getFuture2MoleculeMap(activators, ecs);
         	LOGGER.debug("MOLECULES before submitting cofactors");
-	        Map<Future<Molecule>, Molecule> cofFut =
-	        		getFuture2MoleculeMap(chemicalEntity.getCofactors(), ecs);
+            Map<Future<Molecule>, Molecule> cofFut =
+	        		getFuture2MoleculeMap(cofactors, ecs);
         	LOGGER.debug("MOLECULES before submitting bioactives");
-	        Map<Future<Molecule>, Molecule> bioactFut =
-	        		getFuture2MoleculeMap(chemicalEntity.getBioactiveLigands(), ecs);
+            Map<Future<Molecule>, Molecule> bioactFut =
+	        		getFuture2MoleculeMap(bioactive, ecs);
 	        // How many jobs have we sent?
 	        final int numOfMolecules = drugFut.size() + inhFut.size()
 	        		+ actFut.size() + cofFut.size() + bioactFut.size();
@@ -264,21 +271,26 @@ public class ChebiAdapter implements IChebiAdapter {
 	        }
         	LOGGER.debug("MOLECULES before setting molecules");
         	// Replace first items in each list with the retrieved ones:
-        	enzymeModel.getMolecule().getDrugs()
-        			.subList(0, drugFut.size()).clear();
-        	enzymeModel.getMolecule().getDrugs().addAll(0, drugFut.values());
-        	enzymeModel.getMolecule().getInhibitors()
-					.subList(0, inhFut.size()).clear();
-    		enzymeModel.getMolecule().getInhibitors().addAll(0, inhFut.values());
-    		enzymeModel.getMolecule().getActivators()
-    				.subList(0, actFut.size()).clear();
-			enzymeModel.getMolecule().getActivators().addAll(0, actFut.values());
-			enzymeModel.getMolecule().getCofactors()
-					.subList(0, cofFut.size()).clear();
-			enzymeModel.getMolecule().getCofactors().addAll(0, cofFut.values());
-			enzymeModel.getMolecule().getBioactiveLigands()
-					.subList(0, bioactFut.size()).clear();
-			enzymeModel.getMolecule().getBioactiveLigands().addAll(0, bioactFut.values());
+        	if (drugs != null){
+                drugs.getMolecule().subList(0, drugFut.size()).clear();
+                drugs.getMolecule().addAll(0, drugFut.values());
+            }
+            if (inhibitors != null){
+                inhibitors.getMolecule().subList(0, inhFut.size()).clear();
+                inhibitors.getMolecule().addAll(0, inhFut.values());
+            }
+            if (activators != null){
+                activators.getMolecule().subList(0, actFut.size()).clear();
+                activators.getMolecule().addAll(0, actFut.values());
+            }
+            if (cofactors != null){
+                cofactors.getMolecule().subList(0, cofFut.size()).clear();
+                cofactors.getMolecule().addAll(0, cofFut.values());
+            }
+            if (bioactive != null){
+                bioactive.getMolecule().subList(0, bioactFut.size()).clear();
+                bioactive.getMolecule().addAll(0, bioactFut.values());
+            }
 	    } finally {
 	    	pool.shutdown();
 	    }
@@ -293,17 +305,19 @@ public class ChebiAdapter implements IChebiAdapter {
      * @return a map of <code>Future</code>s to <code>Molecule</code>s
      */
     private Map<Future<Molecule>, Molecule> getFuture2MoleculeMap(
-    		List<Molecule> molecules, CompletionService<Molecule> ecs){
+    		CountableMolecules molecules, CompletionService<Molecule> ecs){
     	Map<Future<Molecule>, Molecule> fut2mol =
     			new LinkedHashMap<Future<Molecule>, Molecule>();
-        for (Molecule molecule : molecules) {
-        	ChebiWsCallable callable = getCallable(molecule);
-			if (callable != null){
-				fut2mol.put(ecs.submit(callable), molecule);
-			}
-			// Limit to the first few molecules:
-			if (fut2mol.size() >= config.getMaxRetrievedMolecules()) break;
-		}
+        if (molecules != null && molecules.getMolecule() != null){
+            for (Molecule molecule : molecules.getMolecule()) {
+                ChebiWsCallable callable = getCallable(molecule);
+                if (callable != null){
+                    fut2mol.put(ecs.submit(callable), molecule);
+                }
+                // Limit to the first few molecules:
+                if (fut2mol.size() >= config.getMaxRetrievedMolecules()) break;
+            }
+        }
         return fut2mol;
     }
 
