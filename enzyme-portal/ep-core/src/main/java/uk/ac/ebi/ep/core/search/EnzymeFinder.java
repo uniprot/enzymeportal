@@ -47,6 +47,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 //********************************* VARIABLES ********************************//
     private static final Logger LOGGER = Logger.getLogger(EnzymeFinder.class);
+    Config searchConfig;
     IEbeyeAdapter ebeyeAdapter;
     IUniprotAdapter uniprotAdapter;
     IintenzAdapter intenzAdapter;
@@ -62,12 +63,12 @@ public class EnzymeFinder implements IEnzymeFinder {
     List<String> compoundFilter;
     List<EnzymeSummary> enzymeSummaryList;
     MegaMapperConnection megaMapperConnection;
-    private Set<CompoundDefaultWrapper> uniqueCompounds = new TreeSet<CompoundDefaultWrapper>();
     private Set<DiseaseDefaultWrapper> uniqueDiseases = new TreeSet<DiseaseDefaultWrapper>();
     private NcbiBlastClient blastClient;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeFinder(Config config) {
+        this.searchConfig = config;
         enzymeSearchResults = new SearchResults();
         ebeyeAdapter = new EbeyeAdapter();
         uniprotEnzymeIds = new ArrayList<String>();
@@ -286,12 +287,19 @@ public class EnzymeFinder implements IEnzymeFinder {
         Map<Integer, Species> priorityMapper = new TreeMap<Integer, Species>();
 
         Set<SpeciesDefaultWrapper> uniqueSpecies = new TreeSet<SpeciesDefaultWrapper>();
-
-
+        Set<CompoundDefaultWrapper> related_compounds =
+                new TreeSet<CompoundDefaultWrapper>();
 
         for (EnzymeSummary summaryEntry : searchResults.getSummaryentries()) {
 
-            Set<CompoundDefaultWrapper> related_compounds = computeCompound(summaryEntry.getUniprotid());
+            final Collection<Compound> summaryCompounds =
+                    computeCompound(summaryEntry.getUniprotid());
+            if (summaryCompounds != null){
+                // TODO: reduce the list to unique compounds
+                summaryEntry.setCompounds(
+                        new ArrayList<Compound>(summaryCompounds));
+                related_compounds.addAll(wrap(summaryCompounds));
+            }
             Set<DiseaseDefaultWrapper> disease_found = computeDiseaseWithUniprotId(summaryEntry.getUniprotid());
 
 
@@ -316,15 +324,6 @@ public class EnzymeFinder implements IEnzymeFinder {
 
                         }
                     }
-
-
-                    if (!related_compounds.isEmpty() && related_compounds.size() > 0) {
-                        for (CompoundDefaultWrapper comp : related_compounds) {
-                            sp.getCompounds().add(comp.getCompound());
-                        }
-                    }
-
-
 
                     uniqueSpecies.add(new SpeciesDefaultWrapper(sp));
 
@@ -374,7 +373,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
 
         List<Compound> compoundFilters = new ArrayList<Compound>();
-        for (CompoundDefaultWrapper cw : uniqueCompounds) {
+        for (CompoundDefaultWrapper cw : related_compounds) {
             compoundFilters.add(cw.getCompound());
         }
         List<Disease> diseaseFilter = new ArrayList<Disease>();
@@ -389,55 +388,24 @@ public class EnzymeFinder implements IEnzymeFinder {
         searchResults.setSearchfilters(filters);
     }
 
-//    //this method is deprecated
-//    private Set<CompoundDefaultWrapper> computeCompound(String uniprotAccession) {
-//
-//        Set<CompoundDefaultWrapper> related_compounds = new TreeSet<CompoundDefaultWrapper>();
-//
-//        Map<String, String> xRefList = (Map<String, String>) megaMapperConnection.getMegaMapper().getCompounds(MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEBI, MmDatabase.ChEBI);
-//        
-//        if (xRefList != null) {
-//            for (Map.Entry<String, String> ref : xRefList.entrySet()) {
-//
-//                if (ref.getKey() != null && !ref.getValue().equals(" ") && ref.getValue() != null && !ref.getValue().equals("")) {
-//                    Compound com = new Compound();
-//                    com.setId(ref.getKey());
-//                    String compoundName = resolveSpecialCharacters(ref.getValue());
-//                    com.setName(compoundName.replaceAll(",", ""));
-//
-//                    CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(com);
-//                    uniqueCompounds.add(compoundDefaultWrapper);
-//                    related_compounds.add(compoundDefaultWrapper);
-//
-//                }
-//
-//            }
-//        }
-//
-//        return related_compounds;
-//    }
-    
-    
-    
-        private Set<CompoundDefaultWrapper> computeCompound(String uniprotAccession) {
+    /**
+     * Retrieves a collection of compounds related to a UniProt entry.
+     * @param uniprotId a UniProt ID (<i>not accession</i>), or the prefix of it
+     *      including the underscore.
+     * @return a collection of compounds related to a UniProt entry.
+     */
+    private Collection<Compound> computeCompound(String uniprotId) {
+        return megaMapperConnection.getMegaMapper()
+                .getCompounds(uniprotId.substring(0, uniprotId.indexOf("_")+1));
+    }
 
-        Set<CompoundDefaultWrapper> related_compounds = new TreeSet<CompoundDefaultWrapper>();
-
-        Collection<Compound> compoundList = megaMapperConnection.getMegaMapper().getCompounds(uniprotAccession);
-        
-         if (compoundList != null) {
-                for (Compound compound : compoundList) {
-                     if (compound != null ) {
-                    CompoundDefaultWrapper compoundDefaultWrapper = new CompoundDefaultWrapper(compound);
-                    uniqueCompounds.add(compoundDefaultWrapper);
-                    related_compounds.add(compoundDefaultWrapper);
-
-                }
-
-            }
+    private Set<CompoundDefaultWrapper> wrap(Collection<Compound> compounds){
+        Set<CompoundDefaultWrapper> wrappers =
+                new TreeSet<CompoundDefaultWrapper>();
+        for (Compound compound : compounds) {
+            wrappers.add(new CompoundDefaultWrapper(compound));
         }
-
-        return related_compounds;
+        return wrappers;
     }
 
     public Set<DiseaseDefaultWrapper> computeDiseaseWithUniprotId(String uniprotAccession) {

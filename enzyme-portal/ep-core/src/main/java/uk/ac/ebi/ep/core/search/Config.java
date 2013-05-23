@@ -48,6 +48,8 @@ public class Config implements ConfigMBean {
     		UniprotImplementation.WS;
     
     protected int searchCacheSize = 50;
+
+    protected int maxMoleculesPerGroup = 3;
     
     /**
      * The JNDI name for the mega-mapper data source.
@@ -184,4 +186,12 @@ public class Config implements ConfigMBean {
 	public void setMmDatasource(String mmDatasource) {
 		this.mmDatasource = mmDatasource;
 	}
+
+    public int getMaxMoleculesPerGroup() {
+        return maxMoleculesPerGroup;
+    }
+
+    public void setMaxMoleculesPerGroup(int maxMoleculesPerGroup) {
+        this.maxMoleculesPerGroup = maxMoleculesPerGroup;
+    }
 }
