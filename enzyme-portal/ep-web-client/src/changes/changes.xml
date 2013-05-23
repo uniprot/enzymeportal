@@ -11,13 +11,19 @@
 
 <body>
     <release version="1.0.20" date="" description="">
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of ep-util, uniprot-adapter,
+            literature-adapter-1.0.7 (which makes citations retrieval much more
+            efficient and faster) and ep-core (which retrieves compounds from
+            the mega-map, which is faster and more consistent).
+            <fixes issue="160"/>
+        </action>
         <action dev="rafalcan" type="fix">
             Added JMX-enabled configuration for literature tab, in order to
             have a fallback in case citexplore is not responsive.
             <fixes issue="157"/>
         </action>
         <action dev="rafalcan" type="update">
-            Updated to literature-adapter-1.0.7.
         </action>
     </release>
     <release version="1.0.15" date="" description="">

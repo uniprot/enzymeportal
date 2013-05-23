@@ -3,16 +3,11 @@ package uk.ac.ebi.ep.web;
 
 
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -32,7 +27,6 @@ import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
 import uk.ac.ebi.ep.core.filter.CompoundsPredicate;
-import uk.ac.ebi.ep.core.filter.DefaultPredicate;
 import uk.ac.ebi.ep.core.filter.DiseasesPredicate;
 import uk.ac.ebi.ep.core.filter.SpeciesPredicate;
 import uk.ac.ebi.ep.core.search.Config;
@@ -40,21 +34,10 @@ import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
 import uk.ac.ebi.ep.entry.Field;
-import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.*;
 import uk.ac.ebi.ep.enzyme.model.Disease;
-import uk.ac.ebi.ep.enzyme.model.Enzyme;
-import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
-import uk.ac.ebi.ep.enzyme.model.Molecule;
-import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
-import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.model.Compound;
-import uk.ac.ebi.ep.search.model.EnzymeSummary;
-import uk.ac.ebi.ep.search.model.SearchModel;
-import uk.ac.ebi.ep.search.model.SearchParams;
-import uk.ac.ebi.ep.search.model.SearchResults;
-import uk.ac.ebi.ep.search.model.Species;
+import uk.ac.ebi.ep.search.model.*;
 import uk.ac.ebi.ep.search.result.Pagination;
 
 /**
@@ -158,6 +141,7 @@ public class SearchController {
             model.addAttribute(ENZYME_MODEL, enzymeModel);
             addToHistory(session, accession);
         } catch (Exception ex) {
+            // FIXME: this is an odd job to signal an error for the JSP!
             LOGGER.error("Unable to retrieve the entry!", ex);
             if (requestedField.getName().equalsIgnoreCase(Field.diseaseDrugs.getName())) {
                 enzymeModel = new EnzymeModel();
@@ -174,7 +158,9 @@ public class SearchController {
                 Molecule molecule = new Molecule();
                 molecule.setName(ERROR);
                 ChemicalEntity chemicalEntity = new ChemicalEntity();
-                chemicalEntity.getDrugs().add(0, molecule);
+                chemicalEntity.setDrugs(new CountableMolecules());
+                chemicalEntity.getDrugs().setMolecule(new ArrayList<Molecule>());
+                chemicalEntity.getDrugs().getMolecule().add(molecule);
                 enzymeModel.setMolecule(chemicalEntity);
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.fatal("Error in retrieving Molecules Information");
@@ -346,8 +332,8 @@ public class SearchController {
      * the submit button the request is processed here.
      *
      * @param searchModel
-     * @param result
      * @param model
+     * @param session
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -515,7 +501,7 @@ public class SearchController {
                 }
 
                 // list to hold all selected species both from the specie list and auto-complete
-                Set<String> allSelectedItems = new TreeSet<String>();
+//                Set<String> allSelectedItems = new TreeSet<String>();
 
                 //if an item is seleted, then filter the list
                 if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
@@ -534,16 +520,16 @@ public class SearchController {
 
 
 
-                    allSelectedItems.addAll(compoundsFilter);
+//                    allSelectedItems.addAll(compoundsFilter);
 
 
-                    allSelectedItems.addAll(diseasesFilter);
+//                    allSelectedItems.addAll(diseasesFilter);
 
 
-                    allSelectedItems.addAll(speciesFilter);
+//                    allSelectedItems.addAll(speciesFilter);
 
 
-                    CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedItems));
+//                    CollectionUtils.filter(filteredResults, new DefaultPredicate(allSelectedItems));
                     
                     
                     //adapting the sequece code

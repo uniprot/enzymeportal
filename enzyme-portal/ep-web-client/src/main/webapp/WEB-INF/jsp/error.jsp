@@ -78,7 +78,7 @@
         <!-- <script src="../js/libs/modernizr.minified.2.1.6.js"></script> -->
 
         <!-- custom build (lacks most of the "advanced" HTML5 support -->
-        <script src="http://wwwdev.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
+        <script src="http://www.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
         <!--  <script src="/web_guidelines/js/libs/modernizr.custom.49274.js"></script>		-->
 
 
@@ -220,7 +220,7 @@
 
                     </nav>
                     <!--			<script src="/web_guidelines/js/foot.js"></script>-->
-                    <script src="http://wwwdev.ebi.ac.uk/web_guidelines/js/foot.js"></script>
+                    <script src="http://www.ebi.ac.uk/web_guidelines/js/foot.js"></script>
 
                 </div>
 
