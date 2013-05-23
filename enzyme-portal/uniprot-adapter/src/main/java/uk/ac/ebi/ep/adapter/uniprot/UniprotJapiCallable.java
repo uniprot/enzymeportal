@@ -9,17 +9,11 @@ import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
-import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
-import uk.ac.ebi.ep.enzyme.model.Disease;
-import uk.ac.ebi.ep.enzyme.model.Enzyme;
-import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.enzyme.model.Molecule;
-import uk.ac.ebi.ep.enzyme.model.Pathway;
-import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
-import uk.ac.ebi.ep.enzyme.model.Sequence;
+import uk.ac.ebi.ep.enzyme.model.*;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
+import uk.ac.ebi.ep.util.EPUtil;
 import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseCrossReference;
 import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseType;
 import uk.ac.ebi.kraken.interfaces.uniprot.Organism;
@@ -207,9 +201,12 @@ public class UniprotJapiCallable {
             //ReactionPathway reactionpathway = this.setReactomePathways(entry);
             //List<Molecule>  molecules = this.getDrugBankAccessions(entry);
             //chemicalEntity.setDrugs(molecules);
-            ChemicalEntity chemicalEntity = new ChemicalEntity();
+            ChemicalEntity chemicalEntity = new ChemicalEntity()
+                    .withDrugs(new CountableMolecules())
+                    .withActivators(new CountableMolecules())
+                    .withInhibitors(new CountableMolecules());
             List<Molecule> molecules = getDrugBankMoleculeNames();
-            chemicalEntity.setDrugs(molecules);
+            chemicalEntity.getDrugs().setMolecule(molecules);
 
             //Inhibitors, activators
             List<Comment> comments = getComments(CommentType.ENZYME_REGULATION);
@@ -217,12 +214,12 @@ public class UniprotJapiCallable {
             String[] sentences = commentText.split("\\.");
             for (String sentence : sentences) {
                 if (sentence.contains("Activated by") || sentence.contains("activated by")) {
-                    List<Molecule> activators = Transformer.parseTextForActivators(sentence.trim());
-                    chemicalEntity.getActivators().addAll(activators);
+                    List<Molecule> activators = EPUtil.parseTextForActivators(sentence.trim());
+                    chemicalEntity.getActivators().setMolecule(activators);
                 }
                 if (sentence.contains("Inhibited by") || sentence.contains("inhibited by")) {
-                    List<Molecule> inhibitors = Transformer.parseTextForInhibitors(sentence.trim());
-                    chemicalEntity.getInhibitors().addAll(inhibitors);
+                    List<Molecule> inhibitors = EPUtil.parseTextForInhibitors(sentence.trim());
+                    chemicalEntity.getInhibitors().setMolecule(inhibitors);
                 }
             }
 

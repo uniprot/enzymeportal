@@ -374,7 +374,10 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
      * @return
      */
     private ChemicalEntity parseChemicalEntity(String drugsCol, String regulCol) {
-        ChemicalEntity chemicalEntity = new ChemicalEntity();
+        ChemicalEntity chemicalEntity = new ChemicalEntity()
+                .withDrugs(new CountableMolecules())
+                .withActivators(new CountableMolecules())
+                .withInhibitors(new CountableMolecules());
         if (drugsCol.length() > 0) {
             String[] drugbankIds = drugsCol.split(";");
             List<Molecule> drugs = new ArrayList<Molecule>();
@@ -384,12 +387,12 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
                 // TODO molecule.setName(name);
                 drugs.add(drug);
             }
-            chemicalEntity.setDrugs(drugs);
+            chemicalEntity.getDrugs().setMolecule(drugs);
         }
         if (regulCol.length() > 0) {
-            chemicalEntity.setActivators(
+            chemicalEntity.getActivators().setMolecule(
                     EPUtil.parseTextForActivators(regulCol));
-            chemicalEntity.setInhibitors(
+            chemicalEntity.getInhibitors().setMolecule(
                     EPUtil.parseTextForInhibitors(regulCol));
         }
         return chemicalEntity;
