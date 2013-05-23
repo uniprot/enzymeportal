@@ -24,6 +24,7 @@ import uk.ac.ebi.ep.enzyme.model.*;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
+import uk.ac.ebi.ep.util.EPUtil;
 
 /**
  * Callable to get enzyme summaries from UniProt web services given an
@@ -386,19 +387,10 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
             chemicalEntity.setDrugs(drugs);
         }
         if (regulCol.length() > 0) {
-            String[] sentences = regulCol.replace("ENZYME REGULATION: ", "").split("\\.");
-            for (String sentence : sentences) {
-                if (sentence.matches(".*" + Transformer.ACTIVATOR_REGEX + ".*")) {
-                    List<Molecule> activators =
-                            Transformer.parseTextForActivators(sentence.trim());
-                    chemicalEntity.getActivators().addAll(activators);
-                }
-                if (sentence.matches(".*" + Transformer.INHIBITOR_REGEX + ".*")) {
-                    List<Molecule> inhibitors =
-                            Transformer.parseTextForInhibitors(sentence.trim());
-                    chemicalEntity.getInhibitors().addAll(inhibitors);
-                }
-            }
+            chemicalEntity.setActivators(
+                    EPUtil.parseTextForActivators(regulCol));
+            chemicalEntity.setInhibitors(
+                    EPUtil.parseTextForInhibitors(regulCol));
         }
         return chemicalEntity;
     }
