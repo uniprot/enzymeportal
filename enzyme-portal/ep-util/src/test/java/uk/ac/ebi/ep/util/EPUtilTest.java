@@ -260,6 +260,15 @@ public class EPUtilTest {
             assertEquals(names[i], inhibitors.get(i).getName());
         }
 */
+        text = "Sildenafil (Viagra) is a highly selective and potent" +
+                " inhibitor of PDE5A and is effective in the treatment of" +
+                " penile erectile dysfunction. Also inhibited by zaprinast.";
+        inhibitors = EPUtil.parseTextForInhibitors(text);
+        names = new String[]{ "Sildenafil (Viagra)", "zaprinast" };
+        assertEquals(names.length, inhibitors.size());
+        for (int i = 0; i < inhibitors.size(); i++){
+            assertEquals(names[i], inhibitors.get(i).getName());
+        }
     }
 
     @Test
@@ -646,7 +655,21 @@ public class EPUtilTest {
         for (int i = 0; i < activators.size(); i++){
             assertEquals(names[i], activators.get(i).getName());
         }
-
+/* Too complex a text for our regular expressions:
+        // Q9SIU0
+        text = "Activated by oxaloacetate (OAA), 2-ketoglutarate, succinate" +
+                " and fumarate as homodimer and by OAA, 2-ketoglutarate," +
+                " succinate, fumarate and coenzyme A (acetyl-CoA and CoA) as" +
+                " heterodimer NAD-MEH.";
+        activators = EPUtil.parseTextForActivators(text);
+        names = new String[]{ "2-ketoglutarate",
+                "coenzyme A (acetyl-CoA and CoA)", "fumarate", "OAA",
+                "oxaloacetate (OAA)", "succinate" };
+        assertEquals(names.length, activators.size());
+        for (int i = 0; i < activators.size(); i++){
+            assertEquals(names[i], activators.get(i).getName());
+        }
+*/
     }
 
 }
