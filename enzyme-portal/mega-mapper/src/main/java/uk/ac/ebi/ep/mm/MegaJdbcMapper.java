@@ -967,14 +967,10 @@ public class MegaJdbcMapper implements MegaMapper {
                 compound.setId(rs.getString("compound_id"));
 
                compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
+               //TODO fix strange characters in compounds before populating the main compound list
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH).replace(",", "")));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH)));
-                // TODO: modify search model and add relationship as role
-                if (compounds == null) {
-                    compounds = new ArrayList<Compound>();
-                }
-
-                compound.setName(rs.getString("compound_name"));
+               // compound.setName(rs.getString("compound_name"));
                 switch (Relationship.valueOf(rs.getString("relationship"))){
                     case is_reactant_or_product_of:
                     case is_substrate_or_product_of:
@@ -998,7 +994,9 @@ public class MegaJdbcMapper implements MegaMapper {
                                 Compound.Role.BIOACTIVE : Compound.Role.DRUG);
                         break;
                 }
-                if (compounds == null) compounds = new ArrayList<Compound>();
+                if (compounds == null) {
+                    compounds = new ArrayList<Compound>();
+                }
 
                 compounds.add(compound);
             }
