@@ -171,7 +171,7 @@ public class EPUtil {
                 return s1.compareToIgnoreCase(s2);
             }
         });
-        List<Molecule> inhibitors = new ArrayList<Molecule>();
+        List<Molecule> molecules = new ArrayList<Molecule>();
         while (m.find()){
             for (int i = 1; i <= m.groupCount(); i++){
                 if (m.group(i) == null) continue;
@@ -185,11 +185,11 @@ public class EPUtil {
             }
         }
         for (String name: names){
-            Molecule inhibitor = new Molecule();
-            inhibitor.setName(name);
-            inhibitors.add(inhibitor);
+            Molecule molecule = new Molecule();
+            molecule.setName(name);
+            molecules.add(molecule);
         }
-        return inhibitors;
+        return molecules;
     }
 
 }
