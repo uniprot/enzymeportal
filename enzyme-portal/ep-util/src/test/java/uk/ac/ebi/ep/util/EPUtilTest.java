@@ -250,11 +250,44 @@ public class EPUtilTest {
         inhibitors = EPUtil.parseTextForInhibitors(text);
         // oxalate, 3,3',5-triiodo-L-thyronine, PML
         assertEquals(3, inhibitors.size());
-/*
-        text = "Inhibited by foo, a nice drug which does this, and by bar," +
-                " a weird drug which does that";
+
+        text = "Sildenafil (Viagra) is a highly selective and potent" +
+                " inhibitor of PDE5A and is effective in the treatment of" +
+                " penile erectile dysfunction. Also inhibited by zaprinast.";
         inhibitors = EPUtil.parseTextForInhibitors(text);
-        names = new String[]{ "bar", "foo" };
+        names = new String[]{ "Sildenafil (Viagra)", "zaprinast" };
+        assertEquals(names.length, inhibitors.size());
+        for (int i = 0; i < inhibitors.size(); i++){
+            assertEquals(names[i], inhibitors.get(i).getName());
+        }
+
+/*      FIXME: broken at "... derivatives such" ("as ...")
+        // P00918
+        text = "Activated by X-ray, histamine, L-adrenaline, L- and" +
+                " D-phenylalanine, L- and D-histidine, L-His-OMe and" +
+                " beta-Ala-His (carnosine). Competitively inhibited by" +
+                " saccharin, thioxolone, coumarins, 667-coumate, celecoxib" +
+                " (Celebrex), valdecoxib (Bextra), SC-125, SC-560," +
+                " diclofenac, acetate, azide, bromide, sulfonamide" +
+                " derivatives such as acetazolamide (AZA), methazolamide" +
+                " (MZA), ethoxzolamide (EZA), dichlorophenamide (DCP)," +
+                " brinzolamide, dansylamide, thiabendazole-5-sulfonamide," +
+                " trifluoromethane sulfonamide and N-hydroxysulfamide," +
+                " fructose-based sugar sulfamate RWJ-37497, and Foscarnet" +
+                " (phosphonoformate trisodium salt). Repressed strongly by" +
+                " hydrogen sulfide(HS) and weakly by nitrate (NO3). Esterase" +
+                " activity weakly reduced by cyanamide. N-hydroxyurea" +
+                " interfers with zinc binding and inhibit activity.";
+        names = new String[]{ "667-coumate", "acetate", "acetazolamide (AZA)",
+                "azide", "brinzolamide", "bromide", "celecoxib (Celebrex)",
+                "coumarins", "dansylamide", "dichlorophenamide (DCP)",
+                "diclofenac", "ethoxzolamide (EZA)",
+                "Foscarnet (phosphonoformate trisodium salt)",
+                "fructose-based sugar sulfamate RWJ-37497",
+                "methazolamide (MZA)", "N-hydroxysulfamide", "saccharin",
+                "SC-125", "SC-560", "thiabendazole-5-sulfonamide", "thioxolone",
+                "trifluoromethane sulfonamide", "valdecoxib (Bextra)" };
+        inhibitors = EPUtil.parseTextForInhibitors(text);
         assertEquals(names.length, inhibitors.size());
         for (int i = 0; i < inhibitors.size(); i++){
             assertEquals(names[i], inhibitors.get(i).getName());
@@ -647,6 +680,45 @@ public class EPUtilTest {
             assertEquals(names[i], activators.get(i).getName());
         }
 
+/* Too complex a text for our regular expressions:
+        // Q9SIU0
+        text = "Activated by oxaloacetate (OAA), 2-ketoglutarate, succinate" +
+                " and fumarate as homodimer and by OAA, 2-ketoglutarate," +
+                " succinate, fumarate and coenzyme A (acetyl-CoA and CoA) as" +
+                " heterodimer NAD-MEH.";
+        names = new String[]{ "2-ketoglutarate",
+                "coenzyme A (acetyl-CoA and CoA)", "fumarate", "OAA",
+                "oxaloacetate (OAA)", "succinate" };
+        activators = EPUtil.parseTextForActivators(text);
+        assertEquals(names.length, activators.size());
+        for (int i = 0; i < activators.size(); i++){
+            assertEquals(names[i], activators.get(i).getName());
+        }
+*/
+        // P00918
+        text = "Activated by X-ray, histamine, L-adrenaline, L- and" +
+                " D-phenylalanine, L- and D-histidine, L-His-OMe and" +
+                " beta-Ala-His (carnosine). Competitively inhibited by" +
+                " saccharin, thioxolone, coumarins, 667-coumate, celecoxib" +
+                " (Celebrex), valdecoxib (Bextra), SC-125, SC-560," +
+                " diclofenac, acetate, azide, bromide, sulfonamide" +
+                " derivatives such as acetazolamide (AZA), methazolamide" +
+                " (MZA), ethoxzolamide (EZA), dichlorophenamide (DCP)," +
+                " brinzolamide, dansylamide, thiabendazole-5-sulfonamide," +
+                " trifluoromethane sulfonamide and N-hydroxysulfamide," +
+                " fructose-based sugar sulfamate RWJ-37497, and Foscarnet" +
+                " (phosphonoformate trisodium salt). Repressed strongly by" +
+                " hydrogen sulfide(HS) and weakly by nitrate (NO3). Esterase" +
+                " activity weakly reduced by cyanamide. N-hydroxyurea" +
+                " interfers with zinc binding and inhibit activity.";
+        names = new String[]{ "beta-Ala-His (carnosine)", "D-histidine",
+                "D-phenylalanine", "histamine", "L-", "L-adrenaline",
+                "L-His-OMe", "X-ray" };
+        activators = EPUtil.parseTextForActivators(text);
+        assertEquals(names.length, activators.size());
+        for (int i = 0; i < activators.size(); i++){
+            assertEquals(names[i], activators.get(i).getName());
+        }
     }
 
 }

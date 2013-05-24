@@ -26,7 +26,7 @@ public class EPUtil {
 //                    "(?: |,? such as |,? including ))?";
     private static final String REGEXP_EXPLANATION =
             "(?:,? an? .+?|,? whose .+?|,? which .+?|,? irrespective .+?" +
-                    "| to .+?| with .+?| at .+?| concentrations .+?" +
+                    "| as .+?| to .+?| with .+?| at .+?| concentrations .+?" +
                     "|, this [^\\.]+| during .+?|(?: while)? in .+?| binding)?";
     private static final String INH_REGEXP_OTHERS_LESS =
             ",? (?:and(?! activated by)|as well as)" +
@@ -50,7 +50,8 @@ public class EPUtil {
      * capturing groups.
      */
     private static final String INHIBITOR_REGEXP =
-            "(?<![Nn]ot )\\b[Ii]n(?:hibited|activated)" +
+            "(.+?) is a(?:.*?)? inhibitor" +
+            "|(?<![Nn]ot )\\b[Ii]n(?:hibited|activated)" +
                     REGEXP_HOW +
                     " by " +
                     REGEXP_PROHIB +
@@ -156,7 +157,10 @@ public class EPUtil {
      * Extracts and cleans names from a matcher, building a molecule for each
      * of them.<br/>
      * <i>Cleaning</i> includes removing conjunctions from the text and also
-     * chemical concentrations.
+     * chemical concentrations.<br/>
+     * Please note that any synonyms in parentheses - ex. <code>"AIM-100
+     * (4-amino-5,6-biaryl-furo[2,3-d]pyrimidine)"</code> will be included in
+     * the molecule name.
      * @param m a matcher for activators/inhibitors patterns.
      * @return a list of molecules with just a name. The list can be empty, but
      *      never <code>null</code>.
@@ -167,7 +171,7 @@ public class EPUtil {
                 return s1.compareToIgnoreCase(s2);
             }
         });
-        List<Molecule> inhibitors = new ArrayList<Molecule>();
+        List<Molecule> molecules = new ArrayList<Molecule>();
         while (m.find()){
             for (int i = 1; i <= m.groupCount(); i++){
                 if (m.group(i) == null) continue;
@@ -181,14 +185,11 @@ public class EPUtil {
             }
         }
         for (String name: names){
-            // XXX What to do with synonyms in parentheses?
-            // ex: "AIM-100 (4-amino-5,6-biaryl-furo[2,3-d]pyrimidine)"
-            // BUT: "Fe (2+)"
-            Molecule inhibitor = new Molecule();
-            inhibitor.setName(name);
-            inhibitors.add(inhibitor);
+            Molecule molecule = new Molecule();
+            molecule.setName(name);
+            molecules.add(molecule);
         }
-        return inhibitors;
+        return molecules;
     }
 
 }
