@@ -1,10 +1,5 @@
 package uk.ac.ebi.ep.mm;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +12,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
+import static org.junit.Assert.*;
+
+@Ignore("using hibernate, deprecated in this module")
 public class MegaDbMapperTest {
 
 	private MegaDbMapper mm;

@@ -1,12 +1,12 @@
 package uk.ac.ebi.ep.mm.app;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import uk.ac.ebi.ep.mm.Entry;
 
 import static org.junit.Assert.*;
-import org.junit.Ignore;
-@Ignore
+
 public class UniprotSaxParserTest {
 
 	UniprotSaxParser parser;
@@ -93,6 +93,7 @@ public class UniprotSaxParserTest {
 	}
 
     @Test
+    @Ignore("This might fail depending on the ChEBI data and WS availability")
     public void testSearchMoleculeInChEBI(){
         Entry molecule = null;
 

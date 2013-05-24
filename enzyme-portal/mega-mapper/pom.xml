@@ -77,12 +77,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>bioportal-adapter</artifactId>
-            <version>1.0.4-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-lucene</artifactId>
             <version>1.0.6</version>
@@ -301,7 +295,6 @@
                     <version>1.0.4</version>
                 </dependency>
                 <dependency>
-
                     <groupId>uk.ac.ebi.ep</groupId>
                     <artifactId>bioportal-adapter</artifactId>
                     <version>1.0.4-SNAPSHOT</version>
@@ -309,7 +302,7 @@
                 <dependency>
                     <groupId>uk.ac.ebi.ep</groupId>
                     <artifactId>ep-util</artifactId>
-                    <version>1.0.4-SNAPSHOT</version>
+                    <version>1.0.4</version>
                 </dependency>
                 <dependency>
                     <groupId>uk.ac.ebi.biobabel</groupId>

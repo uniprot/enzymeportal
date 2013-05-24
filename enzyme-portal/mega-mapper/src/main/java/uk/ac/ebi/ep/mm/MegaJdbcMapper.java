@@ -308,6 +308,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 entry.setEntryId(rs.getString("entry_id"));
                 entry.setEntryName(rs.getString("entry_name"));
                 // TODO: load accessions?
+                // This happens with UniProt demerged entries:
                 if (rs.next()) {
                     LOGGER.error("More than one entry for same accession! "
                             + accession + " (" + db.name() + ")");
@@ -1100,44 +1101,20 @@ public class MegaJdbcMapper implements MegaMapper {
     /**
      * Updates an entry name in the database, leaving the rest unchanged.
      * @param entry the entry with an updated name.
-     * @return number of rows affected by the update operation
      */
     public int updateEntry(Entry entry) {
-        int num_row_affected = 0;
-        String query = "UPDATE MM_ENTRY SET ENTRY_NAME=? WHERE ENTRY_ID=? and db_name = ?";
-        PreparedStatement preparedStatement = null;
+        int n = 0;
         try {
-            con.setAutoCommit(false);
-
-            preparedStatement = con.prepareStatement(query);
-
-            //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--update.entry");
-
-            preparedStatement.setString(1, entry.getEntryName());
-            preparedStatement.setString(2, entry.getEntryId());
-            preparedStatement.setString(3, entry.getDbName());
-
-            preparedStatement.addBatch();
-
-            // Execute the batch
-            int[] updateCounts = preparedStatement.executeBatch();
-
-            // All statements were successfully executed.
-            // updateCounts contains one element for each batched statement.
-            // updateCounts[i] contains the number of rows affected by that statement.
-            num_row_affected = processUpdateCounts(updateCounts);
-
-
-            // Since there were no errors, commit
-            con.commit();
-
-
+            PreparedStatement ps =
+                    sqlLoader.getPreparedStatement("--update.entry");
+            ps.setString(1, entry.getEntryName());
+            ps.setString(2, entry.getEntryId());
+            ps.setString(3, entry.getDbName());
+            n = ps.executeUpdate();
         } catch (SQLException ex) {
             LOGGER.error("Updating " + entry.getEntryId(), ex);
-        } finally {
-            closePreparedStatement(preparedStatement);
         }
-        return num_row_affected;
+        return n;
     }
 
     private static int processUpdateCounts(int[] updateCounts) {

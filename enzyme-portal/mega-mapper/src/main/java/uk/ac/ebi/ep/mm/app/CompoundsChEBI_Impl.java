@@ -21,7 +21,11 @@ import uk.ac.ebi.ep.mm.XRef;
 /**
  *This class is to retrieve compounds from chebi database and write them to the mega mapper
  * @author joseph
+ * @deprecated Now ChEBI cross-references are imported either by text-mining
+ *      the UniProtXML for inhibitors/activators, or from IntEnzXML for
+ *      cofactors and reaction participants.
  */
+ @Deprecated
 public class CompoundsChEBI_Impl   implements ICompoundsDAO {
 
     private final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CompoundsChEBI_Impl.class);

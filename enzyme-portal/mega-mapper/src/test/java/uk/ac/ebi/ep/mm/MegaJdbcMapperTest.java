@@ -15,7 +15,6 @@ import uk.ac.ebi.ep.mm.MegaMapper.Constraint;
 
 import static org.junit.Assert.*;
 
-@Ignore
 public class MegaJdbcMapperTest {
 
     private MegaJdbcMapper mm;
@@ -27,7 +26,8 @@ public class MegaJdbcMapperTest {
     public void before() throws IOException, SQLException {
         logger.info("Before setting up");
         try {
-            con = OracleDatabaseInstance.getInstance("ep-mm-db-enzdev").getConnection();
+            con = OracleDatabaseInstance.getInstance("ep-mm-db-enzdev")
+                    .getConnection();
             mm = new MegaJdbcMapper(con);
             mm.openMap();
 
@@ -58,7 +58,8 @@ public class MegaJdbcMapperTest {
             entry3.setEntryName("vogonic acid");
             XRef xref3 = new XRef();
             xref3.setFromEntry(entry3);
-            xref3.setRelationship(Relationship.is_substrate_or_product_of.name());
+            xref3.setRelationship(
+                    Relationship.is_substrate_or_product_of.name());
             xref3.setToEntry(entry1);
             mm.writeXref(xref3);
             entries.add(entry3);
@@ -66,20 +67,20 @@ public class MegaJdbcMapperTest {
             Entry entry4 = new Entry();
             entry4.setDbName(MmDatabase.ChEMBL.name());
             entry4.setEntryId("CHEMBLZZZZZZ");
-            entry4.setEntryAccessions(Collections.singletonList("CHEMBLZZZZZZ"));
+            entry4.setEntryAccessions(
+                    Collections.singletonList("CHEMBLZZZZZZ"));
             entry4.setEntryName("vogozepam");
             XRef xref4 = new XRef();
             xref4.setFromEntry(entry4);
-            xref4.setRelationship(Relationship.between(MmDatabase.ChEMBL, MmDatabase.UniProt).name());
+            xref4.setRelationship(Relationship.between(
+                    MmDatabase.ChEMBL, MmDatabase.UniProt).name());
             xref4.setToEntry(entry1);
             mm.writeXref(xref4);
             entries.add(entry4);
 
             con.commit();
         } catch (SQLException e) {
-            if (con != null) {
-                con.rollback();
-            }
+            con.rollback();
             throw e;
         }
         logger.info("After setting up");
