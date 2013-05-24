@@ -13,7 +13,8 @@
 <body>
     <release version="1.0.16" date=""
         description="Cross-references for small molecules taken from IntEnz
-            and UniProt. Fix for ChEMBL parsing. UNIPROT2COMPOUND table.">
+            and UniProt. Fix for ChEMBL parsing. UNIPROT2COMPOUND table.
+            Compounds retrieved with roles.">
         <action dev="rafalcan" type="add">
             Added application to retrieve cross-references from IntEnzXML:
             EC-reactions, EC-substrates/products, EC-cofactors,
@@ -37,7 +38,7 @@
         </action>
         <action dev="rafalcan" type="add">
             Added method to MegaMapper to get compounds related to UniProt IDs
-            as Compound objects.
+            as Compound objects (now with a role).
         </action>
         <action dev="rafalcan" type="fix">
             Fixed import of ChEMBL cross references. There were some extra - and
@@ -45,8 +46,9 @@
             <fixes issue="168"/>
         </action>
         <action dev="rafalcan" type="update">
-            Updated to latest version of ep-util, which provides extraction of
-            inhibitors and activators from UniProt.
+            Updated to latest version of ep-util - which provides extraction of
+            inhibitors and activators from UniProt - and ep-domain - which
+            provides roles for compounds.
         </action>
     </release>
     <release version="1.0.13" date="2013-04-09"
