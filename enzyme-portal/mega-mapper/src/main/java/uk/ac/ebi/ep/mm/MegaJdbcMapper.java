@@ -966,6 +966,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 Compound compound = new Compound();
                 compound.setId(rs.getString("compound_id"));
 
+
                compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH).replace(",", "")));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH)));
@@ -973,6 +974,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 if (compounds == null) {
                     compounds = new ArrayList<Compound>();
                 }
+
 
                 compound.setName(rs.getString("compound_name"));
                 switch (Relationship.valueOf(rs.getString("relationship"))){
