@@ -8,6 +8,23 @@
 			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="role">
+			    <xs:annotation>
+                    <xs:documentation>The role played by the small molecule
+                        with respect to the enzymatic activity of the protein.
+                    </xs:documentation>
+			    </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SUBSTRATE_OR_PRODUCT"/>
+                        <xs:enumeration value="COFACTOR"/>
+                        <xs:enumeration value="ACTIVATOR"/>
+                        <xs:enumeration value="INHIBITOR"/>
+                        <xs:enumeration value="DRUG"/>
+                        <xs:enumeration value="BIOACTIVE"/>
+                    </xs:restriction>
+                </xs:simpleType>
+			</xs:element>
                         <xs:element name="selected" type="xs:boolean"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -36,7 +53,7 @@
         		minOccurs="0" maxOccurs="unbounded">
         	</xs:element>
         	<xs:element name="diseases" type="ep:Disease"
-        		maxOccurs="unbounded" minOccurs="0"></xs:element>
+        		maxOccurs="unbounded" minOccurs="0"/>
      <xs:element name="scoring" type="xs:anySimpleType"
 	
         maxOccurs="1" minOccurs="0">
@@ -154,9 +171,9 @@
                 </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:enumeration value="KEYWORD"></xs:enumeration>
-                        <xs:enumeration value="SEQUENCE"></xs:enumeration>
-                        <xs:enumeration value="COMPOUND"></xs:enumeration>
+                        <xs:enumeration value="KEYWORD"/>
+                        <xs:enumeration value="SEQUENCE"/>
+                        <xs:enumeration value="COMPOUND"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
@@ -183,7 +200,7 @@
                                     minOccurs="0" maxOccurs="unbounded">
             </xs:element>
         	<xs:element name="diseases" type="ep:Disease"
-        		maxOccurs="unbounded" minOccurs="0"></xs:element>
+        		maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
