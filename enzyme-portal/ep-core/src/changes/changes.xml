@@ -10,10 +10,32 @@
 </properties>
 
 <body>
-    <release version="1.0.16" date="" description="">
+    <release version="1.0.16" date=""
+        description="All compounds from mega-map.">
+        <action dev="rafalcan" type="fix">
+            All compounds for the small molecules tab (EnzymeRetriever) are now
+            retrieved from the mega-map - the latest version of mega-mapper
+            imports compounds more accurately -, instead of relying on different
+            resources (used to be: mega-map for ChEMBL, IntEnz web service for
+            cofactors, UniProt web service for drugs, activators and
+            inhibitors). This is much faster, reliable and consistent.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added maximum number of compounds to retrieve to the search
+            configuration.
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of ep-domain - with critic changes for
+            small molecules -, chebi-adapter, literature-adapter, ep-util and
+            uniprot-adapter.
+        </action>
         <action dev="rafalcan" type="fix">
             Avoided NPE when there are no citations.
             <fixes issue="162"/>
+        </action>
+        <action dev="rafalcan" type="fix">
+            Compounds are now retrieved for all of the orthologs in a summary,
+            not only for the default one.
         </action>
     </release>
     <release version="1.0.15" date="" description="">

@@ -49,4 +49,14 @@ public interface ConfigMBean {
 
 	public abstract String getMmDatasource();
 
+    int getMaxMoleculesPerGroup();
+
+    /**
+     * Sets the maximum number of molecules to be retrieved per group
+     * (inhibitors, activators, cofactors, drugs or bioactive). This is set for
+     * performance reasons.
+     * @param maxMoleculesPerGroup the maximum number of molecules to be
+     *      retrieved.
+     */
+    void setMaxMoleculesPerGroup(int maxMoleculesPerGroup);
 }

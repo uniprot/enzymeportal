@@ -1,13 +1,7 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
@@ -21,8 +15,8 @@ import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.FieldsOfPdbe;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
+import uk.ac.ebi.ep.adapter.literature.LabelledCitation;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
-import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter.LabelledCitation;
 import uk.ac.ebi.ep.adapter.reactome.IReactomeAdapter;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeAdapter;
 import uk.ac.ebi.ep.adapter.reactome.ReactomeServiceException;
@@ -33,17 +27,10 @@ import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
 import uk.ac.ebi.ep.core.DiseaseComparator;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
-import uk.ac.ebi.ep.enzyme.model.Disease;
-import uk.ac.ebi.ep.enzyme.model.Entity;
-import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
-import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
-import uk.ac.ebi.ep.enzyme.model.Molecule;
-import uk.ac.ebi.ep.enzyme.model.Pathway;
-import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
-import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
-import uk.ac.ebi.ep.mm.Entry;
+import uk.ac.ebi.ep.enzyme.model.*;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
+import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
 import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 import uk.ac.ebi.util.result.DataTypeConverter;
@@ -400,34 +387,37 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = null;
         try {
-            LOGGER.debug("MOLECULES before getting model");
-            enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummaryWithMolecules(uniprotAccession);
-            // The model contains now only drugs, activators and inhibitors.
-            if (megaMapperConnection != null) {
-                // Get bioactive compounds from ChEMBL:
-                // Search the mega-map for xrefs from UniProt to ChEMBL:
-                LOGGER.debug("MOLECULES before getting xrefs to ChEMBL");
-                //this is the total number of CheMBL molecules found
-                int totalFound = megaMapperConnection.getMegaMapper().getXrefsSize(
-                        MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
-                List<Entry> chemblEntries = megaMapperConnection.getMegaMapper().getChMBLEntries(
-                        MmDatabase.UniProt, uniprotAccession, MmDatabase.ChEMBL);
-                LOGGER.debug("MOLECULES before getting ChEMBL molecules");
-                if (chemblEntries != null) {
-                    Collection<Molecule> chemblDrugs = new ArrayList<Molecule>();
-                    for (Entry chemblEntry : chemblEntries) {
-                        Molecule chemblDrug = new Molecule().withId(chemblEntry.getEntryId()).withName(chemblEntry.getEntryName());
-                        chemblDrugs.add(chemblDrug);
-                    }
-                    enzymeModel.getMolecule().withBioactiveLigands(chemblDrugs);
-                    enzymeModel.getMolecule().setTotalFound(totalFound);
+            enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
+            Collection<Compound> compounds = megaMapperConnection
+                    .getMegaMapper().getCompounds(enzymeModel.getUniprotid());
+            CountableMolecules activators = null, inhibitors = null,
+                    cofactors = null, drugs = null, bioactive = null;
+            if (compounds != null) for (Compound compound : compounds) {
+                // Classify compounds from the mega-map:
+                switch(compound.getRole()){
+                    case ACTIVATOR:
+                        activators = addMoleculeToGroup(activators, compound);
+                        break;
+                    case INHIBITOR:
+                        inhibitors = addMoleculeToGroup(inhibitors, compound);
+                        break;
+                    case COFACTOR:
+                        cofactors = addMoleculeToGroup(cofactors, compound);
+                        break;
+                    case DRUG:
+                        drugs = addMoleculeToGroup(drugs, compound);
+                        break;
+                    case BIOACTIVE:
+                        bioactive = addMoleculeToGroup(bioactive, compound);
+                        break;
                 }
             }
-            // Get cofactors from IntEnz:
-            enzymeModel.getMolecule().withCofactors(
-                    intenzAdapter.getCofactors(enzymeModel.getEc()));
-            // XXX cofactors are mixed if several EC numbers per UniProt acc
-            // XXX wrong cofactors if OR'ed (ex. EC 1.1.1.1 and P07327)
+            enzymeModel.setMolecule(new ChemicalEntity()
+                    .withActivators(activators)
+                    .withInhibitors(inhibitors)
+                    .withCofactors(cofactors)
+                    .withDrugs(drugs)
+                    .withBioactiveLigands(bioactive));
 
             LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
             getChebiAdapter().getMoleculeCompleteEntries(enzymeModel);
@@ -453,6 +443,32 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     "Unable to get enzyme summary for " + uniprotAccession, e);
         }
         return enzymeModel;
+    }
+
+    /**
+     * Adds a compound to the group (inhibitors, cofactors, etc).<br/>
+     * If the group is <code>null</code> it will be created and initialised.
+     * <br/>It will be modified by adding the passed compound (if the
+     * configuration allows) and increasing the total count.
+     * @param group a molecules group.
+     * @param comp a compound.
+     * @return the modified (possibly newly created) group of molecules.
+     */
+    private CountableMolecules addMoleculeToGroup(CountableMolecules group,
+            Compound comp) {
+        if (group == null) {
+            group = new CountableMolecules();
+            group.setMolecule(new ArrayList<Molecule>());
+            group.setTotalFound(0);
+        }
+        if (group.getMolecule().size() < searchConfig.getMaxMoleculesPerGroup()){
+            Molecule molecule = new Molecule();
+            molecule.setName(comp.getName());
+            molecule.setId(comp.getId());
+            group.getMolecule().add(molecule);
+        }
+        group.setTotalFound(group.getTotalFound() + 1);
+        return group;
     }
 
     public EnzymeModel getProteinStructure(String uniprotAccession)
