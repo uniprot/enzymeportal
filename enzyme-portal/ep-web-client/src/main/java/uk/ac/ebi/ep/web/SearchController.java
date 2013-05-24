@@ -527,12 +527,12 @@ public class SearchController {
                 resetSelectedCompounds(defaultCompoundList);
 
                 for (String SelectedCompounds : searchParameters.getCompounds()) {
-                    System.out.println("selected compound "+ SelectedCompounds);
+                   
                     for (Compound theCompound : defaultCompoundList) {
-                        System.out.println("default compound "+ theCompound.getName());
+                     
                         if (SelectedCompounds.equals(theCompound.getName())) {
                             theCompound.setSelected(true);
-                            System.out.println("TRUE");
+                     
                         }
                     }
                 }

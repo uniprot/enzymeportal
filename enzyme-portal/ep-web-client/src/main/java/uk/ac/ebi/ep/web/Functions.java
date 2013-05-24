@@ -94,15 +94,7 @@ public final class Functions {
 
     public static String escapeHTML(String value) {
 
-        //String text = HtmlUtility.cleanText(value);
-        System.out.println("value "+ value);
-        String text = null;
-        if(value.contains(",")){
-            System.out.println("value contains "+ value);
-          value =  value.replace(",", ",");
-        }
-       text = value;
-        System.out.println("final text "+ text);
+        String text = HtmlUtility.cleanText(value);
         return text;
     }
     

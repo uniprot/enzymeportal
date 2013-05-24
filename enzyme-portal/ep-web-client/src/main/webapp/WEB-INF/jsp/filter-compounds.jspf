@@ -43,11 +43,11 @@
                                 <div class="text">
                                     <xchars:translate>
 <span class="compoundName" style="border-bottom-style:none " ><c:out value="${compoundList[i].name}" escapeXml="false"/></span>
-<script> compoundsAutoCompleteDataSource.push({label:"${Fn:escapeHTML(compoundList[i].name)} ",value:"${Fn:escapeHTML(compoundList[i].name)}"});</script>
+<script> compoundsAutoCompleteDataSource.push({label:"${compoundList[i].name} ",value:"${compoundList[i].name}"});</script>
                                     </xchars:translate>
                                 </div>
                                 <div class="checkItem">
-                                    <form:checkbox path="searchparams.compounds" value="${Fn:escapeHTML(compoundList[i].name)}" onclick="submit()"/>
+                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}" onclick="submit()"/>
                                 </div>
                                 <div class="clear"></div>
                             </div>
