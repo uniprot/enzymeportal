@@ -104,7 +104,7 @@
         <!-- <script src="../js/libs/modernizr.minified.2.1.6.js"></script> -->
 
         <!-- custom build (lacks most of the "advanced" HTML5 support -->
-        <script src="http://wwwdev.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
+        <script src="http://www.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
         <!--  <script src="/web_guidelines/js/libs/modernizr.custom.49274.js"></script>		-->
 
 
@@ -434,21 +434,24 @@
                                             <!--START SMALL MOLECULES TAB-->
                                             <c:if test='${requestedfield=="molecules"}'>
                                                 <c:set var="chemEntity" value="${enzymeModel.molecule}"/>
-                                                <c:if test='${chemEntity.drugs[0].name == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
-                                                            <%@include file="errors.jsp" %>
+                                                <c:choose>
+                                                    <c:when test="${not empty chemEntity.drugs
+                                                        and not empty chemEntity.drugs.molecule
+                                                        and chemEntity.drugs.molecule[0] eq 'error'}">
+                                                        <div class="node grid_24">
+                                                            <div class="view grid_24">
+                                                                <%@include file="errors.jsp" %>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </c:if>
-
-                                                <c:if test='${chemEntity.drugs[0].name != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
-                                                            <%@include file="molecules.jsp" %>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <div class="node grid_24">
+                                                            <div class="view grid_24">
+                                                                <%@include file="molecules.jsp" %>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </c:if>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </c:if>
                                             <!--START DISEASE & DRUGS TAB-->
                                             <c:if test='${requestedfield=="diseaseDrugs"}'>

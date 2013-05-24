@@ -200,12 +200,14 @@ function filterCitations(){
 			    labelCode eq 'ENZYME'? 'P':
 			    labelCode eq 'PROTEIN_STRUCTURE'? 's':
 			    labelCode eq 'SMALL_MOLECULES'? 'b':
-			    labelCode eq 'DISEASES'? '': ''
+			    labelCode eq 'DISEASES'? 'v': ''
 			    }"/>
+            <c:set var="iconClass" value="${labelCode eq 'DISEASES'?
+                'icon-species': 'icon-conceptual'}"/>
             <input type="checkbox" checked="checked"
                 value="cit-${labelCode}"
 			    onclick="filterCitations();"/>
-            <span data-icon="${dataIcon}" class="label icon icon-conceptual">
+            <span data-icon="${dataIcon}" class="label icon ${iconClass}">
                 ${citationLabel}</span>
             (${fn:length(splitLabelCodes[clvs.index])-fn:length(labelCode)})
         </label>

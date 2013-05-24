@@ -5,7 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <c:choose>
-    <c:when test="${empty moleculeGroup}">
+    <c:when test="${empty moleculeGroup or empty moleculeGroup.molecule}">
         <br/>
         <div>
             <spring:message code="label.entry.molecules.empty"
@@ -23,29 +23,26 @@
                                 arguments="${explArgs}" />
             </p>
             <div style="display: table-row;">
-                <c:forEach var="molecule" items="${moleculeGroup}"
-                           begin="0"
-                           end="${fn:length(moleculeGroup) gt 3?
-                                  (2) :
-                                  (fn:length(moleculeGroup)-1)}">
-                           <div style="display: table-cell; vertical-align: top;">
-                               <%@include file="molecule.jsp" %>
-                           </div>
+                <c:forEach var="molecule" items="${moleculeGroup.molecule}"
+                    begin="0"
+                    end="${fn:length(moleculeGroup.molecule) gt searchConfig.maxMoleculesPerGroup?
+                        2 : fn:length(moleculeGroup.molecule)-1}">
+                    <div style="display: table-cell; vertical-align: top;">
+                    <%@include file="molecule.jsp" %>
+                    </div>
                 </c:forEach>
             </div>
-            <c:if test="${fn:length(moleculeGroup) gt 3}">
-                <c:choose>
-                    <c:when test='${emptyArgs== "bioactive compounds"}'>
-                        <a href="${moleculeGroupUrl}">See all
-                            ${molecules.totalFound} ${emptyArgs}
-                            in ${moleculeGroupDb}</a>
-                        </c:when>
-                        <c:otherwise>
-                        <a href="${moleculeGroupUrl}">See all
-                            ${fn:length(moleculeGroup)} ${emptyArgs}
-                            in ${moleculeGroupDb}</a>
-                        </c:otherwise>
-                    </c:choose>
+            <c:if test="${moleculeGroup.totalFound gt searchConfig.maxMoleculesPerGroup}">
+                These are only ${searchConfig.maxMoleculesPerGroup} out of
+                ${moleculeGroup.totalFound} ${emptyArgs}s found.
+            </c:if>
+            <a href="${moleculeGroupUrl}">
+                <spring:message code="label.entry.molecules.see.more"
+                    arguments="${moleculeGroup.totalFound eq 1? 'the' : 'all'},
+                    ${moleculeGroup.totalFound eq 1? '' : moleculeGroup.totalFound},
+                    ${emptyArgs}${moleculeGroup.totalFound eq 1? '' : 's'},
+                    ${moleculeGroupDb}"/>
+            </a>
 
                 <%--
                         <c:choose>
@@ -66,7 +63,6 @@
                                 </c:otherwise>
                         </c:choose>
                 --%>
-            </c:if>
         </fieldset>
     </c:otherwise>
 </c:choose>

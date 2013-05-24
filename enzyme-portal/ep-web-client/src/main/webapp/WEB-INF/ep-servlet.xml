@@ -38,6 +38,8 @@
 	<!-- MBeans -->
     <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
         <property name="autodetect" value="true"/>
+        <property name="registrationBehaviorName"
+            value="REGISTRATION_REPLACE_EXISTING"/>
     </bean>
 
     <bean name="uk.ac.ebi.ep:name=searchConfig"
@@ -50,7 +52,9 @@
         <property name="uniprotImplementation" value="WS"/>
         <property name="searchCacheSize" value="100"/>
         <property name="mmDatasource" value="jdbc/ep/mm"/>
+        <property name="maxMoleculesPerGroup" value="3"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=searchConfig" alias="searchConfig"/>
 	
     <bean name="uk.ac.ebi.ep:name=ebeyeConfig"
 		class="uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig">

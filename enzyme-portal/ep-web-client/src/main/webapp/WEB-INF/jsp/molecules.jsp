@@ -23,7 +23,7 @@
             </c:when>
             <c:otherwise>
                 <c:set var="moleculeGroup" value="${molecules.bioactiveLigands}"/>
-                <c:set var="emptyArgs" value="bioactive compounds"/>
+                <c:set var="emptyArgs" value="bioactive compound"/>
                 <c:set var="titleArgs" value="Bioactive compounds,bind to"/>
                 <c:set var="explArgs" value="Bioactive compounds,bind to"/>
                 <c:set var="moleculeGroupDb" value="ChEMBL"/>
@@ -34,7 +34,7 @@
                 </div>
 
                 <c:set var="moleculeGroup" value="${molecules.drugs}"/>
-                <c:set var="emptyArgs" value="drugs"/>
+                <c:set var="emptyArgs" value="drug"/>
                 <c:set var="titleArgs" value="Drugs,interact with"/>
                 <c:set var="explArgs" value="drugs,interact with"/>
                 <c:set var="moleculeGroupDb" value="UniProt"/>
@@ -45,7 +45,7 @@
                 </div>
 
                 <c:set var="moleculeGroup" value="${molecules.activators}"/>
-                <c:set var="emptyArgs" value="activators"/>
+                <c:set var="emptyArgs" value="activator"/>
                 <c:set var="titleArgs" value="Activators,activate"/>
                 <c:set var="explArgs" value="activators,activate"/>
                 <c:set var="moleculeGroupDb" value="UniProt"/>
@@ -56,7 +56,7 @@
                 </div>
 
                 <c:set var="moleculeGroup" value="${molecules.inhibitors}"/>
-                <c:set var="emptyArgs" value="inhibitors"/>
+                <c:set var="emptyArgs" value="inhibitor"/>
                 <c:set var="titleArgs" value="Inhibitors,inhibit"/>
                 <c:set var="explArgs" value="inhibitors,inhibit"/>
                 <c:set var="moleculeGroupDb" value="UniProt"/>
@@ -67,11 +67,12 @@
                 </div>
                 
                 <c:set var="moleculeGroup" value="${molecules.cofactors}"/>
-                <c:set var="emptyArgs" value="cofactors"/>
+                <c:set var="emptyArgs" value="cofactor"/>
                 <c:set var="titleArgs" value="Cofactors,activate"/>
                 <c:set var="explArgs" value="cofactors of the enzyme EC number(s),activate"/>
-                <c:set var="moleculeGroupDb" value=""/>
-                <c:set var="moleculeGroupUrl" value=""/>
+                <c:set var="moleculeGroupDb" value="IntEnz"/>
+                <%-- FIXME: WHAT IF THE ENZYME HAS MORE THAN ONE EC NUMBER? --%>
+                <c:set var="moleculeGroupUrl" value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec=${enzymeModel.ec[0]}"/>
                 <div id="cofactors">
                 	<%@include  file="moleculeGroup.jsp" %>
                 </div>
