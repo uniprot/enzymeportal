@@ -965,6 +965,7 @@ public class MegaJdbcMapper implements MegaMapper {
             while (rs.next()){
                 Compound compound = new Compound();
                 compound.setId(rs.getString("compound_id"));
+
                compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH).replace(",", "")));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH)));
@@ -972,6 +973,33 @@ public class MegaJdbcMapper implements MegaMapper {
                 if (compounds == null) {
                     compounds = new ArrayList<Compound>();
                 }
+
+                compound.setName(rs.getString("compound_name"));
+                switch (Relationship.valueOf(rs.getString("relationship"))){
+                    case is_reactant_or_product_of:
+                    case is_substrate_or_product_of:
+                    case is_reactant_of:
+                    case is_substrate_of:
+                    case is_product_of:
+                        compound.setRole(Compound.Role.SUBSTRATE_OR_PRODUCT);
+                        break;
+                    case is_cofactor_of:
+                        compound.setRole(Compound.Role.COFACTOR);
+                        break;
+                    case is_activator_of:
+                        compound.setRole(Compound.Role.ACTIVATOR);
+                        break;
+                    case is_inhibitor_of:
+                        compound.setRole(Compound.Role.INHIBITOR);
+                        break;
+                    case is_drug_for:
+                    case is_target_of:
+                        compound.setRole(compound.getId().startsWith("CHEMBL")?
+                                Compound.Role.BIOACTIVE : Compound.Role.DRUG);
+                        break;
+                }
+                if (compounds == null) compounds = new ArrayList<Compound>();
+
                 compounds.add(compound);
             }
         } catch (SQLException e){
