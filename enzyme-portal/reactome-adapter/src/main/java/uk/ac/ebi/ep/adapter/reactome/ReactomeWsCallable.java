@@ -31,7 +31,7 @@ public class ReactomeWsCallable implements Callable<Pathway> {
     		Logger.getLogger(ReactomeWsCallable.class);
     
     public static final String WS_BASE_URL =
-            "http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
+            "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
     // Hrefs within descriptions have to be made absolute:
     private static final String AHREF_PATTERN = "<a href='/";
     private static final String AHREF_REPLACEMENT =
