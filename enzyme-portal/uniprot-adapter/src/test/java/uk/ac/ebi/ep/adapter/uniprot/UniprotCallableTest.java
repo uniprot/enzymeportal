@@ -6,13 +6,8 @@
 package uk.ac.ebi.ep.adapter.uniprot;
 
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import org.junit.*;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
@@ -21,6 +16,8 @@ import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.Comment;
 import uk.ac.ebi.kraken.interfaces.uniprot.comments.CommentType;
 import uk.ac.ebi.util.result.DataTypeConverter;
+
+import static org.junit.Assert.*;
 
 /**
  *
@@ -123,7 +120,7 @@ public class UniprotCallableTest {
         EnzymeModel enzymeModel = (EnzymeModel)getEntriesCallerInstance.getSmallMoleculesByAccession();
         String[] expectedResultsForInhibitors = {"ADP","ADP-glucose","ATP","NADH"};
         List<String> molNames = DataTypeConverter.getMoleculeNames(
-                enzymeModel.getMolecule().getInhibitors());
+                enzymeModel.getMolecule().getInhibitors().getMolecule());
         assertArrayEquals(expectedResultsForInhibitors, molNames.toArray());
         System.out.println("Inhibitor results are ok!");
 
