@@ -15,67 +15,60 @@
     <div class="filterContent">
         <c:set var="speciesList" value="${searchFilter.species}"/>
         <c:set var="speciesListSize" value="${fn:length(speciesList)}"/>
-        <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
+        <c:set var="speciesParams" value="${searchModel.searchparams.species}"/>
 
-        <!--to ensure that the specie list is not empty-->
-        <c:if test="${speciesListSize > 0}">
+        <div id="species_filters_y"
+            style="${empty searchModel.searchparams.species?
+            'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>
+        <div id="species_filters_n"></div>
 
-            <!--  keep track of checked and displayed items.-->
-
-            <c:set var="checkedItems" value="0"/>
-            <c:set var="displayedItems" value="0"/>
-            <c:forEach var="times" begin="1" end="2" step="1">
-                <c:forEach var="i" begin="0" end="${speciesListSize}">
-                    <c:if test='${not empty speciesList[i].scientificname}'>
-                        <c:if test='${(speciesList[i].selected eq true and (times == 1))
-                            or (speciesList[i].selected eq false and (times == 2))}'>
-                            <c:if test='${(speciesList[i].selected eq true and (times == 1))}'>
-                                <c:set var="checkedItems" value="${checkedItems + 1}"/>
-                            </c:if>
-                            <c:if test='${displayedItems == limitedDisplay}'>
-                                <div id="species_0" style="display: none">
-                            </c:if>
-                            <div class="filterLine">
-                                <div class="text">
-                                    <c:if test="${Fn:alphaOmegaIsNotNull(speciesList[i].scientificname, speciesList[i].commonname)}">
-<script>speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");</script>
-                                    </c:if>
-                                    <c:choose>
-                                        <c:when test="${Fn:omegaIsNull(speciesList[i].scientificname, speciesList[i].commonname)}">
-<span class="scienceName" style="border-bottom-style:none " >${speciesList[i].scientificname}</span>
-<script>speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");</script>
-                                        </c:when>
-                                        <c:otherwise>
-<span class="scienceName" style="border-bottom-style:none ">${speciesList[i].commonname} <span>[${speciesList[i].scientificname}]</span></span>
 <script>
-speciesAutocompleteDataSource.push({label:"${speciesList[i].commonname}",value:"${speciesList[i].scientificname}"});
-speciesAutocompleteDataSource.push("${speciesList[i].scientificname}");
+// (See search.js if in doubt)
+
+// Initialise variables:
+var group = 'species';
+checkedFilters[group] = [];
+uncheckedFilters[group] = [];
+displayedFilters[group] = 0;
+
+// Populate js variables with data from server:
+//<c:forEach var="sp" items="${speciesList}">
+var sp = { "id": "${sp.scientificname}", "name": "${sp.commonname}" };
+<c:choose><c:when test="${Fn:contains(speciesParams, sp.scientificname)}">
+checkedFilters[group][checkedFilters[group].length] = sp; //</c:when>
+<c:otherwise>
+uncheckedFilters[group][uncheckedFilters[group].length] = sp; //</c:otherwise>
+</c:choose>
+speciesAutocompleteDataSource.push({
+    label: "${not empty sp.commonname? sp.commonname : sp.scientificname}",
+    value: "${sp.scientificname}"}); //</c:forEach>
+
+// Display filters:
+for (var i = 0; i < checkedFilters[group].length; i++){
+    addCheckbox(group, checkedFilters[group][i], true);
+}
+for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
+        && displayedFilters[group] < ${speciesListSize}; i++){
+    addCheckbox(group, uncheckedFilters[group][i], false);
+}
+
 </script>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                                <div class="checkItem">
-                                    <form:checkbox path="searchparams.species" onclick="submit()"  value="${speciesList[i].scientificname}" />
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <c:set var="displayedItems" value="${displayedItems + 1}"/>
-                        </c:if>
-                    </c:if>
-                </c:forEach>
-                <c:if test='${checkedItems gt 0 and checkedItems < speciesListSize}'><hr class="hrLine" /></c:if>
-            </c:forEach>
-            <c:set var="speciesMoreSize" value="${speciesListSize - limitedDisplay}"/>
-            <c:if test='${displayedItems >= limitedDisplay }'>
-                </div>
-                <a class="showLink" onclick="" id="<c:out value='species_link_0'/>"><c:out value="See ${speciesMoreSize} more"/></a> <br/>
-            </c:if>
-            <c:if test="${speciesListSize gt 12}">
-                <!--    then add auto complete-->
-                <script>
-                    ResultAutoComplete('specieAT', speciesAutocompleteDataSource,'filtersForm','_ctempList_selected')
-                </script>
-            </c:if>
+
+        <c:if test="${speciesListSize gt filterSizeDefault}">
+            <img id="loading_more_sf" src="resources/images/loading.gif"
+                style="display: none"/>
+            <a id="more_sf" href="javascript:void(0)"
+                onclick="addUnselectedCheckboxes('species',
+                displayedFilters['species'],
+                ${speciesListSize}-displayedFilters['species'], this)">See all
+                ${speciesListSize}</a>
+        </c:if>
+
+        <c:if test="${speciesListSize gt 12}">
+            <!--    then add auto complete-->
+            <script>
+                ResultAutoComplete('specieAT', speciesAutocompleteDataSource,'filtersForm','_ctempList_selected')
+            </script>
         </c:if>
     </div>
 </div>

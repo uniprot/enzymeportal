@@ -103,7 +103,7 @@ a:link, a:visited {
 }
 
 
-.filter  {
+div.filter  {
     float:left;
     margin-left:2px;
     margin-right:2px;
@@ -362,14 +362,13 @@ a.ui-corner-all{
     padding-left:5px;
     /*border: 1px solid #ddd;*/
 }
-
+/*
 .species {
     margin-left: 5px;
     float: left;
     width: 82%;
-    /*border: 1px solid #ddd;*/
 }
-
+*/
 .basket{
     float: right;        
 }
@@ -456,11 +455,26 @@ a.popup:hover span {
     padding: 0 0px;
 }
 
-.scienceName span{
+.filterItem input[type="checkbox"] {
+    vertical-align: top;
+}
+.filterItem span {
+    color: #207a7a;
+    margin-left: 0.5em;
+}
+.filterItem span span {
     font-style: italic;
     color:#000000;
     font-weight:lighter;
+    margin-left: 0.5em;
 }
+.filterItem span span:before {
+    content: '[';
+}
+.filterItem span span:after {
+    content: ']';
+}
+
 .sublevel1 .filterSearchBox{
     width:96%;
     display: inline-block;
@@ -477,15 +491,6 @@ a.popup:hover span {
 
 }
 
-span.scienceName{
-    color: #207a7a; 
-}
-span.compoundName{
-    color: #207a7a;  
-}
-.diseaseName{
-    color: #207a7a;
-}
 span.resultPageDisease{
    color:  #207a7a; 
 }
