@@ -274,3 +274,82 @@ var unique = $.distinct(dataArray);
 
 
 }
+
+
+
+/**
+ * The keys in this object represent filter groups, and can take only one of
+ * these values:
+ * species|compounds|diseases
+ * , and map to the arrays of available filters for species, compounds and
+ * diseases respectively. The objects in each array have properties 'id' (the
+ * scientific name for species) and 'name', and maybe more (see the JSPs using
+ * this script).
+ * @type {{}}
+ * @deprecated
+ */
+var filterTables = {};
+
+/**
+ * The keys in this object represent filter groups, and can take only one of
+ * these values:
+ * species|compounds|diseases
+ * , and map to the arrays of currently applied filters for species, compounds
+ * and diseases respectively.
+ * @type {{}}
+ */
+var checkedFilters = {};
+
+var uncheckedFilters = {};
+
+/**
+ * The keys in this object represent filter groups, and can take only one of
+ * these values:
+ * species|compounds|diseases
+ * , and map to the number of currently displayed filters for species, compounds
+ * and diseases respectively.
+ * @type {{}}
+ */
+var displayedFilters = {};
+
+/**
+ * Adds a checkbox to the filters list.
+ * @param filterGroup the group this filter belongs to.
+ * @param obj the object to display a filter for.
+ * @param selected is the control checked by default?
+ */
+function addCheckbox(filterGroup, obj, selected){
+    if (obj == '') return;
+    var cb = $('<input/>', {
+        "type":"checkbox", "name":"searchparams."+filterGroup,
+        "value": (filterGroup == 'species'? obj.id : obj.name),
+        onclick:"form.submit()"});
+    if (selected) cb.attr("checked", "checked");
+    var label = $('<span>');
+    if (obj.name){
+        label.text(obj.name);
+        label.append($('<span>', {text:obj.id}));
+    } else {
+        label.text(obj.id);
+    }
+    $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label)
+        .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
+    displayedFilters[filterGroup]++;
+}
+
+/**
+ * Add unselected checkboxes to the list of filters.
+ * @param filterGroup the group this filter belongs to.
+ * @param from index of the first filter to add.
+ * @param num number of new filters to add.
+ * @param link the link triggering this method.
+ */
+function addUnselectedCheckboxes(filterGroup, from, num, link){
+    var loading = $('#loading_'+link.getAttribute('id'));
+    $(link).hide();
+    loading.show();
+    for (var i = from; i < from+num; i++){
+        addCheckbox(filterGroup, uncheckedFilters[filterGroup][i], false);
+    }
+    loading.hide();
+}

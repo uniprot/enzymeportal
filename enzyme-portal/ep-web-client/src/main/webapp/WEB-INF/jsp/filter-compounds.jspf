@@ -20,49 +20,61 @@
         </div>
     </c:if>
     <div class="filterContent">
-        <c:set var="compoundList" value="${searchFilter.compounds}"/>
-        <c:set var="compoundListSize" value="${fn:length(compoundList)}"/>
-        <c:set var="limitedDisplay" value="${filterSizeDefault}"/>
-        <c:if test="${compoundListSize > 0}">
+        <c:set var="compoundsList" value="${searchFilter.compounds}"/>
+        <c:set var="compoundsListSize" value="${fn:length(compoundsList)}"/>
+        <c:set var="compoundsParams"
+            value="${searchModel.searchparams.compounds}"/>
 
-            <!--  keep track of checked and displayed items.-->
+        <c:if test="${compoundsListSize > 0}">
 
-            <c:set var="checkedItems_c" value="0"/>
-            <c:set var="displayedItems_c" value="0"/>
-            <c:forEach var="times" begin="1" end="2" step="1">
-                <c:forEach var="i" begin="0" end="${compoundListSize}">
-                    <c:if test='${not empty compoundList[i].name}'>
-                        <c:if test='${(compoundList[i].selected eq true and (times == 1)) or (compoundList[i].selected eq false and (times == 2))}'>
-                            <c:if test='${(compoundList[i].selected eq true and (times == 1))}'>
-                                <c:set var="checkedItems_c" value="${checkedItems_c + 1}"/>
-                            </c:if>
-                            <c:if test='${displayedItems_c == limitedDisplay}'>
-                                <div id="compound_0" style="display: none">
-                            </c:if>
-                            <div class="filterLine">
-                                <div class="text">
-                                    <xchars:translate>
-<span class="compoundName" style="border-bottom-style:none " ><c:out value="${compoundList[i].name}" escapeXml="false"/></span>
-<script> compoundsAutoCompleteDataSource.push({label:"${compoundList[i].name} ",value:"${compoundList[i].name}"});</script>
-                                    </xchars:translate>
-                                </div>
-                                <div class="checkItem">
-                                    <form:checkbox path="searchparams.compounds" value="${compoundList[i].name}" onclick="submit()"/>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <c:set var="displayedItems_c" value="${displayedItems_c + 1}"/>
-                        </c:if>
-                    </c:if>
-                </c:forEach>
-                <c:if test='${checkedItems_c gt 0 and checkedItems_c < compoundListSize}'><hr class="hrLine" /></c:if>
-            </c:forEach>
-            <c:set var="compoundMoreSize" value="${compoundListSize - limitedDisplay}"/>
-            <c:if test='${displayedItems_c >= limitedDisplay }'>
-                </div>
-                <a class="showLink" id="<c:out value='compound_link_0'/>"><c:out value="See ${compoundMoreSize} more"/></a> <br/>
+        <div id="compounds_filters_y"
+             style="${empty searchModel.searchparams.compounds?
+            'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>
+        <div id="compounds_filters_n"></div>
+
+<script>
+// (See search.js if in doubt)
+
+// Initialise variables:
+var group = 'compounds';
+checkedFilters[group] = [];
+uncheckedFilters[group] = [];
+displayedFilters[group] = 0;
+
+// Populate js variables with data from server:
+//<c:forEach var="compound" items="${compoundsList}">
+var cmp = { "id": "${compound.id}", "name": "${compound.name}" };
+<c:choose><c:when test="${Fn:contains(compoundsParams, compound.name)}">
+checkedFilters[group][checkedFilters[group].length] = cmp; //</c:when>
+<c:otherwise>
+uncheckedFilters[group][uncheckedFilters[group].length] = cmp; //</c:otherwise>
+</c:choose>
+compoundsAutoCompleteDataSource.push({
+    label: "${not empty compound.name? compound.name : compound.id}",
+    value: "${compound.name}"}); //</c:forEach>
+
+// Display filters:
+for (i = 0; i < checkedFilters[group].length; i++){
+    addCheckbox(group, checkedFilters[group][i], true);
+}
+for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
+        && displayedFilters[group] < ${compoundsListSize}; i++){
+    addCheckbox(group, uncheckedFilters[group][i], false);
+}
+
+</script>
+
+            <c:if test="${compoundsListSize gt filterSizeDefault}">
+                <img id="loading_more_cf" src="resources/images/loading.gif"
+                     style="display: none"/>
+                <a id="more_cf" href="javascript:void(0)"
+                   onclick="addUnselectedCheckboxes('compounds',
+                   displayedFilters['compounds'],
+                   ${compoundsListSize}-displayedFilters['compounds'], this)">
+                   See all ${compoundsListSize}</a>
             </c:if>
-            <c:if test="${compoundListSize gt 12}">
+
+            <c:if test="${compoundsListSize gt 12}">
                 <!--    then add auto complete-->
                 <script>
                     ResultAutoComplete('compounds_AUTOCOMPLETE', compoundsAutoCompleteDataSource,'filtersForm','comptempList')
