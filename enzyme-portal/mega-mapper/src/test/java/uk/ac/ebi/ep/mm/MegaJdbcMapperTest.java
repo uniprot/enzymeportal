@@ -14,6 +14,7 @@ import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.mm.MegaMapper.Constraint;
 
 import static org.junit.Assert.*;
+import uk.ac.ebi.ep.search.model.Compound;
 
 public class MegaJdbcMapperTest {
 
@@ -218,67 +219,67 @@ public class MegaJdbcMapperTest {
 
         logger.info("After xrefsByAccession");
     }
-    
+
     @Test
-    public void testGetXrefsByAccessionAndRelationship(){
-    	Collection<XRef> xrefs = mm.getXrefs(MmDatabase.UniProt, "P07327",
-				Relationship.belongs_to);
-    	assertNotNull(xrefs);
-    	assertEquals(2, xrefs.size()); // EC 1.1.1.1, Homo sapiens
-    }
-    
-    @Test
-    public void testGetXrefsByIdFragment(){
-    	Collection<XRef> xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
-    			Constraint.STARTS_WITH, Relationship.is_cofactor_of);
-    	assertNotNull(xrefs);
-    	assertEquals(1, xrefs.size());
-    	XRef xref = xrefs.iterator().next();
-		assertEquals(MmDatabase.ChEBI.name(), xref.getFromEntry().getDbName());
-		assertEquals("vogonate", xref.getFromEntry().getEntryName());
-    	assertEquals("CHEBI:XXXXX", xref.getFromEntry().getEntryId());
-		assertEquals(MmDatabase.UniProt.name(), xref.getToEntry().getDbName());
-		assertEquals("vogonase I", xref.getToEntry().getEntryName());
-    	assertEquals("ABCD_VOGON", xref.getToEntry().getEntryId());
-    	
-    	xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
-    			Constraint.STARTS_WITH, Relationship.is_substrate_or_product_of);
-    	assertNotNull(xrefs);
-    	assertEquals(1, xrefs.size());
-    	xref = xrefs.iterator().next();
-		assertEquals(MmDatabase.ChEBI.name(), xref.getFromEntry().getDbName());
-		assertEquals("vogonic acid", xref.getFromEntry().getEntryName());
-    	assertEquals("CHEBI:YYYYY", xref.getFromEntry().getEntryId());
-		assertEquals(MmDatabase.UniProt.name(), xref.getToEntry().getDbName());
-		assertEquals("vogonase I", xref.getToEntry().getEntryName());
-    	assertEquals("ABCD_VOGON", xref.getToEntry().getEntryId());
-    	
-    	xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
-    			Constraint.STARTS_WITH,
-    			new MmDatabase[]{ MmDatabase.ChEBI, MmDatabase.ChEMBL });
-    	assertNotNull(xrefs);
-    	assertEquals(3, xrefs.size());
-    	for (Iterator<XRef> it = xrefs.iterator(); it.hasNext();) {
-			xref = it.next();
-			switch (Relationship.valueOf(xref.getRelationship())) {
-			case is_cofactor_of:
-				assertEquals("CHEBI:XXXXX", xref.getFromEntry().getEntryId());
-				break;
-			case is_substrate_or_product_of:
-				assertEquals("CHEBI:YYYYY", xref.getFromEntry().getEntryId());
-				break;
-			default:
-				assertEquals("CHEMBLZZZZZZ", xref.getFromEntry().getEntryId());
-				break;
-			}
-		}
-    	
-    	xrefs = mm.getXrefs(MmDatabase.UniProt, "AB_",
-    			Constraint.STARTS_WITH, MmDatabase.ChEBI);
-    	assertNull(xrefs); // underscore not taken as oracle wildcard
+    public void testGetXrefsByAccessionAndRelationship() {
+        Collection<XRef> xrefs = mm.getXrefs(MmDatabase.UniProt, "P07327",
+                Relationship.belongs_to);
+        assertNotNull(xrefs);
+        assertEquals(2, xrefs.size()); // EC 1.1.1.1, Homo sapiens
     }
 
-/**
+    @Test
+    public void testGetXrefsByIdFragment() {
+        Collection<XRef> xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
+                Constraint.STARTS_WITH, Relationship.is_cofactor_of);
+        assertNotNull(xrefs);
+        assertEquals(1, xrefs.size());
+        XRef xref = xrefs.iterator().next();
+        assertEquals(MmDatabase.ChEBI.name(), xref.getFromEntry().getDbName());
+        assertEquals("vogonate", xref.getFromEntry().getEntryName());
+        assertEquals("CHEBI:XXXXX", xref.getFromEntry().getEntryId());
+        assertEquals(MmDatabase.UniProt.name(), xref.getToEntry().getDbName());
+        assertEquals("vogonase I", xref.getToEntry().getEntryName());
+        assertEquals("ABCD_VOGON", xref.getToEntry().getEntryId());
+
+        xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
+                Constraint.STARTS_WITH, Relationship.is_substrate_or_product_of);
+        assertNotNull(xrefs);
+        assertEquals(1, xrefs.size());
+        xref = xrefs.iterator().next();
+        assertEquals(MmDatabase.ChEBI.name(), xref.getFromEntry().getDbName());
+        assertEquals("vogonic acid", xref.getFromEntry().getEntryName());
+        assertEquals("CHEBI:YYYYY", xref.getFromEntry().getEntryId());
+        assertEquals(MmDatabase.UniProt.name(), xref.getToEntry().getDbName());
+        assertEquals("vogonase I", xref.getToEntry().getEntryName());
+        assertEquals("ABCD_VOGON", xref.getToEntry().getEntryId());
+
+        xrefs = mm.getXrefs(MmDatabase.UniProt, "ABCD_",
+                Constraint.STARTS_WITH,
+                new MmDatabase[]{MmDatabase.ChEBI, MmDatabase.ChEMBL});
+        assertNotNull(xrefs);
+        assertEquals(3, xrefs.size());
+        for (Iterator<XRef> it = xrefs.iterator(); it.hasNext();) {
+            xref = it.next();
+            switch (Relationship.valueOf(xref.getRelationship())) {
+                case is_cofactor_of:
+                    assertEquals("CHEBI:XXXXX", xref.getFromEntry().getEntryId());
+                    break;
+                case is_substrate_or_product_of:
+                    assertEquals("CHEBI:YYYYY", xref.getFromEntry().getEntryId());
+                    break;
+                default:
+                    assertEquals("CHEMBLZZZZZZ", xref.getFromEntry().getEntryId());
+                    break;
+            }
+        }
+
+        xrefs = mm.getXrefs(MmDatabase.UniProt, "AB_",
+                Constraint.STARTS_WITH, MmDatabase.ChEBI);
+        assertNull(xrefs); // underscore not taken as oracle wildcard
+    }
+
+    /**
      * Test of getAllUniProtAccessions method, of class MegaJdbcMapper.
      */
     @Test
@@ -291,17 +292,17 @@ public class MegaJdbcMapperTest {
         assertNotNull(result);
 
     }
-    
+
     @Test
     public void getCompounds() {
         //System.out.println("get Compounds");
         Map<String, String> compoundMap = null;
         MmDatabase db = MmDatabase.UniProt;
         String accession = "PDE5A_HUMAN";
-         //String [] acc = accessions.split("_");
+        //String [] acc = accessions.split("_");
         //String accession = acc[0].concat("_%");
         //String accession = "PDE6B_%";
-  
+
         MmDatabase[] xDbs = new MmDatabase[3];
         xDbs[1] = MmDatabase.ChEBI;
         xDbs[0] = MmDatabase.ChEBI;
@@ -309,50 +310,67 @@ public class MegaJdbcMapperTest {
         compoundMap = mm.getCompounds(db, accession, xDbs);
 
         assertNotNull(compoundMap);
-         System.out.println("num compounds found "+ compoundMap.size());
+        System.out.println("num compounds found " + compoundMap.size());
         for (Map.Entry<String, String> m : compoundMap.entrySet()) {
-           
+
             logger.info("Result for compounds: " + m.getKey() + ": " + m.getValue());
         }
-        
+
     }
-    
-        @Test
+
+    @Test
+    public void getCompoundCollection() {
+        Collection<Compound> compounds = null;
+
+        String uniprotId = "O76074";
+        uniprotId = "PDE5A_";// = "PDE5A_HUMAN";
+
+        compounds = mm.getCompounds(uniprotId);
+        if (compounds != null) {
+            for (Compound c : compounds) {
+                logger.info("Compounds found : " + c.getId() + " : " + c.getName());
+
+            }
+        } else {
+            logger.info("NO COMPOUND FOUND");
+        }
+
+    }
+
+    @Test
     public void getDisease() {
         //System.out.println("get Disease");
         Map<String, String> diseaseMap = null;
         MmDatabase db = MmDatabase.UniProt;
         String accession = "CFTR_HUMAN";
 
-  
+
         MmDatabase[] xDbs = new MmDatabase[3];
-  
-           
+
+
         xDbs[0] = MmDatabase.OMIM;
-         xDbs[1] = MmDatabase.EFO;
+        xDbs[1] = MmDatabase.EFO;
         xDbs[2] = MmDatabase.MeSH;
-        
-         
+
+
         diseaseMap = mm.getDiseaseByUniprotId(db, accession, xDbs);
         assertNotNull(diseaseMap);
         for (Map.Entry<String, String> m : diseaseMap.entrySet()) {
             //System.out.println("Result : " + m.getKey() + ": " + m.getValue());
             logger.info("Result for disease: " + m.getKey() + ": " + m.getValue());
         }
-        
+
     }
-    
-        @Test
-        public void getChMBLEntries(){
-            
-            String accession = "P55789";
-           List<Entry> entryList = mm.getChMBLEntries(MmDatabase.UniProt, accession, MmDatabase.ChEMBL);
-           assertNotNull(entryList);
-            for(Entry entry : entryList){
-                //System.out.println("entry"+ entry.getEntryName());
-                logger.info("Entries found for Accession ("+ accession +") : "+ entry.getEntryName());
-            }
+
+    @Test
+    public void getChMBLEntries() {
+
+        String accession = "P55789";
+        List<Entry> entryList = mm.getChMBLEntries(MmDatabase.UniProt, accession, MmDatabase.ChEMBL);
+        assertNotNull(entryList);
+        for (Entry entry : entryList) {
+            //System.out.println("entry"+ entry.getEntryName());
+            logger.info("Entries found for Accession (" + accession + ") : " + entry.getEntryName());
         }
-        
-      
+    }
 }

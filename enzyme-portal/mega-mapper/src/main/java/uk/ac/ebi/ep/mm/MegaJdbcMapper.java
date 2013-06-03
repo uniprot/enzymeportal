@@ -5,7 +5,6 @@ import java.sql.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
-
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 import uk.ac.ebi.ep.search.model.Compound;
@@ -26,6 +25,7 @@ public class MegaJdbcMapper implements MegaMapper {
     private static String ENTRY_ID = "ENTRY_ID";
     private static String ENTRY_NAME = "ENTRY_NAME";
     private static String DB_NAME = "DB_NAME";
+    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "GMP", "H(2)O", "H(+)", "(+)-EHNA", "sildenafil", "Sildenafil", "SILDENAFIL"};
 
     public MegaJdbcMapper(Connection con) throws IOException {
         this.con = con;
@@ -172,6 +172,7 @@ public class MegaJdbcMapper implements MegaMapper {
      * {@link Entry} object is updated with the internal id. Additionally, if
      * the passed entry has got a name but the one stored in the mega-map does
      * not, the latter is updated.
+     *
      * @param entry the entry whose existance is checked.
      * @return <code>true</code> if the entry exists.
      * @throws SQLException
@@ -189,14 +190,14 @@ public class MegaJdbcMapper implements MegaMapper {
             entry.setId(rs.getInt("id"));
             // Check whether the stored name is the same:
             String nameInDb = rs.getString("entry_name");
-            if (nameInDb == null && entry.getEntryName() != null){
+            if (nameInDb == null && entry.getEntryName() != null) {
                 updateEntry(entry);
                 LOGGER.info(MessageFormat.format(
                         "Added name {0} to {1} entry {2}",
                         entry.getEntryName(), entry.getDbName(),
                         entry.getEntryId()));
             } else if (nameInDb != null && entry.getEntryName() != null
-                    && !nameInDb.equals(entry.getEntryName())){
+                    && !nameInDb.equals(entry.getEntryName())) {
                 LOGGER.warn(MessageFormat.format(
                         "{0} entry {1} exists with a name {2} != {3}",
                         entry.getDbName(), entry.getEntryId(), nameInDb,
@@ -220,7 +221,7 @@ public class MegaJdbcMapper implements MegaMapper {
         if (exists) {
             final int xrefId = rs.getInt("id");
             //LOGGER.warn("XRef already exists in the database: "
-                   // + xref.toString() + " as " + xrefId);
+            // + xref.toString() + " as " + xrefId);
             xref.setId(xrefId);
         }
         rs.close();
@@ -532,10 +533,10 @@ public class MegaJdbcMapper implements MegaMapper {
                         + constraint);
         }
     }
-    
-    	/**
->>>>>>> 5a58a8dbc73ad57eac346d1d217ac661f41fc064
-     * retrieves a List of XRef with database name as ChEMBL.
+
+    /**
+     * >>>>>>> 5a58a8dbc73ad57eac346d1d217ac661f41fc064 retrieves a List of XRef
+     * with database name as ChEMBL.
      *
      * @param db database where the accession is found
      * @param accession the accession number
@@ -785,6 +786,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Closes safely a ResultSet, logging in case of error.
+     *
      * @param resultSet a ResultSet. Can be <code>null</code>.
      */
     private void closeResultSet(ResultSet resultSet) {
@@ -799,6 +801,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Closes safely a PreparedStatement, logging in case of error.
+     *
      * @param ps a PreparedStatement. Can be <code>null</code>.
      */
     private void closePreparedStatement(PreparedStatement ps) {
@@ -921,7 +924,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
         return diseasesEntryMap;
     }
-   
+
     private String resolveSpecialCharacters(String data) {
 
         SpecialCharacters xchars = SpecialCharacters.getInstance(null);
@@ -957,20 +960,41 @@ public class MegaJdbcMapper implements MegaMapper {
             query = uniprotId;
             constraint = "--constraint.equals";
         }
+
+        //blackListed compounds
+        StringBuilder queryClauseBuilder = new StringBuilder();
+        for (int i = 2; i < BLACKLISTED_COMPOUNDS.length; i++) {
+
+            queryClauseBuilder.append("?");
+            if (i < BLACKLISTED_COMPOUNDS.length - 1) {
+                queryClauseBuilder.append(",");
+            }
+        }
+        
+        //this query {--compounds.by.uniprot.id} is eqv to the queryString below
+        // String queryString = "select compound_name, compound_id, relationship from uniprot2compound "
+        //  + "where uniprot_id "+ constraint+" and compound_name is not null and compound_name NOT IN ("+queryClauseBuilder+") order by relationship";
+
+
         try {
             PreparedStatement ps = sqlLoader.getPreparedStatement(
-                    "--compounds.by.uniprot.id", constraint);
+                    "--compounds.by.uniprot.id", constraint, queryClauseBuilder);
             ps.setString(1, query);
+
+            for (int i = 2; i < BLACKLISTED_COMPOUNDS.length; i++) {
+                ps.setString(i, BLACKLISTED_COMPOUNDS[i]);
+            }
+
             rs = ps.executeQuery();
             while (rs.next()){
                 Compound compound = new Compound();
                 compound.setId(rs.getString("compound_id"));
 
-               compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
-               //TODO fix strange characters in compounds before populating the main compound list
+                compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
+                //TODO fix strange characters in compounds before populating the main compound list
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH).replace(",", "")));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH)));
-               // compound.setName(rs.getString("compound_name"));
+                // compound.setName(rs.getString("compound_name"));
                 switch (Relationship.valueOf(rs.getString("relationship"))){
                     case is_reactant_or_product_of:
                     case is_substrate_or_product_of:
@@ -990,17 +1014,17 @@ public class MegaJdbcMapper implements MegaMapper {
                         break;
                     case is_drug_for:
                     case is_target_of:
-                        compound.setRole(compound.getId().startsWith("CHEMBL")?
-                                Compound.Role.BIOACTIVE : Compound.Role.DRUG);
+                        compound.setRole(compound.getId().startsWith("CHEMBL")
+                                ? Compound.Role.BIOACTIVE : Compound.Role.DRUG);
                         break;
                 }
                 if (compounds == null) {
-                    compounds = new ArrayList<Compound>();
+                    compounds = new HashSet<Compound>();
                 }
 
                 compounds.add(compound);
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             LOGGER.error("Unable to get compounds for " + uniprotId, e);
         } finally {
             closeResultSet(rs);
@@ -1008,12 +1032,10 @@ public class MegaJdbcMapper implements MegaMapper {
         return compounds;
     }
 
-    public static final String[] ILLEGAL_COMPOUND = {"sample", "sample", "example", "Water", "Acid", "acid", "water"};
-
     public Map<String, String> getCompounds(MmDatabase db, String uniprotId,
             MmDatabase... xDbs) {
 
-                
+
         Map<String, String> compoundEntryMap = null;
         String[] acc = uniprotId.split("_");
         String accession = acc[0].concat("\\_%");
@@ -1027,7 +1049,7 @@ public class MegaJdbcMapper implements MegaMapper {
             StringBuilder queryClauseBuilder = new StringBuilder();
 
 //            boolean firstValue = true;
-//            for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
+//            for (int i = 5; i < BLACKLISTED_COMPOUNDS.length; i++) {
 //                //queryClauseBuilder.append('?');
 //                if (firstValue) {
 //                   
@@ -1038,10 +1060,10 @@ public class MegaJdbcMapper implements MegaMapper {
 //                queryClauseBuilder.append('?');
 //            }
 
-            for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
-                //queryClauseBuilder.append(ILLEGAL_COMPOUND[i]);
+            for (int i = 5; i < BLACKLISTED_COMPOUNDS.length; i++) {
+                //queryClauseBuilder.append(BLACKLISTED_COMPOUNDS[i]);
                 queryClauseBuilder.append("?");
-                if (i < ILLEGAL_COMPOUND.length - 1) {
+                if (i < BLACKLISTED_COMPOUNDS.length - 1) {
                     queryClauseBuilder.append(",");
                 }
             }
@@ -1067,11 +1089,11 @@ public class MegaJdbcMapper implements MegaMapper {
                 ps.setString(1, db.name());
                 ps.setString(3, xDbs[0].name());
                 ps.setString(4, xDbs[1].name());//ignore ChEBI
-                //ps.setString(5, ILLEGAL_COMPOUND);
+                //ps.setString(5, BLACKLISTED_COMPOUNDS);
 
 
-                for (int i = 5; i < ILLEGAL_COMPOUND.length; i++) {
-                    ps.setString(i, ILLEGAL_COMPOUND[i]);
+                for (int i = 5; i < BLACKLISTED_COMPOUNDS.length; i++) {
+                    ps.setString(i, BLACKLISTED_COMPOUNDS[i]);
 
                 }
 
@@ -1127,6 +1149,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     /**
      * Updates an entry name in the database, leaving the rest unchanged.
+     *
      * @param entry the entry with an updated name.
      */
     public int updateEntry(Entry entry) {
@@ -1174,7 +1197,7 @@ public class MegaJdbcMapper implements MegaMapper {
             entryIdList = new LinkedList<String>();
         }
         try {
-                        String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL";
+            String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? AND entry.ENTRY_NAME IS NULL";
             PreparedStatement preparedStatement = con.prepareStatement(query);
             //PreparedStatement preparedStatement = sqlLoader.getPreparedStatement("--allEntry.by.dbName");
             //and rownum <= 700000
@@ -1211,8 +1234,8 @@ public class MegaJdbcMapper implements MegaMapper {
 
         try {
             //String query = "SELECT entry.* FROM MM_ENTRY entry WHERE entry.DB_NAME = ? and rownum <= 700000";
-              PreparedStatement preparedStatement = con.prepareStatement(query);
-           
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+
             preparedStatement.setString(1, database.name());
             resultSet = preparedStatement.executeQuery();
 

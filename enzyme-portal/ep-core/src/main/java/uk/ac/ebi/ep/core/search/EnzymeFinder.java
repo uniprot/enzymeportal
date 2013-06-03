@@ -371,11 +371,12 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
 
 
+       //final String[] BLACKLISTED_COMPOUNDS = {"ACID","acid", "GMP", "H(2)O", "H(+)", "(+)-EHNA", "sildenafil", "Sildenafil","SILDENAFIL"};
 
         List<Compound> compoundFilters = new ArrayList<Compound>();
         for (CompoundDefaultWrapper cw : related_compounds) {
             compoundFilters.add(cw.getCompound());
-        }
+            }
         List<Disease> diseaseFilter = new ArrayList<Disease>();
         for (DiseaseDefaultWrapper dw : uniqueDiseases) {
             diseaseFilter.add(dw.getDisease());
