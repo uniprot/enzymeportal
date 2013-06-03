@@ -55,11 +55,11 @@ compoundsAutoCompleteDataSource.push({
 
 // Display filters:
 for (i = 0; i < checkedFilters[group].length; i++){
-    addCheckbox(group, checkedFilters[group][i], true);
+    addCheckboxCompound(group, checkedFilters[group][i], true);
 }
 for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
         && displayedFilters[group] < ${compoundsListSize}; i++){
-    addCheckbox(group, uncheckedFilters[group][i], false);
+    addCheckboxCompound(group, uncheckedFilters[group][i], false);
 }
 
 </script>

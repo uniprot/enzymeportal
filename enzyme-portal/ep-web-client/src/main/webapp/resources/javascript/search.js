@@ -1,31 +1,31 @@
 $(document).ready(function() {
     //search default text
     //    $("#searchbox").live("blur", function(){
-//    $("#local-searchbox").live("blur", function(){
-//        var default_value = $(this).attr("rel");
-//        if ($(this).val() == ""){
-//            $(this).val(default_value);
-//        }});
-//    }).live("focus", function(){
-//        var default_value = $(this).attr("rel");
-//        if ($(this).val() == default_value){
-//            $(this).val("");
-//        }
-//    });
-//    
-//   
-//    //    for blast search text box
-//    $("#search-keyword-text").live("blur", function(){
-//        var default_value = $(this).attr("rel");
-//        if ($(this).val() == ""){
-//            $(this).val(default_value);
-//        }
-//    }).live("focus", function(){
-//        var default_value = $(this).attr("rel");
-//        if ($(this).val() == default_value){
-//            $(this).val("");
-//        }
-//    });
+    //    $("#local-searchbox").live("blur", function(){
+    //        var default_value = $(this).attr("rel");
+    //        if ($(this).val() == ""){
+    //            $(this).val(default_value);
+    //        }});
+    //    }).live("focus", function(){
+    //        var default_value = $(this).attr("rel");
+    //        if ($(this).val() == default_value){
+    //            $(this).val("");
+    //        }
+    //    });
+    //    
+    //   
+    //    //    for blast search text box
+    //    $("#search-keyword-text").live("blur", function(){
+    //        var default_value = $(this).attr("rel");
+    //        if ($(this).val() == ""){
+    //            $(this).val(default_value);
+    //        }
+    //    }).live("focus", function(){
+    //        var default_value = $(this).attr("rel");
+    //        if ($(this).val() == default_value){
+    //            $(this).val("");
+    //        }
+    //    });
 
 
 
@@ -96,7 +96,8 @@ $(document).ready(function() {
             }
         } else {
             $(idOfHiddenText).hide();
-            $(jqClickedId).html(linkValue.replace(/less|fewer/g,'more'));        }
+            $(jqClickedId).html(linkValue.replace(/less|fewer/g,'more'));
+        }
     });
 
     var pageClicked = false;
@@ -172,44 +173,44 @@ function noImage(source){
  */
 function ResultAutoComplete(id, dataArray,theForm,hiddenCheckbox) {
     
-//    $[ "ui" ][ "autocomplete" ].prototype["_renderItem"] = function( ul, item) {
-//        var keywords = $.trim(this.term).split(' ').join('|');
-//        var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<span class="ui-menu-item-highlight">$1</span>');
-//        //var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<strong>$1</strong>');
-//
-//
-//        return $( "<li></li>" ) 
-//        .data( "item.autocomplete", item )
-//        .append( $( "<a></a>" ).html( output ) )
-//        .appendTo( ul );
-//    };  
+    //    $[ "ui" ][ "autocomplete" ].prototype["_renderItem"] = function( ul, item) {
+    //        var keywords = $.trim(this.term).split(' ').join('|');
+    //        var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<span class="ui-menu-item-highlight">$1</span>');
+    //        //var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<strong>$1</strong>');
+    //
+    //
+    //        return $( "<li></li>" ) 
+    //        .data( "item.autocomplete", item )
+    //        .append( $( "<a></a>" ).html( output ) )
+    //        .appendTo( ul );
+    //    };  
     
     
 
     
-//    to get unique element in the array list
+    //    to get unique element in the array list
     $.extend({
-    distinct : function(anArray) {
-       var result = [];
-       $.each(anArray, function(i,v){
-           if ($.inArray(v, result) == -1) result.push(v);
-       });
-       return result;
-    }
-});
+        distinct : function(anArray) {
+            var result = [];
+            $.each(anArray, function(i,v){
+                if ($.inArray(v, result) == -1) result.push(v);
+            });
+            return result;
+        }
+    });
 
 
-var unique = $.distinct(dataArray);
+    var unique = $.distinct(dataArray);
 
 
 
-  // to remove null values from the array list
-  unique = $.grep(unique,function(n){
-    //return(n);
-    return (n !== " " && n != null);
-});
+    // to remove null values from the array list
+    unique = $.grep(unique,function(n){
+        //return(n);
+        return (n !== " " && n != null);
+    });
   
-//auto complete function
+    //auto complete function
     
     $( "#"+id ).autocomplete({
         source: unique,
@@ -321,22 +322,45 @@ var displayedFilters = {};
 function addCheckbox(filterGroup, obj, selected){
     if (obj == '') return;
     var cb = $('<input/>', {
-        "type":"checkbox", "name":"searchparams."+filterGroup,
+        "type":"checkbox", 
+        "name":"searchparams."+filterGroup,
         "value": (filterGroup == 'species'? obj.id : obj.name),
-        onclick:"form.submit()"});
+        onclick:"form.submit()"
+    });
     if (selected) cb.attr("checked", "checked");
     var label = $('<span>');
     if (obj.name){
         label.text(obj.name);
-        label.append($('<span>', {text:obj.id}));
+    label.append($('<span>', {text:obj.id}));
     } else {
         label.text(obj.id);
     }
     $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label)
-        .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
+    .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
     displayedFilters[filterGroup]++;
 }
-
+function addCheckboxCompound(filterGroup, obj, selected){
+    if (obj == '') return;
+    var cb = $('<input/>', {
+        "type":"checkbox", 
+        "name":"searchparams."+filterGroup,
+        "value": (filterGroup == 'species'? obj.id : obj.name),
+        onclick:"form.submit()"
+    });
+    if (selected) cb.attr("checked", "checked");
+    //var label = $('<span class="popup">');
+    var label = $('<span>').addClass("popup");
+    if (obj.name){
+        label.text(obj.name);
+        
+    label.append($('<span>', {text:obj.id}));
+    } else {
+        label.text(obj.id);
+    }
+    $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label)
+    .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
+    displayedFilters[filterGroup]++;
+}
 /**
  * Add unselected checkboxes to the list of filters.
  * @param filterGroup the group this filter belongs to.
