@@ -17,25 +17,29 @@
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <em class="jxr_javadoccomment"> * @author joseph</em>
-<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../uk/ac/ebi/ep/mm/app/ChebiCompounds.html">ChebiCompounds</a> {
-<a class="jxr_linenumber" name="12" href="#12">12</a>  
-<a class="jxr_linenumber" name="13" href="#13">13</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String... args) {
-<a class="jxr_linenumber" name="14" href="#14">14</a>         <em class="jxr_comment">// String dbConfig = "ep-mm-db-enzdev";</em>
-<a class="jxr_linenumber" name="15" href="#15">15</a>          <em class="jxr_comment">//String dbConfig = "ep-mm-db-ezprel";</em>
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_javadoccomment"> * @deprecated Now ChEBI cross-references are imported either by text-mining</em>
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_javadoccomment"> *      the UniProtXML for inhibitors/activators, or from IntEnzXML for</em>
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_javadoccomment"> *      cofactors and reaction participants.</em>
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="14" href="#14">14</a>  @Deprecated
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../uk/ac/ebi/ep/mm/app/ChebiCompounds.html">ChebiCompounds</a> {
 <a class="jxr_linenumber" name="16" href="#16">16</a>  
-<a class="jxr_linenumber" name="17" href="#17">17</a>          <strong class="jxr_keyword">if</strong> (args == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="18" href="#18">18</a>              System.exit(1);
-<a class="jxr_linenumber" name="19" href="#19">19</a>          }
+<a class="jxr_linenumber" name="17" href="#17">17</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String... args) {
+<a class="jxr_linenumber" name="18" href="#18">18</a>         <em class="jxr_comment">// String dbConfig = "ep-mm-db-enzdev";</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>          <em class="jxr_comment">//String dbConfig = "ep-mm-db-ezprel";</em>
 <a class="jxr_linenumber" name="20" href="#20">20</a>  
-<a class="jxr_linenumber" name="21" href="#21">21</a>          <a href="../../../../../../uk/ac/ebi/ep/mm/app/ICompoundsDAO.html">ICompoundsDAO</a> dAOImpl = <strong class="jxr_keyword">new</strong> <a href="../../../../../../uk/ac/ebi/ep/mm/app/CompoundsChEBI_Impl.html">CompoundsChEBI_Impl</a>(args[0]);
-<a class="jxr_linenumber" name="22" href="#22">22</a>          <em class="jxr_comment">//ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(dbConfig);</em>
-<a class="jxr_linenumber" name="23" href="#23">23</a>          dAOImpl.buildCompound();
-<a class="jxr_linenumber" name="24" href="#24">24</a>          
-<a class="jxr_linenumber" name="25" href="#25">25</a>  
-<a class="jxr_linenumber" name="26" href="#26">26</a>  
-<a class="jxr_linenumber" name="27" href="#27">27</a>      }
-<a class="jxr_linenumber" name="28" href="#28">28</a>  }
+<a class="jxr_linenumber" name="21" href="#21">21</a>          <strong class="jxr_keyword">if</strong> (args == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="22" href="#22">22</a>              System.exit(1);
+<a class="jxr_linenumber" name="23" href="#23">23</a>          }
+<a class="jxr_linenumber" name="24" href="#24">24</a>  
+<a class="jxr_linenumber" name="25" href="#25">25</a>          <a href="../../../../../../uk/ac/ebi/ep/mm/app/ICompoundsDAO.html">ICompoundsDAO</a> dAOImpl = <strong class="jxr_keyword">new</strong> <a href="../../../../../../uk/ac/ebi/ep/mm/app/CompoundsChEBI_Impl.html">CompoundsChEBI_Impl</a>(args[0]);
+<a class="jxr_linenumber" name="26" href="#26">26</a>          <em class="jxr_comment">//ICompoundsDAO dAOImpl = new CompoundsChEBI_Impl(dbConfig);</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>          dAOImpl.buildCompound();
+<a class="jxr_linenumber" name="28" href="#28">28</a>          
+<a class="jxr_linenumber" name="29" href="#29">29</a>  
+<a class="jxr_linenumber" name="30" href="#30">30</a>  
+<a class="jxr_linenumber" name="31" href="#31">31</a>      }
+<a class="jxr_linenumber" name="32" href="#32">32</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

@@ -14,27 +14,27 @@
 <a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.sql.ResultSet;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   <strong class="jxr_keyword">import</strong> java.util.Collection;
-<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> java.util.LinkedList;
-<a class="jxr_linenumber" name="8" href="#8">8</a>   
-<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.analysis.standard.StandardAnalyzer;
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.document.Document;
-<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.document.Field;
-<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.index.CorruptIndexException;
-<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.index.IndexWriter;
-<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.index.IndexWriter.MaxFieldLength;
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.queryParser.QueryParser;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.search.IndexSearcher;
-<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.store.Directory;
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.store.NIOFSDirectory;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.util.Version;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.analysis.standard.StandardAnalyzer;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.document.Document;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.document.Field;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.index.CorruptIndexException;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.index.IndexWriter;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.index.IndexWriter.MaxFieldLength;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.queryParser.QueryParser;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.search.IndexSearcher;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.store.Directory;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.store.NIOFSDirectory;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.lucene.util.Version;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> uk.ac.ebi.ep.search.model.Compound;
 <a class="jxr_linenumber" name="23" href="#23">23</a>  
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment"> * Mega-mapper writing/reading to/from a lucene index.</em>
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment"> * &lt;br&gt;</em>
-<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Use {@link MegaDbMapper} if possible, as a Lucene index does store</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Use {@link MegaJdbcMapper} if possible, as a Lucene index does store</em>
 <a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> * information horizontally.&lt;/b&gt;</em>
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> * @author rafa</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment"> */</em>
@@ -222,50 +222,60 @@
 <a class="jxr_linenumber" name="212" href="#212">212</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
 <a class="jxr_linenumber" name="213" href="#213">213</a>     }
 <a class="jxr_linenumber" name="214" href="#214">214</a> 
-<a class="jxr_linenumber" name="215" href="#215">215</a>     <strong class="jxr_keyword">public</strong> List&lt;Entry&gt; getChMBLEntries(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession, MmDatabase... xDb) {
+<a class="jxr_linenumber" name="215" href="#215">215</a>     <strong class="jxr_keyword">public</strong> Collection&lt;Compound&gt; getCompounds(String uniprotId) {
 <a class="jxr_linenumber" name="216" href="#216">216</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
 <a class="jxr_linenumber" name="217" href="#217">217</a>     }
 <a class="jxr_linenumber" name="218" href="#218">218</a> 
-<a class="jxr_linenumber" name="219" href="#219">219</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getXrefsSize(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession, MmDatabase... xDb) {
+<a class="jxr_linenumber" name="219" href="#219">219</a>     <strong class="jxr_keyword">public</strong> List&lt;Entry&gt; getChMBLEntries(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession, MmDatabase... xDb) {
 <a class="jxr_linenumber" name="220" href="#220">220</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
 <a class="jxr_linenumber" name="221" href="#221">221</a>     }
 <a class="jxr_linenumber" name="222" href="#222">222</a> 
-<a class="jxr_linenumber" name="223" href="#223">223</a>     <strong class="jxr_keyword">public</strong> Map&lt;?, ?&gt; getCompounds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession, MmDatabase... xDbs) {
+<a class="jxr_linenumber" name="223" href="#223">223</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getXrefsSize(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession, MmDatabase... xDb) {
 <a class="jxr_linenumber" name="224" href="#224">224</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
 <a class="jxr_linenumber" name="225" href="#225">225</a>     }
 <a class="jxr_linenumber" name="226" href="#226">226</a> 
-<a class="jxr_linenumber" name="227" href="#227">227</a>     <strong class="jxr_keyword">public</strong> Map&lt;String, String&gt; getDisease(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accessions, MmDatabase... xDbs) {
+<a class="jxr_linenumber" name="227" href="#227">227</a>     <strong class="jxr_keyword">public</strong> Map&lt;?, ?&gt; getCompounds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession, MmDatabase... xDbs) {
 <a class="jxr_linenumber" name="228" href="#228">228</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
 <a class="jxr_linenumber" name="229" href="#229">229</a>     }
 <a class="jxr_linenumber" name="230" href="#230">230</a> 
-<a class="jxr_linenumber" name="231" href="#231">231</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;XRef&gt; getXrefs(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession,
-<a class="jxr_linenumber" name="232" href="#232">232</a> 			Relationship relationship) {
-<a class="jxr_linenumber" name="233" href="#233">233</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
-<a class="jxr_linenumber" name="234" href="#234">234</a> 	}
-<a class="jxr_linenumber" name="235" href="#235">235</a> 
-<a class="jxr_linenumber" name="236" href="#236">236</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;XRef&gt; getXrefs(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String idFragment,
-<a class="jxr_linenumber" name="237" href="#237">237</a> 			Constraint constraint, <a href="../../../../../uk/ac/ebi/ep/mm/Relationship.html">Relationship</a> relationship) {
-<a class="jxr_linenumber" name="238" href="#238">238</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
-<a class="jxr_linenumber" name="239" href="#239">239</a> 	}
-<a class="jxr_linenumber" name="240" href="#240">240</a> 
-<a class="jxr_linenumber" name="241" href="#241">241</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;XRef&gt; getXrefs(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String idFragment,
-<a class="jxr_linenumber" name="242" href="#242">242</a> 			Constraint constraint, MmDatabase... xDbs) {
-<a class="jxr_linenumber" name="243" href="#243">243</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
-<a class="jxr_linenumber" name="244" href="#244">244</a> 	}
-<a class="jxr_linenumber" name="245" href="#245">245</a> 
-<a class="jxr_linenumber" name="246" href="#246">246</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> updateEntry(<a href="../../../../../uk/ac/ebi/ep/mm/Entry.html">Entry</a> entry) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="247" href="#247">247</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
-<a class="jxr_linenumber" name="248" href="#248">248</a>     }
-<a class="jxr_linenumber" name="249" href="#249">249</a> 
-<a class="jxr_linenumber" name="250" href="#250">250</a>     <strong class="jxr_keyword">public</strong> List&lt;String&gt; getAllEntryIds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> database) {
-<a class="jxr_linenumber" name="251" href="#251">251</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
-<a class="jxr_linenumber" name="252" href="#252">252</a>     }
-<a class="jxr_linenumber" name="253" href="#253">253</a> 
-<a class="jxr_linenumber" name="254" href="#254">254</a>     <strong class="jxr_keyword">public</strong> ResultSet getAllEntryIds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> database, String query) {
-<a class="jxr_linenumber" name="255" href="#255">255</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
-<a class="jxr_linenumber" name="256" href="#256">256</a>     }
-<a class="jxr_linenumber" name="257" href="#257">257</a> 
-<a class="jxr_linenumber" name="258" href="#258">258</a> }
+<a class="jxr_linenumber" name="231" href="#231">231</a> 
+<a class="jxr_linenumber" name="232" href="#232">232</a> 
+<a class="jxr_linenumber" name="233" href="#233">233</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;XRef&gt; getXrefs(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accession,
+<a class="jxr_linenumber" name="234" href="#234">234</a> 			Relationship relationship) {
+<a class="jxr_linenumber" name="235" href="#235">235</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="236" href="#236">236</a> 	}
+<a class="jxr_linenumber" name="237" href="#237">237</a> 
+<a class="jxr_linenumber" name="238" href="#238">238</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;XRef&gt; getXrefs(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String idFragment,
+<a class="jxr_linenumber" name="239" href="#239">239</a> 			Constraint constraint, <a href="../../../../../uk/ac/ebi/ep/mm/Relationship.html">Relationship</a> relationship) {
+<a class="jxr_linenumber" name="240" href="#240">240</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="241" href="#241">241</a> 	}
+<a class="jxr_linenumber" name="242" href="#242">242</a> 
+<a class="jxr_linenumber" name="243" href="#243">243</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;XRef&gt; getXrefs(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String idFragment,
+<a class="jxr_linenumber" name="244" href="#244">244</a> 			Constraint constraint, MmDatabase... xDbs) {
+<a class="jxr_linenumber" name="245" href="#245">245</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="246" href="#246">246</a> 	}
+<a class="jxr_linenumber" name="247" href="#247">247</a> 
+<a class="jxr_linenumber" name="248" href="#248">248</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> updateEntry(<a href="../../../../../uk/ac/ebi/ep/mm/Entry.html">Entry</a> entry) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="249" href="#249">249</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="250" href="#250">250</a>     }
+<a class="jxr_linenumber" name="251" href="#251">251</a> 
+<a class="jxr_linenumber" name="252" href="#252">252</a>     <strong class="jxr_keyword">public</strong> List&lt;String&gt; getAllEntryIds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> database) {
+<a class="jxr_linenumber" name="253" href="#253">253</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="254" href="#254">254</a>     }
+<a class="jxr_linenumber" name="255" href="#255">255</a> 
+<a class="jxr_linenumber" name="256" href="#256">256</a>     <strong class="jxr_keyword">public</strong> ResultSet getAllEntryIds(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> database, String query) {
+<a class="jxr_linenumber" name="257" href="#257">257</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="258" href="#258">258</a>     }
+<a class="jxr_linenumber" name="259" href="#259">259</a> 
+<a class="jxr_linenumber" name="260" href="#260">260</a>     <strong class="jxr_keyword">public</strong> Map&lt;String, String&gt; getDiseaseByUniprotId(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accessions, MmDatabase... xDbs) {
+<a class="jxr_linenumber" name="261" href="#261">261</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="262" href="#262">262</a>     }
+<a class="jxr_linenumber" name="263" href="#263">263</a> 
+<a class="jxr_linenumber" name="264" href="#264">264</a>     <strong class="jxr_keyword">public</strong> Map&lt;String, String&gt; getDiseaseByAccession(<a href="../../../../../uk/ac/ebi/ep/mm/MmDatabase.html">MmDatabase</a> db, String accessions, MmDatabase... xDbs) {
+<a class="jxr_linenumber" name="265" href="#265">265</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported yet."</span>);
+<a class="jxr_linenumber" name="266" href="#266">266</a>     }
+<a class="jxr_linenumber" name="267" href="#267">267</a> 
+<a class="jxr_linenumber" name="268" href="#268">268</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
