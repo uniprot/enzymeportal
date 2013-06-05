@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>biomart-adapter</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<parent>
 		<artifactId>ep</artifactId>
 		<groupId>uk.ac.ebi.ep</groupId>
