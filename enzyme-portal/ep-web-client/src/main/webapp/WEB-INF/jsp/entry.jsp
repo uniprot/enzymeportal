@@ -353,7 +353,7 @@
                                                     <a href="diseaseDrugs">
                                                         <span class="inner_tab">
                                                             <span class="icon"></span>
-                                                            <span class="label">
+                                                            <span class="label icon icon-species" data-icon="v">
                                                                 <spring:message code="label.entry.disease.title"/>
                                                             </span>
                                                         </span>

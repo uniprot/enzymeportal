@@ -48,11 +48,11 @@ diseaseAutoCompleteDataSource.push({
 
 // Display filters:
 for (var i = 0; i < checkedFilters[group].length; i++){
-    addCheckbox(group, checkedFilters[group][i], true);
+    addCheckboxCompoundAndDieases(group, checkedFilters[group][i], true);
 }
 for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
         && displayedFilters[group] < ${diseasesListSize}; i++){
-    addCheckbox(group, uncheckedFilters[group][i], false);
+    addCheckboxCompoundAndDieases(group, uncheckedFilters[group][i], false);
 }
 
 </script>

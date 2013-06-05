@@ -310,7 +310,6 @@ public class MegaJdbcMapperTest {
         compoundMap = mm.getCompounds(db, accession, xDbs);
 
         assertNotNull(compoundMap);
-        System.out.println("num compounds found " + compoundMap.size());
         for (Map.Entry<String, String> m : compoundMap.entrySet()) {
 
             logger.info("Result for compounds: " + m.getKey() + ": " + m.getValue());

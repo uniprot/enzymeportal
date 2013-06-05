@@ -209,18 +209,15 @@ public class BiomartAdapter {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 String[]fieldValues = inputLine.split("\t");
-                for(String x : fieldValues){
-                    System.out.println("Val "+ x);
-                }
                 if(fieldValues.length >1){
                 ReactionPathway reactionPathway = new ReactionPathway();
                 EnzymeReaction enzymeReaction = new EnzymeReaction();
                 String reactionId = fieldValues[0].trim();
-                System.out.println("reaction Id "+ reactionId);
+               
                 List<Object> reactomeReactionId = new ArrayList<Object>();
                 reactomeReactionId.add(Database.REACTOME.getEntryUrl(reactionId));
                 enzymeReaction.setXrefs(reactomeReactionId);
-                System.out.println("FIELDS "+ fieldValues.length);
+                
                 
                 String reactionName = fieldValues[1].trim();                
                 enzymeReaction.setName(reactionName);

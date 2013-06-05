@@ -339,7 +339,7 @@ function addCheckbox(filterGroup, obj, selected){
     .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
     displayedFilters[filterGroup]++;
 }
-function addCheckboxCompound(filterGroup, obj, selected){
+function addCheckboxCompoundAndDieases(filterGroup, obj, selected){
     if (obj == '') return;
     var cb = $('<input/>', {
         "type":"checkbox", 
@@ -348,12 +348,11 @@ function addCheckboxCompound(filterGroup, obj, selected){
         onclick:"form.submit()"
     });
     if (selected) cb.attr("checked", "checked");
-    //var label = $('<span class="popup">');
-    var label = $('<span>').addClass("popup");
+    var label = $('<span>');
     if (obj.name){
         label.text(obj.name);
-        
-    label.append($('<span>', {text:obj.id}));
+        //ignore for now - to be implemented in next release
+//    label.append($('<span>', {text:obj.id}));
     } else {
         label.text(obj.id);
     }
@@ -361,6 +360,30 @@ function addCheckboxCompound(filterGroup, obj, selected){
     .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
     displayedFilters[filterGroup]++;
 }
+
+//ignore the mouseover for now - uncomment in the next release implementation
+//function addCheckboxCompound(filterGroup, obj, selected){
+//    if (obj == '') return;
+//    var cb = $('<input/>', {
+//        "type":"checkbox", 
+//        "name":"searchparams."+filterGroup,
+//        "value": (filterGroup == 'species'? obj.id : obj.name),
+//        onclick:"form.submit()"
+//    });
+//    if (selected) cb.attr("checked", "checked");
+//    //var label = $('<span class="popup">');
+//    var label = $('<span>').addClass("popup");
+//    if (obj.name){
+//        label.text(obj.name);
+//        
+//    label.append($('<span>', {text:obj.id}));
+//    } else {
+//        label.text(obj.id);
+//    }
+//    $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label)
+//    .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
+//    displayedFilters[filterGroup]++;
+//}
 /**
  * Add unselected checkboxes to the list of filters.
  * @param filterGroup the group this filter belongs to.

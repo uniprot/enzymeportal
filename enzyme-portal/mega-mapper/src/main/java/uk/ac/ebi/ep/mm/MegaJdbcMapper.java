@@ -25,7 +25,7 @@ public class MegaJdbcMapper implements MegaMapper {
     private static String ENTRY_ID = "ENTRY_ID";
     private static String ENTRY_NAME = "ENTRY_NAME";
     private static String DB_NAME = "DB_NAME";
-    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "GMP", "H(2)O", "H(+)", "(+)-EHNA", "sildenafil", "Sildenafil", "SILDENAFIL"};
+    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)","ACID","WATER","water","ion","ION"};
 
     public MegaJdbcMapper(Connection con) throws IOException {
         this.con = con;
@@ -990,11 +990,11 @@ public class MegaJdbcMapper implements MegaMapper {
                 Compound compound = new Compound();
                 compound.setId(rs.getString("compound_id"));
 
-                compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
+               // compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
                 //TODO fix strange characters in compounds before populating the main compound list
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH).replace(",", "")));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH)));
-                // compound.setName(rs.getString("compound_name"));
+                 compound.setName(rs.getString("compound_name"));
                 switch (Relationship.valueOf(rs.getString("relationship"))){
                     case is_reactant_or_product_of:
                     case is_substrate_or_product_of:
