@@ -49,7 +49,7 @@ java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
 echo "Finished ChEMBL import - $(date)"
 
 echo "Starting ChEMBL names import - $(date)"
-. $MM_SCRIPTS/loadChEMBLNames.sh
+java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.ChemblCompounds ep-mm-db-$1
 echo "Finished ChEMBL names import - $(date)"
 
 echo "Starting UniMed import - $(date)"
