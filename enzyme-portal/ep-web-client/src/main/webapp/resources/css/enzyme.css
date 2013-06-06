@@ -27,10 +27,10 @@ dt{
 }
 
 th,td{
-border:none;
+    border:none;
+    vertical-align: inherit;
 }
 td{
-    vertical-align: inherit;
 }
 th{
     background-color:inherit;
