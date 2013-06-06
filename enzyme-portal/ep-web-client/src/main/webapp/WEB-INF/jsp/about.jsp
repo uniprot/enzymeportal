@@ -199,7 +199,7 @@ Enzyme Portal - An Introduction</div>
 		<ul>
 			<li><a href="http://www.uniprot.org/help/uniprotkb">UniProt
 						Knowledgebase</a></li>
-			<li><a href="http://www.pdbe.org">Protein Data Bank in
+			<li><a href="http://www.ebi.ac.uk/pdbe/">Protein Data Bank in
 						Europe</a></li>
 			<li><a href="http://www.ebi.ac.uk/rhea">Rhea</a>, a database
 					of enzyme-catalyzed reactions</li>
@@ -241,31 +241,29 @@ Enzyme Portal - An Introduction</div>
 	<p>
 		The Enzyme Portal is designed and developed at the
 			EMBL-European Bioinformatics Institute (<a
-			href="http://www.ebi.ac.uk/information">EMBL-EBI</a>)
+			href="http://www.ebi.ac.uk/about">EMBL-EBI</a>)
 			in the UK. Part of the <a
 			href="http://www.embl.org">the European Molecular Biology Laboratory</a>,
 			EMBL-EBI is the hub of excellence for bioinformatics in Europe. We
 			provide freely available life science data and <a
-			href="http://www.ebi.ac.uk">services</a>, and
+			href="http://www.ebi.ac.uk/services">services</a>, and
 			perform basic <a href="http://www.ebi.ac.uk/research">research</a>
 			in computational biology.
 	</p>
 
 	<p>
-		The Enzyme Portal was created by the <a
-		href="http://www.ebi.ac.uk/steinbeck/">Cheminformatics and Metabolism
-		Team</a> at EMBL-EBI, which is led by
-		<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=922">Christoph
+		The <a href="http://www.ebi.ac.uk/services/teams/enzyme-portal/">Enzyme
+		Portal</a> was created by the Cheminformatics and Metabolism Team at
+		EMBL-EBI, which is led by <a
+		href="http://www.ebi.ac.uk/about/people/christoph-steinbeck">Christoph
 		Steinbeck</a>. Some of the key contributors are:
 		<ul>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=265">Paula
-			de Matos</a>, Project Coordinator and User Experience
-			Analyst</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=690">Rafael
-			Alcántara</a>, Hong Cao and
-			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1518">Joseph
+		<li>Paula de Matos, Project Coordinator and User Experience Analyst</li>
+		<li><a href="http://www.ebi.ac.uk/about/people/rafael-alcantara-martin">Rafael
+			Alc&aacute;ntara</a>, Hong Cao and
+			<a href="http://www.ebi.ac.uk/about/people/joseph-onwubiko">Joseph
 			Onwubiko</a>, Software Developers</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1195">Jenny
+		<li><a href="http://www.ebi.ac.uk/about/people/jenny-cham">Jenny
 			Cham</a>, User Experience Consultant</li>
 		</ul>
 	</p>
@@ -273,20 +271,18 @@ Enzyme Portal - An Introduction</div>
 	<p>
             We also have the invaluable support of
 	<ul>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=467">Jules
-			Jacobsen</a> from the UniProt Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=290">Bijay
-			Jassal</a>&nbsp;from the Reactome Team</li>
+		<li>Jules Jacobsen from the UniProt Team</li>
+		<li><a href="http://www.ebi.ac.uk/about/people/bijay-jassal">Bijay
+			Jassal</a> from the Reactome Team</li>
 		<li>Gemma Holliday and Julia Fischer, previously from the Thornton Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=839">Syed
+		<li><a href="http://www.ebi.ac.uk/about/people/syed-asad-rahman">Syed
 			Asad Rahman</a> from the Thornton Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=793">Mickael
-			Goujon</a> and
-			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=1175">Francis
+		<li>Mickael Goujon and
+			<a href="http://www.ebi.ac.uk/about/people/francis-rowland">Francis
 			Rowland</a> from the External Services Team</li>
-		<li><a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=863">James
+		<li><a href="http://www.ebi.ac.uk/about/people/james-malone">James
 			Malone</a> and
-			<a href="http://www.ebi.ac.uk/Information/Staff/person_maintx.php?s_person_id=413">Helen
+			<a href="http://www.ebi.ac.uk/about/people/helen-parkinson">Helen
 			Parkinson</a></li>
 	</ul>
 	</p>
@@ -355,7 +351,7 @@ Enzyme Portal - An Introduction</div>
     
 <h3><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents<br>
 </span></h3>
-<p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub,</a>an online project hosting service. </span></p>
+<p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub</a>, an online project hosting service. </span></p>
 <p><span>Additionally, the technical documentation (Javadoc, project information) is also <a href="http://ebi-cheminf.github.com/enzymeportal/ep/">available online</a> </span></p>
 
    </div> 
