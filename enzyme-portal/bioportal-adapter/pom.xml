@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>bioportal-adapter</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<name>BioPortal adapter</name>
 	<description>A module providing BioPortal proxies.</description>
 	<parent>
