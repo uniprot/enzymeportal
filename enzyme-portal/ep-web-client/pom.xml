@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-web-client</artifactId>
-    <version>1.0.20-SNAPSHOT</version>
+    <version>1.0.20</version>
     <packaging>war</packaging>
     <name>EP website</name>
     <description>
@@ -201,7 +201,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-core</artifactId>
-            <version>1.0.16-SNAPSHOT</version>
+            <version>1.0.16</version>
         </dependency>
         <dependency>
 			<!-- overriding ep-core's -->
@@ -212,7 +212,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-util</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -232,12 +232,12 @@
         <dependency>
         	<groupId>uk.ac.ebi.ep</groupId>
         	<artifactId>biomart-adapter</artifactId>
-        	<version>1.0.4-SNAPSHOT</version>
+        	<version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>uniprot-adapter</artifactId>
-            <version>1.0.4-SNAPSHOT</version>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.xchars</groupId>
