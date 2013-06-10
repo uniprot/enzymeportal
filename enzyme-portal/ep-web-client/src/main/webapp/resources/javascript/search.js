@@ -400,3 +400,13 @@ function addUnselectedCheckboxes(filterGroup, from, num, link){
     }
     loading.hide();
 }
+
+function addUnselectedCheckboxesCompoundsAndDiseases(filterGroup, from, num, link){
+    var loading = $('#loading_'+link.getAttribute('id'));
+    $(link).hide();
+    loading.show();
+    for (var i = from; i < from+num; i++){
+        addCheckboxCompoundAndDieases(filterGroup, uncheckedFilters[filterGroup][i], false);
+    }
+    loading.hide();
+}
