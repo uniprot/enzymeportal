@@ -13,4 +13,4 @@ drop index MM_XREF_UK1;
 drop table MM_ACCESSION;
 drop table MM_XREF;
 drop table MM_ENTRY;
-
+drop table UNIPROT2COMPOUND;
