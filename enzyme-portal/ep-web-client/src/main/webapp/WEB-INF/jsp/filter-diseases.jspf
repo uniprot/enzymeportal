@@ -61,7 +61,7 @@ for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
                 <img id="loading_more_di" src="resources/images/loading.gif"
                      style="display: none"/>
                 <a id="more_di" href="javascript:void(0)"
-                   onclick="addUnselectedCheckboxes('diseases',
+                   onclick="addUnselectedCheckboxesCompoundsAndDiseases('diseases',
                        displayedFilters['diseases'],
                        ${diseasesListSize}-displayedFilters['diseases'], this)">
                        See all ${diseasesListSize}</a>
