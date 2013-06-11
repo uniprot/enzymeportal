@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-    <release version="10.0.21" date="" description="Bug fix.">
+    <release version="1.0.22" date="2013-06-11" description="Bug fix.">
         <action dev="rafalcan" type="update">
             Updated to latest version of ep-core, which fixes issue with
             order of compound filters and another one related to leaking
