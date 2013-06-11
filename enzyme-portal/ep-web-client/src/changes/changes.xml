@@ -10,6 +10,13 @@
 </properties>
 
 <body>
+    <release version="10.0.21" date="" description="">
+        <action dev="rafalcan" type="update">
+            Updated to latest version of ep-core, which fixes issue with
+            order of compound filters.
+            <fixes issue="170"/>
+        </action>
+    </release>
     <release version="1.0.20" date="" description="">
         <action dev="rafalcan" type="update">
             Updated to latest versions of ep-util, uniprot-adapter,

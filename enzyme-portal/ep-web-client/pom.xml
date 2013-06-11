@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-web-client</artifactId>
-    <version>1.0.20</version>
+    <version>1.0.21-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>EP website</name>
     <description>
@@ -201,7 +201,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-core</artifactId>
-            <version>1.0.16</version>
+            <version>1.0.17-SNAPSHOT</version>
         </dependency>
         <dependency>
 			<!-- overriding ep-core's -->
@@ -265,11 +265,6 @@
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
             <version>3.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.biobabel</groupId>
-            <artifactId>biobabel-core</artifactId>
-            <version>0.13</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

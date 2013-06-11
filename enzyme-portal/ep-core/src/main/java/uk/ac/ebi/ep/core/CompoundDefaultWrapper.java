@@ -1,5 +1,8 @@
 package uk.ac.ebi.ep.core;
 
+import java.util.Comparator;
+
+import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.ep.search.model.Compound;
 
 /**
@@ -16,6 +19,9 @@ import uk.ac.ebi.ep.search.model.Compound;
  *
  */
 public class CompoundDefaultWrapper implements Comparable<CompoundDefaultWrapper> {
+
+    private static final Comparator<String> NAME_COMPARATOR =
+            new ChemicalNameComparator();
 
 	private Compound compound;
 	
@@ -47,8 +53,9 @@ public class CompoundDefaultWrapper implements Comparable<CompoundDefaultWrapper
 		return true;
 	}
 
-	public int compareTo(CompoundDefaultWrapper o) {
-		return compound.getName().compareToIgnoreCase(o.compound.getName());
+	public int compareTo(CompoundDefaultWrapper other) {
+	    return NAME_COMPARATOR.compare(this.compound.getName(),
+	            other.compound.getName());
 	}
 
 }

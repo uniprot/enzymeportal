@@ -10,7 +10,14 @@
 </properties>
 
 <body>
-    <release version="1.0.16" date=""
+    <release version="1.0.17" date="">
+        <action dev="rafalcan" type="update">
+            Updated to latest version of biobabel-core which implements proper
+            sorting of compound names.
+            <fixes issue="170"/>
+        </action>
+    </release>
+    <release version="1.0.16" date="2013-06-06"
         description="All compounds from mega-map.">
         <action dev="rafalcan" type="fix">
             All compounds for the small molecules tab (EnzymeRetriever) are now
