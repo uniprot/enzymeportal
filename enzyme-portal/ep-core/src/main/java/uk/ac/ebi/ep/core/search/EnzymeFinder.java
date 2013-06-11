@@ -85,7 +85,6 @@ public class EnzymeFinder implements IEnzymeFinder {
                 uniprotAdapter = new UniprotWsAdapter();
                 break;
         }
-        uniprotAdapter.setMmDatasource(config.getMmDatasource());
     }
 
     @Override
@@ -266,6 +265,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         LOGGER.debug("Building filters...");
         buildFilters(enzymeSearchResults);
         LOGGER.debug("Finished search");
+        closeResources();
         return enzymeSearchResults;
     }
 
@@ -914,7 +914,8 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public List<EnzymeSummary> getEnzymesFromUniprotAPI(
             List<String> resultSubList, List<String> paramList)
-            throws MultiThreadingException {
+    throws MultiThreadingException {
+        uniprotAdapter.setMmConnection(megaMapperConnection.getConnection());
         List<EnzymeSummary> enzymeList =
                 uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
                 IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);

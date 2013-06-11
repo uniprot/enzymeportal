@@ -30,12 +30,7 @@ public interface IUniprotAdapter {
 
     public static final String DEFAULT_SPECIES = "Homo sapiens";
     // public static final String DEFAULT_SPECIES = "none";
-    
-    /**
-     * @return the configuration for this UniProt proxy.
-     */
-    public UniprotConfig getConfig();
-    
+
     /**
      * Sets the configuration for this proxy.
      * @param config
@@ -43,10 +38,12 @@ public interface IUniprotAdapter {
     public void setConfig(UniprotConfig config);
 
     /**
-     * Sets the data source for the mega-map to fix cross-references (ex. PDB
-     * entries for theoretical models which come from UniProt).
+     * Sets a connection to a mega-map which will be used to fix any cross
+     * references (ex: theoretical 3D models from PDB).
+     * @param mmConnection
      */
-    void setMmDatasource(String mmDatasource);
+    void setMmConnection(Connection mmConnection);
+
 
     /**
      * Gets a basic summary of one entry by UniProt accession.

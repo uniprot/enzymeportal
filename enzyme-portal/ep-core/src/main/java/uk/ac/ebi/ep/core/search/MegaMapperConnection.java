@@ -50,7 +50,8 @@ public final class MegaMapperConnection {
     }
 
     /**
-     * 
+     * Gets the connection to the mega-map, creating it if necessary, and stores
+     * it in an instance field.
      * @return the created connection
      */
     public Connection getConnection() {
@@ -63,22 +64,21 @@ public final class MegaMapperConnection {
                 LOGGER.error("Unable to establish connection to " + mmDatasource, ex);
             }
         }
-
         return connection;
     }
 
     /**
-     * 
+     * Gets a mega-mapper, creating it if necessary, and stores it in an
+     * instance field.
      * @return an instance of the MegaMapper
      */
     public MegaMapper getMegaMapper() {
-        final Connection conn = this.getConnection();
-        try {
-            if (megaMapper == null) {
-                megaMapper = new MegaJdbcMapper(conn);
+        if (megaMapper == null) {
+            try {
+                megaMapper = new MegaJdbcMapper(getConnection());
+            } catch (IOException ex) {
+                LOGGER.error("MegaMapper could not be created " + ex);
             }
-        } catch (IOException ex) {
-            LOGGER.error("MegaMapper could not be created " + ex);
         }
         return megaMapper;
     }

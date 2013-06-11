@@ -1,21 +1,7 @@
 package uk.ac.ebi.ep.adapter.uniprot;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -122,7 +108,6 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    // We must keep the order of the summaries, the same as the ID prefixes:
 	    Map<Future<EnzymeSummary>, EnzymeSummary> future2summary =
 	    		new LinkedHashMap<Future<EnzymeSummary>, EnzymeSummary>();
-	    Connection mmConnection = getMmConnection();
 	    try {
 	    	LOGGER.debug("Submitting summary callables...");
 	    	for (String query : idPrefixes) {
@@ -162,11 +147,6 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	    	LOGGER.debug("Polled all futures");
 	    	return new ArrayList<EnzymeSummary>(future2summary.values());
 	    } finally {
-	        if (mmConnection != null) try {
-                mmConnection.close();
-            } catch (SQLException e) {
-                LOGGER.error("Unable to close connection to mega-map", e);
-            }
             pool.shutdown();
 	    }
 	}

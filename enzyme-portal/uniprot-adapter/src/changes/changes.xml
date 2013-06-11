@@ -10,7 +10,14 @@
 </properties>
 
 <body>
-    <release version="1.0.4" date=""
+    <release version="1.0.5" date="2013-06-11" description="Bug fix">
+        <action dev="rafalcan" type="fix">
+            Fixed issue with leaking connections: though not the cause of the
+            problem, the UniProt adapter will take a connection instead of
+            creating one from the data source.
+        </action>
+    </release>
+    <release version="1.0.4" date="2013-06-05"
         description="Using ep-util to mine enzyme regulation text for inhibitors
         and activators.">
         <action dev="rafalcan" type="update">

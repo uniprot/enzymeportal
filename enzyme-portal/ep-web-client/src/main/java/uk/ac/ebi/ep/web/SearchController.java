@@ -668,8 +668,8 @@ public class SearchController {
      */
     private String searchSequence(Model model, SearchModel searchModel){
     	String view = "error";
+        EnzymeFinder finder = new EnzymeFinder(searchConfig);
     	try {
-        	EnzymeFinder finder = new EnzymeFinder(searchConfig);
 			String sequence = searchModel.getSearchparams().getSequence()
 					.trim().toUpperCase();
 			String jobId = finder.blast(sequence);
@@ -679,7 +679,9 @@ public class SearchController {
 			view = "running";
 		} catch (NcbiBlastClientException e) {
 			LOGGER.error(e);
-		}
+		} finally {
+            finder.closeResources();
+        }
     	return view;
     }
     
