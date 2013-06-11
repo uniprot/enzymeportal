@@ -1,4 +1,4 @@
-grant select to enzyme_webserver on mm_accession;
-grant select to enzyme_webserver on mm_entry;
-grant select to enzyme_webserver on mm_xref;
-grant select to enzyme_webserver on uniprot2compound;
+grant select on mm_accession to enzyme_webserver;
+grant select on mm_entry to enzyme_webserver;
+grant select on mm_xref to enzyme_webserver;
+grant select on uniprot2compound to enzyme_webserver;
