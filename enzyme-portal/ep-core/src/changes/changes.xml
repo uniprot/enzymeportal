@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-    <release version="1.0.17" date="" description="Bug fix.">
+    <release version="1.0.17" date="2013-06-11" description="Bug fix.">
         <action dev="rafalcan" type="update">
             Updated to latest version of biobabel-core which implements proper
             sorting of compound names.
