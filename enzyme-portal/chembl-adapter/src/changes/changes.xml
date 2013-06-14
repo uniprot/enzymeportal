@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
+        http://maven.apache.org/changes/1.0.0 ">
+
+    <properties>
+        <title>Change log</title>
+        <author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+    </properties>
+
+    <body>
+        <release version="1.0.0" date="" description="First release">
+            <action dev="rafalcan" type="add">
+                Added chembl-adapter module to deal wich ChEMBL bioactivities.
+            </action>
+        </release>
+    </body>
+</document>
