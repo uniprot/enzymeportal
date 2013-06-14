@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import uk.ac.ebi.ep.adapter.chembl.*;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.Relationship;
@@ -41,8 +42,8 @@ public class EbeyeSaxParser extends MmSaxParser {
 		interestingXrefs.put(MmDatabase.ChEBI, chebiInterestingXrefs);
 		interestingXrefs.put(MmDatabase.PDBeChem,
 				new MmDatabase[]{ MmDatabase.PDB });
-		interestingXrefs.put(MmDatabase.ChEMBL_Target,
-				new MmDatabase[]{ MmDatabase.ChEMBL });
+//		interestingXrefs.put(MmDatabase.ChEMBL_Target,
+//				new MmDatabase[]{ MmDatabase.ChEMBL });
 	}
 	
 	private static final String DATABASE_NAME = "//database/name";
@@ -66,10 +67,12 @@ public class EbeyeSaxParser extends MmSaxParser {
 	
 	private MmDatabase db;
 	private Entry entry;
+	private String chemblTargetId;
 	private Collection<XRef> xrefs = new HashSet<XRef>();
+    private IChemblAdapter chemblAdapter;
 
-	/**
-	 * Parses a EB-Eye XML file and indexes/stores the entry IDs, accessions
+    /**
+	 * Parses an EB-Eye XML file and indexes/stores the entry IDs, accessions
 	 * and xrefs into a mega-map.
 	 * @param args see {@link CliOptionsParser#getCommandLine(String...)}
 	 * @throws Exception in case of error while parsing.
@@ -95,17 +98,21 @@ public class EbeyeSaxParser extends MmSaxParser {
 		 * ChEMBL_Target entries are proteins, the entry will be set to
 		 * the xref'd Swiss-Prot entry (see below).
 		 */
-		if (isEntry && !MmDatabase.ChEMBL_Target.equals(db)){
-			entry = new Entry();
-			entry.setDbName(db.name());
-			entry.setEntryId(attributes.getValue("", "id"));
-			// ChEBI acc is the id with a 'CHEBI:' prefix
-			// PDBeChem id and acc are identical
-			final String acc = attributes.getValue("", "acc");
-			if (acc != null){
-				entry.setEntryAccessions(Collections.singletonList(acc));
-			}
-			LOGGER.debug("Parsing entry " + entry.getEntryId());
+		if (isEntry){
+            if (MmDatabase.ChEMBL_Target.equals(db)){
+                chemblTargetId = attributes.getValue("", "id");
+            } else {
+                entry = new Entry();
+                entry.setDbName(db.name());
+                entry.setEntryId(attributes.getValue("", "id"));
+                // ChEBI acc is the id with a 'CHEBI:' prefix
+                // PDBeChem id and acc are identical
+                final String acc = attributes.getValue("", "acc");
+                if (acc != null){
+                    entry.setEntryAccessions(Collections.singletonList(acc));
+                }
+                LOGGER.debug("Parsing entry " + entry.getEntryId());
+            }
 		} else if (isRef){
 			final MmDatabase refdDb =
 					MmDatabase.parse(attributes.getValue("", "dbname"));
@@ -118,32 +125,14 @@ public class EbeyeSaxParser extends MmSaxParser {
 			if (refdDb != null && dbKey != null){
 				if (MmDatabase.ChEMBL_Target.equals(db)
 						&& MmDatabase.UniProt.equals(refdDb)){
-					// ChEMBL-Target entries are proteins targeted by drugs:
-					try {
-						entry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
-						if (entry != null){
-							LOGGER.info(dbKey + " is enzyme.");
-							for (XRef xref : xrefs) {
-								xref.setFromEntry(entry);
-							}
-						}
-					} catch (NonUniqueResultException e){
-						LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
-					}
-				} else if (isInterestingXref(db, refdDb)){
-					Entry refdEntry = null;
-					if (refdDb.equals(MmDatabase.UniProt)){
-						try {
-							refdEntry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
-						} catch (NonUniqueResultException e){
-							LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
-						}
-					} else {
-						refdEntry = new Entry();
-						refdEntry.setDbName(refdDb.name());
-						refdEntry.setEntryId(dbKey);
-						// TODO: setEntryName, if possible
-					}
+					// ChEMBL-Target entries can be proteins targeted by drugs:
+                    setMmUniprotEntry(dbKey);
+                    // If it is an enzyme (is in the mega-map), go ahead:
+                    if (entry != null){
+                        addChemblXrefs();
+                    }
+                } else if (isInterestingXref(db, refdDb)){
+                    Entry refdEntry = getReferencedEntry(refdDb, dbKey);
 					if (refdEntry != null){
 						LOGGER.debug("\tParsing xref to " + refdEntry.getEntryId());
 						XRef xref = new XRef();
@@ -159,7 +148,108 @@ public class EbeyeSaxParser extends MmSaxParser {
 		currentChars.delete(0, Integer.MAX_VALUE);
 	}
 
-	/**
+    /**
+     * Adds cross references to any ChEMBL compound IDs which show any
+     * bioactivity against <code>chemblTargetId</code>.
+     */
+    private void addChemblXrefs() {
+        try {
+            final Collection<String> chemblCompoundIds =
+                    getFilteredChemblCompounds();
+            if (chemblCompoundIds != null){
+                for (String chemblCompoundId : chemblCompoundIds) {
+                    Entry chemblEntry = new Entry();
+                    chemblEntry.setDbName(MmDatabase.ChEMBL.name());
+                    chemblEntry.setEntryId(chemblCompoundId);
+                    chemblEntry.setEntryName(chemblAdapter
+                            .getPreferredName(chemblCompoundId));
+                    XRef xref = new XRef();
+                    xref.setFromEntry(entry);
+                    xref.setRelationship(Relationship.between(
+                            MmDatabase.UniProt, MmDatabase.ChEMBL)
+                            .name());
+                    xref.setToEntry(chemblEntry);
+                    xrefs.add(xref);
+                }
+            }
+        } catch (Exception e){
+            LOGGER.error(chemblTargetId, e);
+        }
+    }
+
+    /**
+     * Gets bioactivities from WS for the target ID stored in the field
+     * <code>chemblTargetId</code> and filters them.
+     * @return a collection of ChEMBL compound IDs which have significant
+     *      bioactivities,or <code>null</code> if no bioactivities are found
+     *      for the target ID.
+     * @throws ChemblAdapterException
+     */
+    private Collection<String> getFilteredChemblCompounds()
+    throws ChemblAdapterException {
+        Collection<String> filteredBioactivities = null;
+        ChemblBioactivities bioactivities =
+                chemblAdapter.getTargetBioactivities(chemblTargetId);
+        LOGGER.debug(bioactivities);
+        if (bioactivities != null){
+            filteredBioactivities = bioactivities.filter(
+                    chemblAdapter.getConfig().getMinAssays(),
+                    chemblAdapter.getConfig().getMinConf4(),
+                    chemblAdapter.getConfig().getMinConf9(),
+                    chemblAdapter.getConfig().getMinFunc());
+            LOGGER.debug(filteredBioactivities);
+            LOGGER.debug(bioactivities.getMap().size() + " down to "
+                    + filteredBioactivities.size());
+        }
+        return filteredBioactivities;
+    }
+
+    /**
+     * Sets the private field <code>entry</code> to a UniProt entry from the
+     * mega-map. If it does not exist in the mega-map, the field is set to
+     * <code>null</code>.
+     * @param uniprotAcc the UniProt accession.
+     */
+    private void setMmUniprotEntry(String uniprotAcc) {
+        try {
+            entry = mm.getEntryForAccession(MmDatabase.UniProt, uniprotAcc);
+            if (entry != null){
+                LOGGER.info(uniprotAcc + " is enzyme.");
+                for (XRef xref : xrefs) {
+                    xref.setFromEntry(entry);
+                }
+            }
+        } catch (NonUniqueResultException e){
+            LOGGER.warn(uniprotAcc + " refers to more than one UniProt entry", e);
+        }
+    }
+
+    /**
+     * Retrieves or creates an entry.
+     * @param refdDb The referenced database.
+     * @param dbKey the ID or accession of the entry.
+     * @return an entry retrieved from the mega-map (UniProt) or created from
+     *      scratch (otherwise). It can be <code>null</code> in case of
+     *      UniProt entries not stored in the mega-map (probably not enzymes).
+     */
+    private Entry getReferencedEntry(MmDatabase refdDb, String dbKey) {
+        Entry refdEntry = null;
+        if (refdDb.equals(MmDatabase.UniProt)){
+            try {
+                refdEntry = mm.getEntryForAccession(MmDatabase.UniProt, dbKey);
+            } catch (NonUniqueResultException e){
+                LOGGER.warn(dbKey + " refers to more than one UniProt entry", e);
+            }
+        } else {
+            refdEntry = new Entry();
+            refdEntry.setDbName(refdDb.name());
+            refdEntry.setEntryId(dbKey);
+            // TODO: setEntryName, if possible
+        }
+        return refdEntry;
+    }
+
+    /**
 	 * Are we interested in a cross reference?
 	 * @param db the database providing the EB-Eye XML file.
 	 * @param refdDb the referenced database.
@@ -167,7 +257,8 @@ public class EbeyeSaxParser extends MmSaxParser {
 	 * (see {@link #interestingXrefs}).
 	 */
 	private boolean isInterestingXref(MmDatabase db, MmDatabase refdDb) {
-		return Arrays.binarySearch(interestingXrefs.get(db), refdDb) > -1;
+	    return interestingXrefs.get(db) != null
+	            && Arrays.binarySearch(interestingXrefs.get(db), refdDb) > -1;
 	}
 
 	@Override
@@ -184,6 +275,15 @@ public class EbeyeSaxParser extends MmSaxParser {
 		if (isDbName){
 			db = MmDatabase.parse(currentChars.toString());
 			LOGGER.info("Parsing EB-Eye file for " + db.name());
+			if (db.equals(MmDatabase.ChEMBL_Target)){
+			    // TODO: CHANGE this is just for testing (no filtering at all)
+			    ChemblConfig chemblConfig = new ChemblConfig();
+			    chemblConfig.setMinAssays(1);
+			    chemblConfig.setMinConf4(0.0);
+			    chemblConfig.setMinConf9(0.0);
+			    chemblConfig.setMinFunc(0.0);
+                chemblAdapter = new ChemblWsAdapter(chemblConfig);
+            }
 		} else if (isEntryName && entry != null){
 			entry.setEntryName(currentChars.toString());
 		} else if (isEntry){
@@ -195,6 +295,7 @@ public class EbeyeSaxParser extends MmSaxParser {
                 throw new SAXException("Adding entry to mega-map", e);
             } finally {
                 entry = null;
+                chemblTargetId = null;
                 xrefs.clear();
             }
 	    }
