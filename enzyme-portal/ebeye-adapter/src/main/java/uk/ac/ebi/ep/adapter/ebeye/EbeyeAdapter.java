@@ -91,8 +91,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     }
 
     private List<ArrayOfArrayOfString> executeCallables(
-            List<Callable<ArrayOfArrayOfString>> callables)
-	throws MultiThreadingException {
+            List<Callable<ArrayOfArrayOfString>> callables) {
     	List<ArrayOfArrayOfString> ebeyeResultList =
     			new ArrayList<ArrayOfArrayOfString>();
         ExecutorService pool = Executors.newCachedThreadPool();
@@ -178,7 +177,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 	public Map<String, String> getNameMapByAccessions(String domain,
 			Collection<String> accessions) {
 		Domains domains = IEbeyeAdapter.Domains.valueOf(domain);
-		List<String> configFields = null;
+		List<String> configFields;
 		switch (domains) {
 		case chebi:
 			configFields = IEbeyeAdapter.FieldsOfChebiNameMap.getFields();
@@ -197,8 +196,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 				domain, idsArray, fields);
 
 		ArrayOfArrayOfString results = caller.callGetEntries();
-		Map<String, String> resultMap = Transformer.transformToMap(results);
-		return resultMap;
+        return Transformer.transformToMap(results);
 	}
 
     public ParamOfGetResults getNumberOfResults(ParamOfGetResults param){
@@ -213,9 +211,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 		List<Callable<ArrayOfArrayOfString>> callableList =
 				prepareCallableCollection(paramOfGetResults);
 		List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
-		Set<String> NameList = Transformer.transformFieldValueToList(
-				rawResults, false); // FIXME: VARIABLE #RESULTS
-		return NameList;
+        return Transformer.transformFieldValueToList(rawResults, false);
 	}
 	
 	public List<List<String>> getFields(ParamOfGetResults params){
@@ -244,8 +240,8 @@ public class EbeyeAdapter implements IEbeyeAdapter {
                 Future<ArrayOfArrayOfString> future  = pool.submit(callable);
                 ArrayOfArrayOfString rawResults;
                 try {
-                    rawResults = (ArrayOfArrayOfString) future
-                                .get(config.getThreadTimeout(), TimeUnit.MILLISECONDS);
+                    rawResults = future.get(config.getThreadTimeout(),
+                            TimeUnit.MILLISECONDS);
                 } catch (InterruptedException ex) {
                     throw  new MultiThreadingException(ex.getMessage(), ex);
                 } catch (ExecutionException ex) {
@@ -288,8 +284,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         List<Callable<ArrayOfArrayOfString>> callableList
                  = prepareCallableCollection(paramOfGetResults);
          List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
-         Set<String> NameList = Transformer.transformFieldValueToList(rawResults, false);
-         return NameList;
+         return Transformer.transformFieldValueToList(rawResults, false);
     }
 
     public Map<String, List<String>> getUniprotRefAccesionsMap(
@@ -305,15 +300,13 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     					paramOfGetResults.getDomain(),
     					Transformer.transformToArrayOfString(ids),
     					Domains.uniprot.name(),
-    					Transformer.transformToArrayOfString(FieldsOfUniprotNameMap.id.name()));
+    					Transformer.transformToArrayOfString(FieldsOfUniprotNameMap.acc.name()));
         ArrayOfEntryReferences references = callable.callGetReferencedEntriesSet();
         
 //     	LOGGER.debug("SEARCH before Transformer.transformChebiResults");
 //        Map<String,List<String>> uniprotRefAccessionsMap = Transformer.transformChebiResults(rawResults, true);
-     	Map<String, List<String>> uniprotRefAccessionsMap =
-     			Transformer.transformToMap(references);
-//     	LOGGER.debug("SEARCH after Transformer.transformChebiResults");
-        return uniprotRefAccessionsMap;
+        //     	LOGGER.debug("SEARCH after Transformer.transformChebiResults");
+        return Transformer.transformToMap(references);
     }
 
 }
