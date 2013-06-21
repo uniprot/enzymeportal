@@ -33,7 +33,7 @@ public class EbeyeSaxParser extends MmSaxParser {
 	
 	static {
 		final MmDatabase[] chebiInterestingXrefs = new MmDatabase[]{
-			MmDatabase.UniProt,
+			MmDatabase.SwissProt,
 			MmDatabase.PDBeChem,
 			MmDatabase.ChEMBL,
 			MmDatabase.PDB
@@ -101,6 +101,7 @@ public class EbeyeSaxParser extends MmSaxParser {
 		if (isEntry){
             if (MmDatabase.ChEMBL_Target.equals(db)){
                 chemblTargetId = attributes.getValue("", "id");
+                LOGGER.debug("ChEMBL target ID: " + chemblTargetId);
             } else {
                 entry = new Entry();
                 entry.setDbName(db.name());
@@ -124,7 +125,7 @@ public class EbeyeSaxParser extends MmSaxParser {
 			// The xref'd database might be unknown to us:
 			if (refdDb != null && dbKey != null){
 				if (MmDatabase.ChEMBL_Target.equals(db)
-						&& MmDatabase.UniProt.equals(refdDb)){
+						&& MmDatabase.SwissProt.equals(refdDb)){
 					// ChEMBL-Target entries can be proteins targeted by drugs:
                     setMmUniprotEntry(dbKey);
                     // If it is an enzyme (is in the mega-map), go ahead:
@@ -190,14 +191,15 @@ public class EbeyeSaxParser extends MmSaxParser {
         Collection<String> filteredBioactivities = null;
         ChemblBioactivities bioactivities =
                 chemblAdapter.getTargetBioactivities(chemblTargetId);
-        LOGGER.debug(bioactivities);
+        LOGGER.debug(chemblTargetId + " bioactivities: " + bioactivities);
         if (bioactivities != null){
             filteredBioactivities = bioactivities.filter(
                     chemblAdapter.getConfig().getMinAssays(),
                     chemblAdapter.getConfig().getMinConf4(),
                     chemblAdapter.getConfig().getMinConf9(),
                     chemblAdapter.getConfig().getMinFunc());
-            LOGGER.debug(filteredBioactivities);
+            LOGGER.debug(chemblTargetId + " filtered bioactivities: "
+                    + filteredBioactivities);
             LOGGER.debug(bioactivities.getMap().size() + " down to "
                     + filteredBioactivities.size());
         }
@@ -276,9 +278,9 @@ public class EbeyeSaxParser extends MmSaxParser {
 			db = MmDatabase.parse(currentChars.toString());
 			LOGGER.info("Parsing EB-Eye file for " + db.name());
 			if (db.equals(MmDatabase.ChEMBL_Target)){
-			    // TODO: CHANGE this is just for testing (no filtering at all)
+			    // TODO: CHANGE this is just for testing
 			    ChemblConfig chemblConfig = new ChemblConfig();
-			    chemblConfig.setMinAssays(1);
+			    chemblConfig.setMinAssays(5);
 			    chemblConfig.setMinConf4(0.0);
 			    chemblConfig.setMinConf9(0.0);
 			    chemblConfig.setMinFunc(0.0);
