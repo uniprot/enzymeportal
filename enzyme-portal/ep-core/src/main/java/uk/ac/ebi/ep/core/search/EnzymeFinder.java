@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.core.search;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.blast.Hit;
 import uk.ac.ebi.biobabel.blast.Hsp;
@@ -410,24 +411,24 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public Set<DiseaseDefaultWrapper> computeDiseaseWithUniprotId(String uniprotAccession) {
         Set<DiseaseDefaultWrapper> related_disease = new TreeSet<DiseaseDefaultWrapper>();
-        Map<String, String> xRefList = megaMapperConnection.getMegaMapper().getDiseaseByUniprotId(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+        Collection<Disease> diseaseCollection = megaMapperConnection.getMegaMapper().getDiseaseByUniprotId(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
 
-        if (xRefList != null) {
+        if (diseaseCollection != null) {
 
-            for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
+            for (Disease disease : diseaseCollection) {
 
 
 
-                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
-                    Disease disease = new Disease();
-                    String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
-                    disease.setName(diseaseName.replaceAll(",", ""));
-                    disease.setId(diseaseMap.getKey());
+                //if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
+                   // Disease disease = new Disease();
+                    //String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
+                    //disease.setName(diseaseName.replaceAll(",", ""));
+                    //disease.setId(diseaseMap.getKey());
 
                     DiseaseDefaultWrapper diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
                     related_disease.add(diseaseDefaultWrapper);
                     uniqueDiseases.add(diseaseDefaultWrapper);
-                }
+                //}
 
             }
         }
@@ -653,6 +654,12 @@ public class EnzymeFinder implements IEnzymeFinder {
         chebiResults = ebeyeAdapter.getUniprotRefAccesionsMap(chebiParam);
         Collection<List<String>> chebiAccs = chebiResults.values();
         if (chebiAccs.size() > 0) {
+            for (List<String> accList : chebiAccs) {
+                // Remove secondary accessions:
+                for (int i = 0; i < accList.size(); i++) {
+                    accList.set(i, accList.get(i).replaceAll(",.*", ""));
+                }
+            }
             Set<String> uniprotAccsFromChebiSet =
                     DataTypeConverter.mergeAndLimitResult(chebiAccs,
                     ebeyeAdapter.getConfig().getMaxUniprotResultsFromChebi());
@@ -660,11 +667,6 @@ public class EnzymeFinder implements IEnzymeFinder {
             List<String> uniprotIdsRefFromChebi =
                     filterEnzymes(new ArrayList<String>(uniprotAccsFromChebiSet));
             uniprotEnzymeIds.addAll(uniprotIdsRefFromChebi);
-            /*
-             * Map<String, Species> ids2species =
-             * uniprotAdapter.getIdsAndSpecies(uniprotAccsFromChebiSet); if
-             * (ids2species != null) uniprotIds2species.putAll(ids2species);
-             */
         }
     }
 

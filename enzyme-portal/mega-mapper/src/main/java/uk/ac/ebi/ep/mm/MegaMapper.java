@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.Disease;
 
 /**
  * Interface for objects writing/reading entries and cross-references to/from
@@ -252,7 +253,7 @@ public interface MegaMapper {
     Map<?,?> getCompounds(MmDatabase db, String uniprotId,
             MmDatabase... xDbs);
    
-     Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions,
+     Collection<Disease> getDiseaseByUniprotId(MmDatabase db, String accessions,
             MmDatabase... xDbs);
         Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions,
             MmDatabase... xDbs);

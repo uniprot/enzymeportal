@@ -2,12 +2,14 @@ package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
 import java.sql.*;
+import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.Disease;
 import uk.ac.ebi.xchars.SpecialCharacters;
 import uk.ac.ebi.xchars.domain.EncodingType;
 
@@ -25,7 +27,7 @@ public class MegaJdbcMapper implements MegaMapper {
     private static String ENTRY_ID = "ENTRY_ID";
     private static String ENTRY_NAME = "ENTRY_NAME";
     private static String DB_NAME = "DB_NAME";
-    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)","ACID","WATER","water","ion","ION"};
+    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION"};
 
     public MegaJdbcMapper(Connection con) throws IOException {
         this.con = con;
@@ -573,6 +575,7 @@ public class MegaJdbcMapper implements MegaMapper {
      * @return a List of XRef with database name as chEMBL. Note: the maximum
      * number of XRef retrieved is 5.
      */
+    @Deprecated
     public List<Entry> getChMBLEntries(MmDatabase db, String accession,
             MmDatabase... xDbs) {
         List<Entry> entries = null;
@@ -814,6 +817,7 @@ public class MegaJdbcMapper implements MegaMapper {
         }
     }
 
+    @Deprecated
     public Map<String, String> getCompoundsNew(MmDatabase db, String accession,
             MmDatabase... xDbs) {
 
@@ -872,17 +876,17 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     //working version
-    public Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions,
+    public Collection<Disease> getDiseaseByUniprotId(MmDatabase db, String accessions,
             MmDatabase... xDbs) {
-        Map<String, String> diseasesEntryMap = null;
+        Collection<Disease> diseases_collection = null;
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         String[] acc = accessions.split("_");
         String accession = acc[0].concat("\\_%");
 
         try {
-            if (diseasesEntryMap == null) {
-                diseasesEntryMap = new HashMap<String, String>();
+            if (diseases_collection == null) {
+                diseases_collection = new HashSet<Disease>();
             }
 
             String query = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? escape '\\' "
@@ -906,10 +910,30 @@ public class MegaJdbcMapper implements MegaMapper {
 
                 while (resultSet.next()) {
 
+                    String disaseID = resultSet.getString(ENTRY_ID);
+
+                    String url = contructDiseaseUrl(disaseID);
+
+                    Disease disease = new Disease();
+
+                    //set the url or web link for this compound
+                    if (url != null) {
+                        disease.setUrl(url);
+                    } else {
+                        disease.setUrl("#");
+                    }
+
+
+                
                     String entryId = resultSet.getString(ENTRY_ID);
                     String entryName = resultSet.getString(ENTRY_NAME);
+
                     if (entryId != null && entryName != null) {
-                        diseasesEntryMap.put(entryId, entryName);
+                        disease.setId(entryId);
+                        String diseaseName = resolveSpecialCharacters(entryName.toLowerCase(Locale.ENGLISH));
+                        disease.setName(diseaseName.replaceAll(",", ""));
+                      
+                        diseases_collection.add(disease);
                     }
 
                 }
@@ -922,7 +946,7 @@ public class MegaJdbcMapper implements MegaMapper {
             closePreparedStatement(ps);
         }
 
-        return diseasesEntryMap;
+        return diseases_collection;
     }
 
     private String resolveSpecialCharacters(String data) {
@@ -953,7 +977,7 @@ public class MegaJdbcMapper implements MegaMapper {
         Collection<Compound> compounds = null;
         ResultSet rs = null;
         String query = null, constraint = null;
-        if (uniprotId.endsWith("_")){
+        if (uniprotId.endsWith("_")) {
             query = uniprotId.replace("_", "\\_%");
             constraint = "--constraint.like";
         } else {
@@ -970,7 +994,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 queryClauseBuilder.append(",");
             }
         }
-        
+
         //this query {--compounds.by.uniprot.id} is eqv to the queryString below
         // String queryString = "select compound_name, compound_id, relationship from uniprot2compound "
         //  + "where uniprot_id "+ constraint+" and compound_name is not null and compound_name NOT IN ("+queryClauseBuilder+") order by relationship";
@@ -986,16 +1010,28 @@ public class MegaJdbcMapper implements MegaMapper {
             }
 
             rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
+                String compoundID = rs.getString("compound_id");
+                String url = contructCompoundUrl(compoundID);
+
                 Compound compound = new Compound();
+
+                //set the url or web link for this compound
+                if (url != null) {
+                    compound.setUrl(url);
+                } else {
+                    compound.setUrl("#");
+                }
+
                 compound.setId(rs.getString("compound_id"));
 
-               // compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
+
+                // compound.setName(rs.getString("compound_name").toLowerCase(Locale.ENGLISH));
                 //TODO fix strange characters in compounds before populating the main compound list
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH).replace(",", "")));
                 //compound.setName(resolveSpecialCharacters(rs.getString("compound_name").toLowerCase(Locale.ENGLISH)));
-                 compound.setName(rs.getString("compound_name"));
-                switch (Relationship.valueOf(rs.getString("relationship"))){
+                compound.setName(rs.getString("compound_name"));
+                switch (Relationship.valueOf(rs.getString("relationship"))) {
                     case is_reactant_or_product_of:
                     case is_substrate_or_product_of:
                     case is_reactant_of:
@@ -1032,6 +1068,73 @@ public class MegaJdbcMapper implements MegaMapper {
         return compounds;
     }
 
+    //we had to use different methods for contructing urls for Disease and compound becuase some ID's are similar eg. Drug Bank is alpha numeric and starts with letter D and same for Dieases from MESH
+    private String contructCompoundUrl(String id) {
+        String url = null;
+        if (id.startsWith("CHEMBL")) {
+            url = "http://www.ebi.ac.uk/chembldb/compound/inspect/" + id;
+        }
+        if (id.startsWith("DB")) {
+            url = "http://www.drugbank.ca/drugs/" + id;
+        }
+
+        if (id.startsWith("CHEBI")) {
+            url = "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=" + id;
+        }
+
+        return url;
+    }
+
+    private String contructDiseaseUrl(String id) {
+        String url = null;
+
+
+        if (id.startsWith("EFO")) {
+            url = "http://www.ebi.ac.uk/efo/" + id;
+        }
+        if (isAlphaNumeric(id) && id.startsWith("D")) {
+            url = "http://purl.bioontology.org/ontology/MESH/" + id;
+        }
+
+        if (isNumeric(id)) {
+            url = "http://purl.bioontology.org/ontology/OMIM/" + id;
+
+        }
+        return url;
+    }
+
+    public static boolean isNumeric(String str) {
+        DecimalFormatSymbols currentLocaleSymbols = DecimalFormatSymbols.getInstance();
+        char localeMinusSign = currentLocaleSymbols.getMinusSign();
+
+        if (!Character.isDigit(str.charAt(0)) && str.charAt(0) != localeMinusSign) {
+            return false;
+        }
+
+        boolean isDecimalSeparatorFound = false;
+        char localeDecimalSeparator = currentLocaleSymbols.getDecimalSeparator();
+
+        for (char c : str.substring(1).toCharArray()) {
+            if (!Character.isDigit(c)) {
+                if (c == localeDecimalSeparator && !isDecimalSeparatorFound) {
+                    isDecimalSeparatorFound = true;
+                    continue;
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isAlphaNumeric(String s) {
+        String pattern = "^[a-zA-Z0-9]*$";
+        if (s.matches(pattern)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Deprecated
     public Map<String, String> getCompounds(MmDatabase db, String uniprotId,
             MmDatabase... xDbs) {
 

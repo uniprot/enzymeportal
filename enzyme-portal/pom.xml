@@ -371,6 +371,7 @@
 		<module>bioportal-adapter</module>
 		<module>SitemapGenerator</module>
 		<module>rhea-adapter</module>
+        <module>chembl-adapter</module>
   </modules>
 
 </project>

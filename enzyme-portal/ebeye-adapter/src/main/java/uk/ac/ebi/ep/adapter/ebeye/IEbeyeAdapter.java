@@ -62,10 +62,11 @@ public interface IEbeyeAdapter {
 	 * Fields of the {@link Domains#uniprot uniprot} domain.
 	 */
 	public static enum FieldsOfUniprotNameMap {
-		id, descRecName;
+		id, acc, descRecName;
 		public static List<String> getFields() {
 			List<String> fields = new ArrayList<String>();
 			fields.add(id.name());
+			fields.add(acc.name());
 			fields.add(descRecName.name());
 			return fields;
 		}
