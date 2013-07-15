@@ -158,7 +158,7 @@
                 </a>-->
 </span></pre>
                  <p>However, the header <pre style="color: #996a44; background-color:white;">  >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
-                 <p><a style="border-bottom-style: none" href="http://www.ebi.ac.uk/help/formats.html#fasta"><h6 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h6></a></p>
+                 <p><a style="border-bottom-style: none" href="http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"><h6 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h6></a></p>
                  <!--<a   name="fasta" id="fasta"></a>
                  <ul>
                    <li>This format contains a single header line providing the sequence 
