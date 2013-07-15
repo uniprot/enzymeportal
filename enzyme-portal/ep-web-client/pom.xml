@@ -202,7 +202,6 @@
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-core</artifactId>
             <version>1.0.18</version>
-
         </dependency>
         <dependency>
             <!-- overriding ep-core's -->
