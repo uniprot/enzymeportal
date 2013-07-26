@@ -8,7 +8,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-domain</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8-SNAPSHOT</version>
     <name>EP domain</name>
     <description>
     	The domain model of the Enzyme Portal and its searches are defined in
