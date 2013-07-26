@@ -10,6 +10,13 @@
 </properties>
 
 <body>
+       <release version="1.0.19" date="2013-07-26" description="update.">
+        <action dev="joseph" type="update">
+           No longer contruct Compounds from a Map of String (names) rather now returns a collection of compounds from the
+            mega mapper.
+        </action>
+       
+    </release>
     <release version="1.0.18" date="2013-06-19" description="Bug fix.">
         <action dev="rafalcan" type="fix">
             Fixed handling of accessions retrieved from the EBI search web
@@ -17,6 +24,10 @@
         </action>
         <action dev="rafalcan" type="update">
             Updated to latest versions of ebeye-adapter and ep-util.
+        </action>
+         <action dev="joseph" type="update">
+           searches various resources (OMIM,EFO,MESH) for Diseases using uniprot ID and returns 
+             the appropriate/related diseases to an enzyme or search term
         </action>
     </release>
     <release version="1.0.17" date="2013-06-11" description="Bug fix.">
