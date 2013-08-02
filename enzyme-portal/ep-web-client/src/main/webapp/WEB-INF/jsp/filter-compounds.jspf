@@ -7,7 +7,14 @@
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>             
+<%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>  
+
+<style>
+    .ui-widget{
+    font-family: Helvetica,sans-serif;
+    font-size: inherit;
+}
+</style>
 
 <div class="sublevel1">
     <div class="subTitle">
@@ -37,15 +44,15 @@
 
         <div id="accordion">
             <h3 class="head">BIOACTIVE</h3>
-            <div id="bioactive"></div>               
+            <div id="bioactive" class="scroll" style="max-height: 24ex"></div>               
             <h3 class="head">DRUG</h3>
-            <div id="drug"></div>
+            <div id="drug" class="scroll"></div>
             <h3 class="head">INHIBITOR</h3>
-            <div id="inhibitor"></div>
+            <div id="inhibitor" class="scroll"></div>
             <h3 class="head">ACTIVATOR</h3>
-            <div id="activator"></div>
+            <div id="activator" class="scroll"></div>
             <h3 class="head">SUBSTRATE_OR_PRODUCT</h3>
-            <div id="substrate_or_product"></div>
+            <div id="substrate_or_product" class="scroll"></div>
         </div>
 
 

@@ -800,3 +800,13 @@ span.popup:hover span {
     font-weight: bolder;
     
 }
+/*to help scroll the items in the accordion*/
+.scroll{
+    max-height: 24ex;
+}
+.ui-widget{
+    font-family: Helvetica,sans-serif;
+}
+.ui-accordion .ui-widget .ui-helper-reset{
+    font-family: Helvetica,sans-serif;
+}

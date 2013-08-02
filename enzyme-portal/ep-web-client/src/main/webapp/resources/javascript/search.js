@@ -346,7 +346,7 @@ function addCheckbox(filterGroup, obj, selected){
  
 function addCheckboxCompound(filterGroup, obj, selected){
     if (obj == '') return;
-    var cb = $('<input/>', {
+    var cb = $('<input/>#accordion', {
         "type":"checkbox", 
         "name":"searchparams."+filterGroup,
         "value": (filterGroup == 'species'? obj.id : obj.name),
