@@ -191,15 +191,15 @@ public class EbeyeSaxParser extends MmSaxParser {
         Collection<String> filteredBioactivities = null;
         ChemblBioactivities bioactivities =
                 chemblAdapter.getTargetBioactivities(chemblTargetId);
-        LOGGER.debug(chemblTargetId + " bioactivities: " + bioactivities);
+        //LOGGER.debug(chemblTargetId + " bioactivities: " + bioactivities);
         if (bioactivities != null){
             filteredBioactivities = bioactivities.filter(
                     chemblAdapter.getConfig().getMinAssays(),
                     chemblAdapter.getConfig().getMinConf4(),
                     chemblAdapter.getConfig().getMinConf9(),
                     chemblAdapter.getConfig().getMinFunc());
-            LOGGER.debug(chemblTargetId + " filtered bioactivities: "
-                    + filteredBioactivities);
+//            LOGGER.debug(chemblTargetId + " filtered bioactivities: "
+//                    + filteredBioactivities);
             LOGGER.debug(bioactivities.getMap().size() + " down to "
                     + filteredBioactivities.size());
         }
@@ -280,10 +280,10 @@ public class EbeyeSaxParser extends MmSaxParser {
 			if (db.equals(MmDatabase.ChEMBL_Target)){
 			    // TODO: CHANGE this is just for testing
 			    ChemblConfig chemblConfig = new ChemblConfig();
-			    chemblConfig.setMinAssays(5);
+			    chemblConfig.setMinAssays(1);
 			    chemblConfig.setMinConf4(0.0);
-			    chemblConfig.setMinConf9(0.0);
-			    chemblConfig.setMinFunc(0.0);
+			    chemblConfig.setMinConf9(0.5);
+			    chemblConfig.setMinFunc(0.5);
                 chemblAdapter = new ChemblWsAdapter(chemblConfig);
             }
 		} else if (isEntryName && entry != null){
