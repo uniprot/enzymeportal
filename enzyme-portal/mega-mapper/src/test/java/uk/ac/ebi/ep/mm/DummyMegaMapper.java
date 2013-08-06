@@ -9,6 +9,7 @@ import java.util.Map;
 import org.junit.Ignore;
 
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.Disease;
 
 /**
  * A dummy implementation of MegaMapper which stores a few entries and xrefs in
@@ -186,11 +187,13 @@ public class DummyMegaMapper implements MegaMapper{
                 "This is just a dummy implementation");
     }
 
-    public Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+
 
     public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("This is just a dummy implementation.");
+    }
+
+    public Collection<Disease> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("This is just a dummy implementation.");
     }
 }

@@ -411,24 +411,24 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public Set<DiseaseDefaultWrapper> computeDiseaseWithUniprotId(String uniprotAccession) {
         Set<DiseaseDefaultWrapper> related_disease = new TreeSet<DiseaseDefaultWrapper>();
-        Map<String, String> xRefList = megaMapperConnection.getMegaMapper().getDiseaseByUniprotId(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
+        Collection<Disease> diseaseCollection = megaMapperConnection.getMegaMapper().getDiseaseByUniprotId(MmDatabase.UniProt, uniprotAccession, MmDatabase.EFO, MmDatabase.OMIM, MmDatabase.MeSH);
 
-        if (xRefList != null) {
+        if (diseaseCollection != null) {
 
-            for (Map.Entry<String, String> diseaseMap : xRefList.entrySet()) {
+            for (Disease disease : diseaseCollection) {
 
 
 
-                if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
-                    Disease disease = new Disease();
-                    String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
-                    disease.setName(diseaseName.replaceAll(",", ""));
-                    disease.setId(diseaseMap.getKey());
+                //if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
+                   // Disease disease = new Disease();
+                    //String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
+                    //disease.setName(diseaseName.replaceAll(",", ""));
+                    //disease.setId(diseaseMap.getKey());
 
                     DiseaseDefaultWrapper diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
                     related_disease.add(diseaseDefaultWrapper);
                     uniqueDiseases.add(diseaseDefaultWrapper);
-                }
+                //}
 
             }
         }

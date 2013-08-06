@@ -36,7 +36,7 @@ displayedFilters[group] = 0;
 
 // Populate js variables with data from server:
 //<c:forEach var="disease" items="${diseasesList}">
-var dis = { "id": "${disease.id}", "name": "${disease.name}" };
+var dis = { "id": "${disease.id}", "name": "${disease.name}", "url":"${disease.url}" };
 <c:choose><c:when test="${Fn:contains(diseasesParams, disease.name)}">
 checkedFilters[group][checkedFilters[group].length] = dis; //</c:when>
 <c:otherwise>
@@ -48,11 +48,11 @@ diseaseAutoCompleteDataSource.push({
 
 // Display filters:
 for (var i = 0; i < checkedFilters[group].length; i++){
-    addCheckboxCompoundAndDieases(group, checkedFilters[group][i], true);
+     addCheckboxDisease(group, checkedFilters[group][i], true);
 }
 for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
         && displayedFilters[group] < ${diseasesListSize}; i++){
-    addCheckboxCompoundAndDieases(group, uncheckedFilters[group][i], false);
+     addCheckboxDisease(group, uncheckedFilters[group][i], false);
 }
 
 </script>
@@ -61,7 +61,7 @@ for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
                 <img id="loading_more_di" src="resources/images/loading.gif"
                      style="display: none"/>
                 <a id="more_di" href="javascript:void(0)"
-                   onclick="addUnselectedCheckboxesCompoundsAndDiseases('diseases',
+                   onclick="addUnselectedCheckboxesDiseases('diseases',
                        displayedFilters['diseases'],
                        ${diseasesListSize}-displayedFilters['diseases'], this)">
                        See all ${diseasesListSize}</a>
