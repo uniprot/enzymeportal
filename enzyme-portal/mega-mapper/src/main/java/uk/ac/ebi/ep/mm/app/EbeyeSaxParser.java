@@ -280,7 +280,7 @@ public class EbeyeSaxParser extends MmSaxParser {
 			if (db.equals(MmDatabase.ChEMBL_Target)){
 			    // TODO: CHANGE this is just for testing
 			    ChemblConfig chemblConfig = new ChemblConfig();
-			    chemblConfig.setMinAssays(1);
+			    chemblConfig.setMinAssays(5);
 			    chemblConfig.setMinConf4(0.0);
 			    chemblConfig.setMinConf9(0.5);
 			    chemblConfig.setMinFunc(0.5);
