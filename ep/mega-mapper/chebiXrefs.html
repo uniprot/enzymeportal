@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Mega mapper - 
-		Home</title>
+        Home</title>
     <style type="text/css" media="all">
       @import url("./css/maven-base.css");
       @import url("./css/maven-theme.css");
@@ -39,7 +39,7 @@
                           <a href="index.html" title="Mega mapper">Mega mapper</a>
         &gt;
     
-		Home
+        Home
               </div>
             <div class="xright">                    <a href="http://www.ebi.ac.uk/enzymeportal" class="externalLink" title="Enzyme Portal website">Enzyme Portal website</a>
               
@@ -62,11 +62,11 @@
                        <h5>Mega-mapper</h5>
                   <ul>
                   <li class="none">
-            <strong>Home</strong>
-          </li>
-                  <li class="none">
-                          <a href="chebiXrefs.html" title="ChEBI xrefs">ChEBI xrefs</a>
+                          <a href="index.html" title="Home">Home</a>
             </li>
+                  <li class="none">
+            <strong>ChEBI xrefs</strong>
+          </li>
                   <li class="none">
                           <a href="dbDoc/index.html" title="DbDoc">DbDoc</a>
             </li>
@@ -90,42 +90,16 @@
     <div id="bodyColumn">
       <div id="contentBox">
         
-	
-		<div class="section"><h2>Mega mapper<a name="Mega_mapper"></a></h2>
-			<p>
-				This module creates and queries a database containing basically
-				cross references to/from UniProt entries to other databases
-				used by the Enzyme Portal:
-			</p>
-			<img src="img/mm.png" alt="DBs in the mega-map" style="width: 600px" />
-			<p>
-				Note the direction of the arrows. The mega-map stores whenever
-				possible the concrete
-				<a href="apidocs/uk/ac/ebi/ep/mm/Relationship.html">relationship</a>
-				between two entries.
-			</p>
-			<p>
-			    Please note that cross-references between UniProt entries and
-			    substrates/products/cofactors are not direct, but through the
-			    EC classification of the protein.<br />
-			    Note also that inhibitors/activators are text-mined from the
-			    <i>Enzyme regulation</i> comments in UniProt, so it is likely
-			    some are missing, and some might even be wrong.
-			</p>
-			<img src="img/schema.png" alt="Diagram of the Enzyme Portal mega-map schema" />
-			<p style="font-size: small">
-			    Diagram of the Enzyme Portal mega-map
-			    <a href="dbDoc/index.html">schema</a>. Also available as
-			    <a href="img/schema.svg">SVG</a>.
-			</p>
-			<div class="section"><h3>Statistics<a name="Statistics"></a></h3>
-				<ul>
-					<li><a href="statistics/ep-stats-2012.ods">2012</a></li>
-                    <li><a href="statistics/ep-stats-2013.ods">2013</a></li>
-				</ul>
-			</div>
-		</div>
-	
+    
+        <div class="section"><h2>Cross-references from ChEBI<a name="Cross-references_from_ChEBI"></a></h2>
+            In order to establish cross references to the Enzyme Portal, ChEBI
+            needs a XML file with every referenced ChEBI entity and its
+            corresponding cross references in the Enzyme Portal. This file is
+            generated using a SQL script - <tt>chebiXrefs.sql</tt> - at
+            release time and provided by a servlet in the web application (<a href="../ep-web-client/index.html">ep-web-client</a>).
+        </div>
+    
+
 
       </div>
     </div>
