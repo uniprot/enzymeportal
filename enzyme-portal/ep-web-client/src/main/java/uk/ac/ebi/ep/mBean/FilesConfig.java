@@ -9,10 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * Note: this class changed name from SitemapConfig, as it can be used now for
+ * other files as well.
  * @author joseph
  */
-public class SitemapConfig implements SitemapConfigMBean {
+public class FilesConfig implements FilesConfigMBean {
 
     private String userHome = System.getProperty("user.home");
     private String filename = "sitemap_index";
@@ -21,6 +22,7 @@ public class SitemapConfig implements SitemapConfigMBean {
     private String sitemapUrl = output;
     private List<String> sitemapList = new LinkedList<String>();
     private String sitemapIndex;
+    private String baseDirectory;
 
     public String getSitemapUrl() {
         return sitemapUrl;
@@ -28,6 +30,14 @@ public class SitemapConfig implements SitemapConfigMBean {
 
     public void setSitemapUrl(String sitemapUrl) {
         this.sitemapUrl = sitemapUrl;
+    }
+
+    public String getBaseDirectory() {
+        return baseDirectory;
+    }
+
+    public void setBaseDirectory(String baseDirectory) {
+        this.baseDirectory = baseDirectory;
     }
 
     public String getSitemapIndex() {
