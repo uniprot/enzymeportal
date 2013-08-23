@@ -61,6 +61,10 @@ echo "Finished UniMed import - $(date)"
 
 if [ "$1" = "ezprel" ]
 then
+	# Generate xrefs XML for ChEBI:
+	echo -e "\n*************************************************************\n"
+	. $MM_SCRIPTS/mm-chebiXrefs.sh
+	
 	# Backup the new data:
 	echo -e "\n*************************************************************\n"
 	. $MM_SCRIPTS/mm-backup.sh

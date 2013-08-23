@@ -3,8 +3,15 @@
 -- These cross-references are needed to restrict chemical structure searches
 -- to the enzyme portal.
 
+-- Parameter:
+-- &1: the output XML file
+
 set serveroutput on
 set feedback off
+set termout off
+set trimspool on
+
+spool &1
 
 declare
   cid uniprot2compound.compound_id%type := 'foo';
@@ -44,3 +51,8 @@ begin
 
 end;
 /
+
+spool off
+
+exit
+

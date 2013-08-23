@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import uk.ac.ebi.ep.mBean.SitemapConfig;
+import uk.ac.ebi.ep.mBean.FilesConfig;
 
 /**
  * This Servlet reads and serves the generated SiteMap
@@ -26,13 +26,13 @@ import uk.ac.ebi.ep.mBean.SitemapConfig;
 public class EnzymePortalSitemapServlet extends HttpServlet {
 
     public Logger LOGGER = Logger.getLogger(EnzymePortalSitemapServlet.class);
-    private SitemapConfig sitemapConfig;
+    private FilesConfig sitemapConfig;
     
-    public SitemapConfig getSitemapConfig() {
+    public FilesConfig getSitemapConfig() {
         return sitemapConfig;
     }
     
-    public void setSitemapConfig(SitemapConfig sitemapConfig) {
+    public void setSitemapConfig(FilesConfig sitemapConfig) {
         this.sitemapConfig = sitemapConfig;
     }
     
@@ -45,8 +45,8 @@ public class EnzymePortalSitemapServlet extends HttpServlet {
         LOGGER.info("Getting URL connection to sitemap...");
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());//.getWebApplicationContext(getServletContext());
         // ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-        //SitemapConfig sitemapConfig = (SitemapConfig) context.getBean("sitemapConfig");
-        sitemapConfig = (SitemapConfig) context.getBean(SitemapConfig.class);
+        //FilesConfig sitemapConfig = (FilesConfig) context.getBean("sitemapConfig");
+        sitemapConfig = (FilesConfig) context.getBean(FilesConfig.class);
 
        
         URL url = new URL(sitemapConfig.getSitemapIndex());
