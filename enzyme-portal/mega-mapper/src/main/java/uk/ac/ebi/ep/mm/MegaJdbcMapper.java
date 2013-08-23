@@ -912,7 +912,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
                     String disaseID = resultSet.getString(ENTRY_ID);
 
-                    String url = contructDiseaseUrl(disaseID);
+                    String url = contructUrlFromDiseaseId(disaseID);
 
                     Disease disease = new Disease();
 
@@ -924,7 +924,7 @@ public class MegaJdbcMapper implements MegaMapper {
                     }
 
 
-                
+
                     String entryId = resultSet.getString(ENTRY_ID);
                     String entryName = resultSet.getString(ENTRY_NAME);
 
@@ -932,7 +932,7 @@ public class MegaJdbcMapper implements MegaMapper {
                         disease.setId(entryId);
                         String diseaseName = resolveSpecialCharacters(entryName.toLowerCase(Locale.ENGLISH));
                         disease.setName(diseaseName.replaceAll(",", ""));
-                      
+
                         diseases_collection.add(disease);
                     }
 
@@ -1085,7 +1085,7 @@ public class MegaJdbcMapper implements MegaMapper {
         return url;
     }
 
-    private String contructDiseaseUrl(String id) {
+    private String contructUrlFromDiseaseId(String id) {
         String url = null;
 
 
@@ -1351,5 +1351,230 @@ public class MegaJdbcMapper implements MegaMapper {
         return resultSet;
 
 
+    }
+
+    public Iterable<Disease> findAllDiseases(
+            MmDatabase... xDbs) {
+        Set<Disease> diseases_collection = null;
+        ResultSet resultSet = null;
+        PreparedStatement ps = null;
+        //String[] acc = accessions.split("_");
+        // String accession = acc[0].concat("\\_%");
+
+        try {
+            if (diseases_collection == null) {
+                diseases_collection = new LinkedHashSet<Disease>();
+            }
+
+        
+
+            String test = "select ENTRY_ID,ENTRY_NAME from MM_ENTRY where DB_NAME in ('EFO','OMIM','MeSH') and ENTRY_NAME is not null order by ENTRY_NAME";
+
+            String query = "select DISTINCT e2.entry_id, e2.entry_name,e2.db_name, count(e1.ENTRY_ID) as numEnzyme from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name ='UniProt' and e1.entry_id is not null\n"
+                    + "                    and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or \n"
+                    + "                    (e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in ('EFO','OMIM','MeSH') and e2.entry_name is not null  group by e2.entry_id, e2.entry_name, e2.DB_NAME\n"
+                    + "";
+
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+
+
+
+//                ps.setString(1, xDbs[0].name());
+//                ps.setString(2, xDbs[1].name());
+//                ps.setString(3, xDbs[2].name());
+
+
+
+
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+
+                    String disaseID = resultSet.getString(ENTRY_ID);
+
+                    String url = contructUrlFromDiseaseId(disaseID);
+
+                    Disease disease = new Disease();
+
+                    //set the url or web link for this compound
+                    if (url != null) {
+                        disease.setUrl(url);
+                    } else {
+                        disease.setUrl("#");
+                    }
+
+
+
+                    String entryId = resultSet.getString(ENTRY_ID);
+                    String entryName = resultSet.getString(ENTRY_NAME);
+                    Integer numEnzyme = resultSet.getInt("numEnzyme");
+
+                    
+                    if (entryId != null && entryName != null) {
+                        disease.setId(entryId);
+                        disease.setNumEnzyme(numEnzyme);
+                        String diseaseName = resolveSpecialCharacters(entryName.toLowerCase(Locale.ENGLISH));
+                        disease.setName(diseaseName.replaceAll(",", ""));
+                       
+                        diseases_collection.add(disease);
+                    }
+
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(" (" + xDbs + ")", e);
+        } finally {
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
+        }
+
+        return diseases_collection;
+    }
+
+     public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter,
+            MmDatabase... xDbs) {
+        Set<Disease> diseases_collection = null;
+        ResultSet resultSet = null;
+        PreparedStatement ps = null;
+    
+
+        try {
+            if (diseases_collection == null) {
+                diseases_collection = new LinkedHashSet<Disease>();
+            }
+
+        
+
+            String test = "select ENTRY_ID,ENTRY_NAME from MM_ENTRY where DB_NAME in ('EFO','OMIM','MeSH') and ENTRY_NAME is not null order by ENTRY_NAME";
+
+            String query = "select DISTINCT e2.entry_id, e2.entry_name,e2.db_name, count(e1.ENTRY_ID) as numEnzyme from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name ='?' and e1.entry_id is not null\n"
+                    + "                    and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or \n"
+                    + "                    (e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in ('?','?','?') and e2.entry_name like '?%' and e2.entry_name is not null  group by e2.entry_id, e2.entry_name, e2.DB_NAME\n"
+                    + "";
+
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+
+
+                ps.setString(1, uniprotDB.name());
+                ps.setString(2, xDbs[0].name());
+                ps.setString(3, xDbs[1].name());
+                ps.setString(4, xDbs[2].name());
+                ps.setString(5, firstLetter);
+
+
+
+
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+
+                    String disaseID = resultSet.getString(ENTRY_ID);
+
+                    String url = contructUrlFromDiseaseId(disaseID);
+
+                    Disease disease = new Disease();
+
+                    //set the url or web link for this compound
+                    if (url != null) {
+                        disease.setUrl(url);
+                    } else {
+                        disease.setUrl("#");
+                    }
+
+
+
+                    String entryId = resultSet.getString(ENTRY_ID);
+                    String entryName = resultSet.getString(ENTRY_NAME);
+                    Integer numEnzyme = resultSet.getInt("numEnzyme");
+
+                    
+                    if (entryId != null && entryName != null) {
+                        disease.setId(entryId);
+                        disease.setNumEnzyme(numEnzyme);
+                        String diseaseName = resolveSpecialCharacters(entryName.toLowerCase(Locale.ENGLISH));
+                        disease.setName(diseaseName.replaceAll(",", ""));
+                       
+                        diseases_collection.add(disease);
+                    }
+
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(" (" + xDbs + ")", e);
+        } finally {
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
+        }
+
+        return diseases_collection;
+    }
+
+    public Entry findByEntryId(String entryId) {
+        Entry entry = null;
+           ResultSet resultSet = null;
+        PreparedStatement ps = null;
+        
+        try{
+        String query = "select entry.* from MM_ENTRY entry where entry.ENTRY_ID = ?";
+        
+         if (con != null) {
+                ps = con.prepareStatement(query);
+
+
+
+
+                ps.setString(1, entryId);
+
+
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+
+//                    String disaseID = resultSet.getString(ENTRY_ID);
+//
+//                    String url = contructUrlFromDiseaseId(disaseID);
+//
+//                    Disease disease = new Disease();
+//
+//                    //set the url or web link for this compound
+//                    if (url != null) {
+//                        disease.setUrl(url);
+//                    } else {
+//                        disease.setUrl("#");
+//                    }
+
+
+
+                    String entryid = resultSet.getString(ENTRY_ID);
+                    String entryName = resultSet.getString(ENTRY_NAME);
+                    String dbName = resultSet.getString(DB_NAME);
+                    entry = new Entry();
+
+                    
+                    if (entryid != null ) {
+                        entry.setEntryId(entryid);
+                        entry.setEntryName(entryName);
+                        entry.setDbName(dbName);
+                     
+                    }
+
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(" (" + entryId + ")", e);
+        } finally {
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
+        }
+
+        
+        return entry;
     }
 }

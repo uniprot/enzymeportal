@@ -266,4 +266,10 @@ public interface MegaMapper {
     List<String> getAllEntryIds(MmDatabase database);
     
     ResultSet getAllEntryIds(MmDatabase database, String query);
+    
+    Iterable<Disease> findAllDiseases(
+            MmDatabase... xDbs);
+    Entry findByEntryId(String entryId);
+   Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter,
+            MmDatabase... xDbs);
 }

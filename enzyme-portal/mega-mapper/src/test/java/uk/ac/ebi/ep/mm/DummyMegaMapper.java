@@ -196,4 +196,16 @@ public class DummyMegaMapper implements MegaMapper{
     public Collection<Disease> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("This is just a dummy implementation.");
     }
+
+    public Iterable<Disease> findAllDiseases( MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Entry findByEntryId(String entryId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
