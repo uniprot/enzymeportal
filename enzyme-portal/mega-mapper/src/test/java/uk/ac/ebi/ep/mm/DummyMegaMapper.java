@@ -197,7 +197,7 @@ public class DummyMegaMapper implements MegaMapper{
         throw new UnsupportedOperationException("This is just a dummy implementation.");
     }
 
-    public Iterable<Disease> findAllDiseases( MmDatabase... xDbs) {
+    public Iterable<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

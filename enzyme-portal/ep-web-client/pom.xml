@@ -170,11 +170,12 @@
             <version>${org.springframework-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>3.2.4.RELEASE</version>
-            <type>jar</type>
-        </dependency>
+   <groupId>org.springframework</groupId>
+   <artifactId>spring-webmvc</artifactId>
+  
+   <version>${org.springframework-version}</version>
+</dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>

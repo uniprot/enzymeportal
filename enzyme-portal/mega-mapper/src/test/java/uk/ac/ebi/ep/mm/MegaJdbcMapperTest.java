@@ -311,10 +311,10 @@ public class MegaJdbcMapperTest {
         compoundMap = mm.getCompounds(db, accession, xDbs);
 
         assertNotNull(compoundMap);
-        for (Map.Entry<String, String> m : compoundMap.entrySet()) {
-
-            logger.info("Result for compounds: " + m.getKey() + ": " + m.getValue());
-        }
+//        for (Map.Entry<String, String> m : compoundMap.entrySet()) {
+//
+//            logger.info("Result for compounds: " + m.getKey() + ": " + m.getValue());
+//        }
 
     }
 
@@ -355,10 +355,36 @@ public class MegaJdbcMapperTest {
 
         diseaseList = mm.getDiseaseByUniprotId(db, accession, xDbs);
         assertNotNull(diseaseList);
-        for(Disease d : diseaseList){
-           logger.info("Result for disease: " +  d); 
-        }
+//        for(Disease d : diseaseList){
+//           logger.info("Result for disease: " +  d); 
+//        }
    
+
+    }
+   
+    
+        @Test
+    public void findDiseasesLike() {
+        //System.out.println("get Disease");
+        Iterable<Disease> diseaseList = null;
+        MmDatabase db = MmDatabase.UniProt;
+        String startingWith = "a";
+
+
+        MmDatabase[] xDbs = new MmDatabase[3];
+
+
+        xDbs[0] = MmDatabase.OMIM;
+        xDbs[1] = MmDatabase.EFO;
+        xDbs[2] = MmDatabase.MeSH;
+
+
+        diseaseList = mm.findDiseasesLike(db, startingWith, xDbs);
+        assertNotNull(diseaseList);
+//        for(Disease d : diseaseList){
+//           logger.info("Result for disease: " +  d); 
+//        }
+//   
 
     }
 

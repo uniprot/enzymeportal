@@ -1353,7 +1353,7 @@ public class MegaJdbcMapper implements MegaMapper {
 
     }
 
-    public Iterable<Disease> findAllDiseases(
+    public Iterable<Disease> findAllDiseases(MmDatabase uniprotDB,
             MmDatabase... xDbs) {
         Set<Disease> diseases_collection = null;
         ResultSet resultSet = null;
@@ -1370,20 +1370,20 @@ public class MegaJdbcMapper implements MegaMapper {
 
             String test = "select ENTRY_ID,ENTRY_NAME from MM_ENTRY where DB_NAME in ('EFO','OMIM','MeSH') and ENTRY_NAME is not null order by ENTRY_NAME";
 
-            String query = "select DISTINCT e2.entry_id, e2.entry_name,e2.db_name, count(e1.ENTRY_ID) as numEnzyme from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name ='UniProt' and e1.entry_id is not null\n"
+            String query = "select DISTINCT e2.entry_id, e2.entry_name,e2.db_name, count(e1.ENTRY_ID) as numEnzyme from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id is not null\n"
                     + "                    and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or \n"
-                    + "                    (e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in ('EFO','OMIM','MeSH') and e2.entry_name is not null  group by e2.entry_id, e2.entry_name, e2.DB_NAME\n"
+                    + "                    (e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name is not null  group by e2.entry_id, e2.entry_name, e2.DB_NAME\n"
                     + "";
-
+            
             if (con != null) {
                 ps = con.prepareStatement(query);
 
 
 
-
-//                ps.setString(1, xDbs[0].name());
-//                ps.setString(2, xDbs[1].name());
-//                ps.setString(3, xDbs[2].name());
+                 ps.setString(1, uniprotDB.name());
+                ps.setString(2, xDbs[0].name());
+                ps.setString(3, xDbs[1].name());
+                ps.setString(4, xDbs[2].name());
 
 
 
@@ -1434,42 +1434,41 @@ public class MegaJdbcMapper implements MegaMapper {
         return diseases_collection;
     }
 
-     public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter,
+     public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String startsWith,
             MmDatabase... xDbs) {
         Set<Disease> diseases_collection = null;
         ResultSet resultSet = null;
         PreparedStatement ps = null;
     
-
+ 
         try {
             if (diseases_collection == null) {
                 diseases_collection = new LinkedHashSet<Disease>();
             }
 
-        
 
-            String test = "select ENTRY_ID,ENTRY_NAME from MM_ENTRY where DB_NAME in ('EFO','OMIM','MeSH') and ENTRY_NAME is not null order by ENTRY_NAME";
-
-            String query = "select DISTINCT e2.entry_id, e2.entry_name,e2.db_name, count(e1.ENTRY_ID) as numEnzyme from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name ='?' and e1.entry_id is not null\n"
-                    + "                    and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or \n"
-                    + "                    (e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in ('?','?','?') and e2.entry_name like '?%' and e2.entry_name is not null  group by e2.entry_id, e2.entry_name, e2.DB_NAME\n"
-                    + "";
+              
+            String query ="select DISTINCT e2.entry_id, e2.entry_name,e2.db_name, count(e1.ENTRY_ID) as numEnzyme from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name = ? and e1.entry_id is not null\n" +
+"                                     and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or \n" +
+"                                       (e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name like ? and e2.entry_name is not null  group by e2.entry_id, e2.entry_name, e2.DB_NAME\n" +
+"                   ";
 
             if (con != null) {
                 ps = con.prepareStatement(query);
+              
 
-
+                
 
                 ps.setString(1, uniprotDB.name());
                 ps.setString(2, xDbs[0].name());
                 ps.setString(3, xDbs[1].name());
                 ps.setString(4, xDbs[2].name());
-                ps.setString(5, firstLetter);
-
+                ps.setString(5, startsWith.concat("%"));
 
 
 
                 resultSet = ps.executeQuery();
+              
 
                 while (resultSet.next()) {
 
@@ -1535,19 +1534,6 @@ public class MegaJdbcMapper implements MegaMapper {
                 resultSet = ps.executeQuery();
 
                 while (resultSet.next()) {
-
-//                    String disaseID = resultSet.getString(ENTRY_ID);
-//
-//                    String url = contructUrlFromDiseaseId(disaseID);
-//
-//                    Disease disease = new Disease();
-//
-//                    //set the url or web link for this compound
-//                    if (url != null) {
-//                        disease.setUrl(url);
-//                    } else {
-//                        disease.setUrl("#");
-//                    }
 
 
 

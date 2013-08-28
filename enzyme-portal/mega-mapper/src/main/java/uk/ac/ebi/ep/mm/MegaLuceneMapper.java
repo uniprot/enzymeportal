@@ -268,7 +268,7 @@ public class MegaLuceneMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Iterable<Disease> findAllDiseases( MmDatabase... xDbs) {
+    public Iterable<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
