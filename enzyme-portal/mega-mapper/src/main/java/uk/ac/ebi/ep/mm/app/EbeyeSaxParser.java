@@ -278,12 +278,14 @@ public class EbeyeSaxParser extends MmSaxParser {
 			db = MmDatabase.parse(currentChars.toString());
 			LOGGER.info("Parsing EB-Eye file for " + db.name());
 			if (db.equals(MmDatabase.ChEMBL_Target)){
-			    // TODO: CHANGE this is just for testing
-			    ChemblConfig chemblConfig = new ChemblConfig();
-			    chemblConfig.setMinAssays(5);
-			    chemblConfig.setMinConf4(0.0);
-			    chemblConfig.setMinConf9(0.5);
-			    chemblConfig.setMinFunc(0.5);
+                ChemblConfig chemblConfig = null;
+                try {
+                    chemblConfig = ChemblConfig.readFromFile();
+                } catch (IOException e) {
+                    LOGGER.error("Unable to read config file, using defaults",
+                            e);
+                    chemblConfig = new ChemblConfig();
+                }
                 chemblAdapter = new ChemblWsAdapter(chemblConfig);
             }
 		} else if (isEntryName && entry != null){
