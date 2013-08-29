@@ -44,6 +44,12 @@
             <artifactId>mega-mapper</artifactId>
             <version>1.0.16</version>
 		</dependency>
+	 <dependency>
+	  <groupId>uk.ac.ebi.uniprot.kraken</groupId>
+	  <artifactId>model</artifactId>
+	  <version>2012.0333</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 	
 	<properties>

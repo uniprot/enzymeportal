@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
     <!--Controller-->
+
+    
     <servlet>
         <servlet-name>ep</servlet-name>
         <servlet-class>
@@ -20,6 +26,15 @@
         <servlet-name>SiteMapServlet</servlet-name>
         <servlet-class>uk.ac.ebi.ep.web.SiteMapServlet</servlet-class>
     </servlet>
+    <servlet>
+        <description>A servlet to provide files from the file system which are
+            outside the web container, namely a XML file to ChEBI with mappings
+            from ChEBI IDs to enzymes (UniProt identifiers).</description>
+        <display-name>FileProxyServlet</display-name>
+        <servlet-name>FileProxyServlet</servlet-name>
+        <servlet-class>uk.ac.ebi.ep.web.FileProxyServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>ep</servlet-name>
         <url-pattern>/</url-pattern>
@@ -36,6 +51,11 @@
         <servlet-name>SiteMapServlet</servlet-name>
         <url-pattern>/SiteMapServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileProxyServlet</servlet-name>
+        <url-pattern>/getfile/*</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>
             index.jsp
@@ -49,13 +69,11 @@
         <filter-name>HealthFilter</filter-name>
         <url-pattern>/noaccesslog/*</url-pattern>
     </filter-mapping>
-     <resource-ref>
-        <description>Oracle Datasource for enzymePortal</description>
-        <res-ref-name>jdbc/ep/mm</res-ref-name>
-        <res-type>javax.sql.DataSource</res-type>
-        <res-auth>Container</res-auth>
-    </resource-ref>
+
     <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
     </listener>
+
 </web-app>

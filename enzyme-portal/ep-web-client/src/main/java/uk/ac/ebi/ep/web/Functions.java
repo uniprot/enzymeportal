@@ -31,8 +31,8 @@ public final class Functions {
     public static boolean contains(List collection, Object item) {
         return collection.contains(item);
     }
-
-    /**
+    
+        /**
      *
      * @param alpha the first item
      * @param omega the last item

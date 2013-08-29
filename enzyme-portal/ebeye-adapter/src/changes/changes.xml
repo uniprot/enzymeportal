@@ -10,10 +10,15 @@
 </properties>
 
 <body>
-	<release version="1.0.3" date="(Not yet released)">
+	<release version="1.0.3" date="2013-06-19">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
-			ep-domain and junit.
+			ep-domain, ep-util and junit.
+		</action>
+		<action dev="rafalcan" type="fix">
+            Fixed method EbeyeAdapter.getUniprotRefAccesionsMap to return
+            accessions (as per method name and javadocs) instead of IDs.
+            <fixes issue="116"/>
 		</action>
 	</release>
 	<release version="1.0.2" date="2012-08-20" description="Dependency updates">

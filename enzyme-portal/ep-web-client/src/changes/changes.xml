@@ -10,6 +10,19 @@
 </properties>
 
 <body>
+       <release version="1.0.23" date="2013-07-26" description="enhancement">
+        <action dev="joseph" type="update">
+           Added Accordion to the compound search result. compounds are grouped based on their roles.
+            
+        </action>
+    </release>
+    <release version="1.0.23" date="Not yet released" description="Bug fix.">
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of ep-core and ebeye-adapter, which fix
+            an issue with searches of ChEBI IDs.
+            <fixes issue="116"/>
+        </action>
+    </release>
     <release version="1.0.22" date="2013-06-11" description="Bug fix.">
         <action dev="rafalcan" type="update">
             Updated to latest version of ep-core, which fixes issue with

@@ -13,9 +13,11 @@
        http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
     <context:component-scan base-package="uk.ac.ebi.ep.web" />
     <context:property-placeholder
             location="classpath:/ep-web-client.properties"/>
+
     <!--Enable Spring annotation for @Controller and @RequestMapping-->
  <!--
  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -26,7 +28,8 @@
 
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
-    
+    <mvc:resources mapping="/google*.html" location="/" />
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp" />
@@ -35,94 +38,6 @@
 
     <util:list id="history" value-type="java.lang.String" scope="session" />
 
-	<!-- MBeans -->
-    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
-        <property name="autodetect" value="true"/>
-        <property name="registrationBehaviorName"
-            value="REGISTRATION_REPLACE_EXISTING"/>
-    </bean>
-
-    <bean name="uk.ac.ebi.ep:name=searchConfig"
-    	class="uk.ac.ebi.ep.core.search.Config"
-        init-method="initIt" destroy-method="cleanUp">
-        <property name="resultsPerPage" value="10"/>
-        <property name="maxPages" value="1"/>
-        <property name="finderUniprotSource" value="EBEYE"/>
-        <property name="retrieverUniprotSource" value="UNIPROT"/>
-        <property name="uniprotImplementation" value="WS"/>
-        <property name="searchCacheSize" value="100"/>
-        <property name="mmDatasource" value="jdbc/ep/mm"/>
-        <property name="maxMoleculesPerGroup" value="3"/>
-    </bean>
-    <alias name="uk.ac.ebi.ep:name=searchConfig" alias="searchConfig"/>
-	
-    <bean name="uk.ac.ebi.ep:name=ebeyeConfig"
-		class="uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig">
-        <property name="resultsLimit" value="100"/>
-        <property name="maxAccessionsInQuery" value="100"/>
-        <property name="maxResults" value="500"/>
-        <property name="maxChebiResults" value="30"/>
-        <property name="maxUniprotResults" value="500"/>
-        <property name="maxUniprotResultsFromChebi" value="100"/>
-        <property name="maxUniprotResultsFromOtherDomains" value="100"/>
-        <property name="maxThreads" value="50"/>
-        <property name="threadTimeout" value="30000"/>
-    </bean>
-	
-    <bean name="uk.ac.ebi.ep:name=uniprotConfig"
-		class="uk.ac.ebi.ep.adapter.uniprot.UniprotConfig">
-        <property name="timeout" value="30000"/>
-        <property name="reviewed" value="false"/>
-        <property name="wsUrl"
-			value="http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}"/>
-        <property name="useProxy" value="true"/>
-        <property name="maxTermsPerQuery" value="100"/>
-        <property name="maxThreads" value="100"/>
-    </bean>
-	
-    <bean name="uk.ac.ebi.ep:name=intenzConfig"
-		class="uk.ac.ebi.ep.adapter.intenz.IntenzConfig">
-        <property name="timeout" value="30000"/>
-        <property name="intenzXmlUrl"
-        	value="http://www.ebi.ac.uk/intenz/ws/EC/{0}.{1}.{2}.{3}.xml"/>
-    </bean>
-	
-    <bean name="uk.ac.ebi.ep:name=reactomeConfig"
-		class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
-        <property name="timeout" value="30000"/>
-        <property name="useProxy" value="true"/>
-                <property name="wsBaseUrl"
-	value="http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/"/>
-    </bean>
-	
-    <bean name="uk.ac.ebi.ep:name=chebiConfig"
-		class="uk.ac.ebi.ep.adapter.chebi.ChebiConfig">
-        <property name="timeout" value="30000"/>
-        <property name="maxThreads" value="10"/>
-        <property name="searchStars" value="ALL"/>
-        <property name="maxRetrievedMolecules" value="3"/>
-    </bean>
-    
-    <bean name="uk.ac.ebi.ep:name=literatureConfig"
-    	class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">
-   		<property name="maxThreads" value="4" />
-        <property name="useCitexploreWs" value="true" />
-        <property name="maxCitations" value="50" />
-   		<property name="citexploreClientPoolSize" value="8"/>
-   		<property name="citexploreConnectTimeout" value="10000"/>
-   		<property name="citexploreReadTimeout" value="10000" />
-   	</bean>
-	
-    <bean name="uk.ac.ebi.ep:name=bioportalConfig"
-		class="uk.ac.ebi.ep.adapter.bioportal.BioportalConfig">
-        <property name="apiKey" value="${bioportal.api.key}"/>
-    </bean>
-    
-    <bean name="uk.ac.ebi.ep:name=dasConfig"
-    	class="uk.ac.ebi.ep.adapter.das.DASConfig">
-   		<property name="clientPoolSize" value="4" />
-   	</bean>
-	
     <!--Start internationalization-->
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

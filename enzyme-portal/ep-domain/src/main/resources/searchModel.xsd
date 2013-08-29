@@ -8,6 +8,7 @@
 			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="definition" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                         <xs:element name="url" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="role">
 			    <xs:annotation>
                     <xs:documentation>The role played by the small molecule
@@ -34,7 +35,9 @@
 			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                         <xs:element name="url" type="xs:anySimpleType" minOccurs="1" maxOccurs="1"/>
                         <xs:element name="selected" type="xs:boolean"/>
+                        <xs:element name="numEnzyme" type="xs:int" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="EnzymeAccession" type="ep:EnzymeAccession"/>

@@ -20,6 +20,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.Disease;
 
 /**
  * Mega-mapper writing/reading to/from a lucene index.
@@ -257,11 +258,25 @@ public class MegaLuceneMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
+ 
+
+    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
+    public Collection<Disease> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Iterable<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Entry findByEntryId(String entryId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
