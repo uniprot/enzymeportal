@@ -2,9 +2,7 @@ package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
 import java.sql.ResultSet;
-
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 

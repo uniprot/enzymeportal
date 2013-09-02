@@ -348,6 +348,7 @@
                             <!-- This contains the BioPortal API key needed for
                             resolving EFO IDs: -->
                             <include>ep-web-client.properties</include>
+                            <!-- This one configures the ChEMBL adapter: -->
                             <include>chembl-adapter.properties</include>
                         </includes>
                     </resource>

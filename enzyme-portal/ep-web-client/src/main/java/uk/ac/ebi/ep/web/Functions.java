@@ -6,8 +6,7 @@ package uk.ac.ebi.ep.web;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
-import org.springframework.web.util.HtmlUtils;
+
 import uk.ac.ebi.ep.core.search.HtmlUtility;
 
 /**
