@@ -14,6 +14,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.Disease;
 
 /**
  * Objects of this class write the mega-map to a database managed via hibernate.
@@ -297,11 +298,26 @@ public class MegaDbMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Map<String, String> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
+
+
+    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
+    public Collection<Disease> getDiseaseByUniprotId(MmDatabase db, String accessions, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public Entry findByEntryId(String entryId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Iterable<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

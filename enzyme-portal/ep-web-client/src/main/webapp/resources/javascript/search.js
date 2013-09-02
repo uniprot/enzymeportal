@@ -313,6 +313,8 @@ var uncheckedFilters = {};
  */
 var displayedFilters = {};
 
+var maxNum = 20;
+
 /**
  * Adds a checkbox to the filters list.
  * @param filterGroup the group this filter belongs to.
@@ -331,7 +333,9 @@ function addCheckbox(filterGroup, obj, selected){
     var label = $('<span>');
     if (obj.name){
         label.text(obj.name);
-    label.append($('<span>', {text:obj.id}));
+        label.append($('<span>', {
+            text:obj.id
+        }));
     } else {
         label.text(obj.id);
     }
@@ -339,7 +343,77 @@ function addCheckbox(filterGroup, obj, selected){
     .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
     displayedFilters[filterGroup]++;
 }
-function addCheckboxCompoundAndDieases(filterGroup, obj, selected){
+ 
+function addCheckboxCompound(filterGroup, obj, selected){
+    if (obj == '') return;
+    var cb = $('<input/>#accordion', {
+        "type":"checkbox", 
+        "name":"searchparams."+filterGroup,
+        "value": (filterGroup == 'species'? obj.id : obj.name),
+        onclick:"form.submit()"
+    });
+    if (selected) cb.attr("checked", "checked");
+   
+  
+   //add the link to the source of this item 
+    var link = $("<a>", {
+
+   href: ""+obj.url+"",
+   target :"_blank"
+   
+  });
+  
+    //add a span to the link to hold the text to be displayed
+    var label = $('<span>').addClass("popup");
+   var popup = $('<span>').text(obj.id);
+
+   link.append(popup);
+   
+   
+    if (obj.name){
+        label.text(obj.name);
+        link.attr("title", obj.name);
+        //label.append($('<span>', { text:obj.id}));
+        label.append($(link));
+    } else {
+        label.text(obj.id);
+        label.append($(link));
+    }
+        
+     
+             
+        
+    var newItem = $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label);
+        
+    if(selected){
+        $(newItem).appendTo($('#'+filterGroup+'_filters_y'));
+    } else if (obj.role == "BIOACTIVE") {
+           
+        $(newItem).appendTo($('#bioactive'));
+    } else if(obj.role == "DRUG") {
+        $(newItem).appendTo($('#drug'));
+    }else if(obj.role == "INHIBITOR"){
+        $(newItem).appendTo($('#inhibitor'));
+    }else if(obj.role == "ACTIVATOR"){
+        $(newItem).appendTo($('#activator'));
+    }
+    else if(obj.role == 'SUBSTRATE_OR_PRODUCT'){
+        $(newItem).appendTo($('#substrate_or_product'));
+    }
+        
+    var currentSize = $(newItem).siblings().length;
+        
+    if (currentSize >=  maxNum) {
+        $(newItem).addClass("hidden").addClass("extra");
+    }
+        
+ 
+    displayedFilters[filterGroup]++;
+    
+}
+
+
+function addCheckboxDisease(filterGroup, obj, selected){
     if (obj == '') return;
     var cb = $('<input/>', {
         "type":"checkbox", 
@@ -348,42 +422,37 @@ function addCheckboxCompoundAndDieases(filterGroup, obj, selected){
         onclick:"form.submit()"
     });
     if (selected) cb.attr("checked", "checked");
-    var label = $('<span>');
+ 
+    
+     //add the link to the source of this item 
+    var link = $("<a>", {
+
+   href: ""+obj.url+"",
+   target :"_blank"
+   
+  });
+  
+    //add a span to the link to hold the text to be displayed
+    var label = $('<span>').addClass("popup");
+   var popup = $('<span>').text(obj.id);
+
+   link.append(popup);
+   
+   
     if (obj.name){
         label.text(obj.name);
-        //ignore for now - to be implemented in next release
-//    label.append($('<span>', {text:obj.id}));
+        link.attr("title", obj.name);
+        //label.append($('<span>', { text:obj.id}));
+        label.append($(link));
     } else {
         label.text(obj.id);
+        label.append($(link));
     }
+    
     $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label)
     .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
     displayedFilters[filterGroup]++;
 }
-
-//ignore the mouseover for now - uncomment in the next release implementation
-//function addCheckboxCompound(filterGroup, obj, selected){
-//    if (obj == '') return;
-//    var cb = $('<input/>', {
-//        "type":"checkbox", 
-//        "name":"searchparams."+filterGroup,
-//        "value": (filterGroup == 'species'? obj.id : obj.name),
-//        onclick:"form.submit()"
-//    });
-//    if (selected) cb.attr("checked", "checked");
-//    //var label = $('<span class="popup">');
-//    var label = $('<span>').addClass("popup");
-//    if (obj.name){
-//        label.text(obj.name);
-//        
-//    label.append($('<span>', {text:obj.id}));
-//    } else {
-//        label.text(obj.id);
-//    }
-//    $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label)
-//    .appendTo($('#'+filterGroup+'_filters_'+(selected? 'y':'n')));
-//    displayedFilters[filterGroup]++;
-//}
 /**
  * Add unselected checkboxes to the list of filters.
  * @param filterGroup the group this filter belongs to.
@@ -400,13 +469,74 @@ function addUnselectedCheckboxes(filterGroup, from, num, link){
     }
     loading.hide();
 }
-
-function addUnselectedCheckboxesCompoundsAndDiseases(filterGroup, from, num, link){
+/*
+ *same as the above method but this is specifically for diseases
+ **
+ */
+function addUnselectedCheckboxesDiseases(filterGroup, from, num, link){
     var loading = $('#loading_'+link.getAttribute('id'));
     $(link).hide();
     loading.show();
     for (var i = from; i < from+num; i++){
-        addCheckboxCompoundAndDieases(filterGroup, uncheckedFilters[filterGroup][i], false);
+        addCheckboxDisease(filterGroup, uncheckedFilters[filterGroup][i], false);
     }
     loading.hide();
+}
+/**
+ * toggle show more and show less
+ */
+function showMore(anchor) {
+    $(anchor).html("Show less");
+    $(anchor).attr("onclick" , "showLess(this)");
+    $(anchor).siblings('.extra').removeClass('hidden');
+    
+}
+
+/**
+ *toggle show more and show less
+ */
+function showLess(anchor) {
+    var num = $(anchor).siblings().length;
+    $(anchor).html("Show all " + num);
+    $(anchor).attr("onclick" , "showMore(this)");
+    $(anchor).siblings('.extra').addClass('hidden');
+    
+}
+
+
+/**
+ * adds the show more links when the number of items exceeds maxNum
+ */
+function addShowMoreLinks() {
+    $('#accordion').children('div').each(function() {
+            
+        var items = $(this).children().length;
+        
+        if (items >= maxNum) {
+            var linkText = "Show all " + items;
+        
+            $(this).append('<a class="showmore" href="javascript:void(0)" onclick="showMore(this)">'+ linkText+'</a>');
+            
+        }
+        
+    });
+
+ 
+
+}
+
+/**
+ * check content and
+ * hides the accordion header (h3) if there are no elements on that section
+ */
+function checkContent() {
+  $('.head').each(function(){
+      
+      var div = $(this).next();
+      
+      if ($(div).children().length==0){
+          $(this).hide();          
+      }
+  
+  });
 }

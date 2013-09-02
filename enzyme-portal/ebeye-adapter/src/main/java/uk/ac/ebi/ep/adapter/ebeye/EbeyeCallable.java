@@ -70,16 +70,7 @@ public class EbeyeCallable {
         }
 
         public Integer getNumberOfResults(String domain, String query) {
-            LOGGER.info("DOMAIN ..........."+ domain);
-            LOGGER.info("THE QUERY "+ query);
-            LOGGER.info("EBEYE SERVICE "+ eBISearchService);
-            System.out.println("DOMAIN AND QUERYSTRING "+ domain + " :  "+ query);
-            System.out.println("EBI SERVICE "+ eBISearchService);
-           // return eBISearchService.getNumberOfResults(domain, query);
-            //int x = eBISearchService.getNumberOfResults(domain, query);
-            //LOGGER.info("NUMBER RETIRNED "+ x);
-            return 2000;
-            
+            return eBISearchService.getNumberOfResults(domain, query);
         }
 
         public Integer call() throws Exception {

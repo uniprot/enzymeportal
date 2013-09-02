@@ -9,6 +9,11 @@
 </properties>
 
 <body>
+    <release version="1.0.7" date="2013-07-26">
+		<action dev="joseph" type="update">
+			Added web links for Diseases and Compounds to the schema.
+		</action>
+	</release>
     <release version="1.0.6" date=""
         description="Added compound roles and counts.">
         <action dev="rafalcan" type="add">

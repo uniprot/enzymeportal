@@ -181,7 +181,7 @@ function filterCitations(){
     <c:if test="${fn:length(enzymeModel.literature)
         eq requestScope['uk.ac.ebi.ep:name=literatureConfig'].maxCitations}"><a
         title="Europe PubMed Central"
-        href="http://europepmc.org/search/?page=1&query=UNIPROT_PUBS:${enzymeModel.uniprotaccessions[0]}">
+        href="http://europepmc.org/search/?page=1&query=UNIPROT_PUBS:${enzymeModel.uniprotaccessions[0]}" target="_blank">
         See more in EPMC...</a>
     </c:if>
     </span>
