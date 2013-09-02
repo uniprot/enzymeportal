@@ -10,7 +10,7 @@
     </properties>
 
     <body>
-        <release version="1.0.0" date="" description="First release">
+        <release version="1.0.0" date="2013-09-02" description="First release">
             <action dev="rafalcan" type="add">
                 Added chembl-adapter module to deal wich ChEMBL bioactivities.
             </action>
