@@ -14,7 +14,7 @@
 </properties>
 
 <body>
-    <release version="1.0.19" date="2013-09-02"
+    <release version="1.0.19" date=""
         description="ChEMBL bioactivities">
         <action dev="rafalcan" type="fix" issue="75">
             Modified EbeyeSaxParser in order to use chembl-adapter to filter
