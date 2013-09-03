@@ -59,16 +59,39 @@ public class EbeyeSaxParser extends MmSaxParser {
 	
 	private final Logger LOGGER = Logger.getLogger(EbeyeSaxParser.class);
 
+    /*
+     * Flags to mark the current element being processed.
+     */
 	private boolean isDbName;
 	private boolean isEntry;
 	private boolean isEntryName;
 	private boolean isXrefs;
 	private boolean isRef;
-	
+
+    /**
+     * The database being imported into the mega-map from an EB-Eye XML file.
+     */
 	private MmDatabase db;
+
+    /**
+     * The current entry of the {@link #db database} being processed.
+     */
 	private Entry entry;
+
+    /**
+     * The current ChEMBL target ID being processed.
+     */
 	private String chemblTargetId;
+
+    /**
+     * The cross-references being extracted for the current {@link #entry}.
+     */
 	private Collection<XRef> xrefs = new HashSet<XRef>();
+
+    /**
+     * The proxy used to extract information from ChEMBL (only used if
+     * {@link #db} = ChEMBL).
+     */
     private IChemblAdapter chemblAdapter;
 
     /**
@@ -151,7 +174,7 @@ public class EbeyeSaxParser extends MmSaxParser {
 
     /**
      * Adds cross references to any ChEMBL compound IDs which show any
-     * bioactivity against <code>chemblTargetId</code>.
+     * bioactivity against <code>{@link #chemblTargetId}</code>.
      */
     private void addChemblXrefs() {
         try {
@@ -180,9 +203,9 @@ public class EbeyeSaxParser extends MmSaxParser {
 
     /**
      * Gets bioactivities from WS for the target ID stored in the field
-     * <code>chemblTargetId</code> and filters them.
+     * <code>{@link #chemblTargetId}</code> and filters them.
      * @return a collection of ChEMBL compound IDs which have significant
-     *      bioactivities,or <code>null</code> if no bioactivities are found
+     *      bioactivities, or <code>null</code> if no bioactivities are found
      *      for the target ID.
      * @throws ChemblAdapterException
      */
@@ -198,8 +221,6 @@ public class EbeyeSaxParser extends MmSaxParser {
                     chemblAdapter.getConfig().getMinConf4(),
                     chemblAdapter.getConfig().getMinConf9(),
                     chemblAdapter.getConfig().getMinFunc());
-//            LOGGER.debug(chemblTargetId + " filtered bioactivities: "
-//                    + filteredBioactivities);
             LOGGER.debug(bioactivities.getMap().size() + " down to "
                     + filteredBioactivities.size());
         }
@@ -207,9 +228,9 @@ public class EbeyeSaxParser extends MmSaxParser {
     }
 
     /**
-     * Sets the private field <code>entry</code> to a UniProt entry from the
-     * mega-map. If it does not exist in the mega-map, the field is set to
-     * <code>null</code>.
+     * Sets the private field <code>{@link #entry}</code> to a UniProt entry
+     * from the mega-map. If it does not exist in the mega-map, the field is set
+     * to <code>null</code>.
      * @param uniprotAcc the UniProt accession.
      */
     private void setMmUniprotEntry(String uniprotAcc) {
@@ -256,7 +277,7 @@ public class EbeyeSaxParser extends MmSaxParser {
 	 * @param db the database providing the EB-Eye XML file.
 	 * @param refdDb the referenced database.
 	 * @return <code>true</code> if the xref is interesting
-	 * (see {@link #interestingXrefs}).
+	 *      (see {@link #interestingXrefs}).
 	 */
 	private boolean isInterestingXref(MmDatabase db, MmDatabase refdDb) {
 	    return interestingXrefs.get(db) != null
