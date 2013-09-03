@@ -37,7 +37,7 @@ public class Uniprot2DiseaseParser implements MmParser {
 	 * The format of the provided file to parse.
 	 * @author rafa
 	 */
-	private enum Format { html, tab }
+	protected enum Format { html, tab }
 	
 	private static final Logger LOGGER =
 			Logger.getLogger(Uniprot2DiseaseParser.class);
@@ -183,7 +183,7 @@ public class Uniprot2DiseaseParser implements MmParser {
 	 * @return the split fields in the line, or <code>null</code> if it is a
 	 * 		header line. Note that multi-valued fields must be split further.
 	 */
-	private String[] getFields(Format format, String line) {
+	protected String[] getFields(Format format, String line) {
 		String[] fields = null;
 		switch (format) {
 		case html:
@@ -256,7 +256,10 @@ public class Uniprot2DiseaseParser implements MmParser {
 					efoXref.setToEntry(efoEntry);
 					diseaseXrefs.add(efoXref);
 					LOGGER.debug("EFO xref to " + efoDisease.getId());
-				}
+				} else {
+                    LOGGER.warn("EFO entry not found in BioPortal: "
+                            + meshHead);
+                }
 			} catch (BioportalAdapterException e) {
 				// Don't stop the others just because of BioPortal/EFO problems:
 				LOGGER.error("Unable to get EFO xref for " + meshHead, e);
@@ -286,7 +289,9 @@ public class Uniprot2DiseaseParser implements MmParser {
 					BioportalOntology.OMIM, omimString, Disease.class, false);
 			if (omimDisease != null){
 				omimEntry.setEntryName(omimDisease.getName());
-			}
+			} else {
+                LOGGER.warn("OMIM entry not found in BioPortal: " + omimString);
+            }
 			XRef omimXref = new XRef();
 			omimXref.setFromEntry(uniprotEntry);
 			omimXref.setRelationship(Relationship.between(
