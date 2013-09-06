@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.Ignore;
 
 import uk.ac.ebi.ep.search.model.Compound;
@@ -197,15 +198,18 @@ public class DummyMegaMapper implements MegaMapper{
         throw new UnsupportedOperationException("This is just a dummy implementation.");
     }
 
-    public Iterable<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+
 
     public Entry findByEntryId(String entryId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
+
+    public Set<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Set<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

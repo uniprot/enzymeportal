@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -268,15 +269,20 @@ public class MegaLuceneMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Iterable<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+
 
     public Entry findByEntryId(String entryId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
+
+
+
+    public Set<Disease> findAllDiseases(MmDatabase uniprotDB, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Set<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

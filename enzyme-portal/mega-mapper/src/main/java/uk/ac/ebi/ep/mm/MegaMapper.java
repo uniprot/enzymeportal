@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
 
@@ -267,9 +268,8 @@ public interface MegaMapper {
     
     ResultSet getAllEntryIds(MmDatabase database, String query);
     
-    Iterable<Disease> findAllDiseases(MmDatabase uniprotDB,
+    Set<Disease> findAllDiseases(MmDatabase uniprotDB,
             MmDatabase... xDbs);
     Entry findByEntryId(String entryId);
-   Iterable<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter,
-            MmDatabase... xDbs);
+
 }

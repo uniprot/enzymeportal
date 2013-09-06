@@ -362,31 +362,7 @@ public class MegaJdbcMapperTest {
 
     }
    
-    
-        @Test
-    public void findDiseasesLike() {
-        //System.out.println("get Disease");
-        Iterable<Disease> diseaseList = null;
-        MmDatabase db = MmDatabase.UniProt;
-        String startingWith = "a";
 
-
-        MmDatabase[] xDbs = new MmDatabase[3];
-
-
-        xDbs[0] = MmDatabase.OMIM;
-        xDbs[1] = MmDatabase.EFO;
-        xDbs[2] = MmDatabase.MeSH;
-
-
-        diseaseList = mm.findDiseasesLike(db, startingWith, xDbs);
-        assertNotNull(diseaseList);
-//        for(Disease d : diseaseList){
-//           logger.info("Result for disease: " +  d); 
-//        }
-//   
-
-    }
 
 //    @Test
 //    @Deprecated(this method is nolonger in use)
