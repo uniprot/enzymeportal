@@ -52,8 +52,10 @@ public enum MmDatabase {
 	Reaxys("Reaxys Registry Number"),
 	Rhea,
 	SABIO_RK("SABIO-RK"),
+    SwissProt("Swiss-Prot"),
+    TrEMBL,
 	UM_BBD_compID("UM-BBD compID"),
-	UniProt("Swiss-Prot", "TrEMBL"),
+	UniProt,
 	WebElements,
 	Wikipedia;
 	

@@ -12,7 +12,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.18-SNAPSHOT</version>
+    <version>1.0.19-SNAPSHOT</version>
     <name>Mega mapper</name>
     <description>
         A module to keep track of cross references between the databases used
@@ -279,6 +279,14 @@
                         </configuration>
                     </plugin>
                 </plugins>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                        <includes>
+                            <include>log4j.xml</include>
+                        </includes>
+                    </testResource>
+                </testResources>
             </build>
         </profile>
         <profile>
@@ -303,6 +311,11 @@
                     <groupId>uk.ac.ebi.ep</groupId>
                     <artifactId>bioportal-adapter</artifactId>
                     <version>1.0.4</version>
+                </dependency>
+                <dependency>
+                    <groupId>uk.ac.ebi.ep</groupId>
+                    <artifactId>chembl-adapter</artifactId>
+                    <version>1.0.1-SNAPSHOT</version>
                 </dependency>
                 <dependency>
                     <groupId>uk.ac.ebi.ep</groupId>
@@ -331,15 +344,12 @@
                     <resource>
                         <directory>${ep.config.dir}</directory>
                         <includes>
-
                             <include>ep-mm-db${ep.mm.db.config}.properties</include>
-
-                            <include>
-                                ep-mm-db${ep.mm.db.config}.properties
-                            </include>
                             <!-- This contains the BioPortal API key needed for
                             resolving EFO IDs: -->
                             <include>ep-web-client.properties</include>
+                            <!-- This one configures the ChEMBL adapter: -->
+                            <include>chembl-adapter.properties</include>
                         </includes>
                     </resource>
                 </resources>

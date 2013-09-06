@@ -48,9 +48,10 @@ java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
 	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
 echo "Finished ChEMBL import - $(date)"
 
-echo "Starting ChEMBL names import - $(date)"
-java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.ChemblCompounds ep-mm-db-$1
-echo "Finished ChEMBL names import - $(date)"
+# Not needed any more, as EbeEyeSaxParser will import also ChEMBL names:
+#echo "Starting ChEMBL names import - $(date)"
+#java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.ChemblCompounds ep-mm-db-$1
+#echo "Finished ChEMBL names import - $(date)"
 
 echo "Starting UniMed import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \

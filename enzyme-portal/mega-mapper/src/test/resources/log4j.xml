@@ -15,29 +15,17 @@
 		</layout>
 	</appender>
 
-	<logger name="JUNIT" additivity="false">
+	<logger name="uk.ac.ebi.ep.mm" additivity="false">
 		<level value="DEBUG"/>
 		<appender-ref ref="stdout"/>
 	</logger>
-	<logger name="uk.ac.ebi.ep" additivity="false">
-		<level value="INFO"/>
-		<appender-ref ref="file"/>
-	</logger>
-	<logger name="uk.ac.ebi.ep.mm" additivity="false">
-		<level value="INFO"/>
-		<appender-ref ref="file"/>
-	</logger>
-	<logger name="uk.ac.ebi.ep.mm.app" additivity="false">
-		<level value="DEBUG"/>
-		<appender-ref ref="file"/>
-	</logger>
 	<logger name="uk.ac.ebi.chemblws">
         <level value="ERROR"/>
-        <appender-ref ref="file"/>
+        <appender-ref ref="stdout"/>
 	</logger>
 	<root>
 		<level value="INFO"/>
-		<appender-ref ref="file"/>
+		<appender-ref ref="stdout"/>
 	</root>
 
 </log4j:configuration>

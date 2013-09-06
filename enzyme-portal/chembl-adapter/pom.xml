@@ -10,7 +10,7 @@
         <version>1.0.3</version>
     </parent>
     <artifactId>chembl-adapter</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>ChEMBL adapter</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

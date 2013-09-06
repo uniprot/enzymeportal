@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.core.search;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.biobabel.blast.Hit;

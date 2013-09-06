@@ -6,6 +6,7 @@ package uk.ac.ebi.ep.web;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import uk.ac.ebi.ep.core.search.HtmlUtility;
 
 /**

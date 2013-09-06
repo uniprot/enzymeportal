@@ -2,7 +2,7 @@
 # Imports EB-Eye XML files into an existing mega-map.
 # Params:
 # $1: runtime environment (enzdev|ezprel)
-# $2: EB-Eye XML file (ChEBI/ChEMBL-target)
+# $2: EB-Eye XML file (ChEMBL-target)
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 
