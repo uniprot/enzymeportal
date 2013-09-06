@@ -1,5 +1,7 @@
 package uk.ac.ebi.ep.core;
 
+import java.util.Comparator;
+import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.ep.search.model.Disease;
 //import  uk.ac.ebi.ep.enzyme.model.Disease;
 
@@ -19,6 +21,9 @@ import uk.ac.ebi.ep.search.model.Disease;
 public class DiseaseDefaultWrapper implements Comparable<DiseaseDefaultWrapper> {
 
     private Disease disease;
+    
+     private static final Comparator<String> NAME_COMPARATOR =
+            new ChemicalNameComparator();
 
     public Disease getDisease() {
         return disease;
@@ -31,11 +36,16 @@ public class DiseaseDefaultWrapper implements Comparable<DiseaseDefaultWrapper> 
         this.disease = disease;
     }
 
-    public int compareTo(DiseaseDefaultWrapper o) {
-        int result = disease.getName().compareToIgnoreCase(o.disease.getName());
-
-        return result;
-    }
+//    public int compareTo(DiseaseDefaultWrapper o) {
+//        int result = disease.getName().compareToIgnoreCase(o.disease.getName());
+//
+//        return result;
+//    }
+    
+    	public int compareTo(DiseaseDefaultWrapper o) {
+	    return NAME_COMPARATOR.compare(this.disease.getName(),
+	            o.disease.getName());
+	}
 
     @Override
     public int hashCode() {

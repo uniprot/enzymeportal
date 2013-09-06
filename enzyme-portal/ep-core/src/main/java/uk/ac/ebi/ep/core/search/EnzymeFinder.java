@@ -10,6 +10,7 @@ import uk.ac.ebi.biobabel.blast.Hsp;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
+import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
@@ -389,9 +390,8 @@ public class EnzymeFinder implements IEnzymeFinder {
         filters.setDiseases(diseaseFilter);
         searchResults.setSearchfilters(filters);
     }
-    
-    
-     /**
+
+    /**
      * Builds filters - species, compounds, diseases - from a result list.
      *
      * @param searchResults the result list, which will be modified by setting
@@ -511,7 +511,6 @@ public class EnzymeFinder implements IEnzymeFinder {
         return filters;
     }
 
-
     /**
      * Retrieves a collection of compounds related to a UniProt entry.
      *
@@ -542,17 +541,10 @@ public class EnzymeFinder implements IEnzymeFinder {
             for (Disease disease : diseaseCollection) {
 
 
-
-                //if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
-                // Disease disease = new Disease();
-                //String diseaseName = resolveSpecialCharacters(diseaseMap.getValue().toLowerCase(Locale.ENGLISH));
-                //disease.setName(diseaseName.replaceAll(",", ""));
-                //disease.setId(diseaseMap.getKey());
-
                 DiseaseDefaultWrapper diseaseDefaultWrapper = new DiseaseDefaultWrapper(disease);
                 related_disease.add(diseaseDefaultWrapper);
                 uniqueDiseases.add(diseaseDefaultWrapper);
-                //}
+
 
             }
         }
@@ -618,124 +610,61 @@ public class EnzymeFinder implements IEnzymeFinder {
         return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
 
-    public Iterable<Disease> findAllDiseases() {
-  Set<DiseaseDefaultWrapper> unique_disease = new HashSet<DiseaseDefaultWrapper>();
-   Set<Disease> diseaseList = new HashSet<Disease>();
-  DiseaseDefaultWrapper ddw = null;
-        Iterable<Disease> diseases = megaMapperConnection.getMegaMapper().findAllDiseases(MmDatabase.UniProt,MmDatabase.EFO, MmDatabase.MeSH, MmDatabase.OMIM);
-        for (Disease disease : diseases) {
-            ddw = new DiseaseDefaultWrapper(disease);
-            
-            unique_disease.add(ddw);
-        }
-        
-        for(DiseaseDefaultWrapper d : unique_disease){
-            diseaseList.add(d.getDisease());
-        }
-        return diseaseList;
+
+    public Set<Disease> findAllDiseases() {
+  
+       return megaMapperConnection.getMegaMapper().findAllDiseases(MmDatabase.UniProt, MmDatabase.EFO, MmDatabase.MeSH, MmDatabase.OMIM);
     }
-    
-    public Iterable<Disease> findAllDiseasesLike(String startsWith) {
-  Set<DiseaseDefaultWrapper> unique_disease = new HashSet<DiseaseDefaultWrapper>();
-   Set<Disease> diseaseList = new HashSet<Disease>();
-  DiseaseDefaultWrapper ddw = null;
-        Iterable<Disease> diseases = megaMapperConnection.getMegaMapper().findDiseasesLike(MmDatabase.UniProt,startsWith,MmDatabase.EFO, MmDatabase.MeSH, MmDatabase.OMIM);
-        for (Disease disease : diseases) {
-            ddw = new DiseaseDefaultWrapper(disease);
-            
-            unique_disease.add(ddw);
-        }
-        
-        for(DiseaseDefaultWrapper d : unique_disease){
-            diseaseList.add(d.getDisease());
-        }
-        return diseaseList;
-    }
-    
-    
-    public  List<String> getXrefs(Entry disease){
+
+
+    public List<String> getXrefs(Entry disease) {
         List<String> uniprotIds = new ArrayList<String>();
-      
-        Collection<XRef> xrefs = megaMapperConnection.getMegaMapper().getXrefs(disease,MmDatabase.UniProt);
-      
-        if(xrefs != null){
-        for(XRef ref : xrefs){
-           Entry uniprot = ref.getFromEntry();
-       
-       String [] p =  uniprot.getEntryId().split("_");
-       uniprotIds.add(p[0]);
-           
+
+        Collection<XRef> xrefs = megaMapperConnection.getMegaMapper().getXrefs(disease, MmDatabase.UniProt);
+
+        if (xrefs != null) {
+            for (XRef ref : xrefs) {
+                Entry uniprot = ref.getFromEntry();
+
+                String[] p = uniprot.getEntryId().split("_");
+                uniprotIds.add(p[0]);
+
+            }
         }
-        }
-        
+
         return uniprotIds;
     }
-    
-    public Entry findEntryById(String entryId){
+
+    public Entry findEntryById(String entryId) {
         Entry entry = megaMapperConnection.getMegaMapper().findByEntryId(entryId);
         return entry;
     }
-    
-    
-//    public SearchResults computeEnzymeSummary(String entryId, SearchResults searchResults){
-//        
-//        Entry entry = findEntryById(entryId);//get the entry
-//        
-//        List<String> idPrefixesList = getXrefs(entry);//get uniprot ids
-//     
-//           List<EnzymeSummary>  summaryList = new ArrayList<EnzymeSummary>();
-//       
-//      
-//        try {
-// 
-//         summaryList = getEnzymeSummaries(idPrefixesList, new ArrayList<String>());
-//        
-//         
-//        } catch (MultiThreadingException ex) {
-//            LOGGER.error("Error while getting enzymeSummaries", ex);
-//        }
-//        searchResults.setSummaryentries(summaryList);
-//        searchResults.setTotalfound(summaryList.size());
-//       
-//        //createSpeciesFilter(searchResults);
-//        if (uniprotIdPrefixSet.size() != summaryList.size()) {
-//            LOGGER.warn((uniprotIdPrefixSet.size() - summaryList.size())
-//                    + " UniProt ID prefixes have been lost");
-//        }
-//        LOGGER.debug("Building filters...");
-//        SearchFilters filters = buildSearchFilters(searchResults);
-//       searchResults.setSearchfilters(filters);
-//      
-//
-//        LOGGER.debug("Finished search");
-//        closeResources();
-//        return searchResults;
-//    }
-//    
-        public SearchResults computeEnzymeSummary( List<String> idPrefixesList, SearchResults searchResults){
-     
-           List<EnzymeSummary>  summaryList = new ArrayList<EnzymeSummary>();
-       
-     
+
+    public SearchResults computeEnzymeSummary(List<String> idPrefixesList, SearchResults searchResults) {
+
+        List<EnzymeSummary> summaryList = null;
+
         try {
 
-         summaryList = getEnzymeSummaries(idPrefixesList, new ArrayList<String>());
-        
-          
+
+            summaryList = getEnzymeSummaries(idPrefixesList, null);
+
+
+
         } catch (MultiThreadingException ex) {
             LOGGER.error("Error while getting enzymeSummaries", ex);
         }
         searchResults.setSummaryentries(summaryList);
         searchResults.setTotalfound(summaryList.size());
-  
-        if (uniprotIdPrefixSet.size() != summaryList.size()) {
-            LOGGER.warn((uniprotIdPrefixSet.size() - summaryList.size())
+
+        if (idPrefixesList.size() != summaryList.size()) {
+            LOGGER.warn((idPrefixesList.size() - summaryList.size())
                     + " UniProt ID prefixes have been lost");
         }
         LOGGER.debug("Building filters...");
         SearchFilters filters = buildSearchFilters(searchResults);
-       searchResults.setSearchfilters(filters);
-      
+        searchResults.setSearchfilters(filters);
+
         LOGGER.debug("Finished search");
         closeResources();
         return searchResults;
@@ -1161,16 +1090,16 @@ public class EnzymeFinder implements IEnzymeFinder {
         }
     }
 
+
     public List<EnzymeSummary> getEnzymesFromUniprotAPI(
-            List<String> resultSubList, List<String> paramList)
+            List<String> resultSubList1, List<String> paramList)
             throws MultiThreadingException {
+       
+        List<String> resultSubList = resultSubList1;
         uniprotAdapter.setMmConnection(megaMapperConnection.getConnection());
-        List<EnzymeSummary> enzymeList =
-                uniprotAdapter.getEnzymesByIdPrefixes(resultSubList,
-                IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
+        List<EnzymeSummary> enzymeList = uniprotAdapter.getEnzymesByIdPrefixes(resultSubList, IUniprotAdapter.DEFAULT_SPECIES, speciesFilter);
         return enzymeList;
     }
-
     /**
      * Retrieves full enzyme summaries.
      *
@@ -1179,11 +1108,19 @@ public class EnzymeFinder implements IEnzymeFinder {
      * @throws MultiThreadingException problem getting the original summaries,
      * or creating a processor to add synonyms to them.
      */
+
     private List<EnzymeSummary> getEnzymeSummaries(
             List<String> uniprotIdPrefixes, List<String> paramList)
             throws MultiThreadingException {
-        List<EnzymeSummary> summaries =
-                getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
+       
+//        List<String> uniprotIdPrefixes = new ArrayList<String>();
+//        uniprotIdPrefixes.add("EPM2A");
+//        uniprotIdPrefixes.add("NHLC1");
+//       
+
+        List<EnzymeSummary> summaries = getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
+     
+
         if (summaries != null) {
             EnzymeSummaryProcessor[] processors = {
                 new SynonymsProcessor(summaries, intenzAdapter)
