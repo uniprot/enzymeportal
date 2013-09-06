@@ -20,7 +20,16 @@
          <listener-class>com.mycompany.TagLibListener</listener-class> 
      </listener>
    -->
-   
+         <function>
+        <name>startsWithDigit</name>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>boolean startsWithDigit(java.lang.String)</function-signature>
+    </function>
+        <function>
+        <name>startsWithLowerCase</name>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>boolean startsWithLowerCase(java.lang.String, java.lang.String)</function-signature>
+    </function>
    
        <function>
         <name>contains</name>

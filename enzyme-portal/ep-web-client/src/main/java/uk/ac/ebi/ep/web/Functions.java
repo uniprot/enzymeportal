@@ -6,8 +6,6 @@ package uk.ac.ebi.ep.web;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
-import org.springframework.web.util.HtmlUtils;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
 
 /**
@@ -21,7 +19,30 @@ public final class Functions {
     private Functions() {
         // Hiden constructor.
     }
-
+    
+ 
+    
+    public static boolean startsWithDigit(String data){
+        return Character.isDigit(data.charAt(0));
+    }
+    
+    
+        /**This function is to enable using capital letter case in checking if a string starts with the letter
+     * 
+     * @param data the original string
+     * @param letter the first letter
+     * @return true if the string starts with the first letter
+     */
+    public static boolean startsWithLowerCase(String data, String letter){
+        String current = data;
+        if(startsWithDigit(data)){
+             current = data.replaceAll("(-)?\\d+(\\-\\d*)?", "").trim();
+       
+        }
+        return current.startsWith(letter.toLowerCase());
+    }
+    
+  
     /**
      *
      * @param collection
