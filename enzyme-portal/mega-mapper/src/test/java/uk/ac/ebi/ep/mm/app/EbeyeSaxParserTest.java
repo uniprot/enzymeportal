@@ -10,6 +10,7 @@ import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 
 import static junit.framework.Assert.assertEquals;
+import org.junit.Ignore;
 
 /**
  * @author rafa
@@ -41,6 +42,7 @@ public class EbeyeSaxParserTest {
     }
 
     @Test
+    //@Ignore("returns invalid numbers. i guess some files/data are missing. please investigate")
     public void testParseChemblTarget() throws Exception {
         assertEquals(0, mm.getXrefs(p18125).size());
 
