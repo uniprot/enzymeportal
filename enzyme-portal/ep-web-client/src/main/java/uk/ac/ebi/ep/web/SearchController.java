@@ -253,7 +253,7 @@ public class SearchController {
 
     private SearchModel customSearch(@ModelAttribute("searchModel") SearchModel searchModel, @PathVariable("id") String id, Model model, HttpSession session) {
 
-       
+
         EnzymeFinder finder = new EnzymeFinder(searchConfig);
         finder.getUniprotAdapter().setConfig(uniprotConfig);
         finder.getIntenzAdapter().setConfig(intenzConfig);
@@ -263,13 +263,16 @@ public class SearchController {
         List<String> ids = finder.getXrefs(entry);//obtain uniprot ids
 
         SearchParams searchParams = new SearchParams();
-      
+
 
 
         searchParams.setText(entry.getEntryName());
         searchParams.setType(SearchParams.SearchType.KEYWORD);
         searchParams.setStart(0);
         searchParams.setPrevioustext(entry.getEntryName());
+
+        addToHistory(session, "searchparams.text=" + entry.getEntryName());
+
 
 
 
@@ -285,7 +288,6 @@ public class SearchController {
     }
     private Set<uk.ac.ebi.ep.search.model.Disease> diseaseList = new TreeSet<uk.ac.ebi.ep.search.model.Disease>();
     private static final Comparator<String> NAME_COMPARATOR = new ChemicalNameComparator();
-    
     static final Comparator<uk.ac.ebi.ep.search.model.Disease> SORT_DISEASES = new Comparator<uk.ac.ebi.ep.search.model.Disease>() {
         public int compare(uk.ac.ebi.ep.search.model.Disease d1, uk.ac.ebi.ep.search.model.Disease d2) {
 
@@ -438,58 +440,62 @@ public class SearchController {
             HttpSession session) {
         String view = "error";
 
+        String searchKey = null;
+        SearchResults results = null;
+
         boolean custom = getIsCustomSearch();
-
-
-        if (custom == true) {
-            String id = getPathVariable();
-
-
-            searchModel = customSearch(searchModel, id, model, session);
-
-            model.addAttribute("searchModel", searchModel);
-            model.addAttribute("pagination", getPagination(searchModel));
-            clearHistory(session);
-
-            setIsCustomSearch(false);
-            view = "search";
-        }
-
-
         try {
-            // See if it is already there, perhaps we are paginating:
-            Map<String, SearchResults> prevSearches =
-                    getPreviousSearches(session.getServletContext());
 
-            String searchKey = getSearchKey(searchModel.getSearchparams());
+            if (custom == true) {
+                String id = getPathVariable();
 
-
-            SearchResults results = prevSearches.get(searchKey);
-            if (results == null) {
-                // New search:
                 clearHistory(session);
+                searchModel = customSearch(searchModel, id, model, session);
 
-                switch (searchModel.getSearchparams().getType()) {
+                model.addAttribute("searchModel", searchModel);
+                model.addAttribute("pagination", getPagination(searchModel));
 
-                    case KEYWORD:
+
+                setIsCustomSearch(false);
+                view = "search";
+            } else {
 
 
-                        results = searchKeyword(searchModel.getSearchparams());
-                        cacheSearch(session.getServletContext(), searchKey, results);
-                        addToHistory(session, "searchparams.text=" + searchKey);
-                        break;
-                    case SEQUENCE:
-                        view = searchSequence(model, searchModel);
-                        // cacheSearch(session.getServletContext(), searchKey, results);
-                        addToHistory(session, "searchparams.sequence=" + searchKey);
-                        break;
-                    case COMPOUND:
-                        //            	view = postCompoundSearch(model, searchModel);
-                        break;
-                    default:
+
+                // See if it is already there, perhaps we are paginating:
+                Map<String, SearchResults> prevSearches =
+                        getPreviousSearches(session.getServletContext());
+
+                searchKey = getSearchKey(searchModel.getSearchparams());
+
+
+                results = prevSearches.get(searchKey);
+
+                if (results == null) {
+                    // New search:
+                    clearHistory(session);
+
+                    switch (searchModel.getSearchparams().getType()) {
+
+                        case KEYWORD:
+
+
+                            results = searchKeyword(searchModel.getSearchparams());
+                            cacheSearch(session.getServletContext(), searchKey, results);
+                            addToHistory(session, "searchparams.text=" + searchKey);
+                            break;
+                        case SEQUENCE:
+                            view = searchSequence(model, searchModel);
+                            // cacheSearch(session.getServletContext(), searchKey, results);
+                            addToHistory(session, "searchparams.sequence=" + searchKey);
+                            break;
+                        case COMPOUND:
+                            //            	view = postCompoundSearch(model, searchModel);
+                            break;
+                        default:
+                    }
                 }
             }
-
             if (results != null) { // something to show
                 searchModel.setSearchresults(results);
                 applyFilters(searchModel);
@@ -559,7 +565,7 @@ public class SearchController {
 
 
         return "redirect:/search";
-        
+
     }
 
     @RequestMapping(value = "/advanceSearch", method = RequestMethod.GET)
