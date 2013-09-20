@@ -33,7 +33,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mega-mapper</artifactId>
-            <version>1.0.8</version>
+            <version>1.0.19</version>
         </dependency>
         <dependency>
             <groupId>com.oracle</groupId>
