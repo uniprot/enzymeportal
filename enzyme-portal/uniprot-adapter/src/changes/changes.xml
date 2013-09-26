@@ -10,6 +10,15 @@
 </properties>
 
 <body>
+    <release version="1.0.6" date="2013-09-26"
+        description="Dependencies updates">
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of ep-util and kraken.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Set kraken versions to a coherent value via maven property.
+        </action>
+    </release>
     <release version="1.0.5" date="2013-06-11" description="Bug fix">
         <action dev="rafalcan" type="fix">
             Fixed issue with leaking connections: though not the cause of the
