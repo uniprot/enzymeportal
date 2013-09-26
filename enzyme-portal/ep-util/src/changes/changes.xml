@@ -9,6 +9,22 @@
 </properties>
 
 <body>
+    <release version="1.0.6" date="2013-09-26"
+        description="Deprecated methods, new methods">
+        <action dev="rafalcan" type="remove">
+            Deprecated LuceneQueryBuilder methods using parameters of type
+            uk.ac.ebi.ep.config.Domain (ep-domain) as it refers actually to
+            EB-Eye domains and is deprecated in favor of the Domains enumeration
+            in ebeye-adapter. One of them -
+            createFieldsQueryWithEnzymeFilter(Domain, SearchParams) - actually
+            contradicted its name as it did not query specific fields.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added methods createQueryWithEnzymeFilter(String) and
+            createFieldsQueryWithEnzymeFilter(List&lt;String&gt;, String) to
+            LuceneQueryBuilder.
+        </action>
+    </release>
     <release version="1.0.5" date="2013-05-23"
         description="Improved regex for activators and inhibitors">
         <action dev="rafalcan" type="fix">

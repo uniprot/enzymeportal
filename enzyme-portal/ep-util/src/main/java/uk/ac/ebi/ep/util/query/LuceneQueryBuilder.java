@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.config.Domain;
 import uk.ac.ebi.ep.config.SearchField;
@@ -48,7 +47,11 @@ public class LuceneQueryBuilder {
      * @param searchParams The SearchParam object which contain the keywords and
      * the filter which are used to ass 
      * @return a Lucene query
+     * @deprecated The class Domain from ep-domain is deprecated, as it refers
+     *      to EB-Eye domains actually, so it belongs in ebeye-adapter. Use
+     *      {@link #createFieldsQuery(java.util.List, String)} instead.
      */
+    @Deprecated
     public static String createFieldsQuery(Domain domain, SearchParams searchParams) {
         StringBuilder query = new StringBuilder();
         List<SearchField> SearchFieldList = domain.getSearchFieldList().getSearchField();
@@ -70,7 +73,12 @@ public class LuceneQueryBuilder {
      * @param searchParams
      * @return
      * @see {@link #createFieldsQuery(uk.ac.ebi.ep.config.Domain, uk.ac.ebi.ep.search.model.SearchParams)}
+     * @deprecated The class Domain from ep-domain is deprecated, as it refers
+     *      to EB-Eye domains actually, so it belongs in ebeye-adapter. Use
+     *      {@link #createFieldsQueryWithEnzymeFilter(java.util.List, String)}
+     *      instead.
      */
+    @Deprecated
     public static String createFieldsQueryWithEnzymeFilter(Domain domain, SearchParams searchParams) {
         StringBuffer query = new StringBuffer()
 //        	.append(createFieldsQuery(domain, searchParams));
@@ -80,13 +88,37 @@ public class LuceneQueryBuilder {
     }
 
     /**
-     * Overloaded method to create a Lucene query from the fieldNames and fieldValue
-     * instead of a Domain object and a SearchParam object.
-     * @param fieldNames The search field names
-     * @param fieldValue The value of the field names to query
-     * @return a Lucene query OR
+     * Builds a lucene query not restricted to any fields.
+     * @param searchTerm the search term.
+     * @return a lucene query with an filter for enzymes.
+     * @since 1.0.6
      */
-    public static String createFieldsQuery(List<String> fieldNames, String fieldValue) {
+    public static String createQueryWithEnzymeFilter(String searchTerm){
+        return new StringBuilder(searchTerm)
+                .append(" AND ").append(ENZYME_FILTER).toString();
+    }
+
+    /**
+     * Builds a lucene query for several fields.
+     * @param fieldNames names of the fields to be queried.
+     * @param fieldValue value searched in those fields.
+     * @return an OR'ed lucene query.
+     * @since 1.0.6
+     */
+    public static String createFieldsQueryWithEnzymeFilter(
+            List<String> fieldNames, String fieldValue){
+        return new StringBuilder(createFieldsQuery(fieldNames, fieldValue))
+                .append(" AND ").append(ENZYME_FILTER).toString();
+    }
+
+    /**
+     * Method to create a Lucene query from the field names and field value.
+     * @param fieldNames The search field names to query.
+     * @param fieldValue The value of the field names.
+     * @return an OR'ed Lucene query
+     */
+    public static String createFieldsQuery(List<String> fieldNames,
+            String fieldValue) {
         StringBuilder query = new StringBuilder();
         int listLength = fieldNames.size();
         int counter = 1;
@@ -239,7 +271,6 @@ public class LuceneQueryBuilder {
      * @param wildcard
      * @param subListSize
      * @return
-     * @throws EnzymeFinderException
      */
     public static List<String> createQueriesIn(
             String queryField
