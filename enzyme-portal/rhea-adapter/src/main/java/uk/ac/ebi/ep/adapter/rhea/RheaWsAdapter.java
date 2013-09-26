@@ -1,22 +1,16 @@
 package uk.ac.ebi.ep.adapter.rhea;
 
+import java.lang.Object;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.xml_cml.schema.cml2.react.*;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Equation;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.rhea.domain.Database;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
 import uk.ac.ebi.rhea.ws.client.RheasResourceClient;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Link;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Map;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Molecule;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Product;
-import uk.ac.ebi.rhea.ws.response.cmlreact.ProductList;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Reactant;
-import uk.ac.ebi.rhea.ws.response.cmlreact.ReactantList;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 import uk.ac.ebi.rhea.ws.response.search.RheaReaction;
 
 public class RheaWsAdapter implements IRheaAdapter {

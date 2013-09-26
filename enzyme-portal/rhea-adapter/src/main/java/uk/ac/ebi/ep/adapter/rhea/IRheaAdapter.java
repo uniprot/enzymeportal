@@ -1,9 +1,10 @@
 package uk.ac.ebi.ep.adapter.rhea;
 
 import java.util.List;
+
+import org.xml_cml.schema.cml2.react.Reaction;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 import uk.ac.ebi.rhea.ws.response.search.RheaReaction;
 
 /**
