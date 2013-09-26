@@ -9,10 +9,11 @@
 </properties>
 
 <body>
-	<release version="1.0.3" date="(Not yet released)">
+	<release version="1.0.3" date="2013-09-26"
+	    description="Dependencies updates.">
 		<action dev="rafalcan" type="update">
-			Updated to latest version of parent pom file (move to GitHub) and
-			ep-domain.
+			Updated to latest version of parent pom file (move to GitHub),
+			ep-domain, rhea-ws-domain and rhea-ws-client.
 		</action>
 	</release>
 	<release version="1.0.2" date="2012-08-01" description="Bug fix">
