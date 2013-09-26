@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.FieldsOfGetResults;
 import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.ebeye.result.Result;
@@ -166,7 +165,7 @@ public class ResultFactory {
                 //List<String> nonUniprotAccs = Transformer.transform(accsField);
                 Xref xref = new Xref();
                 xref.setDomain(this.domain);
-                if (this.domain.equals(EbeyeAdapter.Domains.chebi.name())) {
+                if (this.domain.equals(Domains.chebi.name())) {
                     xref.getAcc().add(idField);
                 } else {
                     xref.getAcc().add(accsField);

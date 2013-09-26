@@ -2,9 +2,10 @@ package uk.ac.ebi.ep.adapter.ebeye;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 import uk.ac.ebi.ebinocle.webservice.ArrayOfEntryReferences;
+import uk.ac.ebi.ebinocle.webservice.EntryReferences;
 import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
 import uk.ac.ebi.ebisearchservice.ArrayOfString;
 import uk.ac.ebi.ebisearchservice.EBISearchService;
@@ -22,6 +23,10 @@ import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
  * @author  $Author$
  */
 public class EbeyeCallable {
+
+    private static final ArrayOfString ACC_FIELD =
+            Transformer.transformToArrayOfString(
+                IEbeyeAdapter.FieldsOfGetResults.acc.name());
 
 //********************************* VARIABLES ********************************//
     
@@ -192,6 +197,67 @@ public class EbeyeCallable {
             		eBISearchService.getReferencedEntriesFlatSet(
             				domain, entries, referencedDomain, fields);
             return EbeyeResult;
+        }
+
+    }
+
+    /**
+     * Callable to retrieve UniProt accessions referenced by the results of a
+     * search.
+     */
+    public static class GetUniprotReferencesCallable
+    implements Callable<ArrayOfArrayOfString>{
+
+        protected GetResultsCallable getResultsCallable;
+
+        /**
+         * Constructor.
+         * @param param parameters for the search, including the search terms
+         *      and the searched domain.
+         * @param start first record to be fetched from the results list.
+         * @param size how many records to fetch.
+         */
+        public GetUniprotReferencesCallable(ParamOfGetResults param, int start,
+                                            int size) {
+            getResultsCallable = new GetResultsCallable(param, start, size);
+        }
+
+        public ArrayOfArrayOfString call() throws Exception {
+            return getReferences();
+        }
+
+        /**
+         * Method to get UniProt references from EB-Eye. It first calls
+         * EB-Eyes's <code>getResults</code> to get the ids of any entries
+         * matching the search terms in the searched domain, then uses those ids
+         * to call <code>getReferencedEntriesSet</code> to retrieve related
+         * UniProt accessions.
+         * @return a String[][] in which each String[] is a primary UniProt
+         *      accession followed by its secondary ones.
+         */
+        private ArrayOfArrayOfString getReferences(){
+            ArrayOfArrayOfString refs = null;
+            ArrayOfArrayOfString ids = getResultsCallable.callGetResults();
+            ArrayOfString arrIds = Transformer.transformToArrayOfString(ids);
+            if (arrIds != null){
+                ArrayOfEntryReferences upRefs =
+                        eBISearchService.getReferencedEntriesSet(
+                                getResultsCallable.param.getDomain(), arrIds,
+                                Domains.uniprot.name(), ACC_FIELD);
+                for (EntryReferences entryRefs : upRefs.getEntryReferences()){
+                    ArrayOfArrayOfString values =
+                            entryRefs.getReferences().getValue();
+                    if (values == null || values.getArrayOfString() == null){
+                        continue;
+                    }
+                    if (refs == null){
+                        refs = values;
+                    } else {
+                        refs.getArrayOfString().addAll(values.getArrayOfString());
+                    }
+                }
+            }
+            return refs;
         }
 
     }

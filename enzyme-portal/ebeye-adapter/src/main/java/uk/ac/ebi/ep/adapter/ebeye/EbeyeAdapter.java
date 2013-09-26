@@ -1,24 +1,9 @@
 package uk.ac.ebi.ep.adapter.ebeye;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.ebinocle.webservice.ArrayOfEntryReferences;
 import uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;
 import uk.ac.ebi.ebisearchservice.ArrayOfString;
@@ -82,8 +67,17 @@ public class EbeyeAdapter implements IEbeyeAdapter {
             if (i == nrOfQueries - 1 && (totalFound % size) > 0) {
                 size = totalFound % size;
             }
-            Callable<ArrayOfArrayOfString> callable =
-                    new GetResultsCallable(param, start, size);
+            Callable<ArrayOfArrayOfString> callable;
+            switch (Domains.valueOf(param.getDomain().replace('-', '_'))){
+                case efo:
+                case omim:
+                case mesh:
+                    callable = new EbeyeCallable.GetUniprotReferencesCallable(
+                            param, start, size);
+                    break;
+                default:
+                    callable = new GetResultsCallable(param, start, size);
+            }
             callableList.add(callable);
             start = start + size;
         }
@@ -176,7 +170,7 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 
 	public Map<String, String> getNameMapByAccessions(String domain,
 			Collection<String> accessions) {
-		Domains domains = IEbeyeAdapter.Domains.valueOf(domain);
+		Domains domains = Domains.valueOf(domain);
 		List<String> configFields;
 		switch (domains) {
 		case chebi:
@@ -261,23 +255,17 @@ public class EbeyeAdapter implements IEbeyeAdapter {
         return fieldValueMap;
     }
 
-
     public List<String> getRelatedUniprotAccessionSet(List<ParamOfGetResults> paramOfGetResults)
 	throws MultiThreadingException {
-        List<String> accessionList= new ArrayList<String>();
-//        LOGGER.debug("SEARCH before preparing callables for getRelatedUniprotAccessionSet");
-        List<Callable<ArrayOfArrayOfString>> callableList = 
+        List<Callable<ArrayOfArrayOfString>> upAccCallables =
                 new ArrayList<Callable<ArrayOfArrayOfString>>();
-        for (ParamOfGetResults param:paramOfGetResults)  {
-            callableList.addAll(prepareCallableCollection(param));
+        Set<String> accessionSet = new HashSet<String>();
+        for (ParamOfGetResults param: paramOfGetResults)  {
+            upAccCallables.addAll(prepareCallableCollection(param));
         }
-//        LOGGER.debug("SEARCH before executing callables for getRelatedUniprotAccessionSet");
-        List<ArrayOfArrayOfString> rawResults = executeCallables(callableList);
-//        LOGGER.debug("SEARCH before Transformer.transformFieldValueToList");
-		Set<String> accessionSet = Transformer.transformFieldValueToList(rawResults, true);
-//        LOGGER.debug("SEARCH after Transformer.transformFieldValueToList");
-        accessionList.addAll(accessionSet);
-        return accessionList;
+        accessionSet.addAll(Transformer.transformFieldValueToList(
+                executeCallables(upAccCallables), true));
+        return new ArrayList<String>(accessionSet);
     }
 
     public Set<String> getValueOfFields(ParamOfGetResults paramOfGetResults) throws MultiThreadingException {
@@ -289,10 +277,8 @@ public class EbeyeAdapter implements IEbeyeAdapter {
 
     public Map<String, List<String>> getUniprotRefAccesionsMap(
     		ParamOfGetResults paramOfGetResults) throws MultiThreadingException {
-//    	LOGGER.debug("SEARCH before prepareCallableCollection");
         List<Callable<ArrayOfArrayOfString>> callableList
                  = prepareCallableCollection(paramOfGetResults);
-//    	LOGGER.debug("SEARCH before executeCallables");
         List<ArrayOfArrayOfString> ids = executeCallables(callableList);
         
         EbeyeCallable.GetReferencedEntriesSet callable =
@@ -300,12 +286,9 @@ public class EbeyeAdapter implements IEbeyeAdapter {
     					paramOfGetResults.getDomain(),
     					Transformer.transformToArrayOfString(ids),
     					Domains.uniprot.name(),
-    					Transformer.transformToArrayOfString(FieldsOfUniprotNameMap.acc.name()));
+    					Transformer.transformToArrayOfString(
+    					    FieldsOfUniprotNameMap.acc.name()));
         ArrayOfEntryReferences references = callable.callGetReferencedEntriesSet();
-        
-//     	LOGGER.debug("SEARCH before Transformer.transformChebiResults");
-//        Map<String,List<String>> uniprotRefAccessionsMap = Transformer.transformChebiResults(rawResults, true);
-        //     	LOGGER.debug("SEARCH after Transformer.transformChebiResults");
         return Transformer.transformToMap(references);
     }
 

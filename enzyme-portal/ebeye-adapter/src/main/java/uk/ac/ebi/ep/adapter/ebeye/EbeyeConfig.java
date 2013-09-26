@@ -1,5 +1,8 @@
 package uk.ac.ebi.ep.adapter.ebeye;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Configuration for the EB-Eye search.
  * @author rafa
@@ -16,8 +19,20 @@ public class EbeyeConfig implements EbeyeConfigMBean {
 	private int maxUniprotResultsFromOtherDomains;
 	private int maxThreads;
 	private int threadTimeout;
+	private Map<String, String[]> searchFields;
 
-	public int getResultsLimit() {
+    /**
+     * Simple constructor.
+     * The search fields for each EB-Eye domain are set initially to the default
+     * values in the Domains enumeration.
+     * @see Domains
+     */
+    public EbeyeConfig() {
+        searchFields = new HashMap<String, String[]>();
+        resetSearchFields();
+    }
+
+    public int getResultsLimit() {
 		return ebeyeResultsLimit;
 	}
 
@@ -88,5 +103,29 @@ public class EbeyeConfig implements EbeyeConfigMBean {
 	public void setThreadTimeout(int i) {
 		threadTimeout = i;
 	}
+
+    public String[] getSearchFields(String domain) {
+        return searchFields.get(domain);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param domain {@inheritDoc}
+     * @param fields {@inheritDoc} A space-or-colon-or-semicolon separated list
+     *      of field name.
+     */
+    public void setSearchFields(String domain, String fields) {
+        if (fields == null || fields.trim().length() == 0){
+            searchFields.remove(domain);
+        } else {
+            searchFields.put(domain, fields.split("\\s*[\\s,;]\\s*"));
+        }
+    }
+
+    public void resetSearchFields() {
+        for (Domains domain : Domains.values()) {
+            searchFields.put(domain.name(), domain.getSearchFields());
+        }
+    }
 
 }

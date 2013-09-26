@@ -10,6 +10,30 @@
 </properties>
 
 <body>
+    <release version="1.0.4" date="2013-09-26"
+        description="Now searching also EFO, OMIM and MeSH. JMX-manageable
+        search fields.">
+        <action dev="rafalcan" type="add">
+            Added EFO, OMIM and MeSH to the Domains enumeration - now in an
+            independent file -, which now contains lists of default search
+            fields.
+            <fixes issue="177"/>
+        </action>
+        <action dev="rafalcan" type="add">
+            Added search fields to EbeyeConfiguration, where they can be
+            modified via JMX.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added callable EbeyeCallable.GetUniprotReferencesCallable to
+            retrieve UniProt accessions referenced by the results of a search
+            in domains not supporting the UNIPROT pseudo-field (namely
+            EFO, OMIM and MeSH).
+        </action>
+        <action dev="rafalcan" type="add">
+            Added method
+            Transformer.transformToArrayOfString(ArrayOfArrayOfString).
+        </action>
+    </release>
 	<release version="1.0.3" date="2013-06-19">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
