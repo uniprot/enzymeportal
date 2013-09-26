@@ -10,6 +10,25 @@
 </properties>
 
 <body>
+    <release version="1.0.20" date="2013-09-26" description="Better searches.">
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of uniprot-adapter, ebeye-adapter - which
+            fixes issue with searches of disease names -, ep-util, rhea-adapter
+            and rhea-ws-client.
+        </action>
+        <action dev="rafalcan" type="remove">
+            Deprecated use of config.xml from ep-domain to read EB-Eye domains
+            (now using the Domains enumeration in ebeye-adapter).
+        </action>
+        <action dev="rafalcan" type="remove">
+            Removed a lot of rubish (unused methods, old commented-out code,
+            excess blank lines).
+        </action>
+        <action dev="rafalcan" type="fix">
+            Better management of searches by using the proper queries
+            (with/without enzyme filter, general or field-specific).
+        </action>
+    </release>
        <release version="1.0.19" date="2013-07-26" description="update.">
         <action dev="joseph" type="update">
            No longer contruct Compounds from a Map of String (names) rather now returns a collection of compounds from the
