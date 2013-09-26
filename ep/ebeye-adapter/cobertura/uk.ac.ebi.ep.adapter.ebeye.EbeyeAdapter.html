@@ -12,8 +12,8 @@
 <div class="separator">&nbsp;</div>
 <table class="report">
 <thead><tr>  <td class="heading">Classes in this File</td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Line Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Branch Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Complexity</a></td></tr></thead>
-  <tr><td><a href="uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter.html">EbeyeAdapter</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">0%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:0px"><span class="text">0/134</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">0%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:0px"><span class="text">0/40</span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.0;</span>3</td></tr>
-  <tr><td><a href="uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter.html">EbeyeAdapter$1</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">0%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:0px"><span class="text">0/1</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></td><td class="percentgraph"><div class="percentgraph"><div class="na" style="width:100px"><span class="text"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.0;</span>3</td></tr>
+  <tr><td><a href="uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter.html">EbeyeAdapter</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">0%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:0px"><span class="text">0/137</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">0%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:0px"><span class="text">0/44</span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.2142857142857144;</span>3.214</td></tr>
+  <tr><td><a href="uk.ac.ebi.ep.adapter.ebeye.EbeyeAdapter.html">EbeyeAdapter$1</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">0%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:0px"><span class="text">0/1</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></td><td class="percentgraph"><div class="percentgraph"><div class="na" style="width:100px"><span class="text"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">N/A</a></span></div></div></td></tr></table></td><td class="value"><span class="hidden">3.2142857142857144;</span>3.214</td></tr>
 
 </table>
 <div class="separator">&nbsp;</div>
@@ -23,493 +23,456 @@
 <tr>  <td class="numLine">&nbsp;2</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;3</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.ArrayList;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.*;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;4</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.Collection;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.*;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;5</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.HashMap;</pre></td></tr>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;6</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.LinkedHashMap;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;7</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.List;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;8</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.Map;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;9</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.Set;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;10</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.Callable;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;11</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.CompletionService;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;12</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.ExecutionException;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;13</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.ExecutorCompletionService;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;14</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.ExecutorService;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;15</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.Executors;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;16</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.Future;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;17</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.TimeUnit;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;18</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> java.util.concurrent.TimeoutException;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;19</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;20</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> org.apache.log4j.Logger;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;21</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;22</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;7</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ebinocle.webservice.ArrayOfEntryReferences;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;23</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;8</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ebisearchservice.ArrayOfArrayOfString;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;24</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;9</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ebisearchservice.ArrayOfString;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;25</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;10</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetEntriesCallable;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;26</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;11</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.GetResultsCallable;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;27</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;12</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ep.adapter.ebeye.EbeyeCallable.NumberOfResultsCaller;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;28</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;13</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;29</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;14</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ep.adapter.ebeye.util.Transformer;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;30</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;15</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ep.search.exception.MultiThreadingException;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;31</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;16</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="keyword">import</span> uk.ac.ebi.ep.search.result.Pagination;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;32</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;17</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;33</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;18</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment">/**</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;34</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;19</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> *</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;35</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;20</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> * @since   1.0</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;36</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;21</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> * @version $LastChangedRevision$ &lt;br/&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;37</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;22</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> *          $LastChangedDate$ &lt;br/&gt;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;38</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;23</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> *          $Author$</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;39</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;24</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> * @author  $Author$</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;40</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;25</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;<span class="comment"> */</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;41</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<span class="keyword">public</span> <span class="keyword">class</span> EbeyeAdapter <span class="keyword">implements</span> IEbeyeAdapter {</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;42</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;26</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<span class="keyword">public</span> <span class="keyword">class</span> EbeyeAdapter <span class="keyword">implements</span> IEbeyeAdapter {</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;27</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;43</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = Logger.getLogger(EbeyeAdapter.<span class="keyword">class</span>);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;44</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;28</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = Logger.getLogger(EbeyeAdapter.<span class="keyword">class</span>);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;29</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;45</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;30</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> EbeyeConfig config;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;46</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;31</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;47</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;32</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> EbeyeConfig getConfig() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;48</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">return</span> config;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;49</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;33</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">return</span> config;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;34</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;50</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;35</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;51</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;36</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">void</span> setConfig(EbeyeConfig config) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;52</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">this</span>.config = config;</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;53</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;54</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;37</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">this</span>.config = config;</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;38</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;39</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;55</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;40</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">private</span> List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; prepareCallableCollection (</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;56</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;41</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;            List&lt;ParamOfGetResults&gt; paramList){</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;57</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;58</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;42</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;43</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">new</span> ArrayList&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;59</td>  <td class="nbHitsUncovered"><a title="Line 59: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 59: Conditional coverage 0% (0/2).">        <span class="keyword">if</span> (paramList.size() &gt; 0) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;60</td>  <td class="nbHitsUncovered"><a title="Line 60: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 60: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (ParamOfGetResults param : paramList) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;61</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callables =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;62</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;44</td>  <td class="nbHitsUncovered"><a title="Line 44: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 44: Conditional coverage 0% (0/2).">        <span class="keyword">if</span> (paramList.size() &gt; 0) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;45</td>  <td class="nbHitsUncovered"><a title="Line 45: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 45: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (ParamOfGetResults param : paramList) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;46</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callables =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;47</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        prepareCallableCollection(param);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;63</td>  <td class="nbHitsUncovered"><a title="Line 63: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 63: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (callables.size()&gt;0) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;64</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        callableList.addAll(callables);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;65</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;48</td>  <td class="nbHitsUncovered"><a title="Line 48: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 48: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (callables.size()&gt;0) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;49</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        callableList.addAll(callables);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;50</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;66</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        }</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;67</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;51</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        }</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;52</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;68</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> callableList;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;69</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;53</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> callableList;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;54</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;70</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;55</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    </pre></td></tr>
-<tr>  <td class="numLine">&nbsp;71</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;56</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">private</span> List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; prepareCallableCollection (</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;72</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;57</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;            ParamOfGetResults param){</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;73</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;74</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;58</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;59</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                = <span class="keyword">new</span> ArrayList&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;75</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> totalFound = param.getTotalFound();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;76</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> size = config.getResultsLimit();</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;77</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;60</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> totalFound = param.getTotalFound();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;61</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> size = config.getResultsLimit();</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;62</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="comment">//Work around to solve big result set issue</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;78</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        Pagination pagination = <span class="keyword">new</span> Pagination(totalFound, size);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> nrOfQueries = pagination.getLastPage();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> start = 0;</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsUncovered"><a title="Line 81: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 81: Conditional coverage 0% (0/2).">        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; nrOfQueries; i++) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsUncovered"><a title="Line 82: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 82: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">            <span class="keyword">if</span> (i == nrOfQueries - 1 &amp;&amp; (totalFound % size) &gt; 0) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                size = totalFound % size;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;63</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        Pagination pagination = <span class="keyword">new</span> Pagination(totalFound, size);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;64</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> nrOfQueries = pagination.getLastPage();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;65</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> start = 0;</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;66</td>  <td class="nbHitsUncovered"><a title="Line 66: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 66: Conditional coverage 0% (0/2).">        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; nrOfQueries; i++) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;67</td>  <td class="nbHitsUncovered"><a title="Line 67: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 67: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">            <span class="keyword">if</span> (i == nrOfQueries - 1 &amp;&amp; (totalFound % size) &gt; 0) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;68</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                size = totalFound % size;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;69</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;            }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            Callable&lt;ArrayOfArrayOfString&gt; callable =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;86</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                    <span class="keyword">new</span> GetResultsCallable(param, start, size);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;87</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            callableList.add(callable);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            start = start + size;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;89</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;90</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> callableList;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;91</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;92</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    <span class="keyword">private</span> List&lt;ArrayOfArrayOfString&gt; executeCallables(</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;            List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callables) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;95</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            List&lt;ArrayOfArrayOfString&gt; ebeyeResultList =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                            <span class="keyword">new</span> ArrayList&lt;ArrayOfArrayOfString&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;97</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ExecutorService pool = Executors.newCachedThreadPool();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;98</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        CompletionService&lt;ArrayOfArrayOfString&gt; ecs =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;99</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">new</span> ExecutorCompletionService&lt;ArrayOfArrayOfString&gt;(pool);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;100</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;101</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    Map&lt;Future&lt;ArrayOfArrayOfString&gt;, ArrayOfArrayOfString&gt; future2aoaos =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;102</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                    <span class="keyword">new</span> LinkedHashMap&lt;Future&lt;ArrayOfArrayOfString&gt;, ArrayOfArrayOfString&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;103</td>  <td class="nbHitsUncovered"><a title="Line 103: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 103: Conditional coverage 0% (0/2).">                <span class="keyword">for</span> (Callable&lt;ArrayOfArrayOfString&gt; callable : callables) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;104</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                future2aoaos.put(ecs.submit(callable), <span class="keyword">null</span>);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;105</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;106</td>  <td class="nbHitsUncovered"><a title="Line 106: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 106: Conditional coverage 0% (0/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; callables.size(); i++) {</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;107</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;108</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        <span class="keyword">final</span> Future&lt;ArrayOfArrayOfString&gt; taken =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        ecs.poll(config.getThreadTimeout(),</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;110</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                                        TimeUnit.MILLISECONDS);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;111</td>  <td class="nbHitsUncovered"><a title="Line 111: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 111: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (taken != <span class="keyword">null</span>){</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                ArrayOfArrayOfString rawResults = taken.get();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;113</td>  <td class="nbHitsUncovered"><a title="Line 113: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 113: Conditional coverage 0% (0/2).">                                                <span class="keyword">if</span> (rawResults != <span class="keyword">null</span>){</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;114</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                        future2aoaos.put(taken, rawResults);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;115</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;116</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                LOGGER.warn(<span class="string">"SEACH job result is null!"</span>);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;117</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;118</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                } <span class="keyword">else</span> {</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        LOGGER.warn(<span class="string">"SEACH future not retrieved!"</span>);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;120</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;121</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                } <span class="keyword">catch</span> (Exception e) {</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;122</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Don't stop the others</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;123</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        LOGGER.error(<span class="string">"Callable "</span> + (i+1) + <span class="string">" of "</span> + callables.size()</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;124</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        + <span class="string">" - "</span> + e.getMessage(), e);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                }</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;126</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;127</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="comment">// Now finished, let's keep only successful futures:</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsUncovered"><a title="Line 128: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 128: Conditional coverage 0% (0/2).">                <span class="keyword">for</span> (Future&lt;ArrayOfArrayOfString&gt; future : future2aoaos.keySet()) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">final</span> ArrayOfArrayOfString aoaos = future2aoaos.get(future);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;130</td>  <td class="nbHitsUncovered"><a title="Line 130: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 130: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (aoaos != <span class="keyword">null</span>){</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;131</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        ebeyeResultList.add(aoaos);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;132</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;133</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;134</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                LOGGER.debug(<span class="string">"SEARCH after futures loop, successful = "</span></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;135</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                + ebeyeResultList.size() + <span class="string">"/"</span> + callables.size());</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;136</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">finally</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;137</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            pool.shutdown();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> ebeyeResultList;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;140</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;141</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;142</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> List&lt;ParamOfGetResults&gt; getNumberOfResults(</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;143</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                    List&lt;ParamOfGetResults&gt; paramOfGetResults)</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;144</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">throws</span> MultiThreadingException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;145</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;ParamOfGetResults&gt; params = <span class="keyword">new</span> ArrayList&lt;ParamOfGetResults&gt;();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ExecutorService pool = Executors.newCachedThreadPool();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;147</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        CompletionService&lt;Integer&gt; ecs = <span class="keyword">new</span> ExecutorCompletionService&lt;Integer&gt;(pool);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;148</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;149</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            Map&lt;Future&lt;Integer&gt;, ParamOfGetResults&gt; future2param =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;150</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                            <span class="keyword">new</span> HashMap&lt;Future&lt;Integer&gt;, ParamOfGetResults&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsUncovered"><a title="Line 151: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 151: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (ParamOfGetResults param : paramOfGetResults) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;152</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Callable&lt;Integer&gt; callable = <span class="keyword">new</span> NumberOfResultsCaller(param);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;153</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                future2param.put(ecs.submit(callable), param);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;154</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;155</td>  <td class="nbHitsUncovered"><a title="Line 155: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 155: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; paramOfGetResults.size(); i++) {</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;156</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;157</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        Future&lt;Integer&gt; future = ecs.poll(</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;158</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        config.getThreadTimeout(),</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        TimeUnit.MILLISECONDS);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsUncovered"><a title="Line 160: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 160: Conditional coverage 0% (0/2).">                                        <span class="keyword">if</span> (future != <span class="keyword">null</span>){</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            <span class="keyword">int</span> totalFound = future.get();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;162</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            ParamOfGetResults param = future2param.get(future);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            param.setTotalFound(totalFound);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            params.add(param);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                } <span class="keyword">catch</span> (Exception e) {</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;167</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Don't stop the others</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        LOGGER.error(<span class="string">"Future could not be retrieved"</span>, e);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;169</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                }</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;171</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        } <span class="keyword">finally</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;172</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            pool.shutdown();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;173</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;174</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> params;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;175</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;177</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Map&lt;String, String&gt; getNameMapByAccessions(String domain,</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;178</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                        Collection&lt;String&gt; accessions) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;179</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Domains domains = IEbeyeAdapter.Domains.valueOf(domain);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;180</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                List&lt;String&gt; configFields;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;181</td>  <td class="nbHitsUncovered"><a title="Line 181: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 181: Conditional coverage 0% (0/2).">                <span class="keyword">switch</span> (domains) {</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;182</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="keyword">case</span> chebi:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;183</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        configFields = IEbeyeAdapter.FieldsOfChebiNameMap.getFields();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;184</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">break</span>;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;185</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;70</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;            Callable&lt;ArrayOfArrayOfString&gt; callable;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsUncovered"><a title="Line 71: Conditional coverage 0% (0/4).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 71: Conditional coverage 0% (0/4).">            <span class="keyword">switch</span> (Domains.valueOf(param.getDomain().replace(<span class="string">'-'</span>, <span class="string">'_'</span>))){</a></span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;72</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">case</span> efo:</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;73</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">case</span> omim:</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;74</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">case</span> mesh:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;75</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    callable = <span class="keyword">new</span> EbeyeCallable.GetUniprotReferencesCallable(</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;76</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                            param, start, size);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;77</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    <span class="keyword">break</span>;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;78</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">default</span>:</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;186</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        configFields = IEbeyeAdapter.FieldsOfUniprotNameMap.getFields();</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;187</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;188</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                ArrayOfString fields = Transformer</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;189</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                .transformToArrayOfString(configFields);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;190</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;191</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="comment">// TODO limited array size</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                ArrayOfString idsArray = Transformer</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;193</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                .transformToArrayOfString(accessions);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;194</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;195</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                GetEntriesCallable caller = <span class="keyword">new</span> EbeyeCallable.GetEntriesCallable(</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;196</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                domain, idsArray, fields);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;197</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                ArrayOfArrayOfString results = caller.callGetEntries();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;199</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> Transformer.transformToMap(results);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;200</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    callable = <span class="keyword">new</span> GetResultsCallable(param, start, size);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;80</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;            }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            callableList.add(callable);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            start = start + size;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;83</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;201</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;202</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> ParamOfGetResults getNumberOfResults(ParamOfGetResults param){</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;203</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        NumberOfResultsCaller callable = <span class="keyword">new</span> NumberOfResultsCaller(param);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;204</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> totalFound = callable.getNumberOfResults();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;205</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        param.setTotalFound(totalFound);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;206</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> param;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;207</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;84</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> callableList;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;85</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;208</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;86</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;209</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Set&lt;String&gt; getValueOfFields(List&lt;ParamOfGetResults&gt; paramOfGetResults)</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;210</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">throws</span> MultiThreadingException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;211</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;212</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                prepareCallableCollection(paramOfGetResults);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;213</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;ArrayOfArrayOfString&gt; rawResults = executeCallables(callableList);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;214</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> Transformer.transformFieldValueToList(rawResults, <span class="keyword">false</span>);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;215</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;216</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
-<tr>  <td class="numLine">&nbsp;217</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> List&lt;List&lt;String&gt;&gt; getFields(ParamOfGetResults params){</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;218</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;List&lt;String&gt;&gt; results = <span class="keyword">null</span>;</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;219</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                getNumberOfResults(params);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;220</td>  <td class="nbHitsUncovered"><a title="Line 220: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 220: Conditional coverage 0% (0/2).">                <span class="keyword">if</span> (params.getTotalFound() &gt; 0){</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;221</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        GetResultsCallable callable =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;222</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">new</span> GetResultsCallable(params, 0, params.getTotalFound());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;223</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        ArrayOfArrayOfString rawResults = callable.callGetResults(</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;224</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        params.getDomain(), params.getQuery(), params.getFields(),</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;225</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        0, params.getTotalFound());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;226</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        results = Transformer.transformToList(rawResults);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;227</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">return</span> results;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;229</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;230</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;231</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> Map&lt;String, String&gt; getMapOfFieldAndValue(List&lt;ParamOfGetResults&gt; params)</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;232</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="keyword">throws</span> MultiThreadingException{</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;233</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        Map&lt;String,String&gt; fieldValueMap = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;234</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ExecutorService pool = Executors.newCachedThreadPool();</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;235</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    <span class="keyword">private</span> List&lt;ArrayOfArrayOfString&gt; executeCallables(</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;88</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;            List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callables) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;89</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            List&lt;ArrayOfArrayOfString&gt; ebeyeResultList =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;90</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                            <span class="keyword">new</span> ArrayList&lt;ArrayOfArrayOfString&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;91</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ExecutorService pool = Executors.newCachedThreadPool();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        CompletionService&lt;ArrayOfArrayOfString&gt; ecs =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">new</span> ExecutorCompletionService&lt;ArrayOfArrayOfString&gt;(pool);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;94</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;236</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="comment">// FIXME: submit one by one to a CompletionService,</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="comment">// then loop again to take and get the Futures</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;238</td>  <td class="nbHitsUncovered"><a title="Line 238: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 238: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (ParamOfGetResults param: params) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Callable&lt;ArrayOfArrayOfString&gt; callable = <span class="keyword">new</span> GetResultsCallable(param, 0,1);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;240</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Future&lt;ArrayOfArrayOfString&gt; future  = pool.submit(callable);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;241</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                ArrayOfArrayOfString rawResults;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;242</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;243</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    rawResults = future.get(config.getThreadTimeout(),</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;244</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                            TimeUnit.MILLISECONDS);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;245</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (InterruptedException ex) {</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;246</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    <span class="keyword">throw</span>  <span class="keyword">new</span> MultiThreadingException(ex.getMessage(), ex);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;247</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (ExecutionException ex) {</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    <span class="keyword">throw</span>  <span class="keyword">new</span> MultiThreadingException(ex.getMessage(), ex);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;249</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (TimeoutException ex) {</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;250</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    <span class="keyword">throw</span>  <span class="keyword">new</span> MultiThreadingException(ex.getMessage(), ex);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;251</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;252</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                 List&lt;String&gt; valueList =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;253</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                         <span class="keyword">new</span> ArrayList&lt;String&gt;(Transformer.transformFieldValueToList(rawResults, <span class="keyword">false</span>));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;254</td>  <td class="nbHitsUncovered"><a title="Line 254: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 254: Conditional coverage 0% (0/2).">                 <span class="keyword">if</span> (valueList.size() &gt; 0) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;255</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                     fieldValueMap.put(param.getQuery(), valueList.get(0));</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;256</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                 }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;257</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            }</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;258</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        } <span class="keyword">finally</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;259</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            pool.shutdown();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;260</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;261</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> fieldValueMap;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;262</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;95</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    Map&lt;Future&lt;ArrayOfArrayOfString&gt;, ArrayOfArrayOfString&gt; future2aoaos =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                    <span class="keyword">new</span> LinkedHashMap&lt;Future&lt;ArrayOfArrayOfString&gt;, ArrayOfArrayOfString&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;97</td>  <td class="nbHitsUncovered"><a title="Line 97: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 97: Conditional coverage 0% (0/2).">                <span class="keyword">for</span> (Callable&lt;ArrayOfArrayOfString&gt; callable : callables) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;98</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                future2aoaos.put(ecs.submit(callable), <span class="keyword">null</span>);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;99</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;100</td>  <td class="nbHitsUncovered"><a title="Line 100: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 100: Conditional coverage 0% (0/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; callables.size(); i++) {</a></span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;101</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">try</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;102</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        <span class="keyword">final</span> Future&lt;ArrayOfArrayOfString&gt; taken =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;103</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                        ecs.poll(config.getThreadTimeout(),</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;104</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                                        TimeUnit.MILLISECONDS);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;105</td>  <td class="nbHitsUncovered"><a title="Line 105: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 105: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (taken != <span class="keyword">null</span>){</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;106</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                ArrayOfArrayOfString rawResults = taken.get();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;107</td>  <td class="nbHitsUncovered"><a title="Line 107: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 107: Conditional coverage 0% (0/2).">                                                <span class="keyword">if</span> (rawResults != <span class="keyword">null</span>){</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;108</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                        future2aoaos.put(taken, rawResults);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;109</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                } <span class="keyword">else</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;110</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                LOGGER.warn(<span class="string">"SEACH job result is null!"</span>);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;111</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;112</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                } <span class="keyword">else</span> {</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;113</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        LOGGER.warn(<span class="string">"SEACH future not retrieved!"</span>);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;114</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;115</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                } <span class="keyword">catch</span> (Exception e) {</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;116</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Don't stop the others</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;117</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        LOGGER.error(<span class="string">"Callable "</span> + (i+1) + <span class="string">" of "</span> + callables.size()</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;118</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                        + <span class="string">" - "</span> + e.getMessage(), e);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;119</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                }</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;120</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;121</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="comment">// Now finished, let's keep only successful futures:</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;122</td>  <td class="nbHitsUncovered"><a title="Line 122: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 122: Conditional coverage 0% (0/2).">                <span class="keyword">for</span> (Future&lt;ArrayOfArrayOfString&gt; future : future2aoaos.keySet()) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;123</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">final</span> ArrayOfArrayOfString aoaos = future2aoaos.get(future);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;124</td>  <td class="nbHitsUncovered"><a title="Line 124: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 124: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (aoaos != <span class="keyword">null</span>){</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;125</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        ebeyeResultList.add(aoaos);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;126</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;127</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                LOGGER.debug(<span class="string">"SEARCH after futures loop, successful = "</span></span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;129</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                + ebeyeResultList.size() + <span class="string">"/"</span> + callables.size());</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;130</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                } <span class="keyword">finally</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;131</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            pool.shutdown();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;132</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;133</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> ebeyeResultList;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;134</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;263</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;135</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;264</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;265</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> List&lt;String&gt; getRelatedUniprotAccessionSet(List&lt;ParamOfGetResults&gt; paramOfGetResults)</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;266</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;136</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> List&lt;ParamOfGetResults&gt; getNumberOfResults(</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;137</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                    List&lt;ParamOfGetResults&gt; paramOfGetResults)</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;138</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">throws</span> MultiThreadingException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;267</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;String&gt; accessionList= <span class="keyword">new</span> ArrayList&lt;String&gt;();</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;268</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//        LOGGER.debug("SEARCH before preparing callables for getRelatedUniprotAccessionSet");</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;269</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList = </span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;270</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                <span class="keyword">new</span> ArrayList&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt;();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;271</td>  <td class="nbHitsUncovered"><a title="Line 271: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 271: Conditional coverage 0% (0/2).">        <span class="keyword">for</span> (ParamOfGetResults param:paramOfGetResults)  {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;272</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            callableList.addAll(prepareCallableCollection(param));</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;273</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;ParamOfGetResults&gt; params = <span class="keyword">new</span> ArrayList&lt;ParamOfGetResults&gt;();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ExecutorService pool = Executors.newCachedThreadPool();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;141</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        CompletionService&lt;Integer&gt; ecs = <span class="keyword">new</span> ExecutorCompletionService&lt;Integer&gt;(pool);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;142</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">try</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            Map&lt;Future&lt;Integer&gt;, ParamOfGetResults&gt; future2param =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;144</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                            <span class="keyword">new</span> HashMap&lt;Future&lt;Integer&gt;, ParamOfGetResults&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;145</td>  <td class="nbHitsUncovered"><a title="Line 145: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 145: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (ParamOfGetResults param : paramOfGetResults) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Callable&lt;Integer&gt; callable = <span class="keyword">new</span> NumberOfResultsCaller(param);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;147</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                future2param.put(ecs.submit(callable), param);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;148</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;149</td>  <td class="nbHitsUncovered"><a title="Line 149: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 149: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; paramOfGetResults.size(); i++) {</a></span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;150</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">try</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;151</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        Future&lt;Integer&gt; future = ecs.poll(</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;152</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                        config.getThreadTimeout(),</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;153</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                        TimeUnit.MILLISECONDS);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;154</td>  <td class="nbHitsUncovered"><a title="Line 154: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 154: Conditional coverage 0% (0/2).">                                        <span class="keyword">if</span> (future != <span class="keyword">null</span>){</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;155</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            <span class="keyword">int</span> totalFound = future.get();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;156</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            ParamOfGetResults param = future2param.get(future);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;157</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            param.setTotalFound(totalFound);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                            params.add(param);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                } <span class="keyword">catch</span> (Exception e) {</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;161</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        <span class="comment">// Don't stop the others</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;162</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        LOGGER.error(<span class="string">"Future could not be retrieved"</span>, e);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                }</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;164</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        } <span class="keyword">finally</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            pool.shutdown();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> params;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;171</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Map&lt;String, String&gt; getNameMapByAccessions(String domain,</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;172</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                        Collection&lt;String&gt; accessions) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;173</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Domains domains = Domains.valueOf(domain);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;174</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                List&lt;String&gt; configFields;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;175</td>  <td class="nbHitsUncovered"><a title="Line 175: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 175: Conditional coverage 0% (0/2).">                <span class="keyword">switch</span> (domains) {</a></span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">case</span> chebi:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;177</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        configFields = IEbeyeAdapter.FieldsOfChebiNameMap.getFields();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;178</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">break</span>;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;179</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">default</span>:</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;180</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        configFields = IEbeyeAdapter.FieldsOfUniprotNameMap.getFields();</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;181</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;182</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                ArrayOfString fields = Transformer</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;183</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                .transformToArrayOfString(configFields);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;184</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;185</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="comment">// TODO limited array size</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;186</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                ArrayOfString idsArray = Transformer</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;187</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                .transformToArrayOfString(accessions);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;188</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;189</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                GetEntriesCallable caller = <span class="keyword">new</span> EbeyeCallable.GetEntriesCallable(</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;190</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                domain, idsArray, fields);</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;191</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                ArrayOfArrayOfString results = caller.callGetEntries();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;193</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> Transformer.transformToMap(results);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;194</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;274</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//        LOGGER.debug("SEARCH before executing callables for getRelatedUniprotAccessionSet");</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;ArrayOfArrayOfString&gt; rawResults = executeCallables(callableList);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;276</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//        LOGGER.debug("SEARCH before Transformer.transformFieldValueToList");</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;277</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Set&lt;String&gt; accessionSet = Transformer.transformFieldValueToList(rawResults, <span class="keyword">true</span>);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;278</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//        LOGGER.debug("SEARCH after Transformer.transformFieldValueToList");</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;279</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        accessionList.addAll(accessionSet);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> accessionList;</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;281</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;282</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;195</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;283</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;196</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> ParamOfGetResults getNumberOfResults(ParamOfGetResults param){</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;197</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        NumberOfResultsCaller callable = <span class="keyword">new</span> NumberOfResultsCaller(param);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">int</span> totalFound = callable.getNumberOfResults();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;199</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        param.setTotalFound(totalFound);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;200</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> param;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;201</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;202</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;203</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> Set&lt;String&gt; getValueOfFields(List&lt;ParamOfGetResults&gt; paramOfGetResults)</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;204</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">throws</span> MultiThreadingException {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;205</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;206</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                prepareCallableCollection(paramOfGetResults);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;207</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;ArrayOfArrayOfString&gt; rawResults = executeCallables(callableList);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;208</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> Transformer.transformFieldValueToList(rawResults, <span class="keyword">false</span>);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;209</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;210</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
+<tr>  <td class="numLine">&nbsp;211</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> List&lt;List&lt;String&gt;&gt; getFields(ParamOfGetResults params){</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;212</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                List&lt;List&lt;String&gt;&gt; results = <span class="keyword">null</span>;</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;213</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                getNumberOfResults(params);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;214</td>  <td class="nbHitsUncovered"><a title="Line 214: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 214: Conditional coverage 0% (0/2).">                <span class="keyword">if</span> (params.getTotalFound() &gt; 0){</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;215</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        GetResultsCallable callable =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;216</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">new</span> GetResultsCallable(params, 0, params.getTotalFound());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        ArrayOfArrayOfString rawResults = callable.callGetResults(</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;218</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                        params.getDomain(), params.getQuery(), params.getFields(),</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;219</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                        0, params.getTotalFound());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;220</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        results = Transformer.transformToList(rawResults);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;221</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                <span class="keyword">return</span> results;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;223</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;224</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;225</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> Map&lt;String, String&gt; getMapOfFieldAndValue(List&lt;ParamOfGetResults&gt; params)</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;226</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">throws</span> MultiThreadingException{</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;227</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        Map&lt;String,String&gt; fieldValueMap = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ExecutorService pool = Executors.newCachedThreadPool();</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;229</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">try</span> {</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;230</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="comment">// FIXME: submit one by one to a CompletionService,</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;231</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="comment">// then loop again to take and get the Futures</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;232</td>  <td class="nbHitsUncovered"><a title="Line 232: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 232: Conditional coverage 0% (0/2).">            <span class="keyword">for</span> (ParamOfGetResults param: params) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;233</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Callable&lt;ArrayOfArrayOfString&gt; callable = <span class="keyword">new</span> GetResultsCallable(param, 0,1);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;234</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                Future&lt;ArrayOfArrayOfString&gt; future  = pool.submit(callable);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;235</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                ArrayOfArrayOfString rawResults;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;236</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;237</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    rawResults = future.get(config.getThreadTimeout(),</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;238</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                            TimeUnit.MILLISECONDS);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (InterruptedException ex) {</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;240</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    <span class="keyword">throw</span>  <span class="keyword">new</span> MultiThreadingException(ex.getMessage(), ex);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;241</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (ExecutionException ex) {</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;242</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    <span class="keyword">throw</span>  <span class="keyword">new</span> MultiThreadingException(ex.getMessage(), ex);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;243</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                } <span class="keyword">catch</span> (TimeoutException ex) {</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;244</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                    <span class="keyword">throw</span>  <span class="keyword">new</span> MultiThreadingException(ex.getMessage(), ex);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;245</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;246</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                 List&lt;String&gt; valueList =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;247</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                         <span class="keyword">new</span> ArrayList&lt;String&gt;(Transformer.transformFieldValueToList(rawResults, <span class="keyword">false</span>));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsUncovered"><a title="Line 248: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 248: Conditional coverage 0% (0/2).">                 <span class="keyword">if</span> (valueList.size() &gt; 0) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;249</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                     fieldValueMap.put(param.getQuery(), valueList.get(0));</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;250</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                 }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;251</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            }</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;252</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        } <span class="keyword">finally</span> {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;253</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            pool.shutdown();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;254</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;255</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> fieldValueMap;</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;256</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;257</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;258</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> List&lt;String&gt; getRelatedUniprotAccessionSet(List&lt;ParamOfGetResults&gt; paramOfGetResults)</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;259</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;        <span class="keyword">throws</span> MultiThreadingException {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;260</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; upAccCallables =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;261</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                <span class="keyword">new</span> ArrayList&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;262</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        Set&lt;String&gt; accessionSet = <span class="keyword">new</span> HashSet&lt;String&gt;();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;263</td>  <td class="nbHitsUncovered"><a title="Line 263: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 263: Conditional coverage 0% (0/2).">        <span class="keyword">for</span> (ParamOfGetResults param: paramOfGetResults)  {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;264</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;            upAccCallables.addAll(prepareCallableCollection(param));</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;265</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        }</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;266</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        accessionSet.addAll(Transformer.transformFieldValueToList(</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;267</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                executeCallables(upAccCallables), <span class="keyword">true</span>));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;268</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;String&gt;(accessionSet);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;269</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;270</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;271</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> Set&lt;String&gt; getValueOfFields(ParamOfGetResults paramOfGetResults) <span class="keyword">throws</span> MultiThreadingException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;284</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;285</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;272</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;273</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                 = prepareCallableCollection(paramOfGetResults);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;286</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;         List&lt;ArrayOfArrayOfString&gt; rawResults = executeCallables(callableList);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;287</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;         <span class="keyword">return</span> Transformer.transformFieldValueToList(rawResults, <span class="keyword">false</span>);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;288</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;274</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;         List&lt;ArrayOfArrayOfString&gt; rawResults = executeCallables(callableList);</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;         <span class="keyword">return</span> Transformer.transformFieldValueToList(rawResults, <span class="keyword">false</span>);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;276</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;289</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;277</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;290</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;278</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> Map&lt;String, List&lt;String&gt;&gt; getUniprotRefAccesionsMap(</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;291</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;279</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                    ParamOfGetResults paramOfGetResults) <span class="keyword">throws</span> MultiThreadingException {</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;292</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//            LOGGER.debug("SEARCH before prepareCallableCollection");</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;293</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;294</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;Callable&lt;ArrayOfArrayOfString&gt;&gt; callableList</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;281</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                 = prepareCallableCollection(paramOfGetResults);</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;295</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//            LOGGER.debug("SEARCH before executeCallables");</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;296</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;ArrayOfArrayOfString&gt; ids = executeCallables(callableList);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;297</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;282</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        List&lt;ArrayOfArrayOfString&gt; ids = executeCallables(callableList);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;283</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;298</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        EbeyeCallable.GetReferencedEntriesSet callable =</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;299</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLineCover">&nbsp;284</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        EbeyeCallable.GetReferencedEntriesSet callable =</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;285</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                            <span class="keyword">new</span> EbeyeCallable.GetReferencedEntriesSet(</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;300</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;286</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                            paramOfGetResults.getDomain(),</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;301</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;287</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                            Transformer.transformToArrayOfString(ids),</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;302</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;288</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                            Domains.uniprot.name(),</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;303</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                            Transformer.transformToArrayOfString(FieldsOfUniprotNameMap.acc.name()));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;304</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ArrayOfEntryReferences references = callable.callGetReferencedEntriesSet();</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;305</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        </pre></td></tr>
-<tr>  <td class="numLine">&nbsp;306</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//             LOGGER.debug("SEARCH before Transformer.transformChebiResults");</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;307</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;<span class="comment">//        Map&lt;String,List&lt;String&gt;&gt; uniprotRefAccessionsMap = Transformer.transformChebiResults(rawResults, true);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;308</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;        <span class="comment">//             LOGGER.debug("SEARCH after Transformer.transformChebiResults");</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;309</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> Transformer.transformToMap(references);</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;310</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;289</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                            Transformer.transformToArrayOfString(</pre></td></tr>
+<tr>  <td class="numLine">&nbsp;290</td>  <td class="nbHits">&nbsp;</td>
+  <td class="src"><pre class="src">&nbsp;                                                FieldsOfUniprotNameMap.acc.name()));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        ArrayOfEntryReferences references = callable.callGetReferencedEntriesSet();</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;292</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">return</span> Transformer.transformToMap(references);</span></pre></td></tr>
+<tr>  <td class="numLine">&nbsp;293</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;311</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;294</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;312</td>  <td class="nbHits">&nbsp;</td>
+<tr>  <td class="numLine">&nbsp;295</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 6/19/13 4:08 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 26/09/13 15:12.</div>
 </body>
 </html>
