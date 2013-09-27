@@ -387,20 +387,9 @@ function addCheckboxCompound(filterGroup, obj, selected){
         
     if(selected){
         $(newItem).appendTo($('#'+filterGroup+'_filters_y'));
-    } else if (obj.role == "BIOACTIVE") {
-           
-        $(newItem).appendTo($('#bioactive'));
-    } else if(obj.role == "DRUG") {
-        $(newItem).appendTo($('#drug'));
-    }else if(obj.role == "INHIBITOR"){
-        $(newItem).appendTo($('#inhibitor'));
-    }else if(obj.role == "ACTIVATOR"){
-        $(newItem).appendTo($('#activator'));
+    } else {
+    	$(newItem).appendTo($('#'+ obj.role.toLowerCase()));
     }
-    else if(obj.role == 'SUBSTRATE_OR_PRODUCT'){
-        $(newItem).appendTo($('#substrate_or_product'));
-    }
-        
     var currentSize = $(newItem).siblings().length;
         
     if (currentSize >=  maxNum) {

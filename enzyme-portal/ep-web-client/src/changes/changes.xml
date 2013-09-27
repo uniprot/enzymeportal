@@ -10,13 +10,29 @@
 </properties>
 
 <body>
-       <release version="1.0.23" date="2013-07-26" description="enhancement">
-        <action dev="joseph" type="update">
-           Added Accordion to the compound search result. compounds are grouped based on their roles.
-            
+    <release version="1.0.25" date="" description="Bug fixes.">
+        <action dev="rafalcan" type="fix">
+            Disease names are now found, after including queries to the efo,
+            omim and mesh domains of EB-Eye.
+            <fixes issue="177"/>
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of ep-util, ebeye-adapter - which fixes
+            query to uniprot domain in EB-Eye, making searches more accurate -,
+            uniprot-adapter and ep-core.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Fixed issue with cofactors (they were ignored for compound filters).
+            <fixes issue="180"/>
         </action>
     </release>
-    <release version="1.0.23" date="Not yet released" description="Bug fix.">
+    <release version="1.0.24" date="2013-08-02" description="">
+    </release>
+    <release version="1.0.23" date="2013-07-26"
+        description="Bug fix, enhancement">
+        <action dev="joseph" type="update">
+           Added Accordion to the compound search result. compounds are grouped based on their roles.
+        </action>
         <action dev="rafalcan" type="update">
             Updated to latest versions of ep-core and ebeye-adapter, which fix
             an issue with searches of ChEBI IDs.
