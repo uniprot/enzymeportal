@@ -1,9 +1,8 @@
 package uk.ac.ebi.ep.core.compare;
 
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
 
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
@@ -12,6 +11,9 @@ import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 
 /**
+ * Comparison for lists of items. It does not take into account their order, so
+ * for this class <code>[ "1", "2" ]</code> is not different from
+ * <code>[ "2", "1" ]</code>.<br>
  * This comparison requires that the items class implements properly the equals
  * and hashCode methods.
  * 
@@ -20,12 +22,12 @@ import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
  */
 public class ListComparison extends AbstractComparison<List<?>> {
 
-    public ListComparison(List<?> l1, List<?> l2) {
+    public ListComparison(final List<?> l1, final List<?> l2) {
         compared = new List<?>[] { l1, l2 };
         if (l1 != null && l2 != null) {
-            Collection<?> common = CollectionUtils.intersection(l1, l2);
-            Collection<?> onlyL1 = CollectionUtils.subtract(l1, common);
-            Collection<?> onlyL2 = CollectionUtils.subtract(l2, common);
+            List<?> common = ListUtils.intersection(l1, l2);
+            List<?> onlyL1 = ListUtils.subtract(l1, common);
+            List<?> onlyL2 = ListUtils.subtract(l2, common);
             for (Object o : common) {
                 subComparisons.add(getItemComparison(o, o));
             }
@@ -51,20 +53,22 @@ public class ListComparison extends AbstractComparison<List<?>> {
      */
     private Comparison<?> getItemComparison(Object o1, Object o2) {
         Comparison<?> itemComparison = null;
-        if (o1.getClass().equals(String.class)) {
+        Class<? extends Object> theClass = o1 != null?
+                o1.getClass() : o2.getClass();
+        if (theClass.equals(String.class)) {
             itemComparison = new StringComparison((String) o1, (String) o2);
-        } else if (o1.getClass().equals(ProteinStructure.class)) {
+        } else if (theClass.equals(ProteinStructure.class)) {
             itemComparison = new ProteinStructureComparison(
                     (ProteinStructure) o1, (ProteinStructure) o2);
-        } else if (o1.getClass().equals(ReactionPathway.class)) {
+        } else if (theClass.equals(ReactionPathway.class)) {
             itemComparison = new ReactionPathwayComparison(
                     (ReactionPathway) o1, (ReactionPathway) o2);
-        } else if (o1.getClass().equals(Pathway.class)) {
+        } else if (theClass.equals(Pathway.class)) {
             itemComparison = new PathwayComparison((Pathway) o1, (Pathway) o2);
-        } else if (o1.getClass().equals(Molecule.class)) {
+        } else if (theClass.equals(Molecule.class)) {
             itemComparison = new MoleculeComparison(
                     (Molecule) o1, (Molecule) o2);
-        } else if (o1.getClass().equals(Disease.class)) {
+        } else if (theClass.equals(Disease.class)) {
             itemComparison = new DiseaseComparison((Disease) o1, (Disease) o2);
         }
         return itemComparison;
