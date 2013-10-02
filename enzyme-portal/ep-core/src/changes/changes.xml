@@ -10,6 +10,15 @@
 </properties>
 
 <body>
+    <release version="1.1.0" date="" description="Enzyme comparison">
+        <action dev="rafalcan" type="add">
+            Added package to compare two enzymes side by side.
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of ep-domain, which adds equals and
+            hashCode methods to the JAXB-generated classes.
+        </action>
+    </release>
     <release version="1.0.20" date="2013-09-26" description="Better searches.">
         <action dev="rafalcan" type="update">
             Updated to latest versions of uniprot-adapter, ebeye-adapter - which

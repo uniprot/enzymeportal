@@ -9,6 +9,13 @@
 </properties>
 
 <body>
+    <release version="1.1.0" date="" description="Equals and hashCode">
+        <action dev="rafalcan" type="add">
+            Added methods equals and hashCode to the auto-generated (JAXB) code
+            using a JAXB plugin. This should allow us to avoid those fancy
+            wrappers in ep-core.
+        </action>
+    </release>
     <release version="1.0.8" date="2013-09-20"
         description="Number of enzymes per disease">
         <action dev="joseph" type="add">
