@@ -57,6 +57,31 @@ public class Transformer {
         return arrayOfString;
     }
 
+    /**
+     * Converts a String[][] into String[] by concatenating all of the items in
+     * one single array.
+     * @param aoaos the String[][]
+     * @return the String[], or <code>null</code> if the input is
+     *      <code>null</code> or empty.
+     * @since 1.0.4
+     */
+    public static ArrayOfString transformToArrayOfString(
+            ArrayOfArrayOfString aoaos){
+        if (aoaos == null || aoaos.getArrayOfString() == null){
+            return null;
+        }
+        ArrayOfString arrayOfStrings = null;
+        for (ArrayOfString aos : aoaos.getArrayOfString()) {
+            if (aos == null || aos.getString().isEmpty()) continue;
+            if (arrayOfStrings == null){
+                arrayOfStrings = aos;
+            } else {
+                arrayOfStrings.getString().addAll(aos.getString());
+            }
+        }
+        return arrayOfStrings;
+    }
+
     public static List<List<String>> transformToList(ArrayOfArrayOfString rawResults) {
         List<List<String>> rawResultList = new ArrayList<List<String>>();
         Iterator<?> it = rawResults.getArrayOfString().iterator();

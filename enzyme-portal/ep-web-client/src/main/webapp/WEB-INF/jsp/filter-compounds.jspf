@@ -51,8 +51,10 @@
             <div id="inhibitor" class="scroll"></div>
             <h3 class="head">ACTIVATOR</h3>
             <div id="activator" class="scroll"></div>
-            <h3 class="head">SUBSTRATE_OR_PRODUCT</h3>
+            <h3 class="head">SUBSTRATE OR PRODUCT</h3>
             <div id="substrate_or_product" class="scroll"></div>
+            <h3 class="head">COFACTOR</h3>
+            <div id="cofactor" class="scroll"></div>
         </div>
 
 

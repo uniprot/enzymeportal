@@ -32,7 +32,9 @@ public class Config implements ConfigMBean {
     private static final Logger LOGGER = Logger.getLogger(ConfigMBean.class);
 
 	/* <moveThisTo_EbeyeConfig spaghetti="true"> */
+	@Deprecated
     public static List<Domain> domainList;
+    @Deprecated
     public static final String configFile = "/config.xml";
 	/* </moveThisTo_EbeyeConfig> */
 
@@ -66,6 +68,11 @@ public class Config implements ConfigMBean {
           
 	}
 
+    /**
+     * @deprecated this method loads EB-Eye fields from a XML file included in
+     *      ep-domain. Use ebeye-adapter's Domains enum instead.
+     */
+    @Deprecated
     public void loadCacheData() {
         try {
             EnzymeRelatedDomains enzymeRelatedDomains =
@@ -92,6 +99,11 @@ public class Config implements ConfigMBean {
     }
 */
 
+    /**
+     * @deprecated this method is only used by the deprecated
+     *      {@link #loadCacheData()}
+     */
+    @Deprecated
     public static EnzymeRelatedDomains unmarshalConfigFile(InputStream inFile)
             throws IOException, JAXBException {
         EnzymeRelatedDomains enzymeRelatedDomains = null;
@@ -102,6 +114,10 @@ public class Config implements ConfigMBean {
         return enzymeRelatedDomains;
     }
 
+    /**
+     * @deprecated use ebeye-adapter's Domains enum
+     */
+     @Deprecated
     public static Domain getDomain(String domainId) {
         Iterator<Domain> it = Config.domainList.iterator();
         Domain domain = null;
@@ -114,6 +130,12 @@ public class Config implements ConfigMBean {
         return domain;
     }
 
+    /**
+     * @deprecated This method is not used, as for every search in EB-Eye we
+     *      retrieve either acc field (uniprot domain), or UNIPROT pseudo-field
+     *      or id field (to get from it the acc of any uniprot references).
+     */
+     @Deprecated
     public static List<String> getResultFields(Domain domain) {
         List<ResultField> fieldList = domain.getResultFieldList().getResultField();
         Iterator<ResultField> it = fieldList.iterator();

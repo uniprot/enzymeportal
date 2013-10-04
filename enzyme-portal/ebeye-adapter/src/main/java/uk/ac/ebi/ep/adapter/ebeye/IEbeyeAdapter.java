@@ -1,13 +1,8 @@
 package uk.ac.ebi.ep.adapter.ebeye;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
-import uk.ac.ebi.ep.adapter.ebeye.util.Transformer;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 
 /**
@@ -21,21 +16,6 @@ import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 public interface IEbeyeAdapter {
 
     public static final String EBEYE_SPECIES_FIELD ="organism_scientific_name";
-    
-    //FIXME either use this or domains in the config file (
-    public static enum Domains {
-    	intenz, uniprot, rhea, reactome, chebi, pdbe,
-    	chembl_compound(FieldsOfGetResults.id)
-        //, chembl_target, omim, efo
-    	;
-	    private FieldsOfGetResults[] getFields;
-	    private Domains(FieldsOfGetResults... getFields){
-	    	this.getFields = getFields;
-	    }
-	    public List<String> getGetFields() {
-	    	return Transformer.transformToListOfString(getFields);
-		}
-	};
 
 	/**
 	 * Field retrievable from EBEye web services for some domains,
@@ -100,9 +80,9 @@ public interface IEbeyeAdapter {
 
     /**
      * Gets number of results for more than 1 query. The number of results per
-     * query is set to the ParamOfGetResults object.
-     * @param paramOfGetResults
-     * @return
+     * query is set in the ParamOfGetResults object.
+     * @param paramOfGetResults the object containing domain and query info.
+     * @return the same object with the number of results updated.
      * @throws MultiThreadingException
      */
     public List<ParamOfGetResults> getNumberOfResults(
@@ -148,7 +128,7 @@ public interface IEbeyeAdapter {
 
     /**
      * Gets the UniProt references corresponding to the given IDs.
-     * @param paramOfGetResults the object wrapping a query.
+     * @param paramOfGetResults the object wrapping a query (with IDs).
      * @return a map of entry IDs to UniProt accessions.
      * @throws MultiThreadingException
      */
