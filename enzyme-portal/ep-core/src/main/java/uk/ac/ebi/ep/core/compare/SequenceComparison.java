@@ -13,11 +13,20 @@ public class SequenceComparison extends AbstractComparison<Sequence> {
 
     public SequenceComparison(Sequence seq1, Sequence seq2) {
         compared = new Sequence[] { seq1, seq2 };
-        subComparisons.add(new StringComparison(
+        init(seq1, seq2);
+    }
+
+    @Override
+    protected void getSubComparisons(Sequence seq1, Sequence seq2) {
+        subComparisons.put("Sequence", new StringComparison(
                 seq1.getSequence(), seq2.getSequence()));
-        subComparisons.add(new StringComparison(
+        subComparisons.put("Weight", new StringComparison(
                 seq1.getWeight(), seq2.getWeight()));
-        doDiffer();
+    }
+
+    @Override
+    public String toString() {
+        return "Sequence";
     }
 
 }

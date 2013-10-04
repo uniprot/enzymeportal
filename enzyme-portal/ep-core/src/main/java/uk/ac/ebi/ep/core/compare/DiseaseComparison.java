@@ -12,9 +12,19 @@ public class DiseaseComparison extends AbstractComparison<Disease> {
 
     public DiseaseComparison(Disease d1, Disease d2) {
         compared = new Disease[] { d1, d2 };
-        subComparisons.add(new StringComparison(d1.getId(), d2.getId()));
-        subComparisons.add(new StringComparison(d1.getName(), d2.getName()));
-        doDiffer();
+        init(d1, d2);
+    }
+
+    @Override
+    protected void getSubComparisons(Disease d1, Disease d2) {
+        subComparisons.put("ID", new StringComparison(d1.getId(), d2.getId()));
+        subComparisons.put("Name",
+                new StringComparison(d1.getName(), d2.getName()));
+    }
+
+    @Override
+    public String toString() {
+        return "Diseases";
     }
 
 }

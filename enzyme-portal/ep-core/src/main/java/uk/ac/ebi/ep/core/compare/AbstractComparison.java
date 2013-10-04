@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.core.compare;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Partial implementation of the {@link Comparison} interface.
@@ -13,8 +13,8 @@ import java.util.List;
 public abstract class AbstractComparison<T> implements Comparison<T> {
 
     /** Any underlying comparisons to this one. */
-    protected List<Comparison<?>> subComparisons =
-            new ArrayList<Comparison<?>>();
+    protected Map<String, Comparison<?>> subComparisons =
+            new LinkedHashMap<String, Comparison<?>>();
 
     /** Stored flag for any difference. */
     protected boolean differ;
@@ -22,17 +22,7 @@ public abstract class AbstractComparison<T> implements Comparison<T> {
     /** The compared items. */
     protected T[] compared;
 
-    /**
-     * Calculates the value of the <code>differ</code> boolean flag according to
-     * any underlying sub-comparisons.
-     */
-    protected void doDiffer() {
-        for (Comparison<?> subComparison : subComparisons) {
-            differ = differ || subComparison.isDifferent();
-        }
-    }
-
-    public List<Comparison<?>> getSubComparisons() {
+    public Map<String, Comparison<?>> getSubComparisons() {
         return subComparisons;
     }
 
@@ -44,4 +34,27 @@ public abstract class AbstractComparison<T> implements Comparison<T> {
         return compared;
     }
 
+    /**
+     * Initialises any sub-comparisons and the <code>differ</code> boolean flag,
+     * in a null-safe way.
+     */
+    protected void init(T t1, T t2) {
+        if (t1 != null && t2 != null){
+            getSubComparisons(t1, t2);
+            for (Comparison<?> subComparison : subComparisons.values()) {
+                differ = differ || subComparison.isDifferent();
+            }
+        } else if (t1 == null ^ t2 == null){
+            differ = true;
+        }
+    }
+    
+    /**
+     * Prepares any sub-comparisons needed, and updates the <code>differ<code>
+     * flag accordingly.
+     * @param t1 one object to be compared.
+     * @param t2 the other object to be compared.
+     */
+    protected abstract void getSubComparisons(T t1, T t2);
+    
 }

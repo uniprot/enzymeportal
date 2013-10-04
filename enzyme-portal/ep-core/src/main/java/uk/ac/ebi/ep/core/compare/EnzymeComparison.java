@@ -12,15 +12,19 @@ public class EnzymeComparison extends AbstractComparison<EnzymeModel> {
 
     public EnzymeComparison(EnzymeModel e1, EnzymeModel e2) {
         compared = new EnzymeModel[] { e1, e2 };
-        subComparisons.add(new SummaryComparison(e1, e2));
-        subComparisons.add(new ListComparison(
+        init(e1, e2);
+    }
+
+    @Override
+    protected void getSubComparisons(EnzymeModel e1, EnzymeModel e2) {
+        subComparisons.put("Summary", new SummaryComparison(e1, e2));
+        subComparisons.put("Protein structures", new ListComparison(
                 e1.getProteinstructure(), e2.getProteinstructure()));
-        subComparisons.add(new ListComparison(
+        subComparisons.put("Reactions and pathways", new ListComparison(
                 e1.getReactionpathway(), e2.getReactionpathway()));
-        subComparisons.add(new ChemicalEntityComparison(
+        subComparisons.put("Small molecules", new ChemicalEntityComparison(
                 e1.getMolecule(), e2.getMolecule()));
-        subComparisons.add(new ListComparison(
+        subComparisons.put("Diseases", new ListComparison(
                 e1.getDisease(), e2.getDisease()));
-        doDiffer();
     }
 }

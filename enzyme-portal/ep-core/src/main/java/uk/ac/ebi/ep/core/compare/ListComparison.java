@@ -24,23 +24,24 @@ public class ListComparison extends AbstractComparison<List<?>> {
 
     public ListComparison(final List<?> l1, final List<?> l2) {
         compared = new List<?>[] { l1, l2 };
-        if (l1 != null && l2 != null) {
-            List<?> common = ListUtils.intersection(l1, l2);
-            List<?> onlyL1 = ListUtils.subtract(l1, common);
-            List<?> onlyL2 = ListUtils.subtract(l2, common);
-            for (Object o : common) {
-                subComparisons.add(getItemComparison(o, o));
-            }
-            for (Object o : onlyL1) {
-                subComparisons.add(getItemComparison(o, null));
-            }
-            for (Object o : onlyL2) {
-                subComparisons.add(getItemComparison(null, o));
-            }
-            differ = !onlyL1.isEmpty() || !onlyL2.isEmpty();
-        } else if (l1 == null ^ l2 == null) {
-            differ = true;
+        init(l1, l2);
+    }
+
+    @Override
+    protected void getSubComparisons(List<?> l1, List<?> l2) {
+        List<?> common = ListUtils.intersection(l1, l2);
+        List<?> onlyL1 = ListUtils.subtract(l1, common);
+        List<?> onlyL2 = ListUtils.subtract(l2, common);
+        for (Object o : common) {
+            subComparisons.put("common", getItemComparison(o, o));
         }
+        for (Object o : onlyL1) {
+            subComparisons.put("only left", getItemComparison(o, null));
+        }
+        for (Object o : onlyL2) {
+            subComparisons.put("only right", getItemComparison(null, o));
+        }
+        differ = !onlyL1.isEmpty() || !onlyL2.isEmpty();
     }
 
     /**
@@ -72,5 +73,12 @@ public class ListComparison extends AbstractComparison<List<?>> {
             itemComparison = new DiseaseComparison((Disease) o1, (Disease) o2);
         }
         return itemComparison;
+    }
+
+    @Override
+    public String toString() {
+        return subComparisons == null || subComparisons.isEmpty()? "" :
+                subComparisons.entrySet().iterator().next().getValue()
+                .toString();
     }
 }

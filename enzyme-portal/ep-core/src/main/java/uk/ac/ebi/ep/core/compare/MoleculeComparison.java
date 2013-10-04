@@ -13,9 +13,19 @@ public class MoleculeComparison extends AbstractComparison<Molecule> {
 
     public MoleculeComparison(Molecule m1, Molecule m2) {
         compared = new Molecule[] { m1, m2 };
-        subComparisons.add(new StringComparison(m1.getId(), m2.getId()));
-        subComparisons.add(new StringComparison(m1.getName(), m2.getName()));
-        doDiffer();
+        init(m1, m2);
+    }
+
+    @Override
+    protected void getSubComparisons(Molecule m1, Molecule m2) {
+        subComparisons.put("ID", new StringComparison(m1.getId(), m2.getId()));
+        subComparisons.put("Name",
+                new StringComparison(m1.getName(), m2.getName()));
+    }
+
+    @Override
+    public String toString() {
+        return "Molecule";
     }
 
 }

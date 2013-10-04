@@ -71,39 +71,44 @@
     </footer>
 
 
-  <!-- JavaScript at the bottom for fast page loading -->
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!--        add twitter script for twitterapi-->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
-  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-  <!--
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
-  -->
+    <!--    now the frontier js for ebi global result-->
+    <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
+    <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>
 
+    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+    <!--
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+    -->
 
-  <!-- Your custom JavaScript file scan go here... change names accordingly -->
-  <!--
-  <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>
-  <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/script.js"></script>
-  -->
-  <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/cookiebanner.js"></script>  
-  <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/foot.js"></script>
-  <!-- end scripts-->
-
-  <!-- Google Analytics details... -->		
-  <!-- Change UA-XXXXX-X to be your site's ID -->
-  <!--
-  <script>
+    <!-- Your custom JavaScript file scan go here... change names accordingly -->
+    <!--
+    <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>
+    <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/script.js"></script>
+    -->
+    <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/cookiebanner.js"></script>  
+    <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/foot.js"></script>
+    <!-- end scripts-->
+    
+    <!-- Google Analytics details... -->		
+    <!-- Change UA-XXXXX-X to be your site's ID -->
+    <!--
+    <script>
     window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
     Modernizr.load({
       load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
     });
-  </script>
-  -->
+    </script>
+    -->
 
 
-  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+    <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
        chromium.org/developers/how-tos/chrome-frame-getting-started -->
-  <!--[if lt IE 7 ]>
+    <!--[if lt IE 7 ]>
     <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
     <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
-  <![endif]-->
+    <![endif]-->

@@ -1,0 +1,24 @@
+<Context displayName="Enzyme Portal Test Version"
+    path="/enzymeportal"
+    docBase="work/Catalina/localhost"
+    reloadable="true"
+    antiJARLocking="true">
+    
+    <Resource type="javax.sql.DataSource"
+        auth="Container"
+        name="jdbc/ep/mm"
+        driverClassName="oracle.jdbc.OracleDriver"
+        url="jdbc:oracle:thin:@ENZDEV"
+        username="enzyme_portal"
+        password="epsilon"
+        poolPreparedStatements="true"
+        maxWait="15000"
+        testOnBorrow="true"
+        validationQuery="SELECT 1 FROM DUAL"
+        removeAbandoned="true"
+        logAbandoned="true"
+        removeAbandonedTimeout="60">
+    </Resource>
+
+</Context>
+

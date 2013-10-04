@@ -17,11 +17,18 @@ public class ProteinStructureComparison extends
     public ProteinStructureComparison(ProteinStructure ps1,
             ProteinStructure ps2) {
         compared = new ProteinStructure[] { ps1, ps2 };
-        if (ps1 != null && ps2 != null) {
-            differ = !ObjectUtils.equals(ps1.getId(), ps2.getId());
-        } else if (ps1 == null ^ ps2 == null) {
-            differ = true;
-        }
+        init(ps1, ps2);
+    }
+
+    @Override
+    protected void getSubComparisons(ProteinStructure s1, ProteinStructure s2) {
+        // No sub-comparisons here, just seeing if they differ:
+        differ = !ObjectUtils.equals(s1.getId(), s2.getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Protein structure";
     }
 
 }

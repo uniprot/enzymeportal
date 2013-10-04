@@ -449,8 +449,8 @@
                                 <%@ include file="summary.jspf"%>
                             </c:forEach>
                         </div>
-                    </section>
-                </c:if>
+                    </c:if>
+                </section>
             </div>
 
     <footer>

@@ -1,6 +1,6 @@
 package uk.ac.ebi.ep.core.compare;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Basic comparison of objects to state if they differ or not.
@@ -29,7 +29,8 @@ public interface Comparison<T> {
      * Retrieves the underlying comparisons made in order to know if the objects
      * differ.
      * 
-     * @return A list of comparisons.
+     * @return A map of keywords (representing the compared items) to
+     *      comparisons.
      */
-    public List<Comparison<?>> getSubComparisons();
+    public Map<String, Comparison<?>> getSubComparisons();
 }

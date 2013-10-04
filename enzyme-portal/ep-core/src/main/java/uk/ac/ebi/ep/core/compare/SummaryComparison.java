@@ -19,16 +19,31 @@ public class SummaryComparison extends AbstractComparison<EnzymeModel> {
 
     public SummaryComparison(EnzymeModel e1, EnzymeModel e2) {
         compared = new EnzymeModel[] { e1, e2 };
-        subComparisons.add(new StringComparison(e1.getName(), e2.getName()));
-        subComparisons.add(new StringComparison(
-                e1.getSpecies().getScientificname(),
-                e2.getSpecies().getScientificname()));
-        subComparisons.add(new StringComparison(
+        init(e1, e2);
+    }
+
+    @Override
+    protected void getSubComparisons(EnzymeModel e1, EnzymeModel e2) {
+        subComparisons.put("Name",
+                new StringComparison(e1.getName(), e2.getName()));
+        String sp1 = new StringBuilder(e1.getSpecies().getCommonname())
+                .append(" (").append(e1.getSpecies().getScientificname())
+                .append(")").toString();
+        String sp2 = new StringBuilder(e2.getSpecies().getCommonname())
+            .append(" (").append(e2.getSpecies().getScientificname())
+            .append(")").toString();
+        subComparisons.put("Species", new StringComparison(sp1, sp2));
+        subComparisons.put("Function", new StringComparison(
                 e1.getFunction(), e2.getFunction()));
-        subComparisons.add(new ListComparison(e1.getEc(), e2.getEc()));
-        subComparisons.add(new SequenceComparison(
+        subComparisons.put("EC classification",
+                new ListComparison(e1.getEc(), e2.getEc()));
+        subComparisons.put("Sequence", new SequenceComparison(
                 e1.getEnzyme().getSequence(), e2.getEnzyme().getSequence()));
-        doDiffer();
+    }
+
+    @Override
+    public String toString() {
+        return "Summary";
     }
 
 }
