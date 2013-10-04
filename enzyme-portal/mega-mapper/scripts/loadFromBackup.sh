@@ -30,6 +30,9 @@ echo "Importing from backup..."
 $ORACLE_HOME/bin/imp ${DB_USER}/${DB_PASSWD}@$1 \
     file=$DMP log=$(dirname $0)/ep-mm-imp.log
 
+$ORACLE_HOME/bin/sqlplus ${DB_USER}/${DB_PASSWD}@$1 \
+    @$(dirname $0)/../src/main/sql/grant_web.sql
+
 # Clean up:
 [ -n "$TMP_DMP" ] && rm $TMP_DMP
 
