@@ -37,6 +37,13 @@
     </bean>
 
     <util:list id="history" value-type="java.lang.String" scope="session" />
+    
+    <bean id="pdbImgUrl" class="java.lang.String">
+        <constructor-arg value="${pdb.structure.img.url}"/>
+    </bean>
+    <bean id="pdbStructureCompareUrl" class="java.lang.String">
+        <constructor-arg value="${pdb.structure.compare.url}"/>
+    </bean>
 
     <!--Start internationalization-->
     <bean id="messageSource"

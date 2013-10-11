@@ -7,7 +7,6 @@ import org.apache.commons.collections.ListUtils;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;
-import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 
 /**
@@ -58,9 +57,6 @@ public class ListComparison extends AbstractComparison<List<?>> {
                 o1.getClass() : o2.getClass();
         if (theClass.equals(String.class)) {
             itemComparison = new StringComparison((String) o1, (String) o2);
-        } else if (theClass.equals(ProteinStructure.class)) {
-            itemComparison = new ProteinStructureComparison(
-                    (ProteinStructure) o1, (ProteinStructure) o2);
         } else if (theClass.equals(ReactionPathway.class)) {
             itemComparison = new ReactionPathwayComparison(
                     (ReactionPathway) o1, (ReactionPathway) o2);

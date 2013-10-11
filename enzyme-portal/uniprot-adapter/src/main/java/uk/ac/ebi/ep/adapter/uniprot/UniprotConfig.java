@@ -12,10 +12,11 @@ public class UniprotConfig implements UniprotConfigMBean {
 	
 	private int maxThreads;
 	
-	/**
-	 * http://www.uniprot.org/uniprot/?format=tab&sort=score&query={0}&columns={1}
-	 */
-	private String wsUrl;
+	private String wsUrl =
+	        "http://www.uniprot.org/uniprot/?format=tab&sort=score&query={0}&columns={1}";
+	
+	private String alignUrl =
+	        "http://www.uniprot.org/align/?redirect=yes&annotated=false&program=clustalo&query={0}+{1}";
 	
 	public int getTimeout() {
 		return timeout;
@@ -41,7 +42,15 @@ public class UniprotConfig implements UniprotConfigMBean {
 		this.wsUrl = wsUrl;
 	}
 
-	public void setUseProxy(boolean useProxy) {
+	public String getAlignUrl() {
+        return alignUrl;
+    }
+
+    public void setAlignUrl(String alignUrl) {
+        this.alignUrl = alignUrl;
+    }
+
+    public void setUseProxy(boolean useProxy) {
 		this.useProxy = useProxy;
 	}
 

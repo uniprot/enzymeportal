@@ -74,6 +74,7 @@
         <property name="useProxy" value="${uniprot.ws.proxy}"/>
         <property name="maxTermsPerQuery" value="${uniprot.query.terms.max}"/>
         <property name="maxThreads" value="${uniprot.threads.max}"/>
+        <property name="alignUrl" value="${uniprot.align.url}"
     </bean>
 
     <bean name="uk.ac.ebi.ep:name=intenzConfig"

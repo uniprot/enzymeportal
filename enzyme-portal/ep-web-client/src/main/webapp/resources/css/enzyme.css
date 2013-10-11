@@ -21,9 +21,9 @@ img {
 }
 /*overidding frontier css*/
 dt{
-  clear: none;  
-  padding: 0em 0em;
-  font-family: inherit;
+	clear: none;  
+	padding: 0em 0em;
+    font-family: inherit;
 }
 
 th,td{
@@ -157,6 +157,7 @@ div#local-masthead {
 	position: fixed;
 	z-index: 666;
 	width: auto;
+	max-width: 16%;
 	background-color: white;
 	box-shadow: 0 0 1em #ccc;
 }
@@ -183,7 +184,38 @@ legend.comparison.header {
 	background-color: transparent;
 }
 
-fieldset.compare {
+fieldset.comparison {
 	border: 1px solid;
 	margin: 0.3ex 1em;
+}
+fieldset.comparison section {
+	margin-bottom: 1ex;
+}
+select.ps {
+	border: none;
+	width: 100%;
+}
+/*
+div.comparison.list {
+	height: 13ex;
+	overflow: auto;
+}
+div.comparison.list div {
+	white-space: nowrap;
+	cursor: pointer;
+}
+*/
+section div.diff {
+    text-align: center;
+    margin-top: 0.3ex;
+}
+section.alpha > div.diff {
+	margin: 0.3ex 0em 0.3ex 1em;
+}
+section.omega > div.diff {
+    margin: 0.3ex 1em 0.3ex 0em;
+}
+#compare-ps {
+  width: 100%;
+  text-align: center;
 }

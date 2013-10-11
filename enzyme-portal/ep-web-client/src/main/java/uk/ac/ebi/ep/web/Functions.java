@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import uk.ac.ebi.ep.core.search.HtmlUtility;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
 
 /**
  * Due to no similar functionality in JSTL, this function was designed to help
@@ -119,6 +120,42 @@ public final class Functions {
         String text = HtmlUtility.cleanText(value);
         return text;
     }
+
+    /**
+     * Retrieves the URL to the source of the molecule, or builds it if it is
+     * not set yet.
+     * @param molecule
+     * @return a URL pointing to the source of the molecule.
+     */
+    public static String getMoleculeUrl(Molecule molecule){
+        String url = (String) molecule.getUrl();
+        if (url == null || url.length() == 0){
+            if (molecule.getId().startsWith("DB")){
+                // DrugBank
+                url = "http://www.drugbank.ca/drugs/" + molecule.getId();
+            } else if (molecule.getId().startsWith("CHEMBL")){
+                // CHEMBL
+                url = "https://www.ebi.ac.uk/chembldb/compound/inspect/"
+                        + molecule.getId();
+            }
+        }
+        return url;
+    }
     
-  
+    /**
+     * Builds the URL for the image of a molecule, according to its source
+     * database. 
+     * @param molecule
+     * @return a URL for the image.
+     */
+    public static String getMoleculeImgSrc(Molecule molecule){
+        String imgSrc = "";
+        if (molecule.getId().startsWith("CHEBI")){
+            imgSrc = "http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=" + molecule.getId();
+        } else if (molecule.getId().startsWith("CHEMBL")){
+            imgSrc = "https://www.ebi.ac.uk/chembldb/compound/displayimage/"
+                    + molecule.getId();
+        }
+        return imgSrc;
+    }
 }

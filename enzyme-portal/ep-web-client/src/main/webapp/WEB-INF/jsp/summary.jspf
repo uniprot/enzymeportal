@@ -36,6 +36,7 @@
                          title="No structure available"/>
                 </c:when>
                 <c:otherwise>
+                    <%-- FIXME: hardcoded --%>
                     <c:set var="imgLink"
                            value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
                     <a class="noLine" style="border-bottom-style: none" target="blank" href="${imgLink}">

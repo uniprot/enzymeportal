@@ -4,65 +4,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Enzyme Portal - Enzyme comparison</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="utf-8">
-
-    <!-- Use the .htaccess and remove these lines to avoid edge case issues.
-         More info: h5bp.com/b/378 -->
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> --> <!-- Not yet implemented -->
-
-    <title>Enzyme Portal - Enzyme comparison</title>
     <meta name="description" content="EMBL-EBI">
     <meta name="keywords" content="bioinformatics, europe, institute">
     <meta name="author" content="EMBL-EBI, Cheminformatics and Metabolism Team">
-
-    <!-- Mobile viewport optimized: j.mp/bplateviewport -->
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
-
-    <!-- CSS: implied media=all -->
-    <!-- CSS concatenated and minified via ant build script-->
-<!--  <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/boilerplate-style.css">
-    <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/ebi-global.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/ebi-visual.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/984-24-col-fluid.css" type="text/css" media="screen">
-    -->
-    <!-- you can replace this with [projectname]-colours.css. See http://frontier.ebi.ac.uk/web/style/colour for details of how to do this -->
-    <!-- also inform ES so we can host your colour palette file -->
     <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
-    <!-- for production the above can be replaced with -->
     <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-
-    <link href="resources/css/enzyme.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="resources/css/enzyme.css" type="text/css" />
+    <link rel="stylesheet" href="resources/skins/default/skin2.css" type="text/css" />
 
     <style type="text/css">
       /* You have the option of setting a maximum width for your page, and making sure everything is centered */
       /* body { max-width: 1600px; margin: 0 auto; } */
     </style>
-    
-    <!-- end CSS-->
 
-
-    <!-- All JavaScript at the bottom, except for Modernizr / Respond.
-         Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
-         For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
-    
-    <!-- Full build -->
-    <!-- <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script> -->
-    
-    <!-- custom build (lacks most of the "advanced" HTML5 support -->
     <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
-    
-<!--  <script id="redline_js" type="text/javascript">var redline = {}; redline.project_id = 33249186;var b,d;b=document.createElement("script");b.type="text/javascript";b.async=!0;b.src=("https:"===document.location.protocol?"https://data":"http://www")+'.redline.cc/assets/button.js';d=document.getElementsByTagName("script")[0];d.parentNode.insertBefore(b,d);</script>-->
-
-<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>-->
-<!--      <script type="text/javascript" src="javascripts/lib/jquery.jcarousel.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/enzymeportal/images/skins/default/skin2.css" />-->
-<!--      <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />-->
-
-    <link rel="stylesheet" type="text/css" href="resources/skins/default/skin2.css" />
-
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 </head>
 <body class="level2">
 
@@ -107,6 +68,7 @@
             <section class="grid_18 omega">
                 <h2>Comparing ${comparison.compared[0].uniprotaccessions[0]}
                     to ${comparison.compared[1].uniprotaccessions[0]}</h2>
+                    ${applicationContext.uniprotConfig}
             </section>
             <br clear="all"/>
 
@@ -125,20 +87,21 @@
                 <br clear="all"/>
             </section>
 
-            <c:forEach var="sc" items="${comparison.subComparisons}">
+            <c:forEach var="topComparison" items="${comparison.subComparisons}">
                 <section class="grid_4 alpha" id="${sc.key}">&nbsp;</section>
                 <section class="grid_20 omega">
-                    <fieldset style="border: 1px solid; margin: 0ex 1em">
+                    <fieldset class="comparison" id="${topComparison.key}">
 
-                        <legend class="comparison header">${sc.key}</legend>
+                        <legend class="comparison header">${topComparison.key}</legend>
 
                         <c:choose>
-                            <c:when test="${empty sc.value.subComparisons}">
-                                <%@include file="comparison-item.jsp" %>
+                            <c:when test="${empty topComparison.value.subComparisons}">
+                                <c:set var="theComparison" value="${topComparison}"/>
+                                <%@include file="comparison-sideBySide.jsp" %>
                             </c:when>
                             <c:otherwise>
                                 <c:forEach var="theComparison"
-                                    items="${sc.value.subComparisons}">
+                                    items="${topComparison.value.subComparisons}">
                                     <%@include file="comparison-list.jsp" %>
                                 </c:forEach>
                             </c:otherwise>

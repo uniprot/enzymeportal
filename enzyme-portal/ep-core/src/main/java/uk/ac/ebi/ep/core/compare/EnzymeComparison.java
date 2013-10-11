@@ -18,7 +18,7 @@ public class EnzymeComparison extends AbstractComparison<EnzymeModel> {
     @Override
     protected void getSubComparisons(EnzymeModel e1, EnzymeModel e2) {
         subComparisons.put("Summary", new SummaryComparison(e1, e2));
-        subComparisons.put("Protein structures", new ListComparison(
+        subComparisons.put("Protein structures", new ProteinStructureComparison(
                 e1.getProteinstructure(), e2.getProteinstructure()));
         subComparisons.put("Reactions and pathways", new ListComparison(
                 e1.getReactionpathway(), e2.getReactionpathway()));

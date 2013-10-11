@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import uk.ac.ebi.ep.adapter.bioportal.BioportalConfig;
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
@@ -49,7 +50,11 @@ public class CompareController {
     private BioportalConfig bioportalConfig;
 
     @RequestMapping(value="/compare")
-    protected String getComparison(Model model) throws EnzymeRetrieverException{
+    protected String getComparison(Model model,
+            /* as params only for testing, move them to session: */
+            @RequestParam(value = "acc1", required = true) String acc1,
+            @RequestParam(value = "acc2", required = true) String acc2)
+    throws EnzymeRetrieverException{
         LOGGER.debug("Creating enzyme retriever...");
         EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
         retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
@@ -58,9 +63,6 @@ public class CompareController {
         retriever.getReactomeAdapter().setConfig(reactomeConfig);
         retriever.getChebiAdapter().setConfig(chebiConfig);
         retriever.getBioportalAdapter().setConfig(bioportalConfig);
-        
-        // FIXME: from session
-        String acc1 = "O76074", acc2 = "Q9HCR9";
         
         final EnzymeModel model1 = getWholeEnzymeModel(acc1, retriever);
         final EnzymeModel model2 = getWholeEnzymeModel(acc2, retriever);

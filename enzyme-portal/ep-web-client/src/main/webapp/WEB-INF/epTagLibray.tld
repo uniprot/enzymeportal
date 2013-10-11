@@ -59,4 +59,16 @@
     <function-class>uk.ac.ebi.ep.web.Functions</function-class>
     <function-signature>java.lang.String escapeHTML(java.lang.String)</function-signature>
   </function>
+    <function>
+        <name>getMoleculeUrl</name>
+        <description>Retrieves (or builds) the URL for a molecule.</description>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>java.lang.String getMoleculeUrl(uk.ac.ebi.ep.enzyme.model.Molecule)</function-signature>
+    </function>
+    <function>
+        <name>getMoleculeImgSrc</name>
+        <description>Builds the URL for the image of a molecule.</description>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>java.lang.String getMoleculeImgSrc(uk.ac.ebi.ep.enzyme.model.Molecule)</function-signature>
+    </function>
 </taglib>
