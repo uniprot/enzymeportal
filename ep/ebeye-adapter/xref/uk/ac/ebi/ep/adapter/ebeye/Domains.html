@@ -40,28 +40,29 @@
 <a class="jxr_linenumber" name="30" href="#30">30</a>              <span class="jxr_string">"formula"</span>, <span class="jxr_string">"inchi"</span>, <span class="jxr_string">"inchikey"</span>, <span class="jxr_string">"smiles"</span>, <span class="jxr_string">"iupac_name"</span>,
 <a class="jxr_linenumber" name="31" href="#31">31</a>              <span class="jxr_string">"secondary_accession_number"</span>}),
 <a class="jxr_linenumber" name="32" href="#32">32</a>      pdbe(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"acc"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"description"</span>, <span class="jxr_string">"keywords"</span>}),
-<a class="jxr_linenumber" name="33" href="#33">33</a>      chembl_compound(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"compound_synonym"</span>}),
-<a class="jxr_linenumber" name="34" href="#34">34</a>      efo(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"synonym"</span>
-<a class="jxr_linenumber" name="35" href="#35">35</a>           <em class="jxr_comment">/*<em class="jxr_comment"> extra: , "description", "domain_source" */</em>}),</em>
-<a class="jxr_linenumber" name="36" href="#36">36</a>      mesh(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>
-<a class="jxr_linenumber" name="37" href="#37">37</a>           <em class="jxr_comment">/*<em class="jxr_comment"> extra: , "annotation", "domain_source", "historynote",</em></em>
-<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_comment">         "onlinenote", "publicmeshnote", "qualifiername" */</em>}),
-<a class="jxr_linenumber" name="39" href="#39">39</a>      omim(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"alternative_title"</span>
-<a class="jxr_linenumber" name="40" href="#40">40</a>           <em class="jxr_comment">/*<em class="jxr_comment"> extra: , "description", "domain_source", "allelic_variations",</em></em>
-<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_comment">         "clinical_synopsis" */</em>})
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <em class="jxr_comment">//, chembl_target</em>
-<a class="jxr_linenumber" name="43" href="#43">43</a>      ;
-<a class="jxr_linenumber" name="44" href="#44">44</a>  
-<a class="jxr_linenumber" name="45" href="#45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] searchFields;
-<a class="jxr_linenumber" name="46" href="#46">46</a>  
-<a class="jxr_linenumber" name="47" href="#47">47</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../uk/ac/ebi/ep/adapter/ebeye/Domains.html">Domains</a>(String[] searchFields) {
-<a class="jxr_linenumber" name="48" href="#48">48</a>          <strong class="jxr_keyword">this</strong>.searchFields = searchFields;
-<a class="jxr_linenumber" name="49" href="#49">49</a>      }
-<a class="jxr_linenumber" name="50" href="#50">50</a>  
-<a class="jxr_linenumber" name="51" href="#51">51</a>      String[] getSearchFields() {
-<a class="jxr_linenumber" name="52" href="#52">52</a>          <strong class="jxr_keyword">return</strong> searchFields;
-<a class="jxr_linenumber" name="53" href="#53">53</a>      }
-<a class="jxr_linenumber" name="54" href="#54">54</a>  }
+<a class="jxr_linenumber" name="33" href="#33">33</a>      chembl_molecule(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"molecule_synonym"</span>, <span class="jxr_string">"canonical_smiles"</span>,
+<a class="jxr_linenumber" name="34" href="#34">34</a>              <span class="jxr_string">"standard_inchi_key"</span>}),
+<a class="jxr_linenumber" name="35" href="#35">35</a>      efo(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"synonym"</span>
+<a class="jxr_linenumber" name="36" href="#36">36</a>           <em class="jxr_comment">/*<em class="jxr_comment"> extra: , "description", "domain_source" */</em>}),</em>
+<a class="jxr_linenumber" name="37" href="#37">37</a>      mesh(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>
+<a class="jxr_linenumber" name="38" href="#38">38</a>           <em class="jxr_comment">/*<em class="jxr_comment"> extra: , "annotation", "domain_source", "historynote",</em></em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_comment">         "onlinenote", "publicmeshnote", "qualifiername" */</em>}),
+<a class="jxr_linenumber" name="40" href="#40">40</a>      omim(<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"id"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"alternative_title"</span>
+<a class="jxr_linenumber" name="41" href="#41">41</a>           <em class="jxr_comment">/*<em class="jxr_comment"> extra: , "description", "domain_source", "allelic_variations",</em></em>
+<a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_comment">         "clinical_synopsis" */</em>})
+<a class="jxr_linenumber" name="43" href="#43">43</a>      <em class="jxr_comment">//, chembl_target</em>
+<a class="jxr_linenumber" name="44" href="#44">44</a>      ;
+<a class="jxr_linenumber" name="45" href="#45">45</a>  
+<a class="jxr_linenumber" name="46" href="#46">46</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String[] searchFields;
+<a class="jxr_linenumber" name="47" href="#47">47</a>  
+<a class="jxr_linenumber" name="48" href="#48">48</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../../uk/ac/ebi/ep/adapter/ebeye/Domains.html">Domains</a>(String[] searchFields) {
+<a class="jxr_linenumber" name="49" href="#49">49</a>          <strong class="jxr_keyword">this</strong>.searchFields = searchFields;
+<a class="jxr_linenumber" name="50" href="#50">50</a>      }
+<a class="jxr_linenumber" name="51" href="#51">51</a>  
+<a class="jxr_linenumber" name="52" href="#52">52</a>      String[] getSearchFields() {
+<a class="jxr_linenumber" name="53" href="#53">53</a>          <strong class="jxr_keyword">return</strong> searchFields;
+<a class="jxr_linenumber" name="54" href="#54">54</a>      }
+<a class="jxr_linenumber" name="55" href="#55">55</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
