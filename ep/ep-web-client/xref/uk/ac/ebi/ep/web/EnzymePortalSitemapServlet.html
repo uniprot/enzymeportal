@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> org.springframework.web.context.WebApplicationContext;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> org.springframework.web.context.support.WebApplicationContextUtils;
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> uk.ac.ebi.ep.mBean.SitemapConfig;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> uk.ac.ebi.ep.mBean.FilesConfig;
 <a class="jxr_linenumber" name="19" href="#19">19</a>  
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_javadoccomment"> * This Servlet reads and serves the generated SiteMap</em>
@@ -36,13 +36,13 @@
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../uk/ac/ebi/ep/web/EnzymePortalSitemapServlet.html">EnzymePortalSitemapServlet</a> <strong class="jxr_keyword">extends</strong> HttpServlet {
 <a class="jxr_linenumber" name="27" href="#27">27</a>  
 <a class="jxr_linenumber" name="28" href="#28">28</a>      <strong class="jxr_keyword">public</strong> Logger LOGGER = Logger.getLogger(EnzymePortalSitemapServlet.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../uk/ac/ebi/ep/mBean/SitemapConfig.html">SitemapConfig</a> sitemapConfig;
+<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../uk/ac/ebi/ep/mBean/FilesConfig.html">FilesConfig</a> sitemapConfig;
 <a class="jxr_linenumber" name="30" href="#30">30</a>      
-<a class="jxr_linenumber" name="31" href="#31">31</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../uk/ac/ebi/ep/mBean/SitemapConfig.html">SitemapConfig</a> getSitemapConfig() {
+<a class="jxr_linenumber" name="31" href="#31">31</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../uk/ac/ebi/ep/mBean/FilesConfig.html">FilesConfig</a> getSitemapConfig() {
 <a class="jxr_linenumber" name="32" href="#32">32</a>          <strong class="jxr_keyword">return</strong> sitemapConfig;
 <a class="jxr_linenumber" name="33" href="#33">33</a>      }
 <a class="jxr_linenumber" name="34" href="#34">34</a>      
-<a class="jxr_linenumber" name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSitemapConfig(<a href="../../../../../uk/ac/ebi/ep/mBean/SitemapConfig.html">SitemapConfig</a> sitemapConfig) {
+<a class="jxr_linenumber" name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSitemapConfig(<a href="../../../../../uk/ac/ebi/ep/mBean/FilesConfig.html">FilesConfig</a> sitemapConfig) {
 <a class="jxr_linenumber" name="36" href="#36">36</a>          <strong class="jxr_keyword">this</strong>.sitemapConfig = sitemapConfig;
 <a class="jxr_linenumber" name="37" href="#37">37</a>      }
 <a class="jxr_linenumber" name="38" href="#38">38</a>      
@@ -55,8 +55,8 @@
 <a class="jxr_linenumber" name="45" href="#45">45</a>          LOGGER.info(<span class="jxr_string">"Getting URL connection to sitemap..."</span>);
 <a class="jxr_linenumber" name="46" href="#46">46</a>          WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());<em class="jxr_comment">//.getWebApplicationContext(getServletContext());</em>
 <a class="jxr_linenumber" name="47" href="#47">47</a>          <em class="jxr_comment">// ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());</em>
-<a class="jxr_linenumber" name="48" href="#48">48</a>          <em class="jxr_comment">//SitemapConfig sitemapConfig = (SitemapConfig) context.getBean("sitemapConfig");</em>
-<a class="jxr_linenumber" name="49" href="#49">49</a>          sitemapConfig = (SitemapConfig) context.getBean(SitemapConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="48" href="#48">48</a>          <em class="jxr_comment">//FilesConfig sitemapConfig = (FilesConfig) context.getBean("sitemapConfig");</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>          sitemapConfig = (FilesConfig) context.getBean(FilesConfig.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="50" href="#50">50</a>  
 <a class="jxr_linenumber" name="51" href="#51">51</a>         
 <a class="jxr_linenumber" name="52" href="#52">52</a>          URL url = <strong class="jxr_keyword">new</strong> URL(sitemapConfig.getSitemapIndex());
