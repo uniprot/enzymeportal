@@ -3,7 +3,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.21-SNAPSHOT</version>
+    <version>1.0.21</version>
     <name>EP core</name>
 
     <parent>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ebeye-adapter</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
