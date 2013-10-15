@@ -10,6 +10,11 @@
 </properties>
 
 <body>
+    <release version="1.0.5" date="2013-10-15" description="chembl-molecule">
+        <action dev="rafalcan" type="fix" issue="182">
+            Renamed EB-Eye domain from chembl-compound to chembl-molecule.
+        </action>
+    </release>
     <release version="1.0.4" date="2013-09-26"
         description="Now searching also EFO, OMIM and MeSH. JMX-manageable
         search fields.">

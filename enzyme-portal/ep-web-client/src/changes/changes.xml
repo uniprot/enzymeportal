@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-    <release version="1.0.25" date="" description="Bug fixes.">
+    <release version="1.0.25" date="2013-10-15" description="Bug fixes.">
         <action dev="rafalcan" type="fix">
             Disease names are now found, after including queries to the efo,
             omim and mesh domains of EB-Eye.
@@ -18,12 +18,18 @@
         </action>
         <action dev="rafalcan" type="update">
             Updated to latest versions of ep-util, ebeye-adapter - which fixes
-            query to uniprot domain in EB-Eye, making searches more accurate -,
-            uniprot-adapter and ep-core.
+            query to uniprot domain in EB-Eye, making searches more accurate,
+            and which also fixes renamed domain -, uniprot-adapter and ep-core
+            - which tries to recover from failures in EB-Eye searches, getting
+            at least some results.
         </action>
         <action dev="rafalcan" type="fix">
             Fixed issue with cofactors (they were ignored for compound filters).
             <fixes issue="180"/>
+        </action>
+        <action dev="rafalcan" type="fix" issue="182">
+            Fixed issue with searches sent to renamed domain in EB-Eye
+            (chembl-compound, now chembl-molecule).
         </action>
     </release>
     <release version="1.0.24" date="2013-08-02" description="">

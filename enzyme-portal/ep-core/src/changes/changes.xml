@@ -10,6 +10,17 @@
 </properties>
 
 <body>
+    <release version="1.0.21" date="2013-10-15"
+        description="chembl-molecule domain">
+        <action dev="rafalcan" type="update" issue="182">
+            Updated to latest version of ebeye-adapter, which fixes domain name
+            (used to be chembl-compound, now is chembl-molecule).
+        </action>
+        <action dev="rafalcan" type="fix">
+            Caught exceptions when there are any problems with the two main
+            searches sent to EB-Eye, so that we can recover some results.
+        </action>
+    </release>
     <release version="1.0.20" date="2013-09-26" description="Better searches.">
         <action dev="rafalcan" type="update">
             Updated to latest versions of uniprot-adapter, ebeye-adapter - which

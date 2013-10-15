@@ -476,18 +476,15 @@ public class SearchController {
                     clearHistory(session);
 
                     switch (searchModel.getSearchparams().getType()) {
-
                         case KEYWORD:
-
-
                             results = searchKeyword(searchModel.getSearchparams());
-                            cacheSearch(session.getServletContext(), searchKey, results);
-                            addToHistory(session, "searchparams.text=" + searchKey);
+                            if (results.getTotalfound() > 0){
+                                cacheSearch(session.getServletContext(), searchKey, results);
+                                addToHistory(session, "searchparams.text=" + searchKey);
+                            }
                             break;
                         case SEQUENCE:
                             view = searchSequence(model, searchModel);
-                            // cacheSearch(session.getServletContext(), searchKey, results);
-                            addToHistory(session, "searchparams.sequence=" + searchKey);
                             break;
                         case COMPOUND:
                             //            	view = postCompoundSearch(model, searchModel);

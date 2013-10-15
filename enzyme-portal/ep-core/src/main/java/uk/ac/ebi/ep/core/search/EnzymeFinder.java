@@ -122,25 +122,20 @@ public class EnzymeFinder implements IEnzymeFinder {
         if (newSearch) {
             // Search in EBEye for Uniprot ids, the search is filtered by ec:*
             LOGGER.debug("Starting new search");
-            queryEbeyeForUniprotIds();
-            /*
-             * replacing EB-Eye with UniProt ws here: uniprotIds2species = new
-             * HashMap<String,Collection<Species>>(); final List<String>
-             * uniprotAccessions =
-             * uniprotAdapter.getUniprotAccessions(searchParams.getText()); if
-             * (uniprotAccessions != null){ final Map<String,
-             * Collection<Species>> idsAndSpecies =
-             * uniprotAdapter.getAccessionsAndSpecies(uniprotAccessions); if
-             * (idsAndSpecies != null) uniprotIds2species.putAll(idsAndSpecies);
-             * }
-             */
-            LOGGER.debug("UniProt IDs from UniProt: " + uniprotEnzymeIds.size());
-
-            /*
-             * Search in Intenz, Rhea, Reactome, PDBe etc. for Uniprot ids.
-             */
-            queryEbeyeOtherDomainForIds();
-            LOGGER.debug("UniProt IDs from UniProt+ChEBI+others: " + uniprotEnzymeIds.size());
+            try {
+                queryEbeyeForUniprotIds();
+                LOGGER.debug("UniProt IDs from UniProt: " + uniprotEnzymeIds.size());
+            } catch (EnzymeFinderException e){
+                LOGGER.error("Unable to search EB-Eye uniprot domain", e);
+            }
+            // Search in Intenz, Rhea, Reactome, PDBe etc. for Uniprot ids.
+            try {
+                queryEbeyeOtherDomainForIds();
+                LOGGER.debug("UniProt IDs from UniProt+ChEBI+others: "
+                        + uniprotEnzymeIds.size());
+            } catch (EnzymeFinderException e){
+                LOGGER.error("Unable to search EB-Eye other domains", e);
+            }
 
             uniprotIdPrefixSet.addAll(EPUtil.getIdPrefixes(uniprotEnzymeIds));
         }
@@ -552,9 +547,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         return ebeyeAdapter.getNumberOfResults(paramsWithoutNrOfResults);
     }
 
-    public ParamOfGetResults getUniprotNrOfRecords() throws EnzymeFinderException {
-        //Uniprot number of result
-        //IEbeyeAdapter ebeyeAdapter = new EbeyeAdapter();
+    public ParamOfGetResults getUniprotNrOfRecords() {
         //prepare list of parameters
         ParamOfGetResults param = prepareGetUniprotIdQueries(searchParams);
         ebeyeAdapter.getNumberOfResults(param);
@@ -704,7 +697,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             List<String> uniprotIdPrefixes, List<String> paramList)
             throws MultiThreadingException {
         List<EnzymeSummary> summaries = getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
-        if (summaries != null) {
+        if (summaries != null && !summaries.isEmpty()) {
             EnzymeSummaryProcessor[] processors = {
                 new SynonymsProcessor(summaries, intenzAdapter)
             };

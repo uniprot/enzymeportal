@@ -30,7 +30,8 @@ public enum Domains {
             "formula", "inchi", "inchikey", "smiles", "iupac_name",
             "secondary_accession_number"}),
     pdbe(new String[]{"id", "acc", "name", "description", "keywords"}),
-    chembl_compound(new String[]{"id", "compound_synonym"}),
+    chembl_molecule(new String[]{"id", "molecule_synonym", "canonical_smiles",
+            "standard_inchi_key"}),
     efo(new String[]{"id", "name", "synonym"
          /* extra: , "description", "domain_source" */}),
     mesh(new String[]{"id", "name"
