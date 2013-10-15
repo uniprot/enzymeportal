@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>ebeye-adapter</artifactId>
-	<version>1.0.5-SNAPSHOT</version>
+	<version>1.0.5</version>
 	<name>EB-Eye adapter</name>
 	<description>
 		A module providing proxies to the EB-Eye search engine.
