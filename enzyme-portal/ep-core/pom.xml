@@ -3,7 +3,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.21</version>
+    <version>1.0.22-SNAPSHOT</version>
     <name>EP core</name>
 
     <parent>
