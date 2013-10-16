@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-web-client</artifactId>
-    <version>1.0.26-SNAPSHOT</version>
+    <version>1.0.26</version>
     <packaging>war</packaging>
     <name>EP website</name>
     <description>
@@ -223,7 +223,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ebeye-adapter</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.xchars</groupId>

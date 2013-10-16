@@ -10,6 +10,14 @@
 </properties>
 
 <body>
+    <release version="1.0.26" date="2013-10-16"
+        description="Updated dependency">
+        <action dev="rafalcan" type="update">
+            Updated version of ebeye-adapter (the transitive dependency from
+            ep-core does not override the explicit one in this module's pom
+            file).
+        </action>
+    </release>
     <release version="1.0.25" date="2013-10-15" description="Bug fixes.">
         <action dev="rafalcan" type="fix">
             Disease names are now found, after including queries to the efo,
