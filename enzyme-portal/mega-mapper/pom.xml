@@ -279,6 +279,14 @@
                         </configuration>
                     </plugin>
                 </plugins>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>log4j.xml</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
                 <testResources>
                     <testResource>
                         <directory>src/test/resources</directory>
