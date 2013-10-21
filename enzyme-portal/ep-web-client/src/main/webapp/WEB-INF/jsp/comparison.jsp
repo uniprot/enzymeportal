@@ -53,7 +53,7 @@
                             <ul>
                             <c:forEach var="ssc"
                                 items="${sc.value.subComparisons}">
-                                <li class="${ssc.value.different? 'diff' : ''}">
+                                <li class="${ssc.value.different? 'diff' : 'same'}">
                                     <a href="#${ssc.key}">${ssc.key}</a>
                                 </li>
                             </c:forEach>

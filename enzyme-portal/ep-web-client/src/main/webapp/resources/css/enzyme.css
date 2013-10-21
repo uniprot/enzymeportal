@@ -181,7 +181,7 @@ legend.comparison.header {
 	background-color: #ffa;
 }
 .same {
-	background-color: transparent;
+	background-color: #fff;
 }
 
 fieldset.comparison {
@@ -195,16 +195,7 @@ select.ps {
 	border: none;
 	width: 100%;
 }
-/*
-div.comparison.list {
-	height: 13ex;
-	overflow: auto;
-}
-div.comparison.list div {
-	white-space: nowrap;
-	cursor: pointer;
-}
-*/
+
 section div.diff {
     text-align: center;
     margin-top: 0.3ex;
@@ -215,7 +206,7 @@ section.alpha > div.diff {
 section.omega > div.diff {
     margin: 0.3ex 1em 0.3ex 0em;
 }
-#compare-ps {
+button.comparison {
   width: 100%;
   text-align: center;
 }

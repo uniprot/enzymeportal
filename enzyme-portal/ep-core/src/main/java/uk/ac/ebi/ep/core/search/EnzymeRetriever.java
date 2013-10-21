@@ -189,7 +189,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         queryRheaWsForReactions(enzymeModel);
         List<ReactionPathway> reactionPathways = enzymeModel.getReactionpathway();
 
-        /**
+        /*
          * manually add provenance
          */
 //        List<String> prov = new LinkedList<String>();

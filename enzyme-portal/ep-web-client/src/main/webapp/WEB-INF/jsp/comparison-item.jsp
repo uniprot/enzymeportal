@@ -52,7 +52,8 @@
         </div>
         <div style="margin-left: 2em">
             <span class="comparison subheader">Rhea identifier:</span>
-            ${item.reaction.id}
+            <a href="${urlConfig['rhea.reaction']}${item.reaction.id}"
+                 target="_blank">RHEA:${item.reaction.id}</a>
             <c:if test="${not empty item.pathways}">
                 <br/>
                 <span class="comparison subheader">Pathways:</span>

@@ -12,17 +12,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-<!--
-    <context:component-scan
-            base-package="uk.ac.ebi.ep.web, uk.ac.ebi.ep.mBean" />
--->
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <context:component-scan base-package="uk.ac.ebi.ep.web" />
     <context:property-placeholder
-            location="classpath:/ep-web-client.properties"/>
+        location="classpath:/ep-web-client.properties"/>
 
     <!-- MBeans -->
     <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
@@ -74,8 +75,9 @@
         <property name="useProxy" value="${uniprot.ws.proxy}"/>
         <property name="maxTermsPerQuery" value="${uniprot.query.terms.max}"/>
         <property name="maxThreads" value="${uniprot.threads.max}"/>
-        <property name="alignUrl" value="${uniprot.align.url}"
+        <property name="alignUrl" value="${uniprot.align.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=uniprotConfig" alias="uniprotConfig"/>
 
     <bean name="uk.ac.ebi.ep:name=intenzConfig"
           class="uk.ac.ebi.ep.adapter.intenz.IntenzConfig">
@@ -96,6 +98,9 @@
         <property name="maxThreads" value="${chebi.threads.max}"/>
         <property name="searchStars" value="${chebi.search.stars}"/>
         <property name="maxRetrievedMolecules" value="${chebi.results.max}"/>
+        <property name="compoundBaseUrl" value="${chebi.compound.base.url}"/>
+        <property name="compoundImgBaseUrl"
+            value="${chebi.compound.img.base.url}"/>
     </bean>
 
     <bean name="uk.ac.ebi.ep:name=literatureConfig"
@@ -128,5 +133,11 @@
         <property name="baseDirectory" value="${ep.files.base.dir}"/>
     </bean>
     <alias name="uk.ac.ebi.ep:name=filesConfig" alias="filesConfig"/>
+    
+    <util:map id="urlConfig"
+        map-class="java.util.HashMap" key-type="java.lang.String">
+        <description>Base URLs for resources used by EP.</description>
+        <entry key="drugbank.compound" value="${ep.url.drugbank.compound"/>
+    </util:map>
 
 </beans>

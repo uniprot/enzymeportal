@@ -28,7 +28,7 @@
         <section class="grid_8 alpha">&nbsp;</section>
         <section class="grid_8">
             <div class="${theComparison.value.different? 'diff':'same'}">
-                <button type="submit" id="compare-sequence"
+                <button type="submit" class="comparison"
                     name="referrer" value="Enzyme portal"
                     onclick="sendUniprotAlignQuery()"
                 	${theComparison.value.different? '' : 'disabled'}>
@@ -60,7 +60,7 @@
         </section>
         <section class="grid_8">
             <div class="${theComparison.value.different? 'diff':'same'}">
-                <button type="submit" id="compare-ps"
+                <button type="submit" class="comparison"
                     name="referrer" value="Enzyme portal"
                     onclick="sendPdbeCompareQuery()"
                     ${fn:length(theComparison.value.compared[0]) eq 0 or

@@ -1,8 +1,5 @@
 package uk.ac.ebi.ep.web;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -83,7 +80,8 @@ public class CompareController {
     }
     
     private EnzymeModel getWholeEnzymeModel(String acc,
-            EnzymeRetriever retriever) throws EnzymeRetrieverException{
+            EnzymeRetriever retriever)
+    throws EnzymeRetrieverException{
         LOGGER.debug("Retrieving enzyme model...");
         EnzymeModel model = retriever.getEnzyme(acc);
         model.setProteinstructure(
