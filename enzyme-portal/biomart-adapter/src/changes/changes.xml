@@ -10,6 +10,13 @@
 </properties>
 
 <body>
+    <release version="1.1.0" date=""
+        description="Number of results not limited">
+        <action dev="rafalcan" type="fix">
+            The list of results (pathways IDs) from BioMart is not trimmed to 2.
+            Any problem in handling a long list should be handled by the client.
+        </action>
+    </release>
 	<release version="1.0.3" date="2013-02-05">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub) and

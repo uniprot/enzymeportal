@@ -30,22 +30,6 @@ public class BiomartAdapter {
 	private static final Logger LOGGER = Logger.getLogger(BiomartAdapter.class);
 
 	/**
-	 * Limits a list of results to only two.
-	 * @param results
-	 *            a list
-	 * @return Only the first two elements in the list.
-	 */
-	private static List<String> limitResults(List<String> results) {
-		List<String> subResults = null;
-		if (results.size() > 0) {
-			subResults = results.subList(0, 2);
-		} else {
-			subResults = results;
-		}
-		return subResults;
-	}
-
-	/**
 	 * Retrieves Reactome pathway stable IDs for a given Reactome reaction
 	 * stable ID.
 	 * @param reactionStableId a Reactome reaction stable ID
@@ -64,10 +48,7 @@ public class BiomartAdapter {
 				getPathwaysByReactionIdQueryArg);
 		String baseUrl = Transformer.getMessageTemplate("baseUrl");
 		URLConnection uCon = sendRequest(baseUrl, query);
-		List<String> results = parsePathwaysResponse(uCon);
-		// Test Reactome is too slow to handle more than 2
-		// return results;
-		return limitResults(results);
+		return parsePathwaysResponse(uCon);
 	}
 
 	/**
@@ -110,8 +91,7 @@ public class BiomartAdapter {
 				getPathwaysByUniprotIdQueryArg);
 		String baseUrl = Transformer.getMessageTemplate("baseUrl");
 		URLConnection uCon = sendRequest(baseUrl, query);
-		List<String> results = parsePathwaysResponse(uCon);
-		return limitResults(results);
+		return parsePathwaysResponse(uCon);
 	}
 
 	/**
