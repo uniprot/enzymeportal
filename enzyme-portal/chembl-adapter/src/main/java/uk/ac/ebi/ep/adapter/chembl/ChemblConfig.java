@@ -24,6 +24,10 @@ public class ChemblConfig implements ChemblConfigMBean {
     private static final String MIN_CONF9 =
             "ep.chembl.adapter.bioactivities.assays.confidence9.min";
     private static final String WS_URL = "ep.chembl.adapter.ws.url.base";
+    private static final String COMPOUND_URL =
+            "ep.chembl.adapter.compound.url.base";
+    private static final String IMG_URL = 
+            "ep.chembl.adapter.compound.img.url.base";
 
     private int minAssays = 5;
 
@@ -34,6 +38,12 @@ public class ChemblConfig implements ChemblConfigMBean {
     private double minConf9 = 0.5;
 
     private String wsBaseUrl = "https://www.ebi.ac.uk/chemblws";
+    
+    private String compoundBaseUrl =
+            "https://www.ebi.ac.uk/chembldb/compound/inspect/";
+    
+    private String compoundImgBaseUrl =
+            "https://www.ebi.ac.uk/chembldb/compound/displayimage/";
 
     public int getMinAssays() {
         return minAssays;
@@ -75,6 +85,22 @@ public class ChemblConfig implements ChemblConfigMBean {
         this.wsBaseUrl = wsBaseUrl;
     }
 
+    public String getCompoundBaseUrl() {
+        return compoundBaseUrl;
+    }
+
+    public void setCompoundBaseUrl(String compoundBaseUrl) {
+        this.compoundBaseUrl = compoundBaseUrl;
+    }
+
+    public String getCompoundImgBaseUrl() {
+        return compoundImgBaseUrl;
+    }
+
+    public void setCompoundImgBaseUrl(String compoundImgBaseUrl) {
+        this.compoundImgBaseUrl = compoundImgBaseUrl;
+    }
+
     /**
      * Reads the configuration for the ChEMBL proxy from a properties file
      * <code>chembl-adapter.properties</code> in the classpath. The properties'
@@ -103,6 +129,10 @@ public class ChemblConfig implements ChemblConfigMBean {
      *      bioactivity.</li>
      *  <li><code>ep.chembl.adapter.ws.url.base</code>: the base URL for ChEMBL
      *      web services.</li>
+     *  <li><code>ep.chembl.adapter.compound.url.base</code>: the base URL for
+     *      the public view of a ChEMBL compound.</li>
+     *  <li><code>ep.chembl.adapter.compound.img.url.base</code>: the base URL
+     *      for the image of a ChEMBL compound.</li>
      * </ul>
      * For confidence levels, see also the table CONFIDENCE_SCORE_LOOKUP in
      * ChEMBL schema.
@@ -138,6 +168,14 @@ public class ChemblConfig implements ChemblConfigMBean {
         }
     }
 
+    /**
+     * Reads properties from an input stream. If any property is not found, the
+     * default value is used.
+     * @param is the input stream.
+     * @return a ChEMBL configuration with properties from the input stream,
+     *      or default values for properties not found.
+     * @throws IOException in case of problem loading the properties.
+     */
     protected static ChemblConfig readFromInputStream(InputStream is)
     throws IOException {
         Properties props = new Properties();
@@ -168,6 +206,10 @@ public class ChemblConfig implements ChemblConfigMBean {
                     + MIN_CONF9 + "=" + props.getProperty(MIN_CONF9));
         }
         config.setWsBaseUrl(props.getProperty(WS_URL, config.wsBaseUrl));
+        config.setCompoundBaseUrl(
+                props.getProperty(COMPOUND_URL, config.compoundBaseUrl));
+        config.setCompoundImgBaseUrl(
+                props.getProperty(IMG_URL, config.compoundImgBaseUrl));
         return config;
     }
 }

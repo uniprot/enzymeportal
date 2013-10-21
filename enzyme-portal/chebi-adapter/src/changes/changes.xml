@@ -9,7 +9,13 @@
 </properties>
 
 <body>
-	<release version="1.0.3" date="(Not yet released)"
+    <release version="1.0.4" date="" description="Added base URLs">
+        <action dev="rafalcan" type="add">
+            Added configuration properties for public URLs of compounds and
+            compound images.
+        </action>
+    </release>
+	<release version="1.0.3" date="2013-06-05"
 	    description="Small but critic change in ep-domain">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),

@@ -11,8 +11,14 @@ public class ChebiConfig implements ChebiConfigMBean {
 	StarsCategory searchStars = StarsCategory.ALL;
 	
 	int timeout = 30000;
+	
+	protected String compoundBaseUrl =
+	        "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=";
 
-	public int getMaxThreads() {
+	protected String compoundImgBaseUrl =
+	        "http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=";
+	
+    public int getMaxThreads() {
 		return maxThreads;
 	}
 
@@ -43,5 +49,21 @@ public class ChebiConfig implements ChebiConfigMBean {
 	public void setMaxRetrievedMolecules(int maxRetrievedMolecules) {
 		this.maxRetrievedMolecules = maxRetrievedMolecules;
 	}
+
+    public String getCompoundBaseUrl() {
+        return compoundBaseUrl;
+    }
+
+    public void setCompoundBaseUrl(String compoundBaseUrl) {
+        this.compoundBaseUrl = compoundBaseUrl;
+    }
+
+    public String getCompoundImgBaseUrl() {
+        return compoundImgBaseUrl;
+    }
+
+    public void setCompoundImgBaseUrl(String compoundImgBaseUrl) {
+        this.compoundImgBaseUrl = compoundImgBaseUrl;
+    }
 	
 }
