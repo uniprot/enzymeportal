@@ -24,4 +24,17 @@ public interface IntenzConfigMBean {
 	 * @param intenzXmlUrl
 	 */
 	public abstract void setIntenzXmlUrl(String intenzXmlUrl);
+
+	/**
+	 * Sets the base URL for a concrete EC number in the IntEnz website (the
+	 * complete URL is built just adding the EC number at the end).
+	 * @param ecBaseUrl the base URL.
+	 * @since 1.0.6
+	 */
+    public abstract void setEcBaseUrl(String ecBaseUrl);
+
+    /**
+     * @since 1.0.6
+     */
+    public abstract String getEcBaseUrl();
 }

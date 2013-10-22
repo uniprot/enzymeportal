@@ -51,4 +51,30 @@ public interface ChemblConfigMBean {
      * @param minFunc the minimum fraction of functional assays.
      */
     void setMinFunc(double minFunc);
+
+    /**
+     * Sets the base public URL for compounds (the whole URL is built just
+     * appending the ChEMBL ID at the end).
+     * @param compoundBaseUrl the base URL.
+     * @since 1.0.1
+     */
+    public abstract void setCompoundBaseUrl(String compoundBaseUrl);
+
+    /**
+     * @since 1.0.1
+     */
+    public abstract String getCompoundBaseUrl();
+
+    /**
+     * Sets the base public URL for compound images (the whole URL is built
+     * just appending the ChEMBL ID at the end).
+     * @param compoundImgBaseUrl the base URL.
+     * @since 1.0.1
+     */
+    public abstract void setCompoundImgBaseUrl(String compoundImgBaseUrl);
+
+    /**
+     * @since 1.0.1
+     */
+    public abstract String getCompoundImgBaseUrl();
 }

@@ -10,6 +10,13 @@
     </properties>
 
     <body>
+        <release version="1.0.1" date="2013-10-22"
+            description="Added base URLs for compounds and images">
+            <action dev="rafalcan" type="add">
+                Added configuration properties for base URLs of compounds and
+                images.
+            </action>
+        </release>
         <release version="1.0.0" date="2013-09-02" description="First release">
             <action dev="rafalcan" type="add">
                 Added chembl-adapter module to deal wich ChEMBL bioactivities.
