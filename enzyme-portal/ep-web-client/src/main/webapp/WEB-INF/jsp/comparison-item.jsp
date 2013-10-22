@@ -18,6 +18,10 @@
         and empty topComparison.value.subComparisons}">
         No data available.
     </c:when>
+    <c:when test="${fn:contains(comparePath, 'EC classification')}">
+        <a href="${intenzConfig.ecBaseUrl}${item}" target="_blank">EC
+            ${item}</a>
+    </c:when>
     <c:when test="${theComparison.key eq 'Sequence'}">
         <a href="${item.sequenceurl}" target="_blank">${item.sequence}</a>
         amino acids.
@@ -51,15 +55,21 @@
             ${item.reaction.name}
         </div>
         <div style="margin-left: 2em">
-            <span class="comparison subheader">Rhea identifier:</span>
-            <a href="${urlConfig['rhea.reaction']}${item.reaction.id}"
-                 target="_blank">RHEA:${item.reaction.id}</a>
+            <c:if test="${not empty item.reaction.id}">
+                <div>
+                <span class="comparison subheader">Rhea identifier:</span>
+                    <a href="${rheaConfig.reactionBaseUrl}${item.reaction.id}"
+                         target="_blank">RHEA:${item.reaction.id}</a>
+                </div>
+            </c:if>
             <c:if test="${not empty item.pathways}">
-                <br/>
+                <div>
                 <span class="comparison subheader">Pathways:</span>
                 <c:forEach var="pathway" items="${item.pathways}" varStatus="vs">
-                    ${pathway.id}${vs.last? '' : ','}
+                    <a href="${reactomeConfig.eventBaseUrl}${pathway.id}"
+                        target="_blank">${pathway.id}</a>${vs.last? '' : ','}
                 </c:forEach>
+                </div>
             </c:if>
         </div>
     </c:when>
@@ -71,6 +81,18 @@
                 <br/>Formula: ${item.formula}
             </c:if>
         </div>
+    </c:when>
+    <c:when test="${topComparison.key eq 'Diseases'}">
+        <a href="${item.url}" style="font-weight: bold">${item.name}</a>:
+        ${item.description}
+        <c:if test="${not empty item.evidence}">
+            <br/><b>Evidence:</b>
+            <ul>
+                <c:forEach var="ev" items="${item.evidence}">
+                    <li>${ev}</li>
+                </c:forEach>
+            </ul>
+        </c:if>
     </c:when>
     <c:otherwise>
         ${item}

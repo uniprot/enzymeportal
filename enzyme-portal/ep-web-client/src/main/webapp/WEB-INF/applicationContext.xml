@@ -84,6 +84,7 @@
         <property name="timeout" value="${intenz.ws.timeout}"/>
         <property name="intenzXmlUrl" value="${intenz.xml.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=intenzConfig" alias="intenzConfig"/>
 
     <bean name="uk.ac.ebi.ep:name=reactomeConfig"
           class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
@@ -91,6 +92,7 @@
         <property name="useProxy" value="${reactome.ws.proxy}"/>
         <property name="wsBaseUrl" value="${reactome.ws.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=reactomeConfig" alias="reactomeConfig"/>
 
     <bean name="uk.ac.ebi.ep:name=chebiConfig"
           class="uk.ac.ebi.ep.adapter.chebi.ChebiConfig">
@@ -102,7 +104,12 @@
         <property name="compoundImgBaseUrl"
             value="${chebi.compound.img.base.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=chebiConfig" alias="chebiConfig"/>
 
+    <bean name="uk.ac.ebi.ep:name=rheaConfig"
+        class="uk.ac.ebi.ep.adapter.rhea.RheaConfig"/>
+    <alias name="uk.ac.ebi.ep:name=rheaConfig" alias="rheaConfig"/>
+    
     <bean name="uk.ac.ebi.ep:name=literatureConfig"
           class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">
         <property name="maxThreads" value="${literature.threads.max}" />
