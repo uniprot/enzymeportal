@@ -9,6 +9,13 @@
 </properties>
 
 <body>
+    <release version="1.0.4" date="2013-10-22"
+        description="Added RheaConfig class">
+        <action dev="rafalcan" type="add">
+            Added RheaConfig class and its MBean interface, with just reaction
+            base URL.
+        </action>
+    </release>
 	<release version="1.0.3" date="2013-09-26"
 	    description="Dependencies updates.">
 		<action dev="rafalcan" type="update">

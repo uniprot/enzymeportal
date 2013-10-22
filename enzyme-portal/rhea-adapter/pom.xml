@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>uk.ac.ebi.ep</groupId>
 	<artifactId>rhea-adapter</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<name>Rhea adapter</name>
 	<description>
 		Module providing proxies to Rhea reactions.
