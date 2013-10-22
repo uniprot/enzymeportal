@@ -18,9 +18,6 @@
         and empty topComparison.value.subComparisons}">
         No data available.
     </c:when>
-    <c:when test="${empty item}">
-        &nbsp;
-    </c:when>
     <c:when test="${theComparison.key eq 'Sequence'}">
         <a href="${item.sequenceurl}" target="_blank">${item.sequence}</a>
         amino acids.
@@ -28,8 +25,8 @@
     </c:when>
     <c:when test="${theComparison.key eq 'Protein structures'}">
         <c:choose>
-            <c:when test="${fn:length(theComparison.value.compared[0]) eq 0}">
-                No protein structures available
+            <c:when test="${fn:length(item) eq 0}">
+                No protein structures available.
             </c:when>
             <c:otherwise>
                 <select id="ps${i}" size="5" class="ps"
@@ -43,6 +40,9 @@
                 </select>
             </c:otherwise>
         </c:choose>
+    </c:when>
+    <c:when test="${empty item}">
+        &nbsp;
     </c:when>
     <c:when test="${topComparison.key eq 'Reactions and pathways'}">
         <div>

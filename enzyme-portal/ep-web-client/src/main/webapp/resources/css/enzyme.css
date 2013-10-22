@@ -192,7 +192,7 @@ fieldset.comparison section {
 	margin-bottom: 1ex;
 }
 select.ps {
-	border: none;
+	border: 1px inset;
 	width: 100%;
 }
 

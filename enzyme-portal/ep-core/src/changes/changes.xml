@@ -15,8 +15,9 @@
             Added package to compare two enzymes side by side.
         </action>
         <action dev="rafalcan" type="update">
-            Updated to latest version of ep-domain, which adds equals and
-            hashCode methods to the JAXB-generated classes.
+            Updated to latest version of ep-domain - which adds equals and
+            hashCode methods to the JAXB-generated classes -, chebi-adapter and
+            intenz-adapter.
         </action>
     </release>
     <release version="1.0.20" date="2013-09-26" description="Better searches.">

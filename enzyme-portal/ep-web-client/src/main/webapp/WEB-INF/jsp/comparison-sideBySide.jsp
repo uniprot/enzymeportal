@@ -16,6 +16,7 @@
 </c:forEach>
 <br clear="all"/>
 <c:choose>
+
     <c:when test="${theComparison.key eq 'Sequence'}">
         <script>
         function sendUniprotAlignQuery(){
@@ -38,6 +39,7 @@
         </section>
         <section class="grid_8 omega">&nbsp;</section>
     </c:when>
+    
     <c:when test="${theComparison.key eq 'Protein structures'}">
         <script>
         function sendPdbeCompareQuery(){
@@ -60,14 +62,14 @@
         </section>
         <section class="grid_8">
             <div class="${theComparison.value.different? 'diff':'same'}">
-                <button type="submit" class="comparison"
-                    name="referrer" value="Enzyme portal"
-                    onclick="sendPdbeCompareQuery()"
-                    ${fn:length(theComparison.value.compared[0]) eq 0 or
-                        fn:length(theComparison.value.compared[1]) eq 0?
-                        'disabled' : ''}>
-                    Run protein structure similarity
-                </button>
+                <c:if test="${fn:length(theComparison.value.compared[0]) gt 0
+                    and fn:length(theComparison.value.compared[1]) gt 0}">
+                    <button type="submit" class="comparison"
+                        name="referrer" value="Enzyme portal"
+                        onclick="sendPdbeCompareQuery()">
+                        Run protein structure similarity
+                    </button>
+                </c:if>
             </div>
         </section>
         <section class="grid_8 omega">
@@ -79,4 +81,5 @@
             </div>
         </section>
     </c:when>
+    
 </c:choose>
