@@ -529,3 +529,73 @@ function checkContent() {
   
   });
 }
+
+/**
+ * (De)selects an enzyme to be compared to another one.
+ * @param event the event (change in the option selected).
+ */
+function selectToCompare(event){
+    var params = {};
+    var thisFunction = this;
+    var select = event.target;
+    // The last option (deselect the enzyme):
+    var deselectOpt = select.children[select.children.length-1];
+    if (select.value.charAt(0) == '-'){
+        // chosen option to deselect
+        params.removeAcc = select.value.substring(1);
+    } else {
+        // chosen option to select
+        params.addAcc = select.value;
+        params.enzymeName =
+        		$(select).parent().parent().find('.enzymeName').text()
+        		+ ' [' + select.options[select.selectedIndex].text + ']';
+        // we must deselect any other option already selected
+        if (deselectOpt.value != '-'){
+            params.removeAcc = deselectOpt.value.substring(1);
+        }
+    }
+    jQuery.ajax({
+    	dataType: "json",
+        url: "ajax/compare",
+        data: params,
+        context: thisFunction,
+        success: function(data){
+            // Set proper value of deselect option for eventual future requests:
+            if (params.addAcc){
+                deselectOpt.value = "-" + params.addAcc;
+            } else {
+                deselectOpt.value = "-";
+            }
+            // Deselect any options which have been deselected in the server:
+            for (var i = 0; i < data.deselected.lenght; i++){
+            	var theSel =
+            			$('option[value="' + deselected[0].acc + '"]').parent();
+            	theSel.selectedIndex = theSel.children().length;
+            }
+            // Update compare button with enzyme names:
+            updateCompareButton(
+            		data.selected.length > 0? data.selected[0].name : '',
+            		data.selected.length > 1? data.selected[1].name : '');
+        }
+    });
+}
+
+/**
+ * Updates the tool-tip of the compare button with the names of the enzymes to
+ * be compared (if any).
+ * @param name1 an enzyme name (can be the empty string).
+ * @param name2 another enzyme name (can be the empty string).
+ */
+function updateCompareButton(name1, name2){
+    if (name1 == '' && name2 == ''){
+        $('#compareButton').attr('title', 'No enzymes selected');
+        $('#compareButton').attr('disabled', 'disabled');
+	} else if (name1 != '' && name2 != ''){
+	    $('#compareButton').attr('title', 'Compare ' + name1 + ' to ' + name2);
+	    $('#compareButton').removeAttr('disabled');
+    } else {
+    	var name = name1 == ''? name2 : name1;
+        $('#compareButton').attr('title', 'Compare ' + name + ' to...');
+        $('#compareButton').attr('disabled', 'disabled');
+    }
+}

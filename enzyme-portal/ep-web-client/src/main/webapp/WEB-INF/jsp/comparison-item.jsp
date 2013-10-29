@@ -18,6 +18,9 @@
         and empty topComparison.value.subComparisons}">
         No data available.
     </c:when>
+    <c:when test="${empty item}">
+        &nbsp;
+    </c:when>
     <c:when test="${fn:contains(comparePath, 'EC classification')}">
         <a href="${intenzConfig.ecBaseUrl}${item}" target="_blank">EC
             ${item}</a>
@@ -44,9 +47,6 @@
                 </select>
             </c:otherwise>
         </c:choose>
-    </c:when>
-    <c:when test="${empty item}">
-        &nbsp;
     </c:when>
     <c:when test="${topComparison.key eq 'Reactions and pathways'}">
         <div>
@@ -83,7 +83,8 @@
         </div>
     </c:when>
     <c:when test="${topComparison.key eq 'Diseases'}">
-        <a href="${item.url}" style="font-weight: bold">${item.name}</a>:
+        <a href="${item.url}" target="_blank"
+            style="font-weight: bold">${item.name}</a>:
         ${item.description}
         <c:if test="${not empty item.evidence}">
             <br/><b>Evidence:</b>

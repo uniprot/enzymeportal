@@ -106,6 +106,10 @@
     </bean>
     <alias name="uk.ac.ebi.ep:name=chebiConfig" alias="chebiConfig"/>
 
+    <bean name="uk.ac.ebi.ep:name=chemblConfig"
+        class="uk.ac.ebi.ep.adapter.chembl.ChemblConfig"/>
+    <alias name="uk.ac.ebi.ep:name=chemblConfig" alias="chemblConfig"/>
+    
     <bean name="uk.ac.ebi.ep:name=rheaConfig"
         class="uk.ac.ebi.ep.adapter.rhea.RheaConfig"/>
     <alias name="uk.ac.ebi.ep:name=rheaConfig" alias="rheaConfig"/>
@@ -141,10 +145,17 @@
     </bean>
     <alias name="uk.ac.ebi.ep:name=filesConfig" alias="filesConfig"/>
     
-    <util:map id="urlConfig"
-        map-class="java.util.HashMap" key-type="java.lang.String">
-        <description>Base URLs for resources used by EP.</description>
-        <entry key="drugbank.compound" value="${ep.url.drugbank.compound"/>
+    <util:map id="drugbankConfig" map-class="java.util.HashMap"
+        key-type="java.lang.String" value-type="java.lang.String">
+        <description>Configuration for DrugBank URLs.</description>
+        <entry key="compound.base.url" value="${drugbank.compound.base.url}"/>
+        <entry key="compound.img.base.url" value="${drugbank.compound.img.base.url}"/>
     </util:map>
+    
+    <bean name="functions" class="uk.ac.ebi.ep.web.Functions">
+        <property name="chebiConfig" ref="chebiConfig"/>
+        <property name="chemblConfig" ref="chemblConfig"/>
+        <property name="drugbankConfig" ref="drugbankConfig"/>
+    </bean>
 
 </beans>

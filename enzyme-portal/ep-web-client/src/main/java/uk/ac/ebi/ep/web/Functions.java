@@ -6,7 +6,10 @@ package uk.ac.ebi.ep.web;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
+import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 
@@ -18,11 +21,24 @@ import uk.ac.ebi.ep.enzyme.model.Molecule;
  */
 public final class Functions {
 
-    private Functions() {
-        // Hiden constructor.
+    private static ChebiConfig chebiConfig;
+    private static ChemblConfig chemblConfig;
+    private static Map<String, String> drugbankConfig;
+    
+    public Functions() {
     }
     
+    public void setChebiConfig(ChebiConfig chebiConfig){
+        Functions.chebiConfig = chebiConfig;
+    }
  
+    public void setChemblConfig(ChemblConfig chemblConfig){
+        Functions.chemblConfig = chemblConfig;
+    }
+    
+    public void setDrugbankConfig(Map<String, String> config){
+        Functions.drugbankConfig = config;
+    }
     
     public static boolean startsWithDigit(String data){
         return Character.isDigit(data.charAt(0));
@@ -132,10 +148,11 @@ public final class Functions {
         if (url == null || url.length() == 0){
             if (molecule.getId().startsWith("DB")){
                 // DrugBank
-                url = "http://www.drugbank.ca/drugs/" + molecule.getId();
+                url = Functions.drugbankConfig.get("compound.base.url")
+                        + molecule.getId();
             } else if (molecule.getId().startsWith("CHEMBL")){
                 // CHEMBL
-                url = "https://www.ebi.ac.uk/chembldb/compound/inspect/"
+                url = Functions.chemblConfig.getCompoundBaseUrl()
                         + molecule.getId();
             }
         }
@@ -151,10 +168,14 @@ public final class Functions {
     public static String getMoleculeImgSrc(Molecule molecule){
         String imgSrc = "";
         if (molecule.getId().startsWith("CHEBI")){
-            imgSrc = "http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=" + molecule.getId();
-        } else if (molecule.getId().startsWith("CHEMBL")){
-            imgSrc = "https://www.ebi.ac.uk/chembldb/compound/displayimage/"
+            imgSrc = Functions.chebiConfig.getCompoundImgBaseUrl()
                     + molecule.getId();
+        } else if (molecule.getId().startsWith("CHEMBL")){
+            imgSrc = Functions.chemblConfig.getCompoundImgBaseUrl()
+                    + molecule.getId();
+        } else if (molecule.getId().startsWith("DB")){
+            imgSrc = String.format(drugbankConfig.get("compound.img.base.url"),
+                    molecule.getId());
         }
         return imgSrc;
     }

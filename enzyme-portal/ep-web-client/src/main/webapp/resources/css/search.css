@@ -386,7 +386,11 @@ a.ui-corner-all{
     margin-bottom: 0px;
 }
 
-#hiddenText {
+select.toCompare {
+	max-width: 7em;
+}
+
+.hidden, #hiddenText {
     display:none;
 }
 

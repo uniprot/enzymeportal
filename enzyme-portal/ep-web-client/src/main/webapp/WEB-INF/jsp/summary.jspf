@@ -1,4 +1,5 @@
 <%@include file="util/prioritiseSpecies.jsp" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 
 <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
@@ -52,12 +53,11 @@
     </c:otherwise>
 </c:choose>
 
-<div class="desc grid_21">
+<div class="desc grid_18">
     <c:if test='${not empty enzyme.name }'>
         <a href="search/${primAcc}/enzyme">
-            <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
-            <c:out value="${showName}"/>
-            <!-- ${enzyme.uniprotid} -->
+            <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}"</span>
+            <span class="hidden">${enzyme.uniprotid}</span>
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :
                 theSpecies.species.commonname}]
@@ -214,6 +214,25 @@
     </div>
 
 </div>
+
+<div class="grid_3 omega">
+    <select class="toCompare" onchange="selectToCompare(event)">
+        <c:set var="noneSelected" value="${true}"/>
+        <c:set var="toDeselect" value=""/>
+        <c:forEach var="relSp" items="${enzyme.relatedspecies}">
+            <c:set var="chosenToCompare" value="${not empty enzymesToCompare and
+                not empty enzymesToCompare[relSp.uniprotaccessions[0]]}"/>
+            <c:set var="toDeselect" value="${chosenToCompare?
+                relSp.uniprotaccessions[0] : toDeselect}"/>
+            <option value="${relSp.uniprotaccessions[0]}"
+                ${chosenToCompare? 'selected' : ''}
+                title="${relSp.species.commonname}">${relSp.species.scientificname}</option>
+        </c:forEach>
+        <option ${empty toDeselect? 'selected' : ''} value="-${toDeselect}"
+            title="Deselect this enzyme"></option>
+    </select>
+</div>
+
 </div>
 <div class="clear"></div>
 <c:set var="resultItemId" value="${resultItemId+1}"/>

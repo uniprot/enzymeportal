@@ -441,6 +441,9 @@
                         </form:form>
                         <div class="clear"></div>
                         <div class="line"></div>
+                        <div class="basket">
+                            <%@include file="compare-button.jsp" %>
+                        </div>
                         <div class="resultContent">
                             <c:set var="resultItemId" value="${0}"/>
                             <c:forEach items="${summaryEntries}"
