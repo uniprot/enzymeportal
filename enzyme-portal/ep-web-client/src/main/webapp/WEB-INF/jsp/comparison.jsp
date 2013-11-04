@@ -1,44 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Enzyme Portal - Enzyme comparison</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta charset="utf-8">
-    <meta name="description" content="EMBL-EBI">
-    <meta name="keywords" content="bioinformatics, europe, institute">
-    <meta name="author" content="EMBL-EBI, Cheminformatics and Metabolism Team">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-    <link rel="stylesheet" href="resources/css/enzyme.css" type="text/css" />
-    <link rel="stylesheet" href="resources/skins/default/skin2.css" type="text/css" />
-
-    <style type="text/css">
-      /* You have the option of setting a maximum width for your page, and making sure everything is centered */
-      /* body { max-width: 1600px; margin: 0 auto; } */
-    </style>
-
-    <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.custom.49274.js"></script>
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-</head>
+<c:set var="pageTitle" value="Comparing enzymes"/>
+<%@include file="head.jspf"%>
 <body class="level2">
 
-    <div id="skip-to">
-        <ul>
-            <li><a href="#content">Skip to main content</a></li>
-            <li><a href="#local-nav">Skip to local navigation</a></li>
-            <li><a href="#global-nav">Skip to EBI global navigation menu</a></li>
-            <li><a href="#global-nav-expanded">Skip to expanded EBI global navigation menu (includes all sub-sections)</a></li>
-        </ul>
-    </div>
+    <%@include file="skipto.jspf" %>
 
     <div id="wrapper" class="container_24">
        
-        <%@include file="header.jsp" %>
+        <%@include file="header.jspf" %>
        
         <div id="content" role="main" class="grid_24 clearfix">
 
@@ -66,9 +41,7 @@
         
             <section class="grid_4 alpha">&nbsp;</section>
             <section class="grid_18 omega">
-                <h2>Comparing ${comparison.compared[0].uniprotaccessions[0]}
-                    to ${comparison.compared[1].uniprotaccessions[0]}</h2>
-                    ${applicationContext.uniprotConfig}
+                <h2>Comparing enzymes</h2>
             </section>
             <br clear="all"/>
 
@@ -77,12 +50,16 @@
             </section>
             <section class="grid_20 omega">
                 <section class="grid_12 comparison header">
+                    <a href="search/${comparison.compared[0].uniprotaccessions[0]}/enzyme">
                     ${comparison.compared[0].name}<br/>
                     (${comparison.compared[0].species.scientificname})
+                    </a>
                 </section>
                 <section class="grid_12 omega comparison header">
+                    <a href="search/${comparison.compared[1].uniprotaccessions[0]}/enzyme">
                     ${comparison.compared[1].name}<br/>
                     (${comparison.compared[1].species.scientificname})
+                    </a>
                 </section>
                 <br clear="all"/>
             </section>
@@ -112,7 +89,7 @@
            
         </div>
        
-        <%@include file="footer.jsp" %>
+        <%@include file="footer.jspf" %>
         
     </div>
 </body>

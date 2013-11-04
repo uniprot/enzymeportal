@@ -4,6 +4,10 @@
  */
 package uk.ac.ebi.ep.web;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +16,8 @@ import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.search.model.EnzymeAccession;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
 
 /**
  * Due to no similar functionality in JSTL, this function was designed to help
@@ -67,7 +73,7 @@ public final class Functions {
      * @param item
      * @return true if the item is contained in the collection
      */
-    public static boolean contains(List collection, Object item) {
+    public static boolean contains(Collection collection, Object item) {
         return collection.contains(item);
     }
     
@@ -174,9 +180,19 @@ public final class Functions {
             imgSrc = Functions.chemblConfig.getCompoundImgBaseUrl()
                     + molecule.getId();
         } else if (molecule.getId().startsWith("DB")){
-            imgSrc = String.format(drugbankConfig.get("compound.img.base.url"),
+            imgSrc = MessageFormat.format(
+                    drugbankConfig.get("compound.img.base.url"),
                     molecule.getId());
         }
         return imgSrc;
+    }
+    
+    public static String getSummaryBasketId(EnzymeSummary summary){
+        List<String> accs = new ArrayList<String>();
+        for (EnzymeAccession acc : summary.getRelatedspecies()) {
+            accs.add(acc.getUniprotaccessions().get(0));
+        }
+        Collections.sort(accs);
+        return accs.toString();
     }
 }

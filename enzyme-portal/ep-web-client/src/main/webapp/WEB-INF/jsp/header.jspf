@@ -37,6 +37,9 @@
             <ul class="grid_24" id="local-nav">
                 <li class="first"><a href="/enzymeportal" title="">Home</a></li>
                 <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
+                <li><a href="basket" title="Enzymes selected to compare"
+                    class="icon icon-generic" data-icon="b">Basket
+                    (<span id="basketSize">${fn:length(basket)}</span>)</a></li>
                 <li class="last">
                     <a href="about" title="About Enzyme Portal">About Enzyme
                         Portal</a>

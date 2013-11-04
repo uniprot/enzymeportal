@@ -10,6 +10,8 @@
    TODO customize this sample style
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
+
+/*
 body, td.contentsarea {
     background-color: #FFFFFF;
     color: #000000;
@@ -20,6 +22,7 @@ body, td.contentsarea {
     line-height: 16px;
     width: 100%;
 }
+*/
 
 a:link, a:visited {
     text-decoration: inherit;
@@ -239,15 +242,15 @@ vertical-align: top;
     text-align: right;
     vertical-align: bottom;
 }
-
+/*
 .comparison {
     font-weight: bold;
     color: #408C8C;
     float:right;
     max-height: 40px;
-    width:19%;    
+    width:19%;
 }
-
+*/
 /*#allButtons {
     margin-top: -4px;
     margin-bottom: -6px;
@@ -376,18 +379,14 @@ a.ui-corner-all{
     width: 82%;
 }
 */
-.basket{
-    float: right;        
-}
-
-.basket #compareButton {
-    font-weight: bold;
-    height: 22px;
-    margin-bottom: 0px;
-}
 
 select.toCompare {
-	max-width: 7em;
+	max-width: 10em;
+    margin-top: 2ex;
+}
+
+input.forBasket {
+    margin-top: 2ex;
 }
 
 .hidden, #hiddenText {

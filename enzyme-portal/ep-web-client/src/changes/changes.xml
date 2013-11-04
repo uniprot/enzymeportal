@@ -35,6 +35,10 @@
         <action dev="rafalcan" type="update">
             Updated to latest version of ebeye-adapter.
         </action>
+        <action dev="rafalcan" type="fix">
+            Changed signature of Functions.contains so that it can handle any
+            collection, not just Lists.
+        </action>
     </release>
     <release version="1.0.26" date="2013-10-16"></release>
     <release version="1.0.25" date="2013-10-15" description="Bug fixes.">

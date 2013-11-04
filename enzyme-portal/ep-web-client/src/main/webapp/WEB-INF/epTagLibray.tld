@@ -34,7 +34,7 @@
        <function>
         <name>contains</name>
         <function-class>uk.ac.ebi.ep.web.Functions</function-class>
-        <function-signature>boolean contains(java.util.List, java.lang.Object)</function-signature>
+        <function-signature>boolean contains(java.util.Collection, java.lang.Object)</function-signature>
     </function>
       <function>
         <name>alphaOmegaIsNotNull</name>
@@ -70,5 +70,12 @@
         <description>Builds the URL for the image of a molecule.</description>
         <function-class>uk.ac.ebi.ep.web.Functions</function-class>
         <function-signature>java.lang.String getMoleculeImgSrc(uk.ac.ebi.ep.enzyme.model.Molecule)</function-signature>
+    </function>
+    <function>
+        <name>getSummaryBasketId</name>
+        <description>Builds a unique and reproducible ID for an enzyme summary,
+            based on its UniProt accessions.</description>
+        <function-class>uk.ac.ebi.ep.web.Functions</function-class>
+        <function-signature>java.lang.String getSummaryBasketId(uk.ac.ebi.ep.search.model.EnzymeSummary)</function-signature>
     </function>
 </taglib>

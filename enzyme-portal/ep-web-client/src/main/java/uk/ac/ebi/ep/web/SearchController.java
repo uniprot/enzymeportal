@@ -1,9 +1,11 @@
 package uk.ac.ebi.ep.web;
 
 import java.util.*;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
@@ -393,19 +396,13 @@ public class SearchController {
         }
     }
 
-//    @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
-//    public String getSearchResult(Model model) {
-//        return "underconstruction";
-//    }
-//
     private void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
-        //List<String> history = (List<String>) session.getAttribute("history");
-        LinkedList<String> history = (LinkedList<String>) session.getAttribute("history");
+        LinkedList<String> history = (LinkedList<String>)
+                session.getAttribute(Attribute.history.name());
         if (history == null) {
-            //history = new ArrayList<String>();
             history = new LinkedList<String>();
-            session.setAttribute("history", history);
+            session.setAttribute(Attribute.history.name(), history);
         }
         if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
             String cleanedText = HtmlUtility.cleanText(s);
@@ -415,12 +412,11 @@ public class SearchController {
 
     private void clearHistory(HttpSession session) {
         @SuppressWarnings("unchecked")
-        // List<String> history = (List<String>) session.getAttribute("history");
-        LinkedList<String> history = (LinkedList<String>) session.getAttribute("history");
+        LinkedList<String> history = (LinkedList<String>)
+                session.getAttribute(Attribute.history.name());
         if (history == null) {
-            //history = new ArrayList<String>();
             history = new LinkedList<String>();
-            session.setAttribute("history", history);
+            session.setAttribute(Attribute.history.name(), history);
         } else {
             history.clear();
         }
@@ -508,7 +504,8 @@ public class SearchController {
                 if (searchModel.getSearchparams().getType().equals(SearchParams.SearchType.SEQUENCE)) {
                     addToHistory(session, "searchparams.sequence=" + searchKey);
                 }
-                //addToHistory(session, "searchparams.text=" + searchKey);
+                setLastSummaries(session,
+                        searchModel.getSearchresults().getSummaryentries());
                 view = "search";
             }
         } catch (Throwable t) {
@@ -516,6 +513,22 @@ public class SearchController {
         }
 
         return view;
+    }
+    
+    /**
+     * Updates the {@link lastSummaries Attribute#lastSummaries} attribute in
+     * the user's session.
+     * @param session
+     * @param summaries
+     */
+    private void setLastSummaries(HttpSession session,
+            List<EnzymeSummary> summaries){
+        Map<String, EnzymeSummary> lastSummaries =
+                new HashMap<String, EnzymeSummary>();
+        for (EnzymeSummary summary : summaries) {
+            lastSummaries.put(Functions.getSummaryBasketId(summary), summary);
+        }
+        session.setAttribute(Attribute.lastSummaries.name(), lastSummaries);
     }
 
     /**
@@ -714,13 +727,15 @@ public class SearchController {
     @SuppressWarnings("unchecked")
     private Map<String, SearchResults> getPreviousSearches(
             ServletContext servletContext) {
-        Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) servletContext.getAttribute("searches");
+        Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
+                servletContext.getAttribute(Attribute.prevSearches.name());
         if (prevSearches == null) {
             // Map implementation which maintains the order of access:
             prevSearches = Collections.synchronizedMap(
                     new LinkedHashMap<String, SearchResults>(
                     searchConfig.getSearchCacheSize(), 1, true));
-            servletContext.setAttribute("searches", prevSearches);
+            servletContext.setAttribute(Attribute.prevSearches.name(),
+                    prevSearches);
         }
         return prevSearches;
     }
