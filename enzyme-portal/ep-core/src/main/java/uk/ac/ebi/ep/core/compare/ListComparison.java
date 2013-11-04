@@ -31,14 +31,26 @@ public class ListComparison extends AbstractComparison<List<?>> {
         List<?> common = ListUtils.intersection(l1, l2);
         List<?> onlyL1 = ListUtils.subtract(l1, common);
         List<?> onlyL2 = ListUtils.subtract(l2, common);
+        int c = 0;
         for (Object o : common) {
-            subComparisons.put("common", getItemComparison(o, o));
+            subComparisons.put("same-" + c++, getItemComparison(o, o));
         }
-        for (Object o : onlyL1) {
-            subComparisons.put("only left", getItemComparison(o, null));
+        final int min = Math.min(onlyL1.size(), onlyL2.size());
+        int i = 0;
+        for (; i < min; i++) {
+            subComparisons.put("diff-" + i,
+                    getItemComparison(onlyL1.get(i), onlyL2.get(i)));
         }
-        for (Object o : onlyL2) {
-            subComparisons.put("only right", getItemComparison(null, o));
+        if (onlyL1.size() > onlyL2.size()){
+            for (; i < onlyL1.size(); i++){
+                subComparisons.put("diff-" + i,
+                        getItemComparison(onlyL1.get(i), null));
+            }
+        } else if (onlyL1.size() < onlyL2.size()){
+            for (; i < onlyL2.size(); i++){
+                subComparisons.put("diff-" + i,
+                        getItemComparison(null, onlyL2.get(i)));
+            }
         }
         differ = !onlyL1.isEmpty() || !onlyL2.isEmpty();
     }
