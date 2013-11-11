@@ -4,9 +4,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -85,11 +82,16 @@ public class BasketController {
             session.setAttribute(Attribute.basket.name(), basket);
         }
         final EnzymeSummary summary = lastSummaries.get(id);
-        final String basketId = Functions.getSummaryBasketId(summary);
-        if (checked){
-            basket.put(basketId, summary);
+        if (summary == null){
+            // build a fresh one:
+            // TODO
         } else {
-            basket.remove(basketId);
+            final String basketId = Functions.getSummaryBasketId(summary);
+            if (checked){
+                basket.put(basketId, summary);
+            } else {
+                basket.remove(basketId);
+            }
         }
         response.setContentType("text/plain");
         return String.valueOf(basket.size());
@@ -118,23 +120,20 @@ public class BasketController {
             @RequestParam(value="acc") String[] accs)
     throws EnzymeRetrieverException{
         model.addAttribute("searchModel", newEmptySearchModel());
+        // Filter the incoming accessions, keep only two non-empty:
+        String[] theAccs = new String[2];
+        int j = 0;
+        for (String acc : accs) {
+            if (acc.length() == 0) continue;
+            theAccs[j++] = acc;
+            if (j == 2) break;
+        }
         try {
             LOGGER.debug("Creating enzyme retriever...");
-            EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
-            retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
-            retriever.getUniprotAdapter().setConfig(uniprotConfig);
-            retriever.getIntenzAdapter().setConfig(intenzConfig);
-            retriever.getReactomeAdapter().setConfig(reactomeConfig);
-            retriever.getChebiAdapter().setConfig(chebiConfig);
-            retriever.getBioportalAdapter().setConfig(bioportalConfig);
-
+            EnzymeRetriever retriever = getEnzymeRetriever();
             EnzymeModel models[] = new EnzymeModel[2];
-            int i = 0;
-            for (String acc : accs) {
-                if (acc.length() == 0) continue;
-                // TODO: improve performance here
-                models[i++] = getWholeEnzymeModel(acc, retriever);
-                if (i == 2) break;
+            for (int i = 0; i < theAccs.length; i++) {
+                models[i] = getWholeEnzymeModel(theAccs[i], retriever);
             }
             LOGGER.debug("Comparison started...");
             EnzymeComparison comparison =
@@ -143,11 +142,23 @@ public class BasketController {
             model.addAttribute("comparison", comparison);
             return "comparison";
         } catch (Exception e){
-            LOGGER.error(e);
+            String errorParam = theAccs[0] + "," + theAccs[1];
+            LOGGER.error("Unable to compare enzymes: " + errorParam, e);
             model.addAttribute("errorCode", "comparison");
-            model.addAttribute("errorParam", accs[0] + "," + accs[1]);
+            model.addAttribute("errorParam", errorParam);
             return "error";
         }
+    }
+
+    private EnzymeRetriever getEnzymeRetriever() {
+        EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
+        retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
+        retriever.getUniprotAdapter().setConfig(uniprotConfig);
+        retriever.getIntenzAdapter().setConfig(intenzConfig);
+        retriever.getReactomeAdapter().setConfig(reactomeConfig);
+        retriever.getChebiAdapter().setConfig(chebiConfig);
+        retriever.getBioportalAdapter().setConfig(bioportalConfig);
+        return retriever;
     }
 
     private SearchModel newEmptySearchModel() {

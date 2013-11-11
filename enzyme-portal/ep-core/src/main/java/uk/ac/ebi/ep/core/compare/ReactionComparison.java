@@ -19,7 +19,7 @@ public class ReactionComparison extends AbstractComparison<EnzymeReaction> {
     protected void getSubComparisons(EnzymeReaction r1, EnzymeReaction r2) {
         subComparisons.put("ID", new StringComparison(r2.getId(), r2.getId()));
         subComparisons.put("Equation", new StringComparison(
-                r1.getEquation().toString(), r2.getEquation().toString()));
+                r1.getName(), r2.getName()));
     }
 
     @Override

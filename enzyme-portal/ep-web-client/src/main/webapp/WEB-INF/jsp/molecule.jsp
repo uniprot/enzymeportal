@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 	        
 <c:set var="displayName"
 	value="${empty molecule.name? molecule.id : molecule.name}"/>

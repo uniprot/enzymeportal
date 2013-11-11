@@ -26,14 +26,26 @@
                 style="font-family: verdana, sans-serif;">
 
             <section class="grid_20 alpha">
-                You have ${fn:length(basket)} enzymes to compare. Please select
-                their species.
+                <c:choose>
+                    <c:when test="${empty basket}">
+                        <spring:message code="basket.empty"/>
+                    </c:when>
+                    <c:when test="${fn:length(basket) eq 1}">
+                        <spring:message code="basket.one"/>
+                    </c:when>
+                    <c:otherwise>
+                        <spring:message code="basket.full"
+                            arguments="${fn:length(basket)}"/>
+                    </c:otherwise>
+                </c:choose>
             </section>
-            <section class="grid_4 omega basket">
-                <button id="compareButton" disabled
-                    class="icon icon-functional"
-                    data-icon="O">Compare selected</button>
-            </section>
+            <c:if test="${fn:length(basket) gt 1}">
+                <section class="grid_4 omega basket">
+                    <button id="compareButton" disabled
+                        class="icon icon-functional"
+                        data-icon="O">Compare selected</button>
+                </section>
+            </c:if>
             
             <c:forEach var="basketItem" items="${basket}" varStatus="vsEnzymes">
                 <c:set var="enzyme" value="${basketItem.value}"/>

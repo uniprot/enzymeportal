@@ -13,15 +13,27 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray" %>
 
+<!-- 
+<div style="background-color: yellow">
+topComparison.key = ${topComparison.key}<br/>
+theComparison.key = ${theComparison.key}<br/>
+theComparison.value.class.simpleName = ${theComparison.value.class.simpleName}<br/>
+empty item? = ${empty item}<br/>
+comparePath = ${comparePath}
+</div>
+ -->
+
 <c:choose>
-    <c:when test="${topComparison.value.class.simpleName eq 'ListComparison'
-        and empty topComparison.value.subComparisons}">
+    <c:when test="${empty topComparison.value.subComparisons and
+        (topComparison.value.class.simpleName eq 'ListComparison'
+        or topComparison.key eq 'Small molecules')}">
         No data available.
     </c:when>
-    <c:when test="${empty item}">
-        &nbsp;
+    <c:when test="${theComparison.key eq 'Function' and empty item}">
+        No data available.
     </c:when>
-    <c:when test="${fn:contains(comparePath, 'EC classification')}">
+    <c:when test="${fn:contains(comparePath, 'EC classification')
+        and not empty item}">
         <a href="${intenzConfig.ecBaseUrl}${item}" target="_blank">EC
             ${item}</a>
     </c:when>
@@ -48,7 +60,8 @@
             </c:otherwise>
         </c:choose>
     </c:when>
-    <c:when test="${topComparison.key eq 'Reactions and pathways'}">
+    <c:when test="${topComparison.key eq 'Reactions and pathways'
+        and not empty item}">
         <div>
             <span class="comparison subheader">Reaction:</span>
             <br/>
@@ -74,13 +87,22 @@
         </div>
     </c:when>
     <c:when test="${topComparison.key eq 'Small molecules'}">
-        <a href="${epfn:getMoleculeUrl(item)}">${item.name}</a>
-        <img src="${epfn:getMoleculeImgSrc(item)}" style=""/>
-        <div style="margin-left: 2em">${item.description}
-            <c:if test="${not empty item.formula}">
-                <br/>Formula: ${item.formula}
-            </c:if>
-        </div>
+        <c:choose>
+            <c:when test="${empty item}">
+                No data available.
+            </c:when>
+            <c:when test="${theComparison.value.class.simpleName
+                eq 'MoleculeComparison'}">
+                <c:set var="molecule" value="${item}"/>
+                <%@include file="comparison-item-molecule.jspf" %>
+            </c:when>
+            <c:otherwise>
+                <%-- a list of molecules --%>
+                <c:forEach var="molecule" items="${item}">
+                    <%@include file="comparison-item-molecule.jspf" %>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
     </c:when>
     <c:when test="${topComparison.key eq 'Diseases'}">
         <a href="${item.url}" target="_blank"
@@ -94,6 +116,9 @@
                 </c:forEach>
             </ul>
         </c:if>
+    </c:when>
+    <c:when test="${empty item}">
+        &nbsp;
     </c:when>
     <c:otherwise>
         ${item}

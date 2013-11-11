@@ -20,8 +20,8 @@ used to update the tool-tip of the button with the enzyme names to be compared.
 
 <button id="basketDeselectAll" class="icon icon-functional" data-icon="-"
     onclick="javascript:basketAll(false)"
-    title="Deselect all enzymes in this page."/>
+    title="Deselect all enzymes in this page.">Remove all</button>
 
 <button id="basketSelectAll" class="icon icon-functional" data-icon="+"
     onclick="javascript:basketAll(true)"
-    title="Select all enzymes in this page."/>
+    title="Select all enzymes in this page.">Add all</button>

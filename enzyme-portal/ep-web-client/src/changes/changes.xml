@@ -29,9 +29,6 @@
             Global configuration for ChEBI, ChEMBL and DrugBank is now used
             by the Functions class (singleton now, instead of static).
         </action>
-        <action dev="rafalcan" type="add">
-            Added dependency on javax.json for ajax requests.
-        </action>
         <action dev="rafalcan" type="update">
             Updated to latest version of ebeye-adapter.
         </action>

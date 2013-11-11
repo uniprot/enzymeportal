@@ -20,7 +20,7 @@
             <div id="comparison-outline">
                 <ul>
                 <c:forEach var="sc" items="${comparison.subComparisons}">
-                    <li class="${sc.value.different? 'diff' : ''}">
+                    <li class="${sc.value.different? 'diff' : 'same'}">
                         <a href="#${sc.key}"
                             style="font-weight: bold;">${sc.key}</a>
                         <c:if test="${sc.key eq 'Summary'
@@ -41,7 +41,11 @@
         
             <section class="grid_4 alpha">&nbsp;</section>
             <section class="grid_18 omega">
-                <h2>Comparing enzymes</h2>
+                <h2>Comparing enzymes
+                    <a href="compare?acc=${comparison.compared[0].uniprotaccessions[0]}&acc=${comparison.compared[1].uniprotaccessions[0]}"
+                        class="icon icon-generic" data-icon="L"
+                        style="font-size: smaller;"
+                        title="permalink to this comparison"></a></h2>
             </section>
             <br clear="all"/>
 

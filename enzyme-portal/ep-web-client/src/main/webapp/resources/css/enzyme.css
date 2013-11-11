@@ -167,13 +167,16 @@ div#local-masthead {
     font-weight: normal;
 }
 .basket button.icon:before {
-    color: black !important;
+    color: rgb(80, 80, 80) !important;
 }
 
 .basket button.icon.icon-generic:before,
 .basket button.icon.icon-functional:before {
 }
 
+button#basketDeselectAll, button#basketSelectAll {
+    font-size: smaller;
+}
 /****************** Comparing enzymes *******************/
 
 #comparison-outline {
@@ -183,6 +186,7 @@ div#local-masthead {
 	max-width: 16%;
 	background-color: white;
 	box-shadow: 0 0 1em #ccc;
+	margin-left: 0.5em;
 }
 #comparison-outline ul {
 	padding-left: 0.3em !important;
