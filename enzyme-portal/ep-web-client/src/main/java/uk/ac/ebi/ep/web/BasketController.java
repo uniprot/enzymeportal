@@ -173,13 +173,7 @@ public class BasketController {
             EnzymeRetriever retriever)
     throws EnzymeRetrieverException{
         LOGGER.debug("Retrieving enzyme model...");
-        EnzymeModel model = retriever.getEnzyme(acc);
-        model.setProteinstructure(
-                retriever.getProteinStructure(acc).getProteinstructure());
-        model.setReactionpathway(
-                retriever.getReactionsPathways(acc).getReactionpathway());
-        model.setMolecule(retriever.getMolecules(acc).getMolecule());
-        model.setDisease(retriever.getDiseases(acc).getDisease());
+        EnzymeModel model = retriever.getWholeModel(acc);
         LOGGER.debug("Retrieved");
         return model;
     }

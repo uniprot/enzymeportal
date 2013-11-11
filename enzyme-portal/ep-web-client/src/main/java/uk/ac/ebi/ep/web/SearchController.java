@@ -144,6 +144,17 @@ public class SearchController {
             enzymeModel.setRequestedfield(requestedField.name());
             model.addAttribute(ENZYME_MODEL, enzymeModel);
             addToHistory(session, accession);
+            // If we got here from a bookmark, the summary might not be cached:
+            String summId = Functions.getSummaryBasketId(enzymeModel);
+            @SuppressWarnings("unchecked")
+            final Map<String, EnzymeSummary> sls = (Map<String, EnzymeSummary>)
+                    session.getAttribute(Attribute.lastSummaries.name());
+            if (sls == null){
+                setLastSummaries(session, Collections.singletonList(
+                        (EnzymeSummary) enzymeModel));
+            } else if (sls.get(summId) == null){
+                sls.put(summId, enzymeModel);
+            }
         } catch (Exception ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
             LOGGER.error("Unable to retrieve the entry!", ex);

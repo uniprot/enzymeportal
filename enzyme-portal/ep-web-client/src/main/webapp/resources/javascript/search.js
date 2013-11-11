@@ -542,7 +542,7 @@ function selectForBasket(event){
     params.checked = cb.checked;
     jQuery.ajax({
     	dataType: "text",
-        url: "ajax/basket",
+        url: window.location.pathname.replace(/search.*/, "ajax/basket"),
         data: params,
         context: thisFunction,
         success: function(basketSize){
