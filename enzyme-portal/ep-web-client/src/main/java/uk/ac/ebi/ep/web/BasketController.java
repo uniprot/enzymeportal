@@ -191,8 +191,5 @@ public class BasketController {
             return retriever.getWholeModel(acc);
         }
 
-        private EnzymeRetriever getEnzymeRetriever() {
-        }
-        
     }
 }
