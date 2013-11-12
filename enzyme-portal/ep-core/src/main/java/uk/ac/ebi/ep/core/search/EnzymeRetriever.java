@@ -403,6 +403,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * @param enzymeModel the model
      * @throws EnzymeRetrieverException in case of problem retrieving detailed
      *      info about small molecules from ChEBI.
+     * @since 1.1.0
      */
     protected void addMolecules(EnzymeModel enzymeModel)
     throws EnzymeRetrieverException {
@@ -582,6 +583,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     /**
      * Adds any related diseases to the enzyme model.
      * @param enzymeModel the model without disease info.
+     * @since 1.1.0
      */
     protected void addDiseases(EnzymeModel enzymeModel) {
         List<Disease> diseaseList = new LinkedList<Disease>();
@@ -629,6 +631,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * @return a complete model.
      * @throws EnzymeRetrieverException in case of problem retrieving the model
      *      from UniProt, or small molecules from ChEBI.
+     * @since 1.1.0
      */
     public EnzymeModel getWholeModel(String acc)
     throws EnzymeRetrieverException {
