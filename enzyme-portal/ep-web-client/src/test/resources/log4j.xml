@@ -27,6 +27,11 @@
         <appender-ref ref="file"/>
     </logger>
 
+    <logger name="uk.ac.ebi.ep.web.BasketController" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="file"/>
+    </logger>
+
 	<logger name="org.springframework">
 		<level value="WARN"/>
 		<appender-ref ref="file"/>

@@ -1,8 +1,14 @@
 package uk.ac.ebi.ep.web;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -129,11 +135,19 @@ public class BasketController {
             if (j == 2) break;
         }
         try {
-            LOGGER.debug("Creating enzyme retriever...");
-            EnzymeRetriever retriever = getEnzymeRetriever();
             EnzymeModel models[] = new EnzymeModel[2];
-            for (int i = 0; i < theAccs.length; i++) {
-                models[i] = getWholeEnzymeModel(theAccs[i], retriever);
+            LOGGER.debug("Getting enzyme models...");
+            ExecutorService pool = Executors.newFixedThreadPool(2);
+            CompletionService<EnzymeModel> cs =
+                    new ExecutorCompletionService<EnzymeModel>(pool);
+            for (String acc : theAccs) {
+                cs.submit(new EnzymeModelCallable(acc));
+            }
+            for (int i = 0; i < 2; i++) {
+                EnzymeModel em = cs.take().get();
+                final int n = Arrays.binarySearch(theAccs,
+                        em.getUniprotaccessions().get(0));
+                models[n] = em;
             }
             LOGGER.debug("Comparison started...");
             EnzymeComparison comparison =
@@ -150,17 +164,6 @@ public class BasketController {
         }
     }
 
-    private EnzymeRetriever getEnzymeRetriever() {
-        EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
-        retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
-        retriever.getUniprotAdapter().setConfig(uniprotConfig);
-        retriever.getIntenzAdapter().setConfig(intenzConfig);
-        retriever.getReactomeAdapter().setConfig(reactomeConfig);
-        retriever.getChebiAdapter().setConfig(chebiConfig);
-        retriever.getBioportalAdapter().setConfig(bioportalConfig);
-        return retriever;
-    }
-
     private SearchModel newEmptySearchModel() {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
@@ -169,12 +172,27 @@ public class BasketController {
         return searchModelForm;
     }
     
-    private EnzymeModel getWholeEnzymeModel(String acc,
-            EnzymeRetriever retriever)
-    throws EnzymeRetrieverException{
-        LOGGER.debug("Retrieving enzyme model...");
-        EnzymeModel model = retriever.getWholeModel(acc);
-        LOGGER.debug("Retrieved");
-        return model;
+    private class EnzymeModelCallable implements Callable<EnzymeModel>{
+
+        private String acc;
+
+        public EnzymeModelCallable(String acc) {
+            this.acc = acc;
+        }
+
+        public EnzymeModel call() throws Exception {
+            EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
+            retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
+            retriever.getUniprotAdapter().setConfig(uniprotConfig);
+            retriever.getIntenzAdapter().setConfig(intenzConfig);
+            retriever.getReactomeAdapter().setConfig(reactomeConfig);
+            retriever.getChebiAdapter().setConfig(chebiConfig);
+            retriever.getBioportalAdapter().setConfig(bioportalConfig);
+            return retriever.getWholeModel(acc);
+        }
+
+        private EnzymeRetriever getEnzymeRetriever() {
+        }
+        
     }
 }
