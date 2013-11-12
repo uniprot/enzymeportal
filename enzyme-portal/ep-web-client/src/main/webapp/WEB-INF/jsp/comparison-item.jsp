@@ -104,7 +104,7 @@ comparePath = ${comparePath}
             </c:otherwise>
         </c:choose>
     </c:when>
-    <c:when test="${topComparison.key eq 'Diseases'}">
+    <c:when test="${topComparison.key eq 'Diseases' and not empty item}">
         <a href="${item.url}" target="_blank"
             style="font-weight: bold">${item.name}</a>:
         ${item.description}

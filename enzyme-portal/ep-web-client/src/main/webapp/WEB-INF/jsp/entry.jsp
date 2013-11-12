@@ -85,7 +85,7 @@
         title="Add this enzyme to your basket."
         value="${epfn:getSummaryBasketId(enzymeModel)}"
         ${not empty basket and
-        not empty basket[epfn:getSummaryBasketId(enzyme)]? 'checked': ''}/> Add
+        not empty basket[epfn:getSummaryBasketId(enzymeModel)]? 'checked': ''}/> Add
             to basket
 </div>
                                 <div class="header">

@@ -145,9 +145,11 @@ public class BasketController {
             }
             for (int i = 0; i < 2; i++) {
                 EnzymeModel em = cs.take().get();
-                final int n = Arrays.binarySearch(theAccs,
-                        em.getUniprotaccessions().get(0));
-                models[n] = em;
+                if (em.getUniprotaccessions().get(0).equals(theAccs[0])){
+                    models[0] = em;
+                } else {
+                    models[1] = em;
+                }
             }
             LOGGER.debug("Comparison started...");
             EnzymeComparison comparison =
