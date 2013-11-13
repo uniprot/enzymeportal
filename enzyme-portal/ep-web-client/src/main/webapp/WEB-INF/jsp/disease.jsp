@@ -21,7 +21,7 @@
     </c:if>
 
     <c:if test='${diseasesSize == 0}'>
-        <p><spring:message code="label.entry.molecules.empty" arguments="diseases"/></p>
+        <p><spring:message code="label.entry.molecules.empty" arguments="disease"/></p>
     </c:if>
     <c:if test='${diseasesSize > 0}'>
         <p><spring:message code="label.entry.disease.found" arguments="${diseasesSize},${plural}"/></p>
