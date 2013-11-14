@@ -10,8 +10,8 @@
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!--<link href="resources/css/search.css" type="text/css" rel="stylesheet" />
-<script src="resources/javascript/search.js" type="text/javascript"></script>-->
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script>
     function showCard(tabId){
         var s = tabId.split('-tab-');
@@ -53,10 +53,12 @@
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.sequence"/>
     </li>
-    <!--
-    <li><a href="#compoundSearch"><spring:message
-        code="label.search.tab.compound"/></a></li> 
-    -->
+    <li id="search-tab-compound"
+        class="searchTab ${searchModel.searchparams.type eq 'COMPOUND'?
+                           'selected':'' }"
+        onclick="showCard(this.id);">
+        <spring:message code="label.search.tab.compound"/>
+    </li> 
 </ul>
 
 <form:form id="searchForm" modelAttribute="searchModel"
@@ -83,27 +85,6 @@
                 <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
                 <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
                 <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-           
-<!--             <a class="formSubmit"
-                onclick="submitKeywordForm('sildenafil')">sildenafil</a>,
-             <a class="formSubmit"
-                onclick="submitKeywordForm('Insulin receptor')">Insulin receptor</a>,
-             <a class="formSubmit"
-                onclick="submitKeywordForm('Ceramide glucosyltransferase')">Ceramide
-                 glucosyltransferase</a>,
-             <a class="formSubmit"
-                onclick="submitKeywordForm('Phenylalanine-4-hydroxylase')"
-                >Phenylalanine-4-hydroxylase</a>,
-             <a class="formSubmit"
-                onclick="submitKeywordForm('Cytochrome P450 3A4')">Cytochrome
-                 P450 3A4</a>,
-             <a class="formSubmit"
-                onclick="submitKeywordForm('CFTR')">CFTR</a>,
-             <a class="formSubmit"
-                onclick="submitKeywordForm('Q13423')">Q13423</a>,
-             <a class="formSubmit"
-                onclick="submitKeywordForm('REACT_1400.4')">REACT_1400.4</a>-->
-
              <hr/>
              <br/>
              <section>
@@ -135,7 +116,7 @@
                 VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
                 GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
                 YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
-                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK">>sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
+                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK">&gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
                 MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
                 LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
                 IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
@@ -143,51 +124,19 @@
                 GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
                 YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
                 WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
-    
-<!--    <a style="border-bottom-style: none" class="formSubmit"
-                onclick="submitSequenceForm('MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRELASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIAIYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQLVSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGLGRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAAYVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQTWYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK')"> 
-        >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
-                MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
-                LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
-                IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
-                VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
-                GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
-                YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
-                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK
-
-                </a>-->
 </span></pre>
                  <p>However, the header <pre style="color: #996a44; background-color:white;">  >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
                  <p><a style="border-bottom-style: none" href="http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"><h6 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h6></a></p>
-                 <!--<a   name="fasta" id="fasta"></a>
-                 <ul>
-                   <li>This format contains a single header line providing the sequence 
-                     name, and optionally a description, followed by lines of sequence data.</li>
-                   <li>Sequences in FASTA formatted files are preceded by a line 
-                     starting with a &quot; &gt;&quot; symbol.</li>
-                   <li>The first word on this line is the name of the sequence. The rest 
-                     of the line is a description of the sequence.</li>
-                 </ul>
-                 <div class="commentsbox">
-                   <pre style="color: #996a44; background-color:white;"><span class="insidecommentsbox">
-                        Term 	Entry Name 	Molecule Type 	Gene Name 	Sequence Length
-                        e.g. 	FOSB_MOUSE 	Protein 	fosB 	338 bp
-                 </span></pre>
-                 </div>
-                 <ul>
-                   <li>The remaining lines contain the sequence itself, usually formated 
-                     to 60 characters per line.</li>
-                   <li>Depending on the application blank lines in a FASTA file are 
-                     ignored or treated as terminating the sequence </li>
-                   <li>Depending on the application spaces or other non-sequence symbols 
-                     (dashes, underscores, periods) in a sequence are either ignored or 
-                     treated as gaps.</li>
-                   <li>FASTA files containing multiple sequences are just the same, with 
-                     one sequence listed right after another. This format is accepted for 
-                     many multiple sequence alignment programs.</li>
-                 </ul>-->
-
              </section>
+        </div>
+        
+        <div id="search-compound" class="searchBackground searchTabContent"
+            style="margin-left: auto; margin-right: auto; width: 65em;
+                display: ${searchModel.searchparams.type eq 'COMPOUND'?
+                        'block':'none' };">
+            <iframe src="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&datasourceQuery[0].value=Ezportal&specialDataset=rhea&callbackUrl=${request.requestURL}/search%3Fsearchparams.type=KEYWORD&amp;searchparams.text%3D*"
+                style="border: none; margin: 0px; overflow: auto;"
+                width="100%" height="1010ex"/>
         </div>
     </div>
 

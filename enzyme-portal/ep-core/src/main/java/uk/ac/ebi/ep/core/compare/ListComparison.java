@@ -36,7 +36,9 @@ public class ListComparison extends AbstractComparison<List<?>> {
         List<?> onlyL2 = ListUtils.subtract(l2, common);
         int c = 0;
         for (Object o : common) {
-            subComparisons.put("same-" + c++, getItemComparison(o, o));
+            // We do not use just Object o, they are different objects!
+            subComparisons.put("same-" + c++, getItemComparison(
+                    l1.get(l1.indexOf(o)), l2.get(l2.indexOf(o))));
         }
         final int min = Math.min(onlyL1.size(), onlyL2.size());
         int i = 0;
