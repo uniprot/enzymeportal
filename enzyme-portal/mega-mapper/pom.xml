@@ -12,7 +12,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.19-SNAPSHOT</version>
+    <version>1.0.21-SNAPSHOT</version>
     <name>Mega mapper</name>
     <description>
         A module to keep track of cross references between the databases used
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-domain</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.8</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
@@ -315,7 +315,7 @@
                 <dependency>
                     <groupId>uk.ac.ebi.ep</groupId>
                     <artifactId>chembl-adapter</artifactId>
-                    <version>1.0.1-SNAPSHOT</version>
+                    <version>1.0.0</version>
                 </dependency>
                 <dependency>
                     <groupId>uk.ac.ebi.ep</groupId>

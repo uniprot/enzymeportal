@@ -19,4 +19,12 @@ public interface ReactomeConfigMBean {
 	
 	public String getWsBaseUrl();
 
+	/**
+	 * Sets the base URL for events in Reactome web site.
+	 * @param eventBaseUrl the base URL.
+	 */
+    public abstract void setEventBaseUrl(String eventBaseUrl);
+
+    public abstract String getEventBaseUrl();
+
 }

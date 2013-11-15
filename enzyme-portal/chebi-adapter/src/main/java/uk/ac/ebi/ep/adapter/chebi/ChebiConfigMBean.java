@@ -44,5 +44,31 @@ public interface ChebiConfigMBean {
 
 	public abstract int getMaxRetrievedMolecules();
 
+	/**
+	 * Sets the base public URL of a ChEBI entity (the complete URL is built
+	 * just adding the CHEBI ID at the end).
+	 * @param compoundBaseUrl the base URL
+	 * @since 1.0.4
+	 */
+    public abstract void setCompoundBaseUrl(String compoundBaseUrl);
+
+    /**
+     * @since 1.0.4
+     */
+    public abstract String getCompoundBaseUrl();
+
+    /**
+     * Sets the base URL for a compound image (the complete URL is built just
+     * adding the CHEBI ID at the end).
+     * @param compoundImgBaseUrl the base URL.
+     * @since 1.0.4
+     */
+    public abstract void setCompoundImgBaseUrl(String compoundImgBaseUrl);
+
+    /**
+     * @since 1.0.4
+     */
+    public abstract String getCompoundImgBaseUrl();
+
 
 }

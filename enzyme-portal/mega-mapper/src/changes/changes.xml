@@ -14,7 +14,13 @@
 </properties>
 
 <body>
-    <release version="1.0.19" date=""
+    <release version="1.0.20" date="2013-10-22"
+        description="Cross-references ChEBI-EP">
+        <action dev="rafalcan" type="add">
+            Added XML declaration at the top of the chebi cross-references file.
+        </action>
+    </release>
+    <release version="1.0.19" date="2013-09-20"
         description="ChEMBL bioactivities">
         <action dev="rafalcan" type="fix" issue="75">
             Modified EbeyeSaxParser in order to use chembl-adapter to filter

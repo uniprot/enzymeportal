@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.adapter.ebeye.param;
 
-import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
 import uk.ac.ebi.ep.config.Domain;
 
 /**

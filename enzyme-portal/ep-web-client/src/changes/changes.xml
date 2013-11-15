@@ -10,13 +10,43 @@
 </properties>
 
 <body>
-       <release version="1.0.23" date="2013-07-26" description="enhancement">
-        <action dev="joseph" type="update">
-           Added Accordion to the compound search result. compounds are grouped based on their roles.
-            
+    <release version="1.0.26" date="2013-10-16"
+        description="Updated dependency">
+        <action dev="rafalcan" type="update">
+            Updated version of ebeye-adapter (the transitive dependency from
+            ep-core does not override the explicit one in this module's pom
+            file).
         </action>
     </release>
-    <release version="1.0.23" date="Not yet released" description="Bug fix.">
+    <release version="1.0.25" date="2013-10-15" description="Bug fixes.">
+        <action dev="rafalcan" type="fix">
+            Disease names are now found, after including queries to the efo,
+            omim and mesh domains of EB-Eye.
+            <fixes issue="177"/>
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of ep-util, ebeye-adapter - which fixes
+            query to uniprot domain in EB-Eye, making searches more accurate,
+            and which also fixes renamed domain -, uniprot-adapter and ep-core
+            - which tries to recover from failures in EB-Eye searches, getting
+            at least some results.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Fixed issue with cofactors (they were ignored for compound filters).
+            <fixes issue="180"/>
+        </action>
+        <action dev="rafalcan" type="fix" issue="182">
+            Fixed issue with searches sent to renamed domain in EB-Eye
+            (chembl-compound, now chembl-molecule).
+        </action>
+    </release>
+    <release version="1.0.24" date="2013-08-02" description="">
+    </release>
+    <release version="1.0.23" date="2013-07-26"
+        description="Bug fix, enhancement">
+        <action dev="joseph" type="update">
+           Added Accordion to the compound search result. compounds are grouped based on their roles.
+        </action>
         <action dev="rafalcan" type="update">
             Updated to latest versions of ep-core and ebeye-adapter, which fix
             an issue with searches of ChEBI IDs.

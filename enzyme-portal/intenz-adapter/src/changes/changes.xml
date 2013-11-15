@@ -10,11 +10,18 @@
 </properties>
 
 <body>
-	<release version="1.0.6" date="(Not yet released)">
+	<release version="1.0.6" date="2013-10-22" description="Added base URL for
+        EC numbers, and methods to read from file">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
-			intenz-xml, ep-domain and junit.
+			intenz-xml, ep-util, ep-domain and junit.
 		</action>
+        <action dev="rafalcan" type="add">
+            Added configuration for base URL of EC numbers.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added methods to read configuration from file.
+        </action>
 	</release>
 	<release version="1.0.5" date="2012-10-25"/>
 	<release version="1.0.4" date="2012-10-18"

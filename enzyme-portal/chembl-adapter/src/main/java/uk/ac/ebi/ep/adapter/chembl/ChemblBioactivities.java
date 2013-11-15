@@ -46,7 +46,7 @@ public class ChemblBioactivities {
      * @param minConf4 minimum fraction of assays with confidence 4 or higher.
      * @param minConf9 minimum fraction of assays with confidence 9.
      * @param minFunc minimum fraction of functional assays.
-     * @return
+     * @return a collection of ChEMBL IDs which passed the filter.
      */
     public Collection<String> filter(int minAssays, double minConf4,
             double minConf9, double minFunc){

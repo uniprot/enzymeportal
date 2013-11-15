@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.core.search;
 import java.util.*;
 
 import org.apache.log4j.Logger;
+import org.xml_cml.schema.cml2.react.Reaction;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
@@ -11,7 +12,7 @@ import uk.ac.ebi.ep.adapter.chebi.ChebiFetchDataException;
 import uk.ac.ebi.ep.adapter.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
-import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.Domains;
+import uk.ac.ebi.ep.adapter.ebeye.Domains;
 import uk.ac.ebi.ep.adapter.ebeye.IEbeyeAdapter.FieldsOfPdbe;
 import uk.ac.ebi.ep.adapter.ebeye.param.ParamOfGetResults;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
@@ -32,7 +33,6 @@ import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
-import uk.ac.ebi.rhea.ws.response.cmlreact.Reaction;
 import uk.ac.ebi.util.result.DataTypeConverter;
 
 /**

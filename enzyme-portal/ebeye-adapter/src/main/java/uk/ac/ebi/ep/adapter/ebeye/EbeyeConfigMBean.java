@@ -89,4 +89,20 @@ public interface EbeyeConfigMBean {
 	 * @param i the timeout in miliseconds.
 	 */
 	public void setThreadTimeout(int i); // EBEYE_ONLINE_REQUEST_TIMEOUT
+
+	public Object getSearchFields(String domain);
+
+    /**
+     * Sets the fields to be searched for a concrete EB-Eye domain.
+     * @param domain the searched domain.
+     * @param fields the fields to which the search should be restricted.
+     *      A <code>null</code> or empty value means "search all fields".
+     */
+	public void setSearchFields(String domain, String fields);
+
+    /**
+     * Resets the fields to be searched for every EB-Eye domain.
+     * @see Domains
+     */
+	public void resetSearchFields();
 }

@@ -9,6 +9,12 @@
 </properties>
 
 <body>
+    <release version="1.0.8" date="2013-09-20"
+        description="Number of enzymes per disease">
+        <action dev="joseph" type="add">
+            Added number of enzymes to disease in search model.
+        </action>
+    </release>
     <release version="1.0.7" date="2013-07-26">
 		<action dev="joseph" type="update">
 			Added web links for Diseases and Compounds to the schema.

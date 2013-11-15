@@ -10,11 +10,18 @@
 </properties>
 
 <body>
-	<release version="1.0.3" date="(Not yet released)">
+	<release version="1.0.3" date="2013-10-22" description="Added property for
+        event base URL, and methods to read configuration from file.">
 		<action dev="rafalcan" type="update">
 			Updated to latest version of parent pom file (move to GitHub),
 			ep-domain, biobabel-core and junit.
 		</action>
+        <action dev="rafalcan" type="add">
+            Added configuration for event base URL.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added methods to read configuration from file.
+        </action>
 	</release>
 	<release version="1.0.2" date="2012-08-22" description="Bug fix">
 		<action dev="rafalcan" type="fix">

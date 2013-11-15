@@ -16,6 +16,7 @@ spool &1
 declare
   cid uniprot2compound.compound_id%type := 'foo';
 begin
+  dbms_output.put_line('<?xml version="1.0" encoding="utf-8"?>');
   dbms_output.put_line('<doc>');
   dbms_output.put_line('<database_name>Enzyme Portal</database_name>');
   dbms_output.put_line('<database_description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds. It brings together lots of diverse information about enzymes, and covers a large number of species including the key model organisms.</database_description>');
