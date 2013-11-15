@@ -1313,7 +1313,7 @@ public class MegaJdbcMapper implements MegaMapper {
             }
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(" (" + resultSet + ")", ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -1341,7 +1341,8 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(" (" + resultSet + ")", ex);
+            //java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 
@@ -1498,4 +1499,49 @@ public class MegaJdbcMapper implements MegaMapper {
 
         return entry;
     }
+
+    public List<String> findEcNumbers() {
+        
+          ResultSet resultSet = null;
+        PreparedStatement ps = null;
+        List<String> ecNumbers = null;
+        try{
+           if(ecNumbers == null){
+               ecNumbers = new LinkedList<String>();
+           } 
+            
+        String query = "select * from MM_ENTRY where ENTRY_NAME is not null and DB_NAME ='EC'";
+        
+        
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+
+
+
+                    String entryid = resultSet.getString(ENTRY_ID);
+   
+                    if (entryid != null) {
+                    
+                      ecNumbers.add(entryid);
+
+                    }
+
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(" (" + resultSet + ")", e);
+        } finally {
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
+        }
+        
+        return ecNumbers;
+    }
+
+
 }

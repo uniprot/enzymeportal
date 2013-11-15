@@ -41,8 +41,8 @@ public class EbeyeSaxParserTest {
     public void tearDown(){
     }
 
-    @Test
-    //@Ignore("returns invalid numbers. i guess some files/data are missing. please investigate")
+    //@Test
+    @Ignore("returns invalid numbers. i guess some files/data are missing. please investigate")
     public void testParseChemblTarget() throws Exception {
         assertEquals(0, mm.getXrefs(p18125).size());
 

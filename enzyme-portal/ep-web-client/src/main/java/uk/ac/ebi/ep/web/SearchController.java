@@ -1,17 +1,31 @@
 package uk.ac.ebi.ep.web;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 import javax.annotation.PostConstruct;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
@@ -81,6 +95,7 @@ public class SearchController {
     private BioportalConfig bioportalConfig;
     private Boolean isCustomSearch = false;
     private String pathVariable;
+    //private IntenzAdapter intenzAdapter;
 
     @PostConstruct
     public void init() {
@@ -257,10 +272,14 @@ public class SearchController {
         EnzymeFinder finder = new EnzymeFinder(searchConfig);
         finder.getUniprotAdapter().setConfig(uniprotConfig);
         finder.getIntenzAdapter().setConfig(intenzConfig);
+        System.out.println("custom search called " + id);
 
+        //Entry entry = finder.findEntryById("1.1.1.1");//get the entry (ec)
         Entry entry = finder.findEntryById(id);//get the entry (disease)
+        System.out.println("The entry " + entry.getEntryId());
 
         List<String> ids = finder.getXrefs(entry);//obtain uniprot ids
+        System.out.println("uni Ids " + ids.size());
 
         SearchParams searchParams = new SearchParams();
 
@@ -279,6 +298,7 @@ public class SearchController {
         finder.setSearchParams(searchParams);
 
         SearchResults results = finder.computeEnzymeSummary(ids, new SearchResults());
+        System.out.println("final results " + results.getTotalfound());
 
         searchModel.setSearchparams(searchParams);
 
@@ -289,6 +309,7 @@ public class SearchController {
     private Set<uk.ac.ebi.ep.search.model.Disease> diseaseList = new TreeSet<uk.ac.ebi.ep.search.model.Disease>();
     private static final Comparator<String> NAME_COMPARATOR = new ChemicalNameComparator();
     static final Comparator<uk.ac.ebi.ep.search.model.Disease> SORT_DISEASES = new Comparator<uk.ac.ebi.ep.search.model.Disease>() {
+        @Override
         public int compare(uk.ac.ebi.ep.search.model.Disease d1, uk.ac.ebi.ep.search.model.Disease d2) {
 
             if (d1.getName() == null && d2.getName() == null) {
@@ -315,6 +336,331 @@ public class SearchController {
 
         return "browse";
     }
+    /**
+     * Facilitates communication with the Intenz WebService; autowired by Spring
+     */
+    //@Autowired
+    protected RestTemplate restTemplate;
+    /**
+     * The base URL of the Intenz web service - should be configurable
+     */
+    //private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/1.1.1.1";
+    private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/.json";
+    //private final static String intenzServiceUrl  = "http://www.ebi.ac.uk/intenz/ws/EC/?format=json";
+    // private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/1.1.1.1?format=json";
+    //private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/1.1.1.1.json";
+
+//       @RequestMapping(value = "/browseEcNumber/{id}", method = RequestMethod.GET)
+//    public void showEcNumberWithParams(@PathVariable String id ,Model model) throws MalformedURLException, IOException{
+//           System.out.println("JSON ID "+ id);
+//            URL oracle = new URL("http://www.ebi.ac.uk/intenz/ws/EC/"+id+".json");
+//        // URL oracle = new URL("http://www.ebi.ac.uk/intenz/ws/EC/1.1.json");
+//        URLConnection yc = oracle.openConnection();
+//        yc.setRequestProperty("Content-Type", "application/json");
+//        
+//        BufferedReader in = new BufferedReader(new InputStreamReader(
+//                yc.getInputStream()));
+//
+//        String inputLine;
+//        while ((inputLine = in.readLine()) != null) {
+//            System.out.println(inputLine);
+//         
+//            model.addAttribute("jfile", inputLine);
+//
+//        }
+//           
+//          
+//       }
+//    @RequestMapping(value = "/browseEcNumber", method = RequestMethod.POST)
+//    public @ResponseBody
+//    JsonArray showEcNumber(Model model, @RequestParam("svc") String svc) throws IOException, JSONException {
+//        URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + svc + ".json");
+//        System.out.println("json param " + svc);
+//        System.out.println("AJAX CALL POST ");
+//// Retrieving byte stream object from URL source
+//        InputStream is = url.openStream();
+//
+//        // Creating JSON object model from stream
+//        JsonArray arr = Json.createReader(is).readArray();
+//
+//        JsonArray jsonData = computeJsonArray(arr, null);
+//
+//
+//        //JsonObject obj = Json.createReader(is).readObject();
+//        //s.navigateTree(obj, null);
+//        //s.parserApp(is);
+//
+//        //System.out.println("obj returned " + jsonData);
+//        model.addAttribute("jfile", jsonData);
+//
+//
+//        // return "browseEcNumber";
+//        //return showEcNumberGET(model);
+//        return jsonData;
+//    }
+    @RequestMapping(value = "/browseEcNumber", method = RequestMethod.GET)
+    public String showEcNumberGET(Model model, HttpServletRequest request) throws IOException, JSONException {
+        //URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
+
+        String param = request.getParameter("svc");
+        System.out.println("PARAMETER " + param);
+
+// Retrieving byte stream object from URL source
+        //InputStream is = url.openStream();
+        JsonArray jsonData = null;
+//        if (param != null) {
+//            URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + param + ".json");
+//            InputStream is = url.openStream();
+//            JsonObject obj = Json.createReader(is).readObject();
+//            jsonData = computeJsonObject(obj, param);
+//        } 
+
+        URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
+        InputStream is = url.openStream();
+        JsonArray arr = Json.createReader(is).readArray();
+
+        jsonData = computeJsonArray(arr, null);
+
+
+        model.addAttribute("jfile", jsonData);
+       
+
+        //delete later
+        EnzymeFinder finder = new EnzymeFinder(searchConfig);
+        finder.getUniprotAdapter().setConfig(uniprotConfig);
+        finder.getIntenzAdapter().setConfig(intenzConfig);
+        List<String> ecNumbers = finder.findAllEcNumbers();
+        //model.addAttribute("ecNumbers", ecNumbers);
+
+        return "browseEcNumber";
+        //return jsonData;
+    }
+
+    @RequestMapping(value = "/browseEcNumberJson", method = RequestMethod.GET)
+    //public String showEcNumberGET(Model model, HttpServletRequest request) throws IOException, JSONException {
+    public @ResponseBody
+    Object ajaxJsonResponse(@ModelAttribute("searchModel") SearchModel searchModel,Model model, HttpServletRequest request,HttpSession session) throws IOException, JSONException, ParseException {
+        //URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
+
+        String param = request.getParameter("svc");
+ 
+
+        if (param != null && param.length() < 7) {
+            System.out.println("ajax call to intenz  "+ param);
+            URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + param + ".json");
+            InputStream is = url.openStream();
+            JsonObject obj = Json.createReader(is).readObject();
+
+
+            JsonArray jsonData = computeJsonObject(obj, param);
+            //jsonData = computeJsonArray(obj, null);
+            JSONParser parser = new JSONParser();
+            Object o = parser.parse(jsonData.toString());
+
+              //return jsonData;
+            return o;
+        }else{
+            customSearch(searchModel, param, model, session);
+        }
+        
+//        else {
+//            URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
+//            InputStream is = url.openStream();
+//            JsonArray arr = Json.createReader(is).readArray();
+//
+//            JsonArray jsonData = computeJsonArray(arr, null);
+//            System.out.println("Main json AJAX" + jsonData);
+//            //return jsonData;
+//            return null;
+//        }
+
+
+
+        //return jsonData;
+        return null;
+    }
+
+    private JsonArray computeJsonObject(JsonValue tree, String key) throws JSONException {
+
+        JsonArrayBuilder root_array = Json.createArrayBuilder();
+
+        //JsonArray rootArray = (JsonArray) tree;
+        //List<JsonObject> obj = rootArray.getValuesAs(JsonObject.class);
+        JsonObject obj = (JsonObject) tree;
+
+        JsonObjectBuilder root = Json.createObjectBuilder();
+        //JSONObject jroot = new JSONObject();
+        //JSONArray jList = new JSONArray();
+
+        String ec = "ec";
+        String name = "name";
+        String desc = "description";
+
+
+        System.out.println("child objects called "+ key);
+
+//        if (obj.containsKey(ec)) {
+//            String _ec = obj.getString(ec);
+//            String _name = obj.getString(name);
+//            //root.add("data", _ec);//jsTree
+//             
+//            root.add("label", "ec " + _ec +" "+_name);//jqTree
+//
+//            root.add("id", _ec);//jqTree
+//            //jroot.put("label", ec);
+//
+//
+//
+//        }
+        if (obj.containsKey(name)) {
+            String _name = obj.getString(name);
+            //root.add("data", _ec);//jsTree
+            root.add("label", _name);//jqTree
+
+
+        }
+
+        //JsonObjectBuilder rootObj = editJsonData(obj, ec, name, desc);
+        //root_array.add(rootObj);
+
+
+        if (obj.containsKey("subsubclasses")) {
+            JsonArrayBuilder childArray = Json.createArrayBuilder();
+            
+
+            JsonArray arr = obj.getJsonArray("subsubclasses");
+            List<JsonObject> childList = arr.getValuesAs(JsonObject.class);
+            for (JsonObject children : childList) {
+
+
+                JsonObjectBuilder childObj = editJsonData(children, ec, name, desc);
+                childArray.add(childObj);
+                
+            }
+        
+            root.add("children", childArray);
+            //jroot.put("children", childArray);
+
+
+        } else if (obj.containsKey("entries")) {
+           
+            JsonArrayBuilder childArray = Json.createArrayBuilder();
+            JsonArray arr = obj.getJsonArray("entries");
+            List<JsonObject> childList = arr.getValuesAs(JsonObject.class);
+            for (JsonObject children : childList) {
+
+                JsonObjectBuilder childObj = editJsonData(children, ec, name, desc);
+                childArray.add(childObj);
+            }
+
+            root.add("children", childArray);
+
+
+        } else if (obj.containsKey("entries") && obj.containsKey("subsubclasses")) {
+            //System.out.println("make a request to mega mapper");
+        }
+
+        root_array.add(root);
+
+        //System.out.println(" " + root_array.build());
+        return root_array.build();
+        //return jroot;
+    }
+
+    private JsonArray computeJsonArray(JsonValue tree, String key) {
+        JsonArrayBuilder root_array = Json.createArrayBuilder();
+
+        if (key != null) {
+            //System.out.print("Key " + key + ": ");
+
+        }
+        JsonArray rootArray = (JsonArray) tree;
+
+        List<JsonObject> jsonObject = rootArray.getValuesAs(JsonObject.class);
+
+        JsonObjectBuilder root = Json.createObjectBuilder();
+        String ec = "ec";
+        String name = "name";
+        String desc = "description";
+
+        for (JsonObject obj : jsonObject) {
+
+//            JsonObject rootObj = editJsonData(obj, ec, name, desc);
+//            root_array.add(rootObj);
+
+            if (obj.containsKey(ec)) {
+                String _ec = obj.getString(ec);
+                //root.add("data", _ec);//jsTree
+                
+                root.add("label", "ec "+ _ec +" - "+obj.getString(name));//jqTree
+                root.add("id", _ec);//jqTree
+                //System.out.println("first object "+ obj);
+
+            }
+
+            if (obj.containsKey("subclasses")) {
+                
+                JsonArrayBuilder childArray = Json.createArrayBuilder();
+
+                JsonArray arr = obj.getJsonArray("subclasses");
+                List<JsonObject> childList = arr.getValuesAs(JsonObject.class);
+                for (JsonObject children : childList) {
+
+
+                    JsonObjectBuilder childObj = editJsonData(children, ec, name, desc);
+                    childArray.add(childObj);
+                }
+
+                root.add("children", childArray);
+
+                //root.add("load_on_demand", true);//jqTree
+
+            }
+
+
+            root_array.add(root);
+
+        }
+        //System.out.println(" " + root_array.build());
+
+        return root_array.build();
+
+
+    }
+
+    private JsonObjectBuilder editJsonData(JsonObject jsonObject, String ec, String name, String desc) {
+        JsonObjectBuilder childObj = Json.createObjectBuilder();
+
+        if (jsonObject.containsKey(ec)) {
+            String _ec = jsonObject.getString(ec);
+            //childObj.add("data", _ec);//jsTree
+            childObj.add("label", "ec " + _ec);//jqTree
+            //childObj.add("label", "ec " + _ec +" - "+jsonObject.getString(name) );//jqTree
+            //+" - "+ jsonObject.getString(name)
+
+        }
+        //for JqTree, add an id
+        if (jsonObject.containsKey(ec)) {
+            String _ec = jsonObject.getString(ec);
+            //childObj.add("data", _ec);//jsTree
+            childObj.add("id", _ec);//jqTree
+
+        }
+        if (jsonObject.containsKey(name)) {
+            String title = jsonObject.getString(name);
+            //childObj.add("title", title);//jsTree
+            childObj.add("title", title);//jqTree
+
+        }
+        if (jsonObject.containsKey(desc)) {
+            String description = jsonObject.getString(desc);
+            childObj.add("desc", description);
+
+        }
+
+        //return childObj.build();
+        return childObj;
+    }
 
     private boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
@@ -323,7 +669,7 @@ public class SearchController {
     @RequestMapping(value = "/browse/{startsWith}", method = RequestMethod.GET)
     public String showDiseasesLike(@PathVariable("startsWith") String startsWith, Model model) {
 
-        Set<uk.ac.ebi.ep.search.model.Disease> selectedDiseases = new TreeSet<uk.ac.ebi.ep.search.model.Disease>(SORT_DISEASES);
+        Set<uk.ac.ebi.ep.search.model.Disease> selectedDiseases = new TreeSet<>(SORT_DISEASES);
 
         for (uk.ac.ebi.ep.search.model.Disease disease : diseaseList) {
             if (disease.getName().startsWith(startsWith.toLowerCase())) {
@@ -447,20 +793,48 @@ public class SearchController {
         try {
 
             if (custom == true) {
-                String id = getPathVariable();
-
-                clearHistory(session);
-                searchModel = customSearch(searchModel, id, model, session);
-
-                model.addAttribute("searchModel", searchModel);
-                model.addAttribute("pagination", getPagination(searchModel));
+                results = searchModel.getSearchresults();
 
 
-                setIsCustomSearch(false);
-                view = "search";
-            } else {
+                if (results == null) {
 
 
+
+                    String id = getPathVariable();
+
+                    clearHistory(session);
+                    searchModel = customSearch(searchModel, id, model, session);
+                    results = searchModel.getSearchresults();
+                    model.addAttribute("searchModel", searchModel);
+                    model.addAttribute("pagination", getPagination(searchModel));
+
+
+
+                    searchKey = getSearchKey(searchModel.getSearchparams());
+                    cacheSearch(session.getServletContext(), searchKey, results);
+                    addToHistory(session, "searchparams.text=" + searchKey);
+
+                    setIsCustomSearch(false);
+                    view = "search";
+                }
+                if (results != null) {
+                    searchModel.setSearchresults(results);
+
+                    applyFilters(searchModel);
+                    model.addAttribute("searchModel", searchModel);
+                    model.addAttribute("pagination", getPagination(searchModel));
+                    clearHistory(session);
+                    if (searchModel.getSearchparams().getType().equals(SearchParams.SearchType.KEYWORD)) {
+                        addToHistory(session, "searchparams.text=" + searchKey);
+                    }
+                    if (searchModel.getSearchparams().getType().equals(SearchParams.SearchType.SEQUENCE)) {
+                        addToHistory(session, "searchparams.sequence=" + searchKey);
+                    }
+                    //addToHistory(session, "searchparams.text=" + searchKey);
+                    view = "search";
+                }
+            } else if (custom == false) {
+                
 
                 // See if it is already there, perhaps we are paginating:
                 Map<String, SearchResults> prevSearches =
@@ -558,6 +932,18 @@ public class SearchController {
 
     @RequestMapping(value = "/search/{id}", method = RequestMethod.GET)
     public String getSearchResults(SearchModel searchModel, BindingResult result, @PathVariable("id") String id,
+            Model model, HttpSession session) {
+
+        setIsCustomSearch(true);
+        setPathVariable(id);
+
+
+        return "redirect:/search";
+
+    }
+
+    @RequestMapping(value = "/search/{id}/num", method = RequestMethod.GET)
+    public String getSearchResultsEc(SearchModel searchModel, BindingResult result, @PathVariable("id") String id,
             Model model, HttpSession session) {
 
         setIsCustomSearch(true);

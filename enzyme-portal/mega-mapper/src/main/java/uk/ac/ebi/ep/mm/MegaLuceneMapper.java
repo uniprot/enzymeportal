@@ -286,4 +286,8 @@ public class MegaLuceneMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public List<String> findEcNumbers() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

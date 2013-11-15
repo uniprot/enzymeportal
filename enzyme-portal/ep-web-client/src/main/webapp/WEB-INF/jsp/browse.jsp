@@ -885,7 +885,7 @@
                                 <div class="grid_6">
 
 
-                                    <li>${data.name} (<a href="${pageContext.request.contextPath}/search/<c:out value="${data.id}"/>">${data.numEnzyme}</a>)</li>
+                                    <li>${data.name} (<a href="${pageContext.request.contextPath}/search/<c:out value="${data.id}"/>/num">${data.numEnzyme}</a>)</li>
 
                                 </div>
 

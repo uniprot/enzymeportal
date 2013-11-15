@@ -322,4 +322,8 @@ public class MegaDbMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public List<String> findEcNumbers() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

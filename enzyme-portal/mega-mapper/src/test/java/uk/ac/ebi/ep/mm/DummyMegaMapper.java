@@ -212,4 +212,12 @@ public class DummyMegaMapper implements MegaMapper{
     public Set<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public List<String> findEcNumbers() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+
+
 }

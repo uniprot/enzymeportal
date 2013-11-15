@@ -614,14 +614,16 @@ public class EnzymeFinder implements IEnzymeFinder {
   
        return megaMapperConnection.getMegaMapper().findAllDiseases(MmDatabase.UniProt, MmDatabase.EFO, MmDatabase.MeSH, MmDatabase.OMIM);
     }
+    public List<String> findAllEcNumbers(){
+        return megaMapperConnection.getMegaMapper().findEcNumbers();
+    }
 
 
-    public List<String> getXrefs(Entry disease) {
+    public List<String> getXrefs(Entry entry) {
         List<String> uniprotIds = new ArrayList<String>();
 
-        Collection<XRef> xrefs = megaMapperConnection.getMegaMapper().getXrefs(disease, MmDatabase.UniProt);
-
-        if (xrefs != null) {
+        Collection<XRef> xrefs = megaMapperConnection.getMegaMapper().getXrefs(entry, MmDatabase.UniProt);
+         if (xrefs != null) {
             for (XRef ref : xrefs) {
                 Entry uniprot = ref.getFromEntry();
 

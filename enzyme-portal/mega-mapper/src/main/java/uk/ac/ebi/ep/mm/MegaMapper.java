@@ -271,5 +271,6 @@ public interface MegaMapper {
     Set<Disease> findAllDiseases(MmDatabase uniprotDB,
             MmDatabase... xDbs);
     Entry findByEntryId(String entryId);
-
+    List<String> findEcNumbers();
+   
 }
