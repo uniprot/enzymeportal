@@ -464,8 +464,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     /**
      * Adds a compound to the group (inhibitors, cofactors, etc).<br/>
      * If the group is <code>null</code> it will be created and initialised.
-     * <br/>It will be modified by adding the passed compound (if the
-     * configuration allows) and increasing the total count.
+     * <br>
+     * It will be modified by adding the passed compound and increasing the
+     * total count.
      * @param group a molecules group.
      * @param comp a compound.
      * @return the modified (possibly newly created) group of molecules.
@@ -477,12 +478,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             group.setMolecule(new ArrayList<Molecule>());
             group.setTotalFound(0);
         }
-        if (group.getMolecule().size() < searchConfig.getMaxMoleculesPerGroup()){
-            Molecule molecule = new Molecule();
-            molecule.setName(comp.getName());
-            molecule.setId(comp.getId());
-            group.getMolecule().add(molecule);
-        }
+        Molecule molecule = new Molecule();
+        molecule.setName(comp.getName());
+        molecule.setId(comp.getId());
+        group.getMolecule().add(molecule);
         group.setTotalFound(group.getTotalFound() + 1);
         return group;
     }

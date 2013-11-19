@@ -19,6 +19,13 @@
             hashCode methods to the JAXB-generated classes -, chebi-adapter and
             intenz-adapter.
         </action>
+        <action dev="rafalcan" type="fix">
+            The number of compounds added to the enzyme model is not limited by
+            the searchConfig any more. We need this for enzyme comparisons, and
+            for the future downloads. The view of compounds in the small
+            molecules tab will not be affected, as the configuration is used
+            there.
+        </action>
     </release>
     <release version="1.0.20" date="2013-09-26" description="Better searches.">
         <action dev="rafalcan" type="update">

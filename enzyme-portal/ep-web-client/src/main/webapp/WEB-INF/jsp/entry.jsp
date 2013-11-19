@@ -33,6 +33,16 @@
             <%@include file="header.jspf" %>
             
             <div id="content" role="main" class="grid_24 clearfix">
+<div style="float: right; margin-right: 1em;"
+    class="icon icon-generic" data-icon="b">
+    <input type="checkbox" class="forBasket"
+        onchange="selectForBasket(event)" 
+        title="Add this enzyme to your basket."
+        value="${epfn:getSummaryBasketId(enzymeModel)}"
+        ${not empty basket and
+        not empty basket[epfn:getSummaryBasketId(enzymeModel)]? 'checked': ''}/> Add
+            to basket
+</div>
  <%@ include file="breadcrumbs.jsp" %>
                 <!-- Suggested layout containers -->  
 
@@ -80,14 +90,6 @@
                                 </c:if>
                                 <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
                                 <section>
-<div style="float: right;">
-    <input type="checkbox" class="forBasket" onchange="selectForBasket(event)" 
-        title="Add this enzyme to your basket."
-        value="${epfn:getSummaryBasketId(enzymeModel)}"
-        ${not empty basket and
-        not empty basket[epfn:getSummaryBasketId(enzymeModel)]? 'checked': ''}/> Add
-            to basket
-</div>
                                 <div class="header">
                                         <div class="grid_8 prefix_8 suffix_6 alpha">
                                             <div class="panel">
