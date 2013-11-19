@@ -14,10 +14,16 @@
 </properties>
 
 <body>
-    <release version="1.0.20" date="" description="Recovered missing diseases.">
+    <release version="1.0.21" date="" description="Recovered missing diseases.">
         <action dev="rafalcan" type="fix" issue="195">
             Now OMIM cross-references are not discarded because of a low score
             in the UniMed file.
+        </action>
+    </release>
+    <release version="1.0.20" date="2013-10-22"
+        description="Cross-references ChEBI-EP">
+        <action dev="rafalcan" type="add">
+            Added XML declaration at the top of the chebi cross-references file.
         </action>
     </release>
     <release version="1.0.19" date="2013-09-20"
