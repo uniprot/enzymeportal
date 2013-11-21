@@ -12,14 +12,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
 import uk.ac.ebi.biobabel.util.xml.XPathSAXHandler;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
@@ -27,7 +27,7 @@ import uk.ac.ebi.ep.enzyme.model.Entity;
 /**
  * Implementation of {@link IBioportalAdapter} using the
  * <a href="http://www.bioontology.org/wiki/index.php/NCBO_REST_services">NCBO
- * Bioportal web services</a>.
+ * Bioportal web services</a> (XML).
  * @author rafa
  *
  */
@@ -38,55 +38,60 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 
 	/* Interesting XPaths from the search */
 	
-	private static final String SEARCH_PREFERREDNAME =
-			"//success/data/page/contents/searchResultList/searchBean/preferredName";
-	private static final String SEARCH_CONCEPTID =
-			"//success/data/page/contents/searchResultList/searchBean/conceptId";
-	private static final String SEARCH_CONCEPTIDSHORT =
-			"//success/data/page/contents/searchResultList/searchBean/conceptIdShort";
-	private static final String SEARCH_ONTOLOGYVERSIONID =
-			"//success/data/page/contents/searchResultList/searchBean/ontologyVersionId";
-
+	private static final String SEARCH_CONCEPT_PREFNAME =
+			"//class/collection/class/prefLabel";
+	private static final String SEARCH_CONCEPT_ID =
+	        "//class/collection/class/id";
+	private static final String SEARCH_CONCEPT_URL =
+	        "//class/collection/class/linksCollection/links/ui/@href";
+	private static final String SEARCH_CONCEPT_ONTOLOGY =
+	        "//class/collection/class/linksCollection/links/ontology/@href";
+	
 	/* Interesting XPaths from the get */
 	
-	private static final String GET_LABEL = "/success/data/classBean/label";
 	private static final String GET_DEFINITION =
-			"//success/data/classBean/definitions/string";
-	private static final String GET_FULLID = "/success/data/classBean/fullId";
+			"//class/definitionCollection/definition";
 	
 	private BioportalConfig config;
 
+	/**
+	 * Creates an instance of this proxy with a default configuration.
+	 * @deprecated A default configuration lacks of api key, use the
+	 * {@link #BioportalWsAdapter(BioportalConfig) other constructor} instead.
+	 */
     public BioportalWsAdapter() {
-        config = new BioportalConfig();
-        }
-	
-    
-//      public BioportalWsAdapter() {
-//        config = new BioportalConfig();
-//          System.out.println("config "+ config.getApiKey());
-//         Properties configProps = new Properties();
-//        try {
-//            configProps.load(BioportalWsAdapter.class.getClassLoader()
-//                    .getResourceAsStream("ep-web-client.properties"));
-//        } catch (IOException ex) {
-//            java.util.logging.Logger.getLogger(BioportalWsAdapter.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        //BioportalConfig config = new BioportalConfig(); // defaults
-//        config.setApiKey(configProps.getProperty("bioportal.api.key"));
-//        //bwa.setConfig(config);
-//    }  
-    
+        this(new BioportalConfig());
+    }
+
+    public BioportalWsAdapter(BioportalConfig config){
+        this.config = config;
+    }
     
     /**
      * Prepares a list of ontologies IDs as one parameter for BioPortal.
      * @param ontologies the ontologies to search.
      * @return a comma-separated String containing the ontologies IDs.
+     * @deprecated The BioPortal WS v4.0 does not use ontologies IDs any more.
      */
     private String getOntologiesIds(BioportalOntology[] ontologies){
         StringBuilder sb = new StringBuilder();
         for (BioportalOntology ontology : ontologies) {
             if (sb.length() > 0) sb.append(',');
             sb.append(ontology.getId());
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * Prepares a list of ontologies names as one parameter for BioPortal.
+     * @param ontologies the ontologies to search.
+     * @return a comma-separated String containing the ontologies names.
+     */
+    private String getOntologiesNames(BioportalOntology[] ontologies){
+        StringBuilder sb = new StringBuilder();
+        for (BioportalOntology ontology : ontologies) {
+            if (sb.length() > 0) sb.append(',');
+            sb.append(ontology.name());
         }
         return sb.toString();
     }
@@ -131,8 +136,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
     /**
 	 * Searches BioPortal for a concept in several ontologies.
 	 * @param ontologies The ontologies to be searched in BioPortal.
-	 * @param query The text to search (a name, concept ID without ontology
-	 * 		prefix...).
+	 * @param query The text to search (a name).
 	 * @param clazz The type of the returned entity.
 	 * @param complete query BioPortal again with the concept ID in order to get
 	 * 		additional info? If <code>true</code>, the entity is completed (see
@@ -153,47 +157,51 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			
 			urlString = MessageFormat.format(config.getSearchUrl(),
-                    getOntologiesIds(ontologies),
-                    URLEncoder.encode(query, "UTF-8"), config.getApiKey(), 1);
-			LOGGER.debug("[BIOPORTAL] URL=" + urlString);
+                    getOntologiesNames(ontologies),
+                    URLEncoder.encode(query, "UTF-8"), config.getApiKey());
+			LOGGER.debug("[BIOPORTAL URL] " + urlString);
 			URLConnection urlCon = new URL(urlString).openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
+			urlCon.setRequestProperty("Accept",
+			        "application/rdf+xml,application/xml");
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
 			XPathSAXHandler handler = new XPathSAXHandler(
-					SEARCH_CONCEPTIDSHORT,
-					SEARCH_PREFERREDNAME,
-					SEARCH_CONCEPTID,
-					SEARCH_ONTOLOGYVERSIONID);
+                    SEARCH_CONCEPT_ID,
+					SEARCH_CONCEPT_PREFNAME,
+					SEARCH_CONCEPT_URL,
+					SEARCH_CONCEPT_ONTOLOGY);
 			xr.setContentHandler(handler);
 			xr.parse(inputSource);
 			
 			Collection<String> conceptIds = handler.getResults()
-                    .get(SEARCH_CONCEPTIDSHORT);
+                    .get(SEARCH_CONCEPT_ID);
 			if (conceptIds != null){
                 // the internal implementation of these collections in the
                 // handler are Lists, so we can rely on their iterators:
                 final Iterator<String> preferredNames = handler.getResults()
-                        .get(SEARCH_PREFERREDNAME).iterator();
+                        .get(SEARCH_CONCEPT_PREFNAME).iterator();
                 final Iterator<String> urls = handler.getResults()
-                        .get(SEARCH_CONCEPTID).iterator();
-                final Iterator<String> versionIds = handler.getResults()
-                                 .get(SEARCH_ONTOLOGYVERSIONID).iterator();
+                        .get(SEARCH_CONCEPT_URL).iterator();
+                final Iterator<String> ontoUrls = handler.getResults()
+                        .get(SEARCH_CONCEPT_ONTOLOGY).iterator();
                 for (String conceptId : conceptIds) {
                     String preferredName = preferredNames.next();
                     String url = urls.next();
-                    String versionId = versionIds.next();
+                    String ontoUrl = ontoUrls.next(); // a complete URI
                     // Workaround for obsolete EFO entries:
-                    if (conceptId.startsWith("rdfns:pat_id_")) {
+                    if (conceptId.contains("rdfns#pat_id_")) {
                         continue;
                     }
                     Entity entity = clazz.newInstance();
                     // Remove the ontology prefix:
-                    entity.setId(conceptId.replaceFirst("^\\w+:", ""));
+                    entity.setId(conceptId.substring(
+                            conceptId.lastIndexOf('/') + 1));
                     entity.setName(preferredName);
                     entity.setUrl(url);
                     if (complete) {
-                        completeEntity(entity, conceptId, versionId);
+                        completeEntity(entity, conceptId, ontoUrl.substring(
+                                ontoUrl.lastIndexOf('/') + 1));
                     }
                     if (entities == null) {
                         entities = new HashSet<Entity>();//new ArrayList<Entity>();
@@ -227,28 +235,29 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	 * Completes an entity as much as possible by making another request to
 	 * BioPortal in order to get additional info (currently, only definition).
 	 * @param entity the Entity to complete.
-	 * @param conceptId the ID of the concept in BioPortal (including the
-	 * 		ontology prefix).
-	 * @param ontologyVersionId the ontology version ID in BioPortal.
+	 * @param conceptId the ID of the concept in BioPortal (whole URI).
+	 * @param ontologyName the ontology name in BioPortal.
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 * @throws SAXException
 	 */
 	private void completeEntity(Entity entity, final String conceptId,
-			String ontologyVersionId)
+			String ontologyName)
 	throws IOException, SAXException {
 		InputStream is = null;
 		try {
 			URL url = new URL(MessageFormat.format(config.getGetUrl(),
-					ontologyVersionId, conceptId, config.getApiKey()));
+					ontologyName, URLEncoder.encode(conceptId, "UTF-8"),
+					config.getApiKey()));
 			LOGGER.debug("[BIOPORTAL URL] " + url);
 			URLConnection urlCon = url.openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
+            urlCon.setRequestProperty("Accept",
+                    "application/rdf+xml,application/xml");
 			urlCon.connect();
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
-			XPathSAXHandler handler = new XPathSAXHandler(
-					GET_LABEL, GET_DEFINITION, GET_FULLID);
+			XPathSAXHandler handler = new XPathSAXHandler(GET_DEFINITION);
 			XMLReader xr = XMLReaderFactory.createXMLReader();
 			xr.setContentHandler(handler);
 			xr.parse(inputSource);
@@ -285,10 +294,10 @@ public class BioportalWsAdapter implements IBioportalAdapter {
             for (Entity e : diseases) {
                 if (disease == null) disease = e;
                 else others += " ["+e.getId()+"]";
-    }
+            }
             if (others != null){
                 LOGGER.warn("More than one disease found for " + nameOrId
-                        + others);
+                        + ": " + others);
             }
             disease = diseases.iterator().next();
         }
