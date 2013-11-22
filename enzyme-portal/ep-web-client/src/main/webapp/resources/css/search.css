@@ -239,6 +239,7 @@ vertical-align: top;
     vertical-align: bottom;
 }
 #paginationNav {
+    float: right;
     text-align: right;
     vertical-align: bottom;
 }

@@ -154,29 +154,29 @@ div#local-masthead {
 /****************** Basket ******************************/
 
 .basket{
-    float: right;        
+    float: right;
 }
 
-.basket button {
-    height: 4ex;
+#basketAll {
+	margin-left: 2em;
+}
+#basketAll button {
     margin-bottom: 0px;
     white-space: nowrap;
 }
-
-.basket button.icon {
+#basketAll button.icon {
     font-weight: normal;
 }
-.basket button.icon:before {
+#basketAll button.icon:before {
     color: rgb(80, 80, 80) !important;
 }
-
-.basket button.icon.icon-generic:before,
-.basket button.icon.icon-functional:before {
+#basketAll button.icon.icon-generic:before,
+#basketAll button.icon.icon-functional:before {
 }
-
 button#basketDeselectAll, button#basketSelectAll {
     font-size: smaller;
 }
+
 /****************** Comparing enzymes *******************/
 
 #comparison-outline {

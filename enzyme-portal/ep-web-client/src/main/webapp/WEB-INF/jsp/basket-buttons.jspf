@@ -1,27 +1,8 @@
-<%--
-This JSP fragment displays the basket buttons. The enzymes to
-compare are stored in a session attribute 'enzymesToCompare' of class Map (see
-CompareController#updateComparableEnzymes).
-This also requires search.js for a javascript function 'updateCompareButton'
-used to update the tool-tip of the button with the enzyme names to be compared.
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
-<button id="basketButton" class="icon icon-generic" data-icon="b"
-    onclick="javascript:location='basket'"
-    ${(empty basket or fn:length(basket) lt 2)? 'disabled' : ''}>
-    Compare
-    (<span id="basketSize">${fn:length(basket)}</span>)
-</button>
-<script>updateBasketButton(${fn:length(basket)});</script>
- --%>
-
 <button id="basketDeselectAll" class="icon icon-functional" data-icon="-"
     onclick="javascript:basketAll(false)"
-    title="Deselect all enzymes in this page.">Remove all</button>
+    title="Deselect all enzymes in this page."></button>
 
 <button id="basketSelectAll" class="icon icon-functional" data-icon="+"
     onclick="javascript:basketAll(true)"
-    title="Select all enzymes in this page.">Add all</button>
+    title="Select all enzymes in this page."></button>
+all

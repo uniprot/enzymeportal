@@ -101,21 +101,17 @@ $(document).ready(function() {
     });
 
     var pageClicked = false;
-    $("#pagination").click(function(event) {
+    $("#paginationNav").click(function(event) {
         var clickedId = event.target.id;
         var nextStart = $("#nextStart").val();
         var prevStart = $("#prevStart").val();
         if (clickedId == "prevButton") {
-            //$("#start").val(prevStart);
             $("#filtersFormStart").val(prevStart);
             pageClicked = true;
-            //$('#searchButton').trigger("click");
             document.forms.filtersForm.submit();
         } else if (clickedId == "nextButton"){
-            //$("#start").val(nextStart);
             $("#filtersFormStart").val(nextStart);
             pageClicked = true;
-            //$('#searchButton').trigger("click");
             document.forms['filtersForm'].submit();
         }
     });
@@ -546,30 +542,9 @@ function selectForBasket(event){
         data: params,
         context: thisFunction,
         success: function(basketSize){
-            updateBasketButton(basketSize);
+            $('#basketSize').text(basketSize);
         }
     });
-}
-
-/**
- * Updates the text and tooltip of the basket button.
- * @param basketSize the current number of enzymes in the basket.
- */
-function updateBasketButton(basketSize){
-    $('#basketSize').text(basketSize);
-    var s = '', tip = '';
-    if (basketSize > 1){
-    	$('#basketButton').removeAttr('disabled');
-    	s = 's';
-    	tip = ' Click to list them and procceed to compare.';
-    }
-    if (basketSize > 0){
-    	$('#basketButton').attr('title', basketSize + ' enzyme' + s
-    			+ ' selected.' + tip);
-    } else {
-    	$('#basketButton').attr('disabled', 'disabled');
-    	$('#basketButton').attr('title', 'No enzymes selected.');
-    }
 }
 
 /**
@@ -589,16 +564,6 @@ function updateCompareButton(){
         $('#compareButton').attr('disabled', 'disabled');
         $('#compareButton').attr('title', 'Please select exactly 2 enzymes.');
     }
-}
-
-/**
- * Deselects all basket checkboxes in the page.
- */
-function basketDeselectAll(){
-	$('input.forBasket').each(function(index, elem){
-		$(elem).removeAttr('checked');
-		$(elem).change();
-	});
 }
 
 /**

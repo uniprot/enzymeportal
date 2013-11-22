@@ -177,7 +177,6 @@
                         </div>
                     </c:if>
                     <c:if test="${summaryEntriesSize gt 0 and searchresults.totalfound gt 0}">
-                        <form:form modelAttribute="pagination" >
                             <div style="width: 100%;">
                                 <c:set var="totalPages" value="${pagination.lastPage}"/>
                                 <c:set var="maxPages" value="${totalPages}"/>
@@ -188,8 +187,13 @@
                                         filtered to <b>${summaryEntriesSize}</b>,
                                     </c:if>
                                     displaying ${pagination.firstResult+1} - ${pagination.lastResult+1}
+                                    <span id="basketAll"
+                                        class="icon icon-generic" data-icon="b">
+                                        <%@include file="basket-buttons.jspf" %>
+                                    </span>
                                 </div>
                                 <div id="paginationNav" style="text-align: right;">
+                                    <form:form modelAttribute="pagination" >
                                     <c:if test="${totalPages gt pagination.maxDisplayedPages}">
                                         <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
                                         <c:set var="showNextButton" value="${true}"/>
@@ -209,6 +213,7 @@
                                             Next
                                         </a>
                                     </c:if>                         
+                                    </form:form>
                                 </div><!-- pagination -->
                             </div>
                             <%-- Add species filter to this form, don't lose it: --%>
@@ -217,12 +222,8 @@
                                        name="searchparams.species"
                                        value="${filterSp.scientificname}" />
                             </c:forEach>
-                        </form:form>
                         <div class="clear"></div>
                         <div class="line"></div>
-                        <div class="basket">
-                            <%@include file="basket-buttons.jspf" %>
-                        </div>
                         <div class="resultContent">
                             <c:set var="resultItemId" value="${0}"/>
                             <c:forEach items="${summaryEntries}"
@@ -232,10 +233,13 @@
                                     <%@ include file="summary.jspf"%>
                                 </div>
                                 <div class="grid_1 omega">
-    <input type="checkbox" class="forBasket" onchange="selectForBasket(event)" 
-        title="Add to your basket." value="${epfn:getSummaryBasketId(enzyme)}"
+    <span class="icon icon-generic" data-icon="b" style="white-space: nowrap;">
+    <input type="checkbox" class="forBasket"
+        onchange="selectForBasket(event)" title="Add to your basket."
+        value="${epfn:getSummaryBasketId(enzyme)}"
         ${not empty basket and
         not empty basket[epfn:getSummaryBasketId(enzyme)]? 'checked': ''}/>
+    </span>
                                 </div>
                             </c:forEach>
                         </div>
