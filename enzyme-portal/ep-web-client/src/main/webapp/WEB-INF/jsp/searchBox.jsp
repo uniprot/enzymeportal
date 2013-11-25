@@ -5,10 +5,8 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -53,12 +51,14 @@
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.sequence"/>
     </li>
+    <%--
     <li id="search-tab-compound"
         class="searchTab ${searchModel.searchparams.type eq 'COMPOUND'?
                            'selected':'' }"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.compound"/>
     </li> 
+     --%>
 </ul>
 
 <form:form id="searchForm" modelAttribute="searchModel"
@@ -77,14 +77,14 @@
                      class="searchButton">Search</button>
              <br />
              <spring:message code="label.search.example" />
-              <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
-                <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
-                <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
-                <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
-                <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,
-                <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
-                <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
+              <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
              <hr/>
              <br/>
              <section>
@@ -110,7 +110,7 @@
                  <p>In order to use the sequence search, the search term must be in FASTA format as shown in the example below:</p>
                  <pre style="color: #996a44; background-color:whitesmoke ">
 <span> 
-    <a style="border-bottom-style: none" href="/enzymeportal/search?searchparams.type=SEQUENCE&searchparams.sequence=MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
+    <a style="border-bottom-style: none" href="${pageContext.request.contextPath}/search?searchparams.type=SEQUENCE&searchparams.sequence=MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
                 LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
                 IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
                 VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
@@ -129,7 +129,7 @@
                  <p><a style="border-bottom-style: none" href="http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"><h6 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h6></a></p>
              </section>
         </div>
-        
+<%--
         <div id="search-compound" class="searchBackground searchTabContent"
             style="margin-left: auto; margin-right: auto; width: 65em;
                 display: ${searchModel.searchparams.type eq 'COMPOUND'?
@@ -138,6 +138,7 @@
                 style="border: none; margin: 0px; overflow: auto;"
                 width="100%" height="1010ex"/>
         </div>
+ --%>
     </div>
 
 </form:form>

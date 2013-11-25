@@ -1,8 +1,8 @@
 <button id="basketDeselectAll" class="icon icon-functional" data-icon="-"
-    onclick="javascript:basketAll(false)"
+    onclick="javascript:basketAll(event)" value="-"
     title="Deselect all enzymes in this page."></button>
 
 <button id="basketSelectAll" class="icon icon-functional" data-icon="+"
-    onclick="javascript:basketAll(true)"
+    onclick="javascript:basketAll(event)" value="+"
     title="Select all enzymes in this page."></button>
 all

@@ -3,17 +3,17 @@
     Created on : Sep 17, 2012, 4:05:40 PM
     Author     : joseph
 --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 
 <!doctype html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
 
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -194,34 +194,35 @@
                                 </div>
                                 <div id="paginationNav" style="text-align: right;">
                                     <form:form modelAttribute="pagination" >
-                                    <c:if test="${totalPages gt pagination.maxDisplayedPages}">
-                                        <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
-                                        <c:set var="showNextButton" value="${true}"/>
-                                    </c:if>
-                                    <input id="prevStart" type="hidden"
-                                           value="${pagination.firstResult - pagination.numberOfResultsPerPage}">
-                                    <a id="prevButton" href="javascript:void(0);"
-                                       style="display:${pagination.currentPage eq 1? 'none' : 'inline'}">
-                                        Previous
-                                    </a>
-                                    Page ${pagination.currentPage} of ${totalPages}
-
-                                    <c:if test="${pagination.lastResult+1 lt summaryEntriesSize}">
-                                        <input id ="nextStart" type="hidden"
-                                               value="${startRecord + pagination.numberOfResultsPerPage}">                                    
-                                        <a id="nextButton" href="javascript:void(0);">
-                                            Next
+                                        <c:if test="${totalPages gt pagination.maxDisplayedPages}">
+                                            <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
+                                            <c:set var="showNextButton" value="${true}"/>
+                                        </c:if>
+                                        <input id="prevStart" type="hidden"
+                                               value="${pagination.firstResult - pagination.numberOfResultsPerPage}">
+                                        <a id="prevButton" href="javascript:void(0);"
+                                           style="display:${pagination.currentPage eq 1? 'none' : 'inline'}">
+                                            Previous
                                         </a>
-                                    </c:if>                         
+                                        Page ${pagination.currentPage} of ${totalPages}
+    
+                                        <c:if test="${pagination.lastResult+1 lt summaryEntriesSize}">
+                                            <input id ="nextStart" type="hidden"
+                                                   value="${startRecord + pagination.numberOfResultsPerPage}">                                    
+                                            <a id="nextButton" href="javascript:void(0);">
+                                                Next
+                                            </a>
+                                        </c:if>                         
+                                        <%-- Add species filter to this form, don't lose it: --%>
+                                        <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
+                                            <input type="checkbox" style="display: none;" 
+                                                   name="searchparams.species"
+                                                   value="${filterSp.scientificname}" />
+                                        </c:forEach>
+                                        <%-- TODO: add also compounds and disease filters --%>
                                     </form:form>
                                 </div><!-- pagination -->
                             </div>
-                            <%-- Add species filter to this form, don't lose it: --%>
-                            <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
-                                <input type="checkbox" style="display: none;" 
-                                       name="searchparams.species"
-                                       value="${filterSp.scientificname}" />
-                            </c:forEach>
                         <div class="clear"></div>
                         <div class="line"></div>
                         <div class="resultContent">
@@ -247,133 +248,10 @@
                 </section>
             </div>
 
-    <footer>
-    <!-- Optional local footer (insert citation / project-specific copyright / etc here -->
-		  <!--
-      <div id="local-footer" class="grid_24 clearfix">
-			  <p>How to reference this page: ...</p>
-		  </div>
-      -->
-		<!-- End optional local footer -->
-		
-		<div id="global-footer" class="grid_24">
-						
-			<nav id="global-nav-expanded">
-				
-				<div class="grid_4 alpha">
-					<h3 class="embl-ebi"><a href="/" title="EMBL-EBI">EMBL-EBI</a></h3>
-				</div>
-				
-				<div class="grid_4">
-					<h3 class="services"><a href="/services">Services</a></h3>
-				</div>
-				
-				<div class="grid_4">
-					<h3 class="research"><a href="/research">Research</a></h3>
-				</div>
-				
-				<div class="grid_4">
-					<h3 class="training"><a href="/training">Training</a></h3>
-				</div>
-				
-				<div class="grid_4">
-					<h3 class="industry"><a href="/industry">Industry</a></h3>
-				</div>
-				
-				<div class="grid_4 omega">
-					<h3 class="about"><a href="/about">About us</a></h3>
-				</div>
-
-			</nav>
-			
-			<section id="ebi-footer-meta">
-				<p class="address">EMBL-EBI, Wellcome Trust Genome Campus, Hinxton, Cambridgeshire, CB10 1SD, UK &nbsp; &nbsp; +44 (0)1223 49 44 44</p>
-				<p class="legal">Copyright &copy; EMBL-EBI 2012 | EBI is an Outstation of the <a href="http://www.embl.org">European Molecular Biology Laboratory</a> | <a href="/about/privacy">Privacy</a> | <a href="/about/cookies">Cookies</a> | <a href="/about/terms-of-use">Terms of use</a></p>	
-			</section>
-
-		</div>
-		
-    </footer>
+    <%@include file="footer.jspf" %>
+    
         </div> <!--! end of #wrapper -->
 
-
-        <!-- JavaScript at the bottom for fast page loading -->
-
-        <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >
-            <script type="text/javascript">var redline = {}; redline.project_id = 185653108;</script><script id="redline_js" src="http://www.redline.cc/assets/button.js" type="text/javascript">
-                
-            </script>
-               <script>
-            $(document).ready(function() {
-                setTimeout(function(){
-                    // Handler for .ready() called.
-                    $("#redline_side_car").css("background-image","url(resources/images/redline_left_button.png)");
-                    $("#redline_side_car").css("background-size", "23px auto");
-                    $("#redline_side_car").css("display", "block");
-                    $("#redline_side_car").css("width", "23px");
-                    $("#redline_side_car").css("height", "63px");
-                },1000);
-            });
-        </script>
-        </c:if>
-        
-        <!--        add twitter script for twitterapi-->
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-
-<!--        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <script src="resources/javascript/search.js" type="text/javascript"></script>
-       -->
-
-<!--    now the frontier js for ebi global result-->
-        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search-run.js"></script>
-        <script src="//www.ebi.ac.uk/web_guidelines/js/ebi-global-search.js"></script>
-
-<!--        To be able to run locally as frontier impl only works when deployed to ebi domain-->
-<!--  <script src="resources/javascript/ebi-global-search-run.js" type="text/javascript"></script>
-    <script src="resources/javascript/ebi-global-search.js" type="text/javascript"></script>-->
-    
-        <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-
-        <!--      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-                <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.6.2.min.js"><\/script>')</script>-->
-
-
-
-        <!-- scripts concatenated and minified via ant build script-->
-        <!--
-      <script defer src="../js/plugins.js"></script>
-        <script defer src="../js/script.js"></script>
-        -->
-        
-         <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/cookiebanner.js"></script>  
-  <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/foot.js"></script>
- 
-        <!-- end scripts-->
-
-
-        <!-- Change UA-XXXXX-X to be your site's ID -->
-        <!--
-      <script>
-          window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
-          Modernizr.load({
-            load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
-          });
-        </script>
-        -->
-
-
-        <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
-             chromium.org/developers/how-tos/chrome-frame-getting-started -->
-        <!--[if lt IE 7 ]>
-            <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
-            <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
-          <![endif]-->
-
     </body>
-<!--    <script>
-        updateSummary();
-    </script>-->
 </html>
 

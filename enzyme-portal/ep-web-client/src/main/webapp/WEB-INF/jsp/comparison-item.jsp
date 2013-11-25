@@ -89,7 +89,7 @@ comparePath = ${comparePath}
     <c:when test="${topComparison.key eq 'Small molecules'}">
         <c:choose>
             <c:when test="${empty item}">
-                No data available.
+                &nbsp;
             </c:when>
             <c:when test="${theComparison.value.class.simpleName
                 eq 'MoleculeComparison'}">

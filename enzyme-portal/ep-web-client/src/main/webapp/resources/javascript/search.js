@@ -531,11 +531,26 @@ function checkContent() {
  * @param event a change event in a checkbox.
  */
 function selectForBasket(event){
-    var params = {};
-    var thisFunction = this;
     var cb = event.target;
-    params.id = cb.value;
-    params.checked = cb.checked;
+    var id = cb.value;
+    var checked = cb.checked;
+	ajaxBasket(id, checked);
+}
+
+/**
+ * Sends an AJAX request to the server to update the basket (add or remove
+ * enzymes).
+ * @param id the basket ID(s) to be added/removed. Note that events triggered
+ * 		from a checkbox send only one basket ID, but buttons send more
+ * 		(10 according to the current pagination configuration).
+ * @param checked <code>true</code> if the enzyme is added, <code>false</code>
+ * 		if removed.
+ */
+function ajaxBasket(id, checked){
+	var thisFunction = this;
+    var params = {};
+    params.id = id;
+    params.checked = checked;
     jQuery.ajax({
     	dataType: "text",
         url: window.location.pathname.replace(/search.*/, "ajax/basket"),
@@ -543,6 +558,9 @@ function selectForBasket(event){
         context: thisFunction,
         success: function(basketSize){
             $('#basketSize').text(basketSize);
+        },
+        error: function(xhr, status, message){
+        	alert(message);
         }
     });
 }
@@ -568,13 +586,21 @@ function updateCompareButton(){
 
 /**
  * (Un)checks all basket checkboxes in the page.
- * @param checked status of the checkboxes in the page.
+ * Sends one single ajax request with a semicolon-separated list of basket IDs.
+ * @param event The event triggering this action, namely the (de)select all
+ * 		buttons.
  */
-function basketAll(checked){
+function basketAll(event){
+	var id = '';
+	$('input.forBasket').each(function(index, elem){
+		if (id.length > 0) id += ';';
+		id += elem.value;
+	});
+	var checked = event.target.value == '+';
+	ajaxBasket(id, checked);
 	$('input.forBasket').each(function(index, elem){
 		elem.checked = checked;
-		$(elem).change();
+		//if (checked) $(elem).attr('checked', 'checked');
+		//else $(elem).removeAttr('checked');
 	});
 }
-
-

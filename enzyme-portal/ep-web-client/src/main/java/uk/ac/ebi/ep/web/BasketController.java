@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.web;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -65,7 +64,9 @@ public class BasketController {
      * Updates the basket with enzymes (summaries) to compare or download.
      * @param response the HTTP response to write to.
      * @param id the basket ID to add/remove (see
-     *      {@link Functions#getSummaryBasketId(EnzymeSummary)}.
+     *      {@link Functions#getSummaryBasketId(EnzymeSummary)}. It may be a
+     *      semicolon-separated list of basket IDs, which will be processed in
+     *      block.
      * @param checked if <code>true</code>, add the accession; if
      *      <code>false</code>, remove it.
      * @param session the user session.
@@ -87,13 +88,13 @@ public class BasketController {
                     new LinkedHashMap<String, EnzymeSummary>());
             session.setAttribute(Attribute.basket.name(), basket);
         }
-        final EnzymeSummary summary = lastSummaries.get(id);
-        if (summary == null){
-            // build a fresh one:
-            // TODO
-        } else {
-            final String basketId = Functions.getSummaryBasketId(summary);
+        for (String basketId : id.split(";")) {
             if (checked){
+                final EnzymeSummary summary = lastSummaries.get(basketId);
+                if (summary == null){
+                    // build a fresh one:
+                    // TODO
+                }
                 basket.put(basketId, summary);
             } else {
                 basket.remove(basketId);

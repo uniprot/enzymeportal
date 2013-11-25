@@ -160,6 +160,10 @@ public final class Functions {
                 // CHEMBL
                 url = Functions.chemblConfig.getCompoundBaseUrl()
                         + molecule.getId();
+            } else if (molecule.getId().startsWith("CHEBI")){
+                // ChEBI
+                url = Functions.chebiConfig.getCompoundBaseUrl()
+                        + molecule.getId();
             }
         }
         return url;

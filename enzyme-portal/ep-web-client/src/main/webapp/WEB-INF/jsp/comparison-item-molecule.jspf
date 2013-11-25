@@ -10,7 +10,7 @@
 
 <a href="${epfn:getMoleculeUrl(molecule)}">${molecule.name}</a>
 <div style="margin-left: 2em">
-    <img src="${epfn:getMoleculeImgSrc(molecule)}"
+    <img src="${epfn:getMoleculeImgSrc(molecule)}" class="molecule"
         style="float: left; margin-right: 1em;"/>
     ${molecule.description}
     <c:if test="${not empty molecule.formula}">

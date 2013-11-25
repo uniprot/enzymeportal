@@ -25,7 +25,7 @@
 			<div style="width: 200px;">
 				<c:choose>
 					<c:when test="${empty compoundUrl}">
-						<img src="${compoundImgUrl}"
+						<img src="${compoundImgUrl}" class="molecule"
 							alt="(No image available)" />
 					</c:when>
 					<c:otherwise>

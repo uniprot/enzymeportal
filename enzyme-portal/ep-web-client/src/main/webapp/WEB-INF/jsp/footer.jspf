@@ -3,8 +3,10 @@
     Created on : Aug 20, 2011, 8:44:45 PM
     Author     : hongcao
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!--<div id="afterContent"></div>
+<%--
+<div id="afterContent"></div>
 <table class="footerpane" id="footerpane"
 	summary="The main footer pane of the page">
     <tr>
@@ -20,7 +22,8 @@
             </div>
         </td>
     </tr>
-</table>-->
+</table>
+--%>
 
 <footer>
     <!-- Optional local footer (insert citation / project-specific copyright / etc here -->

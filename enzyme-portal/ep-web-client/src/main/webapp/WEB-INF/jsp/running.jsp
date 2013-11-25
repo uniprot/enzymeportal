@@ -6,27 +6,28 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<html>
-    <head>
-        <title>Enzyme Portal</title>
-        <link href="http://www.ebi.ac.uk/inc/css/contents.css"
-        	rel="stylesheet" type="text/css" />
-        <link href="resources/css/search.css"
-        	rel="stylesheet" type="text/css" />
-        <link href="resources/lib/spineconcept/css/common.css"
-        	rel="stylesheet" type="text/css" media="screen" />
-        <script type="text/javascript"
-        	src="resources/javascript/search.js"></script>
-    </head>
-   <body>
-    	<script type="text/javascript">
-    		function checkJob(){
-    			document.forms['check-job'].submit();
-    		}
-    		setTimeout(checkJob, 5000);
-    	</script>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+<c:set var="pageTitle" value="BLAST search... &lt; Enzyme Portal &lt; EMBL-EBI"/>
+<%@include file="head.jspf" %>
+
+<body class="level2">
+
+    <%@include file="skipto.jspf" %>
+
+	<script type="text/javascript">
+		function checkJob(){
+			document.forms['check-job'].submit();
+		}
+		setTimeout(checkJob, 5000);
+	</script>
        
-   <jsp:include page="frontierHeader.jsp"/>
+   <jsp:include page="header.jsp"/>
   
                 
             <div id="content" role="main" class="grid_24 clearfix">
