@@ -8,16 +8,20 @@
 	<title>Mega-mapper change log</title>
     
 	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
-<!--        <author email="joseph@ebi.ac.uk" >Joseph Onwubiko</author>-->
-       
+    <author email="joseph@ebi.ac.uk" >Joseph Onwubiko</author>
     
 </properties>
 
 <body>
-    <release version="1.0.21" date="" description="Recovered missing diseases.">
+    <release version="1.0.21" date="2013-11-25"
+        description="Recovered missing diseases.">
         <action dev="rafalcan" type="fix" issue="195">
-            Now OMIM cross-references are not discarded because of a low score
-            in the UniMed file.
+            Now OMIM cross-references are not (unfairly) discarded because of a
+            low score in the UniMed file.
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of ep-util, biobabel-core and
+            chembl-adapter.
         </action>
     </release>
     <release version="1.0.20" date="2013-10-22"
@@ -43,7 +47,7 @@
             the compound structure search in EP.
         </action>
         <action dev="rafalcan" type="update">
-            Updated to latest versions of rhea-util - with improved parsing of
+            Updated to latest versions of ep-util - with improved parsing of
             activator and inhibitors from UniProt - and biobabel-core.
         </action>
     </release>
