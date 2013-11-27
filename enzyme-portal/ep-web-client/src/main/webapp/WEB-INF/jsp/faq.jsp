@@ -177,6 +177,9 @@
                     <li><a href="faq#01">How is the EnzymePortal different from BRENDA?</a></li>
                     <li><a href="faq#02">What is the meaning of those compounds used as filters for the search results?</a></li>
                     <li><a href="faq#03">What are the figures in colourful labels which appear with the results of a protein sequence search?</a></li>
+                    <li><a href="#04">Why does the small molecules tab show
+                        fewer bioactive compounds than the ChEMBL page?</a>
+                    <li><a href="#05">How can I combine search filters?</a>
                 </ul>
                 <a name="01"></a><h4>How is the EnzymePortal different from BRENDA?</h4>
                 <fieldset>
@@ -190,7 +193,38 @@
                 <a name="03"></a><h4>What are the figures in colourful labels which appear with the results of a protein sequence search?</h4>
                 <fieldset>
                     <p>The figures are <a href="http://www.ncbi.nlm.nih.gov/books/NBK21097/#A614">bit scores</a> for the blast search of the given sequence against the shown enzyme. The colour is a hint for the match: red means a close match, blue a loose one. It helps to locate best results at first sight.</p><p>For more information about scores, please refer to the <a href="http://www.ncbi.nlm.nih.gov/books/NBK21097/">BLAST documentation</a>.</p>
-                    
+                </fieldset>
+                <a id="04"></a><h4>Why does the small molecules tab show fewer
+                    bioactive compounds than the ChEMBL page?</h4>
+                <fieldset>
+                    <p>The small molecules tab shows any bioactive compounds
+                        described in ChEMBL as interacting with the enzyme. The
+                        link <i>See all bioactive compounds in ChEMBL</i> will
+                        take to a ChEMBL page where you may see many more. The
+                        difference is due to a filter applied by the Enzyme
+                        Portal, whereby only those compounds more likely to have
+                        a significative activity on the function of the enzyme
+                        are shown.</p>
+                </fieldset>
+                <a id="05">How can I combine search filters?</a>
+                <fieldset>
+                    <p>Search results can be filtered using the facets shown on
+                        the left hand side in three blocks: species, chemical
+                        compounds and diseases. Checking more than one filter
+                        in the same block narrows the search to those results
+                        matching <i>any</i> of them. Checking filters in
+                        different blocks shows only results matching <i>all</i>
+                        of them.<br/>
+                        For example, if you search for <code>sildenafil</code>
+                        and then check the filter <i>Species &gt; Human</i> you
+                        will see only the enzymes found in human.</p> Now,
+                        checking an additional species - say <i>Mouse</i> - will
+                        restrict the list of results to those found
+                        <i>either</i> in human or mouse. If you now select a
+                        filter in another block - <i>Chemical compounds &gt;
+                        Drug > Sildenafil</i>, for example - the results shown
+                        will be those enzymes affected by sildenafil <i>and</i>
+                        present in <i>either</i> human or mouse.</p>
                 </fieldset>
             </section>
 		<!-- End example layout containers -->
