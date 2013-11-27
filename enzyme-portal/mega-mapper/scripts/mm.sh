@@ -12,7 +12,7 @@ SWISSPROT=$UNIPROT_DATA/uniprot_sprot.xml
 TREMBL=$UNIPROT_DATA/uniprot_trembl.xml
 CHEBI=$EBINOCLE_DATA/chebi/latest/chebi_prod.xml
 INTENZ_XML=$EBINOCLE_DATA/intenz/latest/intenz.xml
-CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target.xml
+CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target_component.xml
 #UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 UNIMED=http://research.isb-sib.ch/unimed/SP_MeSH.tab
 
@@ -44,14 +44,9 @@ java ${JAVA_OPTS} -classpath $CP uk.ac.ebi.ep.mm.app.IntenzSaxParser \
 echo "Finished IntEnz import - $(date)"
 
 echo "Starting ChEMBL import - $(date)"
-java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.EbeyeSaxParser \
+java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.ChemblSaxParser \
 	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
 echo "Finished ChEMBL import - $(date)"
-
-# Not needed any more, as EbeEyeSaxParser will import also ChEMBL names:
-#echo "Starting ChEMBL names import - $(date)"
-#java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.ChemblCompounds ep-mm-db-$1
-#echo "Finished ChEMBL names import - $(date)"
 
 echo "Starting UniMed import - $(date)"
 java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.Uniprot2DiseaseParser \
