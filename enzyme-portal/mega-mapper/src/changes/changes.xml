@@ -6,19 +6,18 @@
 
 <properties>
 	<title>Mega-mapper change log</title>
-    
 	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
     <author email="joseph@ebi.ac.uk" >Joseph Onwubiko</author>
-    
 </properties>
 
 <body>
-    <release version="1.0.22" date="" description="New parser for ChEMBL xrefs">
+    <release version="1.0.22" date="2013-11-28"
+        description="New parser for ChEMBL xrefs">
         <action dev="rafalcan" type="add">
             Added class ChemblSaxParser, which deprecates EbeyeSaxParser (it was
             only used for ChEMBL xrefs). This new class processes the ebinocle
             file chembl-target_component.xml instead of chembl-target.xml, due
-            to changes in the content of it.
+            to changes in the content of the latter.
         </action>
     </release>
     <release version="1.0.21" date="2013-11-25"
