@@ -109,7 +109,7 @@ public class ChemblSaxParser extends MmSaxParser implements EbinocleParser {
                     LOGGER.info(accession + " is enzyme.");
                     Collection<XRef> xrefs = getChemblXrefs();
                     try {
-                        if (!xrefs.isEmpty()){
+                        if (xrefs != null && !xrefs.isEmpty()){
                             mm.write(Collections.singleton(entry), xrefs);
                         }
                     } catch (IOException e) {
@@ -143,7 +143,8 @@ public class ChemblSaxParser extends MmSaxParser implements EbinocleParser {
      * Adds cross references to any ChEMBL compound IDs which show any
      * bioactivity against the <code>{@link #targetIds}</code> of the element
      * being processed.
-     * @return a collection of cross-references from UniProt to ChEMBL.
+     * @return a collection of cross-references from UniProt to ChEMBL, or
+     *      <code>null</code> if none found.
      */
     private Collection<XRef> getChemblXrefs() {
         Collection<XRef> xrefs = null;
