@@ -10,6 +10,13 @@
 </properties>
 
 <body>
+    <release version="1.0.27" date="" description="Compound search">
+        <action dev="rafalcan" type="add">
+            Added method SearchController.searchCompound for chemical structure
+            searches (using ChEBI advanced search, and then searching the
+            mega-map by ChEBI ID).
+        </action>
+    </release>
     <release version="1.0.26" date="2013-10-16"
         description="Updated dependency">
         <action dev="rafalcan" type="update">

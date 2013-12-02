@@ -1,9 +1,11 @@
 package uk.ac.ebi.ep.web;
 
 import java.util.*;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
@@ -487,7 +490,7 @@ public class SearchController {
                             view = searchSequence(model, searchModel);
                             break;
                         case COMPOUND:
-                            //            	view = postCompoundSearch(model, searchModel);
+                            view = searchCompound(model, searchModel);
                             break;
                         default:
                     }
@@ -499,19 +502,49 @@ public class SearchController {
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
                 clearHistory(session);
-                if (searchModel.getSearchparams().getType().equals(SearchParams.SearchType.KEYWORD)) {
+                switch (searchModel.getSearchparams().getType()) {
+                case KEYWORD:
+                case COMPOUND:
                     addToHistory(session, "searchparams.text=" + searchKey);
-                }
-                if (searchModel.getSearchparams().getType().equals(SearchParams.SearchType.SEQUENCE)) {
+                    break;
+                case SEQUENCE:
                     addToHistory(session, "searchparams.sequence=" + searchKey);
+                    break;
                 }
-                //addToHistory(session, "searchparams.text=" + searchKey);
                 view = "search";
             }
         } catch (Throwable t) {
             LOGGER.error("one of the search params (Text or Sequence is :", t);
         }
 
+        return view;
+    }
+
+    /**
+     * Uses a finder to search by compound ID.
+     * @param model the view model.
+     * @param searchModel the search model, including a compound ID as the
+     *      <code>text</code> parameter.
+     * @return the view to show (<code>search</code>, or <code>error</code> in
+     *      case of error.
+     */
+    private String searchCompound(Model model, SearchModel searchModel) {
+        String view = "error";
+        EnzymeFinder finder = null;
+        try {
+            finder = new EnzymeFinder(searchConfig);
+            finder.getUniprotAdapter().setConfig(uniprotConfig);
+            finder.getIntenzAdapter().setConfig(intenzConfig);
+            searchModel.setSearchresults(
+                    finder.getEnzymesByCompound(searchModel.getSearchparams()));
+            model.addAttribute("searchModel", searchModel);
+            model.addAttribute("pagination", getPagination(searchModel));
+            view = "search";
+        } catch (Exception e){
+            LOGGER.error("Unable to get enzymes by compound", e);
+        } finally {
+            if (finder != null) finder.closeResources();
+        }
         return view;
     }
 
@@ -862,7 +895,8 @@ public class SearchController {
                         .replaceAll("[\n\r]", "");
                 break;
             case COMPOUND:
-                throw new NotImplementedException("Compound structure search");
+                key = searchParams.getText().trim().toUpperCase();
+                break;
             default:
                 key = searchParams.getText().trim().toLowerCase();
         }

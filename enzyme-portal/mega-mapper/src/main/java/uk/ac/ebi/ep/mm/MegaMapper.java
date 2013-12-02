@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
 
@@ -271,5 +272,13 @@ public interface MegaMapper {
     Set<Disease> findAllDiseases(MmDatabase uniprotDB,
             MmDatabase... xDbs);
     Entry findByEntryId(String entryId);
+
+    /**
+     * Retrieves UniProt IDs related to a given compound.
+     * @param compoundId the compound ID.
+     * @return A list of UniProt IDs.
+     * @since 
+     */
+    List<String> getEnzymesByCompound(String compoundId);
 
 }
