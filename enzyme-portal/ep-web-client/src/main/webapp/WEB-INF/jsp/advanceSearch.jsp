@@ -132,7 +132,7 @@
             <section>
              <div class="contents">
             <div class="page container_12"> 
-                 <jsp:include page="searchBox.jsp"/>
+                 <%@ include file="searchBox.jsp" %>
             </div>
                      </div>
             </section>
@@ -192,8 +192,7 @@
         </div> <!--! end of #wrapper -->
 
    <!-- Your custom JavaScript file scan go here... change names accordingly -->
-    
-  <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
         
         <c:if test="${pageContext.request.serverName!='www.ebi.ac.uk'}" >

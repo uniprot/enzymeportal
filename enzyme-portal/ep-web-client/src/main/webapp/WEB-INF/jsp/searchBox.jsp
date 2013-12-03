@@ -53,10 +53,12 @@
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.sequence"/>
     </li>
-    <!--
-    <li><a href="#compoundSearch"><spring:message
-        code="label.search.tab.compound"/></a></li> 
-    -->
+    <li id="search-tab-compound"
+        class="searchTab ${searchModel.searchparams.type eq 'COMPOUND'?
+            'selected':'' }"
+        onclick="showCard(this.id);">
+        <spring:message code="label.search.tab.compound"/>
+    </li>
 </ul>
 
 <form:form id="searchForm" modelAttribute="searchModel"
@@ -157,7 +159,7 @@
 
                 </a>-->
 </span></pre>
-                 <p>However, the header <pre style="color: #996a44; background-color:white;">  >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
+                 <p>However, the header <pre style="color: #996a44; background-color:white;">  &gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
                  <p><a style="border-bottom-style: none" href="http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"><h6 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h6></a></p>
                  <!--<a   name="fasta" id="fasta"></a>
                  <ul>
@@ -188,6 +190,15 @@
                  </ul>-->
 
              </section>
+        </div>
+        
+        <div id="search-compound" class="searchBackground searchTabContent"
+            style="margin-left: auto; margin-right: auto; width: 65em;
+                display: ${searchModel.searchparams.type eq 'COMPOUND'?
+                'block':'none' };">
+            <iframe src="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&datasourceQuery[0].value=EnzymePortal&callbackUrl=${pageContext.request.contextPath}/search%3Fsearchparams.type=COMPOUND&amp;searchparams.text%3D*"
+                style="border: none; margin: 0px; overflow: auto;"
+                width="100%" height="1010ex"></iframe>
         </div>
     </div>
 
