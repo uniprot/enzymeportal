@@ -10,10 +10,17 @@
 </properties>
 
 <body>
-    <release version="1.0.22" date="" description="">
+    <release version="1.0.22" date="" description="Chemical structure search">
         <action dev="rafalcan" type="add">
             Added method EnzymeFinder.getEnzymesByCompound to retrieve enzymes
             related to a given ChEBI ID (for the structure search).
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest versions of rhea-adapter, chebi-adapter and
+            mega-mapper.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added configuration property Config.structureSearchUrl.
         </action>
     </release>
     <release version="1.0.21" date="2013-10-15"

@@ -17,10 +17,7 @@
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-<!--
-    <context:component-scan
-            base-package="uk.ac.ebi.ep.web, uk.ac.ebi.ep.mBean" />
--->
+
     <context:property-placeholder
             location="classpath:/ep-web-client.properties"/>
 
@@ -46,6 +43,8 @@
         <property name="mmDatasource" value="${search.mm.data.source}"/>
         <property name="maxMoleculesPerGroup"
                   value="${search.molecules.group.max}"/>
+        <property name="structureSearchUrl"
+            value="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&amp;datasourceQuery[0].value=EnzymePortal&amp;specialDataset=EnzymePortal&amp;callbackUrl=http://localhost:8080/enzymeportal/search%3Fsearchparams.type%3DCOMPOUND%26searchparams.text%3D*"/>
     </bean>
     <alias name="uk.ac.ebi.ep:name=searchConfig" alias="searchConfig"/>
 

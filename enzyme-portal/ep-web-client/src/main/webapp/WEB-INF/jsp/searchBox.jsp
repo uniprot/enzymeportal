@@ -67,9 +67,8 @@
 
     <div id="search" style="min-height: 20ex;">
         <div id="search-keyword" class="searchBackground searchTabContent"
-             style="margin-left: auto; margin-right: auto; width: 65em;
-             display: ${empty searchModel.searchparams.type or
-                        searchModel.searchparams.type eq 'KEYWORD'? 'block':'none' };">
+             style="display: ${empty searchModel.searchparams.type or
+                CsearchModel.searchparams.type eq 'KEYWORD'? 'block':'none' };">
              <form:input id="search-keyword-text" path="searchparams.text"
                          cssClass="field" />
              <button id="search-keyword-submit" type="submit"
@@ -85,8 +84,8 @@
                 <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
                 <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
                 <a href="/enzymeportal/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
-           
-<!--             <a class="formSubmit"
+<%--
+             <a class="formSubmit"
                 onclick="submitKeywordForm('sildenafil')">sildenafil</a>,
              <a class="formSubmit"
                 onclick="submitKeywordForm('Insulin receptor')">Insulin receptor</a>,
@@ -104,8 +103,8 @@
              <a class="formSubmit"
                 onclick="submitKeywordForm('Q13423')">Q13423</a>,
              <a class="formSubmit"
-                onclick="submitKeywordForm('REACT_1400.4')">REACT_1400.4</a>-->
-
+                onclick="submitKeywordForm('REACT_1400.4')">REACT_1400.4</a>
+--%>
              <hr/>
              <br/>
              <section>
@@ -116,8 +115,7 @@
         </div>
 
         <div id="search-sequence" class="searchBackground searchTabContent"
-             style="margin-left: auto; margin-right: auto; width: 65em;
-             display: ${searchModel.searchparams.type eq 'SEQUENCE'?
+             style="display: ${searchModel.searchparams.type eq 'SEQUENCE'?
                         'block':'none' };">
             <form:textarea id="search-sequence-text" path="searchparams.sequence" cols="80" rows="5"
                             title="Enter a protein sequence to search" />
@@ -130,23 +128,23 @@
 
                  <p>In order to use the sequence search, the search term must be in FASTA format as shown in the example below:</p>
                  <pre style="color: #996a44; background-color:whitesmoke ">
-<span> 
-    <a style="border-bottom-style: none" href="/enzymeportal/search?searchparams.type=SEQUENCE&searchparams.sequence=MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
+<a style="border-bottom-style: none" href="/enzymeportal/search?searchparams.type=SEQUENCE&searchparams.sequence=MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
                 LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
                 IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
                 VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
                 GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
                 YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
-                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK">>sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
-                MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
-                LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
-                IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
-                VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
-                GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
-                YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
-                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
-    
-<!--    <a style="border-bottom-style: none" class="formSubmit"
+                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK">
+&gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
+MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
+LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
+IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
+VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
+GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
+YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
+WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
+<%--
+    <a style="border-bottom-style: none" class="formSubmit"
                 onclick="submitSequenceForm('MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRELASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIAIYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQLVSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGLGRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAAYVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQTWYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK')"> 
         >sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
                 MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
@@ -157,11 +155,13 @@
                 YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
                 WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK
 
-                </a>-->
-</span></pre>
+                </a>
+--%>
+</pre>
                  <p>However, the header <pre style="color: #996a44; background-color:white;">  &gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
                  <p><a style="border-bottom-style: none" href="http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"><h6 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h6></a></p>
-                 <!--<a   name="fasta" id="fasta"></a>
+<%--
+                 <a   name="fasta" id="fasta"></a>
                  <ul>
                    <li>This format contains a single header line providing the sequence 
                      name, and optionally a description, followed by lines of sequence data.</li>
@@ -187,18 +187,17 @@
                    <li>FASTA files containing multiple sequences are just the same, with 
                      one sequence listed right after another. This format is accepted for 
                      many multiple sequence alignment programs.</li>
-                 </ul>-->
-
+                 </ul>
+--%>
              </section>
         </div>
         
         <div id="search-compound" class="searchBackground searchTabContent"
-            style="margin-left: auto; margin-right: auto; width: 65em;
-                display: ${searchModel.searchparams.type eq 'COMPOUND'?
+            style="display: ${searchModel.searchparams.type eq 'COMPOUND'?
                 'block':'none' };">
-            <iframe src="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&datasourceQuery[0].value=EnzymePortal&callbackUrl=${pageContext.request.contextPath}/search%3Fsearchparams.type=COMPOUND&amp;searchparams.text%3D*"
+            <iframe src="${searchConfig.structureSearchUrl}"
                 style="border: none; margin: 0px; overflow: auto;"
-                width="100%" height="1010ex"></iframe>
+                width="100%" height="1200ex"></iframe>
         </div>
     </div>
 

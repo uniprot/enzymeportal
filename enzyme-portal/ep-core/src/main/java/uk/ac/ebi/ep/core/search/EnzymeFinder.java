@@ -908,7 +908,7 @@ public class EnzymeFinder implements IEnzymeFinder {
      *      <code>type=COMPOUND</code> and a compound ID as <code>text</code>.
      * @return Search results (including summaries).
      * @throws EnzymeFinderException
-     * @since 
+     * @since 1.0.22
      */
     public SearchResults getEnzymesByCompound(SearchParams searchParams)
     throws EnzymeFinderException {

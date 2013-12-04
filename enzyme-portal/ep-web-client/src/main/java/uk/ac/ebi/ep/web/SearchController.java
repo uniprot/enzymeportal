@@ -481,22 +481,20 @@ public class SearchController {
                     switch (searchModel.getSearchparams().getType()) {
                         case KEYWORD:
                             results = searchKeyword(searchModel.getSearchparams());
-                            if (results.getTotalfound() > 0){
-                                cacheSearch(session.getServletContext(), searchKey, results);
-                                addToHistory(session, "searchparams.text=" + searchKey);
-                            }
                             break;
                         case SEQUENCE:
                             view = searchSequence(model, searchModel);
                             break;
                         case COMPOUND:
-                            view = searchCompound(model, searchModel);
+                            results = searchCompound(model, searchModel);
                             break;
                         default:
                     }
                 }
             }
             if (results != null) { // something to show
+                cacheSearch(session.getServletContext(), searchKey, results);
+                addToHistory(session, "searchparams.text=" + searchKey);
                 searchModel.setSearchresults(results);
                 applyFilters(searchModel);
                 model.addAttribute("searchModel", searchModel);
@@ -525,27 +523,26 @@ public class SearchController {
      * @param model the view model.
      * @param searchModel the search model, including a compound ID as the
      *      <code>text</code> parameter.
-     * @return the view to show (<code>search</code>, or <code>error</code> in
-     *      case of error.
+     * @return the search results, or <code>null</code> if nothing found.
+     * @since 1.0.27
      */
-    private String searchCompound(Model model, SearchModel searchModel) {
-        String view = "error";
+    private SearchResults searchCompound(Model model, SearchModel searchModel) {
+        SearchResults results = null;
         EnzymeFinder finder = null;
         try {
             finder = new EnzymeFinder(searchConfig);
             finder.getUniprotAdapter().setConfig(uniprotConfig);
             finder.getIntenzAdapter().setConfig(intenzConfig);
-            searchModel.setSearchresults(
-                    finder.getEnzymesByCompound(searchModel.getSearchparams()));
+            results = finder.getEnzymesByCompound(searchModel.getSearchparams());
+            searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
-            view = "search";
         } catch (Exception e){
             LOGGER.error("Unable to get enzymes by compound", e);
         } finally {
             if (finder != null) finder.closeResources();
         }
-        return view;
+        return results;
     }
 
     /**

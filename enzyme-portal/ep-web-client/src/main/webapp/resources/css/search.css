@@ -433,7 +433,10 @@ a.ui-corner-all{
 }
 .searchTabContent {
     margin-top: 0.3ex;
+    margin-left: auto;
+    margin-right: auto;
     padding: 2ex 1em;
+    width: 75em;
 }
 
 /*sort of tooltip to pop up scientific names*/
