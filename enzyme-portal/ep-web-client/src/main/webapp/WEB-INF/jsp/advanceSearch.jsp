@@ -123,7 +123,7 @@
           <nav id="breadcrumb">
      	<p>
 		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
-		    Advance Search
+		    Advanced Search
 			</p>
   	</nav>
     
