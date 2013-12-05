@@ -529,3 +529,18 @@ function checkContent() {
   
   });
 }
+
+/**
+ * Captures clicks to links in the ChEBI iframe (chemical structure search).
+ */
+function captureChebiClicks(){
+    var frame = $('iframe')[0].contentWindow.document;
+    $(frame).on('click', 'a', function(event) {
+        // Get the link to ChEBI including the compound name:
+        var link = this.parentsUntil('table', 'tr').siblings()
+                .find('a:contains("CHEBI")');
+        var structure = frame.forms['goBackStructureSearch']
+                .structure;
+        return false;
+    });
+}

@@ -39,36 +39,40 @@
     }
 </script>
 
+<c:set var="isKeyword"
+    value="${(empty param.type and empty searchModel.searchparams.type)
+    or param.type eq 'KEYWORD' or searchModel.searchparams.type eq 'KEYWORD'}"/>
+<c:set var="isSequence" value="${param.type eq 'SEQUENCE'
+    or searchModel.searchparams.type eq 'SEQUENCE'}"/>
+<c:set var="isCompound" value="${param.type eq 'COMPOUND'
+    or searchModel.searchparams.type eq 'COMPOUND'}"/>
+
 <ul id="search-tabs"
     style="width: 70em; margin-left: auto; margin-right: auto;">
     <li id="search-tab-keyword"
-        class="searchTab ${empty searchModel.searchparams.type or
-                           searchModel.searchparams.type eq 'KEYWORD'? 'selected':'' }"
+        class="searchTab ${isKeyword? 'selected' : ''}"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.keyword"/>
     </li>
     <li id="search-tab-sequence"
-        class="searchTab ${searchModel.searchparams.type eq 'SEQUENCE'?
-                           'selected':'' }"
+        class="searchTab ${isSequence? 'selected' : ''}"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.sequence"/>
     </li>
     <li id="search-tab-compound"
-        class="searchTab ${searchModel.searchparams.type eq 'COMPOUND'?
-            'selected':'' }"
+        class="searchTab ${isCompound? 'selected' : ''}"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.compound"/>
     </li>
 </ul>
 
-<form:form id="searchForm" modelAttribute="searchModel"
-           action="${pageContext.request.contextPath}/search" method="POST">
-    <form:hidden path="searchparams.previoustext" />
 
     <div id="search" style="min-height: 20ex;">
         <div id="search-keyword" class="searchBackground searchTabContent"
-             style="display: ${empty searchModel.searchparams.type or
-                CsearchModel.searchparams.type eq 'KEYWORD'? 'block':'none' };">
+             style="display: ${isKeyword? 'block':'none' };">
+        <form:form id="keywordSearchForm" modelAttribute="searchModel"
+                   action="${pageContext.request.contextPath}/search" method="POST">
+            <form:hidden path="searchparams.previoustext" />
              <form:input id="search-keyword-text" path="searchparams.text"
                          cssClass="field" />
              <button id="search-keyword-submit" type="submit"
@@ -112,11 +116,14 @@
                  <p>To use the keyword search, simply enter a search term and click on the search button. For example you can enter <a class="formSubmit"
                                                                                                                                        onclick="submitKeywordForm('sildenafil')">sildenafil</a> as a keyword in the search field provided.</p>
              </section>
+        </form:form>
         </div>
 
         <div id="search-sequence" class="searchBackground searchTabContent"
-             style="display: ${searchModel.searchparams.type eq 'SEQUENCE'?
-                        'block':'none' };">
+             style="display: ${isSequence? 'block':'none' };">
+        <form:form id="sequenceSearchForm" modelAttribute="searchModel"
+                   action="${pageContext.request.contextPath}/search" method="POST">
+            <form:hidden path="searchparams.previoustext" />
             <form:textarea id="search-sequence-text" path="searchparams.sequence" cols="80" rows="5"
                             title="Enter a protein sequence to search" />
              <button id="search-sequence-submit" type="submit"
@@ -190,15 +197,14 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                  </ul>
 --%>
              </section>
+        </form:form>
         </div>
         
         <div id="search-compound" class="searchBackground searchTabContent"
-            style="display: ${searchModel.searchparams.type eq 'COMPOUND'?
-                'block':'none' };">
+            style="display: ${isCompound? 'block':'none' };">
             <iframe src="${searchConfig.structureSearchUrl}"
                 style="border: none; margin: 0px; overflow: auto;"
-                width="100%" height="1200ex"></iframe>
+                width="100%" height="1200ex"
+                onload="captureChebiClicks"></iframe>
         </div>
     </div>
-
-</form:form>

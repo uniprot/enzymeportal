@@ -44,7 +44,7 @@
         <property name="maxMoleculesPerGroup"
                   value="${search.molecules.group.max}"/>
         <property name="structureSearchUrl"
-            value="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&amp;datasourceQuery[0].value=EnzymePortal&amp;specialDataset=EnzymePortal&amp;callbackUrl=http://localhost:8080/enzymeportal/search%3Fsearchparams.type%3DCOMPOUND%26searchparams.text%3D*"/>
+            value="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&amp;datasourceQuery[0].value=EnzymePortal&amp;specialDataset=rhea&amp;callbackUrl=http://localhost:8080/enzymeportal/search%3Fsearchparams.type%3DCOMPOUND%26searchparams.text%3D*"/>
     </bean>
     <alias name="uk.ac.ebi.ep:name=searchConfig" alias="searchConfig"/>
 
@@ -95,6 +95,7 @@
         <property name="searchStars" value="${chebi.search.stars}"/>
         <property name="maxRetrievedMolecules" value="${chebi.results.max}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=chebiConfig" alias="chebiConfig"/>
 
     <bean name="uk.ac.ebi.ep:name=literatureConfig"
           class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">

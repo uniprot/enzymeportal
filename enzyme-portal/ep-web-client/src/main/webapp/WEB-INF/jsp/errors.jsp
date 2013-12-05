@@ -26,7 +26,7 @@
                 <section>
                    
                     <h4 style="text-align: center">Enzyme Portal Service Error</h4>
-                            <p class="alert">We're sorry but there was an error in your search for ${enzymeModel.name} . Please try again later or use the <a href="/enzymeportal/advanceSearch">advanced search</a></p>
+                            <p class="alert">We're sorry but there was an error in your search for ${enzymeModel.name} . Please try again later or use the <a href="${pageContext.request.contextPath}/advanceSearch">advanced search</a></p>
                             
                 </section>
         

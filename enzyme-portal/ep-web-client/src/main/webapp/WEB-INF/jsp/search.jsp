@@ -335,23 +335,20 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                                  <c:choose>
+                          <c:choose>
                             <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
                                <h2>Enzyme Portal results for <span class="searchterm"><i>${fn:substring(searchText, 0, 20)}${fn:length(searchText) gt 20? '...':''}</i>
                                     </span></h2>	
                             </c:when>
-
                             <c:otherwise>
                                 <h2>Enzyme Portal results for <span class="searchterm"><i>${searchText}</i>
                                     </span></h2>
                             </c:otherwise>
-                        </c:choose>
-                            
-                                              
+                          </c:choose>
                             <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
                         </c:if>
                     </section>
-                    <c:if test="${searchModel.searchparams.type eq 'KEYWORD'}">
+                    <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
                     <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
                         <div id="ebi_search_results"><h3 class="slideToggle icon icon-functional" data-icon="u">Show more data from EMBL-EBI</h3>
                         </div>
@@ -388,6 +385,9 @@
                     </c:if>
                 </section>
                 <section class="grid_18" id="keywordSearchResult">
+                  <c:if test="${searchModel.searchparams.type eq 'COMPOUND'}">
+                    <img src="${chebiConfig.compoundImgBaseUrl}${searchText}" alt=""/>
+                  </c:if>                                              
                     <c:if test="${totalfound eq -100}">
                         <spring:message code="label.search.empty"/>
                     </c:if>
