@@ -544,3 +544,12 @@ function captureChebiClicks(){
         return false;
     });
 }
+
+/**
+ * Saves the drawn structure in a cookie for later use.
+ */
+function saveDrawnStructure(){
+    var chebiDoc = $('#chebiIframe')[0].contentWindow.document;
+    var str = $(chebiDoc).find('input[name="structure"]').value;
+    document.cookie = 'drawnStructure=' + str;
+}

@@ -202,9 +202,8 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
         
         <div id="search-compound" class="searchBackground searchTabContent"
             style="display: ${isCompound? 'block':'none' };">
-            <iframe src="${searchConfig.structureSearchUrl}"
+            <iframe id="chebiIframe" src="${searchConfig.structureSearchUrl}"
                 style="border: none; margin: 0px; overflow: auto;"
-                width="100%" height="1200ex"
-                onload="captureChebiClicks"></iframe>
+                width="100%" height="1200ex"></iframe>
         </div>
     </div>

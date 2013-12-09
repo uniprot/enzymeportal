@@ -39,6 +39,7 @@ import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.*;
+import uk.ac.ebi.ep.search.model.SearchParams.SearchType;
 import uk.ac.ebi.ep.search.result.Pagination;
 import uk.ac.ebi.xchars.SpecialCharacters;
 import uk.ac.ebi.xchars.domain.EncodingType;
@@ -415,6 +416,29 @@ public class SearchController {
             history.add(cleanedText);
         }
     }
+    
+    /**
+     * Adds a search to the user history. The history item (String) actually
+     * stored depends on the type of search, so that the links can be re-created
+     * in the web page properly (see <code>breadcrumbs.jsp</code>).
+     * @param session the user session.
+     * @param searchType the search type.
+     * @param s the text to be added to history.
+     */
+    private void addToHistory(HttpSession session, SearchType searchType, String s){
+        switch (searchType) {
+        case KEYWORD:
+            addToHistory(session, "searchparams.text=" + s);
+            break;
+        case COMPOUND:
+            addToHistory(session,
+                    "searchparams.type=COMPOUND&searchparams.text=" + s);
+            break;
+        case SEQUENCE:
+            addToHistory(session, "searchparams.sequence=" + s);
+            break;
+        }
+    }
 
     private void clearHistory(HttpSession session) {
         @SuppressWarnings("unchecked")
@@ -451,29 +475,18 @@ public class SearchController {
 
             if (custom == true) {
                 String id = getPathVariable();
-
                 clearHistory(session);
                 searchModel = customSearch(searchModel, id, model, session);
-
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
-
-
                 setIsCustomSearch(false);
                 view = "search";
             } else {
-
-
-
                 // See if it is already there, perhaps we are paginating:
                 Map<String, SearchResults> prevSearches =
                         getPreviousSearches(session.getServletContext());
-
                 searchKey = getSearchKey(searchModel.getSearchparams());
-
-
                 results = prevSearches.get(searchKey);
-
                 if (results == null) {
                     // New search:
                     clearHistory(session);
@@ -494,21 +507,13 @@ public class SearchController {
             }
             if (results != null) { // something to show
                 cacheSearch(session.getServletContext(), searchKey, results);
-                addToHistory(session, "searchparams.text=" + searchKey);
                 searchModel.setSearchresults(results);
                 applyFilters(searchModel);
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
                 clearHistory(session);
-                switch (searchModel.getSearchparams().getType()) {
-                case KEYWORD:
-                case COMPOUND:
-                    addToHistory(session, "searchparams.text=" + searchKey);
-                    break;
-                case SEQUENCE:
-                    addToHistory(session, "searchparams.sequence=" + searchKey);
-                    break;
-                }
+                addToHistory(session, searchModel.getSearchparams().getType(),
+                        searchKey);
                 view = "search";
             }
         } catch (Throwable t) {
@@ -850,7 +855,7 @@ public class SearchController {
                     SearchParams searchParams = searchModel.getSearchparams();
                     String resultKey = getSearchKey(searchParams);
                     cacheSearch(session.getServletContext(), resultKey, results);
-                    addToHistory(session, "searchparams.sequence=" + resultKey);
+                    //addToHistory(session, "searchparams.sequence=" + resultKey);
                     searchParams.setSize(searchConfig.getResultsPerPage());
                     searchModel.setSearchresults(results);
                     model.addAttribute("searchModel", searchModel);
@@ -873,7 +878,11 @@ public class SearchController {
 
     /**
      * Processes a string to normalise it to use as a key in the application
-     * cache.
+     * cache.<br>
+     * Note that the key for a ChEBI ID depends on the type of search: if a
+     * keyword search, the prefix will be lowercase (<code>chebi:</code>); if a
+     * compound structure search, the prefix will be uppercase
+     * (<code>CHEBI:</code>).
      *
      * @param searchParams the search parameters, including the original search
      * text from the user.

@@ -341,8 +341,7 @@
                                     </span></h2>	
                             </c:when>
                             <c:otherwise>
-                                <h2>Enzyme Portal results for <span class="searchterm"><i>${searchText}</i>
-                                    </span></h2>
+                                <h2>Enzyme Portal results for <span id="searchTerm" class="searchterm"><i>${searchText}</i></span></h2>
                             </c:otherwise>
                           </c:choose>
                             <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
@@ -386,7 +385,26 @@
                 </section>
                 <section class="grid_18" id="keywordSearchResult">
                   <c:if test="${searchModel.searchparams.type eq 'COMPOUND'}">
-                    <img src="${chebiConfig.compoundImgBaseUrl}${searchText}" alt=""/>
+                    <figure class="compound structure">
+                        <img src="${chebiConfig.compoundImgBaseUrl}${searchText}" alt=""/>
+                        <figcaption>
+                            <a href="${chebiConfig.compoundBaseUrl}${searchText}"
+                                target="_blank"><span id="chebiNameId"></span></a>
+                        </figcaption>
+                    </figure>
+                    <script>
+                    jQuery.ajax({
+                    	// FIXME: soft-code this URL!
+                        url: "/webservices/chebi/2.0/test/getCompleteEntity?chebiId=${searchText}",
+                        success: function(data){
+                        	var xmlDoc = jQuery.parseXML(data);
+                        	var xmlResult = jQuery(xmlDoc).find('return');
+                        	var chebiName = xmlResult.find('chebiAsciiName').text();
+                        	$('#chebiNameId').text(
+                        			chebiName + ' (' + '${searchText}' + ')');
+                        }
+                    });
+                    </script>
                   </c:if>                                              
                     <c:if test="${totalfound eq -100}">
                         <spring:message code="label.search.empty"/>

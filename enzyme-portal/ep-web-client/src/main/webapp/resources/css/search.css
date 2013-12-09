@@ -813,3 +813,11 @@ span.popup:hover span {
 .ui-accordion .ui-widget .ui-helper-reset{
     font-family: Helvetica,sans-serif;
 }
+
+figure.compound.structure {
+	text-align: center;
+}
+figure.compound.structure figcaption {
+	font-weight: bold;
+	text-align: center;
+}

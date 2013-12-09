@@ -48,7 +48,7 @@
         
                 <link rel="stylesheet" href="http://wwwdev.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">  you can replace this with [projectname]-colours.css. See http://frontier.ebi.ac.uk/web/style/colour for details of how to do this -->
 
-<link href="resources/css/search.css" type="text/css" rel="stylesheet" />
+<link href="../../resources/css/search.css" type="text/css" rel="stylesheet" />
  <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
 
 
