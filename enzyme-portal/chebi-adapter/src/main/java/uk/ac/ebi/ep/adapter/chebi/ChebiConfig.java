@@ -9,6 +9,14 @@ import org.apache.log4j.Logger;
 
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 
+/**
+ * Implementation of {@link ChebiConfigMBean}. It can be configured from a
+ * properties file ({@link #readFromFile()}, {@link #readFromFile(String)} or
+ * at runtime via JMX. For the available properties see
+ * {@link #readFromInputStream(InputStream)}
+ * @author rafa
+ *
+ */
 public class ChebiConfig implements ChebiConfigMBean {
 
     private static final Logger LOGGER = Logger.getLogger(ChebiConfig.class);
@@ -19,7 +27,9 @@ public class ChebiConfig implements ChebiConfigMBean {
     private static final String TIMEOUT = "ep.chebi.ws.timeout";
     private static final String COMPOUND_URL = "ep.chebi.compound.base.url";
     private static final String IMG_URL = "ep.chebi.compound.img.base.url";
+    private static final String WS_TESTURL = "ep.chebi.ws.test.url";
     private static final String SS_URL = "ep.chebi.ss.url";
+    private static final String SS_RESULTSURL = "ep.chebi.ss.results.url";
     private static final String SS_PRINTERFRIENDY =
             "ep.chebi.ss.printerfriendly";
     private static final String SS_CALLBACK_URL = "ep.chebi.ss.callback.url";
@@ -42,8 +52,13 @@ public class ChebiConfig implements ChebiConfigMBean {
 	        "http://www.ebi.ac.uk/chebi/displayImage.do?"
 	        + "defaultImage=true&imageIndex=0&chebiId=";
 	
+	protected String wsTestUrl =
+	        "/webservices/chebi/2.0/test/getCompleteEntity?chebiId=";
+	
 	protected String ssUrl =
 	        "http://www.ebi.ac.uk/chebi/advancedSearchForward.do";
+	
+	protected String ssResultsUrl = "/chebi/advancedSearchFT.do";
 	
 	protected boolean ssPrinterFriendly = true;
 	
@@ -103,12 +118,28 @@ public class ChebiConfig implements ChebiConfigMBean {
         this.compoundImgBaseUrl = compoundImgBaseUrl;
     }
     
+    public String getWsTestUrl() {
+        return wsTestUrl;
+    }
+
+    public void setWsTestUrl(String wsTestUrl) {
+        this.wsTestUrl = wsTestUrl;
+    }
+
     public String getSsUrl() {
         return ssUrl;
     }
 
     public void setSsUrl(String ssUrl) {
         this.ssUrl = ssUrl;
+    }
+
+    public String getSsResultsUrl() {
+        return ssResultsUrl;
+    }
+
+    public void setSsResultsUrl(String ssResultsUrl) {
+        this.ssResultsUrl = ssResultsUrl;
     }
 
     public boolean isSsPrinterFriendly() {
@@ -206,19 +237,25 @@ public class ChebiConfig implements ChebiConfigMBean {
      *  <li><code>ep.chebi.compound.img.base.url</code>: (string) base URL for
      *      compound images (complete URL is built by appending the ChEBI ID at
      *      the end).</li>
+     *  <li><code>ep.chebi.ws.test.url</code>: (string) URL for ChEBI web
+     *      services for testing, which accept a <code>chebiId</code>
+     *      parameter instead of a whole SOAP request.</li>
      *  <li><code>ep.chebi.ss.url</code>: the URL for the chebi structure
      *      search.</li>
-     *  <li><code>ep.chebi.ss.printerfriendly</code>: is the web interface of
-     *      the structure search printer friendly (i.e. without headers, ready
-     *      to embed in another web page)? Normally set to
+     *  <li><code>ep.chebi.ss.results.url</code>: (string) URL to retrieve
+     *      structure search results for some given parameters (probably
+     *      stored previously).</li>
+     *  <li><code>ep.chebi.ss.printerfriendly</code>: (boolean) is the web
+     *      interface of the structure search printer friendly (i.e. without
+     *      headers, ready to embed in another web page)? Normally set to
      *      <code>true</code>.</li>
-     *  <li><code>ep.chebi.ss.special.dataset</code>: the configuration of the
+     *  <li><code>ep.chebi.ss.special.dataset</code>: (string) the configuration of the
      *      structure search at the ChEBI side. Normally set to
      *      <code>EnzymePortal</code>.</li>
-     *  <li><code>ep.chebi.ss.data.source</code>: the source of cross references
+     *  <li><code>ep.chebi.ss.data.source</code>: (string) the source of cross references
      *      in ChEBI for which results will be filtered. Normally set to
      *      <code>EnzymePortal</code>.</li>
-     *  <li><code>ep.chebi.ss.callback.url</code>: the URL called from a result
+     *  <li><code>ep.chebi.ss.callback.url</code>: (string) the URL called from a result
      *      from the ChEBI structure search. It includes an asterisk which will
      *      be replaced by the ChEBI ID.</li>
      * </ul>
@@ -264,7 +301,11 @@ public class ChebiConfig implements ChebiConfigMBean {
                 config.getCompoundBaseUrl()));
         config.setCompoundImgBaseUrl(props.getProperty(IMG_URL,
                 config.getCompoundImgBaseUrl()));
+        config.setWsTestUrl(props.getProperty(WS_TESTURL,
+                config.getWsTestUrl()));
         config.setSsUrl(props.getProperty(SS_URL, config.getSsUrl()));
+        config.setSsResultsUrl(props.getProperty(SS_RESULTSURL,
+                config.getSsResultsUrl()));
         config.setSsPrinterFriendly(Boolean.valueOf(
                 props.getProperty(SS_PRINTERFRIENDY,
                         String.valueOf(config.isSsPrinterFriendly())

@@ -393,15 +393,16 @@
                             <form id="goBackStructureSearch"
                                 action="${pageContext.request.contextPath}/advanceSearch"
                                 method="POST" style="text-align: center;">
-                                <input type="submit" value="Edit Query"/>
+                                <button type="submit"
+                                    name="results" value="true">Other results</button>
+                                <button type="submit">Edit Query</button>
                                 <input type="hidden" name="type" value="COMPOUND"/>
                             </form>
                         </figcaption>
                     </figure>
                     <script>
                     jQuery.ajax({
-                    	// FIXME: soft-code this URL!
-                        url: "/webservices/chebi/2.0/test/getCompleteEntity?chebiId=${searchText}",
+                    	url: "${chebiConfig.wsTestUrl}${searchText}",
                         success: function(data){
                         	var xmlDoc = jQuery.parseXML(data);
                         	var xmlResult = jQuery(xmlDoc).find('return');

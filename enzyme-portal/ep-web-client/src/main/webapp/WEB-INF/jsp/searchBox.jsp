@@ -2,6 +2,13 @@
     Document   : searchBox
     Created on : Aug 21, 2011, 12:29:50 PM
     Author     : hongcao
+    
+    Query parameters interpreted in this JSP:
+    type: { KEYWORD | SEQUENCE | COMPOUND }
+        Selects one of the tabs automatically.
+    results: { true }
+        If results=true and type=COMPOUND, shows the results corresponding to
+        the latest structure sent to ChEBI for search.
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -10,8 +17,10 @@
 <%@taglib  prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!--<link href="resources/css/search.css" type="text/css" rel="stylesheet" />
-<script src="resources/javascript/search.js" type="text/javascript"></script>-->
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="resources/javascript/search.js"></script>
+
 <script>
     function showCard(tabId){
         var s = tabId.split('-tab-');
@@ -208,6 +217,7 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                 style="border: none; margin: 0px; overflow: auto;"
                 width="100%" height="1200ex"></iframe>
             <form id="chebiStructureSearch" name="chebiStructureSearch"
+                accept-charset="UTF-8"
                 action="${chebiConfig.ssUrl}"
                 target="chebiIframe" method="POST">
             </form>
@@ -240,6 +250,10 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                                 .attr('value', unescape(value));
                         $('#chebiStructureSearch').append(input);
                 }
+            }
+            if ('${param.results}' == 'true'){
+                document.forms['chebiStructureSearch'].action =
+                        "${chebiConfig.ssResultsUrl}";
             }
             document.forms['chebiStructureSearch'].submit();
             </script>

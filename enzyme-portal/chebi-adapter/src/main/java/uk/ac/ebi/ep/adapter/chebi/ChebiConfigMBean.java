@@ -124,4 +124,12 @@ public interface ChebiConfigMBean {
      */
     public abstract String getSsUrl();
 
+    public abstract void setSsResultsUrl(String ssResultsUrl);
+
+    public abstract String getSsResultsUrl();
+
+    public abstract void setWsTestUrl(String wsTestUrl);
+
+    public abstract String getWsTestUrl();
+
 }
