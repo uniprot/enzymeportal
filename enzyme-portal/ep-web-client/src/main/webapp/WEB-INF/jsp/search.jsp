@@ -390,6 +390,12 @@
                         <figcaption>
                             <a href="${chebiConfig.compoundBaseUrl}${searchText}"
                                 target="_blank"><span id="chebiNameId"></span></a>
+                            <form id="goBackStructureSearch"
+                                action="${pageContext.request.contextPath}/advanceSearch"
+                                method="POST" style="text-align: center;">
+                                <input type="submit" value="Edit Query"/>
+                                <input type="hidden" name="type" value="COMPOUND"/>
+                            </form>
                         </figcaption>
                     </figure>
                     <script>
@@ -404,6 +410,17 @@
                         			chebiName + ' (' + '${searchText}' + ')');
                         }
                     });
+                    // Add structure search parameters, if used recently:
+                    for (i = 0; i < sessionStorage.length; i++){
+                        if (sessionStorage.key(i).indexOf('EPCSS-') > -1){
+                                var name = sessionStorage.key(i);
+                                var value = sessionStorage.getItem(name);
+                                var input = $('<input>').attr('type', 'hidden')
+                                        .attr('name', name.replace('EPCSS-', ''))
+                                        .attr('value', unescape(value));
+                                $('#goBackStructureSearch').append(input);
+                        }
+                    }
                     </script>
                   </c:if>                                              
                     <c:if test="${totalfound eq -100}">

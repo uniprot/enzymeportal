@@ -600,7 +600,8 @@ public class SearchController {
 
     }
 
-    @RequestMapping(value = "/advanceSearch", method = RequestMethod.GET)
+    @RequestMapping(value = "/advanceSearch",
+            method = { RequestMethod.GET, RequestMethod.POST })
     public String getAdvanceSearch(Model model) {
         return "advanceSearch";
     }

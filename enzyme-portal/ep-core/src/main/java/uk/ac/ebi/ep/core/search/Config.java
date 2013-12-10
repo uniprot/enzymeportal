@@ -54,10 +54,13 @@ public class Config implements ConfigMBean {
     protected int maxMoleculesPerGroup = 3;
     
     protected String structureSearchUrl =
-            "http://www.ebi.ac.uk/chebi/advancedSearchForward.do?"
-            + "printerFriendlyView=true&datasourceQuery[0].value=EnzymePortal"
+            "http://www.ebi.ac.uk/chebi/advancedSearchForward.do";
+    
+    protected String structureSearchParams =
+            "printerFriendlyView=true&datasourceQuery[0].value=EnzymePortal"
             + "&specialDataset=EnzymePortal&callbackUrl=/enzymeportal/search%3F"
             + "searchparams.type%3DCOMPOUND%26searchparams.text%3D*";
+
     
     /**
      * The JNDI name for the mega-mapper data source.
@@ -229,6 +232,14 @@ public class Config implements ConfigMBean {
 
     public void setStructureSearchUrl(String structureSearchUrl) {
         this.structureSearchUrl = structureSearchUrl;
+    }
+
+    public String getStructureSearchParams() {
+        return structureSearchParams;
+    }
+
+    public void setStructureSearchParams(String structureSearchParams) {
+        this.structureSearchParams = structureSearchParams;
     }
     
 }

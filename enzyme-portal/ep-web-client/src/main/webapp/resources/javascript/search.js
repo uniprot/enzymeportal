@@ -546,10 +546,19 @@ function captureChebiClicks(){
 }
 
 /**
- * Saves the drawn structure in a cookie for later use.
+ * Saves the structure search parameters in session storage for later use.
  */
 function saveDrawnStructure(){
     var chebiDoc = $('#chebiIframe')[0].contentWindow.document;
-    var str = $(chebiDoc).find('input[name="structure"]').value;
-    document.cookie = 'drawnStructure=' + str;
-}
+    var str = $(chebiDoc).find('input[name="structure"]').attr('value');
+    var inputs = $(chebiDoc).find('#goBackStructureSearch').find('input');
+    for (var i = 0; i < inputs.length; i++){
+        var inputName = $(inputs[i]).attr('name');
+        if (typeof inputName != 'undefined'){
+            var inputValue = $(inputs[i]).attr('value');
+            // EPCSS = Enzyme Portal Chemical Structure Search
+            sessionStorage.setItem('EPCSS-' + inputName, inputValue);
+            //cookieValue = inputName + '=' + inputValue;
+            //document.cookie = cookieValue;
+        }
+    }}

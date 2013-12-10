@@ -202,8 +202,19 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
         
         <div id="search-compound" class="searchBackground searchTabContent"
             style="display: ${isCompound? 'block':'none' };">
-            <iframe id="chebiIframe" src="${searchConfig.structureSearchUrl}"
+            <c:forEach var="par" items="param">
+                <c:if test="${par.key ne 'type'}">
+                <c:set var="structureSearchParams"
+                    value="${structureSearchParams}&amp;${par.key}=${par.value}"/>
+                </c:if>
+            </c:forEach>
+            <c:if test="${empty structureSearchParams}">
+                <c:set var="structureSearchParams"
+                    value="${searchConfig.structureSearchParams}"/>
+            </c:if>
+            <iframe id="chebiIframe"
+                src="${searchConfig.structureSearchUrl}${structureSearchParams}"
                 style="border: none; margin: 0px; overflow: auto;"
-                width="100%" height="1200ex"></iframe>
+                width="100%" height="1200ex" onload="saveDrawnStructure()"></iframe>
         </div>
     </div>
