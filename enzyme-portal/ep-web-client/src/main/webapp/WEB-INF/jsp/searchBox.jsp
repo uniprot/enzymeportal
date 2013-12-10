@@ -202,19 +202,46 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
         
         <div id="search-compound" class="searchBackground searchTabContent"
             style="display: ${isCompound? 'block':'none' };">
-            <c:forEach var="par" items="param">
-                <c:if test="${par.key ne 'type'}">
-                <c:set var="structureSearchParams"
-                    value="${structureSearchParams}&amp;${par.key}=${par.value}"/>
-                </c:if>
-            </c:forEach>
-            <c:if test="${empty structureSearchParams}">
-                <c:set var="structureSearchParams"
-                    value="${searchConfig.structureSearchParams}"/>
-            </c:if>
-            <iframe id="chebiIframe"
-                src="${searchConfig.structureSearchUrl}${structureSearchParams}"
+
+            <iframe id="chebiIframe" src="#" onload="saveDrawnStructure()"
                 style="border: none; margin: 0px; overflow: auto;"
-                width="100%" height="1200ex" onload="saveDrawnStructure()"></iframe>
+                width="100%" height="1200ex"></iframe>
+            <form name="chebiStructureSearch"
+                action="${chebiConfig.ssUrl}"
+                target="chebiIframe" method="POST">
+            </form>
+            <script>
+            if (sessionStorage.length == 0){
+            	// Add mininum parameters for initial search:
+            	$('<input>').attr('type', 'hidden')
+                    .attr('name', 'printerFriendlyView')
+                    .attr('value', '${chebiConfig.ssPrinterFriendly}')
+                    .appendTo($('#chebiStructureSearch'));
+                $('<input>').attr('type', 'hidden')
+                    .attr('name', 'datasourceQuery[0].value')
+                    .attr('value', '${chebiConfig.ssDatasource}')
+                    .appendTo($('#chebiStructureSearch'));
+                $('<input>').attr('type', 'hidden')
+                    .attr('name', 'specialDataset')
+                    .attr('value', '${chebiConfig.ssSpecialDataset}') 
+                    .appendTo($('#chebiStructureSearch'));
+                $('<input>').attr('type', 'hidden')
+                    .attr('name', 'callbackUrl')
+                    .attr('value', '${chebiConfig.ssCallbackUrl}')
+                    .appendTo($('#chebiStructureSearch'));
+            } else for (i = 0; i < sessionStorage.length; i++){
+                // Add structure search parameters, if used recently:
+                if (sessionStorage.key(i).indexOf('EPCSS-') > -1){
+                        var name = sessionStorage.key(i);
+                        var value = sessionStorage.getItem(name);
+                        var input = $('<input>').attr('type', 'hidden')
+                                .attr('name', name.replace('EPCSS-', ''))
+                                .attr('value', unescape(value));
+                        $('#chebiStructureSearch').append(input);
+                }
+            }
+            document.forms['chebiStructureSearch'].submit();
+            </script>
+
         </div>
     </div>

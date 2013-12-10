@@ -60,24 +60,4 @@ public interface ConfigMBean {
      */
     void setMaxMoleculesPerGroup(int maxMoleculesPerGroup);
 
-    public abstract String getStructureSearchUrl();
-
-    /**
-     * Sets the URL called for the chemical structure search.
-     * @param structureSearchUrl the structure search URL, excluding the
-     *      question mark and the query string.
-     * @since 1.0.22
-     */
-    public abstract void setStructureSearchUrl(String structureSearchUrl);
-
-    public abstract String getStructureSearchParams();
-
-    /**
-     * Sets the parameters sent to the chemical structure search URL.
-     * @param structureSearchParams the parameters, as a query String (without
-     *      question mark).
-     * @since 1.0.22
-     */
-    public abstract void setStructureSearchParams(String structureSearchParams);
-
 }
