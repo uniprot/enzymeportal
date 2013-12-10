@@ -203,10 +203,11 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
         <div id="search-compound" class="searchBackground searchTabContent"
             style="display: ${isCompound? 'block':'none' };">
 
-            <iframe id="chebiIframe" src="#" onload="saveDrawnStructure()"
+            <iframe id="chebiIframe" name="chebiIframe"
+                src="#" onload="saveDrawnStructure()"
                 style="border: none; margin: 0px; overflow: auto;"
                 width="100%" height="1200ex"></iframe>
-            <form name="chebiStructureSearch"
+            <form id="chebiStructureSearch" name="chebiStructureSearch"
                 action="${chebiConfig.ssUrl}"
                 target="chebiIframe" method="POST">
             </form>
