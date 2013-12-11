@@ -242,11 +242,11 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                     .appendTo($('#chebiStructureSearch'));
             } else for (i = 0; i < sessionStorage.length; i++){
                 // Add structure search parameters, if used recently:
-                if (sessionStorage.key(i).indexOf('EPCSS-') > -1){
+                if (sessionStorage.key(i).indexOf(EPCSS_PREFIX) > -1){
                         var name = sessionStorage.key(i);
                         var value = sessionStorage.getItem(name);
                         var input = $('<input>').attr('type', 'hidden')
-                                .attr('name', name.replace('EPCSS-', ''))
+                                .attr('name', name.replace(EPCSS_PREFIX, ''))
                                 .attr('value', unescape(value));
                         $('#chebiStructureSearch').append(input);
                 }

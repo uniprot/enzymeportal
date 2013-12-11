@@ -546,6 +546,12 @@ function captureChebiClicks(){
 }
 
 /**
+ * Prefix used for the names of chemical structure search parameters stored in
+ * the sessionStorage.
+ */
+var EPCSS_PREFIX = 'EPCSS-';
+
+/**
  * Saves the structure search parameters in session storage for later use.
  */
 function saveDrawnStructure(){
@@ -557,7 +563,7 @@ function saveDrawnStructure(){
         if (typeof inputName != 'undefined'){
             var inputValue = $(inputs[i]).attr('value');
             // EPCSS = Enzyme Portal Chemical Structure Search
-            sessionStorage.setItem('EPCSS-' + inputName, inputValue);
+            sessionStorage.setItem(EPCSS_PREFIX + inputName, inputValue);
             //cookieValue = inputName + '=' + inputValue;
             //document.cookie = cookieValue;
         }
