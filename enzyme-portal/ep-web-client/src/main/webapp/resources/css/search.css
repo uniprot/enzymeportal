@@ -820,4 +820,5 @@ figure.compound.structure {
 figure.compound.structure figcaption {
 	font-weight: bold;
 	text-align: center;
+	margin: 0ex 2em;
 }

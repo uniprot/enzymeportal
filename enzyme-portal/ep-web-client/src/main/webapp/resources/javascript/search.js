@@ -531,22 +531,7 @@ function checkContent() {
 }
 
 /**
- * Captures clicks to links in the ChEBI iframe (chemical structure search).
- */
-function captureChebiClicks(){
-    var frame = $('iframe')[0].contentWindow.document;
-    $(frame).on('click', 'a', function(event) {
-        // Get the link to ChEBI including the compound name:
-        var link = this.parentsUntil('table', 'tr').siblings()
-                .find('a:contains("CHEBI")');
-        var structure = frame.forms['goBackStructureSearch']
-                .structure;
-        return false;
-    });
-}
-
-/**
- * Prefix used for the names of chemical structure search parameters stored in
+ * Prefix used for the names of Chemical Structure Search parameters stored in
  * the sessionStorage.
  */
 var EPCSS_PREFIX = 'EPCSS-';
@@ -562,9 +547,29 @@ function saveDrawnStructure(){
         var inputName = $(inputs[i]).attr('name');
         if (typeof inputName != 'undefined'){
             var inputValue = $(inputs[i]).attr('value');
-            // EPCSS = Enzyme Portal Chemical Structure Search
             sessionStorage.setItem(EPCSS_PREFIX + inputName, inputValue);
-            //cookieValue = inputName + '=' + inputValue;
-            //document.cookie = cookieValue;
         }
-    }}
+    }
+    // The image for the drawn structure:
+    try {
+    	var strImg = $(chebiDoc).find('img[src*="randomId"]')[0];
+    	if (typeof(strImg) != 'undefined') saveDrawnImg(strImg);
+    } catch (e) {
+    	console.log("Storage failed: " + e);
+    }
+}
+
+/**
+ * Saves the image of the structure drawn by the user in the session storage
+ * under the name <code>drawnImg</code>.
+ * @param strImg the HTML img element containing the image.
+ */
+function saveDrawnImg(strImg){
+    var imgCanvas = document.createElement("canvas");
+    imgCanvas.width = strImg.width;
+    imgCanvas.height = strImg.height;
+    var imgContext = imgCanvas.getContext("2d");
+    imgContext.drawImage(strImg, 0, 0, strImg.width, strImg.height);
+    var imgAsDataURL = imgCanvas.toDataURL("image/png");
+    sessionStorage.setItem("drawnImg", imgAsDataURL);
+}

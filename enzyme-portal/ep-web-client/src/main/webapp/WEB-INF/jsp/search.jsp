@@ -385,24 +385,43 @@
                 </section>
                 <section class="grid_18" id="keywordSearchResult">
                   <c:if test="${searchModel.searchparams.type eq 'COMPOUND'}">
-                    <figure class="compound structure">
-                        <img src="${chebiConfig.compoundImgBaseUrl}${searchText}" alt=""/>
-                        <figcaption>
-                            <a href="${chebiConfig.compoundBaseUrl}${searchText}"
-                                target="_blank"><span id="chebiNameId"></span></a>
-                            <form id="goBackStructureSearch"
-                                action="${pageContext.request.contextPath}/advanceSearch"
-                                method="POST" style="text-align: center;">
+                  
+                    <form id="goBackStructureSearch"
+                        action="${pageContext.request.contextPath}/advanceSearch"
+                        method="POST" style="text-align: center;">
+                        <input type="hidden" name="type" value="COMPOUND"/>
+
+                    <div style="display: table-row;">
+                        <figure class="compound structure" style="display: table-cell">
+                            <img id="drawnImg" src=""
+                                alt="Your searched structure"/>
+                            <figcaption>
+                                Your structure search<br/>
+                                <button type="submit"
+                                    title="Modify the chemical structure to make a new search.">Edit Query</button>
+                            </figcaption>
+                        </figure>
+                        <figure class="compound structure" style="display: table-cell">
+                            <img src="${chebiConfig.compoundImgBaseUrl}${searchText}"
+                                alt="${searchText}"
+                                style="height: 100px; width: 100px"/>
+                            <figcaption>
+                                <a href="${chebiConfig.compoundBaseUrl}${searchText}"
+                                    target="_blank"><span id="chebiNameId"></span></a>
+                                <br/>
                                 <button type="submit"
                                     title="View the list of results from your chemical structure search."
                                     name="results" value="true">Other matching structures</button>
-                                <button type="submit"
-                                    title="Modify the chemical structure to make a new search.">Edit Query</button>
-                                <input type="hidden" name="type" value="COMPOUND"/>
-                            </form>
-                        </figcaption>
-                    </figure>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    
+                    </form>
+                    
                     <script>
+                    if (typeof(sessionStorage.drawnImg) != 'undefined'){
+                    	$('#drawnImg').attr('src', sessionStorage.drawnImg);
+                    }
                     jQuery.ajax({
                     	url: "${chebiConfig.wsTestUrl}${searchText}",
                         success: function(data){
