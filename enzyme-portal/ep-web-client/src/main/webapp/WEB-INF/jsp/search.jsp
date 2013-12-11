@@ -394,8 +394,10 @@
                                 action="${pageContext.request.contextPath}/advanceSearch"
                                 method="POST" style="text-align: center;">
                                 <button type="submit"
-                                    name="results" value="true">Other results</button>
-                                <button type="submit">Edit Query</button>
+                                    title="View the list of results from your chemical structure search."
+                                    name="results" value="true">Other matching structures</button>
+                                <button type="submit"
+                                    title="Modify the chemical structure to make a new search.">Edit Query</button>
                                 <input type="hidden" name="type" value="COMPOUND"/>
                             </form>
                         </figcaption>
