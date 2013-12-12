@@ -394,7 +394,7 @@
                     <div style="display: table-row;">
                         <figure class="compound structure" style="display: table-cell">
                             <img id="drawnImg" src=""
-                                alt="Your searched structure"/>
+                                alt="Image not available"/>
                             <figcaption>
                                 Your structure search<br/>
                                 <button type="submit"

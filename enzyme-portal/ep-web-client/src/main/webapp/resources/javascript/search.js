@@ -540,20 +540,28 @@ var EPCSS_PREFIX = 'EPCSS-';
  * Saves the structure search parameters in session storage for later use.
  */
 function saveDrawnStructure(){
-    var chebiDoc = $('#chebiIframe')[0].contentWindow.document;
-    var str = $(chebiDoc).find('input[name="structure"]').attr('value');
-    var inputs = $(chebiDoc).find('#goBackStructureSearch').find('input');
-    for (var i = 0; i < inputs.length; i++){
-        var inputName = $(inputs[i]).attr('name');
-        if (typeof inputName != 'undefined'){
-            var inputValue = $(inputs[i]).attr('value');
-            sessionStorage.setItem(EPCSS_PREFIX + inputName, inputValue);
-        }
-    }
-    // The image for the drawn structure:
     try {
+	    var chebiDoc = $('#chebiIframe')[0].contentWindow.document;
+	    /* This does not work with IE10:
+	    var inputs = $(chebiDoc).find('#goBackStructureSearch').find('input');
+	    */
+	    var backForm = chebiDoc.getElementById('goBackStructureSearch');
+	    if (!backForm) return; // nothing available to store.
+	    var inputs = backForm.getElementsByTagName('input');
+	    for (var i = 0; i < inputs.length; i++){
+	        var inputName = $(inputs[i]).attr('name');
+	        if (typeof inputName != 'undefined'){
+	            var inputValue = $(inputs[i]).attr('value');
+	            sessionStorage.setItem(EPCSS_PREFIX + inputName, inputValue);
+	        }
+	    }
+	    console.log('Stored inputs');
+	    // The image for the drawn structure:
     	var strImg = $(chebiDoc).find('img[src*="randomId"]')[0];
-    	if (typeof(strImg) != 'undefined') saveDrawnImg(strImg);
+    	if (typeof(strImg) != 'undefined'){
+    		saveDrawnImg(strImg);
+    	    console.log('Stored image');
+    	}
     } catch (e) {
     	console.log("Storage failed: " + e);
     }

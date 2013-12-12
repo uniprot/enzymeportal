@@ -218,8 +218,8 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                 width="100%" height="1200ex"></iframe>
             <form id="chebiStructureSearch" name="chebiStructureSearch"
                 accept-charset="UTF-8"
-                action="${chebiConfig.ssUrl}"
-                target="chebiIframe" method="POST">
+                action="${chebiConfig.ssUrl}" method="POST"
+                target="chebiIframe">
             </form>
             <script>
             if (sessionStorage.length == 0){
