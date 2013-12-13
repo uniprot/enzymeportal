@@ -213,7 +213,7 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
             style="display: ${isCompound? 'block':'none' };">
 
             <iframe id="chebiIframe" name="chebiIframe"
-                src="#" onload="saveDrawnStructure()"
+                src="about:blank" onload="saveDrawnStructure()"
                 style="border: none; margin: 0px; overflow: auto;"
                 width="100%" height="1200ex"></iframe>
             <form id="chebiStructureSearch" name="chebiStructureSearch"
@@ -251,7 +251,8 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                         $('#chebiStructureSearch').append(input);
                 }
             }
-            if ('${param.results}' == 'true'){
+            if ('${param.results}' == 'true'
+            		|| sessionStorage.results == 'true'){
                 document.forms['chebiStructureSearch'].action =
                         "${chebiConfig.ssResultsUrl}";
             }
