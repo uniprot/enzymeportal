@@ -95,14 +95,14 @@
 
                     <!-- CHOOSE -->
  <div id="local-title" class="grid_12 alpha logo-title"> 
-     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
+     <a href="." title="Back to Enzyme Portal homepage">
          <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
      </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
 
 
                     <nav>
                         <ul class="grid_24" id="local-nav">
-                            <li class="first" ><a href="/enzymeportal" title="">Home</a></li>
+                            <li class="first" ><a href="." title="">Home</a></li>
 <!--                            <li><a href="#" title="">TODO 2</a></li>
                             <li class="active"><a href="#" title="">TODO 3</a></li>-->
                             <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
@@ -122,7 +122,7 @@
                 <!-- Suggested layout containers --> 
           <nav id="breadcrumb">
      	<p>
-		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
+		    <a href=".">Enzyme Portal</a> &gt; 
 		    Advanced Search
 			</p>
   	</nav>

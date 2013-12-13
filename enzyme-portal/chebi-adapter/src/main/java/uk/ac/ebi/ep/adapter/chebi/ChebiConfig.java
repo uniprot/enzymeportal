@@ -55,20 +55,18 @@ public class ChebiConfig implements ChebiConfigMBean {
 	protected String wsTestUrl =
 	        "/webservices/chebi/2.0/test/getCompleteEntity?chebiId=";
 	
-	protected String ssUrl =
-	        "http://www.ebi.ac.uk/chebi/advancedSearchForward.do";
+	protected String ssUrl = "/chebi/advancedSearchForward.do";
 	
 	protected String ssResultsUrl = "/chebi/advancedSearchFT.do";
 	
 	protected boolean ssPrinterFriendly = true;
 	
-	protected String ssCallbackUrl =
-	        "http://www.ebi.ac.uk/enzymeportal/search%3F"
-	        + "searchparams.type%3DCOMPOUND%26searchparams.text%3D*";
+	protected String ssCallbackUrl = "/enzymeportal/search%3F"
+            + "searchparams.type%3DCOMPOUND%26searchparams.text%3D*";
 	
 	protected String ssDatasource = "EnzymePortal";
 	
-	protected String ssSpecialDataset = "EnzymePortal";
+	protected String ssSpecialDataset = "enzymeportal";
 
     public int getMaxThreads() {
 		return maxThreads;

@@ -97,7 +97,7 @@
 			
    
  <div id="local-title" class="grid_12 alpha logo-title"> 
-     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
+     <a href="." title="Back to Enzyme Portal homepage">
          <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
      </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
       
@@ -116,10 +116,10 @@
       
 			<nav>
 				<ul class="grid_24" id="local-nav">
-					<li class="first"><a href="/enzymeportal">Home</a></li>
+					<li class="first"><a href=".">Home</a></li>
 <!--					<li class=""><a href="#">Documentation</a></li>-->
 					<li><a href="faq">FAQ</a></li>
-					<li class="active"><a href="about">About Enzyme Portal</a></li>
+					<li class="active"><a href="#">About Enzyme Portal</a></li>
 					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
 					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
 					     whichever one will show up last... 
@@ -145,7 +145,7 @@
      	   You don't need a breadcrumb trail on the homepage of your service... -->
     <nav id="breadcrumb">
      	<p>
-		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
+		    <a href=".">Enzyme Portal</a> &gt; 
 		    About Enzyme Portal
 			</p>
   	</nav>

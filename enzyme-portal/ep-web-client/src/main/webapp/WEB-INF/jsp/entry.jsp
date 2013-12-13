@@ -144,8 +144,8 @@
 
                     <!-- CHOOSE -->
  <div id="local-title" class="grid_12 alpha logo-title"> 
-     <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
-         <img src="/enzymeportal/resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
+     <a href="${pageContext.request.contextPath}" title="Back to Enzyme Portal homepage">
+         <img src="${pageContext.request.contextPath}/resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
      </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
 
                     <!-- OR... -->
@@ -167,10 +167,10 @@
 
                			<nav>
 				<ul class="grid_24" id="local-nav">
-					<li  class="first"><a href="/enzymeportal" title="">Home</a></li>
+					<li  class="first"><a href="${pageContext.request.contextPath}" title="">Home</a></li>
 <!--					<li><a href="#">Documentation</a></li>-->
-					<li><a href="/enzymeportal/faq" title="Frequently Asked questions">FAQ</a></li>
-					<li class="last"><a href="/enzymeportal/about" title="About Enzyme Portal">About Enzyme Portal</a></li>
+					<li><a href="${pageContext.request.contextPath}/faq" title="Frequently Asked questions">FAQ</a></li>
+					<li class="last"><a href="${pageContext.request.contextPath}/about" title="About Enzyme Portal">About Enzyme Portal</a></li>
 					<!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
 					     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
 					     whichever one will show up last... 
@@ -559,7 +559,7 @@
             $(document).ready(function() {
                 setTimeout(function(){
                     // Handler for .ready() called.
-                    $("#redline_side_car").css("background-image","url(/enzymeportal/resources/images/redline_left_button.png)");
+                    $("#redline_side_car").css("background-image","url(${pageContext.request.contextPath}/resources/images/redline_left_button.png)");
                     $("#redline_side_car").css("display", "block");
                 },1000);
             });
