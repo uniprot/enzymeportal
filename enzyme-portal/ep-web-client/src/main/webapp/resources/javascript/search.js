@@ -547,11 +547,11 @@ function saveDrawnStructure(){
 	    */
 	    var backForm = chebiDoc.getElementById('goBackStructureSearch');
 	    if (!backForm){
-	    	sessionStorage.removeItem('results');
+	    	sessionStorage.removeItem(EPCSS_PREFIX + 'results');
 	    	return; // nothing available to store.
 	    }
 	    // We are seeing the results of the structure search:
-	    sessionStorage.setItem('results', 'true');
+	    sessionStorage.setItem(EPCSS_PREFIX + 'results', 'true');
 	    var inputs = backForm.getElementsByTagName('input');
 	    for (var i = 0; i < inputs.length; i++){
 	        var inputName = $(inputs[i]).attr('name');
