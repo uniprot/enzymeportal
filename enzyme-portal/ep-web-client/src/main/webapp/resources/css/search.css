@@ -382,11 +382,16 @@ a.ui-corner-all{
 */
 
 select.toCompare {
+    width: 10em;
 	max-width: 10em;
     margin-top: 2ex;
 }
 
 input.forBasket {
+    margin-top: 2ex;
+}
+
+button.removeFromBasket {
     margin-top: 2ex;
 }
 

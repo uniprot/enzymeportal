@@ -526,6 +526,22 @@ function checkContent() {
   });
 }
 
+var BASKET_SIZE = 'ep.basket.size';
+
+function storeBasketSize(size){
+	document.cookie = BASKET_SIZE + '=' + size;
+}
+
+function showBasketSize(){
+	var basketSize = 0;
+	var dc = document.cookie;
+	if (dc){
+		bsStart = dc.indexOf(BASKET_SIZE+'=') + BASKET_SIZE.length + 1;
+		basketSize = dc.substring(bsStart, dc.indexOf(';', bsStart));
+	}
+	$('#basketSize').text(basketSize);
+}
+
 /**
  * (De)selects one summary for the basket.
  * @param event a change event in a checkbox.
@@ -535,6 +551,12 @@ function selectForBasket(event){
     var id = cb.value;
     var checked = cb.checked;
 	ajaxBasket(id, checked);
+}
+
+function removeFromBasket(event){
+	btn = event.target;
+	ajaxBasket(btn.value, false);
+	$(btn).parent().parent().remove();
 }
 
 /**
@@ -553,11 +575,12 @@ function ajaxBasket(id, checked){
     params.checked = checked;
     jQuery.ajax({
     	dataType: "text",
-        url: window.location.pathname.replace(/search.*/, "ajax/basket"),
+        url: window.location.pathname.replace(/search.*|basket/, "ajax/basket"),
         data: params,
         context: thisFunction,
         success: function(basketSize){
-            $('#basketSize').text(basketSize);
+        	storeBasketSize(basketSize);
+        	showBasketSize();
         },
         error: function(xhr, status, message){
         	alert(message);

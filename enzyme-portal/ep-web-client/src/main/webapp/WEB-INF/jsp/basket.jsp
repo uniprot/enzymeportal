@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 
 <!DOCTYPE html>
 <html>
@@ -25,7 +26,7 @@
             <form action="compare" method="post"
                 style="font-family: verdana, sans-serif;">
 
-            <section class="grid_20 alpha">
+            <section class="grid_19 alpha">
                 <c:choose>
                     <c:when test="${empty basket}">
                         <spring:message code="basket.empty"/>
@@ -39,21 +40,24 @@
                     </c:otherwise>
                 </c:choose>
             </section>
-            <c:if test="${fn:length(basket) gt 1}">
-                <section class="grid_4 omega basket">
+            <section class="grid_4">
+                <c:if test="${fn:length(basket) gt 1}">
                     <button id="compareButton" disabled
                         class="icon icon-functional"
                         data-icon="O">Compare selected</button>
-                </section>
-            </c:if>
+                </c:if>
+            </section>
+            <section class="grid_1 omega">
+            </section>
             
             <c:forEach var="basketItem" items="${basket}" varStatus="vsEnzymes">
                 <c:set var="enzyme" value="${basketItem.value}"/>
-                <section class="grid_20 alpha">
+                <div>
+                <section class="grid_19 alpha">
                     <%@include file="util/prioritiseSpecies.jsp" %>
                     <%@include file="summary.jspf" %>
                 </section>
-                <section class="grid_4 omega">
+                <section class="grid_4">
                     <select class="toCompare" name="acc"
                         onchange="updateCompareButton(event)"
                         title="Select one species to compare.">
@@ -65,6 +69,14 @@
                             title="Deselect this enzyme"></option>
                     </select>
                 </section>
+                <section class="grid_1 omega">
+                    <button class="removeFromBasket icon icon-functional"
+                        title="Remove this summary from your basket."
+                        data-icon="d"
+                        value="${epfn:getSummaryBasketId(enzyme)}"
+                        onclick="removeFromBasket(event)"></button>
+                </section>
+                </div>
             </c:forEach>
             
             <script>updateCompareButton();</script>

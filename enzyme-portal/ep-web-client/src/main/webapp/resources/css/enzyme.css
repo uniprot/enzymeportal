@@ -177,7 +177,7 @@ img.molecule {
 #basketAll button.icon {
     font-weight: normal;
 }
-#basketAll button.icon:before {
+#basketAll button.icon:before, button.removeFromBasket:before {
     color: rgb(80, 80, 80) !important;
 }
 #basketAll button.icon.icon-generic:before,
@@ -252,4 +252,18 @@ section.omega > div.diff {
 button.comparison {
   width: 100%;
   text-align: center;
+}
+
+#compareButton[disabled]:before {
+    color: #aaa;
+}
+#compareButton[disabled]{
+    background-color: #eee;
+}
+#compareButton {
+    border-radius: 5px;
+    background-color: orange;
+}
+#compareButton:before {
+    color: #b50;
 }

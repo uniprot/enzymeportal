@@ -47,12 +47,6 @@
                     'active' : ''}"><a
                     href="${pageContext.request.contextPath}/faq"
                     title="Frequently Asked questions">FAQ</a></li>
-                <li class="${fn:containsIgnoreCase(pageTitle, 'compare')?
-                    'active' : ''}"><a
-                    href="${pageContext.request.contextPath}/basket"
-                    title="Enzymes selected to compare"
-                    class="icon icon-generic" data-icon="b">Basket
-                    (<span id="basketSize">${fn:length(basket)}</span>)</a></li>
 <%--
                 <li><a href="browse" title="Browse Disease">Browse Disease</a></li>
  --%>
@@ -71,17 +65,30 @@
                             data-icon="l">Login</a>
                     </li>
                 --%>
-                <li class="functional">
+                <li class="functional last">
                     <a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
                         class="icon icon-static" data-icon="f">Feedback</a>
                 </li>
-                <li class="functional last">
+                <li class="functional">
                     <a href="https://twitter.com/share"
                         class="icon icon-functional" data-icon="r"
                         data-dnt="true" data-count="none"
                         data-via="twitterapi">Share</a>
                 </li>
+                <li class="functional
+                        ${fn:containsIgnoreCase(pageTitle, 'compare')?
+                        'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/basket"
+                        title="Enzymes selected to compare"
+                        class="icon icon-generic" data-icon="b">Basket
+                        (<span id="basketSize"></span>)</a></li>
             </ul>
         </nav>
     </div>
 </header>
+
+<script>
+window.onpageshow = function(){
+	showBasketSize();
+};
+</script>

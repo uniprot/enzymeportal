@@ -9,6 +9,15 @@
     <meta name="keywords" content="bioinformatics, europe, institute">
     <meta name="author" content="EMBL-EBI, Cheminformatics and Metabolism Team">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <%-- Pages which should not be cached --%>
+    <c:if test="${pageTitle eq 'Compare enzymes'}"><%-- basket.jsp --%>
+    <%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+    response.setDateHeader("Expires", 0); // Proxies.
+    %>
+    </c:if>
 
     <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css" type="text/css" media="screen">
     <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
