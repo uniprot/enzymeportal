@@ -27,18 +27,19 @@
                 style="font-family: verdana, sans-serif;">
 
             <section class="grid_19 alpha">
-                <c:choose>
-                    <c:when test="${empty basket}">
-                        <spring:message code="basket.empty"/>
-                    </c:when>
-                    <c:when test="${fn:length(basket) eq 1}">
-                        <spring:message code="basket.one"/>
-                    </c:when>
-                    <c:otherwise>
-                        <spring:message code="basket.full"
-                            arguments="${fn:length(basket)}"/>
-                    </c:otherwise>
-                </c:choose>
+                <div id="basketEmptyMsg"
+                    style="display: ${empty basket? 'block':'none'}">
+                    <spring:message code="basket.empty"/>
+                </div>
+                <div id="basketOneMsg"
+                    style="display: ${fn:length(basket) eq 1? 'block':'none'}">
+                    <spring:message code="basket.one"/>
+                </div>
+                <div id="basketFullMsg"
+                    style="display: ${fn:length(basket) gt 1? 'block':'none'}">
+                    <spring:message code="basket.full" htmlEscape="false"
+                        arguments="${fn:length(basket)}"/>
+                </div>
             </section>
             <section class="grid_4">
                 <c:if test="${fn:length(basket) gt 1}">

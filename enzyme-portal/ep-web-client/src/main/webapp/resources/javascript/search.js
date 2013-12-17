@@ -526,20 +526,31 @@ function checkContent() {
   });
 }
 
-var BASKET_SIZE = 'ep.basket.size';
+var BASKET_SIZE = 'ep.basket.size=';
 
+/**
+ * Stores the current number of enzymes in the basket into a cookie, which
+ * should expire after the tomcat session expires.
+ * @param size
+ */
 function storeBasketSize(size){
-	document.cookie = BASKET_SIZE + '=' + size;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + 30*60*1000); // tomcat session
+	document.cookie = BASKET_SIZE + size + ';expires=' + exp.toGMTString();
 }
 
+/**
+ * Shows the current number of enzymes in the basket.
+ */
 function showBasketSize(){
 	var basketSize = 0;
 	var dc = document.cookie;
-	if (dc){
-		bsStart = dc.indexOf(BASKET_SIZE+'=') + BASKET_SIZE.length + 1;
+	var bsIndex = dc.indexOf(BASKET_SIZE);
+	if (dc && bsIndex > -1){
+		bsStart = bsIndex + BASKET_SIZE.length;
 		basketSize = dc.substring(bsStart, dc.indexOf(';', bsStart));
 	}
-	$('#basketSize').text(basketSize);
+	$('.basketSize').text(basketSize);
 }
 
 /**
@@ -553,10 +564,15 @@ function selectForBasket(event){
 	ajaxBasket(id, checked);
 }
 
+/**
+ * Removes one summary from the basket.
+ * @param event The event (button click) triggering this method.
+ */
 function removeFromBasket(event){
 	btn = event.target;
 	ajaxBasket(btn.value, false);
 	$(btn).parent().parent().remove();
+	updateCompareButton();
 }
 
 /**
@@ -590,14 +606,30 @@ function ajaxBasket(id, checked){
 
 /**
  * Updates the compare button (disabled/enabled) according to the number of
- * selected enzymes to compare.
+ * selected enzymes to compare, and also the text shown according to the
+ * total number of remaining summaries in the basket.
  */
 function updateCompareButton(){
-    var n = 0;
+    var all = 0, sel = 0;
     $('select.toCompare').each(function(){
-        if (this.value != '') n++;
+    	all++;
+        if (this.value != '') sel++;
     });
-    if (n == 2){
+    if (all == 0){
+    	$('div#basketEmptyMsg').show();
+    	$('div#basketOneMsg').hide();
+    	$('div#basketFullMsg').hide();
+    } else if (all == 1){
+    	$('div#basketEmptyMsg').hide();
+    	$('div#basketOneMsg').show();
+    	$('div#basketFullMsg').hide();
+    } else {
+    	$('div#basketEmptyMsg').hide();
+    	$('div#basketOneMsg').hide();
+    	$('div#basketFullMsg').show();
+    	showBasketSize();
+    }
+    if (sel == 2){
         $('#compareButton').removeAttr('disabled');
         $('#compareButton').attr('title',
                 'Proceed to compare selected enzymes');
