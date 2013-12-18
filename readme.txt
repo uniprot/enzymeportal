@@ -1,1 +1,1 @@
-This folder contains the main development line of the project. 
+This folder contains the main development line of the Enzyme Portal project. 
