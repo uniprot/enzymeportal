@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "log4j" "log4j.dtd" >
+<log4j:configuration>
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="conversionPattern" value="%5p [%t] (%F:%L) - %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file"
+			value="${catalina.base}/logs/${tomcat.hostname}/enzymePortal.log"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="conversionPattern"
+				value="[%p]-[%d{ISO8601}]-%c{1}-%t- %m%n"/>
+		</layout>
+	</appender>
+
+	<logger name="uk.ac.ebi.ep" additivity="false">
+		<level value="DEBUG"/>
+		<appender-ref ref="file"/>
+	</logger>
+
+	<logger name="org.springframework">
+		<level value="DEBUG"/>
+		<appender-ref ref="file"/>
+	</logger>
+	
+	<root>
+		<level value="INFO"/>
+		<appender-ref ref="file"/>
+	</root>
+
+</log4j:configuration>

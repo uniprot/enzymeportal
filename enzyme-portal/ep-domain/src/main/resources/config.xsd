@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://ebi.ac.uk/ep/config" xmlns:ep="http://ebi.ac.uk/ep/config" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Domain" type="ep:Domain"/>
+	<xs:complexType name="Domain">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="SearchFieldList" type="ep:SearchFieldList" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ResultFieldList" type="ep:ResultFieldList" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="EnzymeRelatedDomains" type="ep:EnzymeRelatedDomains"/>
+	<xs:complexType name="EnzymeRelatedDomains">
+		<xs:sequence>
+			<xs:element name="Domain" type="ep:Domain" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Field" type="ep:Field"/>
+	<xs:complexType name="Field">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ResultField" type="ep:ResultField"/>
+	<xs:complexType name="ResultField">
+		<xs:complexContent>
+			<xs:extension base="ep:Field">
+				<xs:sequence>
+					<xs:element name="resultvalue" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ResultFieldList" type="ep:ResultFieldList"/>
+	<xs:complexType name="ResultFieldList">
+		<xs:sequence>
+			<xs:element name="ResultField" type="ep:ResultField" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SearchField" type="ep:SearchField"/>
+	<xs:complexType name="SearchField">
+		<xs:complexContent>
+			<xs:extension base="ep:Field">
+				<xs:sequence>
+					<xs:element name="searchvalue" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="SearchFieldList" type="ep:SearchFieldList"/>
+	<xs:complexType name="SearchFieldList">
+		<xs:sequence>
+			<xs:element name="SearchField" type="ep:SearchField" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

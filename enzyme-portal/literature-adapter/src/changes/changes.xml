@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
+
+<properties>
+	<title>Change log</title>
+	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+</properties>
+
+<body>
+    <release version="1.0.7" date="2013-04-16"
+        description="More performant, more configurable">
+        <action dev="rafalcan" type="add">
+            Added fields to the literature configuration (JMX enabled) to switch
+            on/off the use of CiteXplore web service, and (when on) to set the
+            timeouts and the maximum number of citations retrieved.
+        </action>
+        <action dev="rafalcan" type="fix">
+            When using the citexplore web service, only one request is sent (for
+            the UniProt accession) instead of many (for every citation). When
+            not using it, citations are retrieved from UniProt and PDB as before
+            but no further requests to citexplore are sent.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Fixed NPE when trying to sort citations by date.
+        </action>
+    </release>
+	<release version="1.0.6" date="2013-02-01"
+        description="Faster citation retrieval (PDBe)">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub),
+			das-adapter and junit.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Fixed delay in retrieval of citations from PDBe: now there is only
+			one request to the DAS server with the UniProt accession instead of
+			many with PDBe identifiers.
+			<fixes issue="121"/>
+		</action>
+	</release>
+	<release version="1.0.5" date="2012-10-25"/>
+	<release version="1.0.4" date="2012-10-19" description="More configurable">
+		<action dev="rafalcan" type="add">
+			Added configuration for CiteXplore client pool size.
+		</action>
+	</release>
+	<release version="1.0.3" date="2012-10-17"
+		description="Faster searches. Citations sorted by date.">
+		<action dev="rafalcan" type="update">
+			Updated to last version of das-adapter.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Split callables for every PDB identifier, in order to thread the
+			search.
+			<fixes issue="120"/>
+		</action>
+		<action dev="rafalcan" type="fix">
+			Citations are now sorted by creation date by default.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added configuration to the module.
+		</action>
+	</release>
+	<release version="1.0.2" date="2012-08-01"
+		description="Upgrade to CiteXplore WS v3">
+		<action dev="rafalcan" type="update">
+			Updated to last version of parent, biobabel-citations, uniprotjapi
+			- set to use always the latest one - and log4j.
+			<fixes issue="89"/>
+			<fixes issue="98"/>
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
+	</release>
+</body>
+
+</document>

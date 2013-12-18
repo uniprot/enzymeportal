@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
+
+<properties>
+	<title>EP utilities change log</title>
+	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+</properties>
+
+<body>
+    <release version="1.0.6" date="2013-09-26"
+        description="Deprecated methods, new methods">
+        <action dev="rafalcan" type="remove">
+            Deprecated LuceneQueryBuilder methods using parameters of type
+            uk.ac.ebi.ep.config.Domain (ep-domain) as it refers actually to
+            EB-Eye domains and is deprecated in favor of the Domains enumeration
+            in ebeye-adapter. One of them -
+            createFieldsQueryWithEnzymeFilter(Domain, SearchParams) - actually
+            contradicted its name as it did not query specific fields.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added methods createQueryWithEnzymeFilter(String) and
+            createFieldsQueryWithEnzymeFilter(List&lt;String&gt;, String) to
+            LuceneQueryBuilder.
+        </action>
+    </release>
+    <release version="1.0.5" date="2013-05-23"
+        description="Improved regex for activators and inhibitors">
+        <action dev="rafalcan" type="fix">
+            Improved the regular expressions in order to retrieve more
+            activators and inhibitors from UniProt enzyme regulation text (this
+            includes sildenafil for O76074).
+        </action>
+    </release>
+	<release version="1.0.4" date="2013-05-16"
+	    description="Parsing of UniProt enzyme regulation text for activators
+	        and inhibitors">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub),
+			ep-domain and junit.
+		</action>
+		<action dev="rafalcan" type="add">
+            Added methods to parse text from UniProt in order to extract the
+            inhibitors and activators.
+		</action>
+	</release>
+	<release version="1.0.3" date="2012-08-20"
+		description="Removed System.out.println; dependency updates">
+		<action dev="rafalcan" type="fix">
+			Removed System.out.println's from the code. Using a proper Logger
+			not to clutter catalina.out.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of ep-domain and junit.
+		</action>
+	</release>
+	<release version="1.0.2" date="2012-08-01" description="Bug fix">
+		<action dev="rafalcan" type="fix">
+			Fixed constraint to get only EB-Eye results with EC numbers (the
+			parsing was modified on their side and returned no search results).
+			<fixes issue="103"/>
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest parent.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added explicit dependency on latest version of ebeye-client (now
+			from group uk.ac.ebi.biobabel).
+		</action>
+		<action dev="rafalcan" type="add">
+			Added configuration for doc site generation and fixed files path.
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
+	</release>
+</body>
+
+</document>

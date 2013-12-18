@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<intenz date="2013-04-22" release="87" xsi:schemaLocation="http://www.ebi.ac.uk/intenz ftp://ftp.ebi.ac.uk/pub/databases/intenz/xml/intenz.xsd" xmlns:cml="http://www.xml-cml.org/schema/cml2/react" xmlns:x="http://www.ebi.ac.uk/xchars" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.ebi.ac.uk/intenz">
+    <ec_class ec1="1">
+        <name>Oxidoreductases</name>
+        <description>To this class belong all enzymes catalyzing oxido-reductions. The substrate oxidized is regarded as hydrogen or electron donor. The classification is based on 'donor:acceptor oxidoreductase'. The common name is 'dehydrogenase', wherever this is possible; as an alternative, 'acceptor reductase' can be used. 'Oxidase' is used only where O(2) is an acceptor. Classification is difficult in some cases, because of the lack of specificity toward the acceptor.</description>
+        <ec_subclass ec2="1">
+            <name>Acting on the CH-OH Group of Donors</name>
+            <description>This subclass contains all dehydrogenases acting on primary alcohols, secondary alcohols and hemi-acetals. They are further classified according to the acceptor which can be NAD(+) or NADP(+) (subclass EC 1.1.1), cytochrome (EC 1.1.2), oxygen (EC 1.1.3), a disulfide (EC 1.1.4), quinone (EC 1.1.5) or another acceptor (EC 1.1.99).</description>
+            <ec_sub-subclass ec3="1">
+                <name>With NAD(+) or NADP(+) as acceptor</name>
+                <enzyme preliminary="false" ec4="1">
+                    <ec>EC 1.1.1.1</ec>
+                    <accepted_name view="INTENZ,IUBMB,SIB">Alcohol dehydrogenase</accepted_name>
+                    <systematic_name view="INTENZ,IUBMB">Alcohol:NAD(+) oxidoreductase</systematic_name>
+                    <synonyms>
+                        <synonym view="INTENZ,IUBMB">ADH</synonym>
+                        <synonym view="INTENZ,IUBMB">NAD-dependent alcohol dehydrogenase</synonym>
+                        <synonym view="INTENZ,IUBMB">NAD-specific aromatic alcohol dehydrogenase</synonym>
+                        <synonym view="INTENZ,IUBMB">NADH-alcohol dehydrogenase</synonym>
+                        <synonym view="INTENZ,IUBMB">NADH-aldehyde dehydrogenase</synonym>
+                        <synonym view="INTENZ,IUBMB">Alcohol dehydrogenase (NAD)</synonym>
+                        <synonym view="INTENZ,IUBMB,SIB">Aldehyde reductase</synonym>
+                        <synonym view="INTENZ,IUBMB">Aliphatic alcohol dehydrogenase</synonym>
+                        <synonym view="INTENZ,IUBMB">Ethanol dehydrogenase</synonym>
+                        <synonym view="INTENZ,IUBMB">Primary alcohol dehydrogenase</synonym>
+                        <synonym view="INTENZ,IUBMB">Yeast alcohol dehydrogenase</synonym>
+                    </synonyms>
+                    <reactions>
+                        <cml:reaction id="10739" convention="rhea:direction.BI" title="RHEA:10739">
+                            <cml:label value="Mapped"/>
+                            <cml:label value="Formuled"/>
+                            <cml:label value="Chemically balanced"/>
+                            <cml:label value="view:INTENZ"/>
+                            <cml:label value="iubmb:false"/>
+                            <cml:name>a primary alcohol + NAD(+) &lt;=&gt; an aldehyde + H(+) + NADH</cml:name>
+                            <cml:identifier value="RHEA:10739"/>
+                            <cml:reactantList>
+                                <cml:reactant count="1.0" title="a primary alcohol">
+                                    <cml:molecule title="a primary alcohol" id="CHEBI:15734"/>
+                                </cml:reactant>
+                                <cml:reactant count="1.0" title="NAD(+)">
+                                    <cml:molecule title="NAD(+)" id="CHEBI:57540"/>
+                                </cml:reactant>
+                            </cml:reactantList>
+                            <cml:productList>
+                                <cml:product title="an aldehyde" count="1.0">
+                                    <cml:molecule title="an aldehyde" id="CHEBI:17478"/>
+                                </cml:product>
+                                <cml:product title="H(+)" count="1.0">
+                                    <cml:molecule title="H(+)" id="CHEBI:15378"/>
+                                </cml:product>
+                                <cml:product title="NADH" count="1.0">
+                                    <cml:molecule title="NADH" id="CHEBI:57945"/>
+                                </cml:product>
+                            </cml:productList>
+                            <cml:map id="RHEA:xRefs">
+                                <cml:link href="http://www.ebi.ac.uk/intenz/query?cmd=SearchID&amp;id=1000" title="1.1.1.1" id="intenz:1000" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/intenz/query?cmd=SearchID&amp;id=1070" title="1.1.1.71" id="intenz:1070" linkType="locator"/>
+                                <cml:link href="http://www.genome.jp/dbget-bin/www_bget?rn:R00623" title="R00623" id="kr:R00623" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A1A835" title="FRMA_ECOK1" id="s:A1A835" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A1L4Y2" title="ADHL3_ARATH" id="s:A1L4Y2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A2XAZ3" title="ADHX_ORYSI" id="s:A2XAZ3" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A6ZTT5" title="ADH4_YEAS7" id="s:A6ZTT5" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A7ZIA4" title="FRMA_ECO24" id="s:A7ZIA4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A7ZX04" title="FRMA_ECOHS" id="s:A7ZX04" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/B1J085" title="FRMA_ECOLC" id="s:B1J085" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/B1LIP1" title="FRMA_ECOSM" id="s:B1LIP1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/B4M8Y0" title="ADH_DROVI" id="s:B4M8Y0" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/F8DVL8" title="ADH2_ZYMMA" id="s:F8DVL8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O00097" title="ADH1_PICST" id="s:O00097" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O07737" title="Y1895_MYCTU" id="s:O07737" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O13309" title="ADH2_PICST" id="s:O13309" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O19053" title="ADHX_RABIT" id="s:O19053" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O31186" title="ADHA_RHIME" id="s:O31186" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O45687" title="ADH2_CAEEL" id="s:O45687" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O46649" title="ADHP_RABIT" id="s:O46649" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O46650" title="ADHQ_RABIT" id="s:O46650" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O53303" title="ADHD_MYCTU" id="s:O53303" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O53904" title="ADH_MYCTU" id="s:O53904" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O94038" title="ADH2_CANAL" id="s:O94038" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O97959" title="ADH1G_PAPHA" id="s:O97959" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00325" title="ADH1B_HUMAN" id="s:P00325" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00326" title="ADH1G_HUMAN" id="s:P00326" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00327" title="ADH1E_HORSE" id="s:P00327" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00328" title="ADH1S_HORSE" id="s:P00328" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00329" title="ADH1_MOUSE" id="s:P00329" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00330" title="ADH1_YEAST" id="s:P00330" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00331" title="ADH2_YEAST" id="s:P00331" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00332" title="ADH_SCHPO" id="s:P00332" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00333" title="ADH1_MAIZE" id="s:P00333" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00334" title="ADH_DROME" id="s:P00334" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P04707" title="ADH2_MAIZE" id="s:P04707" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P05336" title="ADH1_HORVU" id="s:P05336" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P06525" title="ADH1_ARATH" id="s:P06525" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P06757" title="ADH1_RAT" id="s:P06757" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07159" title="ADH_DROOR" id="s:P07159" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07160" title="ADH2_DROMU" id="s:P07160" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07161" title="ADH1_DROMU" id="s:P07161" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07162" title="ADH_DROMA" id="s:P07162" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07246" title="ADH3_YEAST" id="s:P07246" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07327" title="ADH1A_HUMAN" id="s:P07327" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07754" title="ADH3_EMENI" id="s:P07754" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P08319" title="ADH4_HUMAN" id="s:P08319" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P08843" title="ADH1_EMENI" id="s:P08843" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P09369" title="ADH2_DROMO" id="s:P09369" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P09370" title="ADH1_DROMO" id="s:P09370" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P0A9Q7" title="ADHE_ECOLI" id="s:P0A9Q7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P0A9Q8" title="ADHE_ECO57" id="s:P0A9Q8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P0DJA2" title="ADH2_ZYMMO" id="s:P0DJA2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10127" title="ADH4_YEAST" id="s:P10127" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10807" title="ADH_DROLE" id="s:P10807" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10847" title="ADH2_HORVU" id="s:P10847" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10848" title="ADH3_HORVU" id="s:P10848" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P11766" title="ADHX_HUMAN" id="s:P11766" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12311" title="ADH1_GEOSE" id="s:P12311" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12711" title="ADHX_RAT" id="s:P12711" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12854" title="ADH1_DRONA" id="s:P12854" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12886" title="ADH1_PEA" id="s:P12886" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P13603" title="ADH1_TRIRP" id="s:P13603" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14139" title="ADH1B_PAPHA" id="s:P14139" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14219" title="ADH1_PENAM" id="s:P14219" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14673" title="ADH1_SOLTU" id="s:P14673" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14674" title="ADH2_SOLTU" id="s:P14674" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14675" title="ADH3_SOLTU" id="s:P14675" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14940" title="ADH_CUPNE" id="s:P14940" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P17648" title="ADH_FRAAN" id="s:P17648" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P19631" title="ADH1_COTJA" id="s:P19631" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P19854" title="ADHX_HORSE" id="s:P19854" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P20368" title="ADH1_ZYMMO" id="s:P20368" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P20369" title="ADH1_KLULA" id="s:P20369" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P21518" title="ADH_DROAF" id="s:P21518" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P21898" title="ADH_DROHE" id="s:P21898" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P22245" title="ADH_DRODI" id="s:P22245" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P22246" title="ADH1_DROMT" id="s:P22246" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P22797" title="ADH1_PELPE" id="s:P22797" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23236" title="ADH1_DROHY" id="s:P23236" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23237" title="ADH2_DROHY" id="s:P23237" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23277" title="ADH_DROPL" id="s:P23277" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23278" title="ADH_DROSL" id="s:P23278" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23361" title="ADH_DROPI" id="s:P23361" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23991" title="ADH1_CHICK" id="s:P23991" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P24267" title="ADH2_DROWH" id="s:P24267" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25139" title="ADH_DROAM" id="s:P25139" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25141" title="ADH1_PETHY" id="s:P25141" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25405" title="ADH1A_UROHA" id="s:P25405" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25406" title="ADH1B_UROHA" id="s:P25406" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25437" title="FRMA_ECOLI" id="s:P25437" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25720" title="ADH2_DROBU" id="s:P25720" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25721" title="ADH_DROMY" id="s:P25721" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25988" title="ADH_SCAAL" id="s:P25988" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P26325" title="ADH1_GADMC" id="s:P26325" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P26719" title="ADH_DROYA" id="s:P26719" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P27581" title="ADH2_DROAR" id="s:P27581" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28032" title="ADH2_SOLLC" id="s:P28032" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28332" title="ADH6_HUMAN" id="s:P28332" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28469" title="ADH1A_MACMU" id="s:P28469" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28474" title="ADHX_MOUSE" id="s:P28474" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28483" title="ADH_DROER" id="s:P28483" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28484" title="ADH_DROTE" id="s:P28484" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P30350" title="ADH1_ANAPL" id="s:P30350" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P32771" title="FADH_YEAST" id="s:P32771" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P33010" title="TERPD_PSESP" id="s:P33010" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P33744" title="ADHE_CLOAB" id="s:P33744" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P37473" title="ADH_DROPE" id="s:P37473" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P37686" title="ADH2_ECOLI" id="s:P37686" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P38113" title="ADH5_YEAST" id="s:P38113" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P39450" title="FRMA_PASPI" id="s:P39450" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P39451" title="ADHP_ECOLI" id="s:P39451" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P39462" title="ADH_SULSO" id="s:P39462" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P40394" title="ADH7_HUMAN" id="s:P40394" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41680" title="ADH1_PERMA" id="s:P41680" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41681" title="ADH6_PERMA" id="s:P41681" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41682" title="ADH7_RAT" id="s:P41682" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41747" title="ADH1_ASPFN" id="s:P41747" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P42327" title="ADH2_GEOSE" id="s:P42327" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P42328" title="ADH3_GEOSE" id="s:P42328" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P43067" title="ADH1_CANAX" id="s:P43067" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P44557" title="FRMA_HAEIN" id="s:P44557" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P46415" title="ADHX_DROME" id="s:P46415" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48584" title="ADH_DROBO" id="s:P48584" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48585" title="ADH_DROFL" id="s:P48585" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48586" title="ADH1_DROMN" id="s:P48586" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48587" title="ADH2_DROMN" id="s:P48587" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48814" title="ADH1_CERCA" id="s:P48814" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48815" title="ADH2_CERCA" id="s:P48815" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48977" title="ADH_MALDO" id="s:P48977" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49383" title="ADH2_KLULA" id="s:P49383" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49384" title="ADH3_KLULA" id="s:P49384" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49385" title="ADH4_KLULA" id="s:P49385" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49645" title="ADH1_APTAU" id="s:P49645" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P50381" title="ADH_SULSR" id="s:P50381" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51549" title="ADH_DROHA" id="s:P51549" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51550" title="ADH_DROTS" id="s:P51550" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51551" title="ADH_DROGR" id="s:P51551" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51552" title="ADH_ZAPTU" id="s:P51552" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P54202" title="ADH2_EMENI" id="s:P54202" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P71017" title="GBSB_BACSU" id="s:P71017" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P71818" title="ADHB_MYCTU" id="s:P71818" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P72324" title="ADHI_RHOS4" id="s:P72324" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P73138" title="FRMA_SYNY3" id="s:P73138" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P79896" title="ADHX_SPAAU" id="s:P79896" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80222" title="ADH1_ALLMI" id="s:P80222" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80338" title="ADH1_STRCA" id="s:P80338" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80360" title="ADHX_MYXGL" id="s:P80360" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80467" title="ADHX_UROHA" id="s:P80467" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80468" title="ADH4_STRCA" id="s:P80468" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80512" title="ADH1_NAJNA" id="s:P80512" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80572" title="ADHX_PEA" id="s:P80572" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81431" title="ADHX_OCTVU" id="s:P81431" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81600" title="ADHH_GADMO" id="s:P81600" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81601" title="ADHL_GADMO" id="s:P81601" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81786" title="ADH_MORSE" id="s:P81786" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P84328" title="ADH_DROPB" id="s:P84328" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P85440" title="ADH1_CATRO" id="s:P85440" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P86883" title="ADH1_COLLI" id="s:P86883" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P86884" title="ADHX_SCYCA" id="s:P86884" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P86885" title="ADH1_MESAU" id="s:P86885" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P93629" title="ADHX_MAIZE" id="s:P93629" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P95153" title="ADHA_MYCTU" id="s:P95153" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00669" title="ADH_DROAD" id="s:Q00669" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00670" title="ADH_DROCR" id="s:Q00670" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00671" title="ADH_DROMM" id="s:Q00671" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00672" title="ADH_DRONI" id="s:Q00672" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q03384" title="ADH_DROSU" id="s:Q03384" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q03505" title="ADH1_RABIT" id="s:Q03505" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q05114" title="ADH_DROWI" id="s:Q05114" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q07264" title="ADH1_ZEALU" id="s:Q07264" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q07288" title="ADH1_KLUMA" id="s:Q07288" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q07588" title="ADH_DROIM" id="s:Q07588" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q09009" title="ADH_DROGU" id="s:Q09009" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q09010" title="ADH_DROMD" id="s:Q09010" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q09669" title="ADH4_SCHPO" id="s:Q09669" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0DWH1" title="ADHX_ORYSJ" id="s:Q0DWH1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0ITW7" title="ADH2_ORYSJ" id="s:Q0ITW7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0TKS7" title="FRMA_ECOL5" id="s:Q0TKS7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0V7W6" title="ADHL5_ARATH" id="s:Q0V7W6" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q17334" title="ADH1_CAEEL" id="s:Q17334" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q17335" title="ADHX_CAEEL" id="s:Q17335" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q1RFI7" title="FRMA_ECOUT" id="s:Q1RFI7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q24641" title="ADH_DROSI" id="s:Q24641" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q24803" title="ADH2_ENTHI" id="s:Q24803" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q27404" title="ADH_DROLA" id="s:Q27404" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2FJ31" title="ADH_STAA3" id="s:Q2FJ31" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2G0G1" title="ADH_STAA8" id="s:Q2G0G1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2R8Z5" title="ADH1_ORYSJ" id="s:Q2R8Z5" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2YSX0" title="ADH_STAAB" id="s:Q2YSX0" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q3Z550" title="FRMA_SHISS" id="s:Q3Z550" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q3ZC42" title="ADHX_BOVIN" id="s:Q3ZC42" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q4J781" title="ADH_SULAC" id="s:Q4J781" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q4R1E8" title="ADH2_ORYSI" id="s:Q4R1E8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q50L96" title="ADH_DROAN" id="s:Q50L96" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q54TC2" title="ADHX_DICDI" id="s:Q54TC2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5HI63" title="ADH_STAAC" id="s:Q5HI63" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5HRD6" title="ADH_STAEQ" id="s:Q5HRD6" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5R1W2" title="ADH1B_PANTR" id="s:Q5R1W2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5R7Z8" title="ADH6_PONAB" id="s:Q5R7Z8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5RBP7" title="ADH1A_PONAB" id="s:Q5RBP7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5XI95" title="ADH6_RAT" id="s:Q5XI95" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64413" title="ADH1_GEOBU" id="s:Q64413" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64415" title="ADH1_GEOKN" id="s:Q64415" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64437" title="ADH7_MOUSE" id="s:Q64437" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64563" title="ADH4_RAT" id="s:Q64563" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6GBM4" title="ADH_STAAS" id="s:Q6GBM4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6GJ63" title="ADH_STAAR" id="s:Q6GJ63" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6LCE4" title="ADH_DROPS" id="s:Q6LCE4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6XQ67" title="ADH5_SACPS" id="s:Q6XQ67" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q70UN9" title="ADH1_CERCO" id="s:Q70UN9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q70UP5" title="ADH2_CERCO" id="s:Q70UP5" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q70UP6" title="ADH2_CERRO" id="s:Q70UP6" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q75ZX4" title="ADH1_ORYSI" id="s:Q75ZX4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q7A742" title="ADH_STAAN" id="s:Q7A742" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q7U1B9" title="ADHB_MYCBO" id="s:Q7U1B9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8CQ56" title="ADH_STAES" id="s:Q8CQ56" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8FKG1" title="FRMA_ECOL6" id="s:Q8FKG1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8LEB2" title="ADHL6_ARATH" id="s:Q8LEB2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8NXU1" title="ADH_STAAW" id="s:Q8NXU1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8VZ49" title="ADHL4_ARATH" id="s:Q8VZ49" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8X5J4" title="FRMA_ECO57" id="s:Q8X5J4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q96533" title="ADHX_ARATH" id="s:Q96533" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q96XE0" title="ADH_SULTO" id="s:Q96XE0" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q99W07" title="ADH_STAAM" id="s:Q99W07" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9FH04" title="ADHL7_ARATH" id="s:Q9FH04" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9GN94" title="ADH_DROSE" id="s:Q9GN94" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9NAR7" title="ADH_BACOL" id="s:Q9NAR7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9NG40" title="ADH_DROIN" id="s:Q9NG40" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9NG42" title="ADH_DROEQ" id="s:Q9NG42" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9P4C2" title="ADH2_KLUMA" id="s:Q9P4C2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9P6C8" title="ADH1_NEUCR" id="s:Q9P6C8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9QYY9" title="ADH4_MOUSE" id="s:Q9QYY9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9SK86" title="ADHL1_ARATH" id="s:Q9SK86" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9SK87" title="ADHL2_ARATH" id="s:Q9SK87" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9U8S9" title="ADH_DROPU" id="s:Q9U8S9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9Z2M2" title="ADH1_GEOAT" id="s:Q9Z2M2" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:15734" title="a primary alcohol" id="chebi:15734" from="CHEBI:15734" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:57540" title="NAD(+)" id="chebi:57540" from="CHEBI:57540" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:17478" title="an aldehyde" id="chebi:17478" from="CHEBI:17478" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:15378" title="H(+)" id="chebi:15378" from="CHEBI:15378" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:57945" title="NADH" id="chebi:57945" from="CHEBI:57945" linkType="locator"/>
+                            </cml:map>
+                            <cml:map id="RHEA:relatedReactions">
+                                <cml:link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10736" convention="rhea:direction.UN" title="RHEA:10736" id="RHEA:10736" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10737" convention="rhea:direction.LR" title="RHEA:10737" id="RHEA:10737" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10738" convention="rhea:direction.RL" title="RHEA:10738" id="RHEA:10738" linkType="locator"/>
+                            </cml:map>
+                        </cml:reaction>
+                        <cml:reaction id="10743" convention="rhea:direction.BI" title="RHEA:10743">
+                            <cml:label value="Mapped"/>
+                            <cml:label value="Formuled"/>
+                            <cml:label value="Chemically balanced"/>
+                            <cml:label value="view:INTENZ"/>
+                            <cml:label value="iubmb:false"/>
+                            <cml:name>NAD(+) + secondary alcohol &lt;=&gt; H(+) + ketone + NADH</cml:name>
+                            <cml:identifier value="RHEA:10743"/>
+                            <cml:reactantList>
+                                <cml:reactant count="1.0" title="NAD(+)">
+                                    <cml:molecule title="NAD(+)" id="CHEBI:57540"/>
+                                </cml:reactant>
+                                <cml:reactant count="1.0" title="secondary alcohol">
+                                    <cml:molecule title="secondary alcohol" id="CHEBI:35681"/>
+                                </cml:reactant>
+                            </cml:reactantList>
+                            <cml:productList>
+                                <cml:product title="H(+)" count="1.0">
+                                    <cml:molecule title="H(+)" id="CHEBI:15378"/>
+                                </cml:product>
+                                <cml:product title="ketone" count="1.0">
+                                    <cml:molecule title="ketone" id="CHEBI:17087"/>
+                                </cml:product>
+                                <cml:product title="NADH" count="1.0">
+                                    <cml:molecule title="NADH" id="CHEBI:57945"/>
+                                </cml:product>
+                            </cml:productList>
+                            <cml:map id="RHEA:xRefs">
+                                <cml:link href="http://www.ebi.ac.uk/intenz/query?cmd=SearchID&amp;id=1000" title="1.1.1.1" id="intenz:1000" linkType="locator"/>
+                                <cml:link href="http://www.genome.jp/dbget-bin/www_bget?rn:R00624" title="R00624" id="kr:R00624" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A1A835" title="FRMA_ECOK1" id="s:A1A835" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A1L4Y2" title="ADHL3_ARATH" id="s:A1L4Y2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A2XAZ3" title="ADHX_ORYSI" id="s:A2XAZ3" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A6ZTT5" title="ADH4_YEAS7" id="s:A6ZTT5" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A7ZIA4" title="FRMA_ECO24" id="s:A7ZIA4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/A7ZX04" title="FRMA_ECOHS" id="s:A7ZX04" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/B1J085" title="FRMA_ECOLC" id="s:B1J085" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/B1LIP1" title="FRMA_ECOSM" id="s:B1LIP1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/B4M8Y0" title="ADH_DROVI" id="s:B4M8Y0" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/F8DVL8" title="ADH2_ZYMMA" id="s:F8DVL8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O00097" title="ADH1_PICST" id="s:O00097" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O07737" title="Y1895_MYCTU" id="s:O07737" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O13309" title="ADH2_PICST" id="s:O13309" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O19053" title="ADHX_RABIT" id="s:O19053" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O31186" title="ADHA_RHIME" id="s:O31186" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O45687" title="ADH2_CAEEL" id="s:O45687" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O46649" title="ADHP_RABIT" id="s:O46649" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O46650" title="ADHQ_RABIT" id="s:O46650" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O53303" title="ADHD_MYCTU" id="s:O53303" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O53904" title="ADH_MYCTU" id="s:O53904" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O94038" title="ADH2_CANAL" id="s:O94038" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/O97959" title="ADH1G_PAPHA" id="s:O97959" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00325" title="ADH1B_HUMAN" id="s:P00325" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00326" title="ADH1G_HUMAN" id="s:P00326" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00327" title="ADH1E_HORSE" id="s:P00327" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00328" title="ADH1S_HORSE" id="s:P00328" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00329" title="ADH1_MOUSE" id="s:P00329" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00330" title="ADH1_YEAST" id="s:P00330" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00331" title="ADH2_YEAST" id="s:P00331" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00332" title="ADH_SCHPO" id="s:P00332" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00333" title="ADH1_MAIZE" id="s:P00333" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P00334" title="ADH_DROME" id="s:P00334" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P04707" title="ADH2_MAIZE" id="s:P04707" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P05336" title="ADH1_HORVU" id="s:P05336" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P06525" title="ADH1_ARATH" id="s:P06525" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P06757" title="ADH1_RAT" id="s:P06757" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07159" title="ADH_DROOR" id="s:P07159" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07160" title="ADH2_DROMU" id="s:P07160" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07161" title="ADH1_DROMU" id="s:P07161" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07162" title="ADH_DROMA" id="s:P07162" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07246" title="ADH3_YEAST" id="s:P07246" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07327" title="ADH1A_HUMAN" id="s:P07327" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P07754" title="ADH3_EMENI" id="s:P07754" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P08319" title="ADH4_HUMAN" id="s:P08319" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P08843" title="ADH1_EMENI" id="s:P08843" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P09369" title="ADH2_DROMO" id="s:P09369" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P09370" title="ADH1_DROMO" id="s:P09370" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P0A9Q7" title="ADHE_ECOLI" id="s:P0A9Q7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P0A9Q8" title="ADHE_ECO57" id="s:P0A9Q8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P0DJA2" title="ADH2_ZYMMO" id="s:P0DJA2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10127" title="ADH4_YEAST" id="s:P10127" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10807" title="ADH_DROLE" id="s:P10807" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10847" title="ADH2_HORVU" id="s:P10847" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P10848" title="ADH3_HORVU" id="s:P10848" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P11766" title="ADHX_HUMAN" id="s:P11766" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12311" title="ADH1_GEOSE" id="s:P12311" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12711" title="ADHX_RAT" id="s:P12711" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12854" title="ADH1_DRONA" id="s:P12854" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P12886" title="ADH1_PEA" id="s:P12886" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P13603" title="ADH1_TRIRP" id="s:P13603" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14139" title="ADH1B_PAPHA" id="s:P14139" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14219" title="ADH1_PENAM" id="s:P14219" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14673" title="ADH1_SOLTU" id="s:P14673" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14674" title="ADH2_SOLTU" id="s:P14674" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14675" title="ADH3_SOLTU" id="s:P14675" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P14940" title="ADH_CUPNE" id="s:P14940" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P17648" title="ADH_FRAAN" id="s:P17648" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P19631" title="ADH1_COTJA" id="s:P19631" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P19854" title="ADHX_HORSE" id="s:P19854" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P20368" title="ADH1_ZYMMO" id="s:P20368" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P20369" title="ADH1_KLULA" id="s:P20369" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P21518" title="ADH_DROAF" id="s:P21518" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P21898" title="ADH_DROHE" id="s:P21898" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P22245" title="ADH_DRODI" id="s:P22245" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P22246" title="ADH1_DROMT" id="s:P22246" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P22797" title="ADH1_PELPE" id="s:P22797" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23236" title="ADH1_DROHY" id="s:P23236" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23237" title="ADH2_DROHY" id="s:P23237" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23277" title="ADH_DROPL" id="s:P23277" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23278" title="ADH_DROSL" id="s:P23278" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23361" title="ADH_DROPI" id="s:P23361" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P23991" title="ADH1_CHICK" id="s:P23991" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P24267" title="ADH2_DROWH" id="s:P24267" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25139" title="ADH_DROAM" id="s:P25139" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25141" title="ADH1_PETHY" id="s:P25141" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25405" title="ADH1A_UROHA" id="s:P25405" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25406" title="ADH1B_UROHA" id="s:P25406" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25437" title="FRMA_ECOLI" id="s:P25437" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25720" title="ADH2_DROBU" id="s:P25720" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25721" title="ADH_DROMY" id="s:P25721" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P25988" title="ADH_SCAAL" id="s:P25988" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P26325" title="ADH1_GADMC" id="s:P26325" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P26719" title="ADH_DROYA" id="s:P26719" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P27581" title="ADH2_DROAR" id="s:P27581" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28032" title="ADH2_SOLLC" id="s:P28032" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28332" title="ADH6_HUMAN" id="s:P28332" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28469" title="ADH1A_MACMU" id="s:P28469" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28474" title="ADHX_MOUSE" id="s:P28474" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28483" title="ADH_DROER" id="s:P28483" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P28484" title="ADH_DROTE" id="s:P28484" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P30350" title="ADH1_ANAPL" id="s:P30350" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P32771" title="FADH_YEAST" id="s:P32771" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P33010" title="TERPD_PSESP" id="s:P33010" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P33744" title="ADHE_CLOAB" id="s:P33744" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P37473" title="ADH_DROPE" id="s:P37473" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P37686" title="ADH2_ECOLI" id="s:P37686" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P38113" title="ADH5_YEAST" id="s:P38113" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P39450" title="FRMA_PASPI" id="s:P39450" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P39451" title="ADHP_ECOLI" id="s:P39451" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P39462" title="ADH_SULSO" id="s:P39462" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P40394" title="ADH7_HUMAN" id="s:P40394" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41680" title="ADH1_PERMA" id="s:P41680" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41681" title="ADH6_PERMA" id="s:P41681" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41682" title="ADH7_RAT" id="s:P41682" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P41747" title="ADH1_ASPFN" id="s:P41747" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P42327" title="ADH2_GEOSE" id="s:P42327" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P42328" title="ADH3_GEOSE" id="s:P42328" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P43067" title="ADH1_CANAX" id="s:P43067" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P44557" title="FRMA_HAEIN" id="s:P44557" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P46415" title="ADHX_DROME" id="s:P46415" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48584" title="ADH_DROBO" id="s:P48584" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48585" title="ADH_DROFL" id="s:P48585" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48586" title="ADH1_DROMN" id="s:P48586" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48587" title="ADH2_DROMN" id="s:P48587" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48814" title="ADH1_CERCA" id="s:P48814" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48815" title="ADH2_CERCA" id="s:P48815" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P48977" title="ADH_MALDO" id="s:P48977" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49383" title="ADH2_KLULA" id="s:P49383" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49384" title="ADH3_KLULA" id="s:P49384" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49385" title="ADH4_KLULA" id="s:P49385" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P49645" title="ADH1_APTAU" id="s:P49645" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P50381" title="ADH_SULSR" id="s:P50381" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51549" title="ADH_DROHA" id="s:P51549" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51550" title="ADH_DROTS" id="s:P51550" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51551" title="ADH_DROGR" id="s:P51551" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P51552" title="ADH_ZAPTU" id="s:P51552" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P54202" title="ADH2_EMENI" id="s:P54202" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P71017" title="GBSB_BACSU" id="s:P71017" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P71818" title="ADHB_MYCTU" id="s:P71818" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P72324" title="ADHI_RHOS4" id="s:P72324" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P73138" title="FRMA_SYNY3" id="s:P73138" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P79896" title="ADHX_SPAAU" id="s:P79896" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80222" title="ADH1_ALLMI" id="s:P80222" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80338" title="ADH1_STRCA" id="s:P80338" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80360" title="ADHX_MYXGL" id="s:P80360" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80467" title="ADHX_UROHA" id="s:P80467" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80468" title="ADH4_STRCA" id="s:P80468" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80512" title="ADH1_NAJNA" id="s:P80512" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P80572" title="ADHX_PEA" id="s:P80572" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81431" title="ADHX_OCTVU" id="s:P81431" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81600" title="ADHH_GADMO" id="s:P81600" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81601" title="ADHL_GADMO" id="s:P81601" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P81786" title="ADH_MORSE" id="s:P81786" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P84328" title="ADH_DROPB" id="s:P84328" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P85440" title="ADH1_CATRO" id="s:P85440" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P86883" title="ADH1_COLLI" id="s:P86883" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P86884" title="ADHX_SCYCA" id="s:P86884" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P86885" title="ADH1_MESAU" id="s:P86885" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P93629" title="ADHX_MAIZE" id="s:P93629" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/P95153" title="ADHA_MYCTU" id="s:P95153" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00669" title="ADH_DROAD" id="s:Q00669" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00670" title="ADH_DROCR" id="s:Q00670" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00671" title="ADH_DROMM" id="s:Q00671" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q00672" title="ADH_DRONI" id="s:Q00672" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q03384" title="ADH_DROSU" id="s:Q03384" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q03505" title="ADH1_RABIT" id="s:Q03505" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q05114" title="ADH_DROWI" id="s:Q05114" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q07264" title="ADH1_ZEALU" id="s:Q07264" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q07288" title="ADH1_KLUMA" id="s:Q07288" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q07588" title="ADH_DROIM" id="s:Q07588" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q09009" title="ADH_DROGU" id="s:Q09009" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q09010" title="ADH_DROMD" id="s:Q09010" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q09669" title="ADH4_SCHPO" id="s:Q09669" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0DWH1" title="ADHX_ORYSJ" id="s:Q0DWH1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0ITW7" title="ADH2_ORYSJ" id="s:Q0ITW7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0TKS7" title="FRMA_ECOL5" id="s:Q0TKS7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q0V7W6" title="ADHL5_ARATH" id="s:Q0V7W6" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q17334" title="ADH1_CAEEL" id="s:Q17334" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q17335" title="ADHX_CAEEL" id="s:Q17335" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q1RFI7" title="FRMA_ECOUT" id="s:Q1RFI7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q24641" title="ADH_DROSI" id="s:Q24641" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q24803" title="ADH2_ENTHI" id="s:Q24803" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q27404" title="ADH_DROLA" id="s:Q27404" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2FJ31" title="ADH_STAA3" id="s:Q2FJ31" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2G0G1" title="ADH_STAA8" id="s:Q2G0G1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2R8Z5" title="ADH1_ORYSJ" id="s:Q2R8Z5" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q2YSX0" title="ADH_STAAB" id="s:Q2YSX0" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q3Z550" title="FRMA_SHISS" id="s:Q3Z550" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q3ZC42" title="ADHX_BOVIN" id="s:Q3ZC42" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q4J781" title="ADH_SULAC" id="s:Q4J781" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q4R1E8" title="ADH2_ORYSI" id="s:Q4R1E8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q50L96" title="ADH_DROAN" id="s:Q50L96" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q54TC2" title="ADHX_DICDI" id="s:Q54TC2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5HI63" title="ADH_STAAC" id="s:Q5HI63" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5HRD6" title="ADH_STAEQ" id="s:Q5HRD6" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5R1W2" title="ADH1B_PANTR" id="s:Q5R1W2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5R7Z8" title="ADH6_PONAB" id="s:Q5R7Z8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5RBP7" title="ADH1A_PONAB" id="s:Q5RBP7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q5XI95" title="ADH6_RAT" id="s:Q5XI95" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64413" title="ADH1_GEOBU" id="s:Q64413" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64415" title="ADH1_GEOKN" id="s:Q64415" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64437" title="ADH7_MOUSE" id="s:Q64437" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q64563" title="ADH4_RAT" id="s:Q64563" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6GBM4" title="ADH_STAAS" id="s:Q6GBM4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6GJ63" title="ADH_STAAR" id="s:Q6GJ63" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6LCE4" title="ADH_DROPS" id="s:Q6LCE4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q6XQ67" title="ADH5_SACPS" id="s:Q6XQ67" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q70UN9" title="ADH1_CERCO" id="s:Q70UN9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q70UP5" title="ADH2_CERCO" id="s:Q70UP5" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q70UP6" title="ADH2_CERRO" id="s:Q70UP6" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q75ZX4" title="ADH1_ORYSI" id="s:Q75ZX4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q7A742" title="ADH_STAAN" id="s:Q7A742" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q7U1B9" title="ADHB_MYCBO" id="s:Q7U1B9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8CQ56" title="ADH_STAES" id="s:Q8CQ56" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8FKG1" title="FRMA_ECOL6" id="s:Q8FKG1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8LEB2" title="ADHL6_ARATH" id="s:Q8LEB2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8NXU1" title="ADH_STAAW" id="s:Q8NXU1" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8VZ49" title="ADHL4_ARATH" id="s:Q8VZ49" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q8X5J4" title="FRMA_ECO57" id="s:Q8X5J4" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q96533" title="ADHX_ARATH" id="s:Q96533" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q96XE0" title="ADH_SULTO" id="s:Q96XE0" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q99W07" title="ADH_STAAM" id="s:Q99W07" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9FH04" title="ADHL7_ARATH" id="s:Q9FH04" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9GN94" title="ADH_DROSE" id="s:Q9GN94" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9NAR7" title="ADH_BACOL" id="s:Q9NAR7" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9NG40" title="ADH_DROIN" id="s:Q9NG40" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9NG42" title="ADH_DROEQ" id="s:Q9NG42" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9P4C2" title="ADH2_KLUMA" id="s:Q9P4C2" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9P6C8" title="ADH1_NEUCR" id="s:Q9P6C8" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9QYY9" title="ADH4_MOUSE" id="s:Q9QYY9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9SK86" title="ADHL1_ARATH" id="s:Q9SK86" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9SK87" title="ADHL2_ARATH" id="s:Q9SK87" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9U8S9" title="ADH_DROPU" id="s:Q9U8S9" linkType="locator"/>
+                                <cml:link href="http://www.uniprot.org/uniprot/Q9Z2M2" title="ADH1_GEOAT" id="s:Q9Z2M2" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:57540" title="NAD(+)" id="chebi:57540" from="CHEBI:57540" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:35681" title="secondary alcohol" id="chebi:35681" from="CHEBI:35681" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:15378" title="H(+)" id="chebi:15378" from="CHEBI:15378" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:17087" title="ketone" id="chebi:17087" from="CHEBI:17087" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:57945" title="NADH" id="chebi:57945" from="CHEBI:57945" linkType="locator"/>
+                            </cml:map>
+                            <cml:map id="RHEA:relatedReactions">
+                                <cml:link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10740" convention="rhea:direction.UN" title="RHEA:10740" id="RHEA:10740" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10741" convention="rhea:direction.LR" title="RHEA:10741" id="RHEA:10741" linkType="locator"/>
+                                <cml:link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10742" convention="rhea:direction.RL" title="RHEA:10742" id="RHEA:10742" linkType="locator"/>
+                            </cml:map>
+                        </cml:reaction>
+                        <reaction iubmb="false" view="INTENZ,IUBMB,SIB">An alcohol + NAD(+) = an aldehyde or ketone + NADH</reaction>
+                        <reaction iubmb="false" view="INTENZ,IUBMB,SIB">A secondary alcohol + NAD(+) = a ketone + NADH</reaction>
+                    </reactions>
+                    <cofactors>(<cofactor accession="CHEBI:27363" db="ChEBI" view="INTENZ,SIB">Zinc</cofactor> or <cofactor accession="CHEBI:18248" db="ChEBI" view="INTENZ,SIB">Iron</cofactor>)</cofactors>
+                    <comments>
+                        <comment view="INTENZ,IUBMB">A zinc protein. Acts on primary or secondary alcohols or hemi-acetalss with very broad specificity; however the enzyme oxidizes methanol much more poorly than ethanol. The animal, but not the yeast, enzyme acts also on cyclic secondary alcohols.</comment>
+                        <comment view="SIB">Acts on primary or secondary alcohols or hemi-acetalss with very broad specificity; however the enzyme oxidizes methanol much more poorly than ethanol. The animal, but not the yeast, enzyme acts also on cyclic secondary alcohols.</comment>
+                    </comments>
+                    <links>
+                        <link accession_number="9031-72-5" db="CAS" view="INTENZ,IUBMB"/>
+                        <link href="http://www.ebi.ac.uk/ego/DisplayGoTerm?id=GO:0004022" accession_number="GO:0004022" db="GO" view="INTENZ,IUBMB">alcohol dehydrogenase (NAD) activity</link>
+                        <link href="http://www.expasy.org/prosite/PDOC00058" accession_number="PDOC00058" db="PROSITE" view="INTENZ,SIB">PROSITE</link>
+                        <link href="http://www.expasy.org/prosite/PDOC00059" accession_number="PDOC00059" db="PROSITE" view="INTENZ,SIB">PROSITE</link>
+                        <link href="http://www.expasy.org/prosite/PDOC00060" accession_number="PDOC00060" db="PROSITE" view="INTENZ,SIB">PROSITE</link>
+                        <link href="http://www.uniprot.org/uniprot/P07327" accession_number="P07327" db="UniProt" view="INTENZ,SIB">ADH1A_HUMAN</link>
+                        <link href="http://www.uniprot.org/uniprot/P28469" accession_number="P28469" db="UniProt" view="INTENZ,SIB">ADH1A_MACMU</link>
+                        <link href="http://www.uniprot.org/uniprot/Q5RBP7" accession_number="Q5RBP7" db="UniProt" view="INTENZ,SIB">ADH1A_PONAB</link>
+                        <link href="http://www.uniprot.org/uniprot/P25405" accession_number="P25405" db="UniProt" view="INTENZ,SIB">ADH1A_UROHA</link>
+                        <link href="http://www.uniprot.org/uniprot/P00325" accession_number="P00325" db="UniProt" view="INTENZ,SIB">ADH1B_HUMAN</link>
+                        <link href="http://www.uniprot.org/uniprot/Q5R1W2" accession_number="Q5R1W2" db="UniProt" view="INTENZ,SIB">ADH1B_PANTR</link>
+                        <link href="http://www.uniprot.org/uniprot/P14139" accession_number="P14139" db="UniProt" view="INTENZ,SIB">ADH1B_PAPHA</link>
+                        <link href="http://www.uniprot.org/uniprot/P25406" accession_number="P25406" db="UniProt" view="INTENZ,SIB">ADH1B_UROHA</link>
+                        <link href="http://www.uniprot.org/uniprot/P00327" accession_number="P00327" db="UniProt" view="INTENZ,SIB">ADH1E_HORSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P00326" accession_number="P00326" db="UniProt" view="INTENZ,SIB">ADH1G_HUMAN</link>
+                        <link href="http://www.uniprot.org/uniprot/O97959" accession_number="O97959" db="UniProt" view="INTENZ,SIB">ADH1G_PAPHA</link>
+                        <link href="http://www.uniprot.org/uniprot/P00328" accession_number="P00328" db="UniProt" view="INTENZ,SIB">ADH1S_HORSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P80222" accession_number="P80222" db="UniProt" view="INTENZ,SIB">ADH1_ALLMI</link>
+                        <link href="http://www.uniprot.org/uniprot/P30350" accession_number="P30350" db="UniProt" view="INTENZ,SIB">ADH1_ANAPL</link>
+                        <link href="http://www.uniprot.org/uniprot/P49645" accession_number="P49645" db="UniProt" view="INTENZ,SIB">ADH1_APTAU</link>
+                        <link href="http://www.uniprot.org/uniprot/P06525" accession_number="P06525" db="UniProt" view="INTENZ,SIB">ADH1_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/P41747" accession_number="P41747" db="UniProt" view="INTENZ,SIB">ADH1_ASPFN</link>
+                        <link href="http://www.uniprot.org/uniprot/Q17334" accession_number="Q17334" db="UniProt" view="INTENZ,SIB">ADH1_CAEEL</link>
+                        <link href="http://www.uniprot.org/uniprot/P43067" accession_number="P43067" db="UniProt" view="INTENZ,SIB">ADH1_CANAX</link>
+                        <link href="http://www.uniprot.org/uniprot/P85440" accession_number="P85440" db="UniProt" view="INTENZ,SIB">ADH1_CATRO</link>
+                        <link href="http://www.uniprot.org/uniprot/P48814" accession_number="P48814" db="UniProt" view="INTENZ,SIB">ADH1_CERCA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q70UN9" accession_number="Q70UN9" db="UniProt" view="INTENZ,SIB">ADH1_CERCO</link>
+                        <link href="http://www.uniprot.org/uniprot/P23991" accession_number="P23991" db="UniProt" view="INTENZ,SIB">ADH1_CHICK</link>
+                        <link href="http://www.uniprot.org/uniprot/P86883" accession_number="P86883" db="UniProt" view="INTENZ,SIB">ADH1_COLLI</link>
+                        <link href="http://www.uniprot.org/uniprot/P19631" accession_number="P19631" db="UniProt" view="INTENZ,SIB">ADH1_COTJA</link>
+                        <link href="http://www.uniprot.org/uniprot/P23236" accession_number="P23236" db="UniProt" view="INTENZ,SIB">ADH1_DROHY</link>
+                        <link href="http://www.uniprot.org/uniprot/P48586" accession_number="P48586" db="UniProt" view="INTENZ,SIB">ADH1_DROMN</link>
+                        <link href="http://www.uniprot.org/uniprot/P09370" accession_number="P09370" db="UniProt" view="INTENZ,SIB">ADH1_DROMO</link>
+                        <link href="http://www.uniprot.org/uniprot/P22246" accession_number="P22246" db="UniProt" view="INTENZ,SIB">ADH1_DROMT</link>
+                        <link href="http://www.uniprot.org/uniprot/P07161" accession_number="P07161" db="UniProt" view="INTENZ,SIB">ADH1_DROMU</link>
+                        <link href="http://www.uniprot.org/uniprot/P12854" accession_number="P12854" db="UniProt" view="INTENZ,SIB">ADH1_DRONA</link>
+                        <link href="http://www.uniprot.org/uniprot/P08843" accession_number="P08843" db="UniProt" view="INTENZ,SIB">ADH1_EMENI</link>
+                        <link href="http://www.uniprot.org/uniprot/P26325" accession_number="P26325" db="UniProt" view="INTENZ,SIB">ADH1_GADMC</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9Z2M2" accession_number="Q9Z2M2" db="UniProt" view="INTENZ,SIB">ADH1_GEOAT</link>
+                        <link href="http://www.uniprot.org/uniprot/Q64413" accession_number="Q64413" db="UniProt" view="INTENZ,SIB">ADH1_GEOBU</link>
+                        <link href="http://www.uniprot.org/uniprot/Q64415" accession_number="Q64415" db="UniProt" view="INTENZ,SIB">ADH1_GEOKN</link>
+                        <link href="http://www.uniprot.org/uniprot/P12311" accession_number="P12311" db="UniProt" view="INTENZ,SIB">ADH1_GEOSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P05336" accession_number="P05336" db="UniProt" view="INTENZ,SIB">ADH1_HORVU</link>
+                        <link href="http://www.uniprot.org/uniprot/P20369" accession_number="P20369" db="UniProt" view="INTENZ,SIB">ADH1_KLULA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q07288" accession_number="Q07288" db="UniProt" view="INTENZ,SIB">ADH1_KLUMA</link>
+                        <link href="http://www.uniprot.org/uniprot/P00333" accession_number="P00333" db="UniProt" view="INTENZ,SIB">ADH1_MAIZE</link>
+                        <link href="http://www.uniprot.org/uniprot/P86885" accession_number="P86885" db="UniProt" view="INTENZ,SIB">ADH1_MESAU</link>
+                        <link href="http://www.uniprot.org/uniprot/P00329" accession_number="P00329" db="UniProt" view="INTENZ,SIB">ADH1_MOUSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P80512" accession_number="P80512" db="UniProt" view="INTENZ,SIB">ADH1_NAJNA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9P6C8" accession_number="Q9P6C8" db="UniProt" view="INTENZ,SIB">ADH1_NEUCR</link>
+                        <link href="http://www.uniprot.org/uniprot/Q75ZX4" accession_number="Q75ZX4" db="UniProt" view="INTENZ,SIB">ADH1_ORYSI</link>
+                        <link href="http://www.uniprot.org/uniprot/Q2R8Z5" accession_number="Q2R8Z5" db="UniProt" view="INTENZ,SIB">ADH1_ORYSJ</link>
+                        <link href="http://www.uniprot.org/uniprot/P12886" accession_number="P12886" db="UniProt" view="INTENZ,SIB">ADH1_PEA</link>
+                        <link href="http://www.uniprot.org/uniprot/P22797" accession_number="P22797" db="UniProt" view="INTENZ,SIB">ADH1_PELPE</link>
+                        <link href="http://www.uniprot.org/uniprot/P14219" accession_number="P14219" db="UniProt" view="INTENZ,SIB">ADH1_PENAM</link>
+                        <link href="http://www.uniprot.org/uniprot/P41680" accession_number="P41680" db="UniProt" view="INTENZ,SIB">ADH1_PERMA</link>
+                        <link href="http://www.uniprot.org/uniprot/P25141" accession_number="P25141" db="UniProt" view="INTENZ,SIB">ADH1_PETHY</link>
+                        <link href="http://www.uniprot.org/uniprot/O00097" accession_number="O00097" db="UniProt" view="INTENZ,SIB">ADH1_PICST</link>
+                        <link href="http://www.uniprot.org/uniprot/Q03505" accession_number="Q03505" db="UniProt" view="INTENZ,SIB">ADH1_RABIT</link>
+                        <link href="http://www.uniprot.org/uniprot/P06757" accession_number="P06757" db="UniProt" view="INTENZ,SIB">ADH1_RAT</link>
+                        <link href="http://www.uniprot.org/uniprot/P14673" accession_number="P14673" db="UniProt" view="INTENZ,SIB">ADH1_SOLTU</link>
+                        <link href="http://www.uniprot.org/uniprot/P80338" accession_number="P80338" db="UniProt" view="INTENZ,SIB">ADH1_STRCA</link>
+                        <link href="http://www.uniprot.org/uniprot/P13603" accession_number="P13603" db="UniProt" view="INTENZ,SIB">ADH1_TRIRP</link>
+                        <link href="http://www.uniprot.org/uniprot/P00330" accession_number="P00330" db="UniProt" view="INTENZ,SIB">ADH1_YEAST</link>
+                        <link href="http://www.uniprot.org/uniprot/Q07264" accession_number="Q07264" db="UniProt" view="INTENZ,SIB">ADH1_ZEALU</link>
+                        <link href="http://www.uniprot.org/uniprot/P20368" accession_number="P20368" db="UniProt" view="INTENZ,SIB">ADH1_ZYMMO</link>
+                        <link href="http://www.uniprot.org/uniprot/O45687" accession_number="O45687" db="UniProt" view="INTENZ,SIB">ADH2_CAEEL</link>
+                        <link href="http://www.uniprot.org/uniprot/O94038" accession_number="O94038" db="UniProt" view="INTENZ,SIB">ADH2_CANAL</link>
+                        <link href="http://www.uniprot.org/uniprot/P48815" accession_number="P48815" db="UniProt" view="INTENZ,SIB">ADH2_CERCA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q70UP5" accession_number="Q70UP5" db="UniProt" view="INTENZ,SIB">ADH2_CERCO</link>
+                        <link href="http://www.uniprot.org/uniprot/Q70UP6" accession_number="Q70UP6" db="UniProt" view="INTENZ,SIB">ADH2_CERRO</link>
+                        <link href="http://www.uniprot.org/uniprot/P27581" accession_number="P27581" db="UniProt" view="INTENZ,SIB">ADH2_DROAR</link>
+                        <link href="http://www.uniprot.org/uniprot/P25720" accession_number="P25720" db="UniProt" view="INTENZ,SIB">ADH2_DROBU</link>
+                        <link href="http://www.uniprot.org/uniprot/P23237" accession_number="P23237" db="UniProt" view="INTENZ,SIB">ADH2_DROHY</link>
+                        <link href="http://www.uniprot.org/uniprot/P48587" accession_number="P48587" db="UniProt" view="INTENZ,SIB">ADH2_DROMN</link>
+                        <link href="http://www.uniprot.org/uniprot/P09369" accession_number="P09369" db="UniProt" view="INTENZ,SIB">ADH2_DROMO</link>
+                        <link href="http://www.uniprot.org/uniprot/P07160" accession_number="P07160" db="UniProt" view="INTENZ,SIB">ADH2_DROMU</link>
+                        <link href="http://www.uniprot.org/uniprot/P24267" accession_number="P24267" db="UniProt" view="INTENZ,SIB">ADH2_DROWH</link>
+                        <link href="http://www.uniprot.org/uniprot/P37686" accession_number="P37686" db="UniProt" view="INTENZ,SIB">ADH2_ECOLI</link>
+                        <link href="http://www.uniprot.org/uniprot/P54202" accession_number="P54202" db="UniProt" view="INTENZ,SIB">ADH2_EMENI</link>
+                        <link href="http://www.uniprot.org/uniprot/Q24803" accession_number="Q24803" db="UniProt" view="INTENZ,SIB">ADH2_ENTHI</link>
+                        <link href="http://www.uniprot.org/uniprot/P42327" accession_number="P42327" db="UniProt" view="INTENZ,SIB">ADH2_GEOSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P10847" accession_number="P10847" db="UniProt" view="INTENZ,SIB">ADH2_HORVU</link>
+                        <link href="http://www.uniprot.org/uniprot/P49383" accession_number="P49383" db="UniProt" view="INTENZ,SIB">ADH2_KLULA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9P4C2" accession_number="Q9P4C2" db="UniProt" view="INTENZ,SIB">ADH2_KLUMA</link>
+                        <link href="http://www.uniprot.org/uniprot/P04707" accession_number="P04707" db="UniProt" view="INTENZ,SIB">ADH2_MAIZE</link>
+                        <link href="http://www.uniprot.org/uniprot/Q4R1E8" accession_number="Q4R1E8" db="UniProt" view="INTENZ,SIB">ADH2_ORYSI</link>
+                        <link href="http://www.uniprot.org/uniprot/Q0ITW7" accession_number="Q0ITW7" db="UniProt" view="INTENZ,SIB">ADH2_ORYSJ</link>
+                        <link href="http://www.uniprot.org/uniprot/O13309" accession_number="O13309" db="UniProt" view="INTENZ,SIB">ADH2_PICST</link>
+                        <link href="http://www.uniprot.org/uniprot/P28032" accession_number="P28032" db="UniProt" view="INTENZ,SIB">ADH2_SOLLC</link>
+                        <link href="http://www.uniprot.org/uniprot/P14674" accession_number="P14674" db="UniProt" view="INTENZ,SIB">ADH2_SOLTU</link>
+                        <link href="http://www.uniprot.org/uniprot/P00331" accession_number="P00331" db="UniProt" view="INTENZ,SIB">ADH2_YEAST</link>
+                        <link href="http://www.uniprot.org/uniprot/F8DVL8" accession_number="F8DVL8" db="UniProt" view="INTENZ,SIB">ADH2_ZYMMA</link>
+                        <link href="http://www.uniprot.org/uniprot/P0DJA2" accession_number="P0DJA2" db="UniProt" view="INTENZ,SIB">ADH2_ZYMMO</link>
+                        <link href="http://www.uniprot.org/uniprot/P07754" accession_number="P07754" db="UniProt" view="INTENZ,SIB">ADH3_EMENI</link>
+                        <link href="http://www.uniprot.org/uniprot/P42328" accession_number="P42328" db="UniProt" view="INTENZ,SIB">ADH3_GEOSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P10848" accession_number="P10848" db="UniProt" view="INTENZ,SIB">ADH3_HORVU</link>
+                        <link href="http://www.uniprot.org/uniprot/P49384" accession_number="P49384" db="UniProt" view="INTENZ,SIB">ADH3_KLULA</link>
+                        <link href="http://www.uniprot.org/uniprot/P14675" accession_number="P14675" db="UniProt" view="INTENZ,SIB">ADH3_SOLTU</link>
+                        <link href="http://www.uniprot.org/uniprot/P07246" accession_number="P07246" db="UniProt" view="INTENZ,SIB">ADH3_YEAST</link>
+                        <link href="http://www.uniprot.org/uniprot/P08319" accession_number="P08319" db="UniProt" view="INTENZ,SIB">ADH4_HUMAN</link>
+                        <link href="http://www.uniprot.org/uniprot/P49385" accession_number="P49385" db="UniProt" view="INTENZ,SIB">ADH4_KLULA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9QYY9" accession_number="Q9QYY9" db="UniProt" view="INTENZ,SIB">ADH4_MOUSE</link>
+                        <link href="http://www.uniprot.org/uniprot/Q64563" accession_number="Q64563" db="UniProt" view="INTENZ,SIB">ADH4_RAT</link>
+                        <link href="http://www.uniprot.org/uniprot/Q09669" accession_number="Q09669" db="UniProt" view="INTENZ,SIB">ADH4_SCHPO</link>
+                        <link href="http://www.uniprot.org/uniprot/P80468" accession_number="P80468" db="UniProt" view="INTENZ,SIB">ADH4_STRCA</link>
+                        <link href="http://www.uniprot.org/uniprot/A6ZTT5" accession_number="A6ZTT5" db="UniProt" view="INTENZ,SIB">ADH4_YEAS7</link>
+                        <link href="http://www.uniprot.org/uniprot/P10127" accession_number="P10127" db="UniProt" view="INTENZ,SIB">ADH4_YEAST</link>
+                        <link href="http://www.uniprot.org/uniprot/Q6XQ67" accession_number="Q6XQ67" db="UniProt" view="INTENZ,SIB">ADH5_SACPS</link>
+                        <link href="http://www.uniprot.org/uniprot/P38113" accession_number="P38113" db="UniProt" view="INTENZ,SIB">ADH5_YEAST</link>
+                        <link href="http://www.uniprot.org/uniprot/P28332" accession_number="P28332" db="UniProt" view="INTENZ,SIB">ADH6_HUMAN</link>
+                        <link href="http://www.uniprot.org/uniprot/P41681" accession_number="P41681" db="UniProt" view="INTENZ,SIB">ADH6_PERMA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q5R7Z8" accession_number="Q5R7Z8" db="UniProt" view="INTENZ,SIB">ADH6_PONAB</link>
+                        <link href="http://www.uniprot.org/uniprot/Q5XI95" accession_number="Q5XI95" db="UniProt" view="INTENZ,SIB">ADH6_RAT</link>
+                        <link href="http://www.uniprot.org/uniprot/P40394" accession_number="P40394" db="UniProt" view="INTENZ,SIB">ADH7_HUMAN</link>
+                        <link href="http://www.uniprot.org/uniprot/Q64437" accession_number="Q64437" db="UniProt" view="INTENZ,SIB">ADH7_MOUSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P41682" accession_number="P41682" db="UniProt" view="INTENZ,SIB">ADH7_RAT</link>
+                        <link href="http://www.uniprot.org/uniprot/P95153" accession_number="P95153" db="UniProt" view="INTENZ,SIB">ADHA_MYCTU</link>
+                        <link href="http://www.uniprot.org/uniprot/O31186" accession_number="O31186" db="UniProt" view="INTENZ,SIB">ADHA_RHIME</link>
+                        <link href="http://www.uniprot.org/uniprot/Q7U1B9" accession_number="Q7U1B9" db="UniProt" view="INTENZ,SIB">ADHB_MYCBO</link>
+                        <link href="http://www.uniprot.org/uniprot/P71818" accession_number="P71818" db="UniProt" view="INTENZ,SIB">ADHB_MYCTU</link>
+                        <link href="http://www.uniprot.org/uniprot/O53303" accession_number="O53303" db="UniProt" view="INTENZ,SIB">ADHD_MYCTU</link>
+                        <link href="http://www.uniprot.org/uniprot/P33744" accession_number="P33744" db="UniProt" view="INTENZ,SIB">ADHE_CLOAB</link>
+                        <link href="http://www.uniprot.org/uniprot/P0A9Q8" accession_number="P0A9Q8" db="UniProt" view="INTENZ,SIB">ADHE_ECO57</link>
+                        <link href="http://www.uniprot.org/uniprot/P0A9Q7" accession_number="P0A9Q7" db="UniProt" view="INTENZ,SIB">ADHE_ECOLI</link>
+                        <link href="http://www.uniprot.org/uniprot/P81600" accession_number="P81600" db="UniProt" view="INTENZ,SIB">ADHH_GADMO</link>
+                        <link href="http://www.uniprot.org/uniprot/P72324" accession_number="P72324" db="UniProt" view="INTENZ,SIB">ADHI_RHOS4</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9SK86" accession_number="Q9SK86" db="UniProt" view="INTENZ,SIB">ADHL1_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9SK87" accession_number="Q9SK87" db="UniProt" view="INTENZ,SIB">ADHL2_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/A1L4Y2" accession_number="A1L4Y2" db="UniProt" view="INTENZ,SIB">ADHL3_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/Q8VZ49" accession_number="Q8VZ49" db="UniProt" view="INTENZ,SIB">ADHL4_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/Q0V7W6" accession_number="Q0V7W6" db="UniProt" view="INTENZ,SIB">ADHL5_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/Q8LEB2" accession_number="Q8LEB2" db="UniProt" view="INTENZ,SIB">ADHL6_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9FH04" accession_number="Q9FH04" db="UniProt" view="INTENZ,SIB">ADHL7_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/P81601" accession_number="P81601" db="UniProt" view="INTENZ,SIB">ADHL_GADMO</link>
+                        <link href="http://www.uniprot.org/uniprot/P39451" accession_number="P39451" db="UniProt" view="INTENZ,SIB">ADHP_ECOLI</link>
+                        <link href="http://www.uniprot.org/uniprot/O46649" accession_number="O46649" db="UniProt" view="INTENZ,SIB">ADHP_RABIT</link>
+                        <link href="http://www.uniprot.org/uniprot/O46650" accession_number="O46650" db="UniProt" view="INTENZ,SIB">ADHQ_RABIT</link>
+                        <link href="http://www.uniprot.org/uniprot/Q96533" accession_number="Q96533" db="UniProt" view="INTENZ,SIB">ADHX_ARATH</link>
+                        <link href="http://www.uniprot.org/uniprot/Q3ZC42" accession_number="Q3ZC42" db="UniProt" view="INTENZ,SIB">ADHX_BOVIN</link>
+                        <link href="http://www.uniprot.org/uniprot/Q17335" accession_number="Q17335" db="UniProt" view="INTENZ,SIB">ADHX_CAEEL</link>
+                        <link href="http://www.uniprot.org/uniprot/Q54TC2" accession_number="Q54TC2" db="UniProt" view="INTENZ,SIB">ADHX_DICDI</link>
+                        <link href="http://www.uniprot.org/uniprot/P46415" accession_number="P46415" db="UniProt" view="INTENZ,SIB">ADHX_DROME</link>
+                        <link href="http://www.uniprot.org/uniprot/P19854" accession_number="P19854" db="UniProt" view="INTENZ,SIB">ADHX_HORSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P11766" accession_number="P11766" db="UniProt" view="INTENZ,SIB">ADHX_HUMAN</link>
+                        <link href="http://www.uniprot.org/uniprot/P93629" accession_number="P93629" db="UniProt" view="INTENZ,SIB">ADHX_MAIZE</link>
+                        <link href="http://www.uniprot.org/uniprot/P28474" accession_number="P28474" db="UniProt" view="INTENZ,SIB">ADHX_MOUSE</link>
+                        <link href="http://www.uniprot.org/uniprot/P80360" accession_number="P80360" db="UniProt" view="INTENZ,SIB">ADHX_MYXGL</link>
+                        <link href="http://www.uniprot.org/uniprot/P81431" accession_number="P81431" db="UniProt" view="INTENZ,SIB">ADHX_OCTVU</link>
+                        <link href="http://www.uniprot.org/uniprot/A2XAZ3" accession_number="A2XAZ3" db="UniProt" view="INTENZ,SIB">ADHX_ORYSI</link>
+                        <link href="http://www.uniprot.org/uniprot/Q0DWH1" accession_number="Q0DWH1" db="UniProt" view="INTENZ,SIB">ADHX_ORYSJ</link>
+                        <link href="http://www.uniprot.org/uniprot/P80572" accession_number="P80572" db="UniProt" view="INTENZ,SIB">ADHX_PEA</link>
+                        <link href="http://www.uniprot.org/uniprot/O19053" accession_number="O19053" db="UniProt" view="INTENZ,SIB">ADHX_RABIT</link>
+                        <link href="http://www.uniprot.org/uniprot/P12711" accession_number="P12711" db="UniProt" view="INTENZ,SIB">ADHX_RAT</link>
+                        <link href="http://www.uniprot.org/uniprot/P86884" accession_number="P86884" db="UniProt" view="INTENZ,SIB">ADHX_SCYCA</link>
+                        <link href="http://www.uniprot.org/uniprot/P79896" accession_number="P79896" db="UniProt" view="INTENZ,SIB">ADHX_SPAAU</link>
+                        <link href="http://www.uniprot.org/uniprot/P80467" accession_number="P80467" db="UniProt" view="INTENZ,SIB">ADHX_UROHA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9NAR7" accession_number="Q9NAR7" db="UniProt" view="INTENZ,SIB">ADH_BACOL</link>
+                        <link href="http://www.uniprot.org/uniprot/P14940" accession_number="P14940" db="UniProt" view="INTENZ,SIB">ADH_CUPNE</link>
+                        <link href="http://www.uniprot.org/uniprot/Q00669" accession_number="Q00669" db="UniProt" view="INTENZ,SIB">ADH_DROAD</link>
+                        <link href="http://www.uniprot.org/uniprot/P21518" accession_number="P21518" db="UniProt" view="INTENZ,SIB">ADH_DROAF</link>
+                        <link href="http://www.uniprot.org/uniprot/P25139" accession_number="P25139" db="UniProt" view="INTENZ,SIB">ADH_DROAM</link>
+                        <link href="http://www.uniprot.org/uniprot/Q50L96" accession_number="Q50L96" db="UniProt" view="INTENZ,SIB">ADH_DROAN</link>
+                        <link href="http://www.uniprot.org/uniprot/P48584" accession_number="P48584" db="UniProt" view="INTENZ,SIB">ADH_DROBO</link>
+                        <link href="http://www.uniprot.org/uniprot/Q00670" accession_number="Q00670" db="UniProt" view="INTENZ,SIB">ADH_DROCR</link>
+                        <link href="http://www.uniprot.org/uniprot/P22245" accession_number="P22245" db="UniProt" view="INTENZ,SIB">ADH_DRODI</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9NG42" accession_number="Q9NG42" db="UniProt" view="INTENZ,SIB">ADH_DROEQ</link>
+                        <link href="http://www.uniprot.org/uniprot/P28483" accession_number="P28483" db="UniProt" view="INTENZ,SIB">ADH_DROER</link>
+                        <link href="http://www.uniprot.org/uniprot/P48585" accession_number="P48585" db="UniProt" view="INTENZ,SIB">ADH_DROFL</link>
+                        <link href="http://www.uniprot.org/uniprot/P51551" accession_number="P51551" db="UniProt" view="INTENZ,SIB">ADH_DROGR</link>
+                        <link href="http://www.uniprot.org/uniprot/Q09009" accession_number="Q09009" db="UniProt" view="INTENZ,SIB">ADH_DROGU</link>
+                        <link href="http://www.uniprot.org/uniprot/P51549" accession_number="P51549" db="UniProt" view="INTENZ,SIB">ADH_DROHA</link>
+                        <link href="http://www.uniprot.org/uniprot/P21898" accession_number="P21898" db="UniProt" view="INTENZ,SIB">ADH_DROHE</link>
+                        <link href="http://www.uniprot.org/uniprot/Q07588" accession_number="Q07588" db="UniProt" view="INTENZ,SIB">ADH_DROIM</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9NG40" accession_number="Q9NG40" db="UniProt" view="INTENZ,SIB">ADH_DROIN</link>
+                        <link href="http://www.uniprot.org/uniprot/Q27404" accession_number="Q27404" db="UniProt" view="INTENZ,SIB">ADH_DROLA</link>
+                        <link href="http://www.uniprot.org/uniprot/P10807" accession_number="P10807" db="UniProt" view="INTENZ,SIB">ADH_DROLE</link>
+                        <link href="http://www.uniprot.org/uniprot/P07162" accession_number="P07162" db="UniProt" view="INTENZ,SIB">ADH_DROMA</link>
+                        <link href="http://www.uniprot.org/uniprot/Q09010" accession_number="Q09010" db="UniProt" view="INTENZ,SIB">ADH_DROMD</link>
+                        <link href="http://www.uniprot.org/uniprot/P00334" accession_number="P00334" db="UniProt" view="INTENZ,SIB">ADH_DROME</link>
+                        <link href="http://www.uniprot.org/uniprot/Q00671" accession_number="Q00671" db="UniProt" view="INTENZ,SIB">ADH_DROMM</link>
+                        <link href="http://www.uniprot.org/uniprot/P25721" accession_number="P25721" db="UniProt" view="INTENZ,SIB">ADH_DROMY</link>
+                        <link href="http://www.uniprot.org/uniprot/Q00672" accession_number="Q00672" db="UniProt" view="INTENZ,SIB">ADH_DRONI</link>
+                        <link href="http://www.uniprot.org/uniprot/P07159" accession_number="P07159" db="UniProt" view="INTENZ,SIB">ADH_DROOR</link>
+                        <link href="http://www.uniprot.org/uniprot/P84328" accession_number="P84328" db="UniProt" view="INTENZ,SIB">ADH_DROPB</link>
+                        <link href="http://www.uniprot.org/uniprot/P37473" accession_number="P37473" db="UniProt" view="INTENZ,SIB">ADH_DROPE</link>
+                        <link href="http://www.uniprot.org/uniprot/P23361" accession_number="P23361" db="UniProt" view="INTENZ,SIB">ADH_DROPI</link>
+                        <link href="http://www.uniprot.org/uniprot/P23277" accession_number="P23277" db="UniProt" view="INTENZ,SIB">ADH_DROPL</link>
+                        <link href="http://www.uniprot.org/uniprot/Q6LCE4" accession_number="Q6LCE4" db="UniProt" view="INTENZ,SIB">ADH_DROPS</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9U8S9" accession_number="Q9U8S9" db="UniProt" view="INTENZ,SIB">ADH_DROPU</link>
+                        <link href="http://www.uniprot.org/uniprot/Q9GN94" accession_number="Q9GN94" db="UniProt" view="INTENZ,SIB">ADH_DROSE</link>
+                        <link href="http://www.uniprot.org/uniprot/Q24641" accession_number="Q24641" db="UniProt" view="INTENZ,SIB">ADH_DROSI</link>
+                        <link href="http://www.uniprot.org/uniprot/P23278" accession_number="P23278" db="UniProt" view="INTENZ,SIB">ADH_DROSL</link>
+                        <link href="http://www.uniprot.org/uniprot/Q03384" accession_number="Q03384" db="UniProt" view="INTENZ,SIB">ADH_DROSU</link>
+                        <link href="http://www.uniprot.org/uniprot/P28484" accession_number="P28484" db="UniProt" view="INTENZ,SIB">ADH_DROTE</link>
+                        <link href="http://www.uniprot.org/uniprot/P51550" accession_number="P51550" db="UniProt" view="INTENZ,SIB">ADH_DROTS</link>
+                        <link href="http://www.uniprot.org/uniprot/B4M8Y0" accession_number="B4M8Y0" db="UniProt" view="INTENZ,SIB">ADH_DROVI</link>
+                        <link href="http://www.uniprot.org/uniprot/Q05114" accession_number="Q05114" db="UniProt" view="INTENZ,SIB">ADH_DROWI</link>
+                        <link href="http://www.uniprot.org/uniprot/P26719" accession_number="P26719" db="UniProt" view="INTENZ,SIB">ADH_DROYA</link>
+                        <link href="http://www.uniprot.org/uniprot/P17648" accession_number="P17648" db="UniProt" view="INTENZ,SIB">ADH_FRAAN</link>
+                        <link href="http://www.uniprot.org/uniprot/P48977" accession_number="P48977" db="UniProt" view="INTENZ,SIB">ADH_MALDO</link>
+                        <link href="http://www.uniprot.org/uniprot/P81786" accession_number="P81786" db="UniProt" view="INTENZ,SIB">ADH_MORSE</link>
+                        <link href="http://www.uniprot.org/uniprot/O53904" accession_number="O53904" db="UniProt" view="INTENZ,SIB">ADH_MYCTU</link>
+                        <link href="http://www.uniprot.org/uniprot/P25988" accession_number="P25988" db="UniProt" view="INTENZ,SIB">ADH_SCAAL</link>
+                        <link href="http://www.uniprot.org/uniprot/P00332" accession_number="P00332" db="UniProt" view="INTENZ,SIB">ADH_SCHPO</link>
+                        <link href="http://www.uniprot.org/uniprot/Q2FJ31" accession_number="Q2FJ31" db="UniProt" view="INTENZ,SIB">ADH_STAA3</link>
+                        <link href="http://www.uniprot.org/uniprot/Q2G0G1" accession_number="Q2G0G1" db="UniProt" view="INTENZ,SIB">ADH_STAA8</link>
+                        <link href="http://www.uniprot.org/uniprot/Q2YSX0" accession_number="Q2YSX0" db="UniProt" view="INTENZ,SIB">ADH_STAAB</link>
+                        <link href="http://www.uniprot.org/uniprot/Q5HI63" accession_number="Q5HI63" db="UniProt" view="INTENZ,SIB">ADH_STAAC</link>
+                        <link href="http://www.uniprot.org/uniprot/Q99W07" accession_number="Q99W07" db="UniProt" view="INTENZ,SIB">ADH_STAAM</link>
+                        <link href="http://www.uniprot.org/uniprot/Q7A742" accession_number="Q7A742" db="UniProt" view="INTENZ,SIB">ADH_STAAN</link>
+                        <link href="http://www.uniprot.org/uniprot/Q6GJ63" accession_number="Q6GJ63" db="UniProt" view="INTENZ,SIB">ADH_STAAR</link>
+                        <link href="http://www.uniprot.org/uniprot/Q6GBM4" accession_number="Q6GBM4" db="UniProt" view="INTENZ,SIB">ADH_STAAS</link>
+                        <link href="http://www.uniprot.org/uniprot/Q8NXU1" accession_number="Q8NXU1" db="UniProt" view="INTENZ,SIB">ADH_STAAW</link>
+                        <link href="http://www.uniprot.org/uniprot/Q5HRD6" accession_number="Q5HRD6" db="UniProt" view="INTENZ,SIB">ADH_STAEQ</link>
+                        <link href="http://www.uniprot.org/uniprot/Q8CQ56" accession_number="Q8CQ56" db="UniProt" view="INTENZ,SIB">ADH_STAES</link>
+                        <link href="http://www.uniprot.org/uniprot/Q4J781" accession_number="Q4J781" db="UniProt" view="INTENZ,SIB">ADH_SULAC</link>
+                        <link href="http://www.uniprot.org/uniprot/P39462" accession_number="P39462" db="UniProt" view="INTENZ,SIB">ADH_SULSO</link>
+                        <link href="http://www.uniprot.org/uniprot/P50381" accession_number="P50381" db="UniProt" view="INTENZ,SIB">ADH_SULSR</link>
+                        <link href="http://www.uniprot.org/uniprot/Q96XE0" accession_number="Q96XE0" db="UniProt" view="INTENZ,SIB">ADH_SULTO</link>
+                        <link href="http://www.uniprot.org/uniprot/P51552" accession_number="P51552" db="UniProt" view="INTENZ,SIB">ADH_ZAPTU</link>
+                        <link href="http://www.uniprot.org/uniprot/P32771" accession_number="P32771" db="UniProt" view="INTENZ,SIB">FADH_YEAST</link>
+                        <link href="http://www.uniprot.org/uniprot/A7ZIA4" accession_number="A7ZIA4" db="UniProt" view="INTENZ,SIB">FRMA_ECO24</link>
+                        <link href="http://www.uniprot.org/uniprot/Q8X5J4" accession_number="Q8X5J4" db="UniProt" view="INTENZ,SIB">FRMA_ECO57</link>
+                        <link href="http://www.uniprot.org/uniprot/A7ZX04" accession_number="A7ZX04" db="UniProt" view="INTENZ,SIB">FRMA_ECOHS</link>
+                        <link href="http://www.uniprot.org/uniprot/A1A835" accession_number="A1A835" db="UniProt" view="INTENZ,SIB">FRMA_ECOK1</link>
+                        <link href="http://www.uniprot.org/uniprot/Q0TKS7" accession_number="Q0TKS7" db="UniProt" view="INTENZ,SIB">FRMA_ECOL5</link>
+                        <link href="http://www.uniprot.org/uniprot/Q8FKG1" accession_number="Q8FKG1" db="UniProt" view="INTENZ,SIB">FRMA_ECOL6</link>
+                        <link href="http://www.uniprot.org/uniprot/B1J085" accession_number="B1J085" db="UniProt" view="INTENZ,SIB">FRMA_ECOLC</link>
+                        <link href="http://www.uniprot.org/uniprot/P25437" accession_number="P25437" db="UniProt" view="INTENZ,SIB">FRMA_ECOLI</link>
+                        <link href="http://www.uniprot.org/uniprot/B1LIP1" accession_number="B1LIP1" db="UniProt" view="INTENZ,SIB">FRMA_ECOSM</link>
+                        <link href="http://www.uniprot.org/uniprot/Q1RFI7" accession_number="Q1RFI7" db="UniProt" view="INTENZ,SIB">FRMA_ECOUT</link>
+                        <link href="http://www.uniprot.org/uniprot/P44557" accession_number="P44557" db="UniProt" view="INTENZ,SIB">FRMA_HAEIN</link>
+                        <link href="http://www.uniprot.org/uniprot/P39450" accession_number="P39450" db="UniProt" view="INTENZ,SIB">FRMA_PASPI</link>
+                        <link href="http://www.uniprot.org/uniprot/Q3Z550" accession_number="Q3Z550" db="UniProt" view="INTENZ,SIB">FRMA_SHISS</link>
+                        <link href="http://www.uniprot.org/uniprot/P73138" accession_number="P73138" db="UniProt" view="INTENZ,SIB">FRMA_SYNY3</link>
+                        <link href="http://www.uniprot.org/uniprot/P71017" accession_number="P71017" db="UniProt" view="INTENZ,SIB">GBSB_BACSU</link>
+                        <link href="http://www.uniprot.org/uniprot/P33010" accession_number="P33010" db="UniProt" view="INTENZ,SIB">TERPD_PSESP</link>
+                        <link href="http://www.uniprot.org/uniprot/O07737" accession_number="O07737" db="UniProt" view="INTENZ,SIB">Y1895_MYCTU</link>
+                        <link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10739" accession_number="10739" db="Rhea" view="INTENZ">A primary alcohol + NAD(+) &lt;=&gt; an aldehyde + H(+) + NADH</link>
+                        <link href="http://www.ebi.ac.uk/rhea/reaction.xhtml?id=10743" accession_number="10743" db="Rhea" view="INTENZ">NAD(+) + secondary alcohol &lt;=&gt; H(+) + ketone + NADH</link>
+                    </links>
+                    <references>
+                        <book view="INTENZ,IUBMB">
+                            <authors>Braenden, G.-I., Joernvall, H., Eklund, H. and Furugren, B.</authors>
+                            <title>Alcohol dehydrogenase.</title>
+                            <year>1975</year>
+                            <name>The Enzymes</name>
+                            <volume>11</volume>
+                            <first_page>103</first_page>
+                            <last_page>190</last_page>
+                            <editorial place="New York">Academic Press</editorial>
+                            <edition>3rd ed.</edition>
+                            <editor>Boyer, P.D. (Ed.)</editor>
+                        </book>
+                        <journal view="INTENZ,IUBMB">
+                            <authors>Joernvall, H.</authors>
+                            <title>Differences between alcohol dehydrogenases. Structural properties and evolutionary aspects.</title>
+                            <year>1977</year>
+                            <name>Eur. J. Biochem.</name>
+                            <volume>72</volume>
+                            <first_page>443</first_page>
+                            <last_page>452</last_page>
+                            <pubmed>320001</pubmed>
+                            <medline>77115786</medline>
+                        </journal>
+                        <journal view="INTENZ,IUBMB">
+                            <authors>Negelein, E. and Wulff, H.-J.</authors>
+                            <title>Diphosphopyridinproteid ackohol, acetaldehyd.</title>
+                            <year>1937</year>
+                            <name>Biochem. Z.</name>
+                            <volume>293</volume>
+                            <first_page>351</first_page>
+                            <last_page>389</last_page>
+                        </journal>
+                        <book view="INTENZ,IUBMB">
+                            <authors>Sund, H. and Theorell, H.</authors>
+                            <title>Alcohol dehydrogenase.</title>
+                            <year>1963</year>
+                            <name>The Enzymes</name>
+                            <volume>7</volume>
+                            <first_page>25</first_page>
+                            <last_page>83</last_page>
+                            <editorial place="New York">Academic Press</editorial>
+                            <edition>2nd ed.</edition>
+                            <editor>Boyer, P.D., Lardy, H. and Myrbaeck, K. (Eds.)</editor>
+                        </book>
+                        <journal view="INTENZ,IUBMB">
+                            <authors>Theorell, H.</authors>
+                            <title>Kinetics and equilibria in the liver alcohol dehydrogenase system.</title>
+                            <year>1958</year>
+                            <name>Adv. Enzymol. Relat. Subj. Biochem.</name>
+                            <volume>20</volume>
+                            <first_page>31</first_page>
+                            <last_page>49</last_page>
+                        </journal>
+                    </references>
+                    <history>EC 1.1.1.1 created 1961</history>
+                </enzyme>
+            </ec_sub-subclass>
+        </ec_subclass>
+    </ec_class>
+</intenz>

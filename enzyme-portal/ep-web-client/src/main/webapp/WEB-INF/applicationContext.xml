@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : applicationContext.xml
+    Created on : 17 March 2012, 14:28
+    Author     : joseph
+    Description:
+        The purpose of this config file is to enable the spring beans to be injected
+        in the Servlet.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+<!--
+    <context:component-scan
+            base-package="uk.ac.ebi.ep.web, uk.ac.ebi.ep.mBean" />
+-->
+    <context:property-placeholder
+            location="classpath:/ep-web-client.properties"/>
+
+    <!-- MBeans -->
+    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+        <property name="autodetect" value="true"/>
+        <property name="registrationBehaviorName"
+                  value="REGISTRATION_REPLACE_EXISTING"/>
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=searchConfig"
+          class="uk.ac.ebi.ep.core.search.Config"
+          init-method="initIt" destroy-method="cleanUp">
+        <property name="resultsPerPage" value="${search.results.per.page}"/>
+        <property name="maxPages" value="${search.results.pages.max}"/>
+        <property name="finderUniprotSource"
+                  value="${search.finder.uniprot.source}"/>
+        <property name="retrieverUniprotSource"
+                  value="${search.retriever.uniprot.source}"/>
+        <property name="uniprotImplementation"
+                  value="${search.uniprot.implementation}"/>
+        <property name="searchCacheSize" value="${search.cache.size}"/>
+        <property name="mmDatasource" value="${search.mm.data.source}"/>
+        <property name="maxMoleculesPerGroup"
+                  value="${search.molecules.group.max}"/>
+    </bean>
+    <alias name="uk.ac.ebi.ep:name=searchConfig" alias="searchConfig"/>
+
+    <bean name="uk.ac.ebi.ep:name=ebeyeConfig"
+          class="uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig">
+        <property name="resultsLimit" value="${ebeye.results.limit}"/>
+        <property name="maxAccessionsInQuery"
+                  value="${ebeye.query.accessions.max}"/>
+        <property name="maxResults" value="${ebeye.results.max}"/>
+        <property name="maxChebiResults" value="${ebeye.results.chebi.max}"/>
+        <property name="maxUniprotResults"
+                  value="${ebeye.results.uniprot.max}"/>
+        <property name="maxUniprotResultsFromChebi"
+                  value="${ebeye.results.uniprot.from.chebi.max}"/>
+        <property name="maxUniprotResultsFromOtherDomains"
+                  value="${ebeye.results.uniprot.from.other.max}"/>
+        <property name="maxThreads" value="${ebeye.threads.max}"/>
+        <property name="threadTimeout" value="${ebeye.ws.timeout}"/>
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=uniprotConfig"
+          class="uk.ac.ebi.ep.adapter.uniprot.UniprotConfig">
+        <property name="timeout" value="${uniprot.ws.timeout}"/>
+        <property name="reviewed" value="${uniprot.reviewed}"/>
+        <property name="wsUrl" value="${uniprot.ws.url}"/>
+        <property name="useProxy" value="${uniprot.ws.proxy}"/>
+        <property name="maxTermsPerQuery" value="${uniprot.query.terms.max}"/>
+        <property name="maxThreads" value="${uniprot.threads.max}"/>
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=intenzConfig"
+          class="uk.ac.ebi.ep.adapter.intenz.IntenzConfig">
+        <property name="timeout" value="${intenz.ws.timeout}"/>
+        <property name="intenzXmlUrl" value="${intenz.xml.url}"/>
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=reactomeConfig"
+          class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
+        <property name="timeout" value="${reactome.ws.timeout}"/>
+        <property name="useProxy" value="${reactome.ws.proxy}"/>
+        <property name="wsBaseUrl" value="${reactome.ws.url}"/>
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=chebiConfig"
+          class="uk.ac.ebi.ep.adapter.chebi.ChebiConfig">
+        <property name="timeout" value="${chebi.ws.timeout}"/>
+        <property name="maxThreads" value="${chebi.threads.max}"/>
+        <property name="searchStars" value="${chebi.search.stars}"/>
+        <property name="maxRetrievedMolecules" value="${chebi.results.max}"/>
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=literatureConfig"
+          class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">
+        <property name="maxThreads" value="${literature.threads.max}" />
+        <property name="useCitexploreWs" value="${literature.citexplore.ws}" />
+        <property name="maxCitations" value="${literature.results.max}" />
+        <property name="citexploreClientPoolSize"
+                  value="${literature.citexplore.client.pool.size}"/>
+        <property name="citexploreConnectTimeout"
+                  value="${literature.citexplore.ws.timeout.connect}"/>
+        <property name="citexploreReadTimeout"
+                  value="${literature.citexplore.ws.timeout.read}" />
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=bioportalConfig"
+          class="uk.ac.ebi.ep.adapter.bioportal.BioportalConfig">
+        <property name="apiKey" value="${bioportal.api.key}"/>
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=dasConfig"
+          class="uk.ac.ebi.ep.adapter.das.DASConfig">
+        <property name="clientPoolSize" value="${das.client.pool.size}" />
+    </bean>
+
+    <bean name="uk.ac.ebi.ep:name=filesConfig"
+          class="uk.ac.ebi.ep.mBean.FilesConfig">
+        <property name="sitemapUrl" value="${sitemap.directory}"/>
+        <property name="sitemapIndex" value="${sitemap.index}"/>
+        <property name="baseDirectory" value="${ep.files.base.dir}"/>
+    </bean>
+    <alias name="uk.ac.ebi.ep:name=filesConfig" alias="filesConfig"/>
+
+</beans>

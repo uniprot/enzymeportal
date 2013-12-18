@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory name="test">
+    <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+    <property name="hibernate.connection.url">jdbc:oracle:thin:@${ep.mm.db.host}:${ep.mm.db.port}:${ep.mm.db.instance}</property>
+    <property name="hibernate.connection.username">${ep.mm.db.username}</property>
+    <property name="hibernate.connection.password">${ep.mm.db.password}</property>
+    <property name="hibernate.connection.pool_size">1</property>
+    <property name="hibernate.connection.autocommit">true</property>
+    <property name="hibernate.cache.use_second_level_cache">false</property>
+    <property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+<!-- 
+  <property name="hibernate.hbm2ddl.auto">create</property>
+ -->
+    <mapping resource="Entry.hbm.xml"/>
+    <mapping resource="XRef.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,94 @@
+img{border:0;}
+*{font-size:9pt;font-family:Tahoma,Arial,Helvetica,Geneva,sans-serif;}
+body{background-color:#fff;font-family:Tahoma,Arial,Helvetica,Geneva,sans-serif;margin:5px;}
+#top_left,#bottom_left{margin:0px;}
+td,body,p,div,span{font-family:Tahoma,Arial,Helvetica,Geneva,sans-serif;font-size:9pt;color:#000;}
+a:link,a:visited{color:#2B7C92;text-decoration:underline;}
+a:active,a:hover{color:red;}
+
+ul {
+  list-style: circle outside;
+  margin-left: 0px;
+  padding-left: 4px; /* icon is 9x9px, so 1/2 to line up icon w/parent text */
+}
+ul[name="Tree"] {
+  margin-left: 0em;
+  padding-left: 2em; /* indent tree nicely in parent container */
+}
+li.collapsed, li.expanded, li.noChildren {
+  list-style: circle outside; /* default to circle if images not found */
+  margin-left: 1em;
+  padding-left: 0em;
+}
+li.collapsed {list-style-image: url(disclosure_collapsed.png);}
+li.expanded  {list-style-image: url(disclosure_expanded.png);}
+li.noChildren {list-style: none;}
+/* remove anchor padding used in regular dbdoc */
+#top_left li.collapsed a, #top_left li.expanded a, #top_left li.noChildren a {
+  padding:2px 0px;
+}
+
+
+
+td{empty-cells:show;border-collapse:collapse;}
+iframe{border:1px solid black;}
+br{clear:both !important;}
+.clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;}
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */
+table{border-spacing:0;empty-cells:show;}
+table th{color:#2b7c92 !important;white-space:nowrap;padding:2px 8px;background-color:#cfe0f1 !important;background-image:none !important;color:#2b7c92 !important;font-size:11px;letter-spacing:1;text-decoration:underline;cursor:pointer;}
+table td{background:none;border-top:1px #fff solid;border-bottom:1px #ccc solid;font-size:8pt;padding:3px 9px;empty-cells:show;background-color:#f2f2f5 !important}
+#bottom_left h2{
+	text-align:center;
+	padding:4px 0;
+	background:#CFE0F1;
+	color:#2B7C92;
+	font-size:1.2em;
+}
+#top_left h2{
+	text-align:center;
+	padding:4px 0;
+	background:#CFE0F1;
+	color:#2B7C92;
+	font-size:1.2em;
+}
+#top_left a,#bottom_left a{
+	display:block;
+	font-size:8pt;
+	padding:2px 8px;
+}
+
+#top_left a:hover,#bottom_left a:hover ,#top_left .current,#bottom_left .current{
+	background:#CFE0F1;
+	color:#2B7C92;
+}
+
+
+
+#header{
+	background-image:url(headerBg.jpg);
+	background-repeat:repeat-x;
+	padding:5px 5px 0 5px;
+	margin:0 0 15px 0;
+}
+body.object {margin:0;}
+
+body.object h2{
+	color:#fff;
+	font-size:2em;
+}
+
+div.tab{background-image:url(topTabL.gif);display:block;float:left;height:21px;padding:0;margin:0 5px 0 0;background-repeat:no-repeat}
+div.tab div{background-image:url(topTabR.gif);background-repeat:no-repeat;background-position:top right;height:21px;float:left;margin:0;}
+div.tab div a{margin:0 8px;height:21px;line-height:21px;background-image:url(topTabBg.gif);display:block;text-decoration:none;vertical-align:middle;float:left;}
+
+#current{background-image:url(topDimTabL.gif);}
+#current div{background-image:url(topDimTabR.gif);}
+#current div a{background-image:url(topDimTabBg.gif);}
+
+#loading{text-align:center;}
+
+#search{line-height:25px;vertical-align:middle;background-position:center center;background-image:url('round_text.png');height:25px;background-repeat:no-repeat;vertical-align:center;}
+#search input{line-height:25px;vertical-align:middle;border:none;height:22px;margin:2px;}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
+
+<properties>
+	<title>EP Rhea adapter change log</title>
+	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+</properties>
+
+<body>
+    <release version="1.0.4" date="2013-10-22"
+        description="Added RheaConfig class">
+        <action dev="rafalcan" type="add">
+            Added RheaConfig class and its MBean interface, with just reaction
+            base URL.
+        </action>
+    </release>
+	<release version="1.0.3" date="2013-09-26"
+	    description="Dependencies updates.">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub),
+			ep-domain, rhea-ws-domain and rhea-ws-client.
+		</action>
+	</release>
+	<release version="1.0.2" date="2012-08-01" description="Bug fix">
+		<action dev="rafalcan" type="fix">
+			Fixed population of the model, so that we don't lose coefficients.
+			<fixes issue="90"/>
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to most recent version of ep-domain, rhea-ws-domain and
+			rhea-domain.
+		</action>
+		<action dev="rafalcan" type="add">
+			Added configuration for doc site generation.
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21"/>
+	<release version="1.0" date="2012-03-30"/>
+</body>
+
+</document>

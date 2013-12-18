@@ -1,0 +1,37 @@
+Agricola citation
+ArrayExpressAtlas
+BRENDA
+Beilstein Registry Number
+BioModels
+CAS Registry Number
+COMe
+ChEMBL COMPOUND
+Chinese Abstracts citation
+DrugBank
+Gmelin Registry Number
+HMDB
+IEDB
+IntAct
+IntEnz
+KEGG COMPOUND
+KEGG DRUG
+KEGG GLYCAN
+LIPID MAPS class
+LIPID MAPS instance
+MetaCyc
+MolBase
+NMRShiftDB
+PDB
+PDBeChem
+Patent
+PubChem
+PubMed citation
+RESID
+Reactome
+Reaxys Registry Number
+Rhea
+SABIO-RK
+UM-BBD compID
+UniProt
+WebElements
+Wikipedia
