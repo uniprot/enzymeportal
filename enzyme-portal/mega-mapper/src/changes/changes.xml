@@ -10,6 +10,12 @@
 </properties>
 
 <body>
+    <release version="1.0.23" date="2013-12-18"
+        description="Fixed release script">
+        <action dev="rafalcan" type="fix">
+            Defined variable which was making a release script to fail.
+        </action>
+    </release>
     <release version="1.0.22" date="2013-11-28"
         description="New parser for ChEMBL xrefs">
         <action dev="rafalcan" type="add">
