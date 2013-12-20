@@ -81,7 +81,7 @@
                     <a href="${pageContext.request.contextPath}/basket"
                         title="Enzymes selected to compare"
                         class="icon icon-generic" data-icon="b">Basket
-                        (<span id="basketSize"></span>)</a></li>
+                        (<span class="basketSize"></span>)</a></li>
             </ul>
         </nav>
     </div>
