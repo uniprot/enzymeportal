@@ -23,6 +23,11 @@
             Added configuration properties Config.structureSearchUrl and
             Config.structureSearchParams.
         </action>
+        <action dev="rafalcan" type="fix">
+            CompoundsPredicate uses the compound ID again - not the name - to
+            evaluate, which fixes a problem with spring parameter handling and
+            commas in compound names.
+        </action>
     </release>
     <release version="1.0.21" date="2013-10-15"
         description="chembl-molecule domain">
