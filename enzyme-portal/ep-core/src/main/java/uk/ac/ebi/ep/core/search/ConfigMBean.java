@@ -5,7 +5,7 @@ import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
 
 public interface ConfigMBean {
 
-	public abstract void setMaxPages(int maxPages);
+    public abstract void setMaxPages(int maxPages);
 
 	public abstract int getMaxPages();
 
@@ -59,4 +59,8 @@ public interface ConfigMBean {
      *      retrieved.
      */
     void setMaxMoleculesPerGroup(int maxMoleculesPerGroup);
+
+    public abstract void setMaxTextLength(int maxTextLength);
+
+    public abstract int getMaxTextLength();
 }

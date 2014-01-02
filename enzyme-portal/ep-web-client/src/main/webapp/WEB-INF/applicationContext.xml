@@ -47,6 +47,8 @@
         <property name="mmDatasource" value="${search.mm.data.source}"/>
         <property name="maxMoleculesPerGroup"
                   value="${search.molecules.group.max}"/>
+        <property name="maxTextLength"
+            value="${search.summary.text.length.max"/>
     </bean>
     <alias name="uk.ac.ebi.ep:name=searchConfig" alias="searchConfig"/>
 

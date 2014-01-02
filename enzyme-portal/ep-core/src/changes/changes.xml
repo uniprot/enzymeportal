@@ -26,6 +26,9 @@
             molecules tab will not be affected, as the configuration is used
             there.
         </action>
+        <action dev="rafalcan" type="add">
+            Added configuration for maximum text length shown for a field.
+        </action>
     </release>
     <release version="1.0.20" date="2013-09-26" description="Better searches.">
         <action dev="rafalcan" type="update">

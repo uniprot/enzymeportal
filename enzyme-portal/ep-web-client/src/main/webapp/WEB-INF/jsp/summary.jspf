@@ -77,12 +77,12 @@
         <div>
             <b>Function</b>:
             <c:choose>
-                <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt textMaxLength}">
+                <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt searchConfig.maxTextLength}">
                     <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
-                        begin="0" end="${textMaxLength-1}"> ${word}</c:forEach>
+                        begin="0" end="${searchConfig.maxTextLength-1}"> ${word}</c:forEach>
                     <span id="fun_${resultItemId}" style="display: none">
                         <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
-                            begin="${textMaxLength}"> ${word}</c:forEach>
+                            begin="${searchConfig.maxTextLength}"> ${word}</c:forEach>
                     </span>
                     <a class="showLink" id="fun_link_${resultItemId}">... Show more about function</a>
                 </c:when>

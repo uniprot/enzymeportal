@@ -64,10 +64,7 @@
                 <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
                 <c:set var="totalfound" value="${searchresults.totalfound}"/>
                 <c:set var="filterSizeDefault" value="${50}"/>
-                <%-- maximum length in words for a text field --%>
-                <c:set var="textMaxLength" value="${60}"/>
                 <script>
-
                     var  speciesAutocompleteDataSource = [];
                     var compoundsAutoCompleteDataSource = [];
                     var diseaseAutoCompleteDataSource = [];
