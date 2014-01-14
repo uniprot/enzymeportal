@@ -36,7 +36,18 @@
         <c:if test="${not empty history}">
             <c:forEach var="hItem" items="${history}">
                 &gt;
-                <c:choose>                                      
+                <c:choose>
+                    <c:when test="${fn:startsWith(hItem, 'searchparams.type=COMPOUND')}">
+                        <c:choose>
+                            <c:when test="${Fn:lastInList(history, hItem)}">
+                                Search for <i>"${fn:substringAfter(hItem, 'searchparams.text=')}"</i>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/search?${hItem}&searchparams.start=0&searchparams.previoustext=">Search
+                                    for <i>"${fn:substringAfter(hItem, 'searchparams.text=')}"</i></a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:when>
                     <c:when test="${fn:startsWith(hItem, 'searchparams.text=')}">
                         <c:if test="${not Fn:lastInList(history, hItem)}">
                       

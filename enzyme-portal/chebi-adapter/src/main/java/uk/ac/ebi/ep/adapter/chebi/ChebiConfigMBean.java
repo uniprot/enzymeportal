@@ -70,5 +70,66 @@ public interface ChebiConfigMBean {
      */
     public abstract String getCompoundImgBaseUrl();
 
+    /**
+     * Sets the data set configuration of the ChEBI structure search.
+     * @param ssSpecialDataset the data set.
+     * @since 1.0.5
+     */
+    public abstract void setSsSpecialDataset(String ssSpecialDataset);
+
+    /**
+     * @since 1.0.5
+     */
+    public abstract String getSsSpecialDataset();
+
+    /**
+     * Sets the data source of cross references for which to filter the ChEBI
+     * structure search results.
+     * @param ssDatasource the data source of cross references.
+     */
+    public abstract void setSsDatasource(String ssDatasource);
+
+    /**
+     * @since 1.0.5
+     */
+    public abstract String getSsDatasource();
+
+    public abstract void setSsCallbackUrl(String ssCallbackUrl);
+
+    /**
+     * @since 1.0.5
+     */
+    public abstract String getSsCallbackUrl();
+
+    /**
+     * Sets the printer friendly character of the ChEBI structure search web
+     * page (i.e. without headers, etc.).
+     * @param ssPrinterFriendly the printer friendliness.
+     */
+    public abstract void setSsPrinterFriendly(boolean ssPrinterFriendly);
+
+    /**
+     * @since 1.0.5
+     */
+    public abstract boolean isSsPrinterFriendly();
+
+    /**
+     * Sets the URL of the ChEBI structure search.
+     * @param ssUrl the URL.
+     */
+    public abstract void setSsUrl(String ssUrl);
+
+    /**
+     * @since 1.0.5
+     */
+    public abstract String getSsUrl();
+
+    public abstract void setSsResultsUrl(String ssResultsUrl);
+
+    public abstract String getSsResultsUrl();
+
+    public abstract void setWsTestUrl(String wsTestUrl);
+
+    public abstract String getWsTestUrl();
 
 }

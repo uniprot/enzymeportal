@@ -10,6 +10,36 @@
 </properties>
 
 <body>
+    <release version="1.1.0" date=""
+    	description="Enzyme comparison and chemical structure search">
+        <action dev="rafalcan" type="add">
+            Added package to compare two enzymes side by side.
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of ep-domain - which adds equals and
+            hashCode methods to the JAXB-generated classes -, intenz-adapter,
+            rhea-adapter, chebi-adapter and mega-mapper.
+        </action>
+        <action dev="rafalcan" type="fix">
+            The number of compounds added to the enzyme model is not limited by
+            the searchConfig any more. We need this for enzyme comparisons, and
+            for the future downloads. The view of compounds in the small
+            molecules tab will not be affected, as the configuration is used
+            there.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added configuration for maximum text length shown for a field.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added method EnzymeFinder.getEnzymesByCompound to retrieve enzymes
+            related to a given ChEBI ID (for the structure search).
+        </action>
+        <action dev="rafalcan" type="fix">
+            CompoundsPredicate uses the compound ID again - not the name - to
+            evaluate, which fixes a problem with spring parameter handling and
+            commas in compound names.
+        </action>
+    </release>
     <release version="1.0.21" date="2013-10-15"
         description="chembl-molecule domain">
         <action dev="rafalcan" type="update" issue="182">

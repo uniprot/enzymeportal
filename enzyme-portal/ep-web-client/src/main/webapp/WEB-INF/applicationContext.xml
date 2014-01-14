@@ -12,17 +12,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-<!--
-    <context:component-scan
-            base-package="uk.ac.ebi.ep.web, uk.ac.ebi.ep.mBean" />
--->
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <context:component-scan base-package="uk.ac.ebi.ep.web" />
     <context:property-placeholder
-            location="classpath:/ep-web-client.properties"/>
+        location="classpath:/ep-web-client.properties"/>
 
     <!-- MBeans -->
     <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
@@ -46,6 +47,8 @@
         <property name="mmDatasource" value="${search.mm.data.source}"/>
         <property name="maxMoleculesPerGroup"
                   value="${search.molecules.group.max}"/>
+        <property name="maxTextLength"
+            value="${search.summary.text.length.max}"/>
     </bean>
     <alias name="uk.ac.ebi.ep:name=searchConfig" alias="searchConfig"/>
 
@@ -74,13 +77,16 @@
         <property name="useProxy" value="${uniprot.ws.proxy}"/>
         <property name="maxTermsPerQuery" value="${uniprot.query.terms.max}"/>
         <property name="maxThreads" value="${uniprot.threads.max}"/>
+        <property name="alignUrl" value="${uniprot.align.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=uniprotConfig" alias="uniprotConfig"/>
 
     <bean name="uk.ac.ebi.ep:name=intenzConfig"
           class="uk.ac.ebi.ep.adapter.intenz.IntenzConfig">
         <property name="timeout" value="${intenz.ws.timeout}"/>
         <property name="intenzXmlUrl" value="${intenz.xml.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=intenzConfig" alias="intenzConfig"/>
 
     <bean name="uk.ac.ebi.ep:name=reactomeConfig"
           class="uk.ac.ebi.ep.adapter.reactome.ReactomeConfig">
@@ -88,6 +94,7 @@
         <property name="useProxy" value="${reactome.ws.proxy}"/>
         <property name="wsBaseUrl" value="${reactome.ws.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=reactomeConfig" alias="reactomeConfig"/>
 
     <bean name="uk.ac.ebi.ep:name=chebiConfig"
           class="uk.ac.ebi.ep.adapter.chebi.ChebiConfig">
@@ -95,8 +102,20 @@
         <property name="maxThreads" value="${chebi.threads.max}"/>
         <property name="searchStars" value="${chebi.search.stars}"/>
         <property name="maxRetrievedMolecules" value="${chebi.results.max}"/>
+        <property name="compoundBaseUrl" value="${chebi.compound.base.url}"/>
+        <property name="compoundImgBaseUrl"
+            value="${chebi.compound.img.base.url}"/>
     </bean>
+    <alias name="uk.ac.ebi.ep:name=chebiConfig" alias="chebiConfig"/>
 
+    <bean name="uk.ac.ebi.ep:name=chemblConfig"
+        class="uk.ac.ebi.ep.adapter.chembl.ChemblConfig"/>
+    <alias name="uk.ac.ebi.ep:name=chemblConfig" alias="chemblConfig"/>
+    
+    <bean name="uk.ac.ebi.ep:name=rheaConfig"
+        class="uk.ac.ebi.ep.adapter.rhea.RheaConfig"/>
+    <alias name="uk.ac.ebi.ep:name=rheaConfig" alias="rheaConfig"/>
+    
     <bean name="uk.ac.ebi.ep:name=literatureConfig"
           class="uk.ac.ebi.ep.adapter.literature.LiteratureConfig">
         <property name="maxThreads" value="${literature.threads.max}" />
@@ -127,5 +146,18 @@
         <property name="baseDirectory" value="${ep.files.base.dir}"/>
     </bean>
     <alias name="uk.ac.ebi.ep:name=filesConfig" alias="filesConfig"/>
+    
+    <util:map id="drugbankConfig" map-class="java.util.HashMap"
+        key-type="java.lang.String" value-type="java.lang.String">
+        <description>Configuration for DrugBank URLs.</description>
+        <entry key="compound.base.url" value="${drugbank.compound.base.url}"/>
+        <entry key="compound.img.base.url" value="${drugbank.compound.img.base.url}"/>
+    </util:map>
+    
+    <bean name="functions" class="uk.ac.ebi.ep.web.Functions">
+        <property name="chebiConfig" ref="chebiConfig"/>
+        <property name="chemblConfig" ref="chemblConfig"/>
+        <property name="drugbankConfig" ref="drugbankConfig"/>
+    </bean>
 
 </beans>

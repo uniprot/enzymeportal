@@ -10,6 +10,34 @@
 </properties>
 
 <body>
+    <release version="1.1.0" date=""
+    	description="Enzyme comparison and chemical structure search">
+        <action dev="rafalcan" type="add">
+            Added select to enzyme summaries for enzyme comparisons, and
+            compare button. Added page for side-by-side enzyme comparison.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added controller for comparison requests.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added dependency on chembl-adapter to use it as MBean for chembl
+            URLs configuration.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added configuration for DrugBank URLs.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Global configuration for ChEBI, ChEMBL and DrugBank is now used
+            by the Functions class (singleton now, instead of static).
+        </action>
+        <action dev="rafalcan" type="update">
+            Updated to latest version of ebeye-adapter.
+        </action>
+        <action dev="rafalcan" type="fix">
+            Changed signature of Functions.contains so that it can handle any
+            collection, not just Lists.
+        </action>
+    </release>
     <release version="1.0.26" date="2013-10-16"
         description="Updated dependency">
         <action dev="rafalcan" type="update">

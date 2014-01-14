@@ -9,6 +9,13 @@
 </properties>
 
 <body>
+    <release version="1.0.5" date=""
+        description="Configuration for chemical structure search">
+        <action dev="rafalcan" type="add">
+            Added configuration properties for the ChEBI chemical structure
+            search.
+        </action>
+    </release>
     <release version="1.0.4" date="2013-10-22"
         description="Added base URLs, and methods to read from file">
         <action dev="rafalcan" type="add">

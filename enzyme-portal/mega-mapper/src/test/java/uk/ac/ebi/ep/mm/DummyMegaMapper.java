@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.Ignore;
 
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
@@ -210,6 +209,10 @@ public class DummyMegaMapper implements MegaMapper{
     }
 
     public Set<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public List<String> getEnzymesByCompound(String compoundId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

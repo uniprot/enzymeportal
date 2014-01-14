@@ -2,42 +2,14 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 	        
 <c:set var="displayName"
 	value="${empty molecule.name? molecule.id : molecule.name}"/>
 
 <%-- Compound URL --%>
-<c:set var="compoundUrl" value="${molecule.url}"/>
-<c:if test="${empty compoundUrl and not empty molecule.id}">
-	<%-- Add URL if we only have ID --%>
-	<c:choose>
-		<c:when test="${fn:startsWith(molecule.id, 'DB')}">
-			<c:set var="compoundUrl"
-				value="http://www.drugbank.ca/drugs/${molecule.id}"/>
-		</c:when>
-		<c:when test="${fn:startsWith(molecule.id, 'CHEMBL')}">
-			<c:set var="compoundUrl"
-				value="https://www.ebi.ac.uk/chembldb/compound/inspect/${molecule.id}"/>
-		</c:when>
-	</c:choose>
-</c:if>
-
-<%-- Image src --%>
-<c:if test="${not empty molecule.id}">
-	<c:choose>
-		<c:when test="${fn:startsWith(molecule.id, 'CHEBI:')}">
-			<c:set var="compoundImgUrl"
-				value="${chebiImageBaseUrl}${molecule.id}"/>
-		</c:when>
-		<c:when test="${fn:startsWith(molecule.id, 'CHEMBL')}">
-			<c:set var="compoundImgUrl"
-				value="${chemblImageBaseUrl}${molecule.id}"/>
-		</c:when>
-		<c:otherwise>
-			<c:set var="compoundImgUrl" value=""/>
-		</c:otherwise>
-	</c:choose>
-</c:if>
+<c:set var="compoundUrl" value="${epfn:getMoleculeUrl(molecule)}"/>
+<c:set var="compoundImgUrl" value="${epfn:getMoleculeImgSrc(molecule)}"/>
 
 <fieldset class="epBox">
 	<c:choose>
@@ -53,7 +25,7 @@
 			<div style="width: 200px;">
 				<c:choose>
 					<c:when test="${empty compoundUrl}">
-						<img src="${compoundImgUrl}"
+						<img src="${compoundImgUrl}" class="molecule"
 							alt="(No image available)" />
 					</c:when>
 					<c:otherwise>

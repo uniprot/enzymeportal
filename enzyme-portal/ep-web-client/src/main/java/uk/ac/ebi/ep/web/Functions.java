@@ -4,10 +4,20 @@
  */
 package uk.ac.ebi.ep.web;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
+import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.search.model.EnzymeAccession;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
 
 /**
  * Due to no similar functionality in JSTL, this function was designed to help
@@ -17,11 +27,24 @@ import uk.ac.ebi.ep.core.search.HtmlUtility;
  */
 public final class Functions {
 
-    private Functions() {
-        // Hiden constructor.
+    private static ChebiConfig chebiConfig;
+    private static ChemblConfig chemblConfig;
+    private static Map<String, String> drugbankConfig;
+    
+    public Functions() {
     }
     
+    public void setChebiConfig(ChebiConfig chebiConfig){
+        Functions.chebiConfig = chebiConfig;
+    }
  
+    public void setChemblConfig(ChemblConfig chemblConfig){
+        Functions.chemblConfig = chemblConfig;
+    }
+    
+    public void setDrugbankConfig(Map<String, String> config){
+        Functions.drugbankConfig = config;
+    }
     
     public static boolean startsWithDigit(String data){
         return Character.isDigit(data.charAt(0));
@@ -50,7 +73,7 @@ public final class Functions {
      * @param item
      * @return true if the item is contained in the collection
      */
-    public static boolean contains(List collection, Object item) {
+    public static boolean contains(Collection collection, Object item) {
         return collection.contains(item);
     }
     
@@ -119,6 +142,61 @@ public final class Functions {
         String text = HtmlUtility.cleanText(value);
         return text;
     }
+
+    /**
+     * Retrieves the URL to the source of the molecule, or builds it if it is
+     * not set yet.
+     * @param molecule
+     * @return a URL pointing to the source of the molecule.
+     */
+    public static String getMoleculeUrl(Molecule molecule){
+        String url = (String) molecule.getUrl();
+        if (url == null || url.length() == 0){
+            if (molecule.getId().startsWith("DB")){
+                // DrugBank
+                url = Functions.drugbankConfig.get("compound.base.url")
+                        + molecule.getId();
+            } else if (molecule.getId().startsWith("CHEMBL")){
+                // CHEMBL
+                url = Functions.chemblConfig.getCompoundBaseUrl()
+                        + molecule.getId();
+            } else if (molecule.getId().startsWith("CHEBI")){
+                // ChEBI
+                url = Functions.chebiConfig.getCompoundBaseUrl()
+                        + molecule.getId();
+            }
+        }
+        return url;
+    }
     
-  
+    /**
+     * Builds the URL for the image of a molecule, according to its source
+     * database. 
+     * @param molecule
+     * @return a URL for the image.
+     */
+    public static String getMoleculeImgSrc(Molecule molecule){
+        String imgSrc = "";
+        if (molecule.getId().startsWith("CHEBI")){
+            imgSrc = Functions.chebiConfig.getCompoundImgBaseUrl()
+                    + molecule.getId();
+        } else if (molecule.getId().startsWith("CHEMBL")){
+            imgSrc = Functions.chemblConfig.getCompoundImgBaseUrl()
+                    + molecule.getId();
+        } else if (molecule.getId().startsWith("DB")){
+            imgSrc = MessageFormat.format(
+                    drugbankConfig.get("compound.img.base.url"),
+                    molecule.getId());
+        }
+        return imgSrc;
+    }
+    
+    public static String getSummaryBasketId(EnzymeSummary summary){
+        List<String> accs = new ArrayList<String>();
+        for (EnzymeAccession acc : summary.getRelatedspecies()) {
+            accs.add(acc.getUniprotaccessions().get(0));
+        }
+        Collections.sort(accs);
+        return accs.toString();
+    }
 }

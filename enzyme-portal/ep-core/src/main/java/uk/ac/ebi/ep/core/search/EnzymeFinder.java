@@ -3,7 +3,9 @@ package uk.ac.ebi.ep.core.search;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.collections.list.SetUniqueList;
 import org.apache.log4j.Logger;
+
 import uk.ac.ebi.biobabel.blast.Hit;
 import uk.ac.ebi.biobabel.blast.Hsp;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
@@ -156,6 +158,32 @@ public class EnzymeFinder implements IEnzymeFinder {
         LOGGER.debug("Finished search");
         closeResources();
         return enzymeSearchResults;
+    }
+    
+    /**
+     * Builds search results from a list of UniProt IDs. It groups orthologs and
+     * builds summaries for them.
+     * @param uniprotIds The UniProt IDs from a search.
+     * @return the search results with summaries.
+     * @throws EnzymeFinderException
+     * @since
+     */
+    private SearchResults getSearchResults(List<String> uniprotIds)
+    throws EnzymeFinderException{
+        SearchResults results = new SearchResults();
+        SetUniqueList distinctPrefixes =
+                SetUniqueList.decorate(EPUtil.getIdPrefixes(uniprotIds));
+        @SuppressWarnings("unchecked")
+        List<EnzymeSummary> summaries =
+                getEnzymeSummaries(distinctPrefixes, null);
+        results.setSummaryentries(summaries);
+        results.setTotalfound(summaries.size());
+        if (distinctPrefixes.size() != summaries.size()){
+            LOGGER.warn((distinctPrefixes.size() - summaries.size())
+                    + " UniProt ID prefixes have been lost.");
+        }
+        buildFilters(results);
+        return results;
     }
 
     /**
@@ -872,5 +900,20 @@ public class EnzymeFinder implements IEnzymeFinder {
             accs.add(hit.getUniprotAccession());
         }
         return EPUtil.getIdPrefixes(filterEnzymes(accs));
+    }
+
+    /**
+     * Retrieves search results for a given compound ID.
+     * @param searchParams The search parameters, including
+     *      <code>type=COMPOUND</code> and a compound ID as <code>text</code>.
+     * @return Search results (including summaries).
+     * @throws EnzymeFinderException
+     * @since 1.0.22
+     */
+    public SearchResults getEnzymesByCompound(SearchParams searchParams)
+    throws EnzymeFinderException {
+        List<String> uniprotIds = megaMapperConnection.getMegaMapper()
+                .getEnzymesByCompound(searchParams.getText());
+        return getSearchResults(uniprotIds);
     }
 }

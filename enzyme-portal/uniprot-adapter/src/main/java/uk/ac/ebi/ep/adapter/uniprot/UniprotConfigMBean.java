@@ -24,9 +24,21 @@ public interface UniprotConfigMBean {
 	 */
 	public abstract void setReviewed(boolean reviewed);
 
+	/**
+	 * Sets the UniProt web service URL.
+	 * @param wsUrl the UniProt web service URL.
+	 */
 	public abstract void setWsUrl(String wsUrl);
 
 	public abstract String getWsUrl();
+	
+	/**
+	 * Sets the UniProt URL to request sequence alignments.
+	 * @param alignUrl the UniProt URL.
+	 */
+	public abstract void setAlignUrl(String alignUrl);
+	
+	public abstract String getAlignUrl();
 	
 	/**
 	 * Sets the use of a proxy to get web service requests.

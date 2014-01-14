@@ -1,17 +1,32 @@
 package uk.ac.ebi.ep.web;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
@@ -31,11 +46,24 @@ import uk.ac.ebi.ep.core.search.EnzymeFinder;
 import uk.ac.ebi.ep.core.search.EnzymeRetriever;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
 import uk.ac.ebi.ep.entry.Field;
-import uk.ac.ebi.ep.enzyme.model.*;
+import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.CountableMolecules;
 import uk.ac.ebi.ep.enzyme.model.Disease;
+import uk.ac.ebi.ep.enzyme.model.Enzyme;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
-import uk.ac.ebi.ep.search.model.*;
+import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.SearchModel;
+import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.ep.search.model.SearchParams.SearchType;
+import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.search.result.Pagination;
 import uk.ac.ebi.xchars.SpecialCharacters;
 import uk.ac.ebi.xchars.domain.EncodingType;
@@ -141,6 +169,17 @@ public class SearchController {
             enzymeModel.setRequestedfield(requestedField.name());
             model.addAttribute(ENZYME_MODEL, enzymeModel);
             addToHistory(session, accession);
+            // If we got here from a bookmark, the summary might not be cached:
+            String summId = Functions.getSummaryBasketId(enzymeModel);
+            @SuppressWarnings("unchecked")
+            final Map<String, EnzymeSummary> sls = (Map<String, EnzymeSummary>)
+                    session.getAttribute(Attribute.lastSummaries.name());
+            if (sls == null){
+                setLastSummaries(session, Collections.singletonList(
+                        (EnzymeSummary) enzymeModel));
+            } else if (sls.get(summId) == null){
+                sls.put(summId, enzymeModel);
+            }
         } catch (Exception ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
             LOGGER.error("Unable to retrieve the entry!", ex);
@@ -393,34 +432,50 @@ public class SearchController {
         }
     }
 
-//    @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
-//    public String getSearchResult(Model model) {
-//        return "underconstruction";
-//    }
-//
     private void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
-        //List<String> history = (List<String>) session.getAttribute("history");
-        LinkedList<String> history = (LinkedList<String>) session.getAttribute("history");
+        LinkedList<String> history = (LinkedList<String>)
+                session.getAttribute(Attribute.history.name());
         if (history == null) {
-            //history = new ArrayList<String>();
             history = new LinkedList<String>();
-            session.setAttribute("history", history);
+            session.setAttribute(Attribute.history.name(), history);
         }
         if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
             String cleanedText = HtmlUtility.cleanText(s);
             history.add(cleanedText);
         }
     }
+    
+    /**
+     * Adds a search to the user history. The history item (String) actually
+     * stored depends on the type of search, so that the links can be re-created
+     * in the web page properly (see <code>breadcrumbs.jsp</code>).
+     * @param session the user session.
+     * @param searchType the search type.
+     * @param s the text to be added to history.
+     */
+    private void addToHistory(HttpSession session, SearchType searchType, String s){
+        switch (searchType) {
+        case KEYWORD:
+            addToHistory(session, "searchparams.text=" + s);
+            break;
+        case COMPOUND:
+            addToHistory(session,
+                    "searchparams.type=COMPOUND&searchparams.text=" + s);
+            break;
+        case SEQUENCE:
+            addToHistory(session, "searchparams.sequence=" + s);
+            break;
+        }
+    }
 
     private void clearHistory(HttpSession session) {
         @SuppressWarnings("unchecked")
-        // List<String> history = (List<String>) session.getAttribute("history");
-        LinkedList<String> history = (LinkedList<String>) session.getAttribute("history");
+        LinkedList<String> history = (LinkedList<String>)
+                session.getAttribute(Attribute.history.name());
         if (history == null) {
-            //history = new ArrayList<String>();
             history = new LinkedList<String>();
-            session.setAttribute("history", history);
+            session.setAttribute(Attribute.history.name(), history);
         } else {
             history.clear();
         }
@@ -448,29 +503,18 @@ public class SearchController {
 
             if (custom == true) {
                 String id = getPathVariable();
-
                 clearHistory(session);
                 searchModel = customSearch(searchModel, id, model, session);
-
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
-
-
                 setIsCustomSearch(false);
                 view = "search";
             } else {
-
-
-
                 // See if it is already there, perhaps we are paginating:
                 Map<String, SearchResults> prevSearches =
                         getPreviousSearches(session.getServletContext());
-
                 searchKey = getSearchKey(searchModel.getSearchparams());
-
-
                 results = prevSearches.get(searchKey);
-
                 if (results == null) {
                     // New search:
                     clearHistory(session);
@@ -478,34 +522,27 @@ public class SearchController {
                     switch (searchModel.getSearchparams().getType()) {
                         case KEYWORD:
                             results = searchKeyword(searchModel.getSearchparams());
-                            if (results.getTotalfound() > 0){
-                                cacheSearch(session.getServletContext(), searchKey, results);
-                                addToHistory(session, "searchparams.text=" + searchKey);
-                            }
                             break;
                         case SEQUENCE:
                             view = searchSequence(model, searchModel);
                             break;
                         case COMPOUND:
-                            //            	view = postCompoundSearch(model, searchModel);
+                            results = searchCompound(model, searchModel);
                             break;
                         default:
                     }
                 }
             }
             if (results != null) { // something to show
+                cacheSearch(session.getServletContext(), searchKey, results);
+                setLastSummaries(session, results.getSummaryentries());
                 searchModel.setSearchresults(results);
                 applyFilters(searchModel);
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
                 clearHistory(session);
-                if (searchModel.getSearchparams().getType().equals(SearchParams.SearchType.KEYWORD)) {
-                    addToHistory(session, "searchparams.text=" + searchKey);
-                }
-                if (searchModel.getSearchparams().getType().equals(SearchParams.SearchType.SEQUENCE)) {
-                    addToHistory(session, "searchparams.sequence=" + searchKey);
-                }
-                //addToHistory(session, "searchparams.text=" + searchKey);
+                addToHistory(session, searchModel.getSearchparams().getType(),
+                        searchKey);
                 view = "search";
             }
         } catch (Throwable t) {
@@ -513,6 +550,55 @@ public class SearchController {
         }
 
         return view;
+    }
+    
+    /**
+     * Updates the {@link lastSummaries Attribute#lastSummaries} attribute in
+     * the user's session.
+     * @param session
+     * @param summaries
+     */
+    private void setLastSummaries(HttpSession session,
+            List<EnzymeSummary> summaries){
+        @SuppressWarnings("unchecked")
+        Map<String, EnzymeSummary> lastSummaries = (Map<String, EnzymeSummary>)
+                session.getAttribute(Attribute.lastSummaries.name());
+        if (lastSummaries == null){
+            lastSummaries = new HashMap<String, EnzymeSummary>();
+            session.setAttribute(Attribute.lastSummaries.name(), lastSummaries);
+        } else {
+            lastSummaries.clear();
+        }
+        for (EnzymeSummary summary : summaries) {
+            lastSummaries.put(Functions.getSummaryBasketId(summary), summary);
+        }
+    }
+
+    /**
+     * Uses a finder to search by compound ID.
+     * @param model the view model.
+     * @param searchModel the search model, including a compound ID as the
+     *      <code>text</code> parameter.
+     * @return the search results, or <code>null</code> if nothing found.
+     * @since 1.0.27
+     */
+    private SearchResults searchCompound(Model model, SearchModel searchModel) {
+        SearchResults results = null;
+        EnzymeFinder finder = null;
+        try {
+            finder = new EnzymeFinder(searchConfig);
+            finder.getUniprotAdapter().setConfig(uniprotConfig);
+            finder.getIntenzAdapter().setConfig(intenzConfig);
+            results = finder.getEnzymesByCompound(searchModel.getSearchparams());
+            searchModel.setSearchresults(results);
+            model.addAttribute("searchModel", searchModel);
+            model.addAttribute("pagination", getPagination(searchModel));
+        } catch (Exception e){
+            LOGGER.error("Unable to get enzymes by compound", e);
+        } finally {
+            if (finder != null) finder.closeResources();
+        }
+        return results;
     }
 
     /**
@@ -565,7 +651,8 @@ public class SearchController {
 
     }
 
-    @RequestMapping(value = "/advanceSearch", method = RequestMethod.GET)
+    @RequestMapping(value = "/advanceSearch",
+            method = { RequestMethod.GET, RequestMethod.POST })
     public String getAdvanceSearch(Model model) {
         return "advanceSearch";
     }
@@ -711,13 +798,15 @@ public class SearchController {
     @SuppressWarnings("unchecked")
     private Map<String, SearchResults> getPreviousSearches(
             ServletContext servletContext) {
-        Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) servletContext.getAttribute("searches");
+        Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
+                servletContext.getAttribute(Attribute.prevSearches.name());
         if (prevSearches == null) {
             // Map implementation which maintains the order of access:
             prevSearches = Collections.synchronizedMap(
                     new LinkedHashMap<String, SearchResults>(
                     searchConfig.getSearchCacheSize(), 1, true));
-            servletContext.setAttribute("searches", prevSearches);
+            servletContext.setAttribute(Attribute.prevSearches.name(),
+                    prevSearches);
         }
         return prevSearches;
     }
@@ -820,7 +909,7 @@ public class SearchController {
                     SearchParams searchParams = searchModel.getSearchparams();
                     String resultKey = getSearchKey(searchParams);
                     cacheSearch(session.getServletContext(), resultKey, results);
-                    addToHistory(session, "searchparams.sequence=" + resultKey);
+                    //addToHistory(session, "searchparams.sequence=" + resultKey);
                     searchParams.setSize(searchConfig.getResultsPerPage());
                     searchModel.setSearchresults(results);
                     model.addAttribute("searchModel", searchModel);
@@ -843,7 +932,11 @@ public class SearchController {
 
     /**
      * Processes a string to normalise it to use as a key in the application
-     * cache.
+     * cache.<br>
+     * Note that the key for a ChEBI ID depends on the type of search: if a
+     * keyword search, the prefix will be lowercase (<code>chebi:</code>); if a
+     * compound structure search, the prefix will be uppercase
+     * (<code>CHEBI:</code>).
      *
      * @param searchParams the search parameters, including the original search
      * text from the user.
@@ -862,7 +955,8 @@ public class SearchController {
                         .replaceAll("[\n\r]", "");
                 break;
             case COMPOUND:
-                throw new NotImplementedException("Compound structure search");
+                key = searchParams.getText().trim().toUpperCase();
+                break;
             default:
                 key = searchParams.getText().trim().toLowerCase();
         }

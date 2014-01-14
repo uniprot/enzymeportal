@@ -1,6 +1,8 @@
 <%-- Indentation in this page is broken in purpose, in order to minimise the
     amount of white space (which multiplies with these big loops). Empty lines
     have been also been avoided. --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="sublevel1" >
     <div class="subTitle">
         Diseases (<c:out value="${fn:length(searchFilter.diseases)}"></c:out>)
