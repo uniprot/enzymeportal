@@ -27,50 +27,43 @@
 		setTimeout(checkJob, 5000);
 	</script>
        
-   <jsp:include page="header.jspf"/>
-  
-                
-            <div id="content" role="main" class="grid_24 clearfix">
+    <div id="wrapper" class="container_24">
+
+        <%@include file="header.jspf" %>
+
+        <div id="content" role="main" class="grid_24 clearfix">
+
+            <nav id="breadcrumb">
+             	<p>
+        		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
+        		    Sequence search in progress ....
+        		</p>
+          	</nav>
     
-    <!-- If you require a breadcrumb trail, its root should be your service.
-     	   You don't need a breadcrumb trail on the homepage of your service... -->
-    <nav id="breadcrumb">
-     	<p>
-		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
-		    Sequence search in progress ....
-			</p>
-  	</nav>
-    
-    	<form:form id="check-job" modelAttribute="searchModel"
-			    	action="checkJob" method="POST">
-			    	<form:hidden path="searchparams.text" />
-			    	<form:hidden path="searchparams.sequence" />
-				    <form:hidden path="searchparams.previoustext" />
-				    <form:hidden path="searchparams.start" />
-				    <form:hidden path="searchparams.type" />
-				    <input type="hidden" name="jobId" value="${jobId}"/>
-	</form:form>
+        	<form:form id="check-job" modelAttribute="searchModel"
+    	    	action="checkJob" method="POST">
+    	    	<form:hidden path="searchparams.text" />
+    	    	<form:hidden path="searchparams.sequence" />
+    		    <form:hidden path="searchparams.previoustext" />
+    		    <form:hidden path="searchparams.start" />
+    		    <form:hidden path="searchparams.type" />
+			    <input type="hidden" name="jobId" value="${jobId}"/>
+        	</form:form>
     	
-                                    <section>
-                                                  <div style="margin: 4ex 4em;">
-                <!-- Job ID: ${jobId} -->
-                <img alt="Searching..." src="resources/images/loading.gif"
-                	style="margin: 0ex 1em"/>
-                Searching protein sequence...
+            <section>
+                <div style="margin: 4ex 4em;">
+                    <!-- Job ID: ${jobId} -->
+                    <img alt="Searching..." src="resources/images/loading.gif"
+                    	style="margin: 0ex 1em"/>
+                    Searching protein sequence...
                 </div>
-                                        
-                                    </section>
-    
-	   
-  			
-    </div>      
+            </section>
+
+        </div>      
                 
-         <jsp:include page="footer.jspf"/>        
-           
-         
+        <%@include file="footer.jspf" %>        
                 
-                
-                
+    </div>                
 		
-    </body>
+</body>
 </html>
