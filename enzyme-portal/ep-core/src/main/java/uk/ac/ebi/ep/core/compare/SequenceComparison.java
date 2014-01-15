@@ -14,6 +14,9 @@ public class SequenceComparison extends AbstractComparison<Sequence> {
     public SequenceComparison(Sequence seq1, Sequence seq2) {
         compared = new Sequence[] { seq1, seq2 };
         init(seq1, seq2);
+        if (seq1.getSequence() == null && seq2.getSequence() == null){
+            differ = true; // safe guess
+        }
     }
 
     @Override
@@ -22,6 +25,11 @@ public class SequenceComparison extends AbstractComparison<Sequence> {
                 seq1.getSequence(), seq2.getSequence()));
         subComparisons.put("Weight", new StringComparison(
                 seq1.getWeight(), seq2.getWeight()));
+        subComparisons.put("Length", new StringComparison(
+                seq1.getLength() == null? null :
+                    String.valueOf(seq1.getLength()),
+                seq2.getLength() == null? null :
+                    String.valueOf(seq2.getLength())));
     }
 
     @Override

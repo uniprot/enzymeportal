@@ -171,7 +171,7 @@ public class UniprotJapiCallable {
                     + IUniprotAdapter.SEQUENCE_URL_SUFFIX;
 
             Sequence seq = new Sequence();
-            seq.setSequence(String.valueOf(seqLength));
+            seq.setLength(seqLength);
             seq.setWeight(String.valueOf(weight));
             seq.setSequenceurl(seqUrl);
             Enzyme enzyme = new Enzyme();

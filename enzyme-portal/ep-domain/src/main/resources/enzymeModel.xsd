@@ -180,9 +180,26 @@
     <xs:element name="Sequence" type="epe:Sequence"/>
     <xs:complexType name="Sequence">
         <xs:sequence>
-            <xs:element name="sequence" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="weight" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="sequenceurl" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="sequence" type="xs:string" minOccurs="0"
+                maxOccurs="1" >
+                <xs:annotation>
+                    <xs:documentation>The sequence of aminoacids in one-letter code.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="weight" type="xs:string" minOccurs="0"
+                maxOccurs="1" >
+                <xs:annotation>
+                    <xs:documentation>The molecular weight of the enzyme.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="sequenceurl" type="xs:string"
+                minOccurs="1" maxOccurs="1" >
+                <xs:annotation>
+                    <xs:documentation>URL to the complete enzyme aminoacid sequence.</xs:documentation>
+                </xs:annotation></xs:element>
+            <xs:element name="length" type="xs:int"
+                minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>The length of the sequence (number of aminoacids).</xs:documentation>
+                </xs:annotation></xs:element>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

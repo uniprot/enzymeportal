@@ -38,7 +38,7 @@ comparePath = ${comparePath}
             ${item}</a>
     </c:when>
     <c:when test="${theComparison.key eq 'Sequence'}">
-        <a href="${item.sequenceurl}" target="_blank">${item.sequence}</a>
+        <a href="${item.sequenceurl}" target="_blank">${item.length}</a>
         amino acids.
         <span class="FIXME" style="display: none">Mass: ${item.weight} Da</span>
     </c:when>
