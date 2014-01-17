@@ -8,6 +8,9 @@
     <c:when test="${empty enzyme.relatedspecies}">
         <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a>
     </c:when>
+   <c:when test="${not empty errorMessage}">
+        <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a>
+    </c:when>
     <c:otherwise>
         <div class="proteinImg grid_3">
             <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>

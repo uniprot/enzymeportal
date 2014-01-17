@@ -217,6 +217,10 @@ public class DummyMegaMapper implements MegaMapper{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public Collection<CustomXRef> getXrefs_ec_Only(Entry entry, MmDatabase... dbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 
 

@@ -70,6 +70,6 @@
             <ref bean="localeChangeInterceptor" />
         </property>
     </bean>
-
+    
     <!--End internationalization-->
 </beans>

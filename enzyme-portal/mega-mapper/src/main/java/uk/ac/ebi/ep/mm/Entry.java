@@ -25,7 +25,7 @@ public class Entry implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return new StringBuilder(entryId)
+		return new StringBuilder(entryId).append(" (").append(entryName).append(")")
 			.append(" (").append(dbName).append(")")
 			.toString();
 	}

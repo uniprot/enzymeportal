@@ -19,6 +19,12 @@
                 this enzyme.</p>
             </c:when>
             <c:otherwise>
+                <c:if test="${fn:length(reactionpathways) > 1}">
+              <div class="main_link"><b>${fn:length(reactionpathways)} reactions found</b></div>  
+                </c:if>
+               <c:if test="${fn:length(reactionpathways) == 1}">
+              <div class="main_link"><b>${fn:length(reactionpathways)} reaction found</b></div>  
+                </c:if>
                 <c:forEach items="${reactionpathways}" var="reactionpathway"
                 	varStatus="rpVs">
                     <c:set var="reaction" value="${reactionpathway.reaction}"/>
@@ -33,7 +39,7 @@
                         <c:set var="rheaEntryUrl" value="${rheaEntryBaseUrl}${reaction.id}"/>
                         <b>
                             <!--<a target="blank" href="${rheaEntryUrl}"><c:out value="${reaction.name}" escapeXml="false"/></a>-->
-                            <c:out value="${reaction.name}" escapeXml="false"/>
+                            <c:out value="${reaction.name}" escapeXml="false"/> 
                         </b>
                         <div class="equation">
                             <table>

@@ -24,7 +24,7 @@
                                             <div class="left" > 
 
 						<label>
-                                   
+                                                                                          
                                    <form:input id="local-searchbox" name="first" path="searchparams.text" />
                                  
 						</label>                                                                           

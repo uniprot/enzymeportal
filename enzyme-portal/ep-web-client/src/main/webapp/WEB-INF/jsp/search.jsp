@@ -336,18 +336,19 @@
                         </c:if>
                         <c:if test="${totalfound gt 0}">
                                   <c:choose>
-                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
                                <h2>Enzyme Portal results for <span class="searchterm"><i>${fn:substring(searchText, 0, 20)}${fn:length(searchText) gt 20? '...':''}</i>
-                                    </span></h2>	
+                                    </span></h2>
                             </c:when>
 
                             <c:otherwise>
-                                <h2>Enzyme Portal results for <span class="searchterm"><i>${searchText}</i>
+                                  
+                                <h2>Enzyme Portal results for <span class="searchterm"><i><xchars:translate>${searchText}</xchars:translate></i>
                                     </span></h2>
                             </c:otherwise>
                         </c:choose>
+    
                             
-                                              
                             <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
                         </c:if>
                     </section>

@@ -1,5 +1,9 @@
 package uk.ac.ebi.ep.web;
 
+import uk.ac.ebi.ep.enzymes.EnzymeEntry;
+import uk.ac.ebi.ep.enzymes.EnzymeSubclass;
+import uk.ac.ebi.ep.enzymes.EnzymeSubSubclass;
+import uk.ac.ebi.ep.enzymes.IntenzEnzyme;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -10,6 +14,7 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +28,9 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
@@ -47,6 +52,7 @@ import uk.ac.ebi.ep.core.search.HtmlUtility;
 import uk.ac.ebi.ep.entry.Field;
 import uk.ac.ebi.ep.enzyme.model.*;
 import uk.ac.ebi.ep.enzyme.model.Disease;
+import uk.ac.ebi.ep.mm.CustomXRef;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.*;
@@ -95,7 +101,9 @@ public class SearchController {
     private BioportalConfig bioportalConfig;
     private Boolean isCustomSearch = false;
     private String pathVariable;
-    //private IntenzAdapter intenzAdapter;
+    private String ecName;
+    private boolean custom_search = false;
+    
 
     @PostConstruct
     public void init() {
@@ -272,41 +280,47 @@ public class SearchController {
         EnzymeFinder finder = new EnzymeFinder(searchConfig);
         finder.getUniprotAdapter().setConfig(uniprotConfig);
         finder.getIntenzAdapter().setConfig(intenzConfig);
-        System.out.println("custom search called " + id);
 
         //Entry entry = finder.findEntryById("1.1.1.1");//get the entry (ec)
         Entry entry = finder.findEntryById(id);//get the entry (disease)
-        System.out.println("The entry " + entry.getEntryId());
 
-        List<String> ids = finder.getXrefs(entry);//obtain uniprot ids
-        System.out.println("uni Ids " + ids.size());
+        List<String> ids = new ArrayList<>();
+         Collection<CustomXRef> xrefResult = null;
+          int total = 0;
+        if (entry != null) {
+           // ids = finder.getXrefs(entry);//obtain uniprot ids
+            xrefResult = finder.getXrefs(entry);
+           for(CustomXRef ref: xrefResult){
+              ids = ref.getIdList();
+              total = ref.getResult_count();
+              custom_search = true;
+     
+          }
+        }
 
         SearchParams searchParams = new SearchParams();
 
 
+        if (ids.size() > 0) {
+            searchParams.setText(entry.getEntryName());
+            searchParams.setType(SearchParams.SearchType.KEYWORD);
+            searchParams.setStart(0);
+            searchParams.setPrevioustext(entry.getEntryName());
 
-        searchParams.setText(entry.getEntryName());
-        searchParams.setType(SearchParams.SearchType.KEYWORD);
-        searchParams.setStart(0);
-        searchParams.setPrevioustext(entry.getEntryName());
+            finder.setSearchParams(searchParams);
 
-        addToHistory(session, "searchparams.text=" + entry.getEntryName());
+            SearchResults results = finder.computeEnzymeSummary(ids, new SearchResults());
 
-
-
-
-        finder.setSearchParams(searchParams);
-
-        SearchResults results = finder.computeEnzymeSummary(ids, new SearchResults());
-        System.out.println("final results " + results.getTotalfound());
-
-        searchModel.setSearchparams(searchParams);
-
-        searchModel.setSearchresults(results);
+            searchModel.setSearchparams(searchParams);
+            results.setTotalfound(total);
+            searchModel.setSearchresults(results);
+            model.addAttribute("custom_search", custom_search);
+            model.addAttribute("pagination", getPagination(searchModel));//use custom pagination()
+        }
 
         return searchModel;
     }
-    private Set<uk.ac.ebi.ep.search.model.Disease> diseaseList = new TreeSet<uk.ac.ebi.ep.search.model.Disease>();
+    private Set<uk.ac.ebi.ep.search.model.Disease> diseaseList = new TreeSet<>();
     private static final Comparator<String> NAME_COMPARATOR = new ChemicalNameComparator();
     static final Comparator<uk.ac.ebi.ep.search.model.Disease> SORT_DISEASES = new Comparator<uk.ac.ebi.ep.search.model.Disease>() {
         @Override
@@ -336,332 +350,222 @@ public class SearchController {
 
         return "browse";
     }
-    /**
-     * Facilitates communication with the Intenz WebService; autowired by Spring
-     */
-    //@Autowired
-    protected RestTemplate restTemplate;
-    /**
-     * The base URL of the Intenz web service - should be configurable
-     */
-    //private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/1.1.1.1";
-    private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/.json";
-    //private final static String intenzServiceUrl  = "http://www.ebi.ac.uk/intenz/ws/EC/?format=json";
-    // private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/1.1.1.1?format=json";
-    //private final static String intenzServiceUrl = "http://www.ebi.ac.uk/intenz/ws/EC/1.1.1.1.json";
 
-//       @RequestMapping(value = "/browseEcNumber/{id}", method = RequestMethod.GET)
-//    public void showEcNumberWithParams(@PathVariable String id ,Model model) throws MalformedURLException, IOException{
-//           System.out.println("JSON ID "+ id);
-//            URL oracle = new URL("http://www.ebi.ac.uk/intenz/ws/EC/"+id+".json");
-//        // URL oracle = new URL("http://www.ebi.ac.uk/intenz/ws/EC/1.1.json");
-//        URLConnection yc = oracle.openConnection();
-//        yc.setRequestProperty("Content-Type", "application/json");
-//        
-//        BufferedReader in = new BufferedReader(new InputStreamReader(
-//                yc.getInputStream()));
-//
-//        String inputLine;
-//        while ((inputLine = in.readLine()) != null) {
-//            System.out.println(inputLine);
-//         
-//            model.addAttribute("jfile", inputLine);
-//
-//        }
-//           
-//          
-//       }
-//    @RequestMapping(value = "/browseEcNumber", method = RequestMethod.POST)
-//    public @ResponseBody
-//    JsonArray showEcNumber(Model model, @RequestParam("svc") String svc) throws IOException, JSONException {
-//        URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + svc + ".json");
-//        System.out.println("json param " + svc);
-//        System.out.println("AJAX CALL POST ");
-//// Retrieving byte stream object from URL source
-//        InputStream is = url.openStream();
-//
-//        // Creating JSON object model from stream
-//        JsonArray arr = Json.createReader(is).readArray();
-//
-//        JsonArray jsonData = computeJsonArray(arr, null);
-//
-//
-//        //JsonObject obj = Json.createReader(is).readObject();
-//        //s.navigateTree(obj, null);
-//        //s.parserApp(is);
-//
-//        //System.out.println("obj returned " + jsonData);
-//        model.addAttribute("jfile", jsonData);
-//
-//
-//        // return "browseEcNumber";
-//        //return showEcNumberGET(model);
-//        return jsonData;
-//    }
     @RequestMapping(value = "/browseEcNumber", method = RequestMethod.GET)
-    public String showEcNumberGET(Model model, HttpServletRequest request) throws IOException, JSONException {
-        //URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
-
-        String param = request.getParameter("svc");
-        System.out.println("PARAMETER " + param);
-
-// Retrieving byte stream object from URL source
-        //InputStream is = url.openStream();
-        JsonArray jsonData = null;
-//        if (param != null) {
-//            URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + param + ".json");
-//            InputStream is = url.openStream();
-//            JsonObject obj = Json.createReader(is).readObject();
-//            jsonData = computeJsonObject(obj, param);
-//        } 
-
-        URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
-        InputStream is = url.openStream();
-        JsonArray arr = Json.createReader(is).readArray();
-
-        jsonData = computeJsonArray(arr, null);
-
-
-        model.addAttribute("jfile", jsonData);
-       
-
-        //delete later
-        EnzymeFinder finder = new EnzymeFinder(searchConfig);
-        finder.getUniprotAdapter().setConfig(uniprotConfig);
-        finder.getIntenzAdapter().setConfig(intenzConfig);
-        List<String> ecNumbers = finder.findAllEcNumbers();
-        //model.addAttribute("ecNumbers", ecNumbers);
-
+    public String showEcNumber(Model model, HttpServletRequest request, HttpSession session) {
+        clearSelectedEc(session);
         return "browseEcNumber";
-        //return jsonData;
     }
 
-    @RequestMapping(value = "/browseEcNumberJson", method = RequestMethod.GET)
-    //public String showEcNumberGET(Model model, HttpServletRequest request) throws IOException, JSONException {
-    public @ResponseBody
-    Object ajaxJsonResponse(@ModelAttribute("searchModel") SearchModel searchModel,Model model, HttpServletRequest request,HttpSession session) throws IOException, JSONException, ParseException {
-        //URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
+    @RequestMapping(value = "/ecnumber", method = RequestMethod.GET)
+    public String browseEcNumber(@ModelAttribute("searchModel") SearchModel searchModel, Model model, HttpServletRequest request, HttpSession session) throws IOException, JSONException, ParseException {
 
-        String param = request.getParameter("svc");
- 
+        String ec = request.getParameter("ec");
+        String ecname = request.getParameter("ecname");
 
-        if (param != null && param.length() < 7) {
-            System.out.println("ajax call to intenz  "+ param);
-            URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + param + ".json");
-            InputStream is = url.openStream();
-            JsonObject obj = Json.createReader(is).readObject();
+        String sub_ecname = request.getParameter("subecname");
+        String subsub_ecname = request.getParameter("subsubecname");
+        String entry_ecname = request.getParameter("entryecname");
 
 
-            JsonArray jsonData = computeJsonObject(obj, param);
-            //jsonData = computeJsonArray(obj, null);
-            JSONParser parser = new JSONParser();
-            Object o = parser.parse(jsonData.toString());
+        if (ec != null && ec.length() >= 7) {
 
-              //return jsonData;
-            return o;
-        }else{
-            customSearch(searchModel, param, model, session);
+            setIsCustomSearch(true);
+            setPathVariable(ec);
+
+            setEcName(entry_ecname);
+
+            return "redirect:/search";
+
         }
-        
-//        else {
-//            URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/.json");
-//            InputStream is = url.openStream();
-//            JsonArray arr = Json.createReader(is).readArray();
-//
-//            JsonArray jsonData = computeJsonArray(arr, null);
-//            System.out.println("Main json AJAX" + jsonData);
-//            //return jsonData;
-//            return null;
-//        }
+        URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + ec + ".json");
+
+        try (InputStream is = url.openStream();
+                JsonReader rdr = Json.createReader(is)) {
+
+            computeJsonData(rdr, model, session, ecname, sub_ecname, subsub_ecname, entry_ecname, ec);
+        }
+
+        return "ecnumber";
+    }
+    private static String EC = "ec";
+    private static String NAME = "name";
+    private static String DESCRIPTION = "description";
+    private static String SUBCLASSES = "subclasses";
+    private static String SUBSUBCLASSES = "subsubclasses";
+    private static String ENTRIES = "entries";
+
+    /**
+     * This method keeps track of the selected enzymes in their hierarchy for
+     * the browse enzyme
+     *
+     * @param session
+     * @param s the selected enzyme
+     * @param type the position in the hierarchy
+     */
+    private void addToSelectedEc(HttpSession session, IntenzEnzyme s, String type) {
+        @SuppressWarnings("unchecked")
+        LinkedList<IntenzEnzyme> history = (LinkedList<IntenzEnzyme>) session.getAttribute("selectedEc");
 
 
+        if (history == null) {
 
-        //return jsonData;
-        return null;
+            history = new LinkedList<>();
+            session.setAttribute("selectedEc", history);
+        }
+
+        if (!history.isEmpty() && history.contains(s)) {
+          
+            if (type.equalsIgnoreCase("ROOT") && history.size() == 2) {
+                history.removeLast();
+
+            }
+            if (type.equalsIgnoreCase("ROOT") && history.size() == 3) {
+                history.removeLast();
+                history.removeLast();
+
+            }
+            if (type.equalsIgnoreCase("SUBCLASS") && history.size() == 2) {
+                history.removeLast();
+                history.add(s);
+            }
+            if (type.equalsIgnoreCase("SUBCLASS") && history.size() == 3) {
+                history.removeLast();
+            }
+
+        } else if ((history.isEmpty() || !history.contains(s)) && (history.size() < 3)) {
+            history.add(s);
+
+        }
     }
 
-    private JsonArray computeJsonObject(JsonValue tree, String key) throws JSONException {
-
-        JsonArrayBuilder root_array = Json.createArrayBuilder();
-
-        //JsonArray rootArray = (JsonArray) tree;
-        //List<JsonObject> obj = rootArray.getValuesAs(JsonObject.class);
-        JsonObject obj = (JsonObject) tree;
-
-        JsonObjectBuilder root = Json.createObjectBuilder();
-        //JSONObject jroot = new JSONObject();
-        //JSONArray jList = new JSONArray();
-
-        String ec = "ec";
-        String name = "name";
-        String desc = "description";
-
-
-        System.out.println("child objects called "+ key);
-
-//        if (obj.containsKey(ec)) {
-//            String _ec = obj.getString(ec);
-//            String _name = obj.getString(name);
-//            //root.add("data", _ec);//jsTree
-//             
-//            root.add("label", "ec " + _ec +" "+_name);//jqTree
-//
-//            root.add("id", _ec);//jqTree
-//            //jroot.put("label", ec);
-//
-//
-//
-//        }
-        if (obj.containsKey(name)) {
-            String _name = obj.getString(name);
-            //root.add("data", _ec);//jsTree
-            root.add("label", _name);//jqTree
-
-
+    private void clearSelectedEc(HttpSession session) {
+        @SuppressWarnings("unchecked")
+        LinkedList<IntenzEnzyme> history = (LinkedList<IntenzEnzyme>) session.getAttribute("selectedEc");
+        if (history == null) {
+            //history = new ArrayList<String>();
+            history = new LinkedList<>();
+            session.setAttribute("selectedEc", history);
+        } else {
+            history.clear();
         }
-
-        //JsonObjectBuilder rootObj = editJsonData(obj, ec, name, desc);
-        //root_array.add(rootObj);
-
-
-        if (obj.containsKey("subsubclasses")) {
-            JsonArrayBuilder childArray = Json.createArrayBuilder();
-            
-
-            JsonArray arr = obj.getJsonArray("subsubclasses");
-            List<JsonObject> childList = arr.getValuesAs(JsonObject.class);
-            for (JsonObject children : childList) {
-
-
-                JsonObjectBuilder childObj = editJsonData(children, ec, name, desc);
-                childArray.add(childObj);
-                
-            }
-        
-            root.add("children", childArray);
-            //jroot.put("children", childArray);
-
-
-        } else if (obj.containsKey("entries")) {
-           
-            JsonArrayBuilder childArray = Json.createArrayBuilder();
-            JsonArray arr = obj.getJsonArray("entries");
-            List<JsonObject> childList = arr.getValuesAs(JsonObject.class);
-            for (JsonObject children : childList) {
-
-                JsonObjectBuilder childObj = editJsonData(children, ec, name, desc);
-                childArray.add(childObj);
-            }
-
-            root.add("children", childArray);
-
-
-        } else if (obj.containsKey("entries") && obj.containsKey("subsubclasses")) {
-            //System.out.println("make a request to mega mapper");
-        }
-
-        root_array.add(root);
-
-        //System.out.println(" " + root_array.build());
-        return root_array.build();
-        //return jroot;
     }
 
-    private JsonArray computeJsonArray(JsonValue tree, String key) {
-        JsonArrayBuilder root_array = Json.createArrayBuilder();
+    private void computeJsonData(JsonReader jsonReader, Model model, HttpSession session, String... ecname) {
+        JsonObject jsonObject = jsonReader.readObject();
 
-        if (key != null) {
-            //System.out.print("Key " + key + ": ");
+        IntenzEnzyme root = new IntenzEnzyme();
 
+      
+        String ec = jsonObject.getString(EC);
+        String name = jsonObject.getString(NAME);
+        String description = null;
+
+        if (jsonObject.containsKey(DESCRIPTION)) {
+            description = jsonObject.getString(DESCRIPTION);
+
+            root.setDescription(description);
         }
-        JsonArray rootArray = (JsonArray) tree;
+        root.setEc(ec);
+        root.setName(ecname[0]);
+        root.setSubclassName(ecname[1]);
+        root.setSubsubclassName(ecname[2]);
+        root.setEntryName(ecname[3]);
 
-        List<JsonObject> jsonObject = rootArray.getValuesAs(JsonObject.class);
+        //compute the childObject
+        if (jsonObject.containsKey(SUBCLASSES)) {
 
-        JsonObjectBuilder root = Json.createObjectBuilder();
-        String ec = "ec";
-        String name = "name";
-        String desc = "description";
+            JsonArray jsonArray = jsonObject.getJsonArray(SUBCLASSES);
 
-        for (JsonObject obj : jsonObject) {
+            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
+                String _ec = null;
+                String _name = null;
+                String _desc = null;
+                _ec = childObject.getString(EC);
+                _name = childObject.getString(NAME);
 
-//            JsonObject rootObj = editJsonData(obj, ec, name, desc);
-//            root_array.add(rootObj);
+                EnzymeSubclass subclass = new EnzymeSubclass();
 
-            if (obj.containsKey(ec)) {
-                String _ec = obj.getString(ec);
-                //root.add("data", _ec);//jsTree
-                
-                root.add("label", "ec "+ _ec +" - "+obj.getString(name));//jqTree
-                root.add("id", _ec);//jqTree
-                //System.out.println("first object "+ obj);
-
-            }
-
-            if (obj.containsKey("subclasses")) {
-                
-                JsonArrayBuilder childArray = Json.createArrayBuilder();
-
-                JsonArray arr = obj.getJsonArray("subclasses");
-                List<JsonObject> childList = arr.getValuesAs(JsonObject.class);
-                for (JsonObject children : childList) {
-
-
-                    JsonObjectBuilder childObj = editJsonData(children, ec, name, desc);
-                    childArray.add(childObj);
+                if (childObject.containsKey(DESCRIPTION)) {
+                    _desc = childObject.getString(DESCRIPTION);
+                    subclass.setDescription(_desc);
                 }
 
-                root.add("children", childArray);
+                subclass.setEc(_ec);
+                subclass.setName(_name);
+                root.getChildren().add(subclass);
 
-                //root.add("load_on_demand", true);//jqTree
+
+            }
+            addToSelectedEc(session, root, "ROOT");
+            model.addAttribute("json", root);
+        }
+        if (jsonObject.containsKey(SUBSUBCLASSES)) {
+
+            JsonArray jsonArray = jsonObject.getJsonArray(SUBSUBCLASSES);
+
+            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
+                String _ec = null;
+                String _name = null;
+                String _desc = null;
+                _ec = childObject.getString(EC);
+                _name = childObject.getString(NAME);
+
+                EnzymeSubSubclass subsubclass = new EnzymeSubSubclass();
+
+
+                if (childObject.containsKey(DESCRIPTION)) {
+                    _desc = childObject.getString(DESCRIPTION);
+
+                    subsubclass.setDescription(_desc);
+                }
+
+
+                subsubclass.setEc(_ec);
+                subsubclass.setName(_name);
+
+                root.getSubSubclasses().add(subsubclass);
 
             }
 
-
-            root_array.add(root);
-
+            model.addAttribute("json", root);
+            addToSelectedEc(session, root, "SUBCLASS");
         }
-        //System.out.println(" " + root_array.build());
+        if (jsonObject.containsKey(ENTRIES)) {
+           
+            JsonArray jsonArray = jsonObject.getJsonArray(ENTRIES);
 
-        return root_array.build();
 
+            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
+                String _ec = null;
+                String _name = null;
+                String _desc = null;
+                _ec = childObject.getString(EC);
+                _name = childObject.getString(NAME);
+
+
+                EnzymeEntry entries = new EnzymeEntry();
+                if (childObject.containsKey(DESCRIPTION)) {
+                    _desc = childObject.getString(DESCRIPTION);
+
+                    entries.setDescription(_desc);
+                }
+
+                entries.setEc(_ec);
+                entries.setName(_name);
+                root.setEc(ecname[4]);
+                root.getEntries().add(entries);
+
+            }
+           
+            model.addAttribute("json", root);
+            addToSelectedEc(session, root, "SUBSUBCLASS");
+        }
 
     }
 
-    private JsonObjectBuilder editJsonData(JsonObject jsonObject, String ec, String name, String desc) {
-        JsonObjectBuilder childObj = Json.createObjectBuilder();
-
-        if (jsonObject.containsKey(ec)) {
-            String _ec = jsonObject.getString(ec);
-            //childObj.add("data", _ec);//jsTree
-            childObj.add("label", "ec " + _ec);//jqTree
-            //childObj.add("label", "ec " + _ec +" - "+jsonObject.getString(name) );//jqTree
-            //+" - "+ jsonObject.getString(name)
-
-        }
-        //for JqTree, add an id
-        if (jsonObject.containsKey(ec)) {
-            String _ec = jsonObject.getString(ec);
-            //childObj.add("data", _ec);//jsTree
-            childObj.add("id", _ec);//jqTree
-
-        }
-        if (jsonObject.containsKey(name)) {
-            String title = jsonObject.getString(name);
-            //childObj.add("title", title);//jsTree
-            childObj.add("title", title);//jqTree
-
-        }
-        if (jsonObject.containsKey(desc)) {
-            String description = jsonObject.getString(desc);
-            childObj.add("desc", description);
-
-        }
-
-        //return childObj.build();
-        return childObj;
-    }
-
+    
+    
     private boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
     }
@@ -750,7 +654,7 @@ public class SearchController {
         LinkedList<String> history = (LinkedList<String>) session.getAttribute("history");
         if (history == null) {
             //history = new ArrayList<String>();
-            history = new LinkedList<String>();
+            history = new LinkedList<>();
             session.setAttribute("history", history);
         }
         if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
@@ -765,7 +669,7 @@ public class SearchController {
         LinkedList<String> history = (LinkedList<String>) session.getAttribute("history");
         if (history == null) {
             //history = new ArrayList<String>();
-            history = new LinkedList<String>();
+            history = new LinkedList<>();
             session.setAttribute("history", history);
         } else {
             history.clear();
@@ -783,18 +687,18 @@ public class SearchController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModel, Model model,
-            HttpSession session) {
+            HttpSession session,HttpServletRequest request) {
         String view = "error";
 
         String searchKey = null;
         SearchResults results = null;
 
         boolean custom = getIsCustomSearch();
+        String ecname = getEcName();//some entries does not have entry name and thereby result in null pointer when searchkey is called
         try {
 
             if (custom == true) {
                 results = searchModel.getSearchresults();
-
 
                 if (results == null) {
 
@@ -804,11 +708,18 @@ public class SearchController {
 
                     clearHistory(session);
                     searchModel = customSearch(searchModel, id, model, session);
+                   
                     results = searchModel.getSearchresults();
+                   
+                    
                     model.addAttribute("searchModel", searchModel);
-                    model.addAttribute("pagination", getPagination(searchModel));
+                    //model.addAttribute("pagination", getPagination(searchModel));
 
 
+                    if (searchModel.getSearchparams().getText() == null || "".equals(searchModel.getSearchparams().getText())) {
+                        searchModel.getSearchparams().setText(ecname);
+                        searchModel.getSearchparams().setType(SearchParams.SearchType.KEYWORD);
+                    }
 
                     searchKey = getSearchKey(searchModel.getSearchparams());
                     cacheSearch(session.getServletContext(), searchKey, results);
@@ -820,7 +731,7 @@ public class SearchController {
                 if (results != null) {
                     searchModel.setSearchresults(results);
 
-                    applyFilters(searchModel);
+                    applyFilters(searchModel,request);
                     model.addAttribute("searchModel", searchModel);
                     model.addAttribute("pagination", getPagination(searchModel));
                     clearHistory(session);
@@ -834,7 +745,7 @@ public class SearchController {
                     view = "search";
                 }
             } else if (custom == false) {
-                
+
 
                 // See if it is already there, perhaps we are paginating:
                 Map<String, SearchResults> prevSearches =
@@ -872,7 +783,7 @@ public class SearchController {
             }
             if (results != null) { // something to show
                 searchModel.setSearchresults(results);
-                applyFilters(searchModel);
+                applyFilters(searchModel,request);
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
                 clearHistory(session);
@@ -920,14 +831,14 @@ public class SearchController {
      * search request using GET.
      *
      * @param searchModel
-     * @param result
+     * @param childObject
      * @param model
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String getSearchResults(SearchModel searchModel, BindingResult result,
-            Model model, HttpSession session) {
-        return postSearchResult(searchModel, model, session);
+            Model model, HttpSession session,HttpServletRequest request) {
+        return postSearchResult(searchModel, model, session, request);
     }
 
     @RequestMapping(value = "/search/{id}", method = RequestMethod.GET)
@@ -980,7 +891,7 @@ public class SearchController {
         }
 
 
-        return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
+        return xchars.xml2Display(data);
     }
 
     /**
@@ -988,7 +899,7 @@ public class SearchController {
      *
      * @param searchModel
      */
-    private void applyFilters(SearchModel searchModel) {
+    private void applyFilters(SearchModel searchModel,HttpServletRequest request) {
 
 
         if (searchModel != null) {
@@ -1003,10 +914,44 @@ public class SearchController {
                     numOfResults, searchParameters.getSize());
             pagination.setFirstResult(searchParameters.getStart());
 
+             String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
+              String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
+              String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
+           
+             
             // Filter:
             List<String> speciesFilter = searchParameters.getSpecies();
             List<String> compoundsFilter = searchParameters.getCompounds();
             List<String> diseasesFilter = searchParameters.getDiseases();
+            
+            //remove empty string in the filter to avoid unsual behavior of the filter facets
+            if(speciesFilter.contains("")){
+                speciesFilter.remove("");
+                
+            }
+            if(compoundsFilter.contains("")){
+                compoundsFilter.remove("");
+               
+            }
+            if(diseasesFilter.contains("")){
+                diseasesFilter.remove("");
+               
+            }
+            
+    
+        
+             //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
+            if( (specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)){
+                speciesFilter.add(specie_autocompleteFilter);
+               
+                
+            }
+            
+            if( (diseases_autocompleteFilter != null && StringUtils.hasLength(diseases_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(specie_autocompleteFilter)){
+                diseasesFilter.add(diseases_autocompleteFilter);
+                
+            }
+
 
 //both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
             SearchResults searchResults = resultSet;
@@ -1112,7 +1057,7 @@ public class SearchController {
     }
 
     /**
-     * Stores a search result in the application context.
+     * Stores a search childObject in the application context.
      *
      * @param servletContext the application context.
      * @param searchKey the key to use for the search results in the table.
@@ -1127,7 +1072,10 @@ public class SearchController {
                 // remove the eldest:
                 prevSearches.remove(prevSearches.keySet().iterator().next());
             }
-            prevSearches.put(searchKey, searchResult);
+            if (searchResult != null && searchResult.getTotalfound() > 0) {
+
+                prevSearches.put(searchKey, searchResult);
+            }
         }
     }
 
@@ -1288,5 +1236,13 @@ public class SearchController {
 
     public void setPathVariable(String pathVariable) {
         this.pathVariable = pathVariable;
+    }
+
+    public String getEcName() {
+        return ecName;
+    }
+
+    public void setEcName(String ecName) {
+        this.ecName = ecName;
     }
 }

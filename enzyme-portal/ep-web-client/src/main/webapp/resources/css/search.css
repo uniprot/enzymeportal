@@ -810,3 +810,7 @@ span.popup:hover span {
 .ui-accordion .ui-widget .ui-helper-reset{
     font-family: Helvetica,sans-serif;
 }
+.num{
+     font-weight: bolder;
+     color: #0A5050;
+}

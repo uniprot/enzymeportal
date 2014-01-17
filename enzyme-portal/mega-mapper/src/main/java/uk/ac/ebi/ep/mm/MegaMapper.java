@@ -272,5 +272,6 @@ public interface MegaMapper {
             MmDatabase... xDbs);
     Entry findByEntryId(String entryId);
     List<String> findEcNumbers();
+    Collection<CustomXRef> getXrefs_ec_Only(Entry entry, MmDatabase... dbs);
    
 }

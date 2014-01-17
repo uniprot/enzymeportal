@@ -25,6 +25,7 @@ import uk.ac.ebi.ep.core.DiseaseDefaultWrapper;
 import uk.ac.ebi.ep.core.SpeciesDefaultWrapper;
 import uk.ac.ebi.ep.core.search.util.EnzymeSummaryProcessor;
 import uk.ac.ebi.ep.core.search.util.SynonymsProcessor;
+import uk.ac.ebi.ep.mm.CustomXRef;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
@@ -447,21 +448,12 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 
 
-    public List<String> getXrefs(Entry entry) {
-        List<String> uniprotIds = new ArrayList<String>();
+    public  Collection<CustomXRef> getXrefs(Entry entry) {
 
-        Collection<XRef> xrefs = megaMapperConnection.getMegaMapper().getXrefs(entry, MmDatabase.UniProt);
-         if (xrefs != null) {
-            for (XRef ref : xrefs) {
-                Entry uniprot = ref.getFromEntry();
+        Collection<CustomXRef> xrefs = megaMapperConnection.getMegaMapper().getXrefs_ec_Only(entry, MmDatabase.UniProt);
 
-                String[] p = uniprot.getEntryId().split("_");
-                uniprotIds.add(p[0]);
-
-            }
-        }
-
-        return uniprotIds;
+         return xrefs;
+        
     }
 
     public Entry findEntryById(String entryId) {
@@ -471,7 +463,7 @@ public class EnzymeFinder implements IEnzymeFinder {
 
     public SearchResults computeEnzymeSummary(List<String> idPrefixesList, SearchResults searchResults) {
 
-        List<EnzymeSummary> summaryList = null;
+        List<EnzymeSummary> summaryList = new ArrayList<EnzymeSummary>();
 
         try {
 
