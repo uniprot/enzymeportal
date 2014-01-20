@@ -135,10 +135,11 @@ public class BasketController {
             theAccs[j++] = acc;
             if (j == 2) break;
         }
+        ExecutorService pool = null;
         try {
             EnzymeModel models[] = new EnzymeModel[2];
             LOGGER.debug("Getting enzyme models...");
-            ExecutorService pool = Executors.newFixedThreadPool(2);
+            pool = Executors.newFixedThreadPool(2);
             CompletionService<EnzymeModel> cs =
                     new ExecutorCompletionService<EnzymeModel>(pool);
             for (String acc : theAccs) {
@@ -164,6 +165,8 @@ public class BasketController {
             model.addAttribute("errorCode", "comparison");
             model.addAttribute("errorParam", errorParam);
             return "error";
+        } finally {
+            if (pool != null) pool.shutdownNow();
         }
     }
 
@@ -184,14 +187,19 @@ public class BasketController {
         }
 
         public EnzymeModel call() throws Exception {
-            EnzymeRetriever retriever = new EnzymeRetriever(searchConfig);
-            retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
-            retriever.getUniprotAdapter().setConfig(uniprotConfig);
-            retriever.getIntenzAdapter().setConfig(intenzConfig);
-            retriever.getReactomeAdapter().setConfig(reactomeConfig);
-            retriever.getChebiAdapter().setConfig(chebiConfig);
-            retriever.getBioportalAdapter().setConfig(bioportalConfig);
-            return retriever.getWholeModel(acc);
+            EnzymeRetriever retriever = null;
+            try {
+                retriever = new EnzymeRetriever(searchConfig);
+                retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
+                retriever.getUniprotAdapter().setConfig(uniprotConfig);
+                retriever.getIntenzAdapter().setConfig(intenzConfig);
+                retriever.getReactomeAdapter().setConfig(reactomeConfig);
+                retriever.getChebiAdapter().setConfig(chebiConfig);
+                retriever.getBioportalAdapter().setConfig(bioportalConfig);
+                return retriever.getWholeModel(acc);
+            } finally {
+                if (retriever != null) retriever.closeResources();
+            }
         }
 
     }
