@@ -905,43 +905,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-            <!--                        <div class="row-fluid">
-                    <div class="span3 alpha">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-                    <div class="span3">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-                    <div class="span3">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-                    <div class="span3 omega">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-            </div>-->
-
-
-
-
-
-
-
-            <footer>
+           <footer>
                 <!-- Optional local footer (insert citation / project-specific copyright / etc here -->
                 <!--
     <div id="local-footer" class="grid_24 clearfix">

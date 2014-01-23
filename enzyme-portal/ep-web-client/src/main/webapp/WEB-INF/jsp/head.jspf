@@ -38,6 +38,10 @@
     <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
     
+    
+  
+    
+    
     <c:if test="${pageTitle eq 'Entry page'}">
         <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />

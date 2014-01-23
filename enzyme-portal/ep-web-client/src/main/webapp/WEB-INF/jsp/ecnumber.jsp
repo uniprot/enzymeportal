@@ -372,32 +372,6 @@
 
   </script>                   
                         
-                    <script type="text/javascript">
-        function ajaxPost(url, $target) {
-            // get the form values
-            var firstName = $('#firstName').val();
-            var lastName = $('#lastName').val();
-
-            $.ajax({
-                type: "POST",
-                url: url,
-                //data:$target,
-                //data: "firstName=" + firstName + "&lastName=" + lastName,
-                success: function(response) {
-                    // we have the response
-                    //$('#info').html(response);
-                   // $('#firstName').val('');
-                   // $('#lastName').val('');
-                   alert("cool!!!");
-                },
-                error: function(e) {
-                    alert('Error: ' + e);
-                }
-            });
-        }
-        </script>
-
-
             <footer>
                 <!-- Optional local footer (insert citation / project-specific copyright / etc here -->
                 <!--
