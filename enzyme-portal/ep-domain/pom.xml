@@ -8,7 +8,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-domain</artifactId>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>EP domain</name>
     <description>
     	The domain model of the Enzyme Portal and its searches are defined in
@@ -19,7 +19,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.1</version>
+                <version>0.8.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -30,11 +30,19 @@
                 <configuration>
                     <extension>true</extension>
                     <args>
+                        <arg>-XtoString</arg>
+                        <arg>-Xequals</arg>
+                        <arg>-XhashCode</arg>
                         <arg>-Xfluent-api</arg>
                         <arg>-Xcollection-setter-injector</arg>
                     </args>
                     <schemaDirectory>src/main/resources</schemaDirectory>
                     <plugins>
+                        <plugin>
+                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                            <artifactId>jaxb2-basics</artifactId>
+                            <version>0.6.4</version>
+                        </plugin>
                         <plugin>
                             <groupId>net.java.dev.jaxb2-commons</groupId>
                             <artifactId>jaxb-fluent-api</artifactId>
@@ -152,6 +160,16 @@
     </build>
 
     <dependencies>
+	    <dependency>
+	        <groupId>org.jvnet.jaxb2_commons</groupId>
+	        <artifactId>jaxb2-basics-runtime</artifactId>
+	        <version>0.6.4</version>
+	    </dependency>
+        <dependency>
+            <groupId>org.cml</groupId>
+            <artifactId>cml-react</artifactId>
+            <version>2.0.1</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

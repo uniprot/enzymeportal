@@ -109,10 +109,9 @@
             <ul>
                 <li>
                     <c:set var="sequence" value="${enzyme.sequence}"/>
-                    This sequence has ${sequence.sequence} amino acids
-                    <c:if test="${not empty sequence.weight}">
-                        and a molecular weight of ${sequence.weight}
-                    </c:if>
+                    This sequence has ${sequence.length} amino acids<c:if
+                        test="${not empty sequence.weight}">
+                        and a molecular weight of ${sequence.weight}</c:if>.
                 </li>
             </ul>
         </dd>

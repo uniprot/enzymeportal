@@ -10,6 +10,17 @@
 </properties>
 
 <body>
+    <release version="1.1.0" date=""
+        description="Using v4.0 of BioPortal web services">
+        <action dev="rafalcan" type="add">
+            Added field classUri to BioportalOntology enumeration, to use it
+            with the v4.0 of BioPortal web services. The existing field id
+            (meaning the ontology ID in BioPortal) is now deprecated, as it is
+            not used in v4.0.
+        </action>
+    </release>
+    <release version="1.0.4" date="2013-06-05" description="">
+    </release>
 	<release version="1.0.3" date="2013-03-06"
         description="Disease search also in OMIM and MeSH">
 		<action dev="rafalcan" type="fix">

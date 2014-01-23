@@ -99,6 +99,9 @@ select mmx.* from mm_xref mmx, mm_entry mme1, mm_entry mme2 /*\
 select compound_name, compound_id, relationship from uniprot2compound /*\
   */where uniprot_id {0} and compound_name is not null and compound_name not in ({1}) order by relationship
 
+--uniprot.ids.by.compound.id:\
+select uniprot_id from uniprot2compound where compound_id = ?
+
 --constraint.equals:\
 = ?
 --constraint.like:\

@@ -8,12 +8,15 @@ import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
 import uk.ac.ebi.biobabel.util.xml.XPathSAXHandler;
 
 /**
@@ -40,6 +43,11 @@ public class ChemblWsAdapter implements IChemblAdapter {
             "//list/bioactivity/target__confidence";
     private static final String ASSAY_TYPE_XPATH =
             "//list/bioactivity/assay__type";
+    
+    private static final String UP_TARGETS_PATH = "/targets/uniprot/{0}";
+    private static final String UP_TARGET_ID_XPATH = "//target/chemblId";
+    private static final String UP_TARGET_BIOACT_COUNT =
+            "//target/bioactivityCount";
 
     private ChemblConfig config;
 
@@ -71,33 +79,21 @@ public class ChemblWsAdapter implements IChemblAdapter {
             SearchBy searchBy)
     throws ChemblAdapterException {
         ChemblBioactivities bioactivities = null;
-        InputStream is = null;
         try {
-            XMLReader xr = XMLReaderFactory.createXMLReader();
-            XPathSAXHandler handler = new XPathSAXHandler(
-                    TARGET_ID_XPATH, COMPOUND_ID_XPATH,
-                    CONFIDENCE_XPATH, ASSAY_TYPE_XPATH);
-            xr.setContentHandler(handler);
-            URL url = new URL(MessageFormat.format(
+            final String theUrl = MessageFormat.format(
                     config.getWsBaseUrl() + BIOACTIVITIES_PATH,
-                    searchBy.name(), chemblId));
-            URLConnection urlCon = url.openConnection();
-            urlCon.setRequestProperty("Accept", "application/xml");
-            is = urlCon.getInputStream();
-            InputSource inputSource = new InputSource(is);
-            xr.parse(inputSource);
-            final Collection<String> targetIds =
-                    handler.getResults().get(TARGET_ID_XPATH);
-            final Collection<String> compoundIds =
-                    handler.getResults().get(COMPOUND_ID_XPATH);
-            final Collection<String> confidences =
-                    handler.getResults().get(CONFIDENCE_XPATH);
-            final Collection<String> assayTypes =
-                    handler.getResults().get(ASSAY_TYPE_XPATH);
+                    searchBy.name(), chemblId);
+            String[] xpaths = { TARGET_ID_XPATH, COMPOUND_ID_XPATH,
+                    CONFIDENCE_XPATH, ASSAY_TYPE_XPATH };
+            Map<String, Collection<String>> results =
+                    getResults(theUrl, xpaths);
+            final Collection<String> targetIds = results.get(TARGET_ID_XPATH);
             if (targetIds != null){
                 bioactivities = new ChemblBioactivities();
-                Iterator<String> confIter = confidences.iterator();
-                Iterator<String> asstIter = assayTypes.iterator();
+                Iterator<String> confIter =
+                        results.get(CONFIDENCE_XPATH).iterator();
+                Iterator<String> asstIter =
+                        results.get(ASSAY_TYPE_XPATH).iterator();
                 // We get compounds for targets and vice-versa:
                 switch (searchBy){
                     case compounds:
@@ -108,29 +104,16 @@ public class ChemblWsAdapter implements IChemblAdapter {
                         }
                         break;
                     case targets:
-                        Iterator<String> compIter = compoundIds.iterator();
-                        for (String compoundId : compoundIds) {
-                            bioactivities.addBioactivity(compoundId,
+                        for (String compId : results.get(COMPOUND_ID_XPATH)){
+                            bioactivities.addBioactivity(compId,
                                     Integer.parseInt(confIter.next()),
                                     asstIter.next());
                         }
                         break;
                 }
             }
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             throw new ChemblAdapterException(chemblId, e);
-        } catch (IOException e) {
-            throw new ChemblAdapterException(chemblId, e);
-        } catch (SAXException e) {
-            throw new ChemblAdapterException(chemblId, e);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    LOGGER.error(e);
-                }
-            }
         }
         return bioactivities;
     }
@@ -148,38 +131,69 @@ public class ChemblWsAdapter implements IChemblAdapter {
     public String getPreferredName(String compoundId)
     throws ChemblAdapterException {
         String name = null;
+        try {
+            final String theUrl = MessageFormat.format(
+                    config.getWsBaseUrl() + COMPOUND_PATH, compoundId);
+            Map<String, Collection<String>> results =
+                    getResults(theUrl, PREFERRED_COMPOUND_NAME_XPATH);
+            Collection<String> names =
+                    results.get(PREFERRED_COMPOUND_NAME_XPATH);
+            if (names != null) name = names.iterator().next(); // only one
+        } catch (Exception e) {
+            throw new ChemblAdapterException(compoundId, e);
+        }
+        return name;
+    }
+
+    public List<String> getTargets(String uniprotAcc)
+    throws ChemblAdapterException {
+        List<String> targetIds = null;
+        String theUrl = MessageFormat.format(
+                config.getWsBaseUrl() + UP_TARGETS_PATH, uniprotAcc);
+        try {
+            Map<String, Collection<String>> results =
+                    getResults(theUrl, UP_TARGET_ID_XPATH);
+            targetIds = (List<String>) results.get(UP_TARGET_ID_XPATH);
+        } catch (Exception e) {
+            throw new ChemblAdapterException(uniprotAcc, e);
+        }
+        return targetIds;
+    }
+    
+    /**
+     * Connects to the web service and retrieves the interesting values.
+     * @param theUrl the complete URL of the requested resource.
+     * @param xpaths the interesting XPaths.
+     * @return a map of XPaths to retrieved values.
+     * @throws SAXException in case of problem creating the XML reader or
+     *      parsing the response.
+     * @throws IOException in case of problem establishing the connection or
+     *      parsing the response.
+     * @since 1.0.2
+     */
+    private Map<String, Collection<String>> getResults(String theUrl,
+            String... xpaths) throws SAXException, IOException{
         InputStream is = null;
         try {
             XMLReader xr = XMLReaderFactory.createXMLReader();
-            XPathSAXHandler handler = new XPathSAXHandler(
-                    PREFERRED_COMPOUND_NAME_XPATH);
+            XPathSAXHandler handler = new XPathSAXHandler(xpaths);
             xr.setContentHandler(handler);
-            URL url = new URL(MessageFormat.format(
-                    config.getWsBaseUrl() + COMPOUND_PATH, compoundId));
+            URL url = new URL(theUrl);
             URLConnection urlCon = url.openConnection();
             urlCon.setRequestProperty("Accept", "application/xml");
             is = urlCon.getInputStream();
             InputSource inputSource = new InputSource(is);
             xr.parse(inputSource);
-            Collection<String> names =
-                    handler.getResults().get(PREFERRED_COMPOUND_NAME_XPATH);
-            if (names != null) name = names.iterator().next(); // only one
-        } catch (MalformedURLException e) {
-            throw new ChemblAdapterException(compoundId, e);
-        } catch (IOException e) {
-            throw new ChemblAdapterException(compoundId, e);
-        } catch (SAXException e) {
-            throw new ChemblAdapterException(compoundId, e);
+            return handler.getResults();
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    LOGGER.error(e);
+                    LOGGER.error("Unable to close input stream", e);
                 }
             }
         }
-        return name;
     }
 
 }

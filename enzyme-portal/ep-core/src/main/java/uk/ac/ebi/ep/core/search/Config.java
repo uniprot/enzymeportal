@@ -52,20 +52,24 @@ public class Config implements ConfigMBean {
     protected int searchCacheSize = 50;
 
     protected int maxMoleculesPerGroup = 3;
+
+    /**
+     * Maximum length (in words) of a text field to be shown at first instance.
+     */
+    public int maxTextLength = 60;
     
     /**
      * The JNDI name for the mega-mapper data source.
      */
     protected String mmDatasource = "jdbc/ep/mm";
     
-	public void initIt() throws Exception {
-	  LOGGER.debug("Init method after properties are set : ");
-          loadCacheData();
+    public void initIt() throws Exception {
+		LOGGER.debug("Init method after properties are set : ");
+        loadCacheData();
 	}
 
 	public void cleanUp() throws Exception {
 	  LOGGER.debug("Spring Container is destroy! Customer clean up");
-          
 	}
 
     /**
@@ -215,5 +219,13 @@ public class Config implements ConfigMBean {
 
     public void setMaxMoleculesPerGroup(int maxMoleculesPerGroup) {
         this.maxMoleculesPerGroup = maxMoleculesPerGroup;
+    }
+
+    public int getMaxTextLength() {
+        return maxTextLength;
+    }
+
+    public void setMaxTextLength(int maxTextLength) {
+        this.maxTextLength = maxTextLength;
     }
 }

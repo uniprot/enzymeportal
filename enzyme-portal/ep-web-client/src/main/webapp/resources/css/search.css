@@ -10,6 +10,8 @@
    TODO customize this sample style
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
+
+/*
 body, td.contentsarea {
     background-color: #FFFFFF;
     color: #000000;
@@ -20,6 +22,7 @@ body, td.contentsarea {
     line-height: 16px;
     width: 100%;
 }
+*/
 
 a:link, a:visited {
     text-decoration: inherit;
@@ -236,18 +239,19 @@ vertical-align: top;
     vertical-align: bottom;
 }
 #paginationNav {
+    float: right;
     text-align: right;
     vertical-align: bottom;
 }
-
+/*
 .comparison {
     font-weight: bold;
     color: #408C8C;
     float:right;
     max-height: 40px;
-    width:19%;    
+    width:19%;
 }
-
+*/
 /*#allButtons {
     margin-top: -4px;
     margin-bottom: -6px;
@@ -376,17 +380,22 @@ a.ui-corner-all{
     width: 82%;
 }
 */
-.basket{
-    float: right;        
+
+select.toCompare {
+    width: 10em;
+	max-width: 10em;
+    margin-top: 2ex;
 }
 
-.basket #compareButton {
-    font-weight: bold;
-    height: 22px;
-    margin-bottom: 0px;
+input.forBasket {
+    margin-top: 2ex;
 }
 
-#hiddenText {
+button.removeFromBasket {
+    margin-top: 2ex;
+}
+
+.hidden, #hiddenText {
     display:none;
 }
 
@@ -433,7 +442,10 @@ a.ui-corner-all{
 }
 .searchTabContent {
     margin-top: 0.3ex;
+    margin-left: auto;
+    margin-right: auto;
     padding: 2ex 1em;
+    width: 75em;
 }
 
 /*sort of tooltip to pop up scientific names*/
@@ -814,3 +826,14 @@ span.popup:hover span {
      font-weight: bolder;
      color: #0A5050;
 }
+
+
+figure.compound.structure {
+	text-align: center;
+}
+figure.compound.structure figcaption {
+	font-weight: bold;
+	text-align: center;
+	margin: 0ex 2em;
+}
+

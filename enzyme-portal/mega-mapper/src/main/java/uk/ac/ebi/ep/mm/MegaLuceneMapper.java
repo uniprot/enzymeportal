@@ -20,6 +20,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
+
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
 
@@ -282,10 +283,10 @@ public class MegaLuceneMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Set<Disease> findDiseasesLike(MmDatabase uniprotDB, String firstLetter, MmDatabase... xDbs) {
+   public List<String> getEnzymesByCompound(String compoundId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
     public List<String> findEcNumbers() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -295,3 +296,4 @@ public class MegaLuceneMapper implements MegaMapper {
     }
 
 }
+

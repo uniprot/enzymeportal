@@ -101,21 +101,17 @@ $(document).ready(function() {
     });
 
     var pageClicked = false;
-    $("#pagination").click(function(event) {
+    $("#paginationNav").click(function(event) {
         var clickedId = event.target.id;
         var nextStart = $("#nextStart").val();
         var prevStart = $("#prevStart").val();
         if (clickedId == "prevButton") {
-            //$("#start").val(prevStart);
             $("#filtersFormStart").val(prevStart);
             pageClicked = true;
-            //$('#searchButton').trigger("click");
             document.forms.filtersForm.submit();
         } else if (clickedId == "nextButton"){
-            //$("#start").val(nextStart);
             $("#filtersFormStart").val(nextStart);
             pageClicked = true;
-            //$('#searchButton').trigger("click");
             document.forms['filtersForm'].submit();
         }
     });
@@ -345,12 +341,12 @@ function addCheckbox(filterGroup, obj, selected){
     displayedFilters[filterGroup]++;
 }
  
-function addCheckboxCompound(filterGroup, obj, selected){
+function addCheckboxCompound(filterGroup, obj, selected){  
     if (obj == '') return;
     var cb = $('<input/>#accordion', {
         "type":"checkbox", 
         "name":"searchparams."+filterGroup,
-        "value": (filterGroup == 'species'? obj.id : obj.name),
+        "value": obj.name,
         onclick:"form.submit()"
     });
     if (selected) cb.attr("checked", "checked");
@@ -400,10 +396,6 @@ function addCheckboxCompound(filterGroup, obj, selected){
  
     displayedFilters[filterGroup]++;
     
-//                    console.log("info : "+ currentSize);
-//            console.log("others : "+ $('.head').html());
-//             console.log("new items : "+ currentSize);
-//             $('.num').html(' ( '+currentSize+' )');
     
 }
 
@@ -516,8 +508,6 @@ function addShowMoreLinks() {
         
     });
 
- 
-
 }
 
 /**
@@ -544,5 +534,202 @@ function countItems() {
         $(this).html('  ( '+$(div).children().size()+' )');
 
     });
+}
+
+
+var BASKET_SIZE = 'ep.basket.size=';
+
+/**
+ * Stores the current number of enzymes in the basket into a cookie, which
+ * should expire after the tomcat session expires.
+ * @param size
+ */
+function storeBasketSize(size){
+	var exp = new Date();
+	exp.setTime(exp.getTime() + 30*60*1000); // tomcat session
+	document.cookie = BASKET_SIZE + size + ';expires=' + exp.toGMTString();
+}
+
+/**
+ * Shows the current number of enzymes in the basket.
+ */
+function showBasketSize(){
+	var basketSize = 0;
+	var dc = document.cookie;
+        console.log("cookies == > "+ dc);
+	var bsIndex = dc.indexOf(BASKET_SIZE);
+         console.log("basket == > "+ bsIndex);
+	if (dc && bsIndex > -1){
+		bsStart = bsIndex + BASKET_SIZE.length;
+                 console.log("bstart  == > "+ bsStart)
+		basketSize = dc.substring(bsStart, dc.indexOf(';', bsStart));
+	}
+         console.log("basket size  == > "+ basketSize)
+	$('.basketSize').text(basketSize);
+}
+
+/**
+ * (De)selects one summary for the basket.
+ * @param event a change event in a checkbox.
+ */
+function selectForBasket(event){
+    var cb = event.target;
+    var id = cb.value;
+    var checked = cb.checked;
+	ajaxBasket(id, checked);
+}
+
+/**
+ * (Un)checks all basket checkboxes in the page.
+ * Sends one single ajax request with a semicolon-separated list of basket IDs.
+ * @param event The event triggering this action, namely the (de)select all
+ * 		buttons.
+ */
+function basketAll(event){
+	var id = '';
+	$('input.forBasket').each(function(index, elem){
+		if (id.length > 0) id += ';';
+		id += elem.value;
+	});
+	var checked = event.target.value == '+';
+	ajaxBasket(id, checked);
+	$('input.forBasket').each(function(index, elem){
+		elem.checked = checked;
+		//if (checked) $(elem).attr('checked', 'checked');
+		//else $(elem).removeAttr('checked');
+	});
+}
+
+/**
+ * Removes one summary from the basket.
+ * @param event The event (button click) triggering this method.
+ */
+function removeFromBasket(event){
+	btn = event.target;
+	ajaxBasket(btn.value, false);
+	$(btn).parent().parent().remove();
+	updateCompareButton();
+}
+
+/**
+ * Sends an AJAX request to the server to update the basket (add or remove
+ * enzymes).
+ * @param id the basket ID(s) to be added/removed. Note that events triggered
+ * 		from a checkbox send only one basket ID, but buttons send more
+ * 		(10 according to the current pagination configuration).
+ * @param checked <code>true</code> if the enzyme is added, <code>false</code>
+ * 		if removed.
+ */
+function ajaxBasket(id, checked){
+	var thisFunction = this;
+    var params = {};
+    params.id = id;
+    params.checked = checked;
+    jQuery.ajax({
+    	dataType: "text",
+        url: window.location.pathname.replace(/search.*|basket/, "ajax/basket"),
+        data: params,
+        context: thisFunction,
+        success: function(basketSize){
+        	storeBasketSize(basketSize);
+        	showBasketSize();
+                //$('.basketSize').text(basketSize);
+        },
+        error: function(xhr, status, message){
+        	alert(message);
+        }
+    });
+}
+
+/**
+ * Updates the compare button (disabled/enabled) according to the number of
+ * selected enzymes to compare, and also the text shown according to the
+ * total number of remaining summaries in the basket.
+ */
+function updateCompareButton(){
+    var all = 0, sel = 0;
+    $('select.toCompare').each(function(){
+    	all++;
+        if (this.value != '') sel++;
+    });
+    if (all == 0){
+    	$('div#basketEmptyMsg').show();
+    	$('div#basketOneMsg').hide();
+    	$('div#basketFullMsg').hide();
+    } else if (all == 1){
+    	$('div#basketEmptyMsg').hide();
+    	$('div#basketOneMsg').show();
+    	$('div#basketFullMsg').hide();
+    } else {
+    	$('div#basketEmptyMsg').hide();
+    	$('div#basketOneMsg').hide();
+    	$('div#basketFullMsg').show();
+    	showBasketSize();
+    }
+    if (sel == 2){
+        $('#compareButton').removeAttr('disabled');
+        $('#compareButton').attr('title',
+                'Proceed to compare selected enzymes');
+    } else {
+        $('#compareButton').attr('disabled', 'disabled');
+        $('#compareButton').attr('title', 'Please select exactly 2 enzymes.');
+	}
+}
+
+/**
+ * Prefix used for the names of Chemical Structure Search parameters stored in
+ * the sessionStorage.
+ */
+var EPCSS_PREFIX = 'EPCSS-';
+
+/**
+ * Saves the structure search parameters in session storage for later use.
+ */
+function saveDrawnStructure(){
+    try {
+	    var chebiDoc = $('#chebiIframe')[0].contentWindow.document;
+	    /* This does not work with IE10:
+	    var inputs = $(chebiDoc).find('#goBackStructureSearch').find('input');
+	    */
+	    var backForm = chebiDoc.getElementById('goBackStructureSearch');
+	    if (!backForm){
+	    	sessionStorage.removeItem(EPCSS_PREFIX + 'results');
+	    	return; // nothing available to store.
+	    }
+	    // We are seeing the results of the structure search:
+	    sessionStorage.setItem(EPCSS_PREFIX + 'results', 'true');
+	    var inputs = backForm.getElementsByTagName('input');
+	    for (var i = 0; i < inputs.length; i++){
+	        var inputName = $(inputs[i]).attr('name');
+	        if (typeof inputName != 'undefined'){
+	            var inputValue = $(inputs[i]).attr('value');
+	            sessionStorage.setItem(EPCSS_PREFIX + inputName, inputValue);
+	        }
+	    }
+	    console.log('Stored inputs');
+	    // The image for the drawn structure:
+    	var strImg = $(chebiDoc).find('img[src*="randomId"]')[0];
+    	if (typeof(strImg) != 'undefined'){
+    		saveDrawnImg(strImg);
+    	    console.log('Stored image');
+    	}
+    } catch (e) {
+    	console.log("Storage failed: " + e);
+    }
+}
+
+/*
+ * Saves the image of the structure drawn by the user in the session storage
+ * under the name <code>drawnImg</code>.
+ * @param strImg the HTML img element containing the image.
+ */
+function saveDrawnImg(strImg){
+    var imgCanvas = document.createElement("canvas");
+    imgCanvas.width = strImg.width;
+    imgCanvas.height = strImg.height;
+    var imgContext = imgCanvas.getContext("2d");
+    imgContext.drawImage(strImg, 0, 0, strImg.width, strImg.height);
+    var imgAsDataURL = imgCanvas.toDataURL("image/png");
+    sessionStorage.setItem("drawnImg", imgAsDataURL);
 }
 

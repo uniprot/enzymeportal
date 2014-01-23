@@ -12,6 +12,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
 
@@ -322,7 +323,12 @@ public class MegaDbMapper implements MegaMapper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public List<String> findEcNumbers() {
+    public List<String> getEnzymesByCompound(String compoundId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+ 
+   public List<String> findEcNumbers() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -331,3 +337,4 @@ public class MegaDbMapper implements MegaMapper {
     }
 
 }
+

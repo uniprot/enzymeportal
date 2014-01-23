@@ -12,7 +12,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.21-SNAPSHOT</version>
+    <version>1.0.24-SNAPSHOT</version>
     <name>Mega mapper</name>
     <description>
         A module to keep track of cross references between the databases used
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-core</artifactId>
-            <version>0.15</version>
+            <version>0.16</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
@@ -279,6 +279,14 @@
                         </configuration>
                     </plugin>
                 </plugins>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>log4j.xml</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
                 <testResources>
                     <testResource>
                         <directory>src/test/resources</directory>
@@ -320,7 +328,7 @@
                 <dependency>
                     <groupId>uk.ac.ebi.ep</groupId>
                     <artifactId>ep-util</artifactId>
-                    <version>1.0.4</version>
+                    <version>1.0.6</version>
                 </dependency>
                 <dependency>
                     <groupId>uk.ac.ebi.biobabel</groupId>

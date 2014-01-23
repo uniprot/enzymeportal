@@ -102,5 +102,8 @@ ON UNIPROT2COMPOUND (UNIPROT_ACCESSION ASC);
 create index uniprot2compound_ind_upid
 on uniprot2compound (uniprot_id asc);
 
+create index uniprot2compound_ind_cmpid
+on uniprot2compound (compound_id asc);
+
 grant SELECT on "UNIPROT2COMPOUND" to "ENZYME_WEBSERVER";
 

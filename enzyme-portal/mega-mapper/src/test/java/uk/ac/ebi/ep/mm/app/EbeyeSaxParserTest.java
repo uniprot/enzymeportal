@@ -1,21 +1,23 @@
 package uk.ac.ebi.ep.mm.app;
 
+import static org.junit.Assert.*;
+
 import java.util.Arrays;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
 import uk.ac.ebi.ep.mm.DummyMegaMapper;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
-
-import static junit.framework.Assert.assertEquals;
-import org.junit.Ignore;
 
 /**
  * @author rafa
  * @since 2013-05-07
  */
+@Ignore("The class EbeSaxParser is deprecated.")
 public class EbeyeSaxParserTest {
 
     private EbeyeSaxParser parser;

@@ -5,7 +5,11 @@ import java.sql.*;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.*;
+
+import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
+
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 import uk.ac.ebi.ep.search.model.Compound;
@@ -1613,5 +1617,32 @@ public class MegaJdbcMapper implements MegaMapper {
          xrefs.add(xref);
         rs.close();
         return xrefs;
+            }
+
+    public List<String> getEnzymesByCompound(String compoundId) {
+        List<String> uniprotIds = null;
+        ResultSet rs = null;
+        try {
+            PreparedStatement ps = sqlLoader
+                    .getPreparedStatement("--uniprot.ids.by.compound.id");
+            ps.setString(1, compoundId);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                if (uniprotIds == null) uniprotIds = new ArrayList<String>();
+                uniprotIds.add(rs.getString("uniprot_id"));
+            }
+        } catch (Exception e) {
+            LOGGER.error("Unable to retrieve enzymes by compound ID", e);
+        } finally {
+            if (rs != null)
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    LOGGER.error("Unable to close result set", e);
+                }
+        }
+        return uniprotIds;
+
     }
+
 }

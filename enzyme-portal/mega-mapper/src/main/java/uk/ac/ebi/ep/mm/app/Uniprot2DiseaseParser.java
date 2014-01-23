@@ -47,9 +47,13 @@ public class Uniprot2DiseaseParser implements MmParser {
 	private BioportalWsAdapter bioportalAdapter;
 	
 	/**
-	 * Minimum scores to accept a mapping.
+	 * Minimum scores to accept a mapping. Currently set to the threshold
+	 * already set in the UniMed mapping file (-2.5), according to the
+	 * <a href="http://www.biomedcentral.com/1471-2105/9/S5/S3">paper</a> (see
+	 * <a href="http://www.biomedcentral.com/1471-2105/9/S5/S3/figure/F4">figure
+	 * 4).
 	 */
-	private final double minScore = 2.5;
+	private final double minScore = -2.5;
 
 	private final Pattern htmlTablePattern = Pattern.compile(
 			"^(?:</TR>)?<TR><TD>(.*?)<\\/TD>" +
@@ -121,11 +125,8 @@ public class Uniprot2DiseaseParser implements MmParser {
 				String[] fields = getFields(format, line);
 				if (fields == null) continue; // header lines
 				
-				// Start with the scores, discard immediately if not
-				// interesting, otherwise keep for the MeSH terms (see below):
 				String[] scoresCell = fields[4].split(" ?/ ?");
 				double[] scores = new double[scoresCell.length];
-				boolean interesting = false;
 				for (int i = 0; i < scoresCell.length; i++) {
 					final String scoreString = scoresCell[i].trim();
 					if (scoreString.equals("exact")){
@@ -133,15 +134,12 @@ public class Uniprot2DiseaseParser implements MmParser {
 					} else {
 						scores[i] = Double.valueOf(scoreString);
 					}
-					if (scores[i] > minScore) interesting = true;
 				}
-				if (!interesting) continue;
-				LOGGER.debug("Score over " + minScore);
 				
 				String uniprotAcc = fields[0];
 				Entry uniprotEntry = mm.getEntryForAccession(
 						MmDatabase.UniProt, uniprotAcc);
-				// XXX: Ignore if not found in the enzymes mega-map:
+				// Ignore if not found in the enzymes mega-map:
 				if (uniprotEntry == null) continue;
 				LOGGER.debug("UniProt accession is an enzyme: " + uniprotAcc);
 				

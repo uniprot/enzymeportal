@@ -9,6 +9,7 @@
 STATS_SQL=$(dirname $0)/../src/main/sql/util/statistics
 STATS_DIR=$(dirname $0)/../src/site/resources/statistics
 TSV_FILE=${STATS_DIR}/stats-${NOW}.tsv
+TMP_BRANCH=tmpBranch$$
 
 echo "Generating statistics..."
 sqlplus ${DB_USER}/${DB_PASSWD}@${1} @${STATS_SQL} ${TSV_FILE}

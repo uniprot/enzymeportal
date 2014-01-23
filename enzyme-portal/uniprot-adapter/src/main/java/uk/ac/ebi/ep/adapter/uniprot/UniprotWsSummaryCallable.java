@@ -84,7 +84,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
 
         String accession = null, id = null,
                 nameSynonymsString = null, ecsString = null,
-                diseasesString = null, sequence = null, functionString = null,
+                diseasesString = null, seqLength = null, functionString = null,
                 pdbeAccessions = null, pdbMethods = null, rpString = null, drugsString = null,
                 regulString = null;
         Species species = null;
@@ -135,7 +135,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         switch (field) {
             case enzyme:
                 diseasesString = colValues[8];
-                sequence = colValues[9];
+                seqLength = colValues[9];
             case brief:
                 functionString = colValues[5];
                 pdbeAccessions = colValues[6];
@@ -170,7 +170,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         }
 
         return buildSummary(accession, id, nameSynonymsString, ecsString,
-                species, diseasesString, sequence, functionString,
+                species, diseasesString, seqLength, functionString,
                 pdbeAccessions, pdbMethods, rpString, drugsString, regulString, relSpecies);
     }
 
@@ -219,7 +219,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
      * @param ecsString
      * @param species
      * @param diseasesString
-     * @param sequence
+     * @param seqLength
      * @param functionString
      * @param pdbAccessions
      * @param pdbMethods
@@ -231,7 +231,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
      */
     private EnzymeModel buildSummary(String accession, String id,
             String nameSynonymsString, String ecsString, Species species,
-            String diseasesString, String sequence, String functionString,
+            String diseasesString, String seqLength, String functionString,
             String pdbAccessions, String pdbMethods, String rpString,
             String drugsString, String regulString, List<EnzymeAccession> relSpecies) {
         EnzymeModel summary = new EnzymeModel();
@@ -251,9 +251,13 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         if (diseasesString != null && diseasesString.length() > 0) {
             summary.setDisease(parseDiseases(diseasesString));
         }
-        if (sequence != null) {
+        if (seqLength != null) {
             Sequence seq = new Sequence();
-            seq.setSequence(sequence);
+            try {
+                seq.setLength(Integer.valueOf(seqLength));
+            } catch (NumberFormatException e){
+                LOGGER.error(seqLength + ": wrong length for " + accession);
+            }
             // TODO seq.setWeight(value);
             seq.setSequenceurl(IUniprotAdapter.SEQUENCE_URL_BASE + accession
                     + IUniprotAdapter.SEQUENCE_URL_SUFFIX);

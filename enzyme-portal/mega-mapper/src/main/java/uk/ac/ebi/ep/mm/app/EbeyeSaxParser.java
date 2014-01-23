@@ -20,7 +20,8 @@ import uk.ac.ebi.ep.mm.XRef;
  * ChEMBL-target files (ChEMBL target is the
  * only one for this database which links compounds with protein IDs).
  * @author rafa
- *
+ * @deprecated This class was only used for ChEMBL cross-references, which are
+ *      now imported by the specialised {@link ChemblSaxParser}.
  */
 public class EbeyeSaxParser extends MmSaxParser {
 

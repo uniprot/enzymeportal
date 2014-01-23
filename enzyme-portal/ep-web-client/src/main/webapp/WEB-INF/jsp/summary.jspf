@@ -1,3 +1,14 @@
+<%--
+    Required variables:
+    EnzymeSummary enzyme: the enzyme summary.
+    LoopTagStatus vsEnzymes: the varStatus of an enclosing loop.
+--%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
+<%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <%@include file="util/prioritiseSpecies.jsp" %>
 
 <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
@@ -39,6 +50,7 @@
                          title="No structure available"/>
                 </c:when>
                 <c:otherwise>
+                    <%-- FIXME: hardcoded --%>
                     <c:set var="imgLink"
                            value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
                     <a class="noLine" style="border-bottom-style: none" target="blank" href="${imgLink}">
@@ -57,9 +69,8 @@
 <div class="desc grid_21">
     <c:if test='${not empty enzyme.name }'>
         <a href="search/${primAcc}/enzyme">
-            <c:set var="showName" value="${fn:substring(enzyme.name, 0, 100)}"/>
-            <c:out value="${showName}"/>
-            <!-- ${enzyme.uniprotid} -->
+            <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}"</span>
+            <span class="hidden">${enzyme.uniprotid}</span>
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :
                 theSpecies.species.commonname}]
@@ -69,12 +80,12 @@
         <div>
             <b>Function</b>:
             <c:choose>
-                <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt textMaxLength}">
+                <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt searchConfig.maxTextLength}">
                     <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
-                        begin="0" end="${textMaxLength-1}"> ${word}</c:forEach>
+                        begin="0" end="${searchConfig.maxTextLength-1}"> ${word}</c:forEach>
                     <span id="fun_${resultItemId}" style="display: none">
                         <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
-                            begin="${textMaxLength}"> ${word}</c:forEach>
+                            begin="${searchConfig.maxTextLength}"> ${word}</c:forEach>
                     </span>
                     <a class="showLink" id="fun_link_${resultItemId}">... Show more about function</a>
                 </c:when>
@@ -216,6 +227,7 @@
     </div>
 
 </div>
+
 </div>
 <div class="clear"></div>
 <c:set var="resultItemId" value="${resultItemId+1}"/>
