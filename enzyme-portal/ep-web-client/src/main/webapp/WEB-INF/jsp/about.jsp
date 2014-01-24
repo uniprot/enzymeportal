@@ -12,7 +12,6 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-
 <c:set var="pageTitle" value="About Us &lt; Enzyme Portal &gt; EMBL-EBI"/>
 <%@include file="head.jspf" %>
 
@@ -255,4 +254,5 @@ Enzyme Portal - An Introduction</div>
   </div> <!--! end of #wrapper -->
   
 </body>
+
 </html>

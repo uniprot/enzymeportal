@@ -51,7 +51,7 @@ SELECT * FROM mm_xref WHERE from_entry = ? OR to_entry = ?
 --xrefs.by.entry:\
 SELECT mmx.* FROM mm_xref mmx, mm_entry mme \
 	WHERE (mmx.from_entry = ? AND mmx.to_entry = mme.id AND mme.db_name IN ({0})) \
-	OR (mmx.to_entry = ? AND mmx.from_entry = mme.id AND mme.db_name IN ({0}))
+	OR (mmx.to_entry = ? AND mmx.from_entry = mme.id AND mme.db_name IN ({0})) 
 
 --xrefs.all.by.accession:\
 SELECT mmx.* FROM mm_xref mmx, mm_accession mma, mm_entry mme \

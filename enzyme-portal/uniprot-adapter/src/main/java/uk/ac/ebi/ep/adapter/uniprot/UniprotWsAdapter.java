@@ -141,9 +141,11 @@ public class UniprotWsAdapter extends AbstractUniprotAdapter {
 	            	// Don't stop the others
 	            	LOGGER.error("Callable " + (i+1) + " of " + idPrefixes.size()
 	            			+ " - " + e.getMessage(), e);
-	            	if (future != null) future2summary.remove(future);
+	            	if (future != null) {
+                                future2summary.remove(future);
+                            }
+                            }
 	    		}
-	    	}
 	    	LOGGER.debug("Polled all futures");
 	    	return new ArrayList<EnzymeSummary>(future2summary.values());
 	    } finally {

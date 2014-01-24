@@ -9,13 +9,14 @@ import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import uk.ac.ebi.ep.mm.DummyMegaMapper;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.mm.XRef;
-
+@Ignore
 public class ChemblSaxParserTest {
 
     private ChemblSaxParser parser;
@@ -42,7 +43,7 @@ public class ChemblSaxParserTest {
         mm.closeMap();
     }
     
-    @Test
+   // @Test
     public void testParseChemblTargetComponent() throws Exception {
         Collection<XRef> xrefs = mm.getXrefs(q13976);
         assertEquals(0, xrefs.size());

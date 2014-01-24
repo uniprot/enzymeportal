@@ -236,16 +236,17 @@ function ResultAutoComplete(id, dataArray,theForm,hiddenCheckbox) {
             return true;
                        
         },
-            
+        
         select: function( event, ui ) {
 
-      
-            $( "#"+hiddenCheckbox ).val( ui.item.value );
-                                  
-                                       
-            $("#"+theForm).submit();
 
-                                
+ 
+$("#"+hiddenCheckbox ).val(ui.item.value);
+
+$("input[type='checkbox'][name='" + hiddenCheckbox + "'][value='" + ui.item.value + "']").prop('checked', true);
+       
+           $("#"+theForm).submit();
+                 
             return true;
         }
             
@@ -340,30 +341,30 @@ function addCheckbox(filterGroup, obj, selected){
     displayedFilters[filterGroup]++;
 }
  
-function addCheckboxCompound(filterGroup, obj, selected){
+function addCheckboxCompound(filterGroup, obj, selected){  
     if (obj == '') return;
     var cb = $('<input/>#accordion', {
         "type":"checkbox", 
         "name":"searchparams."+filterGroup,
-        "value": obj.id,
+        "value": obj.name,
         onclick:"form.submit()"
     });
     if (selected) cb.attr("checked", "checked");
    
   
-   //add the link to the source of this item 
+    //add the link to the source of this item 
     var link = $("<a>", {
 
-   href: ""+obj.url+"",
-   target :"_blank"
+        href: ""+obj.url+"",
+        target :"_blank"
    
-  });
+    });
   
     //add a span to the link to hold the text to be displayed
     var label = $('<span>').addClass("popup");
-   var popup = $('<span>').text(obj.id);
+    var popup = $('<span>').text(obj.id);
 
-   link.append(popup);
+    link.append(popup);
    
    
     if (obj.name){
@@ -384,16 +385,17 @@ function addCheckboxCompound(filterGroup, obj, selected){
     if(selected){
         $(newItem).appendTo($('#'+filterGroup+'_filters_y'));
     } else {
-    	$(newItem).appendTo($('#'+ obj.role.toLowerCase()));
+        $(newItem).appendTo($('#'+ obj.role.toLowerCase()));
     }
     var currentSize = $(newItem).siblings().length;
-        
+          
     if (currentSize >=  maxNum) {
         $(newItem).addClass("hidden").addClass("extra");
     }
         
  
     displayedFilters[filterGroup]++;
+    
     
 }
 
@@ -409,19 +411,19 @@ function addCheckboxDisease(filterGroup, obj, selected){
     if (selected) cb.attr("checked", "checked");
  
     
-     //add the link to the source of this item 
+    //add the link to the source of this item 
     var link = $("<a>", {
 
-   href: ""+obj.url+"",
-   target :"_blank"
+        href: ""+obj.url+"",
+        target :"_blank"
    
-  });
+    });
   
     //add a span to the link to hold the text to be displayed
     var label = $('<span>').addClass("popup");
-   var popup = $('<span>').text(obj.id);
+    var popup = $('<span>').text(obj.id);
 
-   link.append(popup);
+    link.append(popup);
    
    
     if (obj.name){
@@ -506,8 +508,6 @@ function addShowMoreLinks() {
         
     });
 
- 
-
 }
 
 /**
@@ -515,16 +515,27 @@ function addShowMoreLinks() {
  * hides the accordion header (h3) if there are no elements on that section
  */
 function checkContent() {
-  $('.head').each(function(){
+    $('.head').each(function(){
       
-      var div = $(this).next();
+        var div = $(this).next();
       
-      if ($(div).children().length==0){
-          $(this).hide();          
-      }
+        if ($(div).children().length==0){
+            $(this).hide();          
+        }
   
-  });
+    });
 }
+
+
+function countItems() {
+    $('.num').each(function(){
+      
+        var div = $(this).parent().next();
+        $(this).html('  ( '+$(div).children().size()+' )');
+
+    });
+}
+
 
 var BASKET_SIZE = 'ep.basket.size=';
 
@@ -545,11 +556,15 @@ function storeBasketSize(size){
 function showBasketSize(){
 	var basketSize = 0;
 	var dc = document.cookie;
+        console.log("cookies == > "+ dc);
 	var bsIndex = dc.indexOf(BASKET_SIZE);
+         console.log("basket == > "+ bsIndex);
 	if (dc && bsIndex > -1){
 		bsStart = bsIndex + BASKET_SIZE.length;
+                 console.log("bstart  == > "+ bsStart)
 		basketSize = dc.substring(bsStart, dc.indexOf(';', bsStart));
 	}
+         console.log("basket size  == > "+ basketSize)
 	$('.basketSize').text(basketSize);
 }
 
@@ -618,6 +633,7 @@ function ajaxBasket(id, checked){
         success: function(basketSize){
         	storeBasketSize(basketSize);
         	showBasketSize();
+                //$('.basketSize').text(basketSize);
         },
         error: function(xhr, status, message){
         	alert(message);
@@ -716,3 +732,4 @@ function saveDrawnImg(strImg){
     var imgAsDataURL = imgCanvas.toDataURL("image/png");
     sessionStorage.setItem("drawnImg", imgAsDataURL);
 }
+

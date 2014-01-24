@@ -1,6 +1,11 @@
 package uk.ac.ebi.ep.web;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,7 +17,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -20,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +66,11 @@ import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
+import uk.ac.ebi.ep.enzymes.EnzymeEntry;
+import uk.ac.ebi.ep.enzymes.EnzymeSubSubclass;
+import uk.ac.ebi.ep.enzymes.EnzymeSubclass;
+import uk.ac.ebi.ep.enzymes.IntenzEnzyme;
+import uk.ac.ebi.ep.mm.CustomXRef;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.model.Compound;
@@ -109,6 +125,8 @@ public class SearchController {
     private BioportalConfig bioportalConfig;
     private Boolean isCustomSearch = false;
     private String pathVariable;
+    private String ecName;
+    private boolean custom_search = false;
 
     @PostConstruct
     public void init() {
@@ -121,7 +139,7 @@ public class SearchController {
         }
     }
 
-    /**
+   /**
      * Process the entry page,
      *
      * @param accession The UniProt accession of the enzyme.
@@ -172,12 +190,11 @@ public class SearchController {
             // If we got here from a bookmark, the summary might not be cached:
             String summId = Functions.getSummaryBasketId(enzymeModel);
             @SuppressWarnings("unchecked")
-            final Map<String, EnzymeSummary> sls = (Map<String, EnzymeSummary>)
-                    session.getAttribute(Attribute.lastSummaries.name());
-            if (sls == null){
+            final Map<String, EnzymeSummary> sls = (Map<String, EnzymeSummary>) session.getAttribute(Attribute.lastSummaries.name());
+            if (sls == null) {
                 setLastSummaries(session, Collections.singletonList(
                         (EnzymeSummary) enzymeModel));
-            } else if (sls.get(summId) == null){
+            } else if (sls.get(summId) == null) {
                 sls.put(summId, enzymeModel);
             }
         } catch (Exception ex) {
@@ -297,37 +314,49 @@ public class SearchController {
         finder.getUniprotAdapter().setConfig(uniprotConfig);
         finder.getIntenzAdapter().setConfig(intenzConfig);
 
+        //Entry entry = finder.findEntryById("1.1.1.1");//get the entry (ec)
         Entry entry = finder.findEntryById(id);//get the entry (disease)
 
-        List<String> ids = finder.getXrefs(entry);//obtain uniprot ids
+        List<String> ids = new ArrayList<>();
+        Collection<CustomXRef> xrefResult = null;
+        int total = 0;
+        if (entry != null) {
+            // ids = finder.getXrefs(entry);//obtain uniprot ids
+            xrefResult = finder.getXrefs(entry);
+            for (CustomXRef ref : xrefResult) {
+                ids = ref.getIdList();
+                total = ref.getResult_count();
+                custom_search = true;
+
+            }
+        }
 
         SearchParams searchParams = new SearchParams();
 
 
+        if (ids.size() > 0) {
+            searchParams.setText(entry.getEntryName());
+            searchParams.setType(SearchParams.SearchType.KEYWORD);
+            searchParams.setStart(0);
+            searchParams.setPrevioustext(entry.getEntryName());
 
-        searchParams.setText(entry.getEntryName());
-        searchParams.setType(SearchParams.SearchType.KEYWORD);
-        searchParams.setStart(0);
-        searchParams.setPrevioustext(entry.getEntryName());
+            finder.setSearchParams(searchParams);
 
-        addToHistory(session, "searchparams.text=" + entry.getEntryName());
+            SearchResults results = finder.computeEnzymeSummary(ids, new SearchResults());
 
-
-
-
-        finder.setSearchParams(searchParams);
-
-        SearchResults results = finder.computeEnzymeSummary(ids, new SearchResults());
-
-        searchModel.setSearchparams(searchParams);
-
-        searchModel.setSearchresults(results);
+            searchModel.setSearchparams(searchParams);
+            results.setTotalfound(total);
+            searchModel.setSearchresults(results);
+            model.addAttribute("custom_search", custom_search);
+            model.addAttribute("pagination", getPagination(searchModel));//use custom pagination()
+        }
 
         return searchModel;
     }
-    private Set<uk.ac.ebi.ep.search.model.Disease> diseaseList = new TreeSet<uk.ac.ebi.ep.search.model.Disease>();
+    private Set<uk.ac.ebi.ep.search.model.Disease> diseaseList = new TreeSet<>();
     private static final Comparator<String> NAME_COMPARATOR = new ChemicalNameComparator();
     static final Comparator<uk.ac.ebi.ep.search.model.Disease> SORT_DISEASES = new Comparator<uk.ac.ebi.ep.search.model.Disease>() {
+        @Override
         public int compare(uk.ac.ebi.ep.search.model.Disease d1, uk.ac.ebi.ep.search.model.Disease d2) {
 
             if (d1.getName() == null && d2.getName() == null) {
@@ -353,6 +382,219 @@ public class SearchController {
         model.addAttribute("diseaseList", diseaseList);
 
         return "browse";
+    }
+
+    @RequestMapping(value = "/browseEcNumber", method = RequestMethod.GET)
+    public String showEcNumber(Model model, HttpServletRequest request, HttpSession session) {
+        clearSelectedEc(session);
+        return "browseEcNumber";
+    }
+
+    @RequestMapping(value = "/ecnumber", method = RequestMethod.GET)
+    public String browseEcNumber(@ModelAttribute("searchModel") SearchModel searchModel, Model model, HttpServletRequest request, HttpSession session) throws MalformedURLException, IOException {
+
+        String ec = request.getParameter("ec");
+        String ecname = request.getParameter("ecname");
+
+        String sub_ecname = request.getParameter("subecname");
+        String subsub_ecname = request.getParameter("subsubecname");
+        String entry_ecname = request.getParameter("entryecname");
+
+
+        if (ec != null && ec.length() >= 7) {
+
+            setIsCustomSearch(true);
+            setPathVariable(ec);
+
+            setEcName(entry_ecname);
+
+            return "redirect:/search";
+
+        }
+        URL url = new URL("http://www.ebi.ac.uk/intenz/ws/EC/" + ec + ".json");
+
+        try (InputStream is = url.openStream();
+                JsonReader rdr = Json.createReader(is)) {
+
+            computeJsonData(rdr, model, session, ecname, sub_ecname, subsub_ecname, entry_ecname, ec);
+        }
+
+        return "ecnumber";
+    }
+    private static String EC = "ec";
+    private static String NAME = "name";
+    private static String DESCRIPTION = "description";
+    private static String SUBCLASSES = "subclasses";
+    private static String SUBSUBCLASSES = "subsubclasses";
+    private static String ENTRIES = "entries";
+
+    /**
+     * This method keeps track of the selected enzymes in their hierarchy for
+     * the browse enzyme
+     *
+     * @param session
+     * @param s the selected enzyme
+     * @param type the position in the hierarchy
+     */
+    private void addToSelectedEc(HttpSession session, IntenzEnzyme s, String type) {
+        @SuppressWarnings("unchecked")
+        LinkedList<IntenzEnzyme> history = (LinkedList<IntenzEnzyme>) session.getAttribute("selectedEc");
+
+
+        if (history == null) {
+
+            history = new LinkedList<>();
+            session.setAttribute("selectedEc", history);
+        }
+
+        if (!history.isEmpty() && history.contains(s)) {
+
+            if (type.equalsIgnoreCase("ROOT") && history.size() == 2) {
+                history.removeLast();
+
+            }
+            if (type.equalsIgnoreCase("ROOT") && history.size() == 3) {
+                history.removeLast();
+                history.removeLast();
+
+            }
+            if (type.equalsIgnoreCase("SUBCLASS") && history.size() == 2) {
+                history.removeLast();
+                history.add(s);
+            }
+            if (type.equalsIgnoreCase("SUBCLASS") && history.size() == 3) {
+                history.removeLast();
+            }
+
+        } else if ((history.isEmpty() || !history.contains(s)) && (history.size() < 3)) {
+            history.add(s);
+
+        }
+    }
+
+    private void clearSelectedEc(HttpSession session) {
+        @SuppressWarnings("unchecked")
+        LinkedList<IntenzEnzyme> history = (LinkedList<IntenzEnzyme>) session.getAttribute("selectedEc");
+        if (history == null) {
+            //history = new ArrayList<String>();
+            history = new LinkedList<>();
+            session.setAttribute("selectedEc", history);
+        } else {
+            history.clear();
+        }
+    }
+
+    private void computeJsonData(JsonReader jsonReader, Model model, HttpSession session, String... ecname) {
+        JsonObject jsonObject = jsonReader.readObject();
+
+        IntenzEnzyme root = new IntenzEnzyme();
+
+
+        String ec = jsonObject.getString(EC);
+        String name = jsonObject.getString(NAME);
+        String description = null;
+
+        if (jsonObject.containsKey(DESCRIPTION)) {
+            description = jsonObject.getString(DESCRIPTION);
+
+            root.setDescription(description);
+        }
+        root.setEc(ec);
+        root.setName(ecname[0]);
+        root.setSubclassName(ecname[1]);
+        root.setSubsubclassName(ecname[2]);
+        root.setEntryName(ecname[3]);
+
+        //compute the childObject
+        if (jsonObject.containsKey(SUBCLASSES)) {
+
+            JsonArray jsonArray = jsonObject.getJsonArray(SUBCLASSES);
+
+            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
+                String _ec = null;
+                String _name = null;
+                String _desc = null;
+                _ec = childObject.getString(EC);
+                _name = childObject.getString(NAME);
+
+                EnzymeSubclass subclass = new EnzymeSubclass();
+
+                if (childObject.containsKey(DESCRIPTION)) {
+                    _desc = childObject.getString(DESCRIPTION);
+                    subclass.setDescription(_desc);
+                }
+
+                subclass.setEc(_ec);
+                subclass.setName(_name);
+                root.getChildren().add(subclass);
+
+
+            }
+            addToSelectedEc(session, root, "ROOT");
+            model.addAttribute("json", root);
+        }
+        if (jsonObject.containsKey(SUBSUBCLASSES)) {
+
+            JsonArray jsonArray = jsonObject.getJsonArray(SUBSUBCLASSES);
+
+            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
+                String _ec = null;
+                String _name = null;
+                String _desc = null;
+                _ec = childObject.getString(EC);
+                _name = childObject.getString(NAME);
+
+                EnzymeSubSubclass subsubclass = new EnzymeSubSubclass();
+
+
+                if (childObject.containsKey(DESCRIPTION)) {
+                    _desc = childObject.getString(DESCRIPTION);
+
+                    subsubclass.setDescription(_desc);
+                }
+
+
+                subsubclass.setEc(_ec);
+                subsubclass.setName(_name);
+
+                root.getSubSubclasses().add(subsubclass);
+
+            }
+
+            model.addAttribute("json", root);
+            addToSelectedEc(session, root, "SUBCLASS");
+        }
+        if (jsonObject.containsKey(ENTRIES)) {
+
+            JsonArray jsonArray = jsonObject.getJsonArray(ENTRIES);
+
+
+            for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
+                String _ec = null;
+                String _name = null;
+                String _desc = null;
+                _ec = childObject.getString(EC);
+                _name = childObject.getString(NAME);
+
+
+                EnzymeEntry entries = new EnzymeEntry();
+                if (childObject.containsKey(DESCRIPTION)) {
+                    _desc = childObject.getString(DESCRIPTION);
+
+                    entries.setDescription(_desc);
+                }
+
+                entries.setEc(_ec);
+                entries.setName(_name);
+                root.setEc(ecname[4]);
+                root.getEntries().add(entries);
+
+            }
+
+            model.addAttribute("json", root);
+            addToSelectedEc(session, root, "SUBSUBCLASS");
+        }
+
     }
 
     private boolean startsWithDigit(String data) {
@@ -434,8 +676,7 @@ public class SearchController {
 
     private void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
-        LinkedList<String> history = (LinkedList<String>)
-                session.getAttribute(Attribute.history.name());
+        LinkedList<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.name());
         if (history == null) {
             history = new LinkedList<String>();
             session.setAttribute(Attribute.history.name(), history);
@@ -445,34 +686,35 @@ public class SearchController {
             history.add(cleanedText);
         }
     }
-    
+
     /**
      * Adds a search to the user history. The history item (String) actually
      * stored depends on the type of search, so that the links can be re-created
-     * in the web page properly (see <code>breadcrumbs.jsp</code>).
+     * in the web page properly (see
+     * <code>breadcrumbs.jsp</code>).
+     *
      * @param session the user session.
      * @param searchType the search type.
      * @param s the text to be added to history.
      */
-    private void addToHistory(HttpSession session, SearchType searchType, String s){
+    private void addToHistory(HttpSession session, SearchType searchType, String s) {
         switch (searchType) {
-        case KEYWORD:
-            addToHistory(session, "searchparams.text=" + s);
-            break;
-        case COMPOUND:
-            addToHistory(session,
-                    "searchparams.type=COMPOUND&searchparams.text=" + s);
-            break;
-        case SEQUENCE:
-            addToHistory(session, "searchparams.sequence=" + s);
-            break;
+            case KEYWORD:
+                addToHistory(session, "searchparams.text=" + s);
+                break;
+            case COMPOUND:
+                addToHistory(session,
+                        "searchparams.type=COMPOUND&searchparams.text=" + s);
+                break;
+            case SEQUENCE:
+                addToHistory(session, "searchparams.sequence=" + s);
+                break;
         }
     }
 
     private void clearHistory(HttpSession session) {
         @SuppressWarnings("unchecked")
-        LinkedList<String> history = (LinkedList<String>)
-                session.getAttribute(Attribute.history.name());
+        LinkedList<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.name());
         if (history == null) {
             history = new LinkedList<String>();
             session.setAttribute(Attribute.history.name(), history);
@@ -492,7 +734,7 @@ public class SearchController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModel, Model model,
-            HttpSession session) {
+            HttpSession session, HttpServletRequest request) {
         String view = "error";
 
         String searchKey = null;
@@ -537,7 +779,7 @@ public class SearchController {
                 cacheSearch(session.getServletContext(), searchKey, results);
                 setLastSummaries(session, results.getSummaryentries());
                 searchModel.setSearchresults(results);
-                applyFilters(searchModel);
+                applyFilters(searchModel, request);
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
                 clearHistory(session);
@@ -551,19 +793,19 @@ public class SearchController {
 
         return view;
     }
-    
+
     /**
      * Updates the {@link lastSummaries Attribute#lastSummaries} attribute in
      * the user's session.
+     *
      * @param session
      * @param summaries
      */
     private void setLastSummaries(HttpSession session,
-            List<EnzymeSummary> summaries){
+            List<EnzymeSummary> summaries) {
         @SuppressWarnings("unchecked")
-        Map<String, EnzymeSummary> lastSummaries = (Map<String, EnzymeSummary>)
-                session.getAttribute(Attribute.lastSummaries.name());
-        if (lastSummaries == null){
+        Map<String, EnzymeSummary> lastSummaries = (Map<String, EnzymeSummary>) session.getAttribute(Attribute.lastSummaries.name());
+        if (lastSummaries == null) {
             lastSummaries = new HashMap<String, EnzymeSummary>();
             session.setAttribute(Attribute.lastSummaries.name(), lastSummaries);
         } else {
@@ -576,9 +818,10 @@ public class SearchController {
 
     /**
      * Uses a finder to search by compound ID.
+     *
      * @param model the view model.
      * @param searchModel the search model, including a compound ID as the
-     *      <code>text</code> parameter.
+     * <code>text</code> parameter.
      * @return the search results, or <code>null</code> if nothing found.
      * @since 1.0.27
      */
@@ -593,10 +836,12 @@ public class SearchController {
             searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Unable to get enzymes by compound", e);
         } finally {
-            if (finder != null) finder.closeResources();
+            if (finder != null) {
+                finder.closeResources();
+            }
         }
         return results;
     }
@@ -635,8 +880,8 @@ public class SearchController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String getSearchResults(SearchModel searchModel, BindingResult result,
-            Model model, HttpSession session) {
-        return postSearchResult(searchModel, model, session);
+            Model model, HttpSession session, HttpServletRequest request) {
+        return postSearchResult(searchModel, model, session, request);
     }
 
     @RequestMapping(value = "/search/{id}", method = RequestMethod.GET)
@@ -652,7 +897,7 @@ public class SearchController {
     }
 
     @RequestMapping(value = "/advanceSearch",
-            method = { RequestMethod.GET, RequestMethod.POST })
+    method = {RequestMethod.GET, RequestMethod.POST})
     public String getAdvanceSearch(Model model) {
         return "advanceSearch";
     }
@@ -686,7 +931,7 @@ public class SearchController {
      *
      * @param searchModel
      */
-    private void applyFilters(SearchModel searchModel) {
+    private void applyFilters(SearchModel searchModel, HttpServletRequest request) {
 
 
         if (searchModel != null) {
@@ -701,10 +946,42 @@ public class SearchController {
                     numOfResults, searchParameters.getSize());
             pagination.setFirstResult(searchParameters.getStart());
 
+            String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
+            String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
+            String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
+
+
             // Filter:
             List<String> speciesFilter = searchParameters.getSpecies();
             List<String> compoundsFilter = searchParameters.getCompounds();
             List<String> diseasesFilter = searchParameters.getDiseases();
+
+           //remove empty string in the filter to avoid unsual behavior of the filter facets
+            if (speciesFilter.contains("")) {
+                speciesFilter.remove("");
+
+            }
+            if (compoundsFilter.contains("")) {
+                compoundsFilter.remove("");
+
+            }
+            if (diseasesFilter.contains("")) {
+                diseasesFilter.remove("");
+            }
+
+
+            //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
+            if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
+                speciesFilter.add(specie_autocompleteFilter);
+
+
+            }
+
+            if ((diseases_autocompleteFilter != null && StringUtils.hasLength(diseases_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(specie_autocompleteFilter)) {
+                diseasesFilter.add(diseases_autocompleteFilter);
+
+            }
+
 
 //both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
             SearchResults searchResults = resultSet;
@@ -725,7 +1002,6 @@ public class SearchController {
             resetSelectedCompounds(defaultCompoundList);
 
             for (String SelectedCompounds : searchParameters.getCompounds()) {
-
                 for (Compound theCompound : defaultCompoundList) {
 
                     if (SelectedCompounds.equals(theCompound.getName())) {
@@ -798,8 +1074,7 @@ public class SearchController {
     @SuppressWarnings("unchecked")
     private Map<String, SearchResults> getPreviousSearches(
             ServletContext servletContext) {
-        Map<String, SearchResults> prevSearches = (Map<String, SearchResults>)
-                servletContext.getAttribute(Attribute.prevSearches.name());
+        Map<String, SearchResults> prevSearches = (Map<String, SearchResults>) servletContext.getAttribute(Attribute.prevSearches.name());
         if (prevSearches == null) {
             // Map implementation which maintains the order of access:
             prevSearches = Collections.synchronizedMap(
@@ -932,11 +1207,11 @@ public class SearchController {
 
     /**
      * Processes a string to normalise it to use as a key in the application
-     * cache.<br>
-     * Note that the key for a ChEBI ID depends on the type of search: if a
-     * keyword search, the prefix will be lowercase (<code>chebi:</code>); if a
-     * compound structure search, the prefix will be uppercase
-     * (<code>CHEBI:</code>).
+     * cache.<br> Note that the key for a ChEBI ID depends on the type of
+     * search: if a keyword search, the prefix will be lowercase (
+     * <code>chebi:</code>); if a compound structure search, the prefix will be
+     * uppercase (
+     * <code>CHEBI:</code>).
      *
      * @param searchParams the search parameters, including the original search
      * text from the user.
@@ -993,5 +1268,13 @@ public class SearchController {
 
     public void setPathVariable(String pathVariable) {
         this.pathVariable = pathVariable;
+    }
+
+    public String getEcName() {
+        return ecName;
+    }
+
+    public void setEcName(String ecName) {
+        this.ecName = ecName;
     }
 }

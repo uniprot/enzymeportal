@@ -326,5 +326,15 @@ public class MegaDbMapper implements MegaMapper {
     public List<String> getEnzymesByCompound(String compoundId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+ 
+   public List<String> findEcNumbers() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Collection<CustomXRef> getXrefs_ec_Only(Entry entry, MmDatabase... dbs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }
+

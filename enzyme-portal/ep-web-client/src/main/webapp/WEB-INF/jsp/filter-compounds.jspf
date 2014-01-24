@@ -43,17 +43,17 @@
 
 
         <div id="accordion">
-            <h3 class="head">BIOACTIVE</h3>
+            <h3 class="head">BIOACTIVE <span class="num"></span></h3>
             <div id="bioactive" class="scroll" style="max-height: 24ex"></div>               
-            <h3 class="head">DRUG</h3>
+            <h3 class="head">Drug <span class="num"></span></h3>
             <div id="drug" class="scroll"></div>
-            <h3 class="head">INHIBITOR</h3>
+            <h3 class="head">INHIBITOR <span class="num"></span></h3>
             <div id="inhibitor" class="scroll"></div>
-            <h3 class="head">ACTIVATOR</h3>
+            <h3 class="head">ACTIVATOR <span class="num"></span></h3>
             <div id="activator" class="scroll"></div>
-            <h3 class="head">SUBSTRATE OR PRODUCT</h3>
+            <h3 class="head">SUBSTRATE OR PRODUCT <span class="num"></span></h3>
             <div id="substrate_or_product" class="scroll"></div>
-            <h3 class="head">COFACTOR</h3>
+            <h3 class="head">COFACTOR <span class="num"></span></h3>
             <div id="cofactor" class="scroll"></div>
         </div>
 
@@ -62,27 +62,27 @@
         
 <script>
 // (See search.js if in doubt)
-
 // Initialise variables:
 var group = 'compounds';
 checkedFilters[group] = [];
 uncheckedFilters[group] = [];
 displayedFilters[group] = 0;
-
 // Populate js variables with data from server:
 <c:forEach var="compound" items="${compoundsList}">
-var cmp = { "id": "${compound.id}", "name": "${compound.name}", "role": "${compound.role}","url":"${compound.url}" };
-<c:choose><c:when test="${Fn:contains(compoundsParams, compound.id)}">
-checkedFilters[group][checkedFilters[group].length] = cmp; </c:when>
-<c:otherwise>
-uncheckedFilters[group][uncheckedFilters[group].length] = cmp; </c:otherwise>
-</c:choose>
-compoundsAutoCompleteDataSource.push({
+    var cmp = { "id": "${compound.id}", "name": "${compound.name}", "role": "${compound.role}","url":"${compound.url}" };
+    <c:choose>
+        <c:when test="${Fn:contains(compoundsParams, compound.name)}">
+            checkedFilters[group][checkedFilters[group].length] = cmp; 
+        </c:when>
+        <c:otherwise>
+            uncheckedFilters[group][uncheckedFilters[group].length] = cmp; 
+        </c:otherwise>
+    </c:choose>
+    compoundsAutoCompleteDataSource.push({
     label: "${not empty compound.name? compound.name : compound.id}",
-    value: "${compound.name}"}); </c:forEach>
-
+    value: "${compound.name}"});
+</c:forEach>
 // Display filters:
-
 for (i = 0; i < checkedFilters[group].length; i++){
     addCheckboxCompound(group, checkedFilters[group][i], true);
 }
@@ -90,11 +90,9 @@ for (var i = 0; displayedFilters[group] <
         ${compoundsListSize}; i++){
     addCheckboxCompound(group, uncheckedFilters[group][i], false);
 }
-
 checkContent();//hides accordion header if there is no content
-  
-  addShowMoreLinks();
-
+countItems();
+    addShowMoreLinks();
 </script>
 
            
@@ -102,9 +100,9 @@ checkContent();//hides accordion header if there is no content
             <c:if test="${compoundsListSize gt 12}">
                 <!--    then add auto complete-->
                 <script>
-                    ResultAutoComplete('compounds_AUTOCOMPLETE', compoundsAutoCompleteDataSource,'filtersForm','comptempList')
+                    ResultAutoComplete('compounds_AUTOCOMPLETE', compoundsAutoCompleteDataSource,'filtersForm','searchparams.compounds')
                 </script>
-            </c:if>
+        </c:if>
         </c:if>
     </div>
         </div>

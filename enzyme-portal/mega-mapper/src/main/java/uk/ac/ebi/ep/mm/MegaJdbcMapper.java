@@ -5,6 +5,7 @@ import java.sql.*;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.*;
+
 import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
@@ -1315,7 +1316,7 @@ public class MegaJdbcMapper implements MegaMapper {
             }
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(" (" + resultSet + ")", ex);
         } finally {
             closeResultSet(resultSet);
         }
@@ -1343,7 +1344,8 @@ public class MegaJdbcMapper implements MegaMapper {
 
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(" (" + resultSet + ")", ex);
+            //java.util.logging.Logger.getLogger(MegaJdbcMapper.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 
@@ -1476,6 +1478,9 @@ public class MegaJdbcMapper implements MegaMapper {
 
                     String entryid = resultSet.getString(ENTRY_ID);
                     String entryName = resultSet.getString(ENTRY_NAME);
+                    if (entryName == null) {
+                        entryName = "";// to avoid nulL pointer when there is no entry name
+                    }
                     String dbName = resultSet.getString(DB_NAME);
                     entry = new Entry();
 
@@ -1501,6 +1506,119 @@ public class MegaJdbcMapper implements MegaMapper {
         return entry;
     }
 
+    public List<String> findEcNumbers() {
+
+        ResultSet resultSet = null;
+        PreparedStatement ps = null;
+        List<String> ecNumbers = null;
+        try {
+            if (ecNumbers == null) {
+                ecNumbers = new LinkedList<String>();
+            }
+
+            String query = "select * from MM_ENTRY where ENTRY_NAME is not null and DB_NAME ='EC'";
+
+
+            if (con != null) {
+                ps = con.prepareStatement(query);
+
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+
+
+
+                    String entryid = resultSet.getString(ENTRY_ID);
+
+                    if (entryid != null) {
+
+                        ecNumbers.add(entryid);
+
+                    }
+
+                }
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error(" (" + resultSet + ")", e);
+        } finally {
+            closeResultSet(resultSet);
+            closePreparedStatement(ps);
+        }
+
+        return ecNumbers;
+    }
+    
+    
+        public Collection<CustomXRef> getXrefs_ec_Only(Entry entry, MmDatabase... dbs) {
+        Collection<CustomXRef> xrefs = null;
+        PreparedStatement ps = null;
+        int rowcount = 50;//param, 
+        
+        int start = 0;//param
+        int end = start + rowcount;
+        
+        try {
+            if (entry.getId() == null) {
+                // update with value from the database:
+                existsInMegaMap(entry);
+            }
+            if ( entry.getId() != null) {
+
+                String query1 = "SELECT mmx.* FROM mm_xref mmx, mm_entry mme WHERE (mmx.from_entry = ? AND mmx.to_entry = mme.id AND mme.db_name IN (?)"
+                        + "  OR (mmx.to_entry = ? AND mmx.from_entry = mme.id AND mme.db_name IN (?))) and rownum between ? and ? order by mmx.ID asc";
+
+
+                String query = "SELECT * FROM (SELECT mmx.*, COUNT(*) OVER()RESULT_COUNT FROM mm_xref mmx, mm_entry mme WHERE (mmx.from_entry = ? AND mmx.to_entry = mme.id AND mme.db_name IN (?)\n" +
+                                " OR (mmx.to_entry = ? AND mmx.from_entry = mme.id AND mme.db_name IN (?))) \n" +
+                                " order by mmx.ID asc ) WHERE rownum between ? and ?";
+                
+               
+                
+                ps = con.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                 ps.setInt(1, entry.getId());
+                   ps.setString(2, dbs[0].name());
+                  ps.setInt(3, entry.getId());
+                ps.setString(4, dbs[0].name());
+                ps.setInt(5, start);
+                ps.setInt(6, end);
+                
+                ResultSet rs = ps.executeQuery();
+
+                xrefs = buildXref_custom(rs);
+
+            } else {
+                LOGGER.warn(entry.toString() + " not known in the mega-map");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(entry.getId(), e);
+        }
+        return xrefs;
+    }
+        
+            private List<CustomXRef> buildXref_custom(ResultSet rs) throws SQLException {
+        List<CustomXRef> xrefs = null;
+          CustomXRef xref = new CustomXRef();
+        while (rs.next()) {
+            if (xrefs == null) {
+                xrefs = new ArrayList<CustomXRef>();
+            }
+   
+            xref.setId(rs.getInt("id"));
+            
+            String [] from_entry = getEntryById(rs.getInt("from_entry")).getEntryId().split("_");
+             String ids = from_entry[0];
+             xref.getIdList().add(ids);
+            xref.setFromEntry(getEntryById(rs.getInt("from_entry")));
+            xref.setToEntry(getEntryById(rs.getInt("to_entry")));
+            xref.setRelationship(rs.getString("relationship"));
+            xref.setResult_count(rs.getInt("RESULT_COUNT"));
+            }
+         xrefs.add(xref);
+        rs.close();
+        return xrefs;
+            }
+
     public List<String> getEnzymesByCompound(String compoundId) {
         List<String> uniprotIds = null;
         ResultSet rs = null;
@@ -1524,5 +1642,7 @@ public class MegaJdbcMapper implements MegaMapper {
                 }
         }
         return uniprotIds;
+
     }
+
 }

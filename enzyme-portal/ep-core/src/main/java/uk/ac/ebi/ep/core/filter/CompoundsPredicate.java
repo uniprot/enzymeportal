@@ -39,7 +39,7 @@ public class CompoundsPredicate implements Predicate {
 		if (obj instanceof EnzymeSummary){
 			EnzymeSummary es = (EnzymeSummary) obj;
             for (Compound compound : es.getCompounds()) {
-                String id = compound.getId();
+                String id = compound.getName();
                 if (compoundsFilter.contains(id)){
                     eval = true;
                     break;

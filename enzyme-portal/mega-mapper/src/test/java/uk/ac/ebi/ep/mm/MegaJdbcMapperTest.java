@@ -336,6 +336,13 @@ public class MegaJdbcMapperTest {
         }
 
     }
+//    @Test
+//    public void fineEC() {
+//        List<String> s = mm.findEcNumbers();
+//        for(String x : s){
+//            System.out.println("THE ec Numbers: "+ x);
+//        }
+//    }
 
     @Test
     public void getDisease() {

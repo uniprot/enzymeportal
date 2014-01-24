@@ -28,6 +28,15 @@
 
 <body class="level2"><!-- add any of your classes or IDs -->
     
+       
+
+ <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+
+<!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+ 
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
+ 
     <script>
 		$(function() {
 			$("#accordion").accordion({
@@ -111,12 +120,13 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                          <c:choose>
-                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                                  <c:choose>
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
                                <h2>Enzyme Portal results for <span class="searchterm"><i>${fn:substring(searchText, 0, 20)}${fn:length(searchText) gt 20? '...':''}</i>
-                                    </span></h2>	
+                                    </span></h2>
                             </c:when>
                             <c:otherwise>
+
                                 <h2>Enzyme Portal results for <span id="searchTerm" class="searchterm"><i>${searchText}</i></span></h2>
                             </c:otherwise>
                           </c:choose>

@@ -21,6 +21,7 @@
 <body class="level2"><!-- add any of your classes or IDs -->
     <%@include file="skipto.jspf" %>
 
+
     <div id="wrapper" class="container_24">
     
     <%@include file="header.jspf" %>
@@ -49,10 +50,65 @@
                                 Enzyme Portal...</a></p>
 <!--                    </div>-->
                     </div>
-            <div style="margin-left: auto; margin-right: auto;
+            
+          
+            <div class="hidden"   style="margin-left: auto; margin-right: auto;margin-bottom: 20em;
                           width: 50%;">
- <h3 class="pane-title">Enzyme Portal Resources</h3>
-                <div class="shortcuts grid_24">
+<!-- <h3 class="pane-title">Enzyme Portal Resources</h3>-->
+ <div class="shortcuts grid_24 hidden">
+                          <div class="panel-pane pane-custom pane-8 " >
+                                         <div class="containers grid_24">
+                        <div class="iconGroup">
+                            <fieldset class="iconField">
+                                <legend><a href="${pageContext.request.contextPath}/browseEcNumber">Enzyme Classification</a></legend>
+                                    <div class="iconBox">
+                                        <a href="${pageContext.request.contextPath}/browseEcNumber"><img src="resources/images/classification.png"
+                                                alt="enzyme classification" width="100px" height="100px"/></a>
+                                    </div>
+                            </fieldset>
+                            <fieldset class="iconField">
+                                <legend class="center"> <a href="${pageContext.request.contextPath}/browse">Browse Disease</a></legend>
+                                    <div class="iconBox">
+                                        <a href="${pageContext.request.contextPath}/browse"><img src="resources/images/disease3.png"
+                                                alt="?" width="100px" height="100px"/></a>
+                                    </div>
+                            </fieldset>                            
+                            <fieldset class="iconField hidden">
+                                    <legend>Expression</legend>
+                                    <div class="iconBox">
+                                        <img src="resources/images/expression.png"
+                                                alt="?" width="100px" height="100px"/>
+                                    </div>
+                            </fieldset>
+                        </div>
+                        <div class="iconGroup hidden">
+                            <fieldset class="iconField">
+                                    <legend>Chemical Compound</legend>
+                                    <div class="iconBox">
+                                        <img src="resources/images/compounds.png"
+                                                alt="?" width="100px" height="100px"/>
+                                    </div>
+                            </fieldset>
+                            <fieldset class="iconField hidden">
+                                    <legend>Taxonomy</legend>
+                                    <div class="iconBox">
+                                        <img src="resources/images/taxonomy.png"
+                                                                                        alt="?" width="100px" height="100px"/>
+                                    </div>
+                            </fieldset>
+                        </div>
+                    </div>           
+                          </div>  
+ </div>
+                </div>
+                        
+            
+            <div class="clear clearfix"></div>
+            
+            <div  style="margin-left: auto; margin-right: auto;
+                          width: 50%;">
+ <h3 class="pane-title ">Enzyme Portal Resources</h3>
+                <div class="shortcuts grid_24 ">
 
                <div class="panel-pane pane-custom pane-8 clearfix" >
 
@@ -153,26 +209,6 @@ IntEnz contains the recommendations of the Nomenclature Committee of the Interna
             <a href="#">8</a>
          </div>
     
-<!--      </div>-->
-
-
-
-
-
-
-        
-<!--                              <ul class="split">
-                                  <li>UniProt</li>
-                                  <li>ChEBI</li>
-                                  <li>ChEMBL</li>
-                                  <li>PDBe</li>
-                                </ul>
-                                <ul class="split">
-                                    <li>Reactome</li>
-                                    <li>Rhea</li>
-                                    <li>IntEnz</li>
-                                    <li>MACiE</li>
-                                </ul> -->
         
                    
                     
@@ -180,7 +216,8 @@ IntEnz contains the recommendations of the Nomenclature Committee of the Interna
                 
                 </div>
                 
-                
+            </div> 
+                    
             </section>
                 
 			
@@ -189,10 +226,11 @@ IntEnz contains the recommendations of the Nomenclature Committee of the Interna
     <%@include file="footer.jspf" %>
     
   </div> <!--! end of #wrapper -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="resources/javascript/search.js" type="text/javascript"></script>
+         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+        <script src="resources/javascript/jquery.jcarousel.min.js" type="text/javascript"></script>
 
-<script src="resources/javascript/search.js" type="text/javascript"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-<script src="resources/javascript/jquery.jcarousel.min.js" type="text/javascript"></script>
   
        <script type="text/javascript">
             /**
@@ -239,6 +277,5 @@ IntEnz contains the recommendations of the Nomenclature Committee of the Interna
           });  
       });
       </script>
-  
 </body>
 </html>

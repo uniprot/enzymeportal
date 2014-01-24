@@ -75,9 +75,9 @@
         GLOBAL SEARCH TEMPLATE - END
        -------------------------------- >-->
 
-
-
-
+        
+        
+        
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -885,7 +885,7 @@
                                 <div class="grid_6">
 
 
-                                    <li>${data.name} (<a href="${pageContext.request.contextPath}/search/<c:out value="${data.id}"/>">${data.numEnzyme}</a>)</li>
+                                    <li>${data.name} (<a href="${pageContext.request.contextPath}/search/<c:out value="${data.id}"/>/num">${data.numEnzyme}</a>)</li>
 
                                 </div>
 
@@ -905,43 +905,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-            <!--                        <div class="row-fluid">
-                    <div class="span3 alpha">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-                    <div class="span3">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-                    <div class="span3">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-                    <div class="span3 omega">
-                            <h4>One Fourth Column</h4>
-                            <p>Lorem Ipsum is simply dummy text ...</p>
-                    </div>
-            </div>-->
-
-
-
-
-
-
-
-            <footer>
+           <footer>
                 <!-- Optional local footer (insert citation / project-specific copyright / etc here -->
                 <!--
     <div id="local-footer" class="grid_24 clearfix">

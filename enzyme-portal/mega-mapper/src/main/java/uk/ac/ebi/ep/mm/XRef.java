@@ -15,7 +15,7 @@ public class XRef implements Serializable {
 	private Entry fromEntry;
 	private Relationship relationship;
 	private Entry toEntry;
-	
+        
 	public Integer getId() {
 		return id;
 //		return hashCode(); // FIXME, possibly not unique
