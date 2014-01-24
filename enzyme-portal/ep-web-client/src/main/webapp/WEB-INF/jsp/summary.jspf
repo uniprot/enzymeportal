@@ -66,7 +66,7 @@
 <div class="desc grid_21">
     <c:if test='${not empty enzyme.name }'>
         <a href="search/${primAcc}/enzyme">
-            <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}"</span>
+            <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}</span>
             <span class="hidden">${enzyme.uniprotid}</span>
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :
