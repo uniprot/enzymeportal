@@ -557,7 +557,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     "Error while getting EnzymeSummary from Uniprot Adapter", ex);
         }
     }
-
+        
     /**
      * Adds any related diseases to the enzyme model.
      * @param enzymeModel the model without disease info.
@@ -565,14 +565,14 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      */
     protected void addDiseases(EnzymeModel enzymeModel) {
         List<Disease> diseaseList = new LinkedList<Disease>();
-        Set<DiseaseComparator> uniDisease = new TreeSet<DiseaseComparator>();
-        Map<String, String> diseaseFromMegaMapper = megaMapperConnection.getMegaMapper()
+        Set<DiseaseComparator> uniqueDisease = new TreeSet<DiseaseComparator>();
+        Set<uk.ac.ebi.ep.enzyme.model.Disease> diseaseFromMegaMapper = megaMapperConnection.getMegaMapper()
                 .getDiseaseByAccession(MmDatabase.UniProt, enzymeModel.getUniprotaccessions().get(0), MmDatabase.EFO, MmDatabase.MeSH, MmDatabase.OMIM);
-        // FIXME this code is unreadable (ex. diseaseMap is not a Map but an Entry)
-        for (Map.Entry<String, String> diseaseMap : diseaseFromMegaMapper.entrySet()) {
-            if (diseaseMap.getKey() != null && diseaseMap.getValue() != null && !diseaseMap.getValue().equals("") && !diseaseMap.getValue().equals(" ")) {
+        if(diseaseFromMegaMapper != null){
+        for (Disease entry : diseaseFromMegaMapper) {
+          
                 try {
-                    Disease disease_from_bioportal = bioportalAdapter.getDisease(diseaseMap.getKey());
+                    Disease disease_from_bioportal = bioportalAdapter.getDisease(entry.getId());
                     if (disease_from_bioportal != null) {
                         for (Disease d : enzymeModel.getDisease()) {
                             // FIXME adding EVERY disease description
@@ -580,15 +580,24 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                             // from model to EVERY BioPortal disease ???
                             disease_from_bioportal.getEvidence().add(d.getDescription());
                             DiseaseComparator dc = new DiseaseComparator(disease_from_bioportal);
-                            uniDisease.add(dc);
+                            uniqueDisease.add(dc);
                         }
+                    }else{
+                        
+                       for (Disease d : enzymeModel.getDisease()) {
+                            entry.getEvidence().add(d.getDescription());
+                            DiseaseComparator dc = new DiseaseComparator(entry);
+                            uniqueDisease.add(dc);
+                        }
+                        
                     }
                 } catch (BioportalAdapterException ex) {
                     LOGGER.error("Error while getting disease using BioPortal adapter", ex);
                 }
-            }
+            
         }
-        for (DiseaseComparator disease : uniDisease) {
+    }
+        for (DiseaseComparator disease : uniqueDisease) {
             diseaseList.add(disease.getDisease());
         }
         enzymeModel.setDisease(diseaseList);

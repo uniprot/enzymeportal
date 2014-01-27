@@ -275,7 +275,7 @@ public interface MegaMapper {
     Collection<Disease> getDiseaseByUniprotId(MmDatabase db, String accessions,
             MmDatabase... xDbs);
 
-    Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions,
+    Set<uk.ac.ebi.ep.enzyme.model.Disease>getDiseaseByAccession(MmDatabase db, String accessions,
             MmDatabase... xDbs);
 
     /**

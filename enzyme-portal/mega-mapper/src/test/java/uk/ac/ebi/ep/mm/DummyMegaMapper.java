@@ -189,7 +189,7 @@ public class DummyMegaMapper implements MegaMapper{
 
 
 
-    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
+    public Set<uk.ac.ebi.ep.enzyme.model.Disease> getDiseaseByAccession(MmDatabase db, String accessions, MmDatabase... xDbs) {
         throw new UnsupportedOperationException("This is just a dummy implementation.");
     }
 

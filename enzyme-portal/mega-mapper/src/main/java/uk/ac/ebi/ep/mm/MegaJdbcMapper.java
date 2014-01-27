@@ -737,22 +737,20 @@ public class MegaJdbcMapper implements MegaMapper {
     }
 
     //get disease using list of accessions
-    public Map<String, String> getDiseaseByAccession(MmDatabase db, String accession,
+    public Set<uk.ac.ebi.ep.enzyme.model.Disease> getDiseaseByAccession(MmDatabase db, String accession,
             MmDatabase... xDbs) {
-        Map<String, String> diseasesEntryMap = null;
+       
+        Set<uk.ac.ebi.ep.enzyme.model.Disease> diseases = null;
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         //String[] acc = accessions.split("_");
         //String accession = acc[0].concat("_%");
 
         try {
-            if (diseasesEntryMap == null) {
-                diseasesEntryMap = new HashMap<String, String>();
-            }
 
-//            String queryOld = "select DISTINCT e2.entry_id, e2.entry_name, e2.db_name from mm_entry e1,mm_xref xr, mm_entry e2 where e1.db_name =? and e1.entry_id like ? "
-//                    + "and ((e1.id = xr.from_entry and xr.to_entry = e2.id) or "
-//                    + "(e1.id = xr.to_entry and xr.from_entry = e2.id)) and e2.db_name in (?,?,?) and e2.entry_name is not null ";
+                        if (diseases == null) {
+                diseases = new TreeSet<uk.ac.ebi.ep.enzyme.model.Disease>(SORT_ENZYME_MODEL_DISEASES);
+            }
 
 
             String query = "select DISTINCT e.db_name, e.entry_id, e.entry_name from mm_entry e, mm_accession a, mm_xref x "
@@ -772,10 +770,30 @@ public class MegaJdbcMapper implements MegaMapper {
 
                 while (resultSet.next()) {
 
+                    String disaseID = resultSet.getString(ENTRY_ID);
+
+                    String url = contructUrlFromDiseaseId(disaseID);
+
+                     uk.ac.ebi.ep.enzyme.model.Disease disease = new uk.ac.ebi.ep.enzyme.model.Disease();
+
+                    //set the url or web link for this compound
+                    if (url != null) {
+                        disease.setUrl(url);
+                    } else {
+                        disease.setUrl("#");
+                    }  
+                    
+                  
                     String entryId = resultSet.getString(ENTRY_ID);
                     String entryName = resultSet.getString(ENTRY_NAME);
+                    
                     if (entryId != null && entryName != null) {
-                        diseasesEntryMap.put(entryId, entryName);
+                        disease.setId(entryId);
+                        
+                        String diseaseName = resolveSpecialCharacters(entryName.toLowerCase(Locale.ENGLISH));
+                        disease.setName(diseaseName.replaceAll(",", ""));
+
+                        diseases.add(disease);
                     }
 
                 }
@@ -788,7 +806,7 @@ public class MegaJdbcMapper implements MegaMapper {
             closePreparedStatement(ps);
         }
 
-        return diseasesEntryMap;
+        return diseases;
     }
 
     /**
@@ -1352,11 +1370,27 @@ public class MegaJdbcMapper implements MegaMapper {
         return resultSet;
 
 
-    }
+    }   
     private static final Comparator<String> NAME_COMPARATOR =
             new ChemicalNameComparator();
     static final Comparator<uk.ac.ebi.ep.search.model.Disease> SORT_DISEASES = new Comparator<uk.ac.ebi.ep.search.model.Disease>() {
         public int compare(uk.ac.ebi.ep.search.model.Disease d1, uk.ac.ebi.ep.search.model.Disease d2) {
+
+            if (d1.getName() == null && d2.getName() == null) {
+
+                //return sp1.getScientificname().compareTo(sp2.getScientificname())
+                return NAME_COMPARATOR.compare(d1.getName(), d2.getName());
+            }
+            int compare = NAME_COMPARATOR.compare(d1.getName(), d2.getName());
+
+            return ((compare == 0) ? NAME_COMPARATOR.compare(d1.getName(), d2.getName()) : compare);
+
+        }
+    };
+    
+    
+    static final Comparator<uk.ac.ebi.ep.enzyme.model.Disease> SORT_ENZYME_MODEL_DISEASES = new Comparator<uk.ac.ebi.ep.enzyme.model.Disease>() {
+        public int compare(uk.ac.ebi.ep.enzyme.model.Disease d1, uk.ac.ebi.ep.enzyme.model.Disease d2) {
 
             if (d1.getName() == null && d2.getName() == null) {
 

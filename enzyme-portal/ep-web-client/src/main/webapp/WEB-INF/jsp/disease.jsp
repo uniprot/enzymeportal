@@ -26,7 +26,7 @@
     <c:if test='${diseasesSize > 0}'>
         <p><spring:message code="label.entry.disease.found" arguments="${diseasesSize},${plural}"/></p>
         <c:forEach items="${diseases}" var="disease" varStatus="count">
-           <br/><b style=" font-size:medium" ><a href="${disease.url}" > <c:out value="${disease.name}"/></a></b><br/>
+            <br/><b style=" font-size:medium" ><a href="${disease.url}" target="_blank" > <c:out value="${disease.name}"/></a></b><br/>
             <c:out value="${disease.description}"/><br/>
 
             <c:set var="ev" value="${disease.evidence}" />
@@ -43,7 +43,7 @@
             </ul>
         </c:forEach>
         <div class="note_0">
-            <a class="note_0" href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}.html#section_comments">View disease evidence in UniProt</a>
+            <a class="note_0" href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}.html#section_comments" target="_blank">View disease evidence in UniProt</a>
         </div>
                 
             </section>
