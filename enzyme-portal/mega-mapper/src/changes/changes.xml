@@ -10,6 +10,12 @@
 </properties>
 
 <body>
+        <release version="1.0.24" date="2014-01-28"
+        description="New methods">
+        <action dev="joseph" type="add">
+            Added methods for Browse Disease,Enzymes Classification and Disease (Entry Page) retrieval. 
+        </action>
+    </release>
     <release version="1.0.23" date="2013-12-18"
         description="Fixed release script">
         <action dev="rafalcan" type="fix">
