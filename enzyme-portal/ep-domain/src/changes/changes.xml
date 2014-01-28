@@ -9,7 +9,7 @@
 </properties>
 
 <body>
-    <release version="1.1.0" date="" description="Equals and hashCode">
+    <release version="1.1.0" date="2014-01-27" description="Equals and hashCode">
         <action dev="rafalcan" type="add">
             Added methods equals and hashCode to the auto-generated (JAXB) code
             using a JAXB plugin. This should allow us to avoid those fancy
