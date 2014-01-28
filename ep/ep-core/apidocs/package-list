@@ -1,4 +1,5 @@
 uk.ac.ebi.ep.core
+uk.ac.ebi.ep.core.compare
 uk.ac.ebi.ep.core.filter
 uk.ac.ebi.ep.core.search
 uk.ac.ebi.ep.core.search.util
