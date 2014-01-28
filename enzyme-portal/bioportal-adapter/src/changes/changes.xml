@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-    <release version="1.1.0" date=""
+    <release version="1.1.0" date="2014-01-28"
         description="Using v4.0 of BioPortal web services">
         <action dev="rafalcan" type="add">
             Added field classUri to BioportalOntology enumeration, to use it
