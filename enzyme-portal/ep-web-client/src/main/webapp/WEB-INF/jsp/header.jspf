@@ -66,7 +66,7 @@
                     </li>
                 --%>
                 <li class="functional last">
-                    <a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
+                    <a target="_blanc" href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
                         class="icon icon-static" data-icon="f">Feedback</a>
                 </li>
                 <li class="functional">
