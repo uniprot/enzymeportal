@@ -3,7 +3,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
     <name>EP core</name>
 
     <parent>
@@ -21,12 +21,12 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>biomart-adapter</artifactId>
-            <version>1.1.0-SNAPSHOT</version>            
+            <version>1.1.0</version>            
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>uniprot-adapter</artifactId>
-            <version>1.0.7-SNAPSHOT</version>
+            <version>1.0.7</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -113,12 +113,12 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-domain</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>chebi-adapter</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -128,13 +128,13 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>mega-mapper</artifactId>
-            <version>1.0.24-SNAPSHOT</version>
+            <version>1.0.24</version>
 
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>bioportal-adapter</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>
