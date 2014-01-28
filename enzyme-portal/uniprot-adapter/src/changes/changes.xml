@@ -10,7 +10,7 @@
 </properties>
 
 <body>
-    <release version="1.0.7" date="" description="Alignment URL added">
+    <release version="1.0.7" date="2014-01-28" description="Alignment URL added">
         <action dev="rafalcan" type="add">
             Added configuration for alignment URL (used in enzyme comparisons).
         </action>
