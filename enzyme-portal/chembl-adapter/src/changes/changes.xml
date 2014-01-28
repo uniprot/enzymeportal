@@ -10,7 +10,7 @@
     </properties>
 
     <body>
-        <release version="1.0.2" date="" description="Added getTargets method">
+        <release version="1.0.2" date="2014-01-27" description="Added getTargets method">
             <action dev="rafalcan" type="add">
                 Added method IChemblAdapter.getTargets to retrieve target IDs
                 given a UniProt accession.
