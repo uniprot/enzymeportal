@@ -199,7 +199,13 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                 target="chebiIframe">
             </form>
             <script>
-            if (sessionStorage.length == 0){
+            var epcssStore = new Array();
+            for (i = 0, j = 0; i < sessionStorage.length; i++){
+                if (sessionStorage.key(i).indexOf(EPCSS_PREFIX) == 0){
+                    epcssStore[j++] = sessionStorage.key(i);
+                }
+            }
+            if (epcssStore.length == 0){
             	// Add mininum parameters for initial search:
             	$('<input>').attr('type', 'hidden')
                     .attr('name', 'printerFriendlyView')
@@ -217,19 +223,19 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                     .attr('name', 'callbackUrl')
                     .attr('value', '${chebiConfig.ssCallbackUrl}')
                     .appendTo($('#chebiStructureSearch'));
-            } else for (i = 0; i < sessionStorage.length; i++){
+            } else {
                 // Add structure search parameters, if used recently:
-                if (sessionStorage.key(i).indexOf(EPCSS_PREFIX) > -1){
-                        var name = sessionStorage.key(i);
-                        var value = sessionStorage.getItem(name);
-                        var input = $('<input>').attr('type', 'hidden')
-                                .attr('name', name.replace(EPCSS_PREFIX, ''))
-                                .attr('value', unescape(value));
-                        $('#chebiStructureSearch').append(input);
-                }
+        		for (i = 0; i < epcssStore.length; i++){
+                    var name = epcssStore[i];
+                    var value = sessionStorage.getItem(name);
+                    var input = $('<input>').attr('type', 'hidden')
+                            .attr('name', name.replace(EPCSS_PREFIX, ''))
+                            .attr('value', unescape(value));
+                    $('#chebiStructureSearch').append(input);
+        		}
             }
-            if ('${param.results}' == 'true'
-            		|| sessionStorage.results == 'true'){
+            if ('${param.results}' == 'true' ||
+            		sessionStorage.getItem(EPCSS_PREFIX+'results') == 'true'){
                 document.forms['chebiStructureSearch'].action =
                         "${chebiConfig.ssResultsUrl}";
             }

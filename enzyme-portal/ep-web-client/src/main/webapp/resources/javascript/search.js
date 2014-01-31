@@ -675,7 +675,7 @@ function updateCompareButton(){
  * Prefix used for the names of Chemical Structure Search parameters stored in
  * the sessionStorage.
  */
-var EPCSS_PREFIX = 'EPCSS-';
+var EPCSS_PREFIX = 'ep.search.compound.';
 
 /**
  * Saves the structure search parameters in session storage for later use.
