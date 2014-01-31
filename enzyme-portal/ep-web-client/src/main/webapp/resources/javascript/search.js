@@ -531,7 +531,7 @@ function countItems() {
     $('.num').each(function(){
       
         var div = $(this).parent().next();
-        $(this).html('  ( '+$(div).children().size()+' )');
+        $(this).html('('+$(div).children().size()+')');
 
     });
 }

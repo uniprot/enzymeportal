@@ -43,17 +43,17 @@
 
 
         <div id="accordion">
-            <h3 class="head">BIOACTIVE <span class="num"></span></h3>
+            <h3 class="head">Bioactive <span class="num"></span></h3>
             <div id="bioactive" class="scroll" style="max-height: 24ex"></div>               
             <h3 class="head">Drug <span class="num"></span></h3>
             <div id="drug" class="scroll"></div>
-            <h3 class="head">INHIBITOR <span class="num"></span></h3>
+            <h3 class="head">Inhibitor <span class="num"></span></h3>
             <div id="inhibitor" class="scroll"></div>
-            <h3 class="head">ACTIVATOR <span class="num"></span></h3>
+            <h3 class="head">Activator <span class="num"></span></h3>
             <div id="activator" class="scroll"></div>
-            <h3 class="head">SUBSTRATE OR PRODUCT <span class="num"></span></h3>
+            <h3 class="head">Substrate or Product <span class="num"></span></h3>
             <div id="substrate_or_product" class="scroll"></div>
-            <h3 class="head">COFACTOR <span class="num"></span></h3>
+            <h3 class="head">Cofactor <span class="num"></span></h3> 
             <div id="cofactor" class="scroll"></div>
         </div>
 
