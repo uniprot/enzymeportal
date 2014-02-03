@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.PostConstruct;
 import javax.json.Json;
@@ -123,10 +124,12 @@ public class SearchController {
     private LiteratureConfig literatureConfig;
     @Autowired
     private BioportalConfig bioportalConfig;
-    private Boolean isCustomSearch = false;
+    //private Boolean isCustomSearch = false;
+     private AtomicBoolean isCustomSearch = new AtomicBoolean(false);
     private String pathVariable;
     private String ecName;
-    private boolean custom_search = false;
+    //private boolean custom_search = false;
+    private AtomicBoolean custom_search = new AtomicBoolean(false);
 
     @PostConstruct
     public void init() {
@@ -326,7 +329,7 @@ public class SearchController {
             for (CustomXRef ref : xrefResult) {
                 ids = ref.getIdList();
                 total = ref.getResult_count();
-                custom_search = true;
+                custom_search.getAndSet(true);
 
             }
         }
@@ -403,7 +406,8 @@ public class SearchController {
 
         if (ec != null && ec.length() >= 7) {
 
-            setIsCustomSearch(true);
+            
+            isCustomSearch.getAndSet(true);
             setPathVariable(ec);
 
             setEcName(entry_ecname);
@@ -740,18 +744,18 @@ public class SearchController {
         String searchKey = null;
         SearchResults results = null;
 
-        boolean custom = getIsCustomSearch();
+       // boolean custom = getIsCustomSearch();
         try {
 
-            if (custom == true) {
-                String id = getPathVariable();
-                clearHistory(session);
-                searchModel = customSearch(searchModel, id, model, session);
-                model.addAttribute("searchModel", searchModel);
-                model.addAttribute("pagination", getPagination(searchModel));
-                setIsCustomSearch(false);
-                view = "search";
-            } else {
+            //if (custom == true) {
+//                String id = getPathVariable();
+//                clearHistory(session);
+//                searchModel = customSearch(searchModel, id, model, session);
+//                model.addAttribute("searchModel", searchModel);
+//                model.addAttribute("pagination", getPagination(searchModel));
+//                setIsCustomSearch(false);
+//                view = "search";
+            //} else {
                 // See if it is already there, perhaps we are paginating:
                 Map<String, SearchResults> prevSearches =
                         getPreviousSearches(session.getServletContext());
@@ -774,7 +778,7 @@ public class SearchController {
                         default:
                     }
                 }
-            }
+            //}
             if (results != null) { // something to show
                 cacheSearch(session.getServletContext(), searchKey, results);
                 setLastSummaries(session, results.getSummaryentries());
@@ -884,17 +888,17 @@ public class SearchController {
         return postSearchResult(searchModel, model, session, request);
     }
 
-    @RequestMapping(value = "/search/{id}", method = RequestMethod.GET)
-    public String getSearchResults(SearchModel searchModel, BindingResult result, @PathVariable("id") String id,
-            Model model, HttpSession session) {
-
-        setIsCustomSearch(true);
-        setPathVariable(id);
-
-
-        return "redirect:/search";
-
-    }
+//    @RequestMapping(value = "/search/{id}", method = RequestMethod.GET)
+//    public String getSearchResultsTODO(SearchModel searchModel, BindingResult result, @PathVariable("id") String id,
+//            Model model, HttpSession session) {
+//
+//        setIsCustomSearch(true);
+//        setPathVariable(id);
+//
+//
+//        return "redirect:/search";
+//
+//    }
 
     @RequestMapping(value = "/advanceSearch",
     method = {RequestMethod.GET, RequestMethod.POST})
@@ -1254,13 +1258,13 @@ public class SearchController {
         return pagination;
     }
 
-    public Boolean getIsCustomSearch() {
-        return isCustomSearch;
-    }
-
-    public void setIsCustomSearch(Boolean isCustomSearch) {
-        this.isCustomSearch = isCustomSearch;
-    }
+//    public Boolean getIsCustomSearch() {
+//        return isCustomSearch;
+//    }
+//
+//    public void setIsCustomSearch(Boolean isCustomSearch) {
+//        this.isCustomSearch = isCustomSearch;
+//    }
 
     public String getPathVariable() {
         return pathVariable;

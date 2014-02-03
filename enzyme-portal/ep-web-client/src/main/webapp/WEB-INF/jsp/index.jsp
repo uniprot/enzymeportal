@@ -59,7 +59,7 @@
                           <div class="panel-pane pane-custom pane-8 " >
                                          <div class="containers grid_24">
                         <div class="iconGroup">
-                            <fieldset class="iconField">
+<!--                            <fieldset class="iconField">
                                 <legend><a href="${pageContext.request.contextPath}/browseEcNumber">Enzyme Classification</a></legend>
                                     <div class="iconBox">
                                         <a href="${pageContext.request.contextPath}/browseEcNumber"><img src="resources/images/classification.png"
@@ -72,7 +72,7 @@
                                         <a href="${pageContext.request.contextPath}/browse"><img src="resources/images/disease3.png"
                                                 alt="?" width="100px" height="100px"/></a>
                                     </div>
-                            </fieldset>                            
+                            </fieldset>                            -->
                             <fieldset class="iconField hidden">
                                     <legend>Expression</legend>
                                     <div class="iconBox">
