@@ -2,14 +2,14 @@ package uk.ac.ebi.ep.web;
 
 /**
  * Enumeration of attributes (application, session) used in the Enzyme Portal
- * webapp.
+ * webapp. 
  *
  * @author rafa
  *
  */
 public enum Attribute {
-
-    /**
+  
+           /**
      * Cache of previous searches made. Application scope.
      */
     prevSearches("prevSearches"),
@@ -29,7 +29,7 @@ public enum Attribute {
 
     private Attribute(String value) {
         this.name = value;
-    }
+}
 
     public String getName() {
         return name;

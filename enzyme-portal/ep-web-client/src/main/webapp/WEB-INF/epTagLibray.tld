@@ -20,7 +20,7 @@
          <listener-class>com.mycompany.TagLibListener</listener-class> 
      </listener>
    -->
-            <function>
+         <function>
         <name>startsWithDigit</name>
         <function-class>uk.ac.ebi.ep.web.Functions</function-class>
         <function-signature>boolean startsWithDigit(java.lang.String)</function-signature>

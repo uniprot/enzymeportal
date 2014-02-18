@@ -67,9 +67,6 @@ public class BrowseController extends AbstractController {
     private static final String ENTRIES = "entries";
     private static final String INTENZ_URL = "http://www.ebi.ac.uk/intenz/ws/EC";
     private Set<uk.ac.ebi.ep.search.model.Disease> diseaseList = new TreeSet<>();
-    
-    //TODO
-    //Get implemenation for both disease and ec considering back button users
 
     private SearchResults findEnzymesByEntry(String entry_id) {
 

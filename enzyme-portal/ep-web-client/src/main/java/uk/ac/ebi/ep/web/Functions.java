@@ -49,7 +49,7 @@ public final class Functions {
         return Character.isDigit(data.charAt(0));
     }
     
-
+    
         /**This function is to enable using capital letter case in checking if a string starts with the letter
      * 
      * @param data the original string
