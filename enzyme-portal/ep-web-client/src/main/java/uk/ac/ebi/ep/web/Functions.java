@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
@@ -50,7 +49,7 @@ public final class Functions {
         return Character.isDigit(data.charAt(0));
     }
     
-    
+
         /**This function is to enable using capital letter case in checking if a string starts with the letter
      * 
      * @param data the original string

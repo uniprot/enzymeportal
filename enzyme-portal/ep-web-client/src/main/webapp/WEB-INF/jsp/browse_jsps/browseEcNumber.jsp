@@ -186,18 +186,18 @@
                     <h3 style="text-align: center; margin-right: 10em">Browse Enzymes By EC classification</h3><br/>
                     <div class="grid_6" style="margin-left: 30em">
                         
-<div style="text-align: center; min-width: 170px">
-	<div style="text-align: left; margin-left: auto; margin-right: auto; width: 170px">
-	   <ul style="list-style-type: none; padding-left: 5px; margin-left: 0px">
-		    <li><a href="ecnumber?ec=1&amp;ecname=Oxidoreductases">EC 1</a>&nbsp;&nbsp;Oxidoreductases</li>
-			<li><a href="ecnumber?ec=2&amp;ecname=Transferases">EC 2</a>&nbsp;&nbsp;Transferases</li>
-			<li><a href="ecnumber?ec=3&amp;ecname=Hydrolases">EC 3</a>&nbsp;&nbsp;Hydrolases</li>
-			<li><a href="ecnumber?ec=4&amp;ecname=Lyases">EC 4</a>&nbsp;&nbsp;Lyases</li>
-			<li><a href="ecnumber?ec=5&amp;ecname=Isomerases">EC 5</a>&nbsp;&nbsp;Isomerases</li>
-			<li><a href="ecnumber?ec=6&amp;ecname=Ligases">EC 6</a>&nbsp;&nbsp;Ligases</li>
-		</ul>
-	</div>
-</div>
+                <div style="text-align: center; min-width: 170px">
+                        <div style="text-align: left; margin-left: auto; margin-right: auto; width: 170px">
+                           <ul style="list-style-type: none; padding-left: 5px; margin-left: 0px">
+                                    <li><a href="ecnumber?ec=1&amp;ecname=Oxidoreductases">EC 1</a>&nbsp;&nbsp;Oxidoreductases</li>
+                                        <li><a href="ecnumber?ec=2&amp;ecname=Transferases">EC 2</a>&nbsp;&nbsp;Transferases</li>
+                                        <li><a href="ecnumber?ec=3&amp;ecname=Hydrolases">EC 3</a>&nbsp;&nbsp;Hydrolases</li>
+                                        <li><a href="ecnumber?ec=4&amp;ecname=Lyases">EC 4</a>&nbsp;&nbsp;Lyases</li>
+                                        <li><a href="ecnumber?ec=5&amp;ecname=Isomerases">EC 5</a>&nbsp;&nbsp;Isomerases</li>
+                                        <li><a href="ecnumber?ec=6&amp;ecname=Ligases">EC 6</a>&nbsp;&nbsp;Ligases</li>
+                                </ul>
+                        </div>
+                </div>
 
                     </div>
                 </div>

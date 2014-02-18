@@ -13,11 +13,9 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 
 <!DOCTYPE html>
-
-
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
@@ -26,66 +24,9 @@
 <!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
     <head>
-        <!--        <meta charset="utf-8">-->
-
-        <!-- Use the .htaccess and remove these lines to avoid edge case issues.
-             More info: h5bp.com/b/378 -->
-        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->	<!-- Not yet implemented -->
-
-        <title>Search Result  &lt; Enzyme Portal &gt; &lt; EMBL-EBI</title>
-        <meta name="description" content="EMBL-EBI"><!-- Describe what this page is about -->
-        <meta name="keywords" content="bioinformatics, europe, institute"><!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
-        <meta name="author" content="EMBL-EBI"><!-- Your [project-name] here -->
-
-        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-
-
-        <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
-        <!--           <link rel="stylesheet" href="resources/css/enzyme-portal-colours.css" type="text/css" media="screen" />-->
-        <link rel="stylesheet" href="resources/css/embl-petrol-colours.css" type="text/css" media="screen" />
-
-        <!--        for production-->
-        <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-
-        <!--        javascript was placed here for auto complete otherwise should be place at the bottom for faster page loading-->
-
-        <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
-        <script src="resources/lib/spineconcept/javascript/identification.js" type="text/javascript"></script>
-        <script src="resources/javascript/search.js" type="text/javascript"></script>
-
-
-        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-        <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
-
-
-
-        <!-- Full build -->
-        <!-- <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script> -->
-
-        <!-- custom build (lacks most of the "advanced" HTML5 support -->
-        <script src="//www.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/modernizr.js"></script>		
-
-        <!--<! --------------------------------
-        GLOBAL SEARCH TEMPLATE - START
-       -------------------------------- >-->
-
-        <script type="text/javascript" src="//www.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-1.8.0.min.js"></script>
-        <script type="text/javascript" src="//www.ebi.ac.uk/ebisearch/examples/ebisearch-globalSearch-template_files/jquery-ui-1.8.23.custom.min.js"></script>
-
-        <!--<! --------------------------------
-        GLOBAL SEARCH TEMPLATE - END
-       -------------------------------- >-->
-
-
-
-
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-        
+<c:set var="pageTitle" value="Browse Enzymes"/>
+<%@include file="head.jspf" %>
+      
 
 
 <!-- History.js -->
@@ -107,68 +48,7 @@
         </div>
 
         <div id="wrapper" class="container_24">
-            <header>
-                <div id="global-masthead" class="masthead grid_24">
-                    <!--This has to be one line and no newline characters-->
-                    <a href="/" title="Go to the EMBL-EBI homepage"><img src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png" alt="EMBL European Bioinformatics Institute"></a>
-
-                    <nav>
-                        <ul id="global-nav">
-                            <!-- set active class as appropriate -->
-                            <li class="first active" id="services"><a href="/services">Services</a></li>
-                            <li id="research"><a href="/research">Research</a></li>
-                            <li id="training"><a href="/training">Training</a></li>
-                            <li id="industry"><a href="/industry">Industry</a></li>
-                            <li id="about" class="last"><a href="/about">About us</a></li>
-                        </ul>
-                    </nav>
-
-                </div>
-
-                <div id="local-masthead" class="masthead grid_24 nomenu">
-
-                    <!-- local-title -->
-
-                    <div id="local-title" class="grid_12 alpha logo-title"> 
-                        <a href="/enzymeportal" title="Back to Enzyme Portal homepage">
-                            <img src="resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px;height: 64px; margin-right: 0px">
-                        </a> <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme Portal</h1></span> </div>
-
-
-
-                    <div class="grid_12 omega">
-
-
-
-
-                        <%@ include file="frontierSearchBox.jsp" %>
-
-
-
-                    </div>
-
-
-                    <nav>
-                        <ul class="grid_24" id="local-nav">
-                            <li  class="first"><a href="/enzymeportal" title="">Home</a></li>
-                            <!--					<li><a href="#">Documentation</a></li>-->
-                            <li><a href="faq" title="Frequently Asked questions">FAQ</a></li>
-                            <li><a href="about" title="About Enzyme Portal">About Enzyme Portal</a></li>
-                            <li><a href="browse" title="Browse Disease">Browse Disease</a></li>
-                             <li class="last active"><a href="${pageContext.request.contextPath}/browseEcNumber" title="Browse Enzyme">Browse Enzyme</a></li>
-                            <!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
-                                 add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
-                                 whichever one will show up last... 
-                                 For example: -->
-                            <!--					<li class="functional last"><a href="#" class="icon icon-functional" data-icon="l">Login</a></li>-->
-                            <li class="functional"><a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/" class="icon icon-static" data-icon="f">Feedback</a></li>
-                            <!--                            <li class="functional"><a href="#" class="icon icon-functional" data-icon="r">Share</a></li>-->
-                            <li class="functional"> <a href="https://twitter.com/share" class="icon icon-functional" data-icon="r" data-dnt="true" data-count="none" data-via="twitterapi">Share</a></li>
-
-                        </ul>
-                    </nav>
-                </div>
-            </header>
+            <%@include file="header.jspf" %>
             <div id="content" role="main" class="grid_24 clearfix">
                 <div class="grid_24">
                     <div class="clear"></div>
@@ -183,9 +63,13 @@
                                        <c:choose>
                                            <c:when test="${fn:length(selectedEc) gt 1}">
                                       
-                                           <xchars:translate>
-                                               <h2><a href="${pageContext.request.contextPath}/ecnumber?ec=${selected.ec}&amp;ecname=${selected.name}">EC ${selected.ec}</a> - ${selected.name}</h2>    
-                                       </xchars:translate> 
+                                            <form:form commandName="searchModel" action="${pageContext.request.contextPath}/browse/ec/${selected.ec}" method="post">
+                                                 <xchars:translate>
+                                               <h2><a onclick="submit()" href="#">EC ${selected.ec}</a> - ${selected.name}</h2> 
+                                                 </xchars:translate>
+                                               <input type="hidden" name="ec" value="${selected.ec}"/>
+                                               <input type="hidden" name="ecname" value="${selected.name}"/>
+                                           </form:form>
                                       
                                            </c:when>
                                        <c:otherwise>
@@ -197,9 +81,17 @@
                                         <c:choose>
                                            <c:when test="${fn:length(selectedEc) gt 2}">  
                                        
-                                           <xchars:translate>
-                                           <h2 style="margin-left: 1em"><a href="${pageContext.request.contextPath}/ecnumber?ec=${selected.ec}&amp;subecname=${selected.subclassName}">EC ${selected.ec}</a> - ${selected.subclassName}</h2> 
-                                        </xchars:translate> 
+                                          
+                                           
+                                                <form:form commandName="searchModel" action="${pageContext.request.contextPath}/browse/ec/${selected.ec}" method="post">
+                                                      <xchars:translate>
+                                                     <h2 style="margin-left: 1em"> <a onclick="submit()" href="#">EC ${selected.ec}</a> - ${selected.subclassName} </h2> 
+                                                      </xchars:translate>
+                                             <input type="hidden" name="ec" value="${selected.ec}"/>
+                                               <input type="hidden" name="subecname" value="${selected.subclassName}"/>
+                                                </form:form>
+                                          
+                                      
                                        
                                            </c:when>
                                         <c:otherwise>
@@ -242,7 +134,16 @@
                                 <div class="resultText" style="display: table-row">
                                     <c:forEach var="data" items="${json.children}"> 
                                         
-                                        <div class="result"  style="display: table-row;vertical-align: top;padding-left: 1em;padding-top: 1ex; min-height: 10px"><a href="${pageContext.request.contextPath}/ecnumber?ec=${data.ec}&amp;subecname=${data.name}">EC ${data.ec}</a>  - ${data.name}</div>
+                                        <div class="result"  style="display: table-row;vertical-align: top;padding-left: 1em;padding-top: 1ex; min-height: 10px">
+                                             <form:form commandName="searchModel" action="${pageContext.request.contextPath}/browse/ec/${data.ec}" method="post">
+                                                 <a onclick="submit()" href="#">EC ${data.ec}</a>  - ${data.name}
+                                               <input type="hidden" name="ec" value="${data.ec}"/>
+                                               <input type="hidden" name="subecname" value="${data.name}"/>
+                                                    <form:hidden path="searchparams.type" value="KEYWORD"/>
+                                                    <form:hidden path="searchparams.text" value="${data.name}"/>
+                                                    <form:hidden path="searchparams.previoustext" />
+                                             </form:form>
+                                        </div>
 
 
                                     </c:forEach>
@@ -251,9 +152,20 @@
                             </c:when>
                              <c:when test="${not empty json.subSubclasses}">
                                 <div class="resultText" style="display: table-row">
-                                    <c:forEach var="data" items="${json.subSubclasses}"> 
+                                    <c:forEach var="subsub" items="${json.subSubclasses}"> 
                                         
-                                        <div class="result"  style="display: table-row;vertical-align: top;padding-left: 1em;padding-top: 1ex; min-height: 10px"><a href="${pageContext.request.contextPath}/ecnumber?ec=${data.ec}&amp;subsubecname=${data.name}">EC ${data.ec}</a>  - ${data.name}</div>
+                                        <div class="result"  style="display: table-row;vertical-align: top;padding-left: 1em;padding-top: 1ex; min-height: 10px">
+                                            <form:form  commandName="searchModel" action="${pageContext.request.contextPath}/browse/ec/${subsub.ec}" method="post">
+                                                <xchars:translate>
+                                                <a onclick="submit()" href="#">EC ${subsub.ec}</a>  - ${subsub.name} 
+                                                </xchars:translate>
+                                                <input type="hidden" name="ec" value="${subsub.ec}"/>
+                                               <input type="hidden" name="subsubecname" value="${subsub.name}"/>
+                                                   <form:hidden path="searchparams.type" value="KEYWORD"/>
+                                                    <form:hidden path="searchparams.text" value="${subsub.name}"/>
+                                                    <form:hidden path="searchparams.previoustext" />
+                                            </form:form>
+                                        </div>
 
 
                                     </c:forEach>
@@ -262,9 +174,18 @@
                             </c:when>
                                <c:when test="${not empty json.entries}">
                                 <div class="resultText" style="display: table-row">
-                                    <c:forEach var="data" items="${json.entries}"> 
+                                    <c:forEach var="entry" items="${json.entries}"> 
                                        
-                                        <div class="result"  style="display: table-row;vertical-align: top;padding-left: 1em;padding-top: 1ex; min-height: 10px"><a href="${pageContext.request.contextPath}/ecnumber?ec=${data.ec}&amp;entryecname=${data.name}"> ${data.ec}</a>  - ${data.name}</div>
+                                        <div class="result"  style="display: table-row;vertical-align: top;padding-left: 1em;padding-top: 1ex; min-height: 10px">
+                                             <form:form commandName="searchModel" action="${pageContext.request.contextPath}/search/ec/${entry.ec}" method="post">
+                                                 <a onclick="submit()" href="#"> ${entry.ec}</a>  - ${entry.name} 
+                                              <input type="hidden" name="ec" value="${entry.ec}"/>
+                                              <input type="hidden" name="entryecname" value="${entry.name}"/>
+                                                 <form:hidden path="searchparams.type" value="KEYWORD"/>
+                                                    <form:hidden path="searchparams.text" value="${entry.name}"/>
+                                                    <form:hidden path="searchparams.previoustext" />
+                                             </form:form>
+                                        </div>
 
 
                                     </c:forEach>

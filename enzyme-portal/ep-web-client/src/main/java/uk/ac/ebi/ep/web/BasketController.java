@@ -79,14 +79,14 @@ public class BasketController {
             HttpSession session){
         @SuppressWarnings("unchecked")
         Map<String, EnzymeSummary> lastSummaries = (Map<String, EnzymeSummary>)
-                session.getAttribute(Attribute.lastSummaries.name());
+                session.getAttribute(Attribute.lastSummaries.getName());
         @SuppressWarnings("unchecked")
         Map<String, EnzymeSummary> basket = (Map<String, EnzymeSummary>)
-                session.getAttribute(Attribute.basket.name());
+                session.getAttribute(Attribute.basket.getName());
         if (basket == null){
             basket = Collections.synchronizedMap(
                     new LinkedHashMap<String, EnzymeSummary>());
-            session.setAttribute(Attribute.basket.name(), basket);
+            session.setAttribute(Attribute.basket.getName(), basket);
         }
         for (String basketId : id.split(";")) {
             if (checked){
@@ -107,7 +107,7 @@ public class BasketController {
     @RequestMapping(value="/basket")
     protected String getBasket(Model model){
         model.addAttribute("searchModel", newEmptySearchModel());
-        return Attribute.basket.name();
+        return Attribute.basket.getName();
     }
 
     /**
@@ -186,6 +186,7 @@ public class BasketController {
             this.acc = acc;
         }
 
+        @Override
         public EnzymeModel call() throws Exception {
             EnzymeRetriever retriever = null;
             try {
@@ -198,7 +199,9 @@ public class BasketController {
                 retriever.getBioportalAdapter().setConfig(bioportalConfig);
                 return retriever.getWholeModel(acc);
             } finally {
-                if (retriever != null) retriever.closeResources();
+                if (retriever != null) {
+                    retriever.closeResources();
+                }
             }
         }
 
