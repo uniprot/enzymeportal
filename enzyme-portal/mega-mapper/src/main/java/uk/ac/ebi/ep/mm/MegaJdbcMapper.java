@@ -6,7 +6,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.*;
 
-import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 
@@ -1483,7 +1482,7 @@ public class MegaJdbcMapper implements MegaMapper {
             closeResultSet(resultSet);
             closePreparedStatement(ps);
         }
-
+         
         return diseases;
     }
 
@@ -1540,6 +1539,7 @@ public class MegaJdbcMapper implements MegaMapper {
         return entry;
     }
 
+    @Deprecated
     public List<String> findEcNumbers() {
 
         ResultSet resultSet = null;
@@ -1583,7 +1583,7 @@ public class MegaJdbcMapper implements MegaMapper {
         return ecNumbers;
     }
     
-    
+    //this implementation is still  a work in progress, pls see issue #200 on github
         public Collection<CustomXRef> getXrefs_ec_Only(Entry entry, MmDatabase... dbs) {
         Collection<CustomXRef> xrefs = null;
         PreparedStatement ps = null;
@@ -1599,8 +1599,8 @@ public class MegaJdbcMapper implements MegaMapper {
             }
             if ( entry.getId() != null) {
 
-                String query1 = "SELECT mmx.* FROM mm_xref mmx, mm_entry mme WHERE (mmx.from_entry = ? AND mmx.to_entry = mme.id AND mme.db_name IN (?)"
-                        + "  OR (mmx.to_entry = ? AND mmx.from_entry = mme.id AND mme.db_name IN (?))) and rownum between ? and ? order by mmx.ID asc";
+                //String query1 = "SELECT mmx.* FROM mm_xref mmx, mm_entry mme WHERE (mmx.from_entry = ? AND mmx.to_entry = mme.id AND mme.db_name IN (?)"
+                       // + "  OR (mmx.to_entry = ? AND mmx.from_entry = mme.id AND mme.db_name IN (?))) and rownum between ? and ? order by mmx.ID asc";
 
 
                 String query = "SELECT * FROM (SELECT mmx.*, COUNT(*) OVER()RESULT_COUNT FROM mm_xref mmx, mm_entry mme WHERE (mmx.from_entry = ? AND mmx.to_entry = mme.id AND mme.db_name IN (?)\n" +
@@ -1631,12 +1631,10 @@ public class MegaJdbcMapper implements MegaMapper {
     }
         
             private List<CustomXRef> buildXref_custom(ResultSet rs) throws SQLException {
-        List<CustomXRef> xrefs = null;
+        List<CustomXRef> xrefs = new ArrayList<CustomXRef>();
           CustomXRef xref = new CustomXRef();
         while (rs.next()) {
-            if (xrefs == null) {
-                xrefs = new ArrayList<CustomXRef>();
-            }
+
    
             xref.setId(rs.getInt("id"));
             

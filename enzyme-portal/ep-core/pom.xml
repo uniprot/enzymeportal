@@ -128,7 +128,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>mega-mapper</artifactId>
-            <version>1.0.24</version>
+            <version>1.0.25-SNAPSHOT</version>
 
         </dependency>
         <dependency>
