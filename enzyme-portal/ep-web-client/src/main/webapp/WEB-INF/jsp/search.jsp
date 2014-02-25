@@ -26,9 +26,7 @@
 <c:set var="pageTitle" value="Search results"/>
 <%@include file="head.jspf" %>
 
-<body class="level2"><!-- add any of your classes or IDs -->
-    
-       
+<body class="level2 ${totalfound eq 0? 'noresults' : ''}">
 
  <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 
@@ -134,8 +132,12 @@
                         </c:if>
                     </section>
                     <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
-                    <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
-                        <div id="ebi_search_results"><h3 class="slideToggle icon icon-functional" data-icon="u">Show more data from EMBL-EBI</h3>
+                        <script src="resources/javascript/ebi-global-search-run.js"></script>
+                        <script src="resources/javascript/ebi-global-search.js"></script>
+                        <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
+                        <div id="ebi_search_results"><h3
+                            class="slideToggle icon icon-functional"
+                            data-icon="u">Show more data from EMBL-EBI</h3>
                         </div>
                     </aside>
                     </c:if>
