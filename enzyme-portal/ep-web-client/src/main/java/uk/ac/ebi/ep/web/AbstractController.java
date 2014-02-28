@@ -52,9 +52,8 @@ public abstract class AbstractController {
     protected IntenzConfig intenzConfig;
     @Autowired
     protected EbeyeConfig ebeyeConfig;
-    
-    
-     @ModelAttribute("searchModel")
+
+    @ModelAttribute("searchModel")
     public SearchModel searchform() {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
@@ -224,7 +223,6 @@ public abstract class AbstractController {
         finder.getIntenzAdapter().setConfig(intenzConfig);
         try {
             results = finder.getEnzymes(searchParameters);
-            System.out.println("enzyme results "+ results);
         } catch (EnzymeFinderException ex) {
             LOGGER.error("Unable to create the result list because an error "
                     + "has occurred in the find method! \n", ex);
@@ -256,7 +254,6 @@ public abstract class AbstractController {
      * @param searchModel
      */
     protected void applyFilters(SearchModel searchModel, HttpServletRequest request) {
-
 
         if (searchModel != null) {
 

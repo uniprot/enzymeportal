@@ -620,6 +620,7 @@ function ajaxBasket(id, checked){
 	var thisFunction = this;
     var params = {};
     params.id = id;
+    console.log("ID "+ id);
     params.checked = checked;
     jQuery.ajax({
     	dataType: "text",

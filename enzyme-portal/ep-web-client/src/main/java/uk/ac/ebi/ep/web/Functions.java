@@ -191,7 +191,7 @@ public final class Functions {
     }
     
     public static String getSummaryBasketId(EnzymeSummary summary){
-        List<String> accs = new ArrayList<String>();
+        List<String> accs = new ArrayList<>();
         for (EnzymeAccession acc : summary.getRelatedspecies()) {
             accs.add(acc.getUniprotaccessions().get(0));
         }
