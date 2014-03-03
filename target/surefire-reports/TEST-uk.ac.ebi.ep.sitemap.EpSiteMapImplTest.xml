@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="16.541" errors="0" skipped="0" tests="1" name="uk.ac.ebi.ep.sitemap.EpSiteMapImplTest">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/amd64"/>
+    <property name="java.vm.version" value="16.0-b11"/>
+    <property name="java.vm.vendor" value="Sun Microsystems Inc."/>
+    <property name="java.vendor.url" value="http://java.sun.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="GB"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/nfs/gns/homes/joseph/projects/enzymeportal-projects/enzymeportal"/>
+    <property name="java.runtime.version" value="1.6.0_18-ea-b04"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="os.name" value="Linux"/>
+    <property name="classworlds.conf" value="/homes/maven/bin/apache-maven-3.0.1/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/amd64/server:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/amd64:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/../lib/amd64::/sw/arch/dbtools/oracle/product/11.1.0.6.2/client/lib:/sw/arch/dbtools/oracle/product/11.1.0.6.2/client/rdbms/lib:/sw/arch/dbtools/oracle/product/11.1.0.6.2/client/jdbc/lib:/ebi/sp/pro1/chebi/programs/java/jdk1.6_18/lib:/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="50.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Server Compiler"/>
+    <property name="skipTests" value="false"/>
+    <property name="os.version" value="2.6.32-279.14.1.el6.x86_64"/>
+    <property name="user.home" value="/homes/joseph"/>
+    <property name="user.timezone" value="Europe/London"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="1.6"/>
+    <property name="user.name" value="joseph"/>
+    <property name="java.class.path" value="/homes/maven/bin/apache-maven-3.0.1/boot/plexus-classworlds-2.4.jar"/>
+    <property name="java.vm.specification.version" value="1.0"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre"/>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="user.language" value="en"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.6.0_18-ea"/>
+    <property name="java.ext.dirs" value="/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="securerandom.source" value="file:/dev/./urandom"/>
+    <property name="sun.boot.class.path" value="/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/resources.jar:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/rt.jar:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/sunrsasign.jar:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/jsse.jar:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/jce.jar:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/lib/charsets.jar:/nfs/gns/misc/misc03/nfs5-vol9-sp-pro1/chebi/programs/java/jdk1.6_18/jre/classes"/>
+    <property name="java.vendor" value="Sun Microsystems Inc."/>
+    <property name="maven.home" value="/homes/maven/bin/apache-maven-3.0.1"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase time="16.541" classname="uk.ac.ebi.ep.sitemap.EpSiteMapImplTest" name="testGenerateSitemap_3args"/>
+</testsuite>
