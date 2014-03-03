@@ -88,7 +88,7 @@
             $(document).ready(function() {
                 setTimeout(function(){
                     // Handler for .ready() called.
-                    $("#redline_side_car").css("background-image","url(resources/images/redline_left_button.png)");
+                    $("#redline_side_car").css("background-image","url(${pageContext.request.contextPath}/resources/images/redline_left_button.png)");
                     $("#redline_side_car").css("display", "block");
                 },1000);
             });

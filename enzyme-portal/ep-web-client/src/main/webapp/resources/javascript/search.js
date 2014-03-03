@@ -531,7 +531,7 @@ function countItems() {
     $('.num').each(function(){
       
         var div = $(this).parent().next();
-        $(this).html('  ( '+$(div).children().size()+' )');
+        $(this).html('('+$(div).children().size()+')');
 
     });
 }
@@ -545,9 +545,7 @@ var BASKET_SIZE = 'ep.basket.size=';
  * @param size
  */
 function storeBasketSize(size){
-	var exp = new Date();
-	exp.setTime(exp.getTime() + 30*60*1000); // tomcat session
-	document.cookie = BASKET_SIZE + size + ';expires=' + exp.toGMTString();
+    document.cookie = BASKET_SIZE + size + ';path=/enzymeportal;max-age=1800';
 }
 
 /**
@@ -556,15 +554,13 @@ function storeBasketSize(size){
 function showBasketSize(){
 	var basketSize = 0;
 	var dc = document.cookie;
-        console.log("cookies == > "+ dc);
 	var bsIndex = dc.indexOf(BASKET_SIZE);
-         console.log("basket == > "+ bsIndex);
 	if (dc && bsIndex > -1){
 		bsStart = bsIndex + BASKET_SIZE.length;
-                 console.log("bstart  == > "+ bsStart)
-		basketSize = dc.substring(bsStart, dc.indexOf(';', bsStart));
+		bsEnd = dc.indexOf(';', bsStart);
+		basketSize = bsEnd == -1?
+				dc.substring(bsStart) : dc.substring(bsStart, bsEnd);
 	}
-         console.log("basket size  == > "+ basketSize)
 	$('.basketSize').text(basketSize);
 }
 
@@ -624,6 +620,7 @@ function ajaxBasket(id, checked){
 	var thisFunction = this;
     var params = {};
     params.id = id;
+    console.log("ID "+ id);
     params.checked = checked;
     jQuery.ajax({
     	dataType: "text",
@@ -633,7 +630,6 @@ function ajaxBasket(id, checked){
         success: function(basketSize){
         	storeBasketSize(basketSize);
         	showBasketSize();
-                //$('.basketSize').text(basketSize);
         },
         error: function(xhr, status, message){
         	alert(message);
@@ -680,7 +676,7 @@ function updateCompareButton(){
  * Prefix used for the names of Chemical Structure Search parameters stored in
  * the sessionStorage.
  */
-var EPCSS_PREFIX = 'EPCSS-';
+var EPCSS_PREFIX = 'ep.search.compound.';
 
 /**
  * Saves the structure search parameters in session storage for later use.

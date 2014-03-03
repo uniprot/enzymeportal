@@ -57,7 +57,7 @@
                 <h2><spring:message htmlEscape="false"
                     code="error.${errorCode}.title"/>
                 </h2>
-                <h1>what is ${errorCode}</h1>
+               
                 <p class="alert">
                     <spring:message code="error.${errorCode}"
                         arguments="${errorParam}"/>

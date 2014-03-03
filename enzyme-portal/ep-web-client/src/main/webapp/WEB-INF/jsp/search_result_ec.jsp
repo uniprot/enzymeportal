@@ -1,8 +1,10 @@
 <%-- 
-    Document   : search
-    Created on : Sep 17, 2012, 4:05:40 PM
+    Document   : search_result_ec
+    Created on : Feb 27, 2014, 10:47:26 AM
     Author     : joseph
 --%>
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
@@ -26,7 +28,9 @@
 <c:set var="pageTitle" value="Search results"/>
 <%@include file="head.jspf" %>
 
-<body class="level2 ${totalfound eq 0? 'noresults' : ''}">
+<body class="level2 ${totalfound eq 0? 'noresults' : ''}"><!-- add any of your classes or IDs -->
+    
+       
 
  <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 
@@ -132,8 +136,8 @@
                         </c:if>
                     </section>
                     <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
-                        <script src="resources/javascript/ebi-global-search-run.js"></script>
-                        <script src="resources/javascript/ebi-global-search.js"></script>
+                        <script src="${pageContext.request.contextPath}/resources/javascript/ebi-global-search-run.js"></script>
+                        <script src="${pageContext.request.contextPath}/resources/javascript/ebi-global-search.js"></script>
                         <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
                         <div id="ebi_search_results"><h3
                             class="slideToggle icon icon-functional"
@@ -154,11 +158,12 @@
                                 Search Filters
                             </div>
                             <div class="line"></div>
-                            <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="search" method="POST">
-                                <form:hidden path="searchparams.type" />	
-                                <form:hidden path="searchparams.text" />
+                            <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="${pageContext.request.contextPath}/search/enzymes?entryid=${entryid}&entryname=${entryname}&AMP;ec=${entryid}&amp;entryecname=${entryname}&AMP;searchparams.type=KEYWORD" method="POST">
+                                <form:hidden path="searchparams.type" />	                          
                                 <form:hidden path="searchparams.sequence" />
+                                <form:hidden path="searchparams.text" />
                                 <form:hidden path="searchparams.previoustext" />
+                               
                                 <input type="hidden" id="filtersFormStart"
                                        name="searchparams.start" value="0"/>
                                 <%@ include file="filter-species.jspf"%>
@@ -309,4 +314,5 @@
 
     </body>
 </html>
+
 

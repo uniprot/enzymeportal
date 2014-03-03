@@ -44,7 +44,7 @@
                          background-color: #fff;text-align: center;
                          opacity: 0.6; vertical-align: middle;
                          margin-top: 0px; padding: 0px;">No structure available</div>
-                    <img src="resources/images/noStructure-light-small.png"
+                    <img src="${pageContext.request.contextPath}/resources/images/noStructure-light-small.png"
                          style="border-radius: 10px;"
                          alt="No structure available"
                          title="No structure available"/>
@@ -68,7 +68,7 @@
 
 <div class="desc grid_21">
     <c:if test='${not empty enzyme.name }'>
-        <a href="search/${primAcc}/enzyme">
+        <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme">
             <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}</span>
             <span class="hidden">${enzyme.uniprotid}</span>
             [${empty theSpecies.species.commonname?

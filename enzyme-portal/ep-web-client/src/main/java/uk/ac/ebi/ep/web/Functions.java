@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.core.search.HtmlUtility;
@@ -192,7 +191,7 @@ public final class Functions {
     }
     
     public static String getSummaryBasketId(EnzymeSummary summary){
-        List<String> accs = new ArrayList<String>();
+        List<String> accs = new ArrayList<>();
         for (EnzymeAccession acc : summary.getRelatedspecies()) {
             accs.add(acc.getUniprotaccessions().get(0));
         }
