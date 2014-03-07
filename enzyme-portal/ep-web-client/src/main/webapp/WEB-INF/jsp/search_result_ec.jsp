@@ -129,7 +129,7 @@
                             </c:when>
                             <c:otherwise>
 
-                                <h2>Enzyme Portal results for <span id="searchTerm" class="searchterm"><i>${searchText}</i></span></h2>
+                                <h2>Enzyme Portal results for EC <span id="searchTerm" class="searchterm"><i>${searchText}</i></span></h2>
                             </c:otherwise>
                           </c:choose>
                             <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
