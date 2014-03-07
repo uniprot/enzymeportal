@@ -31,7 +31,7 @@ import uk.ac.ebi.ep.search.model.SearchParams;
 import uk.ac.ebi.ep.search.model.SearchResults;
 
 /**
- * This controller is for browse Enzymes By disease and Ec classification
+ * This controller is for browse Enzymes By disease 
  *
  * @author joseph
  */
@@ -68,27 +68,27 @@ public class BrowseController extends AbstractController {
                 //total = ref.getResult_count();
 
 
+
+            }
+
+            SearchParams searchParams = new SearchParams();
+            searchParams.setText(entry.getEntryName());
+            searchParams.setType(SearchParams.SearchType.KEYWORD);
+            searchParams.setStart(0);
+            searchParams.setPrevioustext(entry.getEntryName());
+
+            finder.setSearchParams(searchParams);
+
+            if (ids.size() > 0) {
+
+                results = finder.computeEnzymeSummary(ids, new SearchResults());
+
+            } else if (ids.isEmpty()) {
+                //if not found at mm, search via ebeye using the enzyme name as keyword
+                return getEnzymes(finder, searchParams);
             }
         }
-
-
-
-        SearchParams searchParams = new SearchParams();
-        searchParams.setText(entry.getEntryName());
-        searchParams.setType(SearchParams.SearchType.KEYWORD);
-        searchParams.setStart(0);
-        searchParams.setPrevioustext(entry.getEntryName());
-
-        finder.setSearchParams(searchParams);
-
-        if (ids.size() > 0) {
-
-            results = finder.computeEnzymeSummary(ids, new SearchResults());
-
-        } else if (ids.isEmpty()) {
-            //if not found at mm, search via ebeye using the enzyme name as keyword
-            return getEnzymes(finder, searchParams);
-        }
+    
 
         return results;
     }

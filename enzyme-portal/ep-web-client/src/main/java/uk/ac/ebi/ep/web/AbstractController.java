@@ -252,6 +252,7 @@ public abstract class AbstractController {
      * Applies filters taken from the search parameters to the search results.
      *
      * @param searchModel
+     * @param request
      */
     protected void applyFilters(SearchModel searchModel, HttpServletRequest request) {
 
