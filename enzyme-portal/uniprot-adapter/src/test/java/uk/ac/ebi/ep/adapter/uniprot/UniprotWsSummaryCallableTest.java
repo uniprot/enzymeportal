@@ -1,10 +1,10 @@
 package uk.ac.ebi.ep.adapter.uniprot;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
-
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,10 +1,10 @@
 package uk.ac.ebi.ep.adapter.chembl;
 
-import org.junit.Test;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author rafa
@@ -12,9 +12,10 @@ import static junit.framework.Assert.assertNull;
  */
 public class ChemblWsAdapterTest {
 
-    private IChemblAdapter adapter = new ChemblWsAdapter();
+    private final IChemblAdapter adapter = new ChemblWsAdapter();
 
     @Test
+    @Ignore
     public void testGetTargetBioactivities() throws Exception {
         ChemblBioactivities bioactivities =
                 adapter.getCompoundBioactivities("CHEMBL2");
@@ -26,7 +27,7 @@ public class ChemblWsAdapterTest {
         ChemblBioactivities bioactivities =
                 adapter.getTargetBioactivities("CHEMBL240");
         assertNotNull(bioactivities);
-    }
+}
 
     @Test
     public void testGetPreferredName() throws Exception {
