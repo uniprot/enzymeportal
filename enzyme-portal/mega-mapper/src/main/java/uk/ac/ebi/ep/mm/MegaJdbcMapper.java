@@ -1,15 +1,26 @@
 package uk.ac.ebi.ep.mm;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
-import java.util.*;
-
-import java.util.logging.Level;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.biobabel.util.db.SQLLoader;
 import uk.ac.ebi.ep.search.model.Compound;
@@ -1487,6 +1498,7 @@ public class MegaJdbcMapper implements MegaMapper {
         return diseases;
     }
 
+    @Override
     public Entry findByEntryId(String entryId) {
         Entry entry = null;
         ResultSet resultSet = null;
@@ -1540,6 +1552,7 @@ public class MegaJdbcMapper implements MegaMapper {
         return entry;
     }
 
+    @Override
     public List<String> findEcNumbers() {
 
         ResultSet resultSet = null;
@@ -1547,7 +1560,7 @@ public class MegaJdbcMapper implements MegaMapper {
         List<String> ecNumbers = null;
         try {
             if (ecNumbers == null) {
-                ecNumbers = new LinkedList<String>();
+                ecNumbers = new LinkedList<>();
             }
 
             String query = "select * from MM_ENTRY where ENTRY_NAME is not null and DB_NAME ='EC'";
@@ -1587,7 +1600,7 @@ public class MegaJdbcMapper implements MegaMapper {
         public Collection<CustomXRef> getXrefs_ec_Only(Entry entry, MmDatabase... dbs) {
         Collection<CustomXRef> xrefs = null;
         PreparedStatement ps = null;
-        int rowcount = 50;//param, 
+        int rowcount = 5000;//param, 
         
         int start = 0;//param
         int end = start + rowcount;
@@ -1635,7 +1648,7 @@ public class MegaJdbcMapper implements MegaMapper {
           CustomXRef xref = new CustomXRef();
         while (rs.next()) {
             if (xrefs == null) {
-                xrefs = new ArrayList<CustomXRef>();
+                xrefs = new ArrayList<>();
             }
    
             xref.setId(rs.getInt("id"));

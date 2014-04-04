@@ -6,7 +6,8 @@
 . $(dirname $0)/readDbConfig.sh
 . $(dirname $0)/ts.sh
 
-EP_BACKUP_DIR=/nfs/panda/production/steinbeck/ep/backup
+#EP_BACKUP_DIR=/nfs/panda/production/steinbeck/ep/backup
+EP_BACKUP_DIR=/ebi/uniprot/production/enzyme_portal/ep/backup
 DB_DUMP=$EP_BACKUP_DIR/ep-mm-${NOW}.dmp
 
 echo "Creating backup..."

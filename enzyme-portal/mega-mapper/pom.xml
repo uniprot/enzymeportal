@@ -12,7 +12,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>mega-mapper</artifactId>
-    <version>1.0.25-SNAPSHOT</version>
+    <version>1.0.25</version>
     <name>Mega mapper</name>
     <description>
         A module to keep track of cross references between the databases used
@@ -140,7 +140,8 @@
             <testResource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
-                    <include>ep-mm-db-enzdev.properties</include>
+<!--                    <include>ep-mm-db-enzdev.properties</include>-->
+ <include>ep-mm-db-ezprel.properties</include>
                 </includes>
             </testResource>
         </testResources>
@@ -256,6 +257,15 @@
                     </path>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 	
@@ -299,6 +309,9 @@
         </profile>
         <profile>
             <id>apps</id>
+                <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <dependencies>
                 <dependency>
                     <groupId>commons-cli</groupId>

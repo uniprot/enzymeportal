@@ -1,16 +1,25 @@
 package uk.ac.ebi.ep.mm.app;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.DataItem;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntity;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ebisearchservice.ArrayOfString;
 import uk.ac.ebi.ebisearchservice.EBISearchService;
 import uk.ac.ebi.ebisearchservice.EBISearchService_Service;
@@ -41,24 +50,29 @@ public class UniprotSaxParser extends MmSaxParser {
 	private static final String UNIPROT_ENTRY_ACCESSION =
 			"//uniprot/entry/accession";
 
+        // WE USE EC and DRUGBANK
 	private static final String UNIPROT_ENTRY_DBREFERENCE =
 			"//uniprot/entry/dbReference";
-
+// id = drugbank ID, generic name = drug name
 	private static final String UNIPROT_ENTRY_DBREFERENCE_PROPERTY =
 			"//uniprot/entry/dbReference/property";
 
+        // both scientific and common name
 	private static final String UNIPROT_ENTRY_ORGANISM_NAME =
 			"//uniprot/entry/organism/name";
 
 	private static final String UNIPROT_ENTRY_PROTEIN_REC_NAME =
 			"//uniprot/entry/protein/recommendedName/fullName";
 
+        //mainly enzyme regulation
     private static final String UNIPROT_ENTRY_COMMENT =
             "//uniprot/entry/comment";
 
+    //the text we parsed for inhibitors and activators
     private static final String UNIPROT_ENTRY_COMMENT_TEXT =
             "//uniprot/entry/comment/text";
 
+    // use this when parsing the molecule name - we don't want a molecule with parentesis eg sucrose (DTTI)
     private static final Pattern COMPOUND_NAME_PATTERN =
             Pattern.compile("(.*?)(?: \\((.*?)\\))?");
 

@@ -5,7 +5,8 @@
 
 . $(dirname $0)/readDbConfig.sh
 
-OUTPUT_DIR=/nfs/panda/production/steinbeck/ep/work
+#OUTPUT_DIR=/nfs/panda/production/steinbeck/ep/work
+OUTPUT_DIR=/ebi/uniprot/production/enzyme_portal/ep/work
 CHEBI_EP_XREFS_XML=$OUTPUT_DIR/chebi-ep-xrefs.xml
 STAGING_DIR=/nfs/public/rw/cm/ep
 
@@ -15,5 +16,6 @@ $ORACLE_HOME/bin/sqlplus ${DB_USER}/${DB_PASSWD}@${1} \
 echo "Created: $CHEBI_EP_XREFS_XML"
 
 echo "Copying generated file to $STAGING_DIR..."
-become cm_adm cp $CHEBI_EP_XREFS_XML $STAGING_DIR
+#become cm_adm cp $CHEBI_EP_XREFS_XML $STAGING_DIR
+become uni_adm cp $CHEBI_EP_XREFS_XML $STAGING_DIR
 echo "Copied and ready to sync to LDCs."

@@ -16,7 +16,8 @@ CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target_component.xml
 #UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 UNIMED=http://research.isb-sib.ch/unimed/SP_MeSH.tab
 
-EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
+#EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
+EP_CONFIG_DIR=/ebi/uniprot/production/enzyme_portal/ep/config
 
 . $MM_SCRIPTS/checkParams.sh
 . $MM_SCRIPTS/mvnBuild.sh
