@@ -23,6 +23,7 @@ import uk.ac.ebi.ep.mm.MegaMapper.Constraint;
 import uk.ac.ebi.ep.search.model.Compound;
 import uk.ac.ebi.ep.search.model.Disease;
 
+@Ignore
 public class MegaJdbcMapperTest {
 
     private MegaJdbcMapper mm;

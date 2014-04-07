@@ -8,7 +8,7 @@
 #OUTPUT_DIR=/nfs/panda/production/steinbeck/ep/work
 OUTPUT_DIR=/ebi/uniprot/production/enzyme_portal/ep/work
 CHEBI_EP_XREFS_XML=$OUTPUT_DIR/chebi-ep-xrefs.xml
-STAGING_DIR=/nfs/public/rw/cm/ep
+STAGING_DIR=/nfs/public/rw/cm/ep/test
 
 echo "Creating chebi-ep-xrefs.xml file..."
 $ORACLE_HOME/bin/sqlplus ${DB_USER}/${DB_PASSWD}@${1} \
