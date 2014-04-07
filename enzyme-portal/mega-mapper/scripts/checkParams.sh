@@ -1,6 +1,6 @@
 #!/bin/bash
 
 case $1 in
-	enzdev|ezprel);;
+	enzdev|ezprelvm);;
 	*) echo 'runtime environment (enzdev|ezprel) required as $1' && exit 1;;
 esac
