@@ -11,9 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiCallable.GetEntryCaller;
 import uk.ac.ebi.ep.adapter.uniprot.UniprotJapiCallable.QueryEntryByIdCaller;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;

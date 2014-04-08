@@ -28,6 +28,7 @@ import uk.ac.ebi.util.result.DataTypeConverter;
  *
  * @author hongcao
  */
+@Ignore
 public class UniprotCallableTest {
     private UniprotJapiCallable.GetEntryCaller getEntriesCallerInstance;
     public static final String uniprotAccession = "P67910";
