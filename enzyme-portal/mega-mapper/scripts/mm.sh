@@ -19,7 +19,7 @@ UNIMED=http://research.isb-sib.ch/unimed/SP_MeSH.tab
 #EP_CONFIG_DIR=/nfs/panda/production/steinbeck/ep/config
 EP_CONFIG_DIR=/ebi/uniprot/production/enzyme_portal/ep/config
 
-#. $MM_SCRIPTS/checkParams.sh
+. $MM_SCRIPTS/checkParams.sh
 . $MM_SCRIPTS/mvnBuild.sh
 
 # Delete previous data:
