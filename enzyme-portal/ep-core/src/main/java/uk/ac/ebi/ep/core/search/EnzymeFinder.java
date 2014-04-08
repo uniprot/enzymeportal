@@ -1,11 +1,21 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apache.commons.collections.list.SetUniqueList;
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.biobabel.blast.Hit;
 import uk.ac.ebi.biobabel.blast.Hsp;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
@@ -30,10 +40,16 @@ import uk.ac.ebi.ep.core.search.util.SynonymsProcessor;
 import uk.ac.ebi.ep.mm.CustomXRef;
 import uk.ac.ebi.ep.mm.Entry;
 import uk.ac.ebi.ep.mm.MmDatabase;
-import uk.ac.ebi.ep.mm.XRef;
 import uk.ac.ebi.ep.search.exception.EnzymeFinderException;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
-import uk.ac.ebi.ep.search.model.*;
+import uk.ac.ebi.ep.search.model.Compound;
+import uk.ac.ebi.ep.search.model.Disease;
+import uk.ac.ebi.ep.search.model.EnzymeAccession;
+import uk.ac.ebi.ep.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.search.model.SearchFilters;
+import uk.ac.ebi.ep.search.model.SearchParams;
+import uk.ac.ebi.ep.search.model.SearchResults;
+import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.util.EPUtil;
 import uk.ac.ebi.ep.util.query.LuceneQueryBuilder;
 
@@ -479,11 +495,11 @@ public class EnzymeFinder implements IEnzymeFinder {
     public  Collection<CustomXRef> getXrefs(Entry entry) {
 
         Collection<CustomXRef> xrefs = megaMapperConnection.getMegaMapper().getXrefs_ec_Only(entry, MmDatabase.UniProt);
-
+        
          return xrefs;
         
     }
-
+    
     public Entry findEntryById(String entryId) {
         Entry entry = megaMapperConnection.getMegaMapper().findByEntryId(entryId);
         return entry;
@@ -666,7 +682,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     }
 
     /**
-     * Escapes the keyowrds, validates the filters and sets the global variables
+     * Escapes the keywords, validates the filters and sets the global variables
      * to be used in other methods.
      *
      * @param searchParams
@@ -696,7 +712,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             searchParams.getCompounds().clear();
         }
     }
-
+//this is the part that takes ages.....
     public List<EnzymeSummary> getEnzymesFromUniprotAPI(
             List<String> resultSubList1, List<String> paramList)
             throws MultiThreadingException {
@@ -718,7 +734,7 @@ public class EnzymeFinder implements IEnzymeFinder {
     private List<EnzymeSummary> getEnzymeSummaries(
             List<String> uniprotIdPrefixes, List<String> paramList)
             throws MultiThreadingException {
-        List<EnzymeSummary> summaries = getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
+      List<EnzymeSummary> summaries = getEnzymesFromUniprotAPI(uniprotIdPrefixes, paramList);
         if (summaries != null && !summaries.isEmpty()) {
             EnzymeSummaryProcessor[] processors = {
                 new SynonymsProcessor(summaries, intenzAdapter)
@@ -726,7 +742,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             for (EnzymeSummary summary : summaries) {
                 for (EnzymeSummaryProcessor processor : processors) {
                     processor.process(summary);
-                }
+        }
             }
         }
         return summaries;

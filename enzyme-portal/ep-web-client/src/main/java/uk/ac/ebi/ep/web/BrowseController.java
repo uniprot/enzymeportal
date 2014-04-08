@@ -59,13 +59,13 @@ public class BrowseController extends AbstractController {
 
         List<String> ids = new ArrayList<>();
         Collection<CustomXRef> xrefResult = null;
-        //int total = 0;
+        int total = 0;
         if (entry != null) {
 
             xrefResult = finder.getXrefs(entry);
             for (CustomXRef ref : xrefResult) {
                 ids = ref.getIdList();
-                //total = ref.getResult_count();
+                total = ref.getResult_count();
 
 
 

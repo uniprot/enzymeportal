@@ -66,6 +66,7 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String SUBCLASS = "SUBCLASS";
     private static final String SUBSUBCLASS = "SUBSUBCLASS";
     private static final String selectedEc = "selectedEc";
+    private transient int total;
 
     private SearchResults findEnzymesByEntry(String entry_id) {
 
@@ -76,7 +77,7 @@ public class BrowseEnzymesController extends AbstractController {
         finder.getEbeyeAdapter().setConfig(ebeyeConfig);
 
 
-        Entry entry = finder.findEntryById(entry_id);//get the entry id (disease or ec)
+        Entry entry = finder.findEntryById(entry_id);//get the entry id ( ec)
 
 
         List<String> ids = new ArrayList<>();
@@ -84,10 +85,16 @@ public class BrowseEnzymesController extends AbstractController {
         //int total = 0;
         if (entry != null) {
 
-            xrefResult = finder.getXrefs(entry);
+    // long startTime = System.currentTimeMillis();
+      xrefResult = finder.getXrefs(entry);
+        //long endTime = System.currentTimeMillis();
+
+        //System.out.println("CustomXRef processing took " + (endTime - startTime) + 
+               // " milliseconds.");
+           
             for (CustomXRef ref : xrefResult) {
                 ids = ref.getIdList();
-                //total = ref.getResult_count();
+                total = ref.getResult_count();
 
 
 
@@ -98,13 +105,13 @@ public class BrowseEnzymesController extends AbstractController {
             searchParams.setType(SearchParams.SearchType.KEYWORD);
             searchParams.setStart(0);
             searchParams.setPrevioustext(entry.getEntryName());
-
+            
             finder.setSearchParams(searchParams);
 
             if (ids.size() > 0) {
 
                 results = finder.computeEnzymeSummary(ids, new SearchResults());
-
+                
             } else if (ids.isEmpty()) {
                 //if not found at mm, search via ebeye using the enzyme name as keyword
                 return getEnzymes(finder, searchParams);
@@ -160,6 +167,15 @@ public class BrowseEnzymesController extends AbstractController {
 
         return view;
     }
+    
+//        protected Pagination getPagination1(SearchModel searchModel) {
+//        Pagination pagination = new Pagination(
+//                total,
+//                searchConfig.getResultsPerPage());
+//        pagination.setFirstResult(searchModel.getSearchparams().getStart());
+//        return pagination;
+//    }
+        
 
     @RequestMapping(value = BROWSE_ENZYME_CLASSIFICATION, method = RequestMethod.GET)
     public String browseEc(Model model, HttpSession session) {
