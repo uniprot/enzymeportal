@@ -3,7 +3,7 @@
 # Param:
 # $1: database environment (enzdev|ezprel)
 
-. $(dirname $0)/checkParams.sh
+#. $(dirname $0)/checkParams.sh
 
 if [ -z $DB_CONFIG ]
 then
