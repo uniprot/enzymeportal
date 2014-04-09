@@ -24,29 +24,29 @@ EP_CONFIG_DIR=/ebi/uniprot/production/enzyme_portal/ep/config
 
 # Delete previous data:
 echo -e "\n*************************************************************\n"
-. $MM_SCRIPTS/mm-delete.sh
+#. $MM_SCRIPTS/mm-delete.sh
 
 # Import all database IDs, accessions and xrefs:
 echo -e "\n*************************************************************\n"
 
 echo "Starting Swiss-Prot import - $(date)"
-java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
-	-dbConfig ep-mm-db-$1 -file $SWISSPROT
+#java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
+#	-dbConfig ep-mm-db-$1 -file $SWISSPROT
 echo "Finished Swiss-Prot import - $(date)"
 
-#echo "Starting TrEMBL import - $(date)"
+#echo "Starting TrEMBL import - $(date)"not used anymore
 #java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.UniprotSaxParser \
 #	-dbConfig ep-mm-db-$1 -file $TREMBL
 #echo "Finished TrEMBL import - $(date)"
 
 echo "Starting IntEnz import - $(date)"
-java ${JAVA_OPTS} -classpath $CP uk.ac.ebi.ep.mm.app.IntenzSaxParser \
-	-dbConfig ep-mm-db-$1 -file $INTENZ_XML
+#java ${JAVA_OPTS} -classpath $CP uk.ac.ebi.ep.mm.app.IntenzSaxParser \
+#	-dbConfig ep-mm-db-$1 -file $INTENZ_XML
 echo "Finished IntEnz import - $(date)"
 
 echo "Starting ChEMBL import - $(date)"
-java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.ChemblSaxParser \
-	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
+#java $JAVA_OPTS -classpath $CP uk.ac.ebi.ep.mm.app.ChemblSaxParser \
+#	-dbConfig ep-mm-db-$1 -file $CHEMBL_TARGET
 echo "Finished ChEMBL import - $(date)"
 
 echo "Starting UniMed import - $(date)"
@@ -56,7 +56,7 @@ echo "Finished UniMed import - $(date)"
 
 . $MM_SCRIPTS/mm-uniprot2compound.sh
 
-if [ "$1" = "ezprel" ]
+if [ "$1" = "ezprelvm" ]
 then
 	# Generate xrefs XML for ChEBI:
 	echo -e "\n*************************************************************\n"
