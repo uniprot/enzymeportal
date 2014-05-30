@@ -9,13 +9,13 @@ import org.junit.Test;
 /**
  * @author rafa
  * @since 1.0.0
- */
+ */@Ignore
 public class ChemblWsAdapterTest {
 
     private final IChemblAdapter adapter = new ChemblWsAdapter();
 
     @Test
-    @Ignore
+    //@Ignore
     public void testGetTargetBioactivities() throws Exception {
         ChemblBioactivities bioactivities =
                 adapter.getCompoundBioactivities("CHEMBL2");

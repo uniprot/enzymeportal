@@ -81,7 +81,7 @@ public class ChemblWsAdapter implements IChemblAdapter {
                     config.getWsBaseUrl() + BIOACTIVITIES_PATH,
                     searchBy.name(), chemblId);
             String[] xpaths = { TARGET_ID_XPATH, COMPOUND_ID_XPATH,
-                    CONFIDENCE_XPATH, ASSAY_TYPE_XPATH };
+                    CONFIDENCE_XPATH, ASSAY_TYPE_XPATH };         
             Map<String, Collection<String>> results =
                     getResults(theUrl, xpaths);
             final Collection<String> targetIds = results.get(TARGET_ID_XPATH);
@@ -95,22 +95,30 @@ public class ChemblWsAdapter implements IChemblAdapter {
                 switch (searchBy){
                     case compounds:
                         for (String targetId : targetIds) {
+                            //to avoid number format exception, check if there is no "Unspecified"
+                            String data = confIter.next();
+                            if(!data.equalsIgnoreCase("Unspecified")){
                             bioactivities.addBioactivity(targetId,
-                                    Integer.parseInt(confIter.next()),
+                                    Integer.parseInt(data),
                                     asstIter.next());
+                            }
                         }
                         break;
                     case targets:
                         for (String compId : results.get(COMPOUND_ID_XPATH)){
+                            String data = confIter.next();
+                            //same as above check
+                            if(!data.equalsIgnoreCase("Unspecified")){
                             bioactivities.addBioactivity(compId,
-                                    Integer.parseInt(confIter.next()),
+                                    Integer.parseInt(data),
                                     asstIter.next());
+                            }
                         }
                         break;
                 }
             }
         } catch (Exception e) {
-            throw new ChemblAdapterException(chemblId, e);
+            throw new ChemblAdapterException(chemblId, e);        
         }
         return bioactivities;
     }
