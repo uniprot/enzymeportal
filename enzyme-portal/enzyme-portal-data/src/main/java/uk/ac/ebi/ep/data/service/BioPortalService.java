@@ -1,0 +1,168 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package uk.ac.ebi.ep.data.service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author joseph
+ */
+@Transactional
+@Service
+public class BioPortalService {
+
+    static final String REST_URL = "http://data.bioontology.org";
+    static final String API_KEY = "9f19fdf6-82d0-4335-97a1-f71d3ce156f6";
+    static final ObjectMapper mapper = new ObjectMapper();
+    static final ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+    static final String DEFINITION = "definition";
+    
+    @Autowired 
+    private Environment env;
+
+    private static final Logger LOGGER = Logger.getLogger(BioPortalService.class);
+
+
+
+     @Transactional
+    public String getDiseaseDescription(String term) {
+        String definition = "";
+        Reader reader = new StringReader(get(REST_URL + "/search?q=" + term));
+        JsonReader jsonReader = Json.createReader(reader);
+
+        JsonObject jo = jsonReader.readObject();
+ 
+        JsonArray jsonArray = jo.getJsonArray("collection");
+        for (JsonObject obj : jsonArray.getValuesAs(JsonObject.class)) {
+
+            for (Map.Entry<String, JsonValue> entry : obj.entrySet()) {
+                
+                if (entry.getKey().equalsIgnoreCase(DEFINITION)) {
+                 
+                    definition = entry.getValue().toString().replace("\"", "").replaceAll("\\[", "").replaceAll("\\]", "");
+                }
+
+            }
+        }
+
+        return definition;
+    }
+
+    private JsonNode jsonToNode(String json) {
+        JsonNode root = null;
+
+        try {
+
+            root = mapper.readTree(json);
+        } catch (JsonProcessingException e) {
+           
+            LOGGER.fatal("JsonProcessingException while Processing the Json result", e);
+        } catch (IOException e) {
+            LOGGER.fatal("IOException while Reading from the Bioportal service", e);
+        }
+        return root;
+    }
+
+    private String get(String urlToGet) {
+        URL url;
+        HttpURLConnection conn;
+        BufferedReader rd;
+        String line;
+        String result = "";
+        String bioportal_api_key =env.getRequiredProperty("bioportal.api.key");
+        if(bioportal_api_key == null){
+            bioportal_api_key=API_KEY;
+            LOGGER.error("BioPortal Key could not be retrieved from the environment. default key is now being used");
+        }
+       
+        try {
+            url = new URL(urlToGet);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "apikey token=" + bioportal_api_key);
+            conn.setRequestProperty("Accept", "application/json");
+            rd = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+            while ((line = rd.readLine()) != null) {
+                result += line;
+
+            }
+            rd.close();
+        } catch (IOException e) {
+           
+            //log
+            LOGGER.fatal("ERROR Connecting to BioPortal Service", e);
+        }
+        return result;
+    }
+
+//    public static String Deletelater(String urlToGet) {
+//        StringBuilder results = new StringBuilder();
+//        try {
+//            URL url = new URL(urlToGet);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoOutput(true);
+//
+//            connection.setDoInput(true);
+//
+//            connection.setRequestMethod("GET");
+//            connection.setRequestProperty("Authorization", "apikey token=" + API_KEY);
+//            connection.setRequestProperty("Accept", "application/json");
+//
+//            connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+//
+//            connection.connect();
+//            InputStream inputStream;
+//            if (connection.getResponseCode() == 200) {
+//                inputStream = connection.getInputStream();
+//            } else {
+//                inputStream = connection.getErrorStream();
+//            }
+//            //System.out.println("stream "+ inputStream.available());
+//
+//            //BufferedReader reader = new BufferedReader(new InputStreamReader(((HttpURLConnection) (new URL(urlToGet)).openConnection()).getInputStream(), Charset.forName("UTF-8")));
+//            //BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
+//            //StringBuilder results = new StringBuilder();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                results.append(line);
+//            }
+//
+//            connection.disconnect();
+//            // System.out.println(results.toString());
+//            //return results.toString();
+//        } catch (IOException ex) {
+//
+//            LOGGER.fatal("ERROR Connecting to BioPortal Service", ex);
+//        }
+//        return results.toString();
+//    }
+    
+}
