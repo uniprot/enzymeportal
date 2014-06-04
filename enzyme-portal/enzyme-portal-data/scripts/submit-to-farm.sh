@@ -6,7 +6,7 @@
 
 echo
 echo "**************************** W A R N I N G ****************************"
-echo "THIS WILL OVERWRITE ALL DATA IN $1. ARE YOU SURE?"
+echo "THIS WILL POPULATE FRESH DATA IN $1. PRESS ENTER WHEN YOU'RE READY"
 echo "(Ctrl-C to cancel, Enter to continue)"
 read ok
 

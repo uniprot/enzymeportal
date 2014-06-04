@@ -14,12 +14,12 @@ DB_CONFIG="$1"
 
 #Parse intenz.xml file
 
-echo "Request to parse intenz.xml - $(date)"
+echo "[INFO] Request to parse intenz.xml - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
-echo "The file to be parsed =" $INTENZ_XML
+echo "[INFO] The file to be parsed =" $INTENZ_XML
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.data.main.IntenzXmlParser" -Dexec.args="$DB_CONFIG $INTENZ_XML"
 cd $WD
-echo "Finished querying and parsing intenz.xml and updating Enzyme Portal database with Reactions & ChEBI Compounds  - $(date)"
+echo "[INFO] Finished querying and parsing intenz.xml and updating Enzyme Portal database with Reactions & ChEBI Compounds  - $(date)"

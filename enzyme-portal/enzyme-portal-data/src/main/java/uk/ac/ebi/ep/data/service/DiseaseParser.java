@@ -71,7 +71,8 @@ public class DiseaseParser {
     
     private void LoadToDB(String[] fields) throws InterruptedException {
         double[] scores = new double[1];
-        
+        System.out.println("num fields "+ fields.length);
+      if(fields.length > 4){  
         String[] scoresCell = fields[4].split(" ?/ ?");
         String accession = fields[0];
         String[] omimCell = fields[1].split("\\s");
@@ -96,7 +97,7 @@ public class DiseaseParser {
             } else {
                 scores[0] = Double.valueOf(scoresCell[0]);
             }
-        }
+        } 
         String definition = "";
         for (int i = 0; i < scores.length; i++) {
 
@@ -121,11 +122,15 @@ public class DiseaseParser {
                 LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
                         + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
                 
-                //System.out.println(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
-                       // + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
+                System.out.println(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
+                        + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
 
             }
         }
+      }else{
+          LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is "+ fields.length);
+          throw new ArrayIndexOutOfBoundsException();
+      }
         
     }
     
@@ -143,18 +148,20 @@ public class DiseaseParser {
             isr = new InputStreamReader(is);
             br = new BufferedReader(isr);
             LOGGER.info("Parsing start");
+            System.out.println("parsing starts ...");
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = getFields(format, line);
                 if (fields == null) {
                     continue; // header lines
                 }
+                System.out.println("fields "+ fields);
                 LoadToDB(fields);
                 
             }
             LOGGER.info("Parsing end");
             
-            LOGGER.info("Map closed");
+            //LOGGER.info("Map closed");
         } catch (IOException | InterruptedException e) {
             LOGGER.error("During parsing", e);
             

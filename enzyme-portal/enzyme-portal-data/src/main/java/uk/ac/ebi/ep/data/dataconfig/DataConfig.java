@@ -19,11 +19,6 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import uk.ac.ebi.ep.data.service.BioPortalService;
-import uk.ac.ebi.ep.data.service.DiseaseParser;
-import uk.ac.ebi.ep.data.service.DiseaseService;
-import uk.ac.ebi.ep.data.service.EnzymePortalCompoundService;
-import uk.ac.ebi.ep.data.service.UniprotEntryService;
 
 /**
  *
@@ -78,28 +73,28 @@ public class DataConfig {
         return new HibernateExceptionTranslator();
     }
 
-    @Bean
-    public DiseaseService diseaseService() {
-        return new DiseaseService();
-    }
-
-    @Bean
-    public DiseaseParser diseaseParser() {
-        return new DiseaseParser();
-    }
-
-    @Bean
-    public BioPortalService bioPortalService() {
-        return new BioPortalService();
-    }
-
-    @Bean
-    public UniprotEntryService uniprotEntryService() {
-        return new UniprotEntryService();
-    }
-
-    @Bean
-    public EnzymePortalCompoundService enzymePortalCompoundService() {
-        return new EnzymePortalCompoundService();
-    }
+//    @Bean
+//    public DiseaseService diseaseService() {
+//        return new DiseaseService();
+//    }
+//
+//    @Bean
+//    public DiseaseParser diseaseParser() {
+//        return new DiseaseParser();
+//    }
+//
+//    @Bean
+//    public BioPortalService bioPortalService() {
+//        return new BioPortalService();
+//    }
+//
+//    @Bean
+//    public UniprotEntryService uniprotEntryService() {
+//        return new UniprotEntryService();
+//    }
+//
+//    @Bean
+//    public EnzymePortalCompoundService enzymePortalCompoundService() {
+//        return new EnzymePortalCompoundService();
+//    }
 }
