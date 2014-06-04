@@ -10,7 +10,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>SitemapGenerator</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
     <name>SitemapGenerator</name>
@@ -30,17 +30,18 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+
+        
+                <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mega-mapper</artifactId>
-            <version>1.0.19</version>
+            <artifactId>enzyme-portal-data</artifactId>
+            <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc5</artifactId>
-            <version>11.1.0.7.0</version>
-            <type>jar</type>
-        </dependency>
+ 
+        
+        
+        
+        
     </dependencies>
     <build>
 <!--        <resources>
@@ -52,7 +53,7 @@
                 </includes>
             </resource>
         </resources>-->
-                <testResources>
+<!--                <testResources>
             <testResource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
@@ -64,6 +65,7 @@
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
+                      <include>ep-db-${ep.db.config}.properties</include>
                     <include>ep-mm-db-enzdev.properties</include>
                     <include>ep-mm-db-ezprel.properties</include>
                     
@@ -71,7 +73,7 @@
                     <include>ep-mm-db-ezprel-ro.properties</include>
                 </includes>
             </resource>
-        </resources>
+        </resources>-->
        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

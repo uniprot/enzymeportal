@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.sitemap;
+package uk.ac.ebi.ep.sitemap.generator;
 
 import uk.ac.ebi.ep.exception.EnzymePortalException;
 import uk.ac.ebi.ep.exception.Severity;
@@ -16,6 +16,7 @@ public class SiteMapException extends EnzymePortalException {
     /**
      * Creates a new SiteMapException object with the specified message and severity.
      * @param message The message to be displayed when logging this exception
+     * @param cause
      * @param severity The severity of this exception
      */
     public SiteMapException(String message, Throwable cause, Severity severity) {
@@ -25,7 +26,6 @@ public class SiteMapException extends EnzymePortalException {
     /**
      * Creates a new SiteMapException object with the specified message, severity and root cause.
      * @param message The message text to be displayed when logging this exception
-     * @param cause The root cause of this exception
      * @param severity The severity of this exception
      */
     public SiteMapException(String message, Severity severity) {

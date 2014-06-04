@@ -1,83 +1,46 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.sitemap;
 
-import java.io.*;
-import java.sql.Connection;
+package uk.ac.ebi.ep.sitemap.generator;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.biobabel.util.db.OracleDatabaseInstance;
 import uk.ac.ebi.ep.exception.Severity;
-import uk.ac.ebi.ep.mm.MegaJdbcMapper;
-import uk.ac.ebi.ep.mm.MegaMapper;
 
 /**
- *this class provides the database resources needed by the subclass(es)
+ *
  * @author joseph
+ * @param <T> the output form of this sitemap
  */
-public abstract class SiteMapResources<T> implements ISiteMap<T> {
-
-    private final Logger LOGGER = Logger.getLogger(SiteMapResources.class);
-    private MegaMapper megaMapper;
-    private Connection connection;
-
-    /**
-     * 
-     * @param dbConfig the database configuration filename
-     */
-    public SiteMapResources(String dbConfig) {
-        try {
-            initMegaMapper(dbConfig);
-        } catch (SiteMapException ex) {
-            LOGGER.fatal("MegaMapper cannot be initialized", ex);
-        }
-
-
-
-    }
-
-    private void initMegaMapper(String dbConfig) throws SiteMapException {
-        try {
-            connection = getConnection(dbConfig);
-            if (connection == null) {
-                throw new SiteMapException(String.format("No Database connection due to invalid config %s", dbConfig), Severity.SYSTEM_AFFECTING);
-            }
-            megaMapper = new MegaJdbcMapper(connection);
-            megaMapper.openMap();
-        } catch (IOException ex) {
-            LOGGER.fatal("IOException while creating the megaMapper", ex);
-        }
-    }
-
-    public final Connection getConnection(String dbConfig) throws IOException {
-        if (connection == null) {
-            connection = OracleDatabaseInstance.getInstance(dbConfig).getConnection();
-        }
-        return connection;
-    }
-
-    public MegaMapper getMegaMapper() {
-        return megaMapper;
-    }
-
-    /**any subclass of this class must implement this abstract method to provided
-     * mechanism on how the generated siteMap will be exported
-     * 
-     * @param fileDirectory the file directory
-     * @param filename the name of the file
-     * @return an OutputStream
-     * @throws FileNotFoundException if the file was not found
-     * @throws IOException 
-     */
-    //public abstract T exportFile(String fileDirectory, String filename) throws FileNotFoundException, IOException;
+public abstract class SiteMapGenerator<T> implements ISiteMap<T> {
+ private final Logger LOGGER = Logger.getLogger(SiteMapGenerator.class);
     
-    /**
+    
+    
+    
+
+    
+    
+    
+    
+        /**
      * abstract method to generated siteMap from the specified database
-     * @param fileLocation the directory where the generated siteMap will be saved
+     * 
+     * @param fileDirectory the directory where the generated siteMap will be saved
      * @param filename the filename of the generated siteMap
+     * @param testMode if in test mode
      * @throws SiteMapException if the siteMap cannot be generated.
      */
     public abstract void generateSitemap(String fileDirectory, String filename, boolean testMode) throws SiteMapException;
@@ -141,4 +104,5 @@ public abstract class SiteMapResources<T> implements ISiteMap<T> {
         BufferedReader bufferedReader = new BufferedReader(xover);
         return bufferedReader;
     }
+    
 }
