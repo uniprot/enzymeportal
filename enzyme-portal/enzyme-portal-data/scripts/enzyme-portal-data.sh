@@ -21,7 +21,8 @@ EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
 
 CHEBI=$EBINOCLE_DATA/chebi/latest/chebi_prod.xml
 INTENZ_XML=$EBINOCLE_DATA/intenz/latest/intenz.xml
-CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target_component.xml
+#CHEMBL_TARGET=$EBINOCLE_DATA/chembl/latest/chembl-target_component.xml
+CHEMBL_TARGET=$EBINOCLE_DATA/chembl-target_component/latest/chembl-target_component.xml
 #UNIMED=http://research.isb-sib.ch/unimed/Swiss-Prot_mesh_mapping.html
 UNIMED=http://research.isb-sib.ch/unimed/SP_MeSH.tab
 
