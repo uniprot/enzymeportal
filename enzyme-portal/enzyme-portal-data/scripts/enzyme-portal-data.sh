@@ -1,3 +1,20 @@
+#!/bin/bash
+
+#**************************************************
+# Script Name:    enzyme-portal-data.sh
+# Author:    Joseph Onwubiko
+# Date Created:    5th June 2014
+# Description:    This is the core script for re-generating the enzyme portal database.
+#        The script can:
+#        1. Truncate the ENZYME_PORTAL schema.
+#        2. Rebuild UNIPROT_ENTRY, UNIPROT_XREF, ENZYME_SUMMARY, tables.
+#        3. Parses various data sources such as UNIMED, ChEMBL, INTENZ xml files. This process also involves some web services queries.
+#	 4. Populate DISEASE, COMPOUNDS AND REACTION INFORMATION
+
+#
+#        Expected run time for this procedure is up to 5hrs.
+#
+
 MM_SCRIPTS=$(cd $(dirname $0) && pwd)
 
 EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
@@ -19,6 +36,12 @@ EP_CONFIG_DIR=/ebi/uniprot/production/enzyme_portal/dbconfig
 
 DB_CONFIG="$1"
 
+#first truncate the Schema and populate fresh data to the Database
+echo "[INFO] Request to Truncate and populate the Enzyme Portal database - $(date)"
+. $MM_SCRIPTS/enzyme_portal_uniprot.sh -r $DB_CONFIG -p ALL 
+echo "[INFO] Enzyme Portal database (part-1) has been populate - $(date)"
+
+echo "[INFO] About to start populating Enzyme Portal database (part-2) - $(date)"
 
 #parse unimed_tsv file for diseases
 echo "[INFO] Request to parse UNIMED File - $(date)"

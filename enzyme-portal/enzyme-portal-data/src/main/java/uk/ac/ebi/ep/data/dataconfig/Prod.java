@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.dataconfig;
 
 import java.lang.annotation.ElementType;
@@ -19,6 +18,7 @@ import org.springframework.context.annotation.Profile;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Profile("ezprel")
+
 public @interface Prod {
-  
+
 }

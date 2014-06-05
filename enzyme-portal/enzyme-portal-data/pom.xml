@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzyme-portal-data</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     
     <parent>
@@ -224,7 +224,8 @@
                 <directory>${ep.config.dir}</directory>
                 <includes>
                     
-
+                 <include>ep-db-ezprel.properties</include>
+                  <include>ep-db-vezpdev.properties</include>
                     <include>ep-db-${ep.db.config}.properties</include>
                     <!--                 This contains the BioPortal API key needed for
                     resolving EFO IDs: -->
