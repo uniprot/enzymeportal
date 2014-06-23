@@ -17,8 +17,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.Disease;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import org.springframework.util.StringUtils;
+import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
+import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
 
 /**
  * Class to parse the file - either
@@ -33,15 +35,18 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
 @Transactional
 @Service
 public class DiseaseParser {
-    
+
     @Autowired
     private BioPortalService bioPortalService;
     @Autowired
     private DiseaseService diseaseService;
-    
+
     @Autowired
     private UniprotEntryService uniprotEntryService;
-    
+
+    @Autowired
+    private EnzymeSummaryRepository enzymeSummaryRepository;
+
     private static final Logger LOGGER
             = Logger.getLogger(DiseaseParser.class);
 
@@ -51,7 +56,7 @@ public class DiseaseParser {
      * @author rafa
      */
     protected enum Format {
-        
+
         html, tab
     }
 
@@ -63,77 +68,93 @@ public class DiseaseParser {
      * 4).
      */
     private final double minScore = -2.5;
-    
+
     private final Pattern htmlTablePattern = Pattern.compile(
             "^(?:</TR>)?<TR><TD>(.*?)<\\/TD>"
             + "<TD>(.*?)<\\/TD><TD>(.*?)<\\/TD><TD>(.*?)<\\/TD>"
             + "<TD>(.*?)<\\/TD>");
-    
+
     private void LoadToDB(String[] fields) throws InterruptedException {
         double[] scores = new double[1];
-        System.out.println("num fields "+ fields.length);
-      if(fields.length > 4){  
-        String[] scoresCell = fields[4].split(" ?/ ?");
-        String accession = fields[0];
-        String[] omimCell = fields[1].split("\\s");
-        String[] meshIdsCell = fields[2].split(" ?/ ?");
-        String[] meshHeadsCell = fields[3].split(" / ");
-        
-        if (fields[4].contains("/")) {
-           
-            scores = new double[scoresCell.length];
-            for (int i = 0; i < scoresCell.length; i++) {
-                final String scoreString = scoresCell[i].trim();
-                if (scoreString.equals("exact")) {
-                    scores[i] = Double.MAX_VALUE;
+        if (fields.length > 4) {
+            String[] scoresCell = fields[4].split(" ?/ ?");
+            String accession = fields[0];
+            String[] omimCell = fields[1].split("\\s");
+            String[] meshIdsCell = fields[2].split(" ?/ ?");
+            String[] meshHeadsCell = fields[3].split(" / ");
+
+            if (fields[4].contains("/")) {
+
+                scores = new double[scoresCell.length];
+                for (int i = 0; i < scoresCell.length; i++) {
+                    final String scoreString = scoresCell[i].trim();
+                    if (scoreString.equals("exact")) {
+                        scores[i] = Double.MAX_VALUE;
+                    } else {
+                        scores[i] = Double.valueOf(scoreString);
+                    }
+                }
+            } else {
+
+                if (scoresCell[0].equals("exact")) {
+                    scores[0] = Double.MAX_VALUE;
                 } else {
-                    scores[i] = Double.valueOf(scoreString);
+                    scores[0] = Double.valueOf(scoresCell[0]);
                 }
             }
+            String definition = "";
+            String url = "#";
+            for (int i = 0; i < scores.length; i++) {
+
+                //check to see if accession is an enzyme
+                //UniprotEntry uniprotEntry = uniprotEntryService.findByAccession(accession);
+                EnzymePortalSummary enzyme = enzymeSummaryRepository.findByAccession(accession);
+                if (enzyme != null) {
+
+                    //definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
+                    if (!meshHeadsCell[i].contains(" ")) {
+
+                        definition = bioPortalService.getDiseaseDescription(meshHeadsCell[i]);
+                    } else {
+                        definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
+                    }
+
+                    //get disease evidence 
+                    EnzymePortalSummary summary = enzymeSummaryRepository.findDiseaseEvidence(accession);
+
+                    EnzymePortalDisease disease = new EnzymePortalDisease();
+                    //disease.setUniprotaccession(accession);
+                    disease.setDiseaseName(meshHeadsCell[i]);
+                    disease.setMeshId(meshIdsCell[i]);
+                    disease.setOmimNumber(omimCell[0]);
+                    disease.setScore(Double.toString(scores[i]));
+                    disease.setDefinition(definition);
+                    disease.setAccession(enzyme.getAccession());
+                    disease.setEvidence(summary.getCommentText());
+
+                    if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
+                        url = "http://purl.bioontology.org/ontology/OMIM/" + omimCell[0];
+                    } else {
+                        url = "http://purl.bioontology.org/ontology/MESH/" + meshIdsCell[i];
+                    }
+                    disease.setUrl(url);
+                    diseaseService.addDisease(disease);
+
+                    LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
+                            + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
+
+                    //System.out.println(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
+                    //  + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
+                }
+
+            }
         } else {
-           
-            if (scoresCell[0].equals("exact")) {
-                scores[0] = Double.MAX_VALUE;
-            } else {
-                scores[0] = Double.valueOf(scoresCell[0]);
-            }
-        } 
-        String definition = "";
-        for (int i = 0; i < scores.length; i++) {
-
-            //check to see if accession is an enzyme
-            UniprotEntry uniprotEntry = uniprotEntryService.findByAccession(accession);
-            if (uniprotEntry != null) {
-                      
-                    definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
-
-
-                Disease disease = new Disease();
-                disease.setUniprotaccession(accession);
-                disease.setDiseaseName(meshHeadsCell[i]);
-                disease.setMeshId(meshIdsCell[i]);
-                disease.setOmimNumber(omimCell[0]);
-                disease.setScore(Double.toString(scores[i]));
-                disease.setDefinition(definition);
-                disease.setAccession(uniprotEntry);
-                
-                diseaseService.addDisease(disease);
-                
-                LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
-                        + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
-                
-                System.out.println(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
-                        + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
-
-            }
+            LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is " + fields.length);
+            throw new ArrayIndexOutOfBoundsException();
         }
-      }else{
-          LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is "+ fields.length);
-          throw new ArrayIndexOutOfBoundsException();
-      }
-        
+
     }
-    
+
     public void parse(String file) throws Exception {
         // Check the extension of the file:
         Format format = Format.valueOf(file.substring(file.lastIndexOf('.') + 1));
@@ -141,7 +162,7 @@ public class DiseaseParser {
         InputStreamReader isr = null;
         InputStream is = null;
         try {
-           
+
             is = file.startsWith("http://")
                     ? new URL(file).openStream()
                     : new FileInputStream(file);
@@ -155,16 +176,15 @@ public class DiseaseParser {
                 if (fields == null) {
                     continue; // header lines
                 }
-                System.out.println("fields "+ fields);
                 LoadToDB(fields);
-                
+
             }
             LOGGER.info("Parsing end");
-            
+
             //LOGGER.info("Map closed");
         } catch (IOException | InterruptedException e) {
             LOGGER.error("During parsing", e);
-            
+
             throw e;
         } finally {
             if (is != null) {
@@ -217,7 +237,5 @@ public class DiseaseParser {
         }
         return fields;
     }
-    
-    
-    
+
 }

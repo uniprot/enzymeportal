@@ -25,6 +25,7 @@ import uk.ac.ebi.ep.adapter.chembl.ChemblWsAdapter;
 import uk.ac.ebi.ep.adapter.chembl.IChemblAdapter;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.helper.CompoundUtil;
 import uk.ac.ebi.ep.data.helper.EbinocleParser;
 import uk.ac.ebi.ep.data.helper.MmDatabase;
 import uk.ac.ebi.ep.data.helper.Relationship;
@@ -33,19 +34,19 @@ import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 
 /**
  * Parser for the <code>chembl-target_component.xml</code> file (ebinocle
- * schema). It reads the UniProt accession of every entry and any target IDs.
- * If the accession is an enzyme (that is, already existing in the mega-map)
- * then the target IDs are used with the chembl-adapter to query for
- * bioactivities, of which only the most significant will be kept and their
- * ChEMBL compound IDs used for the cross-references.
- * $Author$
+ * schema). It reads the UniProt accession of every entry and any target IDs. If
+ * the accession is an enzyme (that is, already existing in the mega-map) then
+ * the target IDs are used with the chembl-adapter to query for bioactivities,
+ * of which only the most significant will be kept and their ChEMBL compound IDs
+ * used for the cross-references. $Author$
+ *
  * @since 1.0.22
  */
-public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
+public class ChemblSaxParser extends DefaultHandler implements EbinocleParser {
 
     private final Logger LOGGER = Logger.getLogger(ChemblSaxParser.class);
-    
-       /**
+
+    /**
      * The current element (tree path) being parsed.
      */
     protected Stack<String> currentContext = new Stack<>();
@@ -73,11 +74,11 @@ public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
 
     /* Values stored for the current entry being processed: */
     private String accession;
-    private final  List<String> targetIds = new ArrayList<>();
-    
-      private final EnzymePortalCompoundRepository repository;
-      private final UniprotEntryRepository uniprotEntryRepository;
-    
+    private final List<String> targetIds = new ArrayList<>();
+
+    private final EnzymePortalCompoundRepository repository;
+    private final UniprotEntryRepository uniprotEntryRepository;
+
     public ChemblSaxParser(EnzymePortalCompoundRepository repository, UniprotEntryRepository entryRepository) {
         ChemblConfig chemblConfig = null;
         try {
@@ -91,8 +92,6 @@ public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
         this.uniprotEntryRepository = entryRepository;
     }
 
-
-
     @Override
     public void startElement(String uri, String localName, String qName,
             Attributes attributes) throws SAXException {
@@ -102,13 +101,13 @@ public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
         isEntry = DATABASE_ENTRIES_ENTRY.equals(currentXpath);
         isRef = DATABASE_ENTRIES_ENTRY_XREFS_REF.equals(currentXpath);
         isField = DATABASE_ENTRIES_ENTRY_FIELD.equals(currentXpath);
-        
-        if (isField){
+
+        if (isField) {
             String name = attributes.getValue("", "name");
             isAccession = name != null && name.equals("accession");
-        } else if (isRef){
+        } else if (isRef) {
             String dbName = attributes.getValue("", "dbname");
-            if (dbName != null && dbName.equals("ChEMBL-Target")){
+            if (dbName != null && dbName.equals("ChEMBL-Target")) {
                 targetIds.add(attributes.getValue("", "dbkey"));
             }
         }
@@ -118,22 +117,22 @@ public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
 
     @Override
     public void endElement(String uri, String localName, String qName)
-    throws SAXException {
-        if (isAccession){
+            throws SAXException {
+        if (isAccession) {
             accession = currentChars.toString();
-        } else if (isEntry){
-            if (accession != null && !targetIds.isEmpty()){
+        } else if (isEntry) {
+            if (accession != null && !targetIds.isEmpty()) {
                 //check if accession is enzyme
-  
+
                 entry = uniprotEntryRepository.findByAccession(accession);
-              
-                if (entry != null){
+
+                if (entry != null) {
                     LOGGER.info(accession + " is enzyme.");
-                  
-                            computeCompound(entry);
-        
-                        entry = null;
-         
+
+                    computeCompound(entry);
+
+                    entry = null;
+
                 }
             }
             accession = null;
@@ -149,71 +148,64 @@ public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length){
-        if (isAccession){
-            currentChars.append(Arrays.copyOfRange(ch, start, start+length));
+    public void characters(char[] ch, int start, int length) {
+        if (isAccession) {
+            currentChars.append(Arrays.copyOfRange(ch, start, start + length));
         }
     }
 
-
-    
-    private void computeCompound(UniprotEntry e){
-         Set<EnzymePortalCompound> compounds = null;
+    private void computeCompound(UniprotEntry e) {
+        Set<EnzymePortalCompound> compounds = null;
         try {
-           
-            
+
             final Collection<String> chemblCompoundIds = getFilteredChemblCompounds();
-           
-             if (chemblCompoundIds != null){
-                 compounds = new HashSet<>();
-               
-                  for (String chemblCompoundId : chemblCompoundIds) {
+
+            if (chemblCompoundIds != null) {
+                compounds = new HashSet<>();
+
+                for (String chemblCompoundId : chemblCompoundIds) {
                     EnzymePortalCompound chemblEntry = new EnzymePortalCompound();
                     chemblEntry.setCompoundSource(MmDatabase.ChEMBL.name());
                     chemblEntry.setCompoundId(chemblCompoundId);
-                   
+
                     chemblEntry.setCompoundName(chemblAdapter
                             .getPreferredName(chemblCompoundId));
                     chemblEntry.setRelationship(Relationship.between(
                             MmDatabase.UniProt, MmDatabase.ChEMBL)
                             .name());
                     chemblEntry.setUniprotAccession(e);
-                    
-                 
-                   compounds.add(chemblEntry);
-                   repository.save(compounds);
-                  
+                    chemblEntry = CompoundUtil.computeRole(chemblEntry, chemblEntry.getRelationship());
                    
-              
-                }  
-                 
-                 
-                 
-                 
-             }
+                    compounds.add(chemblEntry);
+                    repository.save(compounds);
+
+                }
+
+            }
 
         } catch (ChemblAdapterException ex) {
             LOGGER.error(targetIds, ex);
         }
-        
+
         //return compounds;
     }
 
     /**
      * Gets bioactivities from WS for the target IDs stored in the field
      * <code>{@link #targetIds}</code> and filters them.
+     *
      * @return a collection of ChEMBL compound IDs which have significant
-     *      bioactivities, or <code>null</code> if no bioactivities are found
-     *      for the target ID.
+     * bioactivities, or <code>null</code> if no bioactivities are found for the
+     * target ID.
      * @throws ChemblAdapterException
      */
     private Collection<String> getFilteredChemblCompounds()
-    throws ChemblAdapterException {
+            throws ChemblAdapterException {
         Collection<String> filteredBioactivities = null;
         for (String targetId : targetIds) {
-            ChemblBioactivities bioactivities =
-                    chemblAdapter.getTargetBioactivities(targetId);
-            if (bioactivities != null){
+            ChemblBioactivities bioactivities
+                    = chemblAdapter.getTargetBioactivities(targetId);
+            if (bioactivities != null) {
                 filteredBioactivities = bioactivities.filter(
                         chemblAdapter.getConfig().getMinAssays(),
                         chemblAdapter.getConfig().getMinConf4(),
@@ -226,35 +218,36 @@ public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
         }
         return filteredBioactivities;
     }
-    
-        protected String getCurrentXpath() {
+
+    protected String getCurrentXpath() {
         StringBuilder xpath = new StringBuilder("/");
         for (String string : currentContext) {
             xpath.append('/').append(string);
         }
         return xpath.toString();
     }
-        
-        /**
+
+    /**
      * Parses a XML file and indexes/stores cross-references in a mega-map.<br>
      * This method is not thread safe.
+     *
      * @param xmlFilePath the XML file to parse
-     * @throws java.io.FileNotFoundException if the UniProt XML file is not found
-     * 		or not readable.
+     * @throws java.io.FileNotFoundException if the UniProt XML file is not
+     * found or not readable.
      * @throws org.xml.sax.SAXException if no default XMLReader can be found or
-     * 		instantiated, or exception during parsing.
+     * instantiated, or exception during parsing.
      * @throws java.io.IOException if the lucene index cannot be opened/created,
-     * 		or from the parser.
+     * or from the parser.
      */
     public void parse(String xmlFilePath) throws Exception {
-          File xmlFile = new File(xmlFilePath);
+        File xmlFile = new File(xmlFilePath);
         parse(new FileInputStream(xmlFile));
     }
 
     private void parse(InputStream is) throws IOException, SAXException {
-       
+
         try {
-           // mm.openMap();
+            // mm.openMap();
             XMLReader xr = XMLReaderFactory.createXMLReader();
             xr.setContentHandler(this);
             xr.setErrorHandler(this);
@@ -262,12 +255,12 @@ public class ChemblSaxParser  extends DefaultHandler implements EbinocleParser {
             LOGGER.info("Parsing start");
             xr.parse(source);
             LOGGER.info("Parsing end");
-     
-        } catch (IOException | SAXException e){
+
+        } catch (IOException | SAXException e) {
             LOGGER.error("During parsing", e);
-          
+
             throw e;
         }
-    }   
+    }
 
 }

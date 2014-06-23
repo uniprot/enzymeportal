@@ -7,18 +7,16 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,24 +25,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author joseph
  */
 @Entity
-@Table(name = "ENZYME_SUMMARY")
+@Table(name = "ENZYME_PORTAL_SUMMARY")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EnzymeSummary.findAll", query = "SELECT e FROM EnzymeSummary e"),
-    @NamedQuery(name = "EnzymeSummary.findByEnzymeId", query = "SELECT e FROM EnzymeSummary e WHERE e.enzymeId = :enzymeId"),
-    @NamedQuery(name = "EnzymeSummary.findByDbentryId", query = "SELECT e FROM EnzymeSummary e WHERE e.dbentryId = :dbentryId")
-   // @NamedQuery(name = "EnzymeSummary.findByCommentType", query = "SELECT e FROM EnzymeSummary e WHERE e.commentType = :commentType"),
-    //@NamedQuery(name = "EnzymeSummary.findByCommentText", query = "SELECT e FROM EnzymeSummary e WHERE e.commentText = :commentText")
+    @NamedQuery(name = "EnzymePortalSummary.findAll", query = "SELECT e FROM EnzymePortalSummary e"),
+    @NamedQuery(name = "EnzymePortalSummary.findByEnzymeId", query = "SELECT e FROM EnzymePortalSummary e WHERE e.enzymeId = :enzymeId"),
+    @NamedQuery(name = "EnzymePortalSummary.findByDbentryId", query = "SELECT e FROM EnzymePortalSummary e WHERE e.dbentryId = :dbentryId"),
+    @NamedQuery(name = "EnzymePortalSummary.findByCommentType", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentType = :commentType")
+    //@NamedQuery(name = "EnzymePortalSummary.findByCommentText", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentText = :commentText")
 })
-public class EnzymeSummary implements Serializable {
+public class EnzymePortalSummary implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @Column(name = "ENZYME_ID")
-    @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_ENZYME_ID")
-    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
-    private Long enzymeId;
+    private BigDecimal enzymeId;
     @Basic(optional = false)
     @Column(name = "DBENTRY_ID")
     private long dbentryId;
@@ -56,23 +52,23 @@ public class EnzymeSummary implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private UniprotEntry accession;
 
-    public EnzymeSummary() {
+    public EnzymePortalSummary() {
     }
 
-    public EnzymeSummary(Long enzymeId) {
+    public EnzymePortalSummary(BigDecimal enzymeId) {
         this.enzymeId = enzymeId;
     }
 
-    public EnzymeSummary(Long enzymeId, long dbentryId) {
+    public EnzymePortalSummary(BigDecimal enzymeId, long dbentryId) {
         this.enzymeId = enzymeId;
         this.dbentryId = dbentryId;
     }
 
-    public Long getEnzymeId() {
+    public BigDecimal getEnzymeId() {
         return enzymeId;
     }
 
-    public void setEnzymeId(Long enzymeId) {
+    public void setEnzymeId(BigDecimal enzymeId) {
         this.enzymeId = enzymeId;
     }
 
@@ -118,25 +114,19 @@ public class EnzymeSummary implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EnzymeSummary)) {
+        if (!(object instanceof EnzymePortalSummary)) {
             return false;
         }
-        EnzymeSummary other = (EnzymeSummary) object;
+        EnzymePortalSummary other = (EnzymePortalSummary) object;
         if ((this.enzymeId == null && other.enzymeId != null) || (this.enzymeId != null && !this.enzymeId.equals(other.enzymeId))) {
             return false;
         }
         return true;
     }
 
-//    @Override
-//    public String toString() {
-//        return "uk.ac.ebi.ep.data.domain.EnzymeSummary[ enzymeId=" + enzymeId + " ]";
-//    }
     @Override
     public String toString() {
-        return "EnzymeSummary{" + "enzymeId=" + enzymeId + ", dbentryId=" + dbentryId + ", commentType=" + commentType + ", commentText=" + commentText + ", accession=" + accession + '}';
+        return "uk.ac.ebi.ep.data.domain.EnzymePortalSummary[ enzymeId=" + enzymeId + " ]";
     }
-   
-    
     
 }

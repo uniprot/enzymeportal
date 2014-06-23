@@ -41,29 +41,31 @@ public class BioPortalService {
     static final ObjectMapper mapper = new ObjectMapper();
     static final ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
     static final String DEFINITION = "definition";
-    
-    @Autowired 
+
+    @Autowired
     private Environment env;
 
     private static final Logger LOGGER = Logger.getLogger(BioPortalService.class);
 
-
-
-     @Transactional
+//http://data.bioontology.org/ontologies/EFO
+    @Transactional
     public String getDiseaseDescription(String term) {
         String definition = "";
+
+       // Reader reader = new StringReader(get(REST_URL + "/search?q=" + term+"&ontology={EFO,MeSH,OMIM}&exact_match=true"));
         Reader reader = new StringReader(get(REST_URL + "/search?q=" + term));
+
         JsonReader jsonReader = Json.createReader(reader);
 
         JsonObject jo = jsonReader.readObject();
- 
+
         JsonArray jsonArray = jo.getJsonArray("collection");
         for (JsonObject obj : jsonArray.getValuesAs(JsonObject.class)) {
 
             for (Map.Entry<String, JsonValue> entry : obj.entrySet()) {
-                
+
                 if (entry.getKey().equalsIgnoreCase(DEFINITION)) {
-                 
+
                     definition = entry.getValue().toString().replace("\"", "").replaceAll("\\[", "").replaceAll("\\]", "");
                 }
 
@@ -80,7 +82,7 @@ public class BioPortalService {
 
             root = mapper.readTree(json);
         } catch (JsonProcessingException e) {
-           
+
             LOGGER.fatal("JsonProcessingException while Processing the Json result", e);
         } catch (IOException e) {
             LOGGER.fatal("IOException while Reading from the Bioportal service", e);
@@ -94,12 +96,12 @@ public class BioPortalService {
         BufferedReader rd;
         String line;
         String result = "";
-        String bioportal_api_key =env.getRequiredProperty("bioportal.api.key");
-        if(bioportal_api_key == null){
-            bioportal_api_key=API_KEY;
+        String bioportal_api_key = env.getRequiredProperty("bioportal.api.key");
+        if (bioportal_api_key == null) {
+            bioportal_api_key = API_KEY;
             LOGGER.error("BioPortal Key could not be retrieved from the environment. default key is now being used");
         }
-       
+
         try {
             url = new URL(urlToGet);
             conn = (HttpURLConnection) url.openConnection();
@@ -114,55 +116,11 @@ public class BioPortalService {
             }
             rd.close();
         } catch (IOException e) {
-           
+
             //log
             LOGGER.fatal("ERROR Connecting to BioPortal Service", e);
         }
         return result;
     }
 
-//    public static String Deletelater(String urlToGet) {
-//        StringBuilder results = new StringBuilder();
-//        try {
-//            URL url = new URL(urlToGet);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoOutput(true);
-//
-//            connection.setDoInput(true);
-//
-//            connection.setRequestMethod("GET");
-//            connection.setRequestProperty("Authorization", "apikey token=" + API_KEY);
-//            connection.setRequestProperty("Accept", "application/json");
-//
-//            connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-//
-//            connection.connect();
-//            InputStream inputStream;
-//            if (connection.getResponseCode() == 200) {
-//                inputStream = connection.getInputStream();
-//            } else {
-//                inputStream = connection.getErrorStream();
-//            }
-//            //System.out.println("stream "+ inputStream.available());
-//
-//            //BufferedReader reader = new BufferedReader(new InputStreamReader(((HttpURLConnection) (new URL(urlToGet)).openConnection()).getInputStream(), Charset.forName("UTF-8")));
-//            //BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
-//            //StringBuilder results = new StringBuilder();
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                results.append(line);
-//            }
-//
-//            connection.disconnect();
-//            // System.out.println(results.toString());
-//            //return results.toString();
-//        } catch (IOException ex) {
-//
-//            LOGGER.fatal("ERROR Connecting to BioPortal Service", ex);
-//        }
-//        return results.toString();
-//    }
-    
 }

@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.data.domain.EnzymeSummary;
+import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 
 /**
  *
@@ -16,8 +15,14 @@ import uk.ac.ebi.ep.data.domain.EnzymeSummary;
  */
 @NoRepositoryBean
 public interface EnzymeSummaryRepositoryCustom {
-    List<EnzymeSummary> findByCommentType(String commentType, int limit);
-     List<EnzymeSummary> findByCommentType(String commentType);
-     List<EnzymeSummary> findByCommentText(String commentText, int limit);
-    
+
+    List<EnzymePortalSummary> findByCommentType(String commentType, int limit);
+
+    List<EnzymePortalSummary> findByCommentType(String commentType);
+
+    List<EnzymePortalSummary> findByCommentText(String commentText, int limit);
+
+    EnzymePortalSummary findDiseaseEvidence(String accession);
+    EnzymePortalSummary findByAccession(String accession);
+
 }

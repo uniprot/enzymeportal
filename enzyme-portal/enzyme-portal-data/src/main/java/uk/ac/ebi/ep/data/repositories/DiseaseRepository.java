@@ -9,13 +9,13 @@ package uk.ac.ebi.ep.data.repositories;
 import java.math.BigDecimal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import uk.ac.ebi.ep.data.domain.Disease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
  *
  * @author joseph
  */
-public interface DiseaseRepository extends JpaRepository<Disease, Long>,  QueryDslPredicateExecutor<Disease>, DiseaseRepositoryCustom{
+public interface DiseaseRepository extends JpaRepository<EnzymePortalDisease, Long>, QueryDslPredicateExecutor<EnzymePortalDisease>, DiseaseRepositoryCustom{
     
-    Disease findByDiseaseId(BigDecimal id);
+    EnzymePortalDisease findByDiseaseId(BigDecimal id);
 }

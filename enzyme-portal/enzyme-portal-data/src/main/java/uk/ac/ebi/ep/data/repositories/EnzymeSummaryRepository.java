@@ -9,13 +9,15 @@ package uk.ac.ebi.ep.data.repositories;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import uk.ac.ebi.ep.data.domain.EnzymeSummary;
+import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 
 /**
  *
  * @author joseph
  */
-public interface EnzymeSummaryRepository extends JpaRepository<EnzymeSummary, Long>,  QueryDslPredicateExecutor<EnzymeSummary>, EnzymeSummaryRepositoryCustom {
+public interface EnzymeSummaryRepository extends JpaRepository<EnzymePortalSummary, Long>, QueryDslPredicateExecutor<EnzymePortalSummary>, EnzymeSummaryRepositoryCustom {
   
-   List<EnzymeSummary> findByCommentText(String commentText);
+   List<EnzymePortalSummary> findByCommentText(String commentText);
+   
+
 }

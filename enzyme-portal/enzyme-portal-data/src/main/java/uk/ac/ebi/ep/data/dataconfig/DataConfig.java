@@ -33,7 +33,7 @@ public class DataConfig {
 
     @Autowired
     private DataSource dataSource;
-
+    
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();

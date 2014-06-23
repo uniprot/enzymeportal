@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.Disease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 
 /**
@@ -24,44 +24,30 @@ public class DiseaseService {
     private DiseaseRepository repository;
 
     @Transactional
-    public Disease addDisease(Disease d) {
-        Disease disease = repository.saveAndFlush(d);
+    public EnzymePortalDisease addDisease(EnzymePortalDisease d) {
+        EnzymePortalDisease disease = repository.saveAndFlush(d);
         return disease;
     }
 
     @Transactional
-    public List<Disease> addDisease(List<Disease> d) {
-        List<Disease> disease = repository.save(d);
+    public List<EnzymePortalDisease> addDisease(List<EnzymePortalDisease> d) {
+        List<EnzymePortalDisease> disease = repository.save(d);
         return disease;
     }
 
     @Transactional(readOnly = true)
-    public Disease findById(Long id) {
+    public EnzymePortalDisease findById(Long id) {
 
      
         return repository.findOne(id);
     }
 
     @Transactional(readOnly = true)
-    public List<Disease> findDiseases() {
+    public List<EnzymePortalDisease> findDiseases() {
 
         return repository.findAll();
     }
 
-    //delete later after testing
-//    @Transactional(rollbackFor = Exception.class)
-//    public void dropDiseaseDatabase() {
-//        repository.dropDiseaseDatabase();
-//    }
-//
-//    @Transactional(rollbackFor = Exception.class)
-//    public void dropDiseaseDatabaseById(Long id) {
-//        repository.delete(id);
-//    }
-//
-//    @Transactional(rollbackFor = Exception.class)
-//    public void deleteAllDisease() {
-//        repository.deleteAll();
-//    }
+
 
 }

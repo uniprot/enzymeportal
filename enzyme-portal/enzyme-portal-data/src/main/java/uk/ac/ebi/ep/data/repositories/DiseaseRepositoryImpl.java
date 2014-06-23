@@ -10,7 +10,7 @@ import com.mysema.query.jpa.impl.JPADeleteClause;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.QDisease;
+import uk.ac.ebi.ep.data.domain.QEnzymePortalDisease;
 
 /**
  *
@@ -20,7 +20,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom{
     
           @PersistenceContext
     private EntityManager entityManager;
-    private static final QDisease $ = QDisease.disease;
+    private static final QEnzymePortalDisease $ = QEnzymePortalDisease.enzymePortalDisease;
 
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;

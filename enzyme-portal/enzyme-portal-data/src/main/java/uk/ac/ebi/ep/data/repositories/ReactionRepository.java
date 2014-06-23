@@ -8,13 +8,13 @@ package uk.ac.ebi.ep.data.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import uk.ac.ebi.ep.data.domain.Reaction;
+import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 
 
 /**
  *
  * @author joseph
  */
-public interface ReactionRepository extends JpaRepository<Reaction, Long>,  QueryDslPredicateExecutor<Reaction> {
+public interface ReactionRepository extends JpaRepository<EnzymePortalReaction, Long>,   QueryDslPredicateExecutor<EnzymePortalReaction> {
     
 }

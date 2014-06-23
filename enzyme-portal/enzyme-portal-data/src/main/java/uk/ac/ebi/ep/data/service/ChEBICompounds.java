@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.data.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,8 +24,9 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.domain.EnzymeSummary;
+import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.helper.CompoundUtil;
 import uk.ac.ebi.ep.data.helper.EPUtil;
 import uk.ac.ebi.ep.data.helper.MmDatabase;
 import uk.ac.ebi.ep.data.helper.Relationship;
@@ -44,7 +46,6 @@ public class ChEBICompounds {
     private final Logger LOGGER = Logger.getLogger(ChEBICompounds.class);
     private final ChebiWebServiceClient chebiWsClient;
 
-
     Map<UniprotEntry, Set<String>> inhibitors = new LinkedHashMap<>();
     Map<UniprotEntry, Set<String>> activators = new LinkedHashMap<>();
 
@@ -54,25 +55,25 @@ public class ChEBICompounds {
 
     private final EnzymePortalCompoundRepository compoundRepository;
 
- 
     private final EnzymeSummaryRepository enzymeSummaryRepository;
+
+    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid" ,"H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION"};
+    List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
     public ChEBICompounds(EnzymeSummaryRepository enzymeSummaryRepository, EnzymePortalCompoundRepository repository) {
         this.compoundRepository = repository;
         this.enzymeSummaryRepository = enzymeSummaryRepository;
         chebiWsClient = new ChebiWebServiceClient();
+
     }
 
     public void computeAndLoadChEBICompounds() {
-       
-        List<EnzymeSummary> enzymeSummary = enzymeSummaryRepository.findByCommentType(COMMENT_TYPE);
-        
-        
+
+        List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findByCommentType(COMMENT_TYPE);
+
        //Java 7 and before only. uncomment if Java 8 is not available in your env
-       
-        
 //
-//        for (EnzymeSummary summary : enzymeSummary) {
+//        for (EnzymePortalSummary summary : enzymeSummary) {
 //            String enzyme_regulation_text = summary.getCommentText();
 //         
 //            inhibitors.put(summary.getAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
@@ -105,11 +106,10 @@ public class ChEBICompounds {
 //            }
 //
 //        }
-        
         //Java 8 specifics - comment out  and uncomment above if java 8 is not found in env
         enzymeSummary.stream().forEach((summary) -> {
             String enzyme_regulation_text = summary.getCommentText();
-         
+
             inhibitors.put(summary.getAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
             activators.put(summary.getAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
         });
@@ -117,6 +117,7 @@ public class ChEBICompounds {
         inhibitors.entrySet().stream().forEach((map) -> {
             map.getValue().stream().map((inhibitor) -> searchMoleculeInChEBI(inhibitor)).filter((inhibitor_from_chebi) -> (inhibitor_from_chebi != null)).map((inhibitor_from_chebi) -> {
                 inhibitor_from_chebi.setRelationship(Relationship.is_inhibitor_of.name());
+                inhibitor_from_chebi = CompoundUtil.computeRole(inhibitor_from_chebi, inhibitor_from_chebi.getRelationship());
                 return inhibitor_from_chebi;
             }).map((inhibitor_from_chebi) -> {
                 inhibitor_from_chebi.setUniprotAccession(map.getKey());
@@ -129,6 +130,7 @@ public class ChEBICompounds {
         activators.entrySet().stream().forEach((map) -> {
             map.getValue().stream().map((activator) -> searchMoleculeInChEBI(activator)).filter((activator_from_chebi) -> (activator_from_chebi != null)).map((activator_from_chebi) -> {
                 activator_from_chebi.setRelationship(Relationship.is_activator_of.name());
+                activator_from_chebi = CompoundUtil.computeRole(activator_from_chebi, activator_from_chebi.getRelationship());
                 return activator_from_chebi;
             }).map((activator_from_chebi) -> {
                 activator_from_chebi.setUniprotAccession(map.getKey());
@@ -137,9 +139,8 @@ public class ChEBICompounds {
                 compounds.add(activator_from_chebi);
             });
         });
-        
-        
 
+        
         LOGGER.debug("Writing to Enzyme Portal database...");
         compoundRepository.save(compounds);
 
@@ -196,7 +197,8 @@ public class ChEBICompounds {
                         }
                     }
                 }
-                if (chebiId != null) {
+
+                if (chebiId != null && !blackList.contains(name)) {
                     entry = new EnzymePortalCompound();
                     entry.setCompoundSource(MmDatabase.ChEBI.name());
                     entry.setCompoundId(chebiId);

@@ -27,6 +27,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+
 /**
  *
  * @author joseph
@@ -38,16 +39,21 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundInternalId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundInternalId = :compoundInternalId"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundId = :compoundId"),
-    @NamedQuery(name = "EnzymePortalCompound.findByCompoundName", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundName = :compoundName"),
+   // @NamedQuery(name = "EnzymePortalCompound.findByCompoundName", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundName = :compoundName"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundSource", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundSource = :compoundSource"),
     @NamedQuery(name = "EnzymePortalCompound.findByRelationship", query = "SELECT e FROM EnzymePortalCompound e WHERE e.relationship = :relationship"),
     @NamedQuery(name = "EnzymePortalCompound.findByUniprotAccession", query = "SELECT e FROM EnzymePortalCompound e WHERE e.uniprotAccession = :uniprotAccession")})
 public class EnzymePortalCompound implements Serializable {
+ 
+    @Column(name = "URL")
+    private String url;
+    @Column(name = "ROLE")
+    private String role;
     @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
         @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Reaction> reactionSet = new HashSet<>();
+    private Set<EnzymePortalReaction> reactionSet = new HashSet<>();
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -185,13 +191,14 @@ public class EnzymePortalCompound implements Serializable {
 //    public String toString() {
 //        return "uk.ac.ebi.ep.data.domain.EnzymePortalCompound[ compoundInternalId=" + compoundInternalId + " ]";
 //    }
-    @Override
-    public String toString() {
-        return "EnzymePortalCompound{" + "reactionSet=" + reactionSet + ", compoundInternalId=" + compoundInternalId + ", compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + '}';
-    }
 
     
     
+    @Override
+    public String toString() {
+        return "EnzymePortalCompound{" + "url=" + url + ", role=" + role + ", reactionSet=" + reactionSet + ", compoundInternalId=" + compoundInternalId + ", compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + '}';
+    }
+
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -201,12 +208,30 @@ public class EnzymePortalCompound implements Serializable {
     }
 
     @XmlTransient
-    public Set<Reaction> getReactionSet() {
+    public Set<EnzymePortalReaction> getReactionSet() {
         return reactionSet;
     }
 
-    public void setReactionSet(Set<Reaction> reactionSet) {
+    public void setReactionSet(Set<EnzymePortalReaction> reactionSet) {
         this.reactionSet = reactionSet;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+
 
 }

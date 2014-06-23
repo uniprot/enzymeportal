@@ -96,3 +96,8 @@ cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.data.main.IntenzXmlParser" -Dexec.args="$DB_CONFIG $INTENZ_XML"
 cd $WD
 echo "[INFO] Finished parsing intenz.xml and updating Enzyme Portal database with ChEBI & Reaction (Rhea) Data  - $(date)"
+
+#first truncate the Schema and populate fresh data to the Database
+echo "[INFO] Request to gather release statistics from the Enzyme Portal database - $(date)"
+. $MM_SCRIPTS/finish_release.sh -r $DB_CONFIG
+echo "[INFO] Enzyme Portal database release is now complete - $(date)"

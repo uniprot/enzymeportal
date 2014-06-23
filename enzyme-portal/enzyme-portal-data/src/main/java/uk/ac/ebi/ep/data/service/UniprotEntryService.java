@@ -5,10 +5,12 @@
  */
 package uk.ac.ebi.ep.data.service;
 
+import com.mysema.query.types.Predicate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 
@@ -28,6 +30,12 @@ public class UniprotEntryService {
 
         return repository.findByAccession(accession);
     }
+    
+        @Transactional(readOnly = true)
+    public UniprotEntry findByUniProtAccession(String accession) {
+
+        return repository.findOne(isAccession(accession));
+    }
 
 
 
@@ -35,6 +43,17 @@ public class UniprotEntryService {
     public List<String> findAllUniprotAccessions() {
 
         return repository.findAccession();
+    }
+    
+    
+        private static Predicate isAccession(String accession) {
+
+       
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate predicate = enzyme.accession.equalsIgnoreCase(accession);
+
+        return predicate;
     }
 
 }

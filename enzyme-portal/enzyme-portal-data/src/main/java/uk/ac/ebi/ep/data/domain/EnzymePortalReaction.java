@@ -7,7 +7,6 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,36 +15,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author joseph
  */
 @Entity
-@Table(name = "REACTION")
+@Table(name = "ENZYME_PORTAL_REACTION")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Reaction.findAll", query = "SELECT r FROM Reaction r"),
-    @NamedQuery(name = "Reaction.findByReactionInternalId", query = "SELECT r FROM Reaction r WHERE r.reactionInternalId = :reactionInternalId"),
-    @NamedQuery(name = "Reaction.findByReactionId", query = "SELECT r FROM Reaction r WHERE r.reactionId = :reactionId"),
-    @NamedQuery(name = "Reaction.findByReactionName", query = "SELECT r FROM Reaction r WHERE r.reactionName = :reactionName"),
-    @NamedQuery(name = "Reaction.findByRelationship", query = "SELECT r FROM Reaction r WHERE r.relationship = :relationship")})
-public class Reaction implements Serializable {
-    @ManyToMany(mappedBy = "reactionSet", fetch = FetchType.EAGER)
-    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @Column(name = "REACTION_SOURCE")
-    private String reactionSource;
+    @NamedQuery(name = "EnzymePortalReaction.findAll", query = "SELECT e FROM EnzymePortalReaction e"),
+    @NamedQuery(name = "EnzymePortalReaction.findByReactionInternalId", query = "SELECT e FROM EnzymePortalReaction e WHERE e.reactionInternalId = :reactionInternalId"),
+    @NamedQuery(name = "EnzymePortalReaction.findByReactionId", query = "SELECT e FROM EnzymePortalReaction e WHERE e.reactionId = :reactionId"),
+    @NamedQuery(name = "EnzymePortalReaction.findByReactionName", query = "SELECT e FROM EnzymePortalReaction e WHERE e.reactionName = :reactionName"),
+    @NamedQuery(name = "EnzymePortalReaction.findByReactionSource", query = "SELECT e FROM EnzymePortalReaction e WHERE e.reactionSource = :reactionSource"),
+    @NamedQuery(name = "EnzymePortalReaction.findByRelationship", query = "SELECT e FROM EnzymePortalReaction e WHERE e.relationship = :relationship"),
+    @NamedQuery(name = "EnzymePortalReaction.findByUrl", query = "SELECT e FROM EnzymePortalReaction e WHERE e.url = :url")})
+public class EnzymePortalReaction implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id
+
+        @Id
     @Basic(optional = false)
     @Column(name = "REACTION_INTERNAL_ID")
     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_REACTION_INTERNAL_ID")
@@ -55,16 +51,20 @@ public class Reaction implements Serializable {
     private String reactionId;
     @Column(name = "REACTION_NAME")
     private String reactionName;
+    @Column(name = "REACTION_SOURCE")
+    private String reactionSource;
     @Column(name = "RELATIONSHIP")
     private String relationship;
+    @Column(name = "URL")
+    private String url;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
 
-    public Reaction() {
+    public EnzymePortalReaction() {
     }
 
-    public Reaction(Long reactionInternalId) {
+    public EnzymePortalReaction(Long reactionInternalId) {
         this.reactionInternalId = reactionInternalId;
     }
 
@@ -92,12 +92,28 @@ public class Reaction implements Serializable {
         this.reactionName = reactionName;
     }
 
+    public String getReactionSource() {
+        return reactionSource;
+    }
+
+    public void setReactionSource(String reactionSource) {
+        this.reactionSource = reactionSource;
+    }
+
     public String getRelationship() {
         return relationship;
     }
 
     public void setRelationship(String relationship) {
         this.relationship = relationship;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public UniprotEntry getUniprotAccession() {
@@ -118,43 +134,19 @@ public class Reaction implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Reaction)) {
+        if (!(object instanceof EnzymePortalReaction)) {
             return false;
         }
-        Reaction other = (Reaction) object;
+        EnzymePortalReaction other = (EnzymePortalReaction) object;
         if ((this.reactionInternalId == null && other.reactionInternalId != null) || (this.reactionInternalId != null && !this.reactionInternalId.equals(other.reactionInternalId))) {
             return false;
         }
         return true;
     }
 
-//    @Override
-//    public String toString() {
-//        return "uk.ac.ebi.ep.data.domain.Reaction[ reactionInternalId=" + reactionInternalId + " ]";
-//    }
     @Override
     public String toString() {
-        return "Reaction{" + "reactionSource=" + reactionSource + ", reactionInternalId=" + reactionInternalId + ", reactionId=" + reactionId + ", reactionName=" + reactionName + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + '}';
-    }
-    
-    
-    
-
-    public String getReactionSource() {
-        return reactionSource;
-    }
-
-    public void setReactionSource(String reactionSource) {
-        this.reactionSource = reactionSource;
-    }
-
-    @XmlTransient
-    public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
-        return enzymePortalCompoundSet;
-    }
-
-    public void setEnzymePortalCompoundSet(Set<EnzymePortalCompound> enzymePortalCompoundSet) {
-        this.enzymePortalCompoundSet = enzymePortalCompoundSet;
+        return "uk.ac.ebi.ep.data.domain.EnzymePortalReaction[ reactionInternalId=" + reactionInternalId + " ]";
     }
     
 }
