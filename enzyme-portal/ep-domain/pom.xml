@@ -8,7 +8,7 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-domain</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <name>EP domain</name>
     <description>
     	The domain model of the Enzyme Portal and its searches are defined in
@@ -19,7 +19,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.3</version>
+                <version>0.9.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -154,6 +154,15 @@
                     <path>
                     	${project.parent.artifactId}/${project.artifactId}
                     </path>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>
