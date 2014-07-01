@@ -1,10 +1,16 @@
 package uk.ac.ebi.ep.adapter.rhea;
 
-import java.lang.Object;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.xml_cml.schema.cml2.react.*;
+import org.xml_cml.schema.cml2.react.Link;
+import org.xml_cml.schema.cml2.react.Map;
+import org.xml_cml.schema.cml2.react.Molecule;
+import org.xml_cml.schema.cml2.react.Name;
+import org.xml_cml.schema.cml2.react.Product;
+import org.xml_cml.schema.cml2.react.ProductList;
+import org.xml_cml.schema.cml2.react.Reactant;
+import org.xml_cml.schema.cml2.react.ReactantList;
+import org.xml_cml.schema.cml2.react.Reaction;
 import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.enzyme.model.Equation;
 import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
@@ -31,11 +37,13 @@ public class RheaWsAdapter implements IRheaAdapter {
 		return wsClient.searchRheasInCmlreact(query);
 	}
 
+        @Override
 	public List<Reaction> getRheasInCmlreact(String query)
 			throws RheaFetchDataException {
 		return wsClient.getRheasInCmlreact(query);
 	}
 
+        @Override
     public ReactionPathway getReactionPathway(Reaction reaction) {
         List<Object> reactionElements = reaction.getReactiveCentreAndMechanismAndReactantList();
         ReactionPathway reactionPathway = new ReactionPathway();
@@ -144,7 +152,13 @@ public class RheaWsAdapter implements IRheaAdapter {
         	if (coef > 1){
         		sb.append(coef.intValue()).append(' ');
         	}
-            sb.append(molecule.getTitle());
+                for(Object name : molecule.getFormulaOrNameOrLabel()){
+                    if(name instanceof Name){
+                     Name n = (Name) name;  
+                        sb.append(n.getValue());
+                    }
+                }
+           
             if (counter < molList.size()) {
                 sb.append(" + ");
             }
