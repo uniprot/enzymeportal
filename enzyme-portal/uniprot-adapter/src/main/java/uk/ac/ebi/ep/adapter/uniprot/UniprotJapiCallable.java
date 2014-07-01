@@ -6,10 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-
 import org.apache.log4j.Logger;
-
-import uk.ac.ebi.ep.enzyme.model.*;
+import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.CountableMolecules;
+import uk.ac.ebi.ep.enzyme.model.Disease;
+import uk.ac.ebi.ep.enzyme.model.Enzyme;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.enzyme.model.Pathway;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
+import uk.ac.ebi.ep.enzyme.model.Sequence;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
