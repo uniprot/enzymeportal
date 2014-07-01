@@ -4,11 +4,20 @@
 	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
 
 <properties>
-	<title>Change log</title>
-	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+	<title> Literature adapter Change log</title>
+	<author email="joseph@ebi.ac.uk">Joseph Onwubiko</author>
 </properties>
 
 <body>
+    <release version="1.0.8" date="2014-07-01"
+        description="Implemented new Uniprot web services">
+        <action dev="joseph" type="update">
+     Now using uniprot JAPI 2014 06 version for retrieving citations with focus on 
+            books, jornal articles and patent.
+        </action>
+  
+    </release> 
+    
     <release version="1.0.7" date="2013-04-16"
         description="More performant, more configurable">
         <action dev="rafalcan" type="add">

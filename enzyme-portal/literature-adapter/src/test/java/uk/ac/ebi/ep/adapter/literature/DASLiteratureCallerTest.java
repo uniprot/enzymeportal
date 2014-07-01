@@ -1,15 +1,15 @@
 package uk.ac.ebi.ep.adapter.literature;
 
 import java.util.Set;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.cdb.webservice.Journal;
 import uk.ac.ebi.cdb.webservice.JournalInfo;
 import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
-
-import static org.junit.Assert.*;
 //@Ignore
 public class DASLiteratureCallerTest {
 

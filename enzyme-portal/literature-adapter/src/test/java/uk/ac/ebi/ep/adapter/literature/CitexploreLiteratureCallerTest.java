@@ -1,14 +1,11 @@
 package uk.ac.ebi.ep.adapter.literature;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Collection;
-
+import static org.junit.Assert.assertEquals;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import uk.ac.ebi.cdb.webservice.Result;
-
+//@Ignore
 public class CitexploreLiteratureCallerTest {
 
 	@Test
