@@ -35,9 +35,9 @@ public class MegaJdbcMapperTest {
     public void before() throws IOException, SQLException {
         logger.info("Before setting up");
         try {
-           // con = OracleDatabaseInstance.getInstance("ep-mm-db-enzdev")
-           con = OracleDatabaseInstance.getInstance("ep-mm-db-ezprel")//testing the new instance. remove later
-                    .getConnection();
+            con = OracleDatabaseInstance.getInstance("ep-mm-db-enzdev")
+            .getConnection();
+            System.out.println("connection "+ con);
             mm = new MegaJdbcMapper(con);
             mm.openMap();
 
