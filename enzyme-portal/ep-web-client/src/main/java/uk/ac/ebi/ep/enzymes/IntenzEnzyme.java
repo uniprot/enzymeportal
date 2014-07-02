@@ -5,13 +5,9 @@
 package uk.ac.ebi.ep.enzymes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import javax.json.JsonValue;
-import uk.ac.ebi.ep.enzyme.model.Enzyme;
-import uk.ac.ebi.ep.enzyme.model.EnzymeHierarchy;
 
 /**
  *

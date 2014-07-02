@@ -29,6 +29,7 @@
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <mvc:resources mapping="/google*.html" location="/" />
+    <mvc:resources mapping="/proxy.jsp" location="/" />
      <mvc:resources mapping="/ep.json" location="/" />
     
     <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>

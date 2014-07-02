@@ -10,6 +10,15 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+
+<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/Biojs.js"></script>
+<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/Biojs.Rheaction.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/jquery-1.6.4.js"></script>
+
+<link href=" ${pageContext.request.contextPath}/resources/javascript/biojs/biojs.Rheaction.css" rel="stylesheet" type="text/css" />
+
+
 <div id="reactionContent" class="summary">
     <h2><c:out value="${enzymeModel.name}"/></h2>
     <c:set var="reactionpathways" value="${enzymeModel.reactionpathway}"/>
@@ -20,16 +29,16 @@
             </c:when>
             <c:otherwise>
                 <c:if test="${fn:length(reactionpathways) > 1}">
-              <div class="main_link"><b>${fn:length(reactionpathways)} reactions found</b></div>  
-                </c:if>
-               <c:if test="${fn:length(reactionpathways) == 1}">
-              <div class="main_link"><b>${fn:length(reactionpathways)} reaction found</b></div>  
-                </c:if>
-                <c:forEach items="${reactionpathways}" var="reactionpathway"
-                	varStatus="rpVs">
-                    <c:set var="reaction" value="${reactionpathway.reaction}"/>
-                    <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
-                    <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
+                <div class="main_link"><b>${fn:length(reactionpathways)} reactions found</b></div>  
+            </c:if>
+            <c:if test="${fn:length(reactionpathways) == 1}">
+                <div class="main_link"><b>${fn:length(reactionpathways)} reaction found</b></div>  
+            </c:if>
+            <c:forEach items="${reactionpathways}" var="reactionpathway"
+                       varStatus="rpVs">
+                <c:set var="reaction" value="${reactionpathway.reaction}"/>
+                <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
+                <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
 
                 <div class="reaction block">
                     <c:if test="${reaction == null}">
@@ -41,7 +50,12 @@
                             <!--<a target="blank" href="${rheaEntryUrl}"><c:out value="${reaction.name}" escapeXml="false"/></a>-->
                             <c:out value="${reaction.name}" escapeXml="false"/> 
                         </b>
-                        <div class="equation">
+                        <br/>
+                        <div id="bjs" style="margin-top: 10px">
+                         
+                        </div>
+                        <%--
+                        <div class="equation hidden">
                             <table>
                                 <tr>
                                     <c:set var="reactants" value="${reaction.equation.reactantlist}"/>
@@ -50,13 +64,13 @@
                                     <c:set var="productsSize" value="${fn:length(products)}"/>
                                     <c:set var="counter" value="${1}"/>
                                     <c:forEach items="${reactants}" var="reactant">
-                                    	<c:if test="${reactant.count gt 1}">
-                                   		<th><fmt:formatNumber
-                                   			value="${reactant.count}"
-                                   			type="number"
-                                   			maxFractionDigits="0"/>
-                                  		</th>
-                                    	</c:if>
+                                        <c:if test="${reactant.count gt 1}">
+                                            <th><fmt:formatNumber
+                                                    value="${reactant.count}"
+                                                    type="number"
+                                                    maxFractionDigits="0"/>
+                                            </th>
+                                        </c:if>
                                         <td>
                                             <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${reactant.molecule.id}${chebiImageParams}"/>
                                             <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${reactant.molecule.id}${chebiEntryBaseUrlParam}"/>
@@ -78,13 +92,13 @@
 
                                     <c:set var="counter" value="${1}"/>
                                     <c:forEach items="${products}" var="product">
-                                    	<c:if test="${product.count gt 1}">
-                                   		<th><fmt:formatNumber
-                                   			value="${product.count}"
-                                   			type="number"
-                                   			maxFractionDigits="0"/>
-                                  		</th>
-                                    	</c:if>
+                                        <c:if test="${product.count gt 1}">
+                                            <th><fmt:formatNumber
+                                                    value="${product.count}"
+                                                    type="number"
+                                                    maxFractionDigits="0"/>
+                                            </th>
+                                        </c:if>
                                         <td>
                                             <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${product.molecule.id}${chebiImageParams}"/>
                                             <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${product.molecule.id}${chebiEntryBaseUrlParam}"/>
@@ -101,18 +115,18 @@
                                     </c:forEach>
                                 </tr>
                             </table>
-                        </div>
+                        </div> --%>
                         <div id="reactionDesc-${rpVs.index}">
                             <c:out value="${reaction.description}" escapeXml="false"/>
                         </div>
                         <div id="extLinks-${rpVs.index}">
-                     		<c:if test="${not empty reaction.xrefs}">
-                     			<div class="reactome inlineLinks">
+                            <c:if test="${not empty reaction.xrefs}">
+                                <div class="reactome inlineLinks">
                                     <a target="blank" href="${reaction.xrefs[0]}">
                                         <spring:message code="label.entry.reactionsPathways.link.reactome.reaction"/>
                                     </a>
-                     			</div>
-                     		</c:if>
+                                </div>
+                            </c:if>
                             <c:if test="${not empty reaction.id}">
                                 <div class="rhea inlineLinks">
                                     <a target="blank" href="${rheaEntryUrl}">
@@ -130,6 +144,23 @@
                                 </div>
                             </c:if>
                         </div>
+                            
+                            <script>
+                                                                                    
+  window.onload = function() {
+ var instance = new Biojs.Rheaction({
+  target: 'bjs',
+  id:'${reaction.id}',
+  proxyUrl:'${pageContext.request.contextPath}/proxy.jsp'
+    
+ });
+ //instance.setId("${reaction.id}");
+  //console.log(instance);
+ }; 
+                            </script>             
+                            
+                            
+                            
                     </c:if>
                     <c:if test="${pathwaysSize>0}" >
                         <c:if test="${reaction != null}">
@@ -145,15 +176,17 @@
                                     </fieldset> 
                                 </div>
                                 <script>
-                                	if (document.getElementById('${pathway.id}')){
+                                    if (document.getElementById('${pathway.id}')) {
                                         $('#pathway-${rpVs.index}-${pathway.id}')
-                                            .html('<fieldset><legend>${pathway.id}</legend>See <a href="#${pathway.id}">above</a>.</fieldset>');
-                                	} else {
+                                                .html('<fieldset><legend>${pathway.id}</legend>See <a href="#${pathway.id}">above</a>.</fieldset>');
+                                    } else {
                                         $('#pathway-${rpVs.index}-${pathway.id}')
-                                        	.load("${pageContext.request.contextPath}/ajax/reactome/${pathway.id}");
-                                        $('#pathway-${rpVs.index}-${pathway.id}')
-                                        	.before('<span id="${pathway.id}"></span>')
-                                	}
+                                                .load("${pageContext.request.contextPath}/ajax/reactome/${pathway.id}");
+                                                        $('#pathway-${rpVs.index}-${pathway.id}')
+                                                                .before('<span id="${pathway.id}"></span>')
+                                                    }
+                             
+                                                    
                                 </script>
                             </c:forEach>
                         </div>
@@ -161,7 +194,7 @@
                 </div>
             </c:forEach>
             <div class="provenance">
-                  <ul>
+                <ul>
                     <li class="note_0">Data Source:
                         <a href="http://www.reactome.org/ReactomeGWT/entrypoint.html">Reactome</a> &AMP; <a href="http://www.ebi.ac.uk/rhea/" >Rhea</a> </li>
                     <li class="note_1">Reactome is an open-source, open access, manually curated and peer-reviewed pathway database. </li>
@@ -169,6 +202,47 @@
                 </ul>
             </div>
         </c:otherwise>
-    </c:choose>                
+    </c:choose> 
+
+
+<!--    <script>
+        
+     window.onload = function() {
+ var instance = new Biojs.Rheaction({
+  target: 'bjs',
+  id: '${reaction.id}',
+  //proxyUrl:'http://www.ebi.ac.uk/Tools/biojs/biojs/dependencies/proxy/proxy.php'
+   proxyUrl:'${pageContext.request.contextPath}/proxy'
+ });
+ //alert(instance);
+  console.log(instance);
+ };
+  
+    </script>-->
+
+
+
+
+
+
+<!--                          <script>
+    
+                $(document).ready(function() {
+    var instance = new Biojs.Rheaction({
+     target: 'bjs',
+     id: '${reaction.id}',
+     proxyUrl:${pageContext.request.contextPath}/proxy.jsp
+     //proxyUrl:'http://www.ebi.ac.uk/Tools/biojs/biojs/dependencies/proxy/proxy.php'
+    });
+    
+    console.log(instance);
+    
+    
+    
+    
+    
+    
+                });
+            </script> -->
 
 </div>

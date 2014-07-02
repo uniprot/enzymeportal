@@ -4,7 +4,6 @@
  */
 package uk.ac.ebi.ep.enzymes;
 
-import uk.ac.ebi.ep.enzymes.EnzymeSubSubclass;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;

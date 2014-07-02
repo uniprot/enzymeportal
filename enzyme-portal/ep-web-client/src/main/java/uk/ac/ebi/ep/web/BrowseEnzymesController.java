@@ -175,7 +175,7 @@ public class BrowseEnzymesController extends AbstractController {
 //        pagination.setFirstResult(searchModel.getSearchparams().getStart());
 //        return pagination;
 //    }
-        
+    
 
     @RequestMapping(value = BROWSE_ENZYME_CLASSIFICATION, method = RequestMethod.GET)
     public String browseEc(Model model, HttpSession session) {
@@ -184,7 +184,7 @@ public class BrowseEnzymesController extends AbstractController {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         return BROWSE_ENZYMES;
-    }
+}
 
     @RequestMapping(value = BROWSE_EC + "/{ec}/{ecname}", method = RequestMethod.GET)
     public String showStaticEc(@ModelAttribute("searchModel") SearchModel searchModel,

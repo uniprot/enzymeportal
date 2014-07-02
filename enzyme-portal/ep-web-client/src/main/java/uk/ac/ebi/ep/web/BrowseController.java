@@ -141,6 +141,12 @@ public class BrowseController extends AbstractController {
         return view;
     }
 
+      @RequestMapping(value = "/bioheadache", method = RequestMethod.GET)
+    public String showProxy(Model model) {
+      
+        return "/bioheadache";
+    }
+    
     @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
     public String showDiseases(Model model) {
         EnzymeFinder finder = new EnzymeFinder(searchConfig);
