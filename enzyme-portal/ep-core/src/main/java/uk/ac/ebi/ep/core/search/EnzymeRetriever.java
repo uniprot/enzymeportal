@@ -1,10 +1,15 @@
 package uk.ac.ebi.ep.core.search;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.xml_cml.schema.cml2.react.Reaction;
-
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
@@ -29,7 +34,16 @@ import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartFetchDataException;
 import uk.ac.ebi.ep.core.DiseaseComparator;
 import uk.ac.ebi.ep.entry.exception.EnzymeRetrieverException;
-import uk.ac.ebi.ep.enzyme.model.*;
+import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.CountableMolecules;
+import uk.ac.ebi.ep.enzyme.model.Disease;
+import uk.ac.ebi.ep.enzyme.model.Entity;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.EnzymeReaction;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.enzyme.model.Pathway;
+import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.mm.MmDatabase;
 import uk.ac.ebi.ep.search.exception.MultiThreadingException;
 import uk.ac.ebi.ep.search.model.Compound;
