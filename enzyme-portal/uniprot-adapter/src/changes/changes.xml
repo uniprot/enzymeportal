@@ -6,10 +6,15 @@
 
 <properties>
 	<title>Change log</title>
-	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+	<author email="joseph@ebi.ac.uk">Joseph Onwubiko</author>
 </properties>
 
 <body>
+        <release version="1.0.8" date="2014-07-01" description="Dependencies update">
+        <action dev="joseph" type="add">
+           upgraded uniprot.kraken.version to 2014.05
+        </action>
+    </release>
     <release version="1.0.7" date="2014-01-28" description="Alignment URL added">
         <action dev="rafalcan" type="add">
             Added configuration for alignment URL (used in enzyme comparisons).
