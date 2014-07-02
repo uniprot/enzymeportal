@@ -5,10 +5,16 @@
 
 <properties>
 	<title>EP domain change log</title>
-	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+	<author email="joseph@ebi.ac.uk">Joseph Onwubiko</author>
 </properties>
 
 <body>
+        <release version="1.1.2" date="2014-07-01"
+        description="Dependencies update">
+        <action dev="joseph" type="add">
+            Upgraded maven-jaxb2-plugin to 0.9.0 version.
+        </action>
+    </release>
     <release version="1.1.0" date="2014-01-27" description="Equals and hashCode">
         <action dev="rafalcan" type="add">
             Added methods equals and hashCode to the auto-generated (JAXB) code
