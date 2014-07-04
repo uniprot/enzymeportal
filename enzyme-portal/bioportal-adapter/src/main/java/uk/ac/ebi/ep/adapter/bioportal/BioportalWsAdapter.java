@@ -13,16 +13,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import uk.ac.ebi.biobabel.util.xml.XPathSAXHandler;
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Entity;
+
+//NOTE : This implementation nolonger work as BioPortal does not return any data for
+//majority of the ID's (EFO,OMIM,MESH).
+//we need to try the json impl as xml seems to be failing.
 
 /**
  * Implementation of {@link IBioportalAdapter} using the
@@ -166,14 +168,14 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 			        "application/rdf+xml,application/xml");
 			is = urlCon.getInputStream();
 			InputSource inputSource = new InputSource(is);
-			XPathSAXHandler handler = new XPathSAXHandler(
+  			XPathSAXHandler handler = new XPathSAXHandler(
                     SEARCH_CONCEPT_ID,
 					SEARCH_CONCEPT_PREFNAME,
 					SEARCH_CONCEPT_URL,
 					SEARCH_CONCEPT_ONTOLOGY);
 			xr.setContentHandler(handler);
 			xr.parse(inputSource);
-			
+			                       
 			Collection<String> conceptIds = handler.getResults()
                     .get(SEARCH_CONCEPT_ID);
 			if (conceptIds != null){
@@ -181,14 +183,46 @@ public class BioportalWsAdapter implements IBioportalAdapter {
                 // handler are Lists, so we can rely on their iterators:
                 final Iterator<String> preferredNames = handler.getResults()
                         .get(SEARCH_CONCEPT_PREFNAME).iterator();
-                final Iterator<String> urls = handler.getResults()
+                         
+                
+                 Collection<String> urlc = handler.getResults()
+                        .get(SEARCH_CONCEPT_URL);
+                  Iterator<String> urls = null;
+                if(urlc != null){
+                    urls = handler.getResults()
                         .get(SEARCH_CONCEPT_URL).iterator();
-                final Iterator<String> ontoUrls = handler.getResults()
+                }
+                           
+                            
+                  Collection<String>  ontoUrlc = handler.getResults()
+                        .get(SEARCH_CONCEPT_ONTOLOGY);
+                  Iterator<String> ontoUrls = null;
+                 if(ontoUrlc != null){
+                    ontoUrls =  handler.getResults()
                         .get(SEARCH_CONCEPT_ONTOLOGY).iterator();
+                 }
+               // final Iterator<String> ontoUrls = handler.getResults()
+                        //.get(SEARCH_CONCEPT_ONTOLOGY).iterator();
+                  
+                  
                 for (String conceptId : conceptIds) {
                     String preferredName = preferredNames.next();
-                    String url = urls.next();
-                    String ontoUrl = ontoUrls.next(); // a complete URI
+                  
+                    String url= "#";
+                    if(urls == null && conceptId.contains("MSH")){
+                       url = "http://purl.bioontology.org/ontology/MESH/"+ query;
+                    } 
+                    if(urls != null){
+                        url = urls.next();
+                    }
+                    //String url = urls.next();
+                    //String ontoUrl = ontoUrls.next(); // a complete URI
+                    String ontoUrl="#";
+                    if(ontoUrls != null){
+                       ontoUrl = ontoUrls.next(); 
+                    }
+                        
+                    
                     // Workaround for obsolete EFO entries:
                     if (conceptId.contains("rdfns#pat_id_")) {
                         continue;
@@ -287,11 +321,15 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 
     public Disease getDisease(String nameOrId) throws BioportalAdapterException{
         Entity disease = null;
+      
         Set<Entity> diseases = searchConcept(
                 BioportalOntology.FOR_DISEASES, nameOrId, Disease.class, true);
+       
         if (diseases != null){
             String others = null;
+          
             for (Entity e : diseases) {
+            
                 if (disease == null) disease = e;
                 else others += " ["+e.getId()+"]";
             }
