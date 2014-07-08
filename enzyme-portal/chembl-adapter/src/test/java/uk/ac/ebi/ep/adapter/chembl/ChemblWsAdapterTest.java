@@ -9,7 +9,8 @@ import org.junit.Test;
 /**
  * @author rafa
  * @since 1.0.0
- */@Ignore
+ */
+@Ignore
 public class ChemblWsAdapterTest {
 
     private final IChemblAdapter adapter = new ChemblWsAdapter();
