@@ -115,7 +115,16 @@
                 </li>
             </ul>
         </dd>
-        <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in UniProt</a></p>
+        <c:choose>
+            <c:when test="${not empty sequence.sequenceurl}">
+                 <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in UniProt</a></p>
+            </c:when>
+            <c:otherwise>
+           <p><a target="_blank" href="http://www.uniprot.org/uniprot/${accession}#section_seq" > View Sequence in UniProt</a></p>       
+            </c:otherwise>
+        </c:choose>
+       
+      
     </dl>
     <c:set var="provenance" value="${enzyme.provenance}"/>
     <div class="provenance">
