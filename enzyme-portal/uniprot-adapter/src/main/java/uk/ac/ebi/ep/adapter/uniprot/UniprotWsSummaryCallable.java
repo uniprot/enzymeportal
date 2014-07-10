@@ -17,18 +17,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.entry.Field;
-import uk.ac.ebi.ep.enzyme.model.*;
+import uk.ac.ebi.ep.enzyme.model.ChemicalEntity;
+import uk.ac.ebi.ep.enzyme.model.CountableMolecules;
+import uk.ac.ebi.ep.enzyme.model.Disease;
+import uk.ac.ebi.ep.enzyme.model.Enzyme;
+import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.enzyme.model.Molecule;
+import uk.ac.ebi.ep.enzyme.model.Pathway;
+import uk.ac.ebi.ep.enzyme.model.ReactionPathway;
+import uk.ac.ebi.ep.enzyme.model.Sequence;
 import uk.ac.ebi.ep.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.search.model.Species;
 import uk.ac.ebi.ep.util.EPUtil;
 
 /**
- * Callable to get enzyme summaries from UniProt web services given an
- * accession number or entry name (ID).
+ * Callable to get enzyme summaries from UniProt web services given an accession
+ * number or entry name (ID).
+ *
  * @author rafa
  *
  */
@@ -36,12 +44,18 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
 
     private static final Logger LOGGER = Logger.getLogger(UniprotWsSummaryCallable.class);
 
-    /** Type of identifier used to retrieve the summary. */
+    /**
+     * Type of identifier used to retrieve the summary.
+     */
     protected enum IdType {
 
-        /** Accession number. */
+        /**
+         * Accession number.
+         */
         ACCESSION,
-        /** Entry name (ID) */
+        /**
+         * Entry name (ID)
+         */
         ENTRY_NAME
     }
     private String accOrId;
@@ -52,11 +66,12 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
 
     /**
      * Constructor.
+     *
      * @param accOrId a UniProt accession number or ID.
      * @param idType the type of identifier (accession or entry name)
      * @param field the field we are interested in.
      * @param defaultSpecies the species to show by default (only used when the
-     * 		web service returns more than one entries).
+     * web service returns more than one entries).
      * @param config Configuration for UniProt.
      */
     public UniprotWsSummaryCallable(String accOrId, IdType idType, Field field,
@@ -68,6 +83,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         this.config = config;
     }
 
+    @Override
     public EnzymeSummary call() throws Exception {
         return getEnzymeSummary();
     }
@@ -94,21 +110,23 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         String[] colValues = null;
         for (int i = 0; i < enzymeInfo.size(); i++) {
             colValues = enzymeInfo.get(i).split("\t", -1);
-
+            
             // some entries don't return a species, ex. Q5D707
             if (colValues[4].length() == 0) {
                 continue;
             }
             //EnzymeAccessionWrapper enzymeAccessionWrapper = new EnzymeAccessionWrapper(new EnzymeAccession());
-           // EnzymeAccession ea = enzymeAccessionWrapper.getAccession(); 
-             EnzymeAccession ea = new EnzymeAccession();
+            // EnzymeAccession ea = enzymeAccessionWrapper.getAccession(); 
+            EnzymeAccession ea = new EnzymeAccession();
             // organism is always [4], accession is [0], see getColumns()
             ea.setSpecies(UniprotWsAdapter.parseSpecies(colValues[4]));
             ea.getUniprotaccessions().add(colValues[0]);
             List<String> pdbCodes = null;
             if (field.equals(Field.brief) || field.equals(Field.enzyme)) {
                 // We already have PDB codes in enzymeInfo as [6], see getColumns()
-                pdbCodes = parsePdbCodes(colValues[6], colValues[7]);
+                if (colValues.length > 6) {
+                    pdbCodes = parsePdbCodes(colValues[6], colValues[7]);
+                }
             }
             ea.setPdbeaccession(pdbCodes);
 
@@ -121,7 +139,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
                 bestSpecies = i;
             } else {
                 relSpecies.add(ea);
-            }
+            }            
         }
 
         species = relSpecies.get(0).getSpecies();
@@ -132,25 +150,35 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         id = colValues[1];
         nameSynonymsString = colValues[2];
         ecsString = colValues[3];
+  
+      
         switch (field) {
             case enzyme:
+                if(colValues.length > 6){
                 diseasesString = colValues[8];
                 seqLength = colValues[9];
+                }
             case brief:
                 functionString = colValues[5];
+                if(colValues.length > 6){
                 pdbeAccessions = colValues[6];
                 pdbMethods = colValues[7];
+                }
                 break;
             case proteinStructure:
                 pdbeAccessions = colValues[5];
+                if(colValues.length > 6){
                 pdbMethods = colValues[6];
+                }
                 break;
             case reactionsPathways:
                 rpString = colValues[5];
                 break;
             case molecules:
                 drugsString = colValues[5];
+                if(colValues.length > 6){
                 regulString = colValues[6];
+                }
                 break;
             case diseaseDrugs:
                 // TODO
@@ -162,11 +190,25 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
                 // TODO
                 break;
         }
+        
         if (idType.equals(IdType.ACCESSION)) {
+         
             // We'll have to make one more request to get other species:
             String uniprotIdPrefix = id.split(IUniprotAdapter.ID_SPLIT_SYMBOL)[0];
             String defSp = species.getScientificname();
+   
             relSpecies = getRelatedSpecies(uniprotIdPrefix, defSp);
+        }
+           
+        //should be deleted later. the implementation is for accession only
+        if (idType.equals(IdType.ENTRY_NAME)) {
+            // We'll have to make one more request to get other species:
+            String uniprotIdPrefix = id.split(IUniprotAdapter.ID_SPLIT_SYMBOL)[0];
+            String defSp = species.getScientificname();
+        
+        
+            relSpecies = getRelatedSpecies(uniprotIdPrefix, defSp);
+           
         }
 
         return buildSummary(accession, id, nameSynonymsString, ecsString,
@@ -177,6 +219,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
     /**
      * Selects the columns to retrieve from the web service according to the
      * field.
+     *
      * @return
      */
     private String getColumns() {
@@ -211,8 +254,9 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
     }
 
     /**
-     * Builds an EnzymeModel and populates it with basic information (enough
-     * for an EnzymeSummary).
+     * Builds an EnzymeModel and populates it with basic information (enough for
+     * an EnzymeSummary).
+     *
      * @param accession
      * @param id
      * @param nameSynonymsString
@@ -282,11 +326,12 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
 
     /**
      * Retrieves the protein recommended name as well as any synonyms.
+     *
      * @param namesColumn the column returned by the web service
      * @return a list of names, the first one of them being the recommended one.
      */
     private List<String> parseNameSynonyms(String namesColumn) {
-        List<String> nameSynonyms = new ArrayList<String>();
+        List<String> nameSynonyms = new ArrayList<>();
         final int sepIndex = namesColumn.indexOf(" (");
         if (sepIndex == -1) {
             // no synonyms, just recommended name:
@@ -296,9 +341,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
             nameSynonyms.add(namesColumn.substring(0, sepIndex));
             // take out starting and ending parentheses
             String[] synonyms = namesColumn.substring(sepIndex + 2, namesColumn.length() - 1).split("\\) \\(");
-            for (int i = 0; i < synonyms.length; i++) {
-                nameSynonyms.add(synonyms[i]);
-            }
+            nameSynonyms.addAll(Arrays.asList(synonyms));
         }
         return nameSynonyms;
     }
@@ -311,36 +354,37 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
      * Parses the strings returned from the UniProt web service for the PDB
      * codes, discarding any theoretical models for which there is no image
      * available from PDBe website.
+     *
      * @param pdbAccessions the PDB accessions. <i>Note that we are assuming
-     * 		that any theoretical models come always first.</i>
-     * 	    FIXME this is not always true!
+     * that any theoretical models come always first.</i>
+     * FIXME this is not always true!
      * @param pdbMethods the methods used to resolve the structures.
      * @return a list of Strings (non-theoretical PDB codes), or
-     * 		<code>null</code> if none is returned by the web service or if all
-     * 		of them are theoretical models.
+     * <code>null</code> if none is returned by the web service or if all of
+     * them are theoretical models.
      */
     protected List<String> parsePdbCodes(String pdbAccessions, String pdbMethods) {
-    	List<String> result = null;
-    	if (pdbAccessions != null && pdbAccessions.length() > 0
-    			&& pdbMethods != null){
-        	Pattern p = Pattern.compile(".*Model \\((\\d+)\\).*");
-        	Matcher m = p.matcher(pdbMethods);
-        	int theorNum = 0;
-        	if (m.matches()){
-        		theorNum = Integer.parseInt(m.group(1));
-        	}
-            final String[] split = pdbAccessions.toLowerCase().split(";");
-            if (split.length > theorNum){
-            	// Get rid of the theoretical models, which come first:
-            	result = Arrays.asList(split).subList(theorNum, split.length);
+        List<String> result = null;
+        if (pdbAccessions != null && pdbAccessions.length() > 0
+                && pdbMethods != null) {
+            Pattern p = Pattern.compile(".*Model \\((\\d+)\\).*");
+            Matcher m = p.matcher(pdbMethods);
+            int theorNum = 0;
+            if (m.matches()) {
+                theorNum = Integer.parseInt(m.group(1));
             }
-    	}
-    	return result;
+            final String[] split = pdbAccessions.toLowerCase().split(";");
+            if (split.length > theorNum) {
+                // Get rid of the theoretical models, which come first:
+                result = Arrays.asList(split).subList(theorNum, split.length);
+            }
+        }
+        return result;
     }
 
     private List<Disease> parseDiseases(String diseaseColumn) {
         String ds = diseaseColumn.replaceAll("^DISEASE: ", "");
-        List<Disease> diseases = new ArrayList<Disease>();
+        List<Disease> diseases = new ArrayList<>();
         for (String s : ds.split("; DISEASE: ")) {
             Disease disease = new Disease();
             disease.setDescription(s);
@@ -352,9 +396,10 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
 
     /**
      * Parses Reactome IDs.
+     *
      * @param reactomeIds Reactome IDs returned by the UniProt web service.
-     * @return a ReactionPathway object containing one or more Pathways,
-     * 		or <code>null</code> if none found.
+     * @return a ReactionPathway object containing one or more Pathways, or
+     * <code>null</code> if none found.
      */
     private ReactionPathway parseReactionPathways(String reactomeIds) {
         ReactionPathway reactionPathway = null;
@@ -373,6 +418,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
     /**
      * Parses chemical entities from the fields (columns) returned by the web
      * service.
+     *
      * @param drugsCol drugs column
      * @param regulCol enzyme regulation comments
      * @return
@@ -384,10 +430,10 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
                 .withInhibitors(new CountableMolecules());
         if (drugsCol.length() > 0) {
             String[] drugbankIds = drugsCol.split(";");
-            List<Molecule> drugs = new ArrayList<Molecule>();
-            for (int i = 0; i < drugbankIds.length; i++) {
+            List<Molecule> drugs = new ArrayList<>();
+            for (String drugbankId : drugbankIds) {
                 Molecule drug = new Molecule();
-                drug.setId(drugbankIds[i]);
+                drug.setId(drugbankId);
                 // TODO molecule.setName(name);
                 drugs.add(drug);
             }
@@ -404,12 +450,13 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
 
     /**
      * Retrieves data from UniProt for a given accession.
+     *
      * @param accOrId the query to UniProt (an accession number or ID).
-     * @param idType 
+     * @param idType
      * @param columns columns to retrieve.
      * @return a list of tab-delimited Strings containing the requested fields
-     * 		in the same order.
-     * @throws UniprotWsException if some error happens 
+     * in the same order.
+     * @throws UniprotWsException if some error happens
      */
     private List<String> getEnzymeInfo(String accOrId, IdType idType, String columns)
             throws UniprotWsException {
@@ -426,7 +473,7 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         query += accOrId;
         String url = MessageFormat.format(config.getWsUrl(),
                 query, columns);
-//		LOGGER.debug(url);
+		//LOGGER.debug(url);
         BufferedReader br = null;
         InputStreamReader isr = null;
         InputStream is = null;
@@ -483,12 +530,13 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
     }
 
     /**
-     * Parses multiple lines returned by the web service in tab format,
-     * getting the whole list of species with the default one (if found)
-     * at the top of it.
+     * Parses multiple lines returned by the web service in tab format, getting
+     * the whole list of species with the default one (if found) at the top of
+     * it.
+     *
      * @param enzymeInfo lines returned by the web service.
      * @return a list of EnzymeAccession objects corresponding to all known
-     * 		species, with the default one (if found) at the top.
+     * species, with the default one (if found) at the top.
      */
     private List<EnzymeAccession> parseRelatedSpecies(List<String> enzymeInfo) {
         List<EnzymeAccession> enzymeAccessions = null;
@@ -551,9 +599,9 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
             }
             ea.getUniprotaccessions().add(split[0]);
             ea.setSpecies(UniprotWsAdapter.parseSpecies(split[1]));
-            if (split[2].length() > 0) {
+                    if (split[2].length() > 0) {
                 ea.setPdbeaccession(parsePdbCodes(split[2], split[3]));
-            }
+              }
             if (enzymeAccessions == null) {
                 enzymeAccessions = new ArrayList<EnzymeAccession>();
             }
