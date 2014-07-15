@@ -73,7 +73,8 @@ function renderItem(ul, item, baseURL) {
 function updateSummary(options) {
 	opts = {}
 	opts.searchboxId = options.searchboxId || "local-searchbox";
-	opts.searchBaseURL = options.searchBaseURL || "http://frontier.ebi.ac.uk/ebisearch/";
+//	opts.searchBaseURL = options.searchBaseURL || "http://frontier.ebi.ac.uk/ebisearch/";
+opts.searchBaseURL = options.searchBaseURL || "http://www.ebi.ac.uk/ebisearch/";
 	opts.globalSearchBoxId = options.globalSearchBoxId || "ebi_search_results";
 	opts.loadingLabel = options.loadingLabel || "Loading other results";
 	opts.loadingLabelClass = options.loadingLabelClass || "loading";
