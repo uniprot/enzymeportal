@@ -12,14 +12,14 @@ public interface IBioportalAdapter {
 	/**
 	 * Retrieves a disease from EFO.
 	 * @param name a disease name
+     * @param diseaseId id of the ontology
 	 * @return a Disease object whose name in EFO matches exactly the
 	 * 		parameter, or <code>null</code> if not found.
 	 * @throws BioportalAdapterException
-     * @deprecated use the generic method {@link #getDisease(java.lang.String)}
-     *      instead, as this one can search also by ID (misleading method name).
-	 */
-    @Deprecated
-	public Disease getDiseaseByName(String name)
+         * 
+         */ 
+
+	public Disease getDiseaseByName(String name, String diseaseId)
     throws BioportalAdapterException;
 
     /**

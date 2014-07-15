@@ -149,7 +149,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
      *      if none found.
 	 * @throws BioportalAdapterException
 	 */
-	public Set<Entity> searchConcept(BioportalOntology[] ontologies,
+	protected Set<Entity> searchConcept(BioportalOntology[] ontologies,
             String query, Class<? extends Entity> clazz, boolean complete)
 	throws BioportalAdapterException{
 		Set<Entity> entities = null;
@@ -162,6 +162,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
                     getOntologiesNames(ontologies),
                     URLEncoder.encode(query, "UTF-8"), config.getApiKey());
 			LOGGER.debug("[BIOPORTAL URL] " + urlString);
+                     
 			URLConnection urlCon = new URL(urlString).openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
 			urlCon.setRequestProperty("Accept",
@@ -175,59 +176,30 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 					SEARCH_CONCEPT_ONTOLOGY);
 			xr.setContentHandler(handler);
 			xr.parse(inputSource);
-			                       
-			Collection<String> conceptIds = handler.getResults()
+                      
+              Collection<String> conceptIds = handler.getResults()
                     .get(SEARCH_CONCEPT_ID);
+                  
 			if (conceptIds != null){
                 // the internal implementation of these collections in the
                 // handler are Lists, so we can rely on their iterators:
                 final Iterator<String> preferredNames = handler.getResults()
                         .get(SEARCH_CONCEPT_PREFNAME).iterator();
-                         
-                
-                 Collection<String> urlc = handler.getResults()
-                        .get(SEARCH_CONCEPT_URL);
-                  Iterator<String> urls = null;
-                if(urlc != null){
-                    urls = handler.getResults()
+               final Iterator<String> urls = handler.getResults()
                         .get(SEARCH_CONCEPT_URL).iterator();
-                }
+                          
+                final Iterator<String> ontoUrls = handler.getResults()
+                       .get(SEARCH_CONCEPT_ONTOLOGY).iterator();
                            
-                            
-                  Collection<String>  ontoUrlc = handler.getResults()
-                        .get(SEARCH_CONCEPT_ONTOLOGY);
-                  Iterator<String> ontoUrls = null;
-                 if(ontoUrlc != null){
-                    ontoUrls =  handler.getResults()
-                        .get(SEARCH_CONCEPT_ONTOLOGY).iterator();
-                 }
-               // final Iterator<String> ontoUrls = handler.getResults()
-                        //.get(SEARCH_CONCEPT_ONTOLOGY).iterator();
-                  
-                  
                 for (String conceptId : conceptIds) {
                     String preferredName = preferredNames.next();
-                  
-                    String url= "#";
-                    if(urls == null && conceptId.contains("MSH")){
-                       url = "http://purl.bioontology.org/ontology/MESH/"+ query;
-                    } 
-                    if(urls != null){
-                        url = urls.next();
-                    }
-                    //String url = urls.next();
-                    //String ontoUrl = ontoUrls.next(); // a complete URI
-                    String ontoUrl="#";
-                    if(ontoUrls != null){
-                       ontoUrl = ontoUrls.next(); 
-                    }
-                        
-                    
+                    String url = urls.next();
+                    String ontoUrl = ontoUrls.next(); // a complete URI
                     // Workaround for obsolete EFO entries:
                     if (conceptId.contains("rdfns#pat_id_")) {
                         continue;
                     }
-                    Entity entity = clazz.newInstance();
+                                     Entity entity = clazz.newInstance();
                     // Remove the ontology prefix:
                     entity.setId(conceptId.substring(
                             conceptId.lastIndexOf('/') + 1));
@@ -280,11 +252,12 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 	throws IOException, SAXException {
 		InputStream is = null;
 		try {
+                   
 			URL url = new URL(MessageFormat.format(config.getGetUrl(),
 					ontologyName, URLEncoder.encode(conceptId, "UTF-8"),
 					config.getApiKey()));
 			LOGGER.debug("[BIOPORTAL URL] " + url);
-			URLConnection urlCon = url.openConnection();
+                    			URLConnection urlCon = url.openConnection();
 			urlCon.setReadTimeout(config.getTimeout());
             urlCon.setRequestProperty("Accept",
                     "application/rdf+xml,application/xml");
@@ -313,7 +286,7 @@ public class BioportalWsAdapter implements IBioportalAdapter {
 		}
 	}
         
-	public Disease getDiseaseByName(String name)
+	public Disease getDiseaseByName(String name, String diseaseId)
 	throws BioportalAdapterException {
 		return (Disease) searchConcept(BioportalOntology.EFO, name,
 				Disease.class, true);
@@ -324,12 +297,12 @@ public class BioportalWsAdapter implements IBioportalAdapter {
       
         Set<Entity> diseases = searchConcept(
                 BioportalOntology.FOR_DISEASES, nameOrId, Disease.class, true);
-       
+        System.out.println("disease from bioportal "+ diseases);
         if (diseases != null){
             String others = null;
           
             for (Entity e : diseases) {
-            
+                System.out.println("disease found "+ e.getName());
                 if (disease == null) disease = e;
                 else others += " ["+e.getId()+"]";
             }
