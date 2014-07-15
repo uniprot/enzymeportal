@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.xml_cml.schema.cml2.react.Reaction;
+import uk.ac.ebi.ep.adapter.bioportal.BioPortalService;
 import uk.ac.ebi.ep.adapter.bioportal.BioportalAdapterException;
-import uk.ac.ebi.ep.adapter.bioportal.BioportalWsAdapter;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.adapter.chebi.ChebiFetchDataException;
@@ -66,14 +66,16 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     protected IDASFeaturesAdapter pdbeAdapter;
     protected ILiteratureAdapter litAdapter;
     protected BiomartAdapter biomartAdapter;
-    private IBioportalAdapter bioportalAdapter;
+    private static IBioportalAdapter bioportalAdapter;
 
 //******************************** CONSTRUCTORS ******************************//
     public EnzymeRetriever(Config searchConfig) {
         super(searchConfig);
         rheaAdapter = new RheaWsAdapter();
         biomartAdapter = new BiomartAdapter();
-        bioportalAdapter = new BioportalWsAdapter();
+
+        //bioportalAdapter = new BioportalWsAdapter(config);
+        bioportalAdapter = new BioPortalService();
         try {
             pdbeAdapter = new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
         } catch (Exception e) {
@@ -84,9 +86,6 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     public IBioportalAdapter getBioportalAdapter() {
         return bioportalAdapter;
     }
-
-
-    
 
     /**
      * Lazily constructs a new adapter if needed.
@@ -219,8 +218,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 //            }
             try {
                 LOGGER.debug(" -RP- before DataTypeConverter.getReactionXrefs");
-                List<String> reactomeReactionIds =
-                        DataTypeConverter.getReactionXrefs(enzymeModel);
+                List<String> reactomeReactionIds
+                        = DataTypeConverter.getReactionXrefs(enzymeModel);
                 if (reactomeReactionIds.size() > 0) {
                     LOGGER.debug(" -RP- before getReactionPathwaysByRheaResults");
                     getReactionPathwaysByRheaResults(enzymeModel);
@@ -234,8 +233,8 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                                 "Failed to get pathway ids from Biomart for uniprot accession " + uniprotAccession, ex);
                     }
                     LOGGER.debug(" -RP- before getPathwayDescFromReactome");
-                    List<Pathway> pathways =
-                            getPathwayDescFromReactome(pathwayReactomeIds);
+                    List<Pathway> pathways
+                            = getPathwayDescFromReactome(pathwayReactomeIds);
                     //To use Rhea reaction without a reference to a Reactome reaction
                     //all pathways found are assigned to the first Rhea reaction
                     reactionPathways.get(0).setPathways(pathways);
@@ -402,8 +401,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
             throws EnzymeRetrieverException {
         EnzymeModel enzymeModel = null;
         try {
-            enzymeModel = (EnzymeModel)
-                    uniprotAdapter.getEnzymeSummary(uniprotAccession);
+            enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
             addMolecules(enzymeModel);
         } catch (UniprotWsException e) {
             throw new EnzymeRetrieverException(
@@ -414,36 +412,39 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
     /**
      * Adds any available data about small molecules to the model.
+     *
      * @param enzymeModel the model
      * @throws EnzymeRetrieverException in case of problem retrieving detailed
-     *      info about small molecules from ChEBI.
+     * info about small molecules from ChEBI.
      * @since 1.1.0
      */
     protected void addMolecules(EnzymeModel enzymeModel)
-    throws EnzymeRetrieverException {
+            throws EnzymeRetrieverException {
         try {
             Collection<Compound> compounds = megaMapperConnection
                     .getMegaMapper().getCompounds(enzymeModel.getUniprotid());
             CountableMolecules activators = null, inhibitors = null,
                     cofactors = null, drugs = null, bioactive = null;
-            if (compounds != null) for (Compound compound : compounds) {
-                // Classify compounds from the mega-map:
-                switch(compound.getRole()){
-                    case ACTIVATOR:
-                        activators = addMoleculeToGroup(activators, compound);
-                        break;
-                    case INHIBITOR:
-                        inhibitors = addMoleculeToGroup(inhibitors, compound);
-                        break;
-                    case COFACTOR:
-                        cofactors = addMoleculeToGroup(cofactors, compound);
-                        break;
-                    case DRUG:
-                        drugs = addMoleculeToGroup(drugs, compound);
-                        break;
-                    case BIOACTIVE:
-                        bioactive = addMoleculeToGroup(bioactive, compound);
-                        break;
+            if (compounds != null) {
+                for (Compound compound : compounds) {
+                    // Classify compounds from the mega-map:
+                    switch (compound.getRole()) {
+                        case ACTIVATOR:
+                            activators = addMoleculeToGroup(activators, compound);
+                            break;
+                        case INHIBITOR:
+                            inhibitors = addMoleculeToGroup(inhibitors, compound);
+                            break;
+                        case COFACTOR:
+                            cofactors = addMoleculeToGroup(cofactors, compound);
+                            break;
+                        case DRUG:
+                            drugs = addMoleculeToGroup(drugs, compound);
+                            break;
+                        case BIOACTIVE:
+                            bioactive = addMoleculeToGroup(bioactive, compound);
+                            break;
+                    }
                 }
             }
             enzymeModel.setMolecule(new ChemicalEntity()
@@ -481,6 +482,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * <br>
      * It will be modified by adding the passed compound and increasing the
      * total count.
+     *
      * @param group a molecules group.
      * @param comp a compound.
      * @return the modified (possibly newly created) group of molecules.
@@ -505,8 +507,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         LOGGER.debug(" -STR- before getEnzymeSummary");
         EnzymeModel enzymeModel = null;
         try {
-            enzymeModel = (EnzymeModel)
-                    uniprotAdapter.getEnzymeSummary(uniprotAccession);
+            enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
             addProteinStructures(enzymeModel);
         } catch (UniprotWsException e) {
             throw new EnzymeRetrieverException(
@@ -521,6 +522,7 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
      * using the primary UniProt accession in order to get PDB identifiers and
      * names. If none is found, any PDB IDs already existing in the model (from
      * UniProt) are kept.
+     *
      * @param enzymeModel the model to add protein structures to.
      * @since 1.1.0
      */
@@ -560,10 +562,9 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
     }
 
     public EnzymeModel getDiseases(String uniprotAccession)
-    throws EnzymeRetrieverException {
+            throws EnzymeRetrieverException {
         try {
-            EnzymeModel enzymeModel = (EnzymeModel)
-                    uniprotAdapter.getEnzymeSummary(uniprotAccession);
+            EnzymeModel enzymeModel = (EnzymeModel) uniprotAdapter.getEnzymeSummary(uniprotAccession);
             addDiseases(enzymeModel);
             return enzymeModel;
         } catch (UniprotWsException ex) {
@@ -571,9 +572,10 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                     "Error while getting EnzymeSummary from Uniprot Adapter", ex);
         }
     }
-        
+
     /**
      * Adds any related diseases to the enzyme model.
+     *
      * @param enzymeModel the model without disease info.
      * @since 1.1.0
      */
@@ -582,11 +584,21 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
         Set<DiseaseComparator> uniqueDisease = new TreeSet<DiseaseComparator>();
         Set<uk.ac.ebi.ep.enzyme.model.Disease> diseaseFromMegaMapper = megaMapperConnection.getMegaMapper()
                 .getDiseaseByAccession(MmDatabase.UniProt, enzymeModel.getUniprotaccessions().get(0), MmDatabase.EFO, MmDatabase.MeSH, MmDatabase.OMIM);
-        if(diseaseFromMegaMapper != null){
-        for (Disease entry : diseaseFromMegaMapper) {
-          
+
+        if (diseaseFromMegaMapper != null) {
+            for (Disease entry : diseaseFromMegaMapper) {
+
                 try {
-                    Disease disease_from_bioportal = bioportalAdapter.getDisease(entry.getId());
+                    Disease disease_from_bioportal = null;
+                    String entryID = entry.getId();
+                    if (entry.getId().startsWith("EFO") && !entry.getName().contains(" ")) {
+                        entryID = entry.getName();
+                        disease_from_bioportal = bioportalAdapter.getDiseaseByName(entry.getName(), entryID);
+                    } else {
+
+                        disease_from_bioportal = bioportalAdapter.getDisease(entryID);
+                    }
+                   
                     if (disease_from_bioportal != null) {
                         for (Disease d : enzymeModel.getDisease()) {
                             // FIXME adding EVERY disease description
@@ -596,21 +608,21 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
                             DiseaseComparator dc = new DiseaseComparator(disease_from_bioportal);
                             uniqueDisease.add(dc);
                         }
-                    }else{
-                        
-                       for (Disease d : enzymeModel.getDisease()) {
+                    } else {
+
+                        for (Disease d : enzymeModel.getDisease()) {
                             entry.getEvidence().add(d.getDescription());
                             DiseaseComparator dc = new DiseaseComparator(entry);
                             uniqueDisease.add(dc);
                         }
-                        
+
                     }
                 } catch (BioportalAdapterException ex) {
                     LOGGER.error("Error while getting disease using BioPortal adapter", ex);
                 }
-            
+
+            }
         }
-    }
         for (DiseaseComparator disease : uniqueDisease) {
             diseaseList.add(disease.getDisease());
         }
@@ -627,17 +639,18 @@ public class EnzymeRetriever extends EnzymeFinder implements IEnzymeRetriever {
 
         return enzymeModel;
     }
-    
+
     /**
      * Retrieves the whole enzyme model for comparisons.
+     *
      * @param acc the UniProt accession of the enzyme.
      * @return a complete model.
      * @throws EnzymeRetrieverException in case of problem retrieving the model
-     *      from UniProt, or small molecules from ChEBI.
+     * from UniProt, or small molecules from ChEBI.
      * @since 1.1.0
      */
     public EnzymeModel getWholeModel(String acc)
-    throws EnzymeRetrieverException {
+            throws EnzymeRetrieverException {
         // This model includes summary, reactions and pathways:
         EnzymeModel model = getReactionsPathways(acc);
         // Add the missing bits:
