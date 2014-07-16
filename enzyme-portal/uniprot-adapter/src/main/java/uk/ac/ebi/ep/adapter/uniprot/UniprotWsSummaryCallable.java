@@ -201,15 +201,15 @@ public class UniprotWsSummaryCallable extends AbstractUniprotCallable {
         }
            
         //should be deleted later. the implementation is for accession only
-        if (idType.equals(IdType.ENTRY_NAME)) {
-            // We'll have to make one more request to get other species:
-            String uniprotIdPrefix = id.split(IUniprotAdapter.ID_SPLIT_SYMBOL)[0];
-            String defSp = species.getScientificname();
-        
-        
-            relSpecies = getRelatedSpecies(uniprotIdPrefix, defSp);
-           
-        }
+//        if (idType.equals(IdType.ENTRY_NAME)) {
+//            // We'll have to make one more request to get other species:
+//            String uniprotIdPrefix = id.split(IUniprotAdapter.ID_SPLIT_SYMBOL)[0];
+//            String defSp = species.getScientificname();
+//        
+//        
+//            relSpecies = getRelatedSpecies(uniprotIdPrefix, defSp);
+//           
+//        }
 
         return buildSummary(accession, id, nameSynonymsString, ecsString,
                 species, diseasesString, seqLength, functionString,
