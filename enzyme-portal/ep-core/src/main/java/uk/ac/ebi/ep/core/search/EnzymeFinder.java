@@ -128,6 +128,7 @@ public class EnzymeFinder implements IEnzymeFinder {
         return uniprotAdapter;
     }
 
+    @Override
     public SearchResults getEnzymes(SearchParams searchParams)
             throws EnzymeFinderException {
 
@@ -712,6 +713,7 @@ public class EnzymeFinder implements IEnzymeFinder {
             searchParams.getCompounds().clear();
         }
     }
+    
 //this is the part that takes ages.....
     public List<EnzymeSummary> getEnzymesFromUniprotAPI(
             List<String> resultSubList1, List<String> paramList)
