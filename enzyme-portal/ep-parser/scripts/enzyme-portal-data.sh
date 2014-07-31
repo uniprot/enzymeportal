@@ -40,7 +40,7 @@ DB_CONFIG="$1"
 
 #first truncate the Schema and populate fresh data to the Database
 echo "[INFO] Request to Truncate and populate the Enzyme Portal database - $(date)"
-##. $MM_SCRIPTS/enzyme_portal_uniprot.sh -r $DB_CONFIG -p ALL 
+. $MM_SCRIPTS/enzyme_portal_uniprot.sh -r $DB_CONFIG -p ALL 
 echo "[INFO] Enzyme Portal database (part-1) has been populate - $(date)"
 
 echo "[INFO] About to start populating Enzyme Portal database (part-2) - $(date)"
@@ -50,10 +50,10 @@ echo "[INFO] Request to parse UNIMED File - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] The file to be parsed =" $UNIMED
 echo "[INFO] *******************************************************************"
-#WD=$(pwd)
-#cd $(dirname $0)/..
-#mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.DiseaseFileParser" -Dexec.args="$DB_CONFIG $UNIMED"
-#cd $WD
+WD=$(pwd)
+cd $(dirname $0)/..
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.DiseaseFileParser" -Dexec.args="$DB_CONFIG $UNIMED"
+cd $WD
 echo "[INFO] Finished parsing unimed file and updating Enzyme Portal database with Diseases Data  - $(date)"
 
 

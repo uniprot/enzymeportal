@@ -18,25 +18,13 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalPathwaysParser;
 @Configuration
 public class GlobalDataConfig {
 
-//    @Bean
-//    public DiseaseService diseaseService() {
-//        return new DiseaseService();
-//    }
 
     @Bean
     public DiseaseParser diseaseParser() {
         return new DiseaseParser();
     }
 
-//    @Bean
-//    public BioPortalService bioPortalService() {
-//        return new BioPortalService();
-//    }
 
-//    @Bean
-//    public UniprotEntryService uniprotEntryService() {
-//        return new UniprotEntryService();
-//    }
 
     @Bean
     public EnzymePortalCompoundParser enzymePortalCompoundParser() {
