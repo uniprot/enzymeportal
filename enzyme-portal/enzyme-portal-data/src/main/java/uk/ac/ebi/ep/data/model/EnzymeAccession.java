@@ -9,7 +9,9 @@ package uk.ac.ebi.ep.data.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
@@ -26,8 +28,8 @@ public class EnzymeAccession extends EnzymePortalSummary {
    
     protected Species species;
     protected List<String> pdbeaccession;
-    protected List<EnzymePortalCompound> compounds;
-    protected List<EnzymePortalDisease> diseases;
+    protected Set<EnzymePortalCompound> compounds;
+    protected Set<EnzymePortalDisease> diseases;
   
     protected Object scoring;
 
@@ -136,9 +138,16 @@ public class EnzymeAccession extends EnzymePortalSummary {
      * 
      * 
      */
-    public List<EnzymePortalCompound> getCompounds() {
+//    public List<EnzymePortalCompound> getCompounds() {
+//        if (compounds == null) {
+//            compounds = new ArrayList<EnzymePortalCompound>();
+//        }
+//        return this.compounds;
+//    }
+    
+        public Set<EnzymePortalCompound> getCompounds() {
         if (compounds == null) {
-            compounds = new ArrayList<EnzymePortalCompound>();
+            compounds = new HashSet<>();
         }
         return this.compounds;
     }
@@ -165,9 +174,16 @@ public class EnzymeAccession extends EnzymePortalSummary {
      * 
      * 
      */
-    public List<EnzymePortalDisease> getDiseases() {
+//    public List<EnzymePortalDisease> getDiseases() {
+//        if (diseases == null) {
+//            diseases = new ArrayList<EnzymePortalDisease>();
+//        }
+//        return this.diseases;
+//    }
+        
+            public Set<EnzymePortalDisease> getDiseases() {
         if (diseases == null) {
-            diseases = new ArrayList<EnzymePortalDisease>();
+            diseases = new HashSet<>();
         }
         return this.diseases;
     }
@@ -300,7 +316,7 @@ public class EnzymeAccession extends EnzymePortalSummary {
      *     {@link Compound }
      *     
      */
-    public void setCompounds(List<EnzymePortalCompound> compounds) {
+    public void setCompounds(Set<EnzymePortalCompound> compounds) {
         this.compounds = compounds;
     }
 
@@ -312,7 +328,7 @@ public class EnzymeAccession extends EnzymePortalSummary {
      *     {@link EnzymePortalDisease }
      *     
      */
-    public void setDiseases(List<EnzymePortalDisease> diseases) {
+    public void setDiseases(Set<EnzymePortalDisease> diseases) {
         this.diseases = diseases;
     }
 

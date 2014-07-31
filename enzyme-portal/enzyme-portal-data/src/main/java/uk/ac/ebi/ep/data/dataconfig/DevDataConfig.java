@@ -22,7 +22,7 @@ import org.springframework.core.env.Environment;
  */
 @Configuration
 @Dev
-@PropertySource({"classpath:ep-db-vezpdev.properties"})
+@PropertySource({"classpath:ep-db-uzpdev.properties"})
 public class DevDataConfig implements iDataConfig {
 
     @Autowired

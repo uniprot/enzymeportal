@@ -47,7 +47,19 @@ public class DiseaseService {
 
         return repository.findAll();
     }
+    
+          @Transactional(readOnly = true)
+    public List<EnzymePortalDisease> findDiseasesByNamePrefix(List<String> name_prefixes){
+       
+        return repository.findByNamePrefixes(name_prefixes);
+    }
 
 
+        
+          @Transactional(readOnly = true)
+    public List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions){
+       
+        return repository.findByAccessions(accessions);
+    }
 
 }

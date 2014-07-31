@@ -6,7 +6,6 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -44,16 +43,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EnzymePortalCompound.findByRelationship", query = "SELECT e FROM EnzymePortalCompound e WHERE e.relationship = :relationship"),
     @NamedQuery(name = "EnzymePortalCompound.findByUniprotAccession", query = "SELECT e FROM EnzymePortalCompound e WHERE e.uniprotAccession = :uniprotAccession")})
 public class EnzymePortalCompound implements Serializable {
- 
-    @Column(name = "URL")
-    private String url;
-    @Column(name = "ROLE")
-    private String role;
-    @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
-        @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<EnzymePortalReaction> reactionSet = new HashSet<>();
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -72,9 +61,22 @@ public class EnzymePortalCompound implements Serializable {
     @Column(name = "RELATIONSHIP")
     private String relationship;
 
+        @Column(name = "COMPOUND_ROLE")
+    private String compoundRole;
+ 
+    @Column(name = "URL")
+    private String url;
+
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
+    
+        @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
+        @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
+    @ManyToMany
+    private Set<EnzymePortalReaction> enzymePortalReactionSet;
+
 
     public EnzymePortalCompound() {
     }
@@ -165,7 +167,16 @@ public class EnzymePortalCompound implements Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "EnzymePortalCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", compoundRole=" + compoundRole + '}';
+    }
 
+
+
+    
+    
+    
 
 //    @Override
 //    public int hashCode() {
@@ -186,7 +197,6 @@ public class EnzymePortalCompound implements Serializable {
 //        }
 //        return true;
 //    }
-
 //    @Override
 //    public String toString() {
 //        return "uk.ac.ebi.ep.data.domain.EnzymePortalCompound[ compoundInternalId=" + compoundInternalId + " ]";
@@ -194,10 +204,6 @@ public class EnzymePortalCompound implements Serializable {
 
     
     
-    @Override
-    public String toString() {
-        return "EnzymePortalCompound{" + "url=" + url + ", role=" + role + ", reactionSet=" + reactionSet + ", compoundInternalId=" + compoundInternalId + ", compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + '}';
-    }
 
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
@@ -207,14 +213,7 @@ public class EnzymePortalCompound implements Serializable {
         this.uniprotAccession = uniprotAccession;
     }
 
-    @XmlTransient
-    public Set<EnzymePortalReaction> getReactionSet() {
-        return reactionSet;
-    }
 
-    public void setReactionSet(Set<EnzymePortalReaction> reactionSet) {
-        this.reactionSet = reactionSet;
-    }
 
     public String getUrl() {
         return url;
@@ -224,12 +223,23 @@ public class EnzymePortalCompound implements Serializable {
         this.url = url;
     }
 
-    public String getRole() {
-        return role;
+
+
+    public String getCompoundRole() {
+        return compoundRole;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setCompoundRole(String compoundRole) {
+        this.compoundRole = compoundRole;
+    }
+
+    @XmlTransient
+    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
+        return enzymePortalReactionSet;
+    }
+
+    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
+        this.enzymePortalReactionSet = enzymePortalReactionSet;
     }
 
 

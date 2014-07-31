@@ -6,6 +6,7 @@
 
 package uk.ac.ebi.ep.data.repositories;
 
+import java.util.List;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 
 /**
@@ -13,5 +14,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  * @author joseph
  */
 public interface UniprotEntryRepositoryCustom {
-     UniprotEntry findByUniProtAccession(String accession);
+     List<UniprotEntry> findEnzymesByNamePrefixes(List<String> name_prefixes);
+     List<UniprotEntry> findEnzymesByAccessions(List<String> accessions);
+    // List<Species> getSpecies(List<String> name_prefixes);
 }

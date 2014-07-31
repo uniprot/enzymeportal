@@ -5,8 +5,10 @@
  */
 package uk.ac.ebi.ep.data.repositories;
 
+import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.BooleanExpression;
+import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,6 +40,23 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
         List<EnzymePortalCompound> compounds = query.from($).where(isUniprotName).distinct().list($);
 
         return compounds;
+
+    }
+
+    @Override
+    public List<EnzymePortalCompound> findByNamePrefixes(List<String> name_prefixes) {
+
+        JPAQuery query = new JPAQuery(entityManager);
+
+        StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
+        BooleanBuilder builder = new BooleanBuilder();
+        name_prefixes.stream().forEach((prefix) -> {
+
+            builder.or(idPrefix.equalsIgnoreCase(prefix));
+
+        });
+        query.from($).where(builder);
+        return query.distinct().list($);
 
     }
 

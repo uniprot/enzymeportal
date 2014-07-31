@@ -7,7 +7,8 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Comparator;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,14 +17,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 
 /**
  *
@@ -43,7 +43,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EnzymePortalDisease.findByDefinition", query = "SELECT e FROM EnzymePortalDisease e WHERE e.definition = :definition"),
     @NamedQuery(name = "EnzymePortalDisease.findByScore", query = "SELECT e FROM EnzymePortalDisease e WHERE e.score = :score"),
     @NamedQuery(name = "EnzymePortalDisease.findByUrl", query = "SELECT e FROM EnzymePortalDisease e WHERE e.url = :url")})
-public class EnzymePortalDisease implements Serializable {
+public class EnzymePortalDisease implements Serializable, Comparable<EnzymePortalDisease> {
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
 
@@ -69,11 +70,13 @@ public class EnzymePortalDisease implements Serializable {
     private String score;
     @Column(name = "URL")
     private String url;
-    @ManyToMany(mappedBy = "enzymePortalDiseaseSet", fetch = FetchType.EAGER)
-    private Set<UniprotEntry> uniprotEntrySet;
-    @JoinColumn(name = "ACCESSION", referencedColumnName = "ACCESSION")
+    
+        @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private UniprotEntry accession;
+    private UniprotEntry uniprotAccession;
+        
+            private static final Comparator<String> NAME_COMPARATOR =
+            new ChemicalNameComparator();
 
     public EnzymePortalDisease() {
     }
@@ -154,46 +157,100 @@ public class EnzymePortalDisease implements Serializable {
         this.url = url;
     }
 
-    @XmlTransient
-    public Set<UniprotEntry> getUniprotEntrySet() {
-        return uniprotEntrySet;
+//    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 17 * hash + Objects.hashCode(this.diseaseName);
+//        hash = 17 * hash + Objects.hashCode(this.uniprotAccession);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final EnzymePortalDisease other = (EnzymePortalDisease) obj;
+//        if (!Objects.equals(this.diseaseName, other.diseaseName)) {
+//            return false;
+//        }
+//        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
+//            return false;
+//        }
+//        return true;
+//    }
+
+//    @Override
+//    public String toString() {
+//        return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", diseaseName=" + diseaseName + ", evidence=" + evidence + ", definition=" + definition + ", url=" + url + '}';
+//    }
+    @Override
+    public String toString() {
+        return "EnzymePortalDisease{" + "diseaseName=" + diseaseName + ", uniprotAccession=" + uniprotAccession + '}';
     }
 
-    public void setUniprotEntrySet(Set<UniprotEntry> uniprotEntrySet) {
-        this.uniprotEntrySet = uniprotEntrySet;
+
+
+
+
+    
+    
+
+    public UniprotEntry getUniprotAccession() {
+        return uniprotAccession;
     }
 
-    public UniprotEntry getAccession() {
-        return accession;
+    public void setUniprotAccession(UniprotEntry uniprotAccession) {
+        this.uniprotAccession = uniprotAccession;
     }
 
-    public void setAccession(UniprotEntry accession) {
-        this.accession = accession;
-    }
-
+//    @Override
+//    public int compareTo(EnzymePortalDisease d) {
+//  
+//        int compare_name = NAME_COMPARATOR.compare(this.getDiseaseName(),d.getDiseaseName());
+//        if(this.getDiseaseName() == null & d.getDiseaseName() == null){
+//            return this.uniprotAccession.getAccession().compareTo(d.getUniprotAccession().getAccession());
+//        }
+//
+//      
+//    return compare_name == 0 ? this.uniprotAccession.getAccession().compareTo(d.getUniprotAccession().getAccession()) : compare_name;
+//
+//    
+//
+//    }
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (diseaseId != null ? diseaseId.hashCode() : 0);
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.diseaseName);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EnzymePortalDisease)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        EnzymePortalDisease other = (EnzymePortalDisease) object;
-        if ((this.diseaseId == null && other.diseaseId != null) || (this.diseaseId != null && !this.diseaseId.equals(other.diseaseId))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymePortalDisease other = (EnzymePortalDisease) obj;
+        if (!Objects.equals(this.diseaseName, other.diseaseName)) {
             return false;
         }
         return true;
     }
+    
+    
+    
+    
 
     @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.data.domain.EnzymePortalDisease[ diseaseId=" + diseaseId + " ]";
+    public int compareTo(EnzymePortalDisease d) {
+       return this.getDiseaseName().compareToIgnoreCase(d.getDiseaseName());
     }
+    
     
 }

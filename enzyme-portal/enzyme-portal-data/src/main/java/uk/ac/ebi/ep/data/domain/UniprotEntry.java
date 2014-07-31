@@ -14,9 +14,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -42,12 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName"),
     @NamedQuery(name = "UniprotEntry.findBySynonymName", query = "SELECT u FROM UniprotEntry u WHERE u.synonymName = :synonymName")})
 public class UniprotEntry implements Serializable {
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    private Set<EnzymePortalReaction> enzymePortalReactionSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
-    private Set<EnzymePortalSummary> enzymePortalSummarySet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
+
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "DBENTRY_ID")
@@ -68,12 +60,18 @@ public class UniprotEntry implements Serializable {
     private String commonName;
     @Column(name = "SYNONYM_NAME")
     private String synonymName;
-    @JoinTable(name = "DISEASE_TO_UNIPROT", joinColumns = {
-        @JoinColumn(name = "ACCESSION", referencedColumnName = "ACCESSION")}, inverseJoinColumns = {
-        @JoinColumn(name = "DISEASE_ID", referencedColumnName = "DISEASE_ID")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
+
+        @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession",fetch = FetchType.EAGER)
+    private Set<UniprotXref> uniprotXrefSet;
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    private Set<EnzymePortalReaction> enzymePortalReactionSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    private Set<EnzymePortalSummary> enzymePortalSummarySet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
+     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalDisease> enzymePortalDiseaseList;
 
     public UniprotEntry() {
@@ -152,14 +150,7 @@ public class UniprotEntry implements Serializable {
         this.synonymName = synonymName;
     }
 
-    @XmlTransient
-    public Set<EnzymePortalDisease> getEnzymePortalDiseaseSet() {
-        return enzymePortalDiseaseSet;
-    }
 
-    public void setEnzymePortalDiseaseSet(Set<EnzymePortalDisease> enzymePortalDiseaseSet) {
-        this.enzymePortalDiseaseSet = enzymePortalDiseaseSet;
-    }
 
     @XmlTransient
     public Set<EnzymePortalDisease> getEnzymePortalDiseaseList() {
@@ -190,10 +181,30 @@ public class UniprotEntry implements Serializable {
         return true;
     }
 
+//    @Override
+//    public String toString() {
+//        return "UniprotEntry{" + "enzymePortalSummarySet=" + enzymePortalSummarySet + ", enzymePortalCompoundSet=" + enzymePortalCompoundSet + ", accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", synonymName=" + synonymName + ", enzymePortalDiseaseList=" + enzymePortalDiseaseList + '}';
+//    }
+//    @Override
+//    public String toString() {
+//        return "UniprotEntry{" + "name=" + name + '}';
+//    }
+//    @Override
+//    public String toString() {
+//        return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", synonymName=" + synonymName + ", uniprotXrefSet=" + uniprotXrefSet + ", enzymePortalSummarySet=" + enzymePortalSummarySet + ", enzymePortalCompoundSet=" + enzymePortalCompoundSet + ", enzymePortalDiseaseList=" + enzymePortalDiseaseList + '}';
+//    }
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.UniprotEntry[ accession=" + accession + " ]";
+        return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
     }
+
+
+
+    
+    
+    
+    
+    
 
     @XmlTransient
     public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
@@ -220,6 +231,24 @@ public class UniprotEntry implements Serializable {
 
     public void setEnzymePortalCompoundSet(Set<EnzymePortalCompound> enzymePortalCompoundSet) {
         this.enzymePortalCompoundSet = enzymePortalCompoundSet;
+    }
+
+    @XmlTransient
+    public Set<UniprotXref> getUniprotXrefSet() {
+        return uniprotXrefSet;
+    }
+
+    public void setUniprotXrefSet(Set<UniprotXref> uniprotXrefSet) {
+        this.uniprotXrefSet = uniprotXrefSet;
+    }
+
+    @XmlTransient
+    public Set<EnzymePortalPathways> getEnzymePortalPathwaysSet() {
+        return enzymePortalPathwaysSet;
+    }
+
+    public void setEnzymePortalPathwaysSet(Set<EnzymePortalPathways> enzymePortalPathwaysSet) {
+        this.enzymePortalPathwaysSet = enzymePortalPathwaysSet;
     }
     
 }

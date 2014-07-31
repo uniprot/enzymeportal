@@ -7,6 +7,7 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,12 +16,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,6 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalReaction.findByRelationship", query = "SELECT e FROM EnzymePortalReaction e WHERE e.relationship = :relationship"),
     @NamedQuery(name = "EnzymePortalReaction.findByUrl", query = "SELECT e FROM EnzymePortalReaction e WHERE e.url = :url")})
 public class EnzymePortalReaction implements Serializable {
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
 
@@ -60,6 +64,9 @@ public class EnzymePortalReaction implements Serializable {
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
+    
+    @ManyToMany(mappedBy = "enzymePortalReactionSet")
+    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
 
     public EnzymePortalReaction() {
     }
@@ -148,5 +155,16 @@ public class EnzymePortalReaction implements Serializable {
     public String toString() {
         return "uk.ac.ebi.ep.data.domain.EnzymePortalReaction[ reactionInternalId=" + reactionInternalId + " ]";
     }
+
+    @XmlTransient
+    public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
+        return enzymePortalCompoundSet;
+    }
+
+    public void setEnzymePortalCompoundSet(Set<EnzymePortalCompound> enzymePortalCompoundSet) {
+        this.enzymePortalCompoundSet = enzymePortalCompoundSet;
+    }
+
+
     
 }

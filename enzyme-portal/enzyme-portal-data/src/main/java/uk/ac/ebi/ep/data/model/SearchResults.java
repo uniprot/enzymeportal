@@ -20,7 +20,7 @@ public class SearchResults {
     private Integer totalfound;
     private SearchFilters searchfilters;
 
-    private List<EnzymeSummaries> summaryentries;
+    private List<EnzymeSummary> summaryentries;
 
     /**
      * Gets the value of the searchfilters property.
@@ -65,9 +65,9 @@ public class SearchResults {
      *
      * @return
      */
-    public List<EnzymeSummaries> getSummaryentries() {
+    public List<EnzymeSummary> getSummaryentries() {
         if (summaryentries == null) {
-            summaryentries = new ArrayList<EnzymeSummaries>();
+            summaryentries = new ArrayList<EnzymeSummary>();
         }
         return this.summaryentries;
     }
@@ -93,14 +93,14 @@ public class SearchResults {
         return this;
     }
 
-    public SearchResults withSummaryentries(EnzymeSummaries... values) {
+    public SearchResults withSummaryentries(EnzymeSummary... values) {
         if (values != null) {
             getSummaryentries().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public SearchResults withSummaryentries(Collection<EnzymeSummaries> values) {
+    public SearchResults withSummaryentries(Collection<EnzymeSummary> values) {
         if (values != null) {
             getSummaryentries().addAll(values);
         }
@@ -118,8 +118,15 @@ public class SearchResults {
      * @param summaryentries allowed object is {@link EnzymeSummary }
      *
      */
-    public void setSummaryentries(List<EnzymeSummaries> summaryentries) {
+    public void setSummaryentries(List<EnzymeSummary> summaryentries) {
         this.summaryentries = summaryentries;
     }
+
+    @Override
+    public String toString() {
+        return "SearchResults{" + "totalfound=" + totalfound + ", searchfilters=" + searchfilters + ", summaryentries=" + summaryentries + '}';
+    }
+    
+    
 
 }

@@ -17,6 +17,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 @NoRepositoryBean
 public interface EnzymePortalCompoundRepositoryCustom {
     List<EnzymePortalCompound> findCompoundsByUniprotName(String uniprotName);
+     List<EnzymePortalCompound> findByNamePrefixes(List<String> name_prefixes);
    
     
 }

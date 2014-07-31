@@ -18,7 +18,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
  *
  * @author joseph
  */
-public class EnzymeSummaries  extends EnzymeAccession {
+public class EnzymeSummary  extends EnzymeAccession {
     
     protected List<String> ec;
   
@@ -130,7 +130,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
      */
     public List<String> getSynonym() {
         if (synonym == null) {
-            synonym = new ArrayList<String>();
+            synonym = new ArrayList<>();
         }
         return this.synonym;
     }
@@ -192,31 +192,31 @@ public class EnzymeSummaries  extends EnzymeAccession {
 
 
 
-    public EnzymeSummaries withEc(String... values) {
+    public EnzymeSummary withEc(String... values) {
         if (values!= null) {
             getEc().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public EnzymeSummaries withEc(Collection<String> values) {
+    public EnzymeSummary withEc(Collection<String> values) {
         if (values!= null) {
             getEc().addAll(values);
         }
         return this;
     }
 
-    public EnzymeSummaries withName(String value) {
+    public EnzymeSummary withName(String value) {
         setName(value);
         return this;
     }
 
-    public EnzymeSummaries withFunction(String value) {
+    public EnzymeSummary withFunction(String value) {
         setFunction(value);
         return this;
     }
 
-    public EnzymeSummaries withSynonym(String... values) {
+    public EnzymeSummary withSynonym(String... values) {
         if (values!= null) {
             for (String value: values) {
                 getSynonym().add(value);
@@ -225,26 +225,26 @@ public class EnzymeSummaries  extends EnzymeAccession {
         return this;
     }
 
-    public EnzymeSummaries withSynonym(Collection<String> values) {
+    public EnzymeSummary withSynonym(Collection<String> values) {
         if (values!= null) {
             getSynonym().addAll(values);
         }
         return this;
     }
 
-    public EnzymeSummaries withUniprotid(String value) {
+    public EnzymeSummary withUniprotid(String value) {
         setUniprotid(value);
         return this;
     }
 
-    public EnzymeSummaries withRelatedspecies(EnzymeAccession... values) {
+    public EnzymeSummary withRelatedspecies(EnzymeAccession... values) {
         if (values!= null) {
             getRelatedspecies().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public EnzymeSummaries withRelatedspecies(Collection<EnzymeAccession> values) {
+    public EnzymeSummary withRelatedspecies(Collection<EnzymeAccession> values) {
         if (values!= null) {
             getRelatedspecies().addAll(values);
         }
@@ -252,7 +252,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withUniprotaccessions(String... values) {
+    public EnzymeSummary withUniprotaccessions(String... values) {
         if (values!= null) {
             getUniprotaccessions().addAll(Arrays.asList(values));
         }
@@ -260,7 +260,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withUniprotaccessions(Collection<String> values) {
+    public EnzymeSummary withUniprotaccessions(Collection<String> values) {
         if (values!= null) {
             getUniprotaccessions().addAll(values);
         }
@@ -268,13 +268,13 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withSpecies(Species value) {
+    public EnzymeSummary withSpecies(Species value) {
         setSpecies(value);
         return this;
     }
 
     @Override
-    public EnzymeSummaries withPdbeaccession(String... values) {
+    public EnzymeSummary withPdbeaccession(String... values) {
         if (values!= null) {
             getPdbeaccession().addAll(Arrays.asList(values));
         }
@@ -282,7 +282,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withPdbeaccession(Collection<String> values) {
+    public EnzymeSummary withPdbeaccession(Collection<String> values) {
         if (values!= null) {
             getPdbeaccession().addAll(values);
         }
@@ -290,7 +290,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withCompounds(EnzymePortalCompound... values) {
+    public EnzymeSummary withCompounds(EnzymePortalCompound... values) {
         if (values!= null) {
             getCompounds().addAll(Arrays.asList(values));
         }
@@ -298,7 +298,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withCompounds(Collection<EnzymePortalCompound> values) {
+    public EnzymeSummary withCompounds(Collection<EnzymePortalCompound> values) {
         if (values!= null) {
             getCompounds().addAll(values);
         }
@@ -306,7 +306,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withDiseases(EnzymePortalDisease... values) {
+    public EnzymeSummary withDiseases(EnzymePortalDisease... values) {
         if (values!= null) {
             getDiseases().addAll(Arrays.asList(values));
         }
@@ -314,7 +314,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withDiseases(Collection<EnzymePortalDisease> values) {
+    public EnzymeSummary withDiseases(Collection<EnzymePortalDisease> values) {
         if (values!= null) {
             getDiseases().addAll(values);
         }
@@ -322,7 +322,7 @@ public class EnzymeSummaries  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummaries withScoring(Object value) {
+    public EnzymeSummary withScoring(Object value) {
         setScoring(value);
         return this;
     }
@@ -363,4 +363,11 @@ public class EnzymeSummaries  extends EnzymeAccession {
         this.relatedspecies = relatedspecies;
     }
 
+    @Override
+    public String toString() {
+        return "EnzymeSummary{" + "name=" + name + ", function=" + function + ", synonym=" + synonym + ", uniprotid=" + uniprotid + '}';
+    }
+
+    
+    
 }

@@ -6,10 +6,10 @@
 
 package uk.ac.ebi.ep.data.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
@@ -20,9 +20,9 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 public class SearchFilters {
     
     
-    protected List<EnzymePortalDisease> diseases;
-    protected List<EnzymePortalCompound> compounds;
-    protected List<Species> species;
+    protected Set<EnzymePortalDisease> diseases;
+    protected Set<EnzymePortalCompound> compounds;
+    protected Set<Species> species;
 
     /**
      * Gets the value of the diseases property.
@@ -47,9 +47,9 @@ public class SearchFilters {
      * 
      * @return 
      */
-    public List<EnzymePortalDisease> getDiseases() {
+    public Set<EnzymePortalDisease> getDiseases() {
         if (diseases == null) {
-            diseases = new ArrayList<>();
+            diseases = new HashSet<>();
         }
         return this.diseases;
     }
@@ -77,9 +77,9 @@ public class SearchFilters {
      * 
      * @return 
      */
-    public List<EnzymePortalCompound> getCompounds() {
+    public Set<EnzymePortalCompound> getCompounds() {
         if (compounds == null) {
-            compounds = new ArrayList<>();
+            compounds = new HashSet<>();
         }
         return this.compounds;
     }
@@ -107,9 +107,9 @@ public class SearchFilters {
      * 
      * @return 
      */
-    public List<Species> getSpecies() {
+    public Set<Species> getSpecies() {
         if (species == null) {
-            species = new ArrayList<>();
+            species = new HashSet<>();
         }
         return this.species;
     }
@@ -171,7 +171,7 @@ public class SearchFilters {
      *     {@link EnzymePortalDisease }
      *     
      */
-    public void setDiseases(List<EnzymePortalDisease> diseases) {
+    public void setDiseases(Set<EnzymePortalDisease> diseases) {
         this.diseases = diseases;
     }
 
@@ -183,7 +183,7 @@ public class SearchFilters {
      *     {@link Compound }
      *     
      */
-    public void setCompounds(List<EnzymePortalCompound> compounds) {
+    public void setCompounds(Set<EnzymePortalCompound> compounds) {
         this.compounds = compounds;
     }
 
@@ -195,7 +195,7 @@ public class SearchFilters {
      *     {@link Species }
      *     
      */
-    public void setSpecies(List<Species> species) {
+    public void setSpecies(Set<Species> species) {
         this.species = species;
     }
 }

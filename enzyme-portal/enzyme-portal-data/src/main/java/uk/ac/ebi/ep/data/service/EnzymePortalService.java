@@ -62,6 +62,12 @@ public class EnzymePortalService {
 
         return enzymePortalCompoundRepository.findCompoundsByUniprotName(uniprotName);
     }
+    
+        @Transactional(readOnly = true)
+    public List<EnzymePortalCompound> findCompoundsByNamePrefix(List<String> name_prefixes) {
+
+        return enzymePortalCompoundRepository.findByNamePrefixes(name_prefixes);
+    }
 
     @Transactional(readOnly = true)
     public List<String> findAccessionsByCompoundID(String compoundId) {

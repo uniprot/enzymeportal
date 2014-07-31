@@ -33,7 +33,7 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
         JPAQuery query = new JPAQuery(entityManager);
 
         BooleanExpression condition = ($.commentType.equalsIgnoreCase(commentType)
-                .and($.commentText.isNotEmpty()).and($.accession.isNotNull()));
+                .and($.commentText.isNotEmpty()).and($.uniprotAccession.isNotNull()));
         List<EnzymePortalSummary> summariesByCommentType = query.from($).where(condition).limit(limit).distinct().list($);
         return summariesByCommentType;
 
@@ -45,7 +45,7 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
         JPAQuery query = new JPAQuery(entityManager);
 
         BooleanExpression condition = ($.commentType.equalsIgnoreCase(commentType)
-                .and($.commentText.isNotEmpty()).and($.accession.isNotNull()));
+                .and($.commentText.isNotEmpty()).and($.uniprotAccession.isNotNull()));
 
         List<EnzymePortalSummary> summariesByCommentType = query.from($).where(condition).distinct().list($);
         return summariesByCommentType;
@@ -68,7 +68,7 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
         String commentType = "DISEASE";
         EnzymePortalSummary summary = query.from($).
                 where($.commentType.equalsIgnoreCase(commentType).
-                        and($.accession.accession.equalsIgnoreCase(accession))).singleResult($);
+                        and($.uniprotAccession.accession.equalsIgnoreCase(accession))).singleResult($);
 
         return summary;
     }
@@ -79,7 +79,7 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
          JPAQuery query = new JPAQuery(entityManager);
           BooleanExpression isEnzyme = $.commentType.equalsIgnoreCase(commentType);
           EnzymePortalSummary summary = query.from($).
-                  where(isEnzyme.and($.accession.accession.equalsIgnoreCase(accession))).singleResult($);
+                  where(isEnzyme.and($.uniprotAccession.accession.equalsIgnoreCase(accession))).singleResult($);
           return summary;
     }
 

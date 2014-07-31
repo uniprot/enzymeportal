@@ -6,7 +6,9 @@
 
 package uk.ac.ebi.ep.data.repositories;
 
+import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
+import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
  *
@@ -16,4 +18,6 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface DiseaseRepositoryCustom {
     
     void dropDiseaseDatabase();
+     List<EnzymePortalDisease> findByNamePrefixes(List<String> name_prefixes);
+      List<EnzymePortalDisease> findByAccessions(List<String> accessions);
 }

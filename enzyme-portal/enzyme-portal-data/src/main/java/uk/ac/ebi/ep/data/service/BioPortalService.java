@@ -46,7 +46,7 @@ public class BioPortalService {
     private Environment env;
 
     private static final Logger LOGGER = Logger.getLogger(BioPortalService.class);
-
+    
 //http://data.bioontology.org/ontologies/EFO
     @Transactional
     public String getDiseaseDescription(String term) {

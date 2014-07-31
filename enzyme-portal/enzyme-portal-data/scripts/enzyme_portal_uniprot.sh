@@ -20,12 +20,12 @@ echo "Sourcing Oracle 11.2 home"
 #export PATH=$PATH:$ORACLE_HOME/bin
 
 echo "Setting Environment variables"
-EZPHOME=/ebi/uniprot/production/enzyme_portal
-export EZPHOME
+UZPHOME=/ebi/uniprot/production/enzyme_portal
+export UZPHOME
 
 
 # Setting output file name
-OUTFILE="$EZPHOME/logs/enzyme_portal_release_`date +%m%d%y`_`date +%H%M%S`.out"
+OUTFILE="$UZPHOME/logs/enzyme_portal_release_`date +%m%d%y`_`date +%H%M%S`.out"
 
     
 
@@ -103,18 +103,21 @@ function ALL() {
 # Send Email Notification to DBAs
 #**************************************************
 function SEND_EMAIL() {
+LOGFILE=`ls -rt $UZPHOME/logs/ | tail -1`
+ERRORS=`cat $UZPHOME/logs/$LOGFILE | grep ORA`
 template_uniprot="
 FYI,
 
-The release of the Enzyme Portal has now been populated from UniProt.
+The Enzyme Portal data import from UniProt has finished. Any errors should be listed below.
 
+$ERRORS
 
 Regards,
 Uniprot Team
 "
 
-echo "$template_uniprot" | mail -s "Enzyme Portal Release ${release} Data Import from UniProt Finished" ${EMAIL}
-echo "Email about ${release} release sent to ${EMAIL}"
+echo "$template_uniprot" | mail -s "Enzyme Portal Data Import from UniProt Finished" ${EMAIL}
+echo "Email about enzyme portal release sent to ${EMAIL}"
 }
 
 #**************************************************
@@ -122,7 +125,7 @@ echo "Email about ${release} release sent to ${EMAIL}"
 #**************************************************
 function usage() {
     echo "syntax: $0"
-    echo " -r ezprel|vezpdev : RUNMODE"
+    echo " -r uzprel|uzpdev : RUNMODE"
     echo " -p : subprocess to run. Options are:
                                 TRUNCATE_SCHEMA     : Truncate all Enzyme Portal tables
                                 TRUNCATE_TABLE      : Truncate a particular Enzyme Portal table
@@ -164,12 +167,12 @@ function main() {
 
     
     #Setting the instance properties file
-    if [ "$run_mode" = "ezprel" ]
+    if [ "$run_mode" = "uzprel" ]
     then
-    	DBFILE="$EZPHOME/dbconfig/ep-db-ezprel.properties"	
-    elif [ "$run_mode" = "vezpdev" ]
+    	DBFILE="$UZPHOME/dbconfig/ep-db-uzprel.properties"	
+    elif [ "$run_mode" = "uzpdev" ]
     then
-    	DBFILE="$EZPHOME/dbconfig/ep-db-vezpdev.properties"
+    	DBFILE="$UZPHOME/dbconfig/ep-db-uzpdev.properties"
     else
         usage
     fi

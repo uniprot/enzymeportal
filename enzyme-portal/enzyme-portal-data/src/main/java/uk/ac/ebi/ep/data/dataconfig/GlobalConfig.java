@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.dataconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.ac.ebi.ep.data.service.BioPortalService;
-import uk.ac.ebi.ep.data.service.DiseaseParser;
 import uk.ac.ebi.ep.data.service.DiseaseService;
-import uk.ac.ebi.ep.data.service.EnzymePortalCompoundService;
+import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.data.service.UniprotEntryService;
 
 /**
@@ -19,16 +17,11 @@ import uk.ac.ebi.ep.data.service.UniprotEntryService;
  * @author joseph
  */
 @Configuration
-public class GlobalDataConfig {
-    
-        @Bean
-    public DiseaseService diseaseService() {
-        return new DiseaseService();
-    }
+public class GlobalConfig {
 
     @Bean
-    public DiseaseParser diseaseParser() {
-        return new DiseaseParser();
+    public DiseaseService diseaseService() {
+        return new DiseaseService();
     }
 
     @Bean
@@ -42,9 +35,8 @@ public class GlobalDataConfig {
     }
 
     @Bean
-    public EnzymePortalCompoundService enzymePortalCompoundService() {
-        return new EnzymePortalCompoundService();
+    public EnzymePortalService enzymePortalService() {
+        return new EnzymePortalService();
     }
-    
 
 }

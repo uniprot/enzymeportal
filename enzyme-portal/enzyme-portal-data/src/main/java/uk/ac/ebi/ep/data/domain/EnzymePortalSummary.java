@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     //@NamedQuery(name = "EnzymePortalSummary.findByCommentText", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentText = :commentText")
 })
 public class EnzymePortalSummary implements Serializable {
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -48,10 +48,10 @@ public class EnzymePortalSummary implements Serializable {
     private String commentType;
     @Column(name = "COMMENT_TEXT")
     private String commentText;
-    @JoinColumn(name = "ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private UniprotEntry accession;
 
+        @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
+    @ManyToOne(optional = false)
+    private UniprotEntry uniprotAccession;
     public EnzymePortalSummary() {
     }
 
@@ -96,13 +96,7 @@ public class EnzymePortalSummary implements Serializable {
         this.commentText = commentText;
     }
 
-    public UniprotEntry getAccession() {
-        return accession;
-    }
 
-    public void setAccession(UniprotEntry accession) {
-        this.accession = accession;
-    }
 
     @Override
     public int hashCode() {
@@ -124,9 +118,23 @@ public class EnzymePortalSummary implements Serializable {
         return true;
     }
 
+//    @Override
+//    public String toString() {
+//        return "uk.ac.ebi.ep.data.domain.EnzymePortalSummary[ enzymeId=" + enzymeId + " ]";
+//    }
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.EnzymePortalSummary[ enzymeId=" + enzymeId + " ]";
+        return "EnzymePortalSummary{" + "commentType=" + commentType + ", commentText=" + commentText + '}';
     }
+
+    public UniprotEntry getUniprotAccession() {
+        return uniprotAccession;
+    }
+
+    public void setUniprotAccession(UniprotEntry uniprotAccession) {
+        this.uniprotAccession = uniprotAccession;
+    }
+
+    
     
 }
