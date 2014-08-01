@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -235,7 +236,10 @@ public class EnzymePortalCompound implements Serializable {
 
     @XmlTransient
     public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
-        return enzymePortalReactionSet;
+        if(enzymePortalReactionSet == null){
+            enzymePortalReactionSet = new HashSet<>();
+        }
+        return this.enzymePortalReactionSet;
     }
 
     public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {

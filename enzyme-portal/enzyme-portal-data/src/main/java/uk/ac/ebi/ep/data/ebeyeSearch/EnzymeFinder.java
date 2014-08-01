@@ -112,8 +112,8 @@ public class EnzymeFinder {
             // prefixes.add("ACE");
             //prefixes.add(result.getUniport_name());
             //accessions.add(result.getUniprot_accession());
-            //uniprotEnzymeIds.add(result.getUniprot_accession());
-            uniprotEnzymeIds.add(result.getUniport_name());
+            uniprotEnzymeIds.add(result.getUniprot_accession());
+            //uniprotEnzymeIds.add(result.getUniport_name());
             //System.out.println("names "+ result.getUniport_name());
         });
 
@@ -137,8 +137,8 @@ public class EnzymeFinder {
             List<String> prefixes, List<String> paramList) {
 
         List<EnzymeSummary> enzymeList = new ArrayList<>();
-        List<UniprotEntry> enzymes = service.findByNamePrefixes(prefixes);
-        // List<UniprotEntry> enzymes = service.findEnzymesByAccessions(prefixes);
+        //List<UniprotEntry> enzymes = service.findByNamePrefixes(prefixes);
+         List<UniprotEntry> enzymes = service.findEnzymesByAccessions(prefixes);
 
         for (UniprotEntry e : enzymes) {
 
