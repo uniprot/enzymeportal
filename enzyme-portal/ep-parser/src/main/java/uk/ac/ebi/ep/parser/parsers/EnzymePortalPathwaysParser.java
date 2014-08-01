@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.parser.main.PathwaysParser;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.parser.main.PathwaysParser;
 
 /**
  *
@@ -86,6 +86,7 @@ public class EnzymePortalPathwaysParser {
     }
 
     private void loadToDB(String[] fields) {
+        if(fields.length > 4){
         String accession = fields[0];
         String pathwayId = fields[1];
         String pathwayUrl = fields[2];
@@ -114,7 +115,7 @@ public class EnzymePortalPathwaysParser {
 //        System.out.println(accession + "\t" + pathwayId + "\t" + pathwayUrl + "\t"
 //                + pathwayName + "\t" + status + "\t" + species);
         }
-
+        }
        
     }
 

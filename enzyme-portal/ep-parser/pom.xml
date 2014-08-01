@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-parser</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     
     <description>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
         </dependency> 
         <dependency>
             <groupId>uk.ac.ebi.chebi.webapps.chebiWS.client</groupId>

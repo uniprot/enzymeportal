@@ -154,7 +154,7 @@ public class DiseaseParser {
             }
         } else {
             LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is " + fields.length);
-            throw new ArrayIndexOutOfBoundsException();
+           // throw new ArrayIndexOutOfBoundsException();
         }
 
     }

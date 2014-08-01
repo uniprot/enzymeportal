@@ -21,13 +21,13 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
+import uk.ac.ebi.ep.data.repositories.ReactionRepository;
 import uk.ac.ebi.ep.parser.helper.CompoundUtil;
 import uk.ac.ebi.ep.parser.helper.EbinocleParser;
 import uk.ac.ebi.ep.parser.helper.MmDatabase;
 import uk.ac.ebi.ep.parser.helper.Relationship;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
-import uk.ac.ebi.ep.data.repositories.ReactionRepository;
 
 /**
  * Parser for IntEnzXML which extracts data interesting for the Enzyme Portal
@@ -300,11 +300,11 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
             }
 
             if (!xrefs.isEmpty()) {
-
+                System.out.println("XREFS "+ xrefs);
                 compoundRepository.save(xrefs);
             }
 
-            System.out.println("CHEBI XREF "+ xrefs);
+           
             // Clean up:
             xrefs.clear();
             ecEntry = null;
