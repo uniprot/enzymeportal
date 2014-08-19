@@ -15,10 +15,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetCofactorsCaller;
 import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetEcHierarchyCaller;
 import uk.ac.ebi.ep.adapter.intenz.IntenzCallable.GetIntenzCaller;
@@ -54,9 +52,16 @@ public class IntenzAdapter implements IintenzAdapter{
 		this.config = config;
 	}
 
+    public IntenzAdapter() {
+        config = new IntenzConfig();
+    }
+        
+        
+      
     public Map<String, Set<String>> getSynonyms(Set<String> ecNumbers)
 	throws MultiThreadingException {
         ExecutorService pool = Executors.newCachedThreadPool();
+        System.out.println("config "+ config);
         CompletionService<Set<String>> ecs =
        		 	new ExecutorCompletionService<Set<String>>(pool);
         Map<String, Set<String>> resultMap =

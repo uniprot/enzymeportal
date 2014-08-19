@@ -4,113 +4,98 @@
  */
 package uk.ac.ebi.ep.core.search;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import uk.ac.ebi.ep.adapter.ebeye.EbeyeConfig;
-import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
-import uk.ac.ebi.ep.adapter.uniprot.UniprotConfig;
-import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotImplementation;
-import uk.ac.ebi.ep.core.search.IEnzymeFinder.UniprotSource;
-import uk.ac.ebi.ep.search.model.SearchFilters;
-import uk.ac.ebi.ep.search.model.SearchParams;
-import uk.ac.ebi.ep.search.model.SearchResults;
-
 /**
  *
  * @author joseph
  */
 public class EnzymeFinderTest {
 
-    private EnzymeFinder instance = null;
-
-    public EnzymeFinderTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() {
-        Config config = new Config();
-        config.setFinderUniprotSource(UniprotSource.EBEYE.name());
-        config.setRetrieverUniprotSource(UniprotSource.UNIPROT.name());
-        config.setResultsPerPage(10);
-        config.setMaxPages(1);
-        config.setUniprotImplementation(UniprotImplementation.JAPI.name());
-        //config.setUniprotImplementation(UniprotImplementation.WS.name());
-        config.loadCacheData();
-
-
-
-        //uniprot
-        UniprotConfig uniprotConfig = new UniprotConfig();
-        uniprotConfig.setReviewed(false);
-        uniprotConfig.setTimeout(30000);
-        uniprotConfig.setUseProxy(true);
-        uniprotConfig.setMaxTermsPerQuery(100);
-        uniprotConfig.setWsUrl("http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}");
-
-
-        //ebeye
-        EbeyeConfig ebeyeConfig = new EbeyeConfig();
-        ebeyeConfig.setMaxAccessionsInQuery(100);
-        ebeyeConfig.setResultsLimit(100);
-        ebeyeConfig.setMaxResults(2000);
-        ebeyeConfig.setMaxChebiResults(30);
-        ebeyeConfig.setMaxUniprotResults(5000);
-        ebeyeConfig.setMaxUniprotResultsFromChebi(100);
-        ebeyeConfig.setMaxUniprotResultsFromOtherDomains(2000);
-        ebeyeConfig.setMaxThreads(50);
-        ebeyeConfig.setThreadTimeout(30000);
-
-
-        //intenz
-        IntenzConfig intenzConfig = new IntenzConfig();
-        intenzConfig.setTimeout(30000);
-
-
-
-        instance = new EnzymeFinder(config);
-        instance.uniprotAdapter.setConfig(uniprotConfig);
-        instance.ebeyeAdapter.setConfig(ebeyeConfig);
-        instance.intenzAdapter.setConfig(intenzConfig);
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of getEnzymes method, of class EnzymeFinder.
-     */
-    @Test
-    public void testGetEnzymes() throws Exception {
-        System.out.println("getEnzymes");
-
-        SearchParams searchParams = new SearchParams();
-
-        searchParams.setText("Q13423");
-        searchParams.setPrevioustext("sildenafil");
-
-        SearchResults expResult = new SearchResults();
-        expResult.setTotalfound(4);
-        expResult.setSearchfilters(new SearchFilters());
-        
-
-       // SearchResults result = instance.getEnzymes(searchParams);
-
-       // assertEquals(expResult.getTotalfound(), result.getTotalfound());
-
-    }
+//    private EnzymeFinder instance = null;
+//
+//    public EnzymeFinderTest() {
+//    }
+//
+//    @BeforeClass
+//    public static void setUpClass() throws Exception {
+//    }
+//
+//    @AfterClass
+//    public static void tearDownClass() throws Exception {
+//    }
+//
+//    @Before
+//    public void setUp() {
+//        Config config = new Config();
+//        config.setFinderUniprotSource(UniprotSource.EBEYE.name());
+//        config.setRetrieverUniprotSource(UniprotSource.UNIPROT.name());
+//        config.setResultsPerPage(10);
+//        config.setMaxPages(1);
+//        config.setUniprotImplementation(UniprotImplementation.JAPI.name());
+//        //config.setUniprotImplementation(UniprotImplementation.WS.name());
+//        config.loadCacheData();
+//
+//
+//
+//        //uniprot
+//        UniprotConfig uniprotConfig = new UniprotConfig();
+//        uniprotConfig.setReviewed(false);
+//        uniprotConfig.setTimeout(30000);
+//        uniprotConfig.setUseProxy(true);
+//        uniprotConfig.setMaxTermsPerQuery(100);
+//        uniprotConfig.setWsUrl("http://www.uniprot.org/uniprot/?format=tab&amp;sort=score&amp;query={0}&amp;columns={1}");
+//
+//
+//        //ebeye
+//        EbeyeConfig ebeyeConfig = new EbeyeConfig();
+//        ebeyeConfig.setMaxAccessionsInQuery(100);
+//        ebeyeConfig.setResultsLimit(100);
+//        ebeyeConfig.setMaxResults(2000);
+//        ebeyeConfig.setMaxChebiResults(30);
+//        ebeyeConfig.setMaxUniprotResults(5000);
+//        ebeyeConfig.setMaxUniprotResultsFromChebi(100);
+//        ebeyeConfig.setMaxUniprotResultsFromOtherDomains(2000);
+//        ebeyeConfig.setMaxThreads(50);
+//        ebeyeConfig.setThreadTimeout(30000);
+//
+//
+//        //intenz
+//        IntenzConfig intenzConfig = new IntenzConfig();
+//        intenzConfig.setTimeout(30000);
+//
+//
+//
+//        instance = new EnzymeFinder(config);
+//        instance.uniprotAdapter.setConfig(uniprotConfig);
+//        instance.ebeyeAdapter.setConfig(ebeyeConfig);
+//        instance.intenzAdapter.setConfig(intenzConfig);
+//    }
+//
+//    @After
+//    public void tearDown() {
+//    }
+//
+//    /**
+//     * Test of getEnzymes method, of class EnzymeFinder.
+//     */
+//    @Test
+//    public void testGetEnzymes() throws Exception {
+//        System.out.println("getEnzymes");
+//
+//        SearchParams searchParams = new SearchParams();
+//
+//        searchParams.setText("Q13423");
+//        searchParams.setPrevioustext("sildenafil");
+//
+//        SearchResults expResult = new SearchResults();
+//        expResult.setTotalfound(4);
+//        expResult.setSearchfilters(new SearchFilters());
+//        
+//
+//       // SearchResults result = instance.getEnzymes(searchParams);
+//
+//       // assertEquals(expResult.getTotalfound(), result.getTotalfound());
+//
+//    }
     /**
      * Test of buildFilters method, of class EnzymeFinder.
      */

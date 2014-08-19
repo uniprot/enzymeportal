@@ -2,9 +2,7 @@ package uk.ac.ebi.ep.core.compare;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.collections.ListUtils;
-
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzyme.model.Pathway;

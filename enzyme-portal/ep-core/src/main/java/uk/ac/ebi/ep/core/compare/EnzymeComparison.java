@@ -3,9 +3,6 @@ package uk.ac.ebi.ep.core.compare;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections.map.MultiKeyMap;
-
 import uk.ac.ebi.ep.enzyme.model.Disease;
 import uk.ac.ebi.ep.enzyme.model.EnzymeModel;
 

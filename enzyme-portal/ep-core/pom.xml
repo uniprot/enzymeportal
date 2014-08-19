@@ -13,7 +13,7 @@
     </parent>
     
     <dependencies>
-        <dependency>
+                <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>rhea-adapter</artifactId>
             <version>1.0.5</version>

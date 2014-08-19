@@ -1,9 +1,7 @@
 package uk.ac.ebi.ep.core.compare;
 
 import java.util.List;
-
 import org.apache.commons.collections.CollectionUtils;
-
 import uk.ac.ebi.ep.enzyme.model.ProteinStructure;
 
 /**
