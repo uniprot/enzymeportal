@@ -3,27 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.data.model;
+package uk.ac.ebi.ep.data.search.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
-import uk.ac.ebi.ep.data.domain.epcore.CommonSpecies;
 
 /**
  *
  * @author joseph
  */
-public class Species implements Comparable<Species> {
+public class Species{// implements Comparable<Species>, Serializable {
 
     private String scientificname;
 
-    private String commonname;
+    private String commonname ;
     private boolean selected;
     private List<Compound> compounds;
-    private List<EnzymePortalDisease> diseases;
+    private List<Disease> diseases;
 
     /**
      * Gets the value of the scientificname property.
@@ -65,9 +62,13 @@ public class Species implements Comparable<Species> {
         this.commonname = value;
     }
 
+    
+    
+    
     /**
      * Gets the value of the selected property.
      *
+     * @return 
      */
     public boolean isSelected() {
         return selected;
@@ -132,7 +133,7 @@ public class Species implements Comparable<Species> {
      *
      * @return
      */
-    public List<EnzymePortalDisease> getDiseases() {
+    public List<Disease> getDiseases() {
         if (diseases == null) {
             diseases = new ArrayList<>();
         }
@@ -170,16 +171,16 @@ public class Species implements Comparable<Species> {
         return this;
     }
 
-    public Species withDiseases(EnzymePortalDisease... values) {
+    public Species withDiseases(Disease... values) {
         if (values != null) {
-            for (EnzymePortalDisease value : values) {
+            for (Disease value : values) {
                 getDiseases().add(value);
             }
         }
         return this;
     }
 
-    public Species withDiseases(Collection<EnzymePortalDisease> values) {
+    public Species withDiseases(Collection<Disease> values) {
         if (values != null) {
             getDiseases().addAll(values);
         }
@@ -202,29 +203,30 @@ public class Species implements Comparable<Species> {
      * @param diseases allowed object is {@link Disease }
      *
      */
-    public void setDiseases(List<EnzymePortalDisease> diseases) {
+    public void setDiseases(List<Disease> diseases) {
         this.diseases = diseases;
     }
 
-    @Override
-    public int compareTo(Species other) {
-        if (this.getCommonname() == null & other.getCommonname() == null) {
-            return this.getScientificname().compareTo(other.getScientificname());
-        }
-        if (this.getCommonname() != null & other.getCommonname() == null) {
-            return this.getCommonname().compareTo(other.getScientificname());
-        }
-        if (this.getCommonname() == null & other.getCommonname() != null) {
-            return this.getScientificname().compareTo(other.getCommonname());
-        }
-
-        if (this.getCommonname() != null & this.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.getCommonname() != null & other.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
-            return this.getScientificname().compareTo(other.getScientificname());
-        }
-        return this.getCommonname().compareTo(other.getCommonname());
-        //return species.getScientificname().compareTo(other.species.getScientificname());
-
-    }
+//    @Override
+//    public int compareTo(Species other) {
+//        if (this.getCommonname() == null & other.getCommonname() == null) {
+//            return this.getScientificname().compareTo(other.getScientificname());
+//        }
+//        if (this.getCommonname() != null & other.getCommonname() == null) {
+//            return this.getCommonname().compareTo(other.getScientificname());
+//        }
+//        if (this.getCommonname() == null & other.getCommonname() != null) {
+//            return this.getScientificname().compareTo(other.getCommonname());
+//        }
+//
+//        if (this.getCommonname() != null & this.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.getCommonname() != null & other.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
+//            return this.getScientificname().compareTo(other.getScientificname());
+//        }
+//        return this.getCommonname().compareTo(other.getCommonname());
+//        //return this.getScientificname().compareTo(other.getScientificname());
+//
+//    }
+//    
 
 //    @Override
 //    public int hashCode() {
@@ -233,36 +235,46 @@ public class Species implements Comparable<Species> {
 //        hash = 79 * hash + (this.getScientificname() != null ? this.getScientificname().hashCode() : 0);
 //        return hash;
 //    }
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.scientificname);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Species other = (Species) obj;
-        if (!Objects.equals(this.scientificname, other.scientificname)) {
-            return false;
-        }
-        if (!Objects.equals(this.commonname, other.commonname)) {
-            return false;
-        }
-        return true;
-    }
-
+    
+    
+    
+//    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 67 * hash + Objects.hashCode(this.scientificname);
+//        hash = 67 * hash + Objects.hashCode(this.commonname);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final Species other = (Species) obj;
+//        if (!Objects.equals(this.scientificname, other.scientificname)) {
+//            return false;
+//        }
+//        if (!Objects.equals(this.commonname, other.commonname)) {
+//            return false;
+//        }
+//        return true;
+//    }
+    
+    
+    
+//    @Override
+//    public String toString() {
+//        return "Species{" + "scientificname=" + scientificname + '}';
+//    }
+//    
     @Override
     public String toString() {
-        return "Species{" + "scientificname=" + scientificname + '}';
+        return "Species{" + "scientificname=" + scientificname + ", commonname=" + commonname + '}';
     }
-    
     
     
 

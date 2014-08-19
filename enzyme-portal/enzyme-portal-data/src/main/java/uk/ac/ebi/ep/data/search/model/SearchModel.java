@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.ep.data.model;
+package uk.ac.ebi.ep.data.search.model;
+
+import java.io.Serializable;
 
 /**
  *
  * @author joseph
  */
-public class SearchModel {
+public class SearchModel implements Serializable {
     
     
    

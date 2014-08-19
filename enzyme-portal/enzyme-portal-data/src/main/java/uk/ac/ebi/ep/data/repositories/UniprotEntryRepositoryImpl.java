@@ -9,6 +9,8 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
@@ -61,7 +63,18 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 //    }
     @Override
     public List<UniprotEntry> findEnzymesByNamePrefixes(List<String> name_prefixes) {
+                EntityGraph eGraph =entityManager.getEntityGraph("graph.UniprotEntry");
+        
+           eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+                        "enzymePortalDiseaseSet", "enzymePortalCompoundSet", "uniprotXrefSet");   
+        
+         
+        
+       
+        
         JPAQuery query = new JPAQuery(entityManager);
+        
+        query.setHint("javax.persistence.fetchgraph", eGraph);
 
         StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
         BooleanBuilder builder = new BooleanBuilder();
@@ -71,13 +84,25 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         });
         query.from($).where(builder);
-        return query.list($);
+        return query.list($).parallelStream().distinct().collect(Collectors.toList());
     }
 
     @Override
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
+        
+                EntityGraph eGraph =entityManager.getEntityGraph("graph.UniprotEntry");
+               
+            eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+                        "enzymePortalDiseaseSet", "enzymePortalCompoundSet", "uniprotXrefSet");   
+        
+           
+       
+        
         JPAQuery query = new JPAQuery(entityManager);
 
+
+        query.setHint("javax.persistence.fetchgraph", eGraph);
+       
         BooleanBuilder builder = new BooleanBuilder();
         accessions.stream().forEach((accession) -> {
 
@@ -85,7 +110,54 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         });
         query.from($).where(builder);
-        return query.distinct().list($);
+        return query.distinct().list($).parallelStream().distinct().collect(Collectors.toList());
     }
+
+    @Override
+    public UniprotEntry findByAccession(String accession) {
+   
+                   EntityGraph eGraph =entityManager.getEntityGraph("graph.UniprotEntry");
+               eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+                        "enzymePortalDiseaseSet", "enzymePortalCompoundSet", "uniprotXrefSet");   
+        
+               
+          
+        JPAQuery query = new JPAQuery(entityManager);
+
+        query.setHint("javax.persistence.fetchgraph", eGraph);
+        UniprotEntry e = query.from($).where($.accession.equalsIgnoreCase(accession)).singleResult($);
+        return e;
+    }
+
+    @Override
+    public List<UniprotEntry> findEnzymeByNamePrefixAndProteinName(String namePrefix,String proteinName) {
+     
+       EntityGraph eGraph = entityManager.getEntityGraph("graph.UniprotEntry");
+
+       
+  
+        eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+                        "enzymePortalDiseaseSet", "enzymePortalCompoundSet", "uniprotXrefSet");   
+        
+        
+        
+          JPAQuery query = new JPAQuery(entityManager);
+          query.setHint("javax.persistence.fetchgraph", eGraph);
+        
+
+        StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
+        BooleanBuilder builder = new BooleanBuilder();
+        
+       
+
+            builder.or(idPrefix.equalsIgnoreCase(namePrefix));
+
+        
+        query.from($).where(builder.and($.proteinName.equalsIgnoreCase(proteinName)));
+        return query.distinct().list($).parallelStream().distinct().collect(Collectors.toList());
+    
+    }
+
+
 
 }

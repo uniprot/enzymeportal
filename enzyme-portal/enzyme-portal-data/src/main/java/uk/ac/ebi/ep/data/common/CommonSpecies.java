@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.data.domain.epcore;
+package uk.ac.ebi.ep.data.common;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +17,7 @@ public enum CommonSpecies {
     Baker_Yeast("Saccharomyces cerevisiae"),
     Ecoli("Escherichia coli");
     
-    private static List<String> allScientificNames = new LinkedList<String>();
+    private static final List<String> allScientificNames = new LinkedList<>();
     static {
     	for (CommonSpecies cs : CommonSpecies.values()) {
             allScientificNames.add(cs.scientificName);

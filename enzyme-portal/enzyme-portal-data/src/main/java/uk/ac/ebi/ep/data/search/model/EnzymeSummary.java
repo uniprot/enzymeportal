@@ -4,27 +4,27 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.ep.data.model;
+package uk.ac.ebi.ep.data.search.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import java.io.Serializable;
+import java.util.*;
 
 
 /**
  *
  * @author joseph
  */
-public class EnzymeSummary  extends EnzymeAccession {
+public class EnzymeSummary  extends EnzymeAccession implements Comparable<EnzymeSummary>, Serializable {
     
     protected List<String> ec;
+    
+    private String accession;
   
     protected String name;
     protected String function;
     protected List<String> synonym;
+    
+//    private String synonyms;
   
     protected String uniprotid;
     protected List<EnzymeAccession> relatedspecies;
@@ -53,7 +53,7 @@ public class EnzymeSummary  extends EnzymeAccession {
      */
     public List<String> getEc() {
         if (ec == null) {
-            ec = new ArrayList<String>();
+            ec = new ArrayList<>();
         }
         return this.ec;
     }
@@ -69,6 +69,16 @@ public class EnzymeSummary  extends EnzymeAccession {
     public String getName() {
         return name;
     }
+
+    public String getAccession() {
+        return accession;
+    }
+
+    public void setAccession(String accession) {
+        this.accession = accession;
+    }
+    
+    
 
     /**
      * Sets the value of the name property.
@@ -120,12 +130,12 @@ public class EnzymeSummary  extends EnzymeAccession {
      * <pre>
      *    getSynonym().add(newItem);
      * </pre>
-     * 
+     *
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link String }
-     * 
+     *
      * 
      */
     public List<String> getSynonym() {
@@ -133,7 +143,30 @@ public class EnzymeSummary  extends EnzymeAccession {
             synonym = new ArrayList<>();
         }
         return this.synonym;
+        //return synonym;
     }
+    /**
+     * Sets the value of the synonym property.
+     * 
+     * @param synonym
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSynonym(List<String> synonym) {
+        this.synonym = synonym;
+    }
+
+
+//    public String getSynonyms() {
+//        return this.synonyms;
+//    }
+//
+//    public void setSynonyms(String synonyms) {
+//        this.synonyms = synonyms;
+//    }
+//    
+    
 
     /**
      * Gets the value of the uniprotid property.
@@ -290,7 +323,7 @@ public class EnzymeSummary  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummary withCompounds(EnzymePortalCompound... values) {
+    public EnzymeSummary withCompounds(Compound... values) {
         if (values!= null) {
             getCompounds().addAll(Arrays.asList(values));
         }
@@ -298,7 +331,7 @@ public class EnzymeSummary  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummary withCompounds(Collection<EnzymePortalCompound> values) {
+    public EnzymeSummary withCompounds(Collection<Compound> values) {
         if (values!= null) {
             getCompounds().addAll(values);
         }
@@ -306,7 +339,7 @@ public class EnzymeSummary  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummary withDiseases(EnzymePortalDisease... values) {
+    public EnzymeSummary withDiseases(Disease... values) {
         if (values!= null) {
             getDiseases().addAll(Arrays.asList(values));
         }
@@ -314,7 +347,7 @@ public class EnzymeSummary  extends EnzymeAccession {
     }
 
     @Override
-    public EnzymeSummary withDiseases(Collection<EnzymePortalDisease> values) {
+    public EnzymeSummary withDiseases(Collection<Disease> values) {
         if (values!= null) {
             getDiseases().addAll(values);
         }
@@ -339,17 +372,7 @@ public class EnzymeSummary  extends EnzymeAccession {
         this.ec = ec;
     }
 
-    /**
-     * Sets the value of the synonym property.
-     * 
-     * @param synonym
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setSynonym(List<String> synonym) {
-        this.synonym = synonym;
-    }
+
 
     /**
      * Sets the value of the relatedspecies property.
@@ -368,6 +391,36 @@ public class EnzymeSummary  extends EnzymeAccession {
         return "EnzymeSummary{" + "name=" + name + ", function=" + function + ", synonym=" + synonym + ", uniprotid=" + uniprotid + '}';
     }
 
-    
-    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.uniprotid);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymeSummary other = (EnzymeSummary) obj;
+        if (!Objects.equals(this.uniprotid, other.uniprotid)) {
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
+
+
+    @Override
+    public int compareTo(EnzymeSummary o) {
+        return this.name.compareToIgnoreCase(o.getName());
+    }
 }

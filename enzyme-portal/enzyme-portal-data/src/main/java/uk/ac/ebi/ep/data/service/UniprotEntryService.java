@@ -8,8 +8,6 @@ package uk.ac.ebi.ep.data.service;
 import com.mysema.query.types.Predicate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
@@ -32,6 +30,8 @@ public class UniprotEntryService {
 
         return repository.findByAccession(accession);
     }
+    
+
 
     @Transactional(readOnly = true)
     public UniprotEntry findByUniProtAccession(String accession) {
@@ -45,14 +45,15 @@ public class UniprotEntryService {
         return repository.findAccession();
     }
 
-    @Transactional(readOnly = true)
-    public Page<UniprotEntry> findByNamePrefix(String namePrefix, Pageable pageable) {
-      
-       // namePrefix.substring(0, namePrefix.indexOf("_"));
-      
-        return repository.findAll(byNamePrefix(namePrefix), pageable);
-    }
+//    @Transactional(readOnly = true)
+//    public Page<UniprotEntry> findByNamePrefix(String namePrefix, Pageable pageable) {
+//      
+//       // namePrefix.substring(0, namePrefix.indexOf("_"));
+//      
+//        return repository.findAll(byNamePrefix(namePrefix), pageable);
+//    }
 
+    
     @Transactional(readOnly = true)
     public List<UniprotEntry> findByNamePrefixes(List<String> namePrefixes) {
 

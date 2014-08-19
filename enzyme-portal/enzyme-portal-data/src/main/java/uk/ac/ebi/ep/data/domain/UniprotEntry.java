@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
@@ -14,12 +13,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.util.StringUtils;
+import uk.ac.ebi.ep.data.common.CommonSpecies;
+import uk.ac.ebi.ep.data.search.model.Species;
 
 /**
  *
@@ -28,17 +33,25 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
+@NamedEntityGraph(name = "graph.UniprotEntry",
+        attributeNodes = @NamedAttributeNode("enzymePortalPathwaysSet")
+)
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
     @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
     //@NamedQuery(name = "UniprotEntry.findByAccession", query = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession"),
-    @NamedQuery(name = "UniprotEntry.findByName", query = "SELECT u FROM UniprotEntry u WHERE u.name = :name"),
-    @NamedQuery(name = "UniprotEntry.findByTaxId", query = "SELECT u FROM UniprotEntry u WHERE u.taxId = :taxId"),
+    //@NamedQuery(name = "UniprotEntry.findByName", query = "SELECT u FROM UniprotEntry u WHERE u.name = :name"),
+    //@NamedQuery(name = "UniprotEntry.findByTaxId", query = "SELECT u FROM UniprotEntry u WHERE u.taxId = :taxId"),
     @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName"),
     @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName"),
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName"),
     @NamedQuery(name = "UniprotEntry.findBySynonymName", query = "SELECT u FROM UniprotEntry u WHERE u.synonymName = :synonymName")})
-public class UniprotEntry implements Serializable {
+
+public class UniprotEntry extends Species implements Serializable, Comparable<UniprotEntry> {
+
+    @Lob
+    @Column(name = "SYNONYM_NAMES")
+    private String synonymNames;
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -61,18 +74,20 @@ public class UniprotEntry implements Serializable {
     @Column(name = "SYNONYM_NAME")
     private String synonymName;
 
-        @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
     private Set<UniprotXref> uniprotXrefSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalSummary> enzymePortalSummarySet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    private Set<EnzymePortalDisease> enzymePortalDiseaseList;
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
+    
+    // private boolean selected;
 
     public UniprotEntry() {
     }
@@ -150,61 +165,14 @@ public class UniprotEntry implements Serializable {
         this.synonymName = synonymName;
     }
 
-
-
     @XmlTransient
-    public Set<EnzymePortalDisease> getEnzymePortalDiseaseList() {
-        return enzymePortalDiseaseList;
+    public Set<EnzymePortalDisease> getEnzymePortalDiseaseSet() {
+        return enzymePortalDiseaseSet;
     }
 
-    public void setEnzymePortalDiseaseList(Set<EnzymePortalDisease> enzymePortalDiseaseList) {
-        this.enzymePortalDiseaseList = enzymePortalDiseaseList;
+    public void setEnzymePortalDiseaseSet(Set<EnzymePortalDisease> enzymePortalDiseaseSet) {
+        this.enzymePortalDiseaseSet = enzymePortalDiseaseSet;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (accession != null ? accession.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UniprotEntry)) {
-            return false;
-        }
-        UniprotEntry other = (UniprotEntry) object;
-        if ((this.accession == null && other.accession != null) || (this.accession != null && !this.accession.equals(other.accession))) {
-            return false;
-        }
-        return true;
-    }
-
-//    @Override
-//    public String toString() {
-//        return "UniprotEntry{" + "enzymePortalSummarySet=" + enzymePortalSummarySet + ", enzymePortalCompoundSet=" + enzymePortalCompoundSet + ", accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", synonymName=" + synonymName + ", enzymePortalDiseaseList=" + enzymePortalDiseaseList + '}';
-//    }
-//    @Override
-//    public String toString() {
-//        return "UniprotEntry{" + "name=" + name + '}';
-//    }
-//    @Override
-//    public String toString() {
-//        return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", synonymName=" + synonymName + ", uniprotXrefSet=" + uniprotXrefSet + ", enzymePortalSummarySet=" + enzymePortalSummarySet + ", enzymePortalCompoundSet=" + enzymePortalCompoundSet + ", enzymePortalDiseaseList=" + enzymePortalDiseaseList + '}';
-//    }
-    @Override
-    public String toString() {
-        return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
-    }
-
-
-
-    
-    
-    
-    
-    
 
     @XmlTransient
     public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
@@ -250,5 +218,87 @@ public class UniprotEntry implements Serializable {
     public void setEnzymePortalPathwaysSet(Set<EnzymePortalPathways> enzymePortalPathwaysSet) {
         this.enzymePortalPathwaysSet = enzymePortalPathwaysSet;
     }
+
+    public String getSynonymNames() {
+        return synonymNames;
+    }
+
+    public void setSynonymNames(String synonymNames) {
+        this.synonymNames = synonymNames;
+    }
     
+    //Note : using protein name will reduce all related species to 1 per enzyme hence we use uniprot name for the equals and hashcode
+
+//    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 89 * hash + Objects.hashCode(this.name);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final UniprotEntry other = (UniprotEntry) obj;
+//        if (!Objects.equals(this.name, other.name)) {
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    
+    
+    
+
+    @Override
+    public String toString() {
+        return "UniprotEntry{" + "Has synonymNames=" + !StringUtils.isEmpty(synonymNames) + ", accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", uniprotXrefSet=" + uniprotXrefSet.size() + ", enzymePortalPathwaysSet=" + enzymePortalPathwaysSet.size() + ", enzymePortalReactionSet=" + enzymePortalReactionSet.size() + ", enzymePortalCompoundSet=" + enzymePortalCompoundSet.size() + ", enzymePortalDiseaseSet=" + enzymePortalDiseaseSet.size() + '}';
+    }
+    
+    
+    @Override
+       public String getScientificname() {
+        return scientificName;
+    }
+
+ 
+
+    @Override
+    public String getCommonname() {
+        return commonName;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return super.isSelected();
+    }
+
+    @Override
+    public int compareTo(UniprotEntry other) {
+            if (this.getCommonname() == null & other.getCommonname() == null) {
+            return this.getScientificname().compareTo(other.getScientificname());
+        }
+        if (this.getCommonname() != null & other.getCommonname() == null) {
+            return this.getCommonname().compareTo(other.getScientificname());
+        }
+        if (this.getCommonname() == null & other.getCommonname() != null) {
+            return this.getScientificname().compareTo(other.getCommonname());
+        }
+
+        if (this.getCommonname() != null & this.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.getCommonname() != null & other.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
+            return this.getScientificname().compareTo(other.getScientificname());
+        }
+        return this.getCommonname().compareTo(other.getCommonname());
+    
+    }
+
+
+
+
+
 }

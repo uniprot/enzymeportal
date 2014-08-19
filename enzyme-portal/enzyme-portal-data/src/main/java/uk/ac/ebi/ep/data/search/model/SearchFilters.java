@@ -4,13 +4,12 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.ep.data.model;
+package uk.ac.ebi.ep.data.search.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
+import java.util.List;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
@@ -20,9 +19,9 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 public class SearchFilters {
     
     
-    protected Set<EnzymePortalDisease> diseases;
-    protected Set<EnzymePortalCompound> compounds;
-    protected Set<Species> species;
+    protected List<Disease> diseases;
+    protected List<Compound> compounds;
+    protected List<Species> species;
 
     /**
      * Gets the value of the diseases property.
@@ -47,9 +46,9 @@ public class SearchFilters {
      * 
      * @return 
      */
-    public Set<EnzymePortalDisease> getDiseases() {
+    public List<Disease> getDiseases() {
         if (diseases == null) {
-            diseases = new HashSet<>();
+            diseases = new ArrayList<>();
         }
         return this.diseases;
     }
@@ -77,9 +76,9 @@ public class SearchFilters {
      * 
      * @return 
      */
-    public Set<EnzymePortalCompound> getCompounds() {
+    public List<Compound> getCompounds() {
         if (compounds == null) {
-            compounds = new HashSet<>();
+            compounds = new ArrayList<>();
         }
         return this.compounds;
     }
@@ -107,9 +106,9 @@ public class SearchFilters {
      * 
      * @return 
      */
-    public Set<Species> getSpecies() {
+    public List<Species> getSpecies() {
         if (species == null) {
-            species = new HashSet<>();
+            species = new ArrayList<>();
         }
         return this.species;
     }
@@ -119,30 +118,30 @@ public class SearchFilters {
 
 
 
-    public SearchFilters withDiseases(EnzymePortalDisease... values) {
+    public SearchFilters withDiseases(Disease... values) {
         if (values!= null) {
-            for (EnzymePortalDisease value: values) {
+            for (Disease value: values) {
                 getDiseases().add(value);
             }
         }
         return this;
     }
 
-    public SearchFilters withDiseases(Collection<EnzymePortalDisease> values) {
+    public SearchFilters withDiseases(Collection<Disease> values) {
         if (values!= null) {
             getDiseases().addAll(values);
         }
         return this;
     }
 
-    public SearchFilters withCompounds(EnzymePortalCompound... values) {
+    public SearchFilters withCompounds(Compound... values) {
         if (values!= null) {
             getCompounds().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public SearchFilters withCompounds(Collection<EnzymePortalCompound> values) {
+    public SearchFilters withCompounds(Collection<Compound> values) {
         if (values!= null) {
             getCompounds().addAll(values);
         }
@@ -171,7 +170,7 @@ public class SearchFilters {
      *     {@link EnzymePortalDisease }
      *     
      */
-    public void setDiseases(Set<EnzymePortalDisease> diseases) {
+    public void setDiseases(List<Disease> diseases) {
         this.diseases = diseases;
     }
 
@@ -183,7 +182,7 @@ public class SearchFilters {
      *     {@link Compound }
      *     
      */
-    public void setCompounds(Set<EnzymePortalCompound> compounds) {
+    public void setCompounds(List<Compound> compounds) {
         this.compounds = compounds;
     }
 
@@ -195,7 +194,7 @@ public class SearchFilters {
      *     {@link Species }
      *     
      */
-    public void setSpecies(Set<Species> species) {
+    public void setSpecies(List<Species> species) {
         this.species = species;
     }
 }

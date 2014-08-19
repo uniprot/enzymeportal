@@ -8,14 +8,18 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,6 +30,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ENZYME_PORTAL_SUMMARY")
 @XmlRootElement
+
+
+  
+        @NamedEntityGraph(
+        name = "summary.graph",
+        attributeNodes = {
+            //@NamedAttributeNode("uniprotAccession"),
+            @NamedAttributeNode(value = "uniprotAccession", subgraph = "uniprotAccession")
+        },
+          subgraphs = {
+            @NamedSubgraph(
+                    name = "uniprotAccession",
+                    attributeNodes = {
+                        @NamedAttributeNode("enzymePortalPathwaysSet")}
+            ),
+              @NamedSubgraph(name="uniprotAccession",attributeNodes = {@NamedAttributeNode("enzymePortalDiseaseSet")})
+        }
+
+
+)
+
+
+
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalSummary.findAll", query = "SELECT e FROM EnzymePortalSummary e"),
     @NamedQuery(name = "EnzymePortalSummary.findByEnzymeId", query = "SELECT e FROM EnzymePortalSummary e WHERE e.enzymeId = :enzymeId"),
@@ -97,36 +124,6 @@ public class EnzymePortalSummary implements Serializable {
     }
 
 
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (enzymeId != null ? enzymeId.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EnzymePortalSummary)) {
-            return false;
-        }
-        EnzymePortalSummary other = (EnzymePortalSummary) object;
-        if ((this.enzymeId == null && other.enzymeId != null) || (this.enzymeId != null && !this.enzymeId.equals(other.enzymeId))) {
-            return false;
-        }
-        return true;
-    }
-
-//    @Override
-//    public String toString() {
-//        return "uk.ac.ebi.ep.data.domain.EnzymePortalSummary[ enzymeId=" + enzymeId + " ]";
-//    }
-    @Override
-    public String toString() {
-        return "EnzymePortalSummary{" + "commentType=" + commentType + ", commentText=" + commentText + '}';
-    }
-
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -135,6 +132,33 @@ public class EnzymePortalSummary implements Serializable {
         this.uniprotAccession = uniprotAccession;
     }
 
+        @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.uniprotAccession);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymePortalSummary other = (EnzymePortalSummary) obj;
+        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "EnzymePortalSummary{" + "uniprotAccession=" + uniprotAccession + '}';
+    }
+    
     
     
 }

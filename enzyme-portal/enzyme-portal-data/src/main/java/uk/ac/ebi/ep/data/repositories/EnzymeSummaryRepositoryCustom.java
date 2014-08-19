@@ -23,6 +23,14 @@ public interface EnzymeSummaryRepositoryCustom {
     List<EnzymePortalSummary> findByCommentText(String commentText, int limit);
 
     EnzymePortalSummary findDiseaseEvidence(String accession);
+
+    //@EntityGraph(value = "summary.graph", type = EntityGraphType.LOAD)
     EnzymePortalSummary findByAccession(String accession);
+
+    //@EntityGraph(value = "summary.graph", type = EntityGraphType.LOAD)
+    List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> name_prefixes);
+
+    //@EntityGraph(value = "summary.graph", type = EntityGraphType.LOAD)
+    List<EnzymePortalSummary> findEnzymesByAccessions(List<String> accessions);
 
 }

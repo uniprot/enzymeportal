@@ -18,7 +18,8 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>,  QueryDslPredicateExecutor<UniprotEntry>, UniprotEntryRepositoryCustom {
    
-    UniprotEntry findByAccession(String accession);
+//     @EntityGraph(value = "graph.UniprotEntry", type = EntityGraphType.LOAD)
+//    UniprotEntry findByAccession(String accession);
      @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
             //AND ROWNUM <= 2000
     List<String> findAccession();

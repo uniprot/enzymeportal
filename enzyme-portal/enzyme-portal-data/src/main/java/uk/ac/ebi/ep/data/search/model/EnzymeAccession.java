@@ -4,23 +4,21 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.ep.data.model;
+package uk.ac.ebi.ep.data.search.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
+import java.util.Objects;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
-import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 
 /**
  *
  * @author joseph
  */
-public class EnzymeAccession extends EnzymePortalSummary {
+public class EnzymeAccession implements Serializable{
    
     
   
@@ -28,10 +26,16 @@ public class EnzymeAccession extends EnzymePortalSummary {
    
     protected Species species;
     protected List<String> pdbeaccession;
-    protected Set<EnzymePortalCompound> compounds;
-    protected Set<EnzymePortalDisease> diseases;
+    protected List<Compound> compounds;
+    protected List<Disease> diseases;
   
     protected Object scoring;
+    
+
+    
+    
+    
+    
 
     /**
      * Gets the value of the uniprotaccessions property.
@@ -145,9 +149,9 @@ public class EnzymeAccession extends EnzymePortalSummary {
 //        return this.compounds;
 //    }
     
-        public Set<EnzymePortalCompound> getCompounds() {
+        public List<Compound> getCompounds() {
         if (compounds == null) {
-            compounds = new HashSet<>();
+            compounds = new ArrayList<>();
         }
         return this.compounds;
     }
@@ -181,9 +185,9 @@ public class EnzymeAccession extends EnzymePortalSummary {
 //        return this.diseases;
 //    }
         
-            public Set<EnzymePortalDisease> getDiseases() {
+            public List<Disease> getDiseases() {
         if (diseases == null) {
-            diseases = new HashSet<>();
+            diseases = new ArrayList<>();
         }
         return this.diseases;
     }
@@ -251,28 +255,28 @@ public class EnzymeAccession extends EnzymePortalSummary {
         return this;
     }
 
-    public EnzymeAccession withCompounds(EnzymePortalCompound... values) {
+    public EnzymeAccession withCompounds(Compound... values) {
         if (values!= null) {
             getCompounds().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public EnzymeAccession withCompounds(Collection<EnzymePortalCompound> values) {
+    public EnzymeAccession withCompounds(Collection<Compound> values) {
         if (values!= null) {
             getCompounds().addAll(values);
         }
         return this;
     }
 
-    public EnzymeAccession withDiseases(EnzymePortalDisease... values) {
+    public EnzymeAccession withDiseases(Disease... values) {
         if (values!= null) {
             getDiseases().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public EnzymeAccession withDiseases(Collection<EnzymePortalDisease> values) {
+    public EnzymeAccession withDiseases(Collection<Disease> values) {
         if (values!= null) {
             getDiseases().addAll(values);
         }
@@ -316,7 +320,7 @@ public class EnzymeAccession extends EnzymePortalSummary {
      *     {@link Compound }
      *     
      */
-    public void setCompounds(Set<EnzymePortalCompound> compounds) {
+    public void setCompounds(List<Compound> compounds) {
         this.compounds = compounds;
     }
 
@@ -328,8 +332,44 @@ public class EnzymeAccession extends EnzymePortalSummary {
      *     {@link EnzymePortalDisease }
      *     
      */
-    public void setDiseases(Set<EnzymePortalDisease> diseases) {
+    public void setDiseases(List<Disease> diseases) {
         this.diseases = diseases;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.uniprotaccessions);
+        hash = 53 * hash + Objects.hashCode(this.species);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymeAccession other = (EnzymeAccession) obj;
+        if (!Objects.equals(this.uniprotaccessions, other.uniprotaccessions)) {
+            return false;
+        }
+        if (!Objects.equals(this.species, other.species)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "EnzymeAccession{" + "uniprotaccessions=" + uniprotaccessions + ", species=" + species + '}';
+    }
+
+
+
+
+    
+    
 }

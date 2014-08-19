@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.data.model;
+package uk.ac.ebi.ep.data.search.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

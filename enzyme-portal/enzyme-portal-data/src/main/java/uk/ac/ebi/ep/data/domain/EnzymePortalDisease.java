@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -24,6 +25,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
+import uk.ac.ebi.ep.data.search.model.Disease;
 
 /**
  *
@@ -43,7 +45,7 @@ import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
     @NamedQuery(name = "EnzymePortalDisease.findByDefinition", query = "SELECT e FROM EnzymePortalDisease e WHERE e.definition = :definition"),
     @NamedQuery(name = "EnzymePortalDisease.findByScore", query = "SELECT e FROM EnzymePortalDisease e WHERE e.score = :score"),
     @NamedQuery(name = "EnzymePortalDisease.findByUrl", query = "SELECT e FROM EnzymePortalDisease e WHERE e.url = :url")})
-public class EnzymePortalDisease implements Serializable, Comparable<EnzymePortalDisease> {
+public class EnzymePortalDisease extends Disease implements Serializable, Comparable<EnzymePortalDisease> {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -53,7 +55,7 @@ public class EnzymePortalDisease implements Serializable, Comparable<EnzymePorta
     @Column(name = "DISEASE_ID")
     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_DISEASE_ID")
     @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
-    private Long diseaseId; 
+    private Long diseaseId;
     @Column(name = "OMIM_NUMBER")
     private String omimNumber;
     @Column(name = "MESH_ID")
@@ -70,13 +72,13 @@ public class EnzymePortalDisease implements Serializable, Comparable<EnzymePorta
     private String score;
     @Column(name = "URL")
     private String url;
-    
-        @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
+
+    @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
-        
-            private static final Comparator<String> NAME_COMPARATOR =
-            new ChemicalNameComparator();
+
+    private static final Comparator<String> NAME_COMPARATOR
+            = new ChemicalNameComparator();
 
     public EnzymePortalDisease() {
     }
@@ -157,47 +159,11 @@ public class EnzymePortalDisease implements Serializable, Comparable<EnzymePorta
         this.url = url;
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 5;
-//        hash = 17 * hash + Objects.hashCode(this.diseaseName);
-//        hash = 17 * hash + Objects.hashCode(this.uniprotAccession);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final EnzymePortalDisease other = (EnzymePortalDisease) obj;
-//        if (!Objects.equals(this.diseaseName, other.diseaseName)) {
-//            return false;
-//        }
-//        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
-//            return false;
-//        }
-//        return true;
-//    }
 
-//    @Override
-//    public String toString() {
-//        return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", diseaseName=" + diseaseName + ", evidence=" + evidence + ", definition=" + definition + ", url=" + url + '}';
-//    }
     @Override
     public String toString() {
-        return "EnzymePortalDisease{" + "diseaseName=" + diseaseName + ", uniprotAccession=" + uniprotAccession + '}';
+        return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", diseaseName=" + diseaseName + ", evidence=" + evidence + ", definition=" + definition + ", url=" + url + '}';
     }
-
-
-
-
-
-    
-    
 
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
@@ -207,20 +173,6 @@ public class EnzymePortalDisease implements Serializable, Comparable<EnzymePorta
         this.uniprotAccession = uniprotAccession;
     }
 
-//    @Override
-//    public int compareTo(EnzymePortalDisease d) {
-//  
-//        int compare_name = NAME_COMPARATOR.compare(this.getDiseaseName(),d.getDiseaseName());
-//        if(this.getDiseaseName() == null & d.getDiseaseName() == null){
-//            return this.uniprotAccession.getAccession().compareTo(d.getUniprotAccession().getAccession());
-//        }
-//
-//      
-//    return compare_name == 0 ? this.uniprotAccession.getAccession().compareTo(d.getUniprotAccession().getAccession()) : compare_name;
-//
-//    
-//
-//    }
     @Override
     public int hashCode() {
         int hash = 7;
@@ -242,15 +194,75 @@ public class EnzymePortalDisease implements Serializable, Comparable<EnzymePorta
         }
         return true;
     }
+
     
-    
-    
+        @Override
+    public int compareTo(EnzymePortalDisease o) {
+        return NAME_COMPARATOR.compare(this.getDiseaseName(),
+                o.getDiseaseName());
+    }
+
+    @Override
+    public List<String> getEvidences() {
+        if (evidences == null) {
+            evidences = new ArrayList<>();
+        }
+
+        evidences.add(getEvidence());
+        return evidences;
+    }
+
+    @Override
+    public void setEvidences(List<String> evidences) {
+        this.evidences = evidences;
+    }
     
 
     @Override
-    public int compareTo(EnzymePortalDisease d) {
-       return this.getDiseaseName().compareToIgnoreCase(d.getDiseaseName());
+    public String getId() {
+        return meshId;
     }
-    
-    
+
+ 
+
+    @Override
+    public String getName() {
+        return diseaseName;
+    }
+
+ 
+
+    @Override
+    public String getDescription() {
+        return definition;
+    }
+
+  
+
+
+    /**
+     * Gets the value of the selected property.
+     *
+     * @return selected
+     */
+    @Override
+    public boolean isSelected() {
+        return selected;
+    }
+
+
+
+    /**
+     * Gets the value of the numEnzyme property.
+     *
+     * @return numEnzyme
+     */
+    @Override
+    public int getNumEnzyme() {
+        return numEnzyme;
+    }
+
+ 
+
+
 }

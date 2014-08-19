@@ -26,6 +26,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import uk.ac.ebi.ep.data.search.model.Compound;
 
 
 /**
@@ -43,7 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundSource", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundSource = :compoundSource"),
     @NamedQuery(name = "EnzymePortalCompound.findByRelationship", query = "SELECT e FROM EnzymePortalCompound e WHERE e.relationship = :relationship"),
     @NamedQuery(name = "EnzymePortalCompound.findByUniprotAccession", query = "SELECT e FROM EnzymePortalCompound e WHERE e.uniprotAccession = :uniprotAccession")})
-public class EnzymePortalCompound implements Serializable {
+public class EnzymePortalCompound extends Compound implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -175,37 +176,6 @@ public class EnzymePortalCompound implements Serializable {
 
 
 
-    
-    
-    
-
-//    @Override
-//    public int hashCode() {
-//        int hash = 0;
-//        hash += (compoundInternalId != null ? compoundInternalId.hashCode() : 0);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object object) {
-//        // TODO: Warning - this method won't work in the case the id fields are not set
-//        if (!(object instanceof EnzymePortalCompound)) {
-//            return false;
-//        }
-//        EnzymePortalCompound other = (EnzymePortalCompound) object;
-//        if ((this.compoundInternalId == null && other.compoundInternalId != null) || (this.compoundInternalId != null && !this.compoundInternalId.equals(other.compoundInternalId))) {
-//            return false;
-//        }
-//        return true;
-//    }
-//    @Override
-//    public String toString() {
-//        return "uk.ac.ebi.ep.data.domain.EnzymePortalCompound[ compoundInternalId=" + compoundInternalId + " ]";
-//    }
-
-    
-    
-
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -246,6 +216,31 @@ public class EnzymePortalCompound implements Serializable {
         this.enzymePortalReactionSet = enzymePortalReactionSet;
     }
 
+    @Override
+  public String getId() {
+        return compoundId;
+    }
 
+
+    @Override
+    public String getName() {
+        return compoundName;
+    }
+    
+    @Override
+      public Compound.Role getRole() {
+        return Compound.Role.valueOf(compoundRole);
+
+    }
+
+
+    @Override
+    public boolean isSelected() {
+        return selected;
+    }
+
+
+
+ 
 
 }
