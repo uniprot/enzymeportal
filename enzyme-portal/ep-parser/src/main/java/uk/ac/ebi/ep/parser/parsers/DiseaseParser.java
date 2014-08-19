@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
@@ -24,6 +25,8 @@ import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
 import uk.ac.ebi.ep.data.service.BioPortalService;
 import uk.ac.ebi.ep.data.service.DiseaseService;
 import uk.ac.ebi.ep.data.service.UniprotEntryService;
+import uk.ac.ebi.xchars.SpecialCharacters;
+import uk.ac.ebi.xchars.domain.EncodingType;
 
 /**
  * Class to parse the file - either
@@ -127,14 +130,17 @@ public class DiseaseParser {
 
                     EnzymePortalDisease disease = new EnzymePortalDisease();
                     //disease.setUniprotaccession(accession);
-                    disease.setDiseaseName(meshHeadsCell[i]);
+
+                    String diseaseName = resolveSpecialCharacters(meshHeadsCell[i].toLowerCase(Locale.ENGLISH));
+                    disease.setDiseaseName(diseaseName.replaceAll(",", ""));
+
+                    disease.setDiseaseName(diseaseName);
                     disease.setMeshId(meshIdsCell[i]);
                     disease.setOmimNumber(omimCell[0]);
                     disease.setScore(Double.toString(scores[i]));
                     disease.setDefinition(definition);
                     disease.setUniprotAccession(enzyme.getUniprotAccession());
                     disease.setEvidence(summary.getCommentText());
-                    
 
                     if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
                         url = "http://purl.bioontology.org/ontology/OMIM/" + omimCell[0];
@@ -154,7 +160,7 @@ public class DiseaseParser {
             }
         } else {
             LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is " + fields.length);
-           // throw new ArrayIndexOutOfBoundsException();
+            // throw new ArrayIndexOutOfBoundsException();
         }
 
     }
@@ -240,6 +246,29 @@ public class DiseaseParser {
                 break;
         }
         return fields;
+    }
+
+    private String resolveSpecialCharacters(String data) {
+
+        SpecialCharacters xchars = SpecialCharacters.getInstance(null);
+        EncodingType[] encodings = {
+            EncodingType.CHEBI_CODE,
+            EncodingType.COMPOSED,
+            EncodingType.EXTENDED_HTML,
+            EncodingType.GIF,
+            EncodingType.HTML,
+            EncodingType.HTML_CODE,
+            EncodingType.JPG,
+            EncodingType.SWISSPROT_CODE,
+            EncodingType.UNICODE
+        };
+
+        if (!xchars.validate(data)) {
+            LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
+
+        }
+
+        return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
 
 }

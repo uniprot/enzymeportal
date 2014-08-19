@@ -2,7 +2,7 @@
 # Rebuilds a fresh enzyme portal database. It asks for a
 # password to delete all data and then sends the script enzyme-portal-data.sh to LSF.
 # Param:
-# $1: database environment (vezpdev|ezprel)
+# $1: database environment (uzpdev|uzprel)
 
 echo
 echo "**************************** W A R N I N G ****************************"

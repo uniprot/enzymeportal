@@ -300,7 +300,7 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
             }
 
             if (!xrefs.isEmpty()) {
-                System.out.println("XREFS "+ xrefs);
+               
                 compoundRepository.save(xrefs);
             }
 
