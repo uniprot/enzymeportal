@@ -49,15 +49,10 @@ public class SearchController extends AbstractController {
       private static final String BROWSE = "/browse";
     private static final String BROWSE_DISEASE = "/browse/disease";
     
-     //private List<EnzymePortalDisease> diseaseList = new ArrayList<>();
-    
-//    @Autowired
-//    private EnzymePortalService enzymePortalService;
        @Autowired
     private Config searchConfig;
-//          @Autowired
-//    protected IntenzConfig intenzConfig;
-//    
+
+    
         private boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
     }
@@ -296,21 +291,6 @@ public class SearchController extends AbstractController {
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeService);
         results = finder.getEnzymes(searchParameters);
         
-        //System.out.println("results "+ results);
-        //System.out.println("Search Config "+ searchConfig.getMaxTextLength());
-        
-//        EnzymeFinder finder = new EnzymeFinder(searchConfig);
-//        finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-//        finder.getUniprotAdapter().setConfig(uniprotConfig);
-//        finder.getIntenzAdapter().setConfig(intenzConfig);
-//        try {
-//            results = finder.getEnzymes(searchParameters);
-//        } catch (EnzymeFinderException ex) {
-//            LOGGER.error("Unable to create the result list because an error "
-//                    + "has occurred in the find method! \n", ex);
-//        } finally {
-//            finder.closeResources();
-//        }
         return results;
     }  
     
@@ -478,110 +458,5 @@ public class SearchController extends AbstractController {
     }
 
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //////// delete later ///////
-    
-    //prior to new impl
-        
-
-//    @RequestMapping(value = SEARCH, method = RequestMethod.GET)
-//    public String showSearchPage(Model model) {
-//        LOGGER.debug("Rendering Search page");
-//         System.out.println("SEARCH page called ");
-//        diseaseList = enzymePortalService.findAllDiseases();
-//        System.out.println("diseaew found "+ diseaseList.size());
-//        
-//         model.addAttribute("diseases", diseaseList);
-//        
-//        
-//
-//       
-//
-//        return SEARCH;
-//    }
-    
-    //keep this in abstract controller
-//        @ModelAttribute("searchModel")
-//    public SearchModel searchform() {
-//        SearchModel searchModelForm = new SearchModel();
-//        SearchParams searchParams = new SearchParams();
-//        searchParams.setStart(0);
-//        searchParams.setType(SearchParams.SearchType.KEYWORD);
-//        searchModelForm.setSearchparams(searchParams);
-//        return searchModelForm;
-//    }
-    
-//        @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
-//    public String showDiseases(Model model) {
-//       // EnzymeFinder finder = new EnzymeFinder(searchConfig);
-//
-//       diseaseList = enzymePortalService.findAllDiseases();
-//
-//        SearchModel searchModelForm = searchform();
-//        model.addAttribute("searchModel", searchModelForm);
-//        model.addAttribute("diseaseList", diseaseList);
-//
-//        return BROWSE;
-//    }
-//    
-//    
-//       private static final Comparator<String> NAME_COMPARATOR = new ChemicalNameComparator();
-//    static final Comparator<EnzymePortalDisease> SORT_DISEASES = new Comparator<EnzymePortalDisease>() {
-//        @Override
-//        public int compare(EnzymePortalDisease d1, EnzymePortalDisease d2) {
-//
-//            if (d1.getDiseaseName() == null && d2.getDiseaseName() == null) {
-//
-//                return NAME_COMPARATOR.compare(d1.getDiseaseName(), d2.getDiseaseName());
-//            }
-//            int compare = NAME_COMPARATOR.compare(d1.getDiseaseName(), d2.getDiseaseName());
-//
-//            return ((compare == 0) ? NAME_COMPARATOR.compare(d1.getDiseaseName(), d2.getDiseaseName()) : compare);
-//
-//        }
-//    };
-//    
-//        @RequestMapping(value = BROWSE_DISEASE + "/{startsWith}", method = RequestMethod.GET)
-//    public String showDiseasesLike(@PathVariable(value = "startsWith") String startsWith, Model model) {
-//
-//      
-//        Set<EnzymePortalDisease> selectedDiseases = new TreeSet<>(SORT_DISEASES);
-//
-//            System.out.println("LIST "+ diseaseList.size());
-//        for (EnzymePortalDisease disease : diseaseList) {
-//            if (disease.getDiseaseName().startsWith(startsWith.toLowerCase())) {
-//                selectedDiseases.add(disease);
-//            }
-//            if (startsWithDigit(disease.getDiseaseName())) {
-//                String current = disease.getDiseaseName().replaceAll("(-)?\\d+(\\-\\d*)?", "").trim();
-//                if (current.startsWith(startsWith.toLowerCase())) {
-//                    selectedDiseases.add(disease);
-//                }
-//            }
-//        }
-//
-//
-//        SearchModel searchModelForm = searchform();
-//        model.addAttribute("searchModel", searchModelForm);
-//
-//          
-//        model.addAttribute("alldiseaseList", selectedDiseases);
-//        model.addAttribute("startsWith", startsWith.toUpperCase());
-//
-//        return BROWSE;
-//    }
     
 }

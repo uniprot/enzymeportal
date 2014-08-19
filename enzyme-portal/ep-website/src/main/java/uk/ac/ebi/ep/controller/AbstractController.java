@@ -47,8 +47,7 @@ import uk.ac.ebi.ep.functions.HtmlUtility;
 public abstract class AbstractController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
-    //@Autowired
-    //protected UniprotConfig uniprotConfig;
+  
     @Autowired
     private Config searchConfig;
     @Autowired
@@ -57,7 +56,7 @@ public abstract class AbstractController {
     protected EnzymePortalService enzymePortalService;
     @Autowired
     protected EbeyeService ebeyeService; 
-    //protected EbeyeConfig ebeyeConfig;
+  
 
     @ModelAttribute("searchModel")
     public SearchModel searchform() {
@@ -224,15 +223,9 @@ public abstract class AbstractController {
     protected SearchResults searchKeyword(SearchParams searchParameters) {
         SearchResults results = null;
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeService);
-        //finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-        //finder.getUniprotAdapter().setConfig(uniprotConfig);
-        //finder.getIntenzAdapter().setConfig(intenzConfig);
-        //try {
+ 
             results = finder.getEnzymes(searchParameters);
-        //} catch (EnzymeFinderException ex) {
-           // LOGGER.error("Unable to create the result list because an error "
-                   // + "has occurred in the find method! \n", ex);
-    
+  
         return results;
     }
 
