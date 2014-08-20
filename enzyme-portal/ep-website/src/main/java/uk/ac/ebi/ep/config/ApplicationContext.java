@@ -41,12 +41,8 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
 @ComponentScan(basePackages = {"uk.ac.ebi.ep",
         "uk.ac.ebi.ep.data.dataconfig"})
 
-//@ComponentScan(basePackages = {"uk.ac.ebi.ep"})
-
-//@ComponentScan(basePackages = "uk.ac.ebi.ep")
 @EnableWebMvc
 @EnableSpringDataWebSupport
-//@Import({DataConfig.class,DevDataConfig.class,ProdDataConfig.class})
 @Import({DevDataConfig.class,ProdDataConfig.class,DataConfig.class})
 @ImportResource("classpath:trace-context.xml")
 //@PropertySource("classpath:spring.properties")
@@ -55,45 +51,12 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
     @Autowired
     private Environment env;
     
-//        @Bean
-//   
-//    public DataSource dataSource() {
-//        try {
-//
-//            System.out.println("ENVIRONMENT "+ env);
-//            OracleDataSource ds = new OracleConnectionPoolDataSource();
-//            //OracleConnectionPoolDataSource ds = new OracleConnectionPoolDataSource();
-//
-//            String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
-//                    env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
-//
-//            System.out.println("URL for connection "+ url);
-//            ds.setURL(url);
-//            ds.setUser(env.getRequiredProperty("ep.db.username"));
-//            ds.setPassword(env.getRequiredProperty("ep.db.password"));
-//
-//            ds.setConnectionCacheName("ep-connection-cache-01");
-//            ds.setImplicitCachingEnabled(true);
-//
-//            Properties prop = new Properties();
-//
-//            prop.setProperty("MinLimit", "5");     // the cache size is 5 at least 
-//            prop.setProperty("MaxLimit", "100");
-//            prop.setProperty("InitialLimit", "3"); // create 3 connections at startup
-//
-//            return ds;
-//        } catch (IllegalStateException | SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    
-//http://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch04s12.html
     // Maps resources path to webapp/resources
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/favicon.ico").addResourceLocations("/");//this is the root src/webapp/here
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("/");
 
  
     }

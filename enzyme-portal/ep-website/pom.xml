@@ -1,0 +1,662 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>uk.ac.ebi.ep</groupId>
+    <artifactId>ep-website</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>enzymeportal</name>
+    
+    <description>
+        The Enzyme Portal web application.
+    </description>
+        <parent>
+        <artifactId>ep</artifactId>
+        <groupId>uk.ac.ebi.ep</groupId>
+        <version>1.0.3</version>
+    </parent>
+    
+    <properties>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+<!--        <spring.data.jpa.version>1.6.2.RELEASE</spring.data.jpa.version>
+        <spring.data.commons.version>1.8.2.RELEASE</spring.data.commons.version>
+        <querydsl.version>3.3.1</querydsl.version>-->
+        <org.springframework-version>4.0.6.RELEASE</org.springframework-version> 
+<!--        <hibernate.entitymanager.version>4.3.5.Final</hibernate.entitymanager.version>
+        <hibernate.jpa-api.version>1.0.0.Final</hibernate.jpa-api.version>-->
+        <cglib.version>3.1</cglib.version>
+        <aspectj.version>1.7.4</aspectj.version>
+
+
+        <c3p0.version>0.9.2.1</c3p0.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <javax.jstl-taglibs.version>1.1.2</javax.jstl-taglibs.version>
+        <jackson.version>1.9.9</jackson.version>
+        <httpclient.version>4.2.1</httpclient.version>
+        
+
+        
+        <!-- Testing -->
+        <mockito.version>1.9.5</mockito.version>
+        <junit.version>4.11</junit.version>
+
+        <!-- Plugins -->
+        <tomcat7.maven.plugin.version>2.0</tomcat7.maven.plugin.version>
+      
+        <maven.copy.plugin.version>0.2.3</maven.copy.plugin.version>
+        <maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
+        <maven.apt.plugin.version>1.0</maven.apt.plugin.version>
+    
+        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>  
+    </properties>
+
+
+    <dependencies>
+
+
+       <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>ep-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+<!--             overriding ep-core's -->
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>reactome-adapter</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>ep-util</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>intenz-adapter</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>chembl-adapter</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+                <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>chebi-adapter</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>literature-adapter</artifactId>
+            <version>1.0.8</version>
+        </dependency> 
+        
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
+            <version>2.5.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.biobabel</groupId>
+            <artifactId>biobabel-core</artifactId>
+            <version>0.16</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
+ 
+        
+<!--
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>javax.persistence</artifactId>
+            <version>2.0.3</version>
+        </dependency>-->
+
+        <!-- Data Mapper package is a high-performance data binding package built 
+        on Jackson JSON processor -->
+
+
+        <!-- Jackson is a high-performance JSON processor (parser, generator) -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+                
+        
+        <!-- Spring Core -->
+        
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>${jackson.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency> 
+         
+        <!--            <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>4.0.3.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+
+    
+    
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${org.springframework-version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${org.springframework-version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${org.springframework-version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+    
+
+     
+        
+
+        <!-- AspectJ - A seamless aspect-oriented extension to the Java programming language -->
+
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${cglib.version}</version>
+        </dependency>
+        
+        <!-- The JavaServer Pages Standard Tag Library (JSTL) encapsulates, as simple tags, core 
+        functionality common to many JSP applications. -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+<!--        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${javax.jstl-taglibs.version}</version>
+        </dependency>-->
+        
+               <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        
+             <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        
+        <!-- Javax Servlet. This needs to be included for runtime only! -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- Logger -->
+        <!-- The Simple Logging Facade for Java or (SLF4J) serves as a simple facade or abstraction 
+        for various logging frameworks, e.g. java.util.logging, log4j and logback, allowing the end 
+        user to plug in the desired logging framework at deployment time. -->
+ 
+        
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>${javax.jstl-taglibs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency> 
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+
+        <!-- Spring Data JPA -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+
+        <!--spring Data commons-->
+
+<!--        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring.data.jpa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>${spring.data.commons.version}</version>
+        </dependency> 
+        -->
+
+        <!-- Database pooling -->
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>${c3p0.version}</version>
+        </dependency>
+
+            
+
+        <!--  ORACLE Connector -->
+<!--        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3</version>
+        </dependency>-->
+
+        <!-- Hibernate  -->
+        
+            
+        <!--                        hibernate core-->
+<!--        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.entitymanager.version}</version>
+        </dependency>
+            -->
+
+
+
+            
+        <!--                    hibernate validator-->
+<!--                        
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.0.3.Final</version>
+        </dependency>
+
+            
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.entitymanager.version}</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>asm</artifactId>
+                    <groupId>asm</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+         QueryDSL 
+	
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>${querydsl.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+        </dependency>-->
+
+        <!-- Testing dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework-version}</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+
+<!--        <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp</artifactId>
+            <version>0.7.1.RELEASE</version>
+            <type>jar</type>
+        </dependency>-->
+
+
+        <dependency>
+            <groupId>uk.ac.ebi.xchars</groupId>
+            <artifactId>xchars-taglib</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.xchars</groupId>
+            <artifactId>xchars-config</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+
+
+
+    <build>
+        <finalName>enzymeportal</finalName>
+        <plugins>
+         
+<!--            <plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>maven-apt-plugin</artifactId>
+                <version>1.0.4</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>   -->
+            
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <compilerArguments>
+                        <endorseddirs>${endorsed.dir}</endorseddirs>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${endorsed.dir}</outputDirectory>
+                            <silent>true</silent>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>javax</groupId>
+                                    <artifactId>javaee-endorsed-api</artifactId>
+                                    <version>6.0</version>
+                                    <type>jar</type>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-site-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<reportPlugins>-->
+                        <!--<plugin>-->
+                            <!--<groupId>org.apache.maven.plugins</groupId>-->
+                            <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
+                            <!--<reports>-->
+                                <!--<report>summary</report>-->
+                                <!--<report>dependencies</report>-->
+                                <!--<report>dependency-convergence</report>-->
+                                <!--<report>project-team</report>-->
+                                <!--<report>issue-tracking</report>-->
+                                <!--<report>license</report>-->
+                                <!--<report>scm</report>-->
+                            <!--</reports>-->
+                        <!--</plugin>-->
+                        <!--<plugin>-->
+                            <!--<groupId>org.apache.maven.plugins</groupId>-->
+                            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+                        <!--</plugin>-->
+                        <!--<plugin>-->
+                            <!--<groupId>org.apache.maven.plugins</groupId>-->
+                            <!--<artifactId>maven-surefire-report-plugin</artifactId>-->
+                        <!--</plugin>-->
+                        <!--<plugin>-->
+                            <!--<groupId>org.apache.maven.plugins</groupId>-->
+                            <!--<artifactId>maven-jxr-plugin</artifactId>-->
+                        <!--</plugin>-->
+                        <!--<plugin>-->
+                            <!--<groupId>org.codehaus.mojo</groupId>-->
+                            <!--<artifactId>cobertura-maven-plugin</artifactId>-->
+                        <!--</plugin>-->
+                        <!--<plugin>-->
+                            <!--<groupId>org.codehaus.mojo</groupId>-->
+                            <!--<artifactId>versions-maven-plugin</artifactId>-->
+                            <!--<reportSets>-->
+                                <!--<reportSet>-->
+                                    <!--<reports>-->
+                                        <!--<report>dependency-updates-report</report>-->
+                                        <!--<report>plugin-updates-report</report>-->
+                                        <!--<report>property-updates-report</report>-->
+                                    <!--</reports>-->
+                                <!--</reportSet>-->
+                            <!--</reportSets>-->
+                        <!--</plugin>-->
+                        <!--<plugin>-->
+                            <!--<groupId>org.apache.maven.plugins</groupId>-->
+                            <!--<artifactId>maven-changes-plugin</artifactId>-->
+                            <!--<reportSets>-->
+                                <!--<reportSet>-->
+                                    <!--<reports>-->
+                                        <!--<report>changes-report</report>-->
+                                    <!--</reports>-->
+                                <!--</reportSet>-->
+                            <!--</reportSets>-->
+                        <!--</plugin>-->
+                    <!--</reportPlugins>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>com.github.github</groupId>-->
+                <!--<artifactId>site-maven-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<path>-->
+                        <!--${project.parent.artifactId}/${project.artifactId}-->
+                    <!--</path>-->
+                <!--</configuration>-->
+            <!--</plugin>  -->
+            
+            
+            
+        </plugins>
+    </build>
+    
+    <repositories>
+        <repository>
+            <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
+            <id>eclipselink</id>
+            <layout>default</layout>
+            <name>Repository for library EclipseLink (JPA 2.0)</name>
+        </repository>
+        <repository>
+            <id>spring-snapshot</id>
+            <name>SpringSource Snapshot Repository</name>
+            <url>http://repo.springsource.org/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestone</id>
+            <name>SpringSource Milestone Repository</name>
+            <url>http://repo.springsource.org/libs-milestone</url>
+        </repository>
+
+        <repository>
+            <id>codelds</id>
+            <url>https://code.lds.org/nexus/content/groups/main-repo</url>
+        </repository>
+    </repositories>
+
+</project>
