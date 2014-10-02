@@ -17,16 +17,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
-import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
-import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.base.comparison.EnzymeComparison;
-import uk.ac.ebi.ep.base.exceptions.EnzymeRetrieverException;
-import uk.ac.ebi.ep.common.Config;
+import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.data.exceptions.EnzymeRetrieverException;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
+import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
+import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 
 
 
@@ -36,7 +35,7 @@ import uk.ac.ebi.ep.data.search.model.SearchParams;
  * @since 1.1.0
  */
 @Controller
-public class BasketController {
+public class BasketController extends AbstractController{
 
     private final Logger LOGGER = Logger.getLogger(BasketController.class);
     
@@ -44,10 +43,10 @@ public class BasketController {
     //private EbeyeConfig ebeyeConfig;
     //@Autowired
     //private UniprotConfig uniprotConfig;
-    @Autowired
-    private Config searchConfig;
-    @Autowired
-    private IntenzConfig intenzConfig;
+    //@Autowired
+    //private Config searchConfig;
+    //@Autowired
+    //private IntenzConfig intenzConfig;
     @Autowired
     private ReactomeConfig reactomeConfig;
     @Autowired
@@ -151,7 +150,7 @@ public class BasketController {
             LOGGER.debug("Comparison started...");
             EnzymeComparison comparison =
                     new EnzymeComparison(models[0], models[1]);
-            LOGGER.debug("Comparison finished");
+            LOGGER.debug("Comparison finished"); 
             model.addAttribute("comparison", comparison);
             return "comparison";
         } catch (Exception e){
@@ -175,27 +174,29 @@ public class BasketController {
     
     private class EnzymeModelCallable implements Callable<EnzymeModel>{
 
-        private String acc;
+        private final String acc;
 
         public EnzymeModelCallable(String acc) {
             this.acc = acc;
         }
 
+        @Override
         public EnzymeModel call() throws Exception {
-//            EnzymeRetriever retriever = null;
-//            try {
-//                retriever = new EnzymeRetriever(searchConfig);
-//                retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
-//                retriever.getUniprotAdapter().setConfig(uniprotConfig);
-//                retriever.getIntenzAdapter().setConfig(intenzConfig);
-//                retriever.getReactomeAdapter().setConfig(reactomeConfig);
-//                retriever.getChebiAdapter().setConfig(chebiConfig);
-//                retriever.getBioportalAdapter().setConfig(bioportalConfig);
-//                return retriever.getWholeModel(acc);
-//            } finally {
+            EnzymeRetriever retriever = null;
+            //try {
+                retriever = new EnzymeRetriever(enzymePortalService, ebeyeService);
+                //retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
+                //retriever.getUniprotAdapter().setConfig(uniprotConfig);
+                retriever.getIntenzAdapter().setConfig(intenzConfig);
+                retriever.getReactomeAdapter().setConfig(reactomeConfig);
+                retriever.getChebiAdapter().setConfig(chebiConfig);
+                //retriever.getBioportalAdapter().setConfig(bioportalConfig);
+                return retriever.getWholeModel(acc);
+            //} 
+//            finally {
 //                if (retriever != null) retriever.closeResources();
 //            }
-            return null;
+            //return null;
         }
 
     }

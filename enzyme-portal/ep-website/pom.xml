@@ -67,37 +67,37 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         
-        <dependency>
-<!--             overriding ep-core's -->
+<!--        <dependency>
+             overriding ep-core's 
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>reactome-adapter</artifactId>
             <version>1.0.3</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-util</artifactId>
             <version>1.0.6</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>intenz-adapter</artifactId>
             <version>1.0.6</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>chembl-adapter</artifactId>
             <version>1.0.2</version>
         </dependency>
-                <dependency>
+<!--                <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>chebi-adapter</artifactId>
             <version>1.0.5</version>
-        </dependency>
-        <dependency>
+        </dependency>-->
+<!--        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>literature-adapter</artifactId>
             <version>1.0.8</version>
-        </dependency> 
+        </dependency> -->
         
 
         <dependency>

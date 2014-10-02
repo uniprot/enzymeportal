@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import uk.ac.ebi.ep.adapter.chebi.ChebiConfig;
+import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.data.enzyme.model.Molecule;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;

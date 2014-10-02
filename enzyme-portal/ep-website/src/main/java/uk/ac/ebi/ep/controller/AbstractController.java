@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import uk.ac.ebi.ep.adapter.intenz.IntenzConfig;
 import uk.ac.ebi.ep.base.common.CompoundsPredicate;
 import uk.ac.ebi.ep.base.common.DiseasesPredicate;
 import uk.ac.ebi.ep.base.common.SpeciesPredicate;
@@ -35,6 +34,7 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeService;
+import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
 
