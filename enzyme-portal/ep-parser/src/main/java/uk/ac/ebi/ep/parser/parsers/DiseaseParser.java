@@ -114,7 +114,7 @@ public class DiseaseParser {
 
                 //check to see if accession is an enzyme
                 //UniprotEntry uniprotEntry = uniprotEntryService.findByAccession(accession);
-                EnzymePortalSummary enzyme = enzymeSummaryRepository.findByAccession(accession);
+                EnzymePortalSummary enzyme = enzymeSummaryRepository.findEnzymeSummaryByAccession(accession);
                 if (enzyme != null) {
 
                     //definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import uk.ac.ebi.ep.parser.parsers.DiseaseParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPathwaysParser;
+import uk.ac.ebi.ep.parser.parsers.RelatedProteinsPopulator;
 
 /**
  *
@@ -34,6 +35,10 @@ public class GlobalDataConfig {
     @Bean
     public EnzymePortalPathwaysParser enzymePortalPathwaysParser() {
         return new EnzymePortalPathwaysParser();
+    }
+    @Bean
+    public RelatedProteinsPopulator relatedProteinsPopulator(){
+        return new RelatedProteinsPopulator();
     }
 
 }

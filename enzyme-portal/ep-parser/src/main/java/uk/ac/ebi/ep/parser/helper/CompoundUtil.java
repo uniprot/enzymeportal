@@ -6,7 +6,8 @@
 package uk.ac.ebi.ep.parser.helper;
 
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.model.Compound;
+import uk.ac.ebi.ep.data.search.model.Compound;
+
 
 /**
  *
