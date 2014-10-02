@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
-import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.Species;
 
@@ -364,9 +364,9 @@ public class EnzymeModel
     }
 
     @Override
-    public EnzymeModel withRelatedspecies(EnzymeAccession... values) {
+    public EnzymeModel withRelatedspecies(RelatedProteins... values) {
         if (values!= null) {
-            for (EnzymeAccession value: values) {
+            for (RelatedProteins value: values) {
                 getRelatedspecies().add(value);
             }
         }
@@ -374,7 +374,7 @@ public class EnzymeModel
     }
 
     @Override
-    public EnzymeModel withRelatedspecies(Collection<EnzymeAccession> values) {
+    public EnzymeModel withRelatedspecies(Collection<RelatedProteins> values) {
         if (values!= null) {
             getRelatedspecies().addAll(values);
         }

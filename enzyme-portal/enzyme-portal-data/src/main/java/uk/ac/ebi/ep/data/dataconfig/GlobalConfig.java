@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.data.service.BioPortalService;
 import uk.ac.ebi.ep.data.service.DiseaseService;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.data.service.RelatedProteinsService;
 import uk.ac.ebi.ep.data.service.UniprotEntryService;
 
 /**
@@ -41,6 +42,11 @@ public class GlobalConfig {
     @Bean
     public EnzymePortalService enzymePortalService() {
         return new EnzymePortalService();
+    }
+    
+    @Bean
+    public RelatedProteinsService relatedProteinsService(){
+        return new RelatedProteinsService();
     }
 
 //    @Bean

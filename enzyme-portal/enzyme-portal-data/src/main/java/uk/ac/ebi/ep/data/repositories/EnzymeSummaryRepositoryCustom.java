@@ -6,6 +6,8 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 
@@ -24,13 +26,16 @@ public interface EnzymeSummaryRepositoryCustom {
 
     EnzymePortalSummary findDiseaseEvidence(String accession);
 
-    //@EntityGraph(value = "summary.graph", type = EntityGraphType.LOAD)
-    EnzymePortalSummary findByAccession(String accession);
+    EnzymePortalSummary findEnzymeSummaryByAccession(String accession);
 
-    //@EntityGraph(value = "summary.graph", type = EntityGraphType.LOAD)
+    List<EnzymePortalSummary> findEnzymeSummariesByAccession(String accessions);
+
     List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> name_prefixes);
 
-    //@EntityGraph(value = "summary.graph", type = EntityGraphType.LOAD)
-    List<EnzymePortalSummary> findEnzymesByAccessions(List<String> accessions);
+    List<EnzymePortalSummary> findEnzymesByAccessionOrNamePrefixes(List<String> accession_or_nameprefix);
+
+    List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions);
+
+    Page<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions, Pageable pageable);
 
 }

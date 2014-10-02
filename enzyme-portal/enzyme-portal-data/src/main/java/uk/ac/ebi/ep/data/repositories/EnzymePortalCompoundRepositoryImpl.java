@@ -10,6 +10,9 @@ import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +47,7 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
     }
 
     @Override
-    public List<EnzymePortalCompound> findByNamePrefixes(List<String> name_prefixes) {
+    public List<EnzymePortalCompound> findCompoundsByNameprefixes(List<String> name_prefixes) {
 
         JPAQuery query = new JPAQuery(entityManager);
 
@@ -58,6 +61,32 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
         query.from($).where(builder);
         return query.distinct().list($);
 
+    }
+
+    @Override
+    public List<EnzymePortalCompound> findCompoundsByUniprotAccession(String accession) {
+        JPAQuery query = new JPAQuery(entityManager);
+        BooleanExpression isUniprotAcc = $.uniprotAccession.accession.equalsIgnoreCase(accession);
+
+        List<EnzymePortalCompound> compounds = query.from($).where(isUniprotAcc).distinct().list($);
+
+        return compounds;
+    }
+
+    @Override
+    public List<String> findEnzymesByCompound(String compound_id) {
+
+        Set<String> enzymes = new TreeSet<>();
+        JPAQuery query = new JPAQuery(entityManager);
+        BooleanExpression compound = $.compoundId.equalsIgnoreCase(compound_id);
+
+        List<EnzymePortalCompound> compounds = query.from($).where(compound).distinct().list($);
+
+        compounds.parallelStream().forEach((c) -> {
+            enzymes.add(c.getUniprotAccession().getAccession());
+        });
+
+        return enzymes.stream().distinct().collect(Collectors.toList());
     }
 
 }

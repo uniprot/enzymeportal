@@ -19,6 +19,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import uk.ac.ebi.ep.data.util.CustomQueryDslJpaRepositoryFactoryBean;
 
 /**
  *
@@ -26,11 +27,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
+@EnableJpaRepositories(repositoryFactoryBeanClass=CustomQueryDslJpaRepositoryFactoryBean.class,basePackages = "uk.ac.ebi.ep.data.repositories")
+//@EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
 @PropertySource({"classpath:ep-web-client.properties", "classpath:chembl-adapter.properties", "classpath:log4j.properties"})
 
 public class DataConfig {
-
+//repositoryFactoryBeanClass=CustomQueryDslJpaRepositoryFactoryBean.class
     @Autowired
     private DataSource dataSource;
     

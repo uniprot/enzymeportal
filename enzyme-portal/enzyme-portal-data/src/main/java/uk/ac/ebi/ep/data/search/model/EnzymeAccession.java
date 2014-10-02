@@ -12,13 +12,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+
 
 /**
  *
  * @author joseph
  */
-public class EnzymeAccession implements Serializable{
+public class EnzymeAccession implements  Serializable{
    
     
   
@@ -338,9 +338,8 @@ public class EnzymeAccession implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.uniprotaccessions);
-        hash = 53 * hash + Objects.hashCode(this.species);
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.species);
         return hash;
     }
 
@@ -353,15 +352,12 @@ public class EnzymeAccession implements Serializable{
             return false;
         }
         final EnzymeAccession other = (EnzymeAccession) obj;
-        if (!Objects.equals(this.uniprotaccessions, other.uniprotaccessions)) {
-            return false;
-        }
         if (!Objects.equals(this.species, other.species)) {
             return false;
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "EnzymeAccession{" + "uniprotaccessions=" + uniprotaccessions + ", species=" + species + '}';

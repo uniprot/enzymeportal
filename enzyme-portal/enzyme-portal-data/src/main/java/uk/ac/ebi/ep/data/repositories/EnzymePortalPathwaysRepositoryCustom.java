@@ -3,24 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 
 /**
  *
  * @author joseph
  */
 @NoRepositoryBean
-public interface DiseaseRepositoryCustom {
-
-  
-
-    List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions);
-
-    List<EnzymePortalDisease> findDiseasesByAccession(String accession);
-
-    List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes);
+public interface EnzymePortalPathwaysRepositoryCustom {
+    
+    List<EnzymePortalPathways> findPathwaysByAccession(String accession);
 }

@@ -18,4 +18,5 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePortalCompound, Long>,  QueryDslPredicateExecutor<EnzymePortalCompound>, EnzymePortalCompoundRepositoryCustom {
     
     List<EnzymePortalCompound> findByCompoundName(String name);
+      
 }

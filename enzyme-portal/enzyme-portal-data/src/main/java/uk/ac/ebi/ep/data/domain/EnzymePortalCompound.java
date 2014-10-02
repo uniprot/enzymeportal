@@ -129,13 +129,8 @@ public class EnzymePortalCompound extends Compound implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 53 * hash + Objects.hashCode(this.compoundInternalId);
-        hash = 53 * hash + Objects.hashCode(this.compoundId);
-        hash = 53 * hash + Objects.hashCode(this.compoundName);
-        hash = 53 * hash + Objects.hashCode(this.compoundSource);
-        hash = 53 * hash + Objects.hashCode(this.relationship);
-        hash = 53 * hash + Objects.hashCode(this.uniprotAccession);
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.compoundId);
         return hash;
     }
 
@@ -148,26 +143,13 @@ public class EnzymePortalCompound extends Compound implements Serializable {
             return false;
         }
         final EnzymePortalCompound other = (EnzymePortalCompound) obj;
-        if (!Objects.equals(this.compoundInternalId, other.compoundInternalId)) {
-            return false;
-        }
         if (!Objects.equals(this.compoundId, other.compoundId)) {
-            return false;
-        }
-        if (!Objects.equals(this.compoundName, other.compoundName)) {
-            return false;
-        }
-        if (!Objects.equals(this.compoundSource, other.compoundSource)) {
-            return false;
-        }
-        if (!Objects.equals(this.relationship, other.relationship)) {
-            return false;
-        }
-        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
             return false;
         }
         return true;
     }
+    
+    
 
     @Override
     public String toString() {

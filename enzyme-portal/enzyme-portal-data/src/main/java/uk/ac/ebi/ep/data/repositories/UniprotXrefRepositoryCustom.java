@@ -7,20 +7,14 @@ package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.domain.UniprotXref;
 
 /**
  *
  * @author joseph
  */
 @NoRepositoryBean
-public interface DiseaseRepositoryCustom {
+public interface UniprotXrefRepositoryCustom {
 
-  
-
-    List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions);
-
-    List<EnzymePortalDisease> findDiseasesByAccession(String accession);
-
-    List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes);
+    List<UniprotXref> findPDBcodesByAccession(String accession);
 }

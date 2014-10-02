@@ -19,47 +19,50 @@ import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 @Transactional
 @Service
 public class DiseaseService {
-
+    
     @Autowired
     private DiseaseRepository repository;
-
+    
     @Transactional
     public EnzymePortalDisease addDisease(EnzymePortalDisease d) {
         EnzymePortalDisease disease = repository.saveAndFlush(d);
         return disease;
     }
-
+    
     @Transactional
     public List<EnzymePortalDisease> addDisease(List<EnzymePortalDisease> d) {
         List<EnzymePortalDisease> disease = repository.save(d);
         return disease;
     }
-
+    
     @Transactional(readOnly = true)
     public EnzymePortalDisease findById(Long id) {
-
-     
+        
         return repository.findOne(id);
     }
-
+    
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
-
+        
         return repository.findAll();
     }
     
-          @Transactional(readOnly = true)
-    public List<EnzymePortalDisease> findDiseasesByNamePrefix(List<String> name_prefixes){
-       
-        return repository.findByNamePrefixes(name_prefixes);
-    }
-
-
+    @Transactional(readOnly = true)
+    public List<EnzymePortalDisease> findDiseasesByNamePrefix(List<String> name_prefixes) {
         
-          @Transactional(readOnly = true)
-    public List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions){
-       
-        return repository.findByAccessions(accessions);
+        return repository.findDiseasesByNamePrefixes(name_prefixes);
     }
-
+    
+    @Transactional(readOnly = true)
+    public List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions) {
+        
+        return repository.findDiseasesByAccessions(accessions);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
+        
+        return repository.findDiseasesByAccession(accession);
+    }
+    
 }

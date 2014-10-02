@@ -44,16 +44,15 @@ public class UniprotEntryService {
 
         return repository.findAccession();
     }
-
-//    @Transactional(readOnly = true)
-//    public Page<UniprotEntry> findByNamePrefix(String namePrefix, Pageable pageable) {
-//      
-//       // namePrefix.substring(0, namePrefix.indexOf("_"));
-//      
-//        return repository.findAll(byNamePrefix(namePrefix), pageable);
-//    }
-
     
+        @Transactional(readOnly = true)
+    public List<UniprotEntry> findUniprotEntries() {
+
+        return repository.findAll();
+        //return repository.findUniprotEntries();
+    }
+
+   
     @Transactional(readOnly = true)
     public List<UniprotEntry> findByNamePrefixes(List<String> namePrefixes) {
 

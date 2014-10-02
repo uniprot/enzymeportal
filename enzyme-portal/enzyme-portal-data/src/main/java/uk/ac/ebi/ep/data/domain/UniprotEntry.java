@@ -6,6 +6,8 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -33,9 +35,49 @@ import uk.ac.ebi.ep.data.search.model.Species;
 @Entity
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
-@NamedEntityGraph(name = "graph.UniprotEntry",
-        attributeNodes = @NamedAttributeNode("enzymePortalPathwaysSet")
-)
+
+
+//@NamedEntityGraph( name = "graph.UniprotEntry",
+//        attributeNodes = @NamedAttributeNode("enzymePortalPathwaysSet")
+//)
+@NamedEntityGraph(name="UniprotEntryEntityGraph", attributeNodes={
+    @NamedAttributeNode("enzymePortalPathwaysSet"),
+    @NamedAttributeNode("enzymePortalReactionSet"),
+    @NamedAttributeNode("enzymePortalSummarySet"),
+    @NamedAttributeNode("enzymePortalCompoundSet"),
+    @NamedAttributeNode("enzymePortalDiseaseSet"),
+    @NamedAttributeNode("uniprotXrefSet"),
+    @NamedAttributeNode("relatedProteinsSet"),
+    @NamedAttributeNode("enzymePortalEcNumbersSet")
+})
+
+//@NamedEntityGraph(name = "UniprotEntryEntityGraph", includeAllAttributes = true
+//  
+//
+//)
+
+
+//@NamedEntityGraph(
+//     name="UniprotEntryEntityGraph",
+//     attributeNodes = {
+//          //@NamedAttributeNode("enzymePortalDiseaseSet")
+//          @NamedAttributeNode(value = "enzymePortalDisease", subgraph = "enzymePortalDisease")
+//     },
+//     subgraphs ={
+//          @NamedSubgraph(
+//               name="enzymePortalDisease",
+//               attributeNodes = {
+//                    @NamedAttributeNode("uniprotAccession")
+//               }
+//          )
+//     }
+//)
+
+
+
+
+
+
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
     @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
@@ -44,10 +86,17 @@ import uk.ac.ebi.ep.data.search.model.Species;
     //@NamedQuery(name = "UniprotEntry.findByTaxId", query = "SELECT u FROM UniprotEntry u WHERE u.taxId = :taxId"),
     @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName"),
     @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName"),
-    @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName"),
-    @NamedQuery(name = "UniprotEntry.findBySynonymName", query = "SELECT u FROM UniprotEntry u WHERE u.synonymName = :synonymName")})
+    @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
+
+})
 
 public class UniprotEntry extends Species implements Serializable, Comparable<UniprotEntry> {
+    @OneToMany(mappedBy = "uniprotAccession")
+    private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
+    @OneToMany(mappedBy = "uniprotAccession" ,fetch = FetchType.EAGER)
+    private Set<RelatedProteins> relatedProteinsSet;
+    @Column(name = "SEQUENCE_LENGTH")
+    private Integer sequenceLength;
 
     @Lob
     @Column(name = "SYNONYM_NAMES")
@@ -71,20 +120,20 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
     private String scientificName;
     @Column(name = "COMMON_NAME")
     private String commonName;
-    @Column(name = "SYNONYM_NAME")
-    private String synonymName;
+    //@Column(name = "SYNONYM_NAME")
+    //private String synonymName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
     private Set<UniprotXref> uniprotXrefSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    private Set<EnzymePortalSummary> enzymePortalSummarySet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    private List<EnzymePortalSummary> enzymePortalSummarySet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
     
     // private boolean selected;
@@ -157,13 +206,6 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
         this.commonName = commonName;
     }
 
-    public String getSynonymName() {
-        return synonymName;
-    }
-
-    public void setSynonymName(String synonymName) {
-        this.synonymName = synonymName;
-    }
 
     @XmlTransient
     public Set<EnzymePortalDisease> getEnzymePortalDiseaseSet() {
@@ -184,11 +226,11 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
     }
 
     @XmlTransient
-    public Set<EnzymePortalSummary> getEnzymePortalSummarySet() {
+    public List<EnzymePortalSummary> getEnzymePortalSummarySet() {
         return enzymePortalSummarySet;
     }
 
-    public void setEnzymePortalSummarySet(Set<EnzymePortalSummary> enzymePortalSummarySet) {
+    public void setEnzymePortalSummarySet(List<EnzymePortalSummary> enzymePortalSummarySet) {
         this.enzymePortalSummarySet = enzymePortalSummarySet;
     }
 
@@ -229,29 +271,32 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
     
     //Note : using protein name will reduce all related species to 1 per enzyme hence we use uniprot name for the equals and hashcode
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 5;
-//        hash = 89 * hash + Objects.hashCode(this.name);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final UniprotEntry other = (UniprotEntry) obj;
-//        if (!Objects.equals(this.name, other.name)) {
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.accession);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UniprotEntry other = (UniprotEntry) obj;
+        if (!Objects.equals(this.accession, other.accession)) {
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+    
     
     
 
@@ -295,6 +340,32 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
         }
         return this.getCommonname().compareTo(other.getCommonname());
     
+    }
+
+    public Integer getSequenceLength() {
+        return sequenceLength;
+    }
+
+    public void setSequenceLength(Integer sequenceLength) {
+        this.sequenceLength = sequenceLength;
+    }
+
+    @XmlTransient
+    public Set<EnzymePortalEcNumbers> getEnzymePortalEcNumbersSet() {
+        return enzymePortalEcNumbersSet;
+    }
+
+    public void setEnzymePortalEcNumbersSet(Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet) {
+        this.enzymePortalEcNumbersSet = enzymePortalEcNumbersSet;
+    }
+
+    @XmlTransient
+    public Set<RelatedProteins> getRelatedProteinsSet() {
+        return relatedProteinsSet;
+    }
+
+    public void setRelatedProteinsSet(Set<RelatedProteins> relatedProteinsSet) {
+        this.relatedProteinsSet = relatedProteinsSet;
     }
 
 

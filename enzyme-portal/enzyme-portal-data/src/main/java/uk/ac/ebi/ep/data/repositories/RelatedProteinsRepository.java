@@ -7,13 +7,13 @@ package uk.ac.ebi.ep.data.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
+import uk.ac.ebi.ep.data.domain.RelatedProteins;
+
 
 /**
  *
  * @author joseph
  */
-public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePortalPathways, Long>, QueryDslPredicateExecutor<EnzymePortalPathways>, EnzymePortalPathwaysRepositoryCustom {
-
-    EnzymePortalPathways findByPathwayId(Long pathwayId);
+public interface RelatedProteinsRepository extends JpaRepository<RelatedProteins, Long>, QueryDslPredicateExecutor<RelatedProteins>,RelatedProteinsRepositoryCustom {
+    
 }

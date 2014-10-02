@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,9 +22,12 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.NamedSubgraph;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import uk.ac.ebi.ep.data.search.model.Compound;
+import uk.ac.ebi.ep.data.search.model.Disease;
+import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.data.search.model.Species;
 
 /**
  *
@@ -31,28 +37,44 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ENZYME_PORTAL_SUMMARY")
 @XmlRootElement
 
-
-  
-        @NamedEntityGraph(
-        name = "summary.graph",
-        attributeNodes = {
-            //@NamedAttributeNode("uniprotAccession"),
-            @NamedAttributeNode(value = "uniprotAccession", subgraph = "uniprotAccession")
-        },
-          subgraphs = {
-            @NamedSubgraph(
-                    name = "uniprotAccession",
-                    attributeNodes = {
-                        @NamedAttributeNode("enzymePortalPathwaysSet")}
-            ),
-              @NamedSubgraph(name="uniprotAccession",attributeNodes = {@NamedAttributeNode("enzymePortalDiseaseSet")})
-        }
-
-
+//        @NamedEntityGraph(
+//        name = "summary.graph",
+//        attributeNodes = {
+//            //@NamedAttributeNode("uniprotAccession"),
+//            @NamedAttributeNode(value = "uniprotAccession", subgraph = "uniprotAccession")
+//        },
+//          subgraphs = {
+//            @NamedSubgraph(
+//                    name = "uniprotAccession",
+//                    attributeNodes = {
+//                        @NamedAttributeNode("enzymePortalPathwaysSet")}
+//            ),
+//              @NamedSubgraph(name="uniprotAccession",attributeNodes = {@NamedAttributeNode("enzymePortalDiseaseSet")})
+//        }
+//
+//
+//)
+@NamedEntityGraph(name = "summary.graph", includeAllAttributes = true, attributeNodes = {
+    @NamedAttributeNode("uniprotAccession"),
+    @NamedAttributeNode(value = "uniprotAccession", subgraph = "enzymePortalDiseaseSet")
+}
 )
 
-
-
+//@NamedEntityGraph(
+//     name="summary.graph",
+//     attributeNodes = {
+//          @NamedAttributeNode("client"),
+//          @NamedAttributeNode(value = "tests", subgraph = "testsSG")
+//     },
+//     subgraphs ={
+//          @NamedSubgraph(
+//               name="testsSG",
+//               attributeNodes = {
+//                    @NamedAttributeNode("template")
+//               }
+//          )
+//     }
+//)
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalSummary.findAll", query = "SELECT e FROM EnzymePortalSummary e"),
     @NamedQuery(name = "EnzymePortalSummary.findByEnzymeId", query = "SELECT e FROM EnzymePortalSummary e WHERE e.enzymeId = :enzymeId"),
@@ -60,10 +82,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalSummary.findByCommentType", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentType = :commentType")
     //@NamedQuery(name = "EnzymePortalSummary.findByCommentText", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentText = :commentText")
 })
-public class EnzymePortalSummary implements Serializable {
+public class EnzymePortalSummary extends EnzymeSummary  implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Id
     @Basic(optional = false)
     @Column(name = "ENZYME_ID")
@@ -76,7 +98,7 @@ public class EnzymePortalSummary implements Serializable {
     @Column(name = "COMMENT_TEXT")
     private String commentText;
 
-        @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
+    @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
     @ManyToOne(optional = false)
     private UniprotEntry uniprotAccession;
     public EnzymePortalSummary() {
@@ -123,7 +145,6 @@ public class EnzymePortalSummary implements Serializable {
         this.commentText = commentText;
     }
 
-
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -132,10 +153,10 @@ public class EnzymePortalSummary implements Serializable {
         this.uniprotAccession = uniprotAccession;
     }
 
-        @Override
+    @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.uniprotAccession);
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.uniprotAccession.getProteinName());
         return hash;
     }
 
@@ -148,17 +169,174 @@ public class EnzymePortalSummary implements Serializable {
             return false;
         }
         final EnzymePortalSummary other = (EnzymePortalSummary) obj;
-        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
+        if (!Objects.equals(this.uniprotAccession.getProteinName(), other.uniprotAccession.getProteinName())) {
             return false;
         }
         return true;
     }
+    
 
+    
+
+    
+    
     @Override
     public String toString() {
-        return "EnzymePortalSummary{" + "uniprotAccession=" + uniprotAccession + '}';
+        return "EnzymePortalSummary{" + "enzymeId=" + enzymeId + ", dbentryId=" + dbentryId + ", commentType=" + commentType + ", commentText=" + commentText + '}';
     }
+
+    
+//    @Override
+//    public List<EnzymeAccession> getRelatedspecies() {
+//
+//        if (relatedspecies == null) {
+//            relatedspecies = new ArrayList<>();
+//        }
+//        String defaultSpecies = CommonSpecies.Human.getScientificName();
+////        
+//          EnzymeAccession ea = new EnzymeAccession();
+//            ea.setPdbeaccession(getPdbCodes(this.uniprotAccession));
+//            ea.getUniprotaccessions().add(this.uniprotAccession.getAccession());
+//            ea.setSpecies(this.uniprotAccession);
+//            //ea.setCompounds(this.uniprotAccession.getEnzymePortalCompoundSet().stream().collect(Collectors.toList()));
+//            ea.setDiseases(this.uniprotAccession.getEnzymePortalDiseaseSet().stream().collect(Collectors.toList()));
+//
+//        if (this.uniprotAccession.getScientificname() != null && this.uniprotAccession.getScientificname().equalsIgnoreCase(defaultSpecies)) {
+//            //relatedspecies.add(0, ea);
+//            relatedspecies.addAll(0, uniprotAccession.getRelatedProteinsSet());
+//           
+//        } else if (this.uniprotAccession.getScientificname() != null && !this.uniprotAccession.getScientificname().equalsIgnoreCase(defaultSpecies)) {
+//            //relatedspecies.add(ea);
+//           relatedspecies.addAll(uniprotAccession.getRelatedProteinsSet());
+//        }
+//
+//        return this.relatedspecies;
+//        
+//        //return this.uniprotAccession.getRelatedProteinsSet().stream().collect(Collectors.toList());
+//       
+//    }
     
     
-    
+    @Override
+    public List<String> getPdbeaccession() {
+
+        return getPdbCodes(this.getUniprotAccession());
+    }
+
+    @Override
+    public List<String> getSynonym() {
+        if (synonym == null) {
+            synonym = new ArrayList<>();
+        }
+
+        String namesColumn = this.getUniprotAccession().getSynonymNames();
+
+        if (namesColumn != null && namesColumn.contains(";")) {
+            String[] syn = namesColumn.split(";");
+            for (String x : syn) {
+
+                synonym.addAll(parseNameSynonyms(x));
+            }
+        }
+
+        return this.synonym;
+        //return synonym;
+    }
+
+    private List<String> getPdbCodes(UniprotEntry e) {
+        List<String> pdbcodes = new ArrayList<>();
+        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
+            pdbcodes.add(xref.getSourceId());
+        });
+        return pdbcodes;
+    }
+
+
+    private List<String> parseNameSynonyms(String namesColumn) {
+        List<String> nameSynonyms = new ArrayList<>();
+        if (namesColumn != null) {
+            final int sepIndex = namesColumn.indexOf(" (");
+
+            //System.out.println("syn index "+ sepIndex);
+            if (sepIndex == -1) {
+                // no synonyms, just recommended name:
+
+                nameSynonyms.add(namesColumn);
+            } else {
+                // Recommended name:
+                nameSynonyms.add(namesColumn.substring(0, sepIndex));
+                // take out starting and ending parentheses
+                String[] synonyms = namesColumn.substring(sepIndex + 2, namesColumn.length() - 1).split("\\) \\(");
+                nameSynonyms.addAll(Arrays.asList(synonyms));
+            }
+            return nameSynonyms.stream().distinct().collect(Collectors.toList());
+        }
+        return nameSynonyms;
+    }
+
+    @Override
+    public String getName() {
+        return this.uniprotAccession.getProteinName();
+    }
+
+    @Override
+    public String getAccession() {
+        return this.uniprotAccession.getAccession();
+    }
+
+    @Override
+    public String getUniprotid() {
+        return this.uniprotAccession.getName();
+    }
+
+    @Override
+    public List<String> getEc() {
+        if (ec == null) {
+            ec = new ArrayList<>();
+        }
+
+        if (this.getCommentType().equalsIgnoreCase("EC_NUMBER")) {
+
+            ec.add(this.getCommentText());
+
+        }
+
+        return this.ec;
+    }
+
+    @Override
+    public String getFunction() {
+        if (this.getCommentType().equalsIgnoreCase("FUNCTION")) {
+
+            function = this.getCommentText();
+        }
+
+        return function;
+    }
+
+    @Override
+    public Species getSpecies() {
+        return uniprotAccession;
+    }
+
+    @Override
+    public List<Compound> getCompounds() {
+////        if (compounds == null) {
+////            compounds = new ArrayList<>();
+////        }
+////        compounds.addAll(uniprotAccession.getEnzymePortalCompoundSet());
+//        return this.compounds;
+        return uniprotAccession.getEnzymePortalCompoundSet().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Disease> getDiseases() {
+//        if (diseases == null) {
+//            diseases = new ArrayList<>();
+//        }
+//
+//        diseases.addAll(uniprotAccession.getEnzymePortalDiseaseSet());
+        return uniprotAccession.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+    }
+
 }

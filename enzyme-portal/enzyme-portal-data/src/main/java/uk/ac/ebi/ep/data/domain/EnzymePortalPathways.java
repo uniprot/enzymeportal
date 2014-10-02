@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 
 /**
  *
@@ -36,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayName", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayName = :pathwayName"),
     @NamedQuery(name = "EnzymePortalPathways.findByStatus", query = "SELECT e FROM EnzymePortalPathways e WHERE e.status = :status"),
     @NamedQuery(name = "EnzymePortalPathways.findBySpecies", query = "SELECT e FROM EnzymePortalPathways e WHERE e.species = :species")})
-public class EnzymePortalPathways implements Serializable {
+public class EnzymePortalPathways extends Pathway  implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -56,9 +58,9 @@ public class EnzymePortalPathways implements Serializable {
     @Column(name = "SPECIES")
     private String species;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
-
+    
     public EnzymePortalPathways() {
     }
 
@@ -144,8 +146,25 @@ public class EnzymePortalPathways implements Serializable {
 
     @Override
     public String toString() {
-        return "EnzymePortalPathways{" + "pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species + ", uniprotAccession=" + uniprotAccession + '}';
+        return "EnzymePortalPathways{" + "pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species +  '}';
     }
 
+    @Override
+    public String getId() {
+        return pathwayId;
+    }
+
+    @Override
+    public String getName() {
+        return pathwayName;
+    }
+
+    @Override
+    public String getUrl() {
+        return pathwayUrl;
+    }
+
+    
+    
     
 }

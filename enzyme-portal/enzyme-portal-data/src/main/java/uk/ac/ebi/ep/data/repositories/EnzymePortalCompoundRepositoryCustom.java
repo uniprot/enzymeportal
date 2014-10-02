@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
@@ -16,8 +15,13 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
  */
 @NoRepositoryBean
 public interface EnzymePortalCompoundRepositoryCustom {
+
     List<EnzymePortalCompound> findCompoundsByUniprotName(String uniprotName);
-     List<EnzymePortalCompound> findByNamePrefixes(List<String> name_prefixes);
-   
+
+    List<EnzymePortalCompound> findCompoundsByUniprotAccession(String accession);
+
+    List<EnzymePortalCompound> findCompoundsByNameprefixes(List<String> nameprefixes);
     
+    List<String> findEnzymesByCompound(String compound_id);
+
 }

@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
+import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 
 
 
@@ -23,8 +25,8 @@ public class ReactionPathway
 {
 
    
-    protected EnzymeReaction reaction;
-    protected List<Pathway> pathways;
+    protected EnzymePortalReaction reaction;
+    protected List<EnzymePortalPathways> pathways;
    
     protected List<Object> mechanism;
     
@@ -50,7 +52,7 @@ public class ReactionPathway
      *     {@link EnzymeReaction }
      *     
      */
-    public void setReaction(EnzymeReaction value) {
+    public void setReaction(EnzymePortalReaction value) {
         this.reaction = value;
     }
 
@@ -76,9 +78,9 @@ public class ReactionPathway
      * 
      * 
      */
-    public List<Pathway> getPathways() {
+    public List<EnzymePortalPathways> getPathways() {
         if (pathways == null) {
-            pathways = new ArrayList<Pathway>();
+            pathways = new ArrayList<EnzymePortalPathways>();
         }
         return this.pathways;
     }
@@ -142,26 +144,26 @@ public class ReactionPathway
     }
 
    
-    public ReactionPathway withReaction(EnzymeReaction value) {
-        setReaction(value);
-        return this;
-    }
+//    public ReactionPathway withReaction(EnzymeReaction value) {
+//        setReaction(value);
+//        return this;
+//    }
 
-    public ReactionPathway withPathways(Pathway... values) {
-        if (values!= null) {
-            for (Pathway value: values) {
-                getPathways().add(value);
-            }
-        }
-        return this;
-    }
-
-    public ReactionPathway withPathways(Collection<Pathway> values) {
-        if (values!= null) {
-            getPathways().addAll(values);
-        }
-        return this;
-    }
+//    public ReactionPathway withPathways(Pathway... values) {
+//        if (values!= null) {
+//            for (Pathway value: values) {
+//                getPathways().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    public ReactionPathway withPathways(Collection<Pathway> values) {
+//        if (values!= null) {
+//            getPathways().addAll(values);
+//        }
+//        return this;
+//    }
 
     public ReactionPathway withMechanism(Object... values) {
         if (values!= null) {
@@ -203,7 +205,7 @@ public class ReactionPathway
      *     {@link Pathway }
      *     
      */
-    public void setPathways(List<Pathway> pathways) {
+    public void setPathways(List<EnzymePortalPathways> pathways) {
         this.pathways = pathways;
     }
 

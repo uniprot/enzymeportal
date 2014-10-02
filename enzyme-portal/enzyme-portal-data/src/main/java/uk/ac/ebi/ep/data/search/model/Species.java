@@ -208,6 +208,31 @@ public class Species{// implements Comparable<Species>, Serializable {
     }
 
 //    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 23 * hash + Objects.hashCode(this.scientificname);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final Species other = (Species) obj;
+//        if (!Objects.equals(this.scientificname, other.scientificname)) {
+//            return false;
+//        }
+//        return true;
+//    }
+    
+    
+    
+
+//    @Override
 //    public int compareTo(Species other) {
 //        if (this.getCommonname() == null & other.getCommonname() == null) {
 //            return this.getScientificname().compareTo(other.getScientificname());
