@@ -42,7 +42,7 @@ public class EbeyeService {
         List<String> ebeyeDomains = new ArrayList<String>() {
             {
                 add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
-               // add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
+                //add("http://www.ebi.ac.uk/ebisearch/ws/rest/intenz?format=json&size=100&fields=UNIPROT&query=");
                // add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
             }
         };

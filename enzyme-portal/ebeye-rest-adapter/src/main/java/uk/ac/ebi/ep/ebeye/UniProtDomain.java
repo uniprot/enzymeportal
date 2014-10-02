@@ -27,14 +27,12 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
        public String getUniport_name() {
         //return uniprot_name.split("_")[0];
            return uniprot_name.substring(0, uniprot_name.indexOf("_"));
+           //return uniprot_name;
     }
     public String getUniprot_accession() {
         return uniprot_accession;
     }
 
-//    public String getUniport_name() {
-//        return uniprot_name;
-//    }
 
     public String getSource() {
         return source;
@@ -45,10 +43,31 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
         return "UniProtDomain{" + "uniprot_accession=" + uniprot_accession + ", uniport_name=" + uniprot_name + ", source=" + source + '}';
     }
     
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        hash = 83 * hash + Objects.hashCode(this.uniprot_accession);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final UniProtDomain other = (UniProtDomain) obj;
+//        if (!Objects.equals(this.uniprot_accession, other.uniprot_accession)) {
+//            return false;
+//        }
+//        return true;
+//    }
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.uniprot_accession);
+        hash = 53 * hash + Objects.hashCode(this.getUniport_name());
         return hash;
     }
 
@@ -61,16 +80,27 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
             return false;
         }
         final UniProtDomain other = (UniProtDomain) obj;
-        if (!Objects.equals(this.uniprot_accession, other.uniprot_accession)) {
+        if (!Objects.equals(this.getUniport_name(), other.getUniport_name())) {
             return false;
         }
         return true;
     }
+    
+    
+    
 
-        @Override
+//        @Override
+//    public int compareTo(UniProtDomain obj) {
+//       int compare = obj.uniprot_accession.compareToIgnoreCase(this.uniprot_accession);
+//         return ((compare == 0) ? obj.uniprot_accession.compareToIgnoreCase(this.uniprot_accession) : compare);
+//      
+//
+//    }
+    
+            @Override
     public int compareTo(UniProtDomain obj) {
-       int compare = obj.uniprot_accession.compareToIgnoreCase(this.uniprot_accession);
-         return ((compare == 0) ? obj.uniprot_accession.compareToIgnoreCase(this.uniprot_accession) : compare);
+       int compare = obj.getUniport_name().compareToIgnoreCase(this.getUniport_name());
+         return ((compare == 0) ? obj.getUniport_name().compareToIgnoreCase(this.getUniport_name()) : compare);
       
 
     }

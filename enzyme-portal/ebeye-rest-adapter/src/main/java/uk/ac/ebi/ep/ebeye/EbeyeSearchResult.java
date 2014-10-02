@@ -19,11 +19,24 @@ public class EbeyeSearchResult {
     
     @JsonProperty("entries")
     private List<UniProtDomain> uniProtDomains;
+    
+
+
 
     public List<UniProtDomain> getUniProtDomains() {
         return uniProtDomains;
     }
     
+    //TODO
+//            @JsonProperty("entries")
+//    private List<IntenzDomain> intenzDomain;
+//        
+//
+//    public List<IntenzDomain> getIntenzDomain() {
+//        return intenzDomain;
+//    }
+//    
+
 
     
 
