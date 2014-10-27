@@ -44,12 +44,12 @@
             <div id="content" role="main" class="grid_24 clearfix">
 
                  <div class="grid_24">
-                    <h3 style="text-align: center; margin-right: 10em">Browse Enzymes By EC classification</h3><br/>
-                    <div class="grid_6" style="margin-left: 30em">
+                    <h3 >Browse Enzymes By EC classification</h3><br/>
+                    <div>
                         
-                <div style="text-align: center; min-width: 170px">
-                        <div style="text-align: left; margin-left: auto; margin-right: auto; width: 170px">
-                           <ul style="list-style-type: none; padding-left: 5px; margin-left: 0px">
+                <div >
+                        <div >
+                           <ul>
                                     <li><a href="${pageContext.request.contextPath}/browse/enzyme/1/Oxidoreductases">EC 1</a>&nbsp;&nbsp;Oxidoreductases</li>
                                         <li><a href="${pageContext.request.contextPath}/browse/enzyme/2/Transferases">EC 2</a>&nbsp;&nbsp;Transferases</li>
                                         <li><a href="${pageContext.request.contextPath}/browse/enzyme/3/Hydrolases">EC 3</a>&nbsp;&nbsp;Hydrolases</li>
