@@ -314,3 +314,8 @@ a.browse-box:hover {
 .gene-box {
     background-color: #3c5561;
 }
+
+
+.disease-overview-box ul {
+    margin-bottom: 0;
+}
