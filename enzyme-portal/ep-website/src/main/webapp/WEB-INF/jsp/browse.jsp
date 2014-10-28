@@ -89,6 +89,28 @@
             </div>
 
         </c:if>
+        <c:if test="${not empty alldiseaseList}">
+            <div class="grid_24">
+
+                <h3 style="text-align: center">Diseases that starts with letter ${startsWith}</h3>
+                <ul>
+                    <c:forEach var="data" items="${alldiseaseList}">
+                        <div class="grid_6">
+
+                            <li><a   href="${pageContext.request.contextPath}/search/disease?entryid=${data.meshId}&entryname=${data.diseaseName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}">${data.diseaseName} (${0})</a></li>
+                        </div>
+
+                    </c:forEach>
+
+                </ul>
+
+
+
+
+            </div>
+
+        </c:if>
+
     </div>
 
     <%@include file="footer.jspf" %>
