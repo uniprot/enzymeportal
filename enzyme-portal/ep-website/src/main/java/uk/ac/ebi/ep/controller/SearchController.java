@@ -352,7 +352,7 @@ public class SearchController extends AbstractController {
                 view = "search";
             }
         } catch (Throwable t) {
-            LOGGER.error("one of the search params (Text or Sequence is :", t);
+            LOGGER.error("one of the search params (Text or Sequence is :"+searchKey, t);
         }
 
         return view;
@@ -590,9 +590,7 @@ public class SearchController extends AbstractController {
         String view = null;
         try {
             EnzymeFinder enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeService);
-            //enzymeFinder.getEbeyeAdapter().setConfig(ebeyeConfig);
-            //enzymeFinder.getUniprotAdapter().setConfig(uniprotConfig);
-            //enzymeFinder.getIntenzAdapter().setConfig(intenzConfig);
+       
             NcbiBlastClient.Status status = enzymeFinder.getBlastStatus(jobId);
             switch (status) {
                 case ERROR:

@@ -45,7 +45,7 @@
                             <c:forEach var="j" begin="0" end="${echierarchiesSize-1}">
                                 <c:set var="ecClass" value="${echierarchies[j].ecclass}"/>
                                 <c:set var="ecClassSize" value="${fn:length(ecClass)}"/>
-                                <c:if test='${ecClassSize>0}'>
+                                <c:if test='${not empty ecClass && ecClassSize > 0}'>
                                     <c:forEach var="i" begin="0" end="${ecClassSize-1}">
                                         <c:if test='${i <= 2}'>
                                             <c:set var="ecNumber" value="${ecClass[i].ec}"/>
