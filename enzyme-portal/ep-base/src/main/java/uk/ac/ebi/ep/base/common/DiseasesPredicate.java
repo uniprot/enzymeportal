@@ -49,13 +49,13 @@ public class DiseasesPredicate implements Predicate {
         if (diseasesFilter == null || diseasesFilter.isEmpty()) {
             return true;
         }
-        System.out.println("dis filter " + diseasesFilter);
+   
         boolean eval = false;
         if (obj instanceof EnzymeSummary) {
             EnzymeSummary es = (EnzymeSummary) obj;
 
             for (Disease disease : es.getDiseases()) {
-                System.out.println("does disease filter contains " + diseasesFilter.contains(disease.getName()));
+          
                 if (diseasesFilter.contains(disease.getName())) {
                     eval = true;
                     break;

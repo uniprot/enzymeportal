@@ -43,16 +43,15 @@ public class DefaultPredicate implements Predicate{
 					eval = true;
 					break;
 				}
-                                System.out.println("species "+ ea.getSpecies());
-                                System.out.println("disease filter "+ ea.getSpecies().getDiseases().size() );
-                                for(Disease disease : ea.getSpecies().getDiseases()){
+                             
+                                for(Disease disease : ea.getDiseases()){
 				if (defaultFilter.contains(disease.getName() )){
 					eval = true;
 					break;
 				}
                                 }
                                 
-                                for(Compound compounds : ea.getSpecies().getCompounds()){
+                                for(Compound compounds : ea.getCompounds()){
                                     	if (defaultFilter.contains(compounds.getName())){
 						eval = true;
 						break;

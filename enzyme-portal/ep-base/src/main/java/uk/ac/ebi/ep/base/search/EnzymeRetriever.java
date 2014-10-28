@@ -29,7 +29,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
-import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
@@ -198,32 +197,32 @@ public class EnzymeRetriever extends EnzymeFinder {
         
     }
     
-    private List<RelatedProteins> getRelatedProteins(UniprotEntry uniprotEntry) {
-        String defaultSpecies = CommonSpecies.Human.getScientificName();
-        
-        String nameprefix = uniprotEntry.getName().substring(0, uniprotEntry.getName().indexOf("_"));
-        
-        List<RelatedProteins> relatedPecies = new LinkedList<>();
-        
-        List<RelatedProteins> relatedProteins = super.getService().findRelatedProteinsByNamePrefix(nameprefix);
-        
-        relatedProteins.stream().map((entry) -> {
-            entry.setSpecies(uniprotEntry);
-            return entry;
-        }).map((entry) -> {
-            entry.getUniprotaccessions().add(uniprotEntry.getAccession());
-            return entry;
-        }).forEach((entry) -> {
-            if (entry.getUniprotAccession().getScientificname() != null && entry.getUniprotAccession().getScientificname().equalsIgnoreCase(defaultSpecies)) {
-                relatedPecies.add(0, entry);
-            } else if (entry.getUniprotAccession().getScientificname() != null && !entry.getUniprotAccession().getScientificname().equalsIgnoreCase(defaultSpecies)) {
-                relatedPecies.add(entry);
-            }
-        });
-        
-        return relatedPecies.stream().distinct().collect(Collectors.toList());
-        
-    }
+//    private List<RelatedProteins> getRelatedProteins(UniprotEntry uniprotEntry) {
+//        String defaultSpecies = CommonSpecies.Human.getScientificName();
+//        
+//        String nameprefix = uniprotEntry.getName().substring(0, uniprotEntry.getName().indexOf("_"));
+//        
+//        List<RelatedProteins> relatedPecies = new LinkedList<>();
+//        
+//        List<RelatedProteins> relatedProteins = super.getService().findRelatedProteinsByNamePrefix(nameprefix);
+//        
+//        relatedProteins.stream().map((entry) -> {
+//            entry.setSpecies(uniprotEntry);
+//            return entry;
+//        }).map((entry) -> {
+//            entry.getUniprotaccessions().add(uniprotEntry.getAccession());
+//            return entry;
+//        }).forEach((entry) -> {
+//            if (entry.getUniprotAccession().getScientificname() != null && entry.getUniprotAccession().getScientificname().equalsIgnoreCase(defaultSpecies)) {
+//                relatedPecies.add(0, entry);
+//            } else if (entry.getUniprotAccession().getScientificname() != null && !entry.getUniprotAccession().getScientificname().equalsIgnoreCase(defaultSpecies)) {
+//                relatedPecies.add(entry);
+//            }
+//        });
+//        
+//        return relatedPecies.stream().distinct().collect(Collectors.toList());
+//        
+//    }
     
     private EnzymeModel getEnzymeModel(String uniprotAccession) {
         UniprotEntry uniprotEntry = super.getService().findByAccession(uniprotAccession);
@@ -231,7 +230,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         List<EnzymeAccession> relatedPecies = getRelatedSPecies(uniprotEntry);
         EnzymeModel model = new EnzymeModel();
         model.setName(uniprotEntry.getProteinName());
-        model.setRelatedspecies(relatedPecies);
+        //model.setRelatedspecies(relatedPecies);
        // model.setRelatedspecies(getRelatedProteins(uniprotEntry));
         
         model.setAccession(uniprotEntry.getAccession());
@@ -269,7 +268,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         enzyme.setSequence(sequence);
         
         model.setName(uniprotEntry.getProteinName());
-        model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
+       // model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
         //model.setRelatedspecies(getRelatedProteins(uniprotEntry));
 
 //        relatedProteins.stream().forEach((relatedProtein) -> {
