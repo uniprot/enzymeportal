@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,6 +23,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -37,44 +39,25 @@ import uk.ac.ebi.ep.data.search.model.Species;
 @Table(name = "ENZYME_PORTAL_SUMMARY")
 @XmlRootElement
 
-//        @NamedEntityGraph(
-//        name = "summary.graph",
-//        attributeNodes = {
-//            //@NamedAttributeNode("uniprotAccession"),
-//            @NamedAttributeNode(value = "uniprotAccession", subgraph = "uniprotAccession")
-//        },
-//          subgraphs = {
-//            @NamedSubgraph(
-//                    name = "uniprotAccession",
-//                    attributeNodes = {
-//                        @NamedAttributeNode("enzymePortalPathwaysSet")}
-//            ),
-//              @NamedSubgraph(name="uniprotAccession",attributeNodes = {@NamedAttributeNode("enzymePortalDiseaseSet")})
-//        }
-//
-//
-//)
-@NamedEntityGraph(name = "summary.graph", includeAllAttributes = true, attributeNodes = {
-    @NamedAttributeNode("uniprotAccession"),
-    @NamedAttributeNode(value = "uniprotAccession", subgraph = "enzymePortalDiseaseSet")
-}
-)
 
-//@NamedEntityGraph(
-//     name="summary.graph",
-//     attributeNodes = {
-//          @NamedAttributeNode("client"),
-//          @NamedAttributeNode(value = "tests", subgraph = "testsSG")
-//     },
-//     subgraphs ={
-//          @NamedSubgraph(
-//               name="testsSG",
-//               attributeNodes = {
-//                    @NamedAttributeNode("template")
-//               }
-//          )
-//     }
-//)
+@NamedEntityGraph(
+     name="summary.graph",
+     attributeNodes = {
+          //@NamedAttributeNode("uniprotAccession"),
+          @NamedAttributeNode(value = "uniprotAccession",subgraph = "enzymePortalDiseaseSet"),
+          @NamedAttributeNode(value = "uniprotAccession", subgraph = "enzymePortalCompoundSet"),
+          @NamedAttributeNode(value = "uniprotAccession", subgraph = "uniprotXrefSet"),
+          @NamedAttributeNode(value = "uniprotAccession", subgraph = "relatedProteinsId")
+     },
+     subgraphs ={
+       
+         @NamedSubgraph( name="uniprotAccession", attributeNodes = { @NamedAttributeNode("enzymePortalDiseaseSet") }),
+          @NamedSubgraph(name = "uniprotAccession",attributeNodes ={@NamedAttributeNode("enzymePortalCompoundSet")} ),
+          @NamedSubgraph(name = "uniprotAccession",attributeNodes ={@NamedAttributeNode("uniprotXrefSet")} ),
+          @NamedSubgraph(name = "uniprotAccession",attributeNodes ={@NamedAttributeNode("relatedProteinsId")} )
+          
+     }
+)
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalSummary.findAll", query = "SELECT e FROM EnzymePortalSummary e"),
     @NamedQuery(name = "EnzymePortalSummary.findByEnzymeId", query = "SELECT e FROM EnzymePortalSummary e WHERE e.enzymeId = :enzymeId"),
@@ -82,7 +65,7 @@ import uk.ac.ebi.ep.data.search.model.Species;
     @NamedQuery(name = "EnzymePortalSummary.findByCommentType", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentType = :commentType")
     //@NamedQuery(name = "EnzymePortalSummary.findByCommentText", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentText = :commentText")
 })
-public class EnzymePortalSummary extends EnzymeSummary  implements Serializable {
+public class EnzymePortalSummary extends EnzymeSummary implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -99,8 +82,9 @@ public class EnzymePortalSummary extends EnzymeSummary  implements Serializable 
     private String commentText;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
+
     public EnzymePortalSummary() {
     }
 
@@ -174,54 +158,58 @@ public class EnzymePortalSummary extends EnzymeSummary  implements Serializable 
         }
         return true;
     }
-    
 
-    
-
-    
-    
     @Override
     public String toString() {
         return "EnzymePortalSummary{" + "enzymeId=" + enzymeId + ", dbentryId=" + dbentryId + ", commentType=" + commentType + ", commentText=" + commentText + '}';
     }
 
+
     
+    
+    
+    
+    
+
+//    public List<RelatedProteins> getRelatedProteins() {
+//
+//        return this.uniprotAccession.getRelatedProteinsSet().stream().collect(Collectors.toList());
+//
+//    }
+//
+    
+    
+//    
 //    @Override
 //    public List<EnzymeAccession> getRelatedspecies() {
-//
 //        if (relatedspecies == null) {
 //            relatedspecies = new ArrayList<>();
 //        }
-//        String defaultSpecies = CommonSpecies.Human.getScientificName();
-////        
-//          EnzymeAccession ea = new EnzymeAccession();
-//            ea.setPdbeaccession(getPdbCodes(this.uniprotAccession));
-//            ea.getUniprotaccessions().add(this.uniprotAccession.getAccession());
-//            ea.setSpecies(this.uniprotAccession);
-//            //ea.setCompounds(this.uniprotAccession.getEnzymePortalCompoundSet().stream().collect(Collectors.toList()));
-//            ea.setDiseases(this.uniprotAccession.getEnzymePortalDiseaseSet().stream().collect(Collectors.toList()));
 //
-//        if (this.uniprotAccession.getScientificname() != null && this.uniprotAccession.getScientificname().equalsIgnoreCase(defaultSpecies)) {
-//            //relatedspecies.add(0, ea);
-//            relatedspecies.addAll(0, uniprotAccession.getRelatedProteinsSet());
+//        String defaultSpecies = CommonSpecies.Human.getScientificName();
+//        //List<RelatedProteins> relatedspecies = new LinkedList<>();
+//        
+//        EnzymeAccession ea = new EnzymeAccession();
+//        ea.setSpecies(uniprotAccession);
+//        ea.getUniprotaccessions().add(uniprotAccession.getAccession());
+//       
+//
+//        if (uniprotAccession.getScientificname() != null && uniprotAccession.getScientificname().equalsIgnoreCase(defaultSpecies)) {
 //           
-//        } else if (this.uniprotAccession.getScientificname() != null && !this.uniprotAccession.getScientificname().equalsIgnoreCase(defaultSpecies)) {
-//            //relatedspecies.add(ea);
-//           relatedspecies.addAll(uniprotAccession.getRelatedProteinsSet());
+//            relatedspecies.add(0, ea);
+// 
+//        } else if (uniprotAccession.getScientificname() != null && !uniprotAccession.getScientificname().equalsIgnoreCase(defaultSpecies)) {
+//           relatedspecies.add(ea);
+//
 //        }
 //
-//        return this.relatedspecies;
 //        
-//        //return this.uniprotAccession.getRelatedProteinsSet().stream().collect(Collectors.toList());
-//       
+//
+//
+//        return relatedspecies;
 //    }
-    
-    
-    @Override
-    public List<String> getPdbeaccession() {
 
-        return getPdbCodes(this.getUniprotAccession());
-    }
+
 
     @Override
     public List<String> getSynonym() {
@@ -242,15 +230,31 @@ public class EnzymePortalSummary extends EnzymeSummary  implements Serializable 
         return this.synonym;
         //return synonym;
     }
+    
+        @Override
+    public List<String> getPdbeaccession() {
+
+        return getPdbCodes(this.getUniprotAccession());
+    }
 
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
-        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
+        
+//        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
+//            pdbcodes.add(xref.getSourceId());
+//        });
+        
+        
+        
+        e.getUniprotXrefSet().stream().filter((x)->(x.getSource().equalsIgnoreCase("PDB"))).limit(2).collect(Collectors.toList()).stream().forEach((xref) -> {
             pdbcodes.add(xref.getSourceId());
         });
+        
+        
         return pdbcodes;
-    }
+        
 
+    }
 
     private List<String> parseNameSynonyms(String namesColumn) {
         List<String> nameSynonyms = new ArrayList<>();
@@ -321,22 +325,15 @@ public class EnzymePortalSummary extends EnzymeSummary  implements Serializable 
 
     @Override
     public List<Compound> getCompounds() {
-////        if (compounds == null) {
-////            compounds = new ArrayList<>();
-////        }
-////        compounds.addAll(uniprotAccession.getEnzymePortalCompoundSet());
-//        return this.compounds;
+
         return uniprotAccession.getEnzymePortalCompoundSet().stream().collect(Collectors.toList());
     }
 
     @Override
     public List<Disease> getDiseases() {
-//        if (diseases == null) {
-//            diseases = new ArrayList<>();
-//        }
-//
-//        diseases.addAll(uniprotAccession.getEnzymePortalDiseaseSet());
+
         return uniprotAccession.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
     }
-
+    
+    
 }

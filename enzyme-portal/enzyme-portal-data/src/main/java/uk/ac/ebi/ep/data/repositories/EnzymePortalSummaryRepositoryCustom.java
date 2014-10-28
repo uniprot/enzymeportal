@@ -16,7 +16,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
  * @author joseph
  */
 @NoRepositoryBean
-public interface EnzymeSummaryRepositoryCustom {
+public interface EnzymePortalSummaryRepositoryCustom {
 
     List<EnzymePortalSummary> findByCommentType(String commentType, int limit);
 
@@ -37,5 +37,7 @@ public interface EnzymeSummaryRepositoryCustom {
     List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions);
 
     Page<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions, Pageable pageable);
+    
+
 
 }

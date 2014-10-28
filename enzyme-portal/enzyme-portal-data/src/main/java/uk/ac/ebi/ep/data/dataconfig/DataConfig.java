@@ -19,7 +19,6 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import uk.ac.ebi.ep.data.util.CustomQueryDslJpaRepositoryFactoryBean;
 
 /**
  *
@@ -27,12 +26,12 @@ import uk.ac.ebi.ep.data.util.CustomQueryDslJpaRepositoryFactoryBean;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(repositoryFactoryBeanClass=CustomQueryDslJpaRepositoryFactoryBean.class,basePackages = "uk.ac.ebi.ep.data.repositories")
-//@EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
+//@EnableJpaRepositories(repositoryFactoryBeanClass=CustomQueryDslJpaRepositoryFactoryBean.class,basePackages = "uk.ac.ebi.ep.data.repositories")
+@EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
 @PropertySource({"classpath:ep-web-client.properties", "classpath:chembl-adapter.properties", "classpath:log4j.properties"})
 
 public class DataConfig {
-//repositoryFactoryBeanClass=CustomQueryDslJpaRepositoryFactoryBean.class
+
     @Autowired
     private DataSource dataSource;
     
@@ -58,12 +57,7 @@ public class DataConfig {
         return em;
     }
 
-//    @Bean
-//    public JpaTransactionManager transactionManager() {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-//        return transactionManager;
-//    }
+
     @Bean
     public PlatformTransactionManager transactionManager() {
         PlatformTransactionManager manager = new JpaTransactionManager(entityManagerFactory().getObject());
@@ -75,28 +69,5 @@ public class DataConfig {
         return new HibernateExceptionTranslator();
     }
 
-//    @Bean
-//    public DiseaseService diseaseService() {
-//        return new DiseaseService();
-//    }
-//
-//    @Bean
-//    public DiseaseParser diseaseParser() {
-//        return new DiseaseParser();
-//    }
-//
-//    @Bean
-//    public BioPortalService bioPortalService() {
-//        return new BioPortalService();
-//    }
-//
-//    @Bean
-//    public UniprotEntryService uniprotEntryService() {
-//        return new UniprotEntryService();
-//    }
-//
-//    @Bean
-//    public EnzymePortalCompoundService enzymePortalCompoundService() {
-//        return new EnzymePortalCompoundService();
-//    }
+
 }

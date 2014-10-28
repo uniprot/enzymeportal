@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.types.expr.BooleanExpression;
 import java.util.List;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -26,26 +25,7 @@ public class RelatedProteinsRepositoryImpl implements RelatedProteinsRepositoryC
     private EntityManager entityManager;
     private static final QRelatedProteins $ = QRelatedProteins.relatedProteins;
     
-    @Transactional(readOnly = true)
-    @Override
-    public List<RelatedProteins> findRelatedProteinsByNamePrefix(String nameprefix) {
-        EntityGraph eGraph = entityManager.getEntityGraph("RelatedProteins.graph");
-        eGraph.addAttributeNodes("uniprotAccession");
-        
-        eGraph.addSubgraph("uniprotAccession")
-                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-        
-        JPAQuery query = new JPAQuery(entityManager);
-        
-        query.setHint("javax.persistence.fetchgraph", eGraph);
-
-        //JPAQuery query = new JPAQuery(entityManager);
-        BooleanExpression isNamePrefix = $.namePrefix.equalsIgnoreCase(nameprefix);
-        return query.from($).where(isNamePrefix).distinct().list($);
-    }
-    
+    @Transactional(readOnly = true)  
     @Override
     public List<RelatedProteins> findRelatedProteinsByNamePrefixes(List<String> nameprefixes) {
         
@@ -55,7 +35,7 @@ public class RelatedProteinsRepositoryImpl implements RelatedProteinsRepositoryC
         eGraph.addSubgraph("uniprotAccession")
                 .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                         "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
+                        "enzymePortalCompoundSet", "uniprotXrefSet", "uniprotEntrySet", "enzymePortalEcNumbersSet");
         
         JPAQuery query = new JPAQuery(entityManager);
         

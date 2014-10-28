@@ -16,7 +16,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalSummary;
@@ -25,7 +24,7 @@ import uk.ac.ebi.ep.data.domain.QEnzymePortalSummary;
  *
  * @author joseph
  */
-public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCustom {
+public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRepositoryCustom {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -84,16 +83,17 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
     @Override
     public List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions) {
         EntityGraph eGraph = entityManager.getEntityGraph("summary.graph");
-        eGraph.addAttributeNodes("uniprotAccession");
+        //eGraph.addAttributeNodes("uniprotAccession");
 
-        eGraph.addSubgraph("uniprotAccession")
-                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
+//        eGraph.addSubgraph("uniprotAccession")
+//                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+//                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
+//                        "enzymePortalCompoundSet", "uniprotXrefSet", "enzymePortalEcNumbersSet");
 
         JPAQuery query = new JPAQuery(entityManager);
 
-        query.setHint("javax.persistence.fetchgraph", eGraph);
+        //query.setHint("javax.persistence.fetchgraph", eGraph);
+         query.setHint("javax.persistence.loadgraph", eGraph);
 
         BooleanBuilder builder = new BooleanBuilder();
         accessions.stream().forEach((accession) -> {
@@ -102,6 +102,8 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
 
         });
         query.from($).where(builder);
+        
+
 
         return query.list($);
 //        List<EnzymePortalSummary> result = query.distinct().list($).parallelStream().distinct().collect(Collectors.toList());
@@ -116,20 +118,27 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
         EntityGraph eGraph = entityManager.getEntityGraph("summary.graph");
 
         //EntityGraph eGraph = entityManager.createEntityGraph("summary.graph");
-        eGraph.addAttributeNodes("uniprotAccession");
-        //eGraph.addSubgraph("uniprotAccession", UniprotEntry.class).addAttributeNodes("enzymePortalDiseaseSet");
+        
+        //eGraph.addSubgraph("uniprotAccession").addAttributeNodes("enzymePortalCompoundSet");
+         //eGraph.addSubgraph("uniprotAccession").addAttributeNodes("relatedProteinsId");
+        
 
-        eGraph.addSubgraph("uniprotAccession")
-                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
+ 
 
-        System.out.println("alternatives " + eGraph.getName());
+//        eGraph.addSubgraph("uniprotAccession")
+//                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+//                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
+//                        "enzymePortalCompoundSet", "uniprotXrefSet", "enzymePortalEcNumbersSet");
+       
+       
+        
         JPAQuery query = new JPAQuery(entityManager);
-        query.setHint("javax.persistence.fetchgraph", eGraph);
-        //query.setHint("javax.persistence.loadgraph", eGraph);
+        //query.setHint("javax.persistence.fetchgraph", eGraph);
+        query.setHint("javax.persistence.loadgraph", eGraph);
 
-        StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
+       // StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
+        StringExpression idPrefix = $.uniprotAccession.relatedProteinsId.namePrefix;
+        
         BooleanBuilder builder = new BooleanBuilder();
         name_prefixes.stream().forEach((prefix) -> {
 
@@ -137,13 +146,24 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
 
         });
         query.from($).where(builder);
-        //return query.distinct().list($).stream().distinct().collect(Collectors.toList());
-        List<EnzymePortalSummary> result = query.limit(20).distinct().list($).stream().distinct().collect(Collectors.toList());
-        Pageable pageable = new PageRequest(0, 10);
-        System.out.println("enzyme summary repositoryImpl Line 166 : FIXME");
-        Page page = new PageImpl(result, pageable, result.size());
-   
-        return page.getContent();
+        
+
+        
+ 
+        
+        
+        return query.list($);
+        
+        
+        
+        
+        
+//        List<EnzymePortalSummary> result = query.distinct().list($).stream().distinct().collect(Collectors.toList());
+//        Pageable pageable = new PageRequest(0, 50);
+//        System.out.println("enzyme summary repositoryImpl Line 166 : FIXME" + result.size());
+//        Page page = new PageImpl(result, pageable, result.size());
+//   
+//        return page.getContent();
     }
 
     @Override
@@ -153,16 +173,14 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
         //EntityGraph eGraph = entityManager.createEntityGraph("summary.graph");
         eGraph.addAttributeNodes("uniprotAccession");
         //eGraph.addSubgraph("uniprotAccession", UniprotEntry.class).addAttributeNodes("enzymePortalDiseaseSet");
-
-        eGraph.addSubgraph("uniprotAccession")
+       eGraph.addSubgraph("uniprotAccession")
                 .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                         "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                        "enzymePortalCompoundSet", "uniprotXrefSet", "enzymePortalEcNumbersSet");
        
         JPAQuery query = new JPAQuery(entityManager);
-        query.setHint("javax.persistence.fetchgraph", eGraph);
-        //query.setHint("javax.persistence.loadgraph", eGraph);
+        //query.setHint("javax.persistence.fetchgraph", eGraph);
+        query.setHint("javax.persistence.loadgraph", eGraph);
 
         StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
         BooleanBuilder builder = new BooleanBuilder();
@@ -183,11 +201,10 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
 
         eGraph.addAttributeNodes("uniprotAccession");
 
-        eGraph.addSubgraph("uniprotAccession")
+       eGraph.addSubgraph("uniprotAccession")
                 .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                         "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                        "enzymePortalCompoundSet", "uniprotXrefSet", "enzymePortalEcNumbersSet");
         JPAQuery query = new JPAQuery(entityManager);
 
         query.setHint("javax.persistence.fetchgraph", eGraph);
@@ -204,8 +221,7 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
         eGraph.addSubgraph("uniprotAccession")
                 .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                         "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                        "enzymePortalCompoundSet", "uniprotXrefSet", "enzymePortalEcNumbersSet");
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
 
@@ -227,11 +243,10 @@ public class EnzymeSummaryRepositoryImpl implements EnzymeSummaryRepositoryCusto
         EntityGraph eGraph = entityManager.getEntityGraph("summary.graph");
 
         eGraph.addAttributeNodes("uniprotAccession");
-        eGraph.addSubgraph("uniprotAccession")
+       eGraph.addSubgraph("uniprotAccession")
                 .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                         "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                        "enzymePortalCompoundSet", "uniprotXrefSet", "enzymePortalEcNumbersSet");
         JPAQuery query = new JPAQuery(entityManager);
 
         query.setHint("javax.persistence.fetchgraph", eGraph);

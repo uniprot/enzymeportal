@@ -34,7 +34,6 @@ public class DevDataConfig implements iDataConfig {
         try {
 
             OracleDataSource ds = new OracleConnectionPoolDataSource();
-            //OracleConnectionPoolDataSource ds = new OracleConnectionPoolDataSource();
 
             String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                     env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));

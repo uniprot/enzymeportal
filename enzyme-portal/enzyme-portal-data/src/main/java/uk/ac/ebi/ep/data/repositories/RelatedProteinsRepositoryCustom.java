@@ -15,6 +15,6 @@ import uk.ac.ebi.ep.data.domain.RelatedProteins;
  */
 @NoRepositoryBean
 public interface RelatedProteinsRepositoryCustom {
-    List<RelatedProteins> findRelatedProteinsByNamePrefix(String nameprefix);
+   
     List<RelatedProteins> findRelatedProteinsByNamePrefixes(List<String> nameprefixes);
 }

@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import uk.ac.ebi.ep.data.domain.RelatedProteins;
 
 /**
  *
@@ -30,7 +29,7 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
 //    private String synonyms;
     protected String uniprotid;
     protected List<EnzymeAccession> relatedspecies;
-
+    
     /**
      * Gets the value of the ec property.
      *
@@ -261,14 +260,14 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
         return this;
     }
 
-    public EnzymeSummary withRelatedspecies(RelatedProteins... values) {
+    public EnzymeSummary withRelatedspecies(EnzymeAccession... values) {
         if (values != null) {
             getRelatedspecies().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public EnzymeSummary withRelatedspecies(Collection<RelatedProteins> values) {
+    public EnzymeSummary withRelatedspecies(Collection<EnzymeAccession> values) {
         if (values != null) {
             getRelatedspecies().addAll(values);
         }
@@ -390,10 +389,11 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
         return true;
     }
 
+  
     @Override
     public int compareTo(EnzymeSummary o) {
-        if(this.scoring != null){
-            return this.scoring.toString().compareTo(o.scoring.toString());
+        if(super.scoring != null){
+            return super.scoring.toString().compareTo(o.scoring.toString());
         }
         return this.name.compareToIgnoreCase(o.getName());
     }

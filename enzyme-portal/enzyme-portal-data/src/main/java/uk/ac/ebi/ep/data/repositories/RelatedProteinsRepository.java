@@ -16,4 +16,5 @@ import uk.ac.ebi.ep.data.domain.RelatedProteins;
  */
 public interface RelatedProteinsRepository extends JpaRepository<RelatedProteins, Long>, QueryDslPredicateExecutor<RelatedProteins>,RelatedProteinsRepositoryCustom {
     
+    RelatedProteins findByNamePrefix(String namePrefix);
 }

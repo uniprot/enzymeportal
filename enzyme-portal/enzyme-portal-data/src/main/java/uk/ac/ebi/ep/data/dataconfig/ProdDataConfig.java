@@ -35,12 +35,12 @@ public class ProdDataConfig implements iDataConfig{
         try {
 
             OracleDataSource ds = new OracleConnectionPoolDataSource();
-            //OracleConnectionPoolDataSource ds = new OracleConnectionPoolDataSource();
+         
 
             String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                     env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 
-            System.out.println("prod url "+ url);
+          
 
             ds.setURL(url);
             ds.setUser(env.getRequiredProperty("ep.db.username"));

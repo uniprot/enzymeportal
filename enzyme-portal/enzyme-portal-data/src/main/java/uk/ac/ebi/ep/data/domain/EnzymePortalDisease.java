@@ -19,8 +19,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -34,6 +37,18 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 @Entity
 @Table(name = "ENZYME_PORTAL_DISEASE")
 @XmlRootElement
+
+@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
+    @NamedAttributeNode(value = "uniprotAccession", subgraph = "relatedProteinsId"),},
+        subgraphs = {
+            @NamedSubgraph(
+                    name = "uniprotAccession",
+                    attributeNodes = {
+                        @NamedAttributeNode("relatedProteinsId")}
+            )
+        }
+)
+
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalDisease.findAll", query = "SELECT e FROM EnzymePortalDisease e"),
     @NamedQuery(name = "EnzymePortalDisease.findByDiseaseId", query = "SELECT e FROM EnzymePortalDisease e WHERE e.diseaseId = :diseaseId"),
@@ -74,7 +89,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     private String url;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     private static final Comparator<String> NAME_COMPARATOR
@@ -159,7 +174,6 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
         this.url = url;
     }
 
-
     @Override
     public String toString() {
         return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", diseaseName=" + diseaseName + ", evidence=" + evidence + ", definition=" + definition + ", url=" + url + '}';
@@ -195,8 +209,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
         return true;
     }
 
-    
-        @Override
+    @Override
     public int compareTo(EnzymePortalDisease o) {
         return NAME_COMPARATOR.compare(this.getDiseaseName(),
                 o.getDiseaseName());
@@ -216,29 +229,21 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     public void setEvidences(List<String> evidences) {
         this.evidences = evidences;
     }
-    
 
     @Override
     public String getId() {
         return meshId;
     }
 
- 
-
     @Override
     public String getName() {
         return diseaseName;
     }
 
- 
-
     @Override
     public String getDescription() {
         return definition;
     }
-
-  
-
 
     /**
      * Gets the value of the selected property.
@@ -250,8 +255,6 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
         return selected;
     }
 
-
-
     /**
      * Gets the value of the numEnzyme property.
      *
@@ -261,8 +264,5 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     public int getNumEnzyme() {
         return numEnzyme;
     }
-
- 
-
 
 }

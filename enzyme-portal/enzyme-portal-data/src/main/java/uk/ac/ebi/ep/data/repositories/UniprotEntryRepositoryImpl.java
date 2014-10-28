@@ -8,7 +8,6 @@ package uk.ac.ebi.ep.data.repositories;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.StringExpression;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
@@ -40,11 +39,14 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                 "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
+                "uniprotXrefSet", "enzymePortalEcNumbersSet");
 
         JPAQuery query = new JPAQuery(entityManager);
 
         query.setHint("javax.persistence.fetchgraph", eGraph);
+        query.setHint( "javax.persistence.query.timeout", 450 );
+        
+
 
         StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
         BooleanBuilder builder = new BooleanBuilder();
@@ -65,8 +67,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                 "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                "uniprotXrefSet", "enzymePortalEcNumbersSet");
         JPAQuery query = new JPAQuery(entityManager);
 
         query.setHint("javax.persistence.fetchgraph", eGraph);
@@ -89,8 +90,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                 "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                "uniprotXrefSet", "enzymePortalEcNumbersSet");
         JPAQuery query = new JPAQuery(entityManager);
 
         query.setHint("javax.persistence.fetchgraph", eGraph);
@@ -106,8 +106,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                 "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                "uniprotXrefSet", "enzymePortalEcNumbersSet");
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
 
@@ -133,35 +132,14 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
             builder.or($.accession.equalsIgnoreCase(accession));
 
         });
-        List<UniprotEntry> enzymes = query.from($).where(builder).list($).stream().distinct().collect(Collectors.toList());
-        List<String> accessionList = new ArrayList<>();
-        enzymes.stream().forEach((entry) -> {
-            accessionList.add(entry.getAccession());
-        });
-        return accessionList;
+        List<String> enzymes = query.from($).where(builder).list($.accession).stream().distinct().collect(Collectors.toList());
+        
+
+        return enzymes;
 
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<String> filterEnzymesInNameprefixes(List<String> prefixes) {
 
-        JPAQuery query = new JPAQuery(entityManager);
-
-        BooleanBuilder builder = new BooleanBuilder();
-        prefixes.parallelStream().forEach((prefix) -> {
-
-            builder.or($.name.substring(0, $.name.indexOf("_")).equalsIgnoreCase(prefix));
-
-        });
-        List<UniprotEntry> enzymes = query.from($).where(builder).list($).stream().distinct().collect(Collectors.toList());
-        List<String> prefixList = new ArrayList<>();
-        enzymes.parallelStream().forEach((entry) -> {
-            prefixList.add(entry.getName().substring(0, entry.getName().indexOf("_")));
-        });
-        return prefixList;
-
-    }
 
     @Override
     public List<UniprotEntry> findEnzymeByAccessionsAndProteinName(List<String> accessions, String proteinName) {
@@ -169,8 +147,8 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                 "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                "uniprotXrefSet", "enzymePortalEcNumbersSet");
+        
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
 
@@ -191,10 +169,9 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     public List<UniprotEntry> findEnzymesByAccession(String accession) {
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
 
-        eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+           eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                 "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "relatedProteinsSet", "enzymePortalEcNumbersSet");
-
+                "uniprotXrefSet", "enzymePortalEcNumbersSet");
         JPAQuery query = new JPAQuery(entityManager);
 
         query.setHint("javax.persistence.fetchgraph", eGraph);
@@ -202,5 +179,5 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return enzymes;
 
     }
-
+    
 }

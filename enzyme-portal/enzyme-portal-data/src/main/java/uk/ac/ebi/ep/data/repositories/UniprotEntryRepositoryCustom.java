@@ -32,6 +32,6 @@ public interface UniprotEntryRepositoryCustom {
 
     List<String> filterEnzymesInAccessions(List<String> accessions);
 
-    List<String> filterEnzymesInNameprefixes(List<String> prefixes);
+
 
 }

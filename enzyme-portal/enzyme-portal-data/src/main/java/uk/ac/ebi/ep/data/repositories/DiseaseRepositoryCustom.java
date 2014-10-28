@@ -23,4 +23,6 @@ public interface DiseaseRepositoryCustom {
     List<EnzymePortalDisease> findDiseasesByAccession(String accession);
 
     List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes);
+     List<String> findAccessionsByDisease(String diseaseId);
+     List<EnzymePortalDisease> findDiseases();
 }

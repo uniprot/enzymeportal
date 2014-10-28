@@ -21,6 +21,21 @@ public class Species{// implements Comparable<Species>, Serializable {
     private boolean selected;
     private List<Compound> compounds;
     private List<Disease> diseases;
+    
+    
+    
+    
+     protected Object scoring;
+
+    public Object getScoring() {
+        return scoring;
+    }
+
+    public void setScoring(Object scoring) {
+        this.scoring = scoring;
+    }
+     
+     
 
     /**
      * Gets the value of the scientificname property.

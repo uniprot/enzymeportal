@@ -23,5 +23,5 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<String> findAccession();
 
     @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE  ROWNUM <= 2000", nativeQuery = true)
-    List<UniprotEntry> findUniprotEntries();
+    List<UniprotEntry> findUniprotEntries();//only for testing purposes.. to be deleted later
 }

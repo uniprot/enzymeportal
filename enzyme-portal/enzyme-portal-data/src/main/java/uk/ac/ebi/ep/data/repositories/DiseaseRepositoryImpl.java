@@ -10,6 +10,7 @@ import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
@@ -37,7 +38,6 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 //        jpa.execute();
 //
 //    }
-
     @Override
     public List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -76,5 +76,31 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
                 .where($.uniprotAccession.accession.equalsIgnoreCase(accession)).list($).stream().distinct().collect(Collectors.toList());
         return diseases;
     }
-    
+
+    /**
+     * Note: meshId is used as default disease id for now as some omim entries
+     * are null and we don't have efo yet
+     *
+     * @param diseaseId meshId is used as default at the moment
+     * @return list of accessions
+     */
+    @Override
+    public List<String> findAccessionsByDisease(String diseaseId) {
+
+        JPAQuery query = new JPAQuery(entityManager);
+
+        List<String> enzymes = query.from($).where($.meshId.equalsIgnoreCase(diseaseId)).list($.uniprotAccession.accession);
+        return enzymes;
+
+    }
+
+    @Override
+    public List<EnzymePortalDisease> findDiseases() {
+        EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
+        JPAQuery query = new JPAQuery(entityManager);
+        query.setHint("javax.persistence.loadgraph", eGraph);
+        List<EnzymePortalDisease> diseases = query.from($).list($);
+        return diseases;
+    }
+
 }

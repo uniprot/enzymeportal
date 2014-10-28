@@ -48,7 +48,7 @@ public class UniprotXref implements Serializable {
     @Column(name = "SOURCE")
     private String source;
     @JoinColumn(name = "ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry accession;
 
     public UniprotXref() {
