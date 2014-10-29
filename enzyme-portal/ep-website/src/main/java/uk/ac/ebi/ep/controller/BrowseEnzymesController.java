@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -23,7 +25,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
+import uk.ac.ebi.ep.data.search.model.SearchParams;
+import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.enzymes.EnzymeEntry;
 import uk.ac.ebi.ep.enzymes.EnzymeSubSubclass;
 import uk.ac.ebi.ep.enzymes.EnzymeSubclass;
@@ -35,7 +40,7 @@ import uk.ac.ebi.ep.enzymes.IntenzEnzyme;
  * @author joseph
  */
 @Controller
-public class BrowseEnzymesController{// extends AbstractController {
+public class BrowseEnzymesController extends AbstractController {
 
     private static final Logger LOGGER = Logger.getLogger(BrowseEnzymesController.class);
     //concrete jsp's
@@ -57,115 +62,96 @@ public class BrowseEnzymesController{// extends AbstractController {
     private static final String SUBCLASS = "SUBCLASS";
     private static final String SUBSUBCLASS = "SUBSUBCLASS";
     private static final String selectedEc = "selectedEc";
-    private transient int total;
+    
+   
 
-//    private SearchResults findEnzymesByEntry(String entry_id) {
-//
-//        SearchResults results = null;
-//        EnzymeFinder finder = new EnzymeFinder(searchConfig);
-//        finder.getUniprotAdapter().setConfig(uniprotConfig);
-//        finder.getIntenzAdapter().setConfig(intenzConfig);
-//        finder.getEbeyeAdapter().setConfig(ebeyeConfig);
-//
-//
-//        Entry entry = finder.findEntryById(entry_id);//get the entry id ( ec)
-//
-//
-//        List<String> ids = new ArrayList<>();
-//        Collection<CustomXRef> xrefResult = null;
-//        //int total = 0;
-//        if (entry != null) {
-//
-//    // long startTime = System.currentTimeMillis();
-//      xrefResult = finder.getXrefs(entry);
-//        //long endTime = System.currentTimeMillis();
-//
-//        //System.out.println("CustomXRef processing took " + (endTime - startTime) + 
-//               // " milliseconds.");
-//           
-//            for (CustomXRef ref : xrefResult) {
-//                ids = ref.getIdList();
-//                total = ref.getResult_count();
-//
-//
-//
-//            }
-//
-//            SearchParams searchParams = new SearchParams();
-//            searchParams.setText(entry.getEntryName());
-//            searchParams.setType(SearchParams.SearchType.KEYWORD);
-//            searchParams.setStart(0);
-//            searchParams.setPrevioustext(entry.getEntryName());
-//            
-//            finder.setSearchParams(searchParams);
-//
-//            if (ids.size() > 0) {
-//
-//                results = finder.computeEnzymeSummary(ids, new SearchResults());
-//                
-//            } else if (ids.isEmpty()) {
-//                //if not found at mm, search via ebeye using the enzyme name as keyword
-//                return getEnzymes(finder, searchParams);
-//            }
-//        }
-//        return results;
-//    }
-//
-//    private SearchResults getEnzymes(EnzymeFinder finder, SearchParams searchParams) {
-//        SearchResults results = null;
-//
-//        try {
-//            results = finder.getEnzymes(searchParams);
-//        } catch (EnzymeFinderException ex) {
-//
-//            LOGGER.fatal("ERROR while searching for enzymes", ex);
-//        }
-//        return results;
-//    }
-//
-//    private String computeResult(@ModelAttribute("searchModel") SearchModel searchModel,
-//            @RequestParam(value = "entryid", required = false) String entryID,
-//            Model model, HttpSession session, HttpServletRequest request) {
-//
-//        String view = "error";
-//
-//        Map<String, SearchResults> prevSearches =
-//                getPreviousSearches(session.getServletContext());
-//        String searchKey = getSearchKey(searchModel.getSearchparams());
-//
-//        SearchResults results = prevSearches.get(searchKey);
-//
-//        if (results == null) {
-//            // New search:
-//            clearHistory(session);
-//            results = findEnzymesByEntry(entryID);
-//
-//        }
-//
-//        if (results != null) {
-//            cacheSearch(session.getServletContext(), searchKey, results);
-//            setLastSummaries(session, results.getSummaryentries());
-//            searchModel.setSearchresults(results);
-//            applyFilters(searchModel, request);
-//            model.addAttribute("searchModel", searchModel);
-//            model.addAttribute("pagination", getPagination(searchModel));
-//            clearHistory(session);
-//            addToHistory(session, searchModel.getSearchparams().getType(),
-//                    searchKey);
-//            view = RESULT;
-//        }
-//
-//
-//        return view;
-//    }
-//    
+    private SearchResults findEnzymesByEntry(String ec, String enzyme_name) {
+
+        SearchResults results = null;
+ EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+
+
+  List<String> accessions = enzymePortalService.findAccessionsByEc(ec);
+ 
+       
+
+        if (accessions != null) {
+
+             System.out.println("Number of accessions found "+ accessions.size());
+
+
+            SearchParams searchParams = new SearchParams();
+            searchParams.setText(ec);//use the ec number here. note ebeye is indexing ep data for ec to be searchable
+            searchParams.setType(SearchParams.SearchType.KEYWORD);
+            searchParams.setStart(0);
+            searchParams.setPrevioustext(ec);//use ec here
+            
+            finder.setSearchParams(searchParams);
+
+            if (accessions.size() > 0) {
+
+                results = finder.computeEnzymeSummariesByAccessions(accessions);
+                
+            } else if (accessions.isEmpty()) {
+                //if not found at mm, search via ebeye using the enzyme name as keyword
+                System.out.println("NO ACCESSION -> QUERY EBEYE FOR "+ ec);
+                return getEnzymes(finder, searchParams);
+            }
+        }
+        return results;
+    }
+
+    private SearchResults getEnzymes(EnzymeFinder finder, SearchParams searchParams) {
+  
+         SearchResults   results = finder.getEnzymes(searchParams);
+
+        return results;
+    }
+
+    private String computeResult(@ModelAttribute("searchModel") SearchModel searchModel,
+            @RequestParam(value = "entryid", required = false) String entryID, @RequestParam(value = "entryname", required = false) String entryname,
+            Model model, HttpSession session, HttpServletRequest request) {
+
+        String view = "error";
+
+        Map<String, SearchResults> prevSearches =
+                getPreviousSearches(session.getServletContext());
+        String searchKey = getSearchKey(searchModel.getSearchparams());
+
+        SearchResults results = prevSearches.get(searchKey);
+
+        if (results == null) {
+            // New search:
+            clearHistory(session);
+            results = findEnzymesByEntry(entryID,entryname);
+
+        }
+
+        if (results != null) {
+            cacheSearch(session.getServletContext(), searchKey, results);
+            setLastSummaries(session, results.getSummaryentries());
+            searchModel.setSearchresults(results);
+            applyFilters(searchModel, request);
+            model.addAttribute("searchModel", searchModel);
+            model.addAttribute("pagination", getPagination(searchModel));
+            clearHistory(session);
+            addToHistory(session, searchModel.getSearchparams().getType(),
+                    searchKey);
+            view = RESULT;
+        }
+
+
+        return view;
+    }
+    
     
         @ModelAttribute("searchModel")
-    public uk.ac.ebi.ep.data.search.model.SearchModel searchform() {
-        uk.ac.ebi.ep.data.search.model.SearchModel searchModelForm = new uk.ac.ebi.ep.data.search.model.SearchModel();
-        uk.ac.ebi.ep.data.search.model.SearchParams searchParams = new uk.ac.ebi.ep.data.search.model.SearchParams();
+    @Override
+    public SearchModel searchform() {
+        SearchModel searchModelForm = new SearchModel();
+       SearchParams searchParams = new SearchParams();
         searchParams.setStart(0);
-        searchParams.setType(uk.ac.ebi.ep.data.search.model.SearchParams.SearchType.KEYWORD);
+        searchParams.setType(SearchParams.SearchType.KEYWORD);
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
     }
@@ -200,7 +186,7 @@ public class BrowseEnzymesController{// extends AbstractController {
 
         if (ec != null && ec.length() >= 7) {
             model.addAttribute("entryid", ec);
-            //return computeResult(searchModel, ec, model, session, request);
+            return computeResult(searchModel, ec,entryecname, model, session, request);
 
         } else {
             browseEc(model, session, ecname, subecname, subsubecname, entryecname, ec);
@@ -219,8 +205,8 @@ public class BrowseEnzymesController{// extends AbstractController {
 
         model.addAttribute("entryid", ec);
         model.addAttribute("entryname", entryecname);
-        //return computeResult(searchModel, ec, model, session, request);
-        return null;
+        return computeResult(searchModel, ec,entryecname, model, session, request);
+       
     }
 
     @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.POST)
@@ -233,8 +219,8 @@ public class BrowseEnzymesController{// extends AbstractController {
         model.addAttribute("entryid", ec);
         model.addAttribute("entryname", entryecname);
 
-       // return computeResult(searchModel, ec, model, session, request);
-        return null;
+        return computeResult(searchModel, ec,entryecname, model, session, request);
+      
 
     }
 
