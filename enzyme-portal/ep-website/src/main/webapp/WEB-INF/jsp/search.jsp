@@ -107,7 +107,7 @@
                                <c:set var="searchText"
                                        value=" "/> 
                             </c:if>
-                            <h2>No Enzyme Portal results found</h2>
+                            <h2>No results found</h2>
                             <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} ". Please try another search or use the<a href="advanceSearch"> advanced search</a></p>
                             <script>
                                 $(document).ready(function() {
@@ -119,17 +119,7 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                                  <c:choose>
-                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
-                               <h2>Enzyme Portal results for <span class="searchterm"><i>${fn:substring(searchText, 0, 20)}${fn:length(searchText) gt 20? '...':''}</i>
-                                    </span></h2>
-                            </c:when>
-                            <c:otherwise>
-
-                                <h2>Enzyme Portal results for <span id="searchTerm" class="searchterm"><i>${searchText}</i></span></h2>
-                            </c:otherwise>
-                          </c:choose>
-                            <!--    	<p>Showing <strong>X</strong> results from a total of <strong>Y</strong></p>-->
+                               <h2>${totalfound} result(s) found</h2>
                         </c:if>
                     </section>
                     <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
@@ -226,27 +216,12 @@
                     <c:if test="${totalfound eq -100}">
                         <spring:message code="label.search.empty"/>
                     </c:if>
-                    <c:if test="${summaryEntriesSize == 0 and ( speciesListSize gt 0 or compoundListSize gt 0 or diseasesListSize gt 0)}">
-                        <div class="resultItem">
-                            <a href="#"><span class="displayMsg" style="font-size:small;text-align:center">
-                                No Result was found for this selection.</span></a>
-                        </div>
-                    </c:if>
                     <c:if test="${summaryEntriesSize gt 0 and searchresults.totalfound gt 0}">
                             <div style="width: 100%;">
                                 <c:set var="totalPages" value="${pagination.lastPage}"/>
                                 <c:set var="maxPages" value="${totalPages}"/>
-                                <div class="resultText">
-                                    <b>${totalfound}</b> results found for
-                                    <i>${fn:substring(searchText, 0, 30)}${fn:length(searchText) gt 30? '...':''}</i>,
-                                    <c:if test="${totalfound ne summaryEntriesSize}">
-                                        filtered to <b>${summaryEntriesSize}</b>,
-                                    </c:if>
-                                    displaying ${pagination.firstResult+1} - ${pagination.lastResult+1}
-                                    <span id="basketAll"
-                                        class="icon icon-generic" data-icon="b">
-                                        <%@include file="basket-buttons.jspf" %>
-                                    </span>
+                                <div class="action-buttons">
+                                    <%@include file="basket-buttons.jspf" %>
                                 </div>
                                 <div id="paginationNav" style="text-align: right;">
                                     <form:form modelAttribute="pagination" >
@@ -286,18 +261,7 @@
                             <c:forEach items="${summaryEntries}"
                                        begin="${pagination.firstResult}"
                                        end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
-                                <div class="grid_23 alpha">
                                     <%@ include file="summary.jspf"%>
-                                </div>
-                                <div class="grid_1 omega">
-    <span class="icon icon-generic" data-icon="b" style="white-space: nowrap;">
-    <input type="checkbox" class="forBasket"
-        onchange="selectForBasket(event)" title="Add to your basket."
-        value="${epfn:getSummaryBasketId(enzyme)}"
-        ${not empty basket and
-        not empty basket[epfn:getSummaryBasketId(enzyme)]? 'checked': ''}/>
-    </span>
-                                </div>
                             </c:forEach>
                         </div>
                     </c:if>

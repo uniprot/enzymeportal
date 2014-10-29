@@ -29,253 +29,57 @@
     <div id="content" role="main" class="grid_24 clearfix">
         
         <section class="grid_24">
-                            <div style="margin-left: auto; margin-right: auto;
-                         width: 50%;">
+            <div id="browse-box-container" class="prefix_4 grid_24">
+                <a href="browse/disease" class="browse-box disease-box grid_4">
+                    <h4>Diseases</h4>
+                    <span class="icon icon-generic" data-icon="B"></span>
+                </a>
+                <a href="browse/enzymes"  class="browse-box enzyme-box grid_4">
+                    <h4>Enzyme Classification</h4>
+                    <span class="icon icon-conceptual" data-icon="b"></span>
+                </a>
+                <a href="browse/taxonomy"  class="browse-box taxonomy-box grid_4">
+                    <h4>Taxonomy</h4>
+                    <span class="icon icon-conceptual" data-icon="o"></span>
+                </a>
+                <a href="browse/pathway"  class="browse-box gene-box grid_4">
+                    <h4>Pathways</h4>
+                    <span class="icon icon-conceptual" data-icon="y"></span>
+                </a>
+            </div>
+        </section>
 
-                        <h2>Welcome to the Enzyme Portal</h2> 
-                        <p>You can search this integrated resource to find information about the biology of a protein with enzymatic activity.</p>
-                        <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds. It brings together lots of diverse information about enzymes, and covers a large number of species including the key model organisms. 
-                          The search results are displayed as a summary, and give you a simple way to compare orthologues.
-                        </p>
-                    <p>
-		Give it a try and 
-		<a href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/">let
-                    us know</a> what you think!</p>
-<!--                        <p> The Enzyme Portal is for those interested
-                        in the biology of enzymes and proteins with enzymatic
-                        activity.</p>-->
-                 
-<!--                        <div style="text-align: right;">-->
-<p><p style="text-align: right;"><a href="about" class="showLink" >More about the
-                                Enzyme Portal...</a></p>
-<!--                    </div>-->
-                    </div>
-            
-          
-            <div class="hidden"   style="margin-left: auto; margin-right: auto;margin-bottom: 20em;
-                          width: 50%;">
-<!-- <h3 class="pane-title">Enzyme Portal Resources</h3>-->
- <div class="shortcuts grid_24 hidden">
-                          <div class="panel-pane pane-custom pane-8 " >
-                                         <div class="containers grid_24">
-                        <div class="iconGroup">
-<!--                            <fieldset class="iconField">
-                                <legend><a href="${pageContext.request.contextPath}/browseEcNumber">Enzyme Classification</a></legend>
-                                    <div class="iconBox">
-                                        <a href="${pageContext.request.contextPath}/browseEcNumber"><img src="resources/images/classification.png"
-                                                alt="enzyme classification" width="100px" height="100px"/></a>
-                                    </div>
-                            </fieldset>
-                            <fieldset class="iconField">
-                                <legend class="center"> <a href="${pageContext.request.contextPath}/browse">Browse Disease</a></legend>
-                                    <div class="iconBox">
-                                        <a href="${pageContext.request.contextPath}/browse"><img src="resources/images/disease3.png"
-                                                alt="?" width="100px" height="100px"/></a>
-                                    </div>
-                            </fieldset>                            -->
-                            <fieldset class="iconField hidden">
-                                    <legend>Expression</legend>
-                                    <div class="iconBox">
-                                        <img src="resources/images/expression.png"
-                                                alt="?" width="100px" height="100px"/>
-                                    </div>
-                            </fieldset>
-                        </div>
-                        <div class="iconGroup hidden">
-                            <fieldset class="iconField">
-                                    <legend>Chemical Compound</legend>
-                                    <div class="iconBox">
-                                        <img src="resources/images/compounds.png"
-                                                alt="?" width="100px" height="100px"/>
-                                    </div>
-                            </fieldset>
-                            <fieldset class="iconField hidden">
-                                    <legend>Taxonomy</legend>
-                                    <div class="iconBox">
-                                        <img src="resources/images/taxonomy.png"
-                                                                                        alt="?" width="100px" height="100px"/>
-                                    </div>
-                            </fieldset>
-                        </div>
-                    </div>           
-                          </div>  
- </div>
-                </div>
-                        
-            
-            <div class="clear clearfix"></div>
-            
-            <div  style="margin-left: auto; margin-right: auto;
-                          width: 50%;">
- <h3 class="pane-title ">Enzyme Portal Resources</h3>
-                <div class="shortcuts grid_24 ">
+        <section class="grid_24">
+            <div class="grid_6">
+                <h4>About Enzyme Portal</h4>
+                <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</p>
+                <p><a href="about">more...</a></p>
+            </div>
+            <div class="grid_6">
+                <h4>Enzyme Portal Resources</h4>
+                <p>To build its reports, the Enzyme Portal uses data from <a href="http://www.uniprot.org" target="_blank">UniProtKb</a>,
+                    <a href="http://www.ebi.ac.uk/pdbe/" target="_blank">PDBe</a>, <a href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>,
+                    <a href="http://www.ebi.ac.uk/chebi/" target="_blank">ChEBI</a>, <a href="http://www.reactome.org/" target="_blank">REACTOME</a>,
+                    <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/" target="_blank">MACiE</a>, <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>,
+                    <a href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a> and many more resources.</p>
+                <p><a href="about">more...</a></p>
+            </div>
+            <div class="grid_6">
+                <h4>Technical documents</h4>
+                <p>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available and can be downloaded from <a href="https://github.com/computingfacts/enzymeportal" target="_blank">GitHub</a>, an online project hosting service.</p>
+                <p>Additionally, the technical documentation (Javadoc, project information) is also available online.</p>
+            </div>
+            <div class="grid_6">
+                <h4>FAQ</h4>
+                <p>Read our frequently asked questions <a href="faq">here</a>.</p>
+            </div>
+        </section>
 
-               <div class="panel-pane pane-custom pane-8 clearfix" >
-
-<!--        <h3 class="pane-title">Enzyme Portal Resources</h3>-->
-
- 
-  <div class="containers grid_24">
-<!--      <section class="grid_24">-->
-         <ul id="mycarousel" class="jcarousel-skin-aqua grid_24">
-            <li>
-                <div class="grid_24">
-                    <img class="grid_3 alpha" src="resources/images/inc/uniprot_logo.gif" />
-                    <span class="grid_21 omega">
-                     <h4>UniProtKB</h4>
-                     <p>The UniProt Knowledgebase (UniProtKB) is the central hub for the collection of functional information on proteins, with accurate, consistent and rich annotation.</p>
-                     <p>The UniProt databases are the UniProt Knowledgebase (UniProtKB), the UniProt Reference Clusters (UniRef), and the UniProt Archive (UniParc).</p>
-                  </span>
-               </div>
-            </li>
-            <li>
-               <div>
-                   <img class="grid_3 alpha" src="resources/images/inc/pdbe_logo.png" />
-                   <span class="grid_21 omega">
-                     <h4>PDBe</h4>
-                     <p> PDBe is the European resource for the collection, organisation and dissemination of data on biological macromolecular structures. In collaboration with the other worldwide Protein Data Bank (wwPDB) partners - the Research Collaboratory for Structural Bioinformatics (RCSB) and BioMagResBank (BMRB) in the USA and the Protein Data Bank of Japan (PDBj) - we work to collate, maintain and provide access to the global repository of macromolecular structure data.</p> 
-<!--                     <a href="/" title="Link">Click this Link</a>-->
-                  </span>
-               </div>
-            </li>
-            <li>
-               <div>
-                  <img class="grid_3 alpha" src="resources/images/inc/chembl_logo.png" />
-                  <span class="grid_21 omega">
-                     <h4>ChEMBL</h4>
-                     <p>ChEMBL is a database of bioactive drug-like small molecules, it contains 2-D structures, calculated properties (e.g. logP, Molecular Weight, Lipinski Parameters, etc.) and abstracted bioactivities (e.g. binding constants, pharmacology and ADMET data).</p>
-                     <p>The data is abstracted and curated from the primary scientific literature, and cover a significant fraction of the SAR and discovery of modern drugs</p>
-                  </span>
-              </div>
-            </li>  
-                     <li>
-               <div>
-                  <img class="grid_3 alpha" src="resources/images/inc/ChEBI_logo.png" />
-                  <span class="grid_21 omega">
-                     <h4>ChEBI</h4>
-                     <p>Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on ?small? chemical compounds. The term ?molecular entity? refers to any constitutionally or isotopically distinct atom, molecule, ion, ion pair, radical, radical ion, complex, conformer, etc., identifiable as a separately distinguishable entity. The molecular entities in question are either products of nature or synthetic products used to intervene in the processes of living organisms.</p>
-                  </span>
-              </div>
-            </li> 
-                     <li>
-               <div>
-                  <img class="grid_3 alpha" src="resources/images/inc/reactome.png" />
-                  <span class="grid_21 omega">
-                     <h4>REACTOME</h4>
-                     <p>REACTOME is an open-source, open access, manually curated and peer-reviewed pathway database. Pathway annotations are authored by expert biologists, in collaboration with Reactome editorial staff and cross-referenced to many bioinformatics databases. These include NCBI Entrez Gene, Ensembl and UniProt databases, the UCSC and HapMap Genome Browsers, the KEGG Compound and ChEBI small molecule databases, PubMed, and Gene Ontology.</p>
-                  </span>
-              </div>
-            </li> 
-               <li>
-               <div>
-                  <img class="grid_3 alpha" src="resources/images/inc/no-image.jpeg" />
-                  <span class="grid_21 omega">
-                     <h4>MACiE</h4>
-                     <p>MACiE, which stands for Mechanism, Annotation and Classification in Enzymes, is a collaborative project between the Thornton Group at the European Bioinformatics Institute and the Mitchell Group at the University of St Andrews (initially within the Unilever Centre for Molecular Informatics part of the University of Cambridge). Metal MACiE, a database of catalytic metal ions, with a view to understanding the functions of the roles and activity of catalytic metals in enzymes.</p>
-                  </span>
-              </div>
-            </li> 
-                          <li>
-               <div>
-                  <img class="grid_3 alpha" src="resources/images/inc/rhea.png" />
-                  <span class="grid_21 omega">
-                     <h4>Rhea</h4>
-                     <p>Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).
-All data in Rhea is freely accessible and available for anyone to use.</p>
-                  </span>
-              </div>
-            </li> 
-              <li>
-               <div>
-                  <img class="grid_3 alpha" src="resources/images/inc/intenz.gif" />
-                  <span class="grid_21 omega">
-                     <h4>IntEnz</h4>
-                     <p>IntEnz (Integrated relational Enzyme database) is a freely available resource focused on enzyme nomenclature. IntEnz is created in collaboration with the Swiss Institute of Bioinformatics (SIB). This collaboration is responsible for the production of the ENZYME resource. 
-IntEnz contains the recommendations of the Nomenclature Committee of the International Union of Biochemistry and Molecular Biology (NC-IUBMB) on the nomenclature and classification of enzyme-catalysed reactions.</p>
-                  </span>
-              </div>
-            </li> 
-         </ul>
-<!--      </section>-->
-    
-         <div class="jcarousel-control">
-            <a href="#">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#">6</a>
-            <a href="#">7</a>
-            <a href="#">8</a>
-         </div>
-    
-        
-                   
-                    
-                    </div></div>
-                
-                </div>
-                
-            </div> 
-                    
-            </section>
-                
-			
-    </div>
-       
     <%@include file="footer.jspf" %>
     
   </div> <!--! end of #wrapper -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="resources/javascript/search.js" type="text/javascript"></script>
-         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-        <script src="resources/javascript/jquery.jcarousel.min.js" type="text/javascript"></script>
+  <script src="resources/javascript/search.js" type="text/javascript"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 
-  
-       <script type="text/javascript">
-            /**
-            * We use the initCallback callback
-            * to assign functionality to the controls
-            */
-            function mycarousel_initCallback(carousel) {
-                jQuery('.jcarousel-control a').bind('click', function () {
-                    carousel.scroll(jQuery.jcarousel.intval(jQuery(this).text()));
-                    return false; 
-                });
-
-                jQuery('#mycarousel-next').bind('click', function () {
-                    carousel.next();
-                    return false;
-                });
-
-                jQuery('#mycarousel-prev').bind('click', function () {
-                    carousel.prev();
-                    return false;
-                });
-
-                // Pause autoscrolling if the user moves with the cursor over the clip.
-        	    carousel.clip.hover(function() {
-        	        carousel.stopAuto();
-        	    }, function() {
-        	        carousel.startAuto();
-        	    });
-
-            };
-
-            // Ride the carousel...
-            jQuery(document).ready(function() {
-              jQuery('#mycarousel').jcarousel({
-              scroll: 1, animation:700, visible:1, auto:5, wrap:"both",
-                    initCallback: mycarousel_initCallback,
-                    itemVisibleInCallback: {
-                        onAfterAnimation: function (c, o, i, s) {
-                            i = (i - 1) % $('#mycarousel li').size();
-                            jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
-                            jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
-                        }
-                    }
-          });  
-      });
-      </script>
 </body>
 </html>

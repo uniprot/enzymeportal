@@ -234,7 +234,7 @@ vertical-align: top;
 
 
 /*search result text: Total found*/
-.resultText {
+.action-buttons {
     float:left;
     vertical-align: bottom;
 }
@@ -270,6 +270,8 @@ vertical-align: top;
     width: 7%;
 }
 
+
+
 /*The container of the search result items in rounded box*/
 .resultContent {
     padding-top: 0px;
@@ -293,17 +295,15 @@ vertical-align: top;
 /*The search result item in rounded box*/
 .resultItem {
     float: left;
-    -moz-border-radius: 15px 15px 15px 15px;
-    border-radius:15px 15px 15px 15px;
-    -webkit-border-radius:15px 15px 15px 15px;
-    border: 1px solid #ddd ;
-    margin-right: 5px;
-    margin-top: 10px;
-    padding: 5px;
-    vertical-align: top;    
+    border-bottom: 1px solid #ddd ;
+    margin:0em 0 0.5em 0;
+    padding-bottom:1em;
+    vertical-align: top;
     min-height: 80px;    
-    /*width: 88%;*/
-    width: 100%;
+}
+
+.summary-header {
+    margin-bottom: 0.5em;
 }
 
 .proteinImg {
@@ -757,17 +757,6 @@ div.caption-center {
 
 div.caption-center .caption-inner {
   display: inline-block;
-}
-
-div#local-masthead {
-    background-color: #70bdbd;
-    background-image:-webkit-linear-gradient(left, #207a7a, #70bdbd);
-    background-image: -moz-linear-gradient(left, #207a7a, #70bdbd);
-    background-image: -ms-linear-gradient(left, #207a7a, #70bdbd);
-    background-image: -o-linear-gradient(left, #207a7a, #70bdbd);
-    background-image: linear-gradient(left,#207a7a,#70bdbd);
-    filter: progid:DXImageTransform.Microsoft.gradient(gradientType='1', startColorStr='#207a7a', EndColorStr='#70bdbd'); /* IE6/7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(gradientType='1', startColorStr='#207a7a', EndColorStr='#70bdbd')"; /* IE8*/ 
 }
 
 

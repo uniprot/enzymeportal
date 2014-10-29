@@ -15,6 +15,23 @@
 
 <div class="resultItem grid_24">
 
+<div class="summary-header">
+    <input type="checkbox" class="forBasket"
+           title="Select entry"
+           value="${epfn:getSummaryBasketId(enzyme)}"/>
+    <c:if test='${not empty enzyme.name }'>
+        <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme">
+            <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}</span>
+            <span class="hidden">${enzyme.uniprotid}</span>
+            [${empty theSpecies.species.commonname?
+                theSpecies.species.scientificname :
+                theSpecies.species.commonname}]
+        </a>
+    </c:if>
+</div>
+<%--${not empty basket and--%>
+<%--not empty basket[epfn:getSummaryBasketId(enzyme)]? 'checked': ''}--%>
+
 <c:choose>
     <c:when test="${empty enzyme.relatedspecies}">
         <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a>
@@ -67,15 +84,6 @@
 </c:choose>
 
 <div class="desc grid_21">
-    <c:if test='${not empty enzyme.name }'>
-        <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme">
-            <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}</span>
-            <span class="hidden">${enzyme.uniprotid}</span>
-            [${empty theSpecies.species.commonname?
-                theSpecies.species.scientificname :
-                theSpecies.species.commonname}]
-        </a>
-    </c:if>
     <c:if test="${not empty enzyme.function}">
         <div>
           

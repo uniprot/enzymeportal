@@ -576,24 +576,33 @@ function selectForBasket(event){
 }
 
 /**
- * (Un)checks all basket checkboxes in the page.
- * Sends one single ajax request with a semicolon-separated list of basket IDs.
- * @param event The event triggering this action, namely the (de)select all
- * 		buttons.
+ * (Un)checks all checkboxes in the page.
  */
-function basketAll(event){
-	var id = '';
-	$('input.forBasket').each(function(index, elem){
-		if (id.length > 0) id += ';';
-		id += elem.value;
-	});
-	var checked = event.target.value == '+';
-	ajaxBasket(id, checked);
-	$('input.forBasket').each(function(index, elem){
-		elem.checked = checked;
-		//if (checked) $(elem).attr('checked', 'checked');
-		//else $(elem).removeAttr('checked');
-	});
+function basketAll(allcheckbox){
+    if(allcheckbox.checked) {
+        $('input.forBasket').each(function(){
+            this.checked = true;
+        });
+    } else {
+        $('input.forBasket').each(function(){
+            this.checked = false;
+        });
+    }
+}
+
+/**
+ * Saves whatever entries are selected to the basket
+ */
+function saveSelectionToBasket(){
+    var id = '';
+    $('input.forBasket').each(function(index, elem){
+        if(elem.checked === true) {
+            if (id.length > 0) id += ';';
+            id += elem.value;
+            console.log(id);
+        }
+    });
+    ajaxBasket(id, true);
 }
 
 /**

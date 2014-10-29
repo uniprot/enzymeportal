@@ -1,8 +1,16 @@
-<button id="basketDeselectAll" class="icon icon-functional" data-icon="-"
-    onclick="javascript:basketAll(event)" value="-"
-    title="Deselect all enzymes in this page."></button>
+<script>
+    $(document).ready(function(){
+        $('#select-all-checkbox').click(function(){
+            basketAll(this);
+        });
 
-<button id="basketSelectAll" class="icon icon-functional" data-icon="+"
-    onclick="javascript:basketAll(event)" value="+"
-    title="Select all enzymes in this page."></button>
-all
+        $('#add-to-basket').click(function(){
+            saveSelectionToBasket();
+        });
+
+    });
+</script>
+<input id="select-all-checkbox" type="checkbox" title="Select all" value="">
+
+<a id="add-to-basket" href="#" class="icon icon-generic" data-icon="b">Add to Basket</a>
+<%--<a id="compare" href="#" class="icon icon-functional" data-icon="O">Compare</a>--%>
