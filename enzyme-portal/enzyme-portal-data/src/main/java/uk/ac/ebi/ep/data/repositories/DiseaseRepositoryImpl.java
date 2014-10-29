@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalDisease;
 
@@ -30,14 +31,8 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         this.entityManager = entityManager;
     }
 
-//    @Override
-//    @Transactional
-//    public void dropDiseaseDatabase() {
-//        // JPADeleteClause jpa = new JPADeleteClause(entityManager,$).where($.diseaseId.eq(BigDecimal.valueOf(8)));
-//        JPADeleteClause jpa = new JPADeleteClause(entityManager, $);
-//        jpa.execute();
-//
-//    }
+
+     @Transactional(readOnly = true)
     @Override
     public List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -53,7 +48,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         return query.distinct().list($);
 
     }
-
+ @Transactional(readOnly = true)
     @Override
     public List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -68,7 +63,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 
         return query.distinct().list($);
     }
-
+ @Transactional(readOnly = true)
     @Override
     public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -84,6 +79,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
      * @param diseaseId meshId is used as default at the moment
      * @return list of accessions
      */
+     @Transactional(readOnly = true)
     @Override
     public List<String> findAccessionsByDisease(String diseaseId) {
 
@@ -95,6 +91,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     }
 
     @Override
+     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
         EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
         JPAQuery query = new JPAQuery(entityManager);

@@ -23,6 +23,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.repositories.ReactionRepository;
@@ -60,6 +61,9 @@ public class EnzymePortalService {
 
     @Autowired
     private RelatedProteinsRepository relatedProteinsRepository;
+    
+    @Autowired
+    private EnzymePortalEcNumbersRepository ecNumbersRepository;
 
     @Transactional(readOnly = true)
     public UniprotEntry findByAccession(String accession) {
@@ -235,6 +239,12 @@ public class EnzymePortalService {
     public List<EnzymePortalDisease> findDiseases() {
 
         return diseaseRepository.findDiseases();
+    }
+    
+            @Transactional(readOnly = true)
+    public List<String> findAccessionsByEc(String ecNumber) {
+
+        return ecNumbersRepository.findAccessionsByEc(ecNumber);
     }
 
 //    public Page<EnzymePortalSummary> findAll(Predicate userSearchCriteria, Pageable pageable) {
