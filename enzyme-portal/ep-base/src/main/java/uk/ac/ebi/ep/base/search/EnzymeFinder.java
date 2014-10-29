@@ -158,16 +158,17 @@ public class EnzymeFinder {
 
     private void getResultsFromUniProt() {
         EbeyeSearchResult searchResult = getEbeyeSearchResult();
+        if (searchResult != null) {
+            List<UniProtDomain> results = searchResult.getUniProtDomains().stream().distinct().collect(Collectors.toList());
 
-        List<UniProtDomain> results = searchResult.getUniProtDomains().stream().distinct().collect(Collectors.toList());
+            results.parallelStream().distinct().forEach((result) -> {
 
-        results.parallelStream().distinct().forEach((result) -> {
+                uniprotNameprefixes.add(result.getUniport_name());
 
-            uniprotNameprefixes.add(result.getUniport_name());
+                uniprotAccessions.add(result.getUniprot_accession());
 
-            uniprotAccessions.add(result.getUniprot_accession());
-
-        });
+            });
+        }
 
     }
 
@@ -244,7 +245,7 @@ public class EnzymeFinder {
         if (relatedProteins == null) {
 
             for (UniprotEntry e : summary.getUniprotAccession().getRelatedProteinsId().getUniprotEntrySet()) {
-         //for (UniprotEntry e : relatedProteins.getUniprotEntrySet()) {    
+                //for (UniprotEntry e : relatedProteins.getUniprotEntrySet()) {    
 
                 EnzymeAccession ea = new EnzymeAccession();
                 ea.setCompounds(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
@@ -583,7 +584,6 @@ public class EnzymeFinder {
     }
 
     public SearchResults computeEnzymeSummariesByAccessions(List<String> accessions) {
-
 
         SearchResults searchResults = new SearchResults();
 
