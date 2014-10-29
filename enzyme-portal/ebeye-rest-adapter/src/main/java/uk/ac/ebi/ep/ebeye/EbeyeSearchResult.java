@@ -8,6 +8,7 @@ package uk.ac.ebi.ep.ebeye;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +25,9 @@ public class EbeyeSearchResult {
 
 
     public List<UniProtDomain> getUniProtDomains() {
+        if(uniProtDomains == null){
+            uniProtDomains = new ArrayList<>();
+        }
         return uniProtDomains;
     }
     
