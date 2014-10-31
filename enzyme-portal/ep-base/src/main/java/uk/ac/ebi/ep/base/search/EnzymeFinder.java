@@ -28,6 +28,8 @@ import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
+import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -579,26 +581,111 @@ public class EnzymeFinder {
     public List<EnzymePortalDisease> findDiseases() {
 
         List<EnzymePortalDisease> diseases = service.findAllDiseases().stream().distinct().collect(Collectors.toList());
+        
+         // List<EnzymePortalDisease> diseases = service.findDiseases().stream().distinct().collect(Collectors.toList());
 
         return diseases;
     }
 
     public SearchResults computeEnzymeSummariesByAccessions(List<String> accessions) {
-
+List<EnzymeSummary> summaryList = new ArrayList<>();
         SearchResults searchResults = new SearchResults();
 
-        List<EnzymeSummary> summaryList = getEnzymeSummariesByAccessions(accessions);
+         List<EnzymePortalSummary> enzymes = service.findEnzymeSumariesByAccessions(accessions).stream().distinct().collect(Collectors.toList());
+
+
+        for (EnzymePortalSummary enzyme_summary : enzymes) {
+            EnzymeSummary summary = enzyme_summary;
+
+            summary.setRelatedspecies(computeRelatedSpecies(enzyme_summary));
+
+            summaryList.add(summary);
+
+        }
 
         searchResults.setSummaryentries(summaryList);
         searchResults.setTotalfound(summaryList.size());
 
         LOGGER.debug("Building filters...");
-        //SearchFilters filters = buildFilters(searchResults);
-        //searchResults.setSearchfilters(filters);
         buildFilters(searchResults);
         LOGGER.debug("Finished search");
 
         return searchResults;
     }
+    
+    
+     /**
+      * 
+      * @return all reactions
+      */
+    public List<EnzymePortalReaction> findAllReactions() {
+
+        return service.findReactions().stream().distinct().collect(Collectors.toList());
+    }
+
+   /**
+    * 
+    * @return all pathways
+    */
+    public List<EnzymePortalPathways> findAllPathways() {
+
+        return service.findPathways().stream().distinct().collect(Collectors.toList());
+    } 
+    
+    
+    
+
+//    public SearchResults computeEnzymeSummariesByDiseaseId(String diseaseId) {
+//
+//        SearchResults searchResults = new SearchResults();
+//        List<EnzymeSummary> summaryList = new ArrayList<>();
+//        
+//        
+//        List<String> accessions = service.findAccessionsByMeshId(diseaseId);
+//    
+//        
+//         List<EnzymePortalSummary> enzymes = service.findEnzymeSumariesByAccessions(accessions).stream().distinct().collect(Collectors.toList());
+//
+//
+//        for (EnzymePortalSummary enzyme_summary : enzymes) {
+//            EnzymeSummary summary = enzyme_summary;
+//
+//            summary.setRelatedspecies(computeRelatedSpecies(enzyme_summary));
+//
+//            summaryList.add(summary);
+//
+//        }
+//
+//        searchResults.setSummaryentries(summaryList);
+//        searchResults.setTotalfound(summaryList.size());
+//
+//        LOGGER.debug("Building filters...");
+//        buildFilters(searchResults);
+//        LOGGER.debug("Finished search");
+//
+//        return searchResults;
+//    }
+    
+//        public SearchResults computeEnzymeSummariesByEc(String ec) {
+//
+//        SearchResults searchResults = new SearchResults();
+//        
+//        List<String> accessions = service.findAccessionsByEc(ec);
+//            System.out.println("num accession per ec "+ accessions.size());
+//
+//        List<EnzymeSummary> summaryList = getEnzymeSummariesByAccessions(accessions).stream().distinct().collect(Collectors.toList());
+//
+//            System.out.println("num summary found "+ summaryList.size());
+//        searchResults.setSummaryentries(summaryList);
+//        searchResults.setTotalfound(summaryList.size());
+//
+//        LOGGER.debug("Building filters...");
+//        //SearchFilters filters = buildFilters(searchResults);
+//        //searchResults.setSearchfilters(filters);
+//        buildFilters(searchResults);
+//        LOGGER.debug("Finished search");
+//
+//        return searchResults;
+//    }
 
 }
