@@ -8,6 +8,7 @@ package uk.ac.ebi.ep.data.repositories;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.StringExpression;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
@@ -31,8 +32,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         this.entityManager = entityManager;
     }
 
-
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     @Override
     public List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -48,7 +48,8 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         return query.distinct().list($);
 
     }
- @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Override
     public List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -63,7 +64,8 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 
         return query.distinct().list($);
     }
- @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Override
     public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -76,28 +78,41 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
      * Note: meshId is used as default disease id for now as some omim entries
      * are null and we don't have efo yet
      *
-     * @param diseaseId meshId is used as default at the moment
+     * @param meshId
+     * 
      * @return list of accessions
      */
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     @Override
-    public List<String> findAccessionsByDisease(String diseaseId) {
+    public List<String> findAccessionsByMeshId(String meshId) {
 
+        List<String> enzymes = new ArrayList<>();
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<String> enzymes = query.from($).where($.meshId.equalsIgnoreCase(diseaseId)).list($.uniprotAccession.accession);
+        List<EnzymePortalDisease> entries = query.from($).where($.meshId.equalsIgnoreCase(meshId)).distinct().list($)
+                .stream().distinct().collect(Collectors.toList());
+        
+       
+        entries.stream().forEach((e) -> {
+            enzymes.add(e.getUniprotAccession().getAccession());
+        });
+
         return enzymes;
 
     }
 
     @Override
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
         EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
+         eGraph.addAttributeNodes("uniprotAccession");
+         
         JPAQuery query = new JPAQuery(entityManager);
-        query.setHint("javax.persistence.loadgraph", eGraph);
+        query.setHint("javax.persistence.fetchgraph", eGraph);
         List<EnzymePortalDisease> diseases = query.from($).list($);
         return diseases;
     }
+
+
 
 }

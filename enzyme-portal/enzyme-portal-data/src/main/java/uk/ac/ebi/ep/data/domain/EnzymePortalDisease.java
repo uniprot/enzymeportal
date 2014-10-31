@@ -41,11 +41,8 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 @NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
     @NamedAttributeNode(value = "uniprotAccession", subgraph = "relatedProteinsId"),},
         subgraphs = {
-            @NamedSubgraph(
-                    name = "uniprotAccession",
-                    attributeNodes = {
-                        @NamedAttributeNode("relatedProteinsId")}
-            )
+            @NamedSubgraph(  name = "uniprotAccession", attributeNodes = { @NamedAttributeNode("relatedProteinsId")}),
+             @NamedSubgraph(name = "uniprotAccession",attributeNodes ={@NamedAttributeNode("enzymePortalSummarySet")} ),
         }
 )
 
@@ -89,7 +86,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     private String url;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+        @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     private static final Comparator<String> NAME_COMPARATOR
@@ -176,8 +173,10 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
 
     @Override
     public String toString() {
-        return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", diseaseName=" + diseaseName + ", evidence=" + evidence + ", definition=" + definition + ", url=" + url + '}';
+        return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", omimNumber=" + omimNumber + ", meshId=" + meshId + ", diseaseName=" + diseaseName + '}';
     }
+
+
 
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;

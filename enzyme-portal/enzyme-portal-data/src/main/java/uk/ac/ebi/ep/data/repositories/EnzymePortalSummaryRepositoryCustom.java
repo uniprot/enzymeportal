@@ -32,7 +32,7 @@ public interface EnzymePortalSummaryRepositoryCustom {
 
     List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> name_prefixes);
 
-    List<EnzymePortalSummary> findEnzymesByAccessionOrNamePrefixes(List<String> accession_or_nameprefix);
+   
 
     List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions);
 

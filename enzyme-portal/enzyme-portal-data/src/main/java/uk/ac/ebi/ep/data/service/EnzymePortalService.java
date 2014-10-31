@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
+import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
@@ -25,8 +26,8 @@ import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.data.repositories.ReactionRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
@@ -51,7 +52,7 @@ public class EnzymePortalService {
     private EnzymePortalSummaryRepository enzymeSummaryRepository;
 
     @Autowired
-    private ReactionRepository reactionRepository;
+    private EnzymePortalReactionRepository reactionRepository;
 
     @Autowired
     private UniprotXrefRepository xrefRepository;
@@ -61,7 +62,7 @@ public class EnzymePortalService {
 
     @Autowired
     private RelatedProteinsRepository relatedProteinsRepository;
-    
+
     @Autowired
     private EnzymePortalEcNumbersRepository ecNumbersRepository;
 
@@ -156,12 +157,6 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<EnzymePortalSummary> findEnzymesByAccessionOrNamePrefixes(List<String> accession_or_nameprefix) {
-
-        return enzymeSummaryRepository.findEnzymesByAccessionOrNamePrefixes(accession_or_nameprefix);
-    }
-
-    @Transactional(readOnly = true)
     public List<EnzymePortalSummary> findEnzymeSumariesByAccessions(List<String> accessions) {
 
         return enzymeSummaryRepository.findEnzymeSummariesByAccessions(accessions);
@@ -209,15 +204,13 @@ public class EnzymePortalService {
         return uniprotEntryRepository.filterEnzymesInAccessions(accessions);
     }
 
-
-
     @Transactional(readOnly = true)
     public RelatedProteins findRelatedProteinsByNamePrefix(String nameprefix) {
 
         return relatedProteinsRepository.findByNamePrefix(nameprefix);
     }
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<RelatedProteins> findRelatedProteinsByNamePrefixes(List<String> nameprefixes) {
 
         return relatedProteinsRepository.findRelatedProteinsByNamePrefixes(nameprefixes);
@@ -228,23 +221,47 @@ public class EnzymePortalService {
 
         return enzymePortalCompoundRepository.findEnzymesByCompound(compound_id);
     }
-    
-        @Transactional(readOnly = true)
-    public List<String> findAccessionsByDisease(String disease_id) {
 
-        return diseaseRepository.findAccessionsByDisease(disease_id);
+    @Transactional(readOnly = true)
+    public List<String> findAccessionsByMeshId(String meshId) {
+
+        return diseaseRepository.findAccessionsByMeshId(meshId);
     }
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
 
         return diseaseRepository.findDiseases();
     }
-    
-            @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<String> findAccessionsByEc(String ecNumber) {
 
         return ecNumbersRepository.findAccessionsByEc(ecNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnzymePortalReaction> findReactions() {
+
+        return reactionRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnzymePortalPathways> findPathways() {
+
+        return pathwaysRepository.findAll();
+    }
+    
+        @Transactional(readOnly = true)
+    public List<String> findAccessionsByReactionId(String reactionId) {
+
+        return reactionRepository.findAccessionsByReactionId(reactionId);
+    }
+    
+        @Transactional(readOnly = true)
+    public List<String> findAccessionsByPathwayId(String pathwayId) {
+
+        return pathwaysRepository.findAccessionsByPathwayId(pathwayId);
     }
 
 //    public Page<EnzymePortalSummary> findAll(Predicate userSearchCriteria, Pageable pageable) {

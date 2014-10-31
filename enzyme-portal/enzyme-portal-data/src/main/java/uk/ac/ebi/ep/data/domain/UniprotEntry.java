@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -27,6 +28,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
@@ -72,6 +75,9 @@ import uk.ac.ebi.ep.data.search.model.Species;
 })
 
 public class UniprotEntry extends Species implements Serializable, Comparable<UniprotEntry> {
+    @Column(name = "LAST_UPDATE_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdateTimestamp;
 
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -358,6 +364,14 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
 
         return pdbcodes;
 
+    }
+
+    public Date getLastUpdateTimestamp() {
+        return lastUpdateTimestamp;
+    }
+
+    public void setLastUpdateTimestamp(Date lastUpdateTimestamp) {
+        this.lastUpdateTimestamp = lastUpdateTimestamp;
     }
 
 }

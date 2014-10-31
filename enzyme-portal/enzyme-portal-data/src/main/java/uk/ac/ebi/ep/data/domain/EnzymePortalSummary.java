@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,6 +26,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
@@ -66,6 +69,11 @@ import uk.ac.ebi.ep.data.search.model.Species;
     //@NamedQuery(name = "EnzymePortalSummary.findByCommentText", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentText = :commentText")
 })
 public class EnzymePortalSummary extends EnzymeSummary implements Serializable {
+    @Column(name = "LAST_UPDATE_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdateTimestamp;
+    @Column(name = "NAME_PREFIX")
+    private String namePrefix;
 
     private static final long serialVersionUID = 1L;
 
@@ -333,6 +341,22 @@ public class EnzymePortalSummary extends EnzymeSummary implements Serializable {
     public List<Disease> getDiseases() {
 
         return uniprotAccession.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+    }
+
+    public Date getLastUpdateTimestamp() {
+        return lastUpdateTimestamp;
+    }
+
+    public void setLastUpdateTimestamp(Date lastUpdateTimestamp) {
+        this.lastUpdateTimestamp = lastUpdateTimestamp;
+    }
+
+    public String getNamePrefix() {
+        return namePrefix;
+    }
+
+    public void setNamePrefix(String namePrefix) {
+        this.namePrefix = namePrefix;
     }
     
     

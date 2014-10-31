@@ -58,7 +58,7 @@ public class EnzymePortalPathways extends Pathway  implements Serializable {
     @Column(name = "SPECIES")
     private String species;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
     
     public EnzymePortalPathways() {

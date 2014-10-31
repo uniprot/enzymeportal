@@ -3,20 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 
 /**
  *
  * @author joseph
  */
 @NoRepositoryBean
-public interface EnzymePortalPathwaysRepositoryCustom {
-    
-    List<EnzymePortalPathways> findPathwaysByAccession(String accession);
-     List<String> findAccessionsByPathwayId(String pathwayId);
+public interface EnzymePortalReactionRepositoryCustom {
+     List<String> findAccessionsByReactionId(String reactionId);
 }

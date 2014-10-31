@@ -15,6 +15,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
  *
  * @author joseph
  */
-public interface ReactionRepository extends JpaRepository<EnzymePortalReaction, Long>,   QueryDslPredicateExecutor<EnzymePortalReaction> {
+public interface EnzymePortalReactionRepository extends JpaRepository<EnzymePortalReaction, Long>,   QueryDslPredicateExecutor<EnzymePortalReaction>, EnzymePortalReactionRepositoryCustom {
     
 }
