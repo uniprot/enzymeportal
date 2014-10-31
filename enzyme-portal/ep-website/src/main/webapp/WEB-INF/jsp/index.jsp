@@ -42,12 +42,17 @@
                     <h4>Taxonomy</h4>
                     <span class="icon icon-conceptual" data-icon="o"></span>
                 </a>
-                <a href="browse/pathway"  class="browse-box gene-box grid_4">
+                <a href="browse/pathways"  class="browse-box gene-box grid_4">
                     <h4>Pathways</h4>
                     <span class="icon icon-conceptual" data-icon="y"></span>
                 </a>
             </div>
         </section>
+        
+                <a href="browse/reactions"  class="browse-box gene-box grid_6 push_10">
+                    <h4>Reactions (testing only)</h4>
+                    <span class="icon icon-conceptual" data-icon="y"></span>
+                </a>
 
         <section class="grid_24">
             <div class="grid_6">

@@ -1,88 +1,70 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 
 /**
- * This controller is for browse Enzymes By disease
  *
  * @author joseph
  */
 @Controller
-public class BrowseDiseasesController extends AbstractController {
+public class BrowseReactionPathwaysController extends AbstractController {
 
-    private static final Logger LOGGER = Logger.getLogger(BrowseDiseasesController.class);
-    private static final String BROWSE = "/browse";
-    private static final String BROWSE_DISEASE = "/browse/disease";
-    private static final String SEARCH_DISEASE = "/search/disease";
-    private static final String RESULT = "/search_result_disease";
+    private static final Logger LOGGER = Logger.getLogger(BrowseReactionPathwaysController.class);
 
-    private List<EnzymePortalDisease> diseaseList = new ArrayList<>();
+    private static final String REACTIONS = "/reactions";
+   
 
-    @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
-    public String showDiseases(Model model) {
+    private static final String BROWSE_REACTIONS = "/browse/reactions";
+   
+
+   private static final String SEARCH_REACTIONS = "/search/reactions";
+
+   
+   
+    private static final String RESULT = "/search"; 
+    
+    private List<EnzymePortalReaction> reactionList = new ArrayList<>();
+  
+
+    @RequestMapping(value = BROWSE_REACTIONS, method = RequestMethod.GET)
+    public String showReactions(Model model) {
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
 
-        diseaseList = finder.findDiseases();
+        reactionList = finder.findAllReactions();
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
-        model.addAttribute("diseaseList", diseaseList);
+        model.addAttribute("reactionList", reactionList);
 
-        return BROWSE;
+        return REACTIONS;
     }
 
-    @RequestMapping(value = BROWSE_DISEASE + "/{startsWith}", method = RequestMethod.GET)
-    public String showDiseasesLike(@PathVariable(value = "startsWith") String startsWith, Model model) {
 
-        Set<EnzymePortalDisease> selectedDiseases = new TreeSet<>(SORT_DISEASES);
-
-        diseaseList.stream().map((disease) -> {
-            if (disease.getName().startsWith(startsWith.toLowerCase())) {
-                selectedDiseases.add(disease);
-            }
-            return disease;
-        }).filter((disease) -> (startsWithDigit(disease.getName()))).forEach((disease) -> {
-            String current = disease.getName().replaceAll("(-)?\\d+(\\-\\d*)?", "").trim();
-            if (current.startsWith(startsWith.toLowerCase())) {
-                selectedDiseases.add(disease);
-            }
-        });
-
-        SearchModel searchModelForm = searchform();
-        model.addAttribute("searchModel", searchModelForm);
-
-        model.addAttribute("alldiseaseList", selectedDiseases);
-        model.addAttribute("startsWith", startsWith.toUpperCase());
-
-        return BROWSE;
-    }
-
-    @RequestMapping(value = SEARCH_DISEASE, method = RequestMethod.GET)
+    
+   
+    
+       @RequestMapping(value = SEARCH_REACTIONS, method = RequestMethod.GET)
     public String showResults(@ModelAttribute("searchModel") SearchModel searchModel,
             @RequestParam(value = "entryid", required = false) String entryID, @RequestParam(value = "entryname", required = false) String entryName,
             Model model, HttpSession session, HttpServletRequest request) {
@@ -93,7 +75,7 @@ public class BrowseDiseasesController extends AbstractController {
         return computeResult(searchModel, entryID, entryName, model, session, request);
     }
 
-    @RequestMapping(value = SEARCH_DISEASE, method = RequestMethod.POST)
+    @RequestMapping(value = SEARCH_REACTIONS, method = RequestMethod.POST)
     public String getSearchResults(@ModelAttribute("searchModel") SearchModel searchModel,
             @RequestParam(value = "entryid", required = false) String entryID, @RequestParam(value = "entryname", required = false) String entryName,
             Model model, HttpSession session, HttpServletRequest request) {
@@ -119,7 +101,7 @@ public class BrowseDiseasesController extends AbstractController {
         if (results == null) {
             // New search:
             clearHistory(session);
-            results = findEnzymesByDisease(entryID, entryName);
+            results = findEnzymesByReaction(entryID, entryName);
 
         }
 
@@ -137,22 +119,22 @@ public class BrowseDiseasesController extends AbstractController {
         }
 
         return view;
-    }
-
-    private SearchResults findEnzymesByDisease(String diseaseId, String diseaseName) {
+    } 
+    
+       private SearchResults findEnzymesByReaction(String reactionId, String reactionName) {
 
         SearchResults results = null;
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
 
         SearchParams searchParams = new SearchParams();
-        searchParams.setText(diseaseName);
+        searchParams.setText(reactionName);
         searchParams.setType(SearchParams.SearchType.KEYWORD);
         searchParams.setStart(0);
-        searchParams.setPrevioustext(diseaseName);
+        searchParams.setPrevioustext(reactionName);
 
         finder.setSearchParams(searchParams);
 
-        List<String> accessions = enzymePortalService.findAccessionsByMeshId(diseaseId);
+        List<String> accessions = enzymePortalService.findAccessionsByReactionId(reactionId);
 
         if (!accessions.isEmpty()) {
             results = finder.computeEnzymeSummariesByAccessions(accessions);
@@ -173,17 +155,4 @@ public class BrowseDiseasesController extends AbstractController {
         return results;
     }
 
-    private boolean startsWithDigit(String data) {
-        return Character.isDigit(data.charAt(0));
-    }
-    private static final Comparator<String> NAME_COMPARATOR = new ChemicalNameComparator();
-    static final Comparator<EnzymePortalDisease> SORT_DISEASES = (EnzymePortalDisease d1, EnzymePortalDisease d2) -> {
-        if (d1.getName() == null && d2.getName() == null) {
-            
-            return NAME_COMPARATOR.compare(d1.getName(), d2.getName());
-        }
-        int compare = NAME_COMPARATOR.compare(d1.getName(), d2.getName());
-        
-        return ((compare == 0) ? NAME_COMPARATOR.compare(d1.getName(), d2.getName()) : compare);
-    };
 }

@@ -34,7 +34,6 @@ import uk.ac.ebi.ep.enzymes.EnzymeSubSubclass;
 import uk.ac.ebi.ep.enzymes.EnzymeSubclass;
 import uk.ac.ebi.ep.enzymes.IntenzEnzyme;
 
-
 /**
  *
  * @author joseph
@@ -62,48 +61,38 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String SUBCLASS = "SUBCLASS";
     private static final String SUBSUBCLASS = "SUBSUBCLASS";
     private static final String selectedEc = "selectedEc";
-    
-   
 
-    private SearchResults findEnzymesByEntry(String ec, String enzyme_name) {
+    private SearchResults findEnzymesByEc(String ec) {
 
         SearchResults results = null;
- EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
 
+        SearchParams searchParams = new SearchParams();
+        searchParams.setText(ec);//use the ec number here. note ebeye is indexing ep data for ec to be searchable
+        searchParams.setType(SearchParams.SearchType.KEYWORD);
+        searchParams.setStart(0);
+        searchParams.setPrevioustext(ec);//use ec here
 
-  List<String> accessions = enzymePortalService.findAccessionsByEc(ec);
- 
-       
+        finder.setSearchParams(searchParams);
 
-        if (accessions != null) {
+        List<String> accessions = enzymePortalService.findAccessionsByEc(ec);
 
-             System.out.println("Number of accessions found "+ accessions.size());
-
-
-            SearchParams searchParams = new SearchParams();
-            searchParams.setText(ec);//use the ec number here. note ebeye is indexing ep data for ec to be searchable
-            searchParams.setType(SearchParams.SearchType.KEYWORD);
-            searchParams.setStart(0);
-            searchParams.setPrevioustext(ec);//use ec here
-            
-            finder.setSearchParams(searchParams);
-
-            if (accessions.size() > 0) {
-
-                results = finder.computeEnzymeSummariesByAccessions(accessions);
-                
-            } else if (accessions.isEmpty()) {
-                //if not found at mm, search via ebeye using the enzyme name as keyword
-                System.out.println("NO ACCESSION -> QUERY EBEYE FOR "+ ec);
-                return getEnzymes(finder, searchParams);
-            }
+        if (!accessions.isEmpty()) {
+            results = finder.computeEnzymeSummariesByAccessions(accessions);
         }
+
+        if (results == null) {
+
+            return getEnzymes(finder, searchParams);
+        }
+        
+
         return results;
     }
 
     private SearchResults getEnzymes(EnzymeFinder finder, SearchParams searchParams) {
-  
-         SearchResults   results = finder.getEnzymes(searchParams);
+
+        SearchResults results = finder.getEnzymes(searchParams);
 
         return results;
     }
@@ -114,8 +103,8 @@ public class BrowseEnzymesController extends AbstractController {
 
         String view = "error";
 
-        Map<String, SearchResults> prevSearches =
-                getPreviousSearches(session.getServletContext());
+        Map<String, SearchResults> prevSearches
+                = getPreviousSearches(session.getServletContext());
         String searchKey = getSearchKey(searchModel.getSearchparams());
 
         SearchResults results = prevSearches.get(searchKey);
@@ -123,7 +112,7 @@ public class BrowseEnzymesController extends AbstractController {
         if (results == null) {
             // New search:
             clearHistory(session);
-            results = findEnzymesByEntry(entryID,entryname);
+            results = findEnzymesByEc(entryID);
 
         }
 
@@ -140,22 +129,19 @@ public class BrowseEnzymesController extends AbstractController {
             view = RESULT;
         }
 
-
         return view;
     }
-    
-    
-        @ModelAttribute("searchModel")
+
+    @ModelAttribute("searchModel")
     @Override
     public SearchModel searchform() {
         SearchModel searchModelForm = new SearchModel();
-       SearchParams searchParams = new SearchParams();
+        SearchParams searchParams = new SearchParams();
         searchParams.setStart(0);
         searchParams.setType(SearchParams.SearchType.KEYWORD);
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
     }
-        
 
     @RequestMapping(value = BROWSE_ENZYME_CLASSIFICATION, method = RequestMethod.GET)
     public String browseEc(Model model, HttpSession session) {
@@ -174,7 +160,6 @@ public class BrowseEnzymesController extends AbstractController {
         browseEc(model, session, ecname, null, null, null, ec);
         return EC;
 
-
     }
 
     @RequestMapping(value = BROWSE_EC, method = RequestMethod.GET)
@@ -186,7 +171,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         if (ec != null && ec.length() >= 7) {
             model.addAttribute("entryid", ec);
-            return computeResult(searchModel, ec,entryecname, model, session, request);
+            return computeResult(searchModel, ec, entryecname, model, session, request);
 
         } else {
             browseEc(model, session, ecname, subecname, subsubecname, entryecname, ec);
@@ -202,11 +187,10 @@ public class BrowseEnzymesController extends AbstractController {
             @RequestParam(value = "subsubecname", required = false) String subsubecname,
             @RequestParam(value = "entryecname", required = false) String entryecname, Model model, HttpSession session, HttpServletRequest request) throws MalformedURLException, IOException {
 
-
         model.addAttribute("entryid", ec);
         model.addAttribute("entryname", entryecname);
-        return computeResult(searchModel, ec,entryecname, model, session, request);
-       
+        return computeResult(searchModel, ec, entryecname, model, session, request);
+
     }
 
     @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.POST)
@@ -219,8 +203,7 @@ public class BrowseEnzymesController extends AbstractController {
         model.addAttribute("entryid", ec);
         model.addAttribute("entryname", entryecname);
 
-        return computeResult(searchModel, ec,entryecname, model, session, request);
-      
+        return computeResult(searchModel, ec, entryecname, model, session, request);
 
     }
 
@@ -247,7 +230,6 @@ public class BrowseEnzymesController extends AbstractController {
         @SuppressWarnings("unchecked")
         LinkedList<IntenzEnzyme> history = (LinkedList<IntenzEnzyme>) session.getAttribute(selectedEc);
 
-
         if (history == null) {
 
             history = new LinkedList<>();
@@ -264,7 +246,6 @@ public class BrowseEnzymesController extends AbstractController {
                 history.removeLast();
                 history.removeLast();
                 //history.remove(history.size()-1);//same as above
-
 
             }
             if (type.equalsIgnoreCase(SUBCLASS) && history.size() == 2) {
@@ -304,8 +285,6 @@ public class BrowseEnzymesController extends AbstractController {
         //String name = jsonObject.getString(NAME);
         String description = null;
 
-
-
         if (jsonObject.containsKey(DESCRIPTION)) {
             description = jsonObject.getString(DESCRIPTION);
 
@@ -340,7 +319,6 @@ public class BrowseEnzymesController extends AbstractController {
                 subclass.setName(_name);
                 root.getChildren().add(subclass);
 
-
             }
             addToSelectedEc(session, root, ROOT);
             model.addAttribute("json", root);
@@ -358,13 +336,11 @@ public class BrowseEnzymesController extends AbstractController {
 
                 EnzymeSubSubclass subsubclass = new EnzymeSubSubclass();
 
-
                 if (childObject.containsKey(DESCRIPTION)) {
                     _desc = childObject.getString(DESCRIPTION);
 
                     subsubclass.setDescription(_desc);
                 }
-
 
                 subsubclass.setEc(_ec);
                 subsubclass.setName(_name);
@@ -380,14 +356,12 @@ public class BrowseEnzymesController extends AbstractController {
 
             JsonArray jsonArray = jsonObject.getJsonArray(ENTRIES);
 
-
             for (JsonObject childObject : jsonArray.getValuesAs(JsonObject.class)) {
                 String _ec = null;
                 String _name = null;
                 String _desc = null;
                 _ec = childObject.getString(EC_NUMBER);
                 _name = childObject.getString(NAME);
-
 
                 EnzymeEntry entries = new EnzymeEntry();
                 if (childObject.containsKey(DESCRIPTION)) {
