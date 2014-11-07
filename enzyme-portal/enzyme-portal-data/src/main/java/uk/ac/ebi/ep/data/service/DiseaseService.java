@@ -65,4 +65,27 @@ public class DiseaseService {
         return repository.findDiseasesByAccession(accession);
     }
     
+    /**
+     * 
+     * @param name formated name e.g name = String.format(%%%s%%,diseaseName)
+     * @return matched names
+     */
+     @Transactional(readOnly = true)
+     public List<String> findDiseaseNamesLike(String name){
+       
+         return repository.findDiseaseNamesLike(name);
+     }
+    
+     /**
+      * 
+      * @param diseaseName formated name e.g name = String.format(%%%s%%,diseaseName)
+      * @return matched diseases
+      */
+          @Transactional(readOnly = true)
+     public List<EnzymePortalDisease> findDiseasesLike(String diseaseName){
+       
+         return repository.findByDiseaseNameLikeIgnoreCase(diseaseName);
+     }
+    
+    
 }

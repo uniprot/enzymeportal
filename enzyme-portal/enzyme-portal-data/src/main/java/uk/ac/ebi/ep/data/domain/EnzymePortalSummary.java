@@ -251,7 +251,7 @@ public class EnzymePortalSummary extends EnzymeSummary implements Serializable {
 //        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
 //            pdbcodes.add(xref.getSourceId());
 //        });
-        
+
         
         
         e.getUniprotXrefSet().stream().filter((x)->(x.getSource().equalsIgnoreCase("PDB"))).limit(2).collect(Collectors.toList()).stream().forEach((xref) -> {
@@ -328,7 +328,7 @@ public class EnzymePortalSummary extends EnzymeSummary implements Serializable {
 
     @Override
     public Species getSpecies() {
-        return uniprotAccession;
+        return uniprotAccession.getSpecies();
     }
 
     @Override

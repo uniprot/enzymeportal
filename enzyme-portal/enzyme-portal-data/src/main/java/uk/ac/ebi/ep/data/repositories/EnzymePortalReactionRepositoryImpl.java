@@ -6,7 +6,6 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.jpa.impl.JPAQuery;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
@@ -26,18 +25,24 @@ public class EnzymePortalReactionRepositoryImpl implements EnzymePortalReactionR
 
     @Override
     public List<String> findAccessionsByReactionId(String reactionId) {
-        List<String> enzymes = new ArrayList<>();
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<EnzymePortalReaction> entries = query.from($).where($.reactionId.equalsIgnoreCase(reactionId)).distinct().list($)
+        List<String> entries = query.from($).where($.reactionId.equalsIgnoreCase(reactionId)).list($.uniprotAccession.accession)
                 .stream().distinct().collect(Collectors.toList());
 
-        entries.stream().forEach((e) -> {
-            enzymes.add(e.getUniprotAccession().getAccession());
-        });
+        return entries;
 
-        return enzymes;
+    }
 
+    @Override
+    public EnzymePortalReaction findReactionByAccession(String accession) {
+
+        JPAQuery query = new JPAQuery(entityManager);
+
+        EnzymePortalReaction reaction = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession)).uniqueResult($);
+               
+
+        return reaction;
     }
 
 }

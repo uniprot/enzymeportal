@@ -25,4 +25,6 @@ public interface DiseaseRepositoryCustom {
     List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes);
      List<String> findAccessionsByMeshId(String meshId);
      List<EnzymePortalDisease> findDiseases();
+     List<String> findDiseaseNamesLike(String name);
+     
 }

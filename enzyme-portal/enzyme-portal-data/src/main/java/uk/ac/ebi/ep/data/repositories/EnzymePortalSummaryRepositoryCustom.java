@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
+import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 
 /**
  *
@@ -31,6 +32,8 @@ public interface EnzymePortalSummaryRepositoryCustom {
     List<EnzymePortalSummary> findEnzymeSummariesByAccession(String accessions);
 
     List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> name_prefixes);
+    @Deprecated
+    List<EnzymeSummary> findSummariesBYAccessions(List<String> accessions);
 
    
 

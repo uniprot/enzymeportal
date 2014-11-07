@@ -5,13 +5,14 @@
  */
 package uk.ac.ebi.ep.data.search.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author joseph
  */
-public class Compound {// implements Comparable<Compound>, Serializable {
+public class Compound  implements  Serializable {
 
     private Compound.Role role;
     protected boolean selected;
@@ -23,17 +24,6 @@ public class Compound {// implements Comparable<Compound>, Serializable {
 
     protected Object url;
 
-//    @Override
-//    public int compareTo(Compound c) {
-//        int id_compare = id.compareToIgnoreCase(c.getId());
-//
-//return id_compare;
-//    }
-    
-//        public int compareTo(Name n) {
-//        int lastCmp = lastName.compareTo(n.lastName);
-//        return (lastCmp != 0 ? lastCmp : firstName.compareTo(n.firstName));
-//    }
 
     @Override
     public int hashCode() {

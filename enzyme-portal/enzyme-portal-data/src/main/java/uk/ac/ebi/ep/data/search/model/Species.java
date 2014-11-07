@@ -5,22 +5,20 @@
  */
 package uk.ac.ebi.ep.data.search.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  *
  * @author joseph
  */
-public class Species{// implements Comparable<Species>, Serializable {
+public class Species implements Comparable<Species>, Serializable {
 
     private String scientificname;
 
     private String commonname ;
     private boolean selected;
-    private List<Compound> compounds;
-    private List<Disease> diseases;
+//    private List<Compound> compounds;
+//    private List<Disease> diseases;
     
     
     
@@ -119,12 +117,12 @@ public class Species{// implements Comparable<Species>, Serializable {
      *
      *
      */
-    public List<Compound> getCompounds() {
-        if (compounds == null) {
-            compounds = new ArrayList<Compound>();
-        }
-        return this.compounds;
-    }
+//    public List<Compound> getCompounds() {
+//        if (compounds == null) {
+//            compounds = new ArrayList<Compound>();
+//        }
+//        return this.compounds;
+//    }
 
     /**
      * Gets the value of the diseases property.
@@ -148,12 +146,12 @@ public class Species{// implements Comparable<Species>, Serializable {
      *
      * @return
      */
-    public List<Disease> getDiseases() {
-        if (diseases == null) {
-            diseases = new ArrayList<>();
-        }
-        return this.diseases;
-    }
+//    public List<Disease> getDiseases() {
+//        if (diseases == null) {
+//            diseases = new ArrayList<>();
+//        }
+//        return this.diseases;
+//    }
 
     public Species withScientificname(String value) {
         setScientificname(value);
@@ -170,57 +168,57 @@ public class Species{// implements Comparable<Species>, Serializable {
         return this;
     }
 
-    public Species withCompounds(Compound... values) {
-        if (values != null) {
-            for (Compound value : values) {
-                getCompounds().add(value);
-            }
-        }
-        return this;
-    }
-
-    public Species withCompounds(Collection<Compound> values) {
-        if (values != null) {
-            getCompounds().addAll(values);
-        }
-        return this;
-    }
-
-    public Species withDiseases(Disease... values) {
-        if (values != null) {
-            for (Disease value : values) {
-                getDiseases().add(value);
-            }
-        }
-        return this;
-    }
-
-    public Species withDiseases(Collection<Disease> values) {
-        if (values != null) {
-            getDiseases().addAll(values);
-        }
-        return this;
-    }
-
-    /**
-     * Sets the value of the compounds property.
-     *
-     * @param compounds allowed object is {@link Compound }
-     *
-     */
-    public void setCompounds(List<Compound> compounds) {
-        this.compounds = compounds;
-    }
-
-    /**
-     * Sets the value of the diseases property.
-     *
-     * @param diseases allowed object is {@link Disease }
-     *
-     */
-    public void setDiseases(List<Disease> diseases) {
-        this.diseases = diseases;
-    }
+//    public Species withCompounds(Compound... values) {
+//        if (values != null) {
+//            for (Compound value : values) {
+//                getCompounds().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    public Species withCompounds(Collection<Compound> values) {
+//        if (values != null) {
+//            getCompounds().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    public Species withDiseases(Disease... values) {
+//        if (values != null) {
+//            for (Disease value : values) {
+//                getDiseases().add(value);
+//            }
+//        }
+//        return this;
+//    }
+//
+//    public Species withDiseases(Collection<Disease> values) {
+//        if (values != null) {
+//            getDiseases().addAll(values);
+//        }
+//        return this;
+//    }
+//
+//    /**
+//     * Sets the value of the compounds property.
+//     *
+//     * @param compounds allowed object is {@link Compound }
+//     *
+//     */
+//    public void setCompounds(List<Compound> compounds) {
+//        this.compounds = compounds;
+//    }
+//
+//    /**
+//     * Sets the value of the diseases property.
+//     *
+//     * @param diseases allowed object is {@link Disease }
+//     *
+//     */
+//    public void setDiseases(List<Disease> diseases) {
+//        this.diseases = diseases;
+//    }
 
 //    @Override
 //    public int hashCode() {
@@ -314,6 +312,12 @@ public class Species{// implements Comparable<Species>, Serializable {
     @Override
     public String toString() {
         return "Species{" + "scientificname=" + scientificname + ", commonname=" + commonname + '}';
+    }
+
+    @Override
+    public int compareTo(Species o) {
+    
+        return this.scientificname.compareToIgnoreCase(o.getScientificname());
     }
     
     

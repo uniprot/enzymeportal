@@ -6,9 +6,13 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 /**
  *
@@ -31,7 +35,13 @@ public interface UniprotEntryRepositoryCustom {
     List<UniprotEntry> findEnzymeByAccessionsAndProteinName(List<String> accessions, String proteinName);
 
     List<String> filterEnzymesInAccessions(List<String> accessions);
+    
+     List<Taxonomy> findModelOrganisms();
+     List<String> findAccessionsByTaxId(Long taxId);
 
+     List<UniprotEntry> findEnzymesByTaxId(Long  taxId);
+     
+     Page<EnzymeSummary> findEnzymesByAccessions(List<String> accessions, Pageable pageable);
 
 
 }

@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -74,47 +73,27 @@ public class EnzymePortalEcNumbers implements Serializable {
         this.uniprotAccession = uniprotAccession;
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 0;
-//        hash += (ecInternalId != null ? ecInternalId.hashCode() : 0);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object object) {
-//        // TODO: Warning - this method won't work in the case the id fields are not set
-//        if (!(object instanceof EnzymePortalEcNumbers)) {
-//            return false;
-//        }
-//        EnzymePortalEcNumbers other = (EnzymePortalEcNumbers) object;
-//        if ((this.ecInternalId == null && other.ecInternalId != null) || (this.ecInternalId != null && !this.ecInternalId.equals(other.ecInternalId))) {
-//            return false;
-//        }
-//        return true;
-//    }
-
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.uniprotAccession.getProteinName());
+        int hash = 0;
+        hash += (ecInternalId != null ? ecInternalId.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof EnzymePortalEcNumbers)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EnzymePortalEcNumbers other = (EnzymePortalEcNumbers) obj;
-        if (!Objects.equals(this.uniprotAccession.getProteinName(), other.uniprotAccession.getProteinName())) {
+        EnzymePortalEcNumbers other = (EnzymePortalEcNumbers) object;
+        if ((this.ecInternalId == null && other.ecInternalId != null) || (this.ecInternalId != null && !this.ecInternalId.equals(other.ecInternalId))) {
             return false;
         }
         return true;
     }
+
+
 
     
     

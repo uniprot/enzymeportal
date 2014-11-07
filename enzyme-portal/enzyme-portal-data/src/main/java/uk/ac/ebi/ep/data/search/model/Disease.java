@@ -6,6 +6,7 @@
 //
 package uk.ac.ebi.ep.data.search.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -19,7 +20,7 @@ import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
  *
  *
  */
-public class Disease{// implements Comparable<Disease>, Serializable {
+public class Disease implements  Serializable {
 
     protected String id;
 
@@ -32,21 +33,11 @@ public class Disease{// implements Comparable<Disease>, Serializable {
 
     protected List<String> evidences;
     
-    //private String uniprotAccession;
-
+  
     private static final Comparator<String> NAME_COMPARATOR
             = new ChemicalNameComparator();
 
-//    public String getUniprotAccession() {
-//        return uniprotAccession;
-//    }
-//
-//    public void setUniprotAccession(String uniprotAccession) {
-//        this.uniprotAccession = uniprotAccession;
-//    }
-//    
-    
-    
+   
 
     public List<String> getEvidences() {
         if(evidences == null){
@@ -257,5 +248,7 @@ public class Disease{// implements Comparable<Disease>, Serializable {
     public String toString() {
         return "Disease{" + "id=" + id + ", name=" + name + ", numEnzyme=" + numEnzyme + '}';
     }
+
+
 
 }

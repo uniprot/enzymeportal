@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author joseph
  */
-public class EnzymeAccession implements  Serializable{
+public class EnzymeAccession implements Serializable {
 
     protected List<String> uniprotaccessions;
 
@@ -99,7 +99,7 @@ public class EnzymeAccession implements  Serializable{
      */
     public List<String> getPdbeaccession() {
         if (pdbeaccession == null) {
-            pdbeaccession = new ArrayList<String>();
+            pdbeaccession = new ArrayList<>();
         }
         return this.pdbeaccession;
     }
@@ -330,7 +330,5 @@ public class EnzymeAccession implements  Serializable{
     public String toString() {
         return "EnzymeAccession{" + "uniprotaccessions=" + uniprotaccessions + ", species=" + species + '}';
     }
-
-
 
 }

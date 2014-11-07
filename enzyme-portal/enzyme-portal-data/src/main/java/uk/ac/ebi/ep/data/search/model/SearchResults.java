@@ -21,7 +21,7 @@ public class SearchResults {
     private SearchFilters searchfilters;
 
     private List<EnzymeSummary> summaryentries;
-
+    
     /**
      * Gets the value of the searchfilters property.
      *
@@ -67,7 +67,7 @@ public class SearchResults {
      */
     public List<EnzymeSummary> getSummaryentries() {
         if (summaryentries == null) {
-            summaryentries = new ArrayList<EnzymeSummary>();
+            summaryentries = new ArrayList<>();
         }
         return this.summaryentries;
     }

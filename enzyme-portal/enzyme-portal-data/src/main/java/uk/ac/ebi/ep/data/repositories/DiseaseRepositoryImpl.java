@@ -79,7 +79,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
      * are null and we don't have efo yet
      *
      * @param meshId
-     * 
+     *
      * @return list of accessions
      */
     @Transactional(readOnly = true)
@@ -89,15 +89,14 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         List<String> enzymes = new ArrayList<>();
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<EnzymePortalDisease> entries = query.from($).where($.meshId.equalsIgnoreCase(meshId)).distinct().list($)
+        List<String> entries = query.from($).where($.meshId.equalsIgnoreCase(meshId)).list($.uniprotAccession.accession)
                 .stream().distinct().collect(Collectors.toList());
-        
-       
-        entries.stream().forEach((e) -> {
-            enzymes.add(e.getUniprotAccession().getAccession());
-        });
 
-        return enzymes;
+//        entries.stream().forEach((e) -> {
+//            enzymes.add(e.getUniprotAccession().getAccession());
+//        });
+
+        return entries;
 
     }
 
@@ -105,14 +104,22 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
         EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
-         eGraph.addAttributeNodes("uniprotAccession");
-         
+        eGraph.addAttributeNodes("uniprotAccession");
+
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
         List<EnzymePortalDisease> diseases = query.from($).list($);
         return diseases;
     }
 
+    @Override
+    public List<String> findDiseaseNamesLike(String name) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<String> result = query.from($)
+                .where($.diseaseName.like(name))
+                .list($.diseaseName);
+        return result;
+    }
 
 
 }

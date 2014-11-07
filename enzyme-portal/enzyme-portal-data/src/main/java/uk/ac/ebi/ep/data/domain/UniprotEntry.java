@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +34,9 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
+import uk.ac.ebi.ep.data.search.model.Compound;
+import uk.ac.ebi.ep.data.search.model.Disease;
+import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.search.model.Species;
 
 /**
@@ -74,7 +78,7 @@ import uk.ac.ebi.ep.data.search.model.Species;
 
 })
 
-public class UniprotEntry extends Species implements Serializable, Comparable<UniprotEntry> {
+public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
     @Column(name = "LAST_UPDATE_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdateTimestamp;
@@ -83,7 +87,7 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
     @ManyToOne(fetch = FetchType.EAGER)
     private RelatedProteins relatedProteinsId;
 
-    @OneToMany(mappedBy = "uniprotAccession")
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
@@ -110,7 +114,6 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
     private String scientificName;
     @Column(name = "COMMON_NAME")
     private String commonName;
- 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
     private Set<UniprotXref> uniprotXrefSet;
@@ -136,6 +139,21 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
         this.accession = accession;
         this.dbentryId = dbentryId;
     }
+
+    public UniprotEntry(String accession, String name, String proteinName, String scientificName, String commonName) {
+       
+        this.accession = accession;
+        this.name = name;
+        this.proteinName = proteinName;
+        this.scientificName = scientificName;
+        this.commonName = commonName;
+       
+    }
+    
+    
+    
+    
+    
 
     public long getDbentryId() {
         return dbentryId;
@@ -288,38 +306,44 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
         return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
     }
 
-    @Override
+  
     public String getScientificname() {
-        return scientificName;
+        return getScientificName();
     }
 
-    @Override
+ 
     public String getCommonname() {
-        return commonName;
+        return getCommonName();
     }
 
-    @Override
-    public boolean isSelected() {
-        return super.isSelected();
-    }
+   
 
-    @Override
-    public int compareTo(UniprotEntry other) {
-        if (this.getCommonname() == null & other.getCommonname() == null) {
-            return this.getScientificname().compareTo(other.getScientificname());
-        }
-        if (this.getCommonname() != null & other.getCommonname() == null) {
-            return this.getCommonname().compareTo(other.getScientificname());
-        }
-        if (this.getCommonname() == null & other.getCommonname() != null) {
-            return this.getScientificname().compareTo(other.getCommonname());
-        }
+//
+//    @Override
+//    public int compareTo(UniprotEntry other) {
+//        if (this.getCommonname() == null & other.getCommonname() == null) {
+//            return this.getScientificname().compareTo(other.getScientificname());
+//        }
+//        if (this.getCommonname() != null & other.getCommonname() == null) {
+//            return this.getCommonname().compareTo(other.getScientificname());
+//        }
+//        if (this.getCommonname() == null & other.getCommonname() != null) {
+//            return this.getScientificname().compareTo(other.getCommonname());
+//        }
+//
+//        if (this.getCommonname() != null & this.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.getCommonname() != null & other.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
+//            return this.getScientificname().compareTo(other.getScientificname());
+//        }
+//        return this.getCommonname().compareTo(other.getCommonname());
+//
+//    }
+    public Species getSpecies() {
+      Species  species = new Species();
+        species.setCommonname(this.getCommonName());
+        species.setScientificname(this.getScientificName());
+        species.setSelected(false);
 
-        if (this.getCommonname() != null & this.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.getCommonname() != null & other.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
-            return this.getScientificname().compareTo(other.getScientificname());
-        }
-        return this.getCommonname().compareTo(other.getCommonname());
-
+        return species;
     }
 
     public Integer getSequenceLength() {
@@ -374,4 +398,103 @@ public class UniprotEntry extends Species implements Serializable, Comparable<Un
         this.lastUpdateTimestamp = lastUpdateTimestamp;
     }
 
+    public List<String> getSynonym() {
+
+        List<String> synonym = new ArrayList<>();
+
+        String namesColumn = this.getSynonymNames();
+
+        if (namesColumn != null && namesColumn.contains(";")) {
+            String[] syn = namesColumn.split(";");
+            for (String x : syn) {
+
+                synonym.addAll(parseNameSynonyms(x));
+            }
+        }
+
+        return synonym;
+    }
+
+    private List<String> parseNameSynonyms(String namesColumn) {
+        List<String> nameSynonyms = new ArrayList<>();
+        if (namesColumn != null) {
+            final int sepIndex = namesColumn.indexOf(" (");
+
+            //System.out.println("syn index "+ sepIndex);
+            if (sepIndex == -1) {
+                // no synonyms, just recommended name:
+
+                nameSynonyms.add(namesColumn);
+            } else {
+                // Recommended name:
+                nameSynonyms.add(namesColumn.substring(0, sepIndex));
+                // take out starting and ending parentheses
+                String[] synonyms = namesColumn.substring(sepIndex + 2, namesColumn.length() - 1).split("\\) \\(");
+                nameSynonyms.addAll(Arrays.asList(synonyms));
+            }
+            return nameSynonyms.stream().distinct().collect(Collectors.toList());
+        }
+        return nameSynonyms;
+    }
+
+    public List<String> getEc() {
+
+        List<String> ec = new ArrayList<>();
+
+        for (EnzymePortalEcNumbers ecNum : this.getEnzymePortalEcNumbersSet()) {
+            ec.add(ecNum.getEcNumber());
+        }
+
+        return ec;
+    }
+
+    public String getFunction() {
+        String function = "Currently there is no data in the database to show for function. This is only a placeholder and a reminder to make appropriate changes in the schema before populating the database.";
+//        for (EnzymePortalSummary summary : getEnzymePortalSummarySet()) {
+//            if (summary.getCommentType().equalsIgnoreCase("FUNCTION")) {
+//
+//                function = summary.getCommentText();
+//            }
+//        }
+
+        return function;
+    }
+
+    public List<Compound> getCompounds() {
+
+        return this.getEnzymePortalCompoundSet().stream().collect(Collectors.toList());
+    }
+
+    public List<Disease> getDiseases() {
+
+        return this.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+    }
+
+    public List<EnzymeAccession> getRelatedspecies() {
+
+        //List<UniprotEntry> relatedspecies = new ArrayList<>();
+        List<EnzymeAccession> relatedspecies = new ArrayList<>();
+        String defaultSpecies = CommonSpecies.Human.getScientificName();
+
+        this.getRelatedProteinsId().getUniprotEntrySet().parallelStream().forEach((entry) -> {
+            if (entry.getScientificName() != null && entry.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+
+                relatedspecies.add(0, entry);
+
+            } else if (entry.getScientificName() != null && !entry.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+                relatedspecies.add(entry);
+
+            }
+
+        });
+
+        return relatedspecies;
+    }
+    
+    
+
+    @Override
+    public int compareTo(UniprotEntry o) {
+        return this.getScientificName().compareToIgnoreCase(o.getScientificName());
+    }
 }
