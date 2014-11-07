@@ -19,4 +19,5 @@ public interface EnzymePortalPathwaysRepositoryCustom {
     
     List<EnzymePortalPathways> findPathwaysByAccession(String accession);
      List<String> findAccessionsByPathwayId(String pathwayId);
+    List<String> findPathwaysByName(String pathwayName);
 }

@@ -27,7 +27,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/skins/default/skin2.css" type="text/css" />
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" type="text/css"/>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
     <style type="text/css">
       /* You have the option of setting a maximum width for your page, and making sure everything is centered */
       /* body { max-width: 1600px; margin: 0 auto; } */
@@ -37,6 +41,9 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/javascript/controllers.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
     
     
