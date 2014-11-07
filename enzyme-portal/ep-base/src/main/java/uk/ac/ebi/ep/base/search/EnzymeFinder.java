@@ -31,7 +31,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
-import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.exceptions.EnzymeFinderException;
 import uk.ac.ebi.ep.data.exceptions.MultiThreadingException;
@@ -162,8 +161,8 @@ public class EnzymeFinder {
         EbeyeSearchResult searchResult = getEbeyeSearchResult();
         if (searchResult != null) {
             List<UniProtDomain> results = searchResult.getUniProtDomains().stream().distinct().collect(Collectors.toList());
-
-            results.parallelStream().distinct().forEach((result) -> {
+          
+            results.stream().distinct().forEach((result) -> {
 
                 uniprotNameprefixes.add(result.getUniport_name());
 
@@ -237,17 +236,13 @@ public class EnzymeFinder {
         return function;
     }
 
-    //Set<EnzymePortalSummary> UNIQUE = new TreeSet<>((EnzymePortalSummary e1, EnzymePortalSummary e2) -> e1.getUniprotAccession().getAccession().compareToIgnoreCase(e2.getUniprotAccession().getAccession()));
+
     private List<EnzymeAccession> computeRelatedSpecies(EnzymePortalSummary summary) {
         String defaultSpecies = CommonSpecies.Human.getScientificName();
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
 
-        RelatedProteins relatedProteins = null;// service.findRelatedProteinsByNamePrefix(summary.getUniprotAccession().getName().substring(0, summary.getUniprotAccession().getName().indexOf("_")));
-
-        if (relatedProteins == null) {
-
             for (UniprotEntry e : summary.getUniprotAccession().getRelatedProteinsId().getUniprotEntrySet()) {
-                //for (UniprotEntry e : relatedProteins.getUniprotEntrySet()) {    
+         
 
                 EnzymeAccession ea = new EnzymeAccession();
                 ea.setCompounds(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
@@ -256,23 +251,23 @@ public class EnzymeFinder {
 
                 ea.setPdbeaccession(e.getPdbeaccession());
                 ea.getUniprotaccessions().add(e.getAccession());
-                ea.setSpecies(e);
+                ea.setSpecies(e.getSpecies());
 
-                if (e.getScientificname() != null && e.getScientificname().equalsIgnoreCase(defaultSpecies)) {
+                if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
 
                     relatedSpecies.add(0, ea);
 
-                } else if (e.getScientificname() != null && !e.getScientificname().equalsIgnoreCase(defaultSpecies)) {
+                } else if (e.getScientificName() != null && !e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
                     relatedSpecies.add(ea);
 
                 }
 
                 diseaseFilters.addAll(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
                 compoundFilters.addAll(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
-                uniqueSpecies.add(e);
+                uniqueSpecies.add(e.getSpecies());
 
             }
-        }
+      
         return relatedSpecies;
     }
 
@@ -304,10 +299,11 @@ public class EnzymeFinder {
         Set<EnzymeSummary> enzymeList = new HashSet<>();
         List<EnzymePortalSummary> enzymes = null;
         if (nameprefixes.size() > 0) {
-
+           
             enzymes = service.findEnzymeSummariesByNamePrefixes(nameprefixes).stream().distinct().collect(Collectors.toList());
 
             for (EnzymePortalSummary enzyme_summary : enzymes) {
+
 
                 EnzymeSummary summary = enzyme_summary;
                 summary.setRelatedspecies(computeRelatedSpecies(enzyme_summary));
@@ -631,61 +627,6 @@ List<EnzymeSummary> summaryList = new ArrayList<>();
 
         return service.findPathways().stream().distinct().collect(Collectors.toList());
     } 
-    
-    
-    
 
-//    public SearchResults computeEnzymeSummariesByDiseaseId(String diseaseId) {
-//
-//        SearchResults searchResults = new SearchResults();
-//        List<EnzymeSummary> summaryList = new ArrayList<>();
-//        
-//        
-//        List<String> accessions = service.findAccessionsByMeshId(diseaseId);
-//    
-//        
-//         List<EnzymePortalSummary> enzymes = service.findEnzymeSumariesByAccessions(accessions).stream().distinct().collect(Collectors.toList());
-//
-//
-//        for (EnzymePortalSummary enzyme_summary : enzymes) {
-//            EnzymeSummary summary = enzyme_summary;
-//
-//            summary.setRelatedspecies(computeRelatedSpecies(enzyme_summary));
-//
-//            summaryList.add(summary);
-//
-//        }
-//
-//        searchResults.setSummaryentries(summaryList);
-//        searchResults.setTotalfound(summaryList.size());
-//
-//        LOGGER.debug("Building filters...");
-//        buildFilters(searchResults);
-//        LOGGER.debug("Finished search");
-//
-//        return searchResults;
-//    }
-    
-//        public SearchResults computeEnzymeSummariesByEc(String ec) {
-//
-//        SearchResults searchResults = new SearchResults();
-//        
-//        List<String> accessions = service.findAccessionsByEc(ec);
-//            System.out.println("num accession per ec "+ accessions.size());
-//
-//        List<EnzymeSummary> summaryList = getEnzymeSummariesByAccessions(accessions).stream().distinct().collect(Collectors.toList());
-//
-//            System.out.println("num summary found "+ summaryList.size());
-//        searchResults.setSummaryentries(summaryList);
-//        searchResults.setTotalfound(summaryList.size());
-//
-//        LOGGER.debug("Building filters...");
-//        //SearchFilters filters = buildFilters(searchResults);
-//        //searchResults.setSearchfilters(filters);
-//        buildFilters(searchResults);
-//        LOGGER.debug("Finished search");
-//
-//        return searchResults;
-//    }
-
+ 
 }
