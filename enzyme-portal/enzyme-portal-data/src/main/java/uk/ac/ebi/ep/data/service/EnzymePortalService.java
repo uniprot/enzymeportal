@@ -331,6 +331,13 @@ public class EnzymePortalService {
         return predicate;
     }
 
+    @Transactional(readOnly = true)
+    public List<String> findPathwaysByName(String pathwayName) {
+
+        return pathwaysRepository.findPathwaysByName(pathwayName);
+    }
+
+
     //delete later
 //    private static Predicate enzymesByAccessionsDELETE(List<String> accessions) {
 //        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;

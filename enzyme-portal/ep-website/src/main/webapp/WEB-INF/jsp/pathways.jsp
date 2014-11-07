@@ -20,16 +20,18 @@
         <%@include file="header.jspf" %>
 
         <div id="content" role="main" class="grid_24 clearfix">
-        <h1>Pathways</h1>
+            <h1>Pathways</h1>
 
-        <input type="text" ng-model="pathwayTypeAheadController" placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)" class="form-control">
-
-<!--         <c:forEach var="data" items="${pathwayList}">
-            <a href="${pageContext.request.contextPath}/search/pathways?entryid=${data.pathwayId}&entryname=${data.pathwayName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.pathwayName}&searchparams.start=0&searchparams.text=${data.pathwayName}">${data.pathwayName}</a>
-            <br/>
-        </c:forEach>
- -->        </div>
+            <input type="text" ng-model="pathwayTypeAheadController" placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)" class="form-control">
+            <div>
+             <c:forEach var="data" items="${pathwayList}" end="20">
+                <a href="${pageContext.request.contextPath}/search/pathways?entryid=${data.pathwayId}&entryname=${data.pathwayName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.pathwayName}&searchparams.start=0&searchparams.text=${data.pathwayName}">${data.pathwayName}</a>
+                <br/>
+            </c:forEach>
+                more...
+            </div>
+        </div>
+        <%@include file="footer.jspf" %>
     </div>
-    <%@include file="footer.jspf" %>
     </body>
 </html>
