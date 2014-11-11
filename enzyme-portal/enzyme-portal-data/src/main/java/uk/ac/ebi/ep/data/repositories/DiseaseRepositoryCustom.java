@@ -6,25 +6,27 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
+
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
- *
  * @author joseph
  */
 @NoRepositoryBean
 public interface DiseaseRepositoryCustom {
 
-  
 
     List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions);
 
     List<EnzymePortalDisease> findDiseasesByAccession(String accession);
 
     List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes);
-     List<String> findAccessionsByMeshId(String meshId);
-     List<EnzymePortalDisease> findDiseases();
-     List<String> findDiseaseNamesLike(String name);
-     
+
+    List<String> findAccessionsByMeshId(String meshId);
+
+    List<EnzymePortalDisease> findDiseases();
+
+    List<String> findDiseasesByName(String name);
+
 }

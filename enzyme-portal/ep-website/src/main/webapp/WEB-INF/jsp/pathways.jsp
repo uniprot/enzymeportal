@@ -11,6 +11,8 @@
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>
+<%@ taglib prefix="ep" tagdir="/WEB-INF/tags/" %>
+
 <!DOCTYPE html>
 <html ng-app="enzyme-portal-app">
         <c:set var="pageTitle" value="Browse pathways"/>
@@ -19,17 +21,20 @@
     <div id="wrapper" class="container_24">
         <%@include file="header.jspf" %>
 
-        <div id="content" role="main" class="grid_24 clearfix">
+        <div id="content" role="main" class="grid_24 clearfix" ng-controller="TypeAheadController">
             <h1>Pathways</h1>
 
-            <input type="text" ng-model="pathwayTypeAheadController" placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)" class="form-control">
-            <div>
-             <c:forEach var="data" items="${pathwayList}" end="20">
-                <a href="${pageContext.request.contextPath}/search/pathways?entryid=${data.pathwayId}&entryname=${data.pathwayName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.pathwayName}&searchparams.start=0&searchparams.text=${data.pathwayName}">${data.pathwayName}</a>
-                <br/>
-            </c:forEach>
-                more...
+            <div class="container-browse-search">
+            <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
+            <input id="pathway-input" class="browse-search" type="text" ng-model="pathwayTypeAheadController" placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)" class="form-control" typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
+            <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>
             </div>
+
+            <c:if test="${not empty pathwayList}">
+                <ep:alphabeticalDisplay items="${pathwayList}" type="pathways" maxDisplay="5"/>
+            </c:if>
+
+
         </div>
         <%@include file="footer.jspf" %>
     </div>

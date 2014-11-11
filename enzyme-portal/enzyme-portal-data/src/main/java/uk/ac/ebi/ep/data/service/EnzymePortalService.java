@@ -302,10 +302,10 @@ public class EnzymePortalService {
         
         return uniprotEntryRepository.findEnzymesByAccessions(accessions, pageable);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymeSummary> findSummariesByAccessions(List<String> accessions) {
-        
+
         return enzymeSummaryRepository.findSummariesBYAccessions(accessions);
     }
 
@@ -337,6 +337,11 @@ public class EnzymePortalService {
         return pathwaysRepository.findPathwaysByName(pathwayName);
     }
 
+
+    @Transactional(readOnly = true)
+    public List<String> findDiseasesByName(String diseaseName) {
+        return diseaseRepository.findDiseasesByName(diseaseName);
+    }
 
     //delete later
 //    private static Predicate enzymesByAccessionsDELETE(List<String> accessions) {
