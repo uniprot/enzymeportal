@@ -14,11 +14,11 @@
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>
 <!DOCTYPE html>
 <html>
-    <head>
-   <c:set var="pageTitle" value="Model Organisms"/>
+<head>
+    <c:set var="pageTitle" value="Model Organisms"/>
     <%@include file="head.jspf" %>
-    </head>
- <body class="level2"><!-- add any of your classes or IDs -->
+</head>
+<body class="level2"><!-- add any of your classes or IDs -->
 <div id="skip-to">
     <ul>
         <li><a href="#content">Skip to main content</a></li>
@@ -33,20 +33,20 @@
     <%@include file="header.jspf" %>
 
     <div id="content" role="main" class="grid_24 clearfix">
-      
-        <h5 class="grid_6 disease-overview-box push_7">Showing ${fn:length(organisms)} Model Organisms </h5>
-         <div class="clear"></div>
-         <br/>
-    <c:forEach var="data" items="${organisms}">
-        <div  class="grid_6 disease-overview-box push_7">
-        <a   href="${pageContext.request.contextPath}/taxonomy?entryid=${data.taxId}&entryname=${data.scientificName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.scientificName}&searchparams.start=0&searchparams.text=${data.scientificName}">${data.commonName} - ${data.scientificName} (${data.num_enzymes})</a>         
+        <h2>Taxonomy</h2>
+        <h3 class="grid_24">Showing ${fn:length(organisms)} Model Organisms </h3>
+
+        <div class="clear"></div>
+        <div class="grid_24">
+            <c:forEach var="data" items="${organisms}">
+                <p>
+                <a href="${pageContext.request.contextPath}/taxonomy?entryid=${data.taxId}&entryname=${data.scientificName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.scientificName}&searchparams.start=0&searchparams.text=${data.scientificName}">${data.commonName}
+                    - ${data.scientificName} (${data.num_enzymes})</a>
+                </p>
+            </c:forEach>
         </div>
-         <div class="clear"></div>
-   
-        <br/> 
-    </c:forEach>
-       
-      </div>
+
+    </div>
 
     <%@include file="footer.jspf" %>
 </div>

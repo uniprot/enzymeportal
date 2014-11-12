@@ -48,11 +48,6 @@
                 </a>
             </div>
         </section>
-        
-                <a href="browse/reactions"  class="browse-box gene-box grid_6 push_10">
-                    <h4>Reactions (testing only)</h4>
-                    <span class="icon icon-conceptual" data-icon="y"></span>
-                </a>
 
         <section class="grid_24">
             <div class="grid_6">

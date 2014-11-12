@@ -5,25 +5,34 @@
 */
 var enzymeApp = angular.module('enzyme-portal-app',['ui.bootstrap']);
 
+enzymeApp.controller('TypeAheadController',['$scope','$http',
 
-enzymeApp.controller('pathwayTypeAheadController',function($scope, $http){
-	
-	$scope.selected = undefined;
+    function($scope, $http){
 
-	$scope.getPathways = function($viewValue) {
-		console.log(val);
-		return 
-		// return $http.get('http://localhost:8081/enzymeportal/pathways', {
-		// 	params: {
-		// 		name: $viewValue
-		// 	}
-		// }).then(function(response){
-		// 	console.log("res:" + response);
-		// 	return response.data.results;
-  //     // return response.data.results.map(function(item){
-  //     //   return item.formatted_address;
-  //     // });
-		// });
-	};
-	
-});
+        $scope.getPathways = function(val) {
+            return $http.get('http://localhost:8081/enzymeportal/service/pathways', {
+                params: {
+                    name: val
+                }
+            }).then(function(response){
+                return response.data;
+            });
+        };
+
+        $scope.getDiseases = function(val) {
+            return $http.get('http://localhost:8081/enzymeportal/service/diseases', {
+                params: {
+                    name: val
+                }
+            }).then(function(response){
+                return response.data;
+            });
+        };
+
+        $scope.onSelect = function($model) {
+            console.log($model);
+            $scope.selectedItem = $model;
+        };
+
+    }
+]);

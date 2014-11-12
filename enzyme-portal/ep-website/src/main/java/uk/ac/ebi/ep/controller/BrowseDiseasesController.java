@@ -36,7 +36,7 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 public class BrowseDiseasesController extends AbstractController {
 
     private static final Logger LOGGER = Logger.getLogger(BrowseDiseasesController.class);
-    private static final String BROWSE = "/browse";
+    private static final String BROWSE = "/browse-diseases";
     private static final String BROWSE_DISEASE = "/browse/disease";
     private static final String SEARCH_DISEASE = "/search/disease";
     private static final String RESULT = "/search_result_disease";

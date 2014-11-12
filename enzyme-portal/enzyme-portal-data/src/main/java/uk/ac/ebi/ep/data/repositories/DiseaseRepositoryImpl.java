@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.Tuple;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.ArrayList;
@@ -113,12 +114,11 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     }
 
     @Override
-    public List<String> findDiseaseNamesLike(String name) {
+    public List<String> findDiseasesByName(String name) {
         JPAQuery query = new JPAQuery(entityManager);
-        List<String> result = query.from($)
-                .where($.diseaseName.like(name))
+        return query.from($)
+                .where($.diseaseName.like(name)).distinct()
                 .list($.diseaseName);
-        return result;
     }
 
 

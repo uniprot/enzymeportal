@@ -20,4 +20,5 @@ public interface DiseaseRepository extends JpaRepository<EnzymePortalDisease, Lo
     
     EnzymePortalDisease findByDiseaseId(BigDecimal id);
     List<EnzymePortalDisease> findByDiseaseNameLikeIgnoreCase(String diseaseName);
+
 }
