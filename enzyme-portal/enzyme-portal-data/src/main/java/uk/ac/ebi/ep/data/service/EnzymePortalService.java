@@ -277,7 +277,7 @@ public class EnzymePortalService {
         
         return uniprotEntryRepository.findAccessionsByTaxId(taxId);
     }
-    
+     @Transactional(readOnly = true)
     public List<Taxonomy> findModelOrganisms() {
         return uniprotEntryRepository.findModelOrganisms();
     }
@@ -286,12 +286,13 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findEnzymesByTaxId(taxId);
     }
     
+     @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByTaxonomy(Long taxId, Pageable pageable) {
         
         return uniprotEntryRepository.findAll(enzymesByTaxId(taxId), pageable);
     }
 
-   
+    @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByAccessionsPageable(List<String> accessions, Pageable pageable) {
         
         return uniprotEntryRepository.findAll(enzymesByAccessions(accessions), pageable);
