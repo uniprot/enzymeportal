@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.BooleanExpression;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalPathways;
+import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 
 /**
  *
@@ -60,13 +62,13 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
 
     @Transactional(readOnly = true)
     @Override
-    public List<String> findPathwaysByName(String pathwayName) {
+    public List<Pathway> findPathwaysByName(String pathwayName) {
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<String> entries = query.from($).where($.pathwayName.like(pathwayName)).distinct().list($.pathwayName)
-               .stream().distinct().collect(Collectors.toList());
-
-        return entries;
+        List<Pathway> entries = query.from($).where($.pathwayName.like(pathwayName))
+                .list(Projections.constructor(Pathway.class, $.pathwayId,$.pathwayName));
+              
+      return entries;
 
     }
 }

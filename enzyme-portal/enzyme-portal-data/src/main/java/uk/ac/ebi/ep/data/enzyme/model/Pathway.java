@@ -4,7 +4,6 @@ package uk.ac.ebi.ep.data.enzyme.model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.xml.bind.annotation.XmlElement;
 
 
 
@@ -23,8 +22,38 @@ public class Pathway
     implements Serializable
 {
 
-    @XmlElement(required = true)
     protected String image;
+    
+    private String pathwayId;
+    private String pathwayName;
+
+    public Pathway() {
+    }
+    
+    
+
+    public Pathway(String pathwayId, String pathwayName) {
+        this.pathwayId = pathwayId;
+        this.pathwayName = pathwayName;
+    }
+
+    public String getPathwayId() {
+        return pathwayId;
+    }
+
+    public void setPathwayId(String pathwayId) {
+        this.pathwayId = pathwayId;
+    }
+
+    public String getPathwayName() {
+        return pathwayName;
+    }
+
+    public void setPathwayName(String pathwayName) {
+        this.pathwayName = pathwayName;
+    }
+    
+    
 
     /**
      * Gets the value of the image property.
@@ -116,5 +145,12 @@ public class Pathway
         }
         return this;
     }
+
+    @Override
+    public String toString() {
+        return pathwayName;
+    }
+    
+    
 
 }

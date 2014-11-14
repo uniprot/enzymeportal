@@ -9,6 +9,7 @@ package uk.ac.ebi.ep.data.repositories;
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
+import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 
 /**
  *
@@ -19,5 +20,5 @@ public interface EnzymePortalPathwaysRepositoryCustom {
     
     List<EnzymePortalPathways> findPathwaysByAccession(String accession);
      List<String> findAccessionsByPathwayId(String pathwayId);
-    List<String> findPathwaysByName(String pathwayName);
+    List<Pathway> findPathwaysByName(String pathwayName);
 }

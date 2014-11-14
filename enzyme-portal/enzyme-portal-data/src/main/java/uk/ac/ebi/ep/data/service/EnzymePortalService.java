@@ -22,6 +22,7 @@ import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
@@ -333,23 +334,17 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<String> findPathwaysByName(String pathwayName) {
+    public List<Pathway> findPathwaysByName(String pathwayName) {
 
         return pathwaysRepository.findPathwaysByName(pathwayName);
     }
 
 
     @Transactional(readOnly = true)
-    public List<String> findDiseasesByName(String diseaseName) {
-        return diseaseRepository.findDiseasesByName(diseaseName);
+    public List<EnzymePortalDisease> findDiseasesLike(String diseaseName) {
+        return diseaseRepository.findByDiseaseNameLikeIgnoreCase(diseaseName);
     }
 
-    //delete later
-//    private static Predicate enzymesByAccessionsDELETE(List<String> accessions) {
-//        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
-//        Predicate predicate = enzyme.accession.in(accessions);
-//        CollQueryFactory.from(enzyme).where(predicate).list(enzyme);
-//        return predicate;
-//    }
+
     
 }

@@ -7,6 +7,7 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 
 /**
  *
@@ -38,7 +38,7 @@ import uk.ac.ebi.ep.data.enzyme.model.Pathway;
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayName", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayName = :pathwayName"),
     @NamedQuery(name = "EnzymePortalPathways.findByStatus", query = "SELECT e FROM EnzymePortalPathways e WHERE e.status = :status"),
     @NamedQuery(name = "EnzymePortalPathways.findBySpecies", query = "SELECT e FROM EnzymePortalPathways e WHERE e.species = :species")})
-public class EnzymePortalPathways extends Pathway  implements Serializable {
+public class EnzymePortalPathways   implements Serializable, Comparable<EnzymePortalPathways> {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -67,7 +67,7 @@ public class EnzymePortalPathways extends Pathway  implements Serializable {
     public EnzymePortalPathways(Long pathwayInternalId) {
         this.pathwayInternalId = pathwayInternalId;
     }
-
+  
     public Long getPathwayInternalId() {
         return pathwayInternalId;
     }
@@ -126,45 +126,54 @@ public class EnzymePortalPathways extends Pathway  implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (pathwayInternalId != null ? pathwayInternalId.hashCode() : 0);
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.pathwayName);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EnzymePortalPathways)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        EnzymePortalPathways other = (EnzymePortalPathways) object;
-        if ((this.pathwayInternalId == null && other.pathwayInternalId != null) || (this.pathwayInternalId != null && !this.pathwayInternalId.equals(other.pathwayInternalId))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymePortalPathways other = (EnzymePortalPathways) obj;
+        if (!Objects.equals(this.pathwayName, other.pathwayName)) {
             return false;
         }
         return true;
     }
+
+
 
     @Override
     public String toString() {
         return "EnzymePortalPathways{" + "pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species +  '}';
     }
 
-    @Override
-    public String getId() {
-        return pathwayId;
-    }
+//    @Override
+//    public String getId() {
+//        return pathwayId;
+//    }
+//
+//    @Override
+//    public String getName() {
+//        return pathwayName;
+//    }
+//
+//    @Override
+//    public String getUrl() {
+//        return pathwayUrl;
+//    }
 
     @Override
-    public String getName() {
-        return pathwayName;
+    public int compareTo(EnzymePortalPathways o) {
+     return this.pathwayName.compareToIgnoreCase(o.getPathwayName());
     }
 
-    @Override
-    public String getUrl() {
-        return pathwayUrl;
-    }
-
-    
+   
     
     
 }
