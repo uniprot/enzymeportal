@@ -240,7 +240,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 //        });
         model.setEnzyme(enzyme);
         try {
-            System.out.println("calling intenz ..." + model.getEc());
+            
             intenzAdapter.getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
             LOGGER.fatal("Error getting enzyme details from Intenz webservice", ex);
