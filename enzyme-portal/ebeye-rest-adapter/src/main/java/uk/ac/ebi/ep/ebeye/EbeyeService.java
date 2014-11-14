@@ -13,6 +13,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
+import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 
 /**
  *
@@ -22,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
 public class EbeyeService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-       // String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?query=" + query + "&format=json&size=100";
+    // String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?query=" + query + "&format=json&size=100";
 
     private EbeyeSearchResult getEbeyeSearchResult(String url) {
         EbeyeSearchResult results = restTemplate.getForObject(url, EbeyeSearchResult.class);
@@ -42,15 +44,16 @@ public class EbeyeService {
         List<String> ebeyeDomains = new ArrayList<String>() {
             {
                 add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
+                //add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?format=json&size=100&query=");
                 //add("http://www.ebi.ac.uk/ebisearch/ws/rest/intenz?format=json&size=100&fields=UNIPROT&query=");
-               // add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
+                // add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
             }
         };
         // get element as soon as it is available
         Optional<EbeyeSearchResult> result = ebeyeDomains.stream().parallel().map((base) -> {
             String url = base + query;
       // open connection and fetch the result
-       
+
             return getEbeyeSearchResult(url);
 //            EbeyeSearchResult r = null;
 //            try {
@@ -63,6 +66,15 @@ public class EbeyeService {
 
         }).findAny();
         return result.get();
+    }
+
+    public List<Suggestion> ebeyeAutocompleteSearch(String searchTerm) {
+        String url = "http://ash-18.ebi.ac.uk:8080/ebisearch/ws/rest/enzymeportal/autocomplete?term=" + searchTerm + "&format=json";
+
+        EbeyeAutocomplete autocomplete = restTemplate.getForObject(url, EbeyeAutocomplete.class);
+
+        return autocomplete.getSuggestions();
+
     }
 
 }
