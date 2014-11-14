@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
 import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.ep.adapter.literature.CitexploreWSClientPool;
@@ -49,6 +51,7 @@ import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
+import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.functions.Functions;
@@ -73,15 +76,15 @@ public class SearchController extends AbstractController {
 
     @Autowired
     private Config searchConfig;
-    
+
     @Autowired
     private LiteratureConfig literatureConfig;
-        @Autowired
+    @Autowired
     private ReactomeConfig reactomeConfig;
     @Autowired
     private ChebiConfig chebiConfig;
     //@Autowired
-   // private BioportalConfig bioportalConfig;
+    // private BioportalConfig bioportalConfig;
 
     private enum ResponsePage {
 
@@ -97,7 +100,6 @@ public class SearchController extends AbstractController {
         return Character.isDigit(data.charAt(0));
     }
 
-   
     @PostConstruct
     public void init() {
         try {
@@ -108,6 +110,7 @@ public class SearchController extends AbstractController {
             LOGGER.error("Unable to set CiteXplore client pool size", e);
         }
     }
+
     /**
      * Process the entry page,
      *
@@ -125,7 +128,7 @@ public class SearchController extends AbstractController {
         EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeService);
         //retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
         // retriever.getUniprotAdapter().setConfig(uniprotConfig);
-         retriever.getIntenzAdapter().setConfig(intenzConfig);
+        retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = ResponsePage.ENTRY.toString();
         try {
@@ -135,39 +138,39 @@ public class SearchController extends AbstractController {
                     break;
                 case reactionsPathways:
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
-                     enzymeModel = retriever.getReactionsPathways(accession);
+                    enzymeModel = retriever.getReactionsPathways(accession);
                     break;
                 case molecules:
                     retriever.getChebiAdapter().setConfig(chebiConfig);
-                     enzymeModel = retriever.getMolecules(accession);
+                    enzymeModel = retriever.getMolecules(accession);
                     break;
                 case diseaseDrugs:
-                   // retriever.getBioportalAdapter().setConfig(bioportalConfig);
-                     enzymeModel = retriever.getDiseases(accession);
+                    // retriever.getBioportalAdapter().setConfig(bioportalConfig);
+                    enzymeModel = retriever.getDiseases(accession);
                     break;
                 case literature:
                     retriever.getLiteratureAdapter().setConfig(literatureConfig);
-                     enzymeModel = retriever.getLiterature(accession);
+                    enzymeModel = retriever.getLiterature(accession);
                     break;
                 default:
                     enzymeModel = retriever.getEnzyme(accession);
                     requestedField = Field.enzyme;
                     break;
             }
-            if(enzymeModel != null){
-            enzymeModel.setRequestedfield(requestedField.name());
-            model.addAttribute(ENZYME_MODEL, enzymeModel);
-            addToHistory(session, accession);
-            // If we got here from a bookmark, the summary might not be cached:
-            String summId = Functions.getSummaryBasketId(enzymeModel);
-            @SuppressWarnings("unchecked")
-            final Map<String, EnzymeSummary> sls = (Map<String, EnzymeSummary>) session.getAttribute(Attribute.lastSummaries.name());
-            if (sls == null) {
-                setLastSummaries(session, Collections.singletonList(
-                        (EnzymeSummary) enzymeModel));
-            } else if (sls.get(summId) == null) {
-                sls.put(summId, enzymeModel);
-            }
+            if (enzymeModel != null) {
+                enzymeModel.setRequestedfield(requestedField.name());
+                model.addAttribute(ENZYME_MODEL, enzymeModel);
+                addToHistory(session, accession);
+                // If we got here from a bookmark, the summary might not be cached:
+                String summId = Functions.getSummaryBasketId(enzymeModel);
+                @SuppressWarnings("unchecked")
+                final Map<String, EnzymeSummary> sls = (Map<String, EnzymeSummary>) session.getAttribute(Attribute.lastSummaries.name());
+                if (sls == null) {
+                    setLastSummaries(session, Collections.singletonList(
+                            (EnzymeSummary) enzymeModel));
+                } else if (sls.get(summId) == null) {
+                    sls.put(summId, enzymeModel);
+                }
             }
         } catch (EnzymeRetrieverException ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
@@ -190,7 +193,7 @@ public class SearchController extends AbstractController {
                 molecule.setName(ERROR);
                 ChemicalEntity chemicalEntity = new ChemicalEntity();
                 chemicalEntity.setDrugs(new CountableMolecules());
-                chemicalEntity.getDrugs().setMolecule(new ArrayList<Molecule>());
+                chemicalEntity.getDrugs().setMolecule(new ArrayList<>());
                 chemicalEntity.getDrugs().getMolecule().add(molecule);
                 enzymeModel.setMolecule(chemicalEntity);
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
@@ -352,7 +355,7 @@ public class SearchController extends AbstractController {
                 view = "search";
             }
         } catch (Throwable t) {
-            LOGGER.error("one of the search params (Text or Sequence is :"+searchKey, t);
+            LOGGER.error("one of the search params (Text or Sequence is :" + searchKey, t);
         }
 
         return view;
@@ -519,9 +522,37 @@ public class SearchController extends AbstractController {
     }
 
     @RequestMapping(value = "/advanceSearch",
-            method = {RequestMethod.GET, RequestMethod.POST})
+            method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {
         return "advanceSearch";
+    }
+
+    @ResponseBody
+    @RequestMapping("/service/search")
+    public List<String> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
+        if (name != null) {
+            name = String.format("%%%s%%", name);
+            
+           
+            
+         List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(name);
+         
+         //needs to return suggestions
+         
+         //delete later
+
+            List<String> list = new ArrayList<>();
+            
+            suggestions.stream().forEach((s) -> {
+                list.add(s.getSuggestion());
+            });
+
+
+            return list;
+            //return suggestions;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public String resolveSpecialCharacters(String data) {
@@ -590,7 +621,7 @@ public class SearchController extends AbstractController {
         String view = null;
         try {
             EnzymeFinder enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeService);
-       
+
             NcbiBlastClient.Status status = enzymeFinder.getBlastStatus(jobId);
             switch (status) {
                 case ERROR:

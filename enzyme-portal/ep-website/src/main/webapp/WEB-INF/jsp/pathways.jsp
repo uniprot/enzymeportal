@@ -22,8 +22,9 @@
         <%@include file="header.jspf" %>
 
         <div id="content" role="main" class="grid_24 clearfix" ng-controller="TypeAheadController">
-            <h1>Pathways</h1>
+            <h2>Pathways</h2>
 
+           
             <div class="container-browse-search">
             <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
             <input id="pathway-input" class="browse-search" type="text" ng-model="pathwayTypeAheadController" placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)" class="form-control" typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">

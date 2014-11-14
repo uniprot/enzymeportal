@@ -8,14 +8,20 @@ package uk.ac.ebi.ep.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
+import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
@@ -34,7 +40,9 @@ public class BrowsePathwaysController extends AbstractController {
     private static final String BROWSE_PATHWAYS = "/browse/pathways";
 
     private static final String SEARCH_PATHWAYS = "/search/pathways";
-      private static final String RESULT = "/search"; 
+    private static final String RESULT = "/search";
+
+    private static final String FIND_PATHWAYS_BY_NAME = "/service/pathways";
 
     private List<EnzymePortalPathways> pathwayList = new ArrayList<>();
 
@@ -42,7 +50,9 @@ public class BrowsePathwaysController extends AbstractController {
     public String showPathways(Model model) {
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
 
-        pathwayList = finder.findAllPathways();
+        pathwayList = finder.findAllPathways().stream().distinct().collect(Collectors.toList());
+        String msg = String.format("Number of pathways found : %s", pathwayList.size());
+        LOGGER.debug(msg);
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
@@ -50,9 +60,8 @@ public class BrowsePathwaysController extends AbstractController {
 
         return PATHWAYS;
     }
-    
-    
-       @RequestMapping(value = SEARCH_PATHWAYS, method = RequestMethod.GET)
+
+    @RequestMapping(value = SEARCH_PATHWAYS, method = RequestMethod.GET)
     public String showResults(@ModelAttribute("searchModel") SearchModel searchModel,
             @RequestParam(value = "entryid", required = false) String entryID, @RequestParam(value = "entryname", required = false) String entryName,
             Model model, HttpSession session, HttpServletRequest request) {
@@ -107,9 +116,9 @@ public class BrowsePathwaysController extends AbstractController {
         }
 
         return view;
-    } 
-    
-       private SearchResults findEnzymesByPathway(String pathwayId, String pathwayName) {
+    }
+
+    private SearchResults findEnzymesByPathway(String pathwayId, String pathwayName) {
 
         SearchResults results = null;
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
@@ -143,5 +152,20 @@ public class BrowsePathwaysController extends AbstractController {
         return results;
     }
 
+    /**Note : to access the name & id use pathwayName and pathwayId respectively
+     * 
+     * @param name pathway name
+     * @return pathways
+     */
+    @ResponseBody
+    @RequestMapping(value = FIND_PATHWAYS_BY_NAME, method = RequestMethod.GET)
+    public List<Pathway> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
+        if (name != null) {
+            name = String.format("%%%s%%", name);
+            return enzymePortalService.findPathwaysByName(name);
+        } else {
+            return new ArrayList<>();
+        }
+    }
 
 }

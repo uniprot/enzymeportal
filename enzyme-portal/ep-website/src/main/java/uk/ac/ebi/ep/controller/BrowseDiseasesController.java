@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
@@ -40,6 +41,8 @@ public class BrowseDiseasesController extends AbstractController {
     private static final String BROWSE_DISEASE = "/browse/disease";
     private static final String SEARCH_DISEASE = "/search/disease";
     private static final String RESULT = "/search_result_disease";
+
+    private static final String FIND_DISEASES_BY_NAME = "/service/diseases";
 
     private List<EnzymePortalDisease> diseaseList = new ArrayList<>();
 
@@ -179,11 +182,29 @@ public class BrowseDiseasesController extends AbstractController {
     private static final Comparator<String> NAME_COMPARATOR = new ChemicalNameComparator();
     static final Comparator<EnzymePortalDisease> SORT_DISEASES = (EnzymePortalDisease d1, EnzymePortalDisease d2) -> {
         if (d1.getName() == null && d2.getName() == null) {
-            
+
             return NAME_COMPARATOR.compare(d1.getName(), d2.getName());
         }
         int compare = NAME_COMPARATOR.compare(d1.getName(), d2.getName());
-        
+
         return ((compare == 0) ? NAME_COMPARATOR.compare(d1.getName(), d2.getName()) : compare);
     };
+
+    /**
+     * Note: to access name and id, use diseaseName & meshId respectively
+     * 
+     * @param name diseaseName
+     * @return Diseases
+     */
+    @ResponseBody
+    @RequestMapping(value = FIND_DISEASES_BY_NAME, method = RequestMethod.GET)
+    public List<EnzymePortalDisease> getDiseases(@RequestParam(value = "name", required = true) String name) {
+        if (name != null) {
+            name = String.format("%%%s%%", name);
+            return enzymePortalService.findDiseasesLike(name);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
 }

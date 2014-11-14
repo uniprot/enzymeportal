@@ -18,7 +18,7 @@
 <c:set var="pageTitle" value="Home &lt; Enzyme Portal &lt; EMBL-EBI"/>
 <%@include file="head.jspf" %>
 
-<body class="level2"><!-- add any of your classes or IDs -->
+<body class="level2" ><!-- add any of your classes or IDs -->
     <%@include file="skipto.jspf" %>
 
 

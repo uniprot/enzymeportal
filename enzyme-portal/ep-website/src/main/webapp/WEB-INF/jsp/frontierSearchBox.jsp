@@ -12,8 +12,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%@ page language="java" pageEncoding="UTF-8"%>
-
-
+<div ng-app="enzyme-portal-app">
+<div ng-controller="TypeAheadController">
 
 
 				<form:form id="local-search" name="local-search" modelAttribute="searchModel"
@@ -25,7 +25,10 @@
 
 						<label>
                                                                                           
-                                   <form:input id="local-searchbox" name="first" path="searchparams.text" />
+                               <%--     <form:input id="local-searchbox" name="first" path="searchparams.text" /> --%>
+                                   
+                               <input id="local-searchbox" name="searchparams.text"  type="text" ng-model="searchTypeAheadController" placeholder="search for enzymes" typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
+            <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>        
                                  
 						</label>                                                                           
 						<!-- Include some example searchterms - keep them short and few! -->
@@ -47,8 +50,8 @@
 					</fieldset>
 					
 				</form:form>
-			
-
+</div>	
+</div>
       <!-- /local-search -->        
          
          
