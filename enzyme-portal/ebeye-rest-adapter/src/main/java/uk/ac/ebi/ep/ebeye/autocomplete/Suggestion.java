@@ -14,8 +14,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Suggestion {
-    
-        @JsonProperty("suggestion")
+
+    @JsonProperty("suggestion")
     private String suggestion;
 
     public String getSuggestion() {
@@ -24,8 +24,7 @@ public class Suggestion {
 
     @Override
     public String toString() {
-        return suggestion ;
+        return suggestion;
     }
-        
-        
+
 }
