@@ -35,6 +35,11 @@ public class Disease implements  Serializable {
 
     public Disease() {
     }
+
+    public Disease(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
     
     
 

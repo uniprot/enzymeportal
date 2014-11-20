@@ -113,8 +113,8 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         return diseases;
     }
 
-    @Override
-     @Transactional(readOnly = true)
+   
+    @Deprecated
     public List<String> findDiseasesByName(String name) {
         JPAQuery query = new JPAQuery(entityManager);
         return query.from($)
@@ -133,6 +133,20 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         query.setHint("javax.persistence.fetchgraph", eGraph);
         List<Disease> result = query.from($).where($.uniprotAccession.taxId.eq(taxId))
                 .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName, $.url)).stream().distinct().collect(Collectors.toList());
+
+        return result;
+    }
+
+    @Override
+    public List<Disease> findDiseasesNameLike(String name) {
+     
+            //EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
+        //eGraph.addAttributeNodes("uniprotAccession");
+
+        JPAQuery query = new JPAQuery(entityManager);
+        //query.setHint("javax.persistence.fetchgraph", eGraph);
+        List<Disease> result = query.from($).where($.diseaseName.like(name))
+                .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName)).stream().distinct().collect(Collectors.toList());
 
         return result;
     }

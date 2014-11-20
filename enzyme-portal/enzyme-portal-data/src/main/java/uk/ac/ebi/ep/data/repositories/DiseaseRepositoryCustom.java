@@ -27,7 +27,7 @@ public interface DiseaseRepositoryCustom {
 
     List<EnzymePortalDisease> findDiseases();
 
-    List<String> findDiseasesByName(String name);
+    List<Disease> findDiseasesNameLike(String name);
     
     List<Disease> findDiseasesByTaxId(Long taxId);
 

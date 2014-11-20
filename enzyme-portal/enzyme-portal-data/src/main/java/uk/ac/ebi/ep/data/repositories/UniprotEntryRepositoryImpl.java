@@ -236,7 +236,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     
         @Override
       @Transactional(readOnly = true)
-    public List<Species> findSpeciesByScientificNAme(String sName) {
+    public List<Species> findSpeciesByScientificName(String sName) {
         JPAQuery query = new JPAQuery(entityManager);
         List<Species> result = query.from($).where($.scientificName.equalsIgnoreCase(sName)).distinct()
                 .list(Projections.constructor(Species.class, $.scientificName, $.commonName,$.taxId));

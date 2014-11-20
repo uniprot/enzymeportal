@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
+import uk.ac.ebi.ep.data.search.model.Disease;
 
 /**
  *
@@ -65,16 +66,6 @@ public class DiseaseService {
         return repository.findDiseasesByAccession(accession);
     }
 
-    /**
-     *
-     * @param name formated name e.g name = String.format(%%%s%%,diseaseName)
-     * @return matched names
-     */
-     @Transactional(readOnly = true)
-     public List<String> findDiseaseNamesLike(String name){
-
-         return repository.findDiseasesByName(name);
-     }
     
      /**
       * 
@@ -82,9 +73,9 @@ public class DiseaseService {
       * @return matched diseases
       */
           @Transactional(readOnly = true)
-     public List<EnzymePortalDisease> findDiseasesLike(String diseaseName){
+     public List<Disease> findDiseasesLike(String diseaseName){
        
-         return repository.findByDiseaseNameLikeIgnoreCase(diseaseName);
+         return repository.findDiseasesNameLike(diseaseName);
      }
     
     

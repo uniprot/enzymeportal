@@ -348,8 +348,8 @@ public class EnzymePortalService {
       * @return matched diseases
       */
     @Transactional(readOnly = true)
-    public List<EnzymePortalDisease> findDiseasesLike(String diseaseName) {
-        return diseaseRepository.findByDiseaseNameLikeIgnoreCase(diseaseName);
+    public List<Disease> findDiseasesLike(String diseaseName) {
+        return diseaseRepository.findDiseasesNameLike(diseaseName);
     }
 
     public List<Disease> findDiseasesByTaxId(Long taxId) {

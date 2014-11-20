@@ -46,7 +46,7 @@ public interface UniprotEntryRepositoryCustom {
      
       List<Species> findSpeciesByTaxId(Long  taxId);
       
-      List<Species> findSpeciesByScientificNAme(String sName);
+      List<Species> findSpeciesByScientificName(String sName);
 
 
 }
