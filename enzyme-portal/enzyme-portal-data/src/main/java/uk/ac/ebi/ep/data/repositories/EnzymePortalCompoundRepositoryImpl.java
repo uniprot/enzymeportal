@@ -7,17 +7,20 @@ package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalCompound;
+import uk.ac.ebi.ep.data.search.model.Compound;
 
 /**
  *
@@ -87,6 +90,23 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
         });
 
         return enzymes.stream().distinct().collect(Collectors.toList());
+    }
+    
+    
+    
+        @Override
+     @Transactional(readOnly = true)
+    public List<Compound> findCompoundsByTaxId(Long taxId) {
+
+        EntityGraph eGraph = entityManager.getEntityGraph("CompoundEntityGraph");
+        eGraph.addAttributeNodes("uniprotAccession");
+
+        JPAQuery query = new JPAQuery(entityManager);
+        query.setHint("javax.persistence.fetchgraph", eGraph);
+        List<Compound> result = query.from($).where($.uniprotAccession.taxId.eq(taxId)).distinct()
+                .list(Projections.constructor(Compound.class, $.compoundId, $.compoundName, $.url,$.compoundRole)).stream().distinct().collect(Collectors.toList());
+
+        return result;
     }
 
 }

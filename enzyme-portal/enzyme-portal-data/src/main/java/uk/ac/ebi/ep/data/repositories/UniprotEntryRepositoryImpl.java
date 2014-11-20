@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 /**
@@ -181,46 +182,66 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
     }
 
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     @Override
     public List<Taxonomy> findModelOrganisms() {
 
         JPAQuery query = new JPAQuery(entityManager);
         // List<Tuple> tuple =    query.from($).groupBy($.taxId,$.scientificName,$.commonName).orderBy($.taxId.count().desc()).limit(11).list($.taxId,$.scientificName,$.commonName,$.taxId.count());
 
-        List<Taxonomy> result = query.from($).groupBy($.taxId, $.scientificName, $.commonName).orderBy($.taxId.count().desc()).limit(15).
+        List<Taxonomy> result = query.from($).groupBy($.taxId, $.scientificName, $.commonName).orderBy($.taxId.count().desc()).limit(50).
                 list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
 
         return result;
     }
- @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Override
     public List<String> findAccessionsByTaxId(Long taxId) {
         JPAQuery query = new JPAQuery(entityManager);
         List<String> result = query.from($).where($.taxId.eq(taxId)).distinct().list($.accession);
         return result;
     }
- @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Override
     public List<UniprotEntry> findEnzymesByTaxId(Long taxId) {
         JPAQuery query = new JPAQuery(entityManager);
         List<UniprotEntry> result = query.from($).where($.taxId.eq(taxId)).distinct().limit(10).list($);
         return result;
-    
+
     }
 
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     @Override
     public Page<EnzymeSummary> findEnzymesByAccessions(List<String> accessions, Pageable pageable) {
         JPAQuery query = new JPAQuery(entityManager);
-       // CollQueryFactory.
+        // CollQueryFactory.
         List<EnzymeSummary> result = query.from($).where($.accession.in(accessions))
-                .list(Projections.constructor(EnzymeSummary.class,$));
-        
-        return new PageImpl<>(result,pageable,result.size());
+                .list(Projections.constructor(EnzymeSummary.class, $));
+
+        return new PageImpl<>(result, pageable, result.size());
+
+    }
+
+    @Override
+      @Transactional(readOnly = true)
+    public List<Species> findSpeciesByTaxId(Long taxId) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<Species> result = query.from($).where($.taxId.eq(taxId)).distinct()
+                .list(Projections.constructor(Species.class, $.scientificName, $.commonName,$.taxId));
+
+        return result;
+    }
     
+        @Override
+      @Transactional(readOnly = true)
+    public List<Species> findSpeciesByScientificNAme(String sName) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<Species> result = query.from($).where($.scientificName.equalsIgnoreCase(sName)).distinct()
+                .list(Projections.constructor(Species.class, $.scientificName, $.commonName,$.taxId));
+
+        return result;
     }
 
 }
-
- 

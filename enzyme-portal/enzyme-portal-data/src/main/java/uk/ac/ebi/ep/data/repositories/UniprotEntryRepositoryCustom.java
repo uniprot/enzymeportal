@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 /**
@@ -42,6 +43,10 @@ public interface UniprotEntryRepositoryCustom {
      List<UniprotEntry> findEnzymesByTaxId(Long  taxId);
      
      Page<EnzymeSummary> findEnzymesByAccessions(List<String> accessions, Pageable pageable);
+     
+      List<Species> findSpeciesByTaxId(Long  taxId);
+      
+      List<Species> findSpeciesByScientificNAme(String sName);
 
 
 }

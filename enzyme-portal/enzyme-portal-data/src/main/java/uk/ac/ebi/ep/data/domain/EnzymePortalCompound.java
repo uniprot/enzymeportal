@@ -20,6 +20,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -36,6 +38,16 @@ import uk.ac.ebi.ep.data.search.model.Compound;
 @Entity
 @Table(name = "ENZYME_PORTAL_COMPOUND")
 @XmlRootElement
+
+
+
+
+
+@NamedEntityGraph(name = "CompoundEntityGraph", attributeNodes = {  
+    @NamedAttributeNode("uniprotAccession")
+})
+
+
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundInternalId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundInternalId = :compoundInternalId"),

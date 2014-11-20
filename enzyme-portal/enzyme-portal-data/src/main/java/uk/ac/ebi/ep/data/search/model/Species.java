@@ -17,13 +17,32 @@ public class Species implements Comparable<Species>, Serializable {
 
     private String commonname ;
     private boolean selected;
+     private Long taxId;
+        protected Object scoring;
 //    private List<Compound> compounds;
 //    private List<Disease> diseases;
+
+    public Species() {
+    }
     
     
     
+    public Species(String scientificname, String commonname) {
+        this.scientificname = scientificname;
+        this.commonname = commonname;
+        
+    }
+
+    public Species(String scientificname, String commonname, Long taxId) {
+        this.scientificname = scientificname;
+        this.commonname = commonname;
+        this.taxId = taxId;
+    }
     
-     protected Object scoring;
+    
+
+    
+  
 
     public Object getScoring() {
         return scoring;
@@ -31,6 +50,14 @@ public class Species implements Comparable<Species>, Serializable {
 
     public void setScoring(Object scoring) {
         this.scoring = scoring;
+    }
+
+    public Long getTaxId() {
+        return taxId;
+    }
+
+    public void setTaxId(Long taxId) {
+        this.taxId = taxId;
     }
      
      

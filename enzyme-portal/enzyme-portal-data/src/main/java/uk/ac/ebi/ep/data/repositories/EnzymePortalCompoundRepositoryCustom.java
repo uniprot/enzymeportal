@@ -8,6 +8,7 @@ package uk.ac.ebi.ep.data.repositories;
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
+import uk.ac.ebi.ep.data.search.model.Compound;
 
 /**
  *
@@ -23,5 +24,7 @@ public interface EnzymePortalCompoundRepositoryCustom {
     List<EnzymePortalCompound> findCompoundsByNameprefixes(List<String> nameprefixes);
     
     List<String> findEnzymesByCompound(String compound_id);
+    
+    List<Compound> findCompoundsByTaxId(Long taxId);
 
 }

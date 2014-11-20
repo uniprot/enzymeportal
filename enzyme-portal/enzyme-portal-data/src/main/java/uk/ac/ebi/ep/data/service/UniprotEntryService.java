@@ -30,8 +30,6 @@ public class UniprotEntryService {
 
         return repository.findByAccession(accession);
     }
-    
-
 
     @Transactional(readOnly = true)
     public UniprotEntry findByUniProtAccession(String accession) {
@@ -44,22 +42,21 @@ public class UniprotEntryService {
 
         return repository.findAccession();
     }
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<UniprotEntry> findUniprotEntries() {
 
         return repository.findAll();
         //return repository.findUniprotEntries();
     }
 
-   
     @Transactional(readOnly = true)
     public List<UniprotEntry> findByNamePrefixes(List<String> namePrefixes) {
 
         return repository.findEnzymesByNamePrefixes(namePrefixes);
     }
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
 
         return repository.findEnzymesByAccessions(accessions);
@@ -82,5 +79,5 @@ public class UniprotEntryService {
 
         return predicate;
     }
-
+      
 }

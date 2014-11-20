@@ -24,12 +24,26 @@ public class Compound  implements  Serializable {
 
     protected Object url;
 
+    public Compound() {
+    }
+
+    public Compound( String id, String name, Object url,String role) {
+        this.role = Role.valueOf(role);
+        this.id = id;
+        this.name = name;
+        this.url = url;
+    }
+    
+    
+    
+    
+    
+    
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.name);
+        int hash = 5;
+        hash = 61 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -42,14 +56,14 @@ public class Compound  implements  Serializable {
             return false;
         }
         final Compound other = (Compound) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         return true;
     }
+
+
+
 
     public enum Role {
 
