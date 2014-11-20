@@ -6,8 +6,8 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.BooleanBuilder;
-import com.mysema.query.Tuple;
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalDisease;
+import uk.ac.ebi.ep.data.search.model.Disease;
 
 /**
  *
@@ -96,7 +97,6 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 //        entries.stream().forEach((e) -> {
 //            enzymes.add(e.getUniprotAccession().getAccession());
 //        });
-
         return entries;
 
     }
@@ -114,6 +114,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     }
 
     @Override
+     @Transactional(readOnly = true)
     public List<String> findDiseasesByName(String name) {
         JPAQuery query = new JPAQuery(entityManager);
         return query.from($)
@@ -121,5 +122,19 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
                 .list($.diseaseName);
     }
 
+    @Override
+     @Transactional(readOnly = true)
+    public List<Disease> findDiseasesByTaxId(Long taxId) {
+
+        EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
+        eGraph.addAttributeNodes("uniprotAccession");
+
+        JPAQuery query = new JPAQuery(entityManager);
+        query.setHint("javax.persistence.fetchgraph", eGraph);
+        List<Disease> result = query.from($).where($.uniprotAccession.taxId.eq(taxId))
+                .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName, $.url)).stream().distinct().collect(Collectors.toList());
+
+        return result;
+    }
 
 }

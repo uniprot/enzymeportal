@@ -6,9 +6,9 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
-
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.search.model.Disease;
 
 /**
  * @author joseph
@@ -28,5 +28,7 @@ public interface DiseaseRepositoryCustom {
     List<EnzymePortalDisease> findDiseases();
 
     List<String> findDiseasesByName(String name);
+    
+    List<Disease> findDiseasesByTaxId(Long taxId);
 
 }
