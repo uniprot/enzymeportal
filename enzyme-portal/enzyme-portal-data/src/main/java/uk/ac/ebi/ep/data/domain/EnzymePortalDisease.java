@@ -23,7 +23,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.NamedSubgraph;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,14 +36,28 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 @Entity
 @Table(name = "ENZYME_PORTAL_DISEASE")
 @XmlRootElement
+//
+//@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
+//    @NamedAttributeNode(value = "uniprotAccession", subgraph = "relatedProteinsId"),},
+//        subgraphs = {
+//            @NamedSubgraph(  name = "uniprotAccession", attributeNodes = { @NamedAttributeNode("relatedProteinsId")}),
+//             @NamedSubgraph(name = "uniprotAccession",attributeNodes ={@NamedAttributeNode("enzymePortalSummarySet")} ),
+//        }
+//)
 
-@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
-    @NamedAttributeNode(value = "uniprotAccession", subgraph = "relatedProteinsId"),},
-        subgraphs = {
-            @NamedSubgraph(  name = "uniprotAccession", attributeNodes = { @NamedAttributeNode("relatedProteinsId")}),
-             @NamedSubgraph(name = "uniprotAccession",attributeNodes ={@NamedAttributeNode("enzymePortalSummarySet")} ),
-        }
-)
+
+@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {  
+    @NamedAttributeNode("uniprotAccession")
+})
+
+
+
+
+
+
+
+
+
 
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalDisease.findAll", query = "SELECT e FROM EnzymePortalDisease e"),
