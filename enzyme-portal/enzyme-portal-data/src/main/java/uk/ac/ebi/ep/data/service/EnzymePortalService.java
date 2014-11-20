@@ -32,7 +32,10 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
+import uk.ac.ebi.ep.data.search.model.Compound;
+import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
+import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 /**
@@ -42,75 +45,75 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 @Transactional
 @Service
 public class EnzymePortalService {
-    
+
     @Autowired
     private DiseaseRepository diseaseRepository;
     @Autowired
     private UniprotEntryRepository uniprotEntryRepository;
-    
+
     @Autowired
     private EnzymePortalCompoundRepository enzymePortalCompoundRepository;
-    
+
     @Autowired
     private EnzymePortalSummaryRepository enzymeSummaryRepository;
-    
+
     @Autowired
     private EnzymePortalReactionRepository reactionRepository;
-    
+
     @Autowired
     private UniprotXrefRepository xrefRepository;
-    
+
     @Autowired
     private EnzymePortalPathwaysRepository pathwaysRepository;
-    
+
     @Autowired
     private RelatedProteinsRepository relatedProteinsRepository;
-    
+
     @Autowired
     private EnzymePortalEcNumbersRepository ecNumbersRepository;
-    
+
     @Transactional(readOnly = true)
     public UniprotEntry findByAccession(String accession) {
-        
+
         return uniprotEntryRepository.findByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public EnzymePortalSummary findEnzymeSummaryByAccession(String accession) {
-        
+
         return enzymeSummaryRepository.findEnzymeSummaryByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> findAllUniprotAccessions() {
-        
+
         return uniprotEntryRepository.findAccession();
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findAllDiseases() {
-        
+
         return diseaseRepository.findAll();
     }
 
     //******global methods for the web apps******************
     public List<EnzymePortalCompound> findCompoundsByUniprotAccession(String accession) {
-        
+
         return enzymePortalCompoundRepository.findCompoundsByUniprotAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalCompound> findCompoundsByUniprotName(String uniprotName) {
-        
+
         return enzymePortalCompoundRepository.findCompoundsByUniprotName(uniprotName);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalCompound> findCompoundsByNamePrefix(List<String> name_prefixes) {
-        
+
         return enzymePortalCompoundRepository.findCompoundsByNameprefixes(name_prefixes);
     }
-    
+
     @Deprecated
     @Transactional(readOnly = true)
     public List<String> findAccessionsByCompoundID(String compoundId) {
@@ -119,189 +122,190 @@ public class EnzymePortalService {
         for (UniprotEntry acc : enzymes) {
             accessions.add(acc.getAccession());
         }
-        
+
         return accessions;
     }
-    
+
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByNamePrefixes(List<String> namePrefixes) {
-        
+
         return uniprotEntryRepository.findEnzymesByNamePrefixes(namePrefixes);
     }
-    
+
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccession(String accession) {
-        
+
         return uniprotEntryRepository.findEnzymesByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
-        
+
         return uniprotEntryRepository.findEnzymesByAccessions(accessions);
     }
-    
+
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymeByNamePrefixAndProteinName(String namePrefix, String proteinName) {
-        
+
         return uniprotEntryRepository.findEnzymeByNamePrefixAndProteinName(namePrefix, proteinName);
     }
-    
+
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymeByAccessionsAndProteinName(List<String> accessions, String proteinName) {
-        
+
         return uniprotEntryRepository.findEnzymeByAccessionsAndProteinName(accessions, proteinName);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalSummary> findEnzymeSummariesByNamePrefixes(List<String> namePrefixes) {
-        
+
         return enzymeSummaryRepository.findEnzymesByNamePrefixes(namePrefixes);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalSummary> findEnzymeSumariesByAccessions(List<String> accessions) {
-        
+
         return enzymeSummaryRepository.findEnzymeSummariesByAccessions(accessions);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalSummary> findEnzymeSumariesByAccession(String accession) {
-        
+
         return enzymeSummaryRepository.findEnzymeSummariesByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public Page<EnzymePortalSummary> findEnzymeSumariesByAccessions(List<String> accessions, Pageable pageable) {
-        
+
         return enzymeSummaryRepository.findEnzymeSummariesByAccessions(accessions, pageable);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
-        
+
         return diseaseRepository.findDiseasesByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseasesByNamePrefix(List<String> name_prefixes) {
-        
+
         return diseaseRepository.findDiseasesByNamePrefixes(name_prefixes);
     }
-    
+
     @Transactional(readOnly = true)
     public List<UniprotXref> findPDBcodesByAccession(String accession) {
-        
+
         return xrefRepository.findPDBcodesByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalPathways> findPathwaysByAccession(String accession) {
-        
+
         return pathwaysRepository.findPathwaysByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> filterEnzymesInAccessions(List<String> accessions) {
-        
+
         return uniprotEntryRepository.filterEnzymesInAccessions(accessions);
     }
-    
+
     @Transactional(readOnly = true)
     public RelatedProteins findRelatedProteinsByNamePrefix(String nameprefix) {
-        
+
         return relatedProteinsRepository.findByNamePrefix(nameprefix);
     }
-    
+
     @Transactional(readOnly = true)
     public List<RelatedProteins> findRelatedProteinsByNamePrefixes(List<String> nameprefixes) {
-        
+
         return relatedProteinsRepository.findRelatedProteinsByNamePrefixes(nameprefixes);
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> findEnzymesByCompound(String compound_id) {
-        
+
         return enzymePortalCompoundRepository.findEnzymesByCompound(compound_id);
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> findAccessionsByMeshId(String meshId) {
-        
+
         return diseaseRepository.findAccessionsByMeshId(meshId);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
-        
+
         return diseaseRepository.findDiseases();
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> findAccessionsByEc(String ecNumber) {
-        
+
         return ecNumbersRepository.findAccessionsByEc(ecNumber);
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalReaction> findReactions() {
-        
+
         return reactionRepository.findAll();
     }
-    
+
     @Transactional(readOnly = true)
     public List<EnzymePortalPathways> findPathways() {
-        
+
         return pathwaysRepository.findAll();
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> findAccessionsByReactionId(String reactionId) {
-        
+
         return reactionRepository.findAccessionsByReactionId(reactionId);
     }
 
     @Transactional(readOnly = true)
     public EnzymePortalReaction findReactionByAccession(String accession) {
-        
+
         return reactionRepository.findReactionByAccession(accession);
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> findAccessionsByPathwayId(String pathwayId) {
-        
+
         return pathwaysRepository.findAccessionsByPathwayId(pathwayId);
     }
-    
+
     @Transactional(readOnly = true)
     public List<String> findAccessionsByTaxId(Long taxId) {
-        
+
         return uniprotEntryRepository.findAccessionsByTaxId(taxId);
     }
-     @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<Taxonomy> findModelOrganisms() {
         return uniprotEntryRepository.findModelOrganisms();
     }
-    
+
     public List<UniprotEntry> findEnzymesByTaxId(Long taxId) {
         return uniprotEntryRepository.findEnzymesByTaxId(taxId);
     }
-    
-     @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByTaxonomy(Long taxId, Pageable pageable) {
-        
+
         return uniprotEntryRepository.findAll(enzymesByTaxId(taxId), pageable);
     }
 
     @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByAccessionsPageable(List<String> accessions, Pageable pageable) {
-        
+
         return uniprotEntryRepository.findAll(enzymesByAccessions(accessions), pageable);
-        
+
     }
-    
+
     public Page<EnzymeSummary> findEnzymesByAccessions(List<String> accessions, Pageable pageable) {
-        
+
         return uniprotEntryRepository.findEnzymesByAccessions(accessions, pageable);
     }
 
@@ -311,22 +315,21 @@ public class EnzymePortalService {
         return enzymeSummaryRepository.findSummariesBYAccessions(accessions);
     }
 
-   
     private static Predicate enzymesByCompoundId(String compoundId) {
-        
+
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
-        
+
         Predicate predicate = enzyme.enzymePortalCompoundSet.any().compoundId.equalsIgnoreCase(compoundId);
-        
+
         return predicate;
     }
-    
+
     private static Predicate enzymesByTaxId(Long taxId) {
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
         Predicate predicate = enzyme.taxId.eq(taxId);
         return predicate;
     }
-    
+
     private static Predicate enzymesByAccessions(List<String> accessions) {
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
         Predicate predicate = enzyme.accession.in(accessions);
@@ -339,12 +342,62 @@ public class EnzymePortalService {
         return pathwaysRepository.findPathwaysByName(pathwayName);
     }
 
-
+        /**
+      * 
+      * @param diseaseName formated name e.g name = String.format(%%%s%%,diseaseName)
+      * @return matched diseases
+      */
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseasesLike(String diseaseName) {
         return diseaseRepository.findByDiseaseNameLikeIgnoreCase(diseaseName);
     }
 
+    public List<Disease> findDiseasesByTaxId(Long taxId) {
+        return diseaseRepository.findDiseasesByTaxId(taxId);
+    }
 
-    
+    public List<Species> findSpeciesByTaxId(Long taxId) {
+        return uniprotEntryRepository.findSpeciesByTaxId(taxId);
+    }
+
+    public List<Compound> findCompoundsByTaxId(Long taxId) {
+        return enzymePortalCompoundRepository.findCompoundsByTaxId(taxId);
+    }
+
+    //filter facets search
+    @Transactional(readOnly = true)
+    public Page<UniprotEntry> filterBySpecieAndAnyOf(Long taxId, String compoudId, String meshId, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterBySpecieAndAnyOf(taxId, compoudId, meshId), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UniprotEntry> filterBySpecieAndCompoundAndDisease(Long taxId, String compoudId, String meshId, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundAndDisease(taxId, compoudId, meshId), pageable);
+    }
+
+    private static Predicate filterBySpecieAndAnyOf(Long taxId, String compoudId, String meshId) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.equalsIgnoreCase(compoudId);
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().meshId.equalsIgnoreCase(meshId);
+
+        Predicate predicate = enzyme.taxId.eq(taxId).andAnyOf(compound, disease);
+
+        return predicate;
+    }
+
+    private static Predicate filterBySpecieAndCompoundAndDisease(Long taxId, String compoudId, String meshId) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate predicate = enzyme.taxId.eq(taxId).
+                and(enzyme.enzymePortalCompoundSet.any().compoundId.equalsIgnoreCase(compoudId))
+                .and(enzyme.enzymePortalDiseaseSet.any().meshId.equalsIgnoreCase(meshId));
+
+        return predicate;
+    }
+
 }
