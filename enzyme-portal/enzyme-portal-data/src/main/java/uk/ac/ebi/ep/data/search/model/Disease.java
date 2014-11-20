@@ -32,6 +32,20 @@ public class Disease implements  Serializable {
     protected int numEnzyme;
 
     protected List<String> evidences;
+
+    public Disease() {
+    }
+    
+    
+
+    public Disease(String id, String name, Object url) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+    }
+    
+    
+    
     
   
     private static final Comparator<String> NAME_COMPARATOR
