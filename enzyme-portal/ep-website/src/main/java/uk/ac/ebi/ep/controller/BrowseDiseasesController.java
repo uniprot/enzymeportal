@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
@@ -198,7 +199,7 @@ public class BrowseDiseasesController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = FIND_DISEASES_BY_NAME, method = RequestMethod.GET)
-    public List<EnzymePortalDisease> getDiseases(@RequestParam(value = "name", required = true) String name) {
+    public List<Disease> getDiseases(@RequestParam(value = "name", required = true) String name) {
         if (name != null) {
             name = String.format("%%%s%%", name);
             return enzymePortalService.findDiseasesLike(name);
