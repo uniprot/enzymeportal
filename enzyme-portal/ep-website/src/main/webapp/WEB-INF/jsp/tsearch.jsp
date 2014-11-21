@@ -54,6 +54,47 @@
             
             <div id="content" role="main" class="grid_24 clearfix"> 
                 
+                               <!--Global variables-->
+                <c:set var="showButton" value="Show more"/>
+                <c:set var="searchText" value="${searchModel.searchparams.text}"/>
+                <c:set var="searchSequence" value="${searchModel.searchparams.sequence}"/>
+                <%-- <c:set var="startRecord" value="${pagination.firstResult}"/>--%>
+                <c:set var="searchresults" value="${searchModel.searchresults}"/>
+                <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
+                <%--
+                <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
+                <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>--%>
+                <c:set var="totalfound" value="${searchresults.totalfound}"/>
+                
+                <c:set var="filterSizeDefault" value="${50}"/>
+                <script>
+                    var  speciesAutocompleteDataSource = [];
+                    var compoundsAutoCompleteDataSource = [];
+                    var diseaseAutoCompleteDataSource = [];
+                </script>
+                
+                
+                       <c:choose>
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
+                                <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
+                            </c:when>
+
+                            <c:otherwise>
+                                <c:set var="searchText"
+                                       value="${Fn:escapeHTML(searchModel.searchparams.text)}"/>
+                            </c:otherwise>
+                        </c:choose> 
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                        <!-- Suggested layout containers -->  
                 <section >
                     <div class="grid_12zzz" style="display: table; margin-left: 0em;">
@@ -63,18 +104,88 @@
 
                 </section>
                     
+                                <section class="grid_24 clearfix">
+                    <section class="grid_18 alpha"  >
+
+                        <c:if test="${totalfound eq 0 && empty filtering}">
+                            <c:if test="${searchText eq ''}">
+                               <c:set var="searchText"
+                                       value=" "/> 
+                            </c:if>
+                            <h2>No results found</h2>
+                            <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} ". Please try another search or use the<a href="advanceSearch"> advanced search</a></p>
+                            <script>
+                                $(document).ready(function() {
+                                    try {
+                                        /* The simplest implementation, used on your zero search results pages */
+                                        updateSummary({noResults: true});	       
+                                    } catch (except_1) {}
+                                });
+                            </script>
+                        </c:if>
+                        <c:if test="${totalfound gt 0}">
+                               <h2>${totalfound} result(s) found</h2>
+                        </c:if>
+                    </section>
+                    <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
+                        <script src="resources/javascript/ebi-global-search-run.js"></script>
+                        <script src="resources/javascript/ebi-global-search.js"></script>
+                        <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
+                        <div id="ebi_search_results"><h3
+                            class="slideToggle icon icon-functional"
+                            data-icon="u">Show more data from EMBL-EBI</h3>
+                        </div>
+                    </aside>
+                    </c:if>
+
+                </section>   
+                    
+                    
+                    
+                    
+                    
+                    
                     <section class="grid_6 alpha" id="search-results">
-                        filter facets should be here
+                       
+                        
+                         <c:if test="${ page.totalElements gt 0}">
+                        <div class="filter grid_24">
+                            <div class="title">
+                                Search Filters
+                            </div>
+                            <div class="line"></div>
+                            <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="${pageContext.request.contextPath}/taxonomy/filter" method="GET">
+                                <form:hidden path="searchparams.type" />	
+                                <form:hidden path="searchparams.text" />
+                                <form:hidden path="searchparams.sequence" />
+                                <form:hidden path="searchparams.previoustext" />
+                                <input type="hidden" id="filtersFormStart"
+                                       name="searchparams.start" value="0"/>
+                                <%@ include file="filter-species.jspf"%>
+                                <br/>
+                                <%@ include file="filter-compounds.jspf"%>
+                                <br/>
+                                <%@ include file="filter-diseases.jspf"%>
+                            </form:form>
+                        </div> 
+                        <%--filter --%>
+                    </c:if>        
+                        
+                        
+                        
+                        
+                        
+                        
                     </section>
                 
          <section class="grid_18" id="keywordSearchResult">       
                 
-<!--        <h3>enzyme portal results for ${organismName}</h3>-->
+<!--
                 <div  style="text-align: center;">
                     
                     <h5>showing ${page.numberOfElements} results of ${page.totalElements} results found <p style="color: red;">page ${page.number + 1} of ${page.totalPages} pages</p> </h5>
                 
-                </div>
+                </div>-->
         
       
 <div style="width: 100%;">
@@ -147,10 +258,13 @@
           <div class="line"></div>
           <div class="resultContent"> 
         
-        
+              <c:if test="${not empty summaryEntries}">
         <c:forEach var="enzyme" items="${summaryEntries}">
          
-      <c:set var="theSpecies" value="${enzyme.relatedspecies[0]}" />
+            <c:if test="${not empty enzyme.relatedspecies}">
+               <c:set var="theSpecies" value="${enzyme.relatedspecies[0]}" />  
+            </c:if>
+     
             
             <div class="resultItem grid_24">
                
@@ -178,7 +292,10 @@
     </c:when>
     <c:otherwise>
         <div class="proteinImg grid_3">
-            <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
+            <c:if test="${ not empty theSpecies.pdbeaccession}">
+           <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>     
+            </c:if>     
+            
             <c:set var="imgFooter" value=""/>
             <c:if test="${empty imgFile}">
                 <c:forEach var="relSp" items="${enzyme.relatedspecies}">
@@ -310,7 +427,10 @@
         <div>
             <!--display = 3 = 2 related species + 1 default species -->
             <c:set var="relSpeciesMaxDisplay" value="${6}"/>
-            <c:set var="relspecies" value="${enzyme.relatedspecies}"/>
+            <c:if test="${not empty enzyme}">
+             <c:set var="relspecies" value="${enzyme.relatedspecies}"/>    
+            </c:if>
+           
             <c:set var="relSpeciesSize" value="${fn:length(relspecies)}"/>
             <c:if test="${relSpeciesSize gt 0}">
                 <b>Species:</b>
@@ -395,7 +515,7 @@
             
             
         </c:forEach>
-        
+          </c:if>
             </div>
             </section>
                           </div>
@@ -403,5 +523,48 @@
     <%@include file="footer.jspf" %>
     
         </div> <!--! end of #wrapper -->
+        
+        
+        
+     
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+        
+                
+               
+                $("#filtersForm").submit(function(e) {
+
+                    var frm = $('#filtersForm');
+                    $(frm).ajaxSubmit({
+                        //$.ajax({
+                        type: frm.attr('method'),
+                        url: frm.attr('action'),
+                        data: frm.serialize(),
+                        dataType: "HTML",
+                        success: function(data) {
+                            console.log(data);
+                            alert("yeah");
+    
+              
+                        }
+                    });
+
+                    e.preventDefault();
+                });    
+        
+
+                
+                
+            });
+
+
+
+
+        </script>       
+        
+        
+        
+        
+        
     </body>
 </html>

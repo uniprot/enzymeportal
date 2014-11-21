@@ -41,7 +41,9 @@ displayedFilters[group] = 0;
 
 // Populate js variables with data from server:
 //<c:forEach var="sp" items="${speciesList}">
-var sp = { "id": "${sp.scientificname}", "name": "${sp.commonname}" };
+var sp = { "id": "${sp.scientificname}", "name": "${sp.commonname}","taxId":"${sp.taxId}" };
+$('#filtersForm').append('<input type="hidden" name="taxId" value="${sp.taxId}" />');
+$('#filtersForm').append('<input type="hidden" name="organismName" value="${sp.scientificname}" />');
 <c:choose><c:when test="${Fn:contains(speciesParams, sp.scientificname)}">
 checkedFilters[group][checkedFilters[group].length] = sp; //</c:when>
 <c:otherwise>

@@ -342,7 +342,7 @@ public abstract class AbstractController {
             }
 
 
-           
+
             //if an item is seleted, then filter the list
             if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
                 List<EnzymeSummary> filteredResults =
@@ -378,14 +378,14 @@ public abstract class AbstractController {
                 searchModel.setSearchresults(sr);
 
 
-            }
-
-
         }
+
 
     }
 
-    private void resetSelectedSpecies(List<Species> speciesList) {
+    }
+
+    protected void resetSelectedSpecies(List<Species> speciesList) {
         for (Species sp : speciesList) {
 
             sp.setSelected(false);
@@ -393,13 +393,13 @@ public abstract class AbstractController {
         }
     }
 
-    private void resetSelectedCompounds(List<Compound> compounds) {
+    protected void resetSelectedCompounds(List<Compound> compounds) {
         for (Compound compound : compounds) {
             compound.setSelected(false);
         }
     }
 
-    private void resetSelectedDisease(List<Disease> diseases) {
+    protected void resetSelectedDisease(List<Disease> diseases) {
         for (Disease disease : diseases) {
             disease.setSelected(false);
         }

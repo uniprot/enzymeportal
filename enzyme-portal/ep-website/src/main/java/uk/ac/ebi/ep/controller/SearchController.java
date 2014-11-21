@@ -542,6 +542,7 @@ public class SearchController extends AbstractController {
          //delete later
 
             List<String> list = new ArrayList<>();
+          
             
             suggestions.stream().forEach((s) -> {
                 list.add(s.getSuggestion());

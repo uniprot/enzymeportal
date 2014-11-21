@@ -20,7 +20,7 @@ enzymeApp.controller('TypeAheadController',['$scope','$http',
         };
         
         
-        
+
         
         $scope.getPathways = function(val) {
             return $http.get('/enzymeportal/service/pathways', {

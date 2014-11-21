@@ -69,7 +69,7 @@ uncheckedFilters[group] = [];
 displayedFilters[group] = 0;
 // Populate js variables with data from server:
 <c:forEach var="compound" items="${compoundsList}">
-    var cmp = { "id": "${compound.id}", "name": "${compound.name}", "role": "${compound.role}","url":"${compound.url}" };
+    var cmp = { "id": "${compound.id}", "name": "${fn:trim(compound.name)}", "role": "${compound.role}","url":"${compound.url}" };
     <c:choose>
         <c:when test="${Fn:contains(compoundsParams, compound.name)}">
             checkedFilters[group][checkedFilters[group].length] = cmp; 
