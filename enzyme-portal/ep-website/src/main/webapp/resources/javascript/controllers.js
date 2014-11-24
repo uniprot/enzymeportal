@@ -52,7 +52,9 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
             var id = $scope.idMappings[$model];
 
             $scope.selectedItem = $model;
-            // window.location.href = 'search/pathways?entryid=' + id + '&entryname=' + name + '&AMP;searchparams.type=KEYWORD&searchparams.previoustext=' + name + '&searchparams.start=0&searchparams.text=' + name;
+            var url = '/enzymeportal/search/pathways?entryid=' + id + '&entryname=' + name + '&AMP;searchparams.type=KEYWORD&searchparams.previoustext=' + name + '&searchparams.start=0&searchparams.text=' + name;
+
+            window.location.href = url;
         };
 
     }
