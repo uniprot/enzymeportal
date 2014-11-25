@@ -4,6 +4,7 @@ package uk.ac.ebi.ep.data.enzyme.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
 
 
@@ -37,6 +38,11 @@ public class Pathway
         this.pathwayName = pathwayName;
     }
 
+       public Pathway(String id, String name, Object url) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
+    } 
     public String getPathwayId() {
         return pathwayId;
     }
@@ -149,6 +155,28 @@ public class Pathway
     @Override
     public String toString() {
         return pathwayName;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.pathwayName);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Pathway other = (Pathway) obj;
+        if (!Objects.equals(this.pathwayName, other.pathwayName)) {
+            return false;
+        }
+        return true;
     }
     
     

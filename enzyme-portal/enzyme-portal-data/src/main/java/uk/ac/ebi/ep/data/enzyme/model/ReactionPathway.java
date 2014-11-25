@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 
 
@@ -26,7 +25,7 @@ public class ReactionPathway
 
    
     protected EnzymePortalReaction reaction;
-    protected List<EnzymePortalPathways> pathways;
+    protected List<Pathway> pathways;
    
     protected List<Object> mechanism;
     
@@ -78,9 +77,9 @@ public class ReactionPathway
      * 
      * 
      */
-    public List<EnzymePortalPathways> getPathways() {
+    public List<Pathway> getPathways() {
         if (pathways == null) {
-            pathways = new ArrayList<EnzymePortalPathways>();
+            pathways = new ArrayList<Pathway>();
         }
         return this.pathways;
     }
@@ -205,7 +204,7 @@ public class ReactionPathway
      *     {@link Pathway }
      *     
      */
-    public void setPathways(List<EnzymePortalPathways> pathways) {
+    public void setPathways(List<Pathway> pathways) {
         this.pathways = pathways;
     }
 

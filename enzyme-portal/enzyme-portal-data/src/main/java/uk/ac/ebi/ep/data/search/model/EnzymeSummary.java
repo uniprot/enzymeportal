@@ -30,10 +30,9 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
     protected String uniprotid;
     protected List<EnzymeAccession> relatedspecies;
 
-    private String commentType;
-    private String commentText;
+ 
     private UniprotEntry uniprotEntry;
-    private List<String> pdbId;
+   
 
     public EnzymeSummary() {
     }

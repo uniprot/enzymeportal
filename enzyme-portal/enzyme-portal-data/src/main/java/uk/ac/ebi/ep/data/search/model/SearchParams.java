@@ -30,8 +30,8 @@ public class SearchParams {
     protected List<String> compounds;
     protected List<String> diseases;
     protected List<String> species;
-   
-    protected SearchParams.SearchType type;
+      
+    protected SearchParams.SearchType type;   
 
     /**
      * Gets the value of the text property.

@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.Projections;
-import com.mysema.query.types.expr.BooleanExpression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,19 +28,21 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
     private static final QEnzymePortalPathways $ = QEnzymePortalPathways.enzymePortalPathways;
 
     @Override
-    public List<EnzymePortalPathways> findPathwaysByAccession(String accession) {
+    public List<Pathway> findPathwaysByAccession(String accession) {
 
         JPAQuery query = new JPAQuery(entityManager);
 
-        BooleanExpression isAccession = $.uniprotAccession.accession.equalsIgnoreCase(accession);
-        List<EnzymePortalPathways> pathways = query.from($).where(isAccession).list($);
+//        BooleanExpression isAccession = $.uniprotAccession.accession.equalsIgnoreCase(accession);
+//        List<EnzymePortalPathways> pathways = query.from($).where(isAccession).list($);
+//
+//        return pathways.stream().distinct().collect(Collectors.toList());
+        List<Pathway> pathways = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
+                .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName, $.pathwayUrl));
 
-        return pathways.stream().distinct().collect(Collectors.toList());
-
+        return pathways;
     }
-    
-    
-       @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Override
     public List<String> findAccessionsByPathwayId(String pathwayId) {
 
@@ -50,8 +51,7 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
 
         List<EnzymePortalPathways> entries = query.from($).where($.pathwayId.equalsIgnoreCase(pathwayId)).distinct().list($)
                 .stream().distinct().collect(Collectors.toList());
-        
-       
+
         entries.stream().forEach((e) -> {
             enzymes.add(e.getUniprotAccession().getAccession());
         });
@@ -66,9 +66,9 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
         JPAQuery query = new JPAQuery(entityManager);
 
         List<Pathway> entries = query.from($).where($.pathwayName.like(pathwayName))
-                .list(Projections.constructor(Pathway.class, $.pathwayId,$.pathwayName));
-              
-      return entries;
+                .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName));
+
+        return entries.stream().distinct().collect(Collectors.toList());
 
     }
 }

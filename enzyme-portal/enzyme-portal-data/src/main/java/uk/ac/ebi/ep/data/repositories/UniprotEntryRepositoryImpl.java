@@ -53,7 +53,8 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         query.setHint("javax.persistence.fetchgraph", eGraph);
         query.setHint("javax.persistence.query.timeout", 450);
 
-        StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
+        //StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
+        StringExpression idPrefix = $.relatedProteinsId.namePrefix;
         BooleanBuilder builder = new BooleanBuilder();
         name_prefixes.stream().forEach((prefix) -> {
 
@@ -61,7 +62,8 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         });
         query.from($).where(builder);
-        return query.list($).parallelStream().distinct().collect(Collectors.toList());
+
+        return query.list($);
     }
 
     @Transactional(readOnly = true)
@@ -84,7 +86,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         });
         query.from($).where(builder);
-        return query.distinct().list($).parallelStream().distinct().collect(Collectors.toList());
+        return query.distinct().list($).stream().distinct().collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -105,7 +107,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
     @Transactional(readOnly = true)
     @Override
-    public List<UniprotEntry> findEnzymeByNamePrefixAndProteinName(String namePrefix, String proteinName) {
+    public List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix) {
 
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
 
@@ -115,13 +117,14 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
 
-        StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
+        //StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
+         StringExpression idPrefix = $.relatedProteinsId.namePrefix;
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.or(idPrefix.equalsIgnoreCase(namePrefix));
 
-        query.from($).where(builder.and($.proteinName.equalsIgnoreCase(proteinName)));
-        return query.distinct().list($).parallelStream().distinct().collect(Collectors.toList());
+        query.from($).where(builder);
+        return query.list($).stream().distinct().collect(Collectors.toList());
 
     }
 
@@ -143,30 +146,29 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
     }
 
-    @Override
-    public List<UniprotEntry> findEnzymeByAccessionsAndProteinName(List<String> accessions, String proteinName) {
-        EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
-
-        eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-                "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "enzymePortalEcNumbersSet");
-
-        JPAQuery query = new JPAQuery(entityManager);
-        query.setHint("javax.persistence.fetchgraph", eGraph);
-
-        BooleanBuilder builder = new BooleanBuilder();
-
-        accessions.stream().forEach((accession) -> {
-
-            builder.or($.accession.equalsIgnoreCase(accession));
-
-        });
-
-        query.from($).where(builder.and($.proteinName.equalsIgnoreCase(proteinName)));
-        return query.distinct().list($).stream().distinct().collect(Collectors.toList());
-
-    }
-
+//    @Override
+//    public List<UniprotEntry> findEnzymeByAccessions(List<String> accessions) {
+//        EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
+//
+//        eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+//                "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
+//                "uniprotXrefSet", "enzymePortalEcNumbersSet");
+//
+//        JPAQuery query = new JPAQuery(entityManager);
+//        query.setHint("javax.persistence.fetchgraph", eGraph);
+//
+//        BooleanBuilder builder = new BooleanBuilder();
+//
+//        accessions.stream().forEach((accession) -> {
+//
+//            builder.or($.accession.equalsIgnoreCase(accession));
+//
+//        });
+//
+//        query.from($).where(builder.and($.proteinName.equalsIgnoreCase(proteinName)));
+//        return query.distinct().list($).stream().distinct().collect(Collectors.toList());
+//
+//    }
     @Override
     public List<UniprotEntry> findEnzymesByAccession(String accession) {
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
@@ -189,7 +191,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         JPAQuery query = new JPAQuery(entityManager);
         // List<Tuple> tuple =    query.from($).groupBy($.taxId,$.scientificName,$.commonName).orderBy($.taxId.count().desc()).limit(11).list($.taxId,$.scientificName,$.commonName,$.taxId.count());
 
-        List<Taxonomy> result = query.from($).groupBy($.taxId, $.scientificName, $.commonName).orderBy($.taxId.count().desc()).limit(50).
+        List<Taxonomy> result = query.from($).groupBy($.taxId, $.scientificName, $.commonName).orderBy($.taxId.count().desc()).limit(20).
                 list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
 
         return result;
@@ -225,22 +227,43 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     }
 
     @Override
-      @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<Species> findSpeciesByTaxId(Long taxId) {
         JPAQuery query = new JPAQuery(entityManager);
         List<Species> result = query.from($).where($.taxId.eq(taxId)).distinct()
-                .list(Projections.constructor(Species.class, $.scientificName, $.commonName,$.taxId));
+                .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
 
         return result;
     }
-    
-        @Override
-      @Transactional(readOnly = true)
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Species> findSpeciesByScientificName(String sName) {
         JPAQuery query = new JPAQuery(entityManager);
         List<Species> result = query.from($).where($.scientificName.equalsIgnoreCase(sName)).distinct()
-                .list(Projections.constructor(Species.class, $.scientificName, $.commonName,$.taxId));
+                .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
 
+        return result;
+    }
+
+    @Override
+    public List<UniprotEntry> findEnzymesByMeshId(String meshId) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<UniprotEntry> result = query.from($).where($.enzymePortalDiseaseSet.any().meshId.trim().equalsIgnoreCase(meshId)).list($);
+        return result;
+    }
+
+    @Override
+    public List<UniprotEntry> findEnzymesByPathwayId(String pathwayId) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<UniprotEntry> result = query.from($).where($.enzymePortalPathwaysSet.any().pathwayId.trim().equalsIgnoreCase(pathwayId)).list($);
+        return result;
+    }
+
+    @Override
+    public List<UniprotEntry> findEnzymesByEc(String ec) {
+       JPAQuery query = new JPAQuery(entityManager);
+        List<UniprotEntry> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.trim().equalsIgnoreCase(ec)).list($);
         return result;
     }
 

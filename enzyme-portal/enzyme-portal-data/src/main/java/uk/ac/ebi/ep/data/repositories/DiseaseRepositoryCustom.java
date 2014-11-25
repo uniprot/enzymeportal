@@ -19,7 +19,7 @@ public interface DiseaseRepositoryCustom {
 
     List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions);
 
-    List<EnzymePortalDisease> findDiseasesByAccession(String accession);
+//    List<EnzymePortalDisease> findDiseasesByAccession(String accession);
 
     List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes);
 
@@ -30,5 +30,7 @@ public interface DiseaseRepositoryCustom {
     List<Disease> findDiseasesNameLike(String name);
     
     List<Disease> findDiseasesByTaxId(Long taxId);
+    
+     List<Disease> findDiseasesByAccession(String accession);
 
 }

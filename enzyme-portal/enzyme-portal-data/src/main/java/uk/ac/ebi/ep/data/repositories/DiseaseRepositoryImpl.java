@@ -67,14 +67,14 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         return query.distinct().list($);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
-        JPAQuery query = new JPAQuery(entityManager);
-        List<EnzymePortalDisease> diseases = query.from($)
-                .where($.uniprotAccession.accession.equalsIgnoreCase(accession)).list($).stream().distinct().collect(Collectors.toList());
-        return diseases;
-    }
+//    @Transactional(readOnly = true)
+//    @Override
+//    public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
+//        JPAQuery query = new JPAQuery(entityManager);
+//        List<EnzymePortalDisease> diseases = query.from($)
+//                .where($.uniprotAccession.accession.equalsIgnoreCase(accession)).list($).stream().distinct().collect(Collectors.toList());
+//        return diseases;
+//    }
 
     /**
      * Note: meshId is used as default disease id for now as some omim entries
@@ -139,16 +139,23 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 
     @Override
     public List<Disease> findDiseasesNameLike(String name) {
-     
-            //EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
-        //eGraph.addAttributeNodes("uniprotAccession");
 
         JPAQuery query = new JPAQuery(entityManager);
-        //query.setHint("javax.persistence.fetchgraph", eGraph);
+       
         List<Disease> result = query.from($).where($.diseaseName.like(name))
                 .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName)).stream().distinct().collect(Collectors.toList());
 
         return result;
+    }
+
+    @Override
+    public List<Disease> findDiseasesByAccession(String accession) {
+              JPAQuery query = new JPAQuery(entityManager);
+     
+        List<Disease> result = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
+                .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName,$.definition,$.url,$.evidence));
+
+        return result.stream().distinct().collect(Collectors.toList()); 
     }
 
 }

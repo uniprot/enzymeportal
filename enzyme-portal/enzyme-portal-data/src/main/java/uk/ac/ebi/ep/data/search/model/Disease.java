@@ -31,7 +31,7 @@ public class Disease implements  Serializable {
     protected boolean selected;
     protected int numEnzyme;
 
-    protected List<String> evidences;
+    protected List<String> evidences = new ArrayList<>();;
 
     public Disease() {
     }
@@ -48,11 +48,16 @@ public class Disease implements  Serializable {
         this.name = name;
         this.url = url;
     }
-    
-    
-    
-    
-  
+
+    public Disease(String id, String name, String description, Object url,  String evidence) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.url = url;
+        evidences.add(evidence);
+    }
+
+
     private static final Comparator<String> NAME_COMPARATOR
             = new ChemicalNameComparator();
 

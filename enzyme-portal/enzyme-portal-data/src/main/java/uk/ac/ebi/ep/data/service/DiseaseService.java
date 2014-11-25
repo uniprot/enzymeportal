@@ -61,7 +61,7 @@ public class DiseaseService {
     }
     
     @Transactional(readOnly = true)
-    public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
+    public List<Disease> findDiseasesByAccession(String accession) {
         
         return repository.findDiseasesByAccession(accession);
     }

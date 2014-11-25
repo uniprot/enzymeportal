@@ -26,7 +26,9 @@ public class EnzymeAccession implements Serializable {
     protected List<Disease> diseases;
 
     protected Object scoring;
-
+    
+     protected String uniprotid;
+     
     /**
      * Gets the value of the uniprotaccessions property.
      *
@@ -330,5 +332,15 @@ public class EnzymeAccession implements Serializable {
     public String toString() {
         return "EnzymeAccession{" + "uniprotaccessions=" + uniprotaccessions + ", species=" + species + '}';
     }
+
+    public String getUniprotid() {
+        return uniprotid;
+    }
+
+    public void setUniprotid(String uniprotid) {
+        this.uniprotid = uniprotid;
+    }
+
+      
 
 }

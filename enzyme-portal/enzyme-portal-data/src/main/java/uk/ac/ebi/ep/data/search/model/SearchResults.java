@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class SearchResults {
 
-    private Integer totalfound;
+    private Long totalfound;
     private SearchFilters searchfilters;
 
     private List<EnzymeSummary> summaryentries;
@@ -76,7 +76,7 @@ public class SearchResults {
      * Gets the value of the totalfound property.
      *
      */
-    public int getTotalfound() {
+    public long getTotalfound() {
         return totalfound;
     }
 
@@ -84,7 +84,7 @@ public class SearchResults {
      * Sets the value of the totalfound property.
      *
      */
-    public void setTotalfound(int value) {
+    public void setTotalfound(long value) {
         this.totalfound = value;
     }
 

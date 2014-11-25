@@ -26,27 +26,29 @@ public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymesByAccessions(List<String> accessions);
 
+    List<UniprotEntry> findEnzymesByAccession(String accession);
+
+    List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
+
     @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     UniprotEntry findByAccession(String accession);
 
-    List<UniprotEntry> findEnzymesByAccession(String accession);
-
-    List<UniprotEntry> findEnzymeByNamePrefixAndProteinName(String namePrefix, String proteinName);
-
-    List<UniprotEntry> findEnzymeByAccessionsAndProteinName(List<String> accessions, String proteinName);
-
     List<String> filterEnzymesInAccessions(List<String> accessions);
+
+    List<Taxonomy> findModelOrganisms();
+
+    List<String> findAccessionsByTaxId(Long taxId);
+
+    List<UniprotEntry> findEnzymesByTaxId(Long taxId);
+
+    Page<EnzymeSummary> findEnzymesByAccessions(List<String> accessions, Pageable pageable);
+
+    List<Species> findSpeciesByTaxId(Long taxId);
+
+    List<Species> findSpeciesByScientificName(String sName);
+    List<UniprotEntry> findEnzymesByMeshId(String meshId);
     
-     List<Taxonomy> findModelOrganisms();
-     List<String> findAccessionsByTaxId(Long taxId);
-
-     List<UniprotEntry> findEnzymesByTaxId(Long  taxId);
-     
-     Page<EnzymeSummary> findEnzymesByAccessions(List<String> accessions, Pageable pageable);
-     
-      List<Species> findSpeciesByTaxId(Long  taxId);
-      
-      List<Species> findSpeciesByScientificName(String sName);
-
+     List<UniprotEntry> findEnzymesByPathwayId(String pathwayId);
+     List<UniprotEntry> findEnzymesByEc(String ec);
 
 }

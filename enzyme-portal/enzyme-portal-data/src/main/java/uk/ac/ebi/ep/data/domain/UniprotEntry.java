@@ -26,7 +26,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -47,24 +46,28 @@ import uk.ac.ebi.ep.data.search.model.Species;
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 
-@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {
-    @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
-    @NamedAttributeNode("enzymePortalPathwaysSet"),
-    @NamedAttributeNode("enzymePortalReactionSet"),
-    @NamedAttributeNode("enzymePortalSummarySet"),
-    @NamedAttributeNode("enzymePortalCompoundSet"),
-    @NamedAttributeNode("enzymePortalDiseaseSet"),
-    @NamedAttributeNode("uniprotXrefSet"),
-    @NamedAttributeNode("enzymePortalEcNumbersSet")
-},
-        subgraphs = {
-            @NamedSubgraph(
-                    name = "relatedProteinsId",
-                    attributeNodes = {
-                        @NamedAttributeNode("uniprotEntrySet")}
-            )
-        }
-)
+//@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {
+//    @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
+//    @NamedAttributeNode("enzymePortalPathwaysSet"),
+//    @NamedAttributeNode("enzymePortalReactionSet"),
+//    @NamedAttributeNode("enzymePortalSummarySet"),
+//    @NamedAttributeNode("enzymePortalCompoundSet"),
+//    @NamedAttributeNode("enzymePortalDiseaseSet"),
+//    @NamedAttributeNode("uniprotXrefSet"),
+//    @NamedAttributeNode("enzymePortalEcNumbersSet")
+//},
+//        subgraphs = {
+//            @NamedSubgraph(
+//                    name = "relatedProteinsId",
+//                    attributeNodes = {
+//                        @NamedAttributeNode("uniprotEntrySet")}
+//            )
+//        }
+//)
+
+@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {  
+    @NamedAttributeNode("relatedProteinsId")
+})
 
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
@@ -273,6 +276,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.synonymNames = synonymNames;
     }
 
+
     //Note : using protein name will reduce all related species to 1 per enzyme hence we use uniprot name for the equals and hashcode
     @Override
     public int hashCode() {
@@ -337,6 +341,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //        return this.getCommonname().compareTo(other.getCommonname());
 //
 //    }
+    @Override
     public Species getSpecies() {
       Species  species = new Species();
         species.setCommonname(this.getCommonName());
@@ -450,21 +455,17 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public String getFunction() {
         String function = "Currently there is no data in the database to show for function. This is only a placeholder and a reminder to make appropriate changes in the schema before populating the database.";
-//        for (EnzymePortalSummary summary : getEnzymePortalSummarySet()) {
-//            if (summary.getCommentType().equalsIgnoreCase("FUNCTION")) {
-//
-//                function = summary.getCommentText();
-//            }
-//        }
 
         return function;
     }
 
+    @Override
     public List<Compound> getCompounds() {
 
         return this.getEnzymePortalCompoundSet().stream().collect(Collectors.toList());
     }
 
+    @Override
     public List<Disease> getDiseases() {
 
         return this.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
@@ -472,7 +473,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public List<EnzymeAccession> getRelatedspecies() {
 
-        //List<UniprotEntry> relatedspecies = new ArrayList<>();
         List<EnzymeAccession> relatedspecies = new ArrayList<>();
         String defaultSpecies = CommonSpecies.Human.getScientificName();
 
@@ -497,4 +497,18 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public int compareTo(UniprotEntry o) {
         return this.getScientificName().compareToIgnoreCase(o.getScientificName());
     }
+    
+
+    public String getUniprotid() {
+        return name;
+    }
+
+    public void setUniprotid(String uniprotid) {
+        this.uniprotid = uniprotid;
+    }
+    
+    
+   
+    
+    
 }
