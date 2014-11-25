@@ -200,7 +200,7 @@ public class BrowseDiseasesController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = FIND_DISEASES_BY_NAME, method = RequestMethod.GET)
     public List<Disease> getDiseases(@RequestParam(value = "name", required = true) String name) {
-        if (name != null) {
+        if (name != null && name.length()>=3) {
             name = String.format("%%%s%%", name);
             return enzymePortalService.findDiseasesLike(name);
         } else {

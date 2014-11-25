@@ -160,7 +160,7 @@ public class BrowsePathwaysController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = FIND_PATHWAYS_BY_NAME, method = RequestMethod.GET)
     public List<Pathway> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
-        if (name != null) {
+        if (name != null && name.length()>=3) {
             name = String.format("%%%s%%", name);
             return enzymePortalService.findPathwaysByName(name);
         } else {
