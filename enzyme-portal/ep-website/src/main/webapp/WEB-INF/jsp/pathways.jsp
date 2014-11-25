@@ -27,8 +27,7 @@
            
             <div class="container-browse-search">
             <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
-            <input id="pathway-input" class="browse-search" type="text" ng-model="pathwayTypeAheadController" placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)" class="form-control" typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
-            <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>
+                <input id="pathway-input" class="browse-search" type="text" ng-model="pathwayTypeAheadController" placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)" class="form-control" typeahead-on-select="onSelectPathways($item, $model, $label)">
             </div>
 
             <c:if test="${not empty pathwayList}">

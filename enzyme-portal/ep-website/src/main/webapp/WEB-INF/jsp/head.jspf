@@ -45,7 +45,6 @@
     
     <c:if test="${pageTitle eq 'Entry page'}">
         <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
-        <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/common.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />
         <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/species.css" type="text/css" rel="stylesheet" />

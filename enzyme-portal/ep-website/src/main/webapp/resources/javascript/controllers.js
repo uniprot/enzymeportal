@@ -39,7 +39,6 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
                     name: val
                 }
             }).then(function(response){
-                console.log(response);
                 return $.map(response.data, function(d,i){
                     $scope.idMappings[d.name] = d.id;
                     return d.name;
@@ -47,7 +46,7 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
             });
         };
 
-        $scope.onSelect = function($model) {
+        $scope.onSelectPathways = function($model) {
             var name = $model;
             var id = $scope.idMappings[$model];
 
@@ -56,6 +55,17 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
 
             window.location.href = url;
         };
+
+        $scope.onSelectDiseases = function($model) {
+            var name = $model;
+            var id = $scope.idMappings[$model];
+
+            $scope.selectedItem = $model;
+            var url = '/enzymeportal/search/disease?entryid=' + id + '&entryname=' + name + '&AMP;searchparams.type=KEYWORD&searchparams.previoustext=' + name + '&searchparams.start=0&searchparams.text=' + name;
+
+            window.location.href = url;
+        };
+
 
     }
     ]);

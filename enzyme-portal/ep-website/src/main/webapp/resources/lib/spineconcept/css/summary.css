@@ -88,6 +88,10 @@
 .selection {
 }
 
+.selection .box {
+    border:none;
+}
+
 .selection ul {
 	max-height: 100px;
 	overflow: auto;
