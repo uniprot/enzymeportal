@@ -39,7 +39,7 @@ public class BrowsePathwaysController extends AbstractController {
 
     private static final String BROWSE_PATHWAYS = "/browse/pathways";
 
-    private static final String SEARCH_PATHWAYS = "/search/pathways";
+    private static final String SEARCH_PATHWAYS = "/search-pathways";
     private static final String RESULT = "/search";
 
     private static final String FIND_PATHWAYS_BY_NAME = "/service/pathways";
@@ -131,11 +131,10 @@ public class BrowsePathwaysController extends AbstractController {
 
         finder.setSearchParams(searchParams);
 
-        List<String> accessions = enzymePortalService.findAccessionsByPathwayId(pathwayId);
-
-        if (!accessions.isEmpty()) {
-            results = finder.computeEnzymeSummariesByAccessions(accessions);
-        }
+    
+       
+            results = finder.computeEnzymeSummariesByPathwayId(pathwayId);
+        
 
         if (results == null) {
 
@@ -162,7 +161,7 @@ public class BrowsePathwaysController extends AbstractController {
     public List<Pathway> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length()>=3) {
             name = String.format("%%%s%%", name);
-            return enzymePortalService.findPathwaysByName(name);
+            return enzymePortalService.findPathwaysByName(name).stream().distinct().collect(Collectors.toList());
         } else {
             return new ArrayList<>();
         }

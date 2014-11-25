@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
@@ -40,9 +41,9 @@ public class BrowseDiseasesController extends AbstractController {
     private static final Logger LOGGER = Logger.getLogger(BrowseDiseasesController.class);
     private static final String BROWSE = "/browse-diseases";
     private static final String BROWSE_DISEASE = "/browse/disease";
-    private static final String SEARCH_DISEASE = "/search/disease";
-    private static final String RESULT = "/search_result_disease";
-
+    private static final String SEARCH_DISEASE = "/search-disease";
+    //private static final String RESULT = "/search_result_disease";
+ private static final String RESULT = "/search";
     private static final String FIND_DISEASES_BY_NAME = "/service/diseases";
 
     private List<EnzymePortalDisease> diseaseList = new ArrayList<>();
@@ -156,11 +157,9 @@ public class BrowseDiseasesController extends AbstractController {
 
         finder.setSearchParams(searchParams);
 
-        List<String> accessions = enzymePortalService.findAccessionsByMeshId(diseaseId);
-
-        if (!accessions.isEmpty()) {
-            results = finder.computeEnzymeSummariesByAccessions(accessions);
-        }
+      String meshId = diseaseId.trim();
+            results = finder.computeEnzymeSummariesByMeshId(meshId);
+        
 
         if (results == null) {
 
@@ -202,7 +201,7 @@ public class BrowseDiseasesController extends AbstractController {
     public List<Disease> getDiseases(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length()>=3) {
             name = String.format("%%%s%%", name);
-            return enzymePortalService.findDiseasesLike(name);
+            return enzymePortalService.findDiseasesLike(name).stream().distinct().collect(Collectors.toList());
         } else {
             return new ArrayList<>();
         }

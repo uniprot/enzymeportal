@@ -220,14 +220,88 @@ public class BrowseTaxonomyController extends AbstractController {
         searchResults.setSearchfilters(filters);
         searchModel.setSearchresults(searchResults);
 
-        applyFiltersAdapted(searchModel, request);
+        //applyFiltersAdapted(searchModel, request);
+        
+                    SearchParams searchParameters = searchModel.getSearchparams();
+            //SearchResults resultSet = searchModel.getSearchresults();
 
-        List<String> specieFilter = searchModel.getSearchparams().getSpecies();
-        List<String> compoundFilter = searchModel.getSearchparams().getCompounds();
-        List<String> diseaseFilter = searchModel.getSearchparams().getDiseases();
+            String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
+            String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
+            String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
+
+            // Filter:
+            List<String> specieFilter = searchParameters.getSpecies();
+            List<String> compoundFilter = searchParameters.getCompounds();
+            List<String> diseaseFilter = searchParameters.getDiseases();
+
+            //remove empty string in the filter to avoid unsual behavior of the filter facets
+            if (specieFilter.contains("")) {
+                specieFilter.remove("");
+
+            }
+            if (compoundFilter.contains("")) {
+                compoundFilter.remove("");
+
+            }
+            if (diseaseFilter.contains("")) {
+                diseaseFilter.remove("");
+            }
+
+            //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
+            if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
+                specieFilter.add(specie_autocompleteFilter);
+
+            }
+
+            if ((diseases_autocompleteFilter != null && StringUtils.hasLength(diseases_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(specie_autocompleteFilter)) {
+                diseaseFilter.add(diseases_autocompleteFilter);
+
+            }
+
+//both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
+            //SearchResults searchResults = resultSet;
+            List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
+            resetSelectedSpecies(defaultSpeciesList);
+
+            searchParameters.getSpecies().stream().forEach((selectedItems) -> {
+                defaultSpeciesList.stream().filter((theSpecies) -> (selectedItems.equals(theSpecies.getScientificname()))).forEach((theSpecies) -> {
+                    theSpecies.setSelected(true);
+                });
+            });
+
+            List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
+            resetSelectedCompounds(defaultCompoundList);
+
+            searchParameters.getCompounds().stream().forEach((SelectedCompounds) -> {
+                defaultCompoundList.stream().filter((theCompound) -> (SelectedCompounds.equals(theCompound.getName()))).forEach((theCompound) -> {
+                    theCompound.setSelected(true);
+                });
+            });
+
+            List<Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
+            resetSelectedDisease(defaultDiseaseList);
+
+            searchParameters.getDiseases().stream().forEach((selectedDisease) -> {
+                defaultDiseaseList.stream().filter((disease) -> (selectedDisease.equals(disease.getName()))).forEach((disease) -> {
+                    disease.setSelected(true);
+                });
+            });
+        
+        
+        
+        
+        
+        
+
 
         Pageable pageable = new PageRequest(0, SEARCH_PAGESIZE);
         Page<UniprotEntry> page = new PageImpl<>(new ArrayList<>(), pageable, 0);
+        
+                //specie only
+        if (specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {
+            page = enzymePortalService.filterBySpecie(taxId, pageable);
+
+        }
 
         //specie only
         if (!specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {

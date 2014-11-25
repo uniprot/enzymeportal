@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -45,11 +44,13 @@ public class BrowseEnzymesController extends AbstractController {
     //concrete jsp's
     private static final String BROWSE_ENZYMES = "/browse_enzymes";
     private static final String EC = "/ec";
-    private static final String RESULT = "/search_result_ec";
+    //private static final String RESULT = "/search_result_ec";
+    private static final String RESULT = "/search";
     //abtract url
     private static final String BROWSE_ENZYME_CLASSIFICATION = "/browse/enzymes";
     private static final String BROWSE_EC = "/browse/enzyme";
-    private static final String SEARCH_ENZYMES = "/search/enzymes";
+    //private static final String SEARCH_ENZYMES = "/search/enzymes";
+     private static final String SEARCH_ENZYMES = "/search-enzymes";
     private static final String EC_NUMBER = "ec";
     private static final String NAME = "name";
     private static final String DESCRIPTION = "description";
@@ -75,17 +76,12 @@ public class BrowseEnzymesController extends AbstractController {
 
         finder.setSearchParams(searchParams);
 
-        List<String> accessions = enzymePortalService.findAccessionsByEc(ec);
-
-        if (!accessions.isEmpty()) {
-            results = finder.computeEnzymeSummariesByAccessions(accessions);
-        }
+        results = finder.computeEnzymeSummariesByEc(ec);
 
         if (results == null) {
 
             return getEnzymes(finder, searchParams);
         }
-        
 
         return results;
     }

@@ -107,7 +107,7 @@
                                 <section class="grid_24 clearfix">
                     <section class="grid_18 alpha"  >
 
-                        <c:if test="${totalfound eq 0 && empty filtering}">
+                        <c:if test="${totalfound eq 0}">
                             <c:if test="${searchText eq ''}">
                                <c:set var="searchText"
                                        value=" "/> 
@@ -542,8 +542,8 @@
                         data: frm.serialize(),
                         dataType: "HTML",
                         success: function(data) {
-                            console.log(data);
-                            alert("yeah");
+                            //console.log(data);
+                          
     
               
                         }

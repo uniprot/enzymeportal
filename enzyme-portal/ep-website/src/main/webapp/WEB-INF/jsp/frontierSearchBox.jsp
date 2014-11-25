@@ -27,7 +27,7 @@
                                                                                           
                                <%--     <form:input id="local-searchbox" name="first" path="searchparams.text" /> --%>
                                   
-                               <input id="local-searchbox" name="searchparams.text"  type="text" ng-model="searchTypeAheadController"  typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
+                               <input id="local-searchbox" name="searchparams.text" value="${searchparams.text}"  type="text" ng-model="searchTypeAheadController"  typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
             <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>        
                                  
 						</label>                                                                           

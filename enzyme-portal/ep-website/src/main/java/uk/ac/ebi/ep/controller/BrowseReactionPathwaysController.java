@@ -28,6 +28,7 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
  * @author joseph
  */
 @Controller
+@Deprecated
 public class BrowseReactionPathwaysController extends AbstractController {
 
     private static final Logger LOGGER = Logger.getLogger(BrowseReactionPathwaysController.class);
@@ -137,7 +138,7 @@ public class BrowseReactionPathwaysController extends AbstractController {
         List<String> accessions = enzymePortalService.findAccessionsByReactionId(reactionId);
 
         if (!accessions.isEmpty()) {
-            results = finder.computeEnzymeSummariesByAccessions(accessions);
+            //results = finder.computeEnzymeSummariesByAccessions(accessions);
         }
 
         if (results == null) {

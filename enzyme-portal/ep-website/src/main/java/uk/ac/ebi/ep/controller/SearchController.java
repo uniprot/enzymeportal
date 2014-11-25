@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -161,6 +162,7 @@ public class SearchController extends AbstractController {
                 enzymeModel.setRequestedfield(requestedField.name());
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 addToHistory(session, accession);
+                
                 // If we got here from a bookmark, the summary might not be cached:
                 String summId = Functions.getSummaryBasketId(enzymeModel);
                 @SuppressWarnings("unchecked")
@@ -170,7 +172,7 @@ public class SearchController extends AbstractController {
                             (EnzymeSummary) enzymeModel));
                 } else if (sls.get(summId) == null) {
                     sls.put(summId, enzymeModel);
-                }
+            }
             }
         } catch (EnzymeRetrieverException ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
@@ -474,6 +476,7 @@ public class SearchController extends AbstractController {
         SearchResults results = null;
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
         results = finder.getEnzymes(searchParameters);
+        System.out.println("result from finder : search controller 479 "+ results);
 
         return results;
     }
@@ -492,8 +495,7 @@ public class SearchController extends AbstractController {
         EnzymeFinder finder = null;
         try {
             finder = new EnzymeFinder(enzymePortalService, ebeyeService);
-            //finder.getUniprotAdapter().setConfig(uniprotConfig);
-            //finder.getIntenzAdapter().setConfig(intenzConfig);
+
             results = finder.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
@@ -529,7 +531,7 @@ public class SearchController extends AbstractController {
 
     @ResponseBody
     @RequestMapping("/service/search")
-    public List<String> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
+    public List<Suggestion> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
         if (name != null) {
             name = String.format("%%%s%%", name);
             
@@ -537,20 +539,7 @@ public class SearchController extends AbstractController {
             
          List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(name);
          
-         //needs to return suggestions
-         
-         //delete later
-
-            List<String> list = new ArrayList<>();
-          
-            
-            suggestions.stream().forEach((s) -> {
-                list.add(s.getSuggestion());
-            });
-
-
-            return list;
-            //return suggestions;
+            return suggestions.stream().distinct().collect(Collectors.toList());
         } else {
             return new ArrayList<>();
         }

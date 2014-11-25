@@ -64,7 +64,7 @@
                     <c:forEach var="data" items="${alldiseaseList}">
                         <div class="grid_6">
 
-                            <li><a   href="${pageContext.request.contextPath}/search/disease?entryid=${data.meshId}&entryname=${data.diseaseName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}">${data.diseaseName} (${0})</a></li>
+                            <li><a   href="${pageContext.request.contextPath}/search-disease?entryid=${data.meshId}&entryname=${data.diseaseName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}">${data.diseaseName} (${0})</a></li>
                         </div>
 
                     </c:forEach>
