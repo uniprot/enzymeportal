@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.ebeye.autocomplete;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 /**
  *
@@ -26,5 +27,29 @@ public class Suggestion {
     public String toString() {
         return suggestion;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.suggestion);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Suggestion other = (Suggestion) obj;
+        if (!Objects.equals(this.suggestion, other.suggestion)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }
