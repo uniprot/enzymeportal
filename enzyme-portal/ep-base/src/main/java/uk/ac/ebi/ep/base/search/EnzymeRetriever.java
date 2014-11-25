@@ -24,8 +24,6 @@ import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
-import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
@@ -36,6 +34,7 @@ import uk.ac.ebi.ep.data.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeHierarchy;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.data.enzyme.model.Molecule;
+import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.data.enzyme.model.Sequence;
@@ -235,9 +234,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         model.setFunction(uniprotEntry.getFunction());
 
-//        summaries.stream().filter((summary) -> (summary.getCommentType().equalsIgnoreCase("FUNCTION"))).forEach((summary) -> {
-//            model.setFunction(summary.getCommentText());
-//        });
+
         model.setEnzyme(enzyme);
         try {
             
@@ -278,7 +275,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 
             ProteinStructure structure = new ProteinStructure();
             structure.setId(pdbId);
-            structure.setName(pdbId);
+            structure.setName("<not availabe>");
 
             //ProteinStructure structure = getPdbInfo(pdbId);
             model.getProteinstructure().add(structure);
@@ -304,20 +301,21 @@ public class EnzymeRetriever extends EnzymeFinder {
      */
     protected void addDiseases(EnzymeModel enzymeModel) {
 
-        List<EnzymePortalDisease> diseases = super.getService().findDiseasesByAccession(enzymeModel.getAccession());
+        List<Disease> diseases = super.getService().findDiseasesByAccession(enzymeModel.getAccession());
 
-        for (EnzymePortalDisease dis : diseases) {
-            Disease disease = new Disease();
-            disease.setDescription(dis.getDescription());
-            disease.setId(dis.getMeshId());
-            disease.setName(dis.getName());
-            disease.setSelected(false);
-            disease.setUrl(dis.getUrl());
-            disease.getEvidences().add(dis.getEvidence());
-
-            enzymeModel.getDisease().add(disease);
-
-        }
+//        for (EnzymePortalDisease dis : diseases) {
+//            Disease disease = new Disease();
+//            disease.setDescription(dis.getDescription());
+//            disease.setId(dis.getMeshId());
+//            disease.setName(dis.getName());
+//            disease.setSelected(false);
+//            disease.setUrl(dis.getUrl());
+//            disease.getEvidences().add(dis.getEvidence());
+//
+//            enzymeModel.getDisease().add(disease);
+//
+//        }
+        enzymeModel.setDisease(diseases);
 
     }
 
@@ -488,7 +486,7 @@ public class EnzymeRetriever extends EnzymeFinder {
             throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
         }
 
-        System.out.println("RHEA IN CML " + reactions);
+       
 
         for (Reaction reaction : reactions) {
 
@@ -521,7 +519,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         ReactionPathway reactionPathway = new ReactionPathway();
 
         EnzymePortalReaction reaction = super.getService().findReactionByAccession(uniprotAccession);
-        List<EnzymePortalPathways> pathways = super.getService().findPathwaysByAccession(uniprotAccession);
+        List<Pathway> pathways = super.getService().findPathwaysByAccession(uniprotAccession);
         reactionPathway.setPathways(pathways);
 
       
