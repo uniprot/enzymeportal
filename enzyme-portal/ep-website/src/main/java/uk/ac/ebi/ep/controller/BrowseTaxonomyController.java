@@ -140,22 +140,6 @@ public class BrowseTaxonomyController extends AbstractController {
 
         Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByTaxonomy(entryID, pageable);
 
-        List<UniprotEntry> result = page.getContent();
-
-        int current = page.getNumber() + 1;
-        int begin = Math.max(1, current - 5);
-        int end = Math.min(begin + 10, page.getTotalPages());
-
-        model.addAttribute("page", page);
-        model.addAttribute("beginIndex", begin);
-        model.addAttribute("endIndex", end);
-        model.addAttribute("currentIndex", current);
-
-        model.addAttribute("organismName", entryName);
-        model.addAttribute("taxId", entryID);
-
-        model.addAttribute("summaryEntries", result);
-
         List<Species> species = enzymePortalService.findSpeciesByTaxId(entryID);
         List<Compound> compouds = enzymePortalService.findCompoundsByTaxId(entryID);
         List<Disease> diseases = enzymePortalService.findDiseasesByTaxId(entryID);
@@ -185,6 +169,22 @@ public class BrowseTaxonomyController extends AbstractController {
 //         model.addAttribute("compouds", compouds);
 //         model.addAttribute("diseases", diseases);
         model.addAttribute("searchFilter", filters);
+
+        List<UniprotEntry> result = page.getContent();
+
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, page.getTotalPages());
+
+        model.addAttribute("page", page);
+        model.addAttribute("beginIndex", begin);
+        model.addAttribute("endIndex", end);
+        model.addAttribute("currentIndex", current);
+
+        model.addAttribute("organismName", entryName);
+        model.addAttribute("taxId", entryID);
+
+        model.addAttribute("summaryEntries", result);
 
         String searchKey = getSearchKey(searchModel.getSearchparams());
         clearHistory(session);
@@ -221,83 +221,75 @@ public class BrowseTaxonomyController extends AbstractController {
         searchModel.setSearchresults(searchResults);
 
         //applyFiltersAdapted(searchModel, request);
-        
-                    SearchParams searchParameters = searchModel.getSearchparams();
-            //SearchResults resultSet = searchModel.getSearchresults();
+        SearchParams searchParameters = searchModel.getSearchparams();
+        //SearchResults resultSet = searchModel.getSearchresults();
 
-            String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
-            String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
-            String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
+        String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
+        String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
+        String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
 
-            // Filter:
-            List<String> specieFilter = searchParameters.getSpecies();
-            List<String> compoundFilter = searchParameters.getCompounds();
-            List<String> diseaseFilter = searchParameters.getDiseases();
+        // Filter:
+        List<String> specieFilter = searchParameters.getSpecies();
+        List<String> compoundFilter = searchParameters.getCompounds();
+        List<String> diseaseFilter = searchParameters.getDiseases();
 
-            //remove empty string in the filter to avoid unsual behavior of the filter facets
-            if (specieFilter.contains("")) {
-                specieFilter.remove("");
+        //remove empty string in the filter to avoid unsual behavior of the filter facets
+        if (specieFilter.contains("")) {
+            specieFilter.remove("");
 
-            }
-            if (compoundFilter.contains("")) {
-                compoundFilter.remove("");
+        }
+        if (compoundFilter.contains("")) {
+            compoundFilter.remove("");
 
-            }
-            if (diseaseFilter.contains("")) {
-                diseaseFilter.remove("");
-            }
+        }
+        if (diseaseFilter.contains("")) {
+            diseaseFilter.remove("");
+        }
 
-            //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
-            if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
-                specieFilter.add(specie_autocompleteFilter);
+        //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
+        if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
+            specieFilter.add(specie_autocompleteFilter);
 
-            }
+        }
 
-            if ((diseases_autocompleteFilter != null && StringUtils.hasLength(diseases_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(specie_autocompleteFilter)) {
-                diseaseFilter.add(diseases_autocompleteFilter);
+        if ((diseases_autocompleteFilter != null && StringUtils.hasLength(diseases_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(specie_autocompleteFilter)) {
+            diseaseFilter.add(diseases_autocompleteFilter);
 
-            }
+        }
 
 //both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
-            //SearchResults searchResults = resultSet;
-            List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
-            resetSelectedSpecies(defaultSpeciesList);
+        //SearchResults searchResults = resultSet;
+        List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
+        resetSelectedSpecies(defaultSpeciesList);
 
-            searchParameters.getSpecies().stream().forEach((selectedItems) -> {
-                defaultSpeciesList.stream().filter((theSpecies) -> (selectedItems.equals(theSpecies.getScientificname()))).forEach((theSpecies) -> {
-                    theSpecies.setSelected(true);
-                });
+        searchParameters.getSpecies().stream().forEach((selectedItems) -> {
+            defaultSpeciesList.stream().filter((theSpecies) -> (selectedItems.equals(theSpecies.getScientificname()))).forEach((theSpecies) -> {
+                theSpecies.setSelected(true);
             });
+        });
 
-            List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
-            resetSelectedCompounds(defaultCompoundList);
+        List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
+        resetSelectedCompounds(defaultCompoundList);
 
-            searchParameters.getCompounds().stream().forEach((SelectedCompounds) -> {
-                defaultCompoundList.stream().filter((theCompound) -> (SelectedCompounds.equals(theCompound.getName()))).forEach((theCompound) -> {
-                    theCompound.setSelected(true);
-                });
+        searchParameters.getCompounds().stream().forEach((SelectedCompounds) -> {
+            defaultCompoundList.stream().filter((theCompound) -> (SelectedCompounds.equals(theCompound.getName()))).forEach((theCompound) -> {
+                theCompound.setSelected(true);
             });
+        });
 
-            List<Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
-            resetSelectedDisease(defaultDiseaseList);
+        List<Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
+        resetSelectedDisease(defaultDiseaseList);
 
-            searchParameters.getDiseases().stream().forEach((selectedDisease) -> {
-                defaultDiseaseList.stream().filter((disease) -> (selectedDisease.equals(disease.getName()))).forEach((disease) -> {
-                    disease.setSelected(true);
-                });
+        searchParameters.getDiseases().stream().forEach((selectedDisease) -> {
+            defaultDiseaseList.stream().filter((disease) -> (selectedDisease.equals(disease.getName()))).forEach((disease) -> {
+                disease.setSelected(true);
             });
-        
-        
-        
-        
-        
-        
-
+        });
 
         Pageable pageable = new PageRequest(0, SEARCH_PAGESIZE);
         Page<UniprotEntry> page = new PageImpl<>(new ArrayList<>(), pageable, 0);
-        
-                //specie only
+
+        //specie only
         if (specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {
             page = enzymePortalService.filterBySpecie(taxId, pageable);
 
@@ -330,8 +322,7 @@ public class BrowseTaxonomyController extends AbstractController {
         searchModel.setSearchresults(searchResults);
         model.addAttribute("searchModel", searchModel);
 
-        String filtering = "true";//a workaround to be fixed in the ui
-        model.addAttribute("filtering", filtering);
+      
 
         model.addAttribute("searchFilter", filters);
         List<UniprotEntry> result = page.getContent();
