@@ -108,39 +108,39 @@
                                                             <c:if test="${fn:length(relSpecies)<=0}">
                                                                 <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
                                                                     <c:set var="species" value="${relSpecies[i].species}"/>
-                                                                    <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
                                                                         <c:set var="select" value=""/>
                                                                         <c:if test="${i==0}">
                                                                             <c:set var="select" value="selected"/>
                                                                         </c:if>
                                                                         <li class="${select}">
+                                                                            <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
                                                                             <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
                                                                                 <span class="name"><c:out value="${species.commonname}"/></span>
                                                                                 <span class="extra"
                                                                                       title="${species.scientificname}"
                                                                                       style="overflow: hidden;">${species.scientificname}</span>
                                                                             </div>
+                                                                            </a>
                                                                         </li>
-                                                                    </a>
                                                                 </c:forEach>
                                                             </c:if>
                                                             <c:if test="${fn:length(relSpecies)>0}">
                                                                 <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
                                                                     <c:set var="species" value="${relSpecies[i].species}"/>
-                                                                    <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
                                                                         <c:set var="select" value=""/>
                                                                         <c:if test="${i==0}">
                                                                             <c:set var="select" value="selected"/>
                                                                         </c:if>
                                                                         <li class="${select}">
+                                                                            <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
                                                                             <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
                                                                                 <span class="name"><c:out value="${species.commonname}"/></span>
                                                                                 <span class="extra"
                                                                                       title="${species.scientificname}"
                                                                                       style="overflow: hidden;">${species.scientificname}</span>
                                                                             </div>
+                                                                            </a>
                                                                         </li>
-                                                                    </a>
                                                                 </c:forEach>
                                                             </c:if>
                                                         </ul>
