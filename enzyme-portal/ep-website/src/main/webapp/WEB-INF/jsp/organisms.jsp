@@ -32,28 +32,6 @@
 <div id="wrapper" class="container_24">
     <%@include file="header.jspf" %>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <style>
-
-    .node circle {
-      fill: #fff;
-      stroke: steelblue;
-      stroke-width: 1.5px;
-    }
-
-    .node {
-      font: 10px sans-serif;
-    }
-
-    .link {
-      fill: none;
-      stroke: #ccc;
-      stroke-width: 1.5px;
-    }
-
-    text {
-        font-size: 1.2em;
-    }
-    </style>
     <script>
     var data = {
         "name":"",
@@ -78,6 +56,17 @@
                 {
                     "name":"Dictyostelium discoideum",
                     "taxid":44689
+                },{
+                    "name":"Fungi",
+                    "children":[
+                        {
+                            "name":"Saccharomyces cerevisiae (strain ATCC 204508 / S288c)",
+                            "taxid":559292
+                        },{
+                            "name":"Schizosaccharomyces pombe (strain 972 / ATCC 24843)",
+                            "taxid":284812
+                        }
+                    ]
                 },{
                     "name":"Viridiplantae",
                     "children":[
@@ -155,10 +144,10 @@
     <script>
 
         var width = 960,
-                height = 900;
+                height = 800;
 
         var cluster = d3.layout.cluster()
-                .size([height, width - 200]);
+                .size([height, width - 250]);
 
         var diagonal = d3.svg.diagonal()
                 .projection(function(d) { return [d.y, d.x]; });
@@ -189,11 +178,14 @@
 
             node.append("a")
                     .attr("xlink:href", function(d){
-                        return "/enzymeportal/taxonomy?entryid=" + d.taxid + "&entryname=" + d.name + "&AMP;searchparams.type=KEYWORD&searchparams.previoustext=" + d.name + "&searchparams.start=0&searchparams.text="+ d.name;
+                        if(d.taxid) {
+                            return "/enzymeportal/taxonomy?entryid=" + d.taxid + "&entryname=" + d.name + "&AMP;searchparams.type=KEYWORD&searchparams.previoustext=" + d.name + "&searchparams.start=0&searchparams.text="+ d.name;
+                        }
                     })
                 .append("text")
                     .attr("dx", function(d) { return d.children ? -8 : 8; })
                     .attr("dy", 3)
+                    .attr("class", function(d){return d.taxid ? "endnode" : "midnode"})
                     .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
                     .text(function(d) { return d.name; });
 

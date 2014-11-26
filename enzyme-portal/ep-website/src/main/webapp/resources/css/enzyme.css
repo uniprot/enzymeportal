@@ -365,3 +365,32 @@ a.browse-box:hover {
     font-size: 123.9%;
     width:30em;
 }
+
+
+/* D3 
+------------------------*/
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node text{
+  font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
+  font-size: 1em;
+}
+
+.node text.endnode {
+    fill:#0C4452;
+}
+
+
+.node text.endnode:hover {
+    fill:#0B5448;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
