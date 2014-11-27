@@ -43,31 +43,10 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
         return "UniProtDomain{" + "uniprot_accession=" + uniprot_accession + ", uniport_name=" + uniprot_name + ", source=" + source + '}';
     }
     
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        hash = 83 * hash + Objects.hashCode(this.uniprot_accession);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final UniProtDomain other = (UniProtDomain) obj;
-//        if (!Objects.equals(this.uniprot_accession, other.uniprot_accession)) {
-//            return false;
-//        }
-//        return true;
-//    }
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.getUniport_name());
+        hash = 83 * hash + Objects.hashCode(this.uniprot_accession);
         return hash;
     }
 
@@ -80,11 +59,32 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
             return false;
         }
         final UniProtDomain other = (UniProtDomain) obj;
-        if (!Objects.equals(this.getUniport_name(), other.getUniport_name())) {
+        if (!Objects.equals(this.uniprot_accession, other.uniprot_accession)) {
             return false;
         }
         return true;
     }
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        hash = 53 * hash + Objects.hashCode(this.getUniport_name());
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final UniProtDomain other = (UniProtDomain) obj;
+//        if (!Objects.equals(this.getUniport_name(), other.getUniport_name())) {
+//            return false;
+//        }
+//        return true;
+//    }
     
     
     
