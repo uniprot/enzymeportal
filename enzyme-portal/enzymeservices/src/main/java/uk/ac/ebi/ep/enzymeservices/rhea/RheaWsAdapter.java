@@ -11,7 +11,6 @@ import org.xml_cml.schema.cml2.react.ProductList;
 import org.xml_cml.schema.cml2.react.Reactant;
 import org.xml_cml.schema.cml2.react.ReactantList;
 import org.xml_cml.schema.cml2.react.Reaction;
-import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Equation;
 import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
@@ -48,8 +47,8 @@ public class RheaWsAdapter implements IRheaAdapter {
     public ReactionPathway getReactionPathway(Reaction reaction) {
         List<Object> reactionElements = reaction.getReactiveCentreAndMechanismAndReactantList();
         ReactionPathway reactionPathway = new ReactionPathway();
-        //EnzymeReaction enzymeReaction = new EnzymeReaction();
-         EnzymePortalReaction enzymeReaction = new EnzymePortalReaction();
+        EnzymeReaction enzymeReaction = new EnzymeReaction();
+         //EnzymePortalReaction enzymeReaction = new EnzymePortalReaction();
 //        reactionElements.get(0);
         Equation equation = new Equation();
         equation.setDirection(createEquationSymbol(reaction));
