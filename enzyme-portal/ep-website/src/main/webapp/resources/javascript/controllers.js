@@ -15,14 +15,16 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
                 params: {
                     name: val
                 }
-            }).then(function(response){    
+            }).then(function(response){
+            console.log(response);    
                 return $.map(response.data, function(s,i){
-                     return s.suggestion;
+                   
+                    return s.suggestion;
                 });   
                 
             });
         };
-        
+         
         $scope.getPathways = function(val) {
             return $http.get('/enzymeportal/service/pathways', {
                 params: {

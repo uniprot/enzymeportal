@@ -358,12 +358,6 @@ public abstract class AbstractController {
                         new DiseasesPredicate(diseasesFilter));
                 
 
-
-
-
-
-                //adapting the sequece code
-
                 // Create a new SearchResults, don't modify the one in session
                 SearchResults sr = new SearchResults();
 

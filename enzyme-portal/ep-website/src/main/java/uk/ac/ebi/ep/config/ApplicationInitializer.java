@@ -33,8 +33,9 @@ public class ApplicationInitializer   implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(ApplicationContext.class);
         // rootContext.register(DataConfig.class);
-       // rootContext.getEnvironment().setDefaultProfiles("uzpdev","uzprel");
-        rootContext.getEnvironment().setActiveProfiles("uzpdev");
+       // rootContext.getEnvironment().setDefaultProfiles("uzpdev","uzppro");
+        //rootContext.getEnvironment().setActiveProfiles("uzppro");
+         rootContext.getEnvironment().setActiveProfiles("uzpdev");
        // rootContext.refresh();
       
         rootContext.setDisplayName("ep-website");

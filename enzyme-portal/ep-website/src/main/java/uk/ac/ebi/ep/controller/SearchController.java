@@ -35,12 +35,12 @@ import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Config;
-import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.entry.Field;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.data.enzyme.model.CountableMolecules;
 import uk.ac.ebi.ep.data.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Molecule;
 import uk.ac.ebi.ep.data.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
@@ -162,7 +162,7 @@ public class SearchController extends AbstractController {
                 enzymeModel.setRequestedfield(requestedField.name());
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 addToHistory(session, accession);
-                
+
                 // If we got here from a bookmark, the summary might not be cached:
                 String summId = Functions.getSummaryBasketId(enzymeModel);
                 @SuppressWarnings("unchecked")
@@ -172,7 +172,7 @@ public class SearchController extends AbstractController {
                             (EnzymeSummary) enzymeModel));
                 } else if (sls.get(summId) == null) {
                     sls.put(summId, enzymeModel);
-            }
+                }
             }
         } catch (EnzymeRetrieverException ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
@@ -230,8 +230,8 @@ public class SearchController extends AbstractController {
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Reactions and Pathways");
                 ReactionPathway pathway = new ReactionPathway();
-                //EnzymeReaction reaction = new EnzymeReaction();
-                EnzymePortalReaction reaction = new EnzymePortalReaction();
+                EnzymeReaction reaction = new EnzymeReaction();
+
                 reaction.setName(ERROR);
                 pathway.setReaction(reaction);
                 enzymeModel.getReactionpathway().add(0, pathway);
@@ -476,7 +476,6 @@ public class SearchController extends AbstractController {
         SearchResults results = null;
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
         results = finder.getEnzymes(searchParameters);
-        System.out.println("result from finder : search controller 479 "+ results);
 
         return results;
     }
@@ -532,17 +531,22 @@ public class SearchController extends AbstractController {
     @ResponseBody
     @RequestMapping("/service/search")
     public List<Suggestion> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
-        if (name != null) {
+        if (name != null && name.length() > 3) {
             name = String.format("%%%s%%", name);
-            
+
+            System.out.println("auto suggest ......");
+            List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(name.trim());
            
-            
-         List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(name);
-         
-            return suggestions.stream().distinct().collect(Collectors.toList());
-        } else {
-            return new ArrayList<>();
+            if (suggestions != null && !suggestions.isEmpty()) {
+                return suggestions.stream().distinct().collect(Collectors.toList());
+            } else {
+                return new ArrayList<>();
+            }
+
         }
+
+        return new ArrayList<>();
+
     }
 
     public String resolveSpecialCharacters(String data) {

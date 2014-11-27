@@ -67,7 +67,7 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
             List<HandlerMethodArgumentResolver> argumentResolvers) {
         
         PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
-        resolver.setFallbackPageable(new PageRequest(1, 5));
+        resolver.setFallbackPageable(new PageRequest(1, 10));
         
         argumentResolvers.add(resolver);
 
