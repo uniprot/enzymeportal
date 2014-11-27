@@ -164,12 +164,12 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
     @Transactional(readOnly = true)
     @Override
-    public List<Taxonomy> findModelOrganisms() {
+    public List<Taxonomy> getCountForOrganisms(List<Long> taxids) {
 
         JPAQuery query = new JPAQuery(entityManager);
         // List<Tuple> tuple =    query.from($).groupBy($.taxId,$.scientificName,$.commonName).orderBy($.taxId.count().desc()).limit(11).list($.taxId,$.scientificName,$.commonName,$.taxId.count());
 
-        List<Taxonomy> result = query.from($).groupBy($.taxId, $.scientificName, $.commonName).orderBy($.taxId.count().desc()).limit(20).
+        List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).groupBy($.taxId, $.scientificName, $.commonName).
                 list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
 
         return result;

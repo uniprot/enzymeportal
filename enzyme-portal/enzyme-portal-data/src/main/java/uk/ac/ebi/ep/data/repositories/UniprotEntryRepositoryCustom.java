@@ -35,7 +35,7 @@ public interface UniprotEntryRepositoryCustom {
 
     List<String> filterEnzymesInAccessions(List<String> accessions);
 
-    List<Taxonomy> findModelOrganisms();
+    List<Taxonomy> getCountForOrganisms(List<Long> taxids);
 
     List<String> findAccessionsByTaxId(Long taxId);
 

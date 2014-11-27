@@ -13,7 +13,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %>
 <!DOCTYPE html>
-<html>
+<html ng-app="enzyme-portal-app">
 <head>
     <c:set var="pageTitle" value="Model Organisms"/>
     <%@include file="head.jspf" %>
@@ -33,165 +33,14 @@
     <%@include file="header.jspf" %>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
-    var data = {
-        "name":"",
-        "children":[
-        {
-            "name":"Bacteria",
-            "children":[
-                {
-                    "name":"Bacillus subtilis (strain 168)", 
-                    "taxid":224308
-                },{
-                    "name":"Escherichia coli (strain K12)", 
-                    "taxid":83333
-                },{
-                    "name":"Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)", 
-                    "taxid":83332
-                }
-        ]},
-        {
-            "name":"Eukaryota",
-            "children":[
-                {
-                    "name":"Dictyostelium discoideum",
-                    "taxid":44689
-                },{
-                    "name":"Fungi",
-                    "children":[
-                        {
-                            "name":"Saccharomyces cerevisiae (strain ATCC 204508 / S288c)",
-                            "taxid":559292
-                        },{
-                            "name":"Schizosaccharomyces pombe (strain 972 / ATCC 24843)",
-                            "taxid":284812
-                        }
-                    ]
-                },{
-                    "name":"Viridiplantae",
-                    "children":[
-                        {
-                            "name":"Oryza sativa subsp. japonica",
-                            "taxid":39947
-                        },{
-                            "name":"Arabidopsis thaliana",
-                            "taxid":3702
-                        }
-                    ]
-                },{
-                    "name":"Metazoa",
-                    "children":[
-                        {
-                            "name":"Ecdysozoa",
-                            "children":[{
-                                    "name":"Drosophila melanogaster",
-                                    "taxid":7227
-                                },{
-                                    "name":"Caenorhabditis elegans",
-                                    "taxid":6239
-                                }
-                            ]
-                        },
-                        {
-                            "name":"Vertebrata",
-                            "children":[
-                                {
-                                    "name":"Danio rerio",
-                                    "taxid":7955
-                                },{
-                                    "name":"Mammalia",
-                                    "children":[
-                                        {
-                                            "name":"Bos taurus",
-                                            "taxid":9913
-                                        },{
-                                            "name":"Euarchontoglires",
-                                            "children":[
-                                                {
-                                                    "name":"Homo sapiens",
-                                                    "taxid":9606
-                                                },{
-                                                    "name":"Rodentia",
-                                                    "children":[{
-                                                        "name":"Mus musculus",
-                                                        "taxid":10090
-                                                    },{
-                                                        "name":"Rattus norvegicus",
-                                                        "taxid":10116
-                                                    }]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-
-            ]
-        }
-        ]
-    };
+  
 
     </script>
 
     <div id="content" role="main" class="grid_24 clearfix">
         <h2>Taxonomy</h2>
-        <div id="taxonomy-tree"></div>
+        <div id="taxonomy-tree" taxonomy-tree></div>
     </div>
-
-    <script>
-
-        var width = 960,
-                height = 800;
-
-        var cluster = d3.layout.cluster()
-                .size([height, width - 250]);
-
-        var diagonal = d3.svg.diagonal()
-                .projection(function(d) { return [d.y, d.x]; });
-
-        var svg = d3.select("#taxonomy-tree").append("svg")
-                .attr("width", width)
-                .attr("height", height)
-                .append("g")
-                .attr("transform", "translate(40,0)");
-
-            var nodes = cluster.nodes(data),
-                    links = cluster.links(nodes);
-
-            var link = svg.selectAll(".link")
-                    .data(links)
-                    .enter().append("path")
-                    .attr("class", "link")
-                    .attr("d", diagonal);
-
-            var node = svg.selectAll(".node")
-                    .data(nodes)
-                    .enter().append("g")
-                    .attr("class", "node")
-                    .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-
-            node.append("circle")
-                    .attr("r", 4.5);
-
-            node.append("a")
-                    .attr("xlink:href", function(d){
-                        if(d.taxid) {
-                            return "/enzymeportal/taxonomy?entryid=" + d.taxid + "&entryname=" + d.name + "&AMP;searchparams.type=KEYWORD&searchparams.previoustext=" + d.name + "&searchparams.start=0&searchparams.text="+ d.name;
-                        }
-                    })
-                .append("text")
-                    .attr("dx", function(d) { return d.children ? -8 : 8; })
-                    .attr("dy", 3)
-                    .attr("class", function(d){return d.taxid ? "endnode" : "midnode"})
-                    .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-                    .text(function(d) { return d.name; });
-
-        d3.select(self.frameElement).style("height", height + "px");
-
-    </script>
 
     <%@include file="footer.jspf" %>
 </div>

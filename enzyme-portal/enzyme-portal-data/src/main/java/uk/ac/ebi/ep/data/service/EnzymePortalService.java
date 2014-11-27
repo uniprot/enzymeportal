@@ -274,8 +274,8 @@ public class EnzymePortalService {
     }
     
     @Transactional(readOnly = true)
-    public List<Taxonomy> findModelOrganisms() {
-        return uniprotEntryRepository.findModelOrganisms();
+    public List<Taxonomy> getCountForOrganisms(List<Long> taxids) {
+        return uniprotEntryRepository.getCountForOrganisms(taxids);
     }
     
     public List<UniprotEntry> findEnzymesByTaxId(Long taxId) {

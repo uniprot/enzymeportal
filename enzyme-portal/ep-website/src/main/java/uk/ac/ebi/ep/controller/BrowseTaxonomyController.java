@@ -17,11 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -49,18 +45,19 @@ public class BrowseTaxonomyController extends AbstractController {
     private static final String RESULT = "/tsearch";
     private static final String SEARCH_BY_TAX_ID = "/taxonomy";
     private static final String FILTER_BY_FACETS = "/taxonomy/filter";
+    private static final String GET_COUNT_FOR_ORGANISMS = "/service/organism-count";
+
 
     private static final int SEARCH_PAGESIZE = 10;
 
     @RequestMapping(value = BROWSE_TAXONOMY, method = RequestMethod.GET)
     public String showPathways(Model model) {
         //EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
-
-        List<Taxonomy> organisms = enzymePortalService.findModelOrganisms();
+//        List<Taxonomy> organisms = enzymePortalService.getCountForOrganisms();
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
-        model.addAttribute("organisms", organisms);
+//        model.addAttribute("organisms", organisms);
 
         return ORGANISMS;
     }
@@ -322,7 +319,7 @@ public class BrowseTaxonomyController extends AbstractController {
         searchModel.setSearchresults(searchResults);
         model.addAttribute("searchModel", searchModel);
 
-      
+
 
         model.addAttribute("searchFilter", filters);
         List<UniprotEntry> result = page.getContent();
@@ -435,6 +432,12 @@ public class BrowseTaxonomyController extends AbstractController {
 
         }
 
+    }
+
+    @ResponseBody
+    @RequestMapping(value = GET_COUNT_FOR_ORGANISMS, method = RequestMethod.GET)
+    public List<Taxonomy> getCountForOrganisms(@RequestParam(value = "taxids", required = true) List<Long> taxids) {
+        return enzymePortalService.getCountForOrganisms(taxids);
     }
 
 }
