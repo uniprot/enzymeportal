@@ -24,6 +24,7 @@ import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
@@ -255,9 +256,9 @@ public class EnzymePortalService {
     }
     
     @Transactional(readOnly = true)
-    public EnzymePortalReaction findReactionByAccession(String accession) {
+    public  List<EnzymeReaction> findReactionsByAccession(String accession) {
         
-        return reactionRepository.findReactionByAccession(accession);
+        return reactionRepository.findReactionsByAccession(accession);
     }
     
     @Transactional(readOnly = true)

@@ -26,6 +26,7 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,28 +47,28 @@ import uk.ac.ebi.ep.data.search.model.Species;
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 
-//@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {
-//    @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
-//    @NamedAttributeNode("enzymePortalPathwaysSet"),
-//    @NamedAttributeNode("enzymePortalReactionSet"),
-//    @NamedAttributeNode("enzymePortalSummarySet"),
-//    @NamedAttributeNode("enzymePortalCompoundSet"),
-//    @NamedAttributeNode("enzymePortalDiseaseSet"),
-//    @NamedAttributeNode("uniprotXrefSet"),
-//    @NamedAttributeNode("enzymePortalEcNumbersSet")
-//},
-//        subgraphs = {
-//            @NamedSubgraph(
-//                    name = "relatedProteinsId",
-//                    attributeNodes = {
-//                        @NamedAttributeNode("uniprotEntrySet")}
-//            )
-//        }
-//)
+@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {
+    @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
+    @NamedAttributeNode("enzymePortalPathwaysSet"),
+    @NamedAttributeNode("enzymePortalReactionSet"),
+    @NamedAttributeNode("enzymePortalSummarySet"),
+    @NamedAttributeNode("enzymePortalCompoundSet"),
+    @NamedAttributeNode("enzymePortalDiseaseSet"),
+    @NamedAttributeNode("uniprotXrefSet"),
+    @NamedAttributeNode("enzymePortalEcNumbersSet")
+},
+        subgraphs = {
+            @NamedSubgraph(
+                    name = "relatedProteinsId",
+                    attributeNodes = {
+                        @NamedAttributeNode("uniprotEntrySet")}
+            )
+        }
+)
 
-@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {  
-    @NamedAttributeNode("relatedProteinsId")
-})
+//@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {  
+//    @NamedAttributeNode("relatedProteinsId")
+//})
 
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),

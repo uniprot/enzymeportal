@@ -7,7 +7,7 @@ package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
+import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 
 /**
  *
@@ -16,5 +16,5 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 @NoRepositoryBean
 public interface EnzymePortalReactionRepositoryCustom {
      List<String> findAccessionsByReactionId(String reactionId);
-      EnzymePortalReaction findReactionByAccession(String accession);
+      List<EnzymeReaction> findReactionsByAccession(String accession);
 }

@@ -6,12 +6,13 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.Projections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalReaction;
+import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 
 /**
  *
@@ -35,14 +36,15 @@ public class EnzymePortalReactionRepositoryImpl implements EnzymePortalReactionR
     }
 
     @Override
-    public EnzymePortalReaction findReactionByAccession(String accession) {
+    public List<EnzymeReaction> findReactionsByAccession(String accession) {
 
         JPAQuery query = new JPAQuery(entityManager);
 
-        EnzymePortalReaction reaction = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession)).uniqueResult($);
+        List<EnzymeReaction> reactions = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
+                .list(Projections.constructor(EnzymeReaction.class, $.reactionId, $.reactionName));
                
 
-        return reaction;
+        return reactions;
     }
 
 }

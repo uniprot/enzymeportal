@@ -24,7 +24,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 
 /**
  *
@@ -41,7 +40,7 @@ import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
     @NamedQuery(name = "EnzymePortalReaction.findByReactionSource", query = "SELECT e FROM EnzymePortalReaction e WHERE e.reactionSource = :reactionSource"),
     @NamedQuery(name = "EnzymePortalReaction.findByRelationship", query = "SELECT e FROM EnzymePortalReaction e WHERE e.relationship = :relationship"),
     @NamedQuery(name = "EnzymePortalReaction.findByUrl", query = "SELECT e FROM EnzymePortalReaction e WHERE e.url = :url")})
-public class EnzymePortalReaction extends EnzymeReaction implements Serializable {
+public class EnzymePortalReaction   implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -167,15 +166,15 @@ public class EnzymePortalReaction extends EnzymeReaction implements Serializable
     }
 
 
-        @Override
-    public String getId() {
-        return reactionId;
-    }
-
-    @Override
-    public String getName() {
-        return reactionName;
-    }
+//        @Override
+//    public String getId() {
+//        return reactionId;
+//    }
+//
+//    @Override
+//    public String getName() {
+//        return reactionName;
+//    }
 
 
     

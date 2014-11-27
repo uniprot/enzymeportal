@@ -146,29 +146,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
     }
 
-//    @Override
-//    public List<UniprotEntry> findEnzymeByAccessions(List<String> accessions) {
-//        EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
-//
-//        eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-//                "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-//                "uniprotXrefSet", "enzymePortalEcNumbersSet");
-//
-//        JPAQuery query = new JPAQuery(entityManager);
-//        query.setHint("javax.persistence.fetchgraph", eGraph);
-//
-//        BooleanBuilder builder = new BooleanBuilder();
-//
-//        accessions.stream().forEach((accession) -> {
-//
-//            builder.or($.accession.equalsIgnoreCase(accession));
-//
-//        });
-//
-//        query.from($).where(builder.and($.proteinName.equalsIgnoreCase(proteinName)));
-//        return query.distinct().list($).stream().distinct().collect(Collectors.toList());
-//
-//    }
+
     @Override
     public List<UniprotEntry> findEnzymesByAccession(String accession) {
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");

@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Profile("uzprel")
+@Profile("uzppro")
 
 public @interface Prod {
 

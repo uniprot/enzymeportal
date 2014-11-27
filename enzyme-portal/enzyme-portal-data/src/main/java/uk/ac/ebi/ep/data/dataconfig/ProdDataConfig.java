@@ -23,7 +23,7 @@ import org.springframework.core.env.Environment;
  */
 @Configuration
 @Prod
-@PropertySource({"classpath:ep-db-uzprel.properties"})
+@PropertySource({"classpath:ep-db-uzppro.properties"})
 public class ProdDataConfig implements iDataConfig{
      @Autowired
     private Environment env;

@@ -127,13 +127,9 @@ public class EnzymeAccession implements Serializable {
      * {@link Compound }
      *
      *
+     * @return 
      */
-//    public List<EnzymePortalCompound> getCompounds() {
-//        if (compounds == null) {
-//            compounds = new ArrayList<EnzymePortalCompound>();
-//        }
-//        return this.compounds;
-//    }
+
     public List<Compound> getCompounds() {
         if (compounds == null) {
             compounds = new ArrayList<>();
@@ -162,13 +158,9 @@ public class EnzymeAccession implements Serializable {
      * {@link EnzymePortalDisease }
      *
      *
+     * @return 
      */
-//    public List<EnzymePortalDisease> getDiseases() {
-//        if (diseases == null) {
-//            diseases = new ArrayList<EnzymePortalDisease>();
-//        }
-//        return this.diseases;
-//    }
+
     public List<Disease> getDiseases() {
         if (diseases == null) {
             diseases = new ArrayList<>();

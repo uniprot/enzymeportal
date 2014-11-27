@@ -237,7 +237,7 @@
                 <directory>${ep.config.dir}</directory>
                 <includes>
                     
-                    <include>ep-db-uzprel.properties</include>
+                    <include>ep-db-uzppro.properties</include>
                     <include>ep-db-uzpdev.properties</include>
                     <include>ep-db-${ep.db.config}.properties</include>
                     <!--                 This contains the BioPortal API key needed for
@@ -264,9 +264,9 @@
         </profile>
         <profile>
             <!--             Profile to work with the release database -->
-            <id>uzprel</id>
+            <id>uzppro</id>
             <properties>
-                <ep.db.config>uzprel</ep.db.config>
+                <ep.db.config>uzppro</ep.db.config>
             </properties>
         </profile>
         

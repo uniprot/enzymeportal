@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalEcNumbers;
 
 /**
@@ -17,15 +18,15 @@ import uk.ac.ebi.ep.data.domain.QEnzymePortalEcNumbers;
  * @author joseph
  */
 public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumbersRepositoryCustom {
-    
+
     @PersistenceContext
     private EntityManager entityManager;
     private static final QEnzymePortalEcNumbers $ = QEnzymePortalEcNumbers.enzymePortalEcNumbers;
-    
+
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
+
     @Override
     public List<String> findAccessionsByEc(String ecNumber) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -41,5 +42,13 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
 //                  enzymes.add(ec.getUniprotAccession().getAccession());
 //            });
         return enzymes;
+    }
+
+    @Override
+    public List<EnzymePortalEcNumbers> findByEcNumber(String ecNumber) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<EnzymePortalEcNumbers> ecs = query.from($).where($.ecNumber.equalsIgnoreCase(ecNumber)).distinct().list($);
+
+        return ecs.stream().collect(Collectors.toList());
     }
 }

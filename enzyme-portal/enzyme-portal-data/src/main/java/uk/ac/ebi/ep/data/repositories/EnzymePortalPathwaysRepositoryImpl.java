@@ -65,7 +65,7 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
     public List<Pathway> findPathwaysByName(String pathwayName) {
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<Pathway> entries = query.from($).where($.pathwayName.like(pathwayName))
+        List<Pathway> entries = query.from($).where($.pathwayName.toLowerCase().like(pathwayName))
                 .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName));
 
         return entries.stream().distinct().collect(Collectors.toList());
