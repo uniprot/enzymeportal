@@ -24,7 +24,6 @@ import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
@@ -33,6 +32,7 @@ import uk.ac.ebi.ep.data.enzyme.model.EcClass;
 import uk.ac.ebi.ep.data.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeHierarchy;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
+import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Molecule;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.enzyme.model.ProteinStructure;
@@ -275,7 +275,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 
             ProteinStructure structure = new ProteinStructure();
             structure.setId(pdbId);
-            structure.setName("<not availabe>");
+            structure.setName("not available");
 
             //ProteinStructure structure = getPdbInfo(pdbId);
             model.getProteinstructure().add(structure);
@@ -486,7 +486,7 @@ public class EnzymeRetriever extends EnzymeFinder {
             throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
         }
 
-       
+        System.out.println("RHEA CML "+ reactions);
 
         for (Reaction reaction : reactions) {
 
@@ -518,12 +518,14 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         ReactionPathway reactionPathway = new ReactionPathway();
 
-        EnzymePortalReaction reaction = super.getService().findReactionByAccession(uniprotAccession);
+         List<EnzymeReaction> reaction = super.getService().findReactionsByAccession(uniprotAccession);
+         System.out.println("reactions found :: "+ reaction);
         List<Pathway> pathways = super.getService().findPathwaysByAccession(uniprotAccession);
         reactionPathway.setPathways(pathways);
 
-      
-        reactionPathway.setReaction(reaction);
+      if(reaction != null && !reaction.isEmpty()){
+        reactionPathway.setReaction(reaction.stream().findFirst().get());
+      }
 
         //model.getReactionpathway().add(reactionPathway);
         rpList.add(reactionPathway);
@@ -534,7 +536,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         // in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
         LOGGER.debug(" -RP- before queryRheaWsForReactions");
-        model = queryRheaWsForReactions(model);
+        model = queryRheaWsForReactions(model);//uncomment to query Rhea
 
         return model;
     }

@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.base.common;
 import java.util.Collection;
 import org.apache.commons.collections.Predicate;
 import uk.ac.ebi.ep.data.search.model.Compound;
+import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 
 
@@ -38,12 +39,14 @@ public class CompoundsPredicate implements Predicate {
 		boolean eval = false;
 		if (obj instanceof EnzymeSummary){
 			EnzymeSummary es = (EnzymeSummary) obj;
-            for (Compound compound : es.getCompounds()) {
+            for (EnzymeAccession ea : es.getRelatedspecies()) {
+               for(Compound compound : ea.getCompounds()){
                 String id = compound.getName();
                 if (compoundsFilter.contains(id)){
                     eval = true;
                     break;
                 }
+               }
             }
 		}
 		return eval;
