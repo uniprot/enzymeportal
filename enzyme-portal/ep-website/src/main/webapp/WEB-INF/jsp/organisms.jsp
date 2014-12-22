@@ -38,7 +38,7 @@
     </script>
 
     <div id="content" role="main" class="grid_24 clearfix">
-        <h2>Taxonomy</h2>
+        <h1>Taxonomy</h1>
         <div id="taxonomy-tree" taxonomy-tree></div>
     </div>
 

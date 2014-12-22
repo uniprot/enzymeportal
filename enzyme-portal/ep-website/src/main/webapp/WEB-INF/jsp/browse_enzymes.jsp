@@ -44,6 +44,7 @@
             <div id="content" role="main" class="grid_24 clearfix">
 
                  <div class="grid_24">
+                     <h1>Enzyme Classification</h1>
                     <h3 >Browse Enzymes By EC classification</h3><br/>
                     <div>
                         
