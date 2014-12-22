@@ -69,12 +69,6 @@
                     <a target="_blanc" href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
                         class="icon icon-static" data-icon="f">Feedback</a>
                 </li>
-                <li class="functional">
-                    <a href="https://twitter.com/share"
-                        class="icon icon-functional" data-icon="r"
-                        data-dnt="true" data-count="none"
-                        data-via="twitterapi">Share</a>
-                </li>
                 <li class="functional
                         ${fn:containsIgnoreCase(pageTitle, 'compare')?
                         'active' : ''}">
