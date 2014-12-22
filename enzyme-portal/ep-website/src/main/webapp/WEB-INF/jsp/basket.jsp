@@ -56,6 +56,7 @@
                 <div>
                 <section class="grid_19 alpha">
                     <%@include file="util/prioritiseSpecies.jsp" %>
+                    <c:set var="showCheckbox" value="false"/>
                     <%@include file="summary.jspf" %>
                 </section>
                 <section class="grid_4">
