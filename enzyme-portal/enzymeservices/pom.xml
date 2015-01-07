@@ -33,7 +33,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.11-SNAPSHOT</version>
         </dependency>
 
       

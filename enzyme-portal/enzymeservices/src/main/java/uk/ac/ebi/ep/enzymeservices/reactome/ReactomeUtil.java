@@ -48,7 +48,7 @@ public class ReactomeUtil {
    }
 
     public static String getReactionDescription(Object eventObj) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Event event = (Event)eventObj;
         List<Summation> summations = event.getSummation();
         for (Summation summation:summations) {

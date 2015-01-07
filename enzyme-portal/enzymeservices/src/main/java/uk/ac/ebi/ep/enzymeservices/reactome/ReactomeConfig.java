@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
 import org.apache.log4j.Logger;
 
 public class ReactomeConfig implements ReactomeConfigMBean {
@@ -29,9 +28,12 @@ public class ReactomeConfig implements ReactomeConfigMBean {
 	private String wsBaseUrl = 
 			"http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
 	
-	private String eventBaseUrl =
-	        "http://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID=";
+//	private String eventBaseUrl =
+//	        "http://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID=";
 	
+        private String eventBaseUrl =
+	        "http://www.reactome.org/PathwayBrowser/#";
+        
 	public void setUseProxy(boolean useProxy) {
 		this.useProxy = useProxy;
 	}

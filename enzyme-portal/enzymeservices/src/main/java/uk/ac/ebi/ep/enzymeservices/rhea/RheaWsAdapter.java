@@ -77,6 +77,7 @@ public class RheaWsAdapter implements IRheaAdapter {
         enzymeReaction.setName(reactionTitle);
         enzymeReaction.setEquation(equation);
         reactionPathway.setReaction( enzymeReaction);
+        reactionPathway.getReactions().add(enzymeReaction);
         List<Object> mecList = getMechanismLinks(linkList);
         reactionPathway.setMechanism(mecList);
         List<Object> pwList = getPathwayLinks(linkList);
