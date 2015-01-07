@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Ignore;
 import org.junit.Test;
 import uk.ac.ebi.cdb.webservice.Result;
-//@Ignore
+@Ignore
 public class CitexploreLiteratureCallerTest {
 
 	@Test

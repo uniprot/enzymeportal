@@ -27,24 +27,6 @@
     </organization>
     <developers>
         <developer>
-            <id>hongcao</id>
-            <name>Hong Cao</name>
-            <email>hongcao@ebi.ac.uk</email>
-            <organization>EMBL-EBI</organization>
-            <roles>
-                <role>Ex-developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>rafalcan</id>
-            <name>Rafael Alcántara</name>
-            <email>rafalcan@ebi.ac.uk</email>
-            <organization>EMBL-EBI</organization>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
             <id>joseph</id>
             <name>Joseph Onwubiko</name>
             <email>joseph@ebi.ac.uk</email>
@@ -53,19 +35,19 @@
                 <role>Developer</role>
             </roles>
         </developer>
-        <developer>
-            <id>pmatos</id>
-            <name>Paula de Matos</name>
-            <email>pmatos@ebi.ac.uk</email>
+           <developer>
+            <id>xwatkins</id>
+            <name>Xavier Watkins</name>
+            <email>xwatkins@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
-                <role>Coordinator</role>
+                <role>Developer</role>
             </roles>
         </developer>
         <developer>
-            <id>steinbeck</id>
-            <name>Christoph Steinbeck</name>
-            <email>steinbeck@ebi.ac.uk</email>
+            <id>martin</id>
+            <name>Maria-Jesus Martin</name>
+            <email>martin@ebi.ac.uk</email>
             <organization>EMBL-EBI</organization>
             <roles>
                 <role>Team leader</role>
@@ -378,7 +360,7 @@
         <github.global.server>github</github.global.server>
     </properties>
     
-<!--    mainly used in the latext ep development-->
+<!--    mainly used in the latext ep development if BOM is to be used-->
 <!--    <dependencyManagement>
         <dependencies>
             
@@ -454,7 +436,7 @@
     </dependencyManagement>-->
     
     <modules>
-                <module>ep-domain</module>
+<!--                <module>ep-domain</module>
         <module>ep-web-client</module>
         <module>ep-core</module>
         <module>ep-util</module>
@@ -470,11 +452,16 @@
         <module>bioportal-adapter</module>
         <module>SitemapGenerator</module>
         <module>rhea-adapter</module>
-        <module>chembl-adapter</module>
+        <module>chembl-adapter</module>-->
         
-
-<!--        <module>enzyme-portal-data</module>
-        <module>ep-website</module>-->
+        <module>SitemapGenerator</module>
+        <module>ep-parser</module>
+        <module>enzyme-portal-data</module>
+        <module>ebeye-rest-adapter</module>
+        <module>enzymeservices</module>
+        <module>ep-base</module>
+        <module>ep-website</module>
+        
     </modules>
     
     <profiles>
