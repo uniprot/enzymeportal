@@ -22,8 +22,9 @@
 <div id="reactionContent" class="summary">
     <h2><c:out value="${enzymeModel.name}"/></h2>
     <c:set var="reactionpathways" value="${enzymeModel.reactionpathway}"/>
+     <c:set var="pathways" value="${enzymeModel.pathways}"/>
     <c:choose>
-        <c:when test="${empty reactionpathways}">
+        <c:when test="${empty reactionpathways && empty pathways}">
             <p>There is no information available about reactions catalised by
                 this enzyme.</p>
             </c:when>
@@ -36,16 +37,20 @@
             </c:if>
             <c:forEach items="${reactionpathways}" var="reactionpathway"
                        varStatus="rpVs">
+                 <c:set var="reactions" value="${reactionpathway.reactions}"/>
                 <c:set var="reaction" value="${reactionpathway.reaction}"/>
                 <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
                 <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
 
-                <div class="reaction block">
-                    <c:if test="${reaction == null}">
+                
+                    <c:if test="${reactions == null}">
                         <b><spring:message code="label.entry.reactionsPathways.found.text.alt" arguments="${pathwaysSize}"/></b>
                     </c:if>
-                    <c:if test="${reaction != null}">
+                    <c:if test="${reactions != null}">
+                        
+                <c:forEach items="${reactions}" var="reaction" varStatus="loop">          
                         <c:set var="rheaEntryUrl" value="${rheaEntryBaseUrl}${reaction.id}"/>
+            <div class="reaction block">            
                         <b>
                             <!--<a target="blank" href="${rheaEntryUrl}"><c:out value="${reaction.name}" escapeXml="false"/></a>-->
                             <c:out value="${reaction.name}" escapeXml="false"/> 
@@ -54,6 +59,22 @@
                         <div id="bjs" style="margin-top: 10px">
                          
                         </div>
+                        
+                            <script>
+
+                            window.onload = function() {
+                            var instance = new Biojs.Rheaction({
+                            target: 'bjs',
+                            id:'${reaction.id}',
+                            proxyUrl:'${pageContext.request.contextPath}/proxy.jsp'
+
+                            });
+                            //instance.setId("${reaction.id}");
+                            //console.log(${reaction.id});
+                            }; 
+                            </script>                    
+                        
+                        
                         <%--
                         <div class="equation hidden">
                             <table>
@@ -144,30 +165,38 @@
                                 </div>
                             </c:if>
                         </div>
-                            
-                            <script>
+                           
+<!--                            <script>
                                                                                     
   window.onload = function() {
  var instance = new Biojs.Rheaction({
-  target: 'bjs',
+  target: 'bjs${reaction.id}',
   id:'${reaction.id}',
   proxyUrl:'${pageContext.request.contextPath}/proxy.jsp'
     
  });
  //instance.setId("${reaction.id}");
-  //console.log(instance);
+  //console.log(${reaction.id});
  }; 
-                            </script>             
+                            </script>             -->
                             
-                            
-                            
-                    </c:if>
+                 </c:forEach> 
+ </div>
+            </c:if>
+ 
+            </c:forEach>
+
+                <div style="margin-top: 10px"></div>
+                 
+                    <c:set var="pathwaysSize" value="${fn:length(pathways)}"/>
+                  <c:set var="rpVs.index" value="${fn:length(reactionpathways)}"/>
                     <c:if test="${pathwaysSize>0}" >
-                        <c:if test="${reaction != null}">
+                        <c:if test="${reactionpathways != null}">
                             <spring:message code="label.entry.reactionsPathways.found.text" arguments="${pathwaysSize}"/>
                         </c:if>
                         <div id="pathways-${rpVs.index}">
-                            <c:forEach var="pathway" items="${reactionpathway.pathways}">
+                                 <c:forEach var="pathway" items="${pathways}">
+                               
                                 <div id="pathway-${rpVs.index}-${pathway.id}">
                                     <fieldset>
                                         <legend>Loading pathway (${pathway.id})...</legend>
@@ -191,8 +220,8 @@
                             </c:forEach>
                         </div>
                     </c:if>
-                </div>
-            </c:forEach>
+              
+          
             <div class="provenance">
                 <ul>
                     <li class="note_0">Data Source:
@@ -205,44 +234,5 @@
     </c:choose> 
 
 
-<!--    <script>
-        
-     window.onload = function() {
- var instance = new Biojs.Rheaction({
-  target: 'bjs',
-  id: '${reaction.id}',
-  //proxyUrl:'http://www.ebi.ac.uk/Tools/biojs/biojs/dependencies/proxy/proxy.php'
-   proxyUrl:'${pageContext.request.contextPath}/proxy'
- });
- //alert(instance);
-  console.log(instance);
- };
-  
-    </script>-->
-
-
-
-
-
-
-<!--                          <script>
-    
-                $(document).ready(function() {
-    var instance = new Biojs.Rheaction({
-     target: 'bjs',
-     id: '${reaction.id}',
-     proxyUrl:${pageContext.request.contextPath}/proxy.jsp
-     //proxyUrl:'http://www.ebi.ac.uk/Tools/biojs/biojs/dependencies/proxy/proxy.php'
-    });
-    
-    console.log(instance);
-    
-    
-    
-    
-    
-    
-                });
-            </script> -->
 
 </div>

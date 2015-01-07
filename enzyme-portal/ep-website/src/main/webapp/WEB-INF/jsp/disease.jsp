@@ -34,6 +34,7 @@
             <hr/>
             <br/>
             <section>
+         <c:if test="${fn:length(disease.evidences) > 0}">
             <h3>Disease Evidence</h3>
            
         <c:forEach items="${ev}" var="v">
@@ -42,6 +43,7 @@
 
             </ul>
         </c:forEach>
+            </c:if>
         <div class="note_0">
             <a class="note_0" href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}.html#section_comments" target="_blank">View disease evidence in UniProt</a>
         </div>

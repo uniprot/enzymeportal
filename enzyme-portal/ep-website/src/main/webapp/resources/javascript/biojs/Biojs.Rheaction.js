@@ -6,7 +6,7 @@ Biojs.Rheaction = Biojs.extend({constructor: function(a) {
         var a = this;
         var b = c.replace("RHEA:", "");
         this._rheaIdLabel = "RHEA_" + b;
-        if ("string" == (typeof this.opt.target)) {
+        if ("string" === (typeof this.opt.target)) {
             this._container = jQuery("#" + this.opt.target);
         } else {
             this.opt.target = "biojs_Rheaction_" + b;
@@ -42,7 +42,7 @@ Biojs.Rheaction = Biojs.extend({constructor: function(a) {
                 Biojs.console.log("ERROR requesting reaction. Response: " + g);
                 a._displayNoDataMessage();
             }};
-        if (this.opt.proxyUrl != undefined) {
+        if (this.opt.proxyUrl !== undefined) {
             b.url = this.opt.proxyUrl;
             b.data = [{name: "url", value: c}];
             b.dataType = "text";

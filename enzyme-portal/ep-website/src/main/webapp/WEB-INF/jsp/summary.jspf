@@ -19,9 +19,9 @@
     <input type="checkbox" class="forBasket"
            title="Select entry"
            value="${epfn:getSummaryBasketId(enzyme)}"/>
-    <c:if test='${not empty enzyme.name }'>
+    <c:if test='${not empty enzyme.proteinName }'>
         <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme">
-            <span class="enzymeName">${fn:substring(enzyme.name, 0, 100)}</span>
+            <span class="enzymeName">${fn:substring(enzyme.proteinName, 0, 100)}</span>
             <span class="hidden">${enzyme.uniprotid}</span>
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :

@@ -133,6 +133,7 @@ public class BrowseDiseasesController extends AbstractController {
             setLastSummaries(session, results.getSummaryentries());
             searchModel.setSearchresults(results);
             applyFilters(searchModel, request);
+             model.addAttribute("searchConfig", searchConfig);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
             clearHistory(session);

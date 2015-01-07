@@ -91,10 +91,10 @@
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Insulin+receptor">Insulin receptor</a>,
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Ceramide+glucosyltransferase">Ceramide glucosyltransferase</a>,
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Phenylalanine-4-hydroxylase">Phenylalanine-4-hydroxylase</a>,
-                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Cytochrome+P450+3A4">Cytochrome P450 3A4</a>,
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=3a40+cytochrome+p450">Cytochrome P450 3A4</a>,
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_1400.4">REACT_1400.4</a>
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_218811">REACT_218811</a>
              <hr/>
              <br/>
              <section>

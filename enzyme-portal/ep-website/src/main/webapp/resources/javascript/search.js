@@ -309,7 +309,7 @@ var displayedFilters = {};
 var maxNum = 20;
 
 function removeWhiteSpace(x) {
-    return x.replace(/^\s+|\s+$/gm,'');
+    return x.replace(/^\s+|\s+$/gm, '');
 }
 
 /**
@@ -321,15 +321,15 @@ function removeWhiteSpace(x) {
 function addCheckbox(filterGroup, obj, selected) {
     if (obj === '')
         return;
-   
+
     var cb = $('<input/>', {
         "type": "checkbox",
         "name": "searchparams." + filterGroup,
         "value": (filterGroup === 'species' ? obj.id : obj.name),
-         //"value":  obj.taxId ,
+        //"value":  obj.taxId ,
         onclick: "form.submit()"
     });
-   
+
     //submit this each time
 //             $('<input/>', {
 //        "type": "hidden",
@@ -337,26 +337,30 @@ function addCheckbox(filterGroup, obj, selected) {
 //        "value": obj.taxId
 //    }).appendTo("#filtersForm");
 
-    
-    
+
+
 
     if (selected)
         cb.attr("checked", "checked");
-    
 
-//    $('<input/>', {
-//        "type": "hidden",
-//        "name": "specieName",
-//        "value": obj.id
-//    }).appendTo("#filtersForm");   
-        
-        
-        
-   
-        
-        
-        
-        
+
+    $('<input/>', {
+        "type": "hidden",
+        "name": "taxId",
+        "value": obj.taxId
+    }).appendTo("#filtersForm");
+
+
+    $('<input/>', {
+        "type": "hidden",
+        "name": "organismName",
+        "value": obj.name
+    }).appendTo("#filtersForm");
+
+
+
+
+
     var label = $('<span>');
     if (obj.name) {
         label.text(obj.name);
@@ -379,7 +383,7 @@ function addCheckboxCompound(filterGroup, obj, selected) {
         "name": "searchparams." + filterGroup,
         //"value":$.trim(obj.name),
         //"value": obj.id,
-         "value":(filterGroup === 'compounds' ? removeWhiteSpace(obj.name) : obj.id),
+        "value": (filterGroup === 'compounds' ? removeWhiteSpace(obj.name) : obj.id),
         onclick: "form.submit()"
     });
     if (selected)
@@ -390,7 +394,7 @@ function addCheckboxCompound(filterGroup, obj, selected) {
 //        "name": "searchparams.compoundsFacet",
 //        "value": obj.name
 //    }).appendTo("#filtersForm");
-  
+
 
     //add the link to the source of this item 
     var link = $("<a>", {
@@ -446,7 +450,7 @@ function addCheckboxDisease(filterGroup, obj, selected) {
         "type": "checkbox",
         "name": "searchparams." + filterGroup,
         "value": (filterGroup === 'diseases' ? obj.name : obj.id),
-         //"value":  obj.id,
+        //"value":  obj.id,
         onclick: "form.submit()"
     });
     if (selected)
@@ -458,7 +462,7 @@ function addCheckboxDisease(filterGroup, obj, selected) {
 //        "value": obj.name
 //    }).appendTo("#filtersForm");
 
-    
+
 
     //add the link to the source of this item 
     var link = $("<a>", {
@@ -678,7 +682,6 @@ function ajaxBasket(id, checked) {
     var thisFunction = this;
     var params = {};
     params.id = id;
-    console.log("ID " + id);
     params.checked = checked;
     jQuery.ajax({
         dataType: "text",

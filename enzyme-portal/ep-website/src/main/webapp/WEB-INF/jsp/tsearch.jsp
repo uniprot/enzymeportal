@@ -18,8 +18,8 @@
 
 <body class="level2 ${totalfound eq 0? 'noresults' : ''}">
 
- <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
-
+<!-- <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>-->
+ <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
   <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
  
@@ -257,23 +257,23 @@
          <div class="clear"></div>
           <div class="line"></div>
           <div class="resultContent"> 
-        
+
               <c:if test="${not empty summaryEntries}">
         <c:forEach var="enzyme" items="${summaryEntries}">
          
             <c:if test="${not empty enzyme.relatedspecies}">
-               <c:set var="theSpecies" value="${enzyme.relatedspecies[0]}" />  
-            </c:if>
+         <c:set var="theSpecies" value="${enzyme.relatedspecies[0]}" /> 
+                    </c:if>  
+                
      
-            
             <div class="resultItem grid_24">
                
              <div class="summary-header">
 
-    <c:if test='${not empty enzyme.name }'>
+    <c:if test='${not empty enzyme.proteinName }'>
         <a href="${pageContext.request.contextPath}/search/${enzyme.accession}/enzyme">
             <span class="enzymeName">${fn:substring(enzyme.proteinName, 0, 100)}</span>
-            <span class="hidden">${enzyme.name}</span>
+            <span class="hidden">${enzyme.proteinName}</span>
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :
                 theSpecies.species.commonname}]
@@ -422,7 +422,7 @@
         </c:if>
     </div>
           <!-- disease ends here-->
-
+                 
     <div>
         <div>
             <!--display = 3 = 2 related species + 1 default species -->
@@ -496,11 +496,11 @@
                 </c:if>
             </c:if>
         </div>
-    </div>
-
+    </div> 
+          
 </div>             
                 
-                
+             
                 
                 
                 
@@ -535,8 +535,8 @@
                 $("#filtersForm").submit(function(e) {
 
                     var frm = $('#filtersForm');
-                    $(frm).ajaxSubmit({
-                        //$.ajax({
+                    //$(frm).ajaxSubmit({
+                        $.ajax({
                         type: frm.attr('method'),
                         url: frm.attr('action'),
                         data: frm.serialize(),
@@ -549,7 +549,7 @@
                         }
                     });
 
-                    e.preventDefault();
+                    //e.preventDefault();
                 });    
         
 

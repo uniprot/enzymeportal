@@ -9,13 +9,11 @@ import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeWsCallable;
 
-//import uk.ac.ebi.ep.adapter.reactome.ReactomeConfig;
-//import uk.ac.ebi.ep.adapter.reactome.ReactomeWsCallable;
-//import uk.ac.ebi.ep.enzyme.model.Pathway;
+
 
 /**
  * Ajax workaround for slow reactome services.
- * @author rafa
+ * @author joseph
  *
  */
 @Controller
@@ -28,9 +26,9 @@ public class ReactomeController {
     protected String getPathway(Model model,
     		@PathVariable String reactomePathwayId)
 	throws Exception{
-    	ReactomeWsCallable callable =
+        ReactomeWsCallable callable =
     			new ReactomeWsCallable(reactomeConfig, reactomePathwayId);
-        Pathway pathway = callable.call();     
+        Pathway pathway = callable.call();
         model.addAttribute("pathway", pathway);
         return "pathway";
     }

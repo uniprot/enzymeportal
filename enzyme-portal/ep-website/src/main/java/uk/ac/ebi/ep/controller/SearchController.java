@@ -34,7 +34,7 @@ import uk.ac.ebi.ep.adapter.literature.CitexploreWSClientPool;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
-import uk.ac.ebi.ep.common.Config;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.entry.Field;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.data.enzyme.model.CountableMolecules;
@@ -48,7 +48,6 @@ import uk.ac.ebi.ep.data.exceptions.EnzymeFinderException;
 import uk.ac.ebi.ep.data.exceptions.EnzymeRetrieverException;
 import uk.ac.ebi.ep.data.exceptions.MultiThreadingException;
 import uk.ac.ebi.ep.data.search.model.Disease;
-import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
@@ -72,20 +71,14 @@ public class SearchController extends AbstractController {
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
 
-    private static final String BROWSE = "/browse";
-    private static final String BROWSE_DISEASE = "/browse/disease";
-
-    @Autowired
-    private Config searchConfig;
-
+//    private static final String BROWSE = "/browse";
+//    private static final String BROWSE_DISEASE = "/browse/disease";
     @Autowired
     private LiteratureConfig literatureConfig;
     @Autowired
     private ReactomeConfig reactomeConfig;
     @Autowired
     private ChebiConfig chebiConfig;
-    //@Autowired
-    // private BioportalConfig bioportalConfig;
 
     private enum ResponsePage {
 
@@ -127,8 +120,7 @@ public class SearchController extends AbstractController {
             HttpSession session) {
         Field requestedField = Field.valueOf(field);
         EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeService);
-        //retriever.getEbeyeAdapter().setConfig(ebeyeConfig);
-        // retriever.getUniprotAdapter().setConfig(uniprotConfig);
+
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = ResponsePage.ENTRY.toString();
@@ -146,7 +138,7 @@ public class SearchController extends AbstractController {
                     enzymeModel = retriever.getMolecules(accession);
                     break;
                 case diseaseDrugs:
-                    // retriever.getBioportalAdapter().setConfig(bioportalConfig);
+
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case literature:
@@ -166,10 +158,10 @@ public class SearchController extends AbstractController {
                 // If we got here from a bookmark, the summary might not be cached:
                 String summId = Functions.getSummaryBasketId(enzymeModel);
                 @SuppressWarnings("unchecked")
-                final Map<String, EnzymeSummary> sls = (Map<String, EnzymeSummary>) session.getAttribute(Attribute.lastSummaries.name());
+                final Map<String, UniprotEntry> sls = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
                 if (sls == null) {
                     setLastSummaries(session, Collections.singletonList(
-                            (EnzymeSummary) enzymeModel));
+                            (UniprotEntry) enzymeModel));
                 } else if (sls.get(summId) == null) {
                     sls.put(summId, enzymeModel);
                 }
@@ -531,12 +523,11 @@ public class SearchController extends AbstractController {
     @ResponseBody
     @RequestMapping("/service/search")
     public List<Suggestion> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
-        if (name != null && name.length() > 3) {
+        if (name != null && name.length() >= 3) {
             name = String.format("%%%s%%", name);
 
-            System.out.println("auto suggest ......");
             List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(name.trim());
-           
+
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());
             } else {

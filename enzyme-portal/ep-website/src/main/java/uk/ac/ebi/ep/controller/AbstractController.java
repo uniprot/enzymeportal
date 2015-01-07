@@ -25,9 +25,9 @@ import uk.ac.ebi.ep.base.common.SpeciesPredicate;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.common.Pagination;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
-import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
@@ -49,7 +49,7 @@ public abstract class AbstractController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
   
     @Autowired
-    private Config searchConfig;
+    protected Config searchConfig;
     @Autowired
     protected IntenzConfig intenzConfig;
     @Autowired
@@ -118,16 +118,16 @@ public abstract class AbstractController {
      * @param summaries
      */
     protected void setLastSummaries(HttpSession session,
-            List<EnzymeSummary> summaries) {
+            List<UniprotEntry> summaries) {
         @SuppressWarnings("unchecked")
-        Map<String, EnzymeSummary> lastSummaries = (Map<String, EnzymeSummary>) session.getAttribute(Attribute.lastSummaries.getName());
+        Map<String, UniprotEntry> lastSummaries = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.getName());
         if (lastSummaries == null) {
             lastSummaries = new HashMap<>();
             session.setAttribute(Attribute.lastSummaries.getName(), lastSummaries);
         } else {
             lastSummaries.clear();
         }
-        for (EnzymeSummary summary : summaries) {
+        for (UniprotEntry summary : summaries) {
             lastSummaries.put(Functions.getSummaryBasketId(summary), summary);
         }
     }
@@ -345,7 +345,7 @@ public abstract class AbstractController {
 
             //if an item is seleted, then filter the list
             if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
-                List<EnzymeSummary> filteredResults =
+                List<UniprotEntry> filteredResults =
                         new LinkedList<>(resultSet.getSummaryentries());
 
 

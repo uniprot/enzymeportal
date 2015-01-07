@@ -117,6 +117,7 @@ public class BrowseEnzymesController extends AbstractController {
             setLastSummaries(session, results.getSummaryentries());
             searchModel.setSearchresults(results);
             applyFilters(searchModel, request);
+             model.addAttribute("searchConfig", searchConfig);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
             clearHistory(session);
@@ -129,11 +130,11 @@ public class BrowseEnzymesController extends AbstractController {
     }
 
     @ModelAttribute("searchModel")
-    @Override
-    public SearchModel searchform() {
+    public SearchModel searchform(String text) {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
         searchParams.setStart(0);
+        searchParams.setText(text);
         searchParams.setType(SearchParams.SearchType.KEYWORD);
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
@@ -167,6 +168,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         if (ec != null && ec.length() >= 7) {
             model.addAttribute("entryid", ec);
+            searchModel = searchform(ec);
             return computeResult(searchModel, ec, entryecname, model, session, request);
 
         } else {

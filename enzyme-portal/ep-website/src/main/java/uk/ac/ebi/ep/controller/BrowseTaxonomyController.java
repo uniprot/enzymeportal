@@ -14,10 +14,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -47,27 +53,23 @@ public class BrowseTaxonomyController extends AbstractController {
     private static final String FILTER_BY_FACETS = "/taxonomy/filter";
     private static final String GET_COUNT_FOR_ORGANISMS = "/service/organism-count";
 
-
     private static final int SEARCH_PAGESIZE = 10;
 
     @RequestMapping(value = BROWSE_TAXONOMY, method = RequestMethod.GET)
     public String showPathways(Model model) {
-        //EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
-//        List<Taxonomy> organisms = enzymePortalService.getCountForOrganisms();
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
-//        model.addAttribute("organisms", organisms);
 
         return ORGANISMS;
     }
 
     @RequestMapping(value = SEARCH_BY_TAX_ID, method = RequestMethod.GET)
     public String searchByTaxId(@ModelAttribute("searchModel") SearchModel searchModel,
-            @RequestParam(value = "entryid", required = false) Long entryID, @RequestParam(value = "entryname", required = false) String entryName,
+            @RequestParam(value = "entryid", required = true) Long entryID, @RequestParam(value = "entryname", required = false) String entryName,
             Model model, HttpServletRequest request, HttpSession session, Pageable pageable, RedirectAttributes attributes) {
 
-        pageable = new PageRequest(0, SEARCH_PAGESIZE);
+        pageable = new PageRequest(0, SEARCH_PAGESIZE, Sort.Direction.ASC, "function", "entryType");
 
         Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByTaxonomy(entryID, pageable);
 
@@ -95,10 +97,8 @@ public class BrowseTaxonomyController extends AbstractController {
         searchModel.setSearchresults(searchResults);
 
         model.addAttribute("searchModel", searchModel);
+        model.addAttribute("searchConfig", searchConfig);
 
-//         model.addAttribute("species", species);
-//         model.addAttribute("compouds", compouds);
-//         model.addAttribute("diseases", diseases);
         model.addAttribute("searchFilter", filters);
 
         List<UniprotEntry> result = page.getContent();
@@ -127,13 +127,14 @@ public class BrowseTaxonomyController extends AbstractController {
 
     @RequestMapping(value = SEARCH_BY_TAX_ID + "/page={pageNumber}", method = RequestMethod.GET)
     public String searchByTaxIdPaginated(@PathVariable Integer pageNumber, @ModelAttribute("searchModel") SearchModel searchModel,
-            @RequestParam(value = "entryid", required = false) Long entryID, @RequestParam(value = "entryname", required = false) String entryName,
+            @RequestParam(value = "entryid", required = true) Long entryID, @RequestParam(value = "entryname", required = false) String entryName,
             Model model, HttpSession session, RedirectAttributes attributes) {
 
         if (pageNumber < 1) {
             pageNumber = 1;
         }
-        Pageable pageable = new PageRequest(pageNumber - 1, SEARCH_PAGESIZE);
+
+        Pageable pageable = new PageRequest(pageNumber - 1, SEARCH_PAGESIZE, Sort.Direction.ASC, "function", "entryType");
 
         Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByTaxonomy(entryID, pageable);
 
@@ -161,10 +162,8 @@ public class BrowseTaxonomyController extends AbstractController {
         searchModel.setSearchresults(searchResults);
 
         model.addAttribute("searchModel", searchModel);
+        model.addAttribute("searchConfig", searchConfig);
 
-//         model.addAttribute("species", species);
-//         model.addAttribute("compouds", compouds);
-//         model.addAttribute("diseases", diseases);
         model.addAttribute("searchFilter", filters);
 
         List<UniprotEntry> result = page.getContent();
@@ -194,7 +193,7 @@ public class BrowseTaxonomyController extends AbstractController {
 
     @RequestMapping(value = FILTER_BY_FACETS, method = RequestMethod.GET)
     public String filterByFacets(@ModelAttribute("searchModel") SearchModel searchModel,
-            @RequestParam(value = "taxId", required = false) Long taxId,
+            @RequestParam(value = "taxId", required = true) Long taxId,
             @RequestParam(value = "organismName", required = false) String organismName,
             Model model, HttpServletRequest request, HttpSession session, RedirectAttributes attributes) {
 
@@ -217,9 +216,7 @@ public class BrowseTaxonomyController extends AbstractController {
         searchResults.setSearchfilters(filters);
         searchModel.setSearchresults(searchResults);
 
-        //applyFiltersAdapted(searchModel, request);
         SearchParams searchParameters = searchModel.getSearchparams();
-        //SearchResults resultSet = searchModel.getSearchresults();
 
         String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
         String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
@@ -283,7 +280,7 @@ public class BrowseTaxonomyController extends AbstractController {
             });
         });
 
-        Pageable pageable = new PageRequest(0, SEARCH_PAGESIZE);
+        Pageable pageable = new PageRequest(0, SEARCH_PAGESIZE, Sort.Direction.ASC, "function", "entryType");
         Page<UniprotEntry> page = new PageImpl<>(new ArrayList<>(), pageable, 0);
 
         //specie only
@@ -318,8 +315,7 @@ public class BrowseTaxonomyController extends AbstractController {
         searchResults.setSearchfilters(filters);
         searchModel.setSearchresults(searchResults);
         model.addAttribute("searchModel", searchModel);
-
-
+        model.addAttribute("searchConfig", searchConfig);
 
         model.addAttribute("searchFilter", filters);
         List<UniprotEntry> result = page.getContent();

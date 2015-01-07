@@ -76,7 +76,7 @@
         <description>Builds a unique and reproducible ID for an enzyme summary,
             based on its UniProt accessions.</description>
         <function-class>uk.ac.ebi.ep.functions.Functions</function-class>
-        <function-signature>java.lang.String getSummaryBasketId(uk.ac.ebi.ep.data.search.model.EnzymeSummary)</function-signature>
+        <function-signature>java.lang.String getSummaryBasketId(uk.ac.ebi.ep.data.domain.UniprotEntry)</function-signature>
     </function>
     
 </taglib>

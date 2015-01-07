@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +32,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import uk.ac.ebi.ep.data.dataconfig.DataConfig;
 import uk.ac.ebi.ep.data.dataconfig.DevDataConfig;
+import uk.ac.ebi.ep.data.dataconfig.OliverYardConfig;
+import uk.ac.ebi.ep.data.dataconfig.PowerGateConfig;
 import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
 
 /**
@@ -43,14 +46,16 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
 
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@Import({DevDataConfig.class,ProdDataConfig.class,DataConfig.class})
+//@Import({DevDataConfig.class,ProdDataConfig.class})
+@Import({DevDataConfig.class,ProdDataConfig.class,PowerGateConfig.class,OliverYardConfig.class,DataConfig.class})
 @ImportResource("classpath:trace-context.xml")
+@PropertySource("classpath:ep.properties")
 //@PropertySource("classpath:spring.properties")
 public class ApplicationContext extends WebMvcConfigurerAdapter {
 
     @Autowired
     private Environment env;
-    
+
     // Maps resources path to webapp/resources
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

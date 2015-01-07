@@ -16,7 +16,7 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
                     name: val
                 }
             }).then(function(response){
-            console.log(response);    
+   
                 return $.map(response.data, function(s,i){
                    return s.suggestion;
                });   
@@ -203,7 +203,7 @@ enzymeApp.directive('taxonomyTree', ['$q','organismService', function($q,organis
                     .attr("dy", 3)
                     .attr("class", function(d){return d.taxid ? "endnode" : "midnode"})
                     .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-                    .text(function(d) { return (d.num_enzymes) ? d.name + " - "+d.num_enzymes+" entries" : d.name; });
+                    .text(function(d) { return (d.num_enzymes) ? d.name + " - "+d.num_enzymes+" enzymes" : d.name; });
 
                 d3.select(self.frameElement).style("height", height + "px");
             }

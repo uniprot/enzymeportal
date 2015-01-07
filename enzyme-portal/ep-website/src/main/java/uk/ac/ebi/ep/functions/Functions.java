@@ -5,16 +5,13 @@
 package uk.ac.ebi.ep.functions;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.enzyme.model.Molecule;
-import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
-import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 
 
@@ -190,12 +187,19 @@ public final class Functions {
         return imgSrc;
     }
  
-    public static String getSummaryBasketId(EnzymeSummary summary){
-        List<String> accs = new ArrayList<>();
-        for (EnzymeAccession acc : summary.getRelatedspecies()) {
-            accs.add(acc.getUniprotaccessions().get(0));
-        }
-             Collections.sort(accs);
-        return accs.toString();
+    public static String getSummaryBasketId(UniprotEntry summary){
+//        List<String> accs = new ArrayList<>();
+//        for (EnzymeAccession acc : summary.getRelatedspecies()) {
+//            accs.add(acc.getUniprotaccessions().get(0));
+//            
+//        }
+//    
+//        Collections.sort(accs);
+//
+//        return accs.toString();
+        
+        return summary.getAccession();
+        
+       
     }
 }
