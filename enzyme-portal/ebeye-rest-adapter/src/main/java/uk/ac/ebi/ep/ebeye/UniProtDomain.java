@@ -24,7 +24,7 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
     @JsonProperty("source")
     private String source;
 
-       public String getUniport_name() {
+       public String getUniprot_name() {
         //return uniprot_name.split("_")[0];
            return uniprot_name.substring(0, uniprot_name.indexOf("_"));
            //return uniprot_name;
@@ -99,8 +99,8 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
     
             @Override
     public int compareTo(UniProtDomain obj) {
-       int compare = obj.getUniport_name().compareToIgnoreCase(this.getUniport_name());
-         return ((compare == 0) ? obj.getUniport_name().compareToIgnoreCase(this.getUniport_name()) : compare);
+       int compare = obj.getUniprot_name().compareToIgnoreCase(this.getUniprot_name());
+         return ((compare == 0) ? obj.getUniprot_name().compareToIgnoreCase(this.getUniprot_name()) : compare);
       
 
     }
