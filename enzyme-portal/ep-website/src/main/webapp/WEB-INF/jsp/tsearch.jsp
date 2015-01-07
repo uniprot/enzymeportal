@@ -269,8 +269,10 @@
             <div class="resultItem grid_24">
                
              <div class="summary-header">
-
-    <c:if test='${not empty enzyme.proteinName }'>
+                 <input type="checkbox" class="forBasket"
+                        title="Select entry"
+                        value="${epfn:getSummaryBasketId(enzyme)}"/>
+    <c:if test='${not empty enzyme.name }'>
         <a href="${pageContext.request.contextPath}/search/${enzyme.accession}/enzyme">
             <span class="enzymeName">${fn:substring(enzyme.proteinName, 0, 100)}</span>
             <span class="hidden">${enzyme.proteinName}</span>

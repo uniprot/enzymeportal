@@ -22,7 +22,7 @@
         <%@include file="header.jspf" %>
 
         <div id="content" role="main" class="grid_24 clearfix" ng-controller="TypeAheadController">
-            <h2>Pathways</h2>
+            <h1>Pathways</h1>
 
            
             <div class="container-browse-search">
