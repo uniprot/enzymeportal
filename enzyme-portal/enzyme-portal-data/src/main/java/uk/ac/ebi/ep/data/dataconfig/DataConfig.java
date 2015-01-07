@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @EnableTransactionManagement
-//@EnableJpaRepositories(repositoryFactoryBeanClass=CustomQueryDslJpaRepositoryFactoryBean.class,basePackages = "uk.ac.ebi.ep.data.repositories")
 @EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
 @PropertySource({"classpath:ep-web-client.properties", "classpath:chembl-adapter.properties", "classpath:log4j.properties"})
 
@@ -70,4 +69,4 @@ public class DataConfig {
     }
 
 
-}
+        }

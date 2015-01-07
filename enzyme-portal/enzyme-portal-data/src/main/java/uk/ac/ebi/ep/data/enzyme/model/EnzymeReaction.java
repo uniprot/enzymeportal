@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.data.enzyme.model;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * <p>
@@ -20,7 +21,7 @@ public class EnzymeReaction
     public EnzymeReaction() {
     }
     
-    
+   
 
     public EnzymeReaction(String id, String name) {
         this.id = id;
@@ -111,5 +112,28 @@ public class EnzymeReaction
         }
         return this;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EnzymeReaction other = (EnzymeReaction) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
 
 }

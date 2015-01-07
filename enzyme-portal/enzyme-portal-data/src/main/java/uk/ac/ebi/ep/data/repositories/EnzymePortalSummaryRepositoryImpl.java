@@ -7,8 +7,6 @@ package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.types.Projections;
-import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +18,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalSummary;
-import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 
 /**
  *
@@ -36,40 +33,6 @@ public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRep
         this.entityManager = entityManager;
     }
 
-    @Override
-    public List<EnzymePortalSummary> findByCommentType(String commentType, int limit) {
-
-        JPAQuery query = new JPAQuery(entityManager);
-
-        BooleanExpression condition = ($.commentType.equalsIgnoreCase(commentType)
-                .and($.commentText.isNotEmpty()).and($.uniprotAccession.isNotNull()));
-        List<EnzymePortalSummary> summariesByCommentType = query.from($).where(condition).limit(limit).distinct().list($);
-        return summariesByCommentType;
-
-    }
-
-    @Override
-    public List<EnzymePortalSummary> findByCommentType(String commentType) {
-
-        JPAQuery query = new JPAQuery(entityManager);
-
-        BooleanExpression condition = ($.commentType.equalsIgnoreCase(commentType)
-                .and($.commentText.isNotEmpty()).and($.uniprotAccession.isNotNull()));
-
-        List<EnzymePortalSummary> summariesByCommentType = query.from($).where(condition).distinct().list($);
-        return summariesByCommentType;
-
-    }
-
-    @Override
-    public List<EnzymePortalSummary> findByCommentText(String commentText, int limit) {
-        JPAQuery query = new JPAQuery(entityManager);
-
-        BooleanExpression condition = ($.commentText.equalsIgnoreCase(commentText).and($.commentText.isNotEmpty()));
-        List<EnzymePortalSummary> summary = query.from($).where(condition).limit(limit).distinct().list($);
-        return summary;
-
-    }
 
     @Override
     public EnzymePortalSummary findDiseaseEvidence(String accession) {
@@ -230,27 +193,6 @@ public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRep
         return summaries;
 
     }
-
-    @Override
-    @Deprecated
-    public List<EnzymeSummary> findSummariesBYAccessions(List<String> accessions) {
- 
-        JPAQuery query = new JPAQuery(entityManager);
-        
-        // List<Tuple> tuple =    query.from($).groupBy($.taxId,$.scientificName,$.commonName).orderBy($.taxId.count().desc()).limit(11).list($.taxId,$.scientificName,$.commonName,$.taxId.count());
-
-//        List<EnzymeSummary> result = query.from($).groupBy($.taxId, $.scientificName, $.commonName).orderBy($.taxId.count().asc()).limit(100).
-//                list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
-//        
-       
-        List<EnzymeSummary> result =  query.from($).where($.uniprotAccession.accession.in(accessions)).
-                //list(Projections.constructor(EnzymeSummary.class, $.uniprotAccession.accession,$.uniprotAccession.proteinName,$.uniprotAccession.name, $.commentType, $.commentText,$.uniprotAccession));
-                 list(Projections.constructor(EnzymeSummary.class,$.commentType, $.commentText,$.uniprotAccession));
-        
-
-        return result;
-    }
-    
 
     
     

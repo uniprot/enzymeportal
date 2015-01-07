@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 
 /**
  *
@@ -17,5 +16,5 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 public interface EnzymePortalEcNumbersRepositoryCustom {
     
     List<String> findAccessionsByEc(String ecNumber);
-    List<EnzymePortalEcNumbers> findByEcNumber(String ecNumber);
+
 }

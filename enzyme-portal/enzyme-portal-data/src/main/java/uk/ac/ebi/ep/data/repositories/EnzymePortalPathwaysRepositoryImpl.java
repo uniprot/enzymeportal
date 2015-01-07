@@ -27,18 +27,16 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
     private EntityManager entityManager;
     private static final QEnzymePortalPathways $ = QEnzymePortalPathways.enzymePortalPathways;
 
+     @Transactional(readOnly = true)
     @Override
     public List<Pathway> findPathwaysByAccession(String accession) {
 
         JPAQuery query = new JPAQuery(entityManager);
-
-//        BooleanExpression isAccession = $.uniprotAccession.accession.equalsIgnoreCase(accession);
-//        List<EnzymePortalPathways> pathways = query.from($).where(isAccession).list($);
-//
-//        return pathways.stream().distinct().collect(Collectors.toList());
-        List<Pathway> pathways = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
-                .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName, $.pathwayUrl));
-
+        
+   
+  List<Pathway> pathways = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
+                .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName));
+  
         return pathways;
     }
 

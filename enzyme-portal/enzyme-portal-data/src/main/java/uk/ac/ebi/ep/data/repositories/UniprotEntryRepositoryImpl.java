@@ -9,7 +9,10 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.StringExpression;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -89,21 +92,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return query.distinct().list($).stream().distinct().collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public UniprotEntry findByAccession(String accession) {
 
-        EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
-
-        eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-                "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
-                "uniprotXrefSet", "enzymePortalEcNumbersSet");
-        JPAQuery query = new JPAQuery(entityManager);
-
-        query.setHint("javax.persistence.fetchgraph", eGraph);
-        UniprotEntry e = query.from($).where($.accession.equalsIgnoreCase(accession)).singleResult($);
-        return e;
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -196,7 +185,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     @Override
     public Page<EnzymeSummary> findEnzymesByAccessions(List<String> accessions, Pageable pageable) {
         JPAQuery query = new JPAQuery(entityManager);
-        // CollQueryFactory.
+         //CollQueryFactory.
         List<EnzymeSummary> result = query.from($).where($.accession.in(accessions))
                 .list(Projections.constructor(EnzymeSummary.class, $));
 
@@ -234,15 +223,12 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     @Override
     public List<UniprotEntry> findEnzymesByPathwayId(String pathwayId) {
         JPAQuery query = new JPAQuery(entityManager);
-        List<UniprotEntry> result = query.from($).where($.enzymePortalPathwaysSet.any().pathwayId.trim().equalsIgnoreCase(pathwayId)).list($);
+         List<UniprotEntry> result = query.from($).where($.enzymePortalPathwaysSet.any().pathwayId.trim().equalsIgnoreCase(pathwayId)).list($);
         return result;
     }
 
-    @Override
-    public List<UniprotEntry> findEnzymesByEc(String ec) {
-       JPAQuery query = new JPAQuery(entityManager);
-        List<UniprotEntry> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.trim().equalsIgnoreCase(ec)).list($);
-        return result;
+    private <T >Set<T> toSet(T... s) {
+        return new HashSet<>(Arrays.asList(s));
     }
 
 }

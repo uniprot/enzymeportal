@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
@@ -77,7 +78,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public UniprotEntry findByAccession(String accession) {
         
-        return uniprotEntryRepository.findByAccession(accession);
+        return uniprotEntryRepository.findEnzymeByAccession(accession);
     }
     
     @Transactional(readOnly = true)
@@ -89,7 +90,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<String> findAllUniprotAccessions() {
         
-        return uniprotEntryRepository.findAccession();
+        return uniprotEntryRepository.findAccessions();
     }
     
     @Transactional(readOnly = true)
@@ -128,11 +129,7 @@ public class EnzymePortalService {
         return accessions;
     }
 
-//    @Transactional(readOnly = true)
-//    public List<UniprotEntry> findEnzymesByNamePrefixes(List<String> namePrefixes) {
-//
-//        return uniprotEntryRepository.findEnzymesByNamePrefixes(namePrefixes);
-//    }
+
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccession(String accession) {
         
@@ -144,8 +141,7 @@ public class EnzymePortalService {
         
         return uniprotEntryRepository.findEnzymesByAccessions(accessions);
     }
-
-
+    
     @Transactional(readOnly = true)
     public List<EnzymePortalSummary> findEnzymeSummariesByNamePrefixes(List<String> namePrefixes) {
         
@@ -238,6 +234,12 @@ public class EnzymePortalService {
     }
     
     @Transactional(readOnly = true)
+    public List<EnzymePortalEcNumbers> findByEcNumbersByAccession(String accession) {
+        
+        return ecNumbersRepository.findByEcNumbersByAccession(accession);
+    }
+    
+    @Transactional(readOnly = true)
     public List<EnzymePortalReaction> findReactions() {
         
         return reactionRepository.findAll();
@@ -256,7 +258,7 @@ public class EnzymePortalService {
     }
     
     @Transactional(readOnly = true)
-    public  List<EnzymeReaction> findReactionsByAccession(String accession) {
+    public List<EnzymeReaction> findReactionsByAccession(String accession) {
         
         return reactionRepository.findReactionsByAccession(accession);
     }
@@ -294,7 +296,7 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findAll(enzymesByAccessions(accessions), pageable);
         
     }
-
+    
     @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByNamePrefixes(List<String> namePrefixes, Pageable pageable) {
 
@@ -319,7 +321,7 @@ public class EnzymePortalService {
         
         return uniprotEntryRepository.findEnzymesByEc(ec);
     }
-
+    
     private static Predicate enzymesByNamePrefixes(List<String> namePrefixes) {
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
         StringExpression idPrefix = enzyme.relatedProteinsId.namePrefix;

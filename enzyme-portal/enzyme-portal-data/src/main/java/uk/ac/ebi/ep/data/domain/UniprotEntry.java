@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -69,7 +70,6 @@ import uk.ac.ebi.ep.data.search.model.Species;
 //@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {  
 //    @NamedAttributeNode("relatedProteinsId")
 //})
-
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
     @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
@@ -83,6 +83,11 @@ import uk.ac.ebi.ep.data.search.model.Species;
 })
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
+
+    @Column(name = "ENTRY_TYPE")
+    private Short entryType;
+    @Column(name = "FUNCTION")
+    private String function;
     @Column(name = "LAST_UPDATE_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdateTimestamp;
@@ -145,19 +150,14 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public UniprotEntry(String accession, String name, String proteinName, String scientificName, String commonName) {
-       
+
         this.accession = accession;
         this.name = name;
         this.proteinName = proteinName;
         this.scientificName = scientificName;
         this.commonName = commonName;
-       
+
     }
-    
-    
-    
-    
-    
 
     public long getDbentryId() {
         return dbentryId;
@@ -277,7 +277,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.synonymNames = synonymNames;
     }
 
-
     //Note : using protein name will reduce all related species to 1 per enzyme hence we use uniprot name for the equals and hashcode
     @Override
     public int hashCode() {
@@ -301,6 +300,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return true;
     }
 
+
+
+
+
+    
+    
+
 //
 //    @Override
 //    public String toString() {
@@ -311,17 +317,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
     }
 
-  
     public String getScientificname() {
         return getScientificName();
     }
 
- 
     public String getCommonname() {
         return getCommonName();
     }
-
-   
 
 //
 //    @Override
@@ -344,12 +346,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //    }
     @Override
     public Species getSpecies() {
-      Species  species = new Species();
-        species.setCommonname(this.getCommonName());
-        species.setScientificname(this.getScientificName());
-        species.setSelected(false);
+        Species specie = new Species();
+        specie.setCommonname(this.getCommonName());
+        specie.setScientificname(this.getScientificName());
+        specie.setSelected(false);
+        specie.setTaxId(this.getTaxId());
 
-        return species;
+        return specie;
     }
 
     public Integer getSequenceLength() {
@@ -362,6 +365,9 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     @XmlTransient
     public Set<EnzymePortalEcNumbers> getEnzymePortalEcNumbersSet() {
+        if (enzymePortalEcNumbersSet == null) {
+            enzymePortalEcNumbersSet = new HashSet<>();
+        }
         return enzymePortalEcNumbersSet;
     }
 
@@ -377,6 +383,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.relatedProteinsId = relatedProteinsId;
     }
 
+    @Override
     public List<String> getPdbeaccession() {
 
         return getPdbCodes(this);
@@ -388,7 +395,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
 //            pdbcodes.add(xref.getSourceId());
 //        });
-        e.getUniprotXrefSet().stream().filter((x) -> (x.getSource().equalsIgnoreCase("PDB"))).limit(2).collect(Collectors.toList()).stream().forEach((xref) -> {
+        e.getUniprotXrefSet().stream().filter((x) -> (x.getSource().equalsIgnoreCase("PDB"))).limit(1).collect(Collectors.toList()).stream().forEach((xref) -> {
             pdbcodes.add(xref.getSourceId());
         });
 
@@ -426,7 +433,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         if (namesColumn != null) {
             final int sepIndex = namesColumn.indexOf(" (");
 
-            //System.out.println("syn index "+ sepIndex);
+          
             if (sepIndex == -1) {
                 // no synonyms, just recommended name:
 
@@ -446,17 +453,16 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public List<String> getEc() {
 
         List<String> ec = new ArrayList<>();
-
-        for (EnzymePortalEcNumbers ecNum : this.getEnzymePortalEcNumbersSet()) {
-            ec.add(ecNum.getEcNumber());
+        if (!getEnzymePortalEcNumbersSet().isEmpty()) {
+            this.getEnzymePortalEcNumbersSet().stream().forEach((ecNum) -> {
+                ec.add(ecNum.getEcNumber());
+            });
         }
 
         return ec;
     }
 
     public String getFunction() {
-        String function = "Currently there is no data in the database to show for function. This is only a placeholder and a reminder to make appropriate changes in the schema before populating the database.";
-
         return function;
     }
 
@@ -477,39 +483,85 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         List<EnzymeAccession> relatedspecies = new ArrayList<>();
         String defaultSpecies = CommonSpecies.Human.getScientificName();
 
-        this.getRelatedProteinsId().getUniprotEntrySet().parallelStream().forEach((entry) -> {
-            if (entry.getScientificName() != null && entry.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+//        EnzymeAccession ea = new EnzymeAccession();
+//        ea.setPdbeaccession(getPdbeaccession());
+//        ea.setSpecies(getSpecies());
+//        ea.setUniprotid(getName());
+//        List<String> acc = new ArrayList<>();
+//        acc.add(getAccession());
+//        ea.setUniprotaccessions(acc);
+//        relatedspecies.add(ea);
+        //current specie is the default specie
+        this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
 
+//                 EnzymeAccession ea = new EnzymeAccession();
+//        ea.setPdbeaccession(getPdbeaccession());
+//        ea.setSpecies(getSpecies());
+//        ea.setUniprotid(getName());
+//        List<String> acc = new ArrayList<>();
+//        acc.add(getAccession());
+//        //ea.setUniprotaccessions(acc);
+//            
+//           
+//            entry.getUniprotaccessions().add(getAccession());
+//            entry.setPdbeaccession(getPdbeaccession());
+//            entry.setSpecies(getSpecies());
+//            entry.setUniprotid(getName());
+            if (entry.getScientificName() != null && entry.getScientificName().equalsIgnoreCase(getSpecies().getScientificname())) {
+                entry.getUniprotaccessions().add(getAccession());
                 relatedspecies.add(0, entry);
 
-            } else if (entry.getScientificName() != null && !entry.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+            } else if (entry.getScientificName() != null && !entry.getScientificName().equalsIgnoreCase(getSpecies().getScientificname())) {
                 relatedspecies.add(entry);
 
             }
 
         });
 
+        //human is default specie
+//        this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
+//            if (entry.getScientificName() != null && entry.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+//
+//                relatedspecies.add(0, entry);
+//
+//            } else if (entry.getScientificName() != null && !entry.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+//                relatedspecies.add(entry);
+//
+//            }
+//
+//        });
         return relatedspecies;
     }
-    
-    
 
     @Override
     public int compareTo(UniprotEntry o) {
         return this.getScientificName().compareToIgnoreCase(o.getScientificName());
     }
-    
 
+    @Override
     public String getUniprotid() {
         return name;
     }
 
-    public void setUniprotid(String uniprotid) {
-        this.uniprotid = uniprotid;
+    public void setFunction(String function) {
+        this.function = function;
     }
-    
-    
-   
-    
-    
+
+    public Short getEntryType() {
+        return entryType;
+    }
+
+    public void setEntryType(Short entryType) {
+        this.entryType = entryType;
+    }
+
+    @Override
+    public List<String> getUniprotaccessions() {
+
+        List<String> uniprotAccessions = new ArrayList<>();
+
+        uniprotAccessions.add(getAccession());
+        return uniprotAccessions;
+    }
+
 }

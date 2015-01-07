@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
 
 
 /**
@@ -20,7 +21,7 @@ public class SearchResults {
     private Long totalfound;
     private SearchFilters searchfilters;
 
-    private List<EnzymeSummary> summaryentries;
+    private List<UniprotEntry> summaryentries;
     
     /**
      * Gets the value of the searchfilters property.
@@ -65,7 +66,7 @@ public class SearchResults {
      *
      * @return
      */
-    public List<EnzymeSummary> getSummaryentries() {
+    public List<UniprotEntry> getSummaryentries() {
         if (summaryentries == null) {
             summaryentries = new ArrayList<>();
         }
@@ -93,14 +94,14 @@ public class SearchResults {
         return this;
     }
 
-    public SearchResults withSummaryentries(EnzymeSummary... values) {
+    public SearchResults withSummaryentries(UniprotEntry... values) {
         if (values != null) {
             getSummaryentries().addAll(Arrays.asList(values));
         }
         return this;
     }
 
-    public SearchResults withSummaryentries(Collection<EnzymeSummary> values) {
+    public SearchResults withSummaryentries(Collection<UniprotEntry> values) {
         if (values != null) {
             getSummaryentries().addAll(values);
         }
@@ -118,7 +119,7 @@ public class SearchResults {
      * @param summaryentries allowed object is {@link EnzymeSummary }
      *
      */
-    public void setSummaryentries(List<EnzymeSummary> summaryentries) {
+    public void setSummaryentries(List<UniprotEntry> summaryentries) {
         this.summaryentries = summaryentries;
     }
 

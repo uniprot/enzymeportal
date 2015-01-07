@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
-import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 
 /**
  *
@@ -19,12 +18,6 @@ import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 @NoRepositoryBean
 public interface EnzymePortalSummaryRepositoryCustom {
 
-    List<EnzymePortalSummary> findByCommentType(String commentType, int limit);
-
-    List<EnzymePortalSummary> findByCommentType(String commentType);
-
-    List<EnzymePortalSummary> findByCommentText(String commentText, int limit);
-
     EnzymePortalSummary findDiseaseEvidence(String accession);
 
     EnzymePortalSummary findEnzymeSummaryByAccession(String accession);
@@ -32,15 +25,9 @@ public interface EnzymePortalSummaryRepositoryCustom {
     List<EnzymePortalSummary> findEnzymeSummariesByAccession(String accessions);
 
     List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> name_prefixes);
-    @Deprecated
-    List<EnzymeSummary> findSummariesBYAccessions(List<String> accessions);
-
-   
 
     List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions);
 
     Page<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions, Pageable pageable);
-    
-
 
 }

@@ -31,23 +31,36 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
     protected List<EnzymeAccession> relatedspecies;
 
  
-    private UniprotEntry uniprotEntry;
+    private UniprotEntry uniprotAccession;
+    private String commentText;
     
 
     public EnzymeSummary() {
     }
 
     public EnzymeSummary(UniprotEntry uniprotEntry) {
-        this.uniprotEntry = uniprotEntry;
+        this.uniprotAccession = uniprotEntry;
     }
 
-
+    public EnzymeSummary(String commentText) {
+        this.commentText = commentText;
+    }
     
-//
-    public UniprotEntry getUniprotEntry() {
-        return uniprotEntry;
+    
+
+    public EnzymeSummary(String commentText,UniprotEntry uniprotEntry) {
+        this.uniprotAccession = uniprotEntry;
+        this.commentText = commentText;
     }
-//
+
+    public UniprotEntry getUniprotAccession() {
+        return uniprotAccession;
+    }
+    
+    public String getCommentText() {
+        return commentText;
+    }
+
 
     /**
      * Gets the value of the ec property.

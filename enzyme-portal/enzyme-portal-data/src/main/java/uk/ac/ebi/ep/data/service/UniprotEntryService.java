@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.data.service;
 
 import com.mysema.query.types.Predicate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +27,10 @@ public class UniprotEntryService {
     private UniprotEntryRepository repository;
 
     @Transactional(readOnly = true)
-    public UniprotEntry findByAccession(String accession) {
+    public Optional<UniprotEntry> findByAccession(String accession) {
 
-        return repository.findByAccession(accession);
+        //return repository.findByAccession(accession);
+        return Optional.ofNullable(repository.findByAccession(accession));
     }
 
     @Transactional(readOnly = true)
@@ -40,14 +42,14 @@ public class UniprotEntryService {
     @Transactional(readOnly = true)
     public List<String> findAllUniprotAccessions() {
 
-        return repository.findAccession();
+        return repository.findAccessions();
     }
 
     @Transactional(readOnly = true)
     public List<UniprotEntry> findUniprotEntries() {
 
-        return repository.findAll();
-        //return repository.findUniprotEntries();
+       
+        return repository.findUniprotEntries();
     }
 
     @Transactional(readOnly = true)

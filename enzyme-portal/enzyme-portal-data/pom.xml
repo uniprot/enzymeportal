@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzyme-portal-data</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.11-SNAPSHOT</version>
     <packaging>jar</packaging>
     
      <name>ep-data</name>
@@ -236,8 +236,9 @@
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
-                    
-                    <include>ep-db-uzppro.properties</include>
+                    <include>ep-db-uzppub-pg.properties</include>
+                    <include>ep-db-uzppub-oy.properties</include>
+                    <include>ep-db-uzprel.properties</include>
                     <include>ep-db-uzpdev.properties</include>
                     <include>ep-db-${ep.db.config}.properties</include>
                     <!--                 This contains the BioPortal API key needed for
@@ -264,9 +265,23 @@
         </profile>
         <profile>
             <!--             Profile to work with the release database -->
-            <id>uzppro</id>
+            <id>uzprel</id>
             <properties>
-                <ep.db.config>uzppro</ep.db.config>
+                <ep.db.config>uzprel</ep.db.config>
+            </properties>
+        </profile>
+          <profile>
+            <!--             Profile to work with the release database -->
+            <id>uzppub-pg</id>
+            <properties>
+                <ep.db.config>uzppub-pg</ep.db.config>
+            </properties>
+        </profile>
+          <profile>
+            <!--             Profile to work with the release database -->
+            <id>uzppub-oy</id>
+            <properties>
+                <ep.db.config>uzppub-oy</ep.db.config>
             </properties>
         </profile>
         

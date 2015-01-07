@@ -17,8 +17,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Profile("uzprel")
-
-public @interface Prod {
-
+@Profile("uzppub-oy")
+public @interface  OliverYard {
+    
 }

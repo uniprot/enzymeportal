@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 
@@ -29,6 +30,22 @@ public class ReactionPathway
     protected List<Object> mechanism;
     
     protected List<String> provenance;
+    
+    protected List<EnzymeReaction> reactions;
+    
+    public List<EnzymeReaction> getReactions() {
+        if(reactions == null){
+            reactions = new ArrayList<>();
+        }
+        
+        return reactions;
+    }
+
+    public void setReactions(List<EnzymeReaction> reactions) {
+        this.reactions = reactions;
+    }
+    
+    
 
     /**
      * Gets the value of the reaction property.
@@ -230,5 +247,30 @@ public class ReactionPathway
     public void setProvenance(List<String> provenance) {
         this.provenance = provenance;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + Objects.hashCode(this.reaction);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ReactionPathway other = (ReactionPathway) obj;
+        if (!Objects.equals(this.reaction.id, other.reaction.id)) {
+            return false;
+        }
+        return true;
+    }
+
+   
+    
 
 }

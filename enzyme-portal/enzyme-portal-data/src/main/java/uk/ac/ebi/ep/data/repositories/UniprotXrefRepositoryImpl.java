@@ -23,16 +23,14 @@ public class UniprotXrefRepositoryImpl implements UniprotXrefRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
     private static final QUniprotXref $ = QUniprotXref.uniprotXref;
+    private static final String PDB = "PDB";
 
     @Override
     public List<UniprotXref> findPDBcodesByAccession(String accession) {
         JPAQuery query = new JPAQuery(entityManager);
 
-        System.out.println("UniprotXrefRepositoryImpl line 31 == " + $.accession.accession);
-        System.out.println("UniprotXrefRepositoryImpl accession " + accession);
-
         BooleanExpression isAccession = $.accession.accession.equalsIgnoreCase(accession);
-        List<UniprotXref> pdb = query.from($).where($.source.equalsIgnoreCase("PDB").and(isAccession)).list($);
+        List<UniprotXref> pdb = query.from($).where($.source.equalsIgnoreCase(PDB).and(isAccession)).list($);
 
         return pdb.stream().distinct().collect(Collectors.toList());
     }

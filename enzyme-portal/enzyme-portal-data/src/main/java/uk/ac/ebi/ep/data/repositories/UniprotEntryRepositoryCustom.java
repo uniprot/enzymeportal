@@ -8,7 +8,6 @@ package uk.ac.ebi.ep.data.repositories;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
@@ -30,9 +29,8 @@ public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
 
-    @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    UniprotEntry findByAccession(String accession);
-
+    //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
+    //UniprotEntry findEnzymeByAccession(String accession);
     List<String> filterEnzymesInAccessions(List<String> accessions);
 
     List<Taxonomy> getCountForOrganisms(List<Long> taxids);
@@ -46,9 +44,9 @@ public interface UniprotEntryRepositoryCustom {
     List<Species> findSpeciesByTaxId(Long taxId);
 
     List<Species> findSpeciesByScientificName(String sName);
+
     List<UniprotEntry> findEnzymesByMeshId(String meshId);
-    
-     List<UniprotEntry> findEnzymesByPathwayId(String pathwayId);
-     List<UniprotEntry> findEnzymesByEc(String ec);
+
+    List<UniprotEntry> findEnzymesByPathwayId(String pathwayId);
 
 }
