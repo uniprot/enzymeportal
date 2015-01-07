@@ -2,16 +2,16 @@ package uk.ac.ebi.ep.base.common;
 
 import java.util.Collection;
 import org.apache.commons.collections.Predicate;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
-import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 
 public class DiseasesPredicate implements Predicate {
 
     /**
      * Collection of unique diseases IDs, which will act as a filter.
      */
-    private Collection<String> diseasesFilter;
+    private final Collection<String> diseasesFilter;
 
     public DiseasesPredicate(Collection<String> diseasesFilter) {
         this.diseasesFilter = diseasesFilter;
@@ -31,8 +31,8 @@ public class DiseasesPredicate implements Predicate {
 			return true;
 		}
 		boolean eval = false;
-		if (obj instanceof EnzymeSummary){
-			EnzymeSummary es = (EnzymeSummary) obj;
+		if (obj instanceof UniprotEntry){
+			UniprotEntry es = (UniprotEntry) obj;
 			for (EnzymeAccession ea : es.getRelatedspecies()){
 				for (Disease disease : ea.getDiseases()) {
 					String name = disease.getName();

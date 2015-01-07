@@ -25,7 +25,7 @@ public class SummaryComparison extends AbstractComparison<EnzymeModel> {
     @Override
     protected void getSubComparisons(EnzymeModel e1, EnzymeModel e2) {
         subComparisons.put("Name", new StringComparison(
-                e1.getName(), e2.getName()));
+                e1.getProteinName(), e2.getProteinName()));
         StringBuilder sb1 =
                 new StringBuilder(e1.getSpecies().getScientificname());
         if (e1.getSpecies().getCommonname() != null){
@@ -37,7 +37,7 @@ public class SummaryComparison extends AbstractComparison<EnzymeModel> {
         if (e2.getSpecies().getCommonname() != null){
             sb2.append(")").insert(0, " (")
                 .insert(0, e2.getSpecies().getCommonname());
-        }
+        }       
         subComparisons.put("Species", new StringComparison(
                 sb1.toString(), sb2.toString()));
         subComparisons.put("Function", new StringComparison(

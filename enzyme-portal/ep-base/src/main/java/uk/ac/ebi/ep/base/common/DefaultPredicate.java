@@ -6,10 +6,10 @@ package uk.ac.ebi.ep.base.common;
 
 import java.util.Collection;
 import org.apache.commons.collections.Predicate;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
-import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 
 
 
@@ -23,19 +23,20 @@ public class DefaultPredicate implements Predicate{
         /**
      * Collection of unique  IDs, which will act as a filter.
      */
-    private Collection<String> defaultFilter;
+    private final Collection<String> defaultFilter;
 
     public DefaultPredicate(Collection<String> defaultFilter) {
         this.defaultFilter = defaultFilter;
     }
 
+    @Override
     public boolean evaluate(Object obj) {
         		if (defaultFilter == null || defaultFilter.isEmpty()){
 			return true;
 		}
 		boolean eval = false;
-		if (obj instanceof EnzymeSummary){
-			EnzymeSummary es = (EnzymeSummary) obj;
+		if (obj instanceof UniprotEntry){
+			UniprotEntry es = (UniprotEntry) obj;
 			for (EnzymeAccession ea : es.getRelatedspecies()){
 				String sciName = ea.getSpecies().getScientificname();
                                 

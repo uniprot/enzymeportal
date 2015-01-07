@@ -7,8 +7,10 @@ package uk.ac.ebi.ep.base.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.xml_cml.schema.cml2.react.Reaction;
@@ -24,6 +26,7 @@ import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
 import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
+import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
@@ -70,7 +73,7 @@ public class EnzymeRetriever extends EnzymeFinder {
     protected BiomartAdapter biomartAdapter;
     private static IBioportalAdapter bioportalAdapter;
 
-    //private final EnzymePortalService service;
+   
     public EnzymeRetriever(EnzymePortalService service, EbeyeService eService) {
         super(service, eService);
 
@@ -159,6 +162,7 @@ public class EnzymeRetriever extends EnzymeFinder {
             ea.setPdbeaccession(e.getPdbeaccession());
             ea.getUniprotaccessions().add(e.getAccession());
             ea.setSpecies(e.getSpecies());
+            ea.setUniprotid(e.getName());
 
             if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
 
@@ -178,15 +182,33 @@ public class EnzymeRetriever extends EnzymeFinder {
         UniprotEntry uniprotEntry = super.getService().findByAccession(uniprotAccession);
 
         EnzymeModel model = new EnzymeModel();
+        Enzyme enzyme = new Enzyme();
+
+        Sequence sequence = new Sequence();
+        sequence.setLength(uniprotEntry.getSequenceLength());
+        enzyme.setSequence(sequence);
+
+        //suppliment info
+        model.setCommonName(uniprotEntry.getCommonName());
+        model.setFunction(uniprotEntry.getFunction());
+        model.setProteinName(uniprotEntry.getProteinName());
+        model.setSpecies(uniprotEntry.getSpecies());
+         model.setScientificName(uniprotEntry.getScientificName());
+        model.setCommonName(uniprotEntry.getCommonName());
+
         model.setName(uniprotEntry.getProteinName());
 
         model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
 
         model.setAccession(uniprotEntry.getAccession());
         model.getUniprotaccessions().add(uniprotEntry.getAccession());
-        model.setSpecies(uniprotEntry.getSpecies());
-        uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
-            Enzyme enzyme = new Enzyme();
+        //model.setSpecies(uniprotEntry.getSpecies());
+        Set<EnzymePortalEcNumbers> ecNumbers = getService().findByEcNumbersByAccession(uniprotAccession)
+                .stream().collect(Collectors.toSet());
+        model.setEnzymePortalEcNumbersSet(ecNumbers);
+        // uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
+        ecNumbers.stream().forEach((ec) -> {
+            //Enzyme enzyme = new Enzyme();
             EnzymeHierarchy enzymeHierarchy = new EnzymeHierarchy();
             EcClass ecClass = new EcClass();
             ecClass.setEc(ec.getEcNumber());
@@ -194,8 +216,9 @@ public class EnzymeRetriever extends EnzymeFinder {
             enzyme.getEchierarchies().add(enzymeHierarchy);
 
             model.getEc().add(ec.getEcNumber());
-            model.setEnzyme(enzyme);
+            //model.setEnzyme(enzyme);
         });
+        model.setEnzyme(enzyme);
 
         return model;
     }
@@ -216,13 +239,17 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
 
-        model.setSynonym(uniprotEntry.getSynonym());
-
+        //model.setSynonym(uniprotEntry.getSynonym());
         model.setAccession(uniprotEntry.getAccession());
         model.getUniprotaccessions().add(uniprotEntry.getAccession());
         model.setSpecies(uniprotEntry.getSpecies());
 
-        uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
+        Set<EnzymePortalEcNumbers> ecNumbers = getService().findByEcNumbersByAccession(uniprotAccession)
+                .stream().collect(Collectors.toSet());
+     
+        model.setEnzymePortalEcNumbersSet(ecNumbers);
+        // uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
+        ecNumbers.stream().forEach((ec) -> {
             EnzymeHierarchy enzymeHierarchy = new EnzymeHierarchy();
             EcClass ecClass = new EcClass();
             ecClass.setEc(ec.getEcNumber());
@@ -234,10 +261,9 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         model.setFunction(uniprotEntry.getFunction());
 
-
         model.setEnzyme(enzyme);
         try {
-            
+
             intenzAdapter.getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
             LOGGER.fatal("Error getting enzyme details from Intenz webservice", ex);
@@ -275,7 +301,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 
             ProteinStructure structure = new ProteinStructure();
             structure.setId(pdbId);
-            structure.setName("not available");
+            structure.setName("..........");
 
             //ProteinStructure structure = getPdbInfo(pdbId);
             model.getProteinstructure().add(structure);
@@ -303,18 +329,6 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         List<Disease> diseases = super.getService().findDiseasesByAccession(enzymeModel.getAccession());
 
-//        for (EnzymePortalDisease dis : diseases) {
-//            Disease disease = new Disease();
-//            disease.setDescription(dis.getDescription());
-//            disease.setId(dis.getMeshId());
-//            disease.setName(dis.getName());
-//            disease.setSelected(false);
-//            disease.setUrl(dis.getUrl());
-//            disease.getEvidences().add(dis.getEvidence());
-//
-//            enzymeModel.getDisease().add(disease);
-//
-//        }
         enzymeModel.setDisease(diseases);
 
     }
@@ -351,8 +365,9 @@ public class EnzymeRetriever extends EnzymeFinder {
     public EnzymeModel getWholeModel(String acc)
             throws EnzymeRetrieverException {
         // This model includes summary, reactions and pathways:
-        EnzymeModel model = getReactionsPathways(acc);
+        EnzymeModel model = getEnzymeModel(acc);
         // Add the missing bits:
+        addReactionsPathways(model);
         addProteinStructures(model);
         addMolecules(model);
         addDiseases(model);
@@ -476,7 +491,6 @@ public class EnzymeRetriever extends EnzymeFinder {
      */
     private EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel)
             throws EnzymeRetrieverException {
-        //List<ReactionPathway> reactionPathways = new ArrayList<>();
         List<Reaction> reactions;
         try {
             reactions = rheaAdapter.getRheasInCmlreact(enzymeModel
@@ -485,8 +499,6 @@ public class EnzymeRetriever extends EnzymeFinder {
         } catch (RheaFetchDataException ex) {
             throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
         }
-
-        System.out.println("RHEA CML "+ reactions);
 
         for (Reaction reaction : reactions) {
 
@@ -497,48 +509,58 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         }
         //enzymeModel.getReactionpathway().addAll(reactionPathways);
+        enzymeModel.getReactionpathway().stream().distinct().collect(Collectors.toList());
         return enzymeModel;
 
     }
 
-
-
     public EnzymeModel getReactionsPathways(String uniprotAccession)
             throws EnzymeRetrieverException {
+
+        EnzymeModel model = getEnzymeModel(uniprotAccession);
+        addReactionsPathways(model);
+        return model;
+    }
+
+    protected void addReactionsPathways(EnzymeModel model)
+            throws EnzymeRetrieverException {
+
         //Get pathways from uniprot --> maybe not for now
         //Get pathways from Biomart (from Reactome reaction retrieved from Rhea)
         //Choose 2 top pathways to extract from Reactome Website
         // View pathway in reactome should be associated with the reaction.        
         //EnzymeModel enzymeModel = (EnzymeModel)this.uniprotAdapter.getReactionPathwaySummary(uniprotAccession);
         LOGGER.debug(" -RP- before uniprotAdapter.getEnzymeSummary");
-        
-        List<ReactionPathway> rpList = new ArrayList<>();
 
-        EnzymeModel model = getEnzyme(uniprotAccession);
+        Set<ReactionPathway> rpList = new HashSet<>();
 
+        //EnzymeModel model = getEnzymeModel(uniprotAccession);
         ReactionPathway reactionPathway = new ReactionPathway();
 
-         List<EnzymeReaction> reaction = super.getService().findReactionsByAccession(uniprotAccession);
-         System.out.println("reactions found :: "+ reaction);
-        List<Pathway> pathways = super.getService().findPathwaysByAccession(uniprotAccession);
+        List<EnzymeReaction> reactions = super.getService().findReactionsByAccession(model.getAccession());
+
+        List<Pathway> pathways = super.getService().findPathwaysByAccession(model.getAccession());
+        model.setPathways(pathways);
         reactionPathway.setPathways(pathways);
 
-      if(reaction != null && !reaction.isEmpty()){
-        reactionPathway.setReaction(reaction.stream().findFirst().get());
-      }
+        if (reactions != null && !reactions.isEmpty()) {
+            reactionPathway.setReactions(reactions);
+        }
 
-        //model.getReactionpathway().add(reactionPathway);
-        rpList.add(reactionPathway);
-        rpList.stream().distinct().collect(Collectors.toList());
-        model.setReactionpathway(rpList);
+        if (!reactionPathway.getReactions().isEmpty()) {
+            rpList.add(reactionPathway);
+
+        }
+
+        model.setReactionpathway(rpList.stream().distinct().collect(Collectors.toList()));
 
         // The model comes with any available Reactome pathway IDs
         // in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
         LOGGER.debug(" -RP- before queryRheaWsForReactions");
-        model = queryRheaWsForReactions(model);//uncomment to query Rhea
+        model = queryRheaWsForReactions(model);//uncomment to query Rhea  
+        
 
-        return model;
     }
 
     //TODO
