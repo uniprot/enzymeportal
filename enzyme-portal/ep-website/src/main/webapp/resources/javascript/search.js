@@ -652,7 +652,6 @@ function saveSelectionToBasket() {
             if (id.length > 0)
                 id += ';';
             id += elem.value;
-            console.log(id);
         }
     });
     ajaxBasket(id, true);
@@ -685,7 +684,7 @@ function ajaxBasket(id, checked) {
     params.checked = checked;
     jQuery.ajax({
         dataType: "text",
-        url: window.location.pathname.replace(/search.*|basket/, "ajax/basket"),
+        url: window.location.pathname.replace(/search.*|basket|taxonomy/, "ajax/basket"),
         data: params,
         context: thisFunction,
         success: function (basketSize) {
