@@ -54,6 +54,22 @@
             </roles>
         </developer>
     </developers>
+    <properties>
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     <github.global.server>github</github.global.server>
+    <ebi.maven.repo.deploy.url>
+         scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo
+    </ebi.maven.repo.deploy.url>
+    <ebi.maven.repo.snapshots.deploy.url>
+         scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
+    </ebi.maven.repo.snapshots.deploy.url>
+    <biobabel.maven.repo.url>
+         http://www.ebi.ac.uk/~biobabel/maven2_repo
+    </biobabel.maven.repo.url>
+    <biobabel.maven.repo.deploy.url>
+         scp://login.ebi.ac.uk:/ebi/sp/pro1/chebi/maven2_repo
+    </biobabel.maven.repo.deploy.url>       
+    </properties>
     <repositories>
         <repository>
             <id>maven-repo</id>
@@ -115,6 +131,38 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
+        
+        
+       <repository>
+        <id>uniprot-artifactory-release</id>
+        <name>UniProt Artifactory for Releases</name>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <url>${http-uniprot-private-url}/release</url>
+    </repository>
+ 
+    <repository>
+        <id>uniprot-artifactory-snapshots</id>
+        <name>UniProt Artifactory for Snapshots</name>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+            <checksumPolicy>warn</checksumPolicy>
+        </snapshots>
+        <url>${http-uniprot-private-url}/snapshot</url>
+    </repository>     
+        
+        
+        
+        
     </repositories>
     <distributionManagement>
         <repository>
@@ -354,11 +402,11 @@
             </extension>
         </extensions>
     </build>
-
+<!--
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <github.global.server>github</github.global.server>
-    </properties>
+    </properties>-->
     
 <!--    mainly used in the latext ep development if BOM is to be used-->
 <!--    <dependencyManagement>
