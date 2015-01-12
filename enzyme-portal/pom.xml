@@ -134,7 +134,7 @@
         </repository>
         
         
-       <repository>
+<!--       <repository>
         <id>uniprot-artifactory-release</id>
         <name>UniProt Artifactory for Releases</name>
         <releases>
@@ -159,28 +159,57 @@
             <checksumPolicy>warn</checksumPolicy>
         </snapshots>
         <url>${http-uniprot-private-url}/snapshot</url>
-    </repository>     
+    </repository>     -->
         
         
         
         
     </repositories>
     <distributionManagement>
-        <repository>
+       
+<!--        <repository>
             <id>ebi-repo</id>
             <name>EBI Maven Repository</name>
             <url>${ebi.maven.repo.deploy.url}</url>
-        </repository>
-        <snapshotRepository>
+        </repository>-->
+         <repository>
+        <id>uniprot-artifactory-release</id>
+        <name>UniProt Artifactory for Releases</name>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <url>${http-uniprot-private-url}/release</url>
+    </repository>
+ 
+    <snapshotRepository>
+        <id>uniprot-artifactory-snapshots</id>
+        <name>UniProt Artifactory for Snapshots</name>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+            <checksumPolicy>warn</checksumPolicy>
+        </snapshots>
+        <url>${http-uniprot-private-url}/snapshot</url>
+    </snapshotRepository> 
+        
+<!--              <snapshotRepository>
             <id>ebi-repo-snapshots</id>
             <name>EBI Maven Snapshots Repository</name>
             <url>${ebi.maven.repo.snapshots.deploy.url}</url>
             <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
+        </snapshotRepository>-->
         <site>
             <id>github</id>
             <url>http://ebi-cheminf.github.com/enzymeportal/</url>
         </site>
+
     </distributionManagement>
     <issueManagement>
         <system>GitHub</system>
