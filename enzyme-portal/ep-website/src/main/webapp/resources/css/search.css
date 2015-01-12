@@ -211,9 +211,10 @@ vertical-align: top;
 }
 
 .title {
-    height: 20px;
-    font-weight: bold;
+    line-height: 37px;
     color: #408C8C;
+    font-size: 1.2em;
+    font-weight: bold;
     /*border-bottom: 1px solid #ddd;*/
 }
 

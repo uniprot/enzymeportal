@@ -394,3 +394,26 @@ a.browse-box:hover {
   stroke: #ccc;
   stroke-width: 1.5px;
 }
+
+/* Buttons */
+.btn, a:link.btn, a:visited.btn {
+    color:#333;
+    background-color: #FFFFFF;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid #84d0d8;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+a:hover.btn {
+    background-color: #e6e6e6;
+}
