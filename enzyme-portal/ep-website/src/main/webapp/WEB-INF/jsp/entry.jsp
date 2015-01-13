@@ -88,19 +88,21 @@
                                 <c:if test='${requestedfield=="literature"}'>
                                     <c:set var="literatureSelected" value="selected"/>
                                 </c:if>
+                                <c:set var="selectedSpecies" value="${enzymeModel.species}" />
                                 <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
                                 <section>
                                 <div class="header">
                                         <div class="grid_8 prefix_8 suffix_6 alpha">
                                             <div class="panel">
-                                                <div wicket:id="classification">
+                                                <div>
                                                     <div class="classification">
                                                         <div class="label">ORGANISMS</div>
-                                                        <div class='box selected ${fn:replace(relSpecies[0].species.scientificname, " ", "_")}'>
-                                                            <span class="name"><c:out value="${relSpecies[0].species.commonname}"/></span>
+                                                        ${selectedSpecies}
+                                                        <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
+                                                            <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
                                                             <span class="extra"
-                                                                  title="${relSpecies[0].species.scientificname}"
-                                                                  style="overflow: hidden;">${relSpecies[0].species.scientificname}</span>
+                                                                  title="${selectedSpecies.scientificname}"
+                                                                  style="overflow: hidden;">${selectedSpecies.scientificname}</span>
                                                         </div>
                                                     </div>
                                                     <div class="selection">
