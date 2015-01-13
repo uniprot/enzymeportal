@@ -97,8 +97,7 @@
                                                 <div>
                                                     <div class="classification">
                                                         <div class="label">ORGANISMS</div>
-                                                        ${selectedSpecies}
-                                                        <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
+                                                                               <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
                                                             <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
                                                             <span class="extra"
                                                                   title="${selectedSpecies.scientificname}"
@@ -107,7 +106,7 @@
                                                     </div>
                                                     <div class="selection">
                                                         <ul>                    
-                                                            <c:if test="${fn:length(relSpecies)<=0}">
+                                            <c:if test="${fn:length(relSpecies)<=0}">
                                                                 <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
                                                                     <c:set var="species" value="${relSpecies[i].species}"/>
                                                                         <c:set var="select" value=""/>
@@ -126,7 +125,7 @@
                                                                         </li>
                                                                 </c:forEach>
                                                             </c:if>
-                                                            <c:if test="${fn:length(relSpecies)>0}">
+                                                   <c:if test="${fn:length(relSpecies)>0}">
                                                                 <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
                                                                     <c:set var="species" value="${relSpecies[i].species}"/>
                                                                         <c:set var="select" value=""/>
