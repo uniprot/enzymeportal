@@ -331,19 +331,13 @@ public class Species implements Comparable<Species>, Serializable {
     
     
     
-//    @Override
-//    public String toString() {
-//        return "Species{" + "scientificname=" + scientificname + '}';
-//    }
-//    
     @Override
     public String toString() {
         return "Species{" + "scientificname=" + scientificname + ", commonname=" + commonname + '}';
     }
-
+    
     @Override
     public int compareTo(Species o) {
-    
         return this.scientificname.compareToIgnoreCase(o.getScientificname());
     }
     

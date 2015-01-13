@@ -38,7 +38,7 @@ public class EnzymeModel extends UniprotEntry
 
     protected List<Pathway> pathways = new ArrayList<>();
     protected List<EnzymeAccession> relatedspecies;
-
+    
     public List<Pathway> getPathways() {
         if (pathways == null) {
             pathways = new ArrayList<>();
