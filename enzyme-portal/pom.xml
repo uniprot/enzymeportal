@@ -72,6 +72,36 @@
     </biobabel.maven.repo.deploy.url>       
     </properties>
     <repositories>
+        
+          <repository>
+        <id>uniprot-artifactory-release</id>
+        <name>UniProt Artifactory for Releases</name>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <url>${http-uniprot-private-url}/release</url>
+    </repository>
+ 
+    <repository>
+        <id>uniprot-artifactory-snapshots</id>
+        <name>UniProt Artifactory for Snapshots</name>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+            <checksumPolicy>warn</checksumPolicy>
+        </snapshots>
+        <url>${http-uniprot-private-url}/snapshot</url>
+    </repository>      
+        
+        
+        
         <repository>
             <id>maven-repo</id>
             <url>http://repo1.maven.org/maven2</url>
@@ -134,32 +164,7 @@
         </repository>
         
         
-<!--       <repository>
-        <id>uniprot-artifactory-release</id>
-        <name>UniProt Artifactory for Releases</name>
-        <releases>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>warn</checksumPolicy>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <url>${http-uniprot-private-url}/release</url>
-    </repository>
- 
-    <repository>
-        <id>uniprot-artifactory-snapshots</id>
-        <name>UniProt Artifactory for Snapshots</name>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-            <checksumPolicy>warn</checksumPolicy>
-        </snapshots>
-        <url>${http-uniprot-private-url}/snapshot</url>
-    </repository>     -->
+    
         
         
         
