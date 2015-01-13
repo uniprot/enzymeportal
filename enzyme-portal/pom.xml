@@ -57,7 +57,7 @@
     <properties>
      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
      <github.global.server>github</github.global.server>
-                 <http-uniprot-maven-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-maven-url>
+                 <http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>
     <ebi.maven.repo.deploy.url>
          scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo
     </ebi.maven.repo.deploy.url>
