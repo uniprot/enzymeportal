@@ -225,49 +225,14 @@ public class EnzymeRetriever extends EnzymeFinder {
 
     public EnzymeModel getEnzyme(String uniprotAccession) {
 
-        UniprotEntry uniprotEntry = super.getService().findByAccession(uniprotAccession);
-
-        EnzymeModel model = new EnzymeModel();
-
-        Enzyme enzyme = new Enzyme();
-
-        Sequence sequence = new Sequence();
-        sequence.setLength(uniprotEntry.getSequenceLength());
-        enzyme.setSequence(sequence);
-
-        model.setName(uniprotEntry.getProteinName());
-
-        model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
-
-        //model.setSynonym(uniprotEntry.getSynonym());
-        model.setAccession(uniprotEntry.getAccession());
-        model.getUniprotaccessions().add(uniprotEntry.getAccession());
-        model.setSpecies(uniprotEntry.getSpecies());
-
-        Set<EnzymePortalEcNumbers> ecNumbers = getService().findByEcNumbersByAccession(uniprotAccession)
-                .stream().collect(Collectors.toSet());
-     
-        model.setEnzymePortalEcNumbersSet(ecNumbers);
-        // uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
-        ecNumbers.stream().forEach((ec) -> {
-            EnzymeHierarchy enzymeHierarchy = new EnzymeHierarchy();
-            EcClass ecClass = new EcClass();
-            ecClass.setEc(ec.getEcNumber());
-            enzymeHierarchy.getEcclass().add(ecClass);
-            enzyme.getEchierarchies().add(enzymeHierarchy);
-
-            model.getEc().add(ec.getEcNumber());
-        });
-
-        model.setFunction(uniprotEntry.getFunction());
-
-        model.setEnzyme(enzyme);
+       
+        EnzymeModel model = getEnzymeModel(uniprotAccession);
         try {
 
             intenzAdapter.getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
             LOGGER.fatal("Error getting enzyme details from Intenz webservice", ex);
-        }
+        }       
         List<String> prov = new LinkedList<>();
         prov.add("IntEnz");
         prov.add("UniProt");
