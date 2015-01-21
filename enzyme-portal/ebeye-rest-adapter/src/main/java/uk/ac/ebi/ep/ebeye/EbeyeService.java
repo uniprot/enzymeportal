@@ -41,7 +41,7 @@ public class EbeyeService {
     }
 
     @Async
-    public Future<EbeyeSearchResult> searchEbeyeDomain(String url) throws InterruptedException {
+    private Future<EbeyeSearchResult> searchEbeyeDomain(String url) throws InterruptedException {
         EbeyeSearchResult results = getEbeyeSearchResult(url);
         return new AsyncResult<>(results);
     }
@@ -50,7 +50,8 @@ public class EbeyeService {
         List<String> ebeyeDomains = new ArrayList<String>() {
             {
                 //add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
-                add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?format=json&size=100&query=");
+                add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?facetcount=100&format=json&query=");
+                //add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?format=json&size=100&query=");
                 //add("http://www.ebi.ac.uk/ebisearch/ws/rest/intenz?format=json&size=100&fields=UNIPROT&query=");
                 // add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
             }
@@ -83,5 +84,6 @@ public class EbeyeService {
         return autocomplete.getSuggestions();
 
     }
+     
 
 }

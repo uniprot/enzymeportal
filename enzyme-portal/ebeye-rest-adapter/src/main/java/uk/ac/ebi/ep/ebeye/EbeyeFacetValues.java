@@ -3,29 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.ebeye.autocomplete;
+package uk.ac.ebi.ep.ebeye;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author joseph
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EbeyeAutocomplete {
+public class EbeyeFacetValues {
 
-    @JsonProperty("suggestions")
-    private List<Suggestion> suggestions;
+    @JsonProperty("label")
+    private String label;
+    @JsonProperty("value")
+    private String value;
 
-    public List<Suggestion> getSuggestions() {
-        if (suggestions == null) {
-            suggestions = new ArrayList<>();
-        }
-
-        return suggestions;
+    public String getLabel() {
+        return label;
     }
- 
+
+    public String getValue() {
+        return value;
+    }
+    
+    
 }

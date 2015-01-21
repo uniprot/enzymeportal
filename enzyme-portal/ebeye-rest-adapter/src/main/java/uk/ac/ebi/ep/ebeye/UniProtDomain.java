@@ -24,6 +24,20 @@ public class UniProtDomain extends Domain  implements Comparable<UniProtDomain> 
     @JsonProperty("source")
     private String source;
 
+    public UniProtDomain() {
+    }
+    
+    
+
+    public UniProtDomain(String uniprot_accession, String uniprot_name) {
+        this.uniprot_accession = uniprot_accession;
+        this.uniprot_name = uniprot_name;
+    }
+
+
+    
+    
+
        public String getUniprot_name() {
         //return uniprot_name.split("_")[0];
            return uniprot_name.substring(0, uniprot_name.indexOf("_"));
