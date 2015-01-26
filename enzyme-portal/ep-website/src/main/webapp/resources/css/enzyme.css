@@ -342,7 +342,7 @@ a.browse-box:hover {
     background-clip: padding-box;
 }
 
-div#local-masthead ul li {
+div#local-masthead ul.dropdown-menu li {
     float: none;
 }
 
