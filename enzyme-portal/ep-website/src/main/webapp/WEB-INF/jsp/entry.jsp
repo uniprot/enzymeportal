@@ -97,7 +97,7 @@
                                                 <div>
                                                     <div class="classification">
                                                         <div class="label">ORGANISMS</div>
-                                                                               <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
+                                                          <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
                                                             <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
                                                             <span class="extra"
                                                                   title="${selectedSpecies.scientificname}"

@@ -571,7 +571,7 @@ function checkContent() {
 
         var div = $(this).next();
 
-        if ($(div).children().length == 0) {
+        if ($(div).children().length === 0) {
             $(this).hide();
         }
 
@@ -610,7 +610,7 @@ function showBasketSize() {
     if (dc && bsIndex > -1) {
         bsStart = bsIndex + BASKET_SIZE.length;
         bsEnd = dc.indexOf(';', bsStart);
-        basketSize = bsEnd == -1 ?
+        basketSize = bsEnd === -1 ?
                 dc.substring(bsStart) : dc.substring(bsStart, bsEnd);
     }
     $('.basketSize').text(basketSize);
@@ -684,7 +684,7 @@ function ajaxBasket(id, checked) {
     params.checked = checked;
     jQuery.ajax({
         dataType: "text",
-        url: window.location.pathname.replace(/search.*|basket|taxonomy/, "ajax/basket"),
+        url: window.location.pathname.replace(/search.*|basket|taxonomy.*/, "ajax/basket"),
         data: params,
         context: thisFunction,
         success: function (basketSize) {
@@ -709,11 +709,11 @@ function updateCompareButton() {
         if (this.value != '')
             sel++;
     });
-    if (all == 0) {
+    if (all === 0) {
         $('div#basketEmptyMsg').show();
         $('div#basketOneMsg').hide();
         $('div#basketFullMsg').hide();
-    } else if (all == 1) {
+    } else if (all === 1) {
         $('div#basketEmptyMsg').hide();
         $('div#basketOneMsg').show();
         $('div#basketFullMsg').hide();
@@ -723,7 +723,7 @@ function updateCompareButton() {
         $('div#basketFullMsg').show();
         showBasketSize();
     }
-    if (sel == 2) {
+    if (sel === 2) {
         $('#compareButton').removeAttr('disabled');
         $('#compareButton').attr('title',
                 'Proceed to compare selected enzymes');

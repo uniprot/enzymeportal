@@ -61,6 +61,9 @@
                 <%-- <c:set var="startRecord" value="${pagination.firstResult}"/>--%>
                 <c:set var="searchresults" value="${searchModel.searchresults}"/>
                 <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
+                
+                 <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
+                  <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
                 <%--
                 <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
                 <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>--%>
@@ -257,14 +260,16 @@
          <div class="clear"></div>
           <div class="line"></div>
           <div class="resultContent"> 
-
+              <%@include file="util/prioritiseSpecies.jsp" %>
+ <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
               <c:if test="${not empty summaryEntries}">
+   
         <c:forEach var="enzyme" items="${summaryEntries}">
          
             <c:if test="${not empty enzyme.relatedspecies}">
          <c:set var="theSpecies" value="${enzyme.relatedspecies[0]}" /> 
                     </c:if>  
-                
+             
      
             <div class="resultItem grid_24">
                

@@ -84,23 +84,21 @@ public class BrowseTaxonomyController extends AbstractController {
         searchParams.setSize(SEARCH_PAGESIZE);
         searchModel.setSearchparams(searchParams);
 
-        SearchResults searchResults = new SearchResults();
-
-        searchResults.setTotalfound(page.getTotalElements());
-        SearchFilters filters = new SearchFilters();
-        filters.setSpecies(species);
-        filters.setCompounds(compouds);
-
-        filters.setDiseases(diseases);
-        searchResults.setSearchfilters(filters);
-
-        searchModel.setSearchresults(searchResults);
-
-        model.addAttribute("searchModel", searchModel);
-        model.addAttribute("searchConfig", searchConfig);
-
-        model.addAttribute("searchFilter", filters);
-
+//        SearchResults searchResults = new SearchResults();
+//
+//        searchResults.setTotalfound(page.getTotalElements());
+//        SearchFilters filters = new SearchFilters();
+//        filters.setSpecies(species);
+//        filters.setCompounds(compouds);
+//
+//        filters.setDiseases(diseases);
+//        searchResults.setSearchfilters(filters);
+//
+//        searchModel.setSearchresults(searchResults);
+//        model.addAttribute("searchModel", searchModel);
+//        model.addAttribute("searchConfig", searchConfig);
+//
+//        model.addAttribute("searchFilter", filters);
         List<UniprotEntry> result = page.getContent();
 
         int current = page.getNumber() + 1;
@@ -115,9 +113,27 @@ public class BrowseTaxonomyController extends AbstractController {
         model.addAttribute("organismName", entryName);
         model.addAttribute("taxId", entryID);
 
-        model.addAttribute("summaryEntries", result);
+        // model.addAttribute("summaryEntries", result);
+        SearchResults searchResults = new SearchResults();
+
+        searchResults.setTotalfound(page.getTotalElements());
+        SearchFilters filters = new SearchFilters();
+        filters.setSpecies(species);
+        filters.setCompounds(compouds);
+
+        filters.setDiseases(diseases);
+        searchResults.setSearchfilters(filters);
+        searchResults.setSummaryentries(result);
+
+        searchModel.setSearchresults(searchResults);
+        model.addAttribute("searchModel", searchModel);
+        model.addAttribute("searchConfig", searchConfig);
+
+        model.addAttribute("searchFilter", filters);
 
         String searchKey = getSearchKey(searchModel.getSearchparams());
+        cacheSearch(session.getServletContext(), searchKey, searchResults);
+        setLastSummaries(session, searchResults.getSummaryentries());
         clearHistory(session);
         addToHistory(session, searchModel.getSearchparams().getType(),
                 searchKey);
@@ -149,23 +165,22 @@ public class BrowseTaxonomyController extends AbstractController {
         searchParams.setSize(SEARCH_PAGESIZE);
         searchModel.setSearchparams(searchParams);
 
-        SearchResults searchResults = new SearchResults();
-
-        searchResults.setTotalfound(page.getTotalElements());
-        SearchFilters filters = new SearchFilters();
-        filters.setSpecies(species);
-        filters.setCompounds(compouds);
-
-        filters.setDiseases(diseases);
-        searchResults.setSearchfilters(filters);
-
-        searchModel.setSearchresults(searchResults);
-
-        model.addAttribute("searchModel", searchModel);
-        model.addAttribute("searchConfig", searchConfig);
-
-        model.addAttribute("searchFilter", filters);
-
+//        SearchResults searchResults = new SearchResults();
+//        
+//        searchResults.setTotalfound(page.getTotalElements());
+//        SearchFilters filters = new SearchFilters();
+//        filters.setSpecies(species);
+//        filters.setCompounds(compouds);
+//        
+//        filters.setDiseases(diseases);
+//        searchResults.setSearchfilters(filters);
+//        
+//        searchModel.setSearchresults(searchResults);
+//        
+//        model.addAttribute("searchModel", searchModel);
+//        model.addAttribute("searchConfig", searchConfig);
+//        
+//        model.addAttribute("searchFilter", filters);
         List<UniprotEntry> result = page.getContent();
 
         int current = page.getNumber() + 1;
@@ -180,9 +195,27 @@ public class BrowseTaxonomyController extends AbstractController {
         model.addAttribute("organismName", entryName);
         model.addAttribute("taxId", entryID);
 
-        model.addAttribute("summaryEntries", result);
+       // model.addAttribute("summaryEntries", result);
+        SearchResults searchResults = new SearchResults();
+
+        searchResults.setTotalfound(page.getTotalElements());
+        SearchFilters filters = new SearchFilters();
+        filters.setSpecies(species);
+        filters.setCompounds(compouds);
+
+        filters.setDiseases(diseases);
+        searchResults.setSearchfilters(filters);
+        searchResults.setSummaryentries(result);
+
+        searchModel.setSearchresults(searchResults);
+        model.addAttribute("searchModel", searchModel);
+        model.addAttribute("searchConfig", searchConfig);
+
+        model.addAttribute("searchFilter", filters);
 
         String searchKey = getSearchKey(searchModel.getSearchparams());
+        cacheSearch(session.getServletContext(), searchKey, searchResults);
+        setLastSummaries(session, searchResults.getSummaryentries());
         clearHistory(session);
         addToHistory(session, searchModel.getSearchparams().getType(),
                 searchKey);
@@ -335,6 +368,10 @@ public class BrowseTaxonomyController extends AbstractController {
         model.addAttribute("summaryEntries", result);
 
         String searchKey = getSearchKey(searchModel.getSearchparams());
+
+        cacheSearch(session.getServletContext(), searchKey, searchResults);
+        setLastSummaries(session, searchResults.getSummaryentries());
+
         clearHistory(session);
         addToHistory(session, searchModel.getSearchparams().getType(),
                 searchKey);

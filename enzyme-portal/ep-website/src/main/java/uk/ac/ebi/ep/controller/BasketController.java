@@ -71,13 +71,15 @@ public class BasketController extends AbstractController {
             session.setAttribute(Attribute.basket.name(), basket);
         }
         for (String basketId : id.split(";")) {
-            if (checked) {
+            if (checked && lastSummaries != null) {
                 final UniprotEntry summary = lastSummaries.get(basketId);
+                if(summary != null){
+                  basket.put(basketId, summary);   
+                }
                 if (summary == null) {
                     // build a fresh one:
                     // TODO
                 }
-                basket.put(basketId, summary);
             } else {
                 basket.remove(basketId);
             }

@@ -5,7 +5,9 @@
 package uk.ac.ebi.ep.functions;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -188,17 +190,16 @@ public final class Functions {
     }
  
     public static String getSummaryBasketId(UniprotEntry summary){
-//        List<String> accs = new ArrayList<>();
-//        for (EnzymeAccession acc : summary.getRelatedspecies()) {
-//            accs.add(acc.getUniprotaccessions().get(0));
-//            
-//        }
-//    
-//        Collections.sort(accs);
-//
-//        return accs.toString();
+        List<String> accs = new ArrayList<>();
+        summary.getRelatedspecies().stream().forEach((acc) -> {
+            accs.add(acc.getUniprotaccessions().get(0));
+        });
+    
+        Collections.sort(accs);
+
+        return accs.toString();
         
-        return summary.getAccession();
+       // return summary.getAccession();
         
        
     }
