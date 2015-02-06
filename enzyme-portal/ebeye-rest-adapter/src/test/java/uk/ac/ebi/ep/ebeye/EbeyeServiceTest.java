@@ -24,22 +24,23 @@ public class EbeyeServiceTest extends TestCase {
     public void testQuery() {
         System.out.println("query");
         String query = "cancer";
-        UniProtDomain domain1 = new UniProtDomain("P1234", "ABC_HUMAN");
-        UniProtDomain domain2 = new UniProtDomain("Q1234", "ABC_RAT");
-
-        List<UniProtDomain> domains = new ArrayList<>();
+        Entry domain1 = new Entry("P1234", "ABC_HUMAN");
+        Entry domain2 = new Entry("Q1234", "ABC_RAT");
+        
+     
+        List<Entry> domains = new ArrayList<>();
         domains.add(domain1);
         domains.add(domain2);
 
         EbeyeService instance = new EbeyeService();
 
         EbeyeSearchResult expResult = new EbeyeSearchResult();
-        expResult.setUniProtDomains(domains);
+        expResult.setEntries(domains);
 
         EbeyeSearchResult result = instance.query(query);
-        result.setUniProtDomains(domains);
+        result.setEntries(domains);
 
-        assertEquals(expResult.getUniProtDomains(), result.getUniProtDomains());
+        assertEquals(expResult.getEntries(), result.getEntries());
 
     }
 

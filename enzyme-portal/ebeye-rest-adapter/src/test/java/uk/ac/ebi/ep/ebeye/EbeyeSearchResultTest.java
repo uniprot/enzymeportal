@@ -20,20 +20,20 @@ public class EbeyeSearchResultTest extends TestCase {
      * Test of getUniProtDomains method, of class EbeyeSearchResult.
      */
     @Test
-    public void testGetUniProtDomains() {
-        System.out.println("getUniProtDomains");
+    public void testGetEntries() {
+        System.out.println("getEntries");
         EbeyeSearchResult instance = new EbeyeSearchResult();
 
-        UniProtDomain domain1 = new UniProtDomain();
-        UniProtDomain domain2 = new UniProtDomain();
-        List<UniProtDomain> expResult = new ArrayList<>();
+        Entry domain1 = new Entry();
+        Entry domain2 = new Entry();
+        List<Entry> expResult = new ArrayList<>();
         expResult.add(domain1);
         expResult.add(domain2);
 
-        instance.getUniProtDomains().add(domain1);
-        instance.getUniProtDomains().add(domain2);
+        instance.getEntries().add(domain1);
+        instance.getEntries().add(domain2);
 
-        List<UniProtDomain> result = instance.getUniProtDomains();
+        List<Entry> result = instance.getEntries();
         assertEquals(expResult.size(), result.size());
 
     }

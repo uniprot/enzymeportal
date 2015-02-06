@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.ebeye;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Future;
@@ -50,12 +51,14 @@ public class EbeyeService {
         List<String> ebeyeDomains = new ArrayList<String>() {
             {
                 //add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
-                add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?facetcount=100&format=json&query=");
-                //add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?format=json&size=100&query=");
+                //add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?facetcount=100&format=json&query=");
+                add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?format=json&size=100&query=");
                 //add("http://www.ebi.ac.uk/ebisearch/ws/rest/intenz?format=json&size=100&fields=UNIPROT&query=");
-                // add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
+                //add("http://www.ebi.ac.uk/ebisearch/ws/rest/uniprot?format=json&size=100&query=");
+                //add("http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?format=json&size=100&fields=name&query=");
             }
         };
+
         // get element as soon as it is available
         Optional<EbeyeSearchResult> result = ebeyeDomains.stream().map((base) -> {
             String url = base + query;
@@ -76,7 +79,6 @@ public class EbeyeService {
     }
 
     public List<Suggestion> ebeyeAutocompleteSearch(String searchTerm) {
-        //String url = "http://ash-18.ebi.ac.uk:8080/ebisearch/ws/rest/enzymeportal/autocomplete?term=" + searchTerm + "&format=json";
         String url = "http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal/autocomplete?term=" + searchTerm + "&format=json";
 
         EbeyeAutocomplete autocomplete = restTemplate.getForObject(url.trim(), EbeyeAutocomplete.class);
@@ -84,6 +86,26 @@ public class EbeyeService {
         return autocomplete.getSuggestions();
 
     }
-     
+
+    public List<EbeyeSearchResult> query(String query, int iteration) {
+        List<String> ebeyeDomains = new LinkedList<>();
+
+        for (int index = 0; index <= iteration; index++) {
+
+            String link = "http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?format=json&size=100&start=" + index * 100 + "&fields=name&query=";
+            ebeyeDomains.add(link);
+        }
+
+        EbeyeSearchResult result = null;
+        List<EbeyeSearchResult> results = new ArrayList<>();
+        for (String base : ebeyeDomains) {
+            String url = base + query;
+            result = getEbeyeSearchResult(url.trim());
+
+            results.add(result);
+        }
+
+        return results;
+    }
 
 }

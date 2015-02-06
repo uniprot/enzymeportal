@@ -5,11 +5,15 @@
  */
 package uk.ac.ebi.ep.ebeye;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -18,52 +22,62 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EbeyeSearchResult {
 
+    @JsonProperty("hitCount")
+    private Integer hitCount;
     @JsonProperty("entries")
-    private List<UniProtDomain> uniProtDomains;
+    private List<Entry> entries;
+    @JsonIgnore
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
-    @JsonProperty("facets")
-    private List<EbeyeFacets> facets;
-
-    private final List<String> ecNumbers;
-
-    public EbeyeSearchResult() {
-        ecNumbers = new LinkedList<>();
+    /**
+     *
+     * @return The hitCount
+     */
+    @JsonProperty("hitCount")
+    public Integer getHitCount() {
+        return hitCount;
     }
 
-    public List<UniProtDomain> getUniProtDomains() {
-        if (uniProtDomains == null) {
-            uniProtDomains = new ArrayList<>();
+    /**
+     *
+     * @param hitCount The hitCount
+     */
+    @JsonProperty("hitCount")
+    public void setHitCount(Integer hitCount) {
+        this.hitCount = hitCount;
+    }
+
+    /**
+     *
+     * @return The entries
+     */
+    @JsonProperty("entries")
+    public List<Entry> getEntries() {
+
+        if (entries == null) {
+            entries = new ArrayList<>();
         }
-        return uniProtDomains;
+
+        return entries;
     }
 
-    public List<EbeyeFacets> getFacets() {
-        if (facets == null) {
-            facets = new ArrayList<>();
-        }
-
-        return facets;
+    /**
+     *
+     * @param entries The entries
+     */
+    @JsonProperty("entries")
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
     }
 
-    private void computeEcNumbers() {
-
-        getFacets().stream().filter((facet) -> (facet.getId().equalsIgnoreCase("ec_number"))).forEach((facet) -> {
-            facet.getFacetValues().stream().forEach((facetValue) -> {
-                ecNumbers.add(facetValue.getValue());
-            });
-        });
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
     }
 
-    public List<String> getEcNumbers() {
-        computeEcNumbers();
-        return ecNumbers;
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
     }
-
-    //for testing purpose only
-    public void setUniProtDomains(List<UniProtDomain> uniProtDomains) {
-        this.uniProtDomains = uniProtDomains;
-    }
-    
-    
 
 }
