@@ -17,4 +17,11 @@ import uk.ac.ebi.ep.data.domain.UniprotXref;
 public interface UniprotXrefRepositoryCustom {
 
     List<UniprotXref> findPDBcodesByAccession(String accession);
+    
+    List<UniprotXref> findPDBcodes();
+    List<String> findPdbCodesWithNoNames();
+    UniprotXref findPdbById(String pdbId);
+        
+    
+    
 }

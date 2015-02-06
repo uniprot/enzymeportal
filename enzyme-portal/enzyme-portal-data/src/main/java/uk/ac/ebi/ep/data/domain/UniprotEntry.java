@@ -83,6 +83,10 @@ import uk.ac.ebi.ep.data.search.model.Species;
 })
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
+    private Set<EnzymePortalNames> enzymePortalNamesSet;
+    @OneToMany(mappedBy = "accession",fetch = FetchType.LAZY)
+    private Set<EnzymeXmlStore> enzymeXmlStoreSet;
 
     @Column(name = "ENTRY_TYPE")
     private Short entryType;
@@ -562,6 +566,24 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
         uniprotAccessions.add(getAccession());
         return uniprotAccessions;
+    }
+
+    @XmlTransient
+    public Set<EnzymePortalNames> getEnzymePortalNamesSet() {
+        return enzymePortalNamesSet;
+    }
+
+    public void setEnzymePortalNamesSet(Set<EnzymePortalNames> enzymePortalNamesSet) {
+        this.enzymePortalNamesSet = enzymePortalNamesSet;
+    }
+
+    @XmlTransient
+    public Set<EnzymeXmlStore> getEnzymeXmlStoreSet() {
+        return enzymeXmlStoreSet;
+    }
+
+    public void setEnzymeXmlStoreSet(Set<EnzymeXmlStore> enzymeXmlStoreSet) {
+        this.enzymeXmlStoreSet = enzymeXmlStoreSet;
     }
 
 }

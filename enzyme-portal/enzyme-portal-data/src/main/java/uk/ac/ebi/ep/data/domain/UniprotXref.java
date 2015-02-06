@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "UniprotXref.findBySourceId", query = "SELECT u FROM UniprotXref u WHERE u.sourceId = :sourceId"),
     @NamedQuery(name = "UniprotXref.findBySource", query = "SELECT u FROM UniprotXref u WHERE u.source = :source")})
 public class UniprotXref implements Serializable {
+    @Column(name = "SOURCE_NAME")
+    private String sourceName;
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -125,7 +127,17 @@ public class UniprotXref implements Serializable {
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.UniprotXref[ xrefId=" + xrefId + " ]";
+        return "UniprotXref{" + "sourceName=" + sourceName + ", sourceId=" + sourceId + ", source=" + source + '}';
+    }
+
+
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
     }
     
 }
