@@ -119,7 +119,7 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                               <h2>${totalfound} result(s) found</h2>
+                               <h2>${summaryEntriesSize} result(s) found</h2>
                         </c:if>
                     </section>
                     <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">

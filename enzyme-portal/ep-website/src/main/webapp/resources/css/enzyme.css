@@ -341,6 +341,11 @@ a.browse-box:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     background-clip: padding-box;
 }
+
+div#local-masthead ul.dropdown-menu li {
+    float: none;
+}
+
 .dropdown-menu li a {
     display: block;
     padding: 3px 20px;
