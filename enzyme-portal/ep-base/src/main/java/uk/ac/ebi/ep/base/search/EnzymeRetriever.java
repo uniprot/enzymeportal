@@ -182,6 +182,8 @@ public class EnzymeRetriever extends EnzymeFinder {
         UniprotEntry uniprotEntry = super.getService().findByAccession(uniprotAccession);
 
         EnzymeModel model = new EnzymeModel();
+        
+        if(uniprotEntry != null){
         Enzyme enzyme = new Enzyme();
 
         Sequence sequence = new Sequence();
@@ -219,7 +221,7 @@ public class EnzymeRetriever extends EnzymeFinder {
             //model.setEnzyme(enzyme);
         });
         model.setEnzyme(enzyme);
-
+        }
         return model;
     }
 
