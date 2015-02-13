@@ -53,6 +53,7 @@ import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
+import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
@@ -79,6 +80,9 @@ public class SearchController extends AbstractController {
     private ReactomeConfig reactomeConfig;
     @Autowired
     private ChebiConfig chebiConfig;
+    
+        @Autowired
+    protected IntenzConfig intenzConfig;
 
     private enum ResponsePage {
 

@@ -13,19 +13,19 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray" %>
 
-<!-- 
+<%--
 <div style="background-color: yellow">
 topComparison.key = ${topComparison.key}<br/>
 theComparison.key = ${theComparison.key}<br/>
-theComparison.value.class.simpleName = ${theComparison.value.class.simpleName}<br/>
+theComparison.value.['class'].simpleName = ${theComparison.value['class'].simpleName}<br/>
 empty item? = ${empty item}<br/>
 comparePath = ${comparePath}
 </div>
- -->
+ --%>
  
 <c:choose>
     <c:when test="${empty topComparison.value.subComparisons and
-        (topComparison.value.class.simpleName eq 'ListComparison'
+        (topComparison.value['class'].simpleName eq 'ListComparison'
         or topComparison.key eq 'Small molecules')}">
         No data available.
     </c:when>
@@ -91,7 +91,7 @@ comparePath = ${comparePath}
             <c:when test="${empty item}">
                 &nbsp;
             </c:when>
-            <c:when test="${theComparison.value.class.simpleName
+            <c:when test="${theComparison.value['class'].simpleName
                 eq 'MoleculeComparison'}">
                 <c:set var="molecule" value="${item}"/>
                 <%@include file="comparison-item-molecule.jspf" %>

@@ -22,6 +22,7 @@ import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.mBean.FilesConfig;
+import uk.ac.ebi.ep.pdbeadapter.PdbService;
 
 /**
  *
@@ -33,24 +34,32 @@ public class EnzymePortalConfig {
     @Autowired
     private Environment env;
 
-    //maybe not needed anymore
+    //maybe not be needed anymore as we now use spting 4 +
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
         interceptor.setParamName("lang");
         return interceptor;
     }
+    
+    
+            
+         @Bean
+    public String uniprotAlignUrl() {
+        String alignUrl = env.getProperty("uniprot.align.url");
+        return alignUrl;
+    }       
 
     @Bean
     public String pdbImgUrl() {
         String pdbImgUrl = env.getProperty("pdb.structure.img.url");
         return pdbImgUrl;
     }
-
+    
     @Bean
     public String pdbStructureCompareUrl() {
-        String compare = env.getProperty("pdb.structure.compare.url");
-        return compare;
+        String pdbStructureCompareUrl = env.getProperty("pdb.structure.compare.url");
+        return pdbStructureCompareUrl;
     }
 
     @Bean
@@ -156,5 +165,13 @@ public class EnzymePortalConfig {
         filesConfig.setSitemapUrl(env.getProperty("sitemap.directory"));
         return filesConfig;
     }
+
+    
+        @Bean
+    public PdbService pdbService() {
+          return new PdbService();
+    }
+
+
 
 }

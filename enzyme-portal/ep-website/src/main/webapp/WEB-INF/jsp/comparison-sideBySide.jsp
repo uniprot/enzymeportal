@@ -20,7 +20,7 @@
     <c:when test="${theComparison.key eq 'Sequence'}">
         <script>
         function sendUniprotAlignQuery(){
-        	var alignQuery = '${uniprotConfig.alignUrl}'
+        	var alignQuery = '${uniprotAlignUrl}'
         		   .replace(/\{0\}/, '${comparison.compared[0].uniprotaccessions[0]}')
                    .replace(/\{1\}/, '${comparison.compared[1].uniprotaccessions[0]}');
         	window.open(alignQuery);

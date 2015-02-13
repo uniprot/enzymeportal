@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <div class="summary structure" id="${proteinStructure.id}">
     <div class="summary">
         <h3><span>${proteinStructure.description}</span></h3>
         <div class="main_link">
-            <a rel="external"
+            <a rel="external" target="_blank"
                href="http://www.ebi.ac.uk/pdbe-srv/view/entry/${proteinStructure.id}/summary">View
                 in PDBe</a>
         </div>
-        <div class="image">
+       <div class="image">
                         <a rel="external" title="Click for an interactive viewer" 
                            href="${proteinStructure.image.href}"><img
                     alt="${proteinStructure.image.caption}"

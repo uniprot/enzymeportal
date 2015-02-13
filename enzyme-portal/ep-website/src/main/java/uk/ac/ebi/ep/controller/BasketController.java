@@ -25,6 +25,7 @@ import uk.ac.ebi.ep.data.exceptions.EnzymeRetrieverException;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
+import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 
 /**
@@ -42,7 +43,16 @@ public class BasketController extends AbstractController {
     private ReactomeConfig reactomeConfig;
     @Autowired
     private ChebiConfig chebiConfig;
+    
+        @Autowired
+    protected IntenzConfig intenzConfig;
 
+    @Autowired
+    private String pdbStructureCompareUrl;
+    @Autowired
+    private String pdbImgUrl;
+    @Autowired
+    private String uniprotAlignUrl;
 
     /**
      * Updates the basket with enzymes (summaries) to compare or download.
@@ -73,8 +83,8 @@ public class BasketController extends AbstractController {
         for (String basketId : id.split(";")) {
             if (checked && lastSummaries != null) {
                 final UniprotEntry summary = lastSummaries.get(basketId);
-                if(summary != null){
-                  basket.put(basketId, summary);   
+                if (summary != null) {
+                    basket.put(basketId, summary);
                 }
                 if (summary == null) {
                     // build a fresh one:
@@ -147,6 +157,10 @@ public class BasketController extends AbstractController {
                     = new EnzymeComparison(models[0], models[1]);
             LOGGER.debug("Comparison finished");
             model.addAttribute("comparison", comparison);
+            model.addAttribute("pdbImgUrl", pdbImgUrl);
+            model.addAttribute("pdbStructureCompareUrl", pdbStructureCompareUrl);
+            model.addAttribute("uniprotAlignUrl", uniprotAlignUrl);
+
             return "comparison";
         } catch (Exception e) {
             String errorParam = theAccs[0] + "," + theAccs[1];

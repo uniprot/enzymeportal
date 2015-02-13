@@ -34,7 +34,6 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeService;
-import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
 
@@ -50,8 +49,8 @@ public abstract class AbstractController {
   
     @Autowired
     protected Config searchConfig;
-    @Autowired
-    protected IntenzConfig intenzConfig;
+    //@Autowired
+   // protected IntenzConfig intenzConfig;
     @Autowired
     protected EnzymePortalService enzymePortalService;
     @Autowired

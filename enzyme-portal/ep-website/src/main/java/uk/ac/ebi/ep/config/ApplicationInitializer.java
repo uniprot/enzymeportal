@@ -62,6 +62,8 @@ public class ApplicationInitializer implements WebApplicationInitializer {
                 = servletContext.addServlet("ep-website-dispatcher", new DispatcherServlet(rootContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
+        dispatcher.addMapping("*.html");
+        dispatcher.addMapping("*.json");
 
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR);
 

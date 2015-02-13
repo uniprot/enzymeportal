@@ -24,7 +24,7 @@
 </c:if>
 
 <c:choose>
-    <c:when test="${theComparison.value.class.simpleName eq 'ListComparison'
+    <c:when test="${theComparison.value['class'].simpleName eq 'ListComparison'
         and not empty theComparison.value.subComparisons}">
         <c:forEach var="sc" items="${theComparison.value.subComparisons}">
             <c:set var="theComparison" value="${sc}"/>

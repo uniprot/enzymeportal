@@ -23,7 +23,7 @@
             	var structures = document.getElementById('proteinStructures');
                 var divs = structures.childNodes;
                 for (var i = 0; i < divs.length; i++){
-                    if (divs[i].nodeName.toLowerCase() == 'div'){
+                    if (divs[i].nodeName.toLowerCase() === 'div'){
                     	divs[i].style.display = 'none';
                     }
                 }
