@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.pdbeadapter;
+package uk.ac.ebi.ep.pdbeadapter.experiment;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -19,23 +19,21 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class PdbSearchResult {
+public class PDBexperiments  {
+    
+        private final Map<String, List<PDBexperiment>> experiment = new HashMap<>();
 
-
-    private final Map<String, List<PDBe>> pdb = new HashMap<>();
-
-    public List<PDBe> get(String name) {
-        return pdb.get(name);
+    public List<PDBexperiment> get(String name) {
+        return experiment.get(name);
     }
 
     @JsonAnyGetter
-    public Map<String, List<PDBe>> any() {
-        return pdb;
+    public Map<String, List<PDBexperiment>> any() {
+        return experiment;
     }
 
     @JsonAnySetter
-    public void set(String name, List<PDBe> value) {
-        pdb.put(name, value);
+    public void set(String name, List<PDBexperiment> value) {
+        experiment.put(name, value);
     }
-
 }

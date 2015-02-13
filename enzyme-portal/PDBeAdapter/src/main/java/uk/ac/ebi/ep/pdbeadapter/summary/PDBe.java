@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.pdbeadapter;
+package uk.ac.ebi.ep.pdbeadapter.summary;
 
+import uk.ac.ebi.ep.pdbeadapter.summary.NumberOfEntities;
+import uk.ac.ebi.ep.pdbeadapter.summary.Assembly;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
