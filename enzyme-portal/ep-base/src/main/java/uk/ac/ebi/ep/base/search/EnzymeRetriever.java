@@ -268,7 +268,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 
             ProteinStructure structure = new ProteinStructure();
             structure.setId(pdbId);
-            structure.setName("..........");
+            structure.setName(pdb.getSourceName());
 
             //ProteinStructure structure = getPdbInfo(pdbId);
             model.getProteinstructure().add(structure);

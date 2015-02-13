@@ -46,6 +46,7 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 
 public class EnzymeRetrieverIT extends TestCase {
 
+    //http://docs.spring.io/spring/docs/current/spring-framework-reference/html/jdbc.html#jdbc-embedded-database-support
     private EnzymePortalService service;
     private EbeyeService ebeyeService;
 

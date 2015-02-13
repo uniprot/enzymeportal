@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 
 /**
@@ -35,15 +34,15 @@ public class EnzymesConfig {
         return chebiConfig;
     }
 
-    @Bean
-    public LiteratureConfig literatureConfig() {
-        LiteratureConfig lc = new LiteratureConfig();
-        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-        return lc;
-    }
+//    @Bean
+//    public LiteratureConfig literatureConfig() {
+//        LiteratureConfig lc = new LiteratureConfig();
+//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
+//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
+//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
+//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
+//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
+//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
+//        return lc;
+//    }
 }
