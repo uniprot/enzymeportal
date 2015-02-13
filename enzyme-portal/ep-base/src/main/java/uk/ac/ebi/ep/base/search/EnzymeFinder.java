@@ -50,7 +50,7 @@ import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.EbeyeService;
-import uk.ac.ebi.ep.ebeye.UniProtDomain;
+import uk.ac.ebi.ep.ebeye.Entry;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 
 /**
@@ -123,9 +123,9 @@ public class EnzymeFinder {
         speciesFilter = searchParams.getSpecies();
         LuceneParser luceneParser = new LuceneParser();
         String keyword = luceneParser.escapeLuceneSpecialChars(this.searchParams.getText());
-        String cleanKeyword = HtmlUtility.cleanText(keyword);
 
-        this.searchParams.setText(cleanKeyword);
+        //String cleanKeyword = HtmlUtility.cleanText(keyword);
+        this.searchParams.setText(keyword);
         String previousText = searchParams.getPrevioustext();
         String currentText = searchParams.getText();
         compoundFilter = searchParams.getCompounds();
@@ -156,10 +156,10 @@ public class EnzymeFinder {
         return searchResult;
     }
 
-    private void getResultsFromUniProt() {
+    private void getResultsFromEpIndex() {
         EbeyeSearchResult searchResult = getEbeyeSearchResult();
         if (searchResult != null) {
-            List<UniProtDomain> results = searchResult.getUniProtDomains().stream().distinct().collect(Collectors.toList());
+            List<Entry> results = searchResult.getEntries().stream().distinct().collect(Collectors.toList());
             results.stream().distinct().forEach((result) -> {
 
                 uniprotNameprefixes.add(result.getUniprot_name());
@@ -177,8 +177,8 @@ public class EnzymeFinder {
      *
      * @throws EnzymeFinderException
      */
-    private void queryEbeyeForUniprotIds() {
-        getResultsFromUniProt();
+    private void queryEbeyeForUniprotNamesOrAccessions() {
+        getResultsFromEpIndex();
     }
 
     /**
@@ -358,22 +358,52 @@ public class EnzymeFinder {
     }
 
     private List<UniprotEntry> computeUniqueEnzymes(List<UniprotEntry> enzymes) {
-        Set<UniprotEntry> enzymeList = new HashSet<>();
+        List<UniprotEntry> enzymeList = new ArrayList<>();
         Set<String> proteinNames = new HashSet<>();
         for (UniprotEntry entry : enzymes) {
 
             if (!proteinNames.contains(entry.getProteinName())) {
+
                 enzymeList.add(entry);
+
             }
             proteinNames.add(entry.getProteinName());
             computeFilterFacets(entry);
         }
+
         return enzymeList.stream().distinct().collect(Collectors.toList());
     }
 
-    private List<UniprotEntry> getEnzymesByAccessions(List<String> accessions) {
+    private List<UniprotEntry> computeUniqueEnzymes(List<UniprotEntry> enzymes, String keyword) {
+        LinkedList<UniprotEntry> enzymeList = new LinkedList<>();
+        Set<String> proteinNames = new HashSet<>();
+        for (UniprotEntry entry : enzymes) {
 
-        List<UniprotEntry> enzymeList = new ArrayList<>();
+            if (!proteinNames.contains(entry.getProteinName())) {
+                 LOGGER.warn("TODO:  "+ entry.getProteinName() +" <<=>> "+ keyword);
+                 
+                if (entry.getProteinName().equalsIgnoreCase(keyword)) {
+                    //enzymeList.add(0, entry);
+                    LOGGER.warn("A MATCH "+ entry.getProteinName() +" => "+ keyword);
+                   
+                    enzymeList.push(entry);
+                } else {
+                    enzymeList.add(entry);
+                }
+
+            }
+
+            proteinNames.add(entry.getProteinName());
+
+            computeFilterFacets(entry);
+        }
+
+        return enzymeList.stream().distinct().collect(Collectors.toList());
+    }
+
+    private List<UniprotEntry> getEnzymesByAccessions(List<String> accessions, String keyword) {
+
+        List<UniprotEntry> enzymeList = new LinkedList<>();
 
         if (accessions.size() > 0) {
             Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "function", "entryType");
@@ -381,7 +411,7 @@ public class EnzymeFinder {
             Page<UniprotEntry> page = service.findEnzymesByAccessions(accessions, pageable);
 
             List<UniprotEntry> enzymes = page.getContent();
-            enzymeList = computeUniqueEnzymes(enzymes);
+            enzymeList = computeUniqueEnzymes(enzymes, keyword);
 
         }
 
@@ -389,7 +419,7 @@ public class EnzymeFinder {
 
     }
 
-    private List<UniprotEntry> getEnzymesByNamePrefixes(List<String> nameprefixes) {
+    private List<UniprotEntry> getEnzymesByNamePrefixes(List<String> nameprefixes, String keyword) {
 
         List<UniprotEntry> enzymeList = new ArrayList<>();
 
@@ -398,7 +428,26 @@ public class EnzymeFinder {
             Page<UniprotEntry> page = service.findEnzymesByNamePrefixes(nameprefixes, pageable);
             //List<UniprotEntry>  enzymes = service.findEnzymesByNamePrefixes(nameprefixes);
             List<UniprotEntry> enzymes = page.getContent();
-            enzymeList = computeUniqueEnzymes(enzymes);
+            enzymeList = computeUniqueEnzymes(enzymes, keyword);
+
+        }
+
+        return enzymeList;
+
+    }
+
+    @Deprecated
+    private List<UniprotEntry> getEnzymesByEcNumbers(List<String> ecNumbers, String keyword) {
+
+        List<UniprotEntry> enzymeList = new ArrayList<>();
+
+        if (ecNumbers.size() > 0) {
+            Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "function", "entryType");
+            //Pageable pageable = new PageRequest(0, 50,Sort.Direction.ASC,"function","lastUpdateTimestamp");
+            Page<UniprotEntry> page = service.findEnzymesByEcNumbers(ecNumbers, pageable);
+
+            List<UniprotEntry> enzymes = page.getContent().stream().distinct().collect(Collectors.toList());
+            enzymeList = computeUniqueEnzymes(enzymes, keyword);
 
         }
 
@@ -414,16 +463,16 @@ public class EnzymeFinder {
      * @throws MultiThreadingException problem getting the original summaries,
      * or creating a processor to add synonyms to them.
      */
-    private List<UniprotEntry> getEnzymeSummariesByNamePrefixes(List<String> nameprefixes) {
+    private List<UniprotEntry> getEnzymeSummariesByNamePrefixes(List<String> nameprefixes, String keyword) {
 
-        List<UniprotEntry> summaries = getEnzymesByNamePrefixes(nameprefixes);
+        List<UniprotEntry> summaries = getEnzymesByNamePrefixes(nameprefixes, keyword);
 
         return summaries;
     }
 
-    private List<UniprotEntry> getEnzymeSummariesByAccessions(List<String> accessions) {
+    private List<UniprotEntry> getEnzymeSummariesByAccessions(List<String> accessions, String keyword) {
 
-        List<UniprotEntry> summaries = getEnzymesByAccessions(accessions);
+        List<UniprotEntry> summaries = getEnzymesByAccessions(accessions, keyword);
 
         return summaries;
     }
@@ -441,7 +490,7 @@ public class EnzymeFinder {
             // Search in EBEye for Uniprot ids, the search is filtered by ec:*
             LOGGER.debug("Starting new search");
             // try {
-            queryEbeyeForUniprotIds();
+            queryEbeyeForUniprotNamesOrAccessions();
             //LOGGER.debug("UniProt IDs from UniProt: " + uniprotEnzymeIds.size());
             //} catch (EnzymeFinderException enzymePortalSummary){
             //LOGGER.error("Unable to search EB-Eye uniprot domain", enzymePortalSummary);
@@ -449,7 +498,7 @@ public class EnzymeFinder {
             // Search in Intenz, Rhea, Reactome, PDBe etc. for Uniprot ids.
             //try {
             //queryEbeyeOtherDomainForIds();
-            LOGGER.debug("UniProt IDs from UniProt+ChEBI+others: "
+            LOGGER.debug("UniProt Names | Accession | Ec_Numbers from Ebeye Rest Service: "
                     + uniprotAccessions.size());
             //} catch (EnzymeFinderException enzymePortalSummary){
             // LOGGER.error("Unable to search EB-Eye other domains", enzymePortalSummary);
@@ -465,9 +514,13 @@ public class EnzymeFinder {
         List<String> namePrefixesList
                 = new ArrayList<>(uniprotNameprefixSet);
 
+        String keyword = HtmlUtility.cleanText(this.searchParams.getText()); 
+        keyword = keyword.replaceAll("&quot;", "");
+
         LOGGER.debug("Getting enzyme summaries...");
         //enzymeSummaryList = getEnzymeSummariesByNamePrefixes(namePrefixesList);
-        enzymeSummaryList = getEnzymeSummariesByAccessions(accessionList);
+        enzymeSummaryList = getEnzymeSummariesByAccessions(accessionList, keyword);
+        //enzymeSummaryList = getEnzymeSummariesByEcNumbers(ecList);
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
         enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
         if (uniprotAccessionSet.size() != enzymeSummaryList.size()) {
@@ -551,14 +604,14 @@ public class EnzymeFinder {
      * @throws EnzymeFinderException
      * @since
      */
-    private SearchResults getSearchResults(List<String> uniprotIds)
+    private SearchResults getSearchResults(List<String> uniprotIds, String keyword)
             throws EnzymeFinderException {
         SearchResults results = new SearchResults();
 
         List<String> distinctPrefixes = uniprotIds.stream().distinct().collect(Collectors.toList());
         @SuppressWarnings("unchecked")
         List<UniprotEntry> summaries
-                = getEnzymeSummariesByNamePrefixes(distinctPrefixes);
+                = getEnzymeSummariesByNamePrefixes(distinctPrefixes, keyword);
         results.setSummaryentries(summaries);
         results.setTotalfound(summaries.size());
         if (distinctPrefixes.size() != summaries.size()) {
@@ -572,7 +625,7 @@ public class EnzymeFinder {
     public SearchResults getEnzymesByCompound(SearchParams searchParams) throws EnzymeFinderException {
         List<String> accessions = this.getService().findEnzymesByCompound(searchParams.getText());
 
-        return getSearchResults(accessions);
+        return getSearchResults(accessions, searchParams.getText());
     }
 
     private NcbiBlastClient getBlastClient() {
@@ -605,7 +658,7 @@ public class EnzymeFinder {
 
         List<String> uniprotAccessionList = filterBlastResults(hits).stream().distinct().collect(Collectors.toList());
 
-        enzymeSummaryList = getEnzymeSummariesByAccessions(uniprotAccessionList);
+        enzymeSummaryList = getEnzymeSummariesByAccessions(uniprotAccessionList, "");
 
         for (UniprotEntry es : enzymeSummaryList) {
 
