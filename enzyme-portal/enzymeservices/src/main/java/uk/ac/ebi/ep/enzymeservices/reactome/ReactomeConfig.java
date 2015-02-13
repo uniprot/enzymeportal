@@ -25,8 +25,10 @@ public class ReactomeConfig implements ReactomeConfigMBean {
 	 */
 	private int timeout = 30000;
 	
-	private String wsBaseUrl = 
-			"http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
+	//private String wsBaseUrl = 
+			//"http://www.reactome.org:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
+        
+        private String wsBaseUrl = "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/";
 	
 //	private String eventBaseUrl =
 //	        "http://www.reactome.org/cgi-bin/link?SOURCE=Reactome&ID=";
@@ -77,7 +79,7 @@ public class ReactomeConfig implements ReactomeConfigMBean {
      */
     public static ReactomeConfig readFromFile() throws IOException{
         return readFromInputStream(ReactomeConfig.class.getClassLoader()
-                .getResourceAsStream("reactome-adapter.properties"));
+                .getResourceAsStream("ep-web-client.properties"));
     }
     
     /**
@@ -155,4 +157,5 @@ public class ReactomeConfig implements ReactomeConfigMBean {
         return config;
     }
 
+   
 }

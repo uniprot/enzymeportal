@@ -57,7 +57,7 @@ public class IntenzConfig implements IntenzConfigMBean {
      */
     public static IntenzConfig readFromFile() throws IOException{
         return readFromInputStream(IntenzConfig.class.getClassLoader()
-                .getResourceAsStream("intenz-adapter.properties"));
+                .getResourceAsStream("ep-web-client.properties"));
     }
     
     /**

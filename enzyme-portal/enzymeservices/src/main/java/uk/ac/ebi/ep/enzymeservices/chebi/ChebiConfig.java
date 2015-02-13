@@ -4,9 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
 import org.apache.log4j.Logger;
-
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 
 /**
@@ -183,7 +181,7 @@ public class ChebiConfig implements ChebiConfigMBean {
      */
     public static ChebiConfig readFromFile() throws IOException{
         return readFromInputStream(ChebiConfig.class.getClassLoader()
-                .getResourceAsStream("chebi-adapter.properties"));
+                .getResourceAsStream("ep-web-client.properties"));
     }
     
     /**

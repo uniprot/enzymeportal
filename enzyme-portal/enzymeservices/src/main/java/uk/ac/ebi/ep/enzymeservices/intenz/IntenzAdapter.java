@@ -106,14 +106,14 @@ public class IntenzAdapter implements IintenzAdapter{
        // Set<String> ecList = DataTypeConverter.getUniprotEcs(enzymeModel);
         
         Set<String> ecList = enzymeModel.getEc().stream().distinct().collect(Collectors.toSet());
-        System.out.println("ECLIST interface Intenz adapter 109 : == "+ ecList);
+       
         //DataTypeConverter.getUniprotEcs(enzymeModel);
         //Synonyms are merged into one list if there are more than 1 ec number
-        Set<String> synonyms = new LinkedHashSet<String>();
+        Set<String> synonyms = new LinkedHashSet<>();
 //        LOGGER.debug("SEARCH before getIntenz");
         List<Intenz> intenzList = getIntenz(ecList);
 //        LOGGER.debug("SEARCH after  getIntenz");
-        List<EnzymeHierarchy> enzymeHierarchies = new ArrayList<EnzymeHierarchy>();
+        List<EnzymeHierarchy> enzymeHierarchies = new ArrayList<>();
         if (intenzList.size() > 0) {
 //            LOGGER.debug("SEARCH before intenzList");
             for (Intenz intenz : intenzList) {
@@ -152,7 +152,7 @@ public class IntenzAdapter implements IintenzAdapter{
     }
 
      public List<Intenz> getIntenz(Collection<String> ecList) {
-         List<Intenz> results = new ArrayList<Intenz>();
+         List<Intenz> results = new ArrayList<>();
          ExecutorService pool = Executors.newCachedThreadPool();
          CompletionService<Intenz> ecs =
         		 new ExecutorCompletionService<Intenz>(pool);

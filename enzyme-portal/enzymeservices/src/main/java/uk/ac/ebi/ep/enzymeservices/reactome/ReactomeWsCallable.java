@@ -28,8 +28,10 @@ public class ReactomeWsCallable implements Callable<Pathway> {
     private static final Logger LOGGER =
     		Logger.getLogger(ReactomeWsCallable.class);
     
-    public static final String WS_BASE_URL =
-            "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
+//    public static final String WS_BASE_URL =
+//            "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/";
+        public static final String WS_BASE_URL =
+            "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/";
     // Hrefs within descriptions have to be made absolute:
     private static final String AHREF_PATTERN = "<a href='/";
     private static final String AHREF_REPLACEMENT =
@@ -143,9 +145,8 @@ public class ReactomeWsCallable implements Callable<Pathway> {
     	Pathway pathway = new Pathway();
     	pathway.setId(pathwayId);
     	pathway.setUrl(Database.REACTOME.getEntryUrl(pathwayId));
-        StringBuilder sb = new StringBuilder(config.getWsBaseUrl())
-				.append(ReactomeClass.Pathway.name()).append('/')
-				.append(pathwayId);
+        String sb = config.getWsBaseUrl() + ReactomeClass.Pathway.name() + '/' + pathwayId;
+        
         InputStream is = null;
         final String nameXpath = DISPLAYNAME.replace(
         		"{reactomeClass}", ReactomeClass.Pathway.name().toLowerCase());
@@ -158,7 +159,7 @@ public class ReactomeWsCallable implements Callable<Pathway> {
             XPathSAXHandler handler =
             		new XPathSAXHandler(nameXpath, summIdXpath, figureXpath);
             xr.setContentHandler(handler);    		
-            URL url = new URL(sb.toString());
+            URL url = new URL(sb);
             URLConnection urlCon = config.getUseProxy()
                     ? url.openConnection()
                     : url.openConnection(Proxy.NO_PROXY);
@@ -180,9 +181,9 @@ public class ReactomeWsCallable implements Callable<Pathway> {
             			.get(figureXpath).iterator().next());
             }
         } catch (MalformedURLException e) {
-            throw new ReactomeConnectionException(sb.toString(), e);
+            throw new ReactomeConnectionException(sb, e);
         } catch (IOException e) {
-            throw new ReactomeConnectionException(sb.toString(), e);
+            throw new ReactomeConnectionException(sb, e);
         } catch (SAXException e) {
             throw new ReactomeFetchDataException(e);
 		} finally {
