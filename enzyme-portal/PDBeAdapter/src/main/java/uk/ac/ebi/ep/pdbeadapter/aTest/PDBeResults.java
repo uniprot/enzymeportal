@@ -21,6 +21,7 @@ import java.util.Map;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PDBeResults {
     
+    
      private final Map<String, List<PDBeGlobal>> pdb = new HashMap<>();
 
     public List<PDBeGlobal> get(String name) {
