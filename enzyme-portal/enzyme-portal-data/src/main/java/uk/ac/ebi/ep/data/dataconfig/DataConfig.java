@@ -33,7 +33,7 @@ public class DataConfig {
 
     @Autowired
     private DataSource dataSource;
-    
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -56,7 +56,6 @@ public class DataConfig {
         return em;
     }
 
-
     @Bean
     public PlatformTransactionManager transactionManager() {
         PlatformTransactionManager manager = new JpaTransactionManager(entityManagerFactory().getObject());
@@ -67,6 +66,6 @@ public class DataConfig {
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
-
-
-        }
+    
+    
+}
