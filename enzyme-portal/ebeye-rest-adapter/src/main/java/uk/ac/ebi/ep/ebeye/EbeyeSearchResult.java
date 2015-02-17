@@ -28,7 +28,7 @@ public class EbeyeSearchResult {
     private List<Entry> entries;
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
-
+    
     /**
      *
      * @return The hitCount
@@ -80,4 +80,4 @@ public class EbeyeSearchResult {
         this.additionalProperties.put(name, value);
     }
 
-}
+    }
