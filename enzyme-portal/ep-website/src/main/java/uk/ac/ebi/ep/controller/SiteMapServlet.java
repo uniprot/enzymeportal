@@ -23,7 +23,7 @@ import uk.ac.ebi.ep.mBean.FilesConfig;
  */
 public class SiteMapServlet extends HttpServlet {
     //SiteMapServlet?sitemaps=sitemapTest1.xml
-    public Logger LOGGER = Logger.getLogger(SiteMapServlet.class);
+    private final Logger LOGGER = Logger.getLogger(SiteMapServlet.class);
     private FilesConfig sitemapConfig;
     
     public FilesConfig getSitemapConfig() {

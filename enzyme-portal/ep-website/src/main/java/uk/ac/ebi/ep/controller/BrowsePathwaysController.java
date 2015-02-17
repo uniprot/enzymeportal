@@ -48,7 +48,7 @@ public class BrowsePathwaysController extends AbstractController {
 
     @RequestMapping(value = BROWSE_PATHWAYS, method = RequestMethod.GET)
     public String showPathways(Model model) {
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         pathwayList = finder.findAllPathways().stream().distinct().collect(Collectors.toList());
         String msg = String.format("Number of pathways found : %s", pathwayList.size());
@@ -122,7 +122,7 @@ public class BrowsePathwaysController extends AbstractController {
     private SearchResults findEnzymesByPathway(String pathwayId, String pathwayName) {
 
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         SearchParams searchParams = new SearchParams();
         searchParams.setText(pathwayName);

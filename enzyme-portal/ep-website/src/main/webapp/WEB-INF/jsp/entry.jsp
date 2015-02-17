@@ -334,6 +334,7 @@
                                             <!--START literature TAB-->
                                             <c:if test='${requestedfield=="literature"}'>
 
+                                                <c:if test="${not empty enzymeModel.literature}">
                                                 <c:set var="lit" value="${enzymeModel.literature}"/>   
                                                 <c:if test='${lit[0] == "error"}'>
                                                     <div class="node grid_24">
@@ -348,6 +349,7 @@
                                                             <%@include file="literature.jsp" %>
                                                         </div>
                                                     </div>
+                                                </c:if>
                                                 </c:if>
                                             </c:if>
                                         </div>

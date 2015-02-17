@@ -123,7 +123,7 @@ public class SearchController extends AbstractController {
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Field requestedField = Field.valueOf(field);
-        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeService);
+        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService);
 
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
@@ -470,7 +470,7 @@ public class SearchController extends AbstractController {
      */
     protected SearchResults searchKeyword(SearchParams searchParameters) {
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         results = finder.getEnzymes(searchParameters);
 
         return results;
@@ -489,7 +489,7 @@ public class SearchController extends AbstractController {
         SearchResults results = null;
         EnzymeFinder finder = null;
         try {
-            finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+            finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
             results = finder.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
@@ -589,7 +589,7 @@ public class SearchController extends AbstractController {
      */
     private String searchSequence(Model model, SearchModel searchModel) {
         String view = "error";
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         try {
             String sequence = searchModel.getSearchparams().getSequence()
                     .trim().toUpperCase();
@@ -609,7 +609,7 @@ public class SearchController extends AbstractController {
             SearchModel searchModel, HttpSession session) throws MultiThreadingException {
         String view = null;
         try {
-            EnzymeFinder enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeService);
+            EnzymeFinder enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
             NcbiBlastClient.Status status = enzymeFinder.getBlastStatus(jobId);
             switch (status) {

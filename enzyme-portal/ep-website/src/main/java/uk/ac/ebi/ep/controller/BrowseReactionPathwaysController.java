@@ -50,7 +50,7 @@ public class BrowseReactionPathwaysController extends AbstractController {
 
     @RequestMapping(value = BROWSE_REACTIONS, method = RequestMethod.GET)
     public String showReactions(Model model) {
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         reactionList = finder.findAllReactions();
 
@@ -125,7 +125,7 @@ public class BrowseReactionPathwaysController extends AbstractController {
        private SearchResults findEnzymesByReaction(String reactionId, String reactionName) {
 
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         SearchParams searchParams = new SearchParams();
         searchParams.setText(reactionName);

@@ -33,6 +33,7 @@ import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EbeyeService;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
@@ -55,6 +56,8 @@ public abstract class AbstractController {
     protected EnzymePortalService enzymePortalService;
     @Autowired
     protected EbeyeService ebeyeService; 
+    @Autowired
+    protected EbeyeRestService ebeyeRestService;
   
 
     @ModelAttribute("searchModel")
@@ -221,7 +224,7 @@ public abstract class AbstractController {
      */
     protected SearchResults searchKeyword(SearchParams searchParameters) {
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeRestService);
  
             results = finder.getEnzymes(searchParameters);
   

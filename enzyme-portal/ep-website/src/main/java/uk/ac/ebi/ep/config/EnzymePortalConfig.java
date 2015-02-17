@@ -16,13 +16,16 @@ import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.adapter.das.DASConfig;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.common.Config;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.mBean.FilesConfig;
+import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
+import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
 
 /**
  *
@@ -168,10 +171,38 @@ public class EnzymePortalConfig {
 
     
         @Bean
-    public PdbService pdbService() {
-          return new PdbService();
+    public EbeyeRestService ebeyeRestService() {
+        return new EbeyeRestService();
     }
+    
+    
+            @Bean
+    public PdbService pdbService() {
+        return new PdbService(pdbeRestService());
+    }
+    
+        @Bean
+    public PDBeRestService pdbeRestService() {
 
-
+        return new PDBeRestService();
+    }
+    
+        @Bean
+    public PDBeUrl pDBeUrl() {
+        PDBeUrl pdBeUrl = new PDBeUrl();
+        
+        String summaryUrl = env.getProperty("pdb.summary.url");
+        String experimentUrl = env.getProperty("pdb.experiment.url");
+        String publicationsUrl = env.getProperty("pdb.publications.url");
+        String moleculesUrl = env.getProperty("pdb.molecules.url");
+        String structuralDomainUrl = env.getProperty("pdb.structuralDomain.url");
+        
+        pdBeUrl.setSummaryUrl(summaryUrl);
+        pdBeUrl.setExperimentUrl(experimentUrl);
+        pdBeUrl.setPublicationsUrl(publicationsUrl);
+        pdBeUrl.setMoleculesUrl(moleculesUrl);
+        pdBeUrl.setStructuralDomainUrl(structuralDomainUrl);
+        return pdBeUrl;
+    }
 
 }

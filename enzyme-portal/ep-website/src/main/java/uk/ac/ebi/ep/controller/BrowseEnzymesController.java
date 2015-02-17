@@ -66,7 +66,7 @@ public class BrowseEnzymesController extends AbstractController {
     private SearchResults findEnzymesByEc(String ec) {
 
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         SearchParams searchParams = new SearchParams();
         searchParams.setText(ec);//use the ec number here. note ebeye is indexing ep data for ec to be searchable

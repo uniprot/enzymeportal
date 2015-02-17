@@ -195,7 +195,7 @@ public class BasketController extends AbstractController {
         public EnzymeModel call() throws Exception {
             EnzymeRetriever retriever = null;
 
-            retriever = new EnzymeRetriever(enzymePortalService, ebeyeService);
+            retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService);
             retriever.getIntenzAdapter().setConfig(intenzConfig);
             retriever.getReactomeAdapter().setConfig(reactomeConfig);
             retriever.getChebiAdapter().setConfig(chebiConfig);

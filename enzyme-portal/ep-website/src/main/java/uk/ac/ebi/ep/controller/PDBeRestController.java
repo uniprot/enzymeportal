@@ -30,8 +30,7 @@ public class PDBeRestController {
     protected  String getStructure(Model model, @PathVariable String pdbId) {
         String retValue = "pdb";
       
-         //PdbService pdbService = new PdbService();
-
+     
         PDB structure = pdbService.computeProteinStructure(pdbId.toLowerCase());
         
         
