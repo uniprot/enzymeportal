@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -30,7 +31,7 @@ public class PDBeRestService {
     @Autowired
     private PDBeUrl pDBeUrl;
 
-    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(PDBeRestService.class);
+    private static final Logger LOGGER = Logger.getLogger(PDBeRestService.class);
     private final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
@@ -44,12 +45,12 @@ public class PDBeRestService {
     }
 
     public PdbSearchResult getPdbSummaryResults(String pdbId) {
-        // String url = "http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/summary/" + pdbId;
+
         String url = pDBeUrl.getSummaryUrl() + pdbId;
         PdbSearchResult pdb = null;
 
         try {
-            //pdb = restTemplate.getForObject(url.trim(), PdbSearchResult.class);
+  
             pdb = getPdbSearchResult(url.trim());
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -60,7 +61,7 @@ public class PDBeRestService {
     }
 
     public PDBexperiments getPDBexperimentResults(String pdbId) {
-       // String url = "http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/experiment/" + pdbId;
+
         String url = pDBeUrl.getExperimentUrl() + pdbId;
 
         PDBexperiments experiments = null;
@@ -75,7 +76,7 @@ public class PDBeRestService {
 
     public PDBePublications getPDBpublicationResults(String pdbId) {
 
-        //String url = "http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/publications/" + pdbId;
+
         String url = pDBeUrl.getPublicationsUrl() + pdbId;
 
         PDBePublications publications = null;
@@ -90,7 +91,6 @@ public class PDBeRestService {
 
     public PDBmolecules getPDBmoleculeResults(String pdbId) {
 
-        //String url = "http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/molecules/" + pdbId;
         String url = pDBeUrl.getMoleculesUrl() + pdbId;
 
         PDBmolecules molecules = null;
@@ -104,7 +104,7 @@ public class PDBeRestService {
 
     public String getStructuralDomain(String pdbId) {
         try {
-            //String pdburl = "http://wwwdev.ebi.ac.uk/pdbe/api/mappings/cath/" + pdbId;
+
             String url = pDBeUrl.getStructuralDomainUrl() + pdbId;
 
             //convert json to string 

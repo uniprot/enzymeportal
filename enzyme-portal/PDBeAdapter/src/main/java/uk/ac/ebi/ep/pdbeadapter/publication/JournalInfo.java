@@ -93,11 +93,11 @@ public class JournalInfo {
 
     /**
      *
-     * @param ISOAbbreviation The ISO_abbreviation
+     * @param abbreviation The ISO_abbreviation
      */
     @JsonProperty("ISO_abbreviation")
-    public void setISOAbbreviation(String ISOAbbreviation) {
-        this.ISOAbbreviation = ISOAbbreviation;
+    public void setISOAbbreviation(String abbreviation) {
+        this.ISOAbbreviation = abbreviation;
     }
 
     /**

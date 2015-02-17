@@ -5,8 +5,6 @@
  */
 package uk.ac.ebi.ep.pdbeadapter.summary;
 
-import uk.ac.ebi.ep.pdbeadapter.summary.NumberOfEntities;
-import uk.ac.ebi.ep.pdbeadapter.summary.Assembly;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -71,7 +69,7 @@ public class PDBe {
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
-    public String name;
+    private String name;
 
     public PDBe() {
     }
@@ -80,6 +78,16 @@ public class PDBe {
     public PDBe(String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
     
     
     /**

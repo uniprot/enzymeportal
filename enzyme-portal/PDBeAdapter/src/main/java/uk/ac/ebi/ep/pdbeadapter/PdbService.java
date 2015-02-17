@@ -25,38 +25,34 @@ import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
  * @author joseph
  */
 public class PdbService {
-  
-   
-   private final PDBeRestService pdbeRestService;
+
+    private final PDBeRestService pdbeRestService;
     private static final Logger LOGGER = Logger.getLogger(PdbService.class);
 
     public PdbService(PDBeRestService pdbeRestService) {
         this.pdbeRestService = pdbeRestService;
     }
-    
-    
 
     public PdbSearchResult getPdbSearchResults(String pdbId) {
-        
+
         return pdbeRestService.getPdbSummaryResults(pdbId);
-        
+
     }
-    
+
     public PDB computeProteinStructure(String pdbId) {
-        
+
         PDB pdb = new PDB();
         pdb.setId(pdbId);
 
-      
         PdbSearchResult summary = pdbeRestService.getPdbSummaryResults(pdbId);
-        
+
         List<PDBe> pdbSummary = summary.get(pdbId);
         if (pdbSummary != null && !pdbSummary.isEmpty()) {
-            
+
             final String inputFormat = "yyyyMMdd";
             //final String outputFormat = "EEE MMM dd HH:mm:ss z yyyy";
             final String outputFormat = "MMMM dd, yyyy";
-            
+
             pdbSummary.stream().map((eSummary) -> {
                 pdb.setTitle(eSummary.getTitle());
                 return eSummary;
@@ -76,48 +72,24 @@ public class PdbService {
 
         //molecules
         PDBmolecules molecules = pdbeRestService.getPDBmoleculeResults(pdbId);
-        
+
         if (molecules != null) {
             List<Molecule> mol = molecules.get(pdbId);
-            
+
             if (mol != null && !mol.isEmpty()) {
-                LinkedList<PdbEntity> entities = new LinkedList<>();
-                for (Molecule m : mol) {
-                    
-                    if (m.getMoleculeType().equalsIgnoreCase("polypeptide(L)")) {
-                        String organism = null;
-                        for (Source s : m.getSource()) {
-                            organism = s.getOrganismScientificName();
-                        }
-                        
-                        PdbEntity entity = new PdbEntity();
-                        entity.setLabel("Chain " + m.getInChains().stream().distinct().findFirst().get());
-                        entity.getMolecules().add(m);
-                        entity.setOrganism(organism);
-                        entity.setProtein(true);
-                        entities.push(entity);
-                        
-                    } else if (m.getMoleculeType().equalsIgnoreCase("Bound")) {
-                        PdbEntity entity = new PdbEntity();
-                        entity.setLabel("Heterogen " + m.getInStructAsyms().stream().findFirst().get());
-                        entity.getMolecules().add(m);
-                        entities.add(entity);
-                        
-                    }
-                    
-                }
-                
+                List<PdbEntity> entities = computeEntities(mol);
+
                 pdb.setPdbEntities(entities);
             }
         }
 
         //experiements
         PDBexperiments experiments = pdbeRestService.getPDBexperimentResults(pdbId);
-        
+
         if (experiments != null) {
-            
+
             List<PDBexperiment> pdbExperiments = experiments.get(pdbId);
-            
+
             if (pdbExperiments != null) {
                 pdbExperiments.stream().map((experiment) -> {
                     pdb.setResolution(String.valueOf(experiment.getResolution()));
@@ -129,12 +101,12 @@ public class PdbService {
                     pdb.setrFree(String.valueOf(experiment.getRFree()));
                 });
             }
-            
+
         }
         //publications
         PDBePublications publications = pdbeRestService.getPDBpublicationResults(pdbId);
         if (publications != null) {
-            
+
             List<PDBePublication> publication = publications.get(pdbId);
             if (publication != null) {
                 PDBePublication primaryCitation = publication.stream().findFirst().get();
@@ -145,11 +117,11 @@ public class PdbService {
                         + " page:" + primaryCitation.getJournalInfo().getPages()
                         + " (" + primaryCitation.getJournalInfo().getYear() + ")";
                 pdb.setPrimaryCitationInfo(info);
-                
+
             }
-            
+
         }
-        
+
         String domains = pdbeRestService.getStructuralDomain(pdbId);
         pdb.setStructuralDomain(domains);
 
@@ -160,8 +132,7 @@ public class PdbService {
                 + "In collaboration with the other worldwide Protein Data Bank (wwPDB) partners we work to collate, "
                 + "maintain and provide access to the global repository of macromolecular structure data (PDB).";
         pdb.getProvenance().add(info);
-        
-       
+
         return pdb;
     }
 
@@ -180,6 +151,34 @@ public class PdbService {
         return new SimpleDateFormat(outputFormat).format(new SimpleDateFormat(
                 inputFormat).parse(inputTimeStamp));
     }
-    
-    
+
+    private List<PdbEntity> computeEntities(List<Molecule> mol) {
+        LinkedList<PdbEntity> entities = new LinkedList<>();
+        for (Molecule m : mol) {
+
+            if ("polypeptide(L)".equalsIgnoreCase(m.getMoleculeType())) {
+                String organism = null;
+                for (Source s : m.getSource()) {
+                    organism = s.getOrganismScientificName();
+                }
+
+                PdbEntity entity = new PdbEntity();
+                entity.setLabel("Chain " + m.getInChains().stream().distinct().findFirst().get());
+                entity.getMolecules().add(m);
+                entity.setOrganism(organism);
+                entity.setProtein(true);
+                entities.push(entity);
+
+            } else if ("Bound".equalsIgnoreCase(m.getMoleculeType())) {
+                PdbEntity entity = new PdbEntity();
+                entity.setLabel("Heterogen " + m.getInStructAsyms().stream().findFirst().get());
+                entity.getMolecules().add(m);
+                entities.add(entity);
+
+            }
+
+        }
+        return entities;
+    }
+
 }
