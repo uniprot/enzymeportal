@@ -25,7 +25,7 @@ public class PDBeRestController {
 
     @Autowired
     private PdbService pdbService;
-
+    
     @RequestMapping(value = "/ajax/pdbe/{pdbId}")
     protected  String getStructure(Model model, @PathVariable String pdbId) {
         String retValue = "pdb";
