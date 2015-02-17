@@ -172,12 +172,13 @@
     </repositories>
     <distributionManagement>
        
-<!--        <repository>
+        <repository>
             <id>ebi-repo</id>
             <name>EBI Maven Repository</name>
             <url>${ebi.maven.repo.deploy.url}</url>
-        </repository>-->
-         <repository>
+        </repository>
+        
+<!--         <repository>
         <id>uniprot-artifactory-release</id>
         <name>UniProt Artifactory for Releases</name>
         <releases>
@@ -202,14 +203,14 @@
             <checksumPolicy>warn</checksumPolicy>
         </snapshots>
         <url>${http-uniprot-private-url}/snapshot</url>
-    </snapshotRepository> 
+    </snapshotRepository> -->
         
-<!--              <snapshotRepository>
+              <snapshotRepository>
             <id>ebi-repo-snapshots</id>
             <name>EBI Maven Snapshots Repository</name>
             <url>${ebi.maven.repo.snapshots.deploy.url}</url>
             <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>-->
+        </snapshotRepository>
         <site>
             <id>github</id>
             <url>http://ebi-cheminf.github.com/enzymeportal/</url>
@@ -537,13 +538,13 @@
         <module>rhea-adapter</module>
         <module>chembl-adapter</module>-->
         
-        <module>SitemapGenerator</module>
-<!--        <module>ep-parser</module>-->
+<!--        <module>SitemapGenerator</module>-->
         <module>enzyme-portal-data</module>
         <module>ebeye-rest-adapter</module>
         <module>enzymeservices</module>
         <module>literature-adapter</module>
         <module>ep-base</module>
+        <module>PDBeAdapter</module>
         <module>ep-website</module>
         
     </modules>
