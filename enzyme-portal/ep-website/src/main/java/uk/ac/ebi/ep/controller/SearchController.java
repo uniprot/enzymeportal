@@ -66,14 +66,12 @@ import uk.ac.ebi.xchars.domain.EncodingType;
  */
 @Controller
 public class SearchController extends AbstractController {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchController.class);
-    private static final String SEARCH = "/search";
+    
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
-
-//    private static final String BROWSE = "/browse";
-//    private static final String BROWSE_DISEASE = "/browse/disease";
+    
     @Autowired
     private LiteratureConfig literatureConfig;
     @Autowired
@@ -81,23 +79,23 @@ public class SearchController extends AbstractController {
     @Autowired
     private ChebiConfig chebiConfig;
     
-        @Autowired
+    @Autowired
     protected IntenzConfig intenzConfig;
-
+    
     private enum ResponsePage {
-
+        
         ENTRY, ERROR;
-
+        
         @Override
         public String toString() {
             return name().toLowerCase();
         }
     }
-
+    
     private boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
     }
-
+    
     @PostConstruct
     public void init() {
         try {
@@ -124,7 +122,7 @@ public class SearchController extends AbstractController {
             HttpSession session) {
         Field requestedField = Field.valueOf(field);
         EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService);
-
+        
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
         String responsePage = ResponsePage.ENTRY.toString();
@@ -142,7 +140,7 @@ public class SearchController extends AbstractController {
                     enzymeModel = retriever.getMolecules(accession);
                     break;
                 case diseaseDrugs:
-
+                    
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case literature:
@@ -198,14 +196,14 @@ public class SearchController extends AbstractController {
                 LOGGER.error("Error in retrieving Molecules Information");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.enzyme.getName())) {
-
+                
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Enzymes");
                 Enzyme enzyme = new Enzyme();
                 enzyme.getEnzymetype().add(0, ERROR);
                 enzymeModel.setEnzyme(enzyme);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving Enzymes");
             }
@@ -216,40 +214,40 @@ public class SearchController extends AbstractController {
                 ProteinStructure structure = new ProteinStructure();
                 structure.setName(ERROR);
                 enzymeModel.getProteinstructure().add(0, structure);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving ProteinStructure");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.reactionsPathways.getName())) {
                 enzymeModel = new EnzymeModel();
-
+                
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Reactions and Pathways");
                 ReactionPathway pathway = new ReactionPathway();
                 EnzymeReaction reaction = new EnzymeReaction();
-
+                
                 reaction.setName(ERROR);
                 pathway.setReaction(reaction);
                 enzymeModel.getReactionpathway().add(0, pathway);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving Reaction Pathways");
-
+                
             }
             if (requestedField.getName().equalsIgnoreCase(Field.literature.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Literatures");
-
+                
                 enzymeModel.getLiterature().add(0, ERROR);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving Literature Information");
-
+                
             }
-
+            
         }
-
+        
         return responsePage;
     }
 
@@ -265,30 +263,29 @@ public class SearchController extends AbstractController {
     public String viewSearchHome(Model model, HttpSession session) {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
-        //searchParams.setText("Enter a name to search");
         searchParams.setStart(0);
         searchModelForm.setSearchparams(searchParams);
         model.addAttribute("searchModel", searchModelForm);
         clearHistory(session);
         return "index";
     }
-
+    
     @ModelAttribute("/about")
     public SearchModel getabout(Model model) {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         return new SearchModel();
     }
-
+    
     @RequestMapping(value = "/faq")
     public SearchModel getfaq(Model model) {
-
+        
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         return searchModelForm;
-
+        
     }
-
+    
     @RequestMapping(value = "/search")
     public SearchModel getSearch(Model model) {
         SearchModel searchModelForm = searchform();
@@ -310,10 +307,10 @@ public class SearchController extends AbstractController {
     public String postSearchResult(SearchModel searchModel, Model model,
             HttpSession session, HttpServletRequest request) {
         String view = "error";
-
+        
         String searchKey = null;
         SearchResults results = null;
-
+        
         try {
 
             // See if it is already there, perhaps we are paginating:
@@ -324,7 +321,7 @@ public class SearchController extends AbstractController {
             if (results == null) {
                 // New search:
                 clearHistory(session);
-
+                
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
                         results = searchKeyword(searchModel.getSearchparams());
@@ -338,7 +335,7 @@ public class SearchController extends AbstractController {
                     default:
                 }
             }
-            //}
+            
             if (results != null) { // something to show
                 cacheSearch(session.getServletContext(), searchKey, results);
                 setLastSummaries(session, results.getSummaryentries());
@@ -352,16 +349,17 @@ public class SearchController extends AbstractController {
                         searchKey);
                 view = "search";
             }
-        } catch (Throwable t) {
-            LOGGER.error("one of the search params (Text or Sequence is :" + searchKey, t);
+        } catch (Exception e) {
+            LOGGER.error("one of the search params (Text or Sequence is :" + searchKey, e);
         }
-
+        
         return view;
     }
-
+    
+    @Override
     protected void clearHistory(HttpSession session) {
         @SuppressWarnings("unchecked")
-        LinkedList<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
+        List<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
         if (history == null) {
             history = new LinkedList<>();
             session.setAttribute(Attribute.history.getName(), history);
@@ -369,10 +367,11 @@ public class SearchController extends AbstractController {
             history.clear();
         }
     }
-
+    
+    @Override
     protected void addToHistory(HttpSession session, String s) {
         @SuppressWarnings("unchecked")
-        LinkedList<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
+        List<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
         if (history == null) {
             history = new LinkedList<>();
             session.setAttribute(Attribute.history.getName(), history);
@@ -392,6 +391,7 @@ public class SearchController extends AbstractController {
      * @param searchType the search type.
      * @param s the text to be added to history.
      */
+    @Override
     protected void addToHistory(HttpSession session, SearchParams.SearchType searchType, String s) {
         switch (searchType) {
             case KEYWORD:
@@ -404,6 +404,9 @@ public class SearchController extends AbstractController {
             case SEQUENCE:
                 addToHistory(session, "searchparams.sequence=" + s);
                 break;
+            default:
+                 addToHistory(session, "searchparams.text=" + s);
+            
         }
     }
 
@@ -422,10 +425,10 @@ public class SearchController extends AbstractController {
             prevSearches = Collections.synchronizedMap(
                     new LinkedHashMap<String, SearchResults>(
                             searchConfig.getSearchCacheSize(), 1, true));
-
+            
             servletContext.setAttribute(Attribute.prevSearches.getName(),
                     prevSearches);
-
+            
         }
         return prevSearches;
     }
@@ -442,9 +445,9 @@ public class SearchController extends AbstractController {
      * @return A normalised string.
      */
     protected String getSearchKey(SearchParams searchParams) {
-
+        
         String key = null;
-
+        
         switch (searchParams.getType()) {
             case KEYWORD:
                 key = searchParams.getText().trim().toLowerCase();
@@ -472,7 +475,7 @@ public class SearchController extends AbstractController {
         SearchResults results = null;
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         results = finder.getEnzymes(searchParameters);
-
+        
         return results;
     }
 
@@ -490,7 +493,7 @@ public class SearchController extends AbstractController {
         EnzymeFinder finder = null;
         try {
             finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-
+            
             results = finder.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
@@ -517,35 +520,35 @@ public class SearchController extends AbstractController {
             Model model, HttpSession session, HttpServletRequest request) {
         return postSearchResult(searchModel, model, session, request);
     }
-
+    
     @RequestMapping(value = "/advanceSearch",
             method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {
         return "advanceSearch";
     }
-
+    
     @ResponseBody
     @RequestMapping("/service/search")
     public List<Suggestion> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length() >= 3) {
-            name = String.format("%%%s%%", name);
-
-            List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(name.trim());
-
+            String keyword = String.format("%%%s%%", name);
+            
+            List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(keyword.trim());
+            
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());
             } else {
                 return new ArrayList<>();
             }
-
+            
         }
-
+        
         return new ArrayList<>();
-
+        
     }
-
+    
     public String resolveSpecialCharacters(String data) {
-
+        
         SpecialCharacters xchars = SpecialCharacters.getInstance(null);
         EncodingType[] encodings = {
             EncodingType.CHEBI_CODE,
@@ -558,20 +561,20 @@ public class SearchController extends AbstractController {
             EncodingType.SWISSPROT_CODE,
             EncodingType.UNICODE
         };
-
+        
         if (!xchars.validate(data)) {
             LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
-
+            
         }
-
+        LOGGER.info("available encodings " + encodings);
         return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
-
+    
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
     public String getSearchResult(Model model) {
         return "underconstruction";
     }
-
+    
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String getAbout(Model model) {
         return "about";
@@ -603,14 +606,14 @@ public class SearchController extends AbstractController {
         }
         return view;
     }
-
+    
     @RequestMapping(value = "/checkJob", method = RequestMethod.POST)
     public String checkJob(@RequestParam String jobId, Model model,
             SearchModel searchModel, HttpSession session) throws MultiThreadingException {
         String view = null;
         try {
             EnzymeFinder enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-
+            
             NcbiBlastClient.Status status = enzymeFinder.getBlastStatus(jobId);
             switch (status) {
                 case ERROR:
@@ -625,7 +628,7 @@ public class SearchController extends AbstractController {
                     SearchParams searchParams = searchModel.getSearchparams();
                     String resultKey = getSearchKey(searchParams);
                     cacheSearch(session.getServletContext(), resultKey, results);
-
+                    
                     searchParams.setSize(searchConfig.getResultsPerPage());
                     searchModel.setSearchresults(results);
                     model.addAttribute("searchModel", searchModel);
@@ -638,12 +641,12 @@ public class SearchController extends AbstractController {
                     break;
                 default:
             }
-
+            
         } catch (NcbiBlastClientException t) {
             LOGGER.error("While checking BLAST job", t);
             view = "error";
         }
         return view;
     }
-
+    
 }

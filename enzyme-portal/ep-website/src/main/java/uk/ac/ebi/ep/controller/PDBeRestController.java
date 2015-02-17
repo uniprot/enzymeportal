@@ -21,7 +21,7 @@ import uk.ac.ebi.ep.pdbeadapter.PdbService;
 @Controller
 public class PDBeRestController {
     
-    private final Logger LOGGER = Logger.getLogger(PDBeRestController.class);
+    private static final Logger LOGGER = Logger.getLogger(PDBeRestController.class);
 
     @Autowired
     private PdbService pdbService;
