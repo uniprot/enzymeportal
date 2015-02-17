@@ -38,60 +38,6 @@ public class PDB {
     
     private List<String> provenance;
    
-    
-    
-    
-
-//    private String moleculeName;
-//    private String chain;
-//    private String heterogen;
-//    private String ligands;
-//    private int residues;
-    
-    
-//    private List<Molecule> pdbMolecules;
-//    private List<PDBe> pdbSummaries;
-//    private List<PDBexperiment> pdbExperiments;
-//    private List<PDBePublication> pdbPublications;
-//
-//    public PDB() {
-//        this.pdbMolecules = new ArrayList<>();
-//        this.pdbSummaries = new ArrayList<>();
-//        this.pdbExperiments = new ArrayList<>();
-//        this.pdbPublications = new ArrayList<>();
-//    }
-//
-//    public List<Molecule> getPdbMolecules() {
-//        return pdbMolecules;
-//    }
-//
-//    public void setPdbMolecules(List<Molecule> pdbMolecules) {
-//        this.pdbMolecules = pdbMolecules;
-//    }
-//
-//    public List<PDBe> getPdbSummaries() {
-//        return pdbSummaries;
-//    }
-//
-//    public void setPdbSummaries(List<PDBe> pdbSummaries) {
-//        this.pdbSummaries = pdbSummaries;
-//    }
-//
-//    public List<PDBexperiment> getPdbExperiments() {
-//        return pdbExperiments;
-//    }
-//
-//    public void setPdbExperiments(List<PDBexperiment> pdbExperiments) {
-//        this.pdbExperiments = pdbExperiments;
-//    }
-//
-//    public List<PDBePublication> getPdbPublications() {
-//        return pdbPublications;
-//    }
-//
-//    public void setPdbPublications(List<PDBePublication> pdbPublications) {
-//        this.pdbPublications = pdbPublications;
-//    }
 
     @Override
     public String toString() {

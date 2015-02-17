@@ -10,8 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiment;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiments;
 import uk.ac.ebi.ep.pdbeadapter.molecule.Molecule;
@@ -26,26 +24,30 @@ import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
  *
  * @author joseph
  */
-@Service
 public class PdbService {
-    //http://wwwdev.ebi.ac.uk/pdbe/entry/search/index?pdb_id:3tge&view=entry
-    
+  
+   
+   private final PDBeRestService pdbeRestService;
     private static final Logger LOGGER = Logger.getLogger(PdbService.class);
+
+    public PdbService(PDBeRestService pdbeRestService) {
+        this.pdbeRestService = pdbeRestService;
+    }
+    
+    
 
     public PdbSearchResult getPdbSearchResults(String pdbId) {
         
-        PDBeRestService pdbeRestService = pdbeRestService();
         return pdbeRestService.getPdbSummaryResults(pdbId);
         
     }
     
     public PDB computeProteinStructure(String pdbId) {
-        PDBeRestService pdbeRestService = pdbeRestService();
         
         PDB pdb = new PDB();
         pdb.setId(pdbId);
 
-        //summary
+      
         PdbSearchResult summary = pdbeRestService.getPdbSummaryResults(pdbId);
         
         List<PDBe> pdbSummary = summary.get(pdbId);
@@ -179,10 +181,5 @@ public class PdbService {
                 inputFormat).parse(inputTimeStamp));
     }
     
-    @Bean
-    public PDBeRestService pdbeRestService() {
-        
-        return new PDBeRestService();
-    }
     
 }
