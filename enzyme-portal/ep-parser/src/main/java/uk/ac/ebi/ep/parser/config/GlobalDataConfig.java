@@ -13,7 +13,6 @@ import uk.ac.ebi.ep.parser.parsers.DiseaseParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPDBeParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPathwaysParser;
-import uk.ac.ebi.ep.parser.parsers.RelatedProteinsPopulator;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
 import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
@@ -42,10 +41,6 @@ public class GlobalDataConfig {
         return new EnzymePortalPathwaysParser();
     }
 
-    @Bean
-    public RelatedProteinsPopulator relatedProteinsPopulator() {
-        return new RelatedProteinsPopulator();
-    }
 
         @Bean
     public PdbService pdbService() {
