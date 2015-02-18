@@ -1,0 +1,115 @@
+{
+    "name": "",
+    "children": [
+        {
+            "name": "Bacteria",
+            "children": [
+                {
+                    "name": "Bacillus subtilis (strain 168)",
+                    "taxid": 224308
+                },
+                {
+                    "name": "Escherichia coli (strain K12)",
+                    "taxid": 83333
+                },
+                {
+                    "name": "Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)",
+                    "taxid": 83332
+                }
+            ]
+        },
+        {
+            "name": "Eukaryota",
+            "children": [
+                {
+                    "name": "Dictyostelium discoideum",
+                    "taxid": 44689
+                },
+                {
+                    "name": "Fungi",
+                    "children": [
+                        {
+                            "name": "Saccharomyces cerevisiae (strain ATCC 204508 / S288c)",
+                            "taxid": 559292
+                        },
+                        {
+                            "name": "Schizosaccharomyces pombe (strain 972 / ATCC 24843)",
+                            "taxid": 284812
+                        }
+                    ]
+                },
+                {
+                    "name": "Viridiplantae",
+                    "children": [
+                        {
+                            "name": "Oryza sativa subsp. japonica",
+                            "taxid": 39947
+                        },
+                        {
+                            "name": "Arabidopsis thaliana",
+                            "taxid": 3702
+                        }
+                    ]
+                },
+                {
+                    "name": "Metazoa",
+                    "children": [
+                        {
+                            "name": "Ecdysozoa",
+                            "children": [
+                                {
+                                    "name": "Drosophila melanogaster",
+                                    "taxid": 7227
+                                },
+                                {
+                                    "name": "Caenorhabditis elegans",
+                                    "taxid": 6239
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Vertebrata",
+                            "children": [
+                                {
+                                    "name": "Danio rerio",
+                                    "taxid": 7955
+                                },
+                                {
+                                    "name": "Mammalia",
+                                    "children": [
+                                        {
+                                            "name": "Bos taurus",
+                                            "taxid": 9913
+                                        },
+                                        {
+                                            "name": "Euarchontoglires",
+                                            "children": [
+                                                {
+                                                    "name": "Homo sapiens",
+                                                    "taxid": 9606
+                                                },
+                                                {
+                                                    "name": "Rodentia",
+                                                    "children": [
+                                                        {
+                                                            "name": "Mus musculus",
+                                                            "taxid": 10090
+                                                        },
+                                                        {
+                                                            "name": "Rattus norvegicus",
+                                                            "taxid": 10116
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

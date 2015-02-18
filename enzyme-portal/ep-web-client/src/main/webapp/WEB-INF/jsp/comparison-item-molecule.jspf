@@ -1,0 +1,20 @@
+<%--
+    Shows one molecule.
+    Requires page scope variable:
+        Molecule molecule: the molecule to show.
+ --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray" %>
+
+<a href="${epfn:getMoleculeUrl(molecule)}">${molecule.name}</a>
+<div style="margin-left: 2em">
+    <img src="${epfn:getMoleculeImgSrc(molecule)}" class="molecule"
+        style="float: left; margin-right: 1em;"/>
+    ${molecule.description}
+    <c:if test="${not empty molecule.formula}">
+        <br/>Formula: ${molecule.formula}
+    </c:if>
+</div>
+<br clear="all"/>

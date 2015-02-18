@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/changes/1.0.0 ">
+
+<properties>
+	<title>EP domain change log</title>
+	<author email="joseph@ebi.ac.uk">Joseph Onwubiko</author>
+</properties>
+
+<body>
+        <release version="1.1.2" date="2014-07-01"
+        description="Dependencies update">
+        <action dev="joseph" type="add">
+            Upgraded maven-jaxb2-plugin to 0.9.0 version.
+        </action>
+    </release>
+    <release version="1.1.0" date="2014-01-27" description="Equals and hashCode">
+        <action dev="rafalcan" type="add">
+            Added methods equals and hashCode to the auto-generated (JAXB) code
+            using a JAXB plugin. This should allow us to avoid those fancy
+            wrappers in ep-core.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added explicit dependency on latest version of cml-react, which adds
+            implementations of equals and hashCode (reactants and products are
+            currently implemented as Objects in this module), forcing it as a
+            transitive dependency.
+        </action>
+    </release>
+    <release version="1.0.8" date="2013-09-20"
+        description="Number of enzymes per disease">
+        <action dev="joseph" type="add">
+            Added number of enzymes to disease in search model.
+        </action>
+    </release>
+    <release version="1.0.7" date="2013-07-26">
+		<action dev="joseph" type="update">
+			Added web links for Diseases and Compounds to the schema.
+		</action>
+	</release>
+    <release version="1.0.6" date=""
+        description="Added compound roles and counts.">
+        <action dev="rafalcan" type="add">
+            Added role to compounds in the search model.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added independent counts for total results for every group of
+            molecules (activators, inhibitors, drugs, bioactive, cofactors).
+        </action>
+    </release>
+	<release version="1.0.5" date="2013-03-06">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub).
+		</action>
+	</release>
+	<release version="1.0.4" date="2012-10-24">
+		<action dev="rafalcan" type="fix">
+			Fixed pagination for empty results.
+		</action>
+	</release>
+	<release version="1.0.3" date="2012-08-20"
+		description="Dependencies cleanup">
+		<action dev="rafalcan" type="remove">
+			Removed unnecessary dependency on ebeye-client.
+		</action>
+		<action dev="rafalcan" type="update">
+			Updated to latest parent version, with plugin management.
+		</action>
+	</release>
+	<release version="1.0.2" date="2012-08-07" description="">
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
+	</release>
+</body>
+
+</document>

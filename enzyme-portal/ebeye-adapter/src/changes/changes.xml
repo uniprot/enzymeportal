@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0
+		http://maven.apache.org/changes/1.0.0 ">
+
+<properties>
+	<title>EB-Eye adapter change log</title>
+	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+</properties>
+
+<body>
+    <release version="1.0.5" date="2013-10-15" description="chembl-molecule">
+        <action dev="rafalcan" type="fix" issue="182">
+            Renamed EB-Eye domain from chembl-compound to chembl-molecule.
+        </action>
+    </release>
+    <release version="1.0.4" date="2013-09-26"
+        description="Now searching also EFO, OMIM and MeSH. JMX-manageable
+        search fields.">
+        <action dev="rafalcan" type="add">
+            Added EFO, OMIM and MeSH to the Domains enumeration - now in an
+            independent file -, which now contains lists of default search
+            fields.
+            <fixes issue="177"/>
+        </action>
+        <action dev="rafalcan" type="add">
+            Added search fields to EbeyeConfiguration, where they can be
+            modified via JMX.
+        </action>
+        <action dev="rafalcan" type="add">
+            Added callable EbeyeCallable.GetUniprotReferencesCallable to
+            retrieve UniProt accessions referenced by the results of a search
+            in domains not supporting the UNIPROT pseudo-field (namely
+            EFO, OMIM and MeSH).
+        </action>
+        <action dev="rafalcan" type="add">
+            Added method
+            Transformer.transformToArrayOfString(ArrayOfArrayOfString).
+        </action>
+    </release>
+	<release version="1.0.3" date="2013-06-19">
+		<action dev="rafalcan" type="update">
+			Updated to latest version of parent pom file (move to GitHub),
+			ep-domain, ep-util and junit.
+		</action>
+		<action dev="rafalcan" type="fix">
+            Fixed method EbeyeAdapter.getUniprotRefAccesionsMap to return
+            accessions (as per method name and javadocs) instead of IDs.
+            <fixes issue="116"/>
+		</action>
+	</release>
+	<release version="1.0.2" date="2012-08-20" description="Dependency updates">
+		<action dev="rafalcan" type="update">
+			Updated to latest versions of parent, ep-domain, ep-util and log4j.
+		</action>
+		<action dev="rafalcan" type="fix">
+			Using the shared uk.ac.ebi.biobabel:ebeye-client artifact instead
+			of uk.ac.ebi.ep:ebeye-client (deprecated).
+		</action>
+	</release>
+	<release version="1.0.1" date="2012-05-21" description="">
+	</release>
+	<release version="1.0" date="2012-03-30" description="First release">
+	</release>
+</body>
+
+</document>

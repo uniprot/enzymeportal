@@ -1,0 +1,45 @@
+body {
+	padding: 0;
+	margin: 0;
+	height: 100%;
+}
+#header {
+	width: 100%;
+	border-bottom: 2px solid #73b360;
+	color: #edf5ea;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#edf5ea), to(#cae2c3));
+	background-image: -moz-linear-gradient(center top, #edf5ea, #cae2c3);
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#edf5ea, endColorstr=#cae2c3, GradientType=0);
+	height: 33px;
+}
+
+a {
+	text-decoration: none;
+	color: #1c783b;
+	padding: 5px;
+	display: block;
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+a:hover {
+	color: #e33e3e;
+}
+
+a#backLink {
+	background: 5px 9px url('../images/back.png') no-repeat;
+	padding: 7px 5px 5px 25px;
+	display: block;
+	position: relative;
+	float: left;
+}
+
+a#closeLink {
+	float: right;
+	display: block;
+	position: relative;
+}
+
+#closeLink img {
+	border: none;
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <name>ChEMBL.Target</name>
+    <description>ChEMBL target data</description>
+    <release>ChEMBL_11</release>
+    <release_date>01-AUG-2011 00:00:00</release_date>
+    <entry_count>8603</entry_count>
+    <entries>
+        <entry id="CHEMBL2339">
+            <name>Cytochrome P450 7A1</name>
+            <description>Cholesterol 7-alpha-monooxygenase</description>
+            <cross_references>
+                <ref dbname="ChEMBL-Compound" dbkey="CHEMBL319160" />
+                <ref dbname="ChEMBL-Compound" dbkey="CHEMBL328863" />
+                <ref dbname="ChEMBL-Compound" dbkey="CHEMBL75" />
+                <ref dbname="ChEMBL-Activity" dbkey="1235456" />
+                <ref dbname="ChEMBL-Activity" dbkey="1239266" />
+                <ref dbname="ChEMBL-Activity" dbkey="1256000" />
+                <ref dbname="ChEMBL-Activity" dbkey="1259794" />
+                <ref dbname="SWISS-PROT" dbkey="P18125" />
+            </cross_references>
+            <additional_fields>
+                <field name="Organism">Rattus norvegicus</field>
+                <field name="Target_synonym">Choleterol 7-alpha-monooxygenase</field>
+                <field name="Target_synonym"> CYPVII</field>
+                <field name="Target_synonym"> Choleterol 7-alpha-hydroxylase</field>
+                <field name="Target_synonym"> Cytochrome P450 7A1</field>
+            </additional_fields>
+        </entry>
+    </entries>
+</database>

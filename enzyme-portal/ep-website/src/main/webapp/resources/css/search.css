@@ -1,0 +1,829 @@
+/* 
+    Document   : ${name}
+    Created on : ${date}, ${time}
+    Author     : ${user}
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+/*
+body, td.contentsarea {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: helvetica,"trebuchet MS",arial,sans-serif;
+    font-size: 9pt;
+    margin: 0;
+    padding: 0;
+    line-height: 16px;
+    width: 100%;
+}
+*/
+
+a:link, a:visited {
+    text-decoration: inherit;
+}
+
+/*.desc a:link, .desc a:visited, .species{
+    color: #207a7a;
+    text-decoration: underline;
+}*/
+.showLink{
+    color: #207a7a;
+/*    text-decoration: underline;*/
+    font-style: italic;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.ebiHeader {
+    min-height: 50px;
+}
+
+.searchBackground {
+    padding: 5px 0px;
+    background: #fff; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dedede', endColorstr='#ffffff'); /* for IE */
+    background: -moz-linear-gradient(center top, #dedede, #ffffff);
+    background: -webkit-gradient(linear, left top, left bottom, from(#dedede), to(#ffffff)); /* for webkit browsers */
+    margin-top: 5px;
+    min-height: 50px;
+    text-align:center;
+}
+
+.field {
+    display: inline-block;
+    width: 550px;
+    font-size: 120%;
+    padding: 4px 5px;
+    margin: 2px auto 5px auto;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+
+.filterButton, .searchButton, .button {
+    /*position: relative;*/
+    /*background: #ddd;*/
+/*    background: #72B55F;*/
+    /*color: #72B55F;*/
+    background: #207a7a;
+    color: white;
+    border: 1px solid #777;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+
+}
+
+.searchButton {
+    display: inline-block;
+    margin: 2px auto 5px auto;
+    padding: 4px 5px;
+    font-size: 130%;
+}
+
+.filterButton {
+    float: right;
+    margin: 5px 5px 5px 5px;
+    font-weight: bold;
+}
+/*
+.searchHome {
+    padding: 5px 0px;
+    margin-top: 5px;
+    min-height: 50px;
+    text-align:center;
+}
+*/
+
+.content {
+    min-height: 700px;
+}
+
+
+div.filter  {
+    float:left;
+    margin-left:2px;
+    margin-right:2px;
+    /*min-width:150px;*/
+    min-width: 15%;
+    /*    max-width: 20%;*/
+    /*    padding: 4px 4px;
+        margin-top: 5px;*/
+    /*border: 2px solid #ddd;*/
+    /*
+    -moz-border-radius: 15px 15px 15px 15px;
+    border-radius:15px 15px 15px 15px;
+    -webkit-border-radius:15px 15px 15px 15px;
+    */
+}
+
+.filter .sublevel1 {
+    margin-top: 10px;
+    /*
+    min-height: 120px;
+    max-height: 600px;
+    */
+    border: 1px solid #ddd;    
+    -moz-border-radius: 8px 8px 8px 8px;
+    border-radius:8px 8px 8px 8px;
+    -webkit-border-radius:8px 8px 8px 8px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.sublevel1 { border:1px thin #ddd; width:inherit;   }
+/*.sublevel1 { overflow:auto ;border:1px thin #ddd;width: 260px; height:400px }*/
+.filterContent {
+    margin-left: 5px;
+    padding-bottom: 2px;
+    line-height:16pt;
+    overflow:auto;
+    max-height: 400px;
+    /*    margin-right: 5px;*/
+}
+
+/*.text {
+    float: left;
+    width: 82%;
+    border: 1px solid #ddd;comment
+}*/
+
+.otherName {
+    font-size: 8pt;
+    font-style: italic;    
+}
+/*.checkItem {
+    vertical-align: top;
+    margin-right: 5px;
+    float: right;
+    width: 10%;
+    text-align: right;
+    border: 1px solid #ddd;
+}
+
+*/
+
+.filterLine {
+    margin-bottom: 9px;
+    vertical-align: top;
+}
+
+/*to maintain the spacing betwwen the items in filter facets*/
+.filterItem{
+     margin-bottom: 9px;
+    vertical-align: top;
+}
+
+/*css to achieve the frontier checkbox alignment starts here*/
+.text {
+    float: right;
+    width: 90%;
+}
+
+.checkItem {
+   
+vertical-align: top;
+/*    margin-right: 0px;*/
+    float: left;
+    width: 10%;
+    text-align: left;
+}
+
+/*frontier checkbox alignment ends here*/
+
+.container { border:2px solid #ccc; width:300px; height: 300px; overflow-y: scroll; }
+/*The container of result items on the right side of the filter*/
+.result  {
+    float:left;
+    margin-left:2px;
+    margin-right:0px;
+    max-width:76%;
+    min-width:70%;
+    padding: 2px 2px;
+    margin-top: 5px;
+    min-height: 700px;
+    /*border: 1px solid #ddd;*/
+}
+
+.title {
+    line-height: 37px;
+    color: #408C8C;
+    font-size: 1.2em;
+    font-weight: bold;
+    /*border-bottom: 1px solid #ddd;*/
+}
+
+.subTitle {
+    padding: 4px 4px;
+    height: 20px;
+    font-weight: bold;
+    color: #408C8C;
+    -moz-border-radius: 8px 8px 8px 8px;
+    border-radius:8px 8px 8px 8px;
+    -webkit-border-radius:8px 8px 8px 8px;
+    background: #fff; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dedede', endColorstr='#ffffff'); /* for IE */
+    background: -moz-linear-gradient(center top, #dedede, #ffffff);
+    background: -webkit-gradient(linear, left top, left bottom, from(#dedede), to(#ffffff)); /* for webkit browsers */
+
+}
+
+
+/*search result text: Total found*/
+.action-buttons {
+    float:left;
+    vertical-align: bottom;
+}
+#paginationNav {
+    float: right;
+    text-align: right;
+    vertical-align: bottom;
+}
+/*
+.comparison {
+    font-weight: bold;
+    color: #408C8C;
+    float:right;
+    max-height: 40px;
+    width:19%;
+}
+*/
+/*#allButtons {
+    margin-top: -4px;
+    margin-bottom: -6px;
+    float: right;
+}*/
+
+#buttonItems {
+    float: right;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+    height: 100px;    
+    width: 7%;
+}
+
+
+
+/*The container of the search result items in rounded box*/
+.resultContent {
+    padding-top: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    max-width: 99%
+}
+/*.resultContent a:link{
+   color: #408C8C; 
+}*/
+
+.line {
+    margin-bottom: 5px;
+    margin-bottom: 2px;
+    max-height: 2px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+/*The search result item in rounded box*/
+.resultItem {
+    float: left;
+    border-bottom: 1px solid #ddd ;
+    margin:0em 0 0.5em 0;
+    padding-bottom:1em;
+    vertical-align: top;
+    min-height: 80px;    
+}
+
+.summary-header {
+    margin-bottom: 0.5em;
+}
+
+.proteinImg {
+    /*    float: left;
+        width:110px;*/
+    /*height:90px;*/
+    text-align: center;    
+    /*    margin-right: 5px;*/
+    /*border: none;*/
+    /*border: 1px solid #ddd;*/
+    display: table-cell;
+}
+a.noLine {
+
+    border-bottom-style: none;
+
+} 
+/* css to end underline in auto complete terms*/
+
+a.ui-corner-all{
+    border-bottom-style: none; 
+}
+
+
+
+.proteinImg a{
+    color: white;
+    text-decoration: none;
+    border-bottom-style: none; 
+    max-width: 120px;
+    max-height: 90px;
+}
+
+.imgFooter {
+    font-size: smaller;
+    text-align: center;
+}
+.structureImage{
+   max-height: 90px;
+   max-width: 100px;
+}
+.img{
+    max-width: 120px;
+    max-height: 90px;
+}
+
+.desc {
+    /*    float: left;*/
+    text-align: left;
+    /*for smaller resolution
+    width: 55%;*/
+    /*    width: 65%;*/
+    /*border: 1px solid #ddd;*/
+    display: table-cell;
+}
+
+
+#speciesContainer{
+    float: left;
+    width: 18%;
+    /*border: 1px solid #ddd;*/
+}
+
+#in {
+    float: left;
+    width: 20px;
+    padding-left:5px;
+    /*border: 1px solid #ddd;*/
+}
+/*
+.species {
+    margin-left: 5px;
+    float: left;
+    width: 82%;
+}
+*/
+
+select.toCompare {
+    width: 10em;
+	max-width: 10em;
+    margin-top: 2ex;
+}
+
+input.forBasket {
+    margin-top: 2ex;
+}
+
+button.removeFromBasket {
+    margin-top: 2ex;
+}
+
+.hidden, #hiddenText {
+    display:none;
+}
+
+.iconGroup {
+    text-align:center;
+    width: 100%;
+}
+.iconField {
+    margin: 10px;
+    width: 12em;
+    height: 18ex;
+    font-weight: bold;
+    -moz-border-radius: 15px;
+    border-radius:15px;
+    -webkit-border-radius:15px;
+    display:inline;
+}
+
+.iconField a {
+    text-decoration: none;
+}
+
+.iconBox img
+{   
+    border: none;
+}
+
+.searchTab {
+    padding: 0.5ex 2em;
+    margin: 0ex 1em;
+    border-top-left-radius: 2ex;
+    border-top-right-radius: 2ex;
+}
+.selected.searchTab {
+    color: #000;
+}
+.disabled.searchTab {
+    background-color: #bbb;
+    color: #eee;
+}
+.selected.searchTab, .searchTabContent {
+    background-color: #fff;
+    /*border: thin solid #fd0;*/
+}
+.searchTabContent {
+    margin-top: 0.3ex;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2ex 1em;
+    width: 75em;
+}
+
+/*sort of tooltip to pop up scientific names*/
+a.popup {
+    position:relative;
+    z-index:24;
+    color: #408C8C;
+    text-decoration:none;
+}
+a.popup:hover {z-index:25; background-color:#FFFFFF;color:#408C8C; }
+a.popup span {display:none; }
+a.popup:hover span {
+    display:block;
+    position:absolute;
+    /*    		top:35px; left:15px;*/
+    top:15px;left:0px;
+    width:200px;
+    padding:3px;
+    /*    		border:1px solid #000000;*/
+    background-color:#A1C7C7; color:#000000;
+    font-style:italic;
+    font-weight: bolder;
+
+}
+#filtersForm{
+    padding: 0 0px;
+}
+
+.filterItem input[type="checkbox"] {
+    vertical-align: top;
+}
+.filterItem span {
+    color: #207a7a;
+    margin-left: 0.5em;
+}
+.filterItem span span {
+    font-style: italic;
+    color:#000000;
+    font-weight:lighter;
+    margin-left: 0.5em;
+}
+.filterItem span span:before {
+    content: '[';
+}
+.filterItem span span:after {
+    content: ']';
+}
+
+.sublevel1 .filterSearchBox{
+    width:96%;
+    display: inline-block;
+    /*        border-color: #A1C7C7;*/
+/*    padding: 2px 3px;
+    margin: 2px auto 5px auto;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;*/
+}
+
+.hrLine{
+    border-style: ridge;
+
+}
+
+span.resultPageDisease{
+   color:  #207a7a; 
+}
+a.formSubmit{
+    color:  #207a7a; 
+}
+
+/*for sequence search*/
+
+a.formSubmit {
+
+    cursor: pointer;
+
+}
+
+#search-tabs {
+
+    margin-bottom: 0ex;
+
+}
+
+.searchTab {	
+    padding: 0.5ex 2em;
+    margin: 0ex 1em;	
+    border-top-left-radius: 2ex;	
+    border-top-right-radius: 2ex;
+    display: inline;
+
+    color: #fff;
+
+    background-color: #808080;
+
+    cursor: pointer;
+
+}
+
+.selected.searchTab {
+
+    color: #000;
+
+    background-color: #dedede;
+
+    cursor: default;
+
+}
+
+/* Search scores (BLAST) */
+	
+.score {
+	
+ background-color: #cdf;
+	
+ padding: 0ex 0.1em;
+	
+ border: thin solid #bbb;
+	
+}
+	
+.score.S1 {
+	
+  background-color: #bcf;
+	
+}
+	
+.score.S2 {
+	
+ background-color: #bdc;
+	
+}
+	
+.score.S3 {
+	
+ background-color: #ada;
+	
+}
+	
+.score.S4 {
+	
+  background-color: #ce6;
+	
+}
+	
+.score.S5 {
+	
+  background-color: #ee2;
+	
+}
+	
+.score.S6 {
+	
+  background-color: #fd4;
+	
+}
+	
+.score.S7 {
+	
+  background-color: #fc6;
+	
+}
+	
+.score.S8 {
+	
+  background-color: #fb7;
+	
+}
+	
+.score.S9 {
+	
+  background-color: #faa;
+	
+}
+	
+.score.S10 {
+	
+  background-color: #f88;
+	
+}
+/*see auto complete code in js*/
+.ui-menu-item-highlight{
+    color: #207a7a;
+    font-weight: bolder;
+}
+
+/*for home page EP resources box*/
+
+.shortcuts>div ul.split { 
+	float: left; 
+	width: 40%;
+	margin: 0 1%;
+	
+	list-style: none;
+	padding: 9px 0 9px 9px;	/* Add some breathing space */
+}
+
+.shortcuts>div ul li a { display: block; border-bottom-color: #ccc; }
+
+
+/*css for about us page*/
+
+/*#intro h2,
+.shortcuts h3,
+#outro h3,
+div.highlight h3 { color: #333; }*/
+
+/*  Intro, Outro
+	These are arguably special kinds of highlight areas.
+	They are usually only featured on the main pages of top-level parts of the website.
+*/
+/*#intro,
+#outro {
+	background-color: #ededed;
+	display: block;
+	padding-bottom: 9px;
+	
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+
+#intro h2 {
+	line-height: 2;
+	margin-bottom: 0;
+	margin-top: 9px;
+}*/
+
+/* Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+.clear {
+	clear: both;
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/* http://perishablepress.com/press/2008/02/05/lessons-learned-concerning-the-clearfix-css-hack */
+
+.clearfix:after {
+	clear: both;
+	content: ' ';
+	display: block;
+	font-size: 0;
+	line-height: 0;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+.clearfix {
+	display: block;
+}
+
+/**
+ * @file
+ * Caption filter default styling for displaying image captions.
+ */
+
+div.caption-inner {
+  border: 1px solid #CCC;
+  padding: 4px;
+  background: #F3F3F3;
+  font-size: 0.857em; /* assuming you have a base font size of 14px, this is 12px */
+  text-align: center;
+}
+
+div.caption p {
+  margin: .25em 0;
+}
+
+div.caption img,
+div.caption object {
+  margin-bottom: 5px;
+  display: block;
+}
+
+/** aligned captions **/
+div.caption-left {
+  float: left;
+  margin: 10px 10px 10px 0;
+}
+
+div.caption-right {
+  float: right;
+  margin: 10px 0 10px 10px;
+}
+
+div.caption-center {
+  display: block;
+  text-align: center;
+}
+
+div.caption-center .caption-inner {
+  display: inline-block;
+}
+
+
+/*see example sequence search in advance search page*/
+
+/*pre.commentsbox {
+	font-size: 9pt;
+	font-weight: bold;
+	color: #000000;
+
+	padding: 12px;
+	background-color: #edf5ea;
+        background-color: #0C4452;
+	border: 1px solid #d9dadc;
+	margin: 5px 0;
+	display: block;
+	overflow: auto;
+}*/
+
+/*pre {
+	display: block;
+}*/
+
+span.popup {
+    position:relative;
+/*    z-index:24;*/
+/*    color: #408C8C;*/
+/*    text-decoration:none;*/
+}
+span.popup:hover {z-index:25; background-color:#FFFFFF;color:#408C8C; }
+span.popup span {display:none; }
+span.popup:hover span {
+    display:block;
+    position:absolute;
+    /*    		top:35px; left:15px;*/
+    top:15px;left:0px;
+    width:200px;
+    padding:3px;
+    /*    		border:1px solid #000000;*/
+    background-color:#A1C7C7; color:#000000;
+    font-style:italic;
+    font-weight: bolder;
+    
+}
+/*to help scroll the items in the accordion*/
+.scroll{
+    max-height: 24ex;
+}
+.ui-widget{
+    font-family: Helvetica,sans-serif;
+}
+.ui-accordion .ui-widget .ui-helper-reset{
+    font-family: Helvetica,sans-serif;
+}
+.num{
+     font-weight: bolder;
+     color: #0A5050;
+}
+
+
+figure.compound.structure {
+	text-align: center;
+}
+figure.compound.structure figcaption {
+	font-weight: bold;
+	text-align: center;
+	margin: 0ex 2em;
+}
+

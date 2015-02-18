@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Home</title>
+		<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+	</properties>
+	
+	<body>
+		<section name="Enzyme Portal web application">
+        
+			<p>This is the web application for the EBI Enzyme Portal.</p>
+            
+            <subsection name="Application scope">
+                <p>These are the variables in application scope (see also
+                    <code>SearchController.java</code>):
+                </p>
+                <ul>
+                    <li>Those <b>spring singletons</b> exposed from the
+                        <code>applicationContext.xml</code> file.</li>
+                    <li><b><code>prevSearches</code></b>: map of Strings (search
+                        terms) to SearchResults objects. This is the cache to
+                        speed up pagination and filtering of results, as well
+                        as results retrieval for common queries.</li>
+                </ul>
+            </subsection>
+            
+            <subsection name="Session scope">
+                <p>These are the variables in session scope (see also
+                    <code>SearchController.java</code> and
+                    <code>BasketController.java</code>):
+                </p>
+                <ul>
+                    <li><b><code>history</code></b>: the search history which
+                        keeps a trail for easy navigation back.</li>
+                    <li><b><code>lastSummaries</code></b>: collection of last
+                        summaries shown to a user. These are cached so that they
+                        can be reused in the basket page instead of making
+                        additional requests to retrieve exactly the same thing
+                        again.</li>
+                    <li><b><code>basket</code></b>: collection of enzyme
+                        summaries to show before comparing or downloading.</li>
+                </ul>
+            </subsection>
+		</section>
+	</body>
+</document>

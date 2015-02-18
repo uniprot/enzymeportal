@@ -1,0 +1,424 @@
+/* 
+    Document   : enzyme
+    Created on : May 6, 2011, 8:03:11 PM
+    Author     : hongcao
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/*.tab.reaction .inner_tab .icon {
+	background-image: url("../images/reaction.png");
+}
+.tab.disease .inner_tab .icon {
+	background-image: url("../images/disease.png");
+}
+.tab.molecule .inner_tab .icon {
+	background-image: url("../images/molecule.png");
+}*/
+
+html {
+    -webkit-font-smoothing:antialiased;
+}
+
+img {
+    border: none;
+}
+/*overidding frontier css*/
+dt{
+	clear: none;  
+	padding: 0em 0em;
+    font-family: inherit;
+}
+
+th,td{
+    border:none;
+    vertical-align: inherit;
+}
+td{
+}
+th{
+    background-color:inherit;
+}
+
+table{
+    border: none;
+}
+
+/*.epBox , fieldset {
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+}*/
+
+
+/*frontier overridding ends*/
+
+
+
+.reaction.block {
+	border: thin solid grey;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    margin-top: 2ex;
+    padding: 1ex 1em;
+}
+
+.equation {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.equation table {
+    text-align: center;
+    width: 100%;
+}
+.inlineLinks {
+    display: inline-table;
+    margin-left: 10px;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+/*
+.pathwayDesc
+  {
+    float: left;
+    max-width:50%;
+    min-width: 250px;
+  }
+*/
+.pathwayImg{
+	display: block;
+	margin: 1.5ex auto 1ex;
+}
+
+fieldset {
+    margin-top: 20px;
+}
+
+legend {
+    font-weight: bold;
+}
+.bold{
+    font-weight: bold;
+}
+
+.epBox {
+    /*min-height: 200px;*/
+    min-width: 200px;
+    max-width: 200px;
+    display: inline;
+    float: left;
+    margin: 5px 5px 5px 5px;
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 0.5em;
+}
+
+.epBox div {
+    max-width: 200px;
+    width: 200px;
+    word-wrap: break-word;
+}
+
+#citationsList > div {
+	margin-bottom: 2ex;
+}
+
+label.citationFilter {
+	font-weight: normal;
+	color: black;
+	margin-right: 2em;
+}
+
+span.synonyms {
+    margin-right: 5px;
+    text-align:justify;
+}
+span.enzymeDisease{
+     margin-right: 5px;  
+    text-align:justify;
+}
+span h1{
+  font-family: 'HelveticaNeueLT Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+  
+}
+
+
+/****************** Molecules ***************************/
+
+img.molecule {
+	max-width: 200px;
+}
+
+/****************** Basket ******************************/
+
+.icon-generic[data-icon="b"]:before {
+    color: orange;
+}
+
+.basket{
+    float: right;
+}
+
+#basketAll {
+	margin-left: 2em;
+}
+#basketAll button {
+    margin-bottom: 0px;
+    white-space: nowrap;
+}
+#basketAll button.icon {
+    font-weight: normal;
+}
+#basketAll button.icon:before, button.removeFromBasket:before {
+    color: rgb(80, 80, 80) !important;
+}
+#basketAll button.icon.icon-generic:before,
+#basketAll button.icon.icon-functional:before {
+}
+button#basketDeselectAll, button#basketSelectAll {
+    font-size: smaller;
+}
+
+/****************** Comparing enzymes *******************/
+
+#comparison-outline {
+	position: fixed;
+	z-index: 666;
+	width: auto;
+	max-width: 16%;
+	background-color: white;
+	box-shadow: 0 0 1em #ccc;
+	margin-left: 0.5em;
+	padding-top: 1ex;
+}
+#comparison-outline ul {
+	padding-left: 0.3em !important;
+}
+#comparison-outline li {
+    list-style: none;
+    padding: 0.3ex 1em;
+    margin-bottom: 0.5ex;
+}
+
+.comparison.header, .comparison.header a, .comparison.subheader {
+	font-weight: bold;
+}
+legend.comparison.header {
+	margin: 0.5ex 1em;
+	padding: 0.5ex 1em
+}
+
+.diff {
+	background-color: #ddd;
+}
+section.diff img {
+	background-color: #fff;
+	max-width: 200px;
+}
+.same {
+	background-color: #fff;
+}
+
+fieldset.comparison {
+	border: 1px solid;
+	margin: 0.3ex 1em;
+}
+fieldset.comparison section {
+	margin-bottom: 1ex;
+}
+select.ps {
+	border: 1px inset;
+	width: 100%;
+}
+
+section div.diff {
+    text-align: center;
+    margin-top: 0.3ex;
+}
+section.alpha > div.diff {
+	margin: 0.3ex 0em 0.3ex 1em;
+}
+section.omega > div.diff {
+    margin: 0.3ex 1em 0.3ex 0em;
+}
+button.comparison {
+  width: 100%;
+  text-align: center;
+}
+
+#compareButton[disabled]:before {
+    color: #aaa;
+}
+#compareButton[disabled]{
+    background-color: #eee;
+}
+#compareButton {
+    border-radius: 5px;
+    background-color: orange;
+}
+#compareButton:before {
+    color: #b50;
+}
+
+
+/* XAV CSS */
+#browse-box-container {
+    margin: 3em auto;
+}
+
+a.browse-box {
+    text-align: center;
+    color:white;
+    display: inline-block;
+    height:120px;
+    padding-top: 1em;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border-bottom: none;
+}
+
+a.browse-box:hover {
+    opacity: 0.7;
+    filter: alpha(opacity=70); /* For IE8 and earlier */
+    border: none;
+}
+
+.browse-box h4 {
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 0;
+}
+
+.browse-box .icon:before {
+    color:white !important;
+    font-size:2.7em !important;
+    font-weight: normal;
+}
+
+.disease-box {
+    background-color: #0e314a;
+}
+
+.enzyme-box {
+    background-color: #a0c13a;
+}
+
+.taxonomy-box {
+    background-color: #08a1b1;
+}
+
+.gene-box {
+    background-color: #3c5561;
+}
+
+
+.disease-overview-box ul {
+    margin-bottom: 0;
+}
+
+/* Typeahead stuff
+----------------------------*/
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+}
+
+div#local-masthead ul.dropdown-menu li {
+    float: none;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 3px 20px;
+    color: #333333;
+    white-space: nowrap;
+}
+.dropdown-menu .active a, .dropdown-menu .active a:hover, .dropdown-menu .active a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #428bca;
+    outline: 0;
+}
+
+.container-browse-search {
+    margin-left:auto;
+    margin-right:auto;
+    width:30em;
+    margin-bottom: 3em;
+}
+
+.browse-search {
+    font-size: 123.9%;
+    width:30em;
+}
+
+
+/* D3 
+------------------------*/
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node text{
+  font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
+  font-size: 1em;
+}
+
+.node text.endnode {
+    fill:#0C4452;
+}
+
+
+.node text.endnode:hover {
+    fill:#0B5448;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+/* Buttons */
+.btn, a:link.btn, a:visited.btn {
+    color:#333;
+    background-color: #FFFFFF;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid #84d0d8;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+a:hover.btn {
+    background-color: #e6e6e6;
+}
