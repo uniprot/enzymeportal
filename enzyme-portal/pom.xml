@@ -520,7 +520,7 @@
     </dependencyManagement>-->
     
     <modules>
-<!--                <module>ep-domain</module>
+        <!--                <module>ep-domain</module>
         <module>ep-web-client</module>
         <module>ep-core</module>
         <module>ep-util</module>
@@ -538,15 +538,16 @@
         <module>rhea-adapter</module>
         <module>chembl-adapter</module>-->
         
-<!--        <module>SitemapGenerator</module>-->
+        <!--        <module>SitemapGenerator</module>-->
         <module>enzyme-portal-data</module>
+        <module>PDBeAdapter</module>
+        <module>ep-parser</module>
         <module>ebeye-rest-adapter</module>
         <module>enzymeservices</module>
         <module>literature-adapter</module>
         <module>ep-base</module>
-        <module>PDBeAdapter</module>
         <module>ep-website</module>
-        
+
     </modules>
     
     <profiles>
@@ -554,7 +555,7 @@
             <id>baseProfile</id>
             <repositories>
 
-<!--                 For main Spring releases -->
+                <!--                 For main Spring releases -->
                 <repository>
                     <id>org.springframework.maven.release</id>
                     <name>Spring Maven Release Repository</name>
@@ -567,7 +568,7 @@
                     </snapshots>
                 </repository>
 
-<!--                 For testing against latest Spring snapshots -->
+                <!--                 For testing against latest Spring snapshots -->
                 <repository>
                     <id>org.springframework.maven.snapshot</id>
                     <name>Spring Maven Snapshot Repository</name>
@@ -580,7 +581,7 @@
                     </snapshots>
                 </repository>
 
-<!--                 For developing against latest Spring milestones -->
+                <!--                 For developing against latest Spring milestones -->
                 <repository>
                     <id>org.springframework.maven.milestone</id>
                     <name>Spring Maven Milestone Repository</name>
@@ -590,7 +591,7 @@
                     </snapshots>
                 </repository>
 
-<!--                 JBoss repository -->
+                <!--                 JBoss repository -->
                 <repository>
                     <id>jboss</id>
                     <name>JBoss repository</name>

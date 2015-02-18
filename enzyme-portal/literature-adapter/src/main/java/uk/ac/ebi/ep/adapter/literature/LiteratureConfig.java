@@ -1,5 +1,8 @@
 package uk.ac.ebi.ep.adapter.literature;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class LiteratureConfig implements LiteratureConfigMBean {
 
 	private int maxThreads = 4;

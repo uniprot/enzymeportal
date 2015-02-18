@@ -1,8 +1,17 @@
 package uk.ac.ebi.ep.adapter.literature;
 
-import java.util.*;
-import java.util.concurrent.*;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.cdb.webservice.Result;
 import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
@@ -151,7 +160,7 @@ public class SimpleLiteratureAdapter implements ILiteratureAdapter {
 				new ArrayList<Callable<Set<Result>>>();
 		callables.add(new UniprotJapiLiteratureCaller(uniprotId));
 		callables.add(new DASLiteratureCaller(
-				IDASFeaturesAdapter.PDBE_DAS_URL, uniprotId));
+				IDASFeaturesAdapter.PDBE_DAS_URL, pdbIds));
 		return callables;
 	}
 
