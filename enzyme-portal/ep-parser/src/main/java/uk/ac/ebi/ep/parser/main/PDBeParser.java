@@ -28,6 +28,7 @@ public class PDBeParser {
             profile = args[0];
 
             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+            context.getEnvironment().setActiveProfiles(profile);
             context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.parser.config");
             context.refresh();
 
