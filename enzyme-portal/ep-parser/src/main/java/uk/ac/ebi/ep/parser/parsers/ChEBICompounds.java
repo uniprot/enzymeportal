@@ -52,7 +52,8 @@ public class ChEBICompounds {
 
     List<EnzymePortalCompound> compounds = new LinkedList<>();
 
-    private static final String COMMENT_TYPE = "ENZYME_REGULATION";
+    //private static final String COMMENT_TYPE = "ENZYME_REGULATION";
+     private static final String COMMENT_TYPE = "REGULATION";
 
     private final EnzymePortalCompoundRepository compoundRepository;
 
