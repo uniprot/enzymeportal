@@ -32,7 +32,6 @@ import org.springframework.web.client.AsyncRestTemplate;
  *
  * @author joseph
  */
-//@Service
 public class EbeyeRestService  {
 private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRestService.class);
     /**
