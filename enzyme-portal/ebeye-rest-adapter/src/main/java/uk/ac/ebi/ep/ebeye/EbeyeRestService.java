@@ -13,8 +13,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -146,7 +144,7 @@ private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRest
                 r = searchEbeyeDomain(url).get();
 
             } catch (InterruptedException | ExecutionException ex) {
-                //Logger.getLogger(EbeyeService.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGER.error(ex.getMessage(), ex);
             }
             return r;
 
@@ -190,7 +188,7 @@ private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRest
             ResponseEntity<EbeyeSearchResult> results = future.get();
             return results.getBody();
         } catch (InterruptedException | ExecutionException ex) {
-            Logger.getLogger(AsyncEbeyeService.class.getName()).log(Level.SEVERE, null, ex);
+           LOGGER.error(ex.getMessage(), ex);
         }
 
         return null;
