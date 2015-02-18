@@ -47,7 +47,7 @@ import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
-import uk.ac.ebi.ep.ebeye.EbeyeService;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiFetchDataException;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
@@ -74,7 +74,7 @@ public class EnzymeRetriever extends EnzymeFinder {
     private static IBioportalAdapter bioportalAdapter;
 
    
-    public EnzymeRetriever(EnzymePortalService service, EbeyeService eService) {
+    public EnzymeRetriever(EnzymePortalService service, EbeyeRestService eService) {
         super(service, eService);
 
         rheaAdapter = new RheaWsAdapter();

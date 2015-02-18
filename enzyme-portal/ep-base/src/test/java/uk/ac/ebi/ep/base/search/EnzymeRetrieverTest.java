@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ import uk.ac.ebi.ep.data.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
-import uk.ac.ebi.ep.ebeye.EbeyeService;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
@@ -37,11 +38,12 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
  *
  * @author joseph
  */
+@Ignore
 public class EnzymeRetrieverTest extends BaseTest {
 
     @Autowired
     private EnzymePortalService service;
-    private EbeyeService ebeyeService;
+    private EbeyeRestService ebeyeService;
 
     @Autowired
     private Environment env;

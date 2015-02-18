@@ -10,6 +10,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,7 @@ import uk.ac.ebi.ep.data.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EbeyeService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
@@ -43,12 +45,12 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
  */
 @Configuration
 @ComponentScan(value = "uk.ac.ebi.ep.data.dataconfig")
-
+@Ignore
 public class EnzymeRetrieverIT extends TestCase {
 
     //http://docs.spring.io/spring/docs/current/spring-framework-reference/html/jdbc.html#jdbc-embedded-database-support
     private EnzymePortalService service;
-    private EbeyeService ebeyeService;
+    private EbeyeRestService ebeyeService;
 
     private AnnotationConfigApplicationContext context = null;
     private Environment env = null;
@@ -64,7 +66,7 @@ public class EnzymeRetrieverIT extends TestCase {
         context.refresh();
 
         service = context.getBean(EnzymePortalService.class);
-        ebeyeService = context.getBean(EbeyeService.class);
+        ebeyeService = context.getBean(EbeyeRestService.class);
         env = context.getEnvironment();
 
     }

@@ -48,9 +48,9 @@ import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.EbeyeService;
-import uk.ac.ebi.ep.ebeye.Entry;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 
 /**
@@ -76,7 +76,9 @@ public class EnzymeFinder {
     //@Autowired
     protected IntenzAdapter intenzAdapter;
     @Autowired
-    private final EbeyeService ebeyeService;
+    private EbeyeService ebeyeService;
+
+    private final EbeyeRestService ebeyeRestService;
 
     Set<Species> uniqueSpecies = new TreeSet<>();
     List<Disease> diseaseFilters = new LinkedList<>();
@@ -85,9 +87,10 @@ public class EnzymeFinder {
     Set<Disease> uniqueDiseases = new HashSet<>();
     private NcbiBlastClient blastClient;
 
-    public EnzymeFinder(EnzymePortalService service, EbeyeService eService) {
+    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
         this.service = service;
-        this.ebeyeService = eService;
+        //this.ebeyeService = eService;
+        this.ebeyeRestService = ebeyeRestService;
 
         enzymeSearchResults = new SearchResults();
 
@@ -144,6 +147,7 @@ public class EnzymeFinder {
         }
     }
 
+    @Deprecated
     private EbeyeSearchResult getEbeyeSearchResult() {
 
         String query = searchParams.getText();
@@ -157,18 +161,31 @@ public class EnzymeFinder {
     }
 
     private void getResultsFromEpIndex() {
-        EbeyeSearchResult searchResult = getEbeyeSearchResult();
-        if (searchResult != null) {
-            List<Entry> results = searchResult.getEntries().stream().distinct().collect(Collectors.toList());
-            results.stream().distinct().forEach((result) -> {
+       // EbeyeSearchResult searchResult = getEbeyeSearchResult();
 
-                uniprotNameprefixes.add(result.getUniprot_name());
-
-                uniprotAccessions.add(result.getUniprot_accession());
-
-            });
+        String query = searchParams.getText();
+        if (!StringUtils.isEmpty(query)) {
+            query = query.trim();
         }
+        //List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true,3000);
+        List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query);
+        //System.out.println("num accession found "+ accessions.size());
+        if(accessions.size() > 1000){
+            accessions = accessions.subList(0, 1000);
+          
+        }
+        uniprotAccessions = accessions;
 
+//        if (searchResult != null) {
+//            List<Entry> results = searchResult.getEntries().stream().distinct().collect(Collectors.toList());
+//            results.stream().distinct().forEach((result) -> {
+//
+//                uniprotNameprefixes.add(result.getUniprot_name());
+//
+//                uniprotAccessions.add(result.getUniprot_accession());
+//
+//            });
+//        }
     }
 
     /**
@@ -380,12 +397,12 @@ public class EnzymeFinder {
         for (UniprotEntry entry : enzymes) {
 
             if (!proteinNames.contains(entry.getProteinName())) {
-                 LOGGER.warn("TODO:  "+ entry.getProteinName() +" <<=>> "+ keyword);
-                 
-                if (entry.getProteinName().equalsIgnoreCase(keyword)) {
+                LOGGER.warn("TODO:  " + entry.getProteinName() + " <<=>> " + keyword);
+
+                if (HtmlUtility.cleanText(entry.getProteinName()).equalsIgnoreCase(keyword)) {
                     //enzymeList.add(0, entry);
-                    LOGGER.warn("A MATCH "+ entry.getProteinName() +" => "+ keyword);
-                   
+                    LOGGER.warn("A MATCH " + entry.getProteinName() + " => " + keyword);
+
                     enzymeList.push(entry);
                 } else {
                     enzymeList.add(entry);
@@ -514,7 +531,7 @@ public class EnzymeFinder {
         List<String> namePrefixesList
                 = new ArrayList<>(uniprotNameprefixSet);
 
-        String keyword = HtmlUtility.cleanText(this.searchParams.getText()); 
+        String keyword = HtmlUtility.cleanText(this.searchParams.getText());
         keyword = keyword.replaceAll("&quot;", "");
 
         LOGGER.debug("Getting enzyme summaries...");
