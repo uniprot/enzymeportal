@@ -18,12 +18,12 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
+import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
-import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
-import uk.ac.ebi.ep.data.repositories.ReactionRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.parser.helper.CompoundUtil;
 import uk.ac.ebi.ep.parser.helper.EbinocleParser;
 import uk.ac.ebi.ep.parser.helper.MmDatabase;
@@ -110,13 +110,12 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
 
     private final EnzymePortalCompoundRepository compoundRepository;
 
-    private final EnzymeSummaryRepository enzymeSummaryRepository;
-    private final ReactionRepository reactionRepository;
+    private final EnzymePortalEcNumbersRepository ecNumbersRepository;
+    private final EnzymePortalReactionRepository reactionRepository;
 
-    public IntenzSaxParser(EnzymePortalCompoundRepository repository, EnzymeSummaryRepository summary, ReactionRepository reactionRepo) {
+    public IntenzSaxParser(EnzymePortalCompoundRepository repository, EnzymePortalEcNumbersRepository ec, EnzymePortalReactionRepository reactionRepo) {
         this.compoundRepository = repository;
-
-        this.enzymeSummaryRepository = summary;
+        this.ecNumbersRepository = ec;
         this.reactionRepository = reactionRepo;
     }
 
@@ -206,11 +205,10 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
 
         } else if (isCmlReaction) {
 
-            //make call to db to obtain concrete uniprot entry using ec
-            List<EnzymePortalSummary> summaryList = enzymeSummaryRepository.findByCommentText(ecEntry.getName());
-            //System.out.println("summarylst "+ summaryList);
+            List<EnzymePortalEcNumbers> summaryList = ecNumbersRepository.findByEcNumber(ecEntry.getName());
+
             if (summaryList != null && !summaryList.isEmpty()) {
-                for (EnzymePortalSummary summary : summaryList) {
+                for (EnzymePortalEcNumbers summary : summaryList) {
 
                     // Cross-reference EC-Rhea:
                     EnzymePortalReaction reaction_per_ec = null;
@@ -226,7 +224,6 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
                         reaction.setUniprotAccession(summary.getUniprotAccession());
 
                         reaction_per_ec = reactionRepository.save(reaction);
-
                     }
 
                     // Cross-references ChEBI-Rhea and ChEBI-EC:
@@ -243,7 +240,9 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
                                 ? Relationship.is_substrate_or_product_of.name()
                                 : Relationship.is_substrate_of.name());
                         chebiEcXref = CompoundUtil.computeRole(chebiEcXref, chebiEcXref.getRelationship());
-                        xrefs.add(chebiEcXref);
+                        if (chebiEcXref.getCompoundName() != null) {
+                            xrefs.add(chebiEcXref);
+                        }
 
                     }
                     for (EnzymePortalCompound product : products) {
@@ -259,8 +258,10 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
                         chebiEcXref.setRelationship(isReversibleReaction
                                 ? Relationship.is_substrate_or_product_of.name()
                                 : Relationship.is_product_of.name());
-                          chebiEcXref = CompoundUtil.computeRole(chebiEcXref, chebiEcXref.getRelationship());
-                        xrefs.add(chebiEcXref);
+                        chebiEcXref = CompoundUtil.computeRole(chebiEcXref, chebiEcXref.getRelationship());
+                        if (chebiEcXref.getCompoundName() != null) {
+                            xrefs.add(chebiEcXref);
+                        }
 
                     }
 
@@ -279,10 +280,10 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
         } else if (isEnzyme) {
 
             if (cofactors != null || !cofactors.isEmpty()) {
-                List<EnzymePortalSummary> summaryList = enzymeSummaryRepository.findByCommentText(ecEntry.getName());
+                List<EnzymePortalEcNumbers> summaryList = ecNumbersRepository.findByEcNumber(ecEntry.getName());
 
                 if (summaryList != null && !summaryList.isEmpty()) {
-                    for (EnzymePortalSummary summary : summaryList) {
+                    for (EnzymePortalEcNumbers summary : summaryList) {
                         for (EnzymePortalCompound cofactor : cofactors) {
                             EnzymePortalCompound chebi_cofactor = new EnzymePortalCompound();
                             chebi_cofactor.setCompoundId(cofactor.getCompoundId());
@@ -291,8 +292,10 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
                             chebi_cofactor.setUniprotAccession(summary.getUniprotAccession());
 
                             chebi_cofactor.setRelationship(Relationship.is_cofactor_of.name());
-                              chebi_cofactor = CompoundUtil.computeRole(chebi_cofactor, chebi_cofactor.getRelationship());
-                            xrefs.add(chebi_cofactor);
+                            chebi_cofactor = CompoundUtil.computeRole(chebi_cofactor, chebi_cofactor.getRelationship());
+                            if (chebi_cofactor.getCompoundName() != null) {
+                                xrefs.add(chebi_cofactor);
+                            }
 
                         }
                     }
@@ -300,11 +303,11 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
             }
 
             if (!xrefs.isEmpty()) {
-               
+
                 compoundRepository.save(xrefs);
+
             }
 
-           
             // Clean up:
             xrefs.clear();
             ecEntry = null;
@@ -329,9 +332,9 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
     // use abstract class to manage this methods across various parsers
     protected String getCurrentXpath() {
         StringBuilder xpath = new StringBuilder("/");
-        for (String string : currentContext) {
+        currentContext.stream().forEach((string) -> {
             xpath.append('/').append(string);
-        }
+        });
         return xpath.toString();
     }
 

@@ -36,8 +36,7 @@ public class EnzymePortalPathwaysParser {
     private EnzymePortalPathwaysRepository pathwaysRepository;
     @Autowired
     private UniprotEntryRepository uniprotEntryRepository;
-
-    private static final String REACTOME_FILE = "http://www.reactome.org/download/current/Uniprot2Reactome.txt";
+    private static final String REACTOME_FILE = "http://www.reactome.org/download/current/UniProt2Reactome.txt";
     private static final Logger LOGGER
             = Logger.getLogger(PathwaysParser.class);
 

@@ -5,17 +5,15 @@
  */
 package uk.ac.ebi.ep.parser.parsers;
 
-import uk.ac.ebi.ep.parser.parsers.ChEBICompounds;
-import uk.ac.ebi.ep.parser.parsers.ChemblSaxParser;
-import uk.ac.ebi.ep.parser.parsers.IntenzSaxParser;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
-import uk.ac.ebi.ep.data.repositories.ReactionRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 
 /**
@@ -32,10 +30,13 @@ public class EnzymePortalCompoundParser {
     private UniprotEntryRepository uniprotEntryRepository;
     
     @Autowired
-    private EnzymeSummaryRepository enzymeSummaryRepository;
+    private EnzymePortalSummaryRepository enzymeSummaryRepository;
     
     @Autowired
-    private ReactionRepository reactionRepository;
+    private EnzymePortalReactionRepository reactionRepository;
+    
+    @Autowired
+      private EnzymePortalEcNumbersRepository ecNumbersRepository;
 
     @Transactional
     public EnzymePortalCompound addCompound(EnzymePortalCompound c) {
@@ -58,7 +59,7 @@ public class EnzymePortalCompoundParser {
 
     @Transactional
     public void parseIntenzAndLoadCompoundsAndReactions(String file) throws Exception {
-        IntenzSaxParser parser = new IntenzSaxParser(repository,enzymeSummaryRepository,reactionRepository);
+        IntenzSaxParser parser = new IntenzSaxParser(repository,ecNumbersRepository,reactionRepository);
         parser.parse(file);
 
     }

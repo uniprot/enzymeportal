@@ -38,6 +38,7 @@ public class CompoundUtil {
                 compound.setCompoundRole(compound.getCompoundId().startsWith("CHEMBL")
                         ? Compound.Role.BIOACTIVE.name() : Compound.Role.DRUG.name());
                 break;
+            default:
         }
         return compound;
     }

@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.DataItem;
@@ -27,7 +28,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.parser.helper.CompoundUtil;
 import uk.ac.ebi.ep.parser.helper.EPUtil;
 import uk.ac.ebi.ep.parser.helper.MmDatabase;
@@ -55,12 +56,12 @@ public class ChEBICompounds {
 
     private final EnzymePortalCompoundRepository compoundRepository;
 
-    private final EnzymeSummaryRepository enzymeSummaryRepository;
+    private final EnzymePortalSummaryRepository enzymeSummaryRepository;
 
     public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid" ,"H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION"};
     List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
-    public ChEBICompounds(EnzymeSummaryRepository enzymeSummaryRepository, EnzymePortalCompoundRepository repository) {
+    public ChEBICompounds(EnzymePortalSummaryRepository enzymeSummaryRepository, EnzymePortalCompoundRepository repository) {
         this.compoundRepository = repository;
         this.enzymeSummaryRepository = enzymeSummaryRepository;
         chebiWsClient = new ChebiWebServiceClient();
@@ -69,17 +70,19 @@ public class ChEBICompounds {
 
     public void computeAndLoadChEBICompounds() {
 
-        List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findByCommentType(COMMENT_TYPE);
+
+       
+          List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
 
        //Java 7 and before only. uncomment if Java 8 is not available in your env
 //
 //        for (EnzymePortalSummary summary : enzymeSummary) {
 //            String enzyme_regulation_text = summary.getCommentText();
 //         
-//            inhibitors.put(summary.getAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
-//            activators.put(summary.getAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
+//            inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
+//            activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
 //        }
-//
+
 //        for (Map.Entry<UniprotEntry, Set<String>> map : inhibitors.entrySet()) {
 //            UniprotEntry key = map.getKey();
 //            for (String inhibitor : map.getValue()) {
@@ -100,7 +103,7 @@ public class ChEBICompounds {
 //                if (activator_from_chebi != null) {
 //           
 //                    activator_from_chebi.setRelationship(Relationship.is_activator_of.name());
-//                    activator_from_chebi.setUniprotAccession(map.getKey());
+//                    activator_from_chebi.setUniprotAccession(key);
 //                    compounds.add(activator_from_chebi);
 //                }
 //            }
@@ -109,7 +112,7 @@ public class ChEBICompounds {
         //Java 8 specifics - comment out  and uncomment above if java 8 is not found in env
         enzymeSummary.stream().forEach((summary) -> {
             String enzyme_regulation_text = summary.getCommentText();
-
+          
             inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
             activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
         });
@@ -198,7 +201,7 @@ public class ChEBICompounds {
                     }
                 }
 
-                if (chebiId != null && !blackList.contains(name)) {
+                if (chebiId != null && !blackList.contains(name) && !StringUtils.isEmpty(name)) {
                     entry = new EnzymePortalCompound();
                     entry.setCompoundSource(MmDatabase.ChEBI.name());
                     entry.setCompoundId(chebiId);

@@ -7,7 +7,7 @@ UNIMED=http://research.isb-sib.ch/unimed/SP_MeSH.tab
 #ensure that db config is passed as param
 . $MM_SCRIPTS/checkParams.sh
 #mvn clean package
-. $MM_SCRIPTS/mvnBuild.sh
+#. $MM_SCRIPTS/mvnBuild.sh
 
 DB_CONFIG="$1"
 

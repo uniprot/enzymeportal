@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
@@ -21,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
-import uk.ac.ebi.ep.data.repositories.EnzymeSummaryRepository;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.service.BioPortalService;
 import uk.ac.ebi.ep.data.service.DiseaseService;
 import uk.ac.ebi.ep.data.service.UniprotEntryService;
@@ -36,7 +38,7 @@ import uk.ac.ebi.xchars.domain.EncodingType;
  * - containing a table of equivalences from UniProt accessions to OMIM IDs and
  * MeSH terms.
  *
- * $Author$
+ * @joseph
  */
 @Transactional
 @Service
@@ -51,7 +53,7 @@ public class DiseaseParser {
     private UniprotEntryService uniprotEntryService;
 
     @Autowired
-    private EnzymeSummaryRepository enzymeSummaryRepository;
+    private EnzymePortalSummaryRepository enzymeSummaryRepository;
 
     private static final Logger LOGGER
             = Logger.getLogger(DiseaseParser.class);
@@ -113,9 +115,9 @@ public class DiseaseParser {
             for (int i = 0; i < scores.length; i++) {
 
                 //check to see if accession is an enzyme
-                //UniprotEntry uniprotEntry = uniprotEntryService.findByAccession(accession);
-                EnzymePortalSummary enzyme = enzymeSummaryRepository.findEnzymeSummaryByAccession(accession);
-                if (enzyme != null) {
+                Optional<UniprotEntry>enzyme = uniprotEntryService.findByAccession(accession);
+               
+                  if (enzyme.isPresent()) {
 
                     //definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
                     if (!meshHeadsCell[i].contains(" ")) {
@@ -127,20 +129,20 @@ public class DiseaseParser {
 
                     //get disease evidence 
                     EnzymePortalSummary summary = enzymeSummaryRepository.findDiseaseEvidence(accession);
-
+                  
                     EnzymePortalDisease disease = new EnzymePortalDisease();
-                    //disease.setUniprotaccession(accession);
+                   
 
                     String diseaseName = resolveSpecialCharacters(meshHeadsCell[i].toLowerCase(Locale.ENGLISH));
-                    disease.setDiseaseName(diseaseName.replaceAll(",", ""));
-
-                    disease.setDiseaseName(diseaseName);
-                    disease.setMeshId(meshIdsCell[i]);
+                    disease.setDiseaseName(diseaseName.replaceAll(",", "").trim());
+                    disease.setMeshId(meshIdsCell[i].trim());
                     disease.setOmimNumber(omimCell[0]);
                     disease.setScore(Double.toString(scores[i]));
                     disease.setDefinition(definition);
-                    disease.setUniprotAccession(enzyme.getUniprotAccession());
+                    disease.setUniprotAccession(enzyme.get());
+                    if(summary != null){
                     disease.setEvidence(summary.getCommentText());
+                    }
 
                     if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
                         url = "http://purl.bioontology.org/ontology/OMIM/" + omimCell[0];
@@ -152,9 +154,9 @@ public class DiseaseParser {
 
                     LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
                             + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
-
-                    //System.out.println(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
-                    //  + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
+//
+//                    System.out.println(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
+//                      + " name: " + meshHeadsCell[i] + " score : " + scores[i] +"evidence "+ disease.getEvidence());
                 }
 
             }

@@ -41,8 +41,14 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.12-SNAPSHOT</version>
         </dependency> 
+                <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>PDBeAdapter</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        
         <dependency>
             <groupId>uk.ac.ebi.chebi.webapps.chebiWS.client</groupId>
             <artifactId>chebiWS-client</artifactId>

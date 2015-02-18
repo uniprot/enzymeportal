@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -25,12 +26,12 @@ import uk.ac.ebi.ep.adapter.chembl.ChemblWsAdapter;
 import uk.ac.ebi.ep.adapter.chembl.IChemblAdapter;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.parser.helper.CompoundUtil;
 import uk.ac.ebi.ep.parser.helper.EbinocleParser;
 import uk.ac.ebi.ep.parser.helper.MmDatabase;
 import uk.ac.ebi.ep.parser.helper.Relationship;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 
 /**
  * Parser for the <code>chembl-target_component.xml</code> file (ebinocle
@@ -164,22 +165,29 @@ public class ChemblSaxParser extends DefaultHandler implements EbinocleParser {
                 compounds = new HashSet<>();
 
                 for (String chemblCompoundId : chemblCompoundIds) {
-                    EnzymePortalCompound chemblEntry = new EnzymePortalCompound();
-                    chemblEntry.setCompoundSource(MmDatabase.ChEMBL.name());
-                    chemblEntry.setCompoundId(chemblCompoundId);
+                    if (!StringUtils.isEmpty(chemblCompoundId)) {
+                        String compoundName = chemblAdapter.getPreferredName(chemblCompoundId);
+                        if (!StringUtils.isEmpty(compoundName)) {
+                            EnzymePortalCompound chemblEntry = new EnzymePortalCompound();
 
-                    chemblEntry.setCompoundName(chemblAdapter
-                            .getPreferredName(chemblCompoundId));
-                    chemblEntry.setRelationship(Relationship.between(
-                            MmDatabase.UniProt, MmDatabase.ChEMBL)
-                            .name());
-                    chemblEntry.setUniprotAccession(e);
-                    chemblEntry = CompoundUtil.computeRole(chemblEntry, chemblEntry.getRelationship());
-                   
-                    compounds.add(chemblEntry);
-                    repository.save(compounds);
+                            chemblEntry.setCompoundSource(MmDatabase.ChEMBL.name());
+                            chemblEntry.setCompoundId(chemblCompoundId);
+
+                            chemblEntry.setCompoundName(compoundName);
+                            chemblEntry.setRelationship(Relationship.between(
+                                    MmDatabase.UniProt, MmDatabase.ChEMBL)
+                                    .name());
+                            chemblEntry.setUniprotAccession(e);
+                            chemblEntry = CompoundUtil.computeRole(chemblEntry, chemblEntry.getRelationship());
+
+                            compounds.add(chemblEntry);
+                        }
+
+                    }
 
                 }
+              
+                repository.save(compounds);
 
             }
 
@@ -247,7 +255,7 @@ public class ChemblSaxParser extends DefaultHandler implements EbinocleParser {
     private void parse(InputStream is) throws IOException, SAXException {
 
         try {
-            // mm.openMap();
+
             XMLReader xr = XMLReaderFactory.createXMLReader();
             xr.setContentHandler(this);
             xr.setErrorHandler(this);
