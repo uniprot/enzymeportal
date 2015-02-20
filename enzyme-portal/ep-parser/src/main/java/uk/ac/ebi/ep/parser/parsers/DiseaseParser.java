@@ -152,8 +152,8 @@ public class DiseaseParser {
                     disease.setUrl(url);
                     diseaseService.addDisease(disease);
 
-                    LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
-                            + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
+//                    LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
+//                            + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
 //
 //                    System.out.println(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
 //                      + " name: " + meshHeadsCell[i] + " score : " + scores[i] +"evidence "+ disease.getEvidence());

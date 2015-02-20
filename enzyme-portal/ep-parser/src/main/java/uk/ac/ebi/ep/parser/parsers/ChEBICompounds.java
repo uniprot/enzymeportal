@@ -59,7 +59,7 @@ public class ChEBICompounds {
 
     private final EnzymePortalSummaryRepository enzymeSummaryRepository;
 
-    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid" ,"H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION"};
+    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid" ,"H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION",""," "};
     List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
     public ChEBICompounds(EnzymePortalSummaryRepository enzymeSummaryRepository, EnzymePortalCompoundRepository repository) {
@@ -74,6 +74,9 @@ public class ChEBICompounds {
 
        
           List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
+          LOGGER.debug("Number of Regulation Text from EnzymeSummary Table "+ enzymeSummary.size());
+          
+          //System.out.println("summaries "+ enzymeSummary);
 
        //Java 7 and before only. uncomment if Java 8 is not available in your env
 //
@@ -113,11 +116,12 @@ public class ChEBICompounds {
         //Java 8 specifics - comment out  and uncomment above if java 8 is not found in env
         enzymeSummary.stream().forEach((summary) -> {
             String enzyme_regulation_text = summary.getCommentText();
-          
+            
             inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
             activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
         });
 
+        LOGGER.debug("number of inhibitors and activators to process are : "+ inhibitors.size() +": "+ activators.size());
         inhibitors.entrySet().stream().forEach((map) -> {
             map.getValue().stream().map((inhibitor) -> searchMoleculeInChEBI(inhibitor)).filter((inhibitor_from_chebi) -> (inhibitor_from_chebi != null)).map((inhibitor_from_chebi) -> {
                 inhibitor_from_chebi.setRelationship(Relationship.is_inhibitor_of.name());
@@ -145,7 +149,8 @@ public class ChEBICompounds {
         });
 
         
-        LOGGER.debug("Writing to Enzyme Portal database...");
+        LOGGER.debug("Writing to Enzyme Portal database... Number of compounds to write : "+ compounds.size());
+     
         compoundRepository.save(compounds);
 
         inhibitors.clear();
@@ -161,6 +166,7 @@ public class ChEBICompounds {
      * @return an entry with a ChEBI ID, or <code>null</code> if not found.
      */
     protected EnzymePortalCompound searchMoleculeInChEBI(String moleculeName) {
+       
         EnzymePortalCompound entry = null;
         // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
         // sometimes as "moleculeName (concentration)":
@@ -177,6 +183,7 @@ public class ChEBICompounds {
                 LiteEntityList lites = chebiWsClient.getLiteEntity(
                         name, SearchCategory.ALL_NAMES, 25, StarsCategory.ALL);
                 String chebiId = null;
+            
                 if (lites != null) {
                     liteLoop:
                     for (LiteEntity lite : lites.getListElement()) {
