@@ -151,6 +151,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         String defaultSpecies = CommonSpecies.Human.getScientificName();
 
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
+        // TODO query for related proteins and use the obj. possible null pointer if db isnot populated with related protein
 
         for (UniprotEntry e : uniprotEntry.getRelatedProteinsId().getUniprotEntrySet()) {
 
