@@ -98,12 +98,11 @@ public class ApplicationInitializer implements WebApplicationInitializer {
             Properties property = new Properties();
             File propsFile = new File(filePath, "ep.properties");
 
-            InputStream is = new FileInputStream(propsFile);
-
-            property.load(is);
-
-            env = property.getProperty("app");
-            is.close();
+            try (InputStream is = new FileInputStream(propsFile)) {
+                property.load(is);
+                
+                env = property.getProperty("app");
+            }
 
         } catch (IOException e) {
             LOGGER.error("Missing property file in this tomcat server.", e);

@@ -32,15 +32,15 @@ public final class Functions {
     public Functions() {
     }
     
-    public void setChebiConfig(ChebiConfig chebiConfig){
+    public static void setChebiConfig(ChebiConfig chebiConfig){
         Functions.chebiConfig = chebiConfig;
     }
  
-    public void setChemblConfig(ChemblConfig chemblConfig){
+    public static void setChemblConfig(ChemblConfig chemblConfig){
         Functions.chemblConfig = chemblConfig;
     }
     
-    public void setDrugbankConfig(Map<String, String> config){
+    public static void setDrugbankConfig(Map<String, String> config){
         Functions.drugbankConfig = config;
     }
     
