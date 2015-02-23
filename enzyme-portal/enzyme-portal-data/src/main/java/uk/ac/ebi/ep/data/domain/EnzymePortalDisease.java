@@ -72,7 +72,7 @@ import uk.ac.ebi.ep.data.search.model.Disease;
     @NamedQuery(name = "EnzymePortalDisease.findByUrl", query = "SELECT e FROM EnzymePortalDisease e WHERE e.url = :url")})
 public class EnzymePortalDisease extends Disease implements Serializable, Comparable<EnzymePortalDisease> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1205172041360251497L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
 
     @Id

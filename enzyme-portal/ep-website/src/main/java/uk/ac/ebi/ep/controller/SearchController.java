@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -566,7 +567,7 @@ public class SearchController extends AbstractController {
             LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
             
         }
-        LOGGER.info("available encodings " + encodings);
+        LOGGER.info("available encodings " +Arrays.toString(encodings));
         return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
     

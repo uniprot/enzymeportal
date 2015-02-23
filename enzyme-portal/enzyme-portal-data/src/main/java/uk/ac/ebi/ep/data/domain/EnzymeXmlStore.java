@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymeXmlStore.findBySource", query = "SELECT e FROM EnzymeXmlStore e WHERE e.source = :source"),
     @NamedQuery(name = "EnzymeXmlStore.findByEnzymeXmlId", query = "SELECT e FROM EnzymeXmlStore e WHERE e.enzymeXmlId = :enzymeXmlId")})
 public class EnzymeXmlStore implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3405113041950251807L;
     @Column(name = "XML_TAG")
     private String xmlTag;
     @Lob

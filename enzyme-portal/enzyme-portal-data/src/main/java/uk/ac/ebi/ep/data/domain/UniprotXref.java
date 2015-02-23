@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class UniprotXref implements Serializable {
     @Column(name = "SOURCE_NAME")
     private String sourceName;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5305172041950176987L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)

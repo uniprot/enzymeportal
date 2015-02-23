@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -247,27 +248,27 @@ public class Species implements Comparable<Species>, Serializable {
 //        this.diseases = diseases;
 //    }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 5;
-//        hash = 23 * hash + Objects.hashCode(this.scientificname);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final Species other = (Species) obj;
-//        if (!Objects.equals(this.scientificname, other.scientificname)) {
-//            return false;
-//        }
-//        return true;
-//    }
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.scientificname);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Species other = (Species) obj;
+        if (!Objects.equals(this.scientificname, other.scientificname)) {
+            return false;
+        }
+        return true;
+    }
     
     
     

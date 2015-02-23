@@ -35,7 +35,7 @@ public class LogAnalyzer {
         Map<Long, String> printer = new TreeMap<>(reverseKeyJava8);
 
         List<String> data = new LinkedList<>();
-        data.add("views " + "  Keyword");
+        data.add("Hits " + "  Keyword");
         data.add(" ");
 
         String userHome = System.getProperty("user.home");
@@ -74,7 +74,7 @@ public class LogAnalyzer {
 
         }
 
-        String filePath = logDir + "sampleLog.txt";
+        String filePath = logDir + "enzyme-portal-search.tsv";
         bufferedWrite(data, filePath);
 
     }

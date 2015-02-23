@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     //@NamedQuery(name = "EnzymePortalEcNumbers.findByEcNumber", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecNumber = :ecNumber")
 })
 public class EnzymePortalEcNumbers implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4405172030650251419L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)

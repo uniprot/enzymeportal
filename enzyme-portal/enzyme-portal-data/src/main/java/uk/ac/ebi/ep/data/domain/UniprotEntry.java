@@ -34,7 +34,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
@@ -84,9 +83,9 @@ import uk.ac.ebi.ep.data.search.model.Species;
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
-    private Set<EnzymePortalNames> enzymePortalNamesSet;
+    private  Set<EnzymePortalNames> enzymePortalNamesSet;
     @OneToMany(mappedBy = "accession",fetch = FetchType.LAZY)
-    private Set<EnzymeXmlStore> enzymeXmlStoreSet;
+    private  Set<EnzymeXmlStore> enzymeXmlStoreSet;
 
     @Column(name = "ENTRY_TYPE")
     private Short entryType;
@@ -399,7 +398,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
 //            pdbcodes.add(xref.getSourceId());
 //        });
-        e.getUniprotXrefSet().stream().filter((x) -> (x.getSource().equalsIgnoreCase("PDB"))).limit(1).collect(Collectors.toList()).stream().forEach((xref) -> {
+        e.getUniprotXrefSet().stream().filter((x) -> ("PDB".equalsIgnoreCase(x.getSource()))).limit(1).collect(Collectors.toList()).stream().forEach((xref) -> {
             pdbcodes.add(xref.getSourceId());
         });
 
@@ -485,7 +484,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public List<EnzymeAccession> getRelatedspecies() {
 
         List<EnzymeAccession> relatedspecies = new ArrayList<>();
-        String defaultSpecies = CommonSpecies.Human.getScientificName();
+        //String defaultSpecies = CommonSpecies.Human.getScientificName();
 
 //        EnzymeAccession ea = new EnzymeAccession();
 //        ea.setPdbeaccession(getPdbeaccession());

@@ -37,7 +37,7 @@ import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
     //@NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix")
 })
 public class RelatedProteins extends EnzymeAccession implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1905196340437802515L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
         @Id
     @Basic(optional = false)

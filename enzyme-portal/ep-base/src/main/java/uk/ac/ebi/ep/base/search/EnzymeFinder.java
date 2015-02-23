@@ -168,7 +168,9 @@ public class EnzymeFinder {
             query = query.trim();
         }
         //List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true,3000);
+        // List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true);
         List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query);
+          LOGGER.warn("Number of Processed Accession for  "+query +" :=:" +  accessions.size());
         //System.out.println("num accession found "+ accessions.size());
         if(accessions.size() > 1000){
             accessions = accessions.subList(0, 1000);
@@ -397,7 +399,7 @@ public class EnzymeFinder {
         for (UniprotEntry entry : enzymes) {
 
             if (!proteinNames.contains(entry.getProteinName())) {
-                LOGGER.warn("TODO:  " + entry.getProteinName() + " <<=>> " + keyword);
+                //LOGGER.warn("TODO:  " + entry.getProteinName() + " <<=>> " + keyword);
 
                 if (HtmlUtility.cleanText(entry.getProteinName()).equalsIgnoreCase(keyword)) {
                     //enzymeList.add(0, entry);

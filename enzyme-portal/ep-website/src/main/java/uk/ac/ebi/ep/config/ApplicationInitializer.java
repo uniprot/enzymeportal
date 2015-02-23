@@ -103,6 +103,7 @@ public class ApplicationInitializer implements WebApplicationInitializer {
             property.load(is);
 
             env = property.getProperty("app");
+            is.close();
 
         } catch (IOException e) {
             LOGGER.error("Missing property file in this tomcat server.", e);

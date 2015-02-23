@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalNames.findByName", query = "SELECT e FROM EnzymePortalNames e WHERE e.name = :name"),
     @NamedQuery(name = "EnzymePortalNames.findByEnzymeNameId", query = "SELECT e FROM EnzymePortalNames e WHERE e.enzymeNameId = :enzymeNameId")})
 public class EnzymePortalNames implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2405172041950251807L;
     @Basic(optional = false)
     @Column(name = "DBENTRY_ID")
     private long dbentryId;

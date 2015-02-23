@@ -110,7 +110,7 @@ public final class Functions {
             eval = true;
         }
 
-        if ((alpha != null & !alpha.equals("") & !alpha.equals(" ")) && (omega == null || omega.equals("") || omega.equals(" "))) {
+        if ((alpha != null && !alpha.equals("") && !alpha.equals(" ")) && (omega == null || omega.equals("") || omega.equals(" "))) {
 
             eval = true;
         }

@@ -62,19 +62,20 @@ private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRest
     public List<String> queryEbeyeForAccessions(String query, boolean paginate, int limit) {
 
         EbeyeSearchResult searchResult = queryEbeye(query.trim());
-        LOGGER.info("Number of hits for search for "+ query+ " : "+ searchResult.getHitCount());
+        LOGGER.warn("Number of hits for search for "+ query+ " : "+ searchResult.getHitCount());
 
        
         Set<String> accessions = new LinkedHashSet<>();
 
-        List<String> accessionList = null;
 
         if (!paginate) {
             for (Entry entry : searchResult.getEntries()) {
                 accessions.add(entry.getUniprot_accession());
             }
 
-            accessionList = accessions.stream().distinct().collect(Collectors.toList());
+         List<String>   accessionList = accessions.stream().distinct().collect(Collectors.toList());
+             LOGGER.warn("Number of Accessions to be processed (Pagination = false) :  "+ accessionList.size());
+             return accessionList;
  
         }
 
@@ -93,12 +94,14 @@ private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRest
 
             int numIteration = hitcount / 100;
 
-            accessionList = query(query, numIteration);
+          List<String>  accessionList = query(query, numIteration);
+              LOGGER.warn("Number of Accessions to be processed (Pagination = true)  :  "+ accessionList.size());
+              return accessionList;
 
         }
 
-        LOGGER.info("Number of Accessions to be processed "+ accessionList.size());
-        return accessionList;
+       
+        return new ArrayList<>();
     }
 
     private EbeyeSearchResult queryEbeye(String query) {

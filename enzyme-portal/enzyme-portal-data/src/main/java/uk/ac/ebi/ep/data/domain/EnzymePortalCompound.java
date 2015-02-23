@@ -58,7 +58,7 @@ import uk.ac.ebi.ep.data.search.model.Compound;
     @NamedQuery(name = "EnzymePortalCompound.findByUniprotAccession", query = "SELECT e FROM EnzymePortalCompound e WHERE e.uniprotAccession = :uniprotAccession")})
 public class EnzymePortalCompound extends Compound implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1289766338588585809L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)

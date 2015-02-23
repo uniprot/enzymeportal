@@ -9,7 +9,6 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.StringExpression;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
@@ -88,15 +87,11 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     @Override
     public List<String> findAccessionsByMeshId(String meshId) {
 
-        List<String> enzymes = new ArrayList<>();
         JPAQuery query = new JPAQuery(entityManager);
 
         List<String> entries = query.from($).where($.meshId.equalsIgnoreCase(meshId)).list($.uniprotAccession.accession)
                 .stream().distinct().collect(Collectors.toList());
 
-//        entries.stream().forEach((e) -> {
-//            enzymes.add(e.getUniprotAccession().getAccession());
-//        });
         return entries;
 
     }

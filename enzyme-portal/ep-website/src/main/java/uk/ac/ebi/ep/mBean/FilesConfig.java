@@ -60,8 +60,7 @@ public class FilesConfig implements FilesConfigMBean {
      */
     public void readFile(String directory) {
         String[] s = directory.split(":");
-        File f = new File(s[1]);
-
+       
         File[] files = new File(s[1]).listFiles();
 
         if (files.length > 0) {
