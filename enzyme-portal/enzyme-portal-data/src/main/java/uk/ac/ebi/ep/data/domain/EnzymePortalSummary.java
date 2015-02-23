@@ -64,11 +64,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     //@NamedQuery(name = "EnzymePortalSummary.findByCommentText", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentText = :commentText")
 })
 public class EnzymePortalSummary  implements Serializable {
-//    @Column(name = "LAST_UPDATE_TIMESTAMP")
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private Date lastUpdateTimestamp;
-//    @Column(name = "NAME_PREFIX")
-//    private String namePrefix;
+
 
     private static final long serialVersionUID = 1L;
 

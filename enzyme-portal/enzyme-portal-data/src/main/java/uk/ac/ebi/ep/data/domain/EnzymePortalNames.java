@@ -5,7 +5,7 @@
  */
 package uk.ac.ebi.ep.data.domain;
 
-import java.io.Serializable;
+
 import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalNames.findByCategoryType", query = "SELECT e FROM EnzymePortalNames e WHERE e.categoryType = :categoryType"),
     @NamedQuery(name = "EnzymePortalNames.findByName", query = "SELECT e FROM EnzymePortalNames e WHERE e.name = :name"),
     @NamedQuery(name = "EnzymePortalNames.findByEnzymeNameId", query = "SELECT e FROM EnzymePortalNames e WHERE e.enzymeNameId = :enzymeNameId")})
-public class EnzymePortalNames implements Serializable {
-    private static final long serialVersionUID = 2405172041950251807L;
+public class EnzymePortalNames implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "DBENTRY_ID")
     private long dbentryId;

@@ -82,6 +82,7 @@ import uk.ac.ebi.ep.data.search.model.Species;
 })
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
+     private static final long serialVersionUID = 1L;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
     private  Set<EnzymePortalNames> enzymePortalNamesSet;
     @OneToMany(mappedBy = "accession",fetch = FetchType.LAZY)
@@ -108,7 +109,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Column(name = "SYNONYM_NAMES")
     private String synonymNames;
 
-    private static final long serialVersionUID = 1L;
+   
     @Basic(optional = false)
     @Column(name = "DBENTRY_ID")
     private long dbentryId;
