@@ -35,13 +35,13 @@ public class PDBeRestService {
     private final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        return factory;
+       return new HttpComponentsClientHttpRequestFactory();
+        
     }
 
     private PdbSearchResult getPdbSearchResult(String url) {
-        PdbSearchResult results = restTemplate.getForObject(url.trim(), PdbSearchResult.class);
-        return results;
+       return restTemplate.getForObject(url.trim(), PdbSearchResult.class);
+      
     }
 
     public PdbSearchResult getPdbSummaryResults(String pdbId) {
@@ -115,9 +115,9 @@ public class PDBeRestService {
             // use the ObjectMapper to read the json string and create a tree
             JsonNode nodes = mapper.readTree(json);
 
-            String homology = nodes.findValue("homology").textValue();
+            return nodes.findValue("homology").textValue();
 
-            return homology;
+           
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }

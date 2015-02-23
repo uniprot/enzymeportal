@@ -36,7 +36,7 @@ public class JournalInfo {
     @JsonProperty("pdb_abbreviation")
     private String pdbAbbreviation;
     @JsonProperty("ISO_abbreviation")
-    private String ISOAbbreviation;
+    private String ISO_Abbreviation;
     @JsonProperty("year")
     private Integer year;
     @JsonProperty("issue")
@@ -84,11 +84,11 @@ public class JournalInfo {
 
     /**
      *
-     * @return The ISOAbbreviation
+     * @return The ISO_Abbreviation
      */
     @JsonProperty("ISO_abbreviation")
     public String getISOAbbreviation() {
-        return ISOAbbreviation;
+        return ISO_Abbreviation;
     }
 
     /**
@@ -97,7 +97,7 @@ public class JournalInfo {
      */
     @JsonProperty("ISO_abbreviation")
     public void setISOAbbreviation(String abbreviation) {
-        this.ISOAbbreviation = abbreviation;
+        this.ISO_Abbreviation = abbreviation;
     }
 
     /**
@@ -166,7 +166,7 @@ public class JournalInfo {
 
     @Override
     public String toString() {
-        return "JournalInfo{" + "volume=" + volume + ", pdbAbbreviation=" + pdbAbbreviation + ", ISOAbbreviation=" + ISOAbbreviation + ", year=" + year + ", issue=" + issue + ", pages=" + pages + '}';
+        return "JournalInfo{" + "volume=" + volume + ", pdbAbbreviation=" + pdbAbbreviation + ", ISOAbbreviation=" + ISO_Abbreviation + ", year=" + year + ", issue=" + issue + ", pages=" + pages + '}';
     }
     
     

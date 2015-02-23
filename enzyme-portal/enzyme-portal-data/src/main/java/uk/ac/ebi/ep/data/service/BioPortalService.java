@@ -75,7 +75,7 @@ public class BioPortalService {
         return definition;
     }
 
-    private JsonNode jsonToNode(String json) {
+    public JsonNode jsonToNode(String json) {
         JsonNode root = null;
 
         try {

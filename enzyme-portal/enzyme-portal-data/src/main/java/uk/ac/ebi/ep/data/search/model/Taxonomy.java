@@ -8,10 +8,11 @@ package uk.ac.ebi.ep.data.search.model;
 import org.springframework.util.StringUtils;
 
 /**
- *Taxonomy is a data transfer object for model organisms
+ * Taxonomy is a data transfer object for model organisms
+ *
  * @author joseph
  */
-public class Taxonomy{
+public class Taxonomy {
 
     private Long taxId;
     private String scientificName;
@@ -24,16 +25,13 @@ public class Taxonomy{
         this.commonName = commonName;
     }
 
-
-
     public Taxonomy(Long taxId, String scientificName, String commonName, Long num_enzymes) {
         this.taxId = taxId;
         this.scientificName = scientificName;
         this.commonName = commonName;
         this.num_enzymes = num_enzymes;
     }
-    
-    
+
     public Long getTaxId() {
         return taxId;
     }
@@ -51,14 +49,14 @@ public class Taxonomy{
     }
 
     public String getCommonName() {
-              if (StringUtils.isEmpty(commonName) && scientificName.equalsIgnoreCase("Escherichia coli (strain K12)")) {
+        if (StringUtils.isEmpty(commonName) && "Escherichia coli (strain K12)".equalsIgnoreCase(scientificName)) {
             commonName = "E.Coli";
         }
 
-        if (StringUtils.isEmpty(commonName) && scientificName.equalsIgnoreCase("Bacillus subtilis (strain 168)")) {
+        if (StringUtils.isEmpty(commonName) && "Bacillus subtilis (strain 168)".equalsIgnoreCase(scientificName)) {
             commonName = "Bacillus subtilis";
-        } 
-        
+        }
+
         return commonName;
     }
 
@@ -78,7 +76,5 @@ public class Taxonomy{
     public String toString() {
         return "Taxonomy{" + "taxId=" + taxId + ", scientificName=" + scientificName + ", commonName=" + commonName + ", num_enzymes=" + num_enzymes + '}';
     }
-
- 
 
 }

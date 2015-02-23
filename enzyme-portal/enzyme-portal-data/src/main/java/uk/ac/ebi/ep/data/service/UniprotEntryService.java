@@ -73,13 +73,6 @@ public class UniprotEntryService {
         return predicate;
     }
 
-    private static Predicate byNamePrefix(String namePrefix) {
 
-        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
-
-        Predicate predicate = enzyme.name.eq(namePrefix);
-
-        return predicate;
-    }
       
 }

@@ -9,10 +9,7 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.StringExpression;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -226,9 +223,6 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
          List<UniprotEntry> result = query.from($).where($.enzymePortalPathwaysSet.any().pathwayId.trim().equalsIgnoreCase(pathwayId)).list($);
         return result;
     }
-
-    private <T >Set<T> toSet(T... s) {
-        return new HashSet<>(Arrays.asList(s));
-    }
+    
 
 }
