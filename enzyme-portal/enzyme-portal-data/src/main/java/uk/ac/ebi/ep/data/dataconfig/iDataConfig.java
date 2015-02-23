@@ -15,4 +15,5 @@ import javax.sql.DataSource;
 
 public interface iDataConfig {
      DataSource dataSource();
+     DataSource dataSource_ep();
 }

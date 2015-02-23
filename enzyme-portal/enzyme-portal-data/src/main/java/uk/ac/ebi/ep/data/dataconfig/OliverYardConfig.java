@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /**
  *
@@ -31,7 +32,7 @@ public class OliverYardConfig implements iDataConfig {
     //declare a datasource that has pooling capabilities
     @Bean
     @Override
-    public DataSource dataSource() {
+    public DataSource dataSource_ep() {
         try {
 
             OracleDataSource ds = new OracleConnectionPoolDataSource();
@@ -56,5 +57,17 @@ public class OliverYardConfig implements iDataConfig {
         } catch (IllegalStateException | SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+        
+    @Bean
+    @Override
+    public DataSource dataSource() {
+        String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
+                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
+
+        String username = env.getRequiredProperty("ep.db.username");
+        String password = env.getRequiredProperty("ep.db.password");
+        return new DriverManagerDataSource(url, username, password);
     }
 }
