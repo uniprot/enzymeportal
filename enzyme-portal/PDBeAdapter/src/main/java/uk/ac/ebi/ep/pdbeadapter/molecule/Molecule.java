@@ -51,13 +51,13 @@ public class Molecule {
     @JsonProperty("mutation_flag")
     private Object mutationFlag;
     @JsonProperty("in_struct_asyms")
-    private List<String> inStructAsyms = new ArrayList<String>();
+    private List<String> inStructAsyms = new ArrayList<>();
     @JsonProperty("molecule_name")
     private String moleculeName;
     @JsonProperty("chem_comp_ids")
-    private List<String> chemCompIds = new ArrayList<String>();
+    private List<String> chemCompIds = new ArrayList<>();
     @JsonProperty("in_chains")
-    private List<String> inChains = new ArrayList<String>();
+    private List<String> inChains = new ArrayList<>();
     @JsonProperty("molecule_type")
     private String moleculeType;
     @JsonProperty("sample_preparation")
@@ -67,15 +67,15 @@ public class Molecule {
     @JsonProperty("sequence")
     private String sequence;
     @JsonProperty("source")
-    private List<Source> source = new ArrayList<Source>();
+    private List<Source> source = new ArrayList<>();
     @JsonProperty("length")
     private Integer length;
     @JsonProperty("synonym")
     private String synonym;
     @JsonProperty("gene_name")
-    private List<String> geneName = new ArrayList<String>();
+    private List<String> geneName = new ArrayList<>();
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      *

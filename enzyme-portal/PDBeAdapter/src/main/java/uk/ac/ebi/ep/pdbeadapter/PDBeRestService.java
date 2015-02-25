@@ -27,21 +27,37 @@ import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
  */
 public class PDBeRestService {
 
+    private static final Logger LOGGER = Logger.getLogger(PDBeRestService.class);
 
     @Autowired
     private PDBeUrl pDBeUrl;
 
-    private static final Logger LOGGER = Logger.getLogger(PDBeRestService.class);
-    private final RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
+    private RestTemplate restTemplate = null;
+
+    public PDBeRestService() {
+        restTemplate = new RestTemplate(clientHttpRequestFactory());
+    }
+
+    /**
+     * 
+     * @param service restTemplate
+     * @param pDBeUrl pdbUrl
+     */
+    public PDBeRestService(RestTemplate service,PDBeUrl pDBeUrl) {
+        this.restTemplate = service;
+        this.pDBeUrl = pDBeUrl;
+    }
+
+   
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
-       return new HttpComponentsClientHttpRequestFactory();
-        
+        return new HttpComponentsClientHttpRequestFactory();
+
     }
 
     private PdbSearchResult getPdbSearchResult(String url) {
-       return restTemplate.getForObject(url.trim(), PdbSearchResult.class);
-      
+        return restTemplate.getForObject(url.trim(), PdbSearchResult.class);
+
     }
 
     public PdbSearchResult getPdbSummaryResults(String pdbId) {
@@ -50,7 +66,7 @@ public class PDBeRestService {
         PdbSearchResult pdb = null;
 
         try {
-  
+
             pdb = getPdbSearchResult(url.trim());
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -75,7 +91,6 @@ public class PDBeRestService {
     }
 
     public PDBePublications getPDBpublicationResults(String pdbId) {
-
 
         String url = pDBeUrl.getPublicationsUrl() + pdbId;
 
@@ -117,12 +132,10 @@ public class PDBeRestService {
 
             return nodes.findValue("homology").textValue();
 
-           
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
         return "";
     }
-
 
 }
