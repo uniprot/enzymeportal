@@ -13,10 +13,12 @@
 
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/Biojs.js"></script>
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/Biojs.Rheaction.js"></script>
+<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.min.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/jquery-1.6.4.js"></script>
 
 <link href=" ${pageContext.request.contextPath}/resources/javascript/biojs/biojs.Rheaction.css" rel="stylesheet" type="text/css" />
+<link href=" ${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.css" rel="stylesheet" type="text/css" />
 
 
 <div id="reactionContent" class="summary">
@@ -164,9 +166,43 @@
                                     </a>
                                 </div>
                             </c:if>
+                            <c:if test="${not empty hItem}">
+                                <div class="pcviz inlineLinks">
+                                    <a target="blank" href="http://www.pathwaycommons.org/pcviz/#neighborhood/${hItem}" data-uid="${hItem}">
+                                        <spring:message code="label.entry.reactionsPathways.link.pcviz"/>
+                                    </a>
+                                </div>
+                            </c:if>
                         </div>
-                           
-<!--                            <script>
+
+                    <!-- PCViz Widget template and script code start -->
+                        <div id="pcviz-widget" class="block reaction">
+                            <a href="#close" id="close-pcviz">Close</a>
+                            <h3>Pathway context</h3>
+
+                            <table class="grid">
+                                <tr class="subsection">
+                                    <th>Pathway View</th>
+                                    <th>Description</th>
+                                </tr>
+                                <tr>
+                                    <td width="70%" id="pcviz-widget-container">
+                                    </td>
+                                    <td width="30%">
+                                        <div id="pcviz-description">
+                                            <center>
+                                                Loading pathway information from <a href="http://www.pathwaycommons.org/pc2/" target="_blank">Pathway Commons 2</a>...
+                                            </center>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.custom.js"></script>
+                        </div>
+                    <!-- PCViz Widget template code end -->
+
+                    <!--                            <script>
                                                                                     
   window.onload = function() {
  var instance = new Biojs.Rheaction({
@@ -225,9 +261,10 @@
             <div class="provenance">
                 <ul>
                     <li class="note_0">Data Source:
-                        <a href="http://www.reactome.org/ReactomeGWT/entrypoint.html">Reactome</a> &AMP; <a href="http://www.ebi.ac.uk/rhea/" >Rhea</a> </li>
+                        <a href="http://www.reactome.org/ReactomeGWT/entrypoint.html">Reactome</a> &AMP; <a href="http://www.ebi.ac.uk/rhea/" >Rhea</a> &AMP; <a href="http://www.pathwaycommons.org/">Pathway Commons</a></li>
                     <li class="note_1">Reactome is an open-source, open access, manually curated and peer-reviewed pathway database. </li>
                     <li class="note_2">Rhea is a freely available, manually annotated database of chemical reactions created in collaboration with the Swiss Institute of Bioinformatics (SIB).All data in Rhea is freely accessible and available for anyone to use. </li>
+                    <li class="note_2">Pathway Commons is a network biology resource and acts as a convenient point of access to biological pathway information collected from public pathway databases, which you can search, visualize and download. All data is freely available, under the license terms of each contributing database.</li>
                 </ul>
             </div>
         </c:otherwise>
