@@ -14,7 +14,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     
     
@@ -43,6 +43,19 @@
                 </configuration>
             </plugin>
         </plugins>
+               <resources>
+            <resource>
+                <directory>${ep.project.dir}/enzymeportal/enzyme-portal/PDBeAdapter/src/main/resources</directory>
+                <includes>
+                    <include>pdb.properties</include>
+                     <include>experiment.json</include>
+                      <include>molecule.json</include>
+                       <include>publication.json</include>
+                        <include>structureDomain.json</include>
+                         <include>summary.json</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
     <dependencies>
         
