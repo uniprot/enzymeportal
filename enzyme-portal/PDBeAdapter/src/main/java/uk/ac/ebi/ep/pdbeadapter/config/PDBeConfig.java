@@ -18,7 +18,8 @@ import uk.ac.ebi.ep.pdbeadapter.PdbService;
  * @author joseph
  */
 @Configuration
-@PropertySource({"classpath:pdb.properties"})
+//@PropertySource({"classpath:pdb.properties"})
+@PropertySource({"classpath:pdb.urlConfig"})
 public class PDBeConfig {
     
     @Autowired

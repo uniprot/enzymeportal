@@ -43,7 +43,7 @@
                 </configuration>
             </plugin>
         </plugins>
-               <resources>
+<!--               <resources>
             <resource>
                 <directory>${ep.project.dir}/enzymeportal/enzyme-portal/PDBeAdapter/src/main/resources</directory>
                 <includes>
@@ -55,7 +55,7 @@
                          <include>summary.json</include>
                 </includes>
             </resource>
-        </resources>
+        </resources>-->
     </build>
     <dependencies>
         

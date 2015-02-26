@@ -1,0 +1,5 @@
+pdb.summary.url=http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/summary/
+pdb.experiment.url=http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/experiment/
+pdb.publications.url=http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/publications/
+pdb.molecules.url=http://wwwdev.ebi.ac.uk/pdbe/api/pdb/entry/molecules/
+pdb.structuralDomain.url=http://wwwdev.ebi.ac.uk/pdbe/api/mappings/cath/
