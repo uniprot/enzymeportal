@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -26,11 +27,13 @@ import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
  *
  * @author joseph
  */
-public class PdbServiceTest extends BaseTest{
-    
+public class PdbServiceTest extends BaseTest {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PDBeRestServiceTest.class);
+
     @Autowired
     private PdbService pdbService;
-        @Autowired
+    @Autowired
     private PDBeRestService restService;
 
     /**
@@ -38,10 +41,10 @@ public class PdbServiceTest extends BaseTest{
      */
     @Test
     public void testGetPdbSearchResults() {
-      
-            System.out.println("getPdbSearchResults");
-            
-       try {
+
+        LOGGER.info("getPdbSearchResults");
+
+        try {
 
             String pdbId = "3tge";
             String url = pDBeUrl.getSummaryUrl() + pdbId;
@@ -66,9 +69,7 @@ public class PdbServiceTest extends BaseTest{
         } catch (IOException ex) {
             Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
     }
 
     /**
@@ -76,14 +77,14 @@ public class PdbServiceTest extends BaseTest{
      */
     @Test
     public void testComputeProteinStructure() {
-        System.out.println("computeProteinStructure");
+        LOGGER.info("computeProteinStructure");
         String pdbId = "3tge";
-       
+
         PDB expResult = new PDB();
         expResult.setId(pdbId);
         PDB result = pdbService.computeProteinStructure(pdbId);
         assertEquals(expResult.getId(), result.getId());
-     
+
     }
-    
+
 }

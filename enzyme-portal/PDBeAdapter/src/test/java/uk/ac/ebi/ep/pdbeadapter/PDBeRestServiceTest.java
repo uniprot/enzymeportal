@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -36,14 +37,14 @@ public class PDBeRestServiceTest extends BaseTest {
     @Autowired
     private PDBeRestService restService;
 
-
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PDBeRestServiceTest.class);
 
     /**
      * Test of getPdbSummaryResults method, of class PDBeRestService.
      */
     @Test
     public void testGetPdbSummaryResults() {
-        System.out.println("getPdbSummaryResults");
+        LOGGER.info("getPdbSummaryResults");
         try {
 
             String pdbId = "3tge";
@@ -77,7 +78,7 @@ public class PDBeRestServiceTest extends BaseTest {
     @Test
     public void testGetPDBexperimentResults() {
 
-        System.out.println("getPDBexperimentResults");
+        LOGGER.info("getPDBexperimentResults");
 
         try {
 
@@ -111,7 +112,7 @@ public class PDBeRestServiceTest extends BaseTest {
      */
     @Test
     public void testGetPDBpublicationResults() {
-        System.out.println("getPDBpublicationResults");
+        LOGGER.info("getPDBpublicationResults");
 
         try {
 
@@ -146,7 +147,7 @@ public class PDBeRestServiceTest extends BaseTest {
      */
     @Test
     public void testGetPDBmoleculeResults() {
-        System.out.println("getPDBmoleculeResults");
+        LOGGER.info("getPDBmoleculeResults");
 
         try {
 
@@ -181,7 +182,7 @@ public class PDBeRestServiceTest extends BaseTest {
      */
     @Test
     public void testGetStructuralDomain() {
-        System.out.println("getStructuralDomain");
+        LOGGER.info("getStructuralDomain");
 
         try {
 
