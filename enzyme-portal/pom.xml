@@ -69,7 +69,25 @@
     </biobabel.maven.repo.url>
     <biobabel.maven.repo.deploy.url>
          scp://login.ebi.ac.uk:/ebi/sp/pro1/chebi/maven2_repo
-    </biobabel.maven.repo.deploy.url>       
+    </biobabel.maven.repo.deploy.url>  
+    
+      <failsafe-version>2.16</failsafe-version>
+
+        <!--Unit and Integration testing settings-->
+        <skipITs>false</skipITs>
+        <skipUTs>false</skipUTs>
+
+        <!-- Test coverage -->
+        <jacoco.outputDir>${project.build.directory}</jacoco.outputDir>
+
+        <!-- Unit test report path -->
+        <jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
+        <jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</jacoco.reportPath>
+
+        <!-- Integration test report path-->
+        <jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
+        <jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</jacoco.itReportPath>    
+                   
     </properties>
     <repositories>
         
@@ -251,14 +269,14 @@
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
                 </plugin>
-                <plugin>
+<!--                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.12.4</version>
                     <configuration>
                         <argLine>-Xmx512m</argLine>
                     </configuration>
-                </plugin>
+                </plugin>-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
@@ -377,6 +395,46 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
+                
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${failsafe-version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.2.201409121644</version>
+                    <executions>
+                        <!-- Sets up jacaco for unit test coverage analysis (jacoco.agent.ut.arg) -->
+                        <execution>
+                            <id>prepare-ut-agent</id>
+                            <phase>process-test-classes</phase>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                            <configuration>
+                                <destFile>${jacoco.reportPath}</destFile>
+                                <propertyName>jacoco.agent.ut.arg</propertyName>
+                            </configuration>
+                        </execution>
+                        <!-- Sets up jacaco for integration test coverage analysis (jacoco.agent.it.arg) -->
+                        <execution>
+                            <id>prepare-it-agent</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                            <configuration>
+                                <destFile>${jacoco.itReportPath}</destFile>
+                                <propertyName>jacoco.agent.it.arg</propertyName>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>     
+                
             </plugins>
         </pluginManagement>
         <plugins>
@@ -425,10 +483,66 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
+            
+                  <!-- Generate the source jar. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+                <version>2.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.16</version>
+                <configuration>
+                    <!-- Exclude integration tests from unit test run-->
+                    <excludes>
+                        <skipITs>${skipUTs}</skipITs>
+                        <exclude>**/*IT.java</exclude>
+                        <exclude>**/IT*.java</exclude>
+                    </excludes>
+                    <argLine>${jacoco.agent.ut.arg}</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe-version}</version>
+                <configuration>
+                    <skipITs>${skipITs}</skipITs>
+                    <argLine>${jacoco.agent.it.arg}</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>    
+            
+            
+            
+            
+            
         </plugins>
         <extensions>
             <extension>

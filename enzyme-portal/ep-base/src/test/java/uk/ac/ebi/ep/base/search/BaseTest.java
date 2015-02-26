@@ -23,5 +23,6 @@ import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 @ActiveProfiles("uzpdev")
 public abstract class BaseTest extends TestCase {
    
-
+//RestTemplate restTemplate = new RestTemplate();
+// MockRestServiceServer mockServer = MockRestServiceServer.createServer(restTemplate);
 }

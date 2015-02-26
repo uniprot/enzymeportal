@@ -56,7 +56,7 @@ private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRest
      * 
      * @param query
      * @param paginate
-     * @param limit limit the number of results from Ebeye service.default is 100 and only to be used in pagination is true.
+     * @param limit limit the number of results from Ebeye service. default is 100 and only used when pagination is true.
      * @return list of accessions
      */
     public List<String> queryEbeyeForAccessions(String query, boolean paginate, int limit) {
