@@ -129,10 +129,6 @@ public void setAdditionalProperty(String name, Object value) {
 this.additionalProperties.put(name, value);
 }
 
-    @Override
-    public String toString() {
-        return "Assembly{" + "preferred=" + preferred + ", form=" + form + ", name=" + name + ", assemblyId=" + assemblyId + ", additionalProperties=" + additionalProperties + '}';
-    }
 
      
      

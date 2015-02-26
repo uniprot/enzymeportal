@@ -95,10 +95,6 @@ public class AuthorList {
         this.additionalProperties.put(name, value);
     }
 
-    @Override
-    public String toString() {
-        return "AuthorList{" + "lastName=" + lastName + ", fullName=" + fullName + ", initials=" + initials + '}';
-    }
     
     
 }

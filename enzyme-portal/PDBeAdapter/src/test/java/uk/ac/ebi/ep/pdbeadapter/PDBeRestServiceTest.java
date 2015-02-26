@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.pdbeadapter;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,6 +33,14 @@ public class PDBeRestServiceTest extends BaseTest {
     private PDBeRestService restService;
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PDBeRestServiceTest.class);
+
+    @Test
+    public void testPDBeRestService() {
+        LOGGER.info("testPDBeRestService");
+        PDBeRestService service = new PDBeRestService(restTemplate, pDBeUrl);
+
+        assertNotNull(service);
+    }
 
     /**
      * Test of getPdbSummaryResults method, of class PDBeRestService.
@@ -95,12 +98,12 @@ public class PDBeRestServiceTest extends BaseTest {
             PDBexperiments result = restService.getPDBexperimentResults(pdbId);
             PDBexperiments expResult = restTemplate.getForObject(url.trim(), PDBexperiments.class);
 
-            String experimental_method = expResult.get(pdbId).stream().findFirst().get().getExperimentalMethod();
+            String experimentalMethod = expResult.get(pdbId).stream().findFirst().get().getExperimentalMethod();
 
             mockRestServer.verify();
 
-            assertThat(result.get(pdbId).stream().findFirst().get().getExperimentalMethod(), containsString(experimental_method));
-            assertEquals(experimental_method, result.get(pdbId).stream().findFirst().get().getExperimentalMethod());
+            assertThat(result.get(pdbId).stream().findFirst().get().getExperimentalMethod(), containsString(experimentalMethod));
+            assertEquals(experimentalMethod, result.get(pdbId).stream().findFirst().get().getExperimentalMethod());
         } catch (IOException ex) {
             Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -7,8 +7,8 @@ package uk.ac.ebi.ep.pdbeadapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiment;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiments;
@@ -50,16 +50,15 @@ public class PdbService {
         if (pdbSummary != null && !pdbSummary.isEmpty()) {
 
             final String inputFormat = "yyyyMMdd";
-            //final String outputFormat = "EEE MMM dd HH:mm:ss z yyyy";
             final String outputFormat = "MMMM dd, yyyy";
 
             pdbSummary.stream().map((eSummary) -> {
                 pdb.setTitle(eSummary.getTitle());
                 return eSummary;
-            }).map((eSummary) -> {
+            }).map(eSummary -> {
                 pdb.setExperimentMethod(eSummary.getExperimentalMethod());
                 return eSummary;
-            }).forEach((eSummary) -> {
+            }).forEach(eSummary -> {
                 try {
                     pdb.setDepositionDate(pdbDateConverter(inputFormat, eSummary.getDepositionDate(), outputFormat));
                     pdb.setRevisionDate(pdbDateConverter(inputFormat, eSummary.getRevisionDate(), outputFormat));
@@ -91,13 +90,13 @@ public class PdbService {
             List<PDBexperiment> pdbExperiments = experiments.get(pdbId);
 
             if (pdbExperiments != null) {
-                pdbExperiments.stream().map((experiment) -> {
+                pdbExperiments.stream().map(experiment -> {
                     pdb.setResolution(String.valueOf(experiment.getResolution()));
                     return experiment;
-                }).map((experiment) -> {
+                }).map(experiment -> {
                     pdb.setrFactor(String.valueOf(experiment.getRFactor()));
                     return experiment;
-                }).forEach((experiment) -> {
+                }).forEach(experiment -> {
                     pdb.setrFree(String.valueOf(experiment.getRFree()));
                 });
             }
@@ -153,7 +152,7 @@ public class PdbService {
     }
 
     private List<PdbEntity> computeEntities(List<Molecule> mol) {
-        LinkedList<PdbEntity> entities = new LinkedList<>();
+        Stack<PdbEntity> entities = new Stack<>(); //LinkedStack<>();
         for (Molecule m : mol) {
 
             if ("polypeptide(L)".equalsIgnoreCase(m.getMoleculeType())) {

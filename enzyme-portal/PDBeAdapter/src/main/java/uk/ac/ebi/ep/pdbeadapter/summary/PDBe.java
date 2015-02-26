@@ -316,9 +316,6 @@ public class PDBe {
         this.additionalProperties.put(name, value);
     }
 
-    @Override
-    public String toString() {
-        return "PDBe{" + "experimentalMethod=" + experimentalMethod + ", assemblies=" + assemblies + ", title=" + title + ", releaseDate=" + releaseDate + ", splitEntry=" + splitEntry + ", experimentalMethodClass=" + experimentalMethodClass + ", revisionDate=" + revisionDate + ", entryAuthors=" + entryAuthors + ", depositionSite=" + depositionSite + ", numberOfEntities=" + numberOfEntities + ", depositionDate=" + depositionDate + ", processingSite=" + processingSite + ", additionalProperties=" + additionalProperties + '}';
-    }
+
 
 }

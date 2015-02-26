@@ -39,15 +39,6 @@ public class PDB {
     private List<String> provenance;
    
 
-    @Override
-    public String toString() {
-        return "PDB{" + "id=" + id + ", title=" + title + ", experimentMethod=" + experimentMethod + ", depositionDate=" + depositionDate + ", revisionDate=" + revisionDate + ", releaseDate=" + releaseDate + ", entryAuthors=" + entryAuthors + ", primaryCitation=" + primaryCitation + ", primaryCitationInfo=" + primaryCitationInfo + ", resolution=" + resolution + ", rFactor=" + rFactor + ", rFree=" + rFree + ", pdbEntities=" + pdbEntities + ", structuralDomain=" + structuralDomain + '}';
-    }
-
-
-
-
-
 
     public String getTitle() {
         return title;

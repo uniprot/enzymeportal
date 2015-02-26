@@ -5,15 +5,10 @@
  */
 package uk.ac.ebi.ep.pdbeadapter.publication;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -36,15 +31,14 @@ public class JournalInfo {
     @JsonProperty("pdb_abbreviation")
     private String pdbAbbreviation;
     @JsonProperty("ISO_abbreviation")
-    private String ISO_Abbreviation;
+    private String isoAbbreviation;
     @JsonProperty("year")
     private Integer year;
     @JsonProperty("issue")
     private String issue;
     @JsonProperty("pages")
     private String pages;
-    @JsonIgnore
-    private final Map<String, Object> additionalProperties = new HashMap<>();
+
 
     /**
      *
@@ -82,23 +76,27 @@ public class JournalInfo {
         this.pdbAbbreviation = pdbAbbreviation;
     }
 
-    /**
+        /**
      *
-     * @return The ISO_Abbreviation
+     * @return The isoAbbreviation
      */
     @JsonProperty("ISO_abbreviation")
-    public String getISOAbbreviation() {
-        return ISO_Abbreviation;
+    public String getIsoAbbreviation() {
+        return isoAbbreviation;
     }
 
-    /**
+        /**
      *
-     * @param abbreviation The ISO_abbreviation
+     * @param isoAbbreviation The isoAbbreviation
      */
     @JsonProperty("ISO_abbreviation")
-    public void setISOAbbreviation(String abbreviation) {
-        this.ISO_Abbreviation = abbreviation;
+    public void setIsoAbbreviation(String isoAbbreviation) {
+        this.isoAbbreviation = isoAbbreviation;
     }
+    
+    
+    
+    
 
     /**
      *
@@ -154,21 +152,6 @@ public class JournalInfo {
         this.pages = pages;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return "JournalInfo{" + "volume=" + volume + ", pdbAbbreviation=" + pdbAbbreviation + ", ISOAbbreviation=" + ISO_Abbreviation + ", year=" + year + ", issue=" + issue + ", pages=" + pages + '}';
-    }
-    
-    
+   
     
 }

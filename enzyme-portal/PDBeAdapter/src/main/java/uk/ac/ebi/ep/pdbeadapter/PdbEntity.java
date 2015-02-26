@@ -48,10 +48,6 @@ public class PdbEntity {
         this.organism = organism;
     }
 
-    @Override
-    public String toString() {
-        return "PdbEntity{" + "label=" + label + ", molecules=" + molecules + ", organism=" + organism + '}';
-    }
 
     public boolean isProtein() {
         return protein;
