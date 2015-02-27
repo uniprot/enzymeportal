@@ -31,7 +31,6 @@ import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
-import uk.ac.ebi.ep.ebeye.EbeyeService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
@@ -61,7 +60,7 @@ public class EnzymeRetrieverIT extends TestCase {
 
         context = new AnnotationConfigApplicationContext();
         context.getEnvironment().setActiveProfiles("uzpdev");
-        context.register(DataConfig.class, EbeyeService.class);
+        context.register(DataConfig.class, EbeyeRestService.class);
         context.scan("uk.ac.ebi.ep.data.dataconfig");
         context.refresh();
 

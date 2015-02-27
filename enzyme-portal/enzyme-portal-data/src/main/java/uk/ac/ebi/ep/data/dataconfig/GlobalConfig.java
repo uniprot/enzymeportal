@@ -5,10 +5,8 @@
  */
 package uk.ac.ebi.ep.data.dataconfig;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.data.service.BioPortalService;
 import uk.ac.ebi.ep.data.service.DiseaseService;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
@@ -25,8 +23,6 @@ import uk.ac.ebi.ep.data.service.UniprotEntryService;
 @Configuration
 public class GlobalConfig {
 
-    @Autowired
-    private Environment env;
 
     @Bean
     public DiseaseService diseaseService() {

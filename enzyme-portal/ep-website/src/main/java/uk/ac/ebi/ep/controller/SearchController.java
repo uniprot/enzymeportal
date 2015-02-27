@@ -326,6 +326,7 @@ public class SearchController extends AbstractController {
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
                         results = searchKeyword(searchModel.getSearchparams());
+                        LOGGER.warn("keyword search="+searchModel.getSearchparams().getText());
                         break;
                     case SEQUENCE:
                         view = searchSequence(model, searchModel);
@@ -534,7 +535,7 @@ public class SearchController extends AbstractController {
         if (name != null && name.length() >= 3) {
             String keyword = String.format("%%%s%%", name);
             
-            List<Suggestion> suggestions = ebeyeService.ebeyeAutocompleteSearch(keyword.trim());
+            List<Suggestion> suggestions = ebeyeRestService.ebeyeAutocompleteSearch(keyword.trim());
             
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());

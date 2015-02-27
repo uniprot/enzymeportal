@@ -52,7 +52,7 @@ public class PdbService {
             final String inputFormat = "yyyyMMdd";
             final String outputFormat = "MMMM dd, yyyy";
 
-            pdbSummary.stream().map((eSummary) -> {
+            pdbSummary.stream().map(eSummary -> {
                 pdb.setTitle(eSummary.getTitle());
                 return eSummary;
             }).map(eSummary -> {
@@ -152,7 +152,7 @@ public class PdbService {
     }
 
     private List<PdbEntity> computeEntities(List<Molecule> mol) {
-        Stack<PdbEntity> entities = new Stack<>(); //LinkedStack<>();
+        Stack<PdbEntity> entities = new Stack<>(); 
         for (Molecule m : mol) {
 
             if ("polypeptide(L)".equalsIgnoreCase(m.getMoleculeType())) {

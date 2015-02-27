@@ -154,8 +154,8 @@ public class EnzymePortalConfig {
     @Bean
     public Functions functions() {
         Functions functions = new Functions();
-        functions.setChebiConfig(chebiConfig());
-        functions.setChemblConfig(chemblConfig());
+        Functions.setChebiConfig(chebiConfig());
+        Functions.setChemblConfig(chemblConfig());
         functions.setDrugbankConfig(drugbankConfig());
         return functions;
     }

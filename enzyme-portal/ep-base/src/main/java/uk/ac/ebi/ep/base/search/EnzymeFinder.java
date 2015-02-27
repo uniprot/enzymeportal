@@ -20,7 +20,6 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,8 +48,6 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
-import uk.ac.ebi.ep.ebeye.EbeyeSearchResult;
-import uk.ac.ebi.ep.ebeye.EbeyeService;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 
 /**
@@ -75,8 +72,6 @@ public class EnzymeFinder {
 
     //@Autowired
     protected IntenzAdapter intenzAdapter;
-    @Autowired
-    private EbeyeService ebeyeService;
 
     private final EbeyeRestService ebeyeRestService;
 
@@ -147,18 +142,18 @@ public class EnzymeFinder {
         }
     }
 
-    @Deprecated
-    private EbeyeSearchResult getEbeyeSearchResult() {
-
-        String query = searchParams.getText();
-        if (!StringUtils.isEmpty(query)) {
-            query = query.trim();
-        }
-
-        EbeyeSearchResult searchResult = ebeyeService.query(query);
-
-        return searchResult;
-    }
+//    @Deprecated
+//    private EbeyeSearchResult getEbeyeSearchResult() {
+//
+//        String query = searchParams.getText();
+//        if (!StringUtils.isEmpty(query)) {
+//            query = query.trim();
+//        }
+//
+//        EbeyeSearchResult searchResult = ebeyeService.query(query);
+//
+//        return searchResult;
+//    }
 
     private void getResultsFromEpIndex() {
        // EbeyeSearchResult searchResult = getEbeyeSearchResult();
