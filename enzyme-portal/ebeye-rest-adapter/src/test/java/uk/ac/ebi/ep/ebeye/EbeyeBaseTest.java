@@ -5,9 +5,15 @@
  */
 package uk.ac.ebi.ep.ebeye;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.io.InputStream;
 import junit.framework.TestCase;
+import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -27,6 +33,7 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 @ContextConfiguration(classes = {EbeyeConfig.class})
 public abstract class EbeyeBaseTest extends TestCase {
 
+    protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeBaseTest.class);
     @Autowired
     protected EbeyeIndexUrl ebeyeIndexUrl;
     protected MockRestServiceServer mockRestServer;
@@ -48,5 +55,22 @@ public abstract class EbeyeBaseTest extends TestCase {
     }
 
 
+        protected String getJsonFile(String filename) throws IOException {
+        InputStream in = this.getClass().getClassLoader()
+                .getResourceAsStream(filename);
+
+        String json = IOUtils.toString(in);
+
+        return json;
+    }
+
+    protected String getValueFromJsonData(String jsonData, String nodeName) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode nodes = mapper.readTree(jsonData);
+        String value = nodes.findValue(nodeName).textValue();
+
+        return value;
+
+    }
 
 }

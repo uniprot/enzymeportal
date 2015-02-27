@@ -6,16 +6,13 @@
 package uk.ac.ebi.ep.ebeye;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.commons.io.IOUtils;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -33,8 +30,6 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  */
 public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRestServiceTest.class);
-
     @Autowired
     private EbeyeRestService ebeyeRestService;
 
@@ -50,10 +45,13 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
 
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("suggestions.json");
+//            InputStream in = this.getClass().getClassLoader()
+//                    .getResourceAsStream("suggestions.json");
+//
+//            String json = IOUtils.toString(in);
+            String filename = "suggestions.json";
+            String json = getJsonFile(filename);
 
-            String json = IOUtils.toString(in);
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
@@ -86,10 +84,13 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
 
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("ebeye.json");
+//            InputStream in = this.getClass().getClassLoader()
+//                    .getResourceAsStream("ebeye.json");
+//
+//            String json = IOUtils.toString(in);
+            String filename = "ebeye.json";
+            String json = getJsonFile(filename);
 
-            String json = IOUtils.toString(in);
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
@@ -133,10 +134,13 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
 
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("ebeye.json");
+//            InputStream in = this.getClass().getClassLoader()
+//                    .getResourceAsStream("ebeye.json");
+//
+//            String json = IOUtils.toString(in);
+            String filename = "ebeye.json";
+            String json = getJsonFile(filename);
 
-            String json = IOUtils.toString(in);
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
@@ -171,7 +175,7 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
      */
     @Test
     public void testQueryEbeyeForAccessions_3args() {
-        System.out.println("queryEbeyeForAccessions paginate :true:limit:yes");
+        LOGGER.info("queryEbeyeForAccessions paginate :true:limit:yes");
 
         try {
 
@@ -181,10 +185,13 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
 
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("ebeye.json");
+//            InputStream in = this.getClass().getClassLoader()
+//                    .getResourceAsStream("ebeye.json");
+//
+//            String json = IOUtils.toString(in);
+            String filename = "ebeye.json";
+            String json = getJsonFile(filename);
 
-            String json = IOUtils.toString(in);
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 

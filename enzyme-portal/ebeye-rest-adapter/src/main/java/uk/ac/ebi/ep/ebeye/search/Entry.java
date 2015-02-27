@@ -21,7 +21,7 @@ import java.util.Objects;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Entry extends Domain implements Comparable<Entry> {
+public final class Entry extends Domain implements Comparable<Entry> {
 
     @JsonProperty("acc")
     private String uniprot_accession;
@@ -44,15 +44,14 @@ public class Entry extends Domain implements Comparable<Entry> {
         this.uniprot_name = uniprot_name;
     }
 
-//    @JsonIgnore
-//    private final Map<String, Object> additionalProperties = new HashMap<>();
+
     /**
      *
      * @return The uniprot name
      */
     public String getUniprot_name() {
         return uniprot_name.substring(0, uniprot_name.indexOf("_"));
-        //return uniprot_name;
+       
     }
 
     /**
@@ -71,15 +70,7 @@ public class Entry extends Domain implements Comparable<Entry> {
         return source;
     }
 
-//    @JsonAnyGetter
-//    public Map<String, Object> getAdditionalProperties() {
-//        return this.additionalProperties;
-//    }
-//
-//    @JsonAnySetter
-//    public void setAdditionalProperty(String name, Object value) {
-//        this.additionalProperties.put(name, value);
-//    }
+
     @Override
     public String toString() {
         return "Entry{" + "uniprot_accession=" + uniprot_accession + ", uniport_name=" + uniprot_name + ", source=" + source + '}';
@@ -192,7 +183,8 @@ public class Entry extends Domain implements Comparable<Entry> {
         }
         return true;
     }
-    
+
+
     
     
     

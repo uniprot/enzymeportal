@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.ebeye;
 
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.TestCase;
 import org.junit.Test;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
@@ -16,14 +15,14 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  *
  * @author joseph
  */
-public class EbeyeSearchResultTest extends TestCase {
+public class EbeyeSearchResultTest extends EbeyeBaseTest {
 
     /**
      * Test of getUniProtDomains method, of class EbeyeSearchResult.
      */
     @Test
     public void testGetEntries() {
-        System.out.println("getEntries");
+        LOGGER.info("getEntries");
         EbeyeSearchResult instance = new EbeyeSearchResult();
 
         Entry entry1 = new Entry();
