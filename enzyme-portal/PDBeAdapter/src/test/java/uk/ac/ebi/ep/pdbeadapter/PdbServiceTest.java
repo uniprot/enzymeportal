@@ -1,16 +1,10 @@
-
 package uk.ac.ebi.ep.pdbeadapter;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static junit.framework.TestCase.assertEquals;
-import org.apache.commons.io.IOUtils;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -24,8 +18,6 @@ import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
  * @author joseph
  */
 public class PdbServiceTest extends BaseTest {
-
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PDBeRestServiceTest.class);
 
     @Autowired
     private PdbService pdbService;
@@ -44,10 +36,9 @@ public class PdbServiceTest extends BaseTest {
 
             String pdbId = "3tge";
             String url = pDBeUrl.getSummaryUrl() + pdbId;
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("summary.json");
 
-            String json = IOUtils.toString(in);
+            String filename = "summary.json";
+            String json = getJsonFile(filename);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
@@ -63,7 +54,7 @@ public class PdbServiceTest extends BaseTest {
             assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
             assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
         } catch (IOException ex) {
-            Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
 
     }

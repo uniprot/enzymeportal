@@ -1,17 +1,10 @@
 package uk.ac.ebi.ep.pdbeadapter;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static junit.framework.TestCase.assertEquals;
-import org.apache.commons.io.IOUtils;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -32,8 +25,6 @@ public class PDBeRestServiceTest extends BaseTest {
     @Autowired
     private PDBeRestService restService;
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PDBeRestServiceTest.class);
-
     @Test
     public void testPDBeRestService() {
         LOGGER.info("testPDBeRestService");
@@ -52,10 +43,9 @@ public class PDBeRestServiceTest extends BaseTest {
 
             String pdbId = "3tge";
             String url = pDBeUrl.getSummaryUrl() + pdbId;
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("summary.json");
 
-            String json = IOUtils.toString(in);
+            String filename = "summary.json";
+            String json = getJsonFile(filename);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
@@ -71,7 +61,7 @@ public class PDBeRestServiceTest extends BaseTest {
             assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
             assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
         } catch (IOException ex) {
-            Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 
@@ -87,10 +77,9 @@ public class PDBeRestServiceTest extends BaseTest {
 
             String pdbId = "3tge";
             String url = pDBeUrl.getExperimentUrl() + pdbId;
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("experiment.json");
 
-            String json = IOUtils.toString(in);
+            String filename = "experiment.json";
+            String json = getJsonFile(filename);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
@@ -105,7 +94,7 @@ public class PDBeRestServiceTest extends BaseTest {
             assertThat(result.get(pdbId).stream().findFirst().get().getExperimentalMethod(), containsString(experimentalMethod));
             assertEquals(experimentalMethod, result.get(pdbId).stream().findFirst().get().getExperimentalMethod());
         } catch (IOException ex) {
-            Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
 
     }
@@ -121,10 +110,9 @@ public class PDBeRestServiceTest extends BaseTest {
 
             String pdbId = "3tge";
             String url = pDBeUrl.getPublicationsUrl() + pdbId;
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("publication.json");
 
-            String json = IOUtils.toString(in);
+            String filename = "publication.json";
+            String json = getJsonFile(filename);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
@@ -140,7 +128,7 @@ public class PDBeRestServiceTest extends BaseTest {
             assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
             assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
         } catch (IOException ex) {
-            Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
 
     }
@@ -156,10 +144,9 @@ public class PDBeRestServiceTest extends BaseTest {
 
             String pdbId = "3tge";
             String url = pDBeUrl.getMoleculesUrl() + pdbId;
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("molecule.json");
 
-            String json = IOUtils.toString(in);
+            String filename = "molecule.json";
+            String json = getJsonFile(filename);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
@@ -175,7 +162,7 @@ public class PDBeRestServiceTest extends BaseTest {
             assertEquals(name, result.get(pdbId).stream().findFirst().get().getMoleculeName());
             assertEquals(expResult.get(pdbId).stream().findFirst().get().getMoleculeName(), result.get(pdbId).stream().findFirst().get().getMoleculeName());
         } catch (IOException ex) {
-            Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
 
     }
@@ -191,10 +178,9 @@ public class PDBeRestServiceTest extends BaseTest {
 
             String pdbId = "3tge";
             String url = pDBeUrl.getStructuralDomainUrl() + pdbId;
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream("structureDomain.json");
 
-            String json = IOUtils.toString(in);
+            String filename = "structureDomain.json";
+            String json = getJsonFile(filename);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
@@ -202,19 +188,18 @@ public class PDBeRestServiceTest extends BaseTest {
             String result = restService.getStructuralDomain(pdbId);
 
             String data = restTemplate.getForObject(url.trim(), String.class);
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode nodes = mapper.readTree(data);
-            String homology = nodes.findValue("homology").textValue();
 
-            String expResult = homology;
+            String homology = "homology";
+            String expResult = getValueFromJsonData(data, homology);
             mockRestServer.verify();
 
-            assertThat(result, containsString(homology));
+            assertThat(result, containsString(expResult));
             assertEquals(expResult, result);
 
         } catch (IOException ex) {
-            Logger.getLogger(PDBeRestServiceTest.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
 
     }
+
 }
