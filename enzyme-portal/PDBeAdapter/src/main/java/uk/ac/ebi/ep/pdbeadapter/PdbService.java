@@ -7,8 +7,10 @@ package uk.ac.ebi.ep.pdbeadapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
+import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiment;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiments;
@@ -152,7 +154,7 @@ public class PdbService {
     }
 
     private List<PdbEntity> computeEntities(List<Molecule> mol) {
-        Stack<PdbEntity> entities = new Stack<>(); 
+        Deque<PdbEntity> entities = new LinkedList<>(); 
         for (Molecule m : mol) {
 
             if ("polypeptide(L)".equalsIgnoreCase(m.getMoleculeType())) {
@@ -177,7 +179,7 @@ public class PdbService {
             }
 
         }
-        return entities;
+        return entities.stream().collect(Collectors.toList());
     }
 
 }

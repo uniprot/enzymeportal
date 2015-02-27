@@ -55,17 +55,17 @@ public abstract class BaseTest extends TestCase {
         InputStream in = this.getClass().getClassLoader()
                 .getResourceAsStream(filename);
 
-        String json = IOUtils.toString(in);
+        return IOUtils.toString(in);
 
-        return json;
+        
     }
 
     protected String getValueFromJsonData(String jsonData, String nodeName) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode nodes = mapper.readTree(jsonData);
-        String value = nodes.findValue(nodeName).textValue();
+        return nodes.findValue(nodeName).textValue();
 
-        return value;
+      
 
     }
 
