@@ -15,7 +15,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
-import uk.ac.ebi.ep.ebeye.testing.EbeyeService;
+
 
 /**
  *
@@ -33,10 +33,7 @@ public class EbeyeConfig {
         return new EbeyeRestService();
     }
 
-    @Bean
-    public EbeyeService ebeyeService() {
-        return new EbeyeService();
-    }
+
 
     @Bean
     public AsyncRestTemplate asyncRestTemplate() {
