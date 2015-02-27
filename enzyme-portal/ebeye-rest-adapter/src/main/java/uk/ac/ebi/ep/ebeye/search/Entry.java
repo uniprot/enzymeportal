@@ -21,12 +21,12 @@ import java.util.Objects;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class Entry extends Domain implements Comparable<Entry> {
+public final class Entry  implements Comparable<Entry> {
 
     @JsonProperty("acc")
-    private String uniprot_accession;
+    private String uniprotAccession;
     @JsonProperty("id")
-    private String uniprot_name;
+    private String uniprotName;
     @JsonProperty("source")
     private String source;
     
@@ -40,8 +40,8 @@ public final class Entry extends Domain implements Comparable<Entry> {
     }
 
     public Entry(String uniprot_accession, String uniprot_name) {
-        this.uniprot_accession = uniprot_accession;
-        this.uniprot_name = uniprot_name;
+        this.uniprotAccession = uniprot_accession;
+        this.uniprotName = uniprot_name;
     }
 
 
@@ -49,8 +49,8 @@ public final class Entry extends Domain implements Comparable<Entry> {
      *
      * @return The uniprot name
      */
-    public String getUniprot_name() {
-        return uniprot_name.substring(0, uniprot_name.indexOf("_"));
+    public String getUniprotName() {
+        return uniprotName.substring(0, uniprotName.indexOf("_"));
        
     }
 
@@ -58,8 +58,8 @@ public final class Entry extends Domain implements Comparable<Entry> {
      *
      * @return uniprot accession
      */
-    public String getUniprot_accession() {
-        return uniprot_accession;
+    public String getUniprotAccession() {
+        return uniprotAccession;
     }
 
     /**
@@ -73,13 +73,13 @@ public final class Entry extends Domain implements Comparable<Entry> {
 
     @Override
     public String toString() {
-        return "Entry{" + "uniprot_accession=" + uniprot_accession + ", uniport_name=" + uniprot_name + ", source=" + source + '}';
+        return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" + source + '}';
     }
 
 //    @Override
 //    public int hashCode() {
 //        int hash = 7;
-//        hash = 83 * hash + Objects.hashCode(this.uniprot_accession);
+//        hash = 83 * hash + Objects.hashCode(this.uniprotAccession);
 //        return hash;
 //    }
 //
@@ -92,7 +92,7 @@ public final class Entry extends Domain implements Comparable<Entry> {
 //            return false;
 //        }
 //        final Entry other = (Entry) obj;
-//        if (!Objects.equals(this.uniprot_accession, other.uniprot_accession)) {
+//        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
 //            return false;
 //        }
 //        return true;
@@ -123,15 +123,15 @@ public final class Entry extends Domain implements Comparable<Entry> {
 
 //        @Override
 //    public int compareTo(Entry obj) {
-//       int compare = obj.uniprot_accession.compareToIgnoreCase(this.uniprot_accession);
-//         return ((compare == 0) ? obj.uniprot_accession.compareToIgnoreCase(this.uniprot_accession) : compare);
+//       int compare = obj.uniprotAccession.compareToIgnoreCase(this.uniprotAccession);
+//         return ((compare == 0) ? obj.uniprotAccession.compareToIgnoreCase(this.uniprotAccession) : compare);
 //      
 //
 //    }
     @Override
     public int compareTo(Entry obj) {
-        int compare = obj.getUniprot_name().compareToIgnoreCase(this.getUniprot_name());
-        return ((compare == 0) ? obj.getUniprot_name().compareToIgnoreCase(this.getUniprot_name()) : compare);
+        int compare = obj.getUniprotName().compareToIgnoreCase(this.getUniprotName());
+        return ((compare == 0) ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare);
 
     }
 

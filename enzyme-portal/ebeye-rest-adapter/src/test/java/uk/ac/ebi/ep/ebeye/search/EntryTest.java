@@ -20,21 +20,24 @@ import org.slf4j.LoggerFactory;
  *
  * @author joseph
  */
-public class EntryTest  {
+public class EntryTest {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EntryTest.class);
 
     private Entry instance;
+    private final String name = "name";
 
     @Before
     public void setUp() {
-        String name = "name";
+
         List<String> fieldNames = new ArrayList<>();
         fieldNames.add(name);
         Fields fields = new Fields();
         fields.setName(fieldNames);
+        String acc = "O76074";
+        String geneName = "ABC_HUMAN";
 
-        instance = new Entry("O76074", "ABC_HUMAN");
+        instance = new Entry(acc, geneName);
         instance.setTitle("cGMP-specific 3',5'-cyclic phosphodiesterase");
         instance.set(name, fields);
 
@@ -50,24 +53,24 @@ public class EntryTest  {
      * Test of getUniprot_name method, of class Entry.
      */
     @Test
-    public void testGetUniprot_name() {
-        LOGGER.info("getUniprot_name");
+    public void testGetUniprotName() {
+        LOGGER.info("getUniprotName");
 
         String expResult = "ABC";
-        String result = instance.getUniprot_name();
+        String result = instance.getUniprotName();
         assertEquals(expResult, result);
 
     }
 
     /**
-     * Test of getUniprot_accession method, of class Entry.
+     * Test of getUniprotAccession method, of class Entry.
      */
     @Test
-    public void testGetUniprot_accession() {
-        LOGGER.info("getUniprot_accession");
+    public void testGetUniprotAccession() {
+        LOGGER.info("getUniprotAccession");
 
         String expResult = "O76074";
-        String result = instance.getUniprot_accession();
+        String result = instance.getUniprotAccession();
         assertEquals(expResult, result);
 
     }
@@ -119,7 +122,7 @@ public class EntryTest  {
     @Test
     public void testGet() {
         LOGGER.info("get");
-        String name = "name";
+
         List<String> fieldNames = new ArrayList<>();
         fieldNames.add(name);
         Fields f = new Fields();
@@ -137,7 +140,6 @@ public class EntryTest  {
     public void testAny() {
         LOGGER.info("any");
 
-        String name = "name";
         List<String> fieldNames = new ArrayList<>();
         fieldNames.add(name);
         Fields f = new Fields();

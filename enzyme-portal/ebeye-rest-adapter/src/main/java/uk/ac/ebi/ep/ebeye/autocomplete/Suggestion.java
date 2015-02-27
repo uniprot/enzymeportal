@@ -17,21 +17,21 @@ import java.util.Objects;
 public class Suggestion {
 
     @JsonProperty("suggestion")
-    private String suggestion;
+    private String suggestedKeyword;
 
-    public String getSuggestion() {
-        return suggestion;
+    public String getSuggestedKeyword() {
+        return suggestedKeyword;
     }
 
     @Override
     public String toString() {
-        return suggestion;
+        return suggestedKeyword;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.suggestion);
+        hash = 83 * hash + Objects.hashCode(this.suggestedKeyword);
         return hash;
     }
 
@@ -44,7 +44,7 @@ public class Suggestion {
             return false;
         }
         final Suggestion other = (Suggestion) obj;
-        if (!Objects.equals(this.suggestion, other.suggestion)) {
+        if (!Objects.equals(this.suggestedKeyword, other.suggestedKeyword)) {
             return false;
         }
         return true;

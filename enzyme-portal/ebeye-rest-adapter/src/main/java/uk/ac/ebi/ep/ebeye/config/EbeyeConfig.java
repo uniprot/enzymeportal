@@ -46,8 +46,8 @@ public class EbeyeConfig {
     }
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        return factory;
+        return new HttpComponentsClientHttpRequestFactory();
+        
     }
 
     @Bean

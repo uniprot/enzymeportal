@@ -32,6 +32,9 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
     @Autowired
     private EbeyeRestService ebeyeRestService;
+    
+    private final  String query = "sildenafil";
+    private final String ebeyeJsonFile = "ebeye.json";
 
     /**
      * Test of ebeyeAutocompleteSearch method, of class EbeyeRestService.
@@ -45,10 +48,6 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
 
-//            InputStream in = this.getClass().getClassLoader()
-//                    .getResourceAsStream("suggestions.json");
-//
-//            String json = IOUtils.toString(in);
             String filename = "suggestions.json";
             String json = getJsonFile(filename);
 
@@ -59,11 +58,11 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
             List<Suggestion> result = ebeyeRestService.ebeyeAutocompleteSearch(searchTerm);
 
-            String suggestion = expResult.getSuggestions().stream().findAny().get().getSuggestion();
+            String suggestion = expResult.getSuggestions().stream().findAny().get().getSuggestedKeyword();
 
             mockRestServer.verify();
 
-            assertThat(result.stream().findAny().get().getSuggestion(), containsString(suggestion));
+            assertThat(result.stream().findAny().get().getSuggestedKeyword(), containsString(suggestion));
 
             assertEquals(expResult.getSuggestions(), result);
         } catch (IOException ex) {
@@ -80,27 +79,23 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
         try {
             LOGGER.info("queryEbeyeForAccessions");
 
-            String query = "sildenafil";
+            
 
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
 
-//            InputStream in = this.getClass().getClassLoader()
-//                    .getResourceAsStream("ebeye.json");
-//
-//            String json = IOUtils.toString(in);
-            String filename = "ebeye.json";
-            String json = getJsonFile(filename);
+            
+            String json = getJsonFile(ebeyeJsonFile);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
             EbeyeSearchResult searchResult = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
 
-            //EbeyeSearchResult searchResult = queryEbeye(query);
+           
             Set<String> accessions = new LinkedHashSet<>();
 
             for (Entry entry : searchResult.getEntries()) {
-                accessions.add(entry.getUniprot_accession());
+                accessions.add(entry.getUniprotAccession());
             }
 
             List<String> expResult = accessions.stream().distinct().collect(Collectors.toList());
@@ -130,27 +125,20 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
         try {
 
             boolean paginate = false;
-            String query = "sildenafil";
 
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
 
-//            InputStream in = this.getClass().getClassLoader()
-//                    .getResourceAsStream("ebeye.json");
-//
-//            String json = IOUtils.toString(in);
-            String filename = "ebeye.json";
-            String json = getJsonFile(filename);
+            String json = getJsonFile(ebeyeJsonFile);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
             EbeyeSearchResult searchResult = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
 
-            //EbeyeSearchResult searchResult = queryEbeye(query);
-            Set<String> accessions = new LinkedHashSet<>();
+               Set<String> accessions = new LinkedHashSet<>();
 
             for (Entry entry : searchResult.getEntries()) {
-                accessions.add(entry.getUniprot_accession());
+                accessions.add(entry.getUniprotAccession());
             }
 
             List<String> expResult = accessions.stream().distinct().collect(Collectors.toList());
@@ -181,16 +169,10 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
 
             int limit = 2;
             boolean paginate = true;
-            String query = "sildenafil";
-
+   
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
 
-//            InputStream in = this.getClass().getClassLoader()
-//                    .getResourceAsStream("ebeye.json");
-//
-//            String json = IOUtils.toString(in);
-            String filename = "ebeye.json";
-            String json = getJsonFile(filename);
+            String json = getJsonFile(ebeyeJsonFile);
 
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
@@ -200,7 +182,7 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
             Set<String> accessions = new LinkedHashSet<>();
 
             for (Entry entry : searchResult.getEntries()) {
-                accessions.add(entry.getUniprot_accession());
+                accessions.add(entry.getUniprotAccession());
             }
 
             List<String> expResult = accessions.stream().distinct().collect(Collectors.toList());
@@ -208,7 +190,7 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
             String accession = expResult.stream().findAny().get();
 
             List<String> result = ebeyeRestService.queryEbeyeForAccessions(query, paginate, limit);
-
+            
             mockRestServer.verify();
 
             assertThat(result.stream().findAny().get(), containsString(accession));

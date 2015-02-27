@@ -31,7 +31,7 @@ public class SuggestionTest {
     @Test
     public void testGetSuggestion() {
         String expResult = null;
-        String result = instance.getSuggestion();
+        String result = instance.getSuggestedKeyword();
         assertEquals(expResult, result);
 
     }

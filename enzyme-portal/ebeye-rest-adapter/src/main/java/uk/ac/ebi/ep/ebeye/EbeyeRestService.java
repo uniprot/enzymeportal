@@ -100,7 +100,7 @@ public class EbeyeRestService {
 
             if (!paginate) {
                 for (Entry entry : searchResult.getEntries()) {
-                    accessions.add(entry.getUniprot_accession());
+                    accessions.add(entry.getUniprotAccession());
                 }
 
                 List<String> accessionList = accessions.stream().distinct().collect(Collectors.toList());
@@ -112,18 +112,20 @@ public class EbeyeRestService {
             if (paginate) {
 
                 int hitcount = searchResult.getHitCount();
+                int resultLimit =0;
 
                 if (limit < 0) {
-                    limit = 100;
+                    resultLimit = 100;
                 }
 
                 //for now limit results
-                if (limit > 0 && hitcount > limit) {
-                    hitcount = limit;
+                if (resultLimit > 0 && hitcount > resultLimit) {
+                    hitcount = resultLimit;
                 }
 
                 int numIteration = hitcount / 100;
 
+                
                 List<String> accessionList = query(query, numIteration);
                 LOGGER.warn("Number of Accessions to be processed (Pagination = true)  :  " + accessionList.size());
                 return accessionList;
@@ -137,12 +139,9 @@ public class EbeyeRestService {
     }
 
     private EbeyeSearchResult queryEbeye(String query) throws InterruptedException, ExecutionException {
-        List<String> ebeyeDomains = new ArrayList<String>() {
-            {
-                add(ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=");
-
-            }
-        };
+        
+        List<String> ebeyeDomains = new ArrayList<>();
+        ebeyeDomains.add(ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=");
 
         // get element as soon as it is available
         Optional<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
@@ -151,7 +150,7 @@ public class EbeyeRestService {
             EbeyeSearchResult searchResult = null;
             try {
                 searchResult = getEbeyeSearchResult(url.trim());
-                //return getEbeyeSearchResult(url.trim());
+                
             } catch (InterruptedException | NullPointerException | ExecutionException ex) {
                 LOGGER.error(ex.getMessage(), ex);
             }
@@ -160,9 +159,8 @@ public class EbeyeRestService {
 
         }).findAny();
 
-        EbeyeSearchResult searchResult = result.get();
-
-        return searchResult;
+ 
+        return result.get();
     }
 
     private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
@@ -173,7 +171,7 @@ public class EbeyeRestService {
             String link = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * 100 + "&fields=name&query=";
             ebeyeDomains.add(link);
         }
-
+        
         Set<String> accessions = new LinkedHashSet<>();
         // get element as soon as it is available
         List<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
@@ -192,13 +190,12 @@ public class EbeyeRestService {
 
         result.stream().map(ebeye -> ebeye.getEntries().stream().distinct().collect(Collectors.toList())).forEach(entries -> {
             entries.stream().forEach(entry -> {
-                accessions.add(entry.getUniprot_accession());
+                accessions.add(entry.getUniprotAccession());
             });
         });
 
-        List<String> accessionList = accessions.stream().distinct().collect(Collectors.toList());
+        return accessions.stream().distinct().collect(Collectors.toList());
 
-        return accessionList;
     }
 
     @Async
