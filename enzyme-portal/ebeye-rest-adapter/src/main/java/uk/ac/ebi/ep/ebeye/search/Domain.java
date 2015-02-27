@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.ep.ebeye;
+package uk.ac.ebi.ep.ebeye.search;
 
 /**
  *

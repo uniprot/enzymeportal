@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.ebeye;
+package uk.ac.ebi.ep.ebeye.search;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -31,6 +31,8 @@ public class Entry extends Domain implements Comparable<Entry> {
     private String source;
     
     private String title;
+        @JsonIgnore
+    private final Map<String, Fields> fields = new HashMap<>();
 
     public Entry() {
      
@@ -142,8 +144,7 @@ public class Entry extends Domain implements Comparable<Entry> {
 
     }
 
-    @JsonIgnore
-    private final Map<String, Fields> fields = new HashMap<>();
+
 
     public Fields get(String name) {
         return fields.get(name);

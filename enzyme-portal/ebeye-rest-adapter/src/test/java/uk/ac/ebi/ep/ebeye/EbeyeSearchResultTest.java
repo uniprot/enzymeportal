@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
 import org.junit.Test;
+import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
+import uk.ac.ebi.ep.ebeye.search.Entry;
 
 /**
  *
@@ -24,14 +26,14 @@ public class EbeyeSearchResultTest extends TestCase {
         System.out.println("getEntries");
         EbeyeSearchResult instance = new EbeyeSearchResult();
 
-        Entry domain1 = new Entry();
-        Entry domain2 = new Entry();
+        Entry entry1 = new Entry();
+        Entry entry2 = new Entry();
         List<Entry> expResult = new ArrayList<>();
-        expResult.add(domain1);
-        expResult.add(domain2);
+        expResult.add(entry1);
+        expResult.add(entry2);
 
-        instance.getEntries().add(domain1);
-        instance.getEntries().add(domain2);
+        instance.getEntries().add(entry1);
+        instance.getEntries().add(entry2);
 
         List<Entry> result = instance.getEntries();
         assertEquals(expResult.size(), result.size());
