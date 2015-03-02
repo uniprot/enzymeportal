@@ -25,7 +25,7 @@ public class EntryTest {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EntryTest.class);
 
     private Entry instance;
-    private final String name = "name";
+    private static final String name = "name";
 
     @Before
     public void setUp() {

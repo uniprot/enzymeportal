@@ -33,8 +33,8 @@ public class EbeyeRestServiceTest extends EbeyeBaseTest {
     @Autowired
     private EbeyeRestService ebeyeRestService;
     
-    private final  String query = "sildenafil";
-    private final String ebeyeJsonFile = "ebeye.json";
+    private static final  String query = "sildenafil";
+    private static final String ebeyeJsonFile = "ebeye.json";
 
     /**
      * Test of ebeyeAutocompleteSearch method, of class EbeyeRestService.

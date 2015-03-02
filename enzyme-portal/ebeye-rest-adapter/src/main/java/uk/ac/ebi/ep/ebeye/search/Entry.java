@@ -39,9 +39,9 @@ public final class Entry  implements Comparable<Entry> {
        
     }
 
-    public Entry(String uniprot_accession, String uniprot_name) {
-        this.uniprotAccession = uniprot_accession;
-        this.uniprotName = uniprot_name;
+    public Entry(String uniprotAccession, String uniprotName) {
+        this.uniprotAccession = uniprotAccession;
+        this.uniprotName = uniprotName;
     }
 
 
@@ -76,62 +76,11 @@ public final class Entry  implements Comparable<Entry> {
         return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" + source + '}';
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        hash = 83 * hash + Objects.hashCode(this.uniprotAccession);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final Entry other = (Entry) obj;
-//        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
-//            return false;
-//        }
-//        return true;
-//    }
-//    
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        hash = 53 * hash + Objects.hashCode(this.getUniprot_name());
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final Entry other = (Entry) obj;
-//        if (!Objects.equals(this.getUniprot_name(), other.getUniprot_name())) {
-//            return false;
-//        }
-//        return true;
-//    }
-    
 
-//        @Override
-//    public int compareTo(Entry obj) {
-//       int compare = obj.uniprotAccession.compareToIgnoreCase(this.uniprotAccession);
-//         return ((compare == 0) ? obj.uniprotAccession.compareToIgnoreCase(this.uniprotAccession) : compare);
-//      
-//
-//    }
     @Override
     public int compareTo(Entry obj) {
         int compare = obj.getUniprotName().compareToIgnoreCase(this.getUniprotName());
-        return ((compare == 0) ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare);
+        return (compare == 0 ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare);
 
     }
 
