@@ -39,30 +39,26 @@ public class PDBeRestServiceTest extends BaseTest {
     @Test
     public void testGetPdbSummaryResults() {
         LOGGER.info("getPdbSummaryResults");
-        try {
 
-            String pdbId = "3tge";
-            String url = pDBeUrl.getSummaryUrl() + pdbId;
+        String pdbId = "3tge";
+        String url = pDBeUrl.getSummaryUrl() + pdbId;
 
-            String filename = "summary.json";
-            String json = getJsonFile(filename);
+        String filename = "summary.json";
+        String json = getJsonFile(filename);
 
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
-            PdbSearchResult expResult = restTemplate.getForObject(url.trim(), PdbSearchResult.class);
+        PdbSearchResult expResult = restTemplate.getForObject(url.trim(), PdbSearchResult.class);
 
-            PdbSearchResult result = restService.getPdbSummaryResults(pdbId);
+        PdbSearchResult result = restService.getPdbSummaryResults(pdbId);
 
-            String title = expResult.get(pdbId).stream().findFirst().get().getTitle();
-            mockRestServer.verify();
+        String title = expResult.get(pdbId).stream().findFirst().get().getTitle();
+        mockRestServer.verify();
 
-            assertThat(result.get(pdbId).stream().findFirst().get().getTitle(), containsString(title));
-            assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
-            assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+        assertThat(result.get(pdbId).stream().findFirst().get().getTitle(), containsString(title));
+        assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
+        assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
     }
 
     /**
@@ -73,29 +69,24 @@ public class PDBeRestServiceTest extends BaseTest {
 
         LOGGER.info("getPDBexperimentResults");
 
-        try {
+        String pdbId = "3tge";
+        String url = pDBeUrl.getExperimentUrl() + pdbId;
 
-            String pdbId = "3tge";
-            String url = pDBeUrl.getExperimentUrl() + pdbId;
+        String filename = "experiment.json";
+        String json = getJsonFile(filename);
 
-            String filename = "experiment.json";
-            String json = getJsonFile(filename);
+        mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        PDBexperiments result = restService.getPDBexperimentResults(pdbId);
+        PDBexperiments expResult = restTemplate.getForObject(url.trim(), PDBexperiments.class);
 
-            PDBexperiments result = restService.getPDBexperimentResults(pdbId);
-            PDBexperiments expResult = restTemplate.getForObject(url.trim(), PDBexperiments.class);
+        String experimentalMethod = expResult.get(pdbId).stream().findFirst().get().getExperimentalMethod();
 
-            String experimentalMethod = expResult.get(pdbId).stream().findFirst().get().getExperimentalMethod();
+        mockRestServer.verify();
 
-            mockRestServer.verify();
-
-            assertThat(result.get(pdbId).stream().findFirst().get().getExperimentalMethod(), containsString(experimentalMethod));
-            assertEquals(experimentalMethod, result.get(pdbId).stream().findFirst().get().getExperimentalMethod());
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+        assertThat(result.get(pdbId).stream().findFirst().get().getExperimentalMethod(), containsString(experimentalMethod));
+        assertEquals(experimentalMethod, result.get(pdbId).stream().findFirst().get().getExperimentalMethod());
 
     }
 
@@ -106,30 +97,25 @@ public class PDBeRestServiceTest extends BaseTest {
     public void testGetPDBpublicationResults() {
         LOGGER.info("getPDBpublicationResults");
 
-        try {
+        String pdbId = "3tge";
+        String url = pDBeUrl.getPublicationsUrl() + pdbId;
 
-            String pdbId = "3tge";
-            String url = pDBeUrl.getPublicationsUrl() + pdbId;
+        String filename = "publication.json";
+        String json = getJsonFile(filename);
 
-            String filename = "publication.json";
-            String json = getJsonFile(filename);
+        mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        PDBePublications expResult = restTemplate.getForObject(url.trim(), PDBePublications.class);
 
-            PDBePublications expResult = restTemplate.getForObject(url.trim(), PDBePublications.class);
+        PDBePublications result = restService.getPDBpublicationResults(pdbId);
 
-            PDBePublications result = restService.getPDBpublicationResults(pdbId);
+        String title = expResult.get(pdbId).stream().findFirst().get().getTitle();
+        mockRestServer.verify();
 
-            String title = expResult.get(pdbId).stream().findFirst().get().getTitle();
-            mockRestServer.verify();
-
-            assertThat(result.get(pdbId).stream().findFirst().get().getTitle(), containsString(title));
-            assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
-            assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+        assertThat(result.get(pdbId).stream().findFirst().get().getTitle(), containsString(title));
+        assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
+        assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
 
     }
 
@@ -140,30 +126,25 @@ public class PDBeRestServiceTest extends BaseTest {
     public void testGetPDBmoleculeResults() {
         LOGGER.info("getPDBmoleculeResults");
 
-        try {
+        String pdbId = "3tge";
+        String url = pDBeUrl.getMoleculesUrl() + pdbId;
 
-            String pdbId = "3tge";
-            String url = pDBeUrl.getMoleculesUrl() + pdbId;
+        String filename = "molecule.json";
+        String json = getJsonFile(filename);
 
-            String filename = "molecule.json";
-            String json = getJsonFile(filename);
+        mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        PDBmolecules expResult = restTemplate.getForObject(url.trim(), PDBmolecules.class);
 
-            PDBmolecules expResult = restTemplate.getForObject(url.trim(), PDBmolecules.class);
+        PDBmolecules result = restService.getPDBmoleculeResults(pdbId);
 
-            PDBmolecules result = restService.getPDBmoleculeResults(pdbId);
+        String name = expResult.get(pdbId).stream().findFirst().get().getMoleculeName();
+        mockRestServer.verify();
 
-            String name = expResult.get(pdbId).stream().findFirst().get().getMoleculeName();
-            mockRestServer.verify();
-
-            assertThat(result.get(pdbId).stream().findFirst().get().getMoleculeName(), containsString(name));
-            assertEquals(name, result.get(pdbId).stream().findFirst().get().getMoleculeName());
-            assertEquals(expResult.get(pdbId).stream().findFirst().get().getMoleculeName(), result.get(pdbId).stream().findFirst().get().getMoleculeName());
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+        assertThat(result.get(pdbId).stream().findFirst().get().getMoleculeName(), containsString(name));
+        assertEquals(name, result.get(pdbId).stream().findFirst().get().getMoleculeName());
+        assertEquals(expResult.get(pdbId).stream().findFirst().get().getMoleculeName(), result.get(pdbId).stream().findFirst().get().getMoleculeName());
 
     }
 

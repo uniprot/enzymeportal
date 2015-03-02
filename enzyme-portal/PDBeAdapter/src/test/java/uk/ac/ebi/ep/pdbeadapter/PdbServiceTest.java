@@ -1,6 +1,6 @@
 package uk.ac.ebi.ep.pdbeadapter;
 
-import java.io.IOException;
+
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -32,7 +32,7 @@ public class PdbServiceTest extends BaseTest {
 
         LOGGER.info("getPdbSearchResults");
 
-        try {
+   
 
             String pdbId = "3tge";
             String url = pDBeUrl.getSummaryUrl() + pdbId;
@@ -53,9 +53,7 @@ public class PdbServiceTest extends BaseTest {
             assertThat(result.get(pdbId).stream().findFirst().get().getTitle(), containsString(title));
             assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
             assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+ 
 
     }
 

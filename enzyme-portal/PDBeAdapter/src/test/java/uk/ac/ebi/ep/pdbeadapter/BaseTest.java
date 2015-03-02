@@ -51,13 +51,17 @@ public abstract class BaseTest extends TestCase {
 
     }
 
-    protected String getJsonFile(String filename) throws IOException {
-        InputStream in = this.getClass().getClassLoader()
-                .getResourceAsStream(filename);
+    protected String getJsonFile(String filename) {
+        try {
+            InputStream in = this.getClass().getClassLoader()
+                    .getResourceAsStream(filename);
+            
+            return IOUtils.toString(in);
+        } catch (IOException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
 
-        return IOUtils.toString(in);
-
-        
+        return null;
     }
 
     protected String getValueFromJsonData(String jsonData, String nodeName) throws IOException {

@@ -51,24 +51,7 @@ public class PdbService {
         List<PDBe> pdbSummary = summary.get(pdbId);
         if (pdbSummary != null && !pdbSummary.isEmpty()) {
 
-            final String inputFormat = "yyyyMMdd";
-            final String outputFormat = "MMMM dd, yyyy";
-
-            pdbSummary.stream().map(eSummary -> {
-                pdb.setTitle(eSummary.getTitle());
-                return eSummary;
-            }).map(eSummary -> {
-                pdb.setExperimentMethod(eSummary.getExperimentalMethod());
-                return eSummary;
-            }).forEach(eSummary -> {
-                try {
-                    pdb.setDepositionDate(pdbDateConverter(inputFormat, eSummary.getDepositionDate(), outputFormat));
-                    pdb.setRevisionDate(pdbDateConverter(inputFormat, eSummary.getRevisionDate(), outputFormat));
-                    pdb.setReleaseDate(pdbDateConverter(inputFormat, eSummary.getReleaseDate(), outputFormat));
-                } catch (ParseException e) {
-                    LOGGER.error("Error while parsing PDB Date", e);
-                }
-            });
+            pdb = computeSummary(pdbSummary, pdb);
         }
 
         //molecules
@@ -92,15 +75,8 @@ public class PdbService {
             List<PDBexperiment> pdbExperiments = experiments.get(pdbId);
 
             if (pdbExperiments != null) {
-                pdbExperiments.stream().map(experiment -> {
-                    pdb.setResolution(String.valueOf(experiment.getResolution()));
-                    return experiment;
-                }).map(experiment -> {
-                    pdb.setrFactor(String.valueOf(experiment.getRFactor()));
-                    return experiment;
-                }).forEach(experiment -> {
-                    pdb.setrFree(String.valueOf(experiment.getRFree()));
-                });
+
+                pdb = computeExperiment(pdbExperiments, pdb);
             }
 
         }
@@ -110,14 +86,8 @@ public class PdbService {
 
             List<PDBePublication> publication = publications.get(pdbId);
             if (publication != null) {
-                PDBePublication primaryCitation = publication.stream().findFirst().get();
-                pdb.setEntryAuthors(primaryCitation.getAuthorList());
-                pdb.setPrimaryCitation(primaryCitation.getTitle());
-                String info = primaryCitation.getJournalInfo().getPdbAbbreviation()
-                        + " vol:" + primaryCitation.getJournalInfo().getVolume()
-                        + " page:" + primaryCitation.getJournalInfo().getPages()
-                        + " (" + primaryCitation.getJournalInfo().getYear() + ")";
-                pdb.setPrimaryCitationInfo(info);
+
+                pdb = computePublications(publication, pdb);
 
             }
 
@@ -153,8 +123,46 @@ public class PdbService {
                 inputFormat).parse(inputTimeStamp));
     }
 
+    private PDB computeSummary(List<PDBe> pdbSummary, final PDB pdb) {
+
+        final String inputFormat = "yyyyMMdd";
+        final String outputFormat = "MMMM dd, yyyy";
+
+        pdbSummary.stream().map(eSummary -> {
+            pdb.setTitle(eSummary.getTitle());
+            return eSummary;
+        }).map(eSummary -> {
+            pdb.setExperimentMethod(eSummary.getExperimentalMethod());
+            return eSummary;
+        }).forEach(eSummary -> {
+            try {
+                pdb.setDepositionDate(pdbDateConverter(inputFormat, eSummary.getDepositionDate(), outputFormat));
+                pdb.setRevisionDate(pdbDateConverter(inputFormat, eSummary.getRevisionDate(), outputFormat));
+                pdb.setReleaseDate(pdbDateConverter(inputFormat, eSummary.getReleaseDate(), outputFormat));
+            } catch (ParseException e) {
+                LOGGER.error("Error while parsing PDB Date", e);
+            }
+        });
+
+        return pdb;
+    }
+
+    private PDB computeExperiment(List<PDBexperiment> pdbExperiments, final PDB pdb) {
+        pdbExperiments.stream().map(experiment -> {
+            pdb.setResolution(String.valueOf(experiment.getResolution()));
+            return experiment;
+        }).map(experiment -> {
+            pdb.setrFactor(String.valueOf(experiment.getRFactor()));
+            return experiment;
+        }).forEach(experiment -> {
+            pdb.setrFree(String.valueOf(experiment.getRFree()));
+        });
+
+        return pdb;
+    }
+
     private List<PdbEntity> computeEntities(List<Molecule> mol) {
-        Deque<PdbEntity> entities = new LinkedList<>(); 
+        Deque<PdbEntity> entities = new LinkedList<>();
         for (Molecule m : mol) {
 
             if ("polypeptide(L)".equalsIgnoreCase(m.getMoleculeType())) {
@@ -180,6 +188,18 @@ public class PdbService {
 
         }
         return entities.stream().collect(Collectors.toList());
+    }
+
+    private PDB computePublications(List<PDBePublication> publication, final PDB pdb) {
+        PDBePublication primaryCitation = publication.stream().findFirst().get();
+        pdb.setEntryAuthors(primaryCitation.getAuthorList());
+        pdb.setPrimaryCitation(primaryCitation.getTitle());
+        String info = primaryCitation.getJournalInfo().getPdbAbbreviation()
+                + " vol:" + primaryCitation.getJournalInfo().getVolume()
+                + " page:" + primaryCitation.getJournalInfo().getPages()
+                + " (" + primaryCitation.getJournalInfo().getYear() + ")";
+        pdb.setPrimaryCitationInfo(info);
+        return pdb;
     }
 
 }
