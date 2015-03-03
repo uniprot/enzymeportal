@@ -63,7 +63,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         });
         query.from($).where(builder);
 
-        return query.list($);
+        return query.distinct().list($);
     }
 
     @Transactional(readOnly = true)

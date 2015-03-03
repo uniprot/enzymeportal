@@ -24,7 +24,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @OliverYard
 @PropertySource({"classpath:ep-db-uzppub-oy.properties"})
-public class OliverYardConfig implements iDataConfig {
+public class OliverYardConfig implements EnzymePortalDataConfig {
 
     @Autowired
     private Environment env;
@@ -32,7 +32,7 @@ public class OliverYardConfig implements iDataConfig {
     //declare a datasource that has pooling capabilities
     @Bean
     @Override
-    public DataSource dataSource_ep() {
+    public DataSource epDataSource() {
         try {
 
             OracleDataSource ds = new OracleConnectionPoolDataSource();

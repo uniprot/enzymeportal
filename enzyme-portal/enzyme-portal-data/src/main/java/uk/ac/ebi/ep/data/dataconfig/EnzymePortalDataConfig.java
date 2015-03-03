@@ -13,7 +13,7 @@ import javax.sql.DataSource;
  * @author joseph
  */
 
-public interface iDataConfig {
+public interface EnzymePortalDataConfig {
      DataSource dataSource();
-     DataSource dataSource_ep();
+     DataSource epDataSource();
 }

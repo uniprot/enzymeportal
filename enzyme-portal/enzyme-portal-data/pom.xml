@@ -6,7 +6,7 @@
     <version>1.0.13-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-     <name>ep-data</name>
+    <name>ep-data</name>
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
@@ -41,32 +41,18 @@
         
 
         
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>4.0.4.RELEASE</version>
         </dependency>-->
         
-            <dependency>
+        <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-core</artifactId>
             <version>0.15</version>
         </dependency>
         
-        <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-test</artifactId>
-    <version>${org.springframework-version}</version>
-    <scope>test</scope>
-</dependency> 
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
- 
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -122,8 +108,8 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-<!--            <version>1.8.2.RELEASE</version>-->
-             <version>${spring.data.commons.version}</version>
+            <!--            <version>1.8.2.RELEASE</version>-->
+            <version>${spring.data.commons.version}</version>
         </dependency>
         
         <dependency>
@@ -203,6 +189,45 @@
             <version>2.5.1</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+        
+                <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework-version}</version>
+            <scope>test</scope>
+        </dependency> 
+         
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hamcrest-core</artifactId>
+                    <groupId>org.hamcrest</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.9.5</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <version>1.4.185</version>
+</dependency>
     </dependencies>
     <build>
         <finalName>ep-data</finalName>
@@ -254,6 +279,9 @@
                     <!--                 This one configures the ChEMBL adapter: -->
                     <include>chembl-adapter.properties</include>
                     <include>log4j.properties</include>
+                    <include>data.sql</include>
+                    <include>schema.sql</include>
+                   
                 </includes>
             </resource>
         </resources>
@@ -277,14 +305,14 @@
                 <ep.db.config>uzprel</ep.db.config>
             </properties>
         </profile>
-          <profile>
+        <profile>
             <!--             Profile to work with the release database -->
             <id>uzppub-pg</id>
             <properties>
                 <ep.db.config>uzppub-pg</ep.db.config>
             </properties>
         </profile>
-          <profile>
+        <profile>
             <!--             Profile to work with the release database -->
             <id>uzppub-oy</id>
             <properties>

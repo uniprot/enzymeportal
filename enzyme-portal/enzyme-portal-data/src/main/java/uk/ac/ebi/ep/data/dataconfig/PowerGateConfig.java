@@ -24,7 +24,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @PowerGate
 @PropertySource({"classpath:ep-db-uzppub-pg.properties"})
-public class PowerGateConfig implements iDataConfig {
+public class PowerGateConfig implements EnzymePortalDataConfig {
 
     @Autowired
     private Environment env;
@@ -32,7 +32,7 @@ public class PowerGateConfig implements iDataConfig {
     //declare a datasource that has pooling capabilities
     @Bean
     @Override
-    public DataSource dataSource_ep() {
+    public DataSource epDataSource() {
         try {
 
             OracleDataSource ds = new OracleConnectionPoolDataSource();

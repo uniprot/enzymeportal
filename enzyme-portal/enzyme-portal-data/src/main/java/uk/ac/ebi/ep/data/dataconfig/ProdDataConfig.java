@@ -25,14 +25,14 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @Prod
 @PropertySource({"classpath:ep-db-uzprel.properties"})
-public class ProdDataConfig implements iDataConfig{
+public class ProdDataConfig implements EnzymePortalDataConfig{
      @Autowired
     private Environment env;
 
      //declare a datasource that has pooling capabilities
     @Bean
     @Override
-    public DataSource dataSource_ep() {
+    public DataSource epDataSource() {
         try {
 
             OracleDataSource ds = new OracleConnectionPoolDataSource();
