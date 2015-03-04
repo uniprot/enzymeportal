@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.data.dataconfig;
+package uk.ac.ebi.ep.data.testConfig;
 
 import java.sql.SQLException;
 import java.util.Properties;
@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -31,6 +32,7 @@ import uk.ac.ebi.ep.testkit.TestKit;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
+@PropertySource({"classpath:data.sql","classpath:schema.sql"})
 public class SpringDataMockConfig extends TestKit {
 protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SpringDataMockConfig.class);
     @Bean

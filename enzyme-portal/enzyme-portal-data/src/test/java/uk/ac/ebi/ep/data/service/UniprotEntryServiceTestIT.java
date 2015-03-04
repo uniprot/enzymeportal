@@ -8,8 +8,6 @@ package uk.ac.ebi.ep.data.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -24,6 +22,7 @@ public class UniprotEntryServiceTestIT extends AbstractDataTest {
     protected UniprotEntryService uniprotEntryService;
     private static final String accession = "Q64441";
 
+    @Override
     protected void tearDown() throws Exception {
         dataSource.getConnection().close();
     }

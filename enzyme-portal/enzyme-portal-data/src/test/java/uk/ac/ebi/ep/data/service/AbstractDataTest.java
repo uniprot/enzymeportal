@@ -5,8 +5,8 @@
  */
 package uk.ac.ebi.ep.data.service;
 
-import uk.ac.ebi.ep.data.dataconfig.SpringDataMockConfig;
 import javax.sql.DataSource;
+import junit.framework.TestCase;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
 
 /**
  *
@@ -21,9 +22,7 @@ import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class})
-//@ActiveProfiles("uzpdev")
-//@Dev
-public abstract class AbstractDataTest {
+public abstract class AbstractDataTest extends TestCase {
 protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AbstractDataTest.class);
     @Autowired
     protected EnzymePortalService enzymePortalService;
