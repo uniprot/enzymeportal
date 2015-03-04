@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.data.service;
+package uk.ac.ebi.ep.data.dataconfig;
 
 import java.sql.SQLException;
 import java.util.Properties;
 import javax.sql.DataSource;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -21,6 +22,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import uk.ac.ebi.ep.testkit.TestKit;
 
 /**
  *configuration for integration test
@@ -29,8 +31,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
-public class SpringDataMockConfig {
-
+public class SpringDataMockConfig extends TestKit {
+protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SpringDataMockConfig.class);
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
@@ -38,7 +40,7 @@ public class SpringDataMockConfig {
 
 
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource(){
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         builder.setType(EmbeddedDatabaseType.H2);
         //return builder.build();
@@ -91,5 +93,5 @@ public class SpringDataMockConfig {
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
     }
-
+    
 }

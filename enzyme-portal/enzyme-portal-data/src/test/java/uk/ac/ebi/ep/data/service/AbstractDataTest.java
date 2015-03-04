@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.data.service;
 
+import uk.ac.ebi.ep.data.dataconfig.SpringDataMockConfig;
 import javax.sql.DataSource;
 import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
