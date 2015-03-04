@@ -15,7 +15,7 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  *
  * @author joseph
  */
-public class EbeyeSearchResultTest extends EbeyeBaseTest {
+public class EbeyeSearchResultTest extends AbstractEbeyeTest {
 
     /**
      * Test of getUniProtDomains method, of class EbeyeSearchResult.

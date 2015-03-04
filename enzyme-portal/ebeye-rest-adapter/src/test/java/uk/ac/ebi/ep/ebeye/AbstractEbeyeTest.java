@@ -31,9 +31,9 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {EbeyeConfig.class})
-public abstract class EbeyeBaseTest extends TestCase {
+public abstract class AbstractEbeyeTest extends TestCase {
 
-    protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeBaseTest.class);
+    protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AbstractEbeyeTest.class);
     @Autowired
     protected EbeyeIndexUrl ebeyeIndexUrl;
     protected MockRestServiceServer mockRestServer;

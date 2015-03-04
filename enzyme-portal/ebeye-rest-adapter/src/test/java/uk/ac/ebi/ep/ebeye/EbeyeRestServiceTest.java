@@ -28,7 +28,7 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  *
  * @author joseph
  */
-public class EbeyeRestServiceTest extends EbeyeBaseTest {
+public class EbeyeRestServiceTest extends AbstractEbeyeTest {
 
     @Autowired
     private EbeyeRestService ebeyeRestService;
