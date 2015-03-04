@@ -653,6 +653,7 @@
         <module>chembl-adapter</module>-->
         
         <!--        <module>SitemapGenerator</module>-->
+         <module>EnzymePortalTestKit</module>
         <module>enzyme-portal-data</module>
         <module>PDBeAdapter</module>
         <module>ep-parser</module>
@@ -661,7 +662,7 @@
         <module>literature-adapter</module>
         <module>ep-base</module>
         <module>ep-website</module>
-
+       
     </modules>
     
     <profiles>
