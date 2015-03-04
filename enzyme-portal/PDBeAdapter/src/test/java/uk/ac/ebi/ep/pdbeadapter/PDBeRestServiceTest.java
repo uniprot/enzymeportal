@@ -20,7 +20,7 @@ import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
  *
  * @author joseph
  */
-public class PDBeRestServiceTest extends BaseTest {
+public class PDBeRestServiceTest extends AbstractPDBeTest {
 
     @Autowired
     private PDBeRestService restService;

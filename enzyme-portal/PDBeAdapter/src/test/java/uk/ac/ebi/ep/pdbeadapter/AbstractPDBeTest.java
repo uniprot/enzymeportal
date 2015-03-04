@@ -30,9 +30,9 @@ import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PDBeConfig.class})
-public abstract class BaseTest extends TestCase {
+public abstract class AbstractPDBeTest extends TestCase {
 
-    protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(BaseTest.class);
+    protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AbstractPDBeTest.class);
     @Autowired
     protected PDBeUrl pDBeUrl;
     protected MockRestServiceServer mockRestServer;
