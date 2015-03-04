@@ -7,20 +7,15 @@ package uk.ac.ebi.ep.base.search;
 
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.data.enzyme.model.CountableMolecules;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
@@ -29,8 +24,6 @@ import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.enzyme.model.ProteinStructure;
 import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.data.search.model.Disease;
-import uk.ac.ebi.ep.data.service.EnzymePortalService;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
@@ -42,39 +35,11 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
  *
  * @author joseph
  */
-@Configuration
-@ComponentScan(value = "uk.ac.ebi.ep.data.dataconfig")
+//@Configuration
+//@ComponentScan(value = "uk.ac.ebi.ep.data.dataconfig")
 @Ignore
-public class EnzymeRetrieverIT extends TestCase {
+public class EnzymeRetrieverIT extends BaseTest {
 
-    //http://docs.spring.io/spring/docs/current/spring-framework-reference/html/jdbc.html#jdbc-embedded-database-support
-    private EnzymePortalService service;
-    private EbeyeRestService ebeyeService;
-
-    private AnnotationConfigApplicationContext context = null;
-    private Environment env = null;
-
-    @Before
-    @Override
-    public void setUp() {
-
-        context = new AnnotationConfigApplicationContext();
-        context.getEnvironment().setActiveProfiles("uzpdev");
-        context.register(DataConfig.class, EbeyeRestService.class);
-        context.scan("uk.ac.ebi.ep.data.dataconfig");
-        context.refresh();
-
-        service = context.getBean(EnzymePortalService.class);
-        ebeyeService = context.getBean(EbeyeRestService.class);
-        env = context.getEnvironment();
-
-    }
-
-    @Override
-    @After
-    public void tearDown() throws Exception {
-        context.close();
-    }
 
     /**
      * Test of getBioportalAdapter method, of class EnzymeRetriever.
