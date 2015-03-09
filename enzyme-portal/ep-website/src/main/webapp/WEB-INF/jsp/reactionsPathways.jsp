@@ -13,7 +13,6 @@
 
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/Biojs.js"></script>
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/Biojs.Rheaction.js"></script>
-<script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.min.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/jquery-1.6.4.js"></script>
 
@@ -166,41 +165,8 @@
                                     </a>
                                 </div>
                             </c:if>
-                            <c:if test="${not empty hItem}">
-                                <div class="pcviz inlineLinks">
-                                    <a target="blank" href="http://www.pathwaycommons.org/pcviz/#neighborhood/${hItem}" data-uid="${hItem}">
-                                        <spring:message code="label.entry.reactionsPathways.link.pcviz"/>
-                                    </a>
-                                </div>
-                            </c:if>
+
                         </div>
-
-                    <!-- PCViz Widget template and script code start -->
-                        <div id="pcviz-widget" class="block reaction">
-                            <a href="#close" id="close-pcviz">Close</a>
-                            <h3>Pathway context</h3>
-
-                            <table class="grid">
-                                <tr class="subsection">
-                                    <th>Pathway View</th>
-                                    <th>Description</th>
-                                </tr>
-                                <tr>
-                                    <td width="70%" id="pcviz-widget-container">
-                                    </td>
-                                    <td width="30%">
-                                        <div id="pcviz-description">
-                                            <center>
-                                                Loading pathway information from <a href="http://www.pathwaycommons.org/pc2/" target="_blank">Pathway Commons 2</a>...
-                                            </center>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.custom.js"></script>
-                        </div>
-                    <!-- PCViz Widget template code end -->
 
                     <!--                            <script>
                                                                                     
@@ -216,14 +182,44 @@
  }; 
                             </script>             -->
                             
-                 </c:forEach> 
+                 </c:forEach>
  </div>
             </c:if>
  
             </c:forEach>
+                <c:if test="${not empty enzymeModel.accession}">
+                    </div>
+                    <!-- PCViz Widget template and script code start -->
+                    <div id="pcviz-widget" class="block reaction" data-uid="${enzymeModel.accession}">
+                        <a href="#close" id="close-pcviz">Close</a>
+                        <h3>Pathway context</h3>
+
+                        <table class="grid">
+                            <tr class="subsection">
+                                <th>Pathway View</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td width="70%" height="500px" id="pcviz-widget-container">
+                                </td>
+                                <td width="30%">
+                                    <div id="pcviz-description">
+                                        <center>
+                                            Loading pathway information from <a href="http://www.pathwaycommons.org/pc2/" target="_blank">Pathway Commons 2</a>...
+                                        </center>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <!-- PCViz Widget template code end -->
+                    <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.js"></script>
+                    <script language="JavaScript" type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/biojs/biojspcviz.custom.js"></script>
+                </c:if>
 
                 <div style="margin-top: 10px"></div>
-                 
+
                     <c:set var="pathwaysSize" value="${fn:length(pathways)}"/>
                   <c:set var="rpVs.index" value="${fn:length(reactionpathways)}"/>
                     <c:if test="${pathwaysSize>0}" >
@@ -270,6 +266,3 @@
         </c:otherwise>
     </c:choose> 
 
-
-
-</div>
