@@ -28,7 +28,7 @@ $(document).ready(function() {
                 if(msg.numberOfNodes<=1) {
                     var myContent = "No interactions found<br><br>" +
                         "Information provided by <a href='http://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
-                    $('#pcviz-widget-container').hide();
+                    $('#pcviz-widget').hide();
                 }
 
                 pcvizDescEl.html( myContent );
@@ -75,11 +75,5 @@ $(document).ready(function() {
         // Visualize the neighborhood of uid in a div using this new instance
         pcviz.neighborhood();
 
-    });
-
-    // This is to handle close event by the user
-    $("#close-pcviz").click(function(e) {
-        e.preventDefault();
-        $("#pcviz-widget").slideUp();
     });
 

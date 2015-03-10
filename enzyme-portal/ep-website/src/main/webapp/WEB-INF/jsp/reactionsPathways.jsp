@@ -191,7 +191,6 @@
                     </div>
                     <!-- PCViz Widget template and script code start -->
                     <div id="pcviz-widget" class="block reaction" data-uid="${enzymeModel.accession}">
-                        <a href="#close" id="close-pcviz">Close</a>
                         <h3>Pathway context</h3>
 
                         <table class="grid">
