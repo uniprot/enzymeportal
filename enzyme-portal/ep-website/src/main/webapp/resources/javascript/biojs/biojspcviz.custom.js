@@ -4,26 +4,19 @@
 
 */
 $(document).ready(function() {
-    $(".pcviz a").click(function(e) {
-        // Let's not load the link and capture the event for custom view
-        e.preventDefault();
-
         // This is going to be our UniProt ID
-        var uid = $(this).attr("data-uid");
-        var orgUrl = $(this).attr("href");
+        var uid = $('#pcviz-widget').attr("data-uid");
+        var orgUrl = 'http://www.pathwaycommons.org/pcviz/#neighborhood/'+ uid;
 
         // This requires BioJS-PCViz library
         var biojspcviz = require('biojs-pcviz');
 
-        // Create an instance of PCViz
-        var pcviz = new biojspcviz();
-
         // This is the HTML element that we are going to fill out based on click events
         var pcvizDescEl =  $("#pcviz-description");
 
-        // Visualize the neighborhood of uid in a div using this new instance
-        pcviz.neighborhood({
-            el: '#pcviz-widget-container',
+        // Create an instance of PCViz
+        var pcviz = new biojspcviz({
+            el: $('#pcviz-widget-container'),
             query: uid,
             onLoad: function(msg) {
                 // Show overall stats
@@ -32,6 +25,12 @@ $(document).ready(function() {
                     " Click on any of the genes or interactions to see more information. <br><br>" +
                     "Information provided by <a href='http://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
 
+                if(msg.numberOfNodes<=1) {
+                    var myContent = "No interactions found<br><br>" +
+                        "Information provided by <a href='http://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
+                    $('#pcviz-widget').hide();
+                }
+
                 pcvizDescEl.html( myContent );
                 return this;
             },
@@ -39,7 +38,7 @@ $(document).ready(function() {
             onNodeClick: function(msg)  {
                 var annotation = msg.annotation;
                 var uniprotId = msg.uniprot ? msg.uniprot : annotation.geneUniprotMapping;
-                var summary = msg.uniprotdesc == null ? annotation.geneSummary : info.uniprotdesc;
+                var summary = msg.uniprotdesc == null ? annotation.geneSummary : annotation.uniprotdesc;
                 var myContent =  "<table class='grid'>" +
                     "<tr><th>Gene</th><td>" + msg.id + "</td></tr>" +
                     "<tr><th>Aliases</th><td>" + annotation.geneAliases.replace(/:/g, ", ") + "</td></tr>" +
@@ -73,16 +72,8 @@ $(document).ready(function() {
             }
         });
 
+        // Visualize the neighborhood of uid in a div using this new instance
+        pcviz.neighborhood();
+
     });
-
-    // This is to handle close event by the user
-    $("#close-pcviz").click(function(e) {
-        e.preventDefault();
-        $("#pcviz-widget").slideUp();
-    });
-
-    // Hide the widget by default
-    $("#pcviz-widget").hide();
-});
-
 
