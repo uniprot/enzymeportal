@@ -62,13 +62,14 @@ comparePath = ${comparePath}
     </c:when>
     <c:when test="${topComparison.key eq 'Reactions and pathways'
         and not empty item}">
-        <div>
+
+        <div style="margin-left: 2em">
+            <c:if test="${not empty item.reaction.id}">
+                        <div>
             <span class="comparison subheader">Reaction:</span>
             <br/>
             ${item.reaction.name}
         </div>
-        <div style="margin-left: 2em">
-            <c:if test="${not empty item.reaction.id}">
                 <div>
                 <span class="comparison subheader">Rhea identifier:</span>
                     <a href="${rheaConfig.reactionBaseUrl}${item.reaction.id}"

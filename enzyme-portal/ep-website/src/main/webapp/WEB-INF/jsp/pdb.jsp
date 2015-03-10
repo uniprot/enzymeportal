@@ -43,7 +43,7 @@
         
         
           <dl>
-            <dt>Experiment</dt>
+            <dt>Experimental Method</dt>
             <dd>
                 <ul>
                    <li class="note_${vs.index}">Resolution    : ${proteinStructure.resolution}&#194;</li> 
@@ -70,7 +70,7 @@
         </dl>              
                    
              <dl>
-            <dt>Entry Author(s)</dt>
+            <dt>Entry Authors</dt>
             <dd>
               <div class="note_${vs.index}">
                     <c:forEach var="author" items="${proteinStructure.entryAuthors}">
@@ -94,39 +94,63 @@
             </dd>
         </dl> 
                
-               
-               <c:forEach var="entity" varStatus="vsSum" items="${proteinStructure.pdbEntities}">
+               <c:if test="${not empty proteinStructure.polypeptides}">
+        
                   
             <dl>
-                <dt>${entity.label}</dt>
+                <dt>Polypeptide chain</dt>
                 <dd>
+                    <c:forEach var="peptides" varStatus="vsSum" items="${proteinStructure.polypeptides}">
                     <ul>
-                        <c:forEach var="mol" items="${entity.molecules}" varStatus="vsSumNote">
+                      
+                            <li class="note_${vsSumNote.index}">${peptides.moleculeName}</li>
+                                          
+                       
+                         <c:if test="${not empty peptides.residues}">
+                             
+                        <c:forEach var="residue" items="${peptides.residues}">
+                        <li class="note_${vsSumNote.index}"> Residues: ${residue}</li>
+                        </c:forEach>
+                                 
+                        </c:if>               
+                                  
+                         <c:if test="${not empty peptides.organism}">
+                         <li>Organism: ${peptides.organism}</li> 
+                        </c:if>
+                           <p></p>  
+                    </ul>
+                      </c:forEach> 
+                </dd>
+            </dl>
+            
+                          
+               </c:if>
+
+               
+               <c:if test="${not empty proteinStructure.smallMoleculeLigands}">
+             
+                  
+            <dl>
+                <dt>Small molecule ligands</dt>
+                 <p></p>
+              </dl>
+                      <c:forEach var="ligand" varStatus="vsSum" items="${proteinStructure.smallMoleculeLigands}">
+                    <ul style="list-style-type: square">
+                        <c:forEach var="mol" items="${ligand.molecules}" varStatus="vsSumNote">
                             <li class="note_${vsSumNote.index}">${mol.moleculeName}</li>
                               <c:if test="${not empty mol.chemCompIds && fn:length(mol.chemCompIds) > 0}">
                                   <c:forEach var="chemCompIds" items="${mol.chemCompIds}">
-                                  <li class="note_${vsSumNote.index}">Ligands: ${chemCompIds}</li>
+                                  <span class="note_${vsSumNote.index}">Short name : ${chemCompIds}</span>
                                   </c:forEach>
+                                  <p></p>
                             </c:if>
-                              <c:if test="${not empty mol.length}">
-                              <li class="note_${vsSumNote.index}">Residues: ${mol.length}</li>    
-                             </c:if>
-  
-                              
-                               
-                        </c:forEach>
-                        <c:if test="${entity.protein eq true}">
-                              <li>Type: Protein</li>    
-                         </c:if>    
-                         <c:if test="${not empty entity.organism}">
-                         <li>Organism: ${entity.organism}</li> 
-                        </c:if>
-                             
+
+                        </c:forEach>                             
                     </ul>
-                </dd>
-            </dl>
-        </c:forEach>       
-               
+                     </c:forEach> 
+
+             
+               </c:if> 
            
                
                <c:if test="${not empty proteinStructure.structuralDomain}">
