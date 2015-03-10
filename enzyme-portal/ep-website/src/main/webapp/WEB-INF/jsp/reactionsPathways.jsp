@@ -44,7 +44,7 @@
                 <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
                 <c:set var="pathwaysSize" value="${fn:length(pathwayLinks)}"/>
 
-                
+
                     <c:if test="${reactions == null}">
                         <b><spring:message code="label.entry.reactionsPathways.found.text.alt" arguments="${pathwaysSize}"/></b>
                     </c:if>
@@ -166,9 +166,10 @@
                                     </a>
                                 </div>
                             </c:if>
-                            <c:if test="${not empty hItem}">
+                            <c:if test="${not empty enzymeModel.accession}">
+                                <c:set var="accession" value="${enzymeModel.accession}"/> 
                                 <div class="pcviz inlineLinks">
-                                    <a target="blank" href="http://www.pathwaycommons.org/pcviz/#neighborhood/${hItem}" data-uid="${hItem}">
+                                    <a target="blank" href="http://www.pathwaycommons.org/pcviz/#neighborhood/${accession}" data-uid="${accession}">
                                         <spring:message code="label.entry.reactionsPathways.link.pcviz"/>
                                     </a>
                                 </div>
@@ -202,20 +203,7 @@
                         </div>
                     <!-- PCViz Widget template code end -->
 
-                    <!--                            <script>
-                                                                                    
-  window.onload = function() {
- var instance = new Biojs.Rheaction({
-  target: 'bjs${reaction.id}',
-  id:'${reaction.id}',
-  proxyUrl:'${pageContext.request.contextPath}/proxy.jsp'
-    
- });
- //instance.setId("${reaction.id}");
-  //console.log(${reaction.id});
- }; 
-                            </script>             -->
-                            
+                             
                  </c:forEach> 
  </div>
             </c:if>
@@ -223,7 +211,7 @@
             </c:forEach>
 
                 <div style="margin-top: 10px"></div>
-                 
+
                     <c:set var="pathwaysSize" value="${fn:length(pathways)}"/>
                   <c:set var="rpVs.index" value="${fn:length(reactionpathways)}"/>
                     <c:if test="${pathwaysSize>0}" >
