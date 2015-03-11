@@ -5,8 +5,11 @@
  */
 package uk.ac.ebi.ep.data.repositories;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 
 /**
@@ -16,4 +19,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePortalPathways, Long>, QueryDslPredicateExecutor<EnzymePortalPathways>, EnzymePortalPathwaysRepositoryCustom {
 
     EnzymePortalPathways findByPathwayId(Long pathwayId);
+           @Query(value = "SELECT * FROM ENZYME_PORTAL_PATHWAYS  WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+     List<EnzymePortalPathways> findPathwaysByAccession(@Param("UNIPROT_ACCESSION") String accession);
 }

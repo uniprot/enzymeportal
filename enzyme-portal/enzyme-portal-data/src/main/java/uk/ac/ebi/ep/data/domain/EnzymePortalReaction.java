@@ -62,7 +62,7 @@ public class EnzymePortalReaction   implements Serializable {
     @Column(name = "URL")
     private String url;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
     
     @ManyToMany(mappedBy = "enzymePortalReactionSet")

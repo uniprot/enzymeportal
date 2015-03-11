@@ -82,11 +82,12 @@ import uk.ac.ebi.ep.data.search.model.Species;
 })
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
-     private static final long serialVersionUID = 1L;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
-    private  Set<EnzymePortalNames> enzymePortalNamesSet;
-    @OneToMany(mappedBy = "accession",fetch = FetchType.LAZY)
-    private  Set<EnzymeXmlStore> enzymeXmlStoreSet;
+
+    private static final long serialVersionUID = 1L;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    private Set<EnzymePortalNames> enzymePortalNamesSet;
+    @OneToMany(mappedBy = "accession", fetch = FetchType.LAZY)
+    private Set<EnzymeXmlStore> enzymeXmlStoreSet;
 
     @Column(name = "ENTRY_TYPE")
     private Short entryType;
@@ -109,7 +110,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Column(name = "SYNONYM_NAMES")
     private String synonymNames;
 
-   
     @Basic(optional = false)
     @Column(name = "DBENTRY_ID")
     private long dbentryId;
@@ -304,13 +304,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return true;
     }
 
-
-
-
-
-    
-    
-
 //
 //    @Override
 //    public String toString() {
@@ -437,7 +430,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         if (namesColumn != null) {
             final int sepIndex = namesColumn.indexOf(" (");
 
-          
             if (sepIndex == -1) {
                 // no synonyms, just recommended name:
 
@@ -473,13 +465,20 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Override
     public List<Compound> getCompounds() {
 
-        return this.getEnzymePortalCompoundSet().stream().collect(Collectors.toList());
+        if (this.getEnzymePortalCompoundSet() != null) {
+            return this.getEnzymePortalCompoundSet().stream().collect(Collectors.toList());
+        }
+
+        return new ArrayList<>();
     }
 
     @Override
     public List<Disease> getDiseases() {
+        if (this.getEnzymePortalDiseaseSet() != null) {
 
-        return this.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+            return this.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 
     public List<EnzymeAccession> getRelatedspecies() {

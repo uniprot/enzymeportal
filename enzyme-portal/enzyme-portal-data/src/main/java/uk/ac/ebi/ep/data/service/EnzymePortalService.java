@@ -186,7 +186,19 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<Pathway> findPathwaysByAccession(String accession) {
 
-        return pathwaysRepository.findPathwaysByAccession(accession);
+        List<EnzymePortalPathways> enzymePortalPathways = pathwaysRepository.findPathwaysByAccession(accession);
+        if (enzymePortalPathways != null) {
+            List<Pathway> pathways = new ArrayList<>();
+
+            enzymePortalPathways.stream().map(ep -> new Pathway(ep.getPathwayId(), ep.getPathwayName())).forEach(pathway -> {
+                pathways.add(pathway);
+            });
+
+            return pathways;
+
+        }
+
+        return new ArrayList<>();
     }
 
     @Transactional(readOnly = true)
@@ -259,7 +271,17 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<EnzymeReaction> findReactionsByAccession(String accession) {
 
-        return reactionRepository.findReactionsByAccession(accession);
+        //return reactionRepository.findReactionsByAccession(accession);
+        List<EnzymePortalReaction> enzreactions = reactionRepository.findReactionsByAccession(accession);
+        List<EnzymeReaction> reactions = new ArrayList<>();
+        if (enzreactions != null) {
+            enzreactions.stream().map(r -> new EnzymeReaction(r.getReactionId(), r.getReactionName())).forEach(er -> {
+                reactions.add(er);
+            });
+
+            return reactions;
+        }
+        return new ArrayList<>();
     }
 
     @Transactional(readOnly = true)

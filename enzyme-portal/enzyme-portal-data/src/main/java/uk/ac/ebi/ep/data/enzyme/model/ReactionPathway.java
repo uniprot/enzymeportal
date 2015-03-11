@@ -92,10 +92,11 @@ public class ReactionPathway
      * {@link Pathway }
      * 
      * 
+     * @return pathways
      */
     public List<Pathway> getPathways() {
         if (pathways == null) {
-            pathways = new ArrayList<Pathway>();
+            pathways = new ArrayList<>();
         }
         return this.pathways;
     }
@@ -264,10 +265,15 @@ public class ReactionPathway
             return false;
         }
         final ReactionPathway other = (ReactionPathway) obj;
-        if (!Objects.equals(this.reaction.id, other.reaction.id)) {
+        if (!Objects.equals(this.reaction, other.reaction)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ReactionPathway{" + "reaction=" + reaction + ", pathways=" + pathways + ", reactions=" + reactions + '}';
     }
 
    

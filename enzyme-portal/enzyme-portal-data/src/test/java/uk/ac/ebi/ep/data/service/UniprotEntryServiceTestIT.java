@@ -20,7 +20,7 @@ public class UniprotEntryServiceTestIT extends AbstractDataTest {
 
     @Autowired
     protected UniprotEntryService uniprotEntryService;
-    private static final String accession = "Q64441";
+    private static final String ACCESSION = "Q64441";
 
     @Override
     protected void tearDown() throws Exception {
@@ -36,7 +36,7 @@ public class UniprotEntryServiceTestIT extends AbstractDataTest {
 
         String geneName = "CP24A_MOUSE";
         String scientificName = "Mus musculus";
-        Optional<UniprotEntry> result = uniprotEntryService.findByAccession(accession);
+        Optional<UniprotEntry> result = uniprotEntryService.findByAccession(ACCESSION);
 
         assertEquals(geneName, result.get().getName());
         assertTrue(result.get().getScientificName().equalsIgnoreCase(scientificName));
@@ -52,7 +52,7 @@ public class UniprotEntryServiceTestIT extends AbstractDataTest {
 
         String commonName = "Mouse";
         String proteinName = "MOCK-1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial";
-        UniprotEntry result = uniprotEntryService.findByUniProtAccession(accession);
+        UniprotEntry result = uniprotEntryService.findByUniProtAccession(ACCESSION);
 
         assertEquals(commonName, result.getCommonName());
         assertEquals(proteinName, result.getProteinName());

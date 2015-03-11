@@ -28,7 +28,7 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
     private static final QEnzymePortalPathways $ = QEnzymePortalPathways.enzymePortalPathways;
 
      @Transactional(readOnly = true)
-    @Override
+   // @Override
     public List<Pathway> findPathwaysByAccession(String accession) {
 
         JPAQuery query = new JPAQuery(entityManager);

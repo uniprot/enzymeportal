@@ -17,7 +17,7 @@ import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 @NoRepositoryBean
 public interface EnzymePortalPathwaysRepositoryCustom {
     
-    List<Pathway> findPathwaysByAccession(String accession);
+//    List<Pathway> findPathwaysByAccession(String accession);
      List<String> findAccessionsByPathwayId(String pathwayId);
     List<Pathway> findPathwaysByName(String pathwayName);
 }
