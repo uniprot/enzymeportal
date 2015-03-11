@@ -1,4 +1,5 @@
-ep.default.search.url=http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal
+ep.default.search.url=http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal
+ep.default.dev.search.url=http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal
 
 
 

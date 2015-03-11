@@ -112,7 +112,13 @@ public class EbeyeRestService {
             if (paginate) {
 
                 int hitcount = searchResult.getHitCount();
-                int resultLimit =0;
+
+                 //for now limit hitcount to 5k
+                if (hitcount > 5000) {
+                    hitcount = 5000;
+                }
+
+                int resultLimit = 0;
 
                 if (limit < 0) {
                     resultLimit = 100;
@@ -125,7 +131,6 @@ public class EbeyeRestService {
 
                 int numIteration = hitcount / 100;
 
-                
                 List<String> accessionList = query(query, numIteration);
                 LOGGER.warn("Number of Accessions to be processed (Pagination = true)  :  " + accessionList.size());
                 return accessionList;
@@ -139,7 +144,7 @@ public class EbeyeRestService {
     }
 
     private EbeyeSearchResult queryEbeye(String query) throws InterruptedException, ExecutionException {
-        
+
         List<String> ebeyeDomains = new ArrayList<>();
         ebeyeDomains.add(ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=");
 
@@ -150,7 +155,7 @@ public class EbeyeRestService {
             EbeyeSearchResult searchResult = null;
             try {
                 searchResult = getEbeyeSearchResult(url.trim());
-                
+
             } catch (InterruptedException | NullPointerException | ExecutionException ex) {
                 LOGGER.error(ex.getMessage(), ex);
             }
@@ -159,7 +164,6 @@ public class EbeyeRestService {
 
         }).findAny();
 
- 
         return result.get();
     }
 
@@ -171,7 +175,7 @@ public class EbeyeRestService {
             String link = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * 100 + "&fields=name&query=";
             ebeyeDomains.add(link);
         }
-        
+
         Set<String> accessions = new LinkedHashSet<>();
         // get element as soon as it is available
         List<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
