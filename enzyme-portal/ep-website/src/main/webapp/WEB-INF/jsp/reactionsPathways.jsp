@@ -187,8 +187,9 @@
             </c:if>
  
             </c:forEach>
+                         </div>
                 <c:if test="${not empty enzymeModel.accession}">
-                    </div>
+                
                     <!-- PCViz Widget template and script code start -->
                     <div id="pcviz-widget" class="block reaction" data-uid="${enzymeModel.accession}">
                         <h3>Pathway context</h3>
@@ -264,4 +265,3 @@
             </div>
         </c:otherwise>
     </c:choose> 
-

@@ -66,11 +66,13 @@
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.sequence"/>
     </li>
+    <%-- 
     <li id="search-tab-compound"
         class="searchTab ${isCompound? 'selected' : ''}"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.compound"/>
     </li>
+    --%>
 </ul>
 
 
@@ -94,7 +96,7 @@
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=3a40+cytochrome+p450">Cytochrome P450 3A4</a>,
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,
                 <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,
-                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=REACT_218811">REACT_218811</a>
+                <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=rapamycin">Rapamycin</a>
              <hr/>
              <br/>
              <section>
@@ -201,11 +203,11 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
             <script>
             var epcssStore = new Array();
             for (i = 0, j = 0; i < sessionStorage.length; i++){
-                if (sessionStorage.key(i).indexOf(EPCSS_PREFIX) == 0){
+                if (sessionStorage.key(i).indexOf(EPCSS_PREFIX) === 0){
                     epcssStore[j++] = sessionStorage.key(i);
                 }
             }
-            if (epcssStore.length == 0){
+            if (epcssStore.length === 0){
             	// Add mininum parameters for initial search:
             	$('<input>').attr('type', 'hidden')
                     .attr('name', 'printerFriendlyView')
@@ -234,8 +236,8 @@ WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
                     $('#chebiStructureSearch').append(input);
         		}
             }
-            if ('${param.results}' == 'true' ||
-            		sessionStorage.getItem(EPCSS_PREFIX+'results') == 'true'){
+            if ('${param.results}' === 'true' ||
+            		sessionStorage.getItem(EPCSS_PREFIX+'results') === 'true'){
                 document.forms['chebiStructureSearch'].action =
                         "${chebiConfig.ssResultsUrl}";
             }

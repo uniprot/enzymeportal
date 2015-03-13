@@ -101,6 +101,7 @@ public class BasketController extends AbstractController {
     @RequestMapping(value = "/basket")
     protected String getBasket(Model model) {
         model.addAttribute("searchModel", newEmptySearchModel());
+         model.addAttribute("searchConfig", searchConfig);
         return Attribute.basket.name();
     }
 

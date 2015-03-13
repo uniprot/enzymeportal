@@ -446,6 +446,7 @@ public class SearchController extends AbstractController {
      * text from the user.
      * @return A normalised string.
      */
+    @Override
     protected String getSearchKey(SearchParams searchParams) {
         
         String key = null;
@@ -500,6 +501,7 @@ public class SearchController extends AbstractController {
             searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
+             model.addAttribute("searchConfig", searchConfig);
         } catch (EnzymeFinderException e) {
             LOGGER.error("Unable to get enzymes by compound", e);
         }
@@ -526,6 +528,7 @@ public class SearchController extends AbstractController {
     @RequestMapping(value = "/advanceSearch",
             method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {
+         model.addAttribute("chebiConfig", chebiConfig);
         return "advanceSearch";
     }
     
