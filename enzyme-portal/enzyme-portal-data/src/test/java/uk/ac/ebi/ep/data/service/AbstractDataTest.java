@@ -31,6 +31,10 @@ protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Abstrac
 
     @Autowired
     protected DiseaseService diseaseService;
+    
+    
+    @Autowired
+    protected UniprotEntryService uniprotEntryService;
 
     @Autowired
     protected DataSource dataSource;

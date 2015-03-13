@@ -136,8 +136,8 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     public List<Disease> findDiseasesNameLike(String name) {
 
         JPAQuery query = new JPAQuery(entityManager);
-       
-        List<Disease> result = query.from($).where($.diseaseName.like(name))
+        String diseaseName = String.format("%%%s%%", name);
+        List<Disease> result = query.from($).where($.diseaseName.like(diseaseName))
                 .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName)).stream().distinct().collect(Collectors.toList());
 
         return result;

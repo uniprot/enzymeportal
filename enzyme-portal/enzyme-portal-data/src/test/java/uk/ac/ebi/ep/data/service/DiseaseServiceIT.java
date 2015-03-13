@@ -5,13 +5,10 @@
  */
 package uk.ac.ebi.ep.data.service;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.search.model.Disease;
@@ -20,53 +17,12 @@ import uk.ac.ebi.ep.data.search.model.Disease;
  *
  * @author joseph
  */
-@Ignore
-public class DiseaseServiceIT {
-    
+public class DiseaseServiceIT extends AbstractDataTest {
 
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
     @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of addDisease method, of class DiseaseService.
-     */
-    @Test
-    public void testAddDisease_EnzymePortalDisease() {
-        System.out.println("addDisease");
-        EnzymePortalDisease d = null;
-        DiseaseService instance = new DiseaseService();
-        EnzymePortalDisease expResult = null;
-        EnzymePortalDisease result = instance.addDisease(d);
-        assertEquals(expResult, result);
-
-    }
-
-    /**
-     * Test of addDisease method, of class DiseaseService.
-     */
-    @Test
-    public void testAddDisease_List() {
-        System.out.println("addDisease");
-        List<EnzymePortalDisease> d = null;
-        DiseaseService instance = new DiseaseService();
-        List<EnzymePortalDisease> expResult = null;
-        List<EnzymePortalDisease> result = instance.addDisease(d);
-        assertEquals(expResult, result);
-    
+    @Override
+    public void tearDown() throws SQLException {
+        dataSource.getConnection().close();
     }
 
     /**
@@ -74,13 +30,13 @@ public class DiseaseServiceIT {
      */
     @Test
     public void testFindById() {
-        System.out.println("findById");
-        Long id = null;
-        DiseaseService instance = new DiseaseService();
-        EnzymePortalDisease expResult = null;
-        EnzymePortalDisease result = instance.findById(id);
-        assertEquals(expResult, result);
-   
+        LOGGER.info("findById");
+        Long id = 872L;
+
+        String expResult = "x-linked combined immunodeficiency diseases";
+        EnzymePortalDisease result = diseaseService.findById(id);
+        assertEquals(expResult, result.getDiseaseName());
+
     }
 
     /**
@@ -88,12 +44,12 @@ public class DiseaseServiceIT {
      */
     @Test
     public void testFindDiseases() {
-        System.out.println("findDiseases");
-        DiseaseService instance = new DiseaseService();
-        List<EnzymePortalDisease> expResult = null;
-        List<EnzymePortalDisease> result = instance.findDiseases();
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findDiseases");
+
+        int expResult = 3;
+        List<EnzymePortalDisease> result = diseaseService.findDiseases();
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -101,13 +57,16 @@ public class DiseaseServiceIT {
      */
     @Test
     public void testFindDiseasesByNamePrefix() {
-        System.out.println("findDiseasesByNamePrefix");
-        List<String> name_prefixes = null;
-        DiseaseService instance = new DiseaseService();
-        List<EnzymePortalDisease> expResult = null;
-        List<EnzymePortalDisease> result = instance.findDiseasesByNamePrefix(name_prefixes);
-        assertEquals(expResult, result);
-   
+        LOGGER.info("findDiseasesByNamePrefix");
+        List<String> name_prefixes = new ArrayList<>();
+        name_prefixes.add("CP7B1");
+        name_prefixes.add("CP8B1");
+        name_prefixes.add("MBTP2");
+
+        int expResult = 2;
+        List<EnzymePortalDisease> result = diseaseService.findDiseasesByNamePrefix(name_prefixes);
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -115,13 +74,17 @@ public class DiseaseServiceIT {
      */
     @Test
     public void testFindDiseasesByAccessions() {
-        System.out.println("findDiseasesByAccessions");
-        List<String> accessions = null;
-        DiseaseService instance = new DiseaseService();
-        List<EnzymePortalDisease> expResult = null;
-        List<EnzymePortalDisease> result = instance.findDiseasesByAccessions(accessions);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findDiseasesByAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q07973");
+        accessions.add("O75881");
+        accessions.add("PKK123_deleted");
+        accessions.add("FakeAccession");
+
+        int expResult = 2;
+        List<EnzymePortalDisease> result = diseaseService.findDiseasesByAccessions(accessions);
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -129,12 +92,12 @@ public class DiseaseServiceIT {
      */
     @Test
     public void testFindDiseasesByAccession() {
-        System.out.println("findDiseasesByAccession");
-        String accession = "";
-        DiseaseService instance = new DiseaseService();
-        List<Disease> expResult = null;
-        List<Disease> result = instance.findDiseasesByAccession(accession);
-        assertEquals(expResult, result);
+        LOGGER.info("findDiseasesByAccession");
+        String accession = "O75881";
+
+        String expResult = "spastic paraplegia hereditary";
+        List<Disease> result = diseaseService.findDiseasesByAccession(accession);
+        assertEquals(expResult, result.stream().findAny().get().getName());
 
     }
 
@@ -143,13 +106,12 @@ public class DiseaseServiceIT {
      */
     @Test
     public void testFindDiseasesLike() {
-        System.out.println("findDiseasesLike");
-        String diseaseName = "";
-        DiseaseService instance = new DiseaseService();
-        List<Disease> expResult = null;
-        List<Disease> result = instance.findDiseasesLike(diseaseName);
-        assertEquals(expResult, result);
+        LOGGER.info("findDiseasesLike");
+        String diseaseName = "paraplegia";
+        String expResult = "spastic paraplegia hereditary";
+        List<Disease> result = diseaseService.findDiseasesLike(diseaseName);
+        assertEquals(expResult, result.stream().findAny().get().getName());
 
     }
-    
+
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 
 /**
@@ -18,8 +17,6 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 public class UniprotEntryServiceTestIT extends AbstractDataTest {
 
-    @Autowired
-    protected UniprotEntryService uniprotEntryService;
     private static final String ACCESSION = "Q64441";
 
     @Override
