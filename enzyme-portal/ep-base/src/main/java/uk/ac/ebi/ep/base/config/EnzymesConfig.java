@@ -9,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 
 /**
@@ -34,15 +40,38 @@ public class EnzymesConfig {
         return chebiConfig;
     }
 
-//    @Bean
-//    public LiteratureConfig literatureConfig() {
-//        LiteratureConfig lc = new LiteratureConfig();
-//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-//        return lc;
-//    }
+    @Bean
+    public LiteratureConfig literatureConfig() {
+        LiteratureConfig lc = new LiteratureConfig();
+        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
+        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
+        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
+        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
+        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
+        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
+        return lc;
+    }
+    
+    @Bean
+    public EbeyeRestService ebeyeRestService() {
+        return new EbeyeRestService();
+    }
+
+
+
+    @Bean
+    public AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate(clientHttpRequestFactory());
+    }
+
+    private ClientHttpRequestFactory clientHttpRequestFactory() {
+        return new HttpComponentsClientHttpRequestFactory();
+        
+    }
+
 }

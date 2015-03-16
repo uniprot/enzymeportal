@@ -81,6 +81,7 @@ public class EnzymeFinder {
     Set<Compound> uniquecompounds = new HashSet<>();
     Set<Disease> uniqueDiseases = new HashSet<>();
     private NcbiBlastClient blastClient;
+    private static final int LIMIT = 5000;
 
     public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
         this.service = service;
@@ -162,11 +163,11 @@ public class EnzymeFinder {
         if (!StringUtils.isEmpty(query)) {
             query = query.trim();
         }
-        //List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true,3000);
+        List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true,LIMIT);
         // List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true);
-        List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query);
+        //List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query);
           LOGGER.warn("Number of Processed Accession for  "+query +" :=:" +  accessions.size());
-        //System.out.println("num accession found "+ accessions.size());
+       //FIXEME
         if(accessions.size() > 1000){
             accessions = accessions.subList(0, 1000);
           
@@ -420,7 +421,7 @@ public class EnzymeFinder {
         List<UniprotEntry> enzymeList = new LinkedList<>();
 
         if (accessions.size() > 0) {
-            Pageable pageable = new PageRequest(0, 100, Sort.Direction.ASC, "function", "entryType");
+            Pageable pageable = new PageRequest(0, 500, Sort.Direction.ASC, "function", "entryType");
             //Pageable pageable = new PageRequest(0, 50,Sort.Direction.ASC,"function","lastUpdateTimestamp");
             Page<UniprotEntry> page = service.findEnzymesByAccessions(accessions, pageable);
 
