@@ -24,21 +24,21 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-"weight",
-"entity_id",
-"mutation_flag",
-"in_chains",
-"molecule_type",
-"in_struct_asyms",
-"molecule_name",
-"chem_comp_ids",
-"sample_preparation",
-"number_of_copies",
-"sequence",
-"source",
-"length",
-"synonym",
-"gene_name"
+    "weight",
+    "entity_id",
+    "mutation_flag",
+    "in_chains",
+    "molecule_type",
+    "in_struct_asyms",
+    "molecule_name",
+    "chem_comp_ids",
+    "sample_preparation",
+    "number_of_copies",
+    "sequence",
+    "source",
+    "length",
+    "synonym",
+    "gene_name"
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -76,6 +76,7 @@ public class Molecule {
     private List<String> geneName = new ArrayList<>();
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
+   
 
     /**
      *
@@ -155,7 +156,7 @@ public class Molecule {
      */
     @JsonProperty("molecule_name")
     public String getMoleculeName() {
-        return "Name: "+ moleculeName;
+        return "Name: " + moleculeName;
     }
 
     /**
@@ -359,9 +360,7 @@ public class Molecule {
 
     @Override
     public String toString() {
-        return "Molecule{" + "inStructAsyms=" + inStructAsyms + ", moleculeName=" + moleculeName + ", chemCompIds=" + chemCompIds + ", inChains=" + inChains + ", moleculeType=" + moleculeType + ", length=" + length + '}';
+        return "Molecule{" + "inStructAsyms=" + inStructAsyms + ", moleculeName=" + moleculeName + ", chemCompIds=" + chemCompIds + ", inChains=" + inChains + ", moleculeType=" + moleculeType + ", length=" + length + ", geneName=" + geneName + '}';
     }
-    
-    
-    
+
 }

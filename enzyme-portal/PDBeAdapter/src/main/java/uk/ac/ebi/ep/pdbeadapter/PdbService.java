@@ -27,72 +27,79 @@ import uk.ac.ebi.ep.pdbeadapter.summary.PdbSearchResult;
  * @author joseph
  */
 public class PdbService {
-
+    
     private final PDBeRestService pdbeRestService;
     private static final Logger LOGGER = Logger.getLogger(PdbService.class);
-
+    
     public PdbService(PDBeRestService pdbeRestService) {
         this.pdbeRestService = pdbeRestService;
     }
-
+    
     public PdbSearchResult getPdbSearchResults(String pdbId) {
-
+        
         return pdbeRestService.getPdbSummaryResults(pdbId);
-
+        
     }
 
+    /**
+     * build a concrete PDB information for summaries, experiments,
+     * molecules,publications and structural domain
+     *
+     * @param pdbId pdbe id
+     * @return a concrete PDB object with relevant information
+     */
     public PDB computeProteinStructure(String pdbId) {
-
+        
         PDB pdb = new PDB();
         pdb.setId(pdbId);
-
+        
         PdbSearchResult summary = pdbeRestService.getPdbSummaryResults(pdbId);
-
+        
         List<PDBe> pdbSummary = summary.get(pdbId);
         if (pdbSummary != null && !pdbSummary.isEmpty()) {
-
+            
             pdb = computeSummary(pdbSummary, pdb);
         }
 
         //molecules
         PDBmolecules molecules = pdbeRestService.getPDBmoleculeResults(pdbId);
-
+        
         if (molecules != null) {
             List<Molecule> mol = molecules.get(pdbId);
-
+            
             if (mol != null && !mol.isEmpty()) {
-                List<PdbEntity> entities = computeEntities(mol);
 
-                pdb.setPdbEntities(entities);
+                pdb.setPolypeptides(computePolypeptides(mol));
+                pdb.setSmallMoleculeLigands(computeSmallMoleculeLigands(mol));
             }
         }
 
         //experiements
         PDBexperiments experiments = pdbeRestService.getPDBexperimentResults(pdbId);
-
+        
         if (experiments != null) {
-
+            
             List<PDBexperiment> pdbExperiments = experiments.get(pdbId);
-
+            
             if (pdbExperiments != null) {
-
+                
                 pdb = computeExperiment(pdbExperiments, pdb);
             }
-
+            
         }
         //publications
         PDBePublications publications = pdbeRestService.getPDBpublicationResults(pdbId);
         if (publications != null) {
-
+            
             List<PDBePublication> publication = publications.get(pdbId);
             if (publication != null) {
-
+                
                 pdb = computePublications(publication, pdb);
-
+                
             }
-
+            
         }
-
+        
         String domains = pdbeRestService.getStructuralDomain(pdbId);
         pdb.setStructuralDomain(domains);
 
@@ -103,7 +110,7 @@ public class PdbService {
                 + "In collaboration with the other worldwide Protein Data Bank (wwPDB) partners we work to collate, "
                 + "maintain and provide access to the global repository of macromolecular structure data (PDB).";
         pdb.getProvenance().add(info);
-
+        
         return pdb;
     }
 
@@ -122,12 +129,12 @@ public class PdbService {
         return new SimpleDateFormat(outputFormat).format(new SimpleDateFormat(
                 inputFormat).parse(inputTimeStamp));
     }
-
+    
     private PDB computeSummary(List<PDBe> pdbSummary, final PDB pdb) {
-
+        
         final String inputFormat = "yyyyMMdd";
         final String outputFormat = "MMMM dd, yyyy";
-
+        
         pdbSummary.stream().map(eSummary -> {
             pdb.setTitle(eSummary.getTitle());
             return eSummary;
@@ -143,10 +150,10 @@ public class PdbService {
                 LOGGER.error("Error while parsing PDB Date", e);
             }
         });
-
+        
         return pdb;
     }
-
+    
     private PDB computeExperiment(List<PDBexperiment> pdbExperiments, final PDB pdb) {
         pdbExperiments.stream().map(experiment -> {
             pdb.setResolution(String.valueOf(experiment.getResolution()));
@@ -157,37 +164,52 @@ public class PdbService {
         }).forEach(experiment -> {
             pdb.setrFree(String.valueOf(experiment.getRFree()));
         });
-
+        
         return pdb;
     }
-
-    private List<PdbEntity> computeEntities(List<Molecule> mol) {
-        Deque<PdbEntity> entities = new LinkedList<>();
+    
+    private List<SmallMoleculeLigand> computeSmallMoleculeLigands(List<Molecule> mol) {
+        Deque<SmallMoleculeLigand> ligands = new LinkedList<>();
         for (Molecule m : mol) {
-
-            if ("polypeptide(L)".equalsIgnoreCase(m.getMoleculeType())) {
-                String organism = null;
-                for (Source s : m.getSource()) {
-                    organism = s.getOrganismScientificName();
-                }
-
-                PdbEntity entity = new PdbEntity();
-                entity.setLabel("Chain " + m.getInChains().stream().distinct().findFirst().get());
-                entity.getMolecules().add(m);
-                entity.setOrganism(organism);
-                entity.setProtein(true);
-                entities.push(entity);
-
-            } else if ("Bound".equalsIgnoreCase(m.getMoleculeType())) {
-                PdbEntity entity = new PdbEntity();
-                entity.setLabel("Heterogen " + m.getInStructAsyms().stream().findFirst().get());
-                entity.getMolecules().add(m);
-                entities.add(entity);
-
+            
+            if ("Bound".equalsIgnoreCase(m.getMoleculeType())) {
+                SmallMoleculeLigand ligand = new SmallMoleculeLigand();
+                ligand.setLabel("Small molecule ligands");
+                ligand.getMolecules().add(m);
+                ligands.add(ligand);
+                
             }
-
+            
         }
-        return entities.stream().collect(Collectors.toList());
+        return ligands.stream().collect(Collectors.toList());
+    }
+    
+    private List<Polypeptide> computePolypeptides(List<Molecule> mol) {
+        Deque<Polypeptide> polypeptides = new LinkedList<>();
+        for (Molecule m : mol) {
+            
+            if ("polypeptide(L)".equalsIgnoreCase(m.getMoleculeType())) {
+              
+                  Polypeptide polypeptide = new Polypeptide();
+                for (Source s : m.getSource()) {
+                                  polypeptide.setOrganism(s.getOrganismScientificName());
+                    polypeptide.setResidues(s.getMappings());
+                    
+                }
+              
+
+              
+                polypeptide.setLabel("Polypeptide chain");
+                polypeptide.setMoleculeName(m.getMoleculeName());
+              
+                polypeptide.setProtein(true);
+                polypeptides.push(polypeptide);
+                
+            }
+            
+        }
+        
+        return polypeptides.stream().collect(Collectors.toList());
     }
 
     private PDB computePublications(List<PDBePublication> publication, final PDB pdb) {
@@ -201,5 +223,5 @@ public class PdbService {
         pdb.setPrimaryCitationInfo(info);
         return pdb;
     }
-
+    
 }

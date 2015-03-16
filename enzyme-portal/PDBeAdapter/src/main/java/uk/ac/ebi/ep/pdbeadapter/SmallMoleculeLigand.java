@@ -8,11 +8,19 @@ import uk.ac.ebi.ep.pdbeadapter.molecule.Molecule;
  *
  * @author joseph
  */
-public abstract  class PdbEntity {
+public class SmallMoleculeLigand {
 
+    private String shortName;
     private String label;
     private List<Molecule> molecules;
 
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
 
     public String getLabel() {
         return label;
@@ -26,7 +34,6 @@ public abstract  class PdbEntity {
         if (molecules == null) {
             molecules = new ArrayList<>();
         }
-
         return molecules;
     }
 
@@ -36,8 +43,7 @@ public abstract  class PdbEntity {
 
     @Override
     public String toString() {
-        return "PdbEntity{" + "label=" + label + ", molecules=" + molecules + '}';
+        return "SmallMoleculeLigand{" + "shortName=" + shortName + ", label=" + label + ", molecules=" + molecules + '}';
     }
-
 
 }

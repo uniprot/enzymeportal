@@ -9,8 +9,12 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,9 +23,19 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+"mappings",
+"expression_host_scientific_name",
+"expression_host_tax_id",
+"organism_scientific_name",
+"tax_id"
+})
+
 public class Source {
     
-
+@JsonProperty("mappings")
+private  List<Mapping> mappings = new ArrayList<>();
 @JsonProperty("expression_host_scientific_name")
 private String expressionHostScientificName;
 @JsonProperty("expression_host_tax_id")
@@ -31,9 +45,28 @@ private String organismScientificName;
 @JsonProperty("tax_id")
 private Integer taxId;
 @JsonIgnore
-private Map<String, Object> additionalProperties = new HashMap<>();
+private final Map<String, Object> additionalProperties = new HashMap<>();
 
 
+/**
+* 
+* @return
+* The mappings
+*/
+@JsonProperty("mappings")
+public List<Mapping> getMappings() {
+return mappings;
+}
+
+/**
+* 
+* @param mappings
+* The mappings
+*/
+@JsonProperty("mappings")
+public void setMappings(List<Mapping> mappings) {
+this.mappings = mappings;
+}
 
 /**
 * 
@@ -124,5 +157,12 @@ return this.additionalProperties;
 public void setAdditionalProperty(String name, Object value) {
 this.additionalProperties.put(name, value);
 }
+
+    @Override
+    public String toString() {
+        return "Source{" + "mappings=" + mappings + ", organismScientificName=" + organismScientificName + '}';
+    }
+
+
 
 }

@@ -60,6 +60,11 @@ public class PDBeRestService {
 
     }
 
+    /**
+     * 
+     * @param pdbId pdbe id
+     * @return the summary results for the pdb id
+     */
     public PdbSearchResult getPdbSummaryResults(String pdbId) {
 
         String url = pDBeUrl.getSummaryUrl() + pdbId;
@@ -76,6 +81,11 @@ public class PDBeRestService {
 
     }
 
+    /**
+     * 
+     * @param pdbId pdbe id
+     * @return experiment results for the pdb id
+     */
     public PDBexperiments getPDBexperimentResults(String pdbId) {
 
         String url = pDBeUrl.getExperimentUrl() + pdbId;
@@ -90,6 +100,11 @@ public class PDBeRestService {
         return experiments;
     }
 
+    /**
+     * 
+     * @param pdbId pdbe id
+     * @return publication result for the pdbe id
+     */
     public PDBePublications getPDBpublicationResults(String pdbId) {
 
         String url = pDBeUrl.getPublicationsUrl() + pdbId;
@@ -104,6 +119,11 @@ public class PDBeRestService {
         return publications;
     }
 
+    /**
+     * 
+     * @param pdbId pdbe id
+     * @return molecules result for the pdbe id
+     */
     public PDBmolecules getPDBmoleculeResults(String pdbId) {
 
         String url = pDBeUrl.getMoleculesUrl() + pdbId;
@@ -117,6 +137,11 @@ public class PDBeRestService {
         return molecules;
     }
 
+    /**
+     * 
+     * @param pdbId pdbe id
+     * @return structural domain for the pdbe id
+     */
     public String getStructuralDomain(String pdbId) {
         try {
 
@@ -127,7 +152,7 @@ public class PDBeRestService {
 
             // create an ObjectMapper instance.
             ObjectMapper mapper = new ObjectMapper();
-            // use the ObjectMapper to read the json string and create a tree
+            // use the ObjectMapper to read the json string 
             JsonNode nodes = mapper.readTree(json);
 
             return nodes.findValue("homology").textValue();

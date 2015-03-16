@@ -32,7 +32,10 @@ public class PDB {
     private String rFactor;
     private String rFree;
     
-    private List<PdbEntity> pdbEntities;
+    
+    private List<Polypeptide> polypeptides;
+    private List<SmallMoleculeLigand> smallMoleculeLigands;
+    
     
     private String structuralDomain;
     
@@ -107,13 +110,6 @@ public class PDB {
     }
 
 
-    public List<PdbEntity> getPdbEntities() {
-        return pdbEntities;
-    }
-
-    public void setPdbEntities(List<PdbEntity> pdbEntities) {
-        this.pdbEntities = pdbEntities;
-    }
 
     public String getId() {
         return id;
@@ -166,6 +162,24 @@ public class PDB {
     public void setProvenance(List<String> provenance) {
         this.provenance = provenance;
     }
+
+    public List<Polypeptide> getPolypeptides() {
+        return polypeptides;
+    }
+
+    public void setPolypeptides(List<Polypeptide> polypeptides) {
+        this.polypeptides = polypeptides;
+    }
+
+    public List<SmallMoleculeLigand> getSmallMoleculeLigands() {
+        return smallMoleculeLigands;
+    }
+
+    public void setSmallMoleculeLigands(List<SmallMoleculeLigand> smallMoleculeLigands) {
+        this.smallMoleculeLigands = smallMoleculeLigands;
+    }
+
+
 
 
 
