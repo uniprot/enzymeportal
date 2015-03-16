@@ -60,10 +60,11 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
 
     @Transactional(readOnly = true)
     @Override
-    public List<Pathway> findPathwaysByName(String pathwayName) {
+    public List<Pathway> findPathwaysByName(String name) {
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<Pathway> entries = query.from($).where($.pathwayName.toLowerCase().like(pathwayName))
+          String pathwayName = String.format("%%%s%%", name);
+        List<Pathway> entries = query.from($).where($.pathwayName.like(pathwayName))
                 .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName));
 
         return entries.stream().distinct().collect(Collectors.toList());

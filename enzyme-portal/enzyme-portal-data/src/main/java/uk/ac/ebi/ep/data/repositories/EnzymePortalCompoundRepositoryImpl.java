@@ -41,7 +41,8 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
     public List<EnzymePortalCompound> findCompoundsByUniprotName(String uniprotName) {
 
         JPAQuery query = new JPAQuery(entityManager);
-        BooleanExpression isUniprotName = $.uniprotAccession.name.equalsIgnoreCase(uniprotName);
+         StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
+        BooleanExpression isUniprotName = idPrefix.equalsIgnoreCase(uniprotName);
 
         List<EnzymePortalCompound> compounds = query.from($).where(isUniprotName).distinct().list($);
 

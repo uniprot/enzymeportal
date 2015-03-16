@@ -8,7 +8,6 @@ package uk.ac.ebi.ep.data.repositories;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import java.util.List;
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,17 +28,17 @@ public class RelatedProteinsRepositoryImpl implements RelatedProteinsRepositoryC
     @Override
     public List<RelatedProteins> findRelatedProteinsByNamePrefixes(List<String> nameprefixes) {
         
-        EntityGraph eGraph = entityManager.getEntityGraph("RelatedProteins.graph");
-        eGraph.addAttributeNodes("uniprotAccession");
-        
-        eGraph.addSubgraph("uniprotAccession")
-                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-                        "enzymePortalCompoundSet", "uniprotXrefSet", "uniprotEntrySet", "enzymePortalEcNumbersSet");
+//        EntityGraph eGraph = entityManager.getEntityGraph("RelatedProteins.graph");
+//        eGraph.addAttributeNodes("uniprotAccession");
+//        
+//        eGraph.addSubgraph("uniprotAccession")
+//                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
+//                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
+//                        "enzymePortalCompoundSet", "uniprotXrefSet", "uniprotEntrySet", "enzymePortalEcNumbersSet");
         
         JPAQuery query = new JPAQuery(entityManager);
         
-        query.setHint("javax.persistence.fetchgraph", eGraph);
+       // query.setHint("javax.persistence.fetchgraph", eGraph);
         
         BooleanBuilder builder = new BooleanBuilder();
         

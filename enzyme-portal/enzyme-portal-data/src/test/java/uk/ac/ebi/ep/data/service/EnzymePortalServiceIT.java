@@ -1,20 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
@@ -35,24 +29,15 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
  *
  * @author joseph
  */
-@Ignore
-public class EnzymePortalServiceIT extends AbstractDataTest{
-    
+public class EnzymePortalServiceIT extends AbstractDataTest {
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+    private static final String ACCESSION = "Q64441";
+    private static final String UNIPROT_ACCESSION = "O76074";
+    private static final Pageable PAGEABLE = new PageRequest(0, 500, Sort.Direction.ASC, "function", "entryType");
+
+    @Override
+    protected void tearDown() throws Exception {
+        dataSource.getConnection().close();
     }
 
     /**
@@ -60,25 +45,16 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindByAccession() {
-        System.out.println("findByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        UniprotEntry expResult = null;
-        UniprotEntry result = instance.findByAccession(accession);
-        assertEquals(expResult, result);
- 
-    }
+        LOGGER.info("findByAccession");
 
-    /**
-     * Test of findEnzymeSummaryByAccession method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSummaryByAccession() {
-        System.out.println("findEnzymeSummaryByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        EnzymePortalSummary expResult = null;
-        EnzymePortalSummary result = instance.findEnzymeSummaryByAccession(accession);
+        UniprotEntry expResult = new UniprotEntry(ACCESSION);
+        expResult.setCommonName("Mouse");
+        expResult.setScientificName("Mus musculus");
+        expResult.setProteinName("MOCK-1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial");
+        expResult.setName("CP24A_MOUSE");
+
+        UniprotEntry result = enzymePortalService.findByAccession(ACCESSION);
+
         assertEquals(expResult, result);
 
     }
@@ -88,12 +64,12 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindAllUniprotAccessions() {
-        System.out.println("findAllUniprotAccessions");
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findAllUniprotAccessions();
-        assertEquals(expResult, result);
-  
+        LOGGER.info("findAllUniprotAccessions");
+
+        int expResult = 14;
+        List<String> result = enzymePortalService.findAllUniprotAccessions();
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -101,25 +77,26 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindAllDiseases() {
-        System.out.println("findAllDiseases");
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalDisease> expResult = null;
-        List<EnzymePortalDisease> result = instance.findAllDiseases();
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findAllDiseases");
+
+        int expResult = 3;
+        List<EnzymePortalDisease> result = enzymePortalService.findAllDiseases();
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
-     * Test of findCompoundsByUniprotAccession method, of class EnzymePortalService.
+     * Test of findCompoundsByUniprotAccession method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFindCompoundsByUniprotAccession() {
-        System.out.println("findCompoundsByUniprotAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalCompound> expResult = null;
-        List<EnzymePortalCompound> result = instance.findCompoundsByUniprotAccession(accession);
-        assertEquals(expResult, result);
+        LOGGER.info("findCompoundsByUniprotAccession");
+
+        int expResult = 1;
+        List<EnzymePortalCompound> result = enzymePortalService.findCompoundsByUniprotAccession(UNIPROT_ACCESSION);
+        assertEquals(expResult, result.size());
 
     }
 
@@ -128,12 +105,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindCompoundsByUniprotName() {
-        System.out.println("findCompoundsByUniprotName");
-        String uniprotName = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalCompound> expResult = null;
-        List<EnzymePortalCompound> result = instance.findCompoundsByUniprotName(uniprotName);
-        assertEquals(expResult, result);
+        LOGGER.info("findCompoundsByUniprotName");
+        String uniprotName = "PDE5A";
+
+        int expResult = 1;
+        List<EnzymePortalCompound> result = enzymePortalService.findCompoundsByUniprotName(uniprotName);
+
+        assertEquals(expResult, result.size());
 
     }
 
@@ -142,27 +120,17 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindCompoundsByNamePrefix() {
-        System.out.println("findCompoundsByNamePrefix");
-        List<String> name_prefixes = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalCompound> expResult = null;
-        List<EnzymePortalCompound> result = instance.findCompoundsByNamePrefix(name_prefixes);
-        assertEquals(expResult, result);
+        LOGGER.info("findCompoundsByNamePrefix");
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("PDE5A");
+        namePrefixes.add("CP24A");
+        namePrefixes.add("FAKE_NAME_PREFIX");
 
-    }
+        int expResult = 1;
+        List<EnzymePortalCompound> result = enzymePortalService.findCompoundsByNamePrefix(namePrefixes);
 
-    /**
-     * Test of findAccessionsByCompoundID method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindAccessionsByCompoundID() {
-        System.out.println("findAccessionsByCompoundID");
-        String compoundId = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findAccessionsByCompoundID(compoundId);
-        assertEquals(expResult, result);
-     
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -170,13 +138,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByAccession() {
-        System.out.println("findEnzymesByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByAccession(accession);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findEnzymesByAccession");
+
+        int expResult = 1;
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByAccession(UNIPROT_ACCESSION);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -184,69 +152,97 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByAccessions_List() {
-        System.out.println("findEnzymesByAccessions");
-        List<String> accessions = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByAccessions(accessions);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q60991");
+        accessions.add("Q63688");
+        accessions.add("Q0III2");
+        accessions.add("Q64441");
+        accessions.add("fakeAccession");
+
+        int expResult = 4;
+
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByAccessions(accessions);
+
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of findEnzymeSummariesByNamePrefixes method, of class EnzymePortalService.
+     * Test of findEnzymeSummariesByNamePrefixes method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFindEnzymeSummariesByNamePrefixes() {
-        System.out.println("findEnzymeSummariesByNamePrefixes");
-        List<String> namePrefixes = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalSummary> expResult = null;
-        List<EnzymePortalSummary> result = instance.findEnzymeSummariesByNamePrefixes(namePrefixes);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymeSummariesByNamePrefixes");
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("CP24A");
+        namePrefixes.add("FAKEGENE");
+        namePrefixes.add("CP7B1");
+        namePrefixes.add("PDE5A");
+
+        int expResult = 3;
+        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSummariesByNamePrefixes(namePrefixes);
+
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of findEnzymeSumariesByAccessions method, of class EnzymePortalService.
+     * Test of findEnzymeSumariesByAccessions method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFindEnzymeSumariesByAccessions_List() {
-        System.out.println("findEnzymeSumariesByAccessions");
-        List<String> accessions = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalSummary> expResult = null;
-        List<EnzymePortalSummary> result = instance.findEnzymeSumariesByAccessions(accessions);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymeSumariesByAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q07973");
+        accessions.add("Q63688");
+        accessions.add("O75881");
+        accessions.add("Q64441");
+        accessions.add("fakeAccession");
+
+        boolean expResult = true;
+        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSumariesByAccessions(accessions);
+
+        assertEquals(expResult, result.size() > 0);
 
     }
 
     /**
-     * Test of findEnzymeSumariesByAccession method, of class EnzymePortalService.
+     * Test of findEnzymeSumariesByAccession method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFindEnzymeSumariesByAccession() {
-        System.out.println("findEnzymeSumariesByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalSummary> expResult = null;
-        List<EnzymePortalSummary> result = instance.findEnzymeSumariesByAccession(accession);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymeSumariesByAccession");
+        String acc = "Q07973";
+        int expResult = 12;
+        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSumariesByAccession(acc);
+
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of findEnzymeSumariesByAccessions method, of class EnzymePortalService.
+     * Test of findEnzymeSumariesByAccessions method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFindEnzymeSumariesByAccessions_List_Pageable() {
-        System.out.println("findEnzymeSumariesByAccessions");
-        List<String> accessions = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<EnzymePortalSummary> expResult = null;
-        Page<EnzymePortalSummary> result = instance.findEnzymeSumariesByAccessions(accessions, pageable);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymeSumariesByAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q07973");
+        accessions.add("Q63688");
+        accessions.add("O75881");
+        accessions.add("Q64441");
+        accessions.add("fakeAccession");
+
+        int expResult = 2;
+        Page<EnzymePortalSummary> result = enzymePortalService.findEnzymeSumariesByAccessions(accessions, PAGEABLE);
+        assertEquals(expResult, result.getContent().size());
+        assertEquals(2, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
 
     }
 
@@ -255,13 +251,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindDiseasesByAccession() {
-        System.out.println("findDiseasesByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Disease> expResult = null;
-        List<Disease> result = instance.findDiseasesByAccession(accession);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findDiseasesByAccession");
+        String dAccession = "O75881";
+
+        String expResult = "spastic paraplegia hereditary";
+        List<Disease> result = enzymePortalService.findDiseasesByAccession(dAccession);
+        assertEquals(expResult, result.stream().findAny().get().getName());
+        assertEquals(1, result.size());
+
     }
 
     /**
@@ -269,13 +266,16 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindDiseasesByNamePrefix() {
-        System.out.println("findDiseasesByNamePrefix");
-        List<String> name_prefixes = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalDisease> expResult = null;
-        List<EnzymePortalDisease> result = instance.findDiseasesByNamePrefix(name_prefixes);
-        assertEquals(expResult, result);
-  
+        LOGGER.info("findDiseasesByNamePrefix");
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("CP7B1");
+        namePrefixes.add("CP8B1");
+        namePrefixes.add("MBTP2");
+
+        int expResult = 2;
+        List<EnzymePortalDisease> result = enzymePortalService.findDiseasesByNamePrefix(namePrefixes);
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -283,13 +283,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindPDBcodesByAccession() {
-        System.out.println("findPDBcodesByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotXref> expResult = null;
-        List<UniprotXref> result = instance.findPDBcodesByAccession(accession);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findPDBcodesByAccession");
+        String pAccession = "Q09128";
+
+        int expResult = 2;
+        List<UniprotXref> result = enzymePortalService.findPDBcodesByAccession(pAccession);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -297,12 +298,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindPathwaysByAccession() {
-        System.out.println("findPathwaysByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Pathway> expResult = null;
-        List<Pathway> result = instance.findPathwaysByAccession(accession);
-        assertEquals(expResult, result);
+        LOGGER.info("findPathwaysByAccession");
+        String acceSSion = "O75881";
+
+        int expResult = 6;
+        List<Pathway> result = enzymePortalService.findPathwaysByAccession(acceSSion);
+
+        assertEquals(expResult, result.size());
 
     }
 
@@ -311,40 +313,53 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFilterEnzymesInAccessions() {
-        System.out.println("filterEnzymesInAccessions");
-        List<String> accessions = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.filterEnzymesInAccessions(accessions);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("filterEnzymesInAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q60991");
+        accessions.add("Q63688");
+        accessions.add("Q0III2");
+        accessions.add("Q64441");
+        accessions.add("NotAnEnzyme");
+
+        int expResult = 4;
+        List<String> result = enzymePortalService.filterEnzymesInAccessions(accessions);
+        assertTrue(result.size() > 1);
+
     }
 
     /**
-     * Test of findRelatedProteinsByNamePrefix method, of class EnzymePortalService.
+     * Test of findRelatedProteinsByNamePrefix method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFindRelatedProteinsByNamePrefix() {
-        System.out.println("findRelatedProteinsByNamePrefix");
-        String nameprefix = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        RelatedProteins expResult = null;
-        RelatedProteins result = instance.findRelatedProteinsByNamePrefix(nameprefix);
+        LOGGER.info("findRelatedProteinsByNamePrefix");
+        String nameprefix = "PDE5A";
+
+        RelatedProteins expResult = new RelatedProteins();
+        expResult.setRelProtInternalId(BigDecimal.valueOf(853983));
+        expResult.setNamePrefix(nameprefix);
+
+        RelatedProteins result = enzymePortalService.findRelatedProteinsByNamePrefix(nameprefix);
         assertEquals(expResult, result);
 
     }
 
     /**
-     * Test of findRelatedProteinsByNamePrefixes method, of class EnzymePortalService.
+     * Test of findRelatedProteinsByNamePrefixes method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFindRelatedProteinsByNamePrefixes() {
-        System.out.println("findRelatedProteinsByNamePrefixes");
-        List<String> nameprefixes = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<RelatedProteins> expResult = null;
-        List<RelatedProteins> result = instance.findRelatedProteinsByNamePrefixes(nameprefixes);
-        assertEquals(expResult, result);
+        LOGGER.info("findRelatedProteinsByNamePrefixes");
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("CP24A");
+        namePrefixes.add("FAKEGENE");
+        namePrefixes.add("PDE5A");
+
+       int  expResult = 2;
+        List<RelatedProteins> result = enzymePortalService.findRelatedProteinsByNamePrefixes(namePrefixes);
+        assertEquals(expResult, result.size());
 
     }
 
@@ -353,26 +368,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByCompound() {
-        System.out.println("findEnzymesByCompound");
-        String compound_id = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findEnzymesByCompound(compound_id);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByCompound");
+        String compoundId = "CHEBI:9139";
 
-    }
+        int expResult = 1;
+        List<String> result = enzymePortalService.findEnzymesByCompound(compoundId);
 
-    /**
-     * Test of findAccessionsByMeshId method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindAccessionsByMeshId() {
-        System.out.println("findAccessionsByMeshId");
-        String meshId = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findAccessionsByMeshId(meshId);
-        assertEquals(expResult, result);
+        assertEquals(expResult, result.size());
 
     }
 
@@ -381,11 +383,12 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindDiseases() {
-        System.out.println("findDiseases");
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalDisease> expResult = null;
-        List<EnzymePortalDisease> result = instance.findDiseases();
-        assertEquals(expResult, result);
+        LOGGER.info("findDiseases");
+
+        int expResult = 3;
+        List<EnzymePortalDisease> result = enzymePortalService.findDiseases();
+
+        assertEquals(expResult, result.size());
 
     }
 
@@ -394,11 +397,15 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindAccessionsByEc() {
-        System.out.println("findAccessionsByEc");
-        String ecNumber = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findAccessionsByEc(ecNumber);
+        LOGGER.info("findAccessionsByEc");
+        String ecNumber = "1.14.13.126";
+
+        List<String> expResult = new LinkedList<>();
+        expResult.add("Q07973");
+        expResult.add("Q09128");
+        expResult.add("Q64441");
+        List<String> result = enzymePortalService.findAccessionsByEc(ecNumber);
+
         assertEquals(expResult, result);
 
     }
@@ -408,13 +415,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindByEcNumbersByAccession() {
-        System.out.println("findByEcNumbersByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalEcNumbers> expResult = null;
-        List<EnzymePortalEcNumbers> result = instance.findByEcNumbersByAccession(accession);
-        assertEquals(expResult, result);
-    
+        LOGGER.info("findByEcNumbersByAccession");
+
+        int expResult = 1;
+        List<EnzymePortalEcNumbers> result = enzymePortalService.findByEcNumbersByAccession(ACCESSION);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -422,12 +429,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindReactions() {
-        System.out.println("findReactions");
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalReaction> expResult = null;
-        List<EnzymePortalReaction> result = instance.findReactions();
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findReactions");
+
+        int expResult = 8;
+        List<EnzymePortalReaction> result = enzymePortalService.findReactions();
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -435,11 +443,11 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindPathways() {
-        System.out.println("findPathways");
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalPathways> expResult = null;
-        List<EnzymePortalPathways> result = instance.findPathways();
-        assertEquals(expResult, result);
+        LOGGER.info("findPathways");
+
+        int expResult = 8;
+        List<EnzymePortalPathways> result = enzymePortalService.findPathways();
+        assertEquals(expResult, result.size());
 
     }
 
@@ -448,12 +456,16 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindAccessionsByReactionId() {
-        System.out.println("findAccessionsByReactionId");
-        String reactionId = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findAccessionsByReactionId(reactionId);
+        LOGGER.info("findAccessionsByReactionId");
+        String reactionId = "RHEA:24979";
+
+        List<String> expResult = new ArrayList<>();
+        expResult.add("Q07973");
+
+        List<String> result = enzymePortalService.findAccessionsByReactionId(reactionId);
+
         assertEquals(expResult, result);
+        assertEquals(expResult.size(), result.size());
 
     }
 
@@ -462,12 +474,12 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindReactionsByAccession() {
-        System.out.println("findReactionsByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymeReaction> expResult = null;
-        List<EnzymeReaction> result = instance.findReactionsByAccession(accession);
-        assertEquals(expResult, result);
+        LOGGER.info("findReactionsByAccession");
+        String rAccession = "Q07973";
+
+        int expResult = 6;
+        List<EnzymeReaction> result = enzymePortalService.findReactionsByAccession(rAccession);
+        assertEquals(expResult, result.size());
 
     }
 
@@ -476,13 +488,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindAccessionsByPathwayId() {
-        System.out.println("findAccessionsByPathwayId");
-        String pathwayId = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findAccessionsByPathwayId(pathwayId);
-        assertEquals(expResult, result);
-  
+        LOGGER.info("findAccessionsByPathwayId");
+        String pathwayId = "REACT_147797";
+
+        int expResult = 1;
+        List<String> result = enzymePortalService.findAccessionsByPathwayId(pathwayId);
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -490,13 +502,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindAccessionsByTaxId() {
-        System.out.println("findAccessionsByTaxId");
-        Long taxId = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<String> expResult = null;
-        List<String> result = instance.findAccessionsByTaxId(taxId);
-        assertEquals(expResult, result);
-  
+        LOGGER.info("findAccessionsByTaxId");
+        Long taxId = 9606L;
+
+        int expResult = 5;
+        List<String> result = enzymePortalService.findAccessionsByTaxId(taxId);
+        System.out.println("acc by taxid " + result.size());
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -504,13 +517,19 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testGetCountForOrganisms() {
-        System.out.println("getCountForOrganisms");
-        List<Long> taxids = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Taxonomy> expResult = null;
-        List<Taxonomy> result = instance.getCountForOrganisms(taxids);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("getCountForOrganisms");
+        List<Long> taxids = new ArrayList<>();
+        taxids.add(9606L);
+        taxids.add(9606L);
+        taxids.add(9606L);
+        taxids.add(10090L);
+        taxids.add(10090L);
+
+        int expResult = 2;
+        List<Taxonomy> result = enzymePortalService.getCountForOrganisms(taxids);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -518,13 +537,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByTaxId() {
-        System.out.println("findEnzymesByTaxId");
-        Long taxId = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByTaxId(taxId);
-        assertEquals(expResult, result);
-   
+        LOGGER.info("findEnzymesByTaxId");
+        Long taxId = 10090L;
+
+        int expResult = 3;
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByTaxId(taxId);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -532,14 +552,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByTaxonomy() {
-        System.out.println("findEnzymesByTaxonomy");
-        Long taxId = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.findEnzymesByTaxonomy(taxId, pageable);
-        assertEquals(expResult, result);
-     
+        LOGGER.info("findEnzymesByTaxonomy");
+        Long taxId = 10116L;
+
+        int expResult = 2;
+        Page<UniprotEntry> result = enzymePortalService.findEnzymesByTaxonomy(taxId, PAGEABLE);
+        assertEquals(expResult, result.getContent().size());
+
     }
 
     /**
@@ -547,14 +566,20 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByAccessions_List_Pageable() {
-        System.out.println("findEnzymesByAccessions");
-        List<String> accessions = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.findEnzymesByAccessions(accessions, pageable);
-        assertEquals(expResult, result);
-    
+        LOGGER.info("findEnzymesByAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q60991");
+        accessions.add("Q63688");
+        accessions.add("Q0III2");
+        accessions.add("Q64441");
+        accessions.add("fakeAccession");
+
+        int expResult = 4;
+        Page<UniprotEntry> result = enzymePortalService.findEnzymesByAccessions(accessions, PAGEABLE);
+        assertEquals(expResult, result.getContent().size());
+        assertEquals(4, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
+
     }
 
     /**
@@ -562,14 +587,16 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByEcNumbers() {
-        System.out.println("findEnzymesByEcNumbers");
-        List<String> ecNumbers = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.findEnzymesByEcNumbers(ecNumbers, pageable);
-        assertEquals(expResult, result);
-   
+        LOGGER.info("findEnzymesByEcNumbers");
+        List<String> ecNumbers = new ArrayList<>();
+        ecNumbers.add("3.4.24.85");
+        ecNumbers.add("1.14.13.126");
+
+        int expResult = 8;
+        Page<UniprotEntry> result = enzymePortalService.findEnzymesByEcNumbers(ecNumbers, PAGEABLE);
+
+        assertEquals(expResult, result.getContent().size());
+
     }
 
     /**
@@ -577,14 +604,16 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByNamePrefixes_List_Pageable() {
-        System.out.println("findEnzymesByNamePrefixes");
-        List<String> namePrefixes = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.findEnzymesByNamePrefixes(namePrefixes, pageable);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findEnzymesByNamePrefixes");
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("CP24A");
+        namePrefixes.add("FAKEGENE");
+        namePrefixes.add("PDE5A");
+
+        int expResult = 4;
+        Page<UniprotEntry> result = enzymePortalService.findEnzymesByNamePrefixes(namePrefixes, PAGEABLE);
+        assertEquals(expResult, result.getContent().size());
+
     }
 
     /**
@@ -592,12 +621,15 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByNamePrefixes_List() {
-        System.out.println("findEnzymesByNamePrefixes");
-        List<String> namePrefixes = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByNamePrefixes(namePrefixes);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByNamePrefixes");
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("CP24A");
+        namePrefixes.add("FAKEGENE");
+        namePrefixes.add("PDE5A");
+        int expResult = 4;
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByNamePrefixes(namePrefixes);
+
+        assertEquals(expResult, result.size());
 
     }
 
@@ -606,12 +638,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByPathwayId() {
-        System.out.println("findEnzymesByPathwayId");
-        String pathwayId = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByPathwayId(pathwayId);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByPathwayId");
+        String pathwayId = "REACT_11054";
+
+        int expResult = 1;
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByPathwayId(pathwayId);
+
+        assertEquals(expResult, result.size());
 
     }
 
@@ -620,13 +653,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByEc() {
-        System.out.println("findEnzymesByEc");
-        String ec = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByEc(ec);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findEnzymesByEc");
+        String ec = "1.14.13.126";
+
+        int expResult = 3;
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByEc(ec);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -634,13 +668,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindPathwaysByName() {
-        System.out.println("findPathwaysByName");
-        String pathwayName = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Pathway> expResult = null;
-        List<Pathway> result = instance.findPathwaysByName(pathwayName);
-        assertEquals(expResult, result);
-    
+        LOGGER.info("findPathwaysByName");
+        String pathwayName = "Orphan transporters";
+
+        int expResult = 1;
+        List<Pathway> result = enzymePortalService.findPathwaysByName(pathwayName.trim());
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -648,13 +682,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindEnzymesByMeshId() {
-        System.out.println("findEnzymesByMeshId");
-        String meshId = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByMeshId(meshId);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findEnzymesByMeshId");
+        String meshId = "D006934";
+
+        int expResult = 1;
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByMeshId(meshId);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -662,13 +697,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindDiseasesLike() {
-        System.out.println("findDiseasesLike");
-        String diseaseName = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Disease> expResult = null;
-        List<Disease> result = instance.findDiseasesLike(diseaseName);
-        assertEquals(expResult, result);
-    
+        LOGGER.info("findDiseasesLike");
+        String diseaseName = "immunodeficiency";
+
+        int expResult = 1;
+        List<Disease> result = enzymePortalService.findDiseasesLike(diseaseName);
+       
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -676,12 +712,13 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindDiseasesByTaxId() {
-        System.out.println("findDiseasesByTaxId");
-        Long taxId = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Disease> expResult = null;
-        List<Disease> result = instance.findDiseasesByTaxId(taxId);
-        assertEquals(expResult, result);
+        LOGGER.info("findDiseasesByTaxId");
+        Long taxId = 9606L;
+
+        int expResult = 3;
+        List<Disease> result = enzymePortalService.findDiseasesByTaxId(taxId);
+
+        assertEquals(expResult, result.size());
 
     }
 
@@ -690,13 +727,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindSpeciesByTaxId() {
-        System.out.println("findSpeciesByTaxId");
-        Long taxId = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Species> expResult = null;
-        List<Species> result = instance.findSpeciesByTaxId(taxId);
-        assertEquals(expResult, result);
-    
+        LOGGER.info("findSpeciesByTaxId");
+        Long taxId = 9606L;
+
+        int expResult = 1;
+        List<Species> result = enzymePortalService.findSpeciesByTaxId(taxId);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
@@ -704,29 +742,33 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFindCompoundsByTaxId() {
-        System.out.println("findCompoundsByTaxId");
-        Long taxId = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<Compound> expResult = null;
-        List<Compound> result = instance.findCompoundsByTaxId(taxId);
-        assertEquals(expResult, result);
+        LOGGER.info("findCompoundsByTaxId");
+        Long taxId = 9606L;
+
+        int expResult = 4;
+        List<Compound> result = enzymePortalService.findCompoundsByTaxId(taxId);
+
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of filterBySpecieAndCompoundsAndDiseases method, of class EnzymePortalService.
+     * Test of filterBySpecieAndCompoundsAndDiseases method, of class
+     * EnzymePortalService.
      */
     @Test
     public void testFilterBySpecieAndCompoundsAndDiseases() {
-        System.out.println("filterBySpecieAndCompoundsAndDiseases");
-        Long taxId = null;
-        List<String> compoudNames = null;
-        List<String> diseaseNames = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.filterBySpecieAndCompoundsAndDiseases(taxId, compoudNames, diseaseNames, pageable);
-        assertEquals(expResult, result);
+        LOGGER.info("filterBySpecieAndCompoundsAndDiseases");
+        Long taxId = 9606L;
+        List<String> compoudNames = new ArrayList<>();
+        compoudNames.add("Sildenafil");
+        List<String> diseaseNames = new ArrayList<>();
+        diseaseNames.add("spastic paraplegia hereditary");
+
+        
+        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndCompoundsAndDiseases(taxId, compoudNames, diseaseNames, PAGEABLE);
+        assertTrue(result.getTotalPages() ==0);
+        
 
     }
 
@@ -735,14 +777,15 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFilterBySpecieAndCompounds() {
-        System.out.println("filterBySpecieAndCompounds");
-        Long taxId = null;
-        List<String> compoudNames = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.filterBySpecieAndCompounds(taxId, compoudNames, pageable);
-        assertEquals(expResult, result);
+        LOGGER.info("filterBySpecieAndCompounds");
+        Long taxId = 9606L;
+        List<String> compoudNames = new ArrayList<>();
+        compoudNames.add("Sildenafil");
+
+        int expResult = 1;
+        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndCompounds(taxId, compoudNames, PAGEABLE);
+
+        assertEquals(expResult, result.getContent().size());
 
     }
 
@@ -751,14 +794,15 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFilterBySpecieAndDiseases() {
-        System.out.println("filterBySpecieAndDiseases");
-        Long taxId = null;
-        List<String> diseaseNames = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.filterBySpecieAndDiseases(taxId, diseaseNames, pageable);
-        assertEquals(expResult, result);
+        LOGGER.info("filterBySpecieAndDiseases");
+        Long taxId = 9606L;
+        List<String> diseaseNames = new ArrayList<>();
+        diseaseNames.add("spastic paraplegia hereditary");
+
+        int expResult = 1;
+        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndDiseases(taxId, diseaseNames, PAGEABLE);
+
+        assertEquals(expResult, result.getContent().size());
 
     }
 
@@ -767,14 +811,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest{
      */
     @Test
     public void testFilterBySpecie() {
-        System.out.println("filterBySpecie");
-        Long taxId = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<UniprotEntry> expResult = null;
-        Page<UniprotEntry> result = instance.filterBySpecie(taxId, pageable);
-        assertEquals(expResult, result);
+        LOGGER.info("filterBySpecie");
+        Long taxId = 9606L;
+
+        int expResult = 5;
+        Page<UniprotEntry> result = enzymePortalService.filterBySpecie(taxId, PAGEABLE);
+
+        assertEquals(expResult, result.getContent().size());
 
     }
-    
+
 }

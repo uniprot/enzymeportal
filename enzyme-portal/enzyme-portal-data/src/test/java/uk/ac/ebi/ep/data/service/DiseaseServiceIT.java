@@ -58,13 +58,13 @@ public class DiseaseServiceIT extends AbstractDataTest {
     @Test
     public void testFindDiseasesByNamePrefix() {
         LOGGER.info("findDiseasesByNamePrefix");
-        List<String> name_prefixes = new ArrayList<>();
-        name_prefixes.add("CP7B1");
-        name_prefixes.add("CP8B1");
-        name_prefixes.add("MBTP2");
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("CP7B1");
+        namePrefixes.add("CP8B1");
+        namePrefixes.add("MBTP2");
 
         int expResult = 2;
-        List<EnzymePortalDisease> result = diseaseService.findDiseasesByNamePrefix(name_prefixes);
+        List<EnzymePortalDisease> result = diseaseService.findDiseasesByNamePrefix(namePrefixes);
         assertEquals(expResult, result.size());
 
     }

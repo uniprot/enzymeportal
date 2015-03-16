@@ -81,6 +81,13 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findEnzymeByAccession(accession);
     }
 
+    /**
+     * 
+     * @param accession
+     * @return
+     * @deprecated(to be removed in 1.0.14)
+     */
+    @Deprecated
     @Transactional(readOnly = true)
     public EnzymePortalSummary findEnzymeSummaryByAccession(String accession) {
 
@@ -117,17 +124,6 @@ public class EnzymePortalService {
         return enzymePortalCompoundRepository.findCompoundsByNameprefixes(namePrefixes);
     }
 
-    @Deprecated
-    @Transactional(readOnly = true)
-    public List<String> findAccessionsByCompoundID(String compoundId) {
-        List<String> accessions = new ArrayList<>();
-        Iterable<UniprotEntry> enzymes = uniprotEntryRepository.findAll(enzymesByCompoundId(compoundId));
-        for (UniprotEntry acc : enzymes) {
-            accessions.add(acc.getAccession());
-        }
-
-        return accessions;
-    }
 
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccession(String accession) {
@@ -225,12 +221,6 @@ public class EnzymePortalService {
         return enzymePortalCompoundRepository.findEnzymesByCompound(compoundId);
     }
 
-    @Transactional(readOnly = true)
-    @Deprecated
-    public List<String> findAccessionsByMeshId(String meshId) {
-
-        return diseaseRepository.findAccessionsByMeshId(meshId);
-    }
 
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
