@@ -254,7 +254,7 @@ public class EnzymeFinder {
 
     @Deprecated
     private List<EnzymeAccession> computeRelatedSpecies(EnzymePortalSummary summary) {
-        String defaultSpecies = CommonSpecies.Human.getScientificName();
+        String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
 
         for (UniprotEntry e : summary.getUniprotAccession().getRelatedProteinsId().getUniprotEntrySet()) {
@@ -288,7 +288,7 @@ public class EnzymeFinder {
 
     @Deprecated
     private List<EnzymeAccession> computeRelatedSpecies(UniprotEntry entry) {
-        String defaultSpecies = CommonSpecies.Human.getScientificName();
+        String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
 
         for (UniprotEntry e : entry.getRelatedProteinsId().getUniprotEntrySet()) {
@@ -556,7 +556,7 @@ public class EnzymeFinder {
      * the relevant filters.
      */
     private void buildFilters(SearchResults searchResults) {
-        //  String[] commonSpecie = {"Human", "Mouse", "Rat", "Fruit fly", "Worm", "Yeast", "Ecoli"};
+        //  String[] commonSpecie = {"HUMAN", "MOUSE", "Rat", "Fruit fly", "WORM", "Yeast", "ECOLI"};
         // CommonSpecies [] commonSpecie = {"Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","Saccharomyces cerevisiae"};
         // List<String> commonSpecieList = Arrays.asList(commonSpecie);
         List<String> commonSpecieList = new ArrayList<>();
@@ -572,21 +572,21 @@ public class EnzymeFinder {
         for (Species sp : uniqueSpecies) {
 
             if (commonSpecieList.contains(sp.getScientificname().split("\\(")[0].trim())) {
-                // Human, Mouse, Rat, Fly, Worm, Yeast, Ecoli 
-                // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","Worm","Saccharomyces cerevisiae","Ecoli"
-                if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Human.getScientificName())) {
+                // HUMAN, MOUSE, Rat, Fly, WORM, Yeast, ECOLI 
+                // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
+                if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.HUMAN.getScientificName())) {
                     priorityMapper.put(1, sp);
-                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Mouse.getScientificName())) {
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.MOUSE.getScientificName())) {
                     priorityMapper.put(2, sp);
                 } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Rat.getScientificName())) {
                     priorityMapper.put(3, sp);
-                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Fruit_fly.getScientificName())) {
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.FRUIT_FLY.getScientificName())) {
                     priorityMapper.put(4, sp);
-                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Worm.getScientificName())) {
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.WORM.getScientificName())) {
                     priorityMapper.put(5, sp);
-                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Ecoli.getScientificName())) {
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.ECOLI.getScientificName())) {
                     priorityMapper.put(6, sp);
-                } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
+                } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.BAKER_YEAST.getScientificName())) {
                     priorityMapper.put(customKey.getAndIncrement(), sp);
 
                 }

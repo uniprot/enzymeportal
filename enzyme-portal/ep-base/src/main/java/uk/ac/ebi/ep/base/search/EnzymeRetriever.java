@@ -145,7 +145,7 @@ public class EnzymeRetriever extends EnzymeFinder {
     }
 
     private List<EnzymeAccession> getRelatedSPecies(UniprotEntry uniprotEntry) {
-        String defaultSpecies = CommonSpecies.Human.getScientificName();
+        String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
 
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
         // TODO query for related proteins and use the obj. possible null pointer if db isnot populated with related protein
