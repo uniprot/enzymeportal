@@ -80,7 +80,7 @@ public final class Entry  implements Comparable<Entry> {
     @Override
     public int compareTo(Entry obj) {
         int compare = obj.getUniprotName().compareToIgnoreCase(this.getUniprotName());
-        return (compare == 0 ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare);
+        return compare == 0 ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare;
 
     }
 
