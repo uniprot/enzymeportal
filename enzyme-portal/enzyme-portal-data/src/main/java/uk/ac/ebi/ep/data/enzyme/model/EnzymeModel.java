@@ -50,6 +50,7 @@ public class EnzymeModel extends UniprotEntry
         this.pathways = pathways;
     }
 
+    @Override
     public List<EnzymeAccession> getRelatedspecies() {
         if (relatedspecies == null) {
             relatedspecies = new ArrayList<>();
@@ -419,7 +420,7 @@ public class EnzymeModel extends UniprotEntry
         return this;
     }
 
-    // @Override
+     @Override
     public EnzymeModel withSpecies(Species value) {
         setSpecies(value);
         return this;
@@ -443,7 +444,7 @@ public class EnzymeModel extends UniprotEntry
         return this;
     }
 
-    //@Override
+    @Override
     public EnzymeModel withCompounds(Compound... values) {
         if (values != null) {
             for (Compound value : values) {

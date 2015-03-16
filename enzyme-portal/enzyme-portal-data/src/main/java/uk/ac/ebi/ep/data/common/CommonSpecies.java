@@ -9,13 +9,13 @@ import java.util.List;
  */
 public enum CommonSpecies {
 
-    Human("Homo sapiens"),
-    Mouse("Mus musculus"),
+    HUMAN("Homo sapiens"),
+    MOUSE("Mus musculus"),
     Rat("Rattus norvegicus"),
-    Fruit_fly("Drosophila melanogaster"),
-    Worm("Caenorhabditis elegans"),
-    Baker_Yeast("Saccharomyces cerevisiae"),
-    Ecoli("Escherichia coli");
+    FRUIT_FLY("Drosophila melanogaster"),
+    WORM("Caenorhabditis elegans"),
+    BAKER_YEAST("Saccharomyces cerevisiae"),
+    ECOLI("Escherichia coli");
     
     private static final List<String> allScientificNames = new LinkedList<>();
     static {

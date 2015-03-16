@@ -6,14 +6,17 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.Species;
@@ -24,16 +27,17 @@ import uk.ac.ebi.ep.data.service.AbstractDataTest;
  *
  * @author joseph
  */
-@Ignore
 public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
-    
+
     @PersistenceContext
     private EntityManager entityManager;
-    
+    private final UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
+
     @After
     @Override
     public void tearDown() throws SQLException {
-         dataSource.getConnection().close();
+        dataSource.getConnection().close();
+        entityManager.close();
     }
 
     /**
@@ -41,81 +45,111 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
      */
     @Test
     public void testSetEntityManager() {
-        System.out.println("setEntityManager");
-        System.out.println("the manager "+ entityManager.getEntityManagerFactory().toString());
-        EntityManager entityManager = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
+        LOGGER.info("setEntityManager");
+
         instance.setEntityManager(entityManager);
+        EntityManager manager = instance.getEntityManager();
+        assertNotNull(manager);
 
     }
 
     /**
-     * Test of findEnzymesByNamePrefixes method, of class UniprotEntryRepositoryImpl.
+     * Test of findEnzymesByNamePrefixes method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindEnzymesByNamePrefixes() {
-        System.out.println("findEnzymesByNamePrefixes");
-        List<String> name_prefixes = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByNamePrefixes(name_prefixes);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByNamePrefixes");
+
+        List<String> namePrefixes = new ArrayList<>();
+        namePrefixes.add("CP24A");
+        namePrefixes.add("FAKEGENE");
+        namePrefixes.add("CP7B1");
+
+        int expResult = 6;
+
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByNamePrefixes(namePrefixes);
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of findEnzymesByAccessions method, of class UniprotEntryRepositoryImpl.
+     * Test of findEnzymesByAccessions method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindEnzymesByAccessions_List() {
-        System.out.println("findEnzymesByAccessions");
-        List<String> accessions = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByAccessions(accessions);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q60991");
+        accessions.add("M636T8");
+        accessions.add("Q0III2");
+        accessions.add("Q64441");
+        accessions.add("PK5671");
+        accessions.add("fakeAccession");
+
+        int expResult = 3;
+
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccessions(accessions);
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of findEnzymeByNamePrefix method, of class UniprotEntryRepositoryImpl.
+     * Test of findEnzymeByNamePrefix method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindEnzymeByNamePrefix() {
-        System.out.println("findEnzymeByNamePrefix");
-        String namePrefix = "";
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymeByNamePrefix(namePrefix);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymeByNamePrefix");
+        String namePrefix = "CP24A";
+
+        int expResult = 3;
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymeByNamePrefix(namePrefix);
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of filterEnzymesInAccessions method, of class UniprotEntryRepositoryImpl.
+     * Test of filterEnzymesInAccessions method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFilterEnzymesInAccessions() {
-        System.out.println("filterEnzymesInAccessions");
-        List<String> accessions = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<String> expResult = null;
-        List<String> result = instance.filterEnzymesInAccessions(accessions);
-        assertEquals(expResult, result);
+        LOGGER.info("filterEnzymesInAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q60991");
+        accessions.add("Q63688");
+        accessions.add("Q0III2");
+        accessions.add("Q64441");
+        accessions.add("NotAnEnzyme");
+
+        List<String> expResult = new LinkedList<>();
+
+        expResult.add("Q0III2");
+        expResult.add("Q63688");
+        expResult.add("Q60991");
+
+        List<String> result = uniprotEntryRepository.filterEnzymesInAccessions(accessions);
+
+        assertEquals(expResult.size() > 2, result.size() > 2);
+        
 
     }
 
     /**
-     * Test of findEnzymesByAccession method, of class UniprotEntryRepositoryImpl.
+     * Test of findEnzymesByAccession method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindEnzymesByAccession() {
-        System.out.println("findEnzymesByAccession");
-        String accession = "";
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByAccession(accession);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByAccession");
+        String accession = "Q64441";
+
+        int expResult = 2;
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccession(accession);
+
+        assertEquals(expResult, result.size());
 
     }
 
@@ -124,26 +158,38 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
      */
     @Test
     public void testGetCountForOrganisms() {
-        System.out.println("getCountForOrganisms");
-        List<Long> taxids = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<Taxonomy> expResult = null;
-        List<Taxonomy> result = instance.getCountForOrganisms(taxids);
-        assertEquals(expResult, result);
+        LOGGER.info("getCountForOrganisms");
+        List<Long> taxids = new ArrayList<>();
+        taxids.add(9606L);
+        taxids.add(9606L);
+        taxids.add(9606L);
+        taxids.add(10090L);
+        taxids.add(10090L);
+
+        int expResult = 2;
+        List<Taxonomy> result = uniprotEntryRepository.getCountForOrganisms(taxids);
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of findAccessionsByTaxId method, of class UniprotEntryRepositoryImpl.
+     * Test of findAccessionsByTaxId method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindAccessionsByTaxId() {
-        System.out.println("findAccessionsByTaxId");
-        Long taxId = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<String> expResult = null;
-        List<String> result = instance.findAccessionsByTaxId(taxId);
+        LOGGER.info("findAccessionsByTaxId");
+        Long taxId = 9606L;
+
+        List<String> expResult = new LinkedList<>();
+
+        expResult.add("O43462");
+        expResult.add("O75881");
+        expResult.add("Q07973");
+
+        List<String> result = uniprotEntryRepository.findAccessionsByTaxId(taxId);
         assertEquals(expResult, result);
+        assertEquals(expResult.size(), result.size());
 
     }
 
@@ -152,27 +198,38 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
      */
     @Test
     public void testFindEnzymesByTaxId() {
-        System.out.println("findEnzymesByTaxId");
-        Long taxId = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByTaxId(taxId);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByTaxId");
+        Long taxId = 9606L;
+
+        int expResult = 3;
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByTaxId(taxId);
+
+        assertEquals(expResult, result.size());
 
     }
 
     /**
-     * Test of findEnzymesByAccessions method, of class UniprotEntryRepositoryImpl.
+     * Test of findEnzymesByAccessions method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindEnzymesByAccessions_List_Pageable() {
-        System.out.println("findEnzymesByAccessions");
-        List<String> accessions = null;
-        Pageable pageable = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        Page<EnzymeSummary> expResult = null;
-        Page<EnzymeSummary> result = instance.findEnzymesByAccessions(accessions, pageable);
-        assertEquals(expResult, result);
+        LOGGER.info("findEnzymesByAccessions");
+        List<String> accessions = new ArrayList<>();
+        accessions.add("Q60991");
+        accessions.add("Q63688");
+        accessions.add("Q0III2");
+        accessions.add("Q64441");
+        accessions.add("fakeAccession");
+
+        Pageable pageable = new PageRequest(0, 500, Sort.Direction.ASC, "function", "entryType");
+
+        int expResult = 4;
+        Page<EnzymeSummary> result = uniprotEntryRepository.findEnzymesByAccessions(accessions, pageable);
+
+        assertEquals(expResult, result.getContent().size());
+        assertEquals(4, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
 
     }
 
@@ -181,27 +238,36 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
      */
     @Test
     public void testFindSpeciesByTaxId() {
-        System.out.println("findSpeciesByTaxId");
-        Long taxId = null;
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<Species> expResult = null;
-        List<Species> result = instance.findSpeciesByTaxId(taxId);
+        LOGGER.info("findSpeciesByTaxId");
+        Long taxId = 9606L;
+
+        Species species = new Species("Homo sapiens", "Human", taxId);
+
+        List<Species> expResult = new ArrayList<>();
+        expResult.add(species);
+
+        List<Species> result = uniprotEntryRepository.findSpeciesByTaxId(taxId);
+
         assertEquals(expResult, result);
+        assertEquals(expResult.size(), result.size());
 
     }
 
     /**
-     * Test of findSpeciesByScientificName method, of class UniprotEntryRepositoryImpl.
+     * Test of findSpeciesByScientificName method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindSpeciesByScientificName() {
-        System.out.println("findSpeciesByScientificName");
-        String sName = "";
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<Species> expResult = null;
-        List<Species> result = instance.findSpeciesByScientificName(sName);
+        LOGGER.info("findSpeciesByScientificName");
+        String sName = "Homo sapiens";
+
+        Species species = new Species("Homo sapiens", "Human", 9606L);
+        List<Species> expResult = new ArrayList<>();
+        expResult.add(species);
+        List<Species> result = uniprotEntryRepository.findSpeciesByScientificName(sName);
         assertEquals(expResult, result);
-  
+
     }
 
     /**
@@ -209,27 +275,29 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
      */
     @Test
     public void testFindEnzymesByMeshId() {
-        System.out.println("findEnzymesByMeshId");
-        String meshId = "";
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByMeshId(meshId);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findEnzymesByMeshId");
+        String meshId = "D006934";
+
+        int expResult = 1;
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByMeshId(meshId);
+
+        assertEquals(expResult, result.size());
+
     }
 
     /**
-     * Test of findEnzymesByPathwayId method, of class UniprotEntryRepositoryImpl.
+     * Test of findEnzymesByPathwayId method, of class
+     * UniprotEntryRepositoryImpl.
      */
     @Test
     public void testFindEnzymesByPathwayId() {
-        System.out.println("findEnzymesByPathwayId");
-        String pathwayId = "";
-        UniprotEntryRepositoryImpl instance = new UniprotEntryRepositoryImpl();
-        List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByPathwayId(pathwayId);
-        assertEquals(expResult, result);
- 
+        LOGGER.info("findEnzymesByPathwayId");
+        String pathwayId = "REACT_147797";
+
+        int expResult = 1;
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByPathwayId(pathwayId);
+        assertEquals(expResult, result.size());
+
     }
-    
+
 }

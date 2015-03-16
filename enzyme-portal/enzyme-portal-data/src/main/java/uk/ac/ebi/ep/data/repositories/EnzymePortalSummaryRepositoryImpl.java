@@ -79,7 +79,7 @@ public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRep
     }
 
     @Override
-    public List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> name_prefixes) {
+    public List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> namePrefixes) {
         EntityGraph eGraph = entityManager.getEntityGraph("summary.graph");
 
         //EntityGraph eGraph = entityManager.createEntityGraph("summary.graph");
@@ -105,7 +105,7 @@ public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRep
         StringExpression idPrefix = $.uniprotAccession.relatedProteinsId.namePrefix;
         
         BooleanBuilder builder = new BooleanBuilder();
-        name_prefixes.stream().forEach((prefix) -> {
+        namePrefixes.stream().forEach((prefix) -> {
 
             builder.or(idPrefix.equalsIgnoreCase(prefix));
 

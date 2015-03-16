@@ -96,9 +96,9 @@ public class BioPortalService {
         BufferedReader rd;
         String line;
         String result = "";
-        String bioportal_api_key = env.getRequiredProperty("bioportal.api.key");
-        if (bioportal_api_key == null) {
-            bioportal_api_key = API_KEY;
+        String bioportalApiKey = env.getRequiredProperty("bioportal.api.key");
+        if (bioportalApiKey == null) {
+            bioportalApiKey = API_KEY;
             LOGGER.error("BioPortal Key could not be retrieved from the environment. default key is now being used");
         }
 
@@ -106,7 +106,7 @@ public class BioPortalService {
             url = new URL(urlToGet);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Authorization", "apikey token=" + bioportal_api_key);
+            conn.setRequestProperty("Authorization", "apikey token=" + bioportalApiKey);
             conn.setRequestProperty("Accept", "application/json");
             rd = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));

@@ -35,12 +35,12 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> name_prefixes) {
+    public List<EnzymePortalDisease> findDiseasesByNamePrefixes(List<String> namePrefixes) {
         JPAQuery query = new JPAQuery(entityManager);
 
         StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
         BooleanBuilder builder = new BooleanBuilder();
-        name_prefixes.stream().forEach((prefix) -> {
+        namePrefixes.stream().forEach((prefix) -> {
 
             builder.or(idPrefix.equalsIgnoreCase(prefix));
 
@@ -108,7 +108,12 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         return diseases;
     }
 
-   
+   /**
+    * 
+    * @param name
+    * @return
+    * @deprecated(To be removed in version 1.0.14)
+    */
     @Deprecated
     public List<String> findDiseasesByName(String name) {
         JPAQuery query = new JPAQuery(entityManager);

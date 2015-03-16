@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;
@@ -193,6 +189,7 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
      * @return possible object is {@link String }
      *
      */
+    @Override
     public String getUniprotid() {
         return uniprotid;
     }
@@ -203,6 +200,7 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
      * @param value allowed object is {@link String }
      *
      */
+    @Override
     public void setUniprotid(String value) {
         this.uniprotid = value;
     }

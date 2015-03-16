@@ -39,7 +39,7 @@ public class DataConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         //em.setPersistenceXmlLocation("classpath*:META-INF/persistence.xml");
 
-        //em.setPersistenceUnitName("ep_PU");
+        
         em.setDataSource(dataSource);
         em.setPackagesToScan("uk.ac.ebi.ep.data.domain");
 

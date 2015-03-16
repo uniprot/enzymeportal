@@ -6,6 +6,7 @@
 
 package uk.ac.ebi.ep.data.search.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author joseph
  */
-public class SearchParams {
+public class SearchParams implements Serializable {
     
       
     protected String text;

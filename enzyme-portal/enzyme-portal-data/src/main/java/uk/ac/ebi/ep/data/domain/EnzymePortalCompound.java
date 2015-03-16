@@ -180,6 +180,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
 
 
 
+    @Override
     public String getUrl() {
         return url;
     }

@@ -176,6 +176,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
         this.score = score;
     }
 
+    @Override
     public String getUrl() {
         return url;
     }

@@ -38,9 +38,15 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         this.entityManager = entityManager;
     }
 
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+    
+    
+
     @Transactional(readOnly = true)
     @Override
-    public List<UniprotEntry> findEnzymesByNamePrefixes(List<String> name_prefixes) {
+    public List<UniprotEntry> findEnzymesByNamePrefixes(List<String> namePrefixes) {
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
         //EntityGraph eGraph =entityManager.createEntityGraph("UniprotEntryEntityGraph");
 
@@ -56,7 +62,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         //StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
         StringExpression idPrefix = $.relatedProteinsId.namePrefix;
         BooleanBuilder builder = new BooleanBuilder();
-        name_prefixes.stream().forEach((prefix) -> {
+        namePrefixes.stream().forEach((prefix) -> {
 
             builder.or(idPrefix.equalsIgnoreCase(prefix));
 

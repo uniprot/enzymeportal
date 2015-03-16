@@ -392,7 +392,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
 //            pdbcodes.add(xref.getSourceId());
 //        });
-        e.getUniprotXrefSet().stream().filter((x) -> ("PDB".equalsIgnoreCase(x.getSource()))).limit(1).collect(Collectors.toList()).stream().forEach((xref) -> {
+        e.getUniprotXrefSet().stream().filter(x -> ("PDB".equalsIgnoreCase(x.getSource()))).limit(1).collect(Collectors.toList()).stream().forEach(xref -> {
             pdbcodes.add(xref.getSourceId());
         });
 
@@ -450,7 +450,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
         List<String> ec = new ArrayList<>();
         if (!getEnzymePortalEcNumbersSet().isEmpty()) {
-            this.getEnzymePortalEcNumbersSet().stream().forEach((ecNum) -> {
+            this.getEnzymePortalEcNumbersSet().stream().forEach(ecNum -> {
                 ec.add(ecNum.getEcNumber());
             });
         }

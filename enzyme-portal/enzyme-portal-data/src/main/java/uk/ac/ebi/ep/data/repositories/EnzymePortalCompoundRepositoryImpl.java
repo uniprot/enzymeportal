@@ -50,13 +50,13 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
     }
 
     @Override
-    public List<EnzymePortalCompound> findCompoundsByNameprefixes(List<String> name_prefixes) {
+    public List<EnzymePortalCompound> findCompoundsByNameprefixes(List<String> namePrefixes) {
 
         JPAQuery query = new JPAQuery(entityManager);
 
         StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
         BooleanBuilder builder = new BooleanBuilder();
-        name_prefixes.stream().forEach((prefix) -> {
+        namePrefixes.stream().forEach((prefix) -> {
 
             builder.or(idPrefix.equalsIgnoreCase(prefix));
 
@@ -77,11 +77,11 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
     }
 
     @Override
-    public List<String> findEnzymesByCompound(String compound_id) {
+    public List<String> findEnzymesByCompound(String compoundId) {
 
         Set<String> enzymes = new TreeSet<>();
         JPAQuery query = new JPAQuery(entityManager);
-        BooleanExpression compound = $.compoundId.equalsIgnoreCase(compound_id);
+        BooleanExpression compound = $.compoundId.equalsIgnoreCase(compoundId);
 
         List<EnzymePortalCompound> compounds = query.from($).where(compound).distinct().list($);
 

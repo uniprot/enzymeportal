@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.data.search.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +17,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  *
  * @author joseph
  */
-public class SearchResults {
+public class SearchResults implements Serializable {
 
     private Long totalfound;
     private SearchFilters searchfilters;

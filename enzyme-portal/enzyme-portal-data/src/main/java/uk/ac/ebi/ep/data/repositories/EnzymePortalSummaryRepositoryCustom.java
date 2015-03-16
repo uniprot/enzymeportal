@@ -24,7 +24,7 @@ public interface EnzymePortalSummaryRepositoryCustom {
 
     List<EnzymePortalSummary> findEnzymeSummariesByAccession(String accessions);
 
-    List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> name_prefixes);
+    List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> namePrefixes);
 
     List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions);
 

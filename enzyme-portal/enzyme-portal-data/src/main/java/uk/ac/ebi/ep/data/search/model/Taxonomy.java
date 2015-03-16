@@ -17,7 +17,7 @@ public class Taxonomy {
     private Long taxId;
     private String scientificName;
     private String commonName;
-    private Long num_enzymes;
+    private Long numEnzymes;
 
     public Taxonomy(Long taxId, String scientificName, String commonName) {
         this.taxId = taxId;
@@ -25,11 +25,11 @@ public class Taxonomy {
         this.commonName = commonName;
     }
 
-    public Taxonomy(Long taxId, String scientificName, String commonName, Long num_enzymes) {
+    public Taxonomy(Long taxId, String scientificName, String commonName, Long numEnzymes) {
         this.taxId = taxId;
         this.scientificName = scientificName;
         this.commonName = commonName;
-        this.num_enzymes = num_enzymes;
+        this.numEnzymes = numEnzymes;
     }
 
     public Long getTaxId() {
@@ -64,17 +64,17 @@ public class Taxonomy {
         this.commonName = commonName;
     }
 
-    public Long getNum_enzymes() {
-        return num_enzymes;
+    public Long getNumEnzymes() {
+        return numEnzymes;
     }
 
-    public void setNum_enzymes(Long num_enzymes) {
-        this.num_enzymes = num_enzymes;
+    public void setNumEnzymes(Long numEnzymes) {
+        this.numEnzymes = numEnzymes;
     }
 
     @Override
     public String toString() {
-        return "Taxonomy{" + "taxId=" + taxId + ", scientificName=" + scientificName + ", commonName=" + commonName + ", num_enzymes=" + num_enzymes + '}';
+        return "Taxonomy{" + "taxId=" + taxId + ", scientificName=" + scientificName + ", commonName=" + commonName + ", num_enzymes=" + numEnzymes + '}';
     }
 
 }

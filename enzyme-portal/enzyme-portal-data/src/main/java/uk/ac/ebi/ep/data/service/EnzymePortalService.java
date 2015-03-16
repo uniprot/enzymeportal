@@ -112,9 +112,9 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<EnzymePortalCompound> findCompoundsByNamePrefix(List<String> name_prefixes) {
+    public List<EnzymePortalCompound> findCompoundsByNamePrefix(List<String> namePrefixes) {
 
-        return enzymePortalCompoundRepository.findCompoundsByNameprefixes(name_prefixes);
+        return enzymePortalCompoundRepository.findCompoundsByNameprefixes(namePrefixes);
     }
 
     @Deprecated
@@ -172,9 +172,9 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<EnzymePortalDisease> findDiseasesByNamePrefix(List<String> name_prefixes) {
+    public List<EnzymePortalDisease> findDiseasesByNamePrefix(List<String> namePrefixes) {
 
-        return diseaseRepository.findDiseasesByNamePrefixes(name_prefixes);
+        return diseaseRepository.findDiseasesByNamePrefixes(namePrefixes);
     }
 
     @Transactional(readOnly = true)
@@ -220,9 +220,9 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<String> findEnzymesByCompound(String compound_id) {
+    public List<String> findEnzymesByCompound(String compoundId) {
 
-        return enzymePortalCompoundRepository.findEnzymesByCompound(compound_id);
+        return enzymePortalCompoundRepository.findEnzymesByCompound(compoundId);
     }
 
     @Transactional(readOnly = true)
