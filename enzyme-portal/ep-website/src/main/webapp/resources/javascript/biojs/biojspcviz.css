@@ -12,9 +12,7 @@
     background-color: #dee;
 }
 
-#close-pcviz {
-    float: right;
-    margin-right: 10px;
-    font-weight: bold;
+#pcviz-widget {
+    display: none;
 }
 

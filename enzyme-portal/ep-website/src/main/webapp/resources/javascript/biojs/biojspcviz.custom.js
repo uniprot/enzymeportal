@@ -32,6 +32,9 @@ $(document).ready(function() {
                 }
 
                 pcvizDescEl.html( myContent );
+                //show when loaded
+                $('#pcviz-widget').show();
+
                 return this;
             },
 
