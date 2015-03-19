@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,21 +51,20 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
 
             String filename = "suggestions.json";
             String json = getJsonFile(filename);
-
+            
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
-            EbeyeAutocomplete expResult = restTemplate.getForObject(url.trim(), EbeyeAutocomplete.class);
+            EbeyeAutocomplete aut = restTemplate.getForObject(url.trim(), EbeyeAutocomplete.class);
+            List<Suggestion> expResult = aut.getSuggestions().stream().sorted().collect(Collectors.toList());
 
-            List<Suggestion> result = ebeyeRestService.ebeyeAutocompleteSearch(searchTerm);
-
-            String suggestion = expResult.getSuggestions().stream().findAny().get().getSuggestedKeyword();
+            List<Suggestion> result = ebeyeRestService.ebeyeAutocompleteSearch(searchTerm).stream().sorted().collect(Collectors.toList());
+            Suggestion suggestion = expResult.stream().sorted().findAny().get();
 
             mockRestServer.verify();
 
-            assertThat(result.stream().findAny().get().getSuggestedKeyword(), containsString(suggestion));
+            assertThat(result, hasItem(suggestion));
 
-            assertEquals(expResult.getSuggestions(), result);
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }

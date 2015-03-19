@@ -14,7 +14,7 @@ import java.util.Objects;
  * @author joseph
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Suggestion {
+public class Suggestion implements Comparable<Suggestion>{
 
     @JsonProperty("suggestion")
     private String suggestedKeyword;
@@ -48,6 +48,11 @@ public class Suggestion {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(Suggestion s) {
+       return this.suggestedKeyword.compareToIgnoreCase(s.getSuggestedKeyword());
     }
     
     
