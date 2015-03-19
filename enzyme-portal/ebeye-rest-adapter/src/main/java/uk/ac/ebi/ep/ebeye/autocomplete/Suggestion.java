@@ -44,10 +44,7 @@ public class Suggestion implements Comparable<Suggestion>{
             return false;
         }
         final Suggestion other = (Suggestion) obj;
-        if (!Objects.equals(this.suggestedKeyword, other.suggestedKeyword)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.suggestedKeyword, other.suggestedKeyword);
     }
 
     @Override
