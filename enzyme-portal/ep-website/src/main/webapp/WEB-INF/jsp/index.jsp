@@ -70,8 +70,9 @@
                 <p>Additionally, the technical documentation (Javadoc, project information) is also available online.</p>
             </div>
             <div class="grid_6">
-                <h4>FAQ</h4>
-                <p>Read our frequently asked questions <a href="faq">here</a>.</p>
+                <h4>Tools</h4>
+                <p><strong>Protein sequence search:</strong> search Enzyme Portal with a sequence by clicking on the "Advanced" link in the search area.</p>
+                <p><strong>Compare enzymes:</strong> the Enzyme Portal basket provides a tool for comparing two enzymes. Select your enzymes from search results and add them to your basket to access the tool.</p>
             </div>
         </section>
 
