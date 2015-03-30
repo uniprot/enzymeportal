@@ -22,6 +22,23 @@
 
 <div id="reactionContent" class="summary">
     <h2><c:out value="${enzymeModel.name}"/></h2>
+    <c:if test="${ not empty enzymeModel.catalyticActivities}">
+  <p></p>
+<!--    
+                <dl>
+                    <dt><h5>Catalytic Activities</h5></dt>
+                 
+              </dl>-->
+    <h5>Catalytic Activities</h5>
+                <ul style="list-style-type: square">
+                    <c:forEach items="${enzymeModel.catalyticActivities}" var="activity" >
+                        <li class="reaction"><b>${activity}</b></li>   
+                    </c:forEach>
+                    
+                </ul>
+    
+  
+    </c:if>
     <c:set var="reactionpathways" value="${enzymeModel.reactionpathway}"/>
      <c:set var="pathways" value="${enzymeModel.pathways}"/>
     <c:choose>

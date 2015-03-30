@@ -76,6 +76,7 @@
                     var  speciesAutocompleteDataSource = [];
                     var compoundsAutoCompleteDataSource = [];
                     var diseaseAutoCompleteDataSource = [];
+                    var ecAutoCompleteDataSource = [];
                 </script>
                 
                 
@@ -157,6 +158,8 @@
                                 <%@ include file="filter-compounds.jspf"%>
                                 <br/>
                                 <%@ include file="filter-diseases.jspf"%>
+                                <br/>
+                                 <%@ include file="filter-family.jsp"%>
                             </form:form>
                         </div> 
                         <%--filter --%>

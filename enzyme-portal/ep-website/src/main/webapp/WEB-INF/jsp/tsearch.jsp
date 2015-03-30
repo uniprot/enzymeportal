@@ -169,6 +169,8 @@
                                 <%@ include file="filter-compounds.jspf"%>
                                 <br/>
                                 <%@ include file="filter-diseases.jspf"%>
+                                                                <br/>
+                                 <%@ include file="filter-family.jsp"%>
                             </form:form>
                         </div> 
                         <%--filter --%>
@@ -272,7 +274,7 @@
              
      
             <div class="resultItem grid_24">
-               
+                <h2>EC ${enzyme.enzymePortalEcNumbersSet}</h2>
              <div class="summary-header">
                  <input type="checkbox" class="forBasket"
                         title="Select entry"
@@ -299,15 +301,14 @@
     </c:when>
     <c:otherwise>
         <div class="proteinImg grid_3">
-            <c:if test="${ not empty theSpecies.pdbeaccession}">
-           <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>     
-            </c:if>     
-            
+            <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
             <c:set var="imgFooter" value=""/>
+            <c:set var="specieWithImage" value="${primAcc}"/>
             <c:if test="${empty imgFile}">
                 <c:forEach var="relSp" items="${enzyme.relatedspecies}">
                     <c:if test="${empty imgFile and not empty relSp.pdbeaccession}">
                         <c:set var="imgFile" value="${relSp.pdbeaccession[0]}"/>
+                        <c:set var="specieWithImage" value="${relSp.accession}"/>
                         <c:set var="imgFooter">
                             <spring:message code="label.entry.proteinStructure.other.species"/>
                             ${empty relSp.species.commonname?
@@ -331,7 +332,7 @@
                     <%-- FIXME: hardcoded --%>
                     <c:set var="imgLink"
                            value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
-                    <a class="noLine" style="border-bottom-style: none" target="blank" href="${imgLink}">
+                    <a class="noLine" style="border-bottom-style: none" target="_blank" href="${pageContext.request.contextPath}/search/${specieWithImage}/proteinStructure">
                         <img src="${imgLink}"
                              alt="PDB ${imgFile}" onerror="noImage(this);"/>
                     </a>
@@ -375,7 +376,7 @@
     <c:set var="synLimitedDisplay" value="${synLimitedDisplayDefault}"/>
     <c:if test='${synonymSize>0}'>
         <div id ="synonym">
-            <b>Synonyms</b>:
+            <b>Other names</b>:
             <c:if test="${synonymSize > 0 && synonymSize <= synLimitedDisplay}">
                 <c:set var="synLimitedDisplay" value="${synonymSize}"/>
             </c:if>
@@ -392,7 +393,7 @@
 
                     </c:forEach>
                 </span>
-                <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>">Show more synonyms</a>
+                <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>">Show more other names</a>
             </c:if>
         </div>
     </c:if>

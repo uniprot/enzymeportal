@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.ac.ebi.ep.base.common.CompoundsPredicate;
 import uk.ac.ebi.ep.base.common.DiseasesPredicate;
+import uk.ac.ebi.ep.base.common.EcNumberPredicate;
 import uk.ac.ebi.ep.base.common.SpeciesPredicate;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.common.Config;
@@ -28,6 +29,7 @@ import uk.ac.ebi.ep.common.Pagination;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
+import uk.ac.ebi.ep.data.search.model.EcNumber;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
@@ -37,8 +39,6 @@ import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
 
-
-
 /**
  *
  * @author joseph
@@ -46,17 +46,16 @@ import uk.ac.ebi.ep.functions.HtmlUtility;
 public abstract class AbstractController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
-  
+
     @Autowired
     protected Config searchConfig;
     //@Autowired
-   // protected IntenzConfig intenzConfig;
+    // protected IntenzConfig intenzConfig;
     @Autowired
     protected EnzymePortalService enzymePortalService;
- 
+
     @Autowired
     protected EbeyeRestService ebeyeRestService;
-  
 
     @ModelAttribute("searchModel")
     public SearchModel searchform() {
@@ -77,8 +76,8 @@ public abstract class AbstractController {
      */
     protected void cacheSearch(ServletContext servletContext, String searchKey,
             SearchResults searchResult) {
-        Map<String, SearchResults> prevSearches =
-                getPreviousSearches(servletContext);
+        Map<String, SearchResults> prevSearches
+                = getPreviousSearches(servletContext);
         synchronized (prevSearches) {
             while (prevSearches.size() >= searchConfig.getSearchCacheSize()) {
                 // remove the eldest:
@@ -102,7 +101,7 @@ public abstract class AbstractController {
             // Map implementation which maintains the order of access:
             prevSearches = Collections.synchronizedMap(
                     new LinkedHashMap<String, SearchResults>(
-                    searchConfig.getSearchCacheSize(), 1, true));
+                            searchConfig.getSearchCacheSize(), 1, true));
             servletContext.setAttribute(Attribute.prevSearches.getName(),
                     prevSearches);
 
@@ -159,8 +158,7 @@ public abstract class AbstractController {
     /**
      * Adds a search to the user history. The history item (String) actually
      * stored depends on the type of search, so that the links can be re-created
-     * in the web page properly (see
-     * <code>breadcrumbs.jsp</code>).
+     * in the web page properly (see <code>breadcrumbs.jsp</code>).
      *
      * @param session the user session.
      * @param searchType the search type.
@@ -186,8 +184,7 @@ public abstract class AbstractController {
      * cache.<br> Note that the key for a ChEBI ID depends on the type of
      * search: if a keyword search, the prefix will be lowercase (
      * <code>chebi:</code>); if a compound structure search, the prefix will be
-     * uppercase (
-     * <code>CHEBI:</code>).
+     * uppercase ( <code>CHEBI:</code>).
      *
      * @param searchParams the search parameters, including the original search
      * text from the user.
@@ -222,10 +219,10 @@ public abstract class AbstractController {
      */
     protected SearchResults searchKeyword(SearchParams searchParameters) {
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeRestService);
- 
-            results = finder.getEnzymes(searchParameters);
-  
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+
+        results = finder.getEnzymes(searchParameters);
+
         return results;
     }
 
@@ -259,7 +256,6 @@ public abstract class AbstractController {
             searchParameters.setSize(searchConfig.getResultsPerPage());
             SearchResults resultSet = searchModel.getSearchresults();
 
-
             final int numOfResults = resultSet.getSummaryentries().size();
             Pagination pagination = new Pagination(
                     numOfResults, searchParameters.getSize());
@@ -269,11 +265,12 @@ public abstract class AbstractController {
             String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
             String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
 
-
             // Filter:
             List<String> speciesFilter = searchParameters.getSpecies();
             List<String> compoundsFilter = searchParameters.getCompounds();
             List<String> diseasesFilter = searchParameters.getDiseases();
+            List<String> ecNumbersFilter = searchParameters.getEcFamilies();
+            
 
             //remove empty string in the filter to avoid unsual behavior of the filter facets
             if (speciesFilter.contains("")) {
@@ -288,11 +285,13 @@ public abstract class AbstractController {
                 diseasesFilter.remove("");
             }
 
+            if (ecNumbersFilter.contains("")) {
+                ecNumbersFilter.remove("");
+            }
 
             //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
             if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
                 speciesFilter.add(specie_autocompleteFilter);
-
 
             }
 
@@ -300,7 +299,6 @@ public abstract class AbstractController {
                 diseasesFilter.add(diseases_autocompleteFilter);
 
             }
-
 
 //both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
             SearchResults searchResults = resultSet;
@@ -341,14 +339,23 @@ public abstract class AbstractController {
                 }
             }
 
+            List<EcNumber> defaultEcNumberList = searchResults.getSearchfilters().getEcNumbers();
 
+            resetSelectedEcNumber(defaultEcNumberList);
+
+            for (String selectedEcFamily : searchParameters.getEcFamilies()) {
+                for (EcNumber ec : defaultEcNumberList) {
+
+                    if (selectedEcFamily.equalsIgnoreCase(ec.getFamily())) {
+                        ec.setSelected(true);
+                    }
+                }
+            }
 
             //if an item is seleted, then filter the list
-            if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty()) {
-                List<UniprotEntry> filteredResults =
-                        new LinkedList<>(resultSet.getSummaryentries());
-
-
+            if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty() || !ecNumbersFilter.isEmpty()) {
+                List<UniprotEntry> filteredResults
+                        = new LinkedList<>(resultSet.getSummaryentries());
 
                 CollectionUtils.filter(filteredResults,
                         new SpeciesPredicate(speciesFilter));
@@ -356,7 +363,8 @@ public abstract class AbstractController {
                         new CompoundsPredicate(compoundsFilter));
                 CollectionUtils.filter(filteredResults,
                         new DiseasesPredicate(diseasesFilter));
-                
+                CollectionUtils.filter(filteredResults,
+                        new EcNumberPredicate(ecNumbersFilter));
 
                 // Create a new SearchResults, don't modify the one in session
                 SearchResults sr = new SearchResults();
@@ -364,18 +372,15 @@ public abstract class AbstractController {
                 // Update the number of results to paginate:
                 pagination.setNumberOfResults(filteredResults.size());
 
-               
                 sr.setSearchfilters(resultSet.getSearchfilters());
                 sr.setSummaryentries(filteredResults);
                 // show the total number of hits (w/o filtering):
                 sr.setTotalfound(resultSet.getTotalfound());
                 searchModel.setSearchresults(sr);
 
+            }
 
         }
-
-
-    }
 
     }
 
@@ -397,5 +402,11 @@ public abstract class AbstractController {
         for (Disease disease : diseases) {
             disease.setSelected(false);
         }
+    }
+
+    protected void resetSelectedEcNumber(List<EcNumber> ecNumbers) {
+        ecNumbers.stream().forEach((ec) -> {
+            ec.setSelected(false);
+        });
     }
 }

@@ -92,7 +92,7 @@ enzymeApp.factory('organismService', function($http){
             return $http.get('/enzymeportal/resources/javascript/organisms.json')
             .then(function(resp){
                 return resp.data;
-            })
+            });
         },
 
         getOrganismCount: function(taxids) {
@@ -139,7 +139,7 @@ enzymeApp.directive('taxonomyTree', ['$q','organismService', function($q,organis
                 if(organism.taxid) {
                     counts.forEach(function(info){
                         if(organism.taxid === info.taxId)
-                            organism.num_enzymes = info.num_enzymes;
+                            organism.num_enzymes = info.numEnzymes;
                     });
                 }
                 if(organism.children){
@@ -160,7 +160,7 @@ enzymeApp.directive('taxonomyTree', ['$q','organismService', function($q,organis
                 var diagonal = d3.svg.diagonal()
                     .projection(function(d) { return [d.y, d.x]; });
 
-                console.log(element);
+                //console.log(element);
                 var svg = d3.select(element[0]).append("svg")
                     .attr("width", width)
                     .attr("height", height)

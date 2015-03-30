@@ -54,31 +54,37 @@
 <c:set var="isCompound" value="${param.type eq 'COMPOUND'
     or searchModel.searchparams.type eq 'COMPOUND'}"/>
 
-<ul id="search-tabs"
+
+
+<!--<ul id="search-tabs"
     style="width: 70em; margin-left: auto; margin-right: auto;">
+    <%--
     <li id="search-tab-keyword"
         class="searchTab ${isKeyword? 'selected' : ''}"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.keyword"/>
     </li>
+
     <li id="search-tab-sequence"
         class="searchTab ${isSequence? 'selected' : ''}"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.sequence"/>
     </li>
-    <%-- 
+
     <li id="search-tab-compound"
         class="searchTab ${isCompound? 'selected' : ''}"
         onclick="showCard(this.id);">
         <spring:message code="label.search.tab.compound"/>
     </li>
     --%>
-</ul>
+</ul>-->
 
 
     <div id="search" style="min-height: 20ex;">
+<!--        <div id="search-keyword" class="searchBackground searchTabContent"
+             style="display: ${isKeyword? 'block':'none' };">-->
         <div id="search-keyword" class="searchBackground searchTabContent"
-             style="display: ${isKeyword? 'block':'none' };">
+             style="display: none;">
         <form:form id="keywordSearchForm" modelAttribute="searchModel"
                    action="${pageContext.request.contextPath}/search" method="POST">
             <form:hidden path="searchparams.previoustext" />
@@ -107,8 +113,10 @@
         </form:form>
         </div>
 
+<!--        <div id="search-sequence" class="searchBackground searchTabContent"
+             style="display: ${isSequence? 'block':'none' };">-->
         <div id="search-sequence" class="searchBackground searchTabContent"
-             style="display: ${isSequence? 'block':'none' };">
+             style="display: block;">
         <form:form id="sequenceSearchForm" modelAttribute="searchModel"
                    action="${pageContext.request.contextPath}/search" method="POST">
             <form:hidden path="searchparams.previoustext" />

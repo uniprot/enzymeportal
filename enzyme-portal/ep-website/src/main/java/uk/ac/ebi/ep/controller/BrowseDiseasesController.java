@@ -201,7 +201,7 @@ public class BrowseDiseasesController extends AbstractController {
     @RequestMapping(value = FIND_DISEASES_BY_NAME, method = RequestMethod.GET)
     public List<Disease> getDiseases(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length()>=3) {
-            name = String.format("%%%s%%", name);
+           // name = String.format("%%%s%%", name);
             return enzymePortalService.findDiseasesLike(name).stream().distinct().collect(Collectors.toList());
         } else {
             return new ArrayList<>();

@@ -492,6 +492,40 @@ function addCheckboxDisease(filterGroup, obj, selected) {
             .appendTo($('#' + filterGroup + '_filters_' + (selected ? 'y' : 'n')));
     displayedFilters[filterGroup]++;
 }
+
+function addCheckboxEc(filterGroup, obj, selected) {
+    if (obj === '')
+        return;
+    var cb = $('<input/>', {
+        "type": "checkbox",
+        "name": "searchparams." + filterGroup,
+        "value": (filterGroup === 'ecFamilies' ? obj.name : obj.id),
+        onclick: "form.submit()"
+    });
+    if (selected)
+        cb.attr("checked", "checked");
+
+
+    var label = $('<span>');
+    if (obj.name) {
+        label.text(obj.name);
+//        label.append($('<span>', {
+//            text: obj.id
+//        }));
+    } else {
+        label.text(obj.id);
+    }
+
+
+    $('<div>').addClass("filterItem").addClass(filterGroup).append(cb, label)
+            .appendTo($('#' + filterGroup + '_filters_' + (selected ? 'y' : 'n')));
+    displayedFilters[filterGroup]++;
+}
+
+
+
+
+
 /**
  * Add unselected checkboxes to the list of filters.
  * @param filterGroup the group this filter belongs to.

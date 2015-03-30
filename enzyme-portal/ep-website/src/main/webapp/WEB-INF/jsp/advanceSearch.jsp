@@ -34,7 +34,7 @@
           <nav id="breadcrumb">
      	<p>
 		    <a href="${pageContext.request.contextPath}">Enzyme Portal</a> &gt; 
-		    Advanced Search
+		    Sequence Search
 			</p>
   	</nav>
     

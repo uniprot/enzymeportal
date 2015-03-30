@@ -30,6 +30,8 @@
             </ul>
         </dd>
     </dl>
+    
+    <c:if test="${not empty enzyme.echierarchies}">
 
     <dl>
         <dt>EC Classification</dt>
@@ -75,22 +77,14 @@
             </ul>
         </dd>
     </dl>
-    <!--
-<dl>
-<dt>Enzyme Type</dt>
-<dd>
-<ul>
-<li>Enzyme Type</li>
-</ul>
-</dd>
-</dl>
-    -->
+    </c:if>
+    <c:if test="${not empty enzymeModel.synonyms}">
     <dl>
         <dt>Other names</dt>
         <dd>
             <ul>
                 <li>
-                    <c:set var="synonym" value="${enzymeModel.synonym}"/>
+                    <c:set var="synonym" value="${enzymeModel.synonyms}"/>
                     <c:set var="synonymSize" value="${fn:length(synonym)}"/>
                     <c:if test='${synonymSize>0}'>
                         <c:forEach var="i" begin="0" end="${synonymSize-1}">
@@ -102,6 +96,7 @@
             </ul>
         </dd>
     </dl>
+    </c:if>
 
     <dl>
         <dt>Protein Sequence</dt>
@@ -120,7 +115,7 @@
                  <p><a target="blank" href="${sequence.sequenceurl}">View Sequence in UniProt</a></p>
             </c:when>
             <c:otherwise>
-           <p><a target="_blank" href="http://www.uniprot.org/uniprot/${accession}#section_seq" > View Sequence in UniProt</a></p>       
+           <p><a target="_blank" href="http://www.uniprot.org/uniprot/${accession}#${accession}-details" > View Sequence in UniProt</a></p>       
             </c:otherwise>
         </c:choose>
        

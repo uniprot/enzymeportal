@@ -43,7 +43,8 @@
                                                 
 						<!-- If your search is more complex than just a keyword search, you can link to an Advanced Search,
 						     with whatever features you want available -->
-						<span class="adv"><a href="${pageContext.request.contextPath}/advanceSearch" id="adv-search" title="Advanced">Advanced</a></span>
+<!--						<span class="adv"><a href="${pageContext.request.contextPath}/advanceSearch" id="adv-search" title="Advanced">Advanced</a></span>-->
+                                                <span style="font-size: 76%;" class="adv"><a href="${pageContext.request.contextPath}/advanceSearch" id="adv-search" title="Advanced">Sequence Search</a></span>
                                                 
                              
 					</div>									
