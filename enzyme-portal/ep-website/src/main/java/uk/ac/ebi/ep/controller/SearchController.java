@@ -129,28 +129,28 @@ public class SearchController extends AbstractController {
         String responsePage = ResponsePage.ENTRY.toString();
         try {
             switch (requestedField) {
-                case proteinStructure:
+                case PROTEINSTRUCTURE:
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
-                case reactionsPathways:
+                case REACTIONPATHWAYS:
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
                     enzymeModel = retriever.getReactionsPathways(accession);
                     break;
-                case molecules:
+                case MOLECULES:
                     retriever.getChebiAdapter().setConfig(chebiConfig);
                     enzymeModel = retriever.getMolecules(accession);
                     break;
-                case diseaseDrugs:
+                case DISEASEDRUGS:
                     
                     enzymeModel = retriever.getDiseases(accession);
                     break;
-                case literature:
+                case LITERATURE:
                     retriever.getLiteratureAdapter().setConfig(literatureConfig);
                     enzymeModel = retriever.getLiterature(accession);
                     break;
                 default:
                     enzymeModel = retriever.getEnzyme(accession);
-                    requestedField = Field.enzyme;
+                    requestedField = Field.ENZYME;
                     break;
             }
             if (enzymeModel != null) {
@@ -172,7 +172,7 @@ public class SearchController extends AbstractController {
         } catch (EnzymeRetrieverException ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
             LOGGER.error("Unable to retrieve the entry!", ex);
-            if (requestedField.getName().equalsIgnoreCase(Field.diseaseDrugs.getName())) {
+            if (requestedField.getName().equalsIgnoreCase(Field.DISEASEDRUGS.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setName("Diseases");
                 enzymeModel.setRequestedfield(requestedField.name());
@@ -182,7 +182,7 @@ public class SearchController extends AbstractController {
                 model.addAttribute("enzymeModel", enzymeModel);
                 LOGGER.error("Error in retrieving Disease Information");
             }
-            if (requestedField.getName().equalsIgnoreCase(Field.molecules.getName())) {
+            if (requestedField.getName().equalsIgnoreCase(Field.MOLECULES.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Small Molecues");
@@ -196,7 +196,7 @@ public class SearchController extends AbstractController {
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving Molecules Information");
             }
-            if (requestedField.getName().equalsIgnoreCase(Field.enzyme.getName())) {
+            if (requestedField.getName().equalsIgnoreCase(Field.ENZYME.getName())) {
                 
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
@@ -208,7 +208,7 @@ public class SearchController extends AbstractController {
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving Enzymes");
             }
-            if (requestedField.getName().equalsIgnoreCase(Field.proteinStructure.getName())) {
+            if (requestedField.getName().equalsIgnoreCase(Field.PROTEINSTRUCTURE.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Protein Structures");
@@ -219,7 +219,7 @@ public class SearchController extends AbstractController {
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving ProteinStructure");
             }
-            if (requestedField.getName().equalsIgnoreCase(Field.reactionsPathways.getName())) {
+            if (requestedField.getName().equalsIgnoreCase(Field.REACTIONPATHWAYS.getName())) {
                 enzymeModel = new EnzymeModel();
                 
                 enzymeModel.setRequestedfield(requestedField.getName());
@@ -235,7 +235,7 @@ public class SearchController extends AbstractController {
                 LOGGER.error("Error in retrieving Reaction Pathways");
                 
             }
-            if (requestedField.getName().equalsIgnoreCase(Field.literature.getName())) {
+            if (requestedField.getName().equalsIgnoreCase(Field.LITERATURE.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Literatures");
