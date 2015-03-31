@@ -47,6 +47,9 @@ public class EbeyeRestService {
     private EbeyeIndexUrl ebeyeIndexUrl;
     @Autowired
     private RestTemplate restTemplate;
+    
+    private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
+    private static final int HITCOUNT = 5000;
 
     /**
      *
@@ -114,14 +117,14 @@ public class EbeyeRestService {
                 int hitcount = searchResult.getHitCount();
 
                  //for now limit hitcount to 5k
-                if (hitcount > 5000) {
-                    hitcount = 5000;
+                if (hitcount > HITCOUNT) {
+                    hitcount = HITCOUNT;
                 }
 
                 int resultLimit = 0;
 
                 if (limit < 0) {
-                    resultLimit = 100;
+                    resultLimit = DEFAULT_EBI_SEARCH_LIMIT;
                 }
 
                 //for now limit results
@@ -129,7 +132,7 @@ public class EbeyeRestService {
                     hitcount = resultLimit;
                 }
 
-                int numIteration = hitcount / 100;
+                int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
 
                 List<String> accessionList = query(query, numIteration);
                 LOGGER.warn("Number of Accessions to be processed (Pagination = true)  :  " + accessionList.size());
@@ -172,7 +175,7 @@ public class EbeyeRestService {
 
         for (int index = 0; index <= iteration; index++) {
 
-            String link = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * 100 + "&fields=name&query=";
+            String link = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=";
             ebeyeDomains.add(link);
         }
 
