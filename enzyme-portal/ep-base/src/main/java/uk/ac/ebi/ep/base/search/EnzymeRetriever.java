@@ -148,7 +148,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
 
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
-        // TODO query for related proteins and use the obj. possible null pointer if db isnot populated with related protein
+        // TODO query for related proteins and use the obj. possible null pointer if db is not populated with related protein
 
         for (UniprotEntry e : uniprotEntry.getRelatedProteinsId().getUniprotEntrySet()) {
 
@@ -198,6 +198,8 @@ public class EnzymeRetriever extends EnzymeFinder {
 
             model.setName(uniprotEntry.getProteinName());
 
+            model.setSynonyms(uniprotEntry.getSynonym());
+
             model.setRelatedspecies(getRelatedSPecies(uniprotEntry));
 
             model.setAccession(uniprotEntry.getAccession());
@@ -227,7 +229,6 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         EnzymeModel model = getEnzymeModel(uniprotAccession);
         try {
-
             intenzAdapter.getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
             LOGGER.fatal("Error getting enzyme details from Intenz webservice", ex);
@@ -444,11 +445,13 @@ public class EnzymeRetriever extends EnzymeFinder {
             throws EnzymeRetrieverException {
 
         EnzymeModel model = getEnzymeModel(uniprotAccession);
+        List<String> catalyticActivities = super.getService().findCatalyticActivitiesByAccession(model.getAccession());
+        model.setCatalyticActivities(catalyticActivities);
         addReactionsPathways(model);
         return model;
-    }   
-        
-        protected void addReactionsPathways(EnzymeModel model)
+    }
+
+    protected void addReactionsPathways(EnzymeModel model)
             throws EnzymeRetrieverException {
 
         //Get pathways from uniprot --> maybe not for now
@@ -484,16 +487,12 @@ public class EnzymeRetriever extends EnzymeFinder {
         // in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
         LOGGER.debug(" -RP- before queryRheaWsForReactions");
-        queryRheaWsForReactions(model);//uncomment to query Rhea  
-        
+        queryRheaWsForReactions(model);
 
     }
 
-    
-
     protected EnzymeModel addReactionsPathwaysWholeModel(EnzymeModel model)
             throws EnzymeRetrieverException {
-
 
         ReactionPathway reactionPathway = new ReactionPathway();
 
@@ -535,10 +534,8 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         return model;
     }
-    
-    
-    
-        /**
+
+    /**
      * Searches Rhea for the primary UniProt accession in the model and adds the
      * corresponding reactions if found. <br><b>WARNING:</b> the added reactions
      * have links only to Reactome and MACiE. The links are strings containing a

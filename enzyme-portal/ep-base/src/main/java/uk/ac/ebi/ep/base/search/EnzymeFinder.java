@@ -40,6 +40,7 @@ import uk.ac.ebi.ep.data.exceptions.EnzymeFinderException;
 import uk.ac.ebi.ep.data.exceptions.MultiThreadingException;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
+import uk.ac.ebi.ep.data.search.model.EcNumber;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.SearchFilters;
@@ -78,6 +79,8 @@ public class EnzymeFinder {
     Set<Species> uniqueSpecies = new TreeSet<>();
     List<Disease> diseaseFilters = new LinkedList<>();
     List<Compound> compoundFilters = new ArrayList<>();
+    List<EcNumber> ecNumberFilters = new ArrayList<>();
+
     Set<Compound> uniquecompounds = new HashSet<>();
     Set<Disease> uniqueDiseases = new HashSet<>();
     private NcbiBlastClient blastClient;
@@ -155,22 +158,21 @@ public class EnzymeFinder {
 //
 //        return searchResult;
 //    }
-
     private void getResultsFromEpIndex() {
-       // EbeyeSearchResult searchResult = getEbeyeSearchResult();
+        // EbeyeSearchResult searchResult = getEbeyeSearchResult();
 
         String query = searchParams.getText();
         if (!StringUtils.isEmpty(query)) {
             query = query.trim();
         }
-        List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true,LIMIT);
+        List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true, LIMIT);
         // List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true);
         //List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query);
-          LOGGER.warn("Number of Processed Accession for  "+query +" :=:" +  accessions.size());
-       //FIXEME
-        if(accessions.size() > 1000){
+        LOGGER.warn("Number of Processed Accession for  " + query + " :=:" + accessions.size());
+        //FIXEME
+        if (accessions.size() > 1000) {
             accessions = accessions.subList(0, 1000);
-          
+
         }
         uniprotAccessions = accessions;
 
@@ -322,18 +324,29 @@ public class EnzymeFinder {
 
     private void computeFilterFacets(UniprotEntry entry) {
 
-        entry.getRelatedProteinsId().getUniprotEntrySet().stream().map((e) -> {
-            diseaseFilters.addAll(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
-            return e;
-        }).map((e) -> {
-            compoundFilters.addAll(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
-            return e;
-        }).forEach((e) -> {
+        ecNumberFilters.addAll(entry.getEnzymePortalEcNumbersSet().stream().distinct().collect(Collectors.toList()));
+         compoundFilters.addAll(entry.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
+         diseaseFilters.addAll(entry.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
+//        entry.getRelatedProteinsId().getUniprotEntrySet().stream().map((e) -> {
+//            diseaseFilters.addAll(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
+//            return e;
+////        }).map((e) -> {
+////            compoundFilters.addAll(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
+////            return e;
+////        }).map(e -> {
+////            ecNumberFilters.addAll(e.getEnzymePortalEcNumbersSet().stream().distinct().collect(Collectors.toList()));
+////            return e;
+//        }).forEach((e) -> {
+//            uniqueSpecies.add(e.getSpecies());
+//        });
+        
+        entry.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((e) -> {
             uniqueSpecies.add(e.getSpecies());
         });
 
     }
 
+     @Deprecated
     private void computeFilterFacets(List<UniprotEntry> entries) {
         for (UniprotEntry entry : entries) {
             entry.getRelatedProteinsId().getUniprotEntrySet().stream().map((e) -> {
@@ -391,29 +404,64 @@ public class EnzymeFinder {
 
     private List<UniprotEntry> computeUniqueEnzymes(List<UniprotEntry> enzymes, String keyword) {
         LinkedList<UniprotEntry> enzymeList = new LinkedList<>();
+        LinkedList<UniprotEntry> theEnzymes = new LinkedList<>();
+        //Deque<UniprotEntry> enzymeList = new LinkedList<>();
         Set<String> proteinNames = new HashSet<>();
         for (UniprotEntry entry : enzymes) {
 
+            //System.out.println(" EC FOUND "+ entry.getEnzymePortalEcNumbersSet() + " <> "+ entry.getProteinName() + " enzyme TYPE "+ entry.getEntryType());
             if (!proteinNames.contains(entry.getProteinName())) {
                 //LOGGER.warn("TODO:  " + entry.getProteinName() + " <<=>> " + keyword);
-
-                if (HtmlUtility.cleanText(entry.getProteinName()).equalsIgnoreCase(keyword)) {
-                    //enzymeList.add(0, entry);
-                    LOGGER.warn("A MATCH " + entry.getProteinName() + " => " + keyword);
-
-                    enzymeList.push(entry);
+                String enzymeName = HtmlUtility.cleanText(entry.getProteinName()).toLowerCase();
+                if (enzymeName.toLowerCase().matches(".*" + keyword.toLowerCase() + ".*") && entry.getEntryType() != 1) {
+                    //enzymeList.push(entry);
+                    enzymeList.offerFirst(entry);
+                    //enzymeList.addFirst(entry);
+                    //System.out.println("pushing " + entry.getProteinName() + "  entry type " + entry.getEntryType());
                 } else {
-                    enzymeList.add(entry);
+                    //enzymeList.addLast(entry);
+                    enzymeList.offerLast(entry);
+                    //System.out.println("at the end " + entry.getEntryType());
                 }
+//                if (enzymeName.equalsIgnoreCase(keyword.toLowerCase())) {
+//                    //enzymeList.add(0, entry);
+//                    LOGGER.warn("FOUND A MATCH " + entry.getProteinName() + " => " + keyword);
+//                    System.out.println("FOUND A MATCH " + entry.getProteinName() + " => " + keyword);
+//
+//                    //enzymeList.push(entry);
+//                    enzymeList.offerFirst(entry);
+//                    //enzymeList.add(0, entry);
+//                }
+//                else {
+//                    enzymeList.addLast(entry);
+//                    System.out.println("at the end " + entry.getEntryType());
+//                }
 
             }
 
             proteinNames.add(entry.getProteinName());
 
             computeFilterFacets(entry);
+
         }
 
-        return enzymeList.stream().distinct().collect(Collectors.toList());
+        for (UniprotEntry enzyme : enzymeList) {
+            if (HtmlUtility.cleanText(enzyme.getProteinName()).toLowerCase().equalsIgnoreCase(keyword.toLowerCase()) && enzyme.getEntryType() != 1) {
+
+                LOGGER.warn("FOUND A MATCH " + enzyme.getProteinName() + " => " + keyword + " entry type "+ enzyme.getEntryType());
+                //System.out.println("FOUND A MATCH " + enzyme.getProteinName() + " => " + keyword);
+                //enzymeList.remove(enzyme);
+
+                theEnzymes.offerFirst(enzyme);
+                //enzymeList.add(0, entry);
+            } else {
+                theEnzymes.offerLast(enzyme);
+
+            }
+            //System.out.println("enzyme status "+ enzyme.getEntryType());
+        }
+
+        return theEnzymes.stream().distinct().collect(Collectors.toList());
     }
 
     private List<UniprotEntry> getEnzymesByAccessions(List<String> accessions, String keyword) {
@@ -425,7 +473,7 @@ public class EnzymeFinder {
             //Pageable pageable = new PageRequest(0, 50,Sort.Direction.ASC,"function","lastUpdateTimestamp");
             Page<UniprotEntry> page = service.findEnzymesByAccessions(accessions, pageable);
 
-            List<UniprotEntry> enzymes = page.getContent();
+            List<UniprotEntry> enzymes = page.getContent().stream().sorted().collect(Collectors.toList());
             enzymeList = computeUniqueEnzymes(enzymes, keyword);
 
         }
@@ -434,6 +482,7 @@ public class EnzymeFinder {
 
     }
 
+     @Deprecated
     private List<UniprotEntry> getEnzymesByNamePrefixes(List<String> nameprefixes, String keyword) {
 
         List<UniprotEntry> enzymeList = new ArrayList<>();
@@ -556,7 +605,7 @@ public class EnzymeFinder {
      * the relevant filters.
      */
     private void buildFilters(SearchResults searchResults) {
-        //  String[] commonSpecie = {"HUMAN", "MOUSE", "Rat", "Fruit fly", "WORM", "Yeast", "ECOLI"};
+        //  String[] commonSpecie = {"HUMAN", "MOUSE", "RAT", "Fruit fly", "WORM", "Yeast", "ECOLI"};
         // CommonSpecies [] commonSpecie = {"Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","Saccharomyces cerevisiae"};
         // List<String> commonSpecieList = Arrays.asList(commonSpecie);
         List<String> commonSpecieList = new ArrayList<>();
@@ -572,13 +621,13 @@ public class EnzymeFinder {
         for (Species sp : uniqueSpecies) {
 
             if (commonSpecieList.contains(sp.getScientificname().split("\\(")[0].trim())) {
-                // HUMAN, MOUSE, Rat, Fly, WORM, Yeast, ECOLI 
+                // HUMAN, MOUSE, RAT, Fly, WORM, Yeast, ECOLI 
                 // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
                 if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.HUMAN.getScientificName())) {
                     priorityMapper.put(1, sp);
                 } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.MOUSE.getScientificName())) {
                     priorityMapper.put(2, sp);
-                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.Rat.getScientificName())) {
+                } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.RAT.getScientificName())) {
                     priorityMapper.put(3, sp);
                 } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.FRUIT_FLY.getScientificName())) {
                     priorityMapper.put(4, sp);
@@ -607,6 +656,7 @@ public class EnzymeFinder {
         filters.setCompounds(compoundFilters.stream().distinct().collect(Collectors.toList()));
 
         filters.setDiseases(diseaseFilters.stream().distinct().collect(Collectors.toList()));
+        filters.setEcNumbers(ecNumberFilters.stream().distinct().collect(Collectors.toList()));
         searchResults.setSearchfilters(filters);
     }
 
