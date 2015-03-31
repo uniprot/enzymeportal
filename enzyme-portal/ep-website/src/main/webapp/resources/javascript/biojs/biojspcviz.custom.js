@@ -32,13 +32,16 @@ $(document).ready(function() {
                 }
 
                 pcvizDescEl.html( myContent );
+                //show when loaded
+                $('#pcviz-widget').show();
+
                 return this;
             },
 
             onNodeClick: function(msg)  {
                 var annotation = msg.annotation;
                 var uniprotId = msg.uniprot ? msg.uniprot : annotation.geneUniprotMapping;
-                var summary = msg.uniprotdesc == null ? annotation.geneSummary : annotation.uniprotdesc;
+                var summary = msg.uniprotdesc == null ? annotation.geneSummary : msg.uniprotdesc;
                 var myContent =  "<table class='grid'>" +
                     "<tr><th>Gene</th><td>" + msg.id + "</td></tr>" +
                     "<tr><th>Aliases</th><td>" + annotation.geneAliases.replace(/:/g, ", ") + "</td></tr>" +
