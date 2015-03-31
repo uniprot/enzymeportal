@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.dataconfig;
 
 import java.sql.SQLException;
@@ -6,6 +5,8 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import oracle.jdbc.pool.OracleConnectionPoolDataSource;
 import oracle.jdbc.pool.OracleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,8 +21,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @PowerGate
 @PropertySource({"classpath:ep-db-uzppub-pg.properties"})
-public class PowerGateConfig implements EnzymePortalDataConfig {
-
+public class PowerGateConfig extends AbstractConfig{
+private  static final Logger LOGGER = LoggerFactory.getLogger(PowerGateConfig.class);
     @Autowired
     private Environment env;
 
@@ -51,8 +52,9 @@ public class PowerGateConfig implements EnzymePortalDataConfig {
 
             return ds;
         } catch (IllegalStateException | SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e.getMessage(),e);
         }
+        return null;
     }
 
     @Bean

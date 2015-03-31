@@ -101,7 +101,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @ManyToOne(fetch = FetchType.EAGER)
     private RelatedProteins relatedProteinsId;
 
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
@@ -304,11 +304,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return true;
     }
 
-//
-//    @Override
-//    public String toString() {
-//        return "UniprotEntry{" + "Has synonymNames=" + !StringUtils.isEmpty(synonymNames) + ", accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + ", uniprotXrefSet=" + uniprotXrefSet.size() + ", enzymePortalPathwaysSet=" + enzymePortalPathwaysSet.size() + ", enzymePortalReactionSet=" + enzymePortalReactionSet.size() + ", enzymePortalCompoundSet=" + enzymePortalCompoundSet.size() + ", enzymePortalDiseaseSet=" + enzymePortalDiseaseSet.size() + '}';
-//    }
+
     @Override
     public String toString() {
         return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
@@ -389,10 +385,8 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
 
-//        e.getUniprotXrefSet().stream().filter((xref) -> (xref.getSource().equalsIgnoreCase("PDB"))).forEach((xref) -> {
-//            pdbcodes.add(xref.getSourceId());
-//        });
-        e.getUniprotXrefSet().stream().filter(x -> ("PDB".equalsIgnoreCase(x.getSource()))).limit(1).collect(Collectors.toList()).stream().forEach(xref -> {
+
+        e.getUniprotXrefSet().stream().filter(x -> "PDB".equalsIgnoreCase(x.getSource())).limit(10).collect(Collectors.toList()).stream().forEach(xref -> {
             pdbcodes.add(xref.getSourceId());
         });
 
@@ -412,20 +406,22 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
         List<String> synonym = new ArrayList<>();
 
-        String namesColumn = this.getSynonymNames();
+        String synonymName = this.getSynonymNames();
 
-        if (namesColumn != null && namesColumn.contains(";")) {
-            String[] syn = namesColumn.split(";");
-            for (String x : syn) {
-
-                synonym.addAll(parseNameSynonyms(x));
+        if (synonymName != null && synonymName.contains(";")) {
+            String[] syn = synonymName.split(";");
+            for (String otherName : syn) {
+                if(!otherName.equalsIgnoreCase(getProteinName())){
+                //synonym.addAll(parseNameSynonyms(otherName));
+                synonym.add(otherName);
+                }
             }
         }
-
-        return synonym;
+        
+         return synonym.stream().distinct().collect(Collectors.toList());
     }
 
-    private List<String> parseNameSynonyms(String namesColumn) {
+    public List<String> parseNameSynonyms(String namesColumn) {
         List<String> nameSynonyms = new ArrayList<>();
         if (namesColumn != null) {
             final int sepIndex = namesColumn.indexOf(" (");
@@ -497,19 +493,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         //current specie is the default specie
         this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
 
-//                 EnzymeAccession ea = new EnzymeAccession();
-//        ea.setPdbeaccession(getPdbeaccession());
-//        ea.setSpecies(getSpecies());
-//        ea.setUniprotid(getName());
-//        List<String> acc = new ArrayList<>();
-//        acc.add(getAccession());
-//        //ea.setUniprotaccessions(acc);
-//            
-//           
-//            entry.getUniprotaccessions().add(getAccession());
-//            entry.setPdbeaccession(getPdbeaccession());
-//            entry.setSpecies(getSpecies());
-//            entry.setUniprotid(getName());
             if (entry.getScientificName() != null && entry.getScientificName().equalsIgnoreCase(getSpecies().getScientificname())) {
                 entry.getUniprotaccessions().add(getAccession());
                 relatedspecies.add(0, entry);
@@ -538,7 +521,8 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     @Override
     public int compareTo(UniprotEntry o) {
-        return this.getScientificName().compareToIgnoreCase(o.getScientificName());
+        return this.entryType.compareTo(o.getEntryType());
+        
     }
 
     @Override

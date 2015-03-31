@@ -2,55 +2,65 @@ package uk.ac.ebi.ep.data.entry;
 
 /**
  * Field to show for an enzyme in the portal.
+ *
  * @author rafa
  *
  */
 public enum Field {
-	/**
-	 * The minimal information to handle result lists and filters internally.
-	 */
-    minimal("minimal"),
+
+    /**
+     * The minimal information to handle result lists and filters internally.
+     */
+    /**
+     * The minimal information to handle result lists and filters internally.
+     */
+    /**
+     * The minimal information to handle result lists and filters internally.
+     */
+    /**
+     * The minimal information to handle result lists and filters internally.
+     */
+    MINIMAL("minimal"),
     /**
      * Just a summary to show in the results page.
      */
-    brief("brief"),
+    BRIEF("brief"),
     /**
      * Enzyme tab.
      */
-    enzyme("enzyme"),
+    ENZYME("enzyme"),
     /**
      * Structure tab.
      */
-    proteinStructure("proteinStructure"),
+    PROTEINSTRUCTURE("proteinStructure"),
     /**
      * Reactions/pathways tab.
      */
-    reactionsPathways("reactionsPathways"),
+    REACTIONPATHWAYS("reactionsPathways"),
     /**
      * Small molecules tab.
      */
-    molecules("molecules"),
+    MOLECULES("molecules"),
     /**
      * Diseases/drugs tab.
      */
-    diseaseDrugs("diseaseDrugs"),
+    DISEASEDRUGS("diseaseDrugs"),
     /**
      * Literature tab.
      */
-    literature("literature"),
+    LITERATURE("literature"),
     /**
      * Full information about the enzyme.
      */
-    full("full");
-    
-    private Field(String name){
+    FULL("full");
+    private final String name;
+
+    private Field(String name) {
         this.name = name;
     }
-    private String name;
 
     public String getName() {
         return name;
     }
-    
-    
+
 }

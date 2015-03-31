@@ -27,14 +27,14 @@ public class RelatedProteinsService {
     
     @Transactional
     public RelatedProteins addRelatedProteins(RelatedProteins proteins) {
-        RelatedProteins relatedProteins = repository.saveAndFlush(proteins);
-        return relatedProteins;
+       return repository.saveAndFlush(proteins);
+        
     }
     
     @Transactional
     public List<RelatedProteins> addRelatedProteins(List<RelatedProteins> l) {
-        List<RelatedProteins> relatedProteinses = repository.save(l);
-        return relatedProteinses;
+        return repository.save(l);
+        
     }
     
     @Transactional(readOnly = true)

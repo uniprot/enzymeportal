@@ -138,10 +138,6 @@ public class EnzymePortalNames implements java.io.Serializable {
         return true;
     }
 
-//    @Override
-//    public String toString() {
-//        return "uk.ac.ebi.ep.data.domain.EnzymePortalNames[ enzymeNameId=" + enzymeNameId + " ]";
-//    }
 
     @Override
     public String toString() {

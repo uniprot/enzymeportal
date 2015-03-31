@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;

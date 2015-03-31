@@ -36,15 +36,6 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 @Entity
 @Table(name = "ENZYME_PORTAL_DISEASE")
 @XmlRootElement
-//
-//@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
-//    @NamedAttributeNode(value = "uniprotAccession", subgraph = "relatedProteinsId"),},
-//        subgraphs = {
-//            @NamedSubgraph(  name = "uniprotAccession", attributeNodes = { @NamedAttributeNode("relatedProteinsId")}),
-//             @NamedSubgraph(name = "uniprotAccession",attributeNodes ={@NamedAttributeNode("enzymePortalSummarySet")} ),
-//        }
-//)
-
 
 @NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {  
     @NamedAttributeNode("uniprotAccession")

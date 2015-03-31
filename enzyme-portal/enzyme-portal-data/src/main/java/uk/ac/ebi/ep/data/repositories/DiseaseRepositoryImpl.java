@@ -40,7 +40,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 
         StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
         BooleanBuilder builder = new BooleanBuilder();
-        namePrefixes.stream().forEach((prefix) -> {
+        namePrefixes.stream().forEach(prefix -> {
 
             builder.or(idPrefix.equalsIgnoreCase(prefix));
 
@@ -56,7 +56,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         JPAQuery query = new JPAQuery(entityManager);
 
         BooleanBuilder builder = new BooleanBuilder();
-        accessions.stream().forEach((accession) -> {
+        accessions.stream().forEach(accession -> {
 
             builder.or($.uniprotAccession.accession.equalsIgnoreCase(accession));
 
@@ -66,14 +66,6 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         return query.distinct().list($);
     }
 
-//    @Transactional(readOnly = true)
-//    @Override
-//    public List<EnzymePortalDisease> findDiseasesByAccession(String accession) {
-//        JPAQuery query = new JPAQuery(entityManager);
-//        List<EnzymePortalDisease> diseases = query.from($)
-//                .where($.uniprotAccession.accession.equalsIgnoreCase(accession)).list($).stream().distinct().collect(Collectors.toList());
-//        return diseases;
-//    }
 
     /**
      * Note: meshId is used as default disease id for now as some omim entries
@@ -104,8 +96,8 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
-        List<EnzymePortalDisease> diseases = query.from($).list($);
-        return diseases;
+        return query.from($).list($);
+        
     }
 
    /**
@@ -141,8 +133,8 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     public List<Disease> findDiseasesNameLike(String name) {
 
         JPAQuery query = new JPAQuery(entityManager);
-        String diseaseName = String.format("%%%s%%", name);
-        List<Disease> result = query.from($).where($.diseaseName.like(diseaseName))
+        String diseaseName = String.format("%%%s%%", name).toLowerCase();
+        List<Disease> result = query.from($).where($.diseaseName.toLowerCase().like(diseaseName))
                 .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName)).stream().distinct().collect(Collectors.toList());
 
         return result;

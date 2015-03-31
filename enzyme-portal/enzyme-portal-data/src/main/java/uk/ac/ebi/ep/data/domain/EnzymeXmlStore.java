@@ -116,10 +116,7 @@ public class EnzymeXmlStore implements Serializable {
         return true;
     }
 
-//    @Override
-//    public String toString() {
-//        return "uk.ac.ebi.ep.data.domain.EnzymeXmlStore[ enzymeXmlId=" + enzymeXmlId + " ]";
-//    }
+
 
     @Override
     public String toString() {

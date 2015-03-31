@@ -50,7 +50,7 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
         List<EnzymePortalPathways> entries = query.from($).where($.pathwayId.equalsIgnoreCase(pathwayId)).distinct().list($)
                 .stream().distinct().collect(Collectors.toList());
 
-        entries.stream().forEach((e) -> {
+        entries.stream().forEach(e -> {
             enzymes.add(e.getUniprotAccession().getAccession());
         });
 
@@ -63,8 +63,8 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
     public List<Pathway> findPathwaysByName(String name) {
         JPAQuery query = new JPAQuery(entityManager);
 
-          String pathwayName = String.format("%%%s%%", name);
-        List<Pathway> entries = query.from($).where($.pathwayName.like(pathwayName))
+          String pathwayName = String.format("%%%s%%", name).toLowerCase();
+        List<Pathway> entries = query.from($).where($.pathwayName.toLowerCase().like(pathwayName))
                 .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName));
 
         return entries.stream().distinct().collect(Collectors.toList());

@@ -27,6 +27,6 @@ public class EnzymePortalSummaryService {
     public List<EnzymePortalSummary> findEnzymePortalSummaries() {
 
         return enzymeSummaryRepository.findAll();
-        //return enzymeSummaryRepository.findEnzymePortalSummaries();
+       
     }
 }

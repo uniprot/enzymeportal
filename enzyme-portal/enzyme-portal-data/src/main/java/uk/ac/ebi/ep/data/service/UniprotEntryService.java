@@ -29,7 +29,6 @@ public class UniprotEntryService {
     @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
 
-        //return repository.findByAccession(accession);
         return Optional.ofNullable(repository.findByAccession(accession));
     }
 
@@ -48,7 +47,6 @@ public class UniprotEntryService {
     @Transactional(readOnly = true)
     public List<UniprotEntry> findUniprotEntries() {
 
-       
         return repository.findUniprotEntries();
     }
 
@@ -68,11 +66,8 @@ public class UniprotEntryService {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate predicate = enzyme.accession.equalsIgnoreCase(accession);
+        return enzyme.accession.equalsIgnoreCase(accession);
 
-        return predicate;
     }
 
-
-      
 }

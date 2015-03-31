@@ -166,15 +166,6 @@ public class EnzymePortalReaction   implements Serializable {
     }
 
 
-//        @Override
-//    public String getId() {
-//        return reactionId;
-//    }
-//
-//    @Override
-//    public String getName() {
-//        return reactionName;
-//    }
 
 
     

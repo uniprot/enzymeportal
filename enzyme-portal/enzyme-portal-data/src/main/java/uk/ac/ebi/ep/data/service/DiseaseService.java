@@ -26,14 +26,14 @@ public class DiseaseService {
     
     @Transactional
     public EnzymePortalDisease addDisease(EnzymePortalDisease d) {
-        EnzymePortalDisease disease = repository.saveAndFlush(d);
-        return disease;
+        return repository.saveAndFlush(d);
+        
     }
     
     @Transactional
     public List<EnzymePortalDisease> addDisease(List<EnzymePortalDisease> d) {
-        List<EnzymePortalDisease> disease = repository.save(d);
-        return disease;
+       return repository.save(d);
+        
     }
     
     @Transactional(readOnly = true)

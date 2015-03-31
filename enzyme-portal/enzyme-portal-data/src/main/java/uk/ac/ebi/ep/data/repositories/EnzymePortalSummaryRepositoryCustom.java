@@ -30,4 +30,5 @@ public interface EnzymePortalSummaryRepositoryCustom {
 
     Page<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions, Pageable pageable);
 
+
 }

@@ -147,7 +147,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         LOGGER.info("findEnzymesByAccession");
         String accession = "Q64441";
 
-        int expResult = 2;
+        int expResult = 4;
         List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccession(accession);
 
         assertEquals(expResult, result.size());
@@ -162,12 +162,12 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         LOGGER.info("getCountForOrganisms");
         List<Long> taxids = new ArrayList<>();
         taxids.add(9606L);
-        taxids.add(9606L);
-        taxids.add(9606L);
-        taxids.add(10090L);
+        taxids.add(10116L);
+        taxids.add(7955L);
+        taxids.add(9913L);
         taxids.add(10090L);
 
-        int expResult = 2;
+        int expResult = 4;
         List<Taxonomy> result = uniprotEntryRepository.getCountForOrganisms(taxids);
         assertEquals(expResult, result.size());
 

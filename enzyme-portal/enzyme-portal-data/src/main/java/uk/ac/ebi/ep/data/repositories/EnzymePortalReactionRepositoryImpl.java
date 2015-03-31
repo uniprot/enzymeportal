@@ -33,29 +33,5 @@ public class EnzymePortalReactionRepositoryImpl implements EnzymePortalReactionR
 
     }
 
-//    @Override
-//    public List<EnzymeReaction> findReactionsByAccession(String accession) {
-//
-//        JPAQuery query = new JPAQuery(entityManager);
-//
-////        List<EnzymeReaction> reactions = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
-////                .list(Projections.constructor(EnzymeReaction.class, $.reactionId, $.reactionName));
-////               
-//        List<EnzymePortalReaction> enzreactions = query.from($).
-//                where($.uniprotAccession.accession.equalsIgnoreCase(accession)).distinct()
-//                .list($);
-//        List<EnzymeReaction> reactions = new ArrayList<>();
-//        if (enzreactions != null) {
-//            for (EnzymePortalReaction r : enzreactions) {
-//                EnzymeReaction er = new EnzymeReaction(r.getReactionId(), r.getReactionName());
-//                reactions.add(er);
-//            }
-//
-//            return reactions;
-//        }
-//
-//        //return reactions;
-//        return new ArrayList<>();
-//    }
 
 }

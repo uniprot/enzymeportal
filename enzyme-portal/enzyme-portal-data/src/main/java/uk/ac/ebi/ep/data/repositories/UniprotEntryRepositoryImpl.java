@@ -48,7 +48,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     @Override
     public List<UniprotEntry> findEnzymesByNamePrefixes(List<String> namePrefixes) {
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
-        //EntityGraph eGraph =entityManager.createEntityGraph("UniprotEntryEntityGraph");
+        
 
         eGraph.addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
                 "enzymePortalSummarySet", "enzymePortalDiseaseSet", "enzymePortalCompoundSet",
@@ -62,7 +62,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         //StringExpression idPrefix = $.name.substring(0, $.name.indexOf("_"));
         StringExpression idPrefix = $.relatedProteinsId.namePrefix;
         BooleanBuilder builder = new BooleanBuilder();
-        namePrefixes.stream().forEach((prefix) -> {
+        namePrefixes.stream().forEach(prefix -> {
 
             builder.or(idPrefix.equalsIgnoreCase(prefix));
 
@@ -86,7 +86,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         query.setHint("javax.persistence.fetchgraph", eGraph);
 
         BooleanBuilder builder = new BooleanBuilder();
-        accessions.stream().forEach((accession) -> {
+        accessions.stream().forEach(accession -> {
 
             builder.or($.accession.equalsIgnoreCase(accession));
 
@@ -127,7 +127,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         JPAQuery query = new JPAQuery(entityManager);
 
         BooleanBuilder builder = new BooleanBuilder();
-        accessions.parallelStream().forEach((accession) -> {
+        accessions.parallelStream().forEach(accession -> {
 
             builder.or($.accession.equalsIgnoreCase(accession));
 
@@ -163,7 +163,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).groupBy($.taxId, $.scientificName, $.commonName).
                 list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
-
+        
         return result;
     }
 
@@ -179,7 +179,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     @Override
     public List<UniprotEntry> findEnzymesByTaxId(Long taxId) {
         JPAQuery query = new JPAQuery(entityManager);
-        List<UniprotEntry> result = query.from($).where($.taxId.eq(taxId)).distinct().limit(10).list($);
+        List<UniprotEntry> result = query.from($).where($.taxId.eq(taxId)).distinct().list($);
         return result;
 
     }

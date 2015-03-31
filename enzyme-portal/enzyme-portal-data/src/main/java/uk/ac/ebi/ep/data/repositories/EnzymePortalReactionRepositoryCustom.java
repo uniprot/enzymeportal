@@ -15,5 +15,4 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface EnzymePortalReactionRepositoryCustom {
      List<String> findAccessionsByReactionId(String reactionId);
-//      List<EnzymeReaction> findReactionsByAccession(String accession);
 }

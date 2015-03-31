@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.dataconfig;
 
 import java.sql.SQLException;
@@ -6,6 +5,8 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import oracle.jdbc.pool.OracleConnectionPoolDataSource;
 import oracle.jdbc.pool.OracleDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,17 +21,19 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 @Dev
 @PropertySource({"classpath:ep-db-uzpdev.properties"})
-public class DevDataConfig implements EnzymePortalDataConfig {
+public class DevDataConfig extends AbstractConfig {
 
+    private  static final Logger LOGGER = LoggerFactory.getLogger(DevDataConfig.class);
     @Autowired
     private Environment env;
 
     @Bean
-     @Override
+    @Override
     public DataSource epDataSource() {
+        OracleDataSource ds = null;
         try {
 
-            OracleDataSource ds = new OracleConnectionPoolDataSource();
+            ds = new OracleConnectionPoolDataSource();
 
             String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                     env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
@@ -50,8 +53,9 @@ public class DevDataConfig implements EnzymePortalDataConfig {
 
             return ds;
         } catch (IllegalStateException | SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.error(e.getMessage(),e);
         }
+        return ds;
     }
 
     @Bean

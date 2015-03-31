@@ -41,12 +41,10 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
     public List<EnzymePortalCompound> findCompoundsByUniprotName(String uniprotName) {
 
         JPAQuery query = new JPAQuery(entityManager);
-         StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
+        StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
         BooleanExpression isUniprotName = idPrefix.equalsIgnoreCase(uniprotName);
 
-        List<EnzymePortalCompound> compounds = query.from($).where(isUniprotName).distinct().list($);
-
-        return compounds;
+        return query.from($).where(isUniprotName).distinct().list($);
 
     }
 
@@ -57,7 +55,7 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
 
         StringExpression idPrefix = $.uniprotAccession.name.substring(0, $.uniprotAccession.name.indexOf("_"));
         BooleanBuilder builder = new BooleanBuilder();
-        namePrefixes.stream().forEach((prefix) -> {
+        namePrefixes.stream().forEach(prefix -> {
 
             builder.or(idPrefix.equalsIgnoreCase(prefix));
 
@@ -72,9 +70,8 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
         JPAQuery query = new JPAQuery(entityManager);
         BooleanExpression isUniprotAcc = $.uniprotAccession.accession.equalsIgnoreCase(accession);
 
-        List<EnzymePortalCompound> compounds = query.from($).where(isUniprotAcc).distinct().list($);
+        return query.from($).where(isUniprotAcc).distinct().list($);
 
-        return compounds;
     }
 
     @Override
@@ -86,17 +83,15 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
 
         List<EnzymePortalCompound> compounds = query.from($).where(compound).distinct().list($);
 
-        compounds.parallelStream().forEach((c) -> {
+        compounds.parallelStream().forEach(c -> {
             enzymes.add(c.getUniprotAccession().getAccession());
         });
 
         return enzymes.stream().distinct().collect(Collectors.toList());
     }
-    
-    
-    
-        @Override
-     @Transactional(readOnly = true)
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Compound> findCompoundsByTaxId(Long taxId) {
 
         EntityGraph eGraph = entityManager.getEntityGraph("CompoundEntityGraph");
@@ -105,7 +100,7 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
         List<Compound> result = query.from($).where($.uniprotAccession.taxId.eq(taxId)).distinct()
-                .list(Projections.constructor(Compound.class, $.compoundId, $.compoundName, $.url,$.compoundRole)).stream().distinct().collect(Collectors.toList());
+                .list(Projections.constructor(Compound.class, $.compoundId, $.compoundName, $.url, $.compoundRole)).stream().distinct().collect(Collectors.toList());
 
         return result;
     }

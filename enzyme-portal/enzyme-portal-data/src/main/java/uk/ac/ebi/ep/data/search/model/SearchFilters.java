@@ -6,22 +6,44 @@
 
 package uk.ac.ebi.ep.data.search.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
  *
  * @author joseph
  */
-public class SearchFilters {
+public class SearchFilters implements Serializable{
     
     
     protected List<Disease> diseases;
     protected List<Compound> compounds;
     protected List<Species> species;
+    protected List<EcNumber> ecNumbers;
+
+    public List<EcNumber> getEcNumbers() {
+        if(ecNumbers == null){
+            ecNumbers = new LinkedList<>();
+        }
+        
+        return ecNumbers.stream().distinct().collect(Collectors.toList());
+    }
+
+    public void setEcNumbers(List<EcNumber> ecNumbers) {
+        this.ecNumbers = ecNumbers;
+    }
+    
+    
+    
+    
+    
+    
 
     /**
      * Gets the value of the diseases property.

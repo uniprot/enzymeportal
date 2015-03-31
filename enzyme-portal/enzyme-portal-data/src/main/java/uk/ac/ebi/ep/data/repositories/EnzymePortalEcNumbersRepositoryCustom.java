@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
+import uk.ac.ebi.ep.data.search.model.EcNumber;
 
 /**
  *
@@ -16,5 +17,6 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface EnzymePortalEcNumbersRepositoryCustom {
     
     List<String> findAccessionsByEc(String ecNumber);
+    List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId);
 
 }

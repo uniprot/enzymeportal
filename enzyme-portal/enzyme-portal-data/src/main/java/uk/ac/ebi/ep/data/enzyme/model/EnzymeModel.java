@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.data.enzyme.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -38,7 +39,34 @@ public class EnzymeModel extends UniprotEntry
 
     protected List<Pathway> pathways = new ArrayList<>();
     protected List<EnzymeAccession> relatedspecies;
-    
+    protected List<String> synonyms;
+
+    protected List<String> catalyticActivities;
+
+    public List<String> getCatalyticActivities() {
+        if (catalyticActivities == null) {
+            catalyticActivities = new LinkedList<>();
+        }
+
+        return catalyticActivities;
+    }
+
+    public void setCatalyticActivities(List<String> catalyticActivities) {
+        this.catalyticActivities = catalyticActivities;
+    }
+
+    public List<String> getSynonyms() {
+        if (synonyms == null) {
+            synonyms = new ArrayList<>();
+        }
+
+        return synonyms;
+    }
+
+    public void setSynonyms(List<String> synonyms) {
+        this.synonyms = synonyms;
+    }
+
     public List<Pathway> getPathways() {
         if (pathways == null) {
             pathways = new ArrayList<>();
@@ -420,7 +448,7 @@ public class EnzymeModel extends UniprotEntry
         return this;
     }
 
-     @Override
+    @Override
     public EnzymeModel withSpecies(Species value) {
         setSpecies(value);
         return this;

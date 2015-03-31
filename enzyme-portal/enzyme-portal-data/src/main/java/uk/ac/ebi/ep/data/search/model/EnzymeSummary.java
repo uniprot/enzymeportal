@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;
@@ -162,7 +161,7 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
             synonym = new ArrayList<>();
         }
         return this.synonym;
-        //return synonym;
+       
             }
     /**
      * Sets the value of the synonym property.
@@ -175,14 +174,7 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
     }
 
     
-//    public String getSynonyms() {
-//        return this.synonyms;
-//    }
-//
-//    public void setSynonyms(String synonyms) {
-//        this.synonyms = synonyms;
-//    }
-//    
+   
     /**
      * Gets the value of the uniprotid property.
      *

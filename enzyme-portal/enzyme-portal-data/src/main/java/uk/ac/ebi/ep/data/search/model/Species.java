@@ -19,9 +19,8 @@ public class Species implements Comparable<Species>, Serializable {
     private String commonname ;
     private boolean selected;
      private Long taxId;
-        protected Object scoring;
-//    private List<Compound> compounds;
-//    private List<Disease> diseases;
+        protected transient  Object scoring;
+
 
     public Species() {
     }
@@ -123,63 +122,7 @@ public class Species implements Comparable<Species>, Serializable {
         this.selected = value;
     }
 
-    /**
-     * Gets the value of the compounds property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list, not a
-     * snapshot. Therefore any modification you make to the returned list will
-     * be present inside the JAXB object. This is why there is not a
-     * <CODE>set</CODE> method for the compounds property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getCompounds().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Compound }
-     *
-     *
-     */
-//    public List<Compound> getCompounds() {
-//        if (compounds == null) {
-//            compounds = new ArrayList<Compound>();
-//        }
-//        return this.compounds;
-//    }
 
-    /**
-     * Gets the value of the diseases property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list, not a
-     * snapshot. Therefore any modification you make to the returned list will
-     * be present inside the JAXB object. This is why there is not a
-     * <CODE>set</CODE> method for the diseases property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDiseases().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list {@link Disease }
-     *
-     *
-     * @return
-     */
-//    public List<Disease> getDiseases() {
-//        if (diseases == null) {
-//            diseases = new ArrayList<>();
-//        }
-//        return this.diseases;
-//    }
 
     public Species withScientificname(String value) {
         setScientificname(value);
@@ -196,57 +139,7 @@ public class Species implements Comparable<Species>, Serializable {
         return this;
     }
 
-//    public Species withCompounds(Compound... values) {
-//        if (values != null) {
-//            for (Compound value : values) {
-//                getCompounds().add(value);
-//            }
-//        }
-//        return this;
-//    }
-//
-//    public Species withCompounds(Collection<Compound> values) {
-//        if (values != null) {
-//            getCompounds().addAll(values);
-//        }
-//        return this;
-//    }
-//
-//    public Species withDiseases(Disease... values) {
-//        if (values != null) {
-//            for (Disease value : values) {
-//                getDiseases().add(value);
-//            }
-//        }
-//        return this;
-//    }
-//
-//    public Species withDiseases(Collection<Disease> values) {
-//        if (values != null) {
-//            getDiseases().addAll(values);
-//        }
-//        return this;
-//    }
-//
-//    /**
-//     * Sets the value of the compounds property.
-//     *
-//     * @param compounds allowed object is {@link Compound }
-//     *
-//     */
-//    public void setCompounds(List<Compound> compounds) {
-//        this.compounds = compounds;
-//    }
-//
-//    /**
-//     * Sets the value of the diseases property.
-//     *
-//     * @param diseases allowed object is {@link Disease }
-//     *
-//     */
-//    public void setDiseases(List<Disease> diseases) {
-//        this.diseases = diseases;
-//    }
+
 
     @Override
     public int hashCode() {
@@ -273,63 +166,7 @@ public class Species implements Comparable<Species>, Serializable {
     
     
 
-//    @Override
-//    public int compareTo(Species other) {
-//        if (this.getCommonname() == null & other.getCommonname() == null) {
-//            return this.getScientificname().compareTo(other.getScientificname());
-//        }
-//        if (this.getCommonname() != null & other.getCommonname() == null) {
-//            return this.getCommonname().compareTo(other.getScientificname());
-//        }
-//        if (this.getCommonname() == null & other.getCommonname() != null) {
-//            return this.getScientificname().compareTo(other.getCommonname());
-//        }
-//
-//        if (this.getCommonname() != null & this.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.getCommonname() != null & other.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
-//            return this.getScientificname().compareTo(other.getScientificname());
-//        }
-//        return this.getCommonname().compareTo(other.getCommonname());
-//        //return this.getScientificname().compareTo(other.getScientificname());
-//
-//    }
-//    
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        //hash = 79 * hash + Objects.hashCode(this.scientificname);
-//        hash = 79 * hash + (this.getScientificname() != null ? this.getScientificname().hashCode() : 0);
-//        return hash;
-//    }
-    
-    
-    
-//    @Override
-//    public int hashCode() {
-//        int hash = 5;
-//        hash = 67 * hash + Objects.hashCode(this.scientificname);
-//        hash = 67 * hash + Objects.hashCode(this.commonname);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final Species other = (Species) obj;
-//        if (!Objects.equals(this.scientificname, other.scientificname)) {
-//            return false;
-//        }
-//        if (!Objects.equals(this.commonname, other.commonname)) {
-//            return false;
-//        }
-//        return true;
-//    }
-    
     
     
     @Override

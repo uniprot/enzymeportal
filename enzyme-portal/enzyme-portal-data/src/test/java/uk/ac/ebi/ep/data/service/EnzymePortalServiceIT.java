@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
+import uk.ac.ebi.ep.data.search.model.EcNumber;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
@@ -181,7 +183,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         namePrefixes.add("CP7B1");
         namePrefixes.add("PDE5A");
 
-        int expResult = 3;
+        int expResult = 5;
         List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSummariesByNamePrefixes(namePrefixes);
 
         assertEquals(expResult, result.size());
@@ -238,10 +240,10 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         accessions.add("Q64441");
         accessions.add("fakeAccession");
 
-        int expResult = 2;
+        int expResult = 3;
         Page<EnzymePortalSummary> result = enzymePortalService.findEnzymeSumariesByAccessions(accessions, PAGEABLE);
         assertEquals(expResult, result.getContent().size());
-        assertEquals(2, result.getTotalElements());
+        assertEquals(3, result.getTotalElements());
         assertEquals(1, result.getTotalPages());
 
     }
@@ -321,7 +323,6 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         accessions.add("Q64441");
         accessions.add("NotAnEnzyme");
 
-        int expResult = 4;
         List<String> result = enzymePortalService.filterEnzymesInAccessions(accessions);
         assertTrue(result.size() > 1);
 
@@ -357,7 +358,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         namePrefixes.add("FAKEGENE");
         namePrefixes.add("PDE5A");
 
-       int  expResult = 2;
+        int expResult = 2;
         List<RelatedProteins> result = enzymePortalService.findRelatedProteinsByNamePrefixes(namePrefixes);
         assertEquals(expResult, result.size());
 
@@ -418,7 +419,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         LOGGER.info("findByEcNumbersByAccession");
 
         int expResult = 1;
-        List<EnzymePortalEcNumbers> result = enzymePortalService.findByEcNumbersByAccession(ACCESSION);
+        List<EnzymePortalEcNumbers> result = enzymePortalService.findByEcNumbersByAccession(ACCESSION).stream().distinct().collect(Collectors.toList());
 
         assertEquals(expResult, result.size());
 
@@ -507,7 +508,6 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
 
         int expResult = 5;
         List<String> result = enzymePortalService.findAccessionsByTaxId(taxId);
-        System.out.println("acc by taxid " + result.size());
         assertEquals(expResult, result.size());
 
     }
@@ -702,7 +702,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
 
         int expResult = 1;
         List<Disease> result = enzymePortalService.findDiseasesLike(diseaseName);
-       
+
         assertEquals(expResult, result.size());
 
     }
@@ -765,10 +765,8 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         List<String> diseaseNames = new ArrayList<>();
         diseaseNames.add("spastic paraplegia hereditary");
 
-        
         Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndCompoundsAndDiseases(taxId, compoudNames, diseaseNames, PAGEABLE);
-        assertTrue(result.getTotalPages() ==0);
-        
+        assertTrue(result.getTotalPages() == 0);
 
     }
 
@@ -818,6 +816,41 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         Page<UniprotEntry> result = enzymePortalService.filterBySpecie(taxId, PAGEABLE);
 
         assertEquals(expResult, result.getContent().size());
+
+    }
+
+    /**
+     * Test of findCatalyticActivitiesByAccession method, of class
+     * EnzymePortalService.
+     */
+    @Test
+    public void testFindCatalyticActivitiesByAccession() {
+        LOGGER.info("findCatalyticActivitiesByAccession");
+
+        int resultSize = 2;
+        List<String> expResult = new LinkedList<>();
+        expResult.add("Calcidiol + NADPH + O(2) = secalciferol + NADP(+) + H(2)O");
+        expResult.add("Calcitriol + NADPH + O(2) = calcitetrol + NADP(+) + H(2)O");
+
+        List<String> result = enzymePortalService.findCatalyticActivitiesByAccession(ACCESSION);
+
+        assertEquals(expResult, result);
+        assertEquals(resultSize, result.size());
+
+    }
+
+    /**
+     * Test of findEnzymeFamiliesByTaxId method, of class EnzymePortalService.
+     */
+    @Test
+    public void testFindEnzymeFamiliesByTaxId() {
+        LOGGER.info("findEnzymeFamiliesByTaxId");
+        Long taxId = 10090L;
+
+        List<EcNumber> result = enzymePortalService.findEnzymeFamiliesByTaxId(taxId);
+       
+
+        assertEquals("Oxidoreductases", result.stream().findAny().get().getFamily());
 
     }
 

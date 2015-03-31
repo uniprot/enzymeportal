@@ -19,11 +19,21 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
  */
 public interface EnzymePortalSummaryRepository extends JpaRepository<EnzymePortalSummary, Long>, QueryDslPredicateExecutor<EnzymePortalSummary>, EnzymePortalSummaryRepositoryCustom {
 
+    @Transactional(readOnly = true)
     @Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE='REGULATION' ", nativeQuery = true)
-    List<EnzymePortalSummary> findEnzymePortalSummaries();
-    
-     @Transactional(readOnly = true)
+    List<EnzymePortalSummary> findSummariesByRegulation();
+
+    //@Transactional(readOnly = true)
+    //@Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TEXT IS NOT NULL AND ROWNUM <= 2000 AND COMMENT_TYPE = :COMMENT_TYPE ", nativeQuery = true)
     @Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TEXT IS NOT NULL AND COMMENT_TYPE = :COMMENT_TYPE ", nativeQuery = true)
-     List<EnzymePortalSummary> findSummariesByCommentType(@Param("COMMENT_TYPE") String commentType);
+    List<EnzymePortalSummary> findSummariesByCommentType(@Param("COMMENT_TYPE") String commentType);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT COMMENT_TEXT FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE='CATALYTIC_ACTIVITY' AND UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+    List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT COMMENT_TEXT FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE AND UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+    List<String> FindTextByCommentTypeAndAccession(@Param("COMMENT_TYPE") String commentType, @Param("UNIPROT_ACCESSION") String accession);
 
 }

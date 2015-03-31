@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.ebi.ep.data.search.model.Compound;
 
-
 /**
  *
  * @author joseph
@@ -39,20 +38,15 @@ import uk.ac.ebi.ep.data.search.model.Compound;
 @Table(name = "ENZYME_PORTAL_COMPOUND")
 @XmlRootElement
 
-
-
-
-
-@NamedEntityGraph(name = "CompoundEntityGraph", attributeNodes = {  
+@NamedEntityGraph(name = "CompoundEntityGraph", attributeNodes = {
     @NamedAttributeNode("uniprotAccession")
 })
-
 
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundInternalId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundInternalId = :compoundInternalId"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundId", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundId = :compoundId"),
-   // @NamedQuery(name = "EnzymePortalCompound.findByCompoundName", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundName = :compoundName"),
+    // @NamedQuery(name = "EnzymePortalCompound.findByCompoundName", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundName = :compoundName"),
     @NamedQuery(name = "EnzymePortalCompound.findByCompoundSource", query = "SELECT e FROM EnzymePortalCompound e WHERE e.compoundSource = :compoundSource"),
     @NamedQuery(name = "EnzymePortalCompound.findByRelationship", query = "SELECT e FROM EnzymePortalCompound e WHERE e.relationship = :relationship"),
     @NamedQuery(name = "EnzymePortalCompound.findByUniprotAccession", query = "SELECT e FROM EnzymePortalCompound e WHERE e.uniprotAccession = :uniprotAccession")})
@@ -75,22 +69,24 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     @Column(name = "RELATIONSHIP")
     private String relationship;
 
-        @Column(name = "COMPOUND_ROLE")
+    @Column(name = "COMPOUND_ROLE")
     private String compoundRole;
- 
+
     @Column(name = "URL")
     private String url;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false,fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
-    
-        @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
+
+    @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
         @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
     @ManyToMany
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
 
+    @Column(name = "NOTE")
+    private String note;
 
     public EnzymePortalCompound() {
     }
@@ -155,20 +151,8 @@ public class EnzymePortalCompound extends Compound implements Serializable {
             return false;
         }
         final EnzymePortalCompound other = (EnzymePortalCompound) obj;
-        if (!Objects.equals(this.compoundId, other.compoundId)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.compoundId, other.compoundId);
     }
-    
-    
-
-    @Override
-    public String toString() {
-        return "EnzymePortalCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", compoundRole=" + compoundRole + '}';
-    }
-
-
 
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
@@ -178,8 +162,6 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.uniprotAccession = uniprotAccession;
     }
 
-
-
     @Override
     public String getUrl() {
         return url;
@@ -188,8 +170,6 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     public void setUrl(String url) {
         this.url = url;
     }
-
-
 
     public String getCompoundRole() {
         return compoundRole;
@@ -201,7 +181,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
 
     @XmlTransient
     public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
-        if(enzymePortalReactionSet == null){
+        if (enzymePortalReactionSet == null) {
             enzymePortalReactionSet = new HashSet<>();
         }
         return this.enzymePortalReactionSet;
@@ -212,30 +192,39 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     }
 
     @Override
-  public String getId() {
+    public String getId() {
         return compoundId;
     }
-
 
     @Override
     public String getName() {
         return compoundName;
     }
-    
+
     @Override
-      public Compound.Role getRole() {
+    public Compound.Role getRole() {
         return Compound.Role.valueOf(compoundRole);
 
     }
-
 
     @Override
     public boolean isSelected() {
         return selected;
     }
 
+    public String getNote() {
+        return note;
+    }
 
+    public void setNote(String note) {
+        this.note = note;
+    }
 
- 
+    @Override
+    public String toString() {
+        return "EnzymePortalCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", compoundRole=" + compoundRole +  ", note=" + note + '}';
+    }
+    
+    
 
 }

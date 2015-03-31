@@ -1,6 +1,3 @@
-
-
-
 package uk.ac.ebi.ep.data.enzyme.model;
 
 import java.io.Serializable;

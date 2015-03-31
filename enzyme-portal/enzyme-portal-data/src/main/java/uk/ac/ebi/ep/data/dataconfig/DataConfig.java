@@ -58,8 +58,8 @@ public class DataConfig {
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-        PlatformTransactionManager manager = new JpaTransactionManager(entityManagerFactory().getObject());
-        return manager;
+       return new JpaTransactionManager(entityManagerFactory().getObject());
+       
     }
 
     @Bean

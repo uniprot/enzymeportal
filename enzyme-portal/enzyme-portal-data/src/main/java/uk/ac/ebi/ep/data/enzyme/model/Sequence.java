@@ -172,10 +172,7 @@ public class Sequence
         if (!Objects.equals(this.sequenceurl, other.sequenceurl)) {
             return false;
         }
-        if (!Objects.equals(this.length, other.length)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.length, other.length);
     }
     
     

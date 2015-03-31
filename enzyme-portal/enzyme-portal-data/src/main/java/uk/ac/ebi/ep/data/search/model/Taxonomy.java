@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.data.search.model;
 
+import java.util.Objects;
 import org.springframework.util.StringUtils;
 
 /**
@@ -12,7 +13,7 @@ import org.springframework.util.StringUtils;
  *
  * @author joseph
  */
-public class Taxonomy {
+public class Taxonomy implements Comparable<Taxonomy>{
 
     private Long taxId;
     private String scientificName;
@@ -76,5 +77,34 @@ public class Taxonomy {
     public String toString() {
         return "Taxonomy{" + "taxId=" + taxId + ", scientificName=" + scientificName + ", commonName=" + commonName + ", num_enzymes=" + numEnzymes + '}';
     }
+
+    @Override
+    public int compareTo(Taxonomy other) {
+       return taxId.compareTo(other.getTaxId());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.taxId);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Taxonomy other = (Taxonomy) obj;
+        if (!Objects.equals(this.taxId, other.taxId)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

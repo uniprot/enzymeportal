@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;
@@ -15,7 +14,7 @@ import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
  *
  *
  */
-public class Disease implements  Serializable {
+public class Disease implements Serializable {
 
     protected String id;
 
@@ -26,7 +25,9 @@ public class Disease implements  Serializable {
     protected boolean selected;
     protected int numEnzyme;
 
-    protected List<String> evidences = new ArrayList<>();;
+    protected List<String> evidences = new ArrayList<>();
+    public static final Comparator<String> NAME_COMPARATOR
+            = new ChemicalNameComparator();
 
     public Disease() {
     }
@@ -35,8 +36,6 @@ public class Disease implements  Serializable {
         this.id = id;
         this.name = name;
     }
-    
-    
 
     public Disease(String id, String name, Object url) {
         this.id = id;
@@ -44,7 +43,7 @@ public class Disease implements  Serializable {
         this.url = url;
     }
 
-    public Disease(String id, String name, String description, Object url,  String evidence) {
+    public Disease(String id, String name, String description, Object url, String evidence) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -52,17 +51,11 @@ public class Disease implements  Serializable {
         evidences.add(evidence);
     }
 
-
-    private static final Comparator<String> NAME_COMPARATOR
-            = new ChemicalNameComparator();
-
-   
-
     public List<String> getEvidences() {
-        if(evidences == null){
+        if (evidences == null) {
             evidences = new ArrayList<>();
         }
-        
+
         return evidences;
     }
 
@@ -212,35 +205,6 @@ public class Disease implements  Serializable {
         return this;
     }
 
-//    @Override
-//    public int compareTo(Disease o) {
-//        if (name == null && o.getName() == null) {
-//            return id.compareToIgnoreCase(o.getId());
-//        }
-//
-//        int compare = this.name.compareToIgnoreCase(o.getName());
-//
-//        return compare == 0 ? name.compareToIgnoreCase(o.getName()) : 0;
-//    }
-//        @Override
-//    public int compareTo(Disease o) {
-//        if (name == null && o.getName() == null) {
-//            return id.compareToIgnoreCase(o.getId());
-//        }
-//
-//        int compare = this.id.compareToIgnoreCase(o.getId());
-//
-//        return compare == 0 ? name.compareToIgnoreCase(o.getName()) : 0;
-//    }
-    
-    
-    
-//    @Override
-//    public int compareTo(Disease o) {
-//        return NAME_COMPARATOR.compare(this.getName(),
-//                o.getName());
-//    }
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -267,7 +231,5 @@ public class Disease implements  Serializable {
     public String toString() {
         return "Disease{" + "id=" + id + ", name=" + name + ", numEnzyme=" + numEnzyme + '}';
     }
-
-
 
 }

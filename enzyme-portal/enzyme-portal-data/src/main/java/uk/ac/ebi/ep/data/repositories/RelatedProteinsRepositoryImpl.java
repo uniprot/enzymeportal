@@ -28,21 +28,15 @@ public class RelatedProteinsRepositoryImpl implements RelatedProteinsRepositoryC
     @Override
     public List<RelatedProteins> findRelatedProteinsByNamePrefixes(List<String> nameprefixes) {
         
-//        EntityGraph eGraph = entityManager.getEntityGraph("RelatedProteins.graph");
-//        eGraph.addAttributeNodes("uniprotAccession");
-//        
-//        eGraph.addSubgraph("uniprotAccession")
-//                .addAttributeNodes("enzymePortalPathwaysSet", "enzymePortalReactionSet",
-//                        "enzymePortalSummarySet", "enzymePortalDiseaseSet",
-//                        "enzymePortalCompoundSet", "uniprotXrefSet", "uniprotEntrySet", "enzymePortalEcNumbersSet");
+
         
         JPAQuery query = new JPAQuery(entityManager);
         
-       // query.setHint("javax.persistence.fetchgraph", eGraph);
+     
         
         BooleanBuilder builder = new BooleanBuilder();
         
-        nameprefixes.stream().forEach((prefix) -> {
+        nameprefixes.stream().forEach(prefix -> {
             
             builder.or($.namePrefix.equalsIgnoreCase(prefix));
             

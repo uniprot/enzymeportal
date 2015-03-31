@@ -1,5 +1,3 @@
-
-
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
@@ -149,20 +147,7 @@ public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePor
         return "EnzymePortalPathways{" + "pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species +  '}';
     }
 
-//    @Override
-//    public String getId() {
-//        return pathwayId;
-//    }
-//
-//    @Override
-//    public String getName() {
-//        return pathwayName;
-//    }
-//
-//    @Override
-//    public String getUrl() {
-//        return pathwayUrl;
-//    }
+
 
     @Override
     public int compareTo(EnzymePortalPathways o) {
