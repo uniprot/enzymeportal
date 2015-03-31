@@ -14,6 +14,7 @@
 <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
 <div class="resultItem grid_24">
+        <h2>EC ${enzyme.ec}</h2>
 <!--    <h2>EC ${enzyme.enzymePortalEcNumbersSet}</h2>-->
 <div class="summary-header">
     <c:if test="${showCheckbox != false}">
