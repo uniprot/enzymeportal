@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class LogAnalyzer {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LogAnalyzer.class);
 
     public void processLog() {
-        Map<String, Long> frequencyMap = null;
+        Map<String, Long> frequencyMap = new HashMap<>();
         Map<Long, String> printer = new TreeMap<>(reverseKeyJava8);
 
         List<String> data = new LinkedList<>();

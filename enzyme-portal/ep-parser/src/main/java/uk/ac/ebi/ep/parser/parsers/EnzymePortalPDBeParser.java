@@ -45,7 +45,7 @@ public class EnzymePortalPDBeParser {
         pdbIds.stream().forEach((pdb) -> {
             //obtain a concrete pdb entry
             PdbSearchResult results = pdbService.getPdbSearchResults(pdb.getSourceId().toLowerCase());
-            System.out.println("count "+count.getAndIncrement() +" PDB id "+ pdb.getSourceId());
+            //System.out.println("count "+count.getAndIncrement() +" PDB id "+ pdb.getSourceId());
             if (results != null) {
                 List<PDBe> result = results.get(pdb.getSourceId().toLowerCase());
                 String title = result.stream().findAny().get().getTitle();

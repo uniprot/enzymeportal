@@ -126,7 +126,7 @@ public class DiseaseParser {
                     } else {
                         definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
                     }
-
+                    
                     //get disease evidence 
                     EnzymePortalSummary summary = enzymeSummaryRepository.findDiseaseEvidence(accession);
                   
@@ -181,7 +181,6 @@ public class DiseaseParser {
             isr = new InputStreamReader(is);
             br = new BufferedReader(isr);
             LOGGER.info("Parsing start");
-            System.out.println("parsing starts ...");
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = getFields(format, line);
@@ -193,7 +192,6 @@ public class DiseaseParser {
             }
             LOGGER.info("Parsing end");
 
-            //LOGGER.info("Map closed");
         } catch (IOException | InterruptedException e) {
             LOGGER.error("During parsing", e);
 

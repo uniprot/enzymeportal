@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.parser.parsers.DiseaseParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPDBeParser;
@@ -26,6 +27,7 @@ public class GlobalDataConfig {
 
     @Autowired
     private Environment env;
+
     @Bean
     public DiseaseParser diseaseParser() {
         return new DiseaseParser();
@@ -41,28 +43,27 @@ public class GlobalDataConfig {
         return new EnzymePortalPathwaysParser();
     }
 
-
-        @Bean
+    @Bean
     public PdbService pdbService() {
         return new PdbService(pdbeRestService());
     }
-    
-        @Bean
+
+    @Bean
     public PDBeRestService pdbeRestService() {
 
         return new PDBeRestService();
     }
-    
-        @Bean
+
+    @Bean
     public PDBeUrl pDBeUrl() {
         PDBeUrl pdBeUrl = new PDBeUrl();
-        
+
         String summaryUrl = env.getProperty("pdb.summary.url");
         String experimentUrl = env.getProperty("pdb.experiment.url");
         String publicationsUrl = env.getProperty("pdb.publications.url");
         String moleculesUrl = env.getProperty("pdb.molecules.url");
         String structuralDomainUrl = env.getProperty("pdb.structuralDomain.url");
-        
+
         pdBeUrl.setSummaryUrl(summaryUrl);
         pdBeUrl.setExperimentUrl(experimentUrl);
         pdBeUrl.setPublicationsUrl(publicationsUrl);
@@ -74,6 +75,11 @@ public class GlobalDataConfig {
     @Bean
     public EnzymePortalPDBeParser enzymePortalPDBeParser() {
         return new EnzymePortalPDBeParser();
+    }
+
+    @Bean
+    public ChebiWebServiceClient chebiWebServiceClient() {
+        return new ChebiWebServiceClient();
     }
 
 }
