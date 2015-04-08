@@ -76,9 +76,9 @@ public class ChEBICompounds {
           List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
           LOGGER.debug("Number of Regulation Text from EnzymeSummary Table "+ enzymeSummary.size());
           
-          //System.out.println("summaries "+ enzymeSummary);
+        
           
-            String text = "Activated by cell stresses such as DNA damage, heat shock, osmotic shock, anisomycin and sodium arsenite, as well as pro-inflammatory stimuli such as bacterial lipopolysaccharide (LPS) and interleukin-1. Activation occurs through dual phosphorylation of Thr-180 and Tyr-182 by either of two dual specificity kinases, MAP2K3/MKK3 or MAP2K6/MKK6, and potentially also MAP2K4/MKK4, as well as by TAB1-mediated autophosphorylation. MAPK14 phosphorylated on both Thr-180 and Tyr-182 is 10-20-fold more active than MAPK14 phosphorylated only on Thr-180, whereas MAPK14 phosphorylated on Tyr-182 alone is inactive. whereas Thr-180 is necessary for catalysis, Tyr-182 may be required for auto-activation and substrate recognition. Phosphorylated at Tyr-323 by ZAP70 in an alternative activation pathway in response to TCR signaling in T-cells. This alternative pathway is inhibited by GADD45A. Inhibited by dual specificity phosphatases, such as DUSP1, DUSP10, and DUSP16. Specifically inhibited by the binding of pyridinyl-imidazole compounds, which are cytokine-suppressive anti-inflammatory drugs (CSAID). Isoform Mxi2 is 100-fold less sensitive to these agents than the other isoforms and is not inhibited by DUSP1. Isoform Exip is not activated by MAP2K6. SB203580 is an inhibitor of MAPK14.";   
+            //String text = "Activated by cell stresses such as DNA damage, heat shock, osmotic shock, anisomycin and sodium arsenite, as well as pro-inflammatory stimuli such as bacterial lipopolysaccharide (LPS) and interleukin-1. Activation occurs through dual phosphorylation of Thr-180 and Tyr-182 by either of two dual specificity kinases, MAP2K3/MKK3 or MAP2K6/MKK6, and potentially also MAP2K4/MKK4, as well as by TAB1-mediated autophosphorylation. MAPK14 phosphorylated on both Thr-180 and Tyr-182 is 10-20-fold more active than MAPK14 phosphorylated only on Thr-180, whereas MAPK14 phosphorylated on Tyr-182 alone is inactive. whereas Thr-180 is necessary for catalysis, Tyr-182 may be required for auto-activation and substrate recognition. Phosphorylated at Tyr-323 by ZAP70 in an alternative activation pathway in response to TCR signaling in T-cells. This alternative pathway is inhibited by GADD45A. Inhibited by dual specificity phosphatases, such as DUSP1, DUSP10, and DUSP16. Specifically inhibited by the binding of pyridinyl-imidazole compounds, which are cytokine-suppressive anti-inflammatory drugs (CSAID). Isoform Mxi2 is 100-fold less sensitive to these agents than the other isoforms and is not inhibited by DUSP1. Isoform Exip is not activated by MAP2K6. SB203580 is an inhibitor of MAPK14.";   
           
 
        //Java 7 and before only. uncomment if Java 8 is not available in your env
@@ -86,21 +86,11 @@ public class ChEBICompounds {
 //        for (EnzymePortalSummary summary : enzymeSummary) {
 //            String enzyme_regulation_text = summary.getCommentText();
 //            
-//            //String enzyme_regulation_text = text;
-////                      
-////           Set<String> pin =    EPUtil.parseTextForInhibitors(text);
-////           
-////           System.out.println("PARSED INHIBITORS "+ pin);
-////           
-////          Set<String> pac =  EPUtil.parseTextForActivators(text);
-////            System.out.println("PARSED ACTIVATORS "+ pac);
 //         
 //            inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
 //            activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
 //        }
 //        
-//                //System.out.println("ACTIVATORS "+ activators);
-//       // System.out.println("INHIBITIRS "+ inhibitors);
 //
 //        for (Map.Entry<UniprotEntry, Set<String>> map : inhibitors.entrySet()) {
 //            UniprotEntry key = map.getKey();
@@ -134,10 +124,7 @@ public class ChEBICompounds {
          
         //Java 8 specifics - comment out  and uncomment above if java 8 is not found in env
         enzymeSummary.stream().forEach((summary) -> {
-           // String enzyme_regulation_text = summary.getCommentText();
-             String enzyme_regulation_text = text;
-            
-        
+            String enzyme_regulation_text = summary.getCommentText();
             inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
             activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
         });
@@ -174,7 +161,7 @@ public class ChEBICompounds {
         
         LOGGER.debug("Writing to Enzyme Portal database... Number of compounds to write : "+ compounds.size());
      
-        //compoundRepository.save(compounds);
+        compoundRepository.save(compounds);
 
         inhibitors.clear();
         activators.clear();
