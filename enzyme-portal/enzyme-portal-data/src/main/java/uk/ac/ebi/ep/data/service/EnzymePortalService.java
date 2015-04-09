@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.ebi.ep.data.domain.EnzymeCatalyticActivity;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
@@ -28,6 +29,7 @@ import uk.ac.ebi.ep.data.domain.UniprotXref;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymeCatalyticActivityRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
@@ -75,6 +77,15 @@ public class EnzymePortalService {
 
     @Autowired
     private EnzymePortalEcNumbersRepository ecNumbersRepository;
+    
+    @Autowired
+    private EnzymeCatalyticActivityRepository catalyticActivityRepository;
+    
+        @Transactional(readOnly = true)
+    public List<EnzymeCatalyticActivity> findEnzymeCatalyticActivities() {
+
+        return catalyticActivityRepository.findAllEnzymeCatalyticActivity();
+    }
 
     @Transactional(readOnly = true)
     public UniprotEntry findByAccession(String accession) {
@@ -158,7 +169,8 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<String> findCatalyticActivitiesByAccession(String accession) {
 
-        return enzymeSummaryRepository.findCatalyticActivitiesByAccession(accession);
+        ///return enzymeSummaryRepository.findCatalyticActivitiesByAccession(accession);
+       return  uniprotEntryRepository.findCatalyticActivitiesByAccession(accession);
     }
 
     @Transactional(readOnly = true)

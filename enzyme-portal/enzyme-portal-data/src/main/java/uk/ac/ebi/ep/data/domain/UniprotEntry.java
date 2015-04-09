@@ -55,7 +55,8 @@ import uk.ac.ebi.ep.data.search.model.Species;
     @NamedAttributeNode("enzymePortalCompoundSet"),
     @NamedAttributeNode("enzymePortalDiseaseSet"),
     @NamedAttributeNode("uniprotXrefSet"),
-    @NamedAttributeNode("enzymePortalEcNumbersSet")
+    @NamedAttributeNode("enzymePortalEcNumbersSet"),
+    @NamedAttributeNode("enzymeCatalyticActivitySet")
 },
         subgraphs = {
             @NamedSubgraph(
@@ -82,6 +83,9 @@ import uk.ac.ebi.ep.data.search.model.Species;
 })
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
+
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
 
     private static final long serialVersionUID = 1L;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
@@ -304,7 +308,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return true;
     }
 
-
     @Override
     public String toString() {
         return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
@@ -385,7 +388,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
 
-
         e.getUniprotXrefSet().stream().filter(x -> "PDB".equalsIgnoreCase(x.getSource())).limit(10).collect(Collectors.toList()).stream().forEach(xref -> {
             pdbcodes.add(xref.getSourceId());
         });
@@ -411,14 +413,14 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         if (synonymName != null && synonymName.contains(";")) {
             String[] syn = synonymName.split(";");
             for (String otherName : syn) {
-                if(!otherName.equalsIgnoreCase(getProteinName())){
-                //synonym.addAll(parseNameSynonyms(otherName));
-                synonym.add(otherName);
+                if (!otherName.equalsIgnoreCase(getProteinName())) {
+                    //synonym.addAll(parseNameSynonyms(otherName));
+                    synonym.add(otherName);
                 }
             }
         }
-        
-         return synonym.stream().distinct().collect(Collectors.toList());
+
+        return synonym.stream().distinct().collect(Collectors.toList());
     }
 
     public List<String> parseNameSynonyms(String namesColumn) {
@@ -522,7 +524,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Override
     public int compareTo(UniprotEntry o) {
         return this.entryType.compareTo(o.getEntryType());
-        
+
     }
 
     @Override
@@ -568,5 +570,24 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public void setEnzymeXmlStoreSet(Set<EnzymeXmlStore> enzymeXmlStoreSet) {
         this.enzymeXmlStoreSet = enzymeXmlStoreSet;
     }
+
+    @XmlTransient
+    public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {
+        return enzymeCatalyticActivitySet;
+    }
+
+    public void setEnzymeCatalyticActivitySet(Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet) {
+        this.enzymeCatalyticActivitySet = enzymeCatalyticActivitySet;
+    }
+
+//    public List<String> getCatalyticActivities() {
+//
+//        List<String> catalyticActivities = new LinkedList<>();
+//        enzymeCatalyticActivitySet.stream().forEach((activity) -> {
+//            catalyticActivities.add(activity.getCatalyticActivity());
+//        });
+//
+//        return catalyticActivities;
+//    }
 
 }

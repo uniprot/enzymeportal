@@ -20,7 +20,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
 public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, UniprotEntryRepositoryCustom {
 
 //     @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraphType.LOAD)
-   UniprotEntry findByAccession(String accession);
+    UniprotEntry findByAccession(String accession);
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION = :ACCESSION ", nativeQuery = true)
@@ -34,4 +34,8 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 
     @Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER", nativeQuery = true)
     List<UniprotEntry> findEnzymesByEc(@Param("EC_NUMBER") String ecNumber);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT CATALYTIC_ACTIVITY FROM ENZYME_CATALYTIC_ACTIVITY WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+    List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
 }

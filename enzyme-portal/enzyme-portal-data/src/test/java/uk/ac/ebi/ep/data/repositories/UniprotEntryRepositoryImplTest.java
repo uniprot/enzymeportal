@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.After;
@@ -130,7 +131,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
 //        expResult.add("Q63688");
 //        expResult.add("Q60991");
 
-        List<String> result = uniprotEntryRepository.filterEnzymesInAccessions(accessions);
+        List<String> result = uniprotEntryRepository.filterEnzymesInAccessions(accessions).stream().distinct().collect(Collectors.toList());
         assertTrue(result.size() > 1);
 
       
@@ -147,9 +148,9 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         LOGGER.info("findEnzymesByAccession");
         String accession = "Q64441";
 
-        int expResult = 4;
-        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccession(accession);
-
+        int expResult = 1;
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccession(accession).stream().distinct().collect(Collectors.toList());
+      
         assertEquals(expResult, result.size());
 
     }

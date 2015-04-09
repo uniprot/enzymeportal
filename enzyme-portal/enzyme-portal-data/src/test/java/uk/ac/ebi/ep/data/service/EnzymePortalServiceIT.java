@@ -165,6 +165,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         int expResult = 4;
 
         List<UniprotEntry> result = enzymePortalService.findEnzymesByAccessions(accessions);
+       
 
         assertEquals(expResult, result.size());
 
@@ -324,7 +325,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         accessions.add("NotAnEnzyme");
 
         List<String> result = enzymePortalService.filterEnzymesInAccessions(accessions);
-        assertTrue(result.size() > 1);
+                assertTrue(result.size() > 1);
 
     }
 
@@ -833,6 +834,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         expResult.add("Calcitriol + NADPH + O(2) = calcitetrol + NADP(+) + H(2)O");
 
         List<String> result = enzymePortalService.findCatalyticActivitiesByAccession(ACCESSION);
+       
 
         assertEquals(expResult, result);
         assertEquals(resultSize, result.size());
@@ -853,5 +855,20 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         assertEquals("Oxidoreductases", result.stream().findAny().get().getFamily());
 
     }
+    
+//                @Test
+//    public void testfindEnzymeCatalyticActivities() {
+//        LOGGER.info("findEnzymeCatalyticActivities");
+//       
+//
+//        List<EnzymeCatalyticActivity> result = enzymePortalService.findEnzymeCatalyticActivities();
+//                    System.out.println("how many activities "+ result);
+//       
+//
+//      
+//
+//    }
+    
+    
 
 }
