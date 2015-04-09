@@ -156,7 +156,7 @@ public class Molecule {
      */
     @JsonProperty("molecule_name")
     public String getMoleculeName() {
-        return "Name: " + moleculeName;
+        return  moleculeName;
     }
 
     /**

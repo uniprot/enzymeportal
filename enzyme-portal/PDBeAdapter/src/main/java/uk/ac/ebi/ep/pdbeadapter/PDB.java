@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.pdbeadapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import uk.ac.ebi.ep.pdbeadapter.publication.AuthorList;
 
 /**
@@ -31,6 +32,7 @@ public class PDB {
     private String resolution;
     private String rFactor;
     private String rFree;
+    private String spacegroup;
     
     
     private List<Polypeptide> polypeptides;
@@ -86,7 +88,7 @@ public class PDB {
     }
 
     public List<AuthorList> getEntryAuthors() {
-        return entryAuthors;
+        return entryAuthors.stream().distinct().sorted().collect(Collectors.toList());
     }
 
     public void setEntryAuthors(List<AuthorList> entryAuthors) {
@@ -142,6 +144,16 @@ public class PDB {
     public void setrFree(String rFree) {
         this.rFree = rFree;
     }
+
+    public String getSpacegroup() {
+        return spacegroup;
+    }
+
+    public void setSpacegroup(String spacegroup) {
+        this.spacegroup = spacegroup;
+    }
+    
+    
 
     public String getStructuralDomain() {
         return structuralDomain;

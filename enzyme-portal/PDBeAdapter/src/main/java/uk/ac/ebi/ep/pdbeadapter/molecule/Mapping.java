@@ -81,7 +81,8 @@ public class Mapping {
     @Override
     public String toString() {
   
-        return start+" - "+end;
+        //return start+" - "+end;
+        return ""+end;
     }
     
     

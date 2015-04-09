@@ -5,14 +5,10 @@
  */
 package uk.ac.ebi.ep.pdbeadapter.publication;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -20,7 +16,7 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class AuthorList {
+public class AuthorList implements Comparable<AuthorList>{
 
     @JsonProperty("last_name")
     private String lastName;
@@ -28,8 +24,6 @@ public class AuthorList {
     private String fullName;
     @JsonProperty("initials")
     private String initials;
-    @JsonIgnore
-    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      *
@@ -85,14 +79,29 @@ public class AuthorList {
         this.initials = initials;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+
+    @Override
+    public int compareTo(AuthorList o) {
+        return this.fullName.compareToIgnoreCase(o.getFullName());
     }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.fullName);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AuthorList other = (AuthorList) obj;
+        return Objects.equals(this.fullName, other.fullName);
     }
 
     

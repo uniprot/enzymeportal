@@ -10,9 +10,18 @@ import uk.ac.ebi.ep.pdbeadapter.molecule.Molecule;
  */
 public class SmallMoleculeLigand {
 
+    private String chainId;
     private String shortName;
     private String label;
     private List<Molecule> molecules;
+
+    public String getChainId() {
+        return chainId.replaceAll("\\[", "").replaceAll("]", "");
+    }
+
+    public void setChainId(String chainId) {
+        this.chainId = chainId;
+    }
 
     public String getShortName() {
         return shortName;

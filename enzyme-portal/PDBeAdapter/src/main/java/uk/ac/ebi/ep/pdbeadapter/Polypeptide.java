@@ -6,20 +6,30 @@
 package uk.ac.ebi.ep.pdbeadapter;
 
 import java.util.List;
+import java.util.Objects;
 import uk.ac.ebi.ep.pdbeadapter.molecule.Mapping;
 
 /**
  *
  * @author joseph
  */
-public class Polypeptide  {
-       
-        private String label;
+public class Polypeptide implements Comparable<Polypeptide> {
+
+    private String label;
     private String moleculeName;
     private String organism;
     private boolean protein;
-     private List<Mapping> residues;
+    private List<Mapping> residues;
+    
+    private String chainId;
+    
+        public String getChainId() {
+        return chainId.replaceAll("\\[", "").replaceAll("]", "");
+    }
 
+    public void setChainId(String chainId) {
+        this.chainId = chainId;
+    }
 
 
     public String getOrganism() {
@@ -38,7 +48,6 @@ public class Polypeptide  {
         this.protein = protein;
     }
 
-
     public String getLabel() {
         return label;
     }
@@ -46,8 +55,6 @@ public class Polypeptide  {
     public void setLabel(String label) {
         this.label = label;
     }
-
-
 
     public List<Mapping> getResidues() {
         return residues;
@@ -65,12 +72,41 @@ public class Polypeptide  {
         this.moleculeName = moleculeName;
     }
 
+
+
+    @Override
+    public int compareTo(Polypeptide o) {
+        return this.label.compareToIgnoreCase(o.getLabel());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.moleculeName);
+        hash = 23 * hash + Objects.hashCode(this.chainId);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Polypeptide other = (Polypeptide) obj;
+        if (!Objects.equals(this.moleculeName, other.moleculeName)) {
+            return false;
+        }
+        return Objects.equals(this.chainId, other.chainId);
+    }
+
     @Override
     public String toString() {
-        return "Polypeptide{" + "label=" + label + ", moleculeName=" + moleculeName + ", organism=" + organism + ", protein=" + protein + ", residues=" + residues + '}';
+        return "Polypeptide{" + "label=" + label + ", moleculeName=" + moleculeName + ", organism=" + organism + ", protein=" + protein + ", residues=" + residues + ", chainId=" + chainId + '}';
     }
 
 
-    
-    
+
 }

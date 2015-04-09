@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +15,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.data.enzyme.model.Enzyme;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeHierarchy;
@@ -61,7 +59,7 @@ public class IntenzAdapter implements IintenzAdapter{
     public Map<String, Set<String>> getSynonyms(Set<String> ecNumbers)
 	throws MultiThreadingException {
         ExecutorService pool = Executors.newCachedThreadPool();
-        System.out.println("adding synomn from intenz "+ config);
+        //System.out.println("adding synomn from intenz "+ config);
         CompletionService<Set<String>> ecs =
        		 	new ExecutorCompletionService<Set<String>>(pool);
         Map<String, Set<String>> resultMap =
@@ -109,7 +107,7 @@ public class IntenzAdapter implements IintenzAdapter{
        
         //DataTypeConverter.getUniprotEcs(enzymeModel);
         //Synonyms are merged into one list if there are more than 1 ec number
-        Set<String> synonyms = new LinkedHashSet<>();
+        //Set<String> synonyms = new LinkedHashSet<>();
 //        LOGGER.debug("SEARCH before getIntenz");
         List<Intenz> intenzList = getIntenz(ecList);
 //        LOGGER.debug("SEARCH after  getIntenz");
@@ -120,7 +118,7 @@ public class IntenzAdapter implements IintenzAdapter{
                 GetSynonymsCaller synonymsCaller = new GetSynonymsCaller();
                 GetEcHierarchyCaller ecCaller = new GetEcHierarchyCaller();
 //                LOGGER.debug("SEARCH before getSynonyms");
-                synonyms.addAll(synonymsCaller.getSynonyms(intenz));
+                //synonyms.addAll(synonymsCaller.getSynonyms(intenz));
 //                LOGGER.debug("SEARCH before getEcHierarchy");
                 EnzymeHierarchy enzymeHierarchy = ecCaller.getEcHierarchy(intenz);
                 if (enzymeHierarchy != null) {
@@ -129,12 +127,12 @@ public class IntenzAdapter implements IintenzAdapter{
 //                LOGGER.debug("SEARCH after  getEcHierarchy");
             }
 //            LOGGER.debug("SEARCH after intenzList");
-            if (synonyms.size() > 0) {
-            	@SuppressWarnings("unchecked")
-				Collection<String> newSynonyms = CollectionUtils.subtract(
-						synonyms, enzymeModel.getSynonym());
-                enzymeModel.getSynonym().addAll(newSynonyms);
-            }
+//            if (synonyms.size() > 0) {
+//            	@SuppressWarnings("unchecked")
+//				Collection<String> newSynonyms = CollectionUtils.subtract(
+//						synonyms, enzymeModel.getSynonym());
+//                enzymeModel.getSynonym().addAll(newSynonyms);
+//            }
 
             //Enzyme has previously initiatized to set Sequence info
             //Enzyme enzyme = new Enzyme();
