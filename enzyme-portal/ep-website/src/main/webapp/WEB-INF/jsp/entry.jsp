@@ -73,16 +73,16 @@
                                 <c:if test='${requestedfield=="enzyme"}'>
                                     <c:set var="enzymeSelected" value="selected"/>
                                 </c:if>
-                                <c:if test='${requestedfield=="proteinStructure"}'>
+                                <c:if test='${requestedfield=="proteinstructure"}'>
                                     <c:set var="proteinStructureSelected" value="selected"/>
                                 </c:if>
-                                <c:if test='${requestedfield=="reactionsPathways"}'>
+                                <c:if test='${requestedfield=="reactionspathways"}'>
                                     <c:set var="reactionsPathwaysSelected" value="selected"/>
                                 </c:if>
                                 <c:if test='${requestedfield=="molecules"}'>
                                     <c:set var="moleculesSelected" value="selected"/>
                                 </c:if>
-                                <c:if test='${requestedfield=="diseaseDrugs"}'>
+                                <c:if test='${requestedfield=="diseasedrugs"}'>
                                     <c:set var="diseaseDrugsSelected" value="selected"/>
                                 </c:if>
                                 <c:if test='${requestedfield=="literature"}'>
@@ -252,7 +252,7 @@
                                             </c:if>
 
                                             <!--START PROTEIN STRUCTURE TAB-->
-                                            <c:if test='${requestedfield=="proteinStructure"}'>
+                                            <c:if test='${requestedfield=="proteinstructure"}'>
                                                 <c:set var="structure" value="${enzymeModel.proteinstructure}"/>   
                                                 <c:if test='${structure[0].name == "error"}'>
                                                     <div class="node grid_24">
@@ -271,7 +271,7 @@
                                             </c:if>
 
                                             <!--START REACTIONS & PATHWAYS TAB-->
-                                            <c:if test='${requestedfield=="reactionsPathways"}'>
+                                            <c:if test='${requestedfield=="reactionspathways"}'>
 
                                                 <c:set var="pathway" value="${enzymeModel.reactionpathway}"/>   
                                                 <c:if test='${pathway[0].reaction.name == "error"}'>
@@ -313,7 +313,7 @@
                                                 </c:choose>
                                             </c:if>
                                             <!--START DISEASE & DRUGS TAB-->
-                                            <c:if test='${requestedfield=="diseaseDrugs"}'>
+                                            <c:if test='${requestedfield=="diseasedrugs"}'>
                                                 <c:set var="diseases" value="${enzymeModel.disease}"/>
                                                 <c:if test='${diseases[0].name == "error"}'>
                                                     <div class="node grid_24">

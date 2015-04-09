@@ -14,7 +14,7 @@
 <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
 <div class="resultItem grid_24">
-        <h2>EC ${enzyme.ec}</h2>
+<!--        <h2>EC ${enzyme.ec}</h2>-->
 <!--    <h2>EC ${enzyme.enzymePortalEcNumbersSet}</h2>-->
 <div class="summary-header">
     <c:if test="${showCheckbox != false}">
@@ -241,6 +241,24 @@
             </c:if>
         </div>
     </div>
+            
+<!--            catalytic activities-->
+
+    <c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">
+        <b>Catalytic Activities: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>
+        
+        <%--
+        TODO
+        This needs to be uncommented in order to test UI fixes.
+        <ul style="list-style-type: square">
+                    <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity" >
+          <li class="reaction"><b>${activity.catalyticActivity}</b></li>   
+                    </c:forEach>
+                    
+                </ul>
+        --%>
+                
+  </c:if>
 
 </div>
 

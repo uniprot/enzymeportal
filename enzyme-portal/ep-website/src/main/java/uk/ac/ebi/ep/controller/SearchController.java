@@ -35,8 +35,8 @@ import uk.ac.ebi.ep.adapter.literature.CitexploreWSClientPool;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
+import uk.ac.ebi.ep.common.Field;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.entry.Field;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.data.enzyme.model.CountableMolecules;
 import uk.ac.ebi.ep.data.enzyme.model.Enzyme;
@@ -121,7 +121,7 @@ public class SearchController extends AbstractController {
     protected String getEnzymeModel(Model model,
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
-        Field requestedField = Field.valueOf(field);
+        Field  requestedField = Field.valueOf(field.toUpperCase());
         EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService);
         
         retriever.getIntenzAdapter().setConfig(intenzConfig);
@@ -132,7 +132,7 @@ public class SearchController extends AbstractController {
                 case PROTEINSTRUCTURE:
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
-                case REACTIONPATHWAYS:
+                case REACTIONSPATHWAYS:
                     retriever.getReactomeAdapter().setConfig(reactomeConfig);
                     enzymeModel = retriever.getReactionsPathways(accession);
                     break;
@@ -154,7 +154,8 @@ public class SearchController extends AbstractController {
                     break;
             }
             if (enzymeModel != null) {
-                enzymeModel.setRequestedfield(requestedField.name());
+              
+                enzymeModel.setRequestedfield(requestedField.name().toLowerCase());
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 addToHistory(session, accession);
 
@@ -219,7 +220,7 @@ public class SearchController extends AbstractController {
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 LOGGER.error("Error in retrieving ProteinStructure");
             }
-            if (requestedField.getName().equalsIgnoreCase(Field.REACTIONPATHWAYS.getName())) {
+            if (requestedField.getName().equalsIgnoreCase(Field.REACTIONSPATHWAYS.getName())) {
                 enzymeModel = new EnzymeModel();
                 
                 enzymeModel.setRequestedfield(requestedField.getName());

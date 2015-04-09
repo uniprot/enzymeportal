@@ -43,12 +43,13 @@
         
         
           <dl>
-            <dt>Experimental Method</dt>
+            <dt>Experiment</dt>
             <dd>
                 <ul>
                    <li class="note_${vs.index}">Resolution    : ${proteinStructure.resolution}&#194;</li> 
                    <li class="note_${vs.index}">R-Factor      : ${proteinStructure.rFactor}&#37;</li> 
                    <li class="note_${vs.index}">Free R-Factor : ${proteinStructure.rFree}&#37;</li> 
+                   <li class="note_${vs.index}">Spacegroup : ${proteinStructure.spacegroup}</li>
                    
                    
                 </ul>
@@ -70,7 +71,7 @@
         </dl>              
                    
              <dl>
-            <dt>Entry Authors</dt>
+            <dt>Authors</dt>
             <dd>
               <div class="note_${vs.index}">
                     <c:forEach var="author" items="${proteinStructure.entryAuthors}">
@@ -98,12 +99,14 @@
         
                   
             <dl>
-                <dt>Polypeptide chain</dt>
+                <dt>Polymers</dt>
                 <dd>
                     <c:forEach var="peptides" varStatus="vsSum" items="${proteinStructure.polypeptides}">
                     <ul>
-                      
-                            <li class="note_${vsSumNote.index}">${peptides.moleculeName}</li>
+                        
+                        <li class="note_${vsSumNote.index}">Chain: <strong>${peptides.chainId}</strong></li>
+                                         
+                        <li class="note_${vsSumNote.index}">Name: ${peptides.moleculeName}</li>
                                           
                        
                          <c:if test="${not empty peptides.residues}">
@@ -112,7 +115,10 @@
                         <li class="note_${vsSumNote.index}"> Residues: ${residue}</li>
                         </c:forEach>
                                  
-                        </c:if>               
+                        </c:if> 
+                         <c:if test="${not empty peptides.protein}">
+                         <li>Type: Protein</li> 
+                        </c:if>
                                   
                          <c:if test="${not empty peptides.organism}">
                          <li>Organism: ${peptides.organism}</li> 
@@ -131,16 +137,18 @@
              
                   
             <dl>
-                <dt>Small molecule ligands</dt>
+                <dt>Heterogens</dt>
                  <p></p>
               </dl>
                       <c:forEach var="ligand" varStatus="vsSum" items="${proteinStructure.smallMoleculeLigands}">
                     <ul style="list-style-type: square">
+                        <li class="note_${vsSumNote.index}">Chain: ${ligand.chainId}</li>
                         <c:forEach var="mol" items="${ligand.molecules}" varStatus="vsSumNote">
-                            <li class="note_${vsSumNote.index}">${mol.moleculeName}</li>
+                            
+                            <li class="note_${vsSumNote.index}">Name: ${mol.moleculeName}</li>
                               <c:if test="${not empty mol.chemCompIds && fn:length(mol.chemCompIds) > 0}">
                                   <c:forEach var="chemCompIds" items="${mol.chemCompIds}">
-                                  <span class="note_${vsSumNote.index}">Short name : ${chemCompIds}</span>
+                                  <span class="note_${vsSumNote.index}">Ligands : ${chemCompIds}</span>
                                   </c:forEach>
                                   <p></p>
                             </c:if>

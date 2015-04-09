@@ -36,7 +36,8 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+<!--    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>-->
+     <script src="${pageContext.request.contextPath}/resources/javascript/angularjs/angular.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javascript/ui-bootstrap-custom-tpls-0.10.0.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javascript/controllers.js"></script>
     <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
