@@ -327,15 +327,18 @@ public class EnzymeFinder {
         ecNumberFilters.addAll(entry.getEnzymePortalEcNumbersSet().stream().distinct().collect(Collectors.toList()));
          compoundFilters.addAll(entry.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
          diseaseFilters.addAll(entry.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
+         
+         
+         
 //        entry.getRelatedProteinsId().getUniprotEntrySet().stream().map((e) -> {
 //            diseaseFilters.addAll(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
 //            return e;
-////        }).map((e) -> {
-////            compoundFilters.addAll(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
-////            return e;
-////        }).map(e -> {
-////            ecNumberFilters.addAll(e.getEnzymePortalEcNumbersSet().stream().distinct().collect(Collectors.toList()));
-////            return e;
+//        }).map((e) -> {
+//            compoundFilters.addAll(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
+//            return e;
+//        }).map(e -> {
+//            ecNumberFilters.addAll(e.getEnzymePortalEcNumbersSet().stream().distinct().collect(Collectors.toList()));
+//            return e;
 //        }).forEach((e) -> {
 //            uniqueSpecies.add(e.getSpecies());
 //        });
