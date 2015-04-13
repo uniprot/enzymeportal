@@ -22,7 +22,8 @@
             <a rel="external" title="Click for an interactive viewer" target="_blank" 
                            href="http://www.ebi.ac.uk/pdbe-srv/view/entry/${proteinStructure.id}/openastex"><img
                     alt="Ribbon structure of ${proteinStructure.id}"
-                    src="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(proteinStructure.id)}_cbc600.png"/>
+                     src="http://www.ebi.ac.uk/pdbe/static/entry/${fn:toLowerCase(proteinStructure.id)}_deposited_chain_front_image-800x800.png"/>
+<!--                    src="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(proteinStructure.id)}_cbc600.png"/>-->
                             <span
                     class="caption">Ribbon structure of ${proteinStructure.id}</span></a>
         </div>
