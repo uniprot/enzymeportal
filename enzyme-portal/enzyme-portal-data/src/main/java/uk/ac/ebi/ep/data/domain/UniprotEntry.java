@@ -388,11 +388,11 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
 
-        e.getUniprotXrefSet().stream().filter(x -> "PDB".equalsIgnoreCase(x.getSource())).limit(10).collect(Collectors.toList()).stream().forEach(xref -> {
+        e.getUniprotXrefSet().stream().filter(x -> "PDB".equalsIgnoreCase(x.getSource())).limit(50).collect(Collectors.toList()).stream().forEach(xref -> {
             pdbcodes.add(xref.getSourceId());
         });
 
-        return pdbcodes;
+        return pdbcodes.stream().sorted().collect(Collectors.toList());
 
     }
 

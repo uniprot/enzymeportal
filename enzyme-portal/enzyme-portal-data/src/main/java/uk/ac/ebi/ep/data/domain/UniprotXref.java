@@ -8,6 +8,7 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "UniprotXref.findByDbentryId", query = "SELECT u FROM UniprotXref u WHERE u.dbentryId = :dbentryId"),
     @NamedQuery(name = "UniprotXref.findBySourceId", query = "SELECT u FROM UniprotXref u WHERE u.sourceId = :sourceId"),
     @NamedQuery(name = "UniprotXref.findBySource", query = "SELECT u FROM UniprotXref u WHERE u.source = :source")})
-public class UniprotXref implements Serializable {
+public class UniprotXref implements Comparable<UniprotXref>, Serializable {
      private static final long serialVersionUID = 1L;
     @Column(name = "SOURCE_NAME")
     private String sourceName;
@@ -108,22 +109,21 @@ public class UniprotXref implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (xrefId != null ? xrefId.hashCode() : 0);
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.sourceId);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UniprotXref)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        UniprotXref other = (UniprotXref) object;
-        if ((this.xrefId == null && other.xrefId != null) || (this.xrefId != null && !this.xrefId.equals(other.xrefId))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final UniprotXref other = (UniprotXref) obj;
+        return Objects.equals(this.sourceId, other.sourceId);
     }
 
     @Override
@@ -139,6 +139,11 @@ public class UniprotXref implements Serializable {
 
     public void setSourceName(String sourceName) {
         this.sourceName = sourceName;
+    }
+
+    @Override
+    public int compareTo(UniprotXref p) {
+       return this.sourceId.compareToIgnoreCase(p.getSourceId());
     }
     
 }

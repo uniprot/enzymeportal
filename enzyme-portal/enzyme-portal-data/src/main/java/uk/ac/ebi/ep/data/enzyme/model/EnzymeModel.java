@@ -145,10 +145,11 @@ public class EnzymeModel extends UniprotEntry
      * {@link ProteinStructure }
      *
      *
+     * @return protein structure
      */
     public List<ProteinStructure> getProteinstructure() {
         if (proteinstructure == null) {
-            proteinstructure = new ArrayList<ProteinStructure>();
+            proteinstructure = new ArrayList<>();
         }
         return this.proteinstructure;
     }
@@ -174,10 +175,11 @@ public class EnzymeModel extends UniprotEntry
      * {@link ReactionPathway }
      *
      *
+     * @return reaction pathway
      */
     public List<ReactionPathway> getReactionpathway() {
         if (reactionpathway == null) {
-            reactionpathway = new ArrayList<ReactionPathway>();
+            reactionpathway = new ArrayList<>();
         }
         return this.reactionpathway;
     }

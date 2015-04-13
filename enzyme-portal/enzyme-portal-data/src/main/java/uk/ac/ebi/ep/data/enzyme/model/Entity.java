@@ -263,5 +263,5 @@ public class Entity
     public void setEvidence(List<String> evidence) {
         this.evidence = evidence;
     }
-
+    
 }

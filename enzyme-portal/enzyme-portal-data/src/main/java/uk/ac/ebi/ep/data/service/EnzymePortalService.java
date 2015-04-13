@@ -10,6 +10,7 @@ import com.mysema.query.types.Predicate;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -194,7 +195,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<UniprotXref> findPDBcodesByAccession(String accession) {
 
-        return xrefRepository.findPDBcodesByAccession(accession);
+        return xrefRepository.findPDBcodesByAccession(accession).stream().sorted().collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
