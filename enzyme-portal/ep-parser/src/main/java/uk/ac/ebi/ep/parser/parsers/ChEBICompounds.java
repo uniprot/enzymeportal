@@ -12,8 +12,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
@@ -33,6 +35,7 @@ import uk.ac.ebi.ep.parser.helper.CompoundUtil;
 import uk.ac.ebi.ep.parser.helper.EPUtil;
 import uk.ac.ebi.ep.parser.helper.MmDatabase;
 import uk.ac.ebi.ep.parser.helper.Relationship;
+import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 
 /**
  *
@@ -53,13 +56,13 @@ public class ChEBICompounds {
     List<EnzymePortalCompound> compounds = new LinkedList<>();
 
     //private static final String COMMENT_TYPE = "ENZYME_REGULATION";
-     private static final String COMMENT_TYPE = "REGULATION";
+    private static final String COMMENT_TYPE = "REGULATION";
 
     private final EnzymePortalCompoundRepository compoundRepository;
 
     private final EnzymePortalSummaryRepository enzymeSummaryRepository;
 
-    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid" ,"H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION",""," "};
+    public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
     List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
     public ChEBICompounds(EnzymePortalSummaryRepository enzymeSummaryRepository, EnzymePortalCompoundRepository repository) {
@@ -71,18 +74,12 @@ public class ChEBICompounds {
 
     public void computeAndLoadChEBICompounds() {
 
+        List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
+        LOGGER.warn("Number of Regulation Text from EnzymeSummary Table " + enzymeSummary.size());
 
-       
-          List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
-          LOGGER.debug("Number of Regulation Text from EnzymeSummary Table "+ enzymeSummary.size());
-          
-        
-          
-            //String text = "Activated by cell stresses such as DNA damage, heat shock, osmotic shock, anisomycin and sodium arsenite, as well as pro-inflammatory stimuli such as bacterial lipopolysaccharide (LPS) and interleukin-1. Activation occurs through dual phosphorylation of Thr-180 and Tyr-182 by either of two dual specificity kinases, MAP2K3/MKK3 or MAP2K6/MKK6, and potentially also MAP2K4/MKK4, as well as by TAB1-mediated autophosphorylation. MAPK14 phosphorylated on both Thr-180 and Tyr-182 is 10-20-fold more active than MAPK14 phosphorylated only on Thr-180, whereas MAPK14 phosphorylated on Tyr-182 alone is inactive. whereas Thr-180 is necessary for catalysis, Tyr-182 may be required for auto-activation and substrate recognition. Phosphorylated at Tyr-323 by ZAP70 in an alternative activation pathway in response to TCR signaling in T-cells. This alternative pathway is inhibited by GADD45A. Inhibited by dual specificity phosphatases, such as DUSP1, DUSP10, and DUSP16. Specifically inhibited by the binding of pyridinyl-imidazole compounds, which are cytokine-suppressive anti-inflammatory drugs (CSAID). Isoform Mxi2 is 100-fold less sensitive to these agents than the other isoforms and is not inhibited by DUSP1. Isoform Exip is not activated by MAP2K6. SB203580 is an inhibitor of MAPK14.";   
-          
 
-       //Java 7 and before only. uncomment if Java 8 is not available in your env
-
+        //String text = "Activated by cell stresses such as DNA damage, heat shock, osmotic shock, anisomycin and sodium arsenite, as well as pro-inflammatory stimuli such as bacterial lipopolysaccharide (LPS) and interleukin-1. Activation occurs through dual phosphorylation of Thr-180 and Tyr-182 by either of two dual specificity kinases, MAP2K3/MKK3 or MAP2K6/MKK6, and potentially also MAP2K4/MKK4, as well as by TAB1-mediated autophosphorylation. MAPK14 phosphorylated on both Thr-180 and Tyr-182 is 10-20-fold more active than MAPK14 phosphorylated only on Thr-180, whereas MAPK14 phosphorylated on Tyr-182 alone is inactive. whereas Thr-180 is necessary for catalysis, Tyr-182 may be required for auto-activation and substrate recognition. Phosphorylated at Tyr-323 by ZAP70 in an alternative activation pathway in response to TCR signaling in T-cells. This alternative pathway is inhibited by GADD45A. Inhibited by dual specificity phosphatases, such as DUSP1, DUSP10, and DUSP16. Specifically inhibited by the binding of pyridinyl-imidazole compounds, which are cytokine-suppressive anti-inflammatory drugs (CSAID). Isoform Mxi2 is 100-fold less sensitive to these agents than the other isoforms and is not inhibited by DUSP1. Isoform Exip is not activated by MAP2K6. SB203580 is an inhibitor of MAPK14.";   
+        //Java 7 and before only. uncomment if Java 8 is not available in your env
 //        for (EnzymePortalSummary summary : enzymeSummary) {
 //            String enzyme_regulation_text = summary.getCommentText();
 //            
@@ -120,18 +117,29 @@ public class ChEBICompounds {
 //            }
 //
 //        }
- 
-         
         //Java 8 specifics - comment out  and uncomment above if java 8 is not found in env
-        enzymeSummary.stream().forEach((summary) -> {
-            String enzyme_regulation_text = summary.getCommentText();
-            inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
-            activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
+//        enzymeSummary.stream().forEach((summary) -> {
+//            String enzyme_regulation_text = summary.getCommentText();
+//            inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
+//            activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
+//        });
+
+        Stream<EnzymePortalSummary> existingStream = enzymeSummary.stream();
+        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 100, 1);
+         AtomicInteger count = new AtomicInteger(1);
+        partitioned.parallel().forEach((chunk) -> {
+            //System.out.println(count.getAndIncrement() + " BATCH SIZE" + chunk.size());
+          chunk.stream().forEach((summary) -> {
+                String enzyme_regulation_text = summary.getCommentText();
+               
+                inhibitors.put(summary.getUniprotAccession(), EPUtil.parseTextForInhibitors(enzyme_regulation_text));
+                activators.put(summary.getUniprotAccession(), EPUtil.parseTextForActivators(enzyme_regulation_text));
+                
+            });
         });
-        
 
 
-        LOGGER.debug("number of inhibitors and activators to process are : "+ inhibitors.size() +": "+ activators.size());
+        LOGGER.debug("number of inhibitors and activators to process are : " + inhibitors.size() + ": " + activators.size());
         inhibitors.entrySet().stream().forEach((map) -> {
             map.getValue().stream().map((inhibitor) -> searchMoleculeInChEBI(inhibitor)).filter((inhibitor_from_chebi) -> (inhibitor_from_chebi != null)).map((inhibitor_from_chebi) -> {
                 inhibitor_from_chebi.setRelationship(Relationship.is_inhibitor_of.name());
@@ -157,10 +165,21 @@ public class ChEBICompounds {
                 compounds.add(activator_from_chebi);
             });
         });
-
         
-        LOGGER.debug("Writing to Enzyme Portal database... Number of compounds to write : "+ compounds.size());
-     
+         LOGGER.warn("Number of compounds before filtering : " + compounds.size());
+
+          
+                compounds.removeIf(c
+                -> (c.getCompoundId().equalsIgnoreCase("CHEBI:338412")
+                || c.getCompoundId().equalsIgnoreCase("CHEBI:16412")
+                || c.getCompoundId().equalsIgnoreCase("CHEBI:29678"))
+                && c.getUniprotAccession().getAccession().equalsIgnoreCase("Q16539"));
+
+
+      
+        LOGGER.warn("Writing to Enzyme Portal database... Number of compounds to write : " + compounds.size());
+
+       
         compoundRepository.save(compounds);
 
         inhibitors.clear();
@@ -176,7 +195,7 @@ public class ChEBICompounds {
      * @return an entry with a ChEBI ID, or <code>null</code> if not found.
      */
     protected EnzymePortalCompound searchMoleculeInChEBI(String moleculeName) {
-       
+
         EnzymePortalCompound entry = null;
         // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
         // sometimes as "moleculeName (concentration)":
@@ -193,7 +212,7 @@ public class ChEBICompounds {
                 LiteEntityList lites = chebiWsClient.getLiteEntity(
                         name, SearchCategory.ALL_NAMES, 25, StarsCategory.ALL);
                 String chebiId = null;
-            
+
                 if (lites != null) {
                     liteLoop:
                     for (LiteEntity lite : lites.getListElement()) {
@@ -219,14 +238,14 @@ public class ChEBICompounds {
                     }
                 }
 
-                if (chebiId != null && !blackList.contains(name) && !StringUtils.isEmpty(name)) {
+                if ((chebiId == null || blackList.contains(name)) || StringUtils.isEmpty(name)) {
+                    LOGGER.warn("Not found in ChEBI: " + name);
+                } else {
                     entry = new EnzymePortalCompound();
                     entry.setCompoundSource(MmDatabase.ChEBI.name());
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(name);
-                    break nameLoop;
-                } else {
-                    LOGGER.warn("Not found in ChEBI: " + name);
+                    break;
                 }
             } catch (ChebiWebServiceFault_Exception e) {
                 LOGGER.error("Searching for " + name, e);

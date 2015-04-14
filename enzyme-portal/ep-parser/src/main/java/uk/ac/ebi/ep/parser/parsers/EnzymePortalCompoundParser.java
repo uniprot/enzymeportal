@@ -21,7 +21,7 @@ import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
  *
  * @author joseph
  */
-@Transactional
+//@Transactional
 @Service
 public class EnzymePortalCompoundParser {
 
@@ -67,7 +67,7 @@ public class EnzymePortalCompoundParser {
 
     }
 
-    @Transactional
+    //@Transactional
     public void loadChEBICompounds() {
 
         ChEBICompounds chebi = new ChEBICompounds(enzymeSummaryRepository, compoundRepository);
@@ -76,7 +76,7 @@ public class EnzymePortalCompoundParser {
 
     }
 
-    @Transactional
+    //@Transactional
     public void loadCofactors() {
 
         CompoundParser compoundParser = new Cofactors(chebiWebServiceClient, compoundRepository, enzymeSummaryRepository);
