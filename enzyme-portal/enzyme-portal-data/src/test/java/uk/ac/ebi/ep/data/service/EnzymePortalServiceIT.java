@@ -853,6 +853,12 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
        
 
         assertEquals("Oxidoreductases", result.stream().findAny().get().getFamily());
+//        List<String> fam = new ArrayList<>();
+//        fam.add("Transferases");
+//         fam.add("Oxidoreductases");
+//        
+//        Page<UniprotEntry> r = enzymePortalService.filterBySpecieAndEc(taxId, fam, PAGEABLE);
+//        System.out.println("FAB "+ r.getContent());
 
     }
     
