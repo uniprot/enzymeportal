@@ -40,7 +40,7 @@ public class UniprotXrefRepositoryImpl implements UniprotXrefRepositoryCustom {
     @Override
     public List<String> findPdbCodesWithNoNames() {
         JPAQuery query = new JPAQuery(entityManager);
-        List<String> result = query.from($).where($.source.equalsIgnoreCase(PDB)).limit(10).list($.sourceId);
+        List<String> result = query.from($).where($.source.equalsIgnoreCase(PDB)).list($.sourceId);
         return result;
     }
     

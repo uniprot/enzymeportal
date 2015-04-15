@@ -110,7 +110,7 @@ public class UniprotXref implements Comparable<UniprotXref>, Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.sourceId);
+        hash = 37 * hash + Objects.hashCode(this.xrefId);
         return hash;
     }
 
@@ -123,8 +123,13 @@ public class UniprotXref implements Comparable<UniprotXref>, Serializable {
             return false;
         }
         final UniprotXref other = (UniprotXref) obj;
-        return Objects.equals(this.sourceId, other.sourceId);
+        if (!Objects.equals(this.xrefId, other.xrefId)) {
+            return false;
+        }
+        return true;
     }
+
+
 
     @Override
     public String toString() {
