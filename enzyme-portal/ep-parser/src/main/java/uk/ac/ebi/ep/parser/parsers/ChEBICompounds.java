@@ -125,7 +125,7 @@ public class ChEBICompounds {
 //        });
 
         Stream<EnzymePortalSummary> existingStream = enzymeSummary.stream();
-        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 100, 1);
+        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 500, 1);
          AtomicInteger count = new AtomicInteger(1);
         partitioned.parallel().forEach((chunk) -> {
             //System.out.println(count.getAndIncrement() + " BATCH SIZE" + chunk.size());
@@ -184,6 +184,7 @@ public class ChEBICompounds {
 
         inhibitors.clear();
         activators.clear();
+        compounds.clear();
     }
 
     /**

@@ -18,6 +18,7 @@ public class FixedBatchSpliterator<T> extends FixedBatchSpliteratorBase<T> {
 
   public FixedBatchSpliterator(Spliterator<T> toWrap, int batchSize, long est) {
     super(toWrap.characteristics(), batchSize, est);
+    //super(toWrap.characteristics(), batchSize, toWrap.estimateSize());
     this.spliterator = toWrap;
   }
   public FixedBatchSpliterator(Spliterator<T> toWrap, int batchSize) {

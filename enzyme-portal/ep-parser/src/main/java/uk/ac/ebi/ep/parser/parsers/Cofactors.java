@@ -82,19 +82,19 @@ public class Cofactors extends CompoundParser {
     private void parseCofactorText(List<EnzymePortalSummary> enzymeSummary) {
 
         Stream<EnzymePortalSummary> existingStream = enzymeSummary.stream();
-        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 100, 1);
+        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 500, 1);
         AtomicInteger count = new AtomicInteger(1);
         partitioned.parallel().forEach((chunk) -> {
-            System.out.println(count.getAndIncrement() + " BATCH SIZE" + chunk.size());
+           // System.out.println(count.getAndIncrement() + " BATCH SIZE" + chunk.size());
             chunk.stream().forEach((summary) -> {
                 processCofactors(summary);
             });
         });
 
         //save compounds
-        LOGGER.warn("Writing to Enzyme Portal database... Number of compounds to write : " + compounds.size());
+        LOGGER.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
-        System.out.println("COFACTORS TO WRITE TO DB " + compounds.size());
+        
         compoundRepository.save(compounds);
         compounds.clear();
 

@@ -206,7 +206,6 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
         } else if (isCmlReaction) {
 
             List<EnzymePortalEcNumbers> summaryList = ecNumbersRepository.findByEcNumber(ecEntry.getName());
-
             if (summaryList != null && !summaryList.isEmpty()) {
                 for (EnzymePortalEcNumbers summary : summaryList) {
 
@@ -279,31 +278,34 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
                     .setCompoundName(currentChars.toString());
         } else if (isEnzyme) {
 
-            if (cofactors != null || !cofactors.isEmpty()) {
-                List<EnzymePortalEcNumbers> summaryList = ecNumbersRepository.findByEcNumber(ecEntry.getName());
-
-                if (summaryList != null && !summaryList.isEmpty()) {
-                    for (EnzymePortalEcNumbers summary : summaryList) {
-                        for (EnzymePortalCompound cofactor : cofactors) {
-                            EnzymePortalCompound chebi_cofactor = new EnzymePortalCompound();
-                            chebi_cofactor.setCompoundId(cofactor.getCompoundId());
-                            chebi_cofactor.setCompoundName(cofactor.getCompoundName());
-                            chebi_cofactor.setCompoundSource(cofactor.getCompoundSource());
-                            chebi_cofactor.setUniprotAccession(summary.getUniprotAccession());
-
-                            chebi_cofactor.setRelationship(Relationship.is_cofactor_of.name());
-                            chebi_cofactor = CompoundUtil.computeRole(chebi_cofactor, chebi_cofactor.getRelationship());
-                            if (chebi_cofactor.getCompoundName() != null) {
-                                xrefs.add(chebi_cofactor);
-                            }
-
-                        }
-                    }
-                }
-            }
+            //we now get cofactors from uniprot -- comment out for now
+//            if (cofactors != null || !cofactors.isEmpty()) {
+//                List<EnzymePortalEcNumbers> summaryList = ecNumbersRepository.findByEcNumber(ecEntry.getName());
+//
+//                if (summaryList != null && !summaryList.isEmpty()) {
+//                    for (EnzymePortalEcNumbers summary : summaryList) {
+//                        for (EnzymePortalCompound cofactor : cofactors) {
+//                            EnzymePortalCompound chebi_cofactor = new EnzymePortalCompound();
+//                            chebi_cofactor.setCompoundId(cofactor.getCompoundId());
+//                            chebi_cofactor.setCompoundName(cofactor.getCompoundName());
+//                            chebi_cofactor.setCompoundSource(cofactor.getCompoundSource());
+//                            chebi_cofactor.setUniprotAccession(summary.getUniprotAccession());
+//
+//                            chebi_cofactor.setRelationship(Relationship.is_cofactor_of.name());
+//                            chebi_cofactor = CompoundUtil.computeRole(chebi_cofactor, chebi_cofactor.getRelationship());
+//                            if (chebi_cofactor.getCompoundName() != null) {
+//                                xrefs.add(chebi_cofactor);
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            }
 
             if (!xrefs.isEmpty()) {
 
+
+                LOGGER.info("writing reaction and compounds to DB "+ xrefs.size());
                 compoundRepository.save(xrefs);
 
             }

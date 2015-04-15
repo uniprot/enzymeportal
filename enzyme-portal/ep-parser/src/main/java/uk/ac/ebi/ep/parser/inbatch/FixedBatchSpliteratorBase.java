@@ -31,6 +31,7 @@ public abstract class FixedBatchSpliteratorBase<T> implements Spliterator<T> {
   }
   public FixedBatchSpliteratorBase(int characteristics) {
     this(characteristics, 64, Long.MAX_VALUE);
+    //this(characteristics, 128, Long.MAX_VALUE);
   }
 
   @Override public Spliterator<T> trySplit() {
