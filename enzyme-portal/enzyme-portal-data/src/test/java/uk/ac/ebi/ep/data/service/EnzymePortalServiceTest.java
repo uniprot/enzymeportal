@@ -176,8 +176,8 @@ public class EnzymePortalServiceTest extends AbstractDataTest {
         List<String> accessions = null;
         EnzymePortalService instance = new EnzymePortalService();
         List<UniprotEntry> expResult = null;
-        List<UniprotEntry> result = instance.findEnzymesByAccessions(accessions);
-        assertEquals(expResult, result);
+       // List<UniprotEntry> result = instance.findEnzymesByAccessions(accessions);
+        //assertEquals(expResult, result);
  
     }
 
@@ -773,7 +773,7 @@ public class EnzymePortalServiceTest extends AbstractDataTest {
         Long taxId = null;
         EnzymePortalService instance = new EnzymePortalService();
         List<EcNumber> expResult = null;
-        List<EcNumber> result = instance.findEnzymeFamiliesByTaxId(taxId);
+        List<EcNumber> result =  instance.findEnzymeFamiliesByTaxId(taxId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

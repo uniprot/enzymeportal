@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class EcNumber {
 
     protected boolean selected;
-    private String ec;
+    private Integer ec;
     protected String family;
     protected List<String> families = new ArrayList<>();
     protected EnzymeFamily enzymeFamily;
@@ -26,11 +26,12 @@ public class EcNumber {
 
     }
 
-    public EcNumber(String ec) {
+    public EcNumber(Integer ec) {
         this.ec = ec;
+        selected = Boolean.FALSE;
     }
 
-    public EcNumber(String ec, boolean selected) {
+    public EcNumber(Integer ec, boolean selected) {
         this.selected = selected;
         this.ec = ec;
     }
@@ -43,16 +44,16 @@ public class EcNumber {
         this.selected = selected;
     }
 
-    public String getEc() {
+    public Integer getEc() {
         return ec;
     }
 
-    public void setEc(String ec) {
+    public void setEc(Integer ec) {
         this.ec = ec;
     }
 
     public String getFamily() {
-        family = computeFamily(getEc());
+        family = computeEcToFamilyName(getEc());
         families.add(family);
         return family;
     }
@@ -65,13 +66,66 @@ public class EcNumber {
         getFamily();
         return families.stream().distinct().collect(Collectors.toList());
     }
+    
+    
+    
+        public String computeEcToFamilyName(int ec) {
+
+        if (ec == 1) {
+
+            return EnzymeFamily.OXIDOREDUCTASES.getName();
+        }
+        if (ec == 2) {
+            return EnzymeFamily.TRANSFERASES.getName();
+        }
+        if (ec == 3) {
+            return EnzymeFamily.HYDROLASES.getName();
+        }
+        if (ec == 4) {
+            return EnzymeFamily.LYASES.getName();
+        }
+        if (ec == 5) {
+            return EnzymeFamily.ISOMERASES.getName();
+        }
+        if (ec == 6) {
+            return EnzymeFamily.LIGASES.getName();
+        }
+
+        return "Invalid Ec Number";
+    }
+        
+        public Integer computeFamilyNameToEc(String family) {
+
+        if (family.equalsIgnoreCase(EnzymeFamily.OXIDOREDUCTASES.getName())) {
+            //return 1;
+            return EnzymeClass.OXIDOREDUCTASES.getFamilyName();
+        }
+        if (family.equalsIgnoreCase(EnzymeFamily.TRANSFERASES.getName())) {
+            return EnzymeClass.TRANSFERASES.getFamilyName();
+        }
+        if (family.equalsIgnoreCase(EnzymeFamily.HYDROLASES.getName())) {
+            return EnzymeClass.HYDROLASES.getFamilyName();
+        }
+        if (family.equalsIgnoreCase(EnzymeFamily.LYASES.getName())) {
+            return EnzymeClass.LYASES.getFamilyName();
+        }
+        if (family.equalsIgnoreCase(EnzymeFamily.ISOMERASES.getName())) {
+            return EnzymeClass.ISOMERASES.getFamilyName();
+        }
+        if (family.equalsIgnoreCase(EnzymeFamily.LIGASES.getName())) {
+            return EnzymeClass.LIGASES.getFamilyName();
+        }
+        return 0;
+    }
+
+
 
     /**
      *
      * @param ec
      * @return enzyme family
      */
-    protected String computeFamily(String ec) {
+    public String computeFamily(String ec) {
 
         if (ec.startsWith("1")) {
 
@@ -96,7 +150,7 @@ public class EcNumber {
         return "Invalid Ec Number";
     }
 
-    protected String computeEc(String family) {
+    public String computeEc(String family) {
 
         if (family.equalsIgnoreCase(EnzymeFamily.OXIDOREDUCTASES.getName())) {
             //return "1";
@@ -169,11 +223,41 @@ public class EcNumber {
         }
 
     }
+    
+    
+        public enum EnzymeClass {
+
+        OXIDOREDUCTASES(1),
+        TRANSFERASES(2),
+        HYDROLASES(3),
+        LYASES(4),
+        ISOMERASES(5),
+        LIGASES(6);
+
+        private final int familyName;
+
+        private EnzymeClass(int name) {
+            this.familyName = name;
+        }
+
+        public int getFamilyName() {
+            return familyName;
+        }
+
+        public String value() {
+            return name();
+        }
+
+        public static EnzymeClass fromValue(String v) {
+            return valueOf(v);
+        }
+
+    }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 13 * hash + Objects.hashCode(this.family);
+        hash = 79 * hash + Objects.hashCode(this.ec);
         return hash;
     }
 
@@ -186,12 +270,14 @@ public class EcNumber {
             return false;
         }
         final EcNumber other = (EcNumber) obj;
-        return Objects.equals(this.family, other.family);
+        return Objects.equals(this.ec, other.ec);
     }
+
+
 
     @Override
     public String toString() {
         return "EcNumber{" + "ec=" + ec + ", family=" + getFamily() + ", families=" + getFamilies() + '}';
     }
-
+    
 }

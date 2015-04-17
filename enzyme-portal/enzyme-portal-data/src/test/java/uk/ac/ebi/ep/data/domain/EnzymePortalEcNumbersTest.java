@@ -26,6 +26,7 @@ public class EnzymePortalEcNumbersTest extends AbstractDataTest {
     public void setUp() {
         instance = new EnzymePortalEcNumbers(BigDecimal.ONE);
         instance.setEcNumber("1.1.1.1");
+        instance.setEcFamily(1);
 
     }
 
@@ -83,6 +84,7 @@ public class EnzymePortalEcNumbersTest extends AbstractDataTest {
         LOGGER.info("compareTo");
         EnzymePortalEcNumbers ec = new EnzymePortalEcNumbers(BigDecimal.ZERO);
         ec.setEcNumber("2.1.1.1");
+        ec.setEcFamily(2);
 
         int expResult = -100000;//not equal as ec is not same
         int result = instance.compareTo(ec);
@@ -110,8 +112,8 @@ public class EnzymePortalEcNumbersTest extends AbstractDataTest {
     public void testGetEc() {
         LOGGER.info("getEc");
 
-        String expResult = "1";
-        String result = instance.getEc();
+        int expResult = 1;
+        int result = instance.getEc();
         assertEquals(expResult, result);
 
     }

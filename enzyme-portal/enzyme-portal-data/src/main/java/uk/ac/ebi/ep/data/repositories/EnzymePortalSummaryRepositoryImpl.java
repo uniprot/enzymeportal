@@ -9,6 +9,7 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -35,15 +36,19 @@ public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRep
 
 
     @Override
-    public EnzymePortalSummary findDiseaseEvidence(String accession) {
+    public Optional<EnzymePortalSummary> findDiseaseEvidence(String accession) {
+        EntityGraph eGraph = entityManager.getEntityGraph("summary.graph");
         JPAQuery query = new JPAQuery(entityManager);
+         query.setHint("javax.persistence.fetchgraph", eGraph);
         String commentType = "DISEASE";
         EnzymePortalSummary summary = query.from($).
                 where($.commentType.equalsIgnoreCase(commentType).
                         and($.uniprotAccession.accession.equalsIgnoreCase(accession))).singleResult($);
 
-        return summary;
+        return Optional.ofNullable(summary);
     }
+      
+    
 
     @Override
     public List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions) {

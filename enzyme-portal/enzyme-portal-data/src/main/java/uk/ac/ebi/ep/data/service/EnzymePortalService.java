@@ -138,18 +138,6 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<UniprotEntry> findEnzymesByAccession(String accession) {
-
-        return uniprotEntryRepository.findEnzymesByAccession(accession);
-    }
-
-    @Transactional(readOnly = true)
-    public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
-
-        return uniprotEntryRepository.findEnzymesByAccessions(accessions);
-    }
-
-    @Transactional(readOnly = true)
     public List<EnzymePortalSummary> findEnzymeSummariesByNamePrefixes(List<String> namePrefixes) {
 
         return enzymeSummaryRepository.findEnzymesByNamePrefixes(namePrefixes);
@@ -320,6 +308,19 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
+    public List<UniprotEntry> findEnzymesByAccession(String accession) {
+
+        return uniprotEntryRepository.findEnzymesByAccession(accession);
+    }
+    
+ 
+
+    @Transactional(readOnly = true)
+    public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
+        return uniprotEntryRepository.findSummariesByAccessions(accessions);
+    }
+
+    @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByAccessions(List<String> accessions, Pageable pageable) {
 
         return uniprotEntryRepository.findAll(enzymesByAccessions(accessions), pageable);
@@ -428,6 +429,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId) {
         return ecNumbersRepository.findEnzymeFamiliesByTaxId(taxId);
+
     }
 
     //filter facets search
@@ -456,25 +458,25 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndEc(Long taxId, List<String> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndEc(Long taxId, List<Integer> ecList, Pageable pageable) {
 
         return uniprotEntryRepository.findAll(filterBySpecieAndEc(taxId, ecList), pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompoundsAndEc(Long taxId, List<String> compoudNames, List<String> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompoundsAndEc(Long taxId, List<String> compoudNames, List<Integer> ecList, Pageable pageable) {
 
         return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndEc(taxId, compoudNames, ecList), pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndDiseasesAndEc(Long taxId, List<String> diseaseNames, List<String> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndDiseasesAndEc(Long taxId, List<String> diseaseNames, List<Integer> ecList, Pageable pageable) {
 
         return uniprotEntryRepository.findAll(filterBySpecieAndDiseasesAndEc(taxId, diseaseNames, ecList), pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> diseaseNames, List<String> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> diseaseNames, List<Integer> ecList, Pageable pageable) {
 
         return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseasesAndEc(taxId, compoudNames, diseaseNames, ecList), pageable);
     }
@@ -519,44 +521,44 @@ public class EnzymePortalService {
 
     }
 
-    private static Predicate filterBySpecieAndEc(Long taxId, List<String> ecList) {
+    private static Predicate filterBySpecieAndEc(Long taxId, List<Integer> ecList) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().family.in(ecList);
+        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
 
         return enzyme.taxId.eq(taxId).and(ec);
 
     }
 
-    private static Predicate filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> diseaseNames, List<String> ecList) {
+    private static Predicate filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> diseaseNames, List<Integer> ecList) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
         Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
         Predicate disease = enzyme.enzymePortalDiseaseSet.any().diseaseName.in(diseaseNames);
-        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecNumber.in(ecList);
+        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
 
         return enzyme.taxId.eq(taxId).and(compound).and(disease).and(ec);
 
     }
 
-    private static Predicate filterBySpecieAndCompoundsAndEc(Long taxId, List<String> compoudNames, List<String> ecList) {
+    private static Predicate filterBySpecieAndCompoundsAndEc(Long taxId, List<String> compoudNames, List<Integer> ecList) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
         Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
-        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecNumber.in(ecList);
+        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
         return enzyme.taxId.eq(taxId).and(compound).and(ec);
 
     }
 
-    private static Predicate filterBySpecieAndDiseasesAndEc(Long taxId, List<String> diseaseNames, List<String> ecList) {
+    private static Predicate filterBySpecieAndDiseasesAndEc(Long taxId, List<String> diseaseNames, List<Integer> ecList) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
         Predicate disease = enzyme.enzymePortalDiseaseSet.any().diseaseName.in(diseaseNames);
-        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecNumber.in(ecList);
+        Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
 
         return enzyme.taxId.eq(taxId).and(disease).and(ec);
 

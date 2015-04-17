@@ -23,6 +23,7 @@ public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymesByNamePrefixes(List<String> nameprefixes);
 
+    @Deprecated
     List<UniprotEntry> findEnzymesByAccessions(List<String> accessions);
 
     List<UniprotEntry> findEnzymesByAccession(String accession);

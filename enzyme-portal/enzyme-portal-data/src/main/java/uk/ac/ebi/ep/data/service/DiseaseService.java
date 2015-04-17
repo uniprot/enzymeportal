@@ -31,7 +31,7 @@ public class DiseaseService {
     }
     
     @Transactional
-    public List<EnzymePortalDisease> addDisease(List<EnzymePortalDisease> d) {
+    public List<EnzymePortalDisease> addDiseases(List<EnzymePortalDisease> d) {
        return repository.save(d);
         
     }

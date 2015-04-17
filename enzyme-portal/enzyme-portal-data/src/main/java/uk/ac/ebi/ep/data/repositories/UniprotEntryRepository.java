@@ -38,4 +38,9 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Transactional(readOnly = true)
     @Query(value = "SELECT CATALYTIC_ACTIVITY FROM ENZYME_CATALYTIC_ACTIVITY WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
+    
+     @Transactional(readOnly = true)
+    @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION")List<String> accession);
+
 }

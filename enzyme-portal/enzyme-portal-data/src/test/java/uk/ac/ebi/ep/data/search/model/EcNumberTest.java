@@ -30,7 +30,8 @@ public class EcNumberTest {
 
     @Before
     public void setUp() {
-        instance = new EcNumber("1.1.1.1", false);
+        instance = new EcNumber(1, false);
+       
 
     }
 
@@ -66,8 +67,8 @@ public class EcNumberTest {
     public void testGetEc() {
         LOGGER.info("getEc");
 
-        String expResult = "1.1.1.1";
-        String result = instance.getEc();
+        Integer expResult = 1;
+        Integer result = instance.getEc();
         assertEquals(expResult, result);
 
     }
@@ -78,11 +79,11 @@ public class EcNumberTest {
     @Test
     public void testSetEc() {
         LOGGER.info("setEc");
-        String ec = "2.2.2.2";
+        int ec = 2;
 
         instance.setEc(ec);
-        String theEc = instance.getEc();
-        TestCase.assertTrue(ec.equalsIgnoreCase(theEc));
+        int theEc = instance.getEc();
+        TestCase.assertTrue(ec==theEc);
 
     }
 
@@ -107,7 +108,7 @@ public class EcNumberTest {
         LOGGER.info("setFamily");
         String family = "Ligases";
         EcNumber obj = new EcNumber();
-        obj.setEc("6.1.1.1");
+        obj.setEc(6);
         obj.setFamily(family);
         String theFamily = obj.getFamily();
         TestCase.assertTrue(family.equalsIgnoreCase(theFamily));
@@ -120,7 +121,7 @@ public class EcNumberTest {
     @Test
     public void testHashCode() {
         LOGGER.info("hashCode");
-        EcNumber obj = new EcNumber("1.1.1.1", false);
+        EcNumber obj = new EcNumber(1, false);
         int expResult = obj.hashCode();
         int result = instance.hashCode();
         assertEquals(expResult, result);
@@ -134,7 +135,7 @@ public class EcNumberTest {
     @Test
     public void testEquals() {
         LOGGER.info("equals");
-        Object obj = new EcNumber("1.1.1.1", false);
+        Object obj = new EcNumber(1, false);
 
         boolean expResult = true;
         boolean result = instance.equals(obj);
@@ -164,7 +165,7 @@ public class EcNumberTest {
     public void testToString() {
         LOGGER.info("toString");
       
-        String expResult = "EcNumber{ec=1.1.1.1, family=Oxidoreductases, families=[Oxidoreductases]}";
+        String expResult = "EcNumber{ec=1, family=Oxidoreductases, families=[Oxidoreductases]}";
         String result = instance.toString();
      
         assertEquals(expResult, result);

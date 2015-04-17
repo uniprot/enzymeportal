@@ -72,6 +72,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return query.distinct().list($);
     }
 
+    @Deprecated
     @Transactional(readOnly = true)
     @Override
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {

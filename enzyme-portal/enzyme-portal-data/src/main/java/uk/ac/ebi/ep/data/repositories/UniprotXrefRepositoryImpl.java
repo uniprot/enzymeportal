@@ -31,7 +31,7 @@ public class UniprotXrefRepositoryImpl implements UniprotXrefRepositoryCustom {
         JPAQuery query = new JPAQuery(entityManager);
         
         BooleanExpression isAccession = $.accession.accession.equalsIgnoreCase(accession);
-        List<UniprotXref> pdb = query.from($).where($.source.equalsIgnoreCase(PDB).and(isAccession)).list($);
+        List<UniprotXref> pdb = query.from($).where($.source.equalsIgnoreCase(PDB).and($.sourceName.isNotNull().or($.sourceName.isNotEmpty())).and(isAccession)).list($);
         
         return pdb.stream().distinct().collect(Collectors.toList());
     }

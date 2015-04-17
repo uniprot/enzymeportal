@@ -30,11 +30,11 @@ public class SearchParams implements Serializable {
     protected List<String> compounds;
     protected List<String> diseases;
     protected List<String> species;
-    protected List<String> ecFamilies;
+    protected List<Integer> ecFamilies;
 
     protected SearchParams.SearchType type;
 
-    public List<String> getEcFamilies() {
+    public List<Integer> getEcFamilies() {
         if (ecFamilies == null) {
             ecFamilies = new ArrayList<>();
         }
@@ -42,7 +42,7 @@ public class SearchParams implements Serializable {
         return ecFamilies.stream().distinct().collect(Collectors.toList());
     }
 
-    public void setEcFamilies(List<String> ecFamilies) {
+    public void setEcFamilies(List<Integer> ecFamilies) {
         this.ecFamilies = ecFamilies;
     }
 

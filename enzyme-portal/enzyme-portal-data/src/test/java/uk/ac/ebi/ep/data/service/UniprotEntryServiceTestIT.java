@@ -63,7 +63,7 @@ public class UniprotEntryServiceTestIT extends AbstractDataTest {
     public void testFindAllUniprotAccessions() {
         LOGGER.info("findAllUniprotAccessions");
 
-        int expResult = 14;
+        int expResult = 17;
         List<String> result = uniprotEntryService.findAllUniprotAccessions();
         assertEquals(expResult, result.size());
 
@@ -76,7 +76,7 @@ public class UniprotEntryServiceTestIT extends AbstractDataTest {
     public void testFindUniprotEntries() {
         LOGGER.info("findUniprotEntries");
 
-        int expResult = 14;
+        int expResult = 17;
 
         List<UniprotEntry> result = uniprotEntryService.findUniprotEntries();
         assertEquals(expResult, result.size());

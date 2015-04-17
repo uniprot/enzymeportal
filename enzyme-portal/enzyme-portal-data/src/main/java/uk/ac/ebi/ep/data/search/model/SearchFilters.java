@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
@@ -32,7 +31,7 @@ public class SearchFilters implements Serializable{
             ecNumbers = new LinkedList<>();
         }
         
-        return ecNumbers.stream().distinct().collect(Collectors.toList());
+        return ecNumbers;
     }
 
     public void setEcNumbers(List<EcNumber> ecNumbers) {

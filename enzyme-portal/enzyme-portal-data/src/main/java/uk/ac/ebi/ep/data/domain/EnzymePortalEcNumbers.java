@@ -31,7 +31,7 @@ import uk.ac.ebi.ep.data.search.model.EcNumber;
 @Table(name = "ENZYME_PORTAL_EC_NUMBERS")
 @XmlRootElement
 
-@NamedEntityGraph(name = "EcNumberEntityGraph", attributeNodes = {  
+@NamedEntityGraph(name = "EcNumberEntityGraph", attributeNodes = {
     @NamedAttributeNode("uniprotAccession")
 })
 @NamedQueries({
@@ -40,6 +40,9 @@ import uk.ac.ebi.ep.data.search.model.EcNumber;
     //@NamedQuery(name = "EnzymePortalEcNumbers.findByEcNumber", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecNumber = :ecNumber")
 })
 public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Comparable<EnzymePortalEcNumbers> {
+
+    @Column(name = "EC_FAMILY")
+    private Integer ecFamily;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -86,8 +89,8 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 23 * hash + Objects.hashCode(this.getFamily());
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.ecFamily);
         return hash;
     }
 
@@ -100,7 +103,7 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
             return false;
         }
         final EnzymePortalEcNumbers other = (EnzymePortalEcNumbers) obj;
-        return Objects.equals(this.getFamily(), other.getFamily());
+        return Objects.equals(this.ecFamily, other.ecFamily);
     }
 
     @Override
@@ -108,17 +111,20 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
         return ecNumber;
     }
 
+   
     /**
      *
      * @return the enzyme family representation of the ec class
      */
     @Override
     public String getFamily() {
-        Optional<String> ec = Optional.ofNullable(this.getEcNumber());
+        Optional<Integer> ec = Optional.ofNullable(this.getEcFamily());
         if (ec.isPresent()) {
-            return computeFamily(ec.get());
+             return computeEcToFamilyName(ec.get());
         }
-        return ec.orElse("");
+        return "";
+        
+       
     }
 
     /**
@@ -126,15 +132,23 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
      * @return ec class
      */
     @Override
-    public String getEc() {
-        return computeEc(getFamily());
+    public Integer getEc() {
+        return getEcFamily();
         
     }
 
     @Override
     public int compareTo(EnzymePortalEcNumbers o) {
-        return this.getFamily().compareToIgnoreCase(o.getFamily());
+        return this.ecFamily.compareTo(o.getEcFamily());
 
+    }
+
+    public Integer getEcFamily() {
+        return ecFamily;
+    }
+
+    public void setEcFamily(Integer ecFamily) {
+        this.ecFamily = ecFamily;
     }
 
 }
