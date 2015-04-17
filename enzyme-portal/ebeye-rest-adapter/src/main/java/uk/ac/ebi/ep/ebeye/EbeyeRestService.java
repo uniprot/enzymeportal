@@ -49,7 +49,8 @@ public class EbeyeRestService {
     private RestTemplate restTemplate;
     
     private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private static final int HITCOUNT = 5000;
+    private static final int HITCOUNT = 9000;
+    private static final int QUERY_LIMIT = 1000;
 
     /**
      *
@@ -194,14 +195,22 @@ public class EbeyeRestService {
             return r;
 
         }).collect(Collectors.toList());
-
+        
         result.stream().map(ebeye -> ebeye.getEntries().stream().distinct().collect(Collectors.toList())).forEach(entries -> {
             entries.stream().forEach(entry -> {
                 accessions.add(entry.getUniprotAccession());
             });
         });
+        
+             
+//        for(EbeyeSearchResult r : result){
+//            
+//            for(Entry e : r.getEntries().stream().distinct().collect(Collectors.toList())){
+//                accessions.add(e.getUniprotAccession());
+//            }
+//        }
 
-        return accessions.stream().distinct().collect(Collectors.toList());
+        return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
 
     }
 
