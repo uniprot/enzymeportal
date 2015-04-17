@@ -18,9 +18,9 @@ import uk.ac.ebi.ep.data.search.model.EcNumber;
  */
 public class EcNumberPredicate implements Predicate {
 
-    private final Collection<String> ecNumberFilters;
+    private final Collection<Integer> ecNumberFilters;
 
-    public EcNumberPredicate(Collection<String> ecNumberFilter) {
+    public EcNumberPredicate(Collection<Integer> ecNumberFilter) {
         this.ecNumberFilters = ecNumberFilter;
     }
 
@@ -30,15 +30,13 @@ public class EcNumberPredicate implements Predicate {
         if (ecNumberFilters == null || ecNumberFilters.isEmpty()) {
             return true;
         }
-        Set<String> ecNumberFilter = ecNumberFilters.stream().distinct().collect(Collectors.toSet());
-       
+        Set<Integer> ecNumberFilter = ecNumberFilters.stream().distinct().collect(Collectors.toSet());
 
         boolean eval = false;
         if (obj instanceof UniprotEntry) {
             UniprotEntry entry = (UniprotEntry) obj;
             for (EcNumber ec : entry.getEnzymePortalEcNumbersSet()) {
-
-                String family = ec.getFamily();
+                Integer family = ec.getEc();
                 if (ecNumberFilter.contains(family)) {
                     eval = true;
                     break;

@@ -26,8 +26,8 @@ public class EcNumberPredicateTest {
 
     @Before
     public void setUp() {
-        List<String> ecList = new ArrayList<>();
-        ecList.add("Oxidoreductases");
+        List<Integer> ecList = new ArrayList<>();
+        ecList.add(1);
 
         instance = new EcNumberPredicate(ecList);
     }
@@ -48,10 +48,12 @@ public class EcNumberPredicateTest {
         EnzymePortalEcNumbers ecNumber = new EnzymePortalEcNumbers(BigDecimal.TEN);
         ecNumber.setEcNumber("1.1.1.1");
         ecNumber.setUniprotAccession(obj);
+        ecNumber.setEcFamily(1);
 
         EnzymePortalEcNumbers ecNumber2 = new EnzymePortalEcNumbers(BigDecimal.ONE);
         ecNumber2.setEcNumber("6.3.4.6");
         ecNumber2.setUniprotAccession(obj);
+        ecNumber2.setEcFamily(6);
 
         obj.getEnzymePortalEcNumbersSet().add(ecNumber);
         obj.getEnzymePortalEcNumbersSet().add(ecNumber2);
