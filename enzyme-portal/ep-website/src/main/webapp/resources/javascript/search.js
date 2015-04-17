@@ -499,7 +499,7 @@ function addCheckboxEc(filterGroup, obj, selected) {
     var cb = $('<input/>', {
         "type": "checkbox",
         "name": "searchparams." + filterGroup,
-        "value": (filterGroup === 'ecFamilies' ? obj.name : obj.id),
+        "value": (filterGroup === 'ecFamilies' ? obj.id : obj.name),
         onclick: "form.submit()"
     });
     if (selected)

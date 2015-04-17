@@ -73,12 +73,14 @@
                 </c:when>
                 <c:otherwise>
                     <%-- FIXME: hardcoded --%>
+                    <%-- old url
                     <c:set var="imgLink"
                            value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
+                    --%>
                                         <c:set var="imgLink"
-                           value="http://www.ebi.ac.uk/pdbe/static/entry/${fn:toLowerCase(imgFile)}_deposited_chain_front_image-800x800.png"/>
+                           value="http://www.ebi.ac.uk/pdbe/static/entry/${fn:toLowerCase(imgFile)}_deposited_chain_front_image-200x200.png"/>
                     <a class="noLine" style="border-bottom-style: none" target="_blank" href="${pageContext.request.contextPath}/search/${specieWithImage}/proteinStructure">
-                        <img style="max-height: 100px; max-width: 100px;" src="${imgLink}"
+                        <img src="${imgLink}"
                              alt="PDB ${imgFile}" onerror="noImage(this);"/>
                     </a>
                     <div class="imgFooter">${imgFooter}</div>

@@ -269,7 +269,7 @@ public abstract class AbstractController {
             List<String> speciesFilter = searchParameters.getSpecies();
             List<String> compoundsFilter = searchParameters.getCompounds();
             List<String> diseasesFilter = searchParameters.getDiseases();
-            List<String> ecNumbersFilter = searchParameters.getEcFamilies();
+            List<Integer> ecNumbersFilter = searchParameters.getEcFamilies();
             
 
             //remove empty string in the filter to avoid unsual behavior of the filter facets
@@ -285,9 +285,6 @@ public abstract class AbstractController {
                 diseasesFilter.remove("");
             }
 
-            if (ecNumbersFilter.contains("")) {
-                ecNumbersFilter.remove("");
-            }
 
             //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
             if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
@@ -343,10 +340,10 @@ public abstract class AbstractController {
 
             resetSelectedEcNumber(defaultEcNumberList);
 
-            for (String selectedEcFamily : searchParameters.getEcFamilies()) {
+            for (Integer selectedEcFamily : searchParameters.getEcFamilies()) {
                 for (EcNumber ec : defaultEcNumberList) {
 
-                    if (selectedEcFamily.equalsIgnoreCase(ec.getFamily())) {
+                    if (selectedEcFamily.equals(ec.getEc())) {
                         ec.setSelected(true);
                     }
                 }

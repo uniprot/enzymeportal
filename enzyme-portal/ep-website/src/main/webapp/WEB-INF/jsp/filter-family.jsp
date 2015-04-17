@@ -45,7 +45,7 @@ displayedFilters[group] = 0;
 // Populate js variables with data from server:
 //<c:forEach var="ec" items="${ecList}">
 var ef = { "id": "${ec.ec}", "name": "${ec.family}" };
-<c:choose><c:when test="${Fn:contains(ecParams, ec.family)}">
+<c:choose><c:when test="${Fn:contains(ecParams, ec.ec)}">
 checkedFilters[group][checkedFilters[group].length] = ef; //</c:when>
 <c:otherwise>
 uncheckedFilters[group][uncheckedFilters[group].length] = ef; //</c:otherwise>

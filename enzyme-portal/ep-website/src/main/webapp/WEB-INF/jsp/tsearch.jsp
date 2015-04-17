@@ -109,8 +109,9 @@
                     
                                 <section class="grid_24 clearfix">
                     <section class="grid_18 alpha"  >
+     
 
-                        <c:if test="${totalfound eq 0}">
+                        <c:if test="${totalfound eq 0 && empty searchresults.searchfilters}">
                             <c:if test="${searchText eq ''}">
                                <c:set var="searchText"
                                        value=" "/> 
@@ -129,8 +130,11 @@
                         <c:if test="${totalfound gt 0}">
                                <h2>${totalfound} result(s) found</h2>
                         </c:if>
+                          <c:if test="${totalfound eq 0 && not empty searchresults.searchfilters}">
+                               <h2>${totalfound} result found</h2>
+                        </c:if>
                     </section>
-                    <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
+                    <c:if test="${searchModel.searchparams.type ne 'SEQUENCE' && not empty searchresults.searchfilters}">
                         <script src="resources/javascript/ebi-global-search-run.js"></script>
                         <script src="resources/javascript/ebi-global-search.js"></script>
                         <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
@@ -151,7 +155,7 @@
                     <section class="grid_6 alpha" id="search-results">
                        
                         
-                         <c:if test="${ page.totalElements gt 0}">
+                         <c:if test="${not empty searchresults.searchfilters}">
                         <div class="filter grid_24">
                             <div class="title">
                                 Search Filters
@@ -185,19 +189,15 @@
                 
          <section class="grid_18" id="keywordSearchResult">       
                 
-<!--
-                <div  style="text-align: center;">
-                    
-                    <h5>showing ${page.numberOfElements} results of ${page.totalElements} results found <p style="color: red;">page ${page.number + 1} of ${page.totalPages} pages</p> </h5>
-                
-                </div>-->
         
-      
+  <c:if test="${totalfound gt 0 and page.totalElements gt 0}">  
 <div style="width: 100%;">
-             
-              <div class="action-buttons">
+
+                      <div class="action-buttons">
                   <%@include file="basket-buttons.jspf" %>
               </div>
+   
+
               
            
               
@@ -206,8 +206,9 @@
                                 <c:url var="prevUrl" value="/taxonomy/page=${currentIndex - 1}?entryid=${taxId}&entryname=${organismName}" />
                                 <c:url var="nextUrl" value="/taxonomy/page=${currentIndex + 1}?entryid=${taxId}&entryname=${organismName}" />
               
-   
-                                        <c:if test="${page.totalElements gt page.size}">	
+</div>
+   </c:if>  
+       <c:if test="${page.totalElements gt page.size}">	
 
 
 <div id="paginationNav" style="text-align: right;">
@@ -264,6 +265,13 @@
           <div class="resultContent"> 
               <%@include file="util/prioritiseSpecies.jsp" %>
  <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
+ 
+            <c:if test="${totalfound eq 0 && not empty searchresults.searchfilters}">
+                <div class="resultItem grid_24">
+                <h3><span class="displayMsg" style="text-align:center " > No Result was found for this Selection.</span></h3>
+                </div>
+         </c:if>
+ 
               <c:if test="${not empty summaryEntries}">
    
         <c:forEach var="enzyme" items="${summaryEntries}">
@@ -274,11 +282,14 @@
              
      
             <div class="resultItem grid_24">
-                <h2>EC ${enzyme.enzymePortalEcNumbersSet}</h2>
+                
              <div class="summary-header">
-                 <input type="checkbox" class="forBasket"
-                        title="Select entry"
-                        value="${epfn:getSummaryBasketId(enzyme)}"/>
+        <c:if test="${showCheckbox != false}">
+        <input type="checkbox" class="forBasket"
+               title="Select entry"
+               value="${epfn:getSummaryBasketId(enzyme)}"/>
+    </c:if>             
+                 
     <c:if test='${not empty enzyme.proteinName }'>
         <a href="${pageContext.request.contextPath}/search/${enzyme.accession}/enzyme">
             <span class="enzymeName">${fn:substring(enzyme.proteinName, 0, 100)}</span>
@@ -288,6 +299,8 @@
                 theSpecies.species.commonname}]
         </a>
     </c:if>
+        
+ 
 </div>   
    
 <!--  protein structure              -->
@@ -303,7 +316,7 @@
         <div class="proteinImg grid_3">
             <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
             <c:set var="imgFooter" value=""/>
-            <c:set var="specieWithImage" value="${primAcc}"/>
+            <c:set var="specieWithImage" value="${enzyme.accession}"/>
             <c:if test="${empty imgFile}">
                 <c:forEach var="relSp" items="${enzyme.relatedspecies}">
                     <c:if test="${empty imgFile and not empty relSp.pdbeaccession}">
@@ -330,8 +343,8 @@
                 </c:when>
                 <c:otherwise>
                     <%-- FIXME: hardcoded --%>
-                    <c:set var="imgLink"
-                           value="http://www.ebi.ac.uk/pdbe-srv/view/images/entry/${fn:toLowerCase(imgFile)}_cbc120.png"/>
+                  <c:set var="imgLink"
+                           value="http://www.ebi.ac.uk/pdbe/static/entry/${fn:toLowerCase(imgFile)}_deposited_chain_front_image-200x200.png"/>
                     <a class="noLine" style="border-bottom-style: none" target="_blank" href="${pageContext.request.contextPath}/search/${specieWithImage}/proteinStructure">
                         <img src="${imgLink}"
                              alt="PDB ${imgFile}" onerror="noImage(this);"/>

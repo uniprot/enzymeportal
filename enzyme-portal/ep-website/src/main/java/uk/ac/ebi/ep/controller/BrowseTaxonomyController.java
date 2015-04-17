@@ -57,7 +57,7 @@ public class BrowseTaxonomyController extends AbstractController {
     private static final int SEARCH_PAGESIZE = 10;
 
     @RequestMapping(value = BROWSE_TAXONOMY, method = RequestMethod.GET)
-    public String showPathways(Model model) {
+    public String showOrganisms(Model model) {
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
@@ -77,9 +77,10 @@ public class BrowseTaxonomyController extends AbstractController {
         List<Species> species = enzymePortalService.findSpeciesByTaxId(entryID);
         List<Compound> compouds = enzymePortalService.findCompoundsByTaxId(entryID);
         List<Disease> diseases = enzymePortalService.findDiseasesByTaxId(entryID);
-        System.out.println("entry id "+ entryID);
+       
         List<EcNumber> enzymeFamilies =  enzymePortalService.findEnzymeFamiliesByTaxId(entryID);
-        System.out.println("num families "+ enzymeFamilies);
+        
+      
 
         SearchParams searchParams = searchModel.getSearchparams();
         searchParams.setStart(0);
@@ -111,8 +112,8 @@ public class BrowseTaxonomyController extends AbstractController {
         filters.setSpecies(species);
         filters.setCompounds(compouds);
         filters.setEcNumbers(enzymeFamilies);
-
         filters.setDiseases(diseases);
+        
         searchResults.setSearchfilters(filters);
         searchResults.setSummaryentries(result);
 
@@ -176,11 +177,12 @@ public class BrowseTaxonomyController extends AbstractController {
 
         searchResults.setTotalfound(page.getTotalElements());
         SearchFilters filters = new SearchFilters();
+        
         filters.setSpecies(species);
         filters.setCompounds(compouds);
         filters.setEcNumbers(enzymeFamilies);
-
         filters.setDiseases(diseases);
+        
         searchResults.setSearchfilters(filters);
         searchResults.setSummaryentries(result);
 
@@ -212,6 +214,7 @@ public class BrowseTaxonomyController extends AbstractController {
         List<Disease> diseases = enzymePortalService.findDiseasesByTaxId(taxId);
         List<EcNumber> enzymeFamilies = enzymePortalService.findEnzymeFamiliesByTaxId(taxId);
 
+
         SearchFilters filters = new SearchFilters();
         filters.setSpecies(species);
         filters.setCompounds(compouds);
@@ -238,7 +241,7 @@ public class BrowseTaxonomyController extends AbstractController {
         List<String> specieFilter = searchParameters.getSpecies();
         List<String> compoundFilter = searchParameters.getCompounds();
         List<String> diseaseFilter = searchParameters.getDiseases();
-        List<String> ecFilter = searchParameters.getEcFamilies();
+        List<Integer> ecFilter = searchParameters.getEcFamilies();
 
         //remove empty string in the filter to avoid unsual behavior of the filter facets
         if (specieFilter.contains("")) {
@@ -253,11 +256,6 @@ public class BrowseTaxonomyController extends AbstractController {
             diseaseFilter.remove("");
         }
 
-        if (ecFilter.contains("")) {
-            ecFilter.remove("");
-        }
-        
-      
 
         //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
         if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
@@ -302,12 +300,13 @@ public class BrowseTaxonomyController extends AbstractController {
         List<EcNumber> defaultEcNumberList = searchResults.getSearchfilters().getEcNumbers();
 
         resetSelectedEcNumber(defaultEcNumberList);
-
+        
         searchParameters.getEcFamilies().stream().forEach((selectedEcFamily) -> {
-            defaultEcNumberList.stream().filter((ec) -> (selectedEcFamily.equalsIgnoreCase(ec.getFamily()))).forEach((ec) -> {
+            defaultEcNumberList.stream().filter((ec) -> (selectedEcFamily.equals(ec.getEc()))).forEach((ec) -> {
                 ec.setSelected(true);
             });
-        });
+        }); 
+        
 
         Pageable pageable = new PageRequest(0, SEARCH_PAGESIZE, Sort.Direction.ASC, "function", "entryType");
         Page<UniprotEntry> page = new PageImpl<>(new ArrayList<>(), pageable, 0);
@@ -337,22 +336,36 @@ public class BrowseTaxonomyController extends AbstractController {
 
         //ec only
         if (compoundFilter.isEmpty() && diseaseFilter.isEmpty() && !ecFilter.isEmpty()) {
-            //page = enzymePortalService.filterBySpecieAndEc(taxId, ecFilter, pageable);
+            page = enzymePortalService.filterBySpecieAndEc(taxId, ecFilter, pageable);
+          
 
         }
 
         //compound and diseases
-        if (!compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
+        if (!compoundFilter.isEmpty() && !diseaseFilter.isEmpty() && ecFilter.isEmpty()) {
             page = enzymePortalService.filterBySpecieAndCompoundsAndDiseases(taxId, compoundFilter, diseaseFilter, pageable);
 
         }
         
         //compound and ec
+          if (!compoundFilter.isEmpty() && !ecFilter.isEmpty() && diseaseFilter.isEmpty()) {
+            page = enzymePortalService.filterBySpecieAndCompoundsAndEc(taxId, compoundFilter, ecFilter, pageable);
+
+        }
         
         
         //disease and ec
-        
+         if (!ecFilter.isEmpty() && !diseaseFilter.isEmpty() && compoundFilter.isEmpty()) {
+            page = enzymePortalService.filterBySpecieAndDiseasesAndEc(taxId,diseaseFilter, ecFilter, pageable);
 
+        }
+         
+         //disease and compounds and ec
+        
+         if (!ecFilter.isEmpty() && !diseaseFilter.isEmpty() && !compoundFilter.isEmpty()) {
+            page = enzymePortalService.filterBySpecieAndCompoundsAndDiseasesAndEc(taxId,compoundFilter,diseaseFilter, ecFilter, pageable);
+
+        }
         model.addAttribute("searchFilter", filters);
         List<UniprotEntry> result = page.getContent();
 
@@ -404,7 +417,7 @@ public class BrowseTaxonomyController extends AbstractController {
      * @param searchModel
      * @param request
      */
-    protected void applyFiltersAdapted(SearchModel searchModel, HttpServletRequest request) {
+    private void applyFiltersAdapted(SearchModel searchModel, HttpServletRequest request) {
 
         if (searchModel != null) {
 
