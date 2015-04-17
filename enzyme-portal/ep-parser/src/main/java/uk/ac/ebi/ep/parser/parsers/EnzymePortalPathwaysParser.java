@@ -85,7 +85,7 @@ public class EnzymePortalPathwaysParser {
     }
 
     private void loadToDB(String[] fields) {
-        if(fields.length > 4){
+        if(fields.length >= 4){
         String accession = fields[0];
         String pathwayId = fields[1];
         String pathwayUrl = fields[2];

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -55,6 +57,8 @@ public class DiseaseParser {
     @Autowired
     private EnzymePortalSummaryRepository enzymeSummaryRepository;
 
+    private final List<EnzymePortalDisease> diseaseList = new ArrayList<>();
+
     private static final Logger LOGGER
             = Logger.getLogger(DiseaseParser.class);
 
@@ -84,7 +88,8 @@ public class DiseaseParser {
 
     private void LoadToDB(String[] fields) throws InterruptedException {
         double[] scores = new double[1];
-        if (fields.length > 4) {
+
+        if (fields.length >= 4) {
             String[] scoresCell = fields[4].split(" ?/ ?");
             String accession = fields[0];
             String[] omimCell = fields[1].split("\\s");
@@ -115,23 +120,18 @@ public class DiseaseParser {
             for (int i = 0; i < scores.length; i++) {
 
                 //check to see if accession is an enzyme
-                Optional<UniprotEntry>enzyme = uniprotEntryService.findByAccession(accession);
-               
-                  if (enzyme.isPresent()) {
+                Optional<UniprotEntry> enzyme = uniprotEntryService.findByAccession(accession);
+                if (enzyme.isPresent()) {
 
-                    //definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
                     if (!meshHeadsCell[i].contains(" ")) {
 
                         definition = bioPortalService.getDiseaseDescription(meshHeadsCell[i]);
                     } else {
                         definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
                     }
-                    
-                    //get disease evidence 
-                    EnzymePortalSummary summary = enzymeSummaryRepository.findDiseaseEvidence(accession);
-                  
+                    Optional<EnzymePortalSummary> summary = enzymeSummaryRepository.findDiseaseEvidence(accession);
+
                     EnzymePortalDisease disease = new EnzymePortalDisease();
-                   
 
                     String diseaseName = resolveSpecialCharacters(meshHeadsCell[i].toLowerCase(Locale.ENGLISH));
                     disease.setDiseaseName(diseaseName.replaceAll(",", "").trim());
@@ -140,8 +140,8 @@ public class DiseaseParser {
                     disease.setScore(Double.toString(scores[i]));
                     disease.setDefinition(definition);
                     disease.setUniprotAccession(enzyme.get());
-                    if(summary != null){
-                    disease.setEvidence(summary.getCommentText());
+                    if (summary.isPresent()) {
+                        disease.setEvidence(summary.get().getCommentText());
                     }
 
                     if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
@@ -150,7 +150,7 @@ public class DiseaseParser {
                         url = "http://purl.bioontology.org/ontology/MESH/" + meshIdsCell[i];
                     }
                     disease.setUrl(url);
-                    diseaseService.addDisease(disease);
+                    diseaseList.add(disease);
 
 //                    LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
 //                            + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
@@ -190,6 +190,10 @@ public class DiseaseParser {
                 LoadToDB(fields);
 
             }
+            LOGGER.warn("Number of Diseases to load to Database : " + diseaseList.size());
+            //update database
+            diseaseService.addDiseases(diseaseList);
+            diseaseList.clear();
             LOGGER.info("Parsing end");
 
         } catch (IOException | InterruptedException e) {
