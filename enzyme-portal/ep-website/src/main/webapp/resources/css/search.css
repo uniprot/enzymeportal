@@ -107,20 +107,7 @@ a:link, a:visited {
 
 
 div.filter  {
-    float:left;
-    margin-left:2px;
-    margin-right:2px;
-    /*min-width:150px;*/
     min-width: 15%;
-    /*    max-width: 20%;*/
-    /*    padding: 4px 4px;
-        margin-top: 5px;*/
-    /*border: 2px solid #ddd;*/
-    /*
-    -moz-border-radius: 15px 15px 15px 15px;
-    border-radius:15px 15px 15px 15px;
-    -webkit-border-radius:15px 15px 15px 15px;
-    */
 }
 
 .filter .sublevel1 {

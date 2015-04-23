@@ -93,14 +93,14 @@
 
                 <!-- Suggested layout containers -->  
                 <section >
-                    <div class="grid_12zzz" style="display: table; margin-left: 0em;">
+                    <div>
                         <%@ include file="breadcrumbs.jsp" %>
                     </div>
 
 
                 </section>
 
-                <section class="grid_24 clearfix">
+                <section class="clearfix">
                     <section class="grid_18 alpha"  >
 
                         <c:if test="${totalfound eq 0}">
@@ -136,12 +136,9 @@
 
                 </section>
 
-                <section class="grid_6 alpha" id="search-results">
-
-
-                    <!--                <div class="grid_12 content">-->
+                <section class="grid_6" id="search-results">
                     <c:if test="${ searchresults.totalfound gt 0}">
-                        <div class="filter grid_24">
+                        <div class="filter">
                             <div class="title">
                                 Search Filters
                             </div>
@@ -162,7 +159,6 @@
                                  <%@ include file="filter-family.jsp"%>
                             </form:form>
                         </div> 
-                        <%--filter --%>
                     </c:if>
                 </section>
                 <section class="grid_18" id="keywordSearchResult">

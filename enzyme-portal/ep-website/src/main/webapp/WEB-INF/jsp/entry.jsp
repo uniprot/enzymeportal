@@ -149,102 +149,74 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <%--
-                                        <div class="grid_1 omega">
-                                            <div class="menu">
-                                                <a href="http://www.ebi.ac.uk/inc/help/search_help.html" class="help">Help</a>
-                                                <a href="" wicket:id="print" class="print"><span wicket:id="printLabel">Print</span></a>
-                                            </div>
-                                        </div>
-                                        --%>
-<!--                                </div>-->
                             </div>
                                 </section>
-            </div>
+                            </div>
 
-                                <div class="grid_24 gradient">
+                                <div class="clearfix gradient">
                                     <div wicket:id="reference" class="content">
-                                        <div class="column1">
+                                        <div class="column1 grid_4">
                                             <ul>                                    
-                                                <li id="enzyme" class="tab protein ${enzymeSelected}">
-                                                    <a href="enzyme">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="enzyme" class="protein">
+                                                    <a href="enzyme" class="tab ${enzymeSelected}">
                                                             <span class="label icon icon-conceptual" data-icon="P">
                                                                <spring:message code="label.entry.enzyme.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="structure" class="tab structure ${proteinStructureSelected}">
-                                                    <a href="proteinStructure">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="structure" class="structure">
+                                                    <a href="proteinStructure" class="tab ${proteinStructureSelected}">
                                                             <span class="label icon icon-conceptual icon-c4" data-icon="s">
                                                                 <spring:message code="label.entry.proteinStructure.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="reaction" class="tab reaction ${reactionsPathwaysSelected}">
-                                                    <a href="reactionsPathways">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
-                                                            
+                                                <li id="reaction" class="reaction">
+                                                    <a href="reactionsPathways" class="tab ${reactionsPathwaysSelected}">
                                                             <span class="label icon icon-conceptual" data-icon="y">
                                                                 <spring:message code="label.entry.reactionsPathways.title"/>
                                                                 
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="molecule" class="tab molecule ${moleculesSelected}">
-                                                    <a href="molecules">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="molecule" class="molecule">
+                                                    <a href="molecules" class="tab ${moleculesSelected}">
                                                              <span class="label icon icon-conceptual" data-icon="b">
                                                                 <spring:message code="label.entry.molecules.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="disease" class="tab disease ${diseaseDrugsSelected}">
-                                                    <a href="diseaseDrugs">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="disease" class="disease">
+                                                    <a href="diseaseDrugs" class="tab ${diseaseDrugsSelected}">
                                                             <span class="label icon icon-species" data-icon="v">
                                                                 <spring:message code="label.entry.disease.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="literature" class="tab literature ${literatureSelected}">
-                                                    <a href="literature">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="literature" class="literature">
+                                                    <a href="literature" class="tab ${literatureSelected}">
                                                             <span class="label icon icon-conceptual" data-icon="l">
                                                                 <spring:message code="label.entry.literature.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="column2">
+                                        <div class="column2 grid_20">
 
                                             <c:if test='${requestedfield=="enzyme"}'>
                                                 <c:set var="_enzyme" value="${enzymeModel.enzyme}"/>
 
                                                 <c:if test='${_enzyme.enzymetype[0] == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${_enzyme.enzymetype[0] != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="enzyme.jsp" %>
                                                         </div>
                                                     </div>
@@ -255,15 +227,15 @@
                                             <c:if test='${requestedfield=="proteinstructure"}'>
                                                 <c:set var="structure" value="${enzymeModel.proteinstructure}"/>   
                                                 <c:if test='${structure[0].name == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${structure[0].name != "error"}'>
-                                                    <div class="node grid_24 clearfix">
-                                                        <div class="view grid_24 clearfix">
+                                                    <div class="node  ">
+                                                        <div class="view ">
                                                             <%@include file="proteinStructure.jsp" %>
                                                         </div>
                                                     </div>
@@ -275,15 +247,15 @@
 
                                                 <c:set var="pathway" value="${enzymeModel.reactionpathway}"/>   
                                                 <c:if test='${pathway[0].reaction.name == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${pathway[0].reaction.name != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="reactionsPathways.jsp" %>
                                                         </div>
                                                     </div>
@@ -297,15 +269,15 @@
                                                     <c:when test="${not empty chemEntity.drugs
                                                         and not empty chemEntity.drugs.molecule
                                                         and chemEntity.drugs.molecule[0] eq 'error'}">
-                                                        <div class="node grid_24">
-                                                            <div class="view grid_24">
+                                                        <div class="node ">
+                                                            <div class="view ">
                                                                 <%@include file="errors.jsp" %>
                                                             </div>
                                                         </div>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <div class="node grid_24">
-                                                            <div class="view grid_24">
+                                                        <div class="node ">
+                                                            <div class="view ">
                                                                 <%@include file="molecules.jsp" %>
                                                             </div>
                                                         </div>
@@ -316,15 +288,15 @@
                                             <c:if test='${requestedfield=="diseasedrugs"}'>
                                                 <c:set var="diseases" value="${enzymeModel.disease}"/>
                                                 <c:if test='${diseases[0].name == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${diseases[0].name != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="disease.jsp" %>
                                                         </div>
                                                     </div>
@@ -337,15 +309,15 @@
                                                 <c:if test="${not empty enzymeModel.literature}">
                                                 <c:set var="lit" value="${enzymeModel.literature}"/>   
                                                 <c:if test='${lit[0] == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${lit[0] != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="literature.jsp" %>
                                                         </div>
                                                     </div>
@@ -353,9 +325,9 @@
                                                 </c:if>
                                             </c:if>
                                         </div>
+                                        <div class="clearfix"></div>
                                 </div>
                             </form:form>
-                            <div class="clear"></div>
                         </div>
 
     <%@include file="footer.jspf" %>
