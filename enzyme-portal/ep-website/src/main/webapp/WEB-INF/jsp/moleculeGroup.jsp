@@ -22,12 +22,12 @@
                 <spring:message code="label.entry.molecules.explanation"
                                 arguments="${explArgs}" />
             </p>
-            <div style="display: table-row;">
+            <div>
                 <c:forEach var="molecule" items="${moleculeGroup.molecule}"
                     begin="0"
                     end="${fn:length(moleculeGroup.molecule) gt searchConfig.maxMoleculesPerGroup?
                         2 : fn:length(moleculeGroup.molecule)-1}">
-                    <div style="display: table-cell; vertical-align: top;">
+                    <div class="small-molecule-container">
                     <%@include file="molecule.jsp" %>
                     </div>
                 </c:forEach>

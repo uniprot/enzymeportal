@@ -422,3 +422,8 @@ div#local-masthead ul.dropdown-menu li {
 a:hover.btn {
     background-color: #e6e6e6;
 }
+
+.small-molecule-container {
+    display: inline-block;
+    vertical-align: top;
+}
