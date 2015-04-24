@@ -294,6 +294,11 @@ vertical-align: top;
     margin-bottom: 0.5em;
 }
 
+.summary-header h4 {
+    display: inline-block;
+    border-bottom: 1px dotted #207A7A;
+}
+
 .proteinImg {
     /*    float: left;
         width:110px;*/

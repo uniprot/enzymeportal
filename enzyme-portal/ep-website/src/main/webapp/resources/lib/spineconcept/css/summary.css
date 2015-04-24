@@ -246,6 +246,9 @@
 	font-size: 110%;
 }
 
+.header h2 {
+	padding-left: 0;
+}
 
 
 .header .menu a.print {

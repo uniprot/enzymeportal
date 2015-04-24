@@ -427,3 +427,8 @@ a:hover.btn {
     display: inline-block;
     vertical-align: top;
 }
+
+ul.catalytic-activity-list li {
+    list-style: disc;
+    line-height: 2em;
+}
