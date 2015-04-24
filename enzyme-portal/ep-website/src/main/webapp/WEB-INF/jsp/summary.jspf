@@ -15,7 +15,7 @@
 
 <div class="resultItem grid_24">
 <!--        <h2>EC ${enzyme.ec}</h2>-->
-<!--    <h2>EC ${enzyme.enzymePortalEcNumbersSet}</h2>-->
+    <h2>EC : ${enzyme.enzymePortalEcNumbersSet}</h2>
 <div class="summary-header">
     <c:if test="${showCheckbox != false}">
         <input type="checkbox" class="forBasket"
@@ -195,7 +195,9 @@
                                       relspecies[i].scoring.bitScore gt 1000? '10':
                                           fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                       title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                        >${relspecies[i].scoring.bitScore}</span></c:if
+                                      >${relspecies[i].scoring.bitScore}</span>
+<!--                                      <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                            </c:if
                             >]
                         </c:when>
                         <c:otherwise>
@@ -206,7 +208,9 @@
                                   relspecies[i].scoring.bitScore gt 1000? '10':
                                       fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                   title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                    >${relspecies[i].scoring.bitScore}</span></c:if
+                                    >${relspecies[i].scoring.bitScore}</span>
+<!--                                    <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                            </c:if
                             >]
                         </c:otherwise>
                     </c:choose>
@@ -223,7 +227,9 @@
                                               relspecies[i].scoring.bitScore gt 1000? '10':
                                                   fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                               title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                                >${relspecies[i].scoring.bitScore}</span></c:if
+                                                >${relspecies[i].scoring.bitScore}</span>
+<!--                                                <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                                    </c:if
                                     >]
                                 </c:when>
                                 <c:otherwise>
@@ -234,7 +240,9 @@
                                               relspecies[i].scoring.bitScore gt 1000? '10':
                                                   fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                               title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                                >${relspecies[i].scoring.bitScore}</span></c:if
+                                                >${relspecies[i].scoring.bitScore}</span>
+<!--                                                <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                                    </c:if
                                     >]
                                 </c:otherwise>
                             </c:choose>
@@ -248,8 +256,13 @@
             
 <!--            catalytic activities-->
 
-    <c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">
-        <b>Catalytic Activities: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>
+        <c:if test="${fn:length(enzyme.enzymeCatalyticActivitySet) ==1}">
+        <b>Catalytic Activity: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>
+        </c:if>
+        <c:if test="${fn:length(enzyme.enzymeCatalyticActivitySet) >1}">
+            <b>Catalytic Activities: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>
+        </c:if>
+        
         
         <%--
         TODO
@@ -262,7 +275,7 @@
                 </ul>
         --%>
                 
-  </c:if>
+ 
 
 </div>
 
