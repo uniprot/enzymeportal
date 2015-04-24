@@ -33,17 +33,7 @@
             <%@include file="header.jspf" %>
             
             <div id="content" role="main" class="grid_24 clearfix">
-<div style="float: right; margin-right: 1em;"
-    class="icon icon-generic" data-icon="b">
-    <input type="checkbox" class="forBasket"
-        onchange="selectForBasket(event)" 
-        title="Add this enzyme to your basket."
-        value="${epfn:getSummaryBasketId(enzymeModel)}"
-        ${not empty basket and
-        not empty basket[epfn:getSummaryBasketId(enzymeModel)]? 'checked': ''}/> Add
-            to basket
-</div>
- <%@ include file="breadcrumbs.jsp" %>
+             <%@ include file="breadcrumbs.jsp" %>
                 <!-- Suggested layout containers -->  
 
                 
@@ -90,72 +80,81 @@
                                 </c:if>
                                 <c:set var="selectedSpecies" value="${enzymeModel.species}" />
                                 <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
+
                                 <section>
-                                <div class="header">
-                                        <div class="grid_8 prefix_8 suffix_6 alpha">
+                                    <div class="header">
+                                        <h2><c:out value="${enzymeModel.name}"/></h2>
+                                        <div class="push_4 grid_20 entry-buttons">
+                                            <c:if test="${empty basket ||empty basket[epfn:getSummaryBasketId(enzymeModel)]}">
+                                                <input type="hidden" id="enzymeId" value="${epfn:getSummaryBasketId(enzymeModel)}"/>
+                                                <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b">Add to Basket</a>
+                                                <script>
+                                                    $('#add-to-basket').click(function(){
+                                                        ajaxBasket($('#enzymeId').val(), true);
+                                                        $(this).hide();
+                                                    });
+                                                </script>
+                                            </c:if>
+                                            <strong>&nbsp;&nbsp;Organism:</strong>
                                             <div class="panel">
-                                                <div>
-                                                    <div class="classification">
-                                                        <div class="label">ORGANISMS</div>
-                                                          <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
-                                                            <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
-                                                            <span class="extra"
-                                                                  title="${selectedSpecies.scientificname}"
-                                                                  style="overflow: hidden;">${selectedSpecies.scientificname}</span>
-                                                        </div>
+                                                <div class="classification">
+                                                    <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
+                                                        <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
+                                                                            <span class="extra"
+                                                                                  title="${selectedSpecies.scientificname}"
+                                                                                  style="overflow: hidden;">${selectedSpecies.scientificname}</span>
                                                     </div>
-                                                    <div class="selection">
-                                                        <ul>                    
-                                            <c:if test="${fn:length(relSpecies)<=0}">
-                                                                <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
-                                                                    <c:set var="species" value="${relSpecies[i].species}"/>
-                                                                        <c:set var="select" value=""/>
-                                                                        <c:if test="${i==0}">
-                                                                            <c:set var="select" value="selected"/>
-                                                                        </c:if>
-                                                                        <li class="${select}">
-                                                                            <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
-                                                                            <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
-                                                                                <span class="name"><c:out value="${species.commonname}"/></span>
-                                                                                <span class="extra"
-                                                                                      title="${species.scientificname}"
-                                                                                      style="overflow: hidden;">${species.scientificname}</span>
-                                                                            </div>
-                                                                            </a>
-                                                                        </li>
-                                                                </c:forEach>
-                                                            </c:if>
-                                                   <c:if test="${fn:length(relSpecies)>0}">
-                                                                <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
-                                                                    <c:set var="species" value="${relSpecies[i].species}"/>
-                                                                        <c:set var="select" value=""/>
-                                                                        <c:if test="${i==0}">
-                                                                            <c:set var="select" value="selected"/>
-                                                                        </c:if>
-                                                                        <li class="${select}">
-                                                                            <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
-                                                                            <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
-                                                                                <span class="name"><c:out value="${species.commonname}"/></span>
-                                                                                <span class="extra"
-                                                                                      title="${species.scientificname}"
-                                                                                      style="overflow: hidden;">${species.scientificname}</span>
-                                                                            </div>
-                                                                            </a>
-                                                                        </li>
-                                                                </c:forEach>
-                                                            </c:if>
-                                                        </ul>
-                                                    </div>
+                                                </div>
+                                                <div class="selection">
+                                                    <ul>
+                                                        <c:if test="${fn:length(relSpecies)<=0}">
+                                                            <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
+                                                                <c:set var="species" value="${relSpecies[i].species}"/>
+                                                                <c:set var="select" value=""/>
+                                                                <c:if test="${i==0}">
+                                                                    <c:set var="select" value="selected"/>
+                                                                </c:if>
+                                                                <li class="${select}">
+                                                                    <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
+                                                                        <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
+                                                                            <span class="name"><c:out value="${species.commonname}"/></span>
+                                                                                                <span class="extra"
+                                                                                                      title="${species.scientificname}"
+                                                                                                      style="overflow: hidden;">${species.scientificname}</span>
+                                                                        </div>
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:if test="${fn:length(relSpecies)>0}">
+                                                            <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
+                                                                <c:set var="species" value="${relSpecies[i].species}"/>
+                                                                <c:set var="select" value=""/>
+                                                                <c:if test="${i==0}">
+                                                                    <c:set var="select" value="selected"/>
+                                                                </c:if>
+                                                                <li class="${select}">
+                                                                    <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
+                                                                        <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
+                                                                            <span class="name"><c:out value="${species.commonname}"/></span>
+                                                                                                <span class="extra"
+                                                                                                      title="${species.scientificname}"
+                                                                                                      style="overflow: hidden;">${species.scientificname}</span>
+                                                                        </div>
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
-                            </div>
+                                    </div>
                                 </section>
-                            </div>
-
-                                <div class="clearfix gradient">
+                                <div class="clearfix"></div>
+                                <div class="gradient">
                                     <div wicket:id="reference" class="content">
-                                        <div class="column1 grid_4">
+                                        <div class="column1 grid_4 alpha">
                                             <ul>                                    
                                                 <li id="enzyme" class="protein">
                                                     <a href="enzyme" class="tab ${enzymeSelected}">
@@ -202,7 +201,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="column2 grid_20">
+                                        <div class="column2 grid_20 omega">
 
                                             <c:if test='${requestedfield=="enzyme"}'>
                                                 <c:set var="_enzyme" value="${enzymeModel.enzyme}"/>

@@ -12,7 +12,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div id="diseaseContent" class="summary">
-    <h2><c:out value="${enzymeModel.name}"/></h2>
     <c:set var="diseases" value="${enzymeModel.disease}"/>
     <c:set var="diseasesSize" value="${fn:length(diseases)}"/>
     <c:set var="plural" value="y"/>

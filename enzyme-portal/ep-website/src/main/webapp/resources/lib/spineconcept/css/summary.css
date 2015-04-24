@@ -1,6 +1,5 @@
 .header .panel {
 	width: 300px;
-	margin: 0px auto;
 }
 
 .classification {
@@ -8,9 +7,6 @@
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
-	-moz-box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
-	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
 	background: #FFF;
 }
 
@@ -93,7 +89,7 @@
 }
 
 .selection ul {
-	max-height: 100px;
+	max-height: 300px;
 	overflow: auto;
 	display: block;
 	list-style: none;
@@ -307,6 +303,8 @@
 }
 
 .column2 {
+	border-top:2px solid #08a1b1;
+	padding-top:0;
 	margin-bottom: 3em;
 }
 
@@ -429,6 +427,8 @@
 }
 
 .references {
+	float:right;
+	width: 400px;
 	border: 1px solid rgb(167, 184, 193);
 	border-radius: 6px;
 	-moz-border-radius: 6px;
@@ -438,18 +438,23 @@
 }
 
 .references .button {
-	margin: 1px;
 	padding: 2px 4px;
-	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #207a7a;
-	color: #fff;
+	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #ffffff;
+	border: 1px solid rgb(167, 184, 193);
+	border-radius: 6px;
+	color: #333;
+	font-weight: bold;
 	cursor: pointer;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
 }
+
+.references .button:hover {
+	background-color: #FFD98F;
+}
+
 
 .references table {
 	padding: 1px;
+	position: absolute;
 }
 .references table {
 	max-height: 200px;
@@ -620,4 +625,13 @@
 div#content {
 	padding-bottom: 0px;
 	min-height: 0px;
+}
+
+.entry-buttons {
+	line-height: 4em;
+}
+
+.entry-buttons #add-to-basket, .entry-buttons .panel {
+	display: inline-block;
+	vertical-align: middle;
 }
