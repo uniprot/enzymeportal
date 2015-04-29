@@ -128,7 +128,7 @@
                             </script>
                         </c:if>
                         <c:if test="${totalfound gt 0}">
-                               <h2>${totalfound} result(s) found</h2>
+                               <h2>${totalfound} results found</h2>
                         </c:if>
                           <c:if test="${totalfound eq 0 && not empty searchresults.searchfilters}">
                                <h2>${totalfound} result found</h2>
@@ -518,13 +518,29 @@
             </c:if>
         </div>
     </div> 
+            
+                <c:if test="${not empty enzyme.enzymeCatalyticActivitySet}">
+        <c:set var="enzymeCatalyticActivitySize" value="${fn:length(enzyme.enzymeCatalyticActivitySet)}"/>
+  
+        <c:if test="${enzymeCatalyticActivitySize eq 1}">
+           <b>Catalytic Activity: </b> 
+        </c:if>
+        <c:if test="${enzymeCatalyticActivitySize gt 1}">
+          <b>Catalytic Activities: </b>  
+        </c:if>
+      
+        <ul class="catalytic-activity-list">
+            <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity"  begin="0" end="0">
+                <li class="reaction">${activity.catalyticActivity}</li>
+            </c:forEach>
+            <c:if test="${enzymeCatalyticActivitySize gt 1}">
+                <li><a href="${pageContext.request.contextPath}/search/${primAcc}/reactionsPathways">more...</a></li>
+            </c:if>
+        </ul>
+    </c:if>
           
 </div>             
-                
-        <b>Catalytic Activity: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>      
-                
-                
-                
+                             
                 
                 
             </div>
