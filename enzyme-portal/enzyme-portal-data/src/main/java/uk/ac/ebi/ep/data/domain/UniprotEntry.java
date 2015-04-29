@@ -580,14 +580,16 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.enzymeCatalyticActivitySet = enzymeCatalyticActivitySet;
     }
 
-//    public List<String> getCatalyticActivities() {
-//
-//        List<String> catalyticActivities = new LinkedList<>();
-//        enzymeCatalyticActivitySet.stream().forEach((activity) -> {
-//            catalyticActivities.add(activity.getCatalyticActivity());
-//        });
-//
-//        return catalyticActivities;
-//    }
+    @Override
+    public Object getScoring() {
+        return scoring;
+    }
+
+    @Override
+    public void setScoring(Object value) {
+        this.scoring = value;
+    }
+    
+    
 
 }

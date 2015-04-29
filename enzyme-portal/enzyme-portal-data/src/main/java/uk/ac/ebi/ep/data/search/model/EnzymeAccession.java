@@ -28,7 +28,7 @@ public class EnzymeAccession implements Serializable {
     protected Object scoring;
     
      protected String uniprotid;
-     
+      
     /**
      * Gets the value of the uniprotaccessions property.
      *
