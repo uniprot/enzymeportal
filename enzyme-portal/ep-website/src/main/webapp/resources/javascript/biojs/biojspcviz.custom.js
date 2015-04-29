@@ -29,12 +29,12 @@ $(document).ready(function() {
                     var myContent = "No interactions found<br><br>" +
                         "Information provided by <a href='http://www.pathwaycommons.org/pc2/' target='_blank'>Pathway Commons 2</a>.";
                     $('#pcviz-widget').hide();
+                } else if(msg.numberOfNodes>100) {
+                    $('#pcviz-widget > table').remove();
+                    $('#pcviz-widget').append("Pathway neighborhood of <b>" + uid + "</b> contains <b>" + msg.numberOfNodes +
+                    " genes</b> and <b>" + msg.numberOfEdges + " interactions</b>. <a target=\"_blank\" href=\"" + orgUrl + "\">View</a></p>");
                 }
-
-                pcvizDescEl.html( myContent );
-                //show when loaded
                 $('#pcviz-widget').show();
-
                 return this;
             },
 
