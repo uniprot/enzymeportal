@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.pdbeadapter.experiment.PDBexperiment;
@@ -53,14 +54,15 @@ public class PdbService {
         PDB pdb = new PDB();
         pdb.setId(pdbId);
 
-        PdbSearchResult summary = pdbeRestService.getPdbSummaryResults(pdbId);
+        Optional<PdbSearchResult> summary = Optional.ofNullable(pdbeRestService.getPdbSummaryResults(pdbId));
 
-        List<PDBe> pdbSummary = summary.get(pdbId);
+        if(summary.isPresent()){
+        List<PDBe> pdbSummary = summary.get().get(pdbId);
         if (pdbSummary != null && !pdbSummary.isEmpty()) {
 
             pdb = computeSummary(pdbSummary, pdb);
         }
-
+        }
         //molecules
         PDBmolecules molecules = pdbeRestService.getPDBmoleculeResults(pdbId);
 
