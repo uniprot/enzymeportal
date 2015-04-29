@@ -56,6 +56,7 @@
             </c:if>
             <c:forEach items="${reactionpathways}" var="reactionpathway"
                        varStatus="rpVs">
+
                  <c:set var="reactions" value="${reactionpathway.reactions}"/>
                 <c:set var="reaction" value="${reactionpathway.reaction}"/>
                 <c:set var="pathwayLinks" value="${reactionpathway.pathways}"/>
@@ -75,87 +76,19 @@
                             <c:out value="${reaction.name}" escapeXml="false"/> 
                         </b>
                         <br/>
-                        <div id="bjs" style="margin-top: 10px">
+                        <div id="bjs_${rpVs.count}" style="margin-top: 10px">
                          
                         </div>
                         
-                            <script>
-
-                            window.onload = function() {
-                            var instance = new Biojs.Rheaction({
-                            target: 'bjs',
-                            id:'${reaction.id}',
-                            proxyUrl:'${pageContext.request.contextPath}/proxy.jsp'
-
+                        <script>
+                            $(document).ready(function() {
+                                new Biojs.Rheaction({
+                                    target: 'bjs_${rpVs.count}',
+                                    id:'${reaction.id}',
+                                    proxyUrl:'${pageContext.request.contextPath}/proxy.jsp'
+                                });
                             });
-                            //instance.setId("${reaction.id}");
-                            //console.log(${reaction.id});
-                            }; 
-                            </script>                    
-                        
-                        
-                        <%--
-                        <div class="equation hidden">
-                            <table>
-                                <tr>
-                                    <c:set var="reactants" value="${reaction.equation.reactantlist}"/>
-                                    <c:set var="reactantsSize" value="${fn:length(reactants)}"/>
-                                    <c:set var="products" value="${reaction.equation.productlist}"/>
-                                    <c:set var="productsSize" value="${fn:length(products)}"/>
-                                    <c:set var="counter" value="${1}"/>
-                                    <c:forEach items="${reactants}" var="reactant">
-                                        <c:if test="${reactant.count gt 1}">
-                                            <th><fmt:formatNumber
-                                                    value="${reactant.count}"
-                                                    type="number"
-                                                    maxFractionDigits="0"/>
-                                            </th>
-                                        </c:if>
-                                        <td>
-                                            <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${reactant.molecule.id}${chebiImageParams}"/>
-                                            <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${reactant.molecule.id}${chebiEntryBaseUrlParam}"/>
-                                            <a target="blank" href="${chebiEntryUrl}">
-                                                <img src="${chebiImageUrl}" alt="${reactant.molecule.title}"/>
-                                            </a>
-                                        </td>
-                                        <c:if test="${counter < reactantsSize}">
-                                            <td width="1%">
-                                                <b>+</b>
-                                            </td>
-                                        </c:if>
-                                        <c:set var="counter" value="${counter+1}"/>
-                                    </c:forEach>
-
-                                    <td>
-                                        <b><c:out value="${reaction.equation.direction}"/></b>
-                                    </td>
-
-                                    <c:set var="counter" value="${1}"/>
-                                    <c:forEach items="${products}" var="product">
-                                        <c:if test="${product.count gt 1}">
-                                            <th><fmt:formatNumber
-                                                    value="${product.count}"
-                                                    type="number"
-                                                    maxFractionDigits="0"/>
-                                            </th>
-                                        </c:if>
-                                        <td>
-                                            <c:set var="chebiImageUrl" value="${chebiImageBaseUrl}${product.molecule.id}${chebiImageParams}"/>
-                                            <c:set var="chebiEntryUrl" value="${chebiEntryBaseUrl}${product.molecule.id}${chebiEntryBaseUrlParam}"/>
-                                            <a target="blank" href="${chebiEntryUrl}">
-                                                <img src="${chebiImageUrl}" alt="${product.molecule.title}"/>
-                                            </a>
-                                        </td>
-                                        <c:if test="${counter < productsSize}">
-                                            <td>
-                                                <b>+</b>
-                                            </td>
-                                        </c:if>
-                                        <c:set var="counter" value="${counter+1}"/>
-                                    </c:forEach>
-                                </tr>
-                            </table>
-                        </div> --%>
+                        </script>
                         <div id="reactionDesc-${rpVs.index}">
                             <c:out value="${reaction.description}" escapeXml="false"/>
                         </div>
