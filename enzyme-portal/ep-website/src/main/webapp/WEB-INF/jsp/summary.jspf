@@ -23,13 +23,14 @@
                value="${epfn:getSummaryBasketId(enzyme)}"/>
     </c:if>
     <c:if test='${not empty enzyme.proteinName }'>
+        <h4>
         <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme">
             <span class="enzymeName">${fn:substring(enzyme.proteinName, 0, 100)}</span>
             <span class="hidden">${enzyme.uniprotid}</span>
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :
                 theSpecies.species.commonname}]
-        </a>
+        </a></h4>
     </c:if>
 </div>
 <%--${not empty basket and--%>
@@ -255,27 +256,20 @@
     </div>
             
 <!--            catalytic activities-->
+    <%--<c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">--%>
+    <c:if test="${not empty enzyme.enzymeCatalyticActivitySet}">
+        <b>Catalytic Activities: </b>
+        <c:set var="enzymeCatalyticActivitySize" value="${fn:length(enzyme.enzymeCatalyticActivitySet)}"/>
 
-        <c:if test="${fn:length(enzyme.enzymeCatalyticActivitySet) ==1}">
-        <b>Catalytic Activity: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>
-        </c:if>
-        <c:if test="${fn:length(enzyme.enzymeCatalyticActivitySet) >1}">
-            <b>Catalytic Activities: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>
-        </c:if>
-        
-        
-        <%--
-        TODO
-        This needs to be uncommented in order to test UI fixes.
-        <ul style="list-style-type: square">
-                    <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity" >
-          <li class="reaction"><b>${activity.catalyticActivity}</b></li>   
-                    </c:forEach>
-                    
-                </ul>
-        --%>
-                
- 
+        <ul class="catalytic-activity-list">
+            <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity" begin="0" end="2">
+                <li class="reaction">${activity.catalyticActivity}</li>
+            </c:forEach>
+            <c:if test="${enzymeCatalyticActivitySize gt 3}">
+                <li><a href="${pageContext.request.contextPath}/search/${primAcc}/reactionsPathways">more...</a></li>
+            </c:if>
+        </ul>
+    </c:if>
 
 </div>
 

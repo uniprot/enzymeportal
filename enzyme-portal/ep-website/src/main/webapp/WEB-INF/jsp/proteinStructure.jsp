@@ -10,7 +10,6 @@
 </div>
 
 <div class="summary">
-<h2><c:out value="${enzymeModel.name}"/></h2>
 <c:set var="proteinStructures" value="${enzymeModel.proteinstructure}" />
 <c:choose>
 	<c:when test="${fn:length(enzymeModel.proteinstructure) eq 0}">
@@ -62,7 +61,8 @@
 		            </table>
 	            </div>
         	</c:if>
-            <div id="proteinStructures" style="margin-top: 1ex;">
+			<div class="clearfix"></div>
+            <div id="proteinStructures">
 				<div class="summary structure" id="structure-${proteinStructures[0].id}">
 					<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
 						alt="Loading..."/>

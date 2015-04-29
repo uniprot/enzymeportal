@@ -13,7 +13,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div id="moleculeContent" class="summary">
-    <h2><c:out value="${enzymeModel.name}"/></h2>
     <c:set var="molecules" value="${enzymeModel.molecule}"/>
     <div id="molecules">
         <c:choose>

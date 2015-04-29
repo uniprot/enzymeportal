@@ -10,7 +10,6 @@
 
     });
 </script>
-<input id="select-all-checkbox" type="checkbox" title="Select all" value="">
-
+<input id="select-all-checkbox" type="checkbox" title="Select all" value=""> <label for="select-all-checkbox">Select all</label>
 <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b">Add to Basket</a>
 <%--<a id="compare" href="#" class="icon icon-functional" data-icon="O">Compare</a>--%>

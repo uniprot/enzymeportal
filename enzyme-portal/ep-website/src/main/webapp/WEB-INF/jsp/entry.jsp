@@ -33,17 +33,7 @@
             <%@include file="header.jspf" %>
             
             <div id="content" role="main" class="grid_24 clearfix">
-<div style="float: right; margin-right: 1em;"
-    class="icon icon-generic" data-icon="b">
-    <input type="checkbox" class="forBasket"
-        onchange="selectForBasket(event)" 
-        title="Add this enzyme to your basket."
-        value="${epfn:getSummaryBasketId(enzymeModel)}"
-        ${not empty basket and
-        not empty basket[epfn:getSummaryBasketId(enzymeModel)]? 'checked': ''}/> Add
-            to basket
-</div>
- <%@ include file="breadcrumbs.jsp" %>
+             <%@ include file="breadcrumbs.jsp" %>
                 <!-- Suggested layout containers -->  
 
                 
@@ -90,161 +80,142 @@
                                 </c:if>
                                 <c:set var="selectedSpecies" value="${enzymeModel.species}" />
                                 <c:set var="relSpecies" value="${enzymeModel.relatedspecies}"/>
+
                                 <section>
-                                <div class="header">
-                                        <div class="grid_8 prefix_8 suffix_6 alpha">
+                                    <div class="header">
+                                        <h2><c:out value="${enzymeModel.name}"/></h2>
+                                        <div class="push_4 grid_20 entry-buttons">
+                                            <c:if test="${empty basket ||empty basket[epfn:getSummaryBasketId(enzymeModel)]}">
+                                                <input type="hidden" id="enzymeId" value="${epfn:getSummaryBasketId(enzymeModel)}"/>
+                                                <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b">Add to Basket</a>
+                                                <script>
+                                                    $('#add-to-basket').click(function(){
+                                                        ajaxBasket($('#enzymeId').val(), true);
+                                                        $(this).hide();
+                                                    });
+                                                </script>
+                                            </c:if>
+                                            <strong>&nbsp;&nbsp;Organism:</strong>
                                             <div class="panel">
-                                                <div>
-                                                    <div class="classification">
-                                                        <div class="label">ORGANISMS</div>
-                                                          <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
-                                                            <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
-                                                            <span class="extra"
-                                                                  title="${selectedSpecies.scientificname}"
-                                                                  style="overflow: hidden;">${selectedSpecies.scientificname}</span>
-                                                        </div>
+                                                <div class="classification">
+                                                    <div class='box selected ${fn:replace(selectedSpecies.scientificname, " ", "_")}'>
+                                                        <span class="name"><c:out value="${selectedSpecies.commonname}"/></span>
+                                                                            <span class="extra"
+                                                                                  title="${selectedSpecies.scientificname}"
+                                                                                  style="overflow: hidden;">${selectedSpecies.scientificname}</span>
                                                     </div>
-                                                    <div class="selection">
-                                                        <ul>                    
-                                            <c:if test="${fn:length(relSpecies)<=0}">
-                                                                <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
-                                                                    <c:set var="species" value="${relSpecies[i].species}"/>
-                                                                        <c:set var="select" value=""/>
-                                                                        <c:if test="${i==0}">
-                                                                            <c:set var="select" value="selected"/>
-                                                                        </c:if>
-                                                                        <li class="${select}">
-                                                                            <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
-                                                                            <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
-                                                                                <span class="name"><c:out value="${species.commonname}"/></span>
-                                                                                <span class="extra"
-                                                                                      title="${species.scientificname}"
-                                                                                      style="overflow: hidden;">${species.scientificname}</span>
-                                                                            </div>
-                                                                            </a>
-                                                                        </li>
-                                                                </c:forEach>
-                                                            </c:if>
-                                                   <c:if test="${fn:length(relSpecies)>0}">
-                                                                <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
-                                                                    <c:set var="species" value="${relSpecies[i].species}"/>
-                                                                        <c:set var="select" value=""/>
-                                                                        <c:if test="${i==0}">
-                                                                            <c:set var="select" value="selected"/>
-                                                                        </c:if>
-                                                                        <li class="${select}">
-                                                                            <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
-                                                                            <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
-                                                                                <span class="name"><c:out value="${species.commonname}"/></span>
-                                                                                <span class="extra"
-                                                                                      title="${species.scientificname}"
-                                                                                      style="overflow: hidden;">${species.scientificname}</span>
-                                                                            </div>
-                                                                            </a>
-                                                                        </li>
-                                                                </c:forEach>
-                                                            </c:if>
-                                                        </ul>
-                                                    </div>
+                                                </div>
+                                                <div class="selection">
+                                                    <ul>
+                                                        <c:if test="${fn:length(relSpecies)<=0}">
+                                                            <c:forEach begin="0" end="${fn:length(relSpecies)}" var="i">
+                                                                <c:set var="species" value="${relSpecies[i].species}"/>
+                                                                <c:set var="select" value=""/>
+                                                                <c:if test="${i==0}">
+                                                                    <c:set var="select" value="selected"/>
+                                                                </c:if>
+                                                                <li class="${select}">
+                                                                    <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
+                                                                        <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
+                                                                            <span class="name"><c:out value="${species.commonname}"/></span>
+                                                                                                <span class="extra"
+                                                                                                      title="${species.scientificname}"
+                                                                                                      style="overflow: hidden;">${species.scientificname}</span>
+                                                                        </div>
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:if test="${fn:length(relSpecies)>0}">
+                                                            <c:forEach begin="0" end="${fn:length(relSpecies)-1}" var="i">
+                                                                <c:set var="species" value="${relSpecies[i].species}"/>
+                                                                <c:set var="select" value=""/>
+                                                                <c:if test="${i==0}">
+                                                                    <c:set var="select" value="selected"/>
+                                                                </c:if>
+                                                                <li class="${select}">
+                                                                    <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
+                                                                        <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
+                                                                            <span class="name"><c:out value="${species.commonname}"/></span>
+                                                                                                <span class="extra"
+                                                                                                      title="${species.scientificname}"
+                                                                                                      style="overflow: hidden;">${species.scientificname}</span>
+                                                                        </div>
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
-                                        <%--
-                                        <div class="grid_1 omega">
-                                            <div class="menu">
-                                                <a href="http://www.ebi.ac.uk/inc/help/search_help.html" class="help">Help</a>
-                                                <a href="" wicket:id="print" class="print"><span wicket:id="printLabel">Print</span></a>
-                                            </div>
-                                        </div>
-                                        --%>
-<!--                                </div>-->
-                            </div>
+                                    </div>
                                 </section>
-            </div>
-
-                                <div class="grid_24 gradient">
+                                <div class="clearfix"></div>
+                                <div class="gradient">
                                     <div wicket:id="reference" class="content">
-                                        <div class="column1">
+                                        <div class="column1 grid_4 alpha">
                                             <ul>                                    
-                                                <li id="enzyme" class="tab protein ${enzymeSelected}">
-                                                    <a href="enzyme">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="enzyme" class="protein">
+                                                    <a href="enzyme" class="tab ${enzymeSelected}">
                                                             <span class="label icon icon-conceptual" data-icon="P">
                                                                <spring:message code="label.entry.enzyme.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="structure" class="tab structure ${proteinStructureSelected}">
-                                                    <a href="proteinStructure">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="structure" class="structure">
+                                                    <a href="proteinStructure" class="tab ${proteinStructureSelected}">
                                                             <span class="label icon icon-conceptual icon-c4" data-icon="s">
                                                                 <spring:message code="label.entry.proteinStructure.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="reaction" class="tab reaction ${reactionsPathwaysSelected}">
-                                                    <a href="reactionsPathways">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
-                                                            
+                                                <li id="reaction" class="reaction">
+                                                    <a href="reactionsPathways" class="tab ${reactionsPathwaysSelected}">
                                                             <span class="label icon icon-conceptual" data-icon="y">
                                                                 <spring:message code="label.entry.reactionsPathways.title"/>
                                                                 
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="molecule" class="tab molecule ${moleculesSelected}">
-                                                    <a href="molecules">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="molecule" class="molecule">
+                                                    <a href="molecules" class="tab ${moleculesSelected}">
                                                              <span class="label icon icon-conceptual" data-icon="b">
                                                                 <spring:message code="label.entry.molecules.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="disease" class="tab disease ${diseaseDrugsSelected}">
-                                                    <a href="diseaseDrugs">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="disease" class="disease">
+                                                    <a href="diseaseDrugs" class="tab ${diseaseDrugsSelected}">
                                                             <span class="label icon icon-species" data-icon="v">
                                                                 <spring:message code="label.entry.disease.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
-                                                <li id="literature" class="tab literature ${literatureSelected}">
-                                                    <a href="literature">
-                                                        <span class="inner_tab">
-                                                            <span class="icon"></span>
+                                                <li id="literature" class="literature">
+                                                    <a href="literature" class="tab ${literatureSelected}">
                                                             <span class="label icon icon-conceptual" data-icon="l">
                                                                 <spring:message code="label.entry.literature.title"/>
                                                             </span>
-                                                        </span>
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="column2">
+                                        <div class="column2 grid_20 omega">
 
                                             <c:if test='${requestedfield=="enzyme"}'>
                                                 <c:set var="_enzyme" value="${enzymeModel.enzyme}"/>
 
                                                 <c:if test='${_enzyme.enzymetype[0] == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${_enzyme.enzymetype[0] != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="enzyme.jsp" %>
                                                         </div>
                                                     </div>
@@ -255,15 +226,15 @@
                                             <c:if test='${requestedfield=="proteinstructure"}'>
                                                 <c:set var="structure" value="${enzymeModel.proteinstructure}"/>   
                                                 <c:if test='${structure[0].name == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${structure[0].name != "error"}'>
-                                                    <div class="node grid_24 clearfix">
-                                                        <div class="view grid_24 clearfix">
+                                                    <div class="node  ">
+                                                        <div class="view ">
                                                             <%@include file="proteinStructure.jsp" %>
                                                         </div>
                                                     </div>
@@ -275,15 +246,15 @@
 
                                                 <c:set var="pathway" value="${enzymeModel.reactionpathway}"/>   
                                                 <c:if test='${pathway[0].reaction.name == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${pathway[0].reaction.name != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="reactionsPathways.jsp" %>
                                                         </div>
                                                     </div>
@@ -297,15 +268,15 @@
                                                     <c:when test="${not empty chemEntity.drugs
                                                         and not empty chemEntity.drugs.molecule
                                                         and chemEntity.drugs.molecule[0] eq 'error'}">
-                                                        <div class="node grid_24">
-                                                            <div class="view grid_24">
+                                                        <div class="node ">
+                                                            <div class="view ">
                                                                 <%@include file="errors.jsp" %>
                                                             </div>
                                                         </div>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <div class="node grid_24">
-                                                            <div class="view grid_24">
+                                                        <div class="node ">
+                                                            <div class="view ">
                                                                 <%@include file="molecules.jsp" %>
                                                             </div>
                                                         </div>
@@ -316,15 +287,15 @@
                                             <c:if test='${requestedfield=="diseasedrugs"}'>
                                                 <c:set var="diseases" value="${enzymeModel.disease}"/>
                                                 <c:if test='${diseases[0].name == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${diseases[0].name != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="disease.jsp" %>
                                                         </div>
                                                     </div>
@@ -337,15 +308,15 @@
                                                 <c:if test="${not empty enzymeModel.literature}">
                                                 <c:set var="lit" value="${enzymeModel.literature}"/>   
                                                 <c:if test='${lit[0] == "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="errors.jsp" %>
                                                         </div>
                                                     </div>
                                                 </c:if>
                                                 <c:if test='${lit[0] != "error"}'>
-                                                    <div class="node grid_24">
-                                                        <div class="view grid_24">
+                                                    <div class="node ">
+                                                        <div class="view ">
                                                             <%@include file="literature.jsp" %>
                                                         </div>
                                                     </div>
@@ -353,9 +324,9 @@
                                                 </c:if>
                                             </c:if>
                                         </div>
+                                        <div class="clearfix"></div>
                                 </div>
                             </form:form>
-                            <div class="clear"></div>
                         </div>
 
     <%@include file="footer.jspf" %>

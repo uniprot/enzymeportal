@@ -21,7 +21,6 @@
 
 
 <div id="reactionContent" class="summary">
-    <h2><c:out value="${enzymeModel.name}"/></h2>
     <c:if test="${ not empty enzymeModel.catalyticActivities}">
   <p></p>
 

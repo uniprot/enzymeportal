@@ -6,7 +6,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div class="summary">
-<h2><c:out value="${enzymeModel.name}"/></h2>
 
 <c:choose>
 	<c:when test="${empty enzymeModel.literature}">

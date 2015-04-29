@@ -12,7 +12,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div id="enzymeContent" class="summary">
-    <h2><c:out value="${enzymeModel.name}"/></h2>
     <dl>
         <dt>Function</dt>
         <dd>

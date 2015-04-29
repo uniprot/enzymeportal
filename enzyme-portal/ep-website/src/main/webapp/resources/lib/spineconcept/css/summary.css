@@ -1,6 +1,5 @@
 .header .panel {
 	width: 300px;
-	margin: 0px auto;
 }
 
 .classification {
@@ -8,9 +7,6 @@
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
-	-moz-box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
-	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
 	background: #FFF;
 }
 
@@ -93,7 +89,7 @@
 }
 
 .selection ul {
-	max-height: 100px;
+	max-height: 300px;
 	overflow: auto;
 	display: block;
 	list-style: none;
@@ -250,6 +246,9 @@
 	font-size: 110%;
 }
 
+.header h2 {
+	padding-left: 0;
+}
 
 
 .header .menu a.print {
@@ -259,6 +258,7 @@
 
 .content {
 	min-height: 500px;
+	background-color: #ffffff;
 /*	padding: 10px 0 0 0;*/
 }
 
@@ -291,12 +291,7 @@
 }
 
 .column1 {
-	z-index: 60;
-	float: left;
-	width: 140px;
-	position: relative;
-	margin-bottom: 10px;
-}			
+}
 
 .column1 ul {
 	list-style: none;
@@ -306,100 +301,80 @@
 
 .column1 ul li {
 	list-style: none;
-	margin: 10px 0px 0px 0px;
-	padding: 0;
+	margin:0;
+	padding:0;
 }
 
 .column2 {
-	padding-left: 160px;
-	width: auto;
-	display: block;
-	position: relative;
-	margin-bottom: 10px;
-	float: none;
+	border-top:2px solid #08a1b1;
+	padding-top:0;
+	margin-bottom: 3em;
 }
 
 .tab {
-	width: 150px;
 	display: block;
-	border: 1px solid rgb(167, 184, 193);
-	background: none repeat scroll 0% 0% rgb(32, 122, 122);
-	border-radius: 8px 8px 8px 8px;
-	-moz-border-radius: 8px 8px 8px 8px;
-	-webkit-border-radius: 8px 8px 8px 8px;
-	box-shadow: 0pt 3px 6px rgba(0, 0, 0, 0.25); 
-	-moz-box-shadow: 0pt 3px 6px rgba(0, 0, 0, 0.25); 
-	-webkit-box-shadow: 0pt 3px 6px rgba(0, 0, 0, 0.25); 
-}
-
-.tab a {
+	line-height: 3em;
+	background-color: #08a1b1;
 	text-decoration: none;
 }
 
 .tab.selected {
-	background: none repeat scroll 0pt 0pt rgb(255, 255, 255);
-	border-width: 1px 0pt 1px 1px;
-	border-radius: 8px 0px 0px 8px;
-	-moz-border-radius: 8px 0px 0px 8px;
-	-webkit-border-radius: 8px 0px 0px 8px;
-	box-shadow: -1pt 1px 3px rgba(0, 0, 0, 0.25);
-	-moz-box-shadow: -1pt 1px 3px rgba(0, 0, 0, 0.25);
-	-webkit-box-shadow: -1pt 1px 3px rgba(0, 0, 0, 0.25);
-	width: 160px;
-	z-index: 60;
 	position: relative;
+	background-color: #ffffff;
+	border: 2px solid #08a1b1;
+}
+
+.tab.selected:after, .tab.selected:before {
+	left: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.tab.selected:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-left-color: #ffffff;
+	border-width: 10px;
+	margin-top: -10px;
+}
+.tab.selected:before {
+	border-color: rgba(8, 161, 177, 0);
+	border-left-color: #08a1b1;
+	border-width: 13px;
+	margin-top: -13px;
 }
 
 .tab:hover {
-	border-color: #FEBA12;
+	opacity: 0.7;
 }
 
 .tab.selected:hover {
-	border-color: rgb(167, 184, 193);
+	opacity: 1;
 }
 
-.inner_tab {
+.tab .label {
 	display: block;
-}
-
-.tab.selected .inner_tab {
-	margin-right: 10px;
-}
-
-.tab .inner_tab .icon {
-	display: none;
-}
-
-.tab.selected .inner_tab .icon {
-	color: #111;
-	border: none;
-}
-
-.tab .inner_tab .label {
-	display: block;
-	margin: 5px 10px;
+	margin: 0 1em;
 	color: white;
-	font-size: 9pt;
+	/*font-size: 9pt;*/
 }
 
-.tab.selected .inner_tab .label {
-	color: #111;
+.tab .label.icon:before {
+	color: #ffffff;
+}
+
+.tab.selected .label, .tab.selected .label.icon:before {
+	color: #333;
 }
 
 .node {
-	border: 1px solid rgb(167, 184, 193);
-	background: none repeat scroll 0% 0% rgb(255, 255, 255);
-	border-radius: 8px 8px 8px 8px;
-	-moz-border-radius: 8px 8px 8px 8px;
-	-webkit-border-radius: 8px 8px 8px 8px;
-	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-	-moz-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-	-webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-/*	padding: 10px;*/
-        padding-left:6px;
-        padding-right: 5px;
+        /*padding-left:6px;*/
+        /*padding-right: 5px;*/
 	min-height: 500px;
-        
 }
 
 .networks {
@@ -455,6 +430,8 @@
 }
 
 .references {
+	float:right;
+	width: 400px;
 	border: 1px solid rgb(167, 184, 193);
 	border-radius: 6px;
 	-moz-border-radius: 6px;
@@ -464,18 +441,23 @@
 }
 
 .references .button {
-	margin: 1px;
 	padding: 2px 4px;
-	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #207a7a;
-	color: #fff;
+	background: 99% 50% url('../images/down-arrow-small.png') no-repeat #ffffff;
+	border: 1px solid rgb(167, 184, 193);
+	border-radius: 6px;
+	color: #333;
+	font-weight: bold;
 	cursor: pointer;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
 }
+
+.references .button:hover {
+	background-color: #FFD98F;
+}
+
 
 .references table {
 	padding: 1px;
+	position: absolute;
 }
 .references table {
 	max-height: 200px;
@@ -646,4 +628,13 @@
 div#content {
 	padding-bottom: 0px;
 	min-height: 0px;
+}
+
+.entry-buttons {
+	line-height: 4em;
+}
+
+.entry-buttons #add-to-basket, .entry-buttons .panel {
+	display: inline-block;
+	vertical-align: middle;
 }
