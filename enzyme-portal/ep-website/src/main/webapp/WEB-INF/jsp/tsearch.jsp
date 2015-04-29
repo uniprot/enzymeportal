@@ -521,7 +521,7 @@
           
 </div>             
                 
-             
+        <b>Catalytic Activity: </b> <span>${enzyme.enzymeCatalyticActivitySet}</span>      
                 
                 
                 

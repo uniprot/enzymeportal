@@ -23,12 +23,14 @@
 <div id="reactionContent" class="summary">
     <c:if test="${ not empty enzymeModel.catalyticActivities}">
   <p></p>
-<!--    
-                <dl>
-                    <dt><h5>Catalytic Activities</h5></dt>
-                 
-              </dl>-->
-    <h5>Catalytic Activities</h5>
+
+  <c:if test="${fn:length(enzymeModel.catalyticActivities) == 1}">
+       <h5>Catalytic Activity</h5>
+  </c:if>
+  <c:if test="${fn:length(enzymeModel.catalyticActivities) > 1}">
+       <h5>Catalytic Activities</h5>
+  </c:if>
+   
                 <ul style="list-style-type: square">
                     <c:forEach items="${enzymeModel.catalyticActivities}" var="activity" >
                         <li class="reaction"><b>${activity}</b></li>   

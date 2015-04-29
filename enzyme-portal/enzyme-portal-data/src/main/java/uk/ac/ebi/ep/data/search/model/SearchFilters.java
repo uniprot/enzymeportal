@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
@@ -31,6 +32,7 @@ public class SearchFilters implements Serializable{
             ecNumbers = new LinkedList<>();
         }
         
+        ecNumbers.sort(SORT_BY_EC);
         return ecNumbers;
     }
 
@@ -218,4 +220,20 @@ public class SearchFilters implements Serializable{
     public void setSpecies(List<Species> species) {
         this.species = species;
     }
+    
+        public static Comparator<EcNumber> SORT_BY_EC = (EcNumber o1, EcNumber o2) -> {
+        if (o1.getEc() == null && o2.getEc() == null) {
+            return 0;
+        }
+        if (o1.getEc() == null) {
+            return 1;
+        }
+
+        if (o2.getEc() == null) {
+            return -1;
+        }
+        return o1.getEc().compareTo(o2.getEc());
+
+     
+    };
 }
