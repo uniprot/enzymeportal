@@ -62,11 +62,7 @@ public class DiseaseParser {
     private static final Logger LOGGER
             = Logger.getLogger(DiseaseParser.class);
 
-    /**
-     * The format of the provided file to parse.
-     *
-     * @author rafa
-     */
+
     protected enum Format {
 
         html, tab
