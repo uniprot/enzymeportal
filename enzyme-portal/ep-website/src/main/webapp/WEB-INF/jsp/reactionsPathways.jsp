@@ -183,8 +183,8 @@
                                 <div id="pathway-${rpVs.index}-${pathway.id}">
                                     <fieldset>
                                         <legend>Loading pathway (${pathway.id})...</legend>
-                                        <img src="${pageContext.request.contextPath}/resources/images/loading.gif"
-                                             alt="Loading..."/>
+                                        <img src="${pageContext.request.contextPath}/resources/images/loading32.gif"
+                                             alt="Loading..." class="center"/>
                                     </fieldset> 
                                 </div>
                                 <script>

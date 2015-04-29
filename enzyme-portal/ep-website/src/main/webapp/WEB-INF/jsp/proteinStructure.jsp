@@ -4,7 +4,7 @@
 
 <div style="display: none;">
 <div id="loading">
-<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
+<img src="${pageContext.request.contextPath}/resources/images/loading16.gif"
 	alt="Loading..."/>
 </div>
 </div>
@@ -64,7 +64,7 @@
 			<div class="clearfix"></div>
             <div id="proteinStructures">
 				<div class="summary structure" id="structure-${proteinStructures[0].id}">
-					<img src="${pageContext.request.contextPath}/resources/images/loading.gif"
+					<img src="${pageContext.request.contextPath}/resources/images/loading16.gif"
 						alt="Loading..."/>
 				</div>
 <script>

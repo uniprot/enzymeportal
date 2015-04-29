@@ -111,6 +111,7 @@ enzymeApp.factory('organismService', function($http){
 enzymeApp.directive('taxonomyTree', ['$q','organismService', function($q,organismService) {
     return {
         link: function(scope, element, attrs) {
+            $("#spinner").show();
             var taxids = [224308,83333,83332,44689,559292,284812,39947,3702,7227,6239,7955,9913,9606,10090,10116];
 
             var organismPromise = organismService.getOrganismHierarchy();
@@ -206,6 +207,7 @@ enzymeApp.directive('taxonomyTree', ['$q','organismService', function($q,organis
                     .text(function(d) { return (d.num_enzymes) ? d.name + " - "+d.num_enzymes+" enzymes" : d.name; });
 
                 d3.select(self.frameElement).style("height", height + "px");
+                $("#spinner").hide();
             }
         }
     };

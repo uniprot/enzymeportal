@@ -53,7 +53,7 @@
             <section>
                 <div style="margin: 4ex 4em;">
                     <!-- Job ID: ${jobId} -->
-                    <img alt="Searching..." src="resources/images/loading.gif"
+                    <img alt="Searching..." src="resources/images/loading16.gif"
                     	style="margin: 0ex 1em"/>
                     Searching protein sequence...
                 </div>

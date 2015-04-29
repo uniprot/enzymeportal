@@ -40,6 +40,7 @@
     <div id="content" role="main" class="grid_24 clearfix">
         <h1>Taxonomy</h1>
         <div id="taxonomy-tree" taxonomy-tree></div>
+        <img id="spinner" ng-src="${pageContext.request.contextPath}/resources/images/loading128.gif" style="display:none;" class="center"/>
     </div>
 
     <%@include file="footer.jspf" %>
