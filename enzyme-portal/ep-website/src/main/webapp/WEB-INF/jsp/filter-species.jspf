@@ -65,7 +65,7 @@ for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
 </script>
 
         <c:if test="${speciesListSize gt filterSizeDefault}">
-            <img id="loading_more_sf" src="${pageContext.request.contextPath}/resources/images/loading.gif"
+            <img id="loading_more_sf" src="${pageContext.request.contextPath}/resources/images/loading16.gif"
                 style="display: none"/>
             <a id="more_sf" href="javascript:void(0)"
                 onclick="addUnselectedCheckboxes('species',

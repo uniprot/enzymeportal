@@ -432,3 +432,6 @@ ul.catalytic-activity-list li {
     list-style: disc;
     line-height: 2em;
 }
+.center {
+    display: block;
+}
