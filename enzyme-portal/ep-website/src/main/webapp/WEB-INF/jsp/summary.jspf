@@ -15,7 +15,7 @@
 
 <div class="resultItem grid_24">
 <!--        <h2>EC ${enzyme.ec}</h2>-->
-    <h2>EC : ${enzyme.enzymePortalEcNumbersSet}</h2>
+<!--    <h2>EC : ${enzyme.enzymePortalEcNumbersSet}</h2>-->
 <div class="summary-header">
     <c:if test="${showCheckbox != false}">
         <input type="checkbox" class="forBasket"
@@ -196,8 +196,7 @@
                                       relspecies[i].scoring.bitScore gt 1000? '10':
                                           fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                       title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                      >${relspecies[i].scoring.bitScore}</span>
-<!--                                      <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                                      > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
                             </c:if
                             >]
                         </c:when>
@@ -209,8 +208,9 @@
                                   relspecies[i].scoring.bitScore gt 1000? '10':
                                       fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                   title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                    >${relspecies[i].scoring.bitScore}</span>
-<!--                                    <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                                    > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
+
+                                           
                             </c:if
                             >]
                         </c:otherwise>
@@ -228,8 +228,7 @@
                                               relspecies[i].scoring.bitScore gt 1000? '10':
                                                   fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                               title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                                >${relspecies[i].scoring.bitScore}</span>
-<!--                                                <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                                                > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
                                     </c:if
                                     >]
                                 </c:when>
@@ -241,8 +240,7 @@
                                               relspecies[i].scoring.bitScore gt 1000? '10':
                                                   fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
                                               title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                                >${relspecies[i].scoring.bitScore}</span>
-<!--                                                <span>${(relspecies[i].identity/relspecies[i].scoring.alignLength)*(100)} %</span>-->
+                                                > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
                                     </c:if
                                     >]
                                 </c:otherwise>
@@ -258,14 +256,20 @@
 <!--            catalytic activities-->
     <%--<c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">--%>
     <c:if test="${not empty enzyme.enzymeCatalyticActivitySet}">
-        <b>Catalytic Activities: </b>
         <c:set var="enzymeCatalyticActivitySize" value="${fn:length(enzyme.enzymeCatalyticActivitySet)}"/>
-
+  
+        <c:if test="${enzymeCatalyticActivitySize eq 1}">
+           <b>Catalytic Activity: </b> 
+        </c:if>
+        <c:if test="${enzymeCatalyticActivitySize gt 1}">
+          <b>Catalytic Activities: </b>  
+        </c:if>
+      
         <ul class="catalytic-activity-list">
-            <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity" begin="0" end="2">
+            <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity"  begin="0" end="0">
                 <li class="reaction">${activity.catalyticActivity}</li>
             </c:forEach>
-            <c:if test="${enzymeCatalyticActivitySize gt 3}">
+            <c:if test="${enzymeCatalyticActivitySize gt 1}">
                 <li><a href="${pageContext.request.contextPath}/search/${primAcc}/reactionsPathways">more...</a></li>
             </c:if>
         </ul>
