@@ -38,17 +38,20 @@ public class PDBeRestService {
         restTemplate = new RestTemplate(clientHttpRequestFactory());
     }
 
-    /**
-     * 
-     * @param service restTemplate
-     * @param pDBeUrl pdbUrl
-     */
-    public PDBeRestService(RestTemplate service,PDBeUrl pDBeUrl) {
-        this.restTemplate = service;
+    public PDBeRestService(PDBeUrl pDBeUrl) {
+        restTemplate = new RestTemplate(clientHttpRequestFactory());
         this.pDBeUrl = pDBeUrl;
     }
 
-   
+    /**
+     *
+     * @param service restTemplate
+     * @param pDBeUrl pdbUrl
+     */
+    public PDBeRestService(RestTemplate service, PDBeUrl pDBeUrl) {
+        this.restTemplate = service;
+        this.pDBeUrl = pDBeUrl;
+    }
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         return new HttpComponentsClientHttpRequestFactory();
@@ -61,7 +64,7 @@ public class PDBeRestService {
     }
 
     /**
-     * 
+     *
      * @param pdbId pdbe id
      * @return the summary results for the pdb id
      */
@@ -82,7 +85,7 @@ public class PDBeRestService {
     }
 
     /**
-     * 
+     *
      * @param pdbId pdbe id
      * @return experiment results for the pdb id
      */
@@ -101,7 +104,7 @@ public class PDBeRestService {
     }
 
     /**
-     * 
+     *
      * @param pdbId pdbe id
      * @return publication result for the pdbe id
      */
@@ -120,7 +123,7 @@ public class PDBeRestService {
     }
 
     /**
-     * 
+     *
      * @param pdbId pdbe id
      * @return molecules result for the pdbe id
      */
@@ -138,7 +141,7 @@ public class PDBeRestService {
     }
 
     /**
-     * 
+     *
      * @param pdbId pdbe id
      * @return structural domain for the pdbe id
      */

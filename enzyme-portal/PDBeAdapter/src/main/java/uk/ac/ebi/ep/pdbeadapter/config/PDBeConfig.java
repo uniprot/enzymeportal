@@ -33,7 +33,7 @@ public class PDBeConfig {
     @Bean
     public PDBeRestService pdbeRestService() {
         
-        return new PDBeRestService();
+        return new PDBeRestService(pDBeUrl());
     }
       
     @Bean
