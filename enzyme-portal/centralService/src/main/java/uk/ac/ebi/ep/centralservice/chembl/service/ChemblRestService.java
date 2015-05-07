@@ -33,8 +33,18 @@ public class ChemblRestService {
 
     }
 
-    public FdaApproved getFdaApprovedDrug(String url) {
-        return restTemplate.getForObject(url.trim(), FdaApproved.class);
+    public Optional<FdaApproved> getFdaApprovedDrug(String url) {
+        //return restTemplate.getForObject(url.trim(), FdaApproved.class);
+
+        Optional<FdaApproved> fda = Optional.empty();
+        try {
+            fda = Optional.ofNullable(restTemplate.getForObject(url.trim(), FdaApproved.class));
+
+        } catch (Exception e) {
+
+            LOGGER.error(e.getMessage(), e);
+        }
+        return fda;
 
     }
 
@@ -45,20 +55,37 @@ public class ChemblRestService {
             mol = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblMolecule.class));
 
         } catch (Exception e) {
-           
+
             LOGGER.error(e.getMessage(), e);
         }
         return mol;
     }
 
-    public ChemblAssay getChemblAssay(String url) {
-        return restTemplate.getForObject(url.trim(), ChemblAssay.class);
+    public Optional<ChemblAssay> getChemblAssay(String url) {
+        // return restTemplate.getForObject(url.trim(), ChemblAssay.class);
+        Optional<ChemblAssay> assay = Optional.empty();
+        try {
+            assay = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblAssay.class));
+
+        } catch (Exception e) {
+
+            LOGGER.error(e.getMessage(), e);
+        }
+        return assay;
 
     }
 
-    public ChemblActivity getChemblActivity(String url) {
-        return restTemplate.getForObject(url.trim(), ChemblActivity.class);
+    public Optional<ChemblActivity> getChemblActivity(String url) {
+        //return restTemplate.getForObject(url.trim(), ChemblActivity.class);
+        Optional<ChemblActivity> activity = Optional.empty();
+        try {
+            activity = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblActivity.class));
 
+        } catch (Exception e) {
+
+            LOGGER.error(e.getMessage(), e);
+        }
+        return activity;
     }
 
 }

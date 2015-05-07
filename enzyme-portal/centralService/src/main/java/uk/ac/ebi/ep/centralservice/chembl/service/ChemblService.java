@@ -66,7 +66,7 @@ public class ChemblService {
  
         String assayUrl = chemblServiceUrl.getAssayUrl() + targetId;
 
-        Optional<ChemblAssay> chemblAssay = Optional.ofNullable(chemblRestService.getChemblAssay(assayUrl));
+        Optional<ChemblAssay> chemblAssay = chemblRestService.getChemblAssay(assayUrl);
 
         if (chemblAssay.isPresent()) {
             for (Assay assay : chemblAssay.get().getAssays()) {
@@ -75,7 +75,7 @@ public class ChemblService {
                 //get activities for a given assay id
                 String activityUrl = chemblServiceUrl.getActivityUrl() + assayId;
          
-                Optional<ChemblActivity> chemblActivity = Optional.ofNullable(chemblRestService.getChemblActivity(activityUrl));
+                Optional<ChemblActivity> chemblActivity = chemblRestService.getChemblActivity(activityUrl);
           
                 if (chemblActivity.isPresent()) {
                     for (Activity activity : chemblActivity.get().getActivities()) {
@@ -111,9 +111,10 @@ public class ChemblService {
 
  
         String mechanismUrl = chemblServiceUrl.getMechanismUrl() + targetId;
-        FdaApproved fda = chemblRestService.getFdaApprovedDrug(mechanismUrl);
+        Optional<FdaApproved> fda = chemblRestService.getFdaApprovedDrug(mechanismUrl);
 
-        for (Mechanism mechanism : fda.getMechanisms()) {
+        if(fda.isPresent()){
+        for (Mechanism mechanism : fda.get().getMechanisms()) {
 
    
             if ("INHIBITOR".equalsIgnoreCase(mechanism.getActionType())) {
@@ -126,7 +127,7 @@ public class ChemblService {
                 moleculeChemblIds_Activators.add(mechanism.getMoleculeChemblId());
             }
         }
-
+        }
         computePreferredName(moleculeChemblIds_Inhibitors, moleculeChemblIds_Activators, moleculeChemblIds_bioactive, chemblCompounds, protein);
 
 
