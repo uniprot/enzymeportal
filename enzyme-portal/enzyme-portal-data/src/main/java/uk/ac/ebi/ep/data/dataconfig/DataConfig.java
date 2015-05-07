@@ -52,7 +52,7 @@ public class DataConfig {
         vendor.setDatabase(Database.ORACLE);
         em.setJpaProperties(properties);
         em.setJpaVendorAdapter(vendor);
-
+       
         return em;
     }
 

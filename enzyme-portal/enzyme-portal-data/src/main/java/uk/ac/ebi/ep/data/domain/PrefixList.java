@@ -77,10 +77,7 @@ public class PrefixList implements Serializable {
             return false;
         }
         PrefixList other = (PrefixList) object;
-        if ((this.prefixId == null && other.prefixId != null) || (this.prefixId != null && !this.prefixId.equals(other.prefixId))) {
-            return false;
-        }
-        return true;
+        return !((this.prefixId == null && other.prefixId != null) || (this.prefixId != null && !this.prefixId.equals(other.prefixId)));
     }
 
     @Override
