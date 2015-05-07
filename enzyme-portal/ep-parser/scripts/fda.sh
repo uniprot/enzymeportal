@@ -24,7 +24,7 @@ echo "[INFO] The file to be parsed =" $CHEMBL_TARGET
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.ChEMBLXmlParser" -Dexec.args="$DB_CONFIG $CHEMBL_TARGET"
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.FDAParser" -Dexec.args="$DB_CONFIG $CHEMBL_TARGET"
 cd $WD
 echo "[INFO] Finished parsing chembl-target_component.xml file and updating Enzyme Portal database with ChEMBL Compounds  - $(date)"
 

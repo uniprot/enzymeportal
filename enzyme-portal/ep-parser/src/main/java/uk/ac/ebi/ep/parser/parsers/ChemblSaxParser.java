@@ -24,14 +24,14 @@ import uk.ac.ebi.ep.adapter.chembl.ChemblBioactivities;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.adapter.chembl.ChemblWsAdapter;
 import uk.ac.ebi.ep.adapter.chembl.IChemblAdapter;
+import uk.ac.ebi.ep.centralservice.helper.CompoundUtil;
+import uk.ac.ebi.ep.centralservice.helper.EbinocleParser;
+import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
+import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
-import uk.ac.ebi.ep.parser.helper.CompoundUtil;
-import uk.ac.ebi.ep.parser.helper.EbinocleParser;
-import uk.ac.ebi.ep.parser.helper.MmDatabase;
-import uk.ac.ebi.ep.parser.helper.Relationship;
 
 /**
  * Parser for the <code>chembl-target_component.xml</code> file (ebinocle
@@ -236,15 +236,15 @@ public class ChemblSaxParser extends DefaultHandler implements EbinocleParser {
     }
 
     /**
-     * Parses a XML file and indexes/stores cross-references in a mega-map.<br>
+     * Parses a XML file and stores cross-references in a database.<br>
      * This method is not thread safe.
      *
      * @param xmlFilePath the XML file to parse
-     * @throws java.io.FileNotFoundException if the UniProt XML file is not
+     * @throws java.io.FileNotFoundException if the  XML file is not
      * found or not readable.
      * @throws org.xml.sax.SAXException if no default XMLReader can be found or
      * instantiated, or exception during parsing.
-     * @throws java.io.IOException if the lucene index cannot be opened/created,
+     * @throws java.io.IOException if the file cannot be opened,
      * or from the parser.
      */
     public void parse(String xmlFilePath) throws Exception {

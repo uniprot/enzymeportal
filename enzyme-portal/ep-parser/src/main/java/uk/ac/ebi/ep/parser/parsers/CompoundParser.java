@@ -23,7 +23,7 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.parser.helper.MmDatabase;
+import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 
 /**
  *

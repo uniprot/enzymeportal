@@ -17,7 +17,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.search.model.Compound;
-import uk.ac.ebi.ep.parser.helper.Relationship;
+import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 
 /**
