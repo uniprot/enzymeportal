@@ -27,6 +27,7 @@ import java.util.Map;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "related_structures",
     "experimental_method",
     "assemblies",
     "title",
@@ -42,6 +43,8 @@ import java.util.Map;
 })
 public class PDBe {
 
+    @JsonProperty("related_structures")
+    private List<Object> relatedStructures = new ArrayList<>();
     @JsonProperty("experimental_method")
     private List<String> experimentalMethod = new ArrayList<>();
     @JsonProperty("assemblies")
@@ -86,10 +89,25 @@ public class PDBe {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    
-    
+
+    /**
+     *
+     * @return The relatedStructures
+     */
+    @JsonProperty("related_structures")
+    public List<Object> getRelatedStructures() {
+        return relatedStructures;
+    }
+
+    /**
+     *
+     * @param relatedStructures The related_structures
+     */
+    @JsonProperty("related_structures")
+    public void setRelatedStructures(List<Object> relatedStructures) {
+        this.relatedStructures = relatedStructures;
+    }
+
     /**
      *
      * @return The experimentalMethod
@@ -315,7 +333,5 @@ public class PDBe {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
-
 
 }
