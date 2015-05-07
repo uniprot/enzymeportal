@@ -600,8 +600,10 @@ public class SearchController extends AbstractController {
         String view = "error";
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         try {
-            String sequence = searchModel.getSearchparams().getSequence()
-                    .trim().toUpperCase();
+//            String sequence = searchModel.getSearchparams().getSequence()
+//                    .trim().toUpperCase();
+               String sequence = searchModel.getSearchparams().getSequence()
+                    .trim().toLowerCase();
             String jobId = finder.blast(sequence);
             searchModel.getSearchparams().setPrevioustext(sequence);
             model.addAttribute("jobId", jobId);
@@ -616,7 +618,7 @@ public class SearchController extends AbstractController {
     @RequestMapping(value = "/checkJob", method = RequestMethod.POST)
     public String checkJob(@RequestParam String jobId, Model model,
             SearchModel searchModel, HttpSession session) throws MultiThreadingException {
-        String view = null;
+        String view = "search";
         try {
             EnzymeFinder enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
             
