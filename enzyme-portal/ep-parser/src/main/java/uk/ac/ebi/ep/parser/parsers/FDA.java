@@ -29,7 +29,7 @@ import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 @Service
 public class FDA {
    
-    private static final Logger LOGGER = Logger.getLogger(ChemblCompound.class);
+    private static final Logger LOGGER = Logger.getLogger(FDA.class);
     @Autowired
     private ChemblService chemblService;
     @Autowired
@@ -42,7 +42,7 @@ public class FDA {
 
         Map<String, List<String>> chemblTargets = chemblXmlParser.parseChemblTarget(targetXml);
         
-        LOGGER.warn("finished parsing chembl target file : " + chemblTargets.size());
+        LOGGER.warn("FDA-finished parsing chembl target file : " + chemblTargets.size());
 
         //System.out.println("finished parsing file " + chemblTargets.size());
      
@@ -95,7 +95,7 @@ public class FDA {
         if (compounds != null) {
             
             LOGGER.warn("Num FDA compounds found " + compounds.size());
-            //System.out.println("Num compounds found " + compounds.size());
+            System.out.println("Num FDA-compounds found " + compounds.size());
     
             compounds.stream().map((c) -> {
                 if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
@@ -113,7 +113,7 @@ public class FDA {
             
              LOGGER.warn("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
 
-            //System.out.println("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+            System.out.println("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
 
             //System.out.println("activators found " + activator);
         }

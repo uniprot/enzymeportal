@@ -66,7 +66,7 @@ public class ChemblCompound {
                     for (String targetId : targets.getValue()) {
                         chemblService.chemblSmallMolecules(targetId, entry.get());
                         //chemblService.getMoleculesByCuratedMechanism(targetId, entry.get());
-                        System.out.println("count : " + count.getAndIncrement());
+                        //System.out.println("count : " + count.getAndIncrement());
                          LOGGER.warn("counter : " + count.getAndIncrement());
                     }
                 }
@@ -101,7 +101,7 @@ public class ChemblCompound {
         if (compounds != null) {
             
             LOGGER.warn("Num compounds found " + compounds.size());
-            //System.out.println("Num compounds found " + compounds.size());
+            System.out.println("Num compounds found " + compounds.size());
     
             compounds.stream().map((c) -> {
                 if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
@@ -119,7 +119,7 @@ public class ChemblCompound {
             
              LOGGER.warn("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
 
-            //System.out.println("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+            System.out.println("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
 
             //System.out.println("activators found " + activator);
         }
