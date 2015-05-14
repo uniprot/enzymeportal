@@ -50,7 +50,7 @@ public class ChemblCompound {
         
         LOGGER.warn("finished parsing chembl target file : " + chemblTargets.size());
 
-        //System.out.println("finished parsing file " + chemblTargets.size());
+        System.out.println("finished parsing file " + chemblTargets.size());
      
         Stream<Entry<String, List<String>>> existingStream = chemblTargets.entrySet().stream();
 
