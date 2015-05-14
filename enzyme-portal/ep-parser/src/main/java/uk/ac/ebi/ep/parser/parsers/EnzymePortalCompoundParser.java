@@ -10,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
+import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 
 /**
  *
@@ -40,6 +43,13 @@ public class EnzymePortalCompoundParser {
     private EnzymePortalEcNumbersRepository ecNumbersRepository;
     @Autowired
     private ChebiWebServiceClient chebiWebServiceClient;
+
+    @Autowired
+    private ChemblService chemblService;
+    @Autowired
+    private ChemblXmlParser chemblXmlParser;
+    @Autowired
+    private EnzymePortalParserService parserService;
 
     @Transactional
     public EnzymePortalCompound addCompound(EnzymePortalCompound c) {
@@ -81,6 +91,22 @@ public class EnzymePortalCompoundParser {
 
         CompoundParser compoundParser = new Cofactors(chebiWebServiceClient, compoundRepository, enzymeSummaryRepository);
         compoundParser.loadCofactors();
+
+    }
+
+    @Transactional
+    public void loadChemblMolecules(String file) {
+
+        ChemblCompound chembl = new ChemblCompound(chemblService, chemblXmlParser, parserService);
+        chembl.loadChEMBL(file);
+
+    }
+
+     @Transactional
+    public void loadChemblFDA(String file) {
+
+        FDA fda = new FDA(chemblService, chemblXmlParser, parserService);
+        fda.loadChEMBL(file);
 
     }
 

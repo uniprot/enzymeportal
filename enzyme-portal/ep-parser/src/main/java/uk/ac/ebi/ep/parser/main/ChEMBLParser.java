@@ -6,14 +6,15 @@
 package uk.ac.ebi.ep.parser.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import uk.ac.ebi.ep.parser.parsers.ChemblCompound;
+import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 
 /**
  *
  * @author joseph
  */
 public class ChEMBLParser {
-     public static void main(String args[]) throws Exception {
+
+    public static void main(String args[]) throws Exception {
 
         String profile = "";
 
@@ -21,7 +22,6 @@ public class ChEMBLParser {
             System.out.println("Please provide required parameters");
             System.exit(0);
         }
-        
 
         if (args.length == 1) {
 
@@ -32,9 +32,11 @@ public class ChEMBLParser {
             context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.parser.config");
             context.refresh();
 
-            ChemblCompound chembl = context.getBean(ChemblCompound.class);
-            chembl.loadChEMBL(args[1]);
-       
+            EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
+            compoundService.loadChemblMolecules(args[1]);
+
+//            ChemblCompound chembl = context.getBean(ChemblCompound.class);
+//            chembl.loadChEMBL(args[1]);
         }
 
     }

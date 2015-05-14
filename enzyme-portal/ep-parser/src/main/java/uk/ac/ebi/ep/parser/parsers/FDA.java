@@ -13,8 +13,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -26,16 +24,25 @@ import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
  *
  * @author joseph
  */
-@Service
+//@Service
 public class FDA {
    
     private final Logger LOGGER = Logger.getLogger(FDA.class);
-    @Autowired
-    private ChemblService chemblService;
-    @Autowired
-    private ChemblXmlParser chemblXmlParser;
-    @Autowired
-    private EnzymePortalParserService parserService;
+    //@Autowired
+    private final ChemblService chemblService;
+    //@Autowired
+    private final ChemblXmlParser chemblXmlParser;
+    //@Autowired
+    private final EnzymePortalParserService parserService;
+
+    public FDA(ChemblService chemblService, ChemblXmlParser chemblXmlParser, EnzymePortalParserService parserService) {
+        this.chemblService = chemblService;
+        this.chemblXmlParser = chemblXmlParser;
+        this.parserService = parserService;
+    }
+    
+    
+    
 
 
     public void loadChEMBL(String targetXml) {

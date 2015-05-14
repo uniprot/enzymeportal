@@ -1,7 +1,3 @@
-
-MM_SCRIPTS=$(cd $(dirname $0) && pwd)
-
-
 MM_SCRIPTS=$(cd $(dirname $0) && pwd)
 
 #/ebi/extserv/projects/ebinocle/data/chembl-target_component/latest/
@@ -12,8 +8,7 @@ CHEMBL_TARGET=$EBINOCLE_DATA/chembl-target_component/latest/chembl-target_compon
 
 #ensure that db config is passed as param
 . $MM_SCRIPTS/checkParams.sh
-#mvn clean package
-#. $MM_SCRIPTS/mvnBuild.sh
+
 
 DB_CONFIG="$1"
 

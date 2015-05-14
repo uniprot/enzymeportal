@@ -1,7 +1,3 @@
-
-MM_SCRIPTS=$(cd $(dirname $0) && pwd)
-
-
 MM_SCRIPTS=$(cd $(dirname $0) && pwd)
 
 #/ebi/extserv/projects/ebinocle/data/chembl-target_component/latest/
