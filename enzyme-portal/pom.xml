@@ -659,13 +659,14 @@
          <module>EnzymePortalTestKit</module>
         <module>enzyme-portal-data</module>
         <module>PDBeAdapter</module>
+        <module>centralService</module>
         <module>ep-parser</module>
         <module>ebeye-rest-adapter</module>
         <module>enzymeservices</module>
         <module>literature-adapter</module>
         <module>ep-base</module>
         <module>ep-website</module>
-       
+
     </modules>
     
     <profiles>
