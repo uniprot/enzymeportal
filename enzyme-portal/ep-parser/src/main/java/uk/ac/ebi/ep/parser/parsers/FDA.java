@@ -29,7 +29,7 @@ import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 @Service
 public class FDA {
    
-    private static final Logger LOGGER = Logger.getLogger(FDA.class);
+    private final Logger LOGGER = Logger.getLogger(FDA.class);
     @Autowired
     private ChemblService chemblService;
     @Autowired

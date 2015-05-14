@@ -14,6 +14,7 @@ import java.util.Optional;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,7 +24,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChemblXmlParser {
 
-    private final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(ChemblXmlParser.class);
+    private final Logger LOGGER = org.apache.log4j.Logger.getLogger(ChemblXmlParser.class);
+   
 
     private Database setupParser(String targetXml) throws JAXBException {
         File file = new File(targetXml);
