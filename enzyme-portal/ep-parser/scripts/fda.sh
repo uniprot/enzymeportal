@@ -11,7 +11,6 @@ DB_CONFIG="$1"
 #parse chembl-target_component.xml for ChEMBL compounds
 echo "[INFO] Request to parse chembl-target_component.xml File - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
-echo "[INFO] The file to be parsed =" $CHEMBL_TARGET
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..

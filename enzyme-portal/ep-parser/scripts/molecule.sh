@@ -7,13 +7,13 @@ MM_SCRIPTS=$(cd $(dirname $0) && pwd)
 
 DB_CONFIG="$1"
 
-#computes PDBe codes and obtain relevant title and update PDBe entries
-echo "[INFO] Request to query & compute PDBe code to obtain title using PDBe web services - $(date)"
+#parse chembl target to get compounds
+echo "[INFO] Request to parse chembl targets and compute activities to get compounds  - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.MoleculeParser" -Dexec.args="$DB_CONFIG"
 cd $WD
-echo "[INFO] Finished querying and computing PDBe data and updating Enzyme Portal database  - $(date)"
+echo "[INFO] Finished parsing data and updating Enzyme Portal database  - $(date)"
 

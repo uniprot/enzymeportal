@@ -10,11 +10,10 @@ DB_CONFIG="$1"
 #parse chembl-target_component.xml for ChEMBL compounds
 echo "[INFO] Request to parse chembl-target_component.xml File - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
-echo "[INFO] The file to be parsed =" $CHEMBL_TARGET
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.ChEMBLParser" -Dexec.args="$DB_CONFIG"
 cd $WD
-echo "[INFO] Finished parsing chembl-target_component.xml file and updating Enzyme Portal database with ChEMBL Compounds  - $(date)"
+echo "[INFO] Finished parsing chembl-target file and updating Enzyme Portal database with ChEMBL Compounds  - $(date)"
 
