@@ -1,4 +1,6 @@
 MM_SCRIPTS=$(cd $(dirname $0) && pwd)
+
+
 #ensure that db config is passed as param
 . $MM_SCRIPTS/checkParams.sh
 
@@ -11,7 +13,7 @@ echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.PDBeParser" -Dexec.args="$DB_CONFIG"
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.MoleculeParser" -Dexec.args="$DB_CONFIG"
 cd $WD
 echo "[INFO] Finished querying and computing PDBe data and updating Enzyme Portal database  - $(date)"
 

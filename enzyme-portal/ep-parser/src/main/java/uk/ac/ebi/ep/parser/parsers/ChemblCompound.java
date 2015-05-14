@@ -5,7 +5,9 @@
  */
 package uk.ac.ebi.ep.parser.parsers;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,9 +53,14 @@ public class ChemblCompound {
     
     
 
-    public void loadChEMBL(String targetXml) {
-
-        Map<String, List<String>> chemblTargets = chemblXmlParser.parseChemblTarget(targetXml);
+    public void loadChEMBL() {
+           
+        Map<String, List<String>> chemblTargets = new HashMap<>();
+     try {
+         chemblTargets = chemblXmlParser.parseChemblTarget();
+     } catch (FileNotFoundException ex) {
+         LOGGER.error("File cannot be found", ex);
+     }
         
         LOGGER.warn("finished parsing chembl target file : " + chemblTargets.size());
 

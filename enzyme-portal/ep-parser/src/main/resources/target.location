@@ -1,0 +1,3 @@
+chembl.target=/ebi/extserv/projects/ebinocle/data/chembl-target_component/latest/chembl-target_component.xml
+
+chembl.target.local=/Users/joseph/chembldata/chembl-target_component.xml

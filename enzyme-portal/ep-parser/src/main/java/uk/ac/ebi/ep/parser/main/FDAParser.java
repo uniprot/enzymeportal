@@ -33,10 +33,8 @@ public class FDAParser {
             context.refresh();
 
             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
-            compoundService.loadChemblFDA(args[1]);
+            compoundService.loadChemblFDA();
 
-//            FDA fda = context.getBean(FDA.class);
-//            fda.loadChEMBL(args[1]);
         }
 
     }

@@ -5,7 +5,9 @@
  */
 package uk.ac.ebi.ep.parser.parsers;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,13 +47,17 @@ public class FDA {
     
 
 
-    public void loadChEMBL(String targetXml) {
+    public void loadChEMBL() {
 
-        Map<String, List<String>> chemblTargets = chemblXmlParser.parseChemblTarget(targetXml);
-        
+              Map<String, List<String>> chemblTargets = new HashMap<>();
+     try {
+         chemblTargets = chemblXmlParser.parseChemblTarget();
+     } catch (FileNotFoundException ex) {
+         LOGGER.error("File cannot be found", ex);
+     }
         LOGGER.warn("FDA-finished parsing chembl target file : " + chemblTargets.size());
 
-        //System.out.println("finished parsing file " + chemblTargets.size());
+        System.out.println("finished parsing file " + chemblTargets.size());
      
         Stream<Map.Entry<String, List<String>>> existingStream = chemblTargets.entrySet().stream();
 

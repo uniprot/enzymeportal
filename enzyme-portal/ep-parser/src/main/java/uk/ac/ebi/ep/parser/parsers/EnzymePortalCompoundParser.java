@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
@@ -50,6 +51,9 @@ public class EnzymePortalCompoundParser {
     private ChemblXmlParser chemblXmlParser;
     @Autowired
     private EnzymePortalParserService parserService;
+    
+       @Autowired
+    private Environment env;
 
     @Transactional
     public EnzymePortalCompound addCompound(EnzymePortalCompound c) {
@@ -95,19 +99,20 @@ public class EnzymePortalCompoundParser {
     }
 
     @Transactional
-    public void loadChemblMolecules(String file) {
+    public void loadChemblMolecules() {
 
+        
         ChemblCompound chembl = new ChemblCompound(chemblService, chemblXmlParser, parserService);
-        chembl.loadChEMBL(file);
-
+        chembl.loadChEMBL();
+        
     }
 
      @Transactional
-    public void loadChemblFDA(String file) {
+    public void loadChemblFDA() {
 
         FDA fda = new FDA(chemblService, chemblXmlParser, parserService);
-        fda.loadChEMBL(file);
+        fda.loadChEMBL();
 
     }
-
+    
 }

@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.parser.xmlparser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,63 +26,71 @@ import org.springframework.stereotype.Service;
 public class ChemblXmlParser {
 
     private final Logger LOGGER = org.apache.log4j.Logger.getLogger(ChemblXmlParser.class);
-   
+    private final String targetXml;
 
-    private Database setupParser(String targetXml) throws JAXBException {
+    public ChemblXmlParser(String targetXml) {
+        this.targetXml = targetXml;
+    }
+
+    private Database setupParser() throws JAXBException, FileNotFoundException {
+
         File file = new File(targetXml);
+        if (!file.canRead()) {
+            throw new FileNotFoundException(targetXml);
+        }
         JAXBContext jaxbContext = JAXBContext.newInstance(Database.class);
-        
+
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         Database database = (Database) jaxbUnmarshaller.unmarshal(file);
-        
+
         return database;
     }
-    
-    public Map<String, List<String>> parseChemblTarget(String targetXml) {
+
+    public Map<String, List<String>> parseChemblTarget() throws FileNotFoundException {
 
         Optional<Database> database = Optional.empty();
         try {
-            database = Optional.ofNullable(setupParser(targetXml));
+            database = Optional.ofNullable(setupParser());
         } catch (JAXBException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
-        
+
         Map<String, List<String>> accessionTargetMapping = new LinkedHashMap<>();
-        
+
         List<String> targetIds = null;
         if (database.isPresent()) {
-            
+
             Entries entries = database.get().getEntries();
-            
+
             List< Entry> entry = entries.getEntry();
-            
+
             for (Entry e : entry) {
                 targetIds = new LinkedList<>();
-                
+
                 for (CrossReference cr : e.getCross_references()) {
-                    
+
                     for (Ref ref : cr.getRef()) {
-                        
+
                         targetIds.add(ref.getDbKey());
                     }
                 }
-                
+
                 for (AdditionalFields ad : e.getAdditional_fields()) {
-                    
+
                     for (Field f : ad.getField()) {
-                        
+
                         if ("accession".equalsIgnoreCase(f.getName())) {
-                            
+
                             accessionTargetMapping.put(f.getValue(), targetIds);
                         }
                     }
-                    
+
                 }
-                
+
             }
             return accessionTargetMapping;
         }
-        
+
         return accessionTargetMapping;
     }
 }

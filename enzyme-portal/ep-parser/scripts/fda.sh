@@ -1,11 +1,6 @@
 
 MM_SCRIPTS=$(cd $(dirname $0) && pwd)
 
-#/ebi/extserv/projects/ebinocle/data/chembl-target_component/latest/
-
-EBINOCLE_DATA=/ebi/extserv/projects/ebinocle/data
-CHEMBL_TARGET=$EBINOCLE_DATA/chembl-target_component/latest/chembl-target_component.xml
-
 
 #ensure that db config is passed as param
 . $MM_SCRIPTS/checkParams.sh
@@ -20,7 +15,7 @@ echo "[INFO] The file to be parsed =" $CHEMBL_TARGET
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.FDAParser" -Dexec.args="$DB_CONFIG $CHEMBL_TARGET"
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.FDAParser" -Dexec.args="$DB_CONFIG"
 cd $WD
 echo "[INFO] Finished parsing chembl-target_component.xml file and updating Enzyme Portal database with ChEMBL Compounds  - $(date)"
 

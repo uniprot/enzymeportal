@@ -28,7 +28,7 @@ import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
  * @author joseph
  */
 @Configuration
-@PropertySource({"classpath:chembl.urlConfig","classpath:pdb.urlConfig"})
+@PropertySource({"classpath:chembl.urlConfig","classpath:pdb.urlConfig","classpath:target.location"})
 public class GlobalDataConfig {
 
     @Autowired
@@ -90,7 +90,8 @@ public class GlobalDataConfig {
 
     @Bean
     public ChemblXmlParser chemblXmlParser() {
-        return new ChemblXmlParser();
+         String target = env.getProperty("chembl.target");
+        return new ChemblXmlParser(target);
     }
 
     @Bean
@@ -98,11 +99,7 @@ public class GlobalDataConfig {
         return new ChemblRestService();
     }
 
-    @Bean
-    public ChemblService chemblService() {
-        return new ChemblService(chemblRestService(),chemblServiceUrl());
-    }
-    
+
        @Bean
     public ChemblServiceUrl chemblServiceUrl() {
         ChemblServiceUrl serviceUrl = new ChemblServiceUrl();
@@ -119,14 +116,10 @@ public class GlobalDataConfig {
         
         return serviceUrl;
     }
+    
+        @Bean
+    public ChemblService chemblService() {
+        return new ChemblService(chemblRestService(),chemblServiceUrl());
+    }
 
-//    @Bean
-//    public ChemblCompound chemblCompound(){
-//        return new ChemblCompound();
-//    }
-//    
-//    @Bean
-//    public FDA fda(){
-//        return new FDA();
-//    }
 }
