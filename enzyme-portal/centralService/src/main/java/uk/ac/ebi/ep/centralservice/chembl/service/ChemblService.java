@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.chembl.activity.Activity;
 import uk.ac.ebi.ep.centralservice.chembl.activity.ChemblActivity;
@@ -33,7 +32,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 public class ChemblService {
 
-    private static final Logger LOGGER = Logger.getLogger(ChemblService.class);
+   // private static final Logger LOGGER = Logger.getLogger(ChemblService.class);
     private final ChemblRestService chemblRestService;
 
     private final Set<EnzymePortalCompound> chemblCompounds = new HashSet<>();

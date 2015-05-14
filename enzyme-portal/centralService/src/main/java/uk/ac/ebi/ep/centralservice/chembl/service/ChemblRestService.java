@@ -21,7 +21,7 @@ import uk.ac.ebi.ep.centralservice.chembl.molecule.ChemblMolecule;
  */
 public class ChemblRestService {
 
-    private static final Logger LOGGER = Logger.getLogger(ChemblRestService.class);
+    private final Logger LOGGER = Logger.getLogger(ChemblRestService.class);
     private RestTemplate restTemplate = null;// new RestTemplate(clientHttpRequestFactory());
 
     public ChemblRestService() {
