@@ -28,9 +28,16 @@ public class ChemblRestService {
         restTemplate = new RestTemplate(clientHttpRequestFactory());
     }
 
-    private ClientHttpRequestFactory clientHttpRequestFactory() {
-        return new HttpComponentsClientHttpRequestFactory();
-
+//    private ClientHttpRequestFactory clientHttpRequestFactory() {
+//        return new HttpComponentsClientHttpRequestFactory();
+//
+//    }
+    
+        private ClientHttpRequestFactory clientHttpRequestFactory() {
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setReadTimeout(200);
+        factory.setConnectTimeout(200);
+        return factory;
     }
 
     public Optional<FdaApproved> getFdaApprovedDrug(String url) {
@@ -38,6 +45,7 @@ public class ChemblRestService {
 
         Optional<FdaApproved> fda = Optional.empty();
         try {
+          
             fda = Optional.ofNullable(restTemplate.getForObject(url.trim(), FdaApproved.class));
 
         } catch (Exception e) {

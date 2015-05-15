@@ -30,8 +30,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
-<!--    <name>centralRestService</name>-->
-  <name>centralService</name>
+    <!--    <name>centralRestService</name>-->
+    <name>centralService</name>
     
     <build>
         <plugins>
@@ -52,6 +52,11 @@
             <artifactId>enzyme-portal-data</artifactId>
             <version>1.0.13-SNAPSHOT</version>
         </dependency> 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
         
         <dependency>
             <groupId>commons-io</groupId>

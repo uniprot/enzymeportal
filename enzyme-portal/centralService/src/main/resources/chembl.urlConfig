@@ -1,4 +1,4 @@
-chembl.mechanism.url=https://www.ebi.ac.uk/chembl/api/data/mechanism.json?limit=200&target_chembl_id=
+chembl.mechanism.url=https://www.ebi.ac.uk/chembl/api/data/mechanism.json?limit=1000&target_chembl_id=
 chembl.molecule.url=https://www.ebi.ac.uk/chembl/api/data/molecule.json?molecule_chembl_id=
 chembl.assay.url=https://www.ebi.ac.uk/chembl/api/data/assay.json?target_chembl_id=
 chembl.activity.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?assay_chembl_id=
