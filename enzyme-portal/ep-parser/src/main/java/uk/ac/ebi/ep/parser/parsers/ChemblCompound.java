@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
@@ -27,22 +26,16 @@ import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
  *
  * @author joseph
  */
-//@Service
+
 public class ChemblCompound {
  private  final Logger LOGGER = Logger.getLogger(ChemblCompound.class);
-    //@Autowired
+
     private final ChemblService chemblService;
-    //@Autowired
+
     private final ChemblXmlParser chemblXmlParser;
-   // @Autowired
+
     private final EnzymePortalParserService parserService;
-//       @Autowired
-//    private ChemblServiceUrl chemblServiceUrl;
-    
-    //FDA  count : 3611
-//Num compounds found 442
-//BIOACTIVE 0 INHIBITORS 430 ACTIVATORS 12
-    //Total time: 3:11.480s
+
 
     public ChemblCompound(ChemblService chemblService, ChemblXmlParser chemblXmlParser, EnzymePortalParserService parserService) {
         this.chemblService = chemblService;
@@ -64,11 +57,10 @@ public class ChemblCompound {
         
         LOGGER.warn("finished parsing chembl target file : " + chemblTargets.size());
 
-        System.out.println("finished parsing file " + chemblTargets.size());
-     
+             
         Stream<Entry<String, List<String>>> existingStream = chemblTargets.entrySet().stream();
 
-        Stream<List<Entry<String, List<String>>>> partitioned = partition(existingStream, 1000, 1);
+        Stream<List<Entry<String, List<String>>>> partitioned = partition(existingStream, 1024, 1);
         AtomicInteger count = new AtomicInteger(0);
         partitioned.parallel().forEach((chunk) -> {
 
@@ -78,9 +70,7 @@ public class ChemblCompound {
                 if (entry.isPresent()) {
      
                     for (String targetId : targets.getValue()) {
-                        chemblService.chemblSmallMolecules(targetId, entry.get());
-                        //chemblService.getMoleculesByCuratedMechanism(targetId, entry.get());
-                        //System.out.println("count : " + count.getAndIncrement());
+                        chemblService.chemblSmallMolecules(targetId, entry.get(),parserService);
                          LOGGER.warn("counter : " + count.getAndIncrement());
                     }
                 }
@@ -105,7 +95,7 @@ public class ChemblCompound {
 //
 //        }
    
-        Set<EnzymePortalCompound> compounds = chemblService.getChemblCompounds();
+        List<EnzymePortalCompound> compounds = chemblService.getChemblCompounds();
 
         List<EnzymePortalCompound> bioactive = new ArrayList<>();
         List<EnzymePortalCompound> activator = new ArrayList<>();
@@ -135,7 +125,7 @@ public class ChemblCompound {
 
             System.out.println("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
 
-            //System.out.println("activators found " + activator);
+            
         }
 
     }

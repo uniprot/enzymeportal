@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
@@ -28,7 +27,7 @@ import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
  */
 //@Service
 public class FDA {
-   
+
     private final Logger LOGGER = Logger.getLogger(FDA.class);
     //@Autowired
     private final ChemblService chemblService;
@@ -42,26 +41,20 @@ public class FDA {
         this.chemblXmlParser = chemblXmlParser;
         this.parserService = parserService;
     }
-    
-    
-    
-
 
     public void loadChEMBL() {
 
-              Map<String, List<String>> chemblTargets = new HashMap<>();
-     try {
-         chemblTargets = chemblXmlParser.parseChemblTarget();
-     } catch (FileNotFoundException ex) {
-         LOGGER.error("File cannot be found", ex);
-     }
+        Map<String, List<String>> chemblTargets = new HashMap<>();
+        try {
+            chemblTargets = chemblXmlParser.parseChemblTarget();
+        } catch (FileNotFoundException ex) {
+            LOGGER.error("File cannot be found", ex);
+        }
         LOGGER.warn("FDA-finished parsing chembl target file : " + chemblTargets.size());
 
-        System.out.println("finished parsing file " + chemblTargets.size());
-     
         Stream<Map.Entry<String, List<String>>> existingStream = chemblTargets.entrySet().stream();
 
-        Stream<List<Map.Entry<String, List<String>>>> partitioned = partition(existingStream, 1000, 1);
+        Stream<List<Map.Entry<String, List<String>>>> partitioned = partition(existingStream, 1024, 1);
         AtomicInteger count = new AtomicInteger(0);
         partitioned.parallel().forEach((chunk) -> {
 
@@ -69,36 +62,36 @@ public class FDA {
 
                 Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
                 if (entry.isPresent()) {
-     
+
                     for (String targetId : targets.getValue()) {
-                       
-                        chemblService.getMoleculesByCuratedMechanism(targetId, entry.get());
+
+                           LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + entry.get().getAccession() + " targetId "+ targetId);
+                        chemblService.getMoleculesByCuratedMechanism(targetId, entry.get(), parserService);
                         //System.out.println("count : " + count.getAndIncrement());
-                         LOGGER.warn("counter : " + count.getAndIncrement());
+                    
                     }
                 }
             });
         });
-        
-        //sequencial processing .....
 
-//        AtomicInteger count = new AtomicInteger(0);
-//
+        //sequencial processing .....
+        //AtomicInteger count = new AtomicInteger(0);
 //        for (Map.Entry<String, List<String>> targets : chemblTargets.entrySet()) {
 //
 //            //System.out.println(map.getKey() + " --> "+ map.getValue());
 //            Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
 //            if (entry.isPresent()) {
-//                System.out.println("protein " + entry.get().getAccession() + " targets " + targets.getValue().size());
+//              
 //                for (String targetId : targets.getValue()) {
 //                    chemblService.chemblSmallMolecules(targetId, entry.get());
-//                    System.out.println("count : " + count.getAndIncrement());
+//                    //System.out.println("count : " + count.getAndIncrement());
+//                    LOGGER.warn("counter : " + count.getAndIncrement() + " accession "+entry.get().getAccession());
 //                }
 //            }
 //
 //        }
-   
-        Set<EnzymePortalCompound> compounds = chemblService.getChemblCompounds();
+        List<EnzymePortalCompound> compounds = chemblService.getChemblCompounds();
+    
 
         List<EnzymePortalCompound> bioactive = new ArrayList<>();
         List<EnzymePortalCompound> activator = new ArrayList<>();
@@ -106,10 +99,10 @@ public class FDA {
 
         //load into database
         if (compounds != null) {
-            
+
             LOGGER.warn("Num FDA compounds found " + compounds.size());
             System.out.println("Num FDA-compounds found " + compounds.size());
-    
+
             compounds.stream().map((c) -> {
                 if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
                     bioactive.add(c);
@@ -123,8 +116,8 @@ public class FDA {
             }).filter((c) -> (c.getCompoundRole().equalsIgnoreCase("ACTIVATOR"))).forEach((c) -> {
                 activator.add(c);
             });
-            
-             LOGGER.warn("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
+
+            LOGGER.warn("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
 
             System.out.println("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
 

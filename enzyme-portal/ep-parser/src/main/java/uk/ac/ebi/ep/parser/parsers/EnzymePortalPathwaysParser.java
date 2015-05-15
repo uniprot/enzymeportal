@@ -18,10 +18,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.parser.main.PathwaysParser;
 
 /**
@@ -32,8 +31,10 @@ import uk.ac.ebi.ep.parser.main.PathwaysParser;
 @Service
 public class EnzymePortalPathwaysParser {
 
+    //@Autowired
+   // private EnzymePortalPathwaysRepository pathwaysRepository;
     @Autowired
-    private EnzymePortalPathwaysRepository pathwaysRepository;
+    private EnzymePortalParserService parserService;
     @Autowired
     private UniprotEntryRepository uniprotEntryRepository;
     private static final String REACTOME_FILE = "http://www.reactome.org/download/current/UniProt2Reactome.txt";
@@ -41,7 +42,9 @@ public class EnzymePortalPathwaysParser {
             = Logger.getLogger(PathwaysParser.class);
 
     /**
-     * parse the Reactome file. (note: if file is missing,the default Reactome url will be used)
+     * parse the Reactome file. (note: if file is missing,the default Reactome
+     * url will be used)
+     *
      * @param file the reactome file
      */
     public void parseReactomeFile(String file) {
@@ -85,37 +88,44 @@ public class EnzymePortalPathwaysParser {
     }
 
     private void loadToDB(String[] fields) {
-        if(fields.length >= 4){
-        String accession = fields[0];
-        String pathwayId = fields[1];
-        String pathwayUrl = fields[2];
-        String pathwayName = fields[3];
-        String status = fields[4];
-        String species = fields[5];
+        if (fields.length >= 4) {
+            String accession = fields[0];
+            String pathwayId = fields[1];
+            String pathwayUrl = fields[2];
+            String pathwayName = fields[3];
+            String status = fields[4];
+            String species = fields[5];
 
-        //check if accession is an enzyme
-        UniprotEntry enzyme = uniprotEntryRepository.findByAccession(accession);
-       
-        if (enzyme != null) {
-        
-            EnzymePortalPathways pathways = new EnzymePortalPathways();
-            pathways.setUniprotAccession(enzyme);
-            pathways.setPathwayId(pathwayId);
-            pathways.setPathwayName(pathwayName);
-            pathways.setPathwayUrl(pathwayUrl);
-            pathways.setSpecies(species);
-            pathways.setStatus(status);
-            pathwaysRepository.saveAndFlush(pathways);
-         
+            //check if accession is an enzyme
+            UniprotEntry enzyme = uniprotEntryRepository.findByAccession(accession);
 
-            /**
-             * Printing the value read from file to the console
-             */
+            if (enzyme != null) {
+
+//                EnzymePortalPathways pathways = new EnzymePortalPathways();
+//                pathways.setUniprotAccession(enzyme);
+//                pathways.setPathwayId(pathwayId);
+//                pathways.setPathwayName(pathwayName);
+//                pathways.setPathwayUrl(pathwayUrl);
+//                pathways.setSpecies(species);
+//                pathways.setStatus(status);
+//                pathwaysRepository.saveAndFlush(pathways);
+                
+                parserService.createPathway(accession, pathwayId, pathwayUrl, pathwayName, status, species);
+                
+               
+                
+                
+                
+                
+
+                /**
+                 * Printing the value read from file to the console
+                 */
 //        System.out.println(accession + "\t" + pathwayId + "\t" + pathwayUrl + "\t"
 //                + pathwayName + "\t" + status + "\t" + species);
+            }
         }
-        }
-       
+
     }
 
     private void parseFromWeblink(String file) throws IOException {

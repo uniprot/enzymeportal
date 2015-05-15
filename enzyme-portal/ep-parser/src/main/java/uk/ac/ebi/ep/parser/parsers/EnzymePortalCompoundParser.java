@@ -90,10 +90,10 @@ public class EnzymePortalCompoundParser {
 
     }
 
-    //@Transactional
+    @Transactional
     public void loadCofactors() {
 
-        CompoundParser compoundParser = new Cofactors(chebiWebServiceClient, compoundRepository, enzymeSummaryRepository);
+        CompoundParser compoundParser = new Cofactors(chebiWebServiceClient, compoundRepository, enzymeSummaryRepository,parserService);
         compoundParser.loadCofactors();
 
     }

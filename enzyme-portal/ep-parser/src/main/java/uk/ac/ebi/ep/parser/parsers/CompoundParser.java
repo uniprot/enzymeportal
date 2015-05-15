@@ -20,10 +20,11 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntity;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
+import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
+import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
 
 /**
  *
@@ -37,6 +38,7 @@ public abstract class CompoundParser {
     protected final EnzymePortalCompoundRepository compoundRepository;
 
     protected final EnzymePortalSummaryRepository enzymeSummaryRepository;
+    protected final EnzymePortalParserService parserService;
 
     protected static final Pattern COMPOUND_NAME_PATTERN
             = Pattern.compile("(.*?)(?: \\((.*?)\\))?");
@@ -44,10 +46,11 @@ public abstract class CompoundParser {
     public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
     protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
-    public CompoundParser(ChebiWebServiceClient chebiWsClient, EnzymePortalCompoundRepository compoundRepository, EnzymePortalSummaryRepository enzymeSummaryRepository) {
+    public CompoundParser(ChebiWebServiceClient chebiWsClient, EnzymePortalCompoundRepository compoundRepository, EnzymePortalSummaryRepository enzymeSummaryRepository,EnzymePortalParserService pService) {
         this.chebiWsClient = chebiWsClient;
         this.compoundRepository = compoundRepository;
         this.enzymeSummaryRepository = enzymeSummaryRepository;
+        this.parserService = pService;
 
     }
 
