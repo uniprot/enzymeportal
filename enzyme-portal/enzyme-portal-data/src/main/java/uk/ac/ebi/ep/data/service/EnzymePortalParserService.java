@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
 
@@ -25,12 +27,18 @@ public class EnzymePortalParserService {
     
     @Autowired
     private UniprotXrefRepository xrefRepository;
-     @Autowired
+    @Autowired
     private UniprotEntryRepository uniprotEntryRepository;
-     
-         @Transactional(readOnly = true)
+    
+    @Autowired
+    private EnzymePortalCompoundRepository compoundRepository;
+    
+    @Autowired
+    private EnzymePortalPathwaysRepository pathwaysRepository;
+    
+    @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
-
+        
         return Optional.ofNullable(uniprotEntryRepository.findByAccession(accession));
     }
     
@@ -40,12 +48,11 @@ public class EnzymePortalParserService {
         return xrefRepository.findPdbById(pdbId);
     }
     
-    
-    
-        @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<UniprotXref> findPDBcodes() {
         return xrefRepository.findPDBcodes();
     }
+    
     @Transactional(readOnly = true)
     public List<String> findPdbIdsWithNoNames() {
         return xrefRepository.findPdbCodesWithNoNames();
@@ -57,4 +64,12 @@ public class EnzymePortalParserService {
         return xrefRepository.save(pdb);
     }
     
+    public void createCompound(String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
+        compoundRepository.createCompoundIgnoreDup(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
+    }
+    
+    public void createPathway(String accession, String pathwayId, String pathwayUrl, String pathwayName, String status, String species) {
+        
+        pathwaysRepository.createPathwayIgnoreDup(accession, pathwayId, pathwayUrl, pathwayName, status, species);
+    }
 }

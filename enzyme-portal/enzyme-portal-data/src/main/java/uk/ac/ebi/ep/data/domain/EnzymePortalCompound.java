@@ -103,6 +103,19 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.compoundInternalId = compoundInternalId;
     }
 
+    public EnzymePortalCompound(String compoundId, String compoundName, String compoundSource, String relationship, String compoundRole, String url, UniprotEntry uniprotAccession, String note) {
+        this.compoundId = compoundId;
+        this.compoundName = compoundName;
+        this.compoundSource = compoundSource;
+        this.relationship = relationship;
+        this.compoundRole = compoundRole;
+        this.url = url;
+        this.uniprotAccession = uniprotAccession;
+        this.note = note;
+    }
+    
+    
+
     public String getCompoundId() {
         return compoundId;
     }
