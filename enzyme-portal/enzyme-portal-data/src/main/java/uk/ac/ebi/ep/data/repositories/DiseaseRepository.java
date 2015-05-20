@@ -29,7 +29,7 @@ public interface DiseaseRepository extends JpaRepository<EnzymePortalDisease, Lo
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT /*+ IGNORE_ROW_ON_DUPKEY_INDEX(ENZYME_PORTAL_DISEASE,IX_ENZYME_DISEASE_DUPS) */ INTO ENZYME_PORTAL_DISEASE (UNIPROT_ACCESSION,OMIM_NUMBER,MESH_ID,EFO_ID,DISEASE_NAME,EVIDENCE,DEFINITION,SCORE,URL) VALUES (?1,?2,?3,?4,?5,?6,?7,?8)", nativeQuery = true)
+    @Query(value = "INSERT /*+ IGNORE_ROW_ON_DUPKEY_INDEX(ENZYME_PORTAL_DISEASE,IX_ENZYME_DISEASE_DUPS) */ INTO ENZYME_PORTAL_DISEASE (UNIPROT_ACCESSION,OMIM_NUMBER,MESH_ID,EFO_ID,DISEASE_NAME,EVIDENCE,DEFINITION,SCORE,URL) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9)", nativeQuery = true)
     void createDiseaseIgnoreDup(String accession, String omimNumber, String meshId, String efoId, String diseaseName, String evidence, String definition, String score, String url);
 
 }
