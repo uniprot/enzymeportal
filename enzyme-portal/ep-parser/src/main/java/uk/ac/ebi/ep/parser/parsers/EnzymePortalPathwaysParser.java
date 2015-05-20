@@ -32,7 +32,7 @@ import uk.ac.ebi.ep.parser.main.PathwaysParser;
 public class EnzymePortalPathwaysParser {
 
     //@Autowired
-   // private EnzymePortalPathwaysRepository pathwaysRepository;
+    // private EnzymePortalPathwaysRepository pathwaysRepository;
     @Autowired
     private EnzymePortalParserService parserService;
     @Autowired
@@ -40,6 +40,20 @@ public class EnzymePortalPathwaysParser {
     private static final String REACTOME_FILE = "http://www.reactome.org/download/current/UniProt2Reactome.txt";
     private static final Logger LOGGER
             = Logger.getLogger(PathwaysParser.class);
+
+    /**
+     * parse the default Reactome file
+     */
+    public void parseReactomeFile() {
+
+        try {
+
+            parseFromWeblink(REACTOME_FILE);
+
+        } catch (IOException ex) {
+            LOGGER.fatal("IOException while parsing reactome file : ", ex);
+        }
+    }
 
     /**
      * parse the Reactome file. (note: if file is missing,the default Reactome
@@ -109,14 +123,7 @@ public class EnzymePortalPathwaysParser {
 //                pathways.setSpecies(species);
 //                pathways.setStatus(status);
 //                pathwaysRepository.saveAndFlush(pathways);
-                
                 parserService.createPathway(accession, pathwayId, pathwayUrl, pathwayName, status, species);
-                
-               
-                
-                
-                
-                
 
                 /**
                  * Printing the value read from file to the console

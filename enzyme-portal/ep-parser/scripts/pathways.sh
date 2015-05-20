@@ -18,7 +18,7 @@ echo "[INFO] The file to be parsed =" $REACTOME_PATHWAYS
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.PathwaysParser" -Dexec.args="$DB_CONFIG $REACTOME_PATHWAYS"
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.PathwaysParser" -Dexec.args="$DB_CONFIG"
 cd $WD
 echo "[INFO] Finished parsing REACTOME_PATHWAYS file and updating Enzyme Portal database with Pathways Data  - $(date)"
 

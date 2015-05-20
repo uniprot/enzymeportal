@@ -23,10 +23,10 @@ public class PathwaysParser {
             System.exit(0);
         }
 
-        if (args.length == 2) {
+        if (args.length > 0) {
 
             profile = args[0];
-            file = args[1];
+            //file = args[1];
 
             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
             context.getEnvironment().setActiveProfiles(profile);
@@ -36,7 +36,7 @@ public class PathwaysParser {
 
             EnzymePortalPathwaysParser pathwaysParser = context.getBean(EnzymePortalPathwaysParser.class);
 
-            pathwaysParser.parseReactomeFile(file);//Total time: 1:57:24.500s
+            pathwaysParser.parseReactomeFile();//Total time: 1:57:24.500s
         }
 
     }

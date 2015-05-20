@@ -27,7 +27,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.service.BioPortalService;
-import uk.ac.ebi.ep.data.service.DiseaseService;
+import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.data.service.UniprotEntryService;
 import uk.ac.ebi.xchars.SpecialCharacters;
 import uk.ac.ebi.xchars.domain.EncodingType;
@@ -48,8 +48,8 @@ public class DiseaseParser {
 
     @Autowired
     private BioPortalService bioPortalService;
-    @Autowired
-    private DiseaseService diseaseService;
+//    @Autowired
+//    private DiseaseService diseaseService;
 
     @Autowired
     private UniprotEntryService uniprotEntryService;
@@ -57,11 +57,13 @@ public class DiseaseParser {
     @Autowired
     private EnzymePortalSummaryRepository enzymeSummaryRepository;
 
+    @Autowired
+    private EnzymePortalParserService parserService;
+
     private final List<EnzymePortalDisease> diseaseList = new ArrayList<>();
 
     private static final Logger LOGGER
             = Logger.getLogger(DiseaseParser.class);
-
 
     protected enum Format {
 
@@ -127,9 +129,26 @@ public class DiseaseParser {
                     }
                     Optional<EnzymePortalSummary> summary = enzymeSummaryRepository.findDiseaseEvidence(accession);
 
+                    String uniprotAccession = enzyme.get().getAccession();
+                    String omimId = omimCell[0];
+                    String meshId = meshIdsCell[i].trim();
+                    String efoId = null;
+                    String name = resolveSpecialCharacters(meshHeadsCell[i].toLowerCase(Locale.ENGLISH));
+                    String diseaseName = name.replaceAll(",", "").trim();
+                    String evidence = null;
+                    if (summary.isPresent()) {
+                        evidence = summary.get().getCommentText();
+                    }
+                    String diseaseDefinition = definition;
+                    if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
+                        url = "http://purl.bioontology.org/ontology/OMIM/" + omimCell[0];
+                    } else {
+                        url = "http://purl.bioontology.org/ontology/MESH/" + meshIdsCell[i];
+                    }
+                    String score = Double.toString(scores[i]);
+
                     EnzymePortalDisease disease = new EnzymePortalDisease();
 
-                    String diseaseName = resolveSpecialCharacters(meshHeadsCell[i].toLowerCase(Locale.ENGLISH));
                     disease.setDiseaseName(diseaseName.replaceAll(",", "").trim());
                     disease.setMeshId(meshIdsCell[i].trim());
                     disease.setOmimNumber(omimCell[0]);
@@ -140,13 +159,10 @@ public class DiseaseParser {
                         disease.setEvidence(summary.get().getCommentText());
                     }
 
-                    if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
-                        url = "http://purl.bioontology.org/ontology/OMIM/" + omimCell[0];
-                    } else {
-                        url = "http://purl.bioontology.org/ontology/MESH/" + meshIdsCell[i];
-                    }
                     disease.setUrl(url);
                     diseaseList.add(disease);
+
+                    parserService.createDisease(uniprotAccession, omimId, meshId, efoId, diseaseName, evidence, definition, score, url);
 
 //                    LOGGER.debug(accession + " mim : " + omimCell[0] + " mesh :" + meshIdsCell[i]
 //                            + " name: " + meshHeadsCell[i] + " score : " + scores[i]);
@@ -188,7 +204,7 @@ public class DiseaseParser {
             }
             LOGGER.warn("Number of Diseases to load to Database : " + diseaseList.size());
             //update database
-            diseaseService.addDiseases(diseaseList);
+            //diseaseService.addDiseases(diseaseList);
             diseaseList.clear();
             LOGGER.info("Parsing end");
 
