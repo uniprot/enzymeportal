@@ -35,8 +35,8 @@ public class ChemblRestService {
     
         private ClientHttpRequestFactory clientHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setReadTimeout(200);
-        factory.setConnectTimeout(200);
+//        factory.setReadTimeout(200);
+//        factory.setConnectTimeout(200);
         return factory;
     }
 

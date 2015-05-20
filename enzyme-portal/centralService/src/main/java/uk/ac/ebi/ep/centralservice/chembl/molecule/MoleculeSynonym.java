@@ -12,7 +12,6 @@ package uk.ac.ebi.ep.centralservice.chembl.molecule;
 //public class MoleculeSynonym {
 //    
 //}
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,8 +23,8 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-"syn_type",
-"synonyms"
+    "syn_type",
+    "synonyms"
 })
 /**
  *
@@ -33,61 +32,62 @@ import java.util.Map;
  */
 public class MoleculeSynonym {
 
-@JsonProperty("syn_type")
-private String synType;
-@JsonProperty("synonyms")
-private String synonyms;
-@JsonIgnore
-private final Map<String, Object> additionalProperties = new HashMap<>();
+    @JsonProperty("syn_type")
+    private String synType;
+    @JsonProperty("synonyms")
+    private String synonyms;
+    @JsonIgnore
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
-/**
-* 
-* @return
-* The synType
-*/
-@JsonProperty("syn_type")
-public String getSynType() {
-return synType;
-}
+    /**
+     *
+     * @return The synType
+     */
+    @JsonProperty("syn_type")
+    public String getSynType() {
+        return synType;
+    }
 
-/**
-* 
-* @param synType
-* The syn_type
-*/
-@JsonProperty("syn_type")
-public void setSynType(String synType) {
-this.synType = synType;
-}
+    /**
+     *
+     * @param synType The syn_type
+     */
+    @JsonProperty("syn_type")
+    public void setSynType(String synType) {
+        this.synType = synType;
+    }
 
-/**
-* 
-* @return
-* The synonyms
-*/
-@JsonProperty("synonyms")
-public String getSynonyms() {
-return synonyms;
-}
+    /**
+     *
+     * @return The synonyms
+     */
+    @JsonProperty("synonyms")
+    public String getSynonyms() {
+//        if (synonyms != null && synonyms.contains("|")) {
+//            String name = synonyms.split("|")[0];
+//            synonyms = name;
+//        }
 
-/**
-* 
-* @param synonyms
-* The synonyms
-*/
-@JsonProperty("synonyms")
-public void setSynonyms(String synonyms) {
-this.synonyms = synonyms;
-}
+        return synonyms;
+    }
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+    /**
+     *
+     * @param synonyms The synonyms
+     */
+    @JsonProperty("synonyms")
+    public void setSynonyms(String synonyms) {
+        this.synonyms = synonyms;
+    }
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
 }

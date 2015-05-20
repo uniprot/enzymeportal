@@ -8,6 +8,7 @@ package uk.ac.ebi.ep.centralservice.chembl.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.chembl.activity.Activity;
 import uk.ac.ebi.ep.centralservice.chembl.activity.ChemblActivity;
@@ -68,35 +69,33 @@ public class ChemblService {
         Optional<ChemblAssay> chemblAssay = chemblRestService.getChemblAssay(assayUrl);
 
         if (chemblAssay.isPresent()) {
-            for (Assay assay : chemblAssay.get().getAssays()) {
-                String assayId = assay.getAssayChemblId();
+                    for (Assay assay : chemblAssay.get().getAssays()) {
+                    String assayId = assay.getAssayChemblId();
+                    //get activities for a given assay id
+                    String activityUrl = chemblServiceUrl.getActivityUrl() + assayId;
+                    Optional<ChemblActivity> chemblActivity = chemblRestService.getChemblActivity(activityUrl);
 
-                //get activities for a given assay id
-                String activityUrl = chemblServiceUrl.getActivityUrl() + assayId;
+                    if (chemblActivity.isPresent()) {
+                        for (Activity activity : chemblActivity.get().getActivities()) {
 
-                Optional<ChemblActivity> chemblActivity = chemblRestService.getChemblActivity(activityUrl);
+                            if ("Inhibition".equalsIgnoreCase(activity.getStandardType())) {
 
-                if (chemblActivity.isPresent()) {
-                    for (Activity activity : chemblActivity.get().getActivities()) {
+                                moleculeChemblIds_Inhibitors.add(activity.getMoleculeChemblId());
+                            }
+                            if ("Activity".equalsIgnoreCase(activity.getStandardType())) {
+                                moleculeChemblIds_Activators.add(activity.getMoleculeChemblId());
 
-                        if ("Inhibition".equalsIgnoreCase(activity.getStandardType())) {
+                            }
 
-                            moleculeChemblIds_Inhibitors.add(activity.getMoleculeChemblId());
+                            if ((!"Inhibition".equalsIgnoreCase(activity.getStandardType())) && (!"Activity".equalsIgnoreCase(activity.getStandardType()))) {
+                                moleculeChemblIds_bioactive.add(activity.getMoleculeChemblId());
+                            }
                         }
-                        if ("Activity".equalsIgnoreCase(activity.getStandardType())) {
-                            moleculeChemblIds_Activators.add(activity.getMoleculeChemblId());
 
-                        }
+                        computePreferredName(moleculeChemblIds_Inhibitors, moleculeChemblIds_Activators, moleculeChemblIds_bioactive, chemblCompounds, protein, parserService);
 
-                        if ((!"Inhibition".equalsIgnoreCase(activity.getStandardType())) && (!"Activity".equalsIgnoreCase(activity.getStandardType()))) {
-                            moleculeChemblIds_bioactive.add(activity.getMoleculeChemblId());
-                        }
                     }
-
-                    computePreferredName(moleculeChemblIds_Inhibitors, moleculeChemblIds_Activators, moleculeChemblIds_bioactive, chemblCompounds, protein, parserService);
-
-                }
-            }
+                    }
         }
 
     }
@@ -174,14 +173,36 @@ public class ChemblService {
 
                 String compoundname = molecule.getPrefName();
 
-                if (compoundname != null && !StringUtils.isEmpty(compoundname)) {
-                    //compoundName = compoundName.replaceAll(",", "");
+                if (compoundname == null && molecule.getMoleculeSynonyms() != null && !molecule.getMoleculeSynonyms().isEmpty()) {
+                    String synonyms = molecule.getMoleculeSynonyms().stream().findFirst().get().getSynonyms();
 
-                    String compoundName = StringUtils.capitalize(compoundname.replaceAll(",", ""));
-                    if (compoundname.contains("-")) {
-                        compoundName = compoundname.replaceAll(",", "");
+                    if (synonyms.contains("|")) {
+                        synonyms = synonyms.split("|")[0];
                     }
+                    compoundname = synonyms;
 
+                }
+
+                if (compoundname != null && !StringUtils.isEmpty(compoundname)) {
+                    String compoundName = compoundname;
+                    String moleculeName = compoundName;
+                    if (!compoundname.contains("-") && !compoundname.contains("+")) {
+
+                        compoundName = compoundname.replaceAll(",", "").trim().toLowerCase();
+
+                        if (compoundName.contains(" ")) {
+                            String[] x = compoundName.split(" ");
+                            String a = x[0];
+                            String b = x[1];
+
+                            compoundName = WordUtils.capitalize(a) + " " + b;
+                            moleculeName = compoundName;
+                        } else if(!compoundName.contains(" ")) {
+                            compoundName = WordUtils.capitalize(compoundName);
+                            moleculeName = compoundName;
+                        }
+                    }
+                
                     String compoundId = molecule.getMoleculeChemblId();
                     String compoundSource = MmDatabase.ChEMBL.name();
                     String relationship = Relationship.is_inhibitor_of.name();
@@ -195,7 +216,7 @@ public class ChemblService {
                     chemblEntry.setCompoundSource(MmDatabase.ChEMBL.name());
                     chemblEntry.setCompoundId(molecule.getMoleculeChemblId());
 
-                    chemblEntry.setCompoundName(compoundName);
+                    chemblEntry.setCompoundName(moleculeName);
                     chemblEntry.setRelationship(Relationship.is_inhibitor_of.name());
 
                     chemblEntry.setUniprotAccession(protein);
@@ -203,8 +224,7 @@ public class ChemblService {
 
                     compounds.add(chemblEntry);
 
-                    parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
-
+                     parserService.createCompound(compoundId, moleculeName, compoundSource, relationship, accession, url, compoundRole, note);
                 }
             }
         }
@@ -219,11 +239,34 @@ public class ChemblService {
             chemblMolecule.get().getMolecules().stream().forEach((molecule) -> {
                 String compoundname = molecule.getPrefName();
 
-                if (compoundname != null && !StringUtils.isEmpty(compoundname)) {
-                    String compoundName = StringUtils.capitalize(compoundname.replaceAll(",", ""));
+                if (compoundname == null && molecule.getMoleculeSynonyms() != null && !molecule.getMoleculeSynonyms().isEmpty()) {
+                    String synonyms = molecule.getMoleculeSynonyms().stream().findFirst().get().getSynonyms();
 
-                    if (compoundname.contains("-")) {
-                        compoundName = compoundname.replaceAll(",", "");
+                    if (synonyms.contains("|")) {
+                        synonyms = synonyms.split("|")[0];
+                    }
+                    compoundname = synonyms;
+
+                }
+
+                if (compoundname != null && !StringUtils.isEmpty(compoundname)) {
+                    String compoundName = compoundname;
+                    String moleculeName = compoundName;
+                    if (!compoundname.contains("-") && !compoundname.contains("+")) {
+
+                        compoundName = compoundname.replaceAll(",", "").trim().toLowerCase();
+
+                        if (compoundName.contains(" ")) {
+                            String[] x = compoundName.split(" ");
+                            String a = x[0];
+                            String b = x[1];
+
+                            compoundName = WordUtils.capitalize(a) + " " + b;
+                            moleculeName = compoundName;
+                        } else if(!compoundName.contains(" ")) {
+                            compoundName = WordUtils.capitalize(compoundName);
+                            moleculeName = compoundName;
+                        }
                     }
                     String compoundId = molecule.getMoleculeChemblId();
                     String compoundSource = MmDatabase.ChEMBL.name();
@@ -233,14 +276,15 @@ public class ChemblService {
                     String accession = protein.getAccession();
                     String note = null;
 
-                    parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
-
+                    parserService.createCompound(compoundId, moleculeName, compoundSource, relationship, accession, url, compoundRole, note);
+                    
+                    
                     EnzymePortalCompound chemblEntry = new EnzymePortalCompound();
 
                     chemblEntry.setCompoundSource(MmDatabase.ChEMBL.name());
                     chemblEntry.setCompoundId(molecule.getMoleculeChemblId());
 
-                    chemblEntry.setCompoundName(compoundName);
+                    chemblEntry.setCompoundName(moleculeName);
                     chemblEntry.setRelationship(Relationship.is_activator_of.name());
                     chemblEntry.setUniprotAccession(protein);
                     chemblEntry = CompoundUtil.computeRole(chemblEntry, chemblEntry.getRelationship());
@@ -261,11 +305,34 @@ public class ChemblService {
             chemblMolecule.get().getMolecules().stream().forEach((molecule) -> {
                 String compoundname = molecule.getPrefName();
 
-                if (compoundname != null && !StringUtils.isEmpty(compoundname)) {
-                    //compoundName = compoundName.replaceAll(",", "");
-                    String compoundName = StringUtils.capitalize(compoundname.replaceAll(",", ""));
-                    if (compoundname.contains("-")) {
-                        compoundName = compoundname.replaceAll(",", "");
+                if (compoundname == null && molecule.getMoleculeSynonyms() != null && !molecule.getMoleculeSynonyms().isEmpty()) {
+                    String synonyms = molecule.getMoleculeSynonyms().stream().findFirst().get().getSynonyms();
+
+                    if (synonyms.contains("|")) {
+                        synonyms = synonyms.split("|")[0];
+                    }
+                    compoundname = synonyms;
+
+                }
+
+                   if (compoundname != null && !StringUtils.isEmpty(compoundname)) {
+                    String compoundName = compoundname;
+                    String moleculeName = compoundName;
+                    if (!compoundname.contains("-") && !compoundname.contains("+")) {
+
+                        compoundName = compoundname.replaceAll(",", "").trim().toLowerCase();
+
+                        if (compoundName.contains(" ")) {
+                            String[] x = compoundName.split(" ");
+                            String a = x[0];
+                            String b = x[1];
+
+                            compoundName = WordUtils.capitalize(a) + " " + b;
+                            moleculeName = compoundName;
+                        } else if(!compoundName.contains(" ")) {
+                            compoundName = WordUtils.capitalize(compoundName);
+                            moleculeName = compoundName;
+                        }
                     }
 
                     String compoundId = molecule.getMoleculeChemblId();
@@ -276,14 +343,15 @@ public class ChemblService {
                     String accession = protein.getAccession();
                     String note = null;
 
-                    parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
-
+                    parserService.createCompound(compoundId, moleculeName, compoundSource, relationship, accession, url, compoundRole, note);
+                    
+                    
                     EnzymePortalCompound chemblEntry = new EnzymePortalCompound();
 
                     chemblEntry.setCompoundSource(MmDatabase.ChEMBL.name());
                     chemblEntry.setCompoundId(molecule.getMoleculeChemblId());
 
-                    chemblEntry.setCompoundName(compoundName);
+                    chemblEntry.setCompoundName(moleculeName);
                     chemblEntry.setRelationship(Relationship.is_target_of.name());
                     chemblEntry.setUniprotAccession(protein);
                     chemblEntry = CompoundUtil.computeRole(chemblEntry, chemblEntry.getRelationship());
