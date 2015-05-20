@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
@@ -17,6 +18,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+import uk.ac.ebi.ep.centralservice.helper.EbinocleParser;
+import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
+import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
@@ -24,10 +28,6 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
-import uk.ac.ebi.ep.centralservice.helper.CompoundUtil;
-import uk.ac.ebi.ep.centralservice.helper.EbinocleParser;
-import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
-import uk.ac.ebi.ep.centralservice.helper.Relationship;
 
 /**
  * Parser for IntEnzXML which extracts data interesting for the Enzyme Portal
@@ -101,12 +101,15 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
     private final List<EnzymePortalCompound> products = new ArrayList<>();
     private final List<EnzymePortalCompound> cofactors = new ArrayList<>();
 
-    /* Flags for processing element contents. */
+    /*
+     * Flags for processing element contents.
+     */
     private boolean isEnzyme, isEc, isAcceptedName, isCmlReaction,
             isReactionName, isRheaId, isCofactor, isReactant, isProduct,
             isReversibleReaction;
     // Cross-references to write to the mega-map:
     Collection<EnzymePortalCompound> xrefs = new HashSet<>();
+    private Set<EnzymePortalReaction> reactions = new HashSet<>();
 
     private final EnzymePortalCompoundRepository compoundRepository;
 
@@ -221,49 +224,49 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
                         reaction.setRelationship(Relationship.between(
                                 MmDatabase.EC, MmDatabase.Rhea).name());
                         reaction.setUniprotAccession(summary.getUniprotAccession());
+                        reactions.add(reaction);
 
-                        reaction_per_ec = reactionRepository.save(reaction);
+                        //reaction_per_ec = reactionRepository.save(reaction);
                     }
 
                     // Cross-references ChEBI-Rhea and ChEBI-EC:
-                    for (EnzymePortalCompound reactant : reactants) {
-
-                        EnzymePortalCompound chebiEcXref = new EnzymePortalCompound();
-                        chebiEcXref.setCompoundId(reactant.getCompoundId());
-                        chebiEcXref.setCompoundName(reactant.getCompoundName());
-                        chebiEcXref.setCompoundSource(reactant.getCompoundSource());
-                        chebiEcXref.setUniprotAccession(summary.getUniprotAccession());
-                        chebiEcXref.getEnzymePortalReactionSet().add(reaction_per_ec);
-
-                        chebiEcXref.setRelationship(isReversibleReaction
-                                ? Relationship.is_substrate_or_product_of.name()
-                                : Relationship.is_substrate_of.name());
-                        chebiEcXref = CompoundUtil.computeRole(chebiEcXref, chebiEcXref.getRelationship());
-                        if (chebiEcXref.getCompoundName() != null) {
-                            xrefs.add(chebiEcXref);
-                        }
-
-                    }
-                    for (EnzymePortalCompound product : products) {
-
-                        EnzymePortalCompound chebiEcXref = new EnzymePortalCompound();
-
-                        chebiEcXref.setCompoundId(product.getCompoundId());
-                        chebiEcXref.setCompoundName(product.getCompoundName());
-                        chebiEcXref.setCompoundSource(product.getCompoundSource());
-                        chebiEcXref.setUniprotAccession(summary.getUniprotAccession());
-                        chebiEcXref.getEnzymePortalReactionSet().add(reaction_per_ec);
-
-                        chebiEcXref.setRelationship(isReversibleReaction
-                                ? Relationship.is_substrate_or_product_of.name()
-                                : Relationship.is_product_of.name());
-                        chebiEcXref = CompoundUtil.computeRole(chebiEcXref, chebiEcXref.getRelationship());
-                        if (chebiEcXref.getCompoundName() != null) {
-                            xrefs.add(chebiEcXref);
-                        }
-
-                    }
-
+//                    for (EnzymePortalCompound reactant : reactants) {
+//
+//                        EnzymePortalCompound chebiEcXref = new EnzymePortalCompound();
+//                        chebiEcXref.setCompoundId(reactant.getCompoundId());
+//                        chebiEcXref.setCompoundName(reactant.getCompoundName());
+//                        chebiEcXref.setCompoundSource(reactant.getCompoundSource());
+//                        chebiEcXref.setUniprotAccession(summary.getUniprotAccession());
+//                        chebiEcXref.getEnzymePortalReactionSet().add(reaction_per_ec);
+//
+//                        chebiEcXref.setRelationship(isReversibleReaction
+//                                ? Relationship.is_substrate_or_product_of.name()
+//                                : Relationship.is_substrate_of.name());
+//                        chebiEcXref = CompoundUtil.computeRole(chebiEcXref, chebiEcXref.getRelationship());
+//                        if (chebiEcXref.getCompoundName() != null) {
+//                            xrefs.add(chebiEcXref);
+//                        }
+//
+//                    }
+//                    for (EnzymePortalCompound product : products) {
+//
+//                        EnzymePortalCompound chebiEcXref = new EnzymePortalCompound();
+//
+//                        chebiEcXref.setCompoundId(product.getCompoundId());
+//                        chebiEcXref.setCompoundName(product.getCompoundName());
+//                        chebiEcXref.setCompoundSource(product.getCompoundSource());
+//                        chebiEcXref.setUniprotAccession(summary.getUniprotAccession());
+//                        chebiEcXref.getEnzymePortalReactionSet().add(reaction_per_ec);
+//
+//                        chebiEcXref.setRelationship(isReversibleReaction
+//                                ? Relationship.is_substrate_or_product_of.name()
+//                                : Relationship.is_product_of.name());
+//                        chebiEcXref = CompoundUtil.computeRole(chebiEcXref, chebiEcXref.getRelationship());
+//                        if (chebiEcXref.getCompoundName() != null) {
+//                            xrefs.add(chebiEcXref);
+//                        }
+//
+//                    }
                     // Clean up:
                     rheaEntry = null;
                     reactants.clear();
@@ -301,12 +304,17 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
 //                    }
 //                }
 //            }
+//            if (!xrefs.isEmpty()) {
+//
+//
+//                LOGGER.info("writing reaction and compounds to DB "+ xrefs.size());
+//                //compoundRepository.save(xrefs);//
+//
+//            }
+            if (!reactions.isEmpty()) {
 
-            if (!xrefs.isEmpty()) {
-
-
-                LOGGER.info("writing reaction and compounds to DB "+ xrefs.size());
-                compoundRepository.save(xrefs);
+                LOGGER.info("writing reaction and compounds to DB " + reactions.size());
+                reactionRepository.save(reactions);
 
             }
 
@@ -314,6 +322,7 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
             xrefs.clear();
             ecEntry = null;
             cofactors.clear();
+            reactions.clear();
 
         }
 
