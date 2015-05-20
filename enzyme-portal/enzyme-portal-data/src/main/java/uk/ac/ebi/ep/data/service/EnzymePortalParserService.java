@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
@@ -35,6 +36,9 @@ public class EnzymePortalParserService {
     
     @Autowired
     private EnzymePortalPathwaysRepository pathwaysRepository;
+    
+    @Autowired
+    private DiseaseRepository diseaseRepository;
     
     @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
@@ -71,5 +75,10 @@ public class EnzymePortalParserService {
     public void createPathway(String accession, String pathwayId, String pathwayUrl, String pathwayName, String status, String species) {
         
         pathwaysRepository.createPathwayIgnoreDup(accession, pathwayId, pathwayUrl, pathwayName, status, species);
+    }
+    
+    public void createDisease(String accession, String omimNumber, String meshId, String efoId, String diseaseName, String evidence, String definition, String score, String url) {
+        
+        diseaseRepository.createDiseaseIgnoreDup(accession, omimNumber, meshId, efoId, diseaseName, evidence, definition, score, url);
     }
 }
