@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,7 @@ public class EnzymePortalPathwaysParser {
         try {
 
             parseFromWeblink(REACTOME_FILE);
+        
 
         } catch (IOException ex) {
             LOGGER.fatal("IOException while parsing reactome file : ", ex);
@@ -92,11 +95,39 @@ public class EnzymePortalPathwaysParser {
                 /**
                  * Splitting the content of tabbed separated line
                  */
-                String fields[] = line.split("\t");
-                loadToDB(fields);
+                String fields[] = line.split("\\t");
+                 List<String> data = Arrays.asList(fields);
+                loadToDB(data);
 
             }
 
+        }
+
+    }
+
+    private void loadToDB(List<String> fields) {
+
+        if (fields.size() == 6) {
+            String accession = fields.get(0);
+            String pathwayId = fields.get(1);
+            String pathwayUrl = fields.get(2);
+            String pathwayName = fields.get(3);
+            String status = fields.get(4);
+            String species = fields.get(5);
+
+            //check if accession is an enzyme
+            UniprotEntry enzyme = uniprotEntryRepository.findByAccession(accession);
+
+            if (enzyme != null) {
+
+                parserService.createPathway(accession, pathwayId, pathwayUrl, pathwayName, status, species);
+
+                /**
+//                 * Printing the value read from file to the console
+//                 */
+//        System.out.println(accession + "\t" + pathwayId + "\t" + pathwayUrl + "\t"
+//                + pathwayName + "\t" + status + "\t" + species);
+            }
         }
 
     }
@@ -152,11 +183,12 @@ public class EnzymePortalPathwaysParser {
 
             String line;
             while ((line = br.readLine()) != null) {
-                String[] fields = line.split("\t");
+                String[] fields = line.split("\\t");
                 if (fields == null) {
                     continue; // header lines
                 }
-                loadToDB(fields);
+                List<String> data = Arrays.asList(fields);
+                loadToDB(data);
 
             }
             LOGGER.info("Parsing end");
@@ -174,5 +206,5 @@ public class EnzymePortalPathwaysParser {
             }
         }
     }
-
+    
 }
