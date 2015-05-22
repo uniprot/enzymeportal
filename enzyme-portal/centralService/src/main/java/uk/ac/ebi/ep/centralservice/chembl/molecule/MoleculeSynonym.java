@@ -9,9 +9,7 @@ package uk.ac.ebi.ep.centralservice.chembl.molecule;
  *
  * @author joseph
  */
-//public class MoleculeSynonym {
-//    
-//}
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

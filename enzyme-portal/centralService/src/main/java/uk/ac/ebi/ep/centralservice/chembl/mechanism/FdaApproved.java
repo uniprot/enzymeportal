@@ -1,7 +1,5 @@
-
 package uk.ac.ebi.ep.centralservice.chembl.mechanism;
 
-import uk.ac.ebi.ep.centralservice.chembl.service.PageMeta;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import uk.ac.ebi.ep.centralservice.chembl.service.PageMeta;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

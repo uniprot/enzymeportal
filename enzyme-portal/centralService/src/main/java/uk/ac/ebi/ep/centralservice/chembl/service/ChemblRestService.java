@@ -28,20 +28,20 @@ public class ChemblRestService {
         restTemplate = new RestTemplate(clientHttpRequestFactory());
     }
 
-//    private ClientHttpRequestFactory clientHttpRequestFactory() {
-//        return new HttpComponentsClientHttpRequestFactory();
-//
-//    }
+    private ClientHttpRequestFactory clientHttpRequestFactory() {
+        return new HttpComponentsClientHttpRequestFactory();
+
+    }
     
-        private ClientHttpRequestFactory clientHttpRequestFactory() {
+        private ClientHttpRequestFactory clientHttpRequestFactoryTimeout() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-//        factory.setReadTimeout(200);
-//        factory.setConnectTimeout(200);
+        factory.setReadTimeout(60000);//1 min
+        factory.setConnectTimeout(60000);
         return factory;
     }
 
     public Optional<FdaApproved> getFdaApprovedDrug(String url) {
-        //return restTemplate.getForObject(url.trim(), FdaApproved.class);
+  
 
         Optional<FdaApproved> fda = Optional.empty();
         try {
@@ -57,7 +57,7 @@ public class ChemblRestService {
     }
 
     public Optional<ChemblMolecule> getChemblMolecule(String url) {
-        //return restTemplate.getForObject(url.trim(), ChemblMolecule.class);
+    
         Optional<ChemblMolecule> mol = Optional.empty();
         try {
             mol = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblMolecule.class));
@@ -70,7 +70,7 @@ public class ChemblRestService {
     }
 
     public Optional<ChemblAssay> getChemblAssay(String url) {
-        // return restTemplate.getForObject(url.trim(), ChemblAssay.class);
+      
         Optional<ChemblAssay> assay = Optional.empty();
         try {
             assay = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblAssay.class));
@@ -84,7 +84,7 @@ public class ChemblRestService {
     }
 
     public Optional<ChemblActivity> getChemblActivity(String url) {
-        //return restTemplate.getForObject(url.trim(), ChemblActivity.class);
+   
         Optional<ChemblActivity> activity = Optional.empty();
         try {
             activity = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblActivity.class));
