@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -84,17 +85,23 @@ public class DiseaseParser {
             + "<TD>(.*?)<\\/TD><TD>(.*?)<\\/TD><TD>(.*?)<\\/TD>"
             + "<TD>(.*?)<\\/TD>");
 
-    private void LoadToDB(String[] fields) throws InterruptedException {
+    private void LoadToDB(List<String> fields) throws InterruptedException {
         double[] scores = new double[1];
 
-        if (fields.length >= 4) {
-            String[] scoresCell = fields[4].split(" ?/ ?");
-            String accession = fields[0];
-            String[] omimCell = fields[1].split("\\s");
-            String[] meshIdsCell = fields[2].split(" ?/ ?");
-            String[] meshHeadsCell = fields[3].split(" / ");
+        if (fields.size() >= 5) {
+//            String[] scoresCell = fields[4].split(" ?/ ?");
+//            String accession = fields[0];
+//            String[] omimCell = fields[1].split("\\s");
+//            String[] meshIdsCell = fields[2].split(" ?/ ?");
+//            String[] meshHeadsCell = fields[3].split(" / ");
 
-            if (fields[4].contains("/")) {
+            String[] scoresCell = fields.get(4).split(" ?/ ?");
+            String accession = fields.get(0);
+            String[] omimCell = fields.get(1).split("\\s");
+            String[] meshIdsCell = fields.get(2).split(" ?/ ?");
+            String[] meshHeadsCell = fields.get(3).split(" / ");
+
+            if (fields.get(4).contains("/")) {
 
                 scores = new double[scoresCell.length];
                 for (int i = 0; i < scoresCell.length; i++) {
@@ -173,7 +180,7 @@ public class DiseaseParser {
 
             }
         } else {
-            LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is " + fields.length);
+            LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is " + fields.size());
             // throw new ArrayIndexOutOfBoundsException();
         }
 
@@ -199,7 +206,8 @@ public class DiseaseParser {
                 if (fields == null) {
                     continue; // header lines
                 }
-                LoadToDB(fields);
+                List<String> data = Arrays.asList(fields);
+                LoadToDB(data);
 
             }
             LOGGER.warn("Number of Diseases to load to Database : " + diseaseList.size());
