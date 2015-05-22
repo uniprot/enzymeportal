@@ -23,7 +23,7 @@ public interface EnzymePortalCompoundRepositoryCustom {
 
     List<EnzymePortalCompound> findCompoundsByNameprefixes(List<String> nameprefixes);
     
-    List<String> findEnzymesByCompound(String compoundId);
+//    List<String> findEnzymesByCompound(String compoundId);
     
     List<Compound> findCompoundsByTaxId(Long taxId);
 

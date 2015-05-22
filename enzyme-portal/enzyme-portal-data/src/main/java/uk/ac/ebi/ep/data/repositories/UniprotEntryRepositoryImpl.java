@@ -230,6 +230,12 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
          List<UniprotEntry> result = query.from($).where($.enzymePortalPathwaysSet.any().pathwayId.trim().equalsIgnoreCase(pathwayId)).list($);
         return result;
     }
+
+    @Override
+    public List<String> findEnzymesByCompound(String compoundId) {
+          JPAQuery query = new JPAQuery(entityManager);
+        return query.from($).where($.enzymePortalCompoundSet.any().compoundId.trim().equalsIgnoreCase(compoundId)).list($.accession);
+    }
     
 
 }

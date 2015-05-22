@@ -225,7 +225,8 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<String> findEnzymesByCompound(String compoundId) {
 
-        return enzymePortalCompoundRepository.findEnzymesByCompound(compoundId);
+        //return enzymePortalCompoundRepository.findEnzymesByCompound(compoundId);
+        return uniprotEntryRepository.findEnzymesByCompound(compoundId);
     }
 
     @Transactional(readOnly = true)

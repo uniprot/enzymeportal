@@ -49,5 +49,7 @@ public interface UniprotEntryRepositoryCustom {
     List<UniprotEntry> findEnzymesByMeshId(String meshId);
 
     List<UniprotEntry> findEnzymesByPathwayId(String pathwayId);
+    
+     List<String> findEnzymesByCompound(String compoundId);
 
 }

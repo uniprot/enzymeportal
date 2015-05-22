@@ -76,7 +76,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     private String url;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private UniprotEntry uniprotAccession;
 
     @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
@@ -148,10 +148,38 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.relationship = relationship;
     }
 
+//    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 47 * hash + Objects.hashCode(this.compoundId);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final EnzymePortalCompound other = (EnzymePortalCompound) obj;
+//        return Objects.equals(this.compoundId, other.compoundId);
+//    }
+//
+    public UniprotEntry getUniprotAccession() {
+        return uniprotAccession;
+    }
+
+    public void setUniprotAccession(UniprotEntry uniprotAccession) {
+        this.uniprotAccession = uniprotAccession;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 47 * hash + Objects.hashCode(this.compoundId);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.compoundId);
+        hash = 29 * hash + Objects.hashCode(this.uniprotAccession);
         return hash;
     }
 
@@ -164,17 +192,15 @@ public class EnzymePortalCompound extends Compound implements Serializable {
             return false;
         }
         final EnzymePortalCompound other = (EnzymePortalCompound) obj;
-        return Objects.equals(this.compoundId, other.compoundId);
+        if (!Objects.equals(this.compoundId, other.compoundId)) {
+            return false;
+        }
+        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
+            return false;
+        }
+        return true;
     }
-
-    public UniprotEntry getUniprotAccession() {
-        return uniprotAccession;
-    }
-
-    public void setUniprotAccession(UniprotEntry uniprotAccession) {
-        this.uniprotAccession = uniprotAccession;
-    }
-
+    
     @Override
     public String getUrl() {
         return url;

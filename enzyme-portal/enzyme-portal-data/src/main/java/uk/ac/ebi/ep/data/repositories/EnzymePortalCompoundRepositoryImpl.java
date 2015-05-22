@@ -11,8 +11,6 @@ import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -74,21 +72,21 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
 
     }
 
-    @Override
-    public List<String> findEnzymesByCompound(String compoundId) {
-
-        Set<String> enzymes = new TreeSet<>();
-        JPAQuery query = new JPAQuery(entityManager);
-        BooleanExpression compound = $.compoundId.equalsIgnoreCase(compoundId);
-
-        List<EnzymePortalCompound> compounds = query.from($).where(compound).distinct().list($);
-
-        compounds.parallelStream().forEach(c -> {
-            enzymes.add(c.getUniprotAccession().getAccession());
-        });
-
-        return enzymes.stream().distinct().collect(Collectors.toList());
-    }
+//    @Override
+//    public List<String> findEnzymesByCompound(String compoundId) {
+//
+//        Set<String> enzymes = new TreeSet<>();
+//        JPAQuery query = new JPAQuery(entityManager);
+//        BooleanExpression compound = $.compoundId.equalsIgnoreCase(compoundId);
+//
+//        List<EnzymePortalCompound> compounds = query.from($).where(compound).distinct().list($);
+//
+//        compounds.stream().forEach(c -> {
+//            enzymes.add(c.getUniprotAccession().getAccession());
+//        });
+//
+//        return enzymes.stream().distinct().collect(Collectors.toList());
+//    }
 
     @Override
     @Transactional(readOnly = true)
