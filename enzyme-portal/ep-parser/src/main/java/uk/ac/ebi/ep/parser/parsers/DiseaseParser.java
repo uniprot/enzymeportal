@@ -181,6 +181,7 @@ public class DiseaseParser {
             }
         } else {
             LOGGER.fatal("ArrayIndexOutOfBoundsException. The size of fields is " + fields.size());
+            LOGGER.fatal("The entry with limited info : " + fields);
             // throw new ArrayIndexOutOfBoundsException();
         }
 

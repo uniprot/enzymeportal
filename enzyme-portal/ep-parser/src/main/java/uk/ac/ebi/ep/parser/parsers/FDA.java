@@ -65,10 +65,10 @@ public class FDA {
 
                     for (String targetId : targets.getValue()) {
 
-                           LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + entry.get().getAccession() + " targetId "+ targetId);
+                        LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + entry.get().getAccession() + " targetId " + targetId);
                         chemblService.getMoleculesByCuratedMechanism(targetId, entry.get(), parserService);
                         //System.out.println("count : " + count.getAndIncrement());
-                    
+
                     }
                 }
             });
@@ -90,8 +90,7 @@ public class FDA {
 //            }
 //
 //        }
-        List<EnzymePortalCompound> compounds = chemblService.getChemblCompounds();
-    
+        List<EnzymePortalCompound> compounds = chemblService.getFdaChemblCompounds();
 
         List<EnzymePortalCompound> bioactive = new ArrayList<>();
         List<EnzymePortalCompound> activator = new ArrayList<>();
@@ -102,6 +101,19 @@ public class FDA {
 
             LOGGER.warn("Num FDA compounds found " + compounds.size());
             System.out.println("Num FDA-compounds found " + compounds.size());
+
+            compounds.stream().forEach((compound) -> {
+                String compoundId = compound.getCompoundId();
+                String moleculeName = compound.getCompoundName();
+                String compoundSource = compound.getCompoundSource();
+                String relationship = compound.getRelationship();
+                String compoundRole = compound.getCompoundRole();
+                String url = compound.getUrl();
+                String accession = compound.getUniprotAccession().getAccession();
+                String note = compound.getNote();
+
+                parserService.createCompound(compoundId, moleculeName, compoundSource, relationship, accession, url, compoundRole, note);
+            });
 
             compounds.stream().map((c) -> {
                 if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
