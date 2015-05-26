@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
@@ -60,17 +59,18 @@ public class FDA {
 
             chunk.stream().forEach((targets) -> {
 
-                Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
-                if (entry.isPresent()) {
+                UniprotEntry entry = new UniprotEntry(targets.getKey());
+                //Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
+                //if (entry.isPresent()) {
 
                     for (String targetId : targets.getValue()) {
 
-                        LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + entry.get().getAccession() + " targetId " + targetId);
-                        chemblService.getMoleculesByCuratedMechanism(targetId, entry.get(), parserService);
+                        LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + entry.getAccession() + " targetId " + targetId);
+                        chemblService.getMoleculesByCuratedMechanism(targetId, entry);
                         //System.out.println("count : " + count.getAndIncrement());
 
                     }
-                }
+                //}
             });
         });
 

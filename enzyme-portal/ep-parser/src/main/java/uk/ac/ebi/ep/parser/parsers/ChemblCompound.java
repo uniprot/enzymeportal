@@ -6,12 +6,13 @@
 package uk.ac.ebi.ep.parser.parsers;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
@@ -60,14 +61,16 @@ public class ChemblCompound {
 
             chunk.stream().forEach((targets) -> {
 
-                Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
-                if (entry.isPresent()) {
+                UniprotEntry entry = new UniprotEntry(targets.getKey());
+                //Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
+                //if (entry.isPresent()) {
 
-                    for (String targetId : targets.getValue()) {
-                        chemblService.chemblSmallMolecules(targetId, entry.get(), parserService);
-                        LOGGER.warn("counter : " + count.getAndIncrement());
-                    }
+                for (String targetId : targets.getValue()) {
+                    LOGGER.warn("counter : " + count.getAndIncrement() + " protein : " + targets.getKey() + " target id : "+ targetId);
+                    chemblService.chemblSmallMolecules(targetId, entry);
+
                 }
+                //}
             });
         });
 
@@ -77,21 +80,18 @@ public class ChemblCompound {
 //        for (Map.Entry<String, List<String>> targets : chemblTargets.entrySet()) {
 //
 //            //System.out.println(map.getKey() + " --> "+ map.getValue());
-//            Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
-//            if (entry.isPresent()) {
-//                System.out.println("protein " + entry.get().getAccession() + " targets " + targets.getValue().size());
-//                for (String targetId : targets.getValue()) {
-//                    chemblService.chemblSmallMolecules(targetId, entry.get());
-//                    System.out.println("count : " + count.getAndIncrement());
-//                }
+//            //Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
+//            UniprotEntry entry = new UniprotEntry(targets.getKey());
+//            //if (entry.isPresent()) {
+//
+//            for (String targetId : targets.getValue()) {
+//                chemblService.chemblSmallMolecules(targetId, entry);
+//                LOGGER.warn("counter : " + count.getAndIncrement() + " protein : " + targets.getKey() + " target id : " + targetId);
 //            }
+//            //}
 //
 //        }
         List<EnzymePortalCompound> compounds = chemblService.getChemblCompounds();
-
-//        List<EnzymePortalCompound> bioactive = new ArrayList<>();
-//        List<EnzymePortalCompound> activator = new ArrayList<>();
-//        List<EnzymePortalCompound> inhibitor = new ArrayList<>();
 
         //load into database
         if (compounds != null) {
@@ -112,23 +112,33 @@ public class ChemblCompound {
                 parserService.createCompound(compoundId, moleculeName, compoundSource, relationship, accession, url, compoundRole, note);
             }
 
-//            compounds.stream().map((c) -> {
-//                if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
-//                    bioactive.add(c);
-//                }
-//                return c;
-//            }).map((c) -> {
-//                if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
-//                    inhibitor.add(c);
-//                }
-//                return c;
-//            }).filter((c) -> (c.getCompoundRole().equalsIgnoreCase("ACTIVATOR"))).forEach((c) -> {
-//                activator.add(c);
-//            });
-//
-//            LOGGER.warn("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
-//
-//            System.out.println("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+            List<EnzymePortalCompound> bioactive = new ArrayList<>();
+            List<EnzymePortalCompound> activator = new ArrayList<>();
+            List<EnzymePortalCompound> inhibitor = new ArrayList<>();
+
+            compounds.stream().map((c) -> {
+                if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
+                    bioactive.add(c);
+                }
+                return c;
+            }).map((c) -> {
+                if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
+                    inhibitor.add(c);
+                }
+                return c;
+            }).filter((c) -> (c.getCompoundRole().equalsIgnoreCase("ACTIVATOR"))).forEach((c) -> {
+                activator.add(c);
+            });
+
+            LOGGER.warn("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+
+            System.out.println("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+            List<EnzymePortalCompound> dc = compounds.stream().distinct().collect(Collectors.toList());
+            System.out.println("DISTINCT compounds found " + dc.size());
+            LOGGER.warn("DISTINCT compounds found " + dc.size());
+//            for (EnzymePortalCompound d : dc) {
+//                LOGGER.warn("DISTINCT compounds :::  " + d);
+//            }
 
         }
 
