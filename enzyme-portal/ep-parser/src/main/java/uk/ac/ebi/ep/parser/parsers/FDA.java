@@ -14,8 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.domain.TempCompoundCompare;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
 import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
@@ -59,18 +58,15 @@ public class FDA {
 
             chunk.stream().forEach((targets) -> {
 
-                UniprotEntry entry = new UniprotEntry(targets.getKey());
-                //Optional<UniprotEntry> entry = parserService.findByAccession(targets.getKey());
-                //if (entry.isPresent()) {
-
+                String protein = targets.getKey();
                     for (String targetId : targets.getValue()) {
 
-                        LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + entry.getAccession() + " targetId " + targetId);
-                        chemblService.getMoleculesByCuratedMechanism(targetId, entry);
-                        //System.out.println("count : " + count.getAndIncrement());
+                        LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + protein + " targetId " + targetId);
+                        chemblService.getMoleculesByCuratedMechanism(targetId, protein);
+                       
 
                     }
-                //}
+                
             });
         });
 
@@ -90,11 +86,11 @@ public class FDA {
 //            }
 //
 //        }
-        List<EnzymePortalCompound> compounds = chemblService.getFdaChemblCompounds();
+        List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds();
 
-        List<EnzymePortalCompound> bioactive = new ArrayList<>();
-        List<EnzymePortalCompound> activator = new ArrayList<>();
-        List<EnzymePortalCompound> inhibitor = new ArrayList<>();
+        List<TempCompoundCompare> bioactive = new ArrayList<>();
+        List<TempCompoundCompare> activator = new ArrayList<>();
+        List<TempCompoundCompare> inhibitor = new ArrayList<>();
 
         //load into database
         if (compounds != null) {
@@ -102,18 +98,7 @@ public class FDA {
             LOGGER.warn("Num FDA compounds found " + compounds.size());
             System.out.println("Num FDA-compounds found " + compounds.size());
 
-            compounds.stream().forEach((compound) -> {
-                String compoundId = compound.getCompoundId();
-                String moleculeName = compound.getCompoundName();
-                String compoundSource = compound.getCompoundSource();
-                String relationship = compound.getRelationship();
-                String compoundRole = compound.getCompoundRole();
-                String url = compound.getUrl();
-                String accession = compound.getUniprotAccession().getAccession();
-                String note = compound.getNote();
 
-                parserService.createCompound(compoundId, moleculeName, compoundSource, relationship, accession, url, compoundRole, note);
-            });
 
             compounds.stream().map((c) -> {
                 if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
@@ -133,7 +118,7 @@ public class FDA {
 
             System.out.println("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
 
-            //System.out.println("activators found " + activator);
+           
         }
 
     }
