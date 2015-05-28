@@ -63,11 +63,11 @@ public class ChemblCompound {
                 String protein = targets.getKey();
 
                 for (String targetId : targets.getValue()) {
-                    LOGGER.warn("counter : " + count.getAndIncrement() + " protein : " + protein + " target id : "+ targetId);
+                    LOGGER.warn("counter : " + count.getAndIncrement() + " protein : " + protein + " target id : " + targetId);
                     chemblService.chemblSmallMolecules(targetId, protein);
 
                 }
-      
+
             });
         });
 
@@ -88,34 +88,26 @@ public class ChemblCompound {
 //            //}
 //
 //        }
-        List<TempCompoundCompare> compounds = chemblService.getChemblCompounds();
+        List<TempCompoundCompare> compounds = chemblService.getChemblCompounds().stream().distinct().collect(Collectors.toList());
 
         //load into database
         if (compounds != null) {
 
-          
             System.out.println("Num compounds found " + compounds.size());
-            
+
             LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
-            parserService.createTempCompounds(compounds);
-             LOGGER.warn("Finished loading temporal compound table ::::::  " );
-              LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
-            parserService.insertCompoundsFromTempTable();
-             LOGGER.warn("**********DONE*************** ");
+            //parserService.createTempCompounds(compounds);
+            LOGGER.warn("Finished loading temporal compound table ::::::  ");
+            LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
+            //parserService.insertCompoundsFromTempTable();
+            LOGGER.warn("**********DONE*************** ");
 
-
-
-            List<TempCompoundCompare> bioactive = new ArrayList<>();
+           //DELETE LATER AND all system.out.println()
             List<TempCompoundCompare> activator = new ArrayList<>();
             List<TempCompoundCompare> inhibitor = new ArrayList<>();
 
             compounds.stream().map((c) -> {
-                if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
-                    bioactive.add(c);
-                }
-                return c;
-            }).map((c) -> {
                 if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
                     inhibitor.add(c);
                 }
@@ -124,16 +116,10 @@ public class ChemblCompound {
                 activator.add(c);
             });
 
-            LOGGER.warn("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+            LOGGER.warn(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
 
-            System.out.println("BIOACTIVE " + bioactive.size() + " INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
-            
-            List<TempCompoundCompare> dc = compounds.stream().distinct().collect(Collectors.toList());
-            System.out.println("DISTINCT compounds found " + dc.size());
-            LOGGER.warn("DISTINCT compounds found " + dc.size());
-            for (TempCompoundCompare d : dc) {
-                LOGGER.warn("DISTINCT compounds :::  " + d);
-            }
+            System.out.println(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+
 
         }
 

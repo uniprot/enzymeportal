@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
@@ -86,9 +87,9 @@ public class FDA {
 //            }
 //
 //        }
-        List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds();
+        List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds().stream().distinct().collect(Collectors.toList());
 
-        List<TempCompoundCompare> bioactive = new ArrayList<>();
+      
         List<TempCompoundCompare> activator = new ArrayList<>();
         List<TempCompoundCompare> inhibitor = new ArrayList<>();
 
@@ -99,24 +100,37 @@ public class FDA {
             System.out.println("Num FDA-compounds found " + compounds.size());
 
 
+             System.out.println("Unique Num FDA-compounds found " + compounds.stream().distinct().collect(Collectors.toList()).size());
+                      
+            System.out.println("Num compounds found " + compounds.size());
+            
+            LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
+            //UPDATE DB
+            parserService.createTempCompounds(compounds);
+             LOGGER.warn("Finished loading temporal compound table ::::::  " );
+              LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
+            parserService.insertCompoundsFromTempTable();
+             LOGGER.warn("**********DONE*************** ");
 
-            compounds.stream().map((c) -> {
-                if (c.getCompoundRole().equalsIgnoreCase("BIOACTIVE")) {
-                    bioactive.add(c);
-                }
-                return c;
-            }).map((c) -> {
-                if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
-                    inhibitor.add(c);
-                }
+
+             
+             //delete LATER
+             compounds.stream().map((c) -> {
+                 if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
+                     inhibitor.add(c);
+                 }
                 return c;
             }).filter((c) -> (c.getCompoundRole().equalsIgnoreCase("ACTIVATOR"))).forEach((c) -> {
                 activator.add(c);
             });
 
-            LOGGER.warn("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
 
-            System.out.println("FDA-BIOACTIVE " + bioactive.size() + " FDA-INHIBITORS " + inhibitor.size() + " FDA-ACTIVATORS " + activator.size());
+            
+            LOGGER.warn(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+
+            System.out.println(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
+            
+
 
            
         }
