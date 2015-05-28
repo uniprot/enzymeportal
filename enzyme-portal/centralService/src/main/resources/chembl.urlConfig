@@ -1,4 +1,4 @@
 chembl.mechanism.url=https://www.ebi.ac.uk/chembl/api/data/mechanism.json?limit=1000&target_chembl_id=
 chembl.molecule.url=https://www.ebi.ac.uk/chembl/api/data/molecule.json?molecule_chembl_id=
-chembl.assay.url=https://www.ebi.ac.uk/chembl/api/data/assay.json?limit=1000&target_chembl_id=
-chembl.activity.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=1000&standard_type=Inhibition&assay_chembl_id=
+chembl.assay.url=https://www.ebi.ac.uk/chembl/api/data/assay.json?limit=100&target_chembl_id=
+chembl.activity.url=https://www.ebi.ac.uk/chembl/api/data/activity.json?limit=100&standard_type=Inhibition&assay_chembl_id=
