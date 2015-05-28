@@ -33,14 +33,20 @@ public class DataConfig {
 
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    protected DataSource driverManagerDataSource;
+    @Autowired
+    protected DataSource oracleDataSource;
+    @Autowired
+    protected DataSource comboPooledDataSource;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         //em.setPersistenceXmlLocation("classpath*:META-INF/persistence.xml");
 
-        
         em.setDataSource(dataSource);
+
         em.setPackagesToScan("uk.ac.ebi.ep.data.domain");
 
         Properties properties = new Properties();
@@ -52,20 +58,19 @@ public class DataConfig {
         vendor.setDatabase(Database.ORACLE);
         em.setJpaProperties(properties);
         em.setJpaVendorAdapter(vendor);
-       
+
         return em;
     }
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-       return new JpaTransactionManager(entityManagerFactory().getObject());
-       
+        return new JpaTransactionManager(entityManagerFactory().getObject());
+
     }
 
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
-    
-    
+
 }

@@ -25,6 +25,12 @@ public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePort
     @Transactional
     @Query(value = "Insert /*+ IGNORE_ROW_ON_DUPKEY_INDEX(ENZYME_PORTAL_COMPOUND,IX_ENZYME_COMPOUND_DUPS) */ INTO ENZYME_PORTAL_COMPOUND "
             + "(COMPOUND_ID,COMPOUND_NAME,COMPOUND_SOURCE,RELATIONSHIP,UNIPROT_ACCESSION,URL,COMPOUND_ROLE,NOTE) VALUES (?1,?2,?3,?4,?5,?6,?7,?8)", nativeQuery = true)
-    void createCompoundIgnoreDup(String compoundId, String compoundName, String compoundSource, String relationship,String accession, String url,String compoundRole, String note);
+    void createCompoundIgnoreDup(String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note);
+
+      @Modifying
+    @Transactional
+    @Query(value = "INSERT /*+ ignore_row_on_dupkey_index(enzyme_portal_compound, ix_enzyme_compound_dups) */ INTO ENZYME_PORTAL_COMPOUND (COMPOUND_ID, COMPOUND_NAME, COMPOUND_SOURCE, RELATIONSHIP,UNIPROT_ACCESSION,URL, COMPOUND_ROLE, NOTE)\n"
+            + "SELECT COMPOUND_ID, COMPOUND_NAME, COMPOUND_SOURCE, RELATIONSHIP,UNIPROT_ACCESSION,URL, COMPOUND_ROLE, NOTE FROM TEMP_COMPOUND_COMPARE tcc WHERE tcc.uniprot_accession IN (SELECT accession FROM UNIPROT_ENTRY)", nativeQuery = true)
+    void insertCompounds();
 
 }

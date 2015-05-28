@@ -13,7 +13,9 @@ import javax.sql.DataSource;
  */
 public abstract class AbstractConfig implements EnzymePortalDataConfig {
 
-    
+    protected abstract DataSource driverManagerDataSource();
 
-    protected abstract DataSource epDataSource();
+    protected abstract DataSource oracleDataSource();
+
+    protected abstract DataSource comboPooledDataSource();
 }
