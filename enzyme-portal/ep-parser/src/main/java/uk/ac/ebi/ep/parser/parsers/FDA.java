@@ -60,14 +60,13 @@ public class FDA {
             chunk.stream().forEach((targets) -> {
 
                 String protein = targets.getKey();
-                    for (String targetId : targets.getValue()) {
+                for (String targetId : targets.getValue()) {
 
-                        LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + protein + " targetId " + targetId);
-                        chemblService.getMoleculesByCuratedMechanism(targetId, protein);
-                       
+                    LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + protein + " targetId " + targetId);
+                    chemblService.getMoleculesByCuratedMechanism(targetId, protein);
 
-                    }
-                
+                }
+
             });
         });
 
@@ -89,7 +88,6 @@ public class FDA {
 //        }
         List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds().stream().distinct().collect(Collectors.toList());
 
-      
         List<TempCompoundCompare> activator = new ArrayList<>();
         List<TempCompoundCompare> inhibitor = new ArrayList<>();
 
@@ -99,40 +97,35 @@ public class FDA {
             LOGGER.warn("Num FDA compounds found " + compounds.size());
             System.out.println("Num FDA-compounds found " + compounds.size());
 
+            System.out.println("Unique Num FDA-compounds found " + compounds.stream().distinct().collect(Collectors.toList()).size());
 
-             System.out.println("Unique Num FDA-compounds found " + compounds.stream().distinct().collect(Collectors.toList()).size());
-                      
             System.out.println("Num compounds found " + compounds.size());
-            
+
             LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
-            parserService.createTempCompounds(compounds);
-             LOGGER.warn("Finished loading temporal compound table ::::::  " );
-              LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
+            for (TempCompoundCompare compound : compounds) {
+                parserService.createTempCompound(compound);
+            }
+            LOGGER.warn("Finished loading temporal compound table ::::::  ");
+            LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
+
             parserService.insertCompoundsFromTempTable();
-             LOGGER.warn("**********DONE*************** ");
+            LOGGER.warn("**********DONE*************** ");
 
-
-             
-             //delete LATER
-             compounds.stream().map((c) -> {
-                 if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
-                     inhibitor.add(c);
-                 }
+            //delete LATER
+            compounds.stream().map((c) -> {
+                if (c.getCompoundRole().equalsIgnoreCase("INHIBITOR")) {
+                    inhibitor.add(c);
+                }
                 return c;
             }).filter((c) -> (c.getCompoundRole().equalsIgnoreCase("ACTIVATOR"))).forEach((c) -> {
                 activator.add(c);
             });
 
-
-            
             LOGGER.warn(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
 
             System.out.println(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
-            
 
-
-           
         }
 
     }

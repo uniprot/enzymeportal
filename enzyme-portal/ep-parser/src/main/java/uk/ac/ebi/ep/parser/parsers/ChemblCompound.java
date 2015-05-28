@@ -97,13 +97,15 @@ public class ChemblCompound {
 
             LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
-            //parserService.createTempCompounds(compounds);
+            for (TempCompoundCompare compound : compounds) {
+                parserService.createTempCompound(compound);
+            }
             LOGGER.warn("Finished loading temporal compound table ::::::  ");
             LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
-            //parserService.insertCompoundsFromTempTable();
+            parserService.insertCompoundsFromTempTable();
             LOGGER.warn("**********DONE*************** ");
 
-           //DELETE LATER AND all system.out.println()
+            //DELETE LATER AND all system.out.println()
             List<TempCompoundCompare> activator = new ArrayList<>();
             List<TempCompoundCompare> inhibitor = new ArrayList<>();
 
@@ -119,7 +121,6 @@ public class ChemblCompound {
             LOGGER.warn(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
 
             System.out.println(" INHIBITORS " + inhibitor.size() + " ACTIVATORS " + activator.size());
-
 
         }
 
