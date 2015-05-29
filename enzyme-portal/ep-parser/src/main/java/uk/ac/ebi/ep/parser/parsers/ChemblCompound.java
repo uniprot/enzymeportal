@@ -97,9 +97,9 @@ public class ChemblCompound {
 
             LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
-            for (TempCompoundCompare compound : compounds) {
+            compounds.stream().forEach((compound) -> {
                 parserService.createTempCompound(compound);
-            }
+            });
             LOGGER.warn("Finished loading temporal compound table ::::::  ");
             LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
             parserService.insertCompoundsFromTempTable();
