@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.pdbeadapter;
 
-
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -32,28 +31,25 @@ public class PdbServiceTest extends AbstractPDBeTest {
 
         LOGGER.info("getPdbSearchResults");
 
-   
+        String pdbId = "3tge";
+        String url = pDBeUrl.getSummaryUrl() + pdbId;
 
-            String pdbId = "3tge";
-            String url = pDBeUrl.getSummaryUrl() + pdbId;
+        String filename = "summary.json";
+        String json = getJsonFile(filename);
 
-            String filename = "summary.json";
-            String json = getJsonFile(filename);
+        mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
 
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        PdbSearchResult expResult = restTemplate.getForObject(url.trim(), PdbSearchResult.class);
 
-            PdbSearchResult expResult = restTemplate.getForObject(url.trim(), PdbSearchResult.class);
+        PdbSearchResult result = restService.getPdbSummaryResults(pdbId);
 
-            PdbSearchResult result = restService.getPdbSummaryResults(pdbId);
+        String title = expResult.get(pdbId).stream().findFirst().get().getTitle();
+        mockRestServer.verify();
 
-            String title = expResult.get(pdbId).stream().findFirst().get().getTitle();
-            mockRestServer.verify();
-
-            assertThat(result.get(pdbId).stream().findFirst().get().getTitle(), containsString(title));
-            assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
-            assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
- 
+        assertThat(result.get(pdbId).stream().findFirst().get().getTitle(), containsString(title));
+        assertEquals(title, result.get(pdbId).stream().findFirst().get().getTitle());
+        assertEquals(expResult.get(pdbId).stream().findFirst().get().getTitle(), result.get(pdbId).stream().findFirst().get().getTitle());
 
     }
 

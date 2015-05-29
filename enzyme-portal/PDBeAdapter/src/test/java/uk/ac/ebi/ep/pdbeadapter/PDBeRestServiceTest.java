@@ -4,7 +4,6 @@ import java.io.IOException;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -123,7 +122,7 @@ public class PDBeRestServiceTest extends AbstractPDBeTest {
     /**
      * Test of getPDBmoleculeResults method, of class PDBeRestService.
      */
-    @Ignore
+   
     public void testGetPDBmoleculeResults() {
         LOGGER.info("getPDBmoleculeResults");
 
@@ -141,13 +140,13 @@ public class PDBeRestServiceTest extends AbstractPDBeTest {
         PDBmolecules result = restService.getPDBmoleculeResults(pdbId);
        
 
-        String name = expResult.get(pdbId).stream().findFirst().get().getMoleculeName();
+        String name = expResult.get(pdbId).stream().findFirst().get().getMoleculeName().stream().findFirst().get();
         mockRestServer.verify();
        
 
-        assertThat(result.get(pdbId).stream().findFirst().get().getMoleculeName(), containsString(name));
-        assertEquals(name, result.get(pdbId).stream().findFirst().get().getMoleculeName());
-        assertEquals(expResult.get(pdbId).stream().findFirst().get().getMoleculeName(), result.get(pdbId).stream().findFirst().get().getMoleculeName());
+        assertThat(result.get(pdbId).stream().findFirst().get().getMoleculeName().stream().findFirst().get(), containsString(name));
+        assertEquals(name, result.get(pdbId).stream().findFirst().get().getMoleculeName().stream().findFirst().get());
+        assertEquals(expResult.get(pdbId).stream().findFirst().get().getMoleculeName().stream().findFirst().get(), result.get(pdbId).stream().findFirst().get().getMoleculeName().stream().findFirst().get());
 
     }
 

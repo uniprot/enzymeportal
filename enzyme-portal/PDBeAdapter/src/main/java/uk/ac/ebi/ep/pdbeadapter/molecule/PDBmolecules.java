@@ -20,8 +20,8 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PDBmolecules {
-    
-      private final Map<String, List<Molecule>> molecule = new HashMap<>();
+
+    private final Map<String, List<Molecule>> molecule = new HashMap<>();
 
     public List<Molecule> get(String name) {
         return molecule.get(name);

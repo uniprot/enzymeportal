@@ -24,6 +24,7 @@ import java.util.Map;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "ca_p_only",
     "weight",
     "entity_id",
     "mutation_flag",
@@ -44,6 +45,9 @@ import java.util.Map;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Molecule {
 
+    //private static final long serialVersionUID = 1L;
+    @JsonProperty("ca_p_only")
+    private Boolean caPOnly;
     @JsonProperty("weight")
     private Double weight;
     @JsonProperty("entity_id")
@@ -53,7 +57,7 @@ public class Molecule {
     @JsonProperty("in_struct_asyms")
     private List<String> inStructAsyms = new ArrayList<>();
     @JsonProperty("molecule_name")
-    private String moleculeName;
+    private List<String> moleculeName = new ArrayList<>();
     @JsonProperty("chem_comp_ids")
     private List<String> chemCompIds = new ArrayList<>();
     @JsonProperty("in_chains")
@@ -68,15 +72,32 @@ public class Molecule {
     private String sequence;
     @JsonProperty("source")
     private List<Source> source = new ArrayList<>();
-    @JsonProperty("length")
-    private Integer length;
     @JsonProperty("synonym")
     private String synonym;
+    @JsonProperty("length")
+    private Integer length;
     @JsonProperty("gene_name")
     private List<String> geneName = new ArrayList<>();
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
-   
+
+    /**
+     *
+     * @return The caPOnly
+     */
+    @JsonProperty("ca_p_only")
+    public Boolean getCaPOnly() {
+        return caPOnly;
+    }
+
+    /**
+     *
+     * @param caPOnly The ca_p_only
+     */
+    @JsonProperty("ca_p_only")
+    public void setCaPOnly(Boolean caPOnly) {
+        this.caPOnly = caPOnly;
+    }
 
     /**
      *
@@ -150,23 +171,25 @@ public class Molecule {
         this.inStructAsyms = inStructAsyms;
     }
 
-    /**
-     *
-     * @return The moleculeName
-     */
-    @JsonProperty("molecule_name")
-    public String getMoleculeName() {
-        return  moleculeName;
-    }
+/**
+* 
+* @return
+* The moleculeName
+*/
+@JsonProperty("molecule_name")
+public List<String> getMoleculeName() {
+return moleculeName;
+}
 
-    /**
-     *
-     * @param moleculeName The molecule_name
-     */
-    @JsonProperty("molecule_name")
-    public void setMoleculeName(String moleculeName) {
-        this.moleculeName = moleculeName;
-    }
+/**
+* 
+* @param moleculeName
+* The molecule_name
+*/
+@JsonProperty("molecule_name")
+public void setMoleculeName(List<String> moleculeName) {
+this.moleculeName = moleculeName;
+}
 
     /**
      *

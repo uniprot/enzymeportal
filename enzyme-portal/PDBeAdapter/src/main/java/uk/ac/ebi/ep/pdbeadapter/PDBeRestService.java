@@ -32,7 +32,7 @@ public class PDBeRestService {
     @Autowired
     private PDBeUrl pDBeUrl;
 
-    private RestTemplate restTemplate = null;
+    private RestTemplate restTemplate = new RestTemplate();
 
     public PDBeRestService() {
         restTemplate = new RestTemplate(clientHttpRequestFactory());
@@ -137,7 +137,7 @@ public class PDBeRestService {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return molecules;
+            return molecules;
     }
 
     /**

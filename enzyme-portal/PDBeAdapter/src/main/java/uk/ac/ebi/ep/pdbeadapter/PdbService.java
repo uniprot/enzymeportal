@@ -51,24 +51,28 @@ public class PdbService {
      */
     public PDB computeProteinStructure(String pdbId) {
 
+        if (pdbId != null) {
+            pdbId = pdbId.trim();
+        }
         PDB pdb = new PDB();
         pdb.setId(pdbId);
 
         Optional<PdbSearchResult> summary = Optional.ofNullable(pdbeRestService.getPdbSummaryResults(pdbId));
 
-        if(summary.isPresent()){
-        List<PDBe> pdbSummary = summary.get().get(pdbId);
-        if (pdbSummary != null && !pdbSummary.isEmpty()) {
+        if (summary.isPresent()) {
+            List<PDBe> pdbSummary = summary.get().get(pdbId);
+            if (pdbSummary != null && !pdbSummary.isEmpty()) {
 
-            pdb = computeSummary(pdbSummary, pdb);
-        }
+                pdb = computeSummary(pdbSummary, pdb);
+            }
         }
         //molecules
         PDBmolecules molecules = pdbeRestService.getPDBmoleculeResults(pdbId);
-
+        System.out.println("MOLS " + molecules);
         if (molecules != null) {
             List<Molecule> mol = molecules.get(pdbId);
 
+            System.out.println("MOL " + mol);
             if (mol != null && !mol.isEmpty()) {
 
                 List<Polypeptide> peptides = computeChains(mol).stream().distinct().collect(Collectors.toList());
@@ -199,7 +203,7 @@ public class PdbService {
         for (Molecule m : mol) {
 
             if ("Bound".equalsIgnoreCase(m.getMoleculeType())) {
-              
+
                 SmallMoleculeLigand ligand = new SmallMoleculeLigand();
                 ligand.setChainId(m.getInChains().toString());
                 ligand.getMolecules().add(m);
@@ -224,7 +228,9 @@ public class PdbService {
                 }
 
                 polypeptide.setLabel("Polypeptide chain");
-                polypeptide.setMoleculeName(m.getMoleculeName());
+                if (m.getMoleculeName() != null && !m.getMoleculeName().isEmpty()) {
+                    polypeptide.setMoleculeName(m.getMoleculeName().stream().findFirst().get());
+                }
 
                 polypeptide.setProtein(true);
                 polypeptides.push(polypeptide);
@@ -252,7 +258,10 @@ public class PdbService {
 
                     polypeptide.setLabel("Chain: " + chain);
                     polypeptide.setChainId(m.getInChains().toString());
-                    polypeptide.setMoleculeName(m.getMoleculeName());
+
+                    if (m.getMoleculeName() != null && !m.getMoleculeName().isEmpty()) {
+                        polypeptide.setMoleculeName(m.getMoleculeName().stream().findFirst().get());
+                    }
 
                     polypeptide.setProtein(true);
                     polypeptides.push(polypeptide);
