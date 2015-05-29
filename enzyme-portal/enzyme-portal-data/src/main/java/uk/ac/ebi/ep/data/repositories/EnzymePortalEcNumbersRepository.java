@@ -22,8 +22,8 @@ public interface EnzymePortalEcNumbersRepository extends JpaRepository<EnzymePor
     @Transactional(readOnly = true)
     @Query(value = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS WHERE EC_NUMBER = :EC_NUMBER", nativeQuery = true)
     List<EnzymePortalEcNumbers> findByEcNumber(@Param("EC_NUMBER") String ecNumber);
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Query(value = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<EnzymePortalEcNumbers> findByEcNumbersByAccession(@Param("UNIPROT_ACCESSION") String ecNumber);
 }

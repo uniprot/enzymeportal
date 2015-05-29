@@ -76,7 +76,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     private String url;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
@@ -166,7 +166,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
 //        final EnzymePortalCompound other = (EnzymePortalCompound) obj;
 //        return Objects.equals(this.compoundId, other.compoundId);
 //    }
-//
+
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }

@@ -54,7 +54,7 @@ public class DataConfig {
         properties.setProperty("hibernate.connection.driver_class", "oracle.jdbc.OracleDriver");
 
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
-        vendor.setShowSql(false);
+        vendor.setShowSql(true);
         vendor.setDatabase(Database.ORACLE);
         em.setJpaProperties(properties);
         em.setJpaVendorAdapter(vendor);
