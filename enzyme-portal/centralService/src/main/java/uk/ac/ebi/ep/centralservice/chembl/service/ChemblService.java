@@ -3,8 +3,10 @@ package uk.ac.ebi.ep.centralservice.chembl.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.text.WordUtils;
+import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.chembl.activity.Activity;
 import uk.ac.ebi.ep.centralservice.chembl.activity.ChemblActivity;
@@ -26,7 +28,7 @@ import uk.ac.ebi.ep.data.domain.TempCompoundCompare;
  */
 public class ChemblService {
 
-    // private static final Logger LOGGER = Logger.getLogger(ChemblService.class);
+    private static final Logger LOGGER = Logger.getLogger(ChemblService.class);
     private final ChemblRestService chemblRestService;
 
     private final List<TempCompoundCompare> chemblCompounds;
@@ -67,14 +69,14 @@ public class ChemblService {
     public void chemblSmallMolecules(String targetId, String protein) {
         List<String> moleculeChemblIdsInhibitors = new ArrayList<>();
         List<String> moleculeChemblIdsActivators = new ArrayList<>();
-       
 
         String assayUrl = chemblServiceUrl.getAssayUrl() + targetId;
 
         Optional<ChemblAssay> chemblAssay = chemblRestService.getChemblAssay(assayUrl);
 
         if (chemblAssay.isPresent()) {
-
+ 
+            LOGGER.warn("Num Assays found for target " + targetId + " == " + chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList()).size());
             for (Assay assay : chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList())) {
                 String assayId = assay.getAssayChemblId();
                 //get activities for a given assay id
@@ -83,9 +85,10 @@ public class ChemblService {
                 Optional<ChemblActivity> chemblActivity = chemblRestService.getChemblActivity(activityUrl);
 
                 if (chemblActivity.isPresent()) {
-
+//                    LOGGER.warn("Num Activities found for Assay " + assayId + " == " + chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList()).size() + " counter "+ count.getAndIncrement());
+                     AtomicInteger count = new AtomicInteger(1);
                     for (Activity activity : chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList())) {
-
+       //LOGGER.warn("Num Activities found for Assay " + assayId + " == " + chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList()).size() + " counter "+ count.getAndIncrement());
                         moleculeChemblIdsInhibitors.add(activity.getMoleculeChemblId());
                     }
 
@@ -101,7 +104,6 @@ public class ChemblService {
 
         List<String> moleculeChemblIdsInhibitors = new ArrayList<>();
         List<String> moleculeChemblIdsActivators = new ArrayList<>();
-       
 
         String mechanismUrl = chemblServiceUrl.getMechanismUrl() + targetId;
 
@@ -130,7 +132,7 @@ public class ChemblService {
     }
 
     private void computePreferredName(List<String> moleculeChemblIds_Inhibitors, List<String> moleculeChemblIds_Activators,
-             List<TempCompoundCompare> compounds, String protein) {
+            List<TempCompoundCompare> compounds, String protein) {
 
         if (!moleculeChemblIds_Inhibitors.isEmpty()) {
 
@@ -148,7 +150,6 @@ public class ChemblService {
                 computeChemblActivators(prefNameUrl, protein, compounds);
             }
         }
-
 
     }
 
@@ -277,6 +278,5 @@ public class ChemblService {
         }
 
     }
-
 
 }
