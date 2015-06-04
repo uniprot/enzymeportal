@@ -8,6 +8,7 @@ import oracle.jdbc.pool.OracleConnectionPoolDataSource;
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,47 @@ public class DevDataConfig extends AbstractConfig {
     @Bean
     @Override
     public DataSource dataSource() {
+        String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
+                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
+
+        String username = env.getRequiredProperty("ep.db.username");
+        String password = env.getRequiredProperty("ep.db.password");
+
+        PoolProperties p = new PoolProperties();
+        p.setUrl(url);
+        p.setDriverClassName("oracle.jdbc.OracleDriver");
+        p.setUsername(username);
+        p.setPassword(password);
+
+        //TODO - fine-tune connection poooling here
+        p.setJmxEnabled(true);
+        p.setTestWhileIdle(false);
+        p.setTestOnBorrow(false);
+        p.setValidationQuery("SELECT 1");
+        p.setTestOnReturn(false);
+        p.setValidationInterval(30000);
+        p.setTimeBetweenEvictionRunsMillis(30000);
+        p.setMaxActive(100);
+        p.setInitialSize(10);
+        p.setMaxWait(10000);
+        p.setRemoveAbandonedTimeout(60);
+        p.setMinEvictableIdleTimeMillis(30000);
+        p.setMinIdle(10);
+        p.setLogAbandoned(true);
+        p.setRemoveAbandoned(true);
+        p.setJdbcInterceptors(
+                "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
+                + "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
+        org.apache.tomcat.jdbc.pool.DataSource datasource = new org.apache.tomcat.jdbc.pool.DataSource();
+        datasource.setPoolProperties(p);
+
+        return datasource;
+
+    }
+
+    @Bean
+    @Override
+    public DataSource poolDataSource() {
         String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                 env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 
@@ -80,7 +122,7 @@ public class DevDataConfig extends AbstractConfig {
         ComboPooledDataSource ds = new ComboPooledDataSource();
         try {
 
-            //app.jdbc.driverClassName=com.mysql.jdbc.Driver
+           
             String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                     env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 

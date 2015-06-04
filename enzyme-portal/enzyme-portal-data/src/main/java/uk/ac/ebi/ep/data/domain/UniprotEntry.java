@@ -52,7 +52,7 @@ import uk.ac.ebi.ep.data.search.model.Species;
     @NamedAttributeNode("enzymePortalPathwaysSet"),
     @NamedAttributeNode("enzymePortalReactionSet"),
     @NamedAttributeNode("enzymePortalSummarySet"),
-    @NamedAttributeNode("enzymePortalCompoundSet"),
+    @NamedAttributeNode(value = "enzymePortalCompoundSet", subgraph = "enzymePortalCompoundSet"),
     @NamedAttributeNode("enzymePortalDiseaseSet"),
     @NamedAttributeNode("uniprotXrefSet"),
     @NamedAttributeNode("enzymePortalEcNumbersSet"),
@@ -62,20 +62,17 @@ import uk.ac.ebi.ep.data.search.model.Species;
             @NamedSubgraph(
                     name = "relatedProteinsId",
                     attributeNodes = {
-                        @NamedAttributeNode("uniprotEntrySet")}
+                        @NamedAttributeNode(value = "uniprotEntrySet", subgraph = "enzymePortalCompoundSet")}
             )
         }
 )
+//@NamedEntityGraph(name = "UniprotEntryEntityGraph",
+//        attributeNodes = @NamedAttributeNode(value = "enzymePortalCompoundSet", subgraph = "enzymePortalCompoundSet"),
+//        subgraphs = @NamedSubgraph(name = "enzymePortalCompoundSet", attributeNodes = @NamedAttributeNode("uniprotAccession")))
 
-//@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {  
-//    @NamedAttributeNode("relatedProteinsId")
-//})
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
     @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
-    //@NamedQuery(name = "UniprotEntry.findByAccession", query = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession"),
-    //@NamedQuery(name = "UniprotEntry.findByName", query = "SELECT u FROM UniprotEntry u WHERE u.name = :name"),
-    //@NamedQuery(name = "UniprotEntry.findByTaxId", query = "SELECT u FROM UniprotEntry u WHERE u.taxId = :taxId"),
     @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName"),
     @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName"),
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
@@ -166,6 +163,14 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.commonName = commonName;
 
     }
+
+    public UniprotEntry(String accession, Set<EnzymePortalDisease> enzymePortalDiseaseSet) {
+        this.accession = accession;
+        this.enzymePortalDiseaseSet = enzymePortalDiseaseSet;
+    }
+    
+    
+    
 
     public long getDbentryId() {
         return dbentryId;
@@ -285,7 +290,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.synonymNames = synonymNames;
     }
 
-    //Note : using protein name will reduce all related species to 1 per enzyme hence we use uniprot name for the equals and hashcode
+    //Note : using protein name will reduce all related species to 1 per enzyme hence we use uniprot accession for the equals and hashcode
     @Override
     public int hashCode() {
         int hash = 7;
@@ -589,7 +594,5 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public void setScoring(Object value) {
         this.scoring = value;
     }
-    
-    
 
 }

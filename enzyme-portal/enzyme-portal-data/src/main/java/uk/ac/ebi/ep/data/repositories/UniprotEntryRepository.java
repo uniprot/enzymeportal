@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
@@ -23,8 +24,10 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     UniprotEntry findByAccession(String accession);
 
     @Transactional(readOnly = true)
-    @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION = :ACCESSION ", nativeQuery = true)
-    UniprotEntry findEnzymeByAccession(@Param("ACCESSION") String accession);
+    @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
+    //@Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION = :ACCESSION ", nativeQuery = true)
+    @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
+    UniprotEntry findEnzymeByAccession(@Param("accession") String accession);
 
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findAccessions();
@@ -38,9 +41,9 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Transactional(readOnly = true)
     @Query(value = "SELECT CATALYTIC_ACTIVITY FROM ENZYME_CATALYTIC_ACTIVITY WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
-    
-     @Transactional(readOnly = true)
-    @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+
+    @Transactional(readOnly = true)
+     @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION")List<String> accession);
 
 }

@@ -148,38 +148,10 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.relationship = relationship;
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 5;
-//        hash = 47 * hash + Objects.hashCode(this.compoundId);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final EnzymePortalCompound other = (EnzymePortalCompound) obj;
-//        return Objects.equals(this.compoundId, other.compoundId);
-//    }
-
-    public UniprotEntry getUniprotAccession() {
-        return uniprotAccession;
-    }
-
-    public void setUniprotAccession(UniprotEntry uniprotAccession) {
-        this.uniprotAccession = uniprotAccession;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.compoundId);
-        hash = 29 * hash + Objects.hashCode(this.uniprotAccession);
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.compoundId);
         return hash;
     }
 
@@ -192,14 +164,42 @@ public class EnzymePortalCompound extends Compound implements Serializable {
             return false;
         }
         final EnzymePortalCompound other = (EnzymePortalCompound) obj;
-        if (!Objects.equals(this.compoundId, other.compoundId)) {
-            return false;
-        }
-        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.compoundId, other.compoundId);
     }
+
+    public UniprotEntry getUniprotAccession() {
+        return uniprotAccession;
+    }
+
+    public void setUniprotAccession(UniprotEntry uniprotAccession) {
+        this.uniprotAccession = uniprotAccession;
+    }
+
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        hash = 29 * hash + Objects.hashCode(this.compoundId);
+//        hash = 29 * hash + Objects.hashCode(this.uniprotAccession);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final EnzymePortalCompound other = (EnzymePortalCompound) obj;
+//        if (!Objects.equals(this.compoundId, other.compoundId)) {
+//            return false;
+//        }
+//        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
+//            return false;
+//        }
+//        return true;
+//    }
     
     @Override
     public String getUrl() {

@@ -39,7 +39,7 @@ import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 public class RelatedProteins extends EnzymeAccession implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-        @Id
+    @Id
     @Basic(optional = false)
     @Column(name = "REL_PROT_INTERNAL_ID")
     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_REL_PROT_ID")
@@ -106,8 +106,5 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
     public String toString() {
         return "uk.ac.ebi.ep.data.domain.RelatedProteins[" + relProtInternalId + " ]";
     }
-    
-    
 
-    
 }

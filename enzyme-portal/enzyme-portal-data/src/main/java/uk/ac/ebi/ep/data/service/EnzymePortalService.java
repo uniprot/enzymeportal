@@ -27,6 +27,7 @@ import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
@@ -313,12 +314,15 @@ public class EnzymePortalService {
 
         return uniprotEntryRepository.findEnzymesByAccession(accession);
     }
-    
- 
 
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
         return uniprotEntryRepository.findSummariesByAccessions(accessions);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnzymePortalCompound> findCompoundsByAccessions(List<String> accessions) {
+        return enzymePortalCompoundRepository.findCompoundsByAccessions(accessions);
     }
 
     @Transactional(readOnly = true)
@@ -357,6 +361,12 @@ public class EnzymePortalService {
     public List<UniprotEntry> findEnzymesByEc(String ec) {
 
         return uniprotEntryRepository.findEnzymesByEc(ec);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Protein> findProteinByEc(String ec) {
+
+        return uniprotEntryRepository.findProteinByEc(ec);
     }
 
     private static Predicate enzymesByNamePrefixes(List<String> namePrefixes) {

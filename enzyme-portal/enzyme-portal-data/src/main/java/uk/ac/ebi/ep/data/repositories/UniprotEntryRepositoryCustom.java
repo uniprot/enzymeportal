@@ -8,8 +8,10 @@ package uk.ac.ebi.ep.data.repositories;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.search.model.Taxonomy;
@@ -49,7 +51,12 @@ public interface UniprotEntryRepositoryCustom {
     List<UniprotEntry> findEnzymesByMeshId(String meshId);
 
     List<UniprotEntry> findEnzymesByPathwayId(String pathwayId);
+
+    List<String> findEnzymesByCompound(String compoundId);
+
+    @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
+    List<UniprotEntry> findSummariesByAccession(List<String> accession);
     
-     List<String> findEnzymesByCompound(String compoundId);
+    List<Protein> findProteinByEc(String ec);
 
 }

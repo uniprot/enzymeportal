@@ -88,7 +88,7 @@ public class EnzymePortalParserService {
     }
 
     public void createTempCompound(TempCompoundCompare compound) {
-        tempRepository.saveAndFlush(compound);
+        tempRepository.save(compound);
     }
 
     public void createTempCompounds(List<TempCompoundCompare> compounds) {
