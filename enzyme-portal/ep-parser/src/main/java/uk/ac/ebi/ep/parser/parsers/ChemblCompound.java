@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -88,8 +89,8 @@ public class ChemblCompound {
 //            //}
 //
 //        }
-        List<TempCompoundCompare> compounds = chemblService.getChemblCompounds().stream().distinct().collect(Collectors.toList());
-
+        List<TempCompoundCompare> compounds = chemblService.getChemblCompounds().stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
+    
         //load into database
         if (compounds != null) {
 
@@ -97,9 +98,11 @@ public class ChemblCompound {
 
             LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
-            compounds.stream().forEach((compound) -> {
+            compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
                 parserService.createTempCompound(compound);
             });
+
+
             LOGGER.warn("Finished loading temporal compound table ::::::  ");
             LOGGER.warn("*******************Updating compound table ignoring duplicates ************");
             parserService.insertCompoundsFromTempTable();
