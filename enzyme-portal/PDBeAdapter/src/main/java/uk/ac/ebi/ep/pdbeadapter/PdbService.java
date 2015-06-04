@@ -68,11 +68,9 @@ public class PdbService {
         }
         //molecules
         PDBmolecules molecules = pdbeRestService.getPDBmoleculeResults(pdbId);
-        System.out.println("MOLS " + molecules);
-        if (molecules != null) {
+         if (molecules != null) {
             List<Molecule> mol = molecules.get(pdbId);
 
-            System.out.println("MOL " + mol);
             if (mol != null && !mol.isEmpty()) {
 
                 List<Polypeptide> peptides = computeChains(mol).stream().distinct().collect(Collectors.toList());
