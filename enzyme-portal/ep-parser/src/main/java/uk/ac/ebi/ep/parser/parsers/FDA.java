@@ -97,14 +97,13 @@ public class FDA {
             LOGGER.warn("Num FDA compounds found " + compounds.size());
             System.out.println("Num FDA-compounds found " + compounds.size());
 
-            System.out.println("Unique Num FDA-compounds found " + compounds.stream().distinct().collect(Collectors.toList()).size());
-
-            System.out.println("Num compounds found " + compounds.size());
 
             LOGGER.warn("About to load the temporal compounds found ::::::  " + compounds.size());
             //UPDATE DB
             compounds.stream().forEach((compound) -> {
-                parserService.createTempCompound(compound);
+
+         parserService.addTempCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+                
             });
           
             LOGGER.warn("Finished loading temporal compound table ::::::  ");
