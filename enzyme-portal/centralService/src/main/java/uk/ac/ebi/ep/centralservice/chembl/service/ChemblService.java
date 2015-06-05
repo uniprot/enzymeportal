@@ -88,7 +88,7 @@ public class ChemblService {
 //                    LOGGER.warn("Num Activities found for Assay " + assayId + " == " + chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList()).size() + " counter "+ count.getAndIncrement());
                      AtomicInteger count = new AtomicInteger(1);
                     for (Activity activity : chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList())) {
-       LOGGER.warn("Num Activities found for Assay " + assayId + " == " + chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList()).size() + " counter "+ count.getAndIncrement());
+       //LOGGER.warn("Num Activities found for Assay " + assayId + " == " + chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList()).size() + " counter "+ count.getAndIncrement());
                         moleculeChemblIdsInhibitors.add(activity.getMoleculeChemblId());
                     }
 
