@@ -43,7 +43,7 @@ public class EnzymePortalParserService {
     private DiseaseRepository diseaseRepository;
 
     @Autowired
-    private TempCompoundCompareRepository tempRepository;
+    private TempCompoundCompareRepository tempCompoundRepository;
 
     @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
@@ -88,11 +88,16 @@ public class EnzymePortalParserService {
     }
 
     public void createTempCompound(TempCompoundCompare compound) {
-        tempRepository.save(compound);
+        tempCompoundRepository.save(compound);
     }
 
     public void createTempCompounds(List<TempCompoundCompare> compounds) {
-        tempRepository.save(compounds);
+        tempCompoundRepository.save(compounds);
+    }
+    
+    
+    public void addTempCompound(String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
+        tempCompoundRepository.addTempCompounds(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
     }
     
         public void insertCompoundsFromTempTable() {
