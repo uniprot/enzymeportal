@@ -33,7 +33,8 @@ public class DevDataConfig extends AbstractConfig {
 
     @Bean
     @Override
-    public DataSource dataSource() {
+    //public DataSource dataSource() {
+              public DataSource driverManagerDataSource() {
         String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                 env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 
@@ -189,7 +190,8 @@ public class DevDataConfig extends AbstractConfig {
 
     @Bean
     @Override
-    public DataSource driverManagerDataSource() {
+            public DataSource dataSource() {
+    //public DataSource driverManagerDataSource() {
         String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                 env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 

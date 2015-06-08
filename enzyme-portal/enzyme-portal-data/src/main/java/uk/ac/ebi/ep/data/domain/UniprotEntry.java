@@ -313,6 +313,10 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return true;
     }
 
+
+
+    
+    
     @Override
     public String toString() {
         return "UniprotEntry{" + "accession=" + accession + ", name=" + name + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';

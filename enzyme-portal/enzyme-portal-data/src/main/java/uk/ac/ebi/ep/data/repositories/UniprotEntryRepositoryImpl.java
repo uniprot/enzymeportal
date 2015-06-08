@@ -11,7 +11,6 @@ import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import static uk.ac.ebi.ep.data.batch.PartitioningSpliterator.partition;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.entry.Protein;
@@ -234,29 +232,29 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return query.from($).where($.enzymePortalCompoundSet.any().compoundId.trim().equalsIgnoreCase(compoundId)).list($.accession);
     }
 
-    @Override
+   // @Override
     public List<UniprotEntry> findSummariesByAccession(List<String> accessions) {
 
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
 
-        BooleanBuilder builder = new BooleanBuilder();
-
-        Stream<String> existingStream = accessions.stream();
-        Stream<List<String>> partitioned = partition(existingStream, 100, 1);
-
-        partitioned.parallel().forEach((chunk) -> {
-            chunk.stream().forEach(accession -> {
-
-                builder.or($.accession.equalsIgnoreCase(accession));
-
-            });
-        });
+//        BooleanBuilder builder = new BooleanBuilder();
+//
+//        Stream<String> existingStream = accessions.stream();
+//        Stream<List<String>> partitioned = partition(existingStream, 100, 1);
+//
+//        partitioned.parallel().forEach((chunk) -> {
+//            chunk.stream().forEach(accession -> {
+//
+//                builder.or($.accession.equalsIgnoreCase(accession));
+//
+//            });
+//        });
 
         JPAQuery query = new JPAQuery(entityManager);
 
-        query.setHint("javax.persistence.loadgraph", eGraph);
+       // query.setHint("javax.persistence.loadgraph", eGraph);
 
-        List<UniprotEntry> result = query.from($).where(builder).distinct().list($);
+        List<UniprotEntry> result = query.from($).where($.accession.in(accessions)).distinct().list($);
 
         return result;
     }

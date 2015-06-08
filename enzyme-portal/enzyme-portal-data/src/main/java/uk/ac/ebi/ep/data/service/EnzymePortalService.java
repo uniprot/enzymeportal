@@ -10,6 +10,7 @@ import com.mysema.query.types.Predicate;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.entry.Enzyme;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
@@ -314,10 +316,13 @@ public class EnzymePortalService {
 
         return uniprotEntryRepository.findEnzymesByAccession(accession);
     }
-
+    
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
-        return uniprotEntryRepository.findSummariesByAccessions(accessions);
+        //return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
+        
+        return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().map(Enzyme::new).distinct().map(Enzyme::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+      
     }
 
     @Transactional(readOnly = true)
@@ -329,6 +334,13 @@ public class EnzymePortalService {
     public Page<UniprotEntry> findEnzymesByAccessions(List<String> accessions, Pageable pageable) {
 
         return uniprotEntryRepository.findAll(enzymesByAccessions(accessions), pageable);
+
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UniprotEntry> findEnzymesByAccessionsIn(List<String> accessions, Pageable pageable) {
+
+        return uniprotEntryRepository.findByAccessionIn(accessions, pageable);
 
     }
 

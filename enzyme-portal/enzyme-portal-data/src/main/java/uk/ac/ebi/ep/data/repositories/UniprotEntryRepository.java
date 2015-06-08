@@ -6,6 +6,8 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -43,7 +45,11 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
 
     @Transactional(readOnly = true)
-     @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+     @Query(value = "SELECT DISTINCT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION")List<String> accession);
+    
+        @Transactional(readOnly = true)
+   // @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
+    Page<UniprotEntry> findByAccessionIn(List<String> accessions,Pageable pageable);
 
 }
