@@ -226,9 +226,7 @@ public class ChemblService {
                 }
             }
         }
-        if(compounds.size() > 0){
-        System.out.println("NUM COMPOUNDS FOUND "+ compounds.size());
-        }
+  
     }
 
     private void computeChemblActivators(String prefNameUrl, String protein, List<TempCompoundCompare> compounds) {
