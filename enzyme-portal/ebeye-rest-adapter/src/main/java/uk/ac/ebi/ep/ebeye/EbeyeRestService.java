@@ -196,13 +196,14 @@ public class EbeyeRestService {
 
         }).collect(Collectors.toList());
         
+        if(result != null && !result.isEmpty()){
         result.stream().map(ebeye -> ebeye.getEntries().stream().distinct().collect(Collectors.toList())).forEach(entries -> {
             entries.stream().forEach(entry -> {
                 accessions.add(entry.getUniprotAccession());
             });
         });
         
-             
+        }   
 //        for(EbeyeSearchResult r : result){
 //            
 //            for(Entry e : r.getEntries().stream().distinct().collect(Collectors.toList())){
