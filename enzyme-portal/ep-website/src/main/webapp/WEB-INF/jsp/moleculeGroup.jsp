@@ -23,14 +23,28 @@
                                 arguments="${explArgs}" />
             </p>
             <div>
-                <c:forEach var="molecule" items="${moleculeGroup.molecule}"
-                    begin="0"
-                    end="${fn:length(moleculeGroup.molecule) gt searchConfig.maxMoleculesPerGroup?
-                        2 : fn:length(moleculeGroup.molecule)-1}">
-                    <div class="small-molecule-container">
-                    <%@include file="molecule.jsp" %>
+                <div>
+                    <c:forEach var="molecule" items="${moleculeGroup.molecule}"
+                        begin="0"
+                        end="11">
+                        <div class="small-molecule-container">
+                        <%@include file="molecule.jsp" %>
+                        </div>
+                    </c:forEach>
+                </div>
+                <c:if test="${fn:length(moleculeGroup.molecule) >= 12}">
+                    <a href="#" id="more-molecule-trigger">More...</a>
+                    <div id="more-molecule-container" style="display: none">
+                        <c:forEach var="molecule" items="${moleculeGroup.molecule}"
+                                   begin="12"
+                                   end="${fn:length(moleculeGroup.molecule) gt searchConfig.maxMoleculesPerGroup?
+                                2 : fn:length(moleculeGroup.molecule)-1}">
+                            <div class="small-molecule-container">
+                                <%@include file="molecule.jsp" %>
+                            </div>
+                        </c:forEach>
                     </div>
-                </c:forEach>
+                </c:if>
             </div>
             <c:if test="${moleculeGroup.totalFound gt searchConfig.maxMoleculesPerGroup}">
                 These are only ${searchConfig.maxMoleculesPerGroup} out of
