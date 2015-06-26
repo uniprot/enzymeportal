@@ -215,7 +215,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     @Override
     public List<UniprotEntry> findEnzymesByMeshId(String meshId) {
         JPAQuery query = new JPAQuery(entityManager);
-        List<UniprotEntry> result = query.from($).where($.enzymePortalDiseaseSet.any().meshId.trim().equalsIgnoreCase(meshId)).list($);
+        List<UniprotEntry> result = query.from($).where($.enzymePortalDiseaseSet.any().omimNumber.trim().equalsIgnoreCase(meshId)).list($);
         return result;
     }
 
@@ -232,27 +232,14 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return query.from($).where($.enzymePortalCompoundSet.any().compoundId.trim().equalsIgnoreCase(compoundId)).list($.accession);
     }
 
-   // @Override
-    public List<UniprotEntry> findSummariesByAccession(List<String> accessions) {
+    @Override
+    public List<UniprotEntry> findSummariesByAcc(List<String> accessions) {
 
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
 
-//        BooleanBuilder builder = new BooleanBuilder();
-//
-//        Stream<String> existingStream = accessions.stream();
-//        Stream<List<String>> partitioned = partition(existingStream, 100, 1);
-//
-//        partitioned.parallel().forEach((chunk) -> {
-//            chunk.stream().forEach(accession -> {
-//
-//                builder.or($.accession.equalsIgnoreCase(accession));
-//
-//            });
-//        });
-
         JPAQuery query = new JPAQuery(entityManager);
-
-       // query.setHint("javax.persistence.loadgraph", eGraph);
+        
+        query.setHint("javax.persistence.loadgraph", eGraph);
 
         List<UniprotEntry> result = query.from($).where($.accession.in(accessions)).distinct().list($);
 

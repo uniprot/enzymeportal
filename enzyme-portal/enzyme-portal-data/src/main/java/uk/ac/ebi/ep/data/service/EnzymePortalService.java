@@ -28,7 +28,7 @@ import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
-import uk.ac.ebi.ep.data.entry.Enzyme;
+import uk.ac.ebi.ep.data.entry.EnzymePortal;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
@@ -228,7 +228,6 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<String> findEnzymesByCompound(String compoundId) {
 
-        //return enzymePortalCompoundRepository.findEnzymesByCompound(compoundId);
         return uniprotEntryRepository.findEnzymesByCompound(compoundId);
     }
 
@@ -317,17 +316,36 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findEnzymesByAccession(accession);
     }
     
+        @Transactional(readOnly = true)
+    public List<UniprotEntry> findEnzymesByAcc(List<String> accessions) {
+
+        return uniprotEntryRepository.findSummariesByAcc(accessions);
+    }
+
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
         //return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
-        
-        return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().map(Enzyme::new).distinct().map(Enzyme::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
-      
+
+        return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+
+    }
+    
+        @Transactional(readOnly = true)
+    public List<UniprotEntry> findEnzymePortalByAccessions(String accession) {
+        //return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
+
+        return uniprotEntryRepository.findEnzymePortalByAccession(accession).stream().distinct().collect(Collectors.toList());
+
     }
 
     @Transactional(readOnly = true)
     public List<EnzymePortalCompound> findCompoundsByAccessions(List<String> accessions) {
         return enzymePortalCompoundRepository.findCompoundsByAccessions(accessions);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnzymePortalCompound> findCompoundsByAccession(String accession) {
+        return enzymePortalCompoundRepository.findCompoundsByAccession(accession);
     }
 
     @Transactional(readOnly = true)

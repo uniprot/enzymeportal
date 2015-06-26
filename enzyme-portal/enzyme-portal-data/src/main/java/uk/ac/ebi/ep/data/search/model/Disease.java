@@ -221,10 +221,25 @@ public class Disease implements Serializable {
             return false;
         }
         final Disease other = (Disease) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
+        return Objects.equals(this.name, other.name);
+    }
+
+    private String cleanDiseaseName(String diseaseName) {
+
+        String cleanName = null;
+        if (null != diseaseName) {
+
+            if (diseaseName.contains(",")) {
+                cleanName = diseaseName.replaceAll(",", "");
+            }
+            if (diseaseName.contains("(")) {
+                cleanName = diseaseName.split("\\(")[0];
+            }
+
+            return cleanName;
         }
-        return true;
+
+        return cleanName;
     }
 
     @Override

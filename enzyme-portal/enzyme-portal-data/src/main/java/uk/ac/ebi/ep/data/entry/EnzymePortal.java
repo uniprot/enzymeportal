@@ -12,11 +12,11 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  *
  * @author joseph
  */
-public class Enzyme {
+public class EnzymePortal {
 
     private final UniprotEntry protein;
 
-    public Enzyme(UniprotEntry p) {
+    public EnzymePortal(UniprotEntry p) {
         this.protein = p;
     }
 
@@ -39,7 +39,7 @@ public class Enzyme {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Enzyme other = (Enzyme) obj;
+        final EnzymePortal other = (EnzymePortal) obj;
         return Objects.equals(this.protein.getProteinName(), other.protein.getProteinName());
     }
     

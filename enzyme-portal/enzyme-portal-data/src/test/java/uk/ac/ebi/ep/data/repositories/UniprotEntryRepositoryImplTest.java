@@ -108,6 +108,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         int expResult = 3;
         List<UniprotEntry> result = uniprotEntryRepository.findEnzymeByNamePrefix(namePrefix);
         assertEquals(expResult, result.size());
+        assertTrue(result.size() > 0);
 
     }
 
@@ -280,10 +281,10 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
     @Test
     public void testFindEnzymesByMeshId() {
         LOGGER.info("findEnzymesByMeshId");
-        String meshId = "D006934";
+        String omimId = "143880";
 
         int expResult = 1;
-        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByMeshId(meshId);
+        List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByMeshId(omimId);
 
         assertEquals(expResult, result.size());
 

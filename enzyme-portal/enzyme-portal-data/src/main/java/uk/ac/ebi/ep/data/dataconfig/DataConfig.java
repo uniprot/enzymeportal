@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -27,18 +28,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
-@PropertySource({"classpath:ep-web-client.properties", "classpath:chembl-adapter.properties", "classpath:log4j.properties"})
+@PropertySources({
+    @PropertySource(value = "classpath:log4j.properties", ignoreResourceNotFound = true),
+    @PropertySource("classpath:ep-web-client.properties"),
+    @PropertySource("classpath:chembl-adapter.properties")
 
+})
 public class DataConfig {
 
     @Autowired
     private DataSource dataSource;
-    @Autowired
-    protected DataSource driverManagerDataSource;
-    @Autowired
-    protected DataSource oracleDataSource;
-    @Autowired
-    protected DataSource comboPooledDataSource;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -53,6 +52,13 @@ public class DataConfig {
         properties.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.NoCacheProvider");
         properties.setProperty("hibernate.connection.driver_class", "oracle.jdbc.OracleDriver");
 
+//         properties.setProperty("hibernate.cache.use_second_level_cache", "false");
+//         properties.setProperty("hibernate.cache.auto_evict_collection_cache", "true");
+//        
+//        
+//        properties.setProperty("hibernate.batch_fetch_style", "DYNAMIC");
+//        properties.setProperty("hibernate.max_fetch_depth", "1");
+//        properties.setProperty("hibernate.default_batch_fetch_size", "16");
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
         vendor.setShowSql(false);
         vendor.setDatabase(Database.ORACLE);

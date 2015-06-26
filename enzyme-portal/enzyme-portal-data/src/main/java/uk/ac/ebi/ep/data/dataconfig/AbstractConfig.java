@@ -18,5 +18,7 @@ public abstract class AbstractConfig implements EnzymePortalDataConfig {
     protected abstract DataSource oracleDataSource();
 
     protected abstract DataSource comboPooledDataSource();
+
     protected abstract DataSource poolDataSource();
+
 }

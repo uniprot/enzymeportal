@@ -54,7 +54,7 @@ public interface UniprotEntryRepositoryCustom {
     List<String> findEnzymesByCompound(String compoundId);
 
     //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    //List<UniprotEntry> findSummariesByAccession(List<String> accession);
+    List<UniprotEntry> findSummariesByAcc(List<String> accession);
     
     List<Protein> findProteinByEc(String ec);
 

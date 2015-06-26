@@ -71,17 +71,17 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
      * Note: meshId is used as default disease id for now as some omim entries
      * are null and we don't have efo yet
      *
-     * @param meshId
+     * @param omimId
      *
      * @return list of accessions
      */
     @Transactional(readOnly = true)
     @Override
-    public List<String> findAccessionsByMeshId(String meshId) {
+    public List<String> findAccessionsByOmimId(String omimId) {
 
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<String> entries = query.from($).where($.meshId.equalsIgnoreCase(meshId)).list($.uniprotAccession.accession)
+        List<String> entries = query.from($).where($.omimNumber.equalsIgnoreCase(omimId)).list($.uniprotAccession.accession)
                 .stream().distinct().collect(Collectors.toList());
 
         return entries;
@@ -124,7 +124,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
         List<Disease> result = query.from($).where($.uniprotAccession.taxId.eq(taxId))
-                .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName, $.url)).stream().distinct().collect(Collectors.toList());
+                .list(Projections.constructor(Disease.class, $.omimNumber, $.diseaseName, $.url)).stream().distinct().collect(Collectors.toList());
 
         return result;
     }
@@ -135,7 +135,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         JPAQuery query = new JPAQuery(entityManager);
         String diseaseName = String.format("%%%s%%", name).toLowerCase();
         List<Disease> result = query.from($).where($.diseaseName.toLowerCase().like(diseaseName))
-                .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName)).stream().distinct().collect(Collectors.toList());
+                .list(Projections.constructor(Disease.class, $.omimNumber, $.diseaseName)).stream().distinct().collect(Collectors.toList());
 
         return result;
     }
@@ -145,7 +145,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
               JPAQuery query = new JPAQuery(entityManager);
      
         List<Disease> result = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
-                .list(Projections.constructor(Disease.class, $.meshId, $.diseaseName,$.definition,$.url,$.evidence));
+                .list(Projections.constructor(Disease.class, $.omimNumber, $.diseaseName,$.definition,$.url,$.evidence));
 
         return result.stream().distinct().collect(Collectors.toList()); 
     }

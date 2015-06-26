@@ -38,4 +38,8 @@ public interface EnzymePortalCompoundRepository extends JpaRepository<EnzymePort
     @Query(value = "SELECT * FROM ENZYME_PORTAL_COMPOUND WHERE UNIPROT_ACCESSION IN (:UNIPROT_ACCESSION)", nativeQuery = true)
     List<EnzymePortalCompound> findCompoundsByAccessions(@Param("UNIPROT_ACCESSION") List<String> accession);
 
+        @Transactional(readOnly = true)
+    @Query(value = "SELECT * FROM ENZYME_PORTAL_COMPOUND WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+    List<EnzymePortalCompound> findCompoundsByAccession(@Param("UNIPROT_ACCESSION") String accession);
+
 }

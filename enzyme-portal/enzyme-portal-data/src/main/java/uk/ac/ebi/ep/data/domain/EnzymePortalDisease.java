@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -26,7 +25,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 import uk.ac.ebi.ep.data.search.model.Disease;
 
 /**
@@ -37,18 +35,9 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 @Table(name = "ENZYME_PORTAL_DISEASE")
 @XmlRootElement
 
-@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {  
+@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
     @NamedAttributeNode("uniprotAccession")
 })
-
-
-
-
-
-
-
-
-
 
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalDisease.findAll", query = "SELECT e FROM EnzymePortalDisease e"),
@@ -70,7 +59,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     @Basic(optional = false)
     @Column(name = "DISEASE_ID")
     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_DISEASE_ID")
-    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
     private Long diseaseId;
     @Column(name = "OMIM_NUMBER")
     private String omimNumber;
@@ -90,11 +79,8 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     private String url;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-        @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
-
-    private static final Comparator<String> NAME_COMPARATOR
-            = new ChemicalNameComparator();
 
     public EnzymePortalDisease() {
     }
@@ -136,7 +122,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     }
 
     public String getDiseaseName() {
-        return diseaseName;
+        return diseaseName.replaceAll(",", "").split("\\(")[0];
     }
 
     public void setDiseaseName(String diseaseName) {
@@ -180,8 +166,6 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     public String toString() {
         return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", omimNumber=" + omimNumber + ", meshId=" + meshId + ", diseaseName=" + diseaseName + '}';
     }
-
-
 
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
@@ -236,12 +220,13 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
 
     @Override
     public String getId() {
-        return meshId;
+        return omimNumber;
     }
 
     @Override
     public String getName() {
-        return diseaseName;
+  
+        return diseaseName.replaceAll(",", "").split("\\(")[0];
     }
 
     @Override
@@ -268,5 +253,5 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
     public int getNumEnzyme() {
         return numEnzyme;
     }
-
+    
 }

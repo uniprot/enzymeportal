@@ -9,9 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +22,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 
 /**
@@ -37,17 +40,21 @@ import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
     //@NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix")
 })
 public class RelatedProteins extends EnzymeAccession implements Serializable {
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @Column(name = "REL_PROT_INTERNAL_ID")
     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_REL_PROT_ID")
-    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
     private BigDecimal relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    // @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
+    @BatchSize(size = 20)
+    @Fetch(FetchMode.JOIN)
     private Set<UniprotEntry> uniprotEntrySet;
 
     public RelatedProteins() {

@@ -24,7 +24,7 @@ import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
  *
  * @author joseph
  */
-@Transactional
+//@Transactional
 @Service
 public class EnzymePortalParserService {
 

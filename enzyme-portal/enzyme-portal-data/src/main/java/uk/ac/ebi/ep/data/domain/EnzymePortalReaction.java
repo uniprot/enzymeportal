@@ -153,7 +153,7 @@ public class EnzymePortalReaction   implements Serializable {
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.EnzymePortalReaction[ reactionInternalId=" + reactionInternalId + " ]";
+        return reactionName;
     }
 
     @XmlTransient

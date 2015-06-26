@@ -175,31 +175,6 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.uniprotAccession = uniprotAccession;
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 7;
-//        hash = 29 * hash + Objects.hashCode(this.compoundId);
-//        hash = 29 * hash + Objects.hashCode(this.uniprotAccession);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final EnzymePortalCompound other = (EnzymePortalCompound) obj;
-//        if (!Objects.equals(this.compoundId, other.compoundId)) {
-//            return false;
-//        }
-//        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
-//            return false;
-//        }
-//        return true;
-//    }
     
     @Override
     public String getUrl() {

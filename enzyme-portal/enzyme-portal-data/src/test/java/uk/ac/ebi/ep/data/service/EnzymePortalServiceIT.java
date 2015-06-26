@@ -56,10 +56,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         expResult.setName("CP24A_MOUSE");
 
         UniprotEntry result = enzymePortalService.findByAccession(ACCESSION);
-        System.out.println("checks 1"+ result.getEnzymePortalCompoundSet());
-        System.out.println("checks 2"+ result.getRelatedProteinsId());
-        System.out.println("check 3 "+ result.getRelatedProteinsId().getUniprotEntrySet());
-        assertEquals(expResult, result);
+           assertEquals(expResult, result);
 
     }
 
@@ -685,10 +682,10 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     @Test
     public void testFindEnzymesByMeshId() {
         LOGGER.info("findEnzymesByMeshId");
-        String meshId = "D006934";
+        String omimId = "143880";
 
         int expResult = 1;
-        List<UniprotEntry> result = enzymePortalService.findEnzymesByMeshId(meshId);
+        List<UniprotEntry> result = enzymePortalService.findEnzymesByMeshId(omimId);
 
         assertEquals(expResult, result.size());
 
