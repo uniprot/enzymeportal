@@ -59,4 +59,9 @@ $(function() {
 		}
 	});
 	$('.print').attr('target', '_blank');
+	$('#more-molecule-trigger').click(function(){
+		$('#more-molecule-container').toggle();
+		$(this).toggle();
+		return false;
+	});
 });
