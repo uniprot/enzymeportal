@@ -145,7 +145,7 @@ public class Cofactors extends CompoundParser {
                     String accession = summary.getUniprotAccession().getAccession();
 
                     parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
-
+                   
                     //deprecate later
                     compound.setRelationship(Relationship.is_cofactor_of.name());
                     compound.setUniprotAccession(summary.getUniprotAccession());
@@ -153,7 +153,7 @@ public class Cofactors extends CompoundParser {
 
                     compound.setNote(note);
                     compounds.add(compound);
-
+                  
                 }
                 if (compound == null) {
                     computeSpecialCases(cofactorText, summary, note);

@@ -100,7 +100,6 @@ public class ChemblCompound {
             //UPDATE DB
             compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
                  parserService.addTempCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-                
             });
 
 
