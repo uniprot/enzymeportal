@@ -236,7 +236,7 @@ public class EnzymeRetrieverIT extends BaseTest {
         expResult.setMolecule(chemicalEntity);
 
         EnzymeModel result = instance.getMolecules(uniprotAccession);
-
+        
         assertEquals(expResult.getMolecule().getInhibitors().getTotalFound(), result.getMolecule().getInhibitors().getTotalFound());
 
     }

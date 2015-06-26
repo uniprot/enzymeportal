@@ -35,8 +35,9 @@ public class DiseasesPredicate implements Predicate {
 			UniprotEntry es = (UniprotEntry) obj;
 			for (EnzymeAccession ea : es.getRelatedspecies()){
 				for (Disease disease : ea.getDiseases()) {
-					String name = disease.getName();
-					if (diseasesFilter.contains(name)){
+					//String name = disease.getName().replaceAll(",", "").split("\\(")[0];
+                                        String id = disease.getId();
+					if (diseasesFilter.contains(id)){
 						eval = true;
 						break;
 					}
