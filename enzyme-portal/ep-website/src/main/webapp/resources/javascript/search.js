@@ -354,7 +354,7 @@ function addCheckbox(filterGroup, obj, selected) {
     $('<input/>', {
         "type": "hidden",
         "name": "organismName",
-        "value": obj.name
+        "value": obj.id
     }).appendTo("#filtersForm");
 
 
@@ -449,7 +449,7 @@ function addCheckboxDisease(filterGroup, obj, selected) {
     var cb = $('<input/>', {
         "type": "checkbox",
         "name": "searchparams." + filterGroup,
-        "value": (filterGroup === 'diseases' ? obj.name : obj.id),
+        "value": (filterGroup === 'diseases' ? obj.id : obj.id),
         //"value":  obj.id,
         onclick: "form.submit()"
     });

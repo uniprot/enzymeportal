@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -361,7 +362,7 @@ public abstract class AbstractController {
                 CollectionUtils.filter(filteredResults,
                         new DiseasesPredicate(diseasesFilter));
                 CollectionUtils.filter(filteredResults,
-                        new EcNumberPredicate(ecNumbersFilter));
+                        new EcNumberPredicate(ecNumbersFilter.stream().sorted().collect(Collectors.toList())));
 
                 // Create a new SearchResults, don't modify the one in session
                 SearchResults sr = new SearchResults();

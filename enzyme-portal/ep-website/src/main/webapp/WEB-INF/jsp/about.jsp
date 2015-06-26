@@ -102,16 +102,16 @@
                             which contain information about small molecule chemistry and
                             bioactivity
                         </li>
-                        <li><a href="http://www.ebi.ac.uk/thornton-srv/databases/CoFactor/">CoFactor</a>
+<!--                        <li><a href="http://www.ebi.ac.uk/thornton-srv/databases/CoFactor/">CoFactor</a>
                             and <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/">MACiE</a>
                             for highly detailed, curated information about cofactors and reaction
                             mechanisms.
-                        </li>
+                        </li>-->
                     </ul>
                     The Enzyme Portal brings together lots of diverse
-                    information about enzymes and displays it in an organised overview.
+                    information about enzymes and displays it in an organized overview.
                     It covers a large number of species including the key model
-                    organisms, and provides a simple way to compare orthologues.
+                    organisms, and provides a simple way to compare orthologs.
                     </p>
                     <!--   </div> -->
 

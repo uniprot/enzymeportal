@@ -45,14 +45,14 @@ displayedFilters[group] = 0;
 // Populate js variables with data from server:
 //<c:forEach var="disease" items="${diseasesList}">
 var dis = { "id": "${disease.id}", "name": "${disease.name}", "url":"${disease.url}" };
-<c:choose><c:when test="${Fn:contains(diseasesParams, disease.name)}">
+<c:choose><c:when test="${Fn:contains(diseasesParams, disease.id)}">
 checkedFilters[group][checkedFilters[group].length] = dis; //</c:when>
 <c:otherwise>
 uncheckedFilters[group][uncheckedFilters[group].length] = dis; //</c:otherwise>
 </c:choose>
 diseaseAutoCompleteDataSource.push({
     label: "${not empty disease.name? disease.name:disease.id}",
-    value: "${not empty disease.name? disease.name:disease.id}"});//</c:forEach>
+    value: "${not empty disease.id? disease.id:disease.name}"});//</c:forEach>
 
 // Display filters:
 for (var i = 0; i < checkedFilters[group].length; i++){

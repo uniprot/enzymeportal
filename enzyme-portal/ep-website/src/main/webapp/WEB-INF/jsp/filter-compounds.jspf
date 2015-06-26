@@ -43,8 +43,8 @@
 
 
         <div id="accordion">
-            <h3 class="head">Bioactive <span class="num"></span></h3>
-            <div id="bioactive" class="scroll" style="max-height: 24ex"></div>               
+<!--            <h3 class="head">Bioactive <span class="num"></span></h3>
+            <div id="bioactive" class="scroll" style="max-height: 24ex"></div>               -->
             <h3 class="head">Drug <span class="num"></span></h3>
             <div id="drug" class="scroll"></div>
             <h3 class="head">Inhibitor <span class="num"></span></h3>

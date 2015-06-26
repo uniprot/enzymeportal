@@ -21,6 +21,7 @@
                                 arguments="small molecules"/></p>
             </c:when>
             <c:otherwise>
+ <%--            
                 <c:set var="moleculeGroup" value="${molecules.bioactiveLigands}"/>
                 <c:set var="emptyArgs" value="bioactive compound"/>
                 <c:set var="titleArgs" value="Bioactive compounds,bind to"/>
@@ -42,7 +43,7 @@
                 <div id="drugs">
                     <%@include  file="moleculeGroup.jsp" %>
                 </div>
-
+--%>
                 <c:set var="moleculeGroup" value="${molecules.activators}"/>
                 <c:set var="emptyArgs" value="activator"/>
                 <c:set var="titleArgs" value="Activators,activate"/>

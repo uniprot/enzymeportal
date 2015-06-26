@@ -51,8 +51,11 @@ public class ApplicationInitializer implements WebApplicationInitializer {
          
 
         rootContext.getEnvironment().setActiveProfiles(profile);
-        //rootContext.getEnvironment().setActiveProfiles("uzpdev");
-        rootContext.setDisplayName("ep-website");
+          //rootContext.register(DataConfig.class);
+        //rootContext.scan("uk.ac.ebi.ep.data.dataconfig");
+       //rootContext.getEnvironment().setActiveProfiles("uzprel");
+       //rootContext.getEnvironment().setActiveProfiles("uzppub-pg");
+        //rootContext.setDisplayName("ep-website");
 
         //Context loader listener
         servletContext.addListener(new ContextLoaderListener(rootContext));

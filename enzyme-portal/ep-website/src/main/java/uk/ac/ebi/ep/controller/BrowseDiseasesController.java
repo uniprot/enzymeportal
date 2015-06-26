@@ -53,7 +53,6 @@ public class BrowseDiseasesController extends AbstractController {
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         diseaseList = finder.findDiseases();
-
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         model.addAttribute("diseaseList", diseaseList);

@@ -517,7 +517,13 @@
                 </c:if>
             </c:if>
         </div>
-    </div> 
+    </div>
+          <c:if test="${not empty enzyme.ec}">
+               <b>Ec : </b> 
+               <span>
+                 ${enzyme.ec}  
+               </span><br/>
+            </c:if>
             
                 <c:if test="${not empty enzyme.enzymeCatalyticActivitySet}">
         <c:set var="enzymeCatalyticActivitySize" value="${fn:length(enzyme.enzymeCatalyticActivitySet)}"/>

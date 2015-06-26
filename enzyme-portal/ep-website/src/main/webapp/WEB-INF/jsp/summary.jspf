@@ -253,6 +253,14 @@
         </div>
     </div>
             
+
+            <c:if test="${not empty enzyme.ec}">
+               <b>Ec : </b> 
+               <span>
+                 ${enzyme.ec}  
+               </span><br/>
+            </c:if>
+            
 <!--            catalytic activities-->
     <%--<c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">--%>
     <c:if test="${not empty enzyme.enzymeCatalyticActivitySet}">

@@ -16,7 +16,6 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.enzyme.model.Molecule;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 
-
 /**
  * Due to no similar functionality in JSTL, this function was designed to help
  * various operation in a Collection.
@@ -28,43 +27,44 @@ public final class Functions {
     private static ChebiConfig chebiConfig;
     private static ChemblConfig chemblConfig;
     private static Map<String, String> drugbankConfig;
-    
+
     public Functions() {
     }
-    
-    public static void setChebiConfig(ChebiConfig chebiConfig){
+
+    public static void setChebiConfig(ChebiConfig chebiConfig) {
         Functions.chebiConfig = chebiConfig;
     }
- 
-    public static void setChemblConfig(ChemblConfig chemblConfig){
+
+    public static void setChemblConfig(ChemblConfig chemblConfig) {
         Functions.chemblConfig = chemblConfig;
     }
-    
-    public static void setDrugbankConfig(Map<String, String> config){
+
+    public static void setDrugbankConfig(Map<String, String> config) {
         Functions.drugbankConfig = config;
     }
-    
-    public static boolean startsWithDigit(String data){
+
+    public static boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
     }
-    
-    
-        /**This function is to enable using capital letter case in checking if a string starts with the letter
-     * 
+
+    /**
+     * This function is to enable using capital letter case in checking if a
+     * string starts with the letter
+     *
      * @param data the original string
      * @param letter the first letter
      * @return true if the string starts with the first letter
      */
-    public static boolean startsWithLowerCase(String data, String letter){
+    public static boolean startsWithLowerCase(String data, String letter) {
         String current = data;
-        if(startsWithDigit(data)){
-             current = data.replaceAll("(-)?\\d+(\\-\\d*)?", "").trim();
-       
+        if (startsWithDigit(data)) {
+            current = data.replaceAll("(-)?\\d+(\\-\\d*)?", "").trim();
+
         }
-        return current.startsWith(letter.toLowerCase());
+        //return current.startsWith(letter.toLowerCase());
+         return current.startsWith(letter);
     }
-    
-  
+
     /**
      *
      * @param collection
@@ -74,8 +74,8 @@ public final class Functions {
     public static boolean contains(Collection collection, Object item) {
         return collection.contains(item);
     }
-    
-        /**
+
+    /**
      *
      * @param alpha the first item
      * @param omega the last item
@@ -115,8 +115,6 @@ public final class Functions {
             eval = true;
         }
 
-
-
         return eval;
     }
 
@@ -144,63 +142,72 @@ public final class Functions {
     /**
      * Retrieves the URL to the source of the molecule, or builds it if it is
      * not set yet.
+     *
      * @param molecule
      * @return a URL pointing to the source of the molecule.
      */
-    public static String getMoleculeUrl(Molecule molecule){
+    public static String getMoleculeUrl(Molecule molecule) {
         String url = (String) molecule.getUrl();
-        if (url == null || url.length() == 0){
-            if (molecule.getId().startsWith("DB")){
-                // DrugBank
-                url = Functions.drugbankConfig.get("compound.base.url")
-                        + molecule.getId();
-            } else if (molecule.getId().startsWith("CHEMBL")){
-                // CHEMBL
+        if (url == null || url.length() == 0) {
+//            if (molecule.getId().startsWith("DB")){
+//                // DrugBank
+//                url = Functions.drugbankConfig.get("compound.base.url")
+//                        + molecule.getId();
+//            } else if (molecule.getId().startsWith("CHEMBL")){
+//                // CHEMBL
+//                url = Functions.chemblConfig.getCompoundBaseUrl()
+//                        + molecule.getId();
+//            } else if (molecule.getId().startsWith("CHEBI")){
+//                // ChEBI
+//                url = Functions.chebiConfig.getCompoundBaseUrl()
+//                        + molecule.getId();
+//            }
+
+            if (molecule.getId().startsWith("CHEMBL")) {
                 url = Functions.chemblConfig.getCompoundBaseUrl()
                         + molecule.getId();
-            } else if (molecule.getId().startsWith("CHEBI")){
-                // ChEBI
+            } else if (molecule.getId().startsWith("CHEBI")) {
                 url = Functions.chebiConfig.getCompoundBaseUrl()
                         + molecule.getId();
             }
+
         }
         return url;
     }
-    
+
     /**
      * Builds the URL for the image of a molecule, according to its source
-     * database. 
+     * database.
+     *
      * @param molecule
      * @return a URL for the image.
      */
-    public static String getMoleculeImgSrc(Molecule molecule){
+    public static String getMoleculeImgSrc(Molecule molecule) {
         String imgSrc = "";
-        if (molecule.getId().startsWith("CHEBI")){
+        if (molecule.getId().startsWith("CHEBI")) {
             imgSrc = Functions.chebiConfig.getCompoundImgBaseUrl()
                     + molecule.getId();
-        } else if (molecule.getId().startsWith("CHEMBL")){
+        } else if (molecule.getId().startsWith("CHEMBL")) {
             imgSrc = Functions.chemblConfig.getCompoundImgBaseUrl()
                     + molecule.getId();
-        } else if (molecule.getId().startsWith("DB")){
+        } else if (molecule.getId().startsWith("DB")) {
             imgSrc = MessageFormat.format(
                     drugbankConfig.get("compound.img.base.url"),
                     molecule.getId());
         }
         return imgSrc;
     }
- 
-    public static String getSummaryBasketId(UniprotEntry summary){
+
+    public static String getSummaryBasketId(UniprotEntry summary) {
         List<String> accs = new ArrayList<>();
         summary.getRelatedspecies().stream().forEach((acc) -> {
             accs.add(acc.getUniprotaccessions().get(0));
         });
-    
+
         Collections.sort(accs);
 
         return accs.toString();
-        
+
        // return summary.getAccession();
-        
-       
     }
 }

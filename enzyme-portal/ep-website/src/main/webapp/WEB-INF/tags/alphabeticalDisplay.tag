@@ -39,7 +39,7 @@
                                     <c:set var="count" value="${count + 1}"/>
 
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/search-disease?entryid=${data.meshId}&entryname=${data.diseaseName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}">${data.diseaseName}</a>
+                                        <a href="${pageContext.request.contextPath}/search-disease?entryid=${data.omimNumber}&entryname=${data.diseaseName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}">${data.diseaseName}</a>
                                     </li>
                                 </c:if>
                             </c:when>
