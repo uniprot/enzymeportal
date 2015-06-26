@@ -39,7 +39,7 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  */
 public class EbeyeRestService {
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRestService.class);
+    private final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EbeyeRestService.class);
 
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
@@ -48,9 +48,9 @@ public class EbeyeRestService {
     @Autowired
     private RestTemplate restTemplate;
     
-    private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private static final int HITCOUNT = 9000;
-    private static final int QUERY_LIMIT = 1000;
+    private  final int DEFAULT_EBI_SEARCH_LIMIT = 100;
+    private  final int HITCOUNT = 9000;
+    private  final int QUERY_LIMIT = 1000;
 
     /**
      *
