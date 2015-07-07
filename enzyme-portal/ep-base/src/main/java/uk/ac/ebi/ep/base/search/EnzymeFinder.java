@@ -10,12 +10,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -24,23 +25,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.biobabel.blast.Hit;
-import uk.ac.ebi.biobabel.blast.Hsp;
-import uk.ac.ebi.biobabel.blast.NcbiBlastClient;
-import uk.ac.ebi.biobabel.blast.NcbiBlastClientException;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import static uk.ac.ebi.ep.data.batch.PartitioningSpliterator.partition;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
+import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.entry.EnzymePortal;
+import uk.ac.ebi.ep.data.entry.Family;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.exceptions.EnzymeFinderException;
 import uk.ac.ebi.ep.data.exceptions.MultiThreadingException;
@@ -55,6 +54,14 @@ import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
+import uk.ac.ebi.ep.uniprotservice.blast.UniprotBlastService;
+import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
+import uk.ac.ebi.kraken.interfaces.blast.Hit;
+import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
+import uk.ac.ebi.kraken.model.blast.JobStatus;
+import uk.ac.ebi.uniprot.dataservice.client.ebiservice.BlastHit;
+import uk.ac.ebi.uniprot.dataservice.client.exception.EBIServiceException;
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 /**
  *
@@ -73,30 +80,32 @@ public class EnzymeFinder {
     List<String> speciesFilter;
     List<String> compoundFilter;
     List<UniprotEntry> enzymeSummaryList;
-    @Deprecated
-    List<String> confirmedEnzymes;
 
     private final EnzymePortalService service;
 
-    //@Autowired
     protected IntenzAdapter intenzAdapter;
 
     private final EbeyeRestService ebeyeRestService;
 
-    Set<Species> uniqueSpecies = new TreeSet<>();
-    List<Disease> diseaseFilters = new LinkedList<>();
-    List<Compound> compoundFilters = new ArrayList<>();
-    LinkedList<EcNumber> ecNumberFilters = new LinkedList<>();
+    Set<Species> uniqueSpecies;
+    List<Disease> diseaseFilters;
+    List<Compound> compoundFilters;
+    LinkedList<EnzymePortalEcNumbers> ecNumberFilters;
 
-    Set<Compound> uniquecompounds = new HashSet<>();
-    Set<Disease> uniqueDiseases = new HashSet<>();
-    private NcbiBlastClient blastClient;
+    Set<Compound> uniquecompounds;
+    Set<Disease> uniqueDiseases;
+
     private final int LIMIT = 7000;
     private final int ACCESSION_LIMIT = 800;
 
+    @Autowired
+    private UniprotBlastService blastService;
+    @Autowired
+    private UniprotProdBlastService prodBlastService;
+
     public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
         this.service = service;
-        //this.ebeyeService = eService;
+
         this.ebeyeRestService = ebeyeRestService;
 
         enzymeSearchResults = new SearchResults();
@@ -108,7 +117,19 @@ public class EnzymeFinder {
 
         uniprotNameprefixes = new TreeSet<>();
         uniprotNameprefixSet = new LinkedHashSet<>();
-        confirmedEnzymes = new ArrayList<>();
+
+        uniqueSpecies = new TreeSet<>();
+        diseaseFilters = new LinkedList<>();
+        compoundFilters = new ArrayList<>();
+        ecNumberFilters = new LinkedList<>();
+
+        uniquecompounds = new HashSet<>();
+        uniqueDiseases = new HashSet<>();
+    }
+
+    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, UniprotProdBlastService prodBlastService ) {
+        this(service, ebeyeRestService);
+        this.prodBlastService = prodBlastService;
     }
 
     public EnzymePortalService getService() {
@@ -155,18 +176,6 @@ public class EnzymeFinder {
         }
     }
 
-//    @Deprecated
-//    private EbeyeSearchResult getEbeyeSearchResult() {
-//
-//        String query = searchParams.getText();
-//        if (!StringUtils.isEmpty(query)) {
-//            query = query.trim();
-//        }
-//
-//        EbeyeSearchResult searchResult = ebeyeService.query(query);
-//
-//        return searchResult;
-//    }
     private void getResultsFromEpIndex() {
 
         String query = searchParams.getText();
@@ -219,21 +228,6 @@ public class EnzymeFinder {
         return nameSynonyms;
     }
 
-    @Deprecated
-    private void computeDedicatedFilters(List<String> accessions) {
-
-        Stream<String> existingStream = accessions.stream();
-        Stream<List<String>> partitioned = partition(existingStream, 100, 1);
-
-        partitioned.parallel().forEach((chunk) -> {
-            List<EnzymePortalCompound> compounds = service.findCompoundsByAccessions(chunk).stream().distinct().collect(Collectors.toList());
-            if (!compounds.isEmpty()) {
-                compoundFilters.addAll(compounds);
-            }
-        });
-
-    }
-
     private void computeFilterFacets(UniprotEntry entry) {
 
         ecNumberFilters.addAll(entry.getEnzymePortalEcNumbersSet().stream().distinct().collect(Collectors.toList()));
@@ -254,25 +248,11 @@ public class EnzymeFinder {
 //            uniqueSpecies.add(e.getSpecies());
 //        });
         entry.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((e) -> {
-            uniqueSpecies.add(e.getSpecies());
+            if (e.getSpecies().getScientificname() != null) {
+                uniqueSpecies.add(e.getSpecies());
+            }
 
         });
-
-    }
-
-    @Deprecated
-    private void computeFilterFacets(List<UniprotEntry> entries) {
-        for (UniprotEntry entry : entries) {
-            entry.getRelatedProteinsId().getUniprotEntrySet().stream().map((e) -> {
-                diseaseFilters.addAll(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
-                return e;
-            }).map((e) -> {
-                compoundFilters.addAll(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
-                return e;
-            }).forEach((e) -> {
-                uniqueSpecies.add(e.getSpecies());
-            });
-        }
 
     }
 
@@ -287,16 +267,18 @@ public class EnzymeFinder {
 
             }
             proteinNames.add(entry.getProteinName());
-            confirmedEnzymes.add(entry.getAccession());
-            computeFilterFacets(entry);
 
         }
-        enzymeList.sort(SWISSPROT_FIRST);
-        return enzymeList.stream().distinct().collect(Collectors.toList());
+
+        enzymeList.stream().forEach((e) -> {
+            computeFilterFacets(e);
+        });
+
+        return enzymeList.stream().distinct().sorted(SORT_BY_IDENTITY_REVERSE_ORDER).collect(Collectors.toList());
     }
 
     private List<UniprotEntry> computeUniqueEnzymes(List<UniprotEntry> enzymes, String keyword) {
-        //LinkedList<UniprotEntry> enzymeList = new LinkedList<>();
+
         LinkedList<UniprotEntry> theEnzymes = new LinkedList<>();
         Deque<UniprotEntry> enzymeList = new LinkedList<>();
         Set<String> proteinNames = new HashSet<>();
@@ -318,8 +300,6 @@ public class EnzymeFinder {
             }
 
             proteinNames.add(entry.getProteinName());
-            confirmedEnzymes.add(entry.getAccession());
-            computeFilterFacets(entry);
 
         }
         //enzymeList.sort(SWISSPROT_FIRST);
@@ -333,6 +313,7 @@ public class EnzymeFinder {
                 theEnzymes.offerLast(enzyme);
 
             }
+            computeFilterFacets(enzyme);
         }
 
         return theEnzymes.stream().distinct().collect(Collectors.toList());
@@ -349,21 +330,17 @@ public class EnzymeFinder {
             Stream<String> existingStream = accessions.stream();
             Stream<List<String>> partitioned = partition(existingStream, 100, 1);
 
-
             partitioned.parallel().forEach((chunk) -> {
 
                 // Page<UniprotEntry> page = service.findEnzymesByAccessionsIn(chunk, pageable);
-                
                 //Page<UniprotEntry> page = service.findEnzymesByAccessions(chunk, pageable);//39 sec 53.610s
                 //List<UniprotEntry> enzymes = page.getContent().stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
-               // List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
-
-             List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk); //36 sec 58.683s
+                // List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+                List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk); //36 sec 58.683s
                 enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
 
-                        
             });
-            //computeDedicatedFilters(confirmedEnzymes);
+
             long endTime = System.nanoTime();
             long duration = endTime - startTime;
             long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
@@ -375,33 +352,15 @@ public class EnzymeFinder {
 
     }
 
-    private final Comparator<UniprotEntry> SWISSPROT_FIRST = (UniprotEntry e1, UniprotEntry e2) -> e1.getEntryType().compareTo(e2.getEntryType());
+    protected final Comparator<UniprotEntry> SWISSPROT_FIRST = (UniprotEntry e1, UniprotEntry e2) -> e1.getEntryType().compareTo(e2.getEntryType());
 
-    private static Comparator<UniprotEntry> SWISSPROT_WITH_FUNCTION_FIRST = (UniprotEntry e1, UniprotEntry e2) -> {
+    protected final Comparator<UniprotEntry> SWISSPROT_WITH_FUNCTION_FIRST = (UniprotEntry e1, UniprotEntry e2) -> {
         int comparison = e1.getEntryType().compareTo(e2.getEntryType());
         if (comparison == 0 && e1.getFunction() != null && e2.getFunction() != null) {
             comparison = e1.getFunction().compareToIgnoreCase(e2.getFunction());
         }
         return comparison;
     };
-
-    @Deprecated
-    private List<UniprotEntry> getEnzymesByNamePrefixes(List<String> nameprefixes, String keyword) {
-
-        List<UniprotEntry> enzymeList = new ArrayList<>();
-
-        if (nameprefixes.size() > 0) {
-            Pageable pageable = new PageRequest(0, 50, Sort.Direction.ASC, "function", "entryType");//temp impl
-            Page<UniprotEntry> page = service.findEnzymesByNamePrefixes(nameprefixes, pageable);
-            //List<UniprotEntry>  enzymes = service.findEnzymesByNamePrefixes(nameprefixes);
-            List<UniprotEntry> enzymes = page.getContent();
-            enzymeList = computeUniqueEnzymes(enzymes, keyword);
-
-        }
-
-        return enzymeList;
-
-    }
 
     /**
      * Retrieves full enzyme summaries.
@@ -522,8 +481,9 @@ public class EnzymeFinder {
         filters.setCompounds(compoundFilters.stream().distinct().collect(Collectors.toList()));
 
         filters.setDiseases(diseaseFilters.stream().distinct().collect(Collectors.toList()));
-        //ecNumberFilters.sort(SORT_BY_EC);
-        filters.setEcNumbers(ecNumberFilters.stream().distinct().sorted().collect(Collectors.toList()));
+
+        filters.setEcNumbers(ecNumberFilters.stream().map(Family::new).distinct().sorted().map(Family::unwrapFamily).filter(Objects::nonNull).collect(Collectors.toList()));
+
         searchResults.setSearchfilters(filters);
     }
 
@@ -562,111 +522,137 @@ public class EnzymeFinder {
         return getSearchResults(accessions, searchParams.getText());
     }
 
-    private NcbiBlastClient getBlastClient() {
-        //refer to this doc
-        //http://www.ebi.ac.uk/Tools/sss/ncbiblast/help/index-protein.html#step3
-        if (blastClient == null) {
-            blastClient = new NcbiBlastClient();
-            blastClient.setEmail("enzymeportal-devel@lists.sourceforge.net");
-            //blastClient.setBaseUrl("http://www.ebi.ac.uk/Tools/services/rest/ncbiblast");
-            //blastClient.setDatabase("uniprotkb_swissprot");
-            //blastClient.setDatabase("uniprotkb");
-        }
-        return blastClient;
+    public static Comparator<UniprotEntry> SORT_BY_IDENTITY_REVERSE_ORDER = (UniprotEntry key1, UniprotEntry key2) -> -(key1.getRelatedspecies().stream().findFirst().get().getIdentity().compareTo(key2.getRelatedspecies().stream().findFirst().get().getIdentity()));
+
+    /**
+     *
+     * @param sequence input sequence
+     * @return job id
+     * @throws EBIServiceException
+     */
+    public String blast(String sequence) throws EBIServiceException {
+        // return blastService.jApiBlast(sequence);
+        return prodBlastService.jApiBlast(sequence);
+
     }
 
-    public String blast(String sequence) throws NcbiBlastClientException {
-        return getBlastClient().run(sequence);
+    /**
+     *
+     * @param jobId job id
+     * @return the status of the job
+     * @throws EBIServiceException
+     */
+    public JobStatus getJobStatus(String jobId) throws EBIServiceException {
+//        return blastService.jobStatus(jobId);
+        return prodBlastService.jobStatus(jobId);
     }
 
-    public NcbiBlastClient.Status getBlastStatus(String jobId)
-            throws NcbiBlastClientException {
-        return getBlastClient().getStatus(jobId);
-    }
+    /**
+     *
+     * @param jobId job id
+     * @return search result
+     * @throws ServiceException
+     */
+    public SearchResults getUniprotBlastResultBeta(String jobId) throws ServiceException {
+        Set<UniprotEntry> enzymes = new LinkedHashSet<>();
+        Set<String> accessions = new TreeSet<>();
+        List<UniprotEntry> enzymeSummaries = new LinkedList<>();
 
-    public SearchResults getBlastResult(String jobId)
-            throws NcbiBlastClientException, MultiThreadingException {
-        List<Hit> hits = getBlastClient().getResults(jobId);
-        Map<String, Hsp> scorings = new HashMap<>();
+        Map<String, Integer> score = new LinkedHashMap<>();
+        Map<String, Float> identity = new LinkedHashMap<>();
+        List<BlastHit<UniProtEntry>> blastResults = blastService.blastService(jobId);
 
-        for (Hit hit : hits) {
+        for (BlastHit<UniProtEntry> result : blastResults) {
+            Hit hit = result.getHit();
 
-            scorings.put(hit.getUniprotAccession(), hit.getHsps().get(0));
+            if (hit.getAlignments() != null) {
 
-        }
-
-        List<String> uniprotAccessionList = filterBlastResults(hits).stream().distinct().collect(Collectors.toList());
-
-        //enzymeSummaryList = getEnzymeSummariesByAccessions(uniprotAccessionList, "");
-        enzymeSummaryList = getEnzymesByAccessions(uniprotAccessionList);
-
-        for (UniprotEntry es : enzymeSummaryList) {
-
-            for (EnzymeAccession ea : es.getRelatedspecies()) {
-
-                String hitAcc = ea.getUniprotaccessions().get(0);
-
-                ea.setScoring(scorings.get(hitAcc));
-                es.setScoring(scorings.get(hitAcc));
+                score.put(hit.getAc(), hit.getAlignments().stream().findFirst().get().getScore());
+                identity.put(hit.getAc(), hit.getAlignments().stream().findFirst().get().getIdentity());
+                accessions.add(hit.getAc());
 
             }
-            Collections.sort(es.getRelatedspecies(), (EnzymeAccession o1, EnzymeAccession o2) -> {
-                if (o1.getScoring() == null && o2.getScoring() == null) {
-                    return 0;
-                }
-                if (o1.getScoring() == null) {
-                    return 1;
-                }
-
-                if (o2.getScoring() == null) {
-                    return -1;
-                }
-
-                return ((Comparable) o1.getScoring())
-                        .compareTo(o2.getScoring());
-            });
 
         }
 
-        enzymeSummaryList.sort(SORT_BY_BITSCORE);
-        enzymeSearchResults.setSummaryentries(enzymeSummaryList);
-        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+        List<String> accs = accessions.stream().distinct().collect(Collectors.toList());
+
+        if (accs.size() > 0) {
+            List<String> accessionList = filterBlastResultsForEnzymes(accs).stream().collect(Collectors.toList());
+
+            enzymeSummaries = getEnzymesByAccessions(accessionList).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
+
+            for (UniprotEntry es : enzymeSummaries) {
+
+                for (EnzymeAccession ea : es.getRelatedspecies()) {
+
+                    for (Map.Entry<String, Float> map : identity.entrySet()) {
+
+                        String hitAcc = ea.getUniprotaccessions().get(0);
+
+                        if (map.getKey().equalsIgnoreCase(hitAcc)) {
+                            ea.setScoring(true);
+                            Float id = map.getValue();
+                            if (id != null) {
+                                ea.setIdentity(id);
+                            } else {
+                                ea.setIdentity(0.0f);
+                            }
+                        }
+
+                    }
+
+                    score.entrySet().stream().forEach((map) -> {
+                        String hitAcc = ea.getUniprotaccessions().get(0);
+                        if (map.getKey().equalsIgnoreCase(hitAcc)) {
+                            ea.setScore(map.getValue());
+                        }
+                    });
+
+                    Collections.sort(es.getRelatedspecies(), (id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity())));
+
+                }
+
+                enzymes.add(es);
+
+            }
+
+            enzymeSummaries = enzymes.stream().distinct().sorted(SORT_BY_IDENTITY_REVERSE_ORDER).collect(Collectors.toList());
+
+        }
+
+        enzymeSearchResults.setSummaryentries(enzymeSummaries);
+        enzymeSearchResults.setTotalfound(enzymeSummaries.size());
         LOGGER.debug("Building filters...");
         buildFilters(enzymeSearchResults);
+
         return enzymeSearchResults;
     }
 
-    public static Comparator<UniprotEntry> SORT_BY_BITSCORE = (UniprotEntry o1, UniprotEntry o2) -> {
-        if (o1.getScoring() == null && o2.getScoring() == null) {
+    public static Comparator<UniprotEntry> SORT_BY_IDENTITY = (UniprotEntry o1, UniprotEntry o2) -> {
+        if (o1.getIdentity() == null && o2.getIdentity() == null) {
             return 0;
         }
-        if (o1.getScoring() == null) {
+        if (o1.getIdentity() == null) {
             return 1;
         }
 
-        if (o2.getScoring() == null) {
+        if (o2.getIdentity() == null) {
             return -1;
         }
 
-        return ((Comparable) o1.getScoring())
-                .compareTo(o2.getScoring());
+        return -((Comparable) o1.getIdentity())
+                .compareTo(o2.getIdentity());
     };
 
     /**
-     * Filters the hits returned by the Blast client to get only enzymes.
      *
-     * @param hits Hits returned by the Blast client.
-     * @return a list of unique UniProt ID prefixes (species stripped).
-     * @throws MultiThreadingException
+     * @param accs accessions to filter for enzymes
+     * @return confirmed enzymes
      */
-    private List<String> filterBlastResults(List<Hit> hits)
-            throws MultiThreadingException {
-        List<String> accs = new ArrayList<>();
-        hits.stream().forEach((hit) -> {
-            accs.add(hit.getUniprotAccession());
-        });
+    private List<String> filterBlastResultsForEnzymes(List<String> accs) {
 
-        return service.filterEnzymesInAccessions(accs);
+        return service.filterEnzymesInAccessions(accs).stream().distinct().collect(Collectors.toList());
 
     }
 
@@ -686,7 +672,6 @@ public class EnzymeFinder {
         List<UniprotEntry> enzymes = service.findEnzymesByMeshId(meshId);
 
         List<UniprotEntry> enzymeList = computeUniqueEnzymes(enzymes);
-        //computeDedicatedFilters(confirmedEnzymes);
         searchResults.setSummaryentries(enzymeList);
         searchResults.setTotalfound(enzymeList.size());
 
@@ -702,7 +687,6 @@ public class EnzymeFinder {
         List<UniprotEntry> enzymes = service.findEnzymesByPathwayId(pathwayId);
 
         List<UniprotEntry> enzymeList = computeUniqueEnzymes(enzymes);
-        //computeDedicatedFilters(confirmedEnzymes);
         searchResults.setSummaryentries(enzymeList);
         searchResults.setTotalfound(enzymeList.size());
 
@@ -753,30 +737,238 @@ public class EnzymeFinder {
 
     private List<UniprotEntry> getEnzymesByAccessions(List<String> accessions) {
 
-        final List<UniprotEntry> enzymeList = new LinkedList<>();
-
+        final LinkedList<UniprotEntry> enzymeList = new LinkedList<>();
+        List<UniprotEntry> results = new ArrayList<>();
         if (accessions.size() > 0) {
-            Pageable pageable = new PageRequest(0, 500, Sort.Direction.ASC, "function", "entryType");
 
             Stream<String> existingStream = accessions.stream();
             Stream<List<String>> partitioned = partition(existingStream, 124, 1);
 
             partitioned.parallel().forEach((chunk) -> {
 
-                //Page<UniprotEntry> page = service.findEnzymesByAccessions(chunk, pageable);
-                //List<UniprotEntry> enzymes = page.getContent();
                 List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk);
 
-                enzymeList.addAll(computeUniqueEnzymes(enzymes));
+                enzymeList.addAll(enzymes);
+
+                results.addAll(computeUniqueEnzymesFromBlast(enzymeList));
 
             });
 
-            //computeDedicatedFilters(confirmedEnzymes);
+            List<UniprotEntry> distinctEnzymes = results.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+
+            return distinctEnzymes.stream().sorted(SORT_BY_IDENTITY_REVERSE_ORDER).collect(Collectors.toList());
 
         }
 
-        return enzymeList;
+        return results;
 
     }
 
+    private List<UniprotEntry> computeUniqueEnzymesFromBlast(List<UniprotEntry> enzymes) {
+        List<UniprotEntry> enzymeList = new LinkedList<>();
+        Set<String> proteinNames = new HashSet<>();
+        for (UniprotEntry entry : enzymes) {
+
+            if (!proteinNames.contains(entry.getProteinName().trim())) {
+
+                enzymeList.add(entry);
+
+            }
+            proteinNames.add(entry.getProteinName().trim());
+        }
+
+        enzymeList.stream().forEach((e) -> {
+            computeFilterFacets(e);
+        });
+
+        return enzymeList.stream().distinct().sorted(SORT_BY_IDENTITY_REVERSE_ORDER).collect(Collectors.toList());
+    }
+
+    //deprecate when Beta goes live
+    public SearchResults getUniprotBlastResult(String jobId) throws ServiceException {
+        Set<UniprotEntry> enzymes = new LinkedHashSet<>();
+        Set<String> accessions = new TreeSet<>();
+        List<UniprotEntry> enzymeSummaries = new LinkedList<>();
+
+        Map<String, Integer> score = new LinkedHashMap<>();
+        Map<String, Float> identity = new LinkedHashMap<>();
+        List<uk.ac.ebi.kraken.uuw.services.remoting.blast.BlastHit<UniProtEntry>> blastResults = prodBlastService.blastService(jobId);
+
+        for (uk.ac.ebi.kraken.uuw.services.remoting.blast.BlastHit<UniProtEntry> result : blastResults) {
+            Hit hit = result.getHit();
+
+            if (hit.getAlignments() != null) {
+
+                score.put(hit.getAc(), hit.getAlignments().stream().findFirst().get().getScore());
+                identity.put(hit.getAc(), hit.getAlignments().stream().findFirst().get().getIdentity());
+                accessions.add(hit.getAc());
+
+            }
+
+        }
+
+        List<String> accs = accessions.stream().distinct().collect(Collectors.toList());
+
+        if (accs.size() > 0) {
+            List<String> accessionList = filterBlastResultsForEnzymes(accs).stream().collect(Collectors.toList());
+
+            enzymeSummaries = getEnzymesByAccessions(accessionList).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
+
+            for (UniprotEntry es : enzymeSummaries) {
+
+                for (EnzymeAccession ea : es.getRelatedspecies()) {
+
+                    for (Map.Entry<String, Float> map : identity.entrySet()) {
+
+                        String hitAcc = ea.getUniprotaccessions().get(0);
+
+                        if (map.getKey().equalsIgnoreCase(hitAcc)) {
+                            ea.setScoring(true);
+                            Float id = map.getValue();
+                            if (id != null) {
+                                ea.setIdentity(id);
+                            } else {
+                                ea.setIdentity(0.0f);
+                            }
+                        }
+
+                    }
+
+                    score.entrySet().stream().forEach((map) -> {
+                        String hitAcc = ea.getUniprotaccessions().get(0);
+                        if (map.getKey().equalsIgnoreCase(hitAcc)) {
+                            ea.setScore(map.getValue());
+                        }
+                    });
+
+                    Collections.sort(es.getRelatedspecies(), (id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity())));
+
+                }
+
+                enzymes.add(es);
+
+            }
+
+            enzymeSummaries = enzymes.stream().distinct().sorted(SORT_BY_IDENTITY_REVERSE_ORDER).collect(Collectors.toList());
+
+        }
+
+        enzymeSearchResults.setSummaryentries(enzymeSummaries);
+        enzymeSearchResults.setTotalfound(enzymeSummaries.size());
+        LOGGER.debug("Building filters...");
+        buildFilters(enzymeSearchResults);
+
+        return enzymeSearchResults;
+    }
+
+    //http://sourceforge.net/p/intenz/code/HEAD/tree/biobabel/trunk/
+// 
+//    private NcbiBlastClient getBlastClient() {
+//        //refer to this doc
+//        //http://www.ebi.ac.uk/Tools/sss/ncbiblast/help/index-protein.html#step3
+//        if (blastClient == null) {
+//            blastClient = new NcbiBlastClient();
+//            blastClient.setEmail("enzymeportal-devel@lists.sourceforge.net");
+//            //blastClient.setBaseUrl("http://www.ebi.ac.uk/Tools/services/rest/ncbiblast");
+//            //blastClient.setDatabase("uniprotkb_swissprot");
+//            //blastClient.setDatabase("uniprotkb");
+//        }
+//        return blastClient;
+//    }
+//
+//    public String blast(String sequence) throws NcbiBlastClientException {
+//        return getBlastClient().run(sequence);
+//    }
+//
+//    public NcbiBlastClient.Status getBlastStatus(String jobId)
+//            throws NcbiBlastClientException {
+//        return getBlastClient().getStatus(jobId);
+//    }
+//
+//    public SearchResults getBlastResult(String jobId)
+//            throws NcbiBlastClientException, MultiThreadingException {
+//        List<Hit> hits = getBlastClient().getResults(jobId);
+//        Map<String, Hsp> scorings = new HashMap<>();
+//
+//        for (Hit hit : hits) {
+//
+//            scorings.put(hit.getUniprotAccession(), hit.getHsps().get(0));
+//
+//        }
+//
+//        List<String> uniprotAccessionList = filterBlastResults(hits).stream().distinct().collect(Collectors.toList());
+//
+//        //enzymeSummaryList = getEnzymeSummariesByAccessions(uniprotAccessionList, "");
+//        enzymeSummaryList = getEnzymesByAccessions(uniprotAccessionList);
+//
+//        for (UniprotEntry es : enzymeSummaryList) {
+//
+//            for (EnzymeAccession ea : es.getRelatedspecies()) {
+//
+//                String hitAcc = ea.getUniprotaccessions().get(0);
+//
+//                ea.setScoring(scorings.get(hitAcc));
+//                es.setScoring(scorings.get(hitAcc));
+//
+//            }
+//            Collections.sort(es.getRelatedspecies(), (EnzymeAccession o1, EnzymeAccession o2) -> {
+//                if (o1.getScoring() == null && o2.getScoring() == null) {
+//                    return 0;
+//                }
+//                if (o1.getScoring() == null) {
+//                    return 1;
+//                }
+//
+//                if (o2.getScoring() == null) {
+//                    return -1;
+//                }
+//
+//                return ((Comparable) o1.getScoring())
+//                        .compareTo(o2.getScoring());
+//            });
+//
+//        }
+//
+//        enzymeSummaryList.sort(SORT_BY_BITSCORE);
+//        enzymeSearchResults.setSummaryentries(enzymeSummaryList);
+//        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+//        LOGGER.debug("Building filters...");
+//        buildFilters(enzymeSearchResults);
+//        return enzymeSearchResults;
+//    }
+//
+//    public static Comparator<UniprotEntry> SORT_BY_BITSCORE = (UniprotEntry o1, UniprotEntry o2) -> {
+//        if (o1.getScoring() == null && o2.getScoring() == null) {
+//            return 0;
+//        }
+//        if (o1.getScoring() == null) {
+//            return 1;
+//        }
+//
+//        if (o2.getScoring() == null) {
+//            return -1;
+//        }
+//
+//        return ((Comparable) o1.getScoring())
+//                .compareTo(o2.getScoring());
+//    };
+//
+//    /**
+//     * Filters the hits returned by the Blast client to get only enzymes.
+//     *
+//     * @param hits Hits returned by the Blast client.
+//     * @return a list of unique UniProt ID prefixes (species stripped).
+//     * @throws MultiThreadingException
+//     */
+//    private List<String> filterBlastResults(List<Hit> hits)
+//            throws MultiThreadingException {
+//        List<String> accs = new ArrayList<>();
+//        hits.stream().forEach((hit) -> {
+//            accs.add(hit.getUniprotAccession());
+//        });
+//
+//        return service.filterEnzymesInAccessions(accs);
+//
+//    }
+//
 }

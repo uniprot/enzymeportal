@@ -16,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
+import uk.ac.ebi.ep.uniprotservice.blast.UniprotBlastService;
+import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
 
 /**
  *
@@ -72,6 +74,16 @@ public class EnzymesConfig {
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         return new HttpComponentsClientHttpRequestFactory();
         
+    }
+    
+    @Bean
+    public UniprotBlastService blastService(){
+        return new UniprotBlastService();
+    }
+    
+    @Bean
+    public UniprotProdBlastService prodBlastService(){
+        return new UniprotProdBlastService();
     }
 
 }

@@ -37,6 +37,7 @@ public class DiseasesPredicate implements Predicate {
 				for (Disease disease : ea.getDiseases()) {
 					//String name = disease.getName().replaceAll(",", "").split("\\(")[0];
                                         String id = disease.getId();
+                                     
 					if (diseasesFilter.contains(id)){
 						eval = true;
 						break;
