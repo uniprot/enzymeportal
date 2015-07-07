@@ -210,7 +210,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<String> filterEnzymesInAccessions(List<String> accessions) {
 
-        return uniprotEntryRepository.filterEnzymesInAccessions(accessions);
+        return uniprotEntryRepository.filterEnzymesFromAccessions(accessions);
     }
 
     @Transactional(readOnly = true)

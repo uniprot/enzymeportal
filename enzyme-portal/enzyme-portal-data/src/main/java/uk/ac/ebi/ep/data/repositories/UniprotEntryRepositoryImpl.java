@@ -117,24 +117,6 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<String> filterEnzymesInAccessions(List<String> accessions) {
-
-        JPAQuery query = new JPAQuery(entityManager);
-
-        BooleanBuilder builder = new BooleanBuilder();
-        accessions.parallelStream().forEach(accession -> {
-
-            builder.or($.accession.equalsIgnoreCase(accession));
-
-        });
-        List<String> enzymes = query.from($).where(builder).list($.accession).stream().distinct().collect(Collectors.toList());
-
-        return enzymes;
-
-    }
-
     @Override
     public List<UniprotEntry> findEnzymesByAccession(String accession) {
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");

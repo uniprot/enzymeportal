@@ -35,8 +35,7 @@ public class PowerGateConfig implements EnzymePortalDataConfig {
 
         ds.setDriverClassName("oracle.jdbc.OracleDriver");
         
-         LOGGER.warn("The connection url "+ url);//DELETE LATER
-
+   
         return ds;
     }
 }

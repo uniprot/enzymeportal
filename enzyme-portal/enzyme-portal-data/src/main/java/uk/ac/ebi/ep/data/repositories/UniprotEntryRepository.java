@@ -45,17 +45,19 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
 
     @Transactional(readOnly = true)
-     @Query(value = "SELECT DISTINCT /*+ PARALLEL(4) FIRST_ROWS(1000) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
-    List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION")List<String> accession);
-    
-        @Transactional(readOnly = true)
-    //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    Page<UniprotEntry> findByAccessionIn(List<String> accessions,Pageable pageable);
-    
-        @Transactional(readOnly = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(4) FIRST_ROWS(1000) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION") List<String> accession);
+
+    @Transactional(readOnly = true)
+    Page<UniprotEntry> findByAccessionIn(List<String> accessions, Pageable pageable);
+
+    @Transactional(readOnly = true)
     @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
     List<UniprotEntry> findEnzymePortalByAccession(@Param("accession") String accession);
 
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(4) FIRST_ROWS(1000) */ ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    List<String> filterEnzymesFromAccessions(@Param("ACCESSION") List<String> accession);
 
 }

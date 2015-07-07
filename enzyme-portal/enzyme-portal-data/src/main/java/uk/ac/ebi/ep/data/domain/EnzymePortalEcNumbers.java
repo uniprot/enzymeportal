@@ -89,8 +89,8 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.ecFamily);
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.ecNumber);
         return hash;
     }
 
@@ -103,15 +103,15 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
             return false;
         }
         final EnzymePortalEcNumbers other = (EnzymePortalEcNumbers) obj;
-        return Objects.equals(this.ecFamily, other.ecFamily);
+        return Objects.equals(this.ecNumber, other.ecNumber);
     }
+
 
     @Override
     public String toString() {
         return ecNumber;
     }
 
-   
     /**
      *
      * @return the enzyme family representation of the ec class
@@ -120,11 +120,10 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
     public String getFamily() {
         Optional<Integer> ec = Optional.ofNullable(this.getEcFamily());
         if (ec.isPresent()) {
-             return computeEcToFamilyName(ec.get());
+            return computeEcToFamilyName(ec.get());
         }
         return "";
-        
-       
+
     }
 
     /**
@@ -134,7 +133,7 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
     @Override
     public Integer getEc() {
         return getEcFamily();
-        
+
     }
 
     @Override
@@ -151,4 +150,4 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
         this.ecFamily = ecFamily;
     }
 
-}
+        }

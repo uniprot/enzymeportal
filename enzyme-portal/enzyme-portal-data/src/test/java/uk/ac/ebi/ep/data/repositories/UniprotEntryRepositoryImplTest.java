@@ -132,7 +132,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
 //        expResult.add("Q63688");
 //        expResult.add("Q60991");
 
-        List<String> result = uniprotEntryRepository.filterEnzymesInAccessions(accessions).stream().distinct().collect(Collectors.toList());
+        List<String> result = uniprotEntryRepository.filterEnzymesFromAccessions(accessions).stream().distinct().collect(Collectors.toList());
         assertTrue(result.size() > 1);
 
       

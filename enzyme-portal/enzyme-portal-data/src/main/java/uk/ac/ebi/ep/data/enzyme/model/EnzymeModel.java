@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.data.enzyme.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,9 +23,7 @@ import uk.ac.ebi.ep.data.search.model.Species;
  *
  *
  */
-public class EnzymeModel extends UniprotEntry
-        //extends EnzymeSummary
-        implements Serializable {
+public class EnzymeModel extends UniprotEntry implements Serializable {
 
     protected Enzyme enzyme;
     protected List<ProteinStructure> proteinstructure;
@@ -37,7 +36,7 @@ public class EnzymeModel extends UniprotEntry
 
     protected List<Object> literature;
 
-    protected List<Pathway> pathways = new ArrayList<>();
+    protected List<Pathway> pathways;
     protected List<EnzymeAccession> relatedspecies;
     protected List<String> synonyms;
 
@@ -242,13 +241,14 @@ public class EnzymeModel extends UniprotEntry
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link uk.ac.ebi.ep.enzyme.model.Disease }
+     * {@link uk.ac.ebi.ep.data.enzyme.model.Disease }
      *
      *
+     * @return 
      */
     public List<Disease> getDisease() {
         if (disease == null) {
-            disease = new ArrayList<Disease>();
+            disease = new ArrayList<>();
         }
         return this.disease;
     }
@@ -273,10 +273,11 @@ public class EnzymeModel extends UniprotEntry
      * Objects of the following type(s) are allowed in the list {@link Object }
      *
      *
+     * @return 
      */
     public List<Object> getLiterature() {
         if (literature == null) {
-            literature = new ArrayList<Object>();
+            literature = new ArrayList<>();
         }
         return this.literature;
     }
@@ -330,9 +331,7 @@ public class EnzymeModel extends UniprotEntry
 
     public EnzymeModel withDisease(Disease... values) {
         if (values != null) {
-            for (Disease value : values) {
-                getDisease().add(value);
-            }
+            getDisease().addAll(Arrays.asList(values));
         }
         return this;
     }
@@ -346,9 +345,7 @@ public class EnzymeModel extends UniprotEntry
 
     public EnzymeModel withLiterature(Object... values) {
         if (values != null) {
-            for (Object value : values) {
-                getLiterature().add(value);
-            }
+            getLiterature().addAll(Arrays.asList(values));
         }
         return this;
     }
@@ -363,9 +360,7 @@ public class EnzymeModel extends UniprotEntry
     //@Override
     public EnzymeModel withEc(String... values) {
         if (values != null) {
-            for (String value : values) {
-                getEc().add(value);
-            }
+            getEc().addAll(Arrays.asList(values));
         }
         return this;
     }
@@ -393,9 +388,7 @@ public class EnzymeModel extends UniprotEntry
     //@Override
     public EnzymeModel withSynonym(String... values) {
         if (values != null) {
-            for (String value : values) {
-                getSynonym().add(value);
-            }
+            getSynonym().addAll(Arrays.asList(values));
         }
         return this;
     }
@@ -511,7 +504,7 @@ public class EnzymeModel extends UniprotEntry
     }
 
     @Override
-    public EnzymeModel withScoring(Object value) {
+    public EnzymeModel withScoring(Boolean value) {
         setScoring(value);
         return this;
     }

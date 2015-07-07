@@ -51,10 +51,7 @@ public class Compound  implements  Serializable {
             return false;
         }
         final Compound other = (Compound) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.name, other.name);
     }
 
 

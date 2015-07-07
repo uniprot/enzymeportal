@@ -34,7 +34,7 @@ public class DevDataConfig extends AbstractConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource(url, username, password);
 
         ds.setDriverClassName("oracle.jdbc.OracleDriver");
-        LOGGER.warn("The connection url "+ url);//DELETE LATER
+        //LOGGER.warn("The connection url "+ url);//DELETE LATER
 
         return ds;
     }

@@ -58,7 +58,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     @Basic(optional = false)
     @Column(name = "COMPOUND_INTERNAL_ID")
     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_COMPOUND_INTERNAL_ID")
-    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
     private Long compoundInternalId;
     @Column(name = "COMPOUND_ID")
     private String compoundId;

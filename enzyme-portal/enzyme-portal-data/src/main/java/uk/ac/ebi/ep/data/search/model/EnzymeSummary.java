@@ -367,7 +367,7 @@ public class EnzymeSummary extends EnzymeAccession  implements Comparable<Enzyme
     }
 
     @Override
-    public EnzymeSummary withScoring(Object value) {
+    public EnzymeSummary withScoring(Boolean value) {
         setScoring(value);
         return this;
     }

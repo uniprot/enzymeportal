@@ -16,21 +16,18 @@ public class Species implements Comparable<Species>, Serializable {
 
     private String scientificname;
 
-    private String commonname ;
+    private String commonname;
     private boolean selected;
-     private Long taxId;
-        protected transient  Object scoring;
-
+    private Long taxId;
+    protected transient Object scoring;
 
     public Species() {
     }
-    
-    
-    
+
     public Species(String scientificname, String commonname) {
         this.scientificname = scientificname;
         this.commonname = commonname;
-        
+
     }
 
     public Species(String scientificname, String commonname, Long taxId) {
@@ -38,11 +35,6 @@ public class Species implements Comparable<Species>, Serializable {
         this.commonname = commonname;
         this.taxId = taxId;
     }
-    
-    
-
-    
-  
 
     public Object getScoring() {
         return scoring;
@@ -59,8 +51,6 @@ public class Species implements Comparable<Species>, Serializable {
     public void setTaxId(Long taxId) {
         this.taxId = taxId;
     }
-     
-     
 
     /**
      * Gets the value of the scientificname property.
@@ -102,13 +92,10 @@ public class Species implements Comparable<Species>, Serializable {
         this.commonname = value;
     }
 
-    
-    
-    
     /**
      * Gets the value of the selected property.
      *
-     * @return 
+     * @return
      */
     public boolean isSelected() {
         return selected;
@@ -121,8 +108,6 @@ public class Species implements Comparable<Species>, Serializable {
     public void setSelected(boolean value) {
         this.selected = value;
     }
-
-
 
     public Species withScientificname(String value) {
         setScientificname(value);
@@ -138,8 +123,6 @@ public class Species implements Comparable<Species>, Serializable {
         setSelected(value);
         return this;
     }
-
-
 
     @Override
     public int hashCode() {
@@ -157,12 +140,9 @@ public class Species implements Comparable<Species>, Serializable {
             return false;
         }
         final Species other = (Species) obj;
-        if (!Objects.equals(this.scientificname, other.scientificname)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.scientificname, other.scientificname);
     }
-    
+
     
     
 
@@ -173,12 +153,12 @@ public class Species implements Comparable<Species>, Serializable {
     public String toString() {
         return "Species{" + "scientificname=" + scientificname + ", commonname=" + commonname + '}';
     }
-    
+
     @Override
     public int compareTo(Species o) {
         return this.scientificname.compareToIgnoreCase(o.getScientificname());
     }
-    
+
     
 
 }

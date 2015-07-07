@@ -25,10 +25,12 @@ public class EnzymeAccession implements Serializable {
     protected List<Compound> compounds;
     protected List<Disease> diseases;
 
-    protected Object scoring;
-    
-     protected String uniprotid;
-      
+    protected Boolean scoring = Boolean.FALSE;
+    protected Float identity = 0.0f;
+    protected Integer score = 0;
+
+    protected String uniprotid;
+
     /**
      * Gets the value of the uniprotaccessions property.
      *
@@ -127,9 +129,8 @@ public class EnzymeAccession implements Serializable {
      * {@link Compound }
      *
      *
-     * @return 
+     * @return
      */
-
     public List<Compound> getCompounds() {
         if (compounds == null) {
             compounds = new ArrayList<>();
@@ -158,9 +159,8 @@ public class EnzymeAccession implements Serializable {
      * {@link EnzymePortalDisease }
      *
      *
-     * @return 
+     * @return
      */
-
     public List<Disease> getDiseases() {
         if (diseases == null) {
             diseases = new ArrayList<>();
@@ -174,7 +174,7 @@ public class EnzymeAccession implements Serializable {
      * @return possible object is {@link Object }
      *
      */
-    public Object getScoring() {
+    public Boolean getScoring() {
         return scoring;
     }
 
@@ -184,15 +184,30 @@ public class EnzymeAccession implements Serializable {
      * @param value allowed object is {@link Object }
      *
      */
-    public void setScoring(Object value) {
+    public void setScoring(Boolean value) {
         this.scoring = value;
+    }
+
+    public Float getIdentity() {
+
+        return identity;
+    }
+
+    public void setIdentity(Float identity) {
+        this.identity = identity;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
     public EnzymeAccession withUniprotaccessions(String... values) {
         if (values != null) {
-            for (String value : values) {
-                getUniprotaccessions().add(value);
-            }
+            getUniprotaccessions().addAll(Arrays.asList(values));
         }
         return this;
     }
@@ -211,9 +226,7 @@ public class EnzymeAccession implements Serializable {
 
     public EnzymeAccession withPdbeaccession(String... values) {
         if (values != null) {
-            for (String value : values) {
-                getPdbeaccession().add(value);
-            }
+            getPdbeaccession().addAll(Arrays.asList(values));
         }
         return this;
     }
@@ -253,7 +266,7 @@ public class EnzymeAccession implements Serializable {
         return this;
     }
 
-    public EnzymeAccession withScoring(Object value) {
+    public EnzymeAccession withScoring(Boolean value) {
         setScoring(value);
         return this;
     }
@@ -301,7 +314,7 @@ public class EnzymeAccession implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.species);
+        hash = 79 * hash + Objects.hashCode(this.species.getScientificname());
         return hash;
     }
 
@@ -314,16 +327,14 @@ public class EnzymeAccession implements Serializable {
             return false;
         }
         final EnzymeAccession other = (EnzymeAccession) obj;
-        if (!Objects.equals(this.species, other.species)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.species.getScientificname(), other.species.getScientificname());
     }
 
     @Override
     public String toString() {
-        return "EnzymeAccession{" + "uniprotaccessions=" + uniprotaccessions + ", species=" + species + '}';
+        return "EnzymeAccession{" + "species=" + species + ", identity=" + identity + ", score=" + score + '}';
     }
+
 
     public String getUniprotid() {
         return uniprotid;
@@ -332,7 +343,5 @@ public class EnzymeAccession implements Serializable {
     public void setUniprotid(String uniprotid) {
         this.uniprotid = uniprotid;
     }
-
-      
 
 }

@@ -29,9 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ENZYME_PORTAL_SUMMARY")
 @XmlRootElement
 
-
-
-@NamedEntityGraph(name = "summary.graph", attributeNodes = {  
+@NamedEntityGraph(name = "summary.graph", attributeNodes = {
     @NamedAttributeNode("uniprotAccession")
 })
 
@@ -42,8 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalSummary.findByCommentType", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentType = :commentType")
     //@NamedQuery(name = "EnzymePortalSummary.findByCommentText", query = "SELECT e FROM EnzymePortalSummary e WHERE e.commentText = :commentText")
 })
-public class EnzymePortalSummary  implements Serializable {
-
+public class EnzymePortalSummary implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -143,10 +140,4 @@ public class EnzymePortalSummary  implements Serializable {
         return "EnzymePortalSummary{" + "enzymeId=" + enzymeId + ", dbentryId=" + dbentryId + ", commentType=" + commentType + ", commentText=" + commentText + '}';
     }
 
-
-
-
-
-
-    
 }

@@ -50,10 +50,7 @@ public class Protein extends UniprotEntry {
             return false;
         }
         final Protein other = (Protein) obj;
-        if (!Objects.equals(this.enzymName, other.enzymName)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.enzymName, other.enzymName);
     }
     
 

@@ -31,10 +31,6 @@ public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
 
-    //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    //UniprotEntry findEnzymeByAccession(String accession);
-    List<String> filterEnzymesInAccessions(List<String> accessions);
-
     List<Taxonomy> getCountForOrganisms(List<Long> taxids);
 
     List<String> findAccessionsByTaxId(Long taxId);
