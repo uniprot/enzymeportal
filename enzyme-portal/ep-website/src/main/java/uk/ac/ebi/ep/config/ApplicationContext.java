@@ -6,7 +6,6 @@ package uk.ac.ebi.ep.config;
 
 import java.util.List;
 import java.util.Locale;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -41,20 +39,14 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
  * @author joseph
  */
 @Configuration
-@ComponentScan(basePackages = {"uk.ac.ebi.ep",
-        "uk.ac.ebi.ep.data.dataconfig"})
-
+@ComponentScan(basePackages = {"uk.ac.ebi.ep.config","uk.ac.ebi.ep.controller","uk.ac.ebi.ep.base", "uk.ac.ebi.ep.ebeye","uk.ac.ebi.ep.data.service"})
 @EnableWebMvc
 @EnableSpringDataWebSupport
-//@Import({DevDataConfig.class,ProdDataConfig.class})
-@Import({DevDataConfig.class,ProdDataConfig.class,PowerGateConfig.class,OliverYardConfig.class,DataConfig.class})
+@Import({EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class, PowerGateConfig.class, OliverYardConfig.class, DataConfig.class})
 @ImportResource("classpath:trace-context.xml")
 @PropertySource("classpath:ep.properties")
-//@PropertySource("classpath:spring.properties")
 public class ApplicationContext extends WebMvcConfigurerAdapter {
 
-    @Autowired
-    private Environment env;
 
     // Maps resources path to webapp/resources
     @Override
@@ -63,23 +55,18 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
         registry.addResourceHandler("/favicon.ico").addResourceLocations("/");
 
- 
     }
-
 
     @Override
     public void addArgumentResolvers(
             List<HandlerMethodArgumentResolver> argumentResolvers) {
-        
+
         PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
         resolver.setFallbackPageable(new PageRequest(1, 10));
-        
+
         argumentResolvers.add(resolver);
 
     }
-    
-
-
 
     // Only needed if we are using @Value and ${...} when referencing properties
 //    @Bean
@@ -91,7 +78,6 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
 //        propertySources.setIgnoreUnresolvablePlaceholders(true);
 //        return propertySources;
 //    }
-
     // Provides internationalization of messages
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
@@ -108,7 +94,7 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
         cookieLocaleResolver.setCookieName("locale");
         return cookieLocaleResolver;
     }
-   // public CookieLocaleResolver
+    // public CookieLocaleResolver
 //
     // Basic jsp view resolver ...
 
@@ -123,7 +109,14 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
 
     }
 
-   
+//    @Bean
+//    public UrlBasedViewResolver urlBasedViewResolver() {
+//        UrlBasedViewResolver resolver = new UrlBasedViewResolver();
+//        resolver.setPrefix("/WEB-INF/jsp/");
+//        resolver.setSuffix(".jsp");
+//        resolver.setViewClass(JstlView.class);
+//        return resolver;
+//    }
 
     @Bean
     public FormattingConversionService formattingConversionService() {
@@ -144,6 +137,5 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
 
         return conversionService;
     }
-
 
 }

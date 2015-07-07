@@ -14,8 +14,7 @@
 <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
 <div class="resultItem grid_24">
-<!--        <h2>EC ${enzyme.ec}</h2>-->
-<!--    <h2>EC : ${enzyme.enzymePortalEcNumbersSet}</h2>-->
+
 <div class="summary-header">
     <c:if test="${showCheckbox != false}">
         <input type="checkbox" class="forBasket"
@@ -191,24 +190,22 @@
                         <c:when test="${empty relspecies[i].species.commonname}">
                             [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
                             >${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a
-                            ><c:if test="${not empty relspecies[i].scoring}">
+                            ><c:if test="${relspecies[i].scoring eq true}">
                                 <span class="score S${
-                                      relspecies[i].scoring.bitScore gt 1000? '10':
-                                          fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
-                                      title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                      > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
+                             fn:substringBefore(relspecies[i].identity/10 , '.') }"
+                                      title="Score = ${relspecies[i].score}"
+                                      > ${relspecies[i].identity}&#37;</span>
                             </c:if
                             >]
                         </c:when>
                         <c:otherwise>
                             [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
                             >${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a
-                            ><c:if test="${not empty relspecies[i].scoring}">
+                            ><c:if test="${ relspecies[i].scoring eq true}">
                             <span class="score S${
-                                  relspecies[i].scoring.bitScore gt 1000? '10':
-                                      fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
-                                  title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                    > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
+                                   fn:substringBefore(relspecies[i].identity/10 , '.') }"
+                                  title="Score = ${relspecies[i].score}"
+                                    > ${relspecies[i].identity}&#37;</span>
 
                                            
                             </c:if
@@ -223,26 +220,28 @@
                                 <c:when test="${empty relspecies[i].species.commonname}">
                                     [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
                                     >${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a
-                                    ><c:if test="${not empty relspecies[i].scoring}">
-                                        <span class="score S${
-                                              relspecies[i].scoring.bitScore gt 1000? '10':
-                                                  fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
-                                              title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                                > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
-                                    </c:if
-                                    >]
+                                      ><c:if test="${relspecies[i].scoring eq true}">
+                            <span class="score S${
+                                   fn:substringBefore(relspecies[i].identity/10 , '.') }"
+                                  title="Score = ${relspecies[i].score}"
+                                    > ${relspecies[i].identity}&#37;</span>
+
+                                           
+                            </c:if
+                            >]
                                 </c:when>
                                 <c:otherwise>
                                     [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'
                                     >${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a
-                                    ><c:if test="${not empty relspecies[i].scoring}">
-                                        <span class="score S${
-                                              relspecies[i].scoring.bitScore gt 1000? '10':
-                                                  fn:substringBefore(relspecies[i].scoring.bitScore/100, '.')}"
-                                              title="Bit score for BLAST search. E-value = ${relspecies[i].scoring.evalue}"
-                                                > <fmt:formatNumber type="number" maxIntegerDigits="3" maxFractionDigits="0"  value="${(relspecies[i].scoring.identity/relspecies[i].scoring.alignLength)*(100)}" />&#37;</span>
-                                    </c:if
-                                    >]
+                                        ><c:if test="${relspecies[i].scoring eq true}">
+                            <span class="score S${
+                                   fn:substringBefore(relspecies[i].identity/10 , '.') }"
+                                  title="Score = ${relspecies[i].score}"
+                                    > ${relspecies[i].identity}&#37;</span>
+
+                                           
+                            </c:if
+                            >]
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>

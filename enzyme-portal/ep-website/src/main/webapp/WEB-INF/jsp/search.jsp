@@ -35,6 +35,7 @@
   <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
  
 <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />-->
+ <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
  
     <script>
 		$(function() {
@@ -124,8 +125,8 @@
                         </c:if>
                     </section>
                     <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
-                        <script src="resources/javascript/ebi-global-search-run.js"></script>
-                        <script src="resources/javascript/ebi-global-search.js"></script>
+                        <script src="${pageContext.request.contextPath}/resources/javascript/ebi-global-search-run.js"></script>
+                        <script src="${pageContext.request.contextPath}/resources/javascript/ebi-global-search.js"></script>
                         <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
                         <div id="ebi_search_results"><h3
                             class="slideToggle icon icon-functional"
@@ -256,12 +257,26 @@
                         <div class="clear"></div>
                         <div class="line"></div>
                         <div class="resultContent">
-                            <c:set var="resultItemId" value="${0}"/>
-                            <c:forEach items="${summaryEntries}"
+                              <c:set var="resultItemId" value="${0}"/>
+                            <c:choose>
+                                <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
+                               <c:forEach items="${summaryEntries}"
                                        begin="${pagination.firstResult}"
                                        end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
                                     <%@ include file="summary.jspf"%>
-                            </c:forEach>
+                            </c:forEach>   
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${summaryEntries}"
+                                       begin="${pagination.firstResult}"
+                                       end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
+                                    <%@ include file="summary.jspf"%>
+                            </c:forEach>     
+                                </c:otherwise>
+                                 
+                            </c:choose>
+                          
+            
                         </div>
                     </c:if>
                 </section>

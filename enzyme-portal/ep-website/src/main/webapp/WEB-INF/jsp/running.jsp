@@ -41,7 +41,7 @@
           	</nav>
     
         	<form:form id="check-job" modelAttribute="searchModel"
-    	    	action="checkJob" method="POST">
+    	    	action="${pageContext.request.contextPath}/checkJob" method="POST">
     	    	<form:hidden path="searchparams.text" />
     	    	<form:hidden path="searchparams.sequence" />
     		    <form:hidden path="searchparams.previoustext" />
@@ -52,7 +52,7 @@
     	
             <section>
                 <div style="margin: 4ex 4em;">
-                    <!-- Job ID: ${jobId} -->
+                     Job ID: ${jobId} 
                     <img alt="Searching..." src="resources/images/loading16.gif"
                     	style="margin: 0ex 1em"/>
                     Searching protein sequence...

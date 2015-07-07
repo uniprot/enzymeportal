@@ -39,6 +39,7 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
+import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
 
 /**
  *
@@ -46,17 +47,19 @@ import uk.ac.ebi.ep.functions.HtmlUtility;
  */
 public abstract class AbstractController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
 
     @Autowired
     protected Config searchConfig;
-    //@Autowired
-    // protected IntenzConfig intenzConfig;
     @Autowired
     protected EnzymePortalService enzymePortalService;
 
     @Autowired
     protected EbeyeRestService ebeyeRestService;
+//    @Autowired
+//    protected UniprotBlastService blastService;
+    @Autowired
+    protected UniprotProdBlastService blastService;
 
     @ModelAttribute("searchModel")
     public SearchModel searchform() {
@@ -271,7 +274,6 @@ public abstract class AbstractController {
             List<String> compoundsFilter = searchParameters.getCompounds();
             List<String> diseasesFilter = searchParameters.getDiseases();
             List<Integer> ecNumbersFilter = searchParameters.getEcFamilies();
-            
 
             //remove empty string in the filter to avoid unsual behavior of the filter facets
             if (speciesFilter.contains("")) {
@@ -285,7 +287,6 @@ public abstract class AbstractController {
             if (diseasesFilter.contains("")) {
                 diseasesFilter.remove("");
             }
-
 
             //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
             if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {

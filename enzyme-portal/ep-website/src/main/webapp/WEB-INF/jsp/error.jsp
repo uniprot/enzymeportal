@@ -34,7 +34,7 @@
             <nav id="breadcrumb">
                 <p><a href="/enzymeportal">Enzyme Portal</a> &gt; Error</p>
             </nav>
-                
+           
             <c:choose>
                 <c:when test="${not empty errorCode}">
                     <%-- No-op, everything done below by spring:message --%>
@@ -54,14 +54,22 @@
             </c:choose>
             
             <section>
+                  <c:set var="errorParam" value="sequence search"/>
                 <h2><spring:message htmlEscape="false"
                     code="error.${errorCode}.title"/>
                 </h2>
+                
+                <p class="alert">
+            We are sorry but we couldn't find anything that matched your ${errorParam} Please try again later        
+                </p>
+                
                
+               <%-- 
                 <p class="alert">
                     <spring:message code="error.${errorCode}"
                         arguments="${errorParam}"/>
                 </p>
+                --%>
             </section>
             
         </div>

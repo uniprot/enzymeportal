@@ -26,6 +26,7 @@ import uk.ac.ebi.ep.mBean.FilesConfig;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
 import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
+import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
 
 /**
  *
@@ -203,6 +204,16 @@ public class EnzymePortalConfig {
         pdBeUrl.setMoleculesUrl(moleculesUrl);
         pdBeUrl.setStructuralDomainUrl(structuralDomainUrl);
         return pdBeUrl;
+    }
+    
+//        @Bean
+//    public UniprotBlastService blastService(){
+//        return new UniprotBlastService();
+//    }
+    
+    @Bean
+    public UniprotProdBlastService blastService(){
+        return new UniprotProdBlastService();
     }
 
 }

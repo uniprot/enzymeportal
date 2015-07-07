@@ -73,7 +73,8 @@ function renderItem(ul, item, baseURL) {
 function updateSummary(options) {
 	opts = {}
 	opts.searchboxId = options.searchboxId || "local-searchbox";
-	opts.searchBaseURL = options.searchBaseURL || "http://frontier.ebi.ac.uk/ebisearch/";
+	//opts.searchBaseURL = options.searchBaseURL || "http://frontier.ebi.ac.uk/ebisearch/";
+        opts.searchBaseURL = options.searchBaseURL || "http://www.ebi.ac.uk/ebisearch/";
 	opts.globalSearchBoxId = options.globalSearchBoxId || "ebi_search_results";
 	opts.loadingLabel = options.loadingLabel || "Loading other results";
 	opts.loadingLabelClass = options.loadingLabelClass || "loading";
@@ -88,10 +89,11 @@ function updateSummary(options) {
         $(thisElem).find("ul").remove();
         $(thisElem).find("p").remove();
         $(thisElem).find("h3").addClass(opts.loadingLabelClass);
-
+        
 		$.ajax({
 		  searchBaseURL: searchBaseURL, 
 		  url: searchBaseURL+"globalsearchsummary.ebi?query="+query+"&noResults="+opts.noResults,
+//url: searchBaseURL+"search.ebi?db=allebi&requestFrom=searchBox&query="+query+"&noResults="+opts.noResults,
 		  context: thisElem,
 		  dataType: "json",
 		  crossdoamin: true,

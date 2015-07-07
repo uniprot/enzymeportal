@@ -26,8 +26,8 @@
 						<label>
                                                                                           
                                <%--     <form:input id="local-searchbox" name="first" path="searchparams.text" /> --%>
-                               <input autocomplete="off" id="local-searchbox" name="searchparams.text"  type="text" ng-model="searchTypeAheadController" placeholder="search for enzymes" typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
-            <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>        
+                               <input autocomplete="off" id="local-searchbox" name="searchparams.text" maxlength="100"  type="text" ng-model="searchTypeAheadController" placeholder="search for enzymes" typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
+            <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>                
                                  
 						</label>                                                                           
 						<!-- Include some example searchterms - keep them short and few! -->

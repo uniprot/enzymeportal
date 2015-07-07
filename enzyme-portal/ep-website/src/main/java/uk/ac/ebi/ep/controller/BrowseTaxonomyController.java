@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
@@ -77,10 +78,8 @@ public class BrowseTaxonomyController extends AbstractController {
         List<Species> species = enzymePortalService.findSpeciesByTaxId(entryID);
         List<Compound> compouds = enzymePortalService.findCompoundsByTaxId(entryID);
         List<Disease> diseases = enzymePortalService.findDiseasesByTaxId(entryID);
-       
-        List<EcNumber> enzymeFamilies =  enzymePortalService.findEnzymeFamiliesByTaxId(entryID);
-        
-      
+
+        List<EcNumber> enzymeFamilies = enzymePortalService.findEnzymeFamiliesByTaxId(entryID);
 
         SearchParams searchParams = searchModel.getSearchparams();
         searchParams.setStart(0);
@@ -88,7 +87,6 @@ public class BrowseTaxonomyController extends AbstractController {
         searchParams.setText(entryName);
         searchParams.setSize(SEARCH_PAGESIZE);
         searchModel.setSearchparams(searchParams);
-
 
         List<UniprotEntry> result = page.getContent();
 
@@ -113,7 +111,7 @@ public class BrowseTaxonomyController extends AbstractController {
         filters.setCompounds(compouds);
         filters.setEcNumbers(enzymeFamilies);
         filters.setDiseases(diseases);
-        
+
         searchResults.setSearchfilters(filters);
         searchResults.setSummaryentries(result);
 
@@ -177,12 +175,12 @@ public class BrowseTaxonomyController extends AbstractController {
 
         searchResults.setTotalfound(page.getTotalElements());
         SearchFilters filters = new SearchFilters();
-        
+
         filters.setSpecies(species);
         filters.setCompounds(compouds);
         filters.setEcNumbers(enzymeFamilies);
         filters.setDiseases(diseases);
-        
+
         searchResults.setSearchfilters(filters);
         searchResults.setSummaryentries(result);
 
@@ -213,7 +211,6 @@ public class BrowseTaxonomyController extends AbstractController {
         List<Compound> compouds = enzymePortalService.findCompoundsByTaxId(taxId);
         List<Disease> diseases = enzymePortalService.findDiseasesByTaxId(taxId);
         List<EcNumber> enzymeFamilies = enzymePortalService.findEnzymeFamiliesByTaxId(taxId);
-
 
         SearchFilters filters = new SearchFilters();
         filters.setSpecies(species);
@@ -255,7 +252,6 @@ public class BrowseTaxonomyController extends AbstractController {
         if (diseaseFilter.contains("")) {
             diseaseFilter.remove("");
         }
-
 
         //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
         if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
@@ -300,13 +296,12 @@ public class BrowseTaxonomyController extends AbstractController {
         List<EcNumber> defaultEcNumberList = searchResults.getSearchfilters().getEcNumbers();
 
         resetSelectedEcNumber(defaultEcNumberList);
-        
+
         searchParameters.getEcFamilies().stream().forEach((selectedEcFamily) -> {
             defaultEcNumberList.stream().filter((ec) -> (selectedEcFamily.equals(ec.getEc()))).forEach((ec) -> {
                 ec.setSelected(true);
             });
-        }); 
-        
+        });
 
         Pageable pageable = new PageRequest(0, SEARCH_PAGESIZE, Sort.Direction.ASC, "function", "entryType");
         Page<UniprotEntry> page = new PageImpl<>(new ArrayList<>(), pageable, 0);
@@ -337,7 +332,6 @@ public class BrowseTaxonomyController extends AbstractController {
         //ec only
         if (compoundFilter.isEmpty() && diseaseFilter.isEmpty() && !ecFilter.isEmpty()) {
             page = enzymePortalService.filterBySpecieAndEc(taxId, ecFilter, pageable);
-          
 
         }
 
@@ -346,24 +340,22 @@ public class BrowseTaxonomyController extends AbstractController {
             page = enzymePortalService.filterBySpecieAndCompoundsAndDiseases(taxId, compoundFilter, diseaseFilter, pageable);
 
         }
-        
+
         //compound and ec
-          if (!compoundFilter.isEmpty() && !ecFilter.isEmpty() && diseaseFilter.isEmpty()) {
+        if (!compoundFilter.isEmpty() && !ecFilter.isEmpty() && diseaseFilter.isEmpty()) {
             page = enzymePortalService.filterBySpecieAndCompoundsAndEc(taxId, compoundFilter, ecFilter, pageable);
 
         }
-        
-        
+
         //disease and ec
-         if (!ecFilter.isEmpty() && !diseaseFilter.isEmpty() && compoundFilter.isEmpty()) {
-            page = enzymePortalService.filterBySpecieAndDiseasesAndEc(taxId,diseaseFilter, ecFilter, pageable);
+        if (!ecFilter.isEmpty() && !diseaseFilter.isEmpty() && compoundFilter.isEmpty()) {
+            page = enzymePortalService.filterBySpecieAndDiseasesAndEc(taxId, diseaseFilter, ecFilter, pageable);
 
         }
-         
+
          //disease and compounds and ec
-        
-         if (!ecFilter.isEmpty() && !diseaseFilter.isEmpty() && !compoundFilter.isEmpty()) {
-            page = enzymePortalService.filterBySpecieAndCompoundsAndDiseasesAndEc(taxId,compoundFilter,diseaseFilter, ecFilter, pageable);
+        if (!ecFilter.isEmpty() && !diseaseFilter.isEmpty() && !compoundFilter.isEmpty()) {
+            page = enzymePortalService.filterBySpecieAndCompoundsAndDiseasesAndEc(taxId, compoundFilter, diseaseFilter, ecFilter, pageable);
 
         }
         model.addAttribute("searchFilter", filters);
@@ -497,9 +489,11 @@ public class BrowseTaxonomyController extends AbstractController {
         long startTime = System.nanoTime();
 
         List<Taxonomy> organisms = enzymePortalService.getCountForOrganisms(taxids);
+
         long endTime = System.nanoTime();
-        final long duration = endTime - startTime;
-        LOGGER.warn("Duration: " + duration + "  (" + duration / 1000000 + "ms)");
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
 
         //return enzymePortalService.getCountForOrganisms(taxids);
         return organisms;

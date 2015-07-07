@@ -74,7 +74,13 @@
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-base</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+          <exclusions>
+             <exclusion>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>servlet-api</artifactId>
+             </exclusion>
+          </exclusions>
+       </dependency>
         
 <!--        <dependency>
              overriding ep-core's 
@@ -282,7 +288,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api.version}</version>
-            <scope>provided</scope>
+<!--            <scope>provided</scope>-->
         </dependency>
 
 

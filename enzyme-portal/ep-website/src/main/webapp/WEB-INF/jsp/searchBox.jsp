@@ -128,23 +128,24 @@
              <br/>
              <section>
                  <h3 style="text-align: left">Sequence Search guideline</h3>
-
+<!--                 <p>Type or paste your protein sequence as shown in the example below and click the search button</p>-->
                  <p>In order to use the sequence search, the search term must be in FASTA format as shown in the example below:</p>
                  <pre style="color: #996a44; background-color:whitesmoke ">
-<!--<a style="border-bottom-style: none" href="${pageContext.request.contextPath}/search?searchparams.type=SEQUENCE&searchparams.sequence=MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
+<a style="border-bottom-style: none" href="${pageContext.request.contextPath}/search?searchparams.type=SEQUENCE&searchparams.sequence=MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
                 LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
                 IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
                 VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
                 GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
                 YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
-                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK"></a>-->
-                MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
-                LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
-                IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
-                VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
-                GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
-                YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
-                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK
+                WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK">
+&gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3
+MQRSPLEKASVVSKLFFSWTRPILRKGYRQRLELSDIYQIPSVDSADNLSEKLEREWDRE
+LASKKNPKLINALRRCFFWRFMFYGIFLYLGEVTKAVQPLLLGRIIASYDPDNKEERSIA
+IYLGIGLCLLFIVRTLLLHPAIFGLHHIGMQMRIAMFSLIYKKTLKLSSRVLDKISIGQL
+VSLLSNNLNKFDEGLALAHFVWIAPLQVALLMGLIWELLQASAFCGLGFLIVLALFQAGL
+GRMMMKYRDQRAGKISERLVITSEMIENIQSVKAYCWEEAMEKMIENLRQTELKLTRKAA
+YVRYFNSSAFFFSGFFVVFLSVLPYALIKGIILRKIFTTISFCIVLRMAVTRQFPWAVQT
+WYDSLGAINKIQDFLQKQEYKTLEYNLTTTEVVMENVTAFWEEGFGELFEKAKQNNNNRK</a>
 
 
 <!--&gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3-->
@@ -163,7 +164,7 @@
                 </a>
 --%>
 </pre>
-<!--                 <p>However, the header <pre style="color: #996a44; background-color:white;">  &gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>-->
+                 <p>However, the header <pre style="color: #996a44; background-color:white;">  &gt;sp|P13569|CFTR_HUMAN Cystic fibrosis transmembrane conductance regulator OS=Homo sapiens GN=CFTR PE=1 SV=3</pre> as shown in the above example is optional.</p>
                  <p><a style="border-bottom-style: none" href="http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"><h6 style="color: mediumblue; text-decoration: underline;">Learn More About FASTA Format</h6></a></p>
 <%--
                  <a   name="fasta" id="fasta"></a>

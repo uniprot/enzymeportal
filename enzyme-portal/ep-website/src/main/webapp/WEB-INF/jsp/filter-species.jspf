@@ -10,8 +10,13 @@
     amount of white space (which multiplies with these big loops). Empty lines
     have been also been avoided. --%>
 <div class="sublevel1">
+    <%-- 
     <div class="subTitle">
         Species (<c:out value="${fn:length(searchFilter.species)}"></c:out>)
+    </div>
+    --%>
+     <div class="subTitle">
+        Species
     </div>
     <c:if test="${fn:length(searchFilter.species) gt 12}">
         <!--auto-complete search box-->

@@ -18,7 +18,7 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
             }).then(function(response){
    
                 return $.map(response.data, function(s,i){
-                   return s.suggestion;
+                    return s.suggestion;
                });   
                 
             });
@@ -49,7 +49,7 @@ enzymeApp.controller('TypeAheadController',['$scope','$http','$location',
                 });
             });
         };
-
+        
         $scope.onSelectPathways = function($model) {
             var name = $model;
             var id = $scope.idMappings[$model];

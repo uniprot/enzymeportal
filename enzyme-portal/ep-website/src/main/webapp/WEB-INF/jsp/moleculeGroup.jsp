@@ -33,7 +33,7 @@
                     </c:forEach>
                 </div>
                 <c:if test="${fn:length(moleculeGroup.molecule) >= 12}">
-                    <a href="#" id="more-molecule-trigger">More...</a>
+                    <a href="#" id="more-molecule-trigger">Show all ${moleculeGroup.totalFound} ${emptyArgs} found...</a>
                     <div id="more-molecule-container" style="display: none">
                         <c:forEach var="molecule" items="${moleculeGroup.molecule}"
                                    begin="12"
@@ -50,6 +50,7 @@
                 These are only ${searchConfig.maxMoleculesPerGroup} out of
                 ${moleculeGroup.totalFound} ${emptyArgs}s found.
             </c:if>
+                 <%--
             <a href="${moleculeGroupUrl}">
                 <spring:message code="label.entry.molecules.see.more"
                     arguments="${moleculeGroup.totalFound eq 1? 'the' : 'all'},
@@ -57,6 +58,7 @@
                     ${emptyArgs}${moleculeGroup.totalFound eq 1? '' : 's'},
                     ${moleculeGroupDb}"/>
             </a>
+                 --%>
         </fieldset>
     </c:otherwise>
 </c:choose>

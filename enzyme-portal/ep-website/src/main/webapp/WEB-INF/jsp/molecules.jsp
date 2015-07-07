@@ -48,9 +48,11 @@
                 <c:set var="emptyArgs" value="activator"/>
                 <c:set var="titleArgs" value="Activators,activate"/>
                 <c:set var="explArgs" value="activators,activate"/>
+                <%--
                 <c:set var="moleculeGroupDb" value="UniProt"/>
                 <c:set var="moleculeGroupUrl"
                        value="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}#section_comments"/>
+                --%>
                 <div id="activators">
                     <%@include  file="moleculeGroup.jsp" %>
                 </div>
@@ -59,9 +61,11 @@
                 <c:set var="emptyArgs" value="inhibitor"/>
                 <c:set var="titleArgs" value="Inhibitors,inhibit"/>
                 <c:set var="explArgs" value="inhibitors,inhibit"/>
+                 <%--
                 <c:set var="moleculeGroupDb" value="UniProt"/>
                 <c:set var="moleculeGroupUrl"
                        value="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}#section_comments"/>
+                --%>
                 <div id="inhibitors">
                     <%@include  file="moleculeGroup.jsp" %>
                 </div>
