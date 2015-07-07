@@ -121,7 +121,15 @@
         <url>${http-uniprot-private-url}/snapshot</url>
     </repository>      -->
         
-        
+               <repository>
+            <releases/>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>ebi-repo</id>
+            <name>EBI maven repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository> 
         
         <repository>
             <id>maven-repo</id>
@@ -130,15 +138,6 @@
         <repository>
             <id>ibiblio</id>
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
-        </repository>
-        <repository>
-            <releases/>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>ebi-repo</id>
-            <name>EBI maven repository</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
         </repository>
         <repository>
             <releases>
@@ -656,7 +655,7 @@
         <module>chembl-adapter</module>-->
         
         <!--        <module>SitemapGenerator</module>-->
-         <module>EnzymePortalTestKit</module>
+        <module>EnzymePortalTestKit</module>
         <module>enzyme-portal-data</module>
         <module>PDBeAdapter</module>
         <module>centralService</module>
@@ -666,7 +665,7 @@
         <module>literature-adapter</module>
         <module>ep-base</module>
         <module>ep-website</module>
-
+        <module>uniprotService</module>
     </modules>
     
     <profiles>
@@ -725,6 +724,11 @@
                 <repository>
                     <id>codelds</id>
                     <url>https://code.lds.org/nexus/content/groups/main-repo</url>
+                </repository>
+                <repository>
+                    <id>ebi-repo</id>
+                    <name>ebi-repo</name>
+                    <url>http://www.ebi.ac.uk/~maven/m2repo</url>
                 </repository>
 
 
