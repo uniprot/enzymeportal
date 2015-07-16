@@ -59,11 +59,11 @@
             <artifactId>uniprotjapi</artifactId>
             <version>2015.07</version>
         </dependency>
-                <dependency>
+<!--                <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
             <version>1.0.13-SNAPSHOT</version>
-        </dependency> 
+        </dependency> -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
