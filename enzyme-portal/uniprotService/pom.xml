@@ -20,7 +20,7 @@
     
     <properties>
         
-        <org.springframework-version>4.0.6.RELEASE</org.springframework-version>
+        <org.springframework-version>4.1.6.RELEASE</org.springframework-version>
         
         <slf4j.version>1.7.5</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
@@ -59,11 +59,11 @@
             <artifactId>uniprotjapi</artifactId>
             <version>2015.07</version>
         </dependency>
-        <!--        <dependency>
+                <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
             <version>1.0.13-SNAPSHOT</version>
-        </dependency> -->
+        </dependency> 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -177,21 +177,15 @@
             <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.0.6.RELEASE</version>
+            <version>4.1.6.RELEASE</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-<!--    <repositories>
-          
-        <repository>
-            <id>ebi-repo</id>
-            <name>ebi-repo</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
-        </repository>
-    </repositories>-->
+
         
 
   
