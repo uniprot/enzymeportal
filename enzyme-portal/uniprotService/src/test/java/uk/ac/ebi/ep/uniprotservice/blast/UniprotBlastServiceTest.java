@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.uniprotservice.blast;
 
 import java.util.List;
+import org.junit.Ignore;
 import org.junit.Test;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.model.blast.JobStatus;
@@ -17,6 +18,7 @@ import uk.ac.ebi.uniprot.dataservice.client.exception.EBIServiceException;
  *
  * @author joseph
  */
+@Ignore
 public class UniprotBlastServiceTest extends AbstractUniprotServiceTest {
 
 
