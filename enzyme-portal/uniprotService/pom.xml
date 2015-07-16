@@ -20,7 +20,7 @@
     
     <properties>
         
-        <org.springframework-version>3.2.7.RELEASE</org.springframework-version>
+        <org.springframework-version>4.0.6.RELEASE</org.springframework-version>
         
         <slf4j.version>1.7.5</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
@@ -59,7 +59,7 @@
             <artifactId>uniprotjapi</artifactId>
             <version>2015.07</version>
         </dependency>
-<!--                <dependency>
+        <!--                <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
             <version>1.0.13-SNAPSHOT</version>
@@ -179,16 +179,11 @@
         </dependency>
         
 
-        <dependency><!--        <dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.0.4.RELEASE</version>
-            <scope>test</scope>
-        </dependency>-->
-	<groupId>org.springframework</groupId>
-	<artifactId>spring-test</artifactId>
-	<version>3.2.7.RELEASE</version>
-</dependency>
+            <version>4.0.6.RELEASE</version>
+        </dependency>
     </dependencies>
 
         
