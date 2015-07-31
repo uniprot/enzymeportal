@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -86,7 +87,7 @@ public class FDA {
 //            }
 //
 //        }
-        List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds().stream().distinct().collect(Collectors.toList());
+        List<TempCompoundCompare> compounds = chemblService.getFdaChemblCompounds().stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
 
         List<TempCompoundCompare> activator = new ArrayList<>();
         List<TempCompoundCompare> inhibitor = new ArrayList<>();
