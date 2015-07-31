@@ -11,10 +11,13 @@ import com.mysema.query.types.expr.StringExpression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymeCatalyticActivity;
@@ -315,8 +318,8 @@ public class EnzymePortalService {
 
         return uniprotEntryRepository.findEnzymesByAccession(accession);
     }
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAcc(List<String> accessions) {
 
         return uniprotEntryRepository.findSummariesByAcc(accessions);
@@ -329,8 +332,29 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
     }
+
+    @Transactional(readOnly = true)
+    public  Stream<List<UniprotEntry>> findEnzymesByAccessions1(List<String> accessions,Pageable pageable) {
+        //return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
+
+        return uniprotEntryRepository.findSummariesByAccessions1(accessions,pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<UniprotEntry> findSummariesByAccessionsFutures(List<String> accessions,Pageable pageable) {
+
+        return uniprotEntryRepository.findSummariesByAccessionsFutures(accessions,pageable);
+
+    }
     
-        @Transactional(readOnly = true)
+       @Transactional(readOnly = true)
+    public Future<List<UniprotEntry>> findSummariesByAccessionsF(List<String> accessions) {
+
+        return uniprotEntryRepository.findSummariesByAccessionsF(accessions);
+
+    }
+
+    @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymePortalByAccessions(String accession) {
         //return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
 

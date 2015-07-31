@@ -36,7 +36,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -52,25 +51,25 @@ import uk.ac.ebi.ep.data.search.model.Species;
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 
-//@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {
-//    @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
-//    @NamedAttributeNode("enzymePortalPathwaysSet"),
-//    @NamedAttributeNode("enzymePortalReactionSet"),
-//    @NamedAttributeNode("enzymePortalSummarySet"),
-//    @NamedAttributeNode(value = "enzymePortalCompoundSet", subgraph = "enzymePortalCompoundSet"),
-//    @NamedAttributeNode("enzymePortalDiseaseSet"),
-//    @NamedAttributeNode("uniprotXrefSet"),
-//    @NamedAttributeNode("enzymePortalEcNumbersSet"),
-//    @NamedAttributeNode("enzymeCatalyticActivitySet")
-//},
-//        subgraphs = {
-//            @NamedSubgraph(
-//                    name = "relatedProteinsId",
-//                    attributeNodes = {
-//                        @NamedAttributeNode(value = "uniprotEntrySet", subgraph = "enzymePortalCompoundSet")}
-//            )
-//        }
-//)
+@NamedEntityGraph(name = "UniprotEntryEntityGraph", attributeNodes = {
+    @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
+    @NamedAttributeNode("enzymePortalPathwaysSet"),
+    @NamedAttributeNode("enzymePortalReactionSet"),
+    @NamedAttributeNode("enzymePortalSummarySet"),
+    @NamedAttributeNode(value = "enzymePortalCompoundSet", subgraph = "enzymePortalCompoundSet"),
+    @NamedAttributeNode("enzymePortalDiseaseSet"),
+    @NamedAttributeNode("uniprotXrefSet"),
+    @NamedAttributeNode("enzymePortalEcNumbersSet"),
+    @NamedAttributeNode("enzymeCatalyticActivitySet")
+},
+        subgraphs = {
+            @NamedSubgraph(
+                    name = "relatedProteinsId",
+                    attributeNodes = {
+                        @NamedAttributeNode(value = "uniprotEntrySet", subgraph = "enzymePortalCompoundSet")}
+            )
+        }
+)
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
     @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
@@ -79,9 +78,6 @@ import uk.ac.ebi.ep.data.search.model.Species;
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
 
 })
-@NamedEntityGraph(name = "UniprotEntryEntityGraph",
-        attributeNodes = @NamedAttributeNode(value = "enzymePortalCompoundSet", subgraph = "enzymePortalCompoundSet"),
-        subgraphs = @NamedSubgraph(name = "enzymePortalCompoundSet", attributeNodes = @NamedAttributeNode("uniprotAccession")))
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
@@ -103,16 +99,16 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Date lastUpdateTimestamp;
 
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
-    //@ManyToOne(fetch = FetchType.EAGER)
-    @ManyToOne
-    @BatchSize(size = 20)
-    @Fetch(FetchMode.JOIN)
+    @ManyToOne(fetch = FetchType.EAGER)
+    //@ManyToOne
+    //@BatchSize(size = 20)
+    //@Fetch(FetchMode.JOIN)
     private RelatedProteins relatedProteinsId;
 
-    //@OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
-    @BatchSize(size = 20)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
+    //@BatchSize(size = 20)
+    //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
@@ -145,17 +141,17 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     private List<EnzymePortalSummary> enzymePortalSummarySet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
-    @BatchSize(size = 20)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
+    //@BatchSize(size = 100)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
-    @BatchSize(size = 20)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
+    //@BatchSize(size = 20)
+    //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
 
     public UniprotEntry() {

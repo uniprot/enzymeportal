@@ -28,6 +28,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.BatchSize;
 import uk.ac.ebi.ep.data.search.model.Compound;
 
 /**
@@ -35,6 +36,7 @@ import uk.ac.ebi.ep.data.search.model.Compound;
  * @author joseph
  */
 @Entity
+@BatchSize(size = 100)
 @Table(name = "ENZYME_PORTAL_COMPOUND")
 @XmlRootElement
 
