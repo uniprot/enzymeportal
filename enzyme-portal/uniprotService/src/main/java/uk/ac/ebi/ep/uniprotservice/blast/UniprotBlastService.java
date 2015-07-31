@@ -86,12 +86,13 @@ public class UniprotBlastService {
         input.setGapalign(GapAlign.FALSE);
         //input.setFilter(FilterOptions.NONE);
         input.setMatrix(SimilarityMatrixOptions.BLOSUM_62);
+        
 
         // Initialise and run a UniProtBlastService
-        ServiceFactory serviceFactoryInstance = Client.getServiceFactoryInstance();
-        UniProtBlastService uniprotBlastService = serviceFactoryInstance.getUniProtBlastService();
+       // ServiceFactory serviceFactoryInstance = Client.getServiceFactoryInstance();
+        //UniProtBlastService uniprotBlastService = serviceFactoryInstance.getUniProtBlastService();
 
-        return uniprotBlastService.submit(input);
+        return uniprotBlastService().submit(input);
 
     }
 

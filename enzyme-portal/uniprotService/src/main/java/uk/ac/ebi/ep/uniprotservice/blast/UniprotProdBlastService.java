@@ -52,7 +52,7 @@ public class UniprotProdBlastService {
 //    uk.ac.ebi.kraken.model.blast.parameters.FormatOptions.DEFAULT
 //    uk.ac.ebi.kraken.model.blast.parameters.TopcomboN.ONE
 //    
-        BlastInput input = new BlastInput(DatabaseOptions.SWISSPROT, sequence, BlastVersionOption.BLASTP, SimilarityMatrixOptions.BLOSUM_62, MaxNumberResultsOptions.TWO_HUNDRED_FIFTY, ExpectedThreshold.TEN, StatsOptions.POISSON, SortOptions.HIGHSCORE);
+        BlastInput input = new BlastInput(DatabaseOptions.UNIPROTKB, sequence, BlastVersionOption.BLASTP, SimilarityMatrixOptions.BLOSUM_62, MaxNumberResultsOptions.FIVE_HUNDRED, ExpectedThreshold.TEN, StatsOptions.POISSON, SortOptions.HIGHSCORE);
 
         //Get the UniProt Service. This is how to access the blast service
         //UniProtQueryService service = UniProtJAPI.factory.getUniProtQueryService();
