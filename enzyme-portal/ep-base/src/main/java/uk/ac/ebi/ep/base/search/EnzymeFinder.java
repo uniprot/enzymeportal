@@ -127,7 +127,7 @@ public class EnzymeFinder {
         uniqueDiseases = new HashSet<>();
     }
 
-    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, UniprotProdBlastService prodBlastService ) {
+    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, UniprotProdBlastService prodBlastService) {
         this(service, ebeyeRestService);
         this.prodBlastService = prodBlastService;
     }
@@ -277,6 +277,46 @@ public class EnzymeFinder {
         return enzymeList.stream().distinct().sorted(SORT_BY_IDENTITY_REVERSE_ORDER).collect(Collectors.toList());
     }
 
+    private List<UniprotEntry> computeUniqueEnzymes(UniprotEntry entry, String keyword) {
+
+        LinkedList<UniprotEntry> theEnzymes = new LinkedList<>();
+        Deque<UniprotEntry> enzymeList = new LinkedList<>();
+        Set<String> proteinNames = new HashSet<>();
+
+        if (!proteinNames.contains(entry.getProteinName())) {
+
+            String enzymeName = HtmlUtility.cleanText(entry.getProteinName()).toLowerCase();
+            if (enzymeName.toLowerCase().matches(".*" + keyword.toLowerCase() + ".*") && entry.getEntryType() != 1) {
+
+                enzymeList.offerFirst(entry);
+
+            } else {
+
+                enzymeList.offerLast(entry);
+
+            }
+
+        }
+
+        proteinNames.add(entry.getProteinName());
+
+        //enzymeList.sort(SWISSPROT_FIRST);
+        for (UniprotEntry enzyme : enzymeList) {
+            if (HtmlUtility.cleanText(enzyme.getProteinName()).toLowerCase().equalsIgnoreCase(keyword.toLowerCase()) && enzyme.getEntryType() != 1) {
+
+                LOGGER.info("FOUND A MATCH " + enzyme.getProteinName() + " => " + keyword + " entry type " + enzyme.getEntryType());
+                theEnzymes.offerFirst(enzyme);
+
+            } else {
+                theEnzymes.offerLast(enzyme);
+
+            }
+            computeFilterFacets(enzyme);
+        }
+
+        return theEnzymes.stream().distinct().collect(Collectors.toList());
+    }
+
     private List<UniprotEntry> computeUniqueEnzymes(List<UniprotEntry> enzymes, String keyword) {
 
         LinkedList<UniprotEntry> theEnzymes = new LinkedList<>();
@@ -321,10 +361,10 @@ public class EnzymeFinder {
 
     private List<UniprotEntry> getEnzymesByAccessions(List<String> accessions, String keyword) {
 
-        final Set<UniprotEntry> enzymeList = new LinkedHashSet<>();
+        Set<UniprotEntry> enzymeList = new LinkedHashSet<>();
         //LOGGER.warn("Number of Accession to query for enzymes :=:" + accessions.size());
         if (accessions.size() > 0) {
-            Pageable pageable = new PageRequest(0, 500, Sort.Direction.ASC, "function", "entryType");
+            Pageable pageable = new PageRequest(0, 800, Sort.Direction.ASC, "function", "entryType");
 
             long startTime = System.nanoTime();
             Stream<String> existingStream = accessions.stream();
@@ -336,11 +376,13 @@ public class EnzymeFinder {
                 //Page<UniprotEntry> page = service.findEnzymesByAccessions(chunk, pageable);//39 sec 53.610s
                 //List<UniprotEntry> enzymes = page.getContent().stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
                 // List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
-                List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk); //36 sec 58.683s
+                
+                List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+                 
                 enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
 
             });
-
+     
             long endTime = System.nanoTime();
             long duration = endTime - startTime;
             long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
