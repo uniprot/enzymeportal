@@ -27,9 +27,9 @@
                                                                                           
                                <%--     <form:input id="local-searchbox" name="first" path="searchparams.text" /> --%>
                                <input autocomplete="off" id="local-searchbox" name="searchparams.text" maxlength="100"  type="text" ng-model="searchTypeAheadController" placeholder="search for enzymes" typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
-            <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>                
-                                 
-						</label>                                                                           
+            <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>
+                                   <input type="hidden" name="search-term" value="${searchTerm}"/>
+						</label>
 						<!-- Include some example searchterms - keep them short and few! -->
                                                 <span class="examples">Examples:  <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>, <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=CFTR">CFTR</a>,  <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=rapamycin">Rapamycin</a>, 
                                                     <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=Q13423">Q13423</a>,

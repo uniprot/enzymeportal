@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.adapter.literature.CitexploreWSClientPool;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
@@ -310,6 +311,7 @@ public class SearchController extends AbstractController {
             HttpSession session, HttpServletRequest request) {
         String view = "error";
 
+
         String searchKey = null;
         SearchResults results = null;
 
@@ -319,6 +321,7 @@ public class SearchController extends AbstractController {
             Map<String, SearchResults> prevSearches
                     = getPreviousSearches(session.getServletContext());
             searchKey = getSearchKey(searchModel.getSearchparams());
+
             results = prevSearches.get(searchKey);
             if (results == null) {
                 // New search:
@@ -347,6 +350,8 @@ public class SearchController extends AbstractController {
                 model.addAttribute("searchConfig", searchConfig);
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
+                request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
+
                 clearHistory(session);
                 addToHistory(session, searchModel.getSearchparams().getType(),
                         searchKey);
