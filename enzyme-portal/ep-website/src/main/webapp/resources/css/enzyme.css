@@ -435,3 +435,13 @@ ul.catalytic-activity-list li {
 .center {
     display: block;
 }
+
+#beta-banner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    z-index: 999999;
+    background: url(../images/beta-banner.png) top left no-repeat;
+}

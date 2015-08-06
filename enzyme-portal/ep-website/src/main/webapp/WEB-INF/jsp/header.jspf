@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<div id="beta-banner"></div>
 <header>
     <div id="global-masthead" class="masthead grid_24">
         <!--This has to be one line and no newline characters-->
@@ -27,9 +28,9 @@
                 <img src="${pageContext.request.contextPath}/resources/images/enzymeportal_logo.png"
                     alt="Enzyme Portal logo"
                     style="width :64px; height: 64px; margin-right: 0px">
-            </a>
             <span style="margin-top: 30px"><h1 style="padding-left: 0px">Enzyme
                 Portal</h1></span>
+            </a>
         </div>
 
         <div class="grid_12 omega">
