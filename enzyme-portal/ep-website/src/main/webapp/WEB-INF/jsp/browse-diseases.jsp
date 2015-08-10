@@ -48,7 +48,16 @@
 
         <div class="container-browse-search">
             <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
-            <input id="disease-input" class="browse-search" type="text" ng-model="diseasesTypeAheadController" placeholder="Disease name" typeahead="disease for disease in getDiseases($viewValue)" class="form-control" typeahead-on-select="onSelectDiseases($item, $model, $label)">
+            <input id="disease-input" class="browse-search" type="text"
+                   ng-model="diseasesTypeAheadController"
+                   placeholder="Disease name"
+                   typeahead="disease for disease in getDiseases($viewValue)"
+                   class="form-control"
+                   typeahead-on-select="onSelectDiseases($item, $model, $label)"
+                   typeahead-no-results="noResults">
+                <div ng-show="noResults">
+                    No Results Found
+                </div>
         </div>
 
         <c:if test="${not empty diseaseList}">

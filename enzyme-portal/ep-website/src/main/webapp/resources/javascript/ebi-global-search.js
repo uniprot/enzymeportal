@@ -82,7 +82,7 @@ function updateSummary(options) {
 	opts.skipEmptyResults = options.skipEmptyResults != null? options.skipEmptyResults : true;
 	opts.noResults = options.noResults != null? options.noResults : false;
 	
-	var query = $("#" + opts.searchboxId).val();
+	var query = $('[name="search-term"]').val();
 	if (query) {
 		var searchBaseURL = opts.searchBaseURL;
 		var thisElem = $.find("#" + opts.globalSearchBoxId);

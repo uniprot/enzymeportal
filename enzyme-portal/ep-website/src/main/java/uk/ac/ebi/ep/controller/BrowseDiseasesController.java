@@ -138,6 +138,7 @@ public class BrowseDiseasesController extends AbstractController {
             clearHistory(session);
             addToHistory(session, searchModel.getSearchparams().getType(),
                     searchKey);
+            request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
             view = RESULT;
         }
 
