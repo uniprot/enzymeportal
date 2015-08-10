@@ -15,6 +15,9 @@ import org.springframework.web.util.HtmlUtils;
  */
 public class HtmlUtility {
 
+    private HtmlUtility(){
+        
+    }
     public static String cleanText(String text) {
 
         String removeBackSlash = text.replaceAll(Pattern.quote("\\"), "");

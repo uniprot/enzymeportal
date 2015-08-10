@@ -210,7 +210,7 @@ public class EnzymeRetriever extends EnzymeFinder {
                     .stream().collect(Collectors.toSet());
             model.setEnzymePortalEcNumbersSet(ecNumbers);
             // uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
-            ecNumbers.stream().forEach((ec) -> {
+            ecNumbers.stream().forEach(ec -> {
                 //Enzyme enzyme = new Enzyme();
                 EnzymeHierarchy enzymeHierarchy = new EnzymeHierarchy();
                 EcClass ecClass = new EcClass();
