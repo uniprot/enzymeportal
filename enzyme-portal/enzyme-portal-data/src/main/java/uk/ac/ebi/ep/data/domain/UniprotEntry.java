@@ -36,6 +36,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -99,16 +100,16 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Date lastUpdateTimestamp;
 
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
-    @ManyToOne(fetch = FetchType.EAGER)
-    //@ManyToOne
-    //@BatchSize(size = 20)
-    //@Fetch(FetchMode.JOIN)
+    //@ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @BatchSize(size = 100)
+    @Fetch(FetchMode.JOIN)
     private RelatedProteins relatedProteinsId;
 
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
-    //@BatchSize(size = 20)
-    //@Fetch(FetchMode.JOIN)
+    //@OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
+    @BatchSize(size = 100)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
@@ -141,17 +142,17 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private List<EnzymePortalSummary> enzymePortalSummarySet;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
-    //@BatchSize(size = 100)
+    @BatchSize(size = 100)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
-    //@BatchSize(size = 20)
-    //@Fetch(FetchMode.JOIN)
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession")
+    @BatchSize(size = 20)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
 
     public UniprotEntry() {

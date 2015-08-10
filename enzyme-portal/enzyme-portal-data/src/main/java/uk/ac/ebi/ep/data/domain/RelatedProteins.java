@@ -9,9 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,9 +22,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 
 /**
@@ -51,10 +48,10 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
     private BigDecimal relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-    // @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
-    @BatchSize(size = 20)
-    @Fetch(FetchMode.JOIN)
+     @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
+    //@BatchSize(size = 20)
+    //@Fetch(FetchMode.JOIN)
     private Set<UniprotEntry> uniprotEntrySet;
 
     public RelatedProteins() {

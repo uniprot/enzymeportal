@@ -334,23 +334,23 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public  Stream<List<UniprotEntry>> findEnzymesByAccessions1(List<String> accessions,Pageable pageable) {
-        //return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
+    public  Stream<List<UniprotEntry>> findStreamedSummariesByAccessions(List<String> accessions,Pageable pageable) {
+        //return uniprotEntryRepository.findStreamedSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
 
-        return uniprotEntryRepository.findSummariesByAccessions1(accessions,pageable);
+        return uniprotEntryRepository.findStreamedSummariesByAccessions(accessions,pageable);
     }
 
     @Transactional(readOnly = true)
-    public Slice<UniprotEntry> findSummariesByAccessionsFutures(List<String> accessions,Pageable pageable) {
+    public Slice<UniprotEntry> findSlicedSummariesByAccessions(List<String> accessions,Pageable pageable) {
 
-        return uniprotEntryRepository.findSummariesByAccessionsFutures(accessions,pageable);
+        return uniprotEntryRepository.findSlicedSummariesByAccessions(accessions,pageable);
 
     }
     
        @Transactional(readOnly = true)
-    public Future<List<UniprotEntry>> findSummariesByAccessionsF(List<String> accessions) {
+    public Future<List<UniprotEntry>> findFutureSummariesByAccessions(List<String> accessions) {
 
-        return uniprotEntryRepository.findSummariesByAccessionsF(accessions);
+        return uniprotEntryRepository.findFutureSummariesByAccessions(accessions);
 
     }
 
