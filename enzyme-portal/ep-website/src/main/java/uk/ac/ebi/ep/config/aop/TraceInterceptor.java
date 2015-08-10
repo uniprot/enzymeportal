@@ -26,7 +26,7 @@ public class TraceInterceptor extends CustomizableTraceInterceptor {
 				logger4J.debug( message, ex );
 			} else {
 				logger4J.debug( message );
-			}
+		}
 		}
 
 		@Override

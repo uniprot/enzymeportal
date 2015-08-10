@@ -25,7 +25,7 @@
 <!--        <spring.data.jpa.version>1.6.2.RELEASE</spring.data.jpa.version>
         <spring.data.commons.version>1.8.2.RELEASE</spring.data.commons.version>
         <querydsl.version>3.3.1</querydsl.version>-->
-        <org.springframework-version>4.0.6.RELEASE</org.springframework-version> 
+        <org.springframework-version>4.1.7.RELEASE</org.springframework-version> 
 <!--        <hibernate.entitymanager.version>4.3.5.Final</hibernate.entitymanager.version>
         <hibernate.jpa-api.version>1.0.0.Final</hibernate.jpa-api.version>-->
         <cglib.version>3.1</cglib.version>
@@ -59,11 +59,6 @@
 
 
     <dependencies>
-<!--               <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.13-SNAPSHOT</version>
-        </dependency>-->
 
                 <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -82,43 +77,22 @@
           </exclusions>
        </dependency>
         
-<!--        <dependency>
-             overriding ep-core's 
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>reactome-adapter</artifactId>
-            <version>1.0.3</version>
-        </dependency>-->
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-util</artifactId>
             <version>1.0.6</version>
         </dependency>
-<!--        <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>intenz-adapter</artifactId>
-            <version>1.0.6</version>
-        </dependency>-->
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>chembl-adapter</artifactId>
             <version>1.0.2</version>
         </dependency>
-<!--                <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>chebi-adapter</artifactId>
-            <version>1.0.5</version>
-        </dependency>-->
-<!--        <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>literature-adapter</artifactId>
-            <version>1.0.8</version>
-        </dependency> -->
         
 
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
-            <version>2.5.1</version>
+            <version>2.6.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -130,24 +104,12 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
+            <version>7.0</version>
             <scope>provided</scope>
         </dependency>
         
  
         
-<!--
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>2.5.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>javax.persistence</artifactId>
-            <version>2.0.3</version>
-        </dependency>-->
 
         <!-- Data Mapper package is a high-performance data binding package built 
         on Jackson JSON processor -->
@@ -186,22 +148,23 @@
             <version>${org.springframework-version}</version>
         </dependency> 
          
-        <!--            <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>4.0.3.RELEASE</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
         
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
             <version>${org.springframework-version}</version>
+        </dependency>
+                <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework-version}</version>
+            <exclusions>
+                <!-- Exclude Commons Logging in favor of SLF4j -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -347,19 +310,6 @@
             <version>${org.springframework-version}</version>
         </dependency>
 
-        <!--spring Data commons-->
-
-<!--        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>${spring.data.jpa.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-            <version>${spring.data.commons.version}</version>
-        </dependency> 
-        -->
 
         <!-- Database pooling -->
         <dependency>
@@ -369,72 +319,6 @@
         </dependency>
 
             
-
-        <!--  ORACLE Connector -->
-<!--        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.3</version>
-        </dependency>-->
-
-        <!-- Hibernate  -->
-        
-            
-        <!--                        hibernate core-->
-<!--        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.entitymanager.version}</version>
-        </dependency>
-            -->
-
-
-
-            
-        <!--                    hibernate validator-->
-<!--                        
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>5.0.3.Final</version>
-        </dependency>
-
-            
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.entitymanager.version}</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>asm</artifactId>
-                    <groupId>asm</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-         QueryDSL 
-	
-        <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-core</artifactId>
-            <version>${querydsl.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>${querydsl.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
-            <scope>provided</scope>
-        </dependency>-->
-
         <!-- Testing dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -457,13 +341,6 @@
             <type>jar</type>
             <scope>test</scope>
         </dependency>
-
-<!--        <dependency>
-            <groupId>com.jolbox</groupId>
-            <artifactId>bonecp</artifactId>
-            <version>0.7.1.RELEASE</version>
-            <type>jar</type>
-        </dependency>-->
 
 
         <dependency>
@@ -504,27 +381,7 @@
     <build>
         <finalName>enzymeportal</finalName>
         <plugins>
-         
-<!--            <plugin>
-                <groupId>com.mysema.maven</groupId>
-                <artifactId>maven-apt-plugin</artifactId>
-                <version>1.0.4</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <configuration>
-                            
-                            <outputDirectory>target/generated-sources/java</outputDirectory>
-                            <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>   -->
-            
-            
+           
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -562,7 +419,7 @@
                                 <artifactItem>
                                     <groupId>javax</groupId>
                                     <artifactId>javaee-endorsed-api</artifactId>
-                                    <version>6.0</version>
+                                    <version>7.0</version>
                                     <type>jar</type>
                                 </artifactItem>
                             </artifactItems>
@@ -570,77 +427,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-site-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<reportPlugins>-->
-                        <!--<plugin>-->
-                            <!--<groupId>org.apache.maven.plugins</groupId>-->
-                            <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
-                            <!--<reports>-->
-                                <!--<report>summary</report>-->
-                                <!--<report>dependencies</report>-->
-                                <!--<report>dependency-convergence</report>-->
-                                <!--<report>project-team</report>-->
-                                <!--<report>issue-tracking</report>-->
-                                <!--<report>license</report>-->
-                                <!--<report>scm</report>-->
-                            <!--</reports>-->
-                        <!--</plugin>-->
-                        <!--<plugin>-->
-                            <!--<groupId>org.apache.maven.plugins</groupId>-->
-                            <!--<artifactId>maven-javadoc-plugin</artifactId>-->
-                        <!--</plugin>-->
-                        <!--<plugin>-->
-                            <!--<groupId>org.apache.maven.plugins</groupId>-->
-                            <!--<artifactId>maven-surefire-report-plugin</artifactId>-->
-                        <!--</plugin>-->
-                        <!--<plugin>-->
-                            <!--<groupId>org.apache.maven.plugins</groupId>-->
-                            <!--<artifactId>maven-jxr-plugin</artifactId>-->
-                        <!--</plugin>-->
-                        <!--<plugin>-->
-                            <!--<groupId>org.codehaus.mojo</groupId>-->
-                            <!--<artifactId>cobertura-maven-plugin</artifactId>-->
-                        <!--</plugin>-->
-                        <!--<plugin>-->
-                            <!--<groupId>org.codehaus.mojo</groupId>-->
-                            <!--<artifactId>versions-maven-plugin</artifactId>-->
-                            <!--<reportSets>-->
-                                <!--<reportSet>-->
-                                    <!--<reports>-->
-                                        <!--<report>dependency-updates-report</report>-->
-                                        <!--<report>plugin-updates-report</report>-->
-                                        <!--<report>property-updates-report</report>-->
-                                    <!--</reports>-->
-                                <!--</reportSet>-->
-                            <!--</reportSets>-->
-                        <!--</plugin>-->
-                        <!--<plugin>-->
-                            <!--<groupId>org.apache.maven.plugins</groupId>-->
-                            <!--<artifactId>maven-changes-plugin</artifactId>-->
-                            <!--<reportSets>-->
-                                <!--<reportSet>-->
-                                    <!--<reports>-->
-                                        <!--<report>changes-report</report>-->
-                                    <!--</reports>-->
-                                <!--</reportSet>-->
-                            <!--</reportSets>-->
-                        <!--</plugin>-->
-                    <!--</reportPlugins>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-            <!--<plugin>-->
-                <!--<groupId>com.github.github</groupId>-->
-                <!--<artifactId>site-maven-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<path>-->
-                        <!--${project.parent.artifactId}/${project.artifactId}-->
-                    <!--</path>-->
-                <!--</configuration>-->
-            <!--</plugin>  -->
-            
             
             
         </plugins>
