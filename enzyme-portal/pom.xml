@@ -662,10 +662,11 @@
         <module>ep-parser</module>
         <module>ebeye-rest-adapter</module>
         <module>enzymeservices</module>
+         <module>uniprotService</module>
         <module>literature-adapter</module>
         <module>ep-base</module>
         <module>ep-website</module>
-        <module>uniprotService</module>
+       
     </modules>
     
     <profiles>

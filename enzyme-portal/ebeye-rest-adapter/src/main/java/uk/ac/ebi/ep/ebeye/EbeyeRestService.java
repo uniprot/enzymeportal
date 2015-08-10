@@ -50,7 +50,7 @@ public class EbeyeRestService {
     
     private  final int DEFAULT_EBI_SEARCH_LIMIT = 100;
     private  final int HITCOUNT = 9000;
-    private  final int QUERY_LIMIT = 1000;
+    private  final int QUERY_LIMIT = 800;
 
     /**
      *
