@@ -7,10 +7,8 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
@@ -19,7 +17,6 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
-import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 
 /**
  *
@@ -93,14 +90,20 @@ public class Cofactors extends CompoundParser {
 
     private void parseCofactorText(List<EnzymePortalSummary> enzymeSummary) {
 
-        Stream<EnzymePortalSummary> existingStream = enzymeSummary.stream();
-        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 500, 1);
-        AtomicInteger count = new AtomicInteger(1);
-        partitioned.parallel().forEach((chunk) -> {
-            // System.out.println(count.getAndIncrement() + " BATCH SIZE" + chunk.size());
-            chunk.stream().forEach((summary) -> {
-                processCofactors(summary);
-            });
+//        Stream<EnzymePortalSummary> existingStream = enzymeSummary.stream();
+//        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 100, 1);
+//        AtomicInteger count = new AtomicInteger(1);
+//        partitioned.parallel().forEach((chunk) -> {
+//             //System.out.println(count.getAndIncrement() + " BATCH SIZE" + chunk.size());
+//            chunk.stream().forEach((summary) -> {
+//                processCofactors(summary);
+//            });
+//        });
+        
+
+        enzymeSummary.forEach(summary ->{
+         processCofactors(summary);
+     
         });
 
         //save compounds
@@ -144,6 +147,7 @@ public class Cofactors extends CompoundParser {
                     String url = compound.getUrl();
                     String accession = summary.getUniprotAccession().getAccession();
 
+                    //System.out.println("COMPOUND ID "+ compoundId);
                     parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
                    
                     //deprecate later
