@@ -197,7 +197,7 @@ public class BrowseTaxonomyController extends AbstractController {
         clearHistory(session);
         addToHistory(session, searchModel.getSearchparams().getType(),
                 searchKey);
-//        request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
+        model.addAttribute("searchTerm", searchModel.getSearchparams().getText());
 
         return RESULT;
 
@@ -392,6 +392,7 @@ public class BrowseTaxonomyController extends AbstractController {
         clearHistory(session);
         addToHistory(session, searchModel.getSearchparams().getType(),
                 searchKey);
+         request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
 
         return RESULT;
     }

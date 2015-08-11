@@ -56,6 +56,11 @@
                     <a href="${pageContext.request.contextPath}/about"
                         title="About Enzyme Portal">About Enzyme Portal</a>
                 </li>
+                <li class="last ${fn:containsIgnoreCase(pageTitle, 'legacy')?
+                    'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/legacy"
+                        title="Old Enzyme Portal">Old Enzyme Portal</a>
+                </li>
                 <%-- If you need to include functional (as opposed to purely
                     navigational) links in your local menu, add them here, and
                     give them a class of "functional". Remember: you'll need a
