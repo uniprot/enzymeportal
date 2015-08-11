@@ -182,10 +182,10 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         namePrefixes.add("CP7B1");
         namePrefixes.add("PDE5A");
 
-        int expResult = 5;
-        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSummariesByNamePrefixes(namePrefixes);
-
+        int expResult = 3;
+        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSummariesByNamePrefixes(namePrefixes).stream().distinct().collect(Collectors.toList());
         assertEquals(expResult, result.size());
+        
 
     }
 

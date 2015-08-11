@@ -6,10 +6,7 @@
 package uk.ac.ebi.ep.data.dataconfig;
 
 import java.util.Properties;
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +14,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -74,20 +70,20 @@ public class DataConfig {
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-        HibernateTransactionManager manager = new HibernateTransactionManager(sessionFactory());
-        manager.setAllowResultAccessAfterCompletion(true);
+//        HibernateTransactionManager manager = new HibernateTransactionManager(sessionFactory());
+//        manager.setAllowResultAccessAfterCompletion(true);
 
         return new JpaTransactionManager(entityManagerFactory().getObject());
 
 
     }
 
-    private SessionFactory sessionFactory() {
-        EntityManager em = entityManagerFactory().getObject().createEntityManager();
-           Session session = em.unwrap(Session.class);
-   
-        return session.getSessionFactory();
-    }
+//    private SessionFactory sessionFactory() {
+//        EntityManager em = entityManagerFactory().getObject().createEntityManager();
+//           Session session = em.unwrap(Session.class);
+//   
+//        return session.getSessionFactory();
+//    }
 
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {

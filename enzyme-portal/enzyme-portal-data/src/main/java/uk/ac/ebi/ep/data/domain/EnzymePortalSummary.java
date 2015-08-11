@@ -58,7 +58,6 @@ public class EnzymePortalSummary implements Serializable {
     private String commentText;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    //@ManyToOne
      @ManyToOne(optional = false,fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
