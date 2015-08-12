@@ -142,8 +142,8 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
         //@ManyToOne(fetch = FetchType.LAZY)
-    @BatchSize(size = 200)
-    @Fetch(FetchMode.JOIN)
+   // @BatchSize(size = 100)
+    //@Fetch(FetchMode.JOIN)
     private List<EnzymePortalSummary> enzymePortalSummarySet;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)

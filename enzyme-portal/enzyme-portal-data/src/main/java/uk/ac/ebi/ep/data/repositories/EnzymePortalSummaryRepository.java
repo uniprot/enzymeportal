@@ -25,7 +25,7 @@ public interface EnzymePortalSummaryRepository extends JpaRepository<EnzymePorta
 
     @Transactional(readOnly = true)
     //@Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TEXT IS NOT NULL AND ROWNUM <= 2000 AND COMMENT_TYPE = :COMMENT_TYPE ", nativeQuery = true)
-    @Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TEXT IS NOT NULL AND COMMENT_TYPE = :COMMENT_TYPE ", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE", nativeQuery = true)
     List<EnzymePortalSummary> findSummariesByCommentType(@Param("COMMENT_TYPE") String commentType);
 
     @Transactional(readOnly = true)

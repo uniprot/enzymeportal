@@ -20,6 +20,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -57,8 +60,10 @@ public class EnzymePortalSummary implements Serializable {
     private String commentText;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-     //@ManyToOne(optional = false,fetch = FetchType.LAZY)
-     @ManyToOne(optional = false)
+    //@ManyToOne(optional = false,fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @BatchSize(size = 10)
+    @Fetch(FetchMode.SELECT)
     private UniprotEntry uniprotAccession;
 
     public EnzymePortalSummary() {
