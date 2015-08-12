@@ -7,8 +7,10 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
@@ -17,19 +19,20 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 
 /**
  *
  * @author joseph
  */
 public class Cofactors extends CompoundParser {
-
+    
     private List<EnzymePortalCompound> compounds = null;
     private static final String COMMENT_TYPE = "COFACTORS";
     private static final String NAME = "Name=([^\\s]+)";
     private static final String XREF = "Xref=ChEBI:([^\\s]+)";
     private static final String NOTE = "Note=([^\\*]+)";
-
+    
     public Cofactors(ChebiWebServiceClient chebiWsClient, EnzymePortalCompoundRepository compoundRepository, EnzymePortalSummaryRepository enzymeSummaryRepository, EnzymePortalParserService parserService) {
         super(chebiWsClient, compoundRepository, enzymeSummaryRepository, parserService);
         compounds = new ArrayList<>();
@@ -42,25 +45,24 @@ public class Cofactors extends CompoundParser {
     @Override
     public void loadCofactors() {
         List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
-
-       
+        
         LOGGER.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
         parseCofactorText(enzymeSummary);
     }
-
+    
     private void computeSpecialCases(String text, EnzymePortalSummary summary, String note) {
         final Pattern xrefPattern = Pattern.compile(XREF);
         final Matcher xrefMatcher = xrefPattern.matcher(text);
-
+        
         while (xrefMatcher.find()) {
-
+            
             String xref = xrefMatcher.group(1).replaceAll(";", "");
-
+            
             if (xref != null) {
                 EnzymePortalCompound compound = searchCompoundInChEBI(xref);
-
+                
                 if (compound != null) {
-
+                    
                     String compoundId = compound.getCompoundId();
                     String compoundName = compound.getCompoundName();
                     String compoundSource = compound.getCompoundSource();
@@ -69,102 +71,107 @@ public class Cofactors extends CompoundParser {
                     String url = compound.getUrl();
                     String accession = summary.getUniprotAccession().getAccession();
 
-                    parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
-
-                    //depreccate later
-                    compound.setRelationship(Relationship.is_cofactor_of.name());
+                    //parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
+                    compound.setCompoundId(compoundId);
+                    compound.setCompoundName(compoundName);
+                    compound.setCompoundSource(compoundSource);
+                    compound.setRelationship(relationship);
                     compound.setUniprotAccession(summary.getUniprotAccession());
-                    compound.setCompoundRole(Compound.Role.COFACTOR.name());
-
+                    compound.setUrl(url);
+                    compound.setCompoundRole(compoundRole);
                     compound.setNote(note);
                     compounds.add(compound);
                     LOGGER.warn("added compound for special case " + compound.getCompoundId() + " <> " + compound.getCompoundName());
-
+                    
                 }
-
+                
             }
-
+            
         }
-
-    }
-
-    private void parseCofactorText(List<EnzymePortalSummary> enzymeSummary) {
-
-//        Stream<EnzymePortalSummary> existingStream = enzymeSummary.stream();
-//        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 100, 1);
-//        AtomicInteger count = new AtomicInteger(1);
-//        partitioned.parallel().forEach((chunk) -> {
-//             //System.out.println(count.getAndIncrement() + " BATCH SIZE" + chunk.size());
-//            chunk.stream().forEach((summary) -> {
-//                processCofactors(summary);
-//            });
-//        });
         
-
-        enzymeSummary.forEach(summary ->{
-         processCofactors(summary);
-     
+    }
+    
+    private void parseCofactorText(List<EnzymePortalSummary> enzymeSummary) {
+        
+        Stream<EnzymePortalSummary> existingStream = enzymeSummary.stream();
+        Stream<List<EnzymePortalSummary>> partitioned = partition(existingStream, 100, 1);
+        AtomicInteger count = new AtomicInteger(1);
+        partitioned.parallel().forEach((chunk) -> {
+            chunk.stream().forEach((summary) -> {
+                processCofactors(summary);
+            });
         });
 
+//        enzymeSummary.forEach(summary ->{
+//         processCofactors(summary);
+//     
+//        });
         //save compounds
         LOGGER.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
-
-        //deprecate later
-        //compoundRepository.save(compounds);
+        
+        compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
+            parserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession().getAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+            
+        });
+        LOGGER.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
-
+        
     }
-
+    
     private void processCofactors(EnzymePortalSummary summary) {
         String cofactorText = summary.getCommentText();
         String note = "";
         final Pattern notePattern = Pattern.compile(NOTE);
         final Matcher noteMatcher = notePattern.matcher(cofactorText);
-
+        
         while (noteMatcher.find()) {
-
+            
             note = noteMatcher.group(1);
-
+            
         }
-
+        
         final Pattern namePattern = Pattern.compile(NAME);
         final Matcher nameMatcher = namePattern.matcher(cofactorText);
-
+        
         while (nameMatcher.find()) {
-
+            
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
-
+            
             if (cofactorName != null) {
                 EnzymePortalCompound compound = searchMoleculeInChEBI(cofactorName);
-
+                
                 if (compound != null) {
-
+                    
                     String compoundId = compound.getCompoundId();
                     String compoundName = compound.getCompoundName();
                     String compoundSource = compound.getCompoundSource();
                     String relationship = Relationship.is_cofactor_of.name();
                     String compoundRole = Compound.Role.COFACTOR.name();
                     String url = compound.getUrl();
-                    String accession = summary.getUniprotAccession().getAccession();
+                    //String accession = summary.getUniprotAccession().getAccession();
 
-                    //System.out.println("COMPOUND ID "+ compoundId);
-                    parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
-                   
+                    //parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
                     //deprecate later
-                    compound.setRelationship(Relationship.is_cofactor_of.name());
+//                    compound.setRelationship(Relationship.is_cofactor_of.name());
+//                    compound.setUniprotAccession(summary.getUniprotAccession());
+//                    compound.setCompoundRole(Compound.Role.COFACTOR.name());
+                    compound.setCompoundId(compoundId);
+                    compound.setCompoundName(compoundName);
+                    compound.setCompoundSource(compoundSource);
+                    compound.setRelationship(relationship);
                     compound.setUniprotAccession(summary.getUniprotAccession());
-                    compound.setCompoundRole(Compound.Role.COFACTOR.name());
-
+                    compound.setUrl(url);
+                    compound.setCompoundRole(compoundRole);
                     compound.setNote(note);
                     compounds.add(compound);
-                  
+                    
                 }
                 if (compound == null) {
                     computeSpecialCases(cofactorText, summary, note);
                 }
             }
-
+            
         }
     }
-
+    
 }
