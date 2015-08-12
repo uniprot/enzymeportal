@@ -11,7 +11,6 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -58,7 +57,8 @@ public class EnzymePortalSummary implements Serializable {
     private String commentText;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-     @ManyToOne(optional = false,fetch = FetchType.LAZY)
+     //@ManyToOne(optional = false,fetch = FetchType.LAZY)
+     @ManyToOne(optional = false)
     private UniprotEntry uniprotAccession;
 
     public EnzymePortalSummary() {
