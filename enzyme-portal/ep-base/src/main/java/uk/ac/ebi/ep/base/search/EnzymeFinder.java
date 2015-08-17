@@ -475,58 +475,11 @@ public class EnzymeFinder {
 
             }
 
-//            
-//            long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-//            LOGGER.warn("Final Time taken to process accessions of size (" + accessions.size() + ") :  (" + elapsedtime + " sec)");
-//
-//            return enzymes.stream().distinct().collect(Collectors.toList());
+
         }
         return enzymeList.stream().collect(Collectors.toList());
     }
 
-//    private List<UniprotEntry> getEnzymesByAccessionsX(List<String> accessions, String keyword) {
-//
-//        Set<UniprotEntry> enzymeList = new LinkedHashSet<>();
-//        List<UniprotEntry> future = new LinkedList<>();
-//        //LOGGER.warn("Number of Accession to query for enzymes :=:" + accessions.size());
-//        if (accessions.size() > 0) {
-//            Pageable pageable = new PageRequest(0, 800, Sort.Direction.ASC, "function", "entryType");
-//
-//            System.out.println("HOW MANY ACCESSION " + accessions.size());
-//
-//            List<List<String>> c = split(accessions, 300);
-//            List<String> chunk1 = c.get(0);
-//            Stream<String> stream2 = c.get(1).stream();
-//            System.out.println("SPLIT " + c.size());
-//            long startTime = System.nanoTime();
-//            Stream<String> existingStream = accessions.stream();
-//            List<String> data = c.get(2);
-//            Stream<List<String>> partitioned = partition(existingStream, 100, 1);
-//
-//            partitioned.parallel().forEach((chunk) -> {
-//                System.out.println("how many chunks " + chunk.size());
-//                // Page<UniprotEntry> page = service.findEnzymesByAccessionsIn(chunk, pageable);
-//                //Page<UniprotEntry> page = service.findEnzymesByAccessions(chunk, pageable);//39 sec 53.610s
-//                //List<UniprotEntry> enzymes = page.getContent().stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
-//                // List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
-//                List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk);//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
-//
-//                enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
-//
-//            });
-//
-//            //List<UniprotEntry> enzymes = service.findEnzymesByAccessions(accessions);
-//            //enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
-//            long endTime = System.nanoTime();
-//            long duration = endTime - startTime;
-//            long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-//            LOGGER.warn("Time taken to process accessions of size (" + accessions.size() + ") :  (" + elapsedtime + " sec)");
-//            return enzymeList.stream().collect(Collectors.toList());
-//        }
-//
-//        return enzymeList.stream().collect(Collectors.toList());
-//
-//    }
     protected final Comparator<UniprotEntry> SWISSPROT_FIRST = (UniprotEntry e1, UniprotEntry e2) -> e1.getEntryType().compareTo(e2.getEntryType());
 
     protected final Comparator<UniprotEntry> SWISSPROT_WITH_FUNCTION_FIRST = (UniprotEntry e1, UniprotEntry e2) -> {

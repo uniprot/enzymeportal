@@ -509,19 +509,24 @@ public class EnzymeRetriever extends EnzymeFinder {
         }
         
         model.getReactionpathway().add(reactionPathway);
+        
+       
+        if(model.getReactionpathway().isEmpty()){
 
+            LOGGER.warn("Searching Rhea for reaction for accession "+ model.getAccession());
         // The model comes with any available Reactome pathway IDs
         // in one ReactionPathway object, no more.
         // Now we get more ReactionPathways (one per Rhea reaction):
         LOGGER.debug(" -RP- before queryRheaWsForReactions");
         
-        List<Reaction> rheaReactions;
+        List<Reaction> rheaReactions = new ArrayList<>();
         try {
             rheaReactions = rheaAdapter.getRheasInCmlreact(model
                     .getUniprotaccessions().get(0));
             
         } catch (RheaFetchDataException ex) {
-            throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
+            //throw new EnzymeRetrieverException("Query data from Rhea failed! ", ex);
+            LOGGER.error("Query data from Rhea failed! ", ex);
         }
         
         for (Reaction reaction : rheaReactions) {
@@ -530,6 +535,7 @@ public class EnzymeRetriever extends EnzymeFinder {
             rPathway.setPathways(pathways);
             model.getReactionpathway().add(rPathway);
             
+        }
         }
         model.getReactionpathway().stream().distinct().collect(Collectors.toList());
         
@@ -549,7 +555,8 @@ public class EnzymeRetriever extends EnzymeFinder {
      */
     private EnzymeModel queryRheaWsForReactions(EnzymeModel enzymeModel)
             throws EnzymeRetrieverException {
-        List<Reaction> reactions;
+        List<Reaction> reactions = new ArrayList<>();
+        
         try {
             reactions = rheaAdapter.getRheasInCmlreact(enzymeModel
                     .getUniprotaccessions().get(0));
