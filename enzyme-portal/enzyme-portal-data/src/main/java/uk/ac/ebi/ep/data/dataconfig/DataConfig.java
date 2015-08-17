@@ -6,7 +6,10 @@
 package uk.ac.ebi.ep.data.dataconfig;
 
 import java.util.Properties;
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,13 +55,12 @@ public class DataConfig {
         properties.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.NoCacheProvider");
         properties.setProperty("hibernate.connection.driver_class", "oracle.jdbc.OracleDriver");
 
-//         properties.setProperty("hibernate.cache.use_second_level_cache", "false");
-//         properties.setProperty("hibernate.cache.auto_evict_collection_cache", "true");
-//        
-//        
-//        properties.setProperty("hibernate.batch_fetch_style", "DYNAMIC");
-//        properties.setProperty("hibernate.max_fetch_depth", "1");
-//        properties.setProperty("hibernate.default_batch_fetch_size", "16");
+        properties.setProperty("hibernate.cache.use_second_level_cache", "false");
+        properties.setProperty("hibernate.cache.auto_evict_collection_cache", "true");
+
+        properties.setProperty("hibernate.batch_fetch_style", "DYNAMIC");
+        properties.setProperty("hibernate.max_fetch_depth", "1");
+        properties.setProperty("hibernate.default_batch_fetch_size", "30");
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
         vendor.setShowSql(false);
         vendor.setDatabase(Database.ORACLE);
@@ -70,24 +72,30 @@ public class DataConfig {
 
     @Bean
     public PlatformTransactionManager transactionManager() {
-//        HibernateTransactionManager manager = new HibernateTransactionManager(sessionFactory());
-//        manager.setAllowResultAccessAfterCompletion(true);
 
         return new JpaTransactionManager(entityManagerFactory().getObject());
 
-
     }
 
-//    private SessionFactory sessionFactory() {
-//        EntityManager em = entityManagerFactory().getObject().createEntityManager();
-//           Session session = em.unwrap(Session.class);
-//   
-//        return session.getSessionFactory();
-//    }
+    private SessionFactory sessionFactory() {
+        EntityManager em = entityManagerFactory().getObject().createEntityManager();
+        Session session = em.unwrap(Session.class);
+
+        return session.getSessionFactory();
+    }
 
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
+
+//    //@Bean
+//    public HibernateTransactionManager hibernateTransactionManager() {
+//        HibernateTransactionManager manager = new HibernateTransactionManager(sessionFactory());
+//        manager.setAllowResultAccessAfterCompletion(true);
+//
+//        return manager;
+//
+//    }
 
 }

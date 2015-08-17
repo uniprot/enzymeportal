@@ -83,7 +83,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
         @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
 
     @Column(name = "NOTE")

@@ -30,10 +30,10 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     UniprotEntry findByAccession(String accession);
 
     @Transactional(readOnly = true)
-    @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    //@Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION = :ACCESSION ", nativeQuery = true)
-    @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
-    UniprotEntry findEnzymeByAccession(@Param("accession") String accession);
+    //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE ACCESSION = :ACCESSION ", nativeQuery = true)
+    //@Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
+    UniprotEntry findEnzymeByAccession(@Param("ACCESSION") String accession);
 
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findAccessions();

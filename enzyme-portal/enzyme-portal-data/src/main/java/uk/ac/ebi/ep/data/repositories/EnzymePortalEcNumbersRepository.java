@@ -20,10 +20,10 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 public interface EnzymePortalEcNumbersRepository extends JpaRepository<EnzymePortalEcNumbers, Long>, QueryDslPredicateExecutor<EnzymePortalEcNumbers>, EnzymePortalEcNumbersRepositoryCustom {
 
     @Transactional(readOnly = true)
-    @Query(value = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS WHERE EC_NUMBER = :EC_NUMBER", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_EC_NUMBERS WHERE EC_NUMBER = :EC_NUMBER", nativeQuery = true)
     List<EnzymePortalEcNumbers> findByEcNumber(@Param("EC_NUMBER") String ecNumber);
 
     @Transactional(readOnly = true)
-    @Query(value = "SELECT * FROM ENZYME_PORTAL_EC_NUMBERS WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_EC_NUMBERS WHERE UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
     List<EnzymePortalEcNumbers> findByEcNumbersByAccession(@Param("UNIPROT_ACCESSION") String ecNumber);
 }

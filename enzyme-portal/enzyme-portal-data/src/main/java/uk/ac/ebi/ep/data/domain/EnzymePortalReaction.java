@@ -65,7 +65,7 @@ public class EnzymePortalReaction   implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
     
-    @ManyToMany(mappedBy = "enzymePortalReactionSet")
+    @ManyToMany(mappedBy = "enzymePortalReactionSet",fetch = FetchType.LAZY)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
 
     public EnzymePortalReaction() {

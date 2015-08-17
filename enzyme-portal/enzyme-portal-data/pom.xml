@@ -158,7 +158,7 @@
             <artifactId>querydsl-jpa</artifactId>
             <version>${querydsl.version}</version>
             <type>jar</type>
-            <scope>compile</scope>
+<!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>com.mysema.querydsl</groupId>

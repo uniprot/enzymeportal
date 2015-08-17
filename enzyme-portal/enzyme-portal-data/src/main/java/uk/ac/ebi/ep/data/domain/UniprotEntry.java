@@ -23,7 +23,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
@@ -36,7 +35,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -82,7 +80,8 @@ import uk.ac.ebi.ep.data.search.model.Species;
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
 
     private static final long serialVersionUID = 1L;
@@ -101,18 +100,18 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
+    //@BatchSize(size = 10)
     @Fetch(FetchMode.JOIN)
     private RelatedProteins relatedProteinsId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
+    //@BatchSize(size = 10)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
 
-    @Lob
+    //@Lob
     @Column(name = "SYNONYM_NAMES")
     private String synonymNames;
 
@@ -134,24 +133,22 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Column(name = "COMMON_NAME")
     private String commonName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
+     @Fetch(FetchMode.JOIN)
     private Set<UniprotXref> uniprotXrefSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-        //@ManyToOne(fetch = FetchType.LAZY)
-   // @BatchSize(size = 100)
-    //@Fetch(FetchMode.JOIN)
     private List<EnzymePortalSummary> enzymePortalSummarySet;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
-    @BatchSize(size = 100)
+    //@BatchSize(size = 10)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @BatchSize(size = 20)
+    //@BatchSize(size = 20)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
 
@@ -497,7 +494,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         List<EnzymeAccession> relatedspecies = new ArrayList<>();
         //String defaultSpecies = CommonSpecies.Human.getScientificName();
 
-
+       if(this.getRelatedProteinsId() != null){
         //current specie is the default specie
         this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
 
@@ -515,6 +512,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             }
 
         });
+       }
 
         //human is default specie
 //        this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
