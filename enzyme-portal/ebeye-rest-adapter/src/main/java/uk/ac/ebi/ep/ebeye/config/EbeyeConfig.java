@@ -54,8 +54,8 @@ public class EbeyeConfig {
     public EbeyeIndexUrl ebeyeIndexUrl() {
         EbeyeIndexUrl url = new EbeyeIndexUrl();
 
-        //String defaultSearchIndexUrl = env.getProperty("ep.default.search.url");
-        String defaultSearchIndexUrl = env.getProperty("ep.default.dev.search.url");
+        String defaultSearchIndexUrl = env.getProperty("ep.default.search.url");
+        //String defaultSearchIndexUrl = env.getProperty("ep.default.dev.search.url");
 
         url.setDefaultSearchIndexUrl(defaultSearchIndexUrl);
 
