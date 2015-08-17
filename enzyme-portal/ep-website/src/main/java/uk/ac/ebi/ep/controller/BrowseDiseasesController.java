@@ -56,6 +56,7 @@ public class BrowseDiseasesController extends AbstractController {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         model.addAttribute("diseaseList", diseaseList);
+        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
 
         return BROWSE;
     }

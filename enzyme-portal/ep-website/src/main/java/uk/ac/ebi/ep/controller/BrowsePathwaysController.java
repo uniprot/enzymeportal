@@ -57,6 +57,7 @@ public class BrowsePathwaysController extends AbstractController {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         model.addAttribute("pathwayList", pathwayList);
+        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
 
         return PATHWAYS;
     }

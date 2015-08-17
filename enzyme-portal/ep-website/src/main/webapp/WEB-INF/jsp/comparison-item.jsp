@@ -38,7 +38,8 @@ comparePath = ${comparePath}
             ${item}</a>
     </c:when>
     <c:when test="${theComparison.key eq 'Sequence'}">
-        <a href="${item.sequenceurl}" target="_blank">${item.length}</a>
+<!--        <a href="${item.sequenceurl}" target="_blank">${item.length}</a>-->
+        <span>${item.length}</span>
         amino acids.
         <span class="FIXME" style="display: none">Mass: ${item.weight} Da</span>
     </c:when>
@@ -62,6 +63,8 @@ comparePath = ${comparePath}
     </c:when>
     <c:when test="${topComparison.key eq 'Reactions and pathways'
         and not empty item}">
+                        <c:set var="rheaEntryBaseUrl"
+                                       value="http://www.ebi.ac.uk/rhea/reaction.xhtml?id="/>
 
         <div style="margin-left: 2em">
             <c:if test="${not empty item.reaction.id}">
@@ -72,7 +75,7 @@ comparePath = ${comparePath}
         </div>
                 <div>
                 <span class="comparison subheader">Rhea identifier:</span>
-                    <a href="${rheaConfig.reactionBaseUrl}${item.reaction.id}"
+                    <a href="${rheaEntryBaseUrl}${item.reaction.id}"
                          target="_blank">RHEA:${item.reaction.id}</a>
                 </div>
             </c:if>

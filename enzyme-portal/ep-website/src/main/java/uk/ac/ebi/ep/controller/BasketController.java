@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,9 +41,9 @@ public class BasketController extends AbstractController {
     private final Logger LOGGER = Logger.getLogger(BasketController.class);
 
     @Autowired
-    private ReactomeConfig reactomeConfig;
+    protected ReactomeConfig reactomeConfig;
     @Autowired
-    private ChebiConfig chebiConfig;
+    protected ChebiConfig chebiConfig;
     
         @Autowired
     protected IntenzConfig intenzConfig;
@@ -52,7 +53,7 @@ public class BasketController extends AbstractController {
     @Autowired
     private String pdbImgUrl;
     @Autowired
-    private String uniprotAlignUrl;
+    protected String uniprotAlignUrl;
 
     /**
      * Updates the basket with enzymes (summaries) to compare or download.
@@ -161,9 +162,11 @@ public class BasketController extends AbstractController {
             model.addAttribute("pdbImgUrl", pdbImgUrl);
             model.addAttribute("pdbStructureCompareUrl", pdbStructureCompareUrl);
             model.addAttribute("uniprotAlignUrl", uniprotAlignUrl);
+            model.addAttribute("reactomeConfig", reactomeConfig);
+            
 
             return "comparison";
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             String errorParam = theAccs[0] + "," + theAccs[1];
             LOGGER.error("Unable to compare enzymes: " + errorParam, e);
             model.addAttribute("errorCode", "comparison");

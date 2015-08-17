@@ -51,7 +51,7 @@
 <%--
                 <li><a href="browse" title="Browse Disease">Browse Disease</a></li>
  --%>
-                <li class="last ${fn:containsIgnoreCase(pageTitle, 'about')?
+                <li class=" ${fn:containsIgnoreCase(pageTitle, 'about')?
                     'active' : ''}">
                     <a href="${pageContext.request.contextPath}/about"
                         title="About Enzyme Portal">About Enzyme Portal</a>
@@ -72,6 +72,46 @@
                     </li>
                 --%>
                 <li class="functional last">
+                    <c:choose>
+                        
+                    <c:when test="${not empty browseVideo}">
+                             <a target="_blanc" href="https://www.youtube.com/watch?v=AS7u1L4Bw0U"
+                       class=""  >
+                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                        Video
+                    </a>               
+                    </c:when>
+                      <c:when test="${not empty searchVideo}">
+                             <a target="_blanc" href="https://www.youtube.com/watch?v=m0uF1PxWPZc"
+                       class=""  >
+                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                        Video
+                    </a>               
+                    </c:when>
+                       <c:when test="${not empty entryVideo}">
+                             <a target="_blanc" href="https://www.youtube.com/watch?v=7doCBhF_XrQ"
+                       class=""  >
+                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                        Video
+                    </a>               
+                    </c:when>
+                       <c:when test="${not empty sequenceVideo}">
+                             <a target="_blanc" href="https://www.youtube.com/watch?v=kUk92ljRuDM"
+                       class=""  >
+                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                        Video
+                    </a>               
+                    </c:when>
+                    <c:otherwise>
+                             <a target="_blanc" href="https://www.youtube.com/watch?v=Wq273CZrgSM"
+                       class=""   >
+                        <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
+                       Video
+                    </a>               
+                    </c:otherwise>
+                    </c:choose>
+                </li>
+                <li class="functional ">
                     <a target="_blanc" href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
                         class="icon icon-static" data-icon="f">Feedback</a>
                 </li>

@@ -58,7 +58,7 @@
 
                     <p></p>
 
-                    <div class="caption caption-right">
+<!--                    <div class="caption caption-right">
                         <div style="width: 301px;">
                             <%-- b>Welcome to the Enzyme Portal</b --%>
                             <iframe class="grid_24"
@@ -68,7 +68,7 @@
                         </div>
                         Enzyme Portal - An Introduction
                     </div>
-                    <p></p>
+                    <p></p>-->
                     <!--<p>The European Bioinformatics Institute is part of <a href="http://www.embl.org/" class=" external">EMBL</a>, Europe?s flagship laboratory for the life sciences. EMBL-EBI provides freely available&nbsp;<a href="http://www.ebi.ac.uk/services">data from life science experiments</a> covering the full spectrum of molecular biology. About 20% of our institute is devoted to <a href="http://www.ebi.ac.uk/research">investigator-led research</a> using computational approaches to unravel the secrets of life. Our extensive <a href="http://www.ebi.ac.uk/training/">training</a> programme helps researchers in academia and <a href="http://www.ebi.ac.uk/industry/">industry</a> to make the most of the incredible amount of data being produced every day in life science experiments.</p>
                     <p>We are a non-profit, intergovernmental organisation funded by <a href="http://www.embl.de/aboutus/general_information/organisation/member_states/index.html" class=" external">EMBL member states</a>. Our 520 staff hail from 43 countries, and we welcome a regular stream of visiting scientists throughout the year. We are located on the <a href="http://frontier.ebi.ac.uk/about/visit-us">Wellcome Trust Genome Campus</a> in Hinxton, Cambridge in the United Kingdom.</p>-->
 
@@ -172,7 +172,7 @@
                                 <%-- b>Explore Enzyme Portal</b --%>
 
                                 <iframe class="grid_24"
-                                        src="http://www.youtube.com/embed/b7hFo5iJuoM"
+                                        src="https://www.youtube.com/embed/Wq273CZrgSM"
                                         frameborder="0"
                                         allowfullscreen></iframe>
 

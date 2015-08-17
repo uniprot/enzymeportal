@@ -72,6 +72,7 @@ public class EnzymePortalConfig {
 
         config.setTimeout(Integer.parseInt(env.getProperty("intenz.ws.timeout")));
         config.setIntenzXmlUrl(env.getProperty("intenz.xml.url"));
+        config.setEcBaseUrl("http://www.ebi.ac.uk/intenz/query?cmd=Search&q=");
         return config;
     }
 
@@ -100,6 +101,7 @@ public class EnzymePortalConfig {
         rc.setTimeout(Integer.parseInt(env.getProperty("reactome.ws.timeout")));
         rc.setUseProxy(Boolean.parseBoolean(env.getProperty("reactome.ws.proxy")));
         rc.setWsBaseUrl(env.getProperty("reactome.ws.url"));
+        rc.setEventBaseUrl("http://www.reactome.org/content/detail/");
 
         return rc;
     }

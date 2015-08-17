@@ -61,6 +61,12 @@ public abstract class AbstractController {
     @Autowired
     protected UniprotProdBlastService blastService;
 
+    protected static final String BROWSE_VIDEO = "browseVideo";
+    protected static final String ENTRY_VIDEO = "entryVideo";
+    protected static final String HOME_VIDEO = "homeVideo";
+    protected static final String SEARCH_VIDEO = "searchVideo";
+    protected static final String SEQUENCE_VIDEO = "sequenceVideo";
+
     @ModelAttribute("searchModel")
     public SearchModel searchform() {
         SearchModel searchModelForm = new SearchModel();

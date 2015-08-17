@@ -147,6 +147,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
+        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
         return BROWSE_ENZYMES;
     }
 
@@ -166,7 +167,7 @@ public class BrowseEnzymesController extends AbstractController {
             @RequestParam(value = "subecname", required = false) String subecname,
             @RequestParam(value = "subsubecname", required = false) String subsubecname,
             @RequestParam(value = "entryecname", required = false) String entryecname, Model model, HttpSession session, HttpServletRequest request) throws MalformedURLException, IOException {
-
+model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
         if (ec != null && ec.length() >= 7) {
             model.addAttribute("entryid", ec);
             searchModel = searchform(ec);
@@ -188,6 +189,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         model.addAttribute("entryid", ec);
         model.addAttribute("entryname", entryecname);
+        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
         return computeResult(searchModel, ec, entryecname, model, session, request);
 
     }

@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.adapter.literature.CitexploreWSClientPool;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
@@ -73,6 +72,9 @@ public class SearchController extends AbstractController {
 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
+    
+
+    
 
     @Autowired
     private LiteratureConfig literatureConfig;
@@ -152,12 +154,14 @@ public class SearchController extends AbstractController {
                 default:
                     enzymeModel = retriever.getEnzyme(accession);
                     requestedField = Field.ENZYME;
+                    
                     break;
             }
             if (enzymeModel != null) {
 
                 enzymeModel.setRequestedfield(requestedField.name().toLowerCase());
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
+                model.addAttribute(ENTRY_VIDEO, ENTRY_VIDEO);
                 addToHistory(session, accession);
 
                 // If we got here from a bookmark, the summary might not be cached:
@@ -269,6 +273,7 @@ public class SearchController extends AbstractController {
         searchParams.setStart(0);
         searchModelForm.setSearchparams(searchParams);
         model.addAttribute("searchModel", searchModelForm);
+         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         clearHistory(session);
         return "index";
     }
@@ -277,6 +282,7 @@ public class SearchController extends AbstractController {
     public SearchModel getabout(Model model) {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
+          model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return new SearchModel();
     }
 
@@ -285,6 +291,7 @@ public class SearchController extends AbstractController {
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
+          model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return searchModelForm;
 
     }
@@ -293,6 +300,7 @@ public class SearchController extends AbstractController {
     public SearchModel getSearch(Model model) {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
+          model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
         return searchModelForm;
     }
 
@@ -330,10 +338,12 @@ public class SearchController extends AbstractController {
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
                         results = searchKeyword(searchModel.getSearchparams());
+                          model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
                         LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
                         break;
                     case SEQUENCE:
                         view = searchSequence(model, searchModel);
+                          model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
                         break;
                     case COMPOUND:
                         results = searchCompound(model, searchModel);
@@ -537,6 +547,7 @@ public class SearchController extends AbstractController {
             method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {
         model.addAttribute("chebiConfig", chebiConfig);
+          model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
         return "advanceSearch";
     }
 
@@ -590,6 +601,7 @@ public class SearchController extends AbstractController {
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String getAbout(Model model) {
+          model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return "about";
     }
 

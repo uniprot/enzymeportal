@@ -52,7 +52,8 @@
         <section class="grid_24">
             <div class="grid_6">
                 <h4>About Enzyme Portal</h4>
-                <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</p>
+                <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.
+                See walk-through <a target="_blank" href="https://www.youtube.com/channel/UCLXd9kRfdlSVLx9Snsi1qIA">videos</a> to learn more</p>
                 <p><a href="about">more...</a></p>
             </div>
             <div class="grid_6">
