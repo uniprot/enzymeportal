@@ -45,14 +45,17 @@ public class RheaWsAdapter implements IRheaAdapter {
 
         @Override
     public ReactionPathway getReactionPathway(Reaction reaction) {
-        List<Object> reactionElements = reaction.getReactiveCentreAndMechanismAndReactantList();
+       
         ReactionPathway reactionPathway = new ReactionPathway();
-        EnzymeReaction enzymeReaction = new EnzymeReaction();
+        
+         if(reaction != null){
+         List<Object> reactionElements = reaction.getReactiveCentreAndMechanismAndReactantList();
+             EnzymeReaction enzymeReaction = new EnzymeReaction();
          //EnzymePortalReaction enzymeReaction = new EnzymePortalReaction();
 //        reactionElements.get(0);
         Equation equation = new Equation();
         equation.setDirection(createEquationSymbol(reaction));
-        List<Link> linkList = new ArrayList<Link>();
+        List<Link> linkList = new ArrayList<>();
         for (Object reactionElement : reactionElements) {
             if (reactionElement instanceof Map) {
                 Map xRefs = (Map) reactionElement;
@@ -83,6 +86,8 @@ public class RheaWsAdapter implements IRheaAdapter {
         List<Object> pwList = getPathwayLinks(linkList);
         setReactomeReactionRef(reactionPathway,pwList);
         return reactionPathway;
+         }
+          return reactionPathway;
     }
 
     private List<Molecule> getMolecules(List<Object> molObjList) {
