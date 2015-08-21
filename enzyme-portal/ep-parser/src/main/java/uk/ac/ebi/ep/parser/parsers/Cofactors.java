@@ -69,7 +69,7 @@ public class Cofactors extends CompoundParser {
                     String relationship = Relationship.is_cofactor_of.name();
                     String compoundRole = Compound.Role.COFACTOR.name();
                     String url = compound.getUrl();
-                    String accession = summary.getUniprotAccession().getAccession();
+                    //String accession = summary.getUniprotAccession().getAccession();
 
                     //parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
                     compound.setCompoundId(compoundId);
@@ -111,7 +111,7 @@ public class Cofactors extends CompoundParser {
         
         compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
             parserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession().getAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-            
+
         });
         LOGGER.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
