@@ -15,6 +15,7 @@ public class ChemblServiceUrl {
     private String moleculeUrl;
     private String assayUrl;
     private String activityUrl;
+    private String ic50ActivityUrl;
 
     public String getMechanismUrl() {
         return mechanismUrl;
@@ -47,6 +48,16 @@ public class ChemblServiceUrl {
     public void setActivityUrl(String activityUrl) {
         this.activityUrl = activityUrl;
     }
+
+    public String getIc50ActivityUrl() {
+        return ic50ActivityUrl;
+    }
+
+    public void setIc50ActivityUrl(String ic50ActivityUrl) {
+        this.ic50ActivityUrl = ic50ActivityUrl;
+    }
+
+
 
     
     

@@ -42,11 +42,13 @@ public class ChemblServiceConfig {
         String moleculeUrl = env.getProperty("chembl.molecule.url");
         String assayUrl = env.getProperty("chembl.assay.url");
         String activityUrl = env.getProperty("chembl.activity.url");
+        String ic50ActivityUrl = env.getProperty("chembl.activity.ic50.url");
         
         serviceUrl.setMechanismUrl(mechanismUrl);
         serviceUrl.setMoleculeUrl(moleculeUrl);
         serviceUrl.setAssayUrl(assayUrl);
         serviceUrl.setActivityUrl(activityUrl);
+        serviceUrl.setIc50ActivityUrl(ic50ActivityUrl);
         
         return serviceUrl;
     }

@@ -75,25 +75,41 @@ public class ChemblService {
         Optional<ChemblAssay> chemblAssay = chemblRestService.getChemblAssay(assayUrl);
 
         if (chemblAssay.isPresent()) {
- 
-            //LOGGER.warn("Num Assays found for target " + targetId + " == " + chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList()).size());
-            for (Assay assay : chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList())) {
-                String assayId = assay.getAssayChemblId();
+            if (chemblAssay.get().getAssays().size() > 0) {
+                //LOGGER.warn("Num Assays found for target " + targetId + " == " + chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList()).size());
+                for (Assay assay : chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList())) {
+                    String assayId = assay.getAssayChemblId();
                 //get activities for a given assay id
-                String activityUrl = chemblServiceUrl.getActivityUrl() + assayId;
+                    //TODO process in parallel the standard types inhibition and ic50 
+                    String activityUrl = chemblServiceUrl.getActivityUrl() + assayId;
+                    String ic50ActivityUrl = chemblServiceUrl.getIc50ActivityUrl() + assayId;
 
-                Optional<ChemblActivity> chemblActivity = chemblRestService.getChemblActivity(activityUrl);
+                    Optional<ChemblActivity> chemblActivity = chemblRestService.getChemblActivity(activityUrl);
 
-                if (chemblActivity.isPresent()) {
+                    if (chemblActivity.isPresent()) {
+                        if (chemblActivity.get().getActivities().size() > 0) {
 //                    LOGGER.warn("Num Activities found for Assay " + assayId + " == " + chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList()).size() + " counter "+ count.getAndIncrement());
-                     AtomicInteger count = new AtomicInteger(1);
-                    for (Activity activity : chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList())) {
-       //LOGGER.warn("Num Activities found for Assay " + assayId + " == " + chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList()).size() + " counter "+ count.getAndIncrement());
-                        moleculeChemblIdsInhibitors.add(activity.getMoleculeChemblId());
+                            AtomicInteger count = new AtomicInteger(1);
+                            for (Activity activity : chemblActivity.get().getActivities().stream().distinct().collect(Collectors.toList())) {
+                                moleculeChemblIdsInhibitors.add(activity.getMoleculeChemblId());
+                            }
+
+                            computePreferredName(moleculeChemblIdsInhibitors, moleculeChemblIdsActivators, chemblCompounds, protein);
+                        }
                     }
 
-                    computePreferredName(moleculeChemblIdsInhibitors, moleculeChemblIdsActivators, chemblCompounds, protein);
+                    Optional<ChemblActivity> chemblic50Activity = chemblRestService.getChemblActivity(ic50ActivityUrl);
 
+                    if (chemblic50Activity.isPresent()) {
+                        if (chemblic50Activity.get().getActivities().size() > 0) {
+
+                            chemblic50Activity.get().getActivities().stream().distinct().collect(Collectors.toList()).stream().forEach((activity) -> {
+                                moleculeChemblIdsInhibitors.add(activity.getMoleculeChemblId());
+                            });
+
+                            computePreferredName(moleculeChemblIdsInhibitors, moleculeChemblIdsActivators, chemblCompounds, protein);
+                        }
+                    }
                 }
             }
         }
@@ -183,50 +199,52 @@ public class ChemblService {
 
         Optional<ChemblMolecule> chemblMolecule = chemblRestService.getChemblMolecule(prefNameUrl.trim());
         if (chemblMolecule.isPresent()) {
-            for (Molecule molecule : chemblMolecule.get().getMolecules()) {
+            if (chemblMolecule.get().getMolecules().size() > 0) {
+                for (Molecule molecule : chemblMolecule.get().getMolecules()) {
 
-                String compoundPrefName = molecule.getPrefName();
+                    String compoundPrefName = molecule.getPrefName();
 
-                if (compoundPrefName == null && molecule.getMoleculeSynonyms() != null && !molecule.getMoleculeSynonyms().isEmpty()) {
-                    compoundPrefName = computeSynonyms(molecule);
+                    if (compoundPrefName == null && molecule.getMoleculeSynonyms() != null && !molecule.getMoleculeSynonyms().isEmpty()) {
+                        compoundPrefName = computeSynonyms(molecule);
 
-                }
-
-                if (compoundPrefName != null && !StringUtils.isEmpty(compoundPrefName)) {
-                    String compoundName = compoundPrefName;
-                    String moleculeName = compoundName;
-                    if (!compoundPrefName.contains("-") && !compoundPrefName.contains("+")) {
-
-                        compoundName = compoundPrefName.replaceAll(",", "").trim().toLowerCase();
-
-                        moleculeName = computeMoleculeName(compoundName);
                     }
 
-                    String compoundId = molecule.getMoleculeChemblId();
-                    String compoundSource = MmDatabase.ChEMBL.name();
-                    String relationship = Relationship.is_inhibitor_of.name();
-                    String compoundRole = CompoundUtil.computeRole(compoundId, relationship);
-                    String url = "https://www.ebi.ac.uk/chembl/compound/inspect/" + compoundId;
-                    String accession = protein;
-                    String note = null;
+                    if (compoundPrefName != null && !StringUtils.isEmpty(compoundPrefName)) {
+                        String compoundName = compoundPrefName;
+                        String moleculeName = compoundName;
+                        if (!compoundPrefName.contains("-") && !compoundPrefName.contains("+")) {
 
-                    TempCompoundCompare chemblEntry = new TempCompoundCompare();
+                            compoundName = compoundPrefName.replaceAll(",", "").trim().toLowerCase();
 
-                    chemblEntry.setCompoundId(molecule.getMoleculeChemblId());
-                    chemblEntry.setCompoundSource(compoundSource);
-                    chemblEntry.setCompoundName(moleculeName);
-                    chemblEntry.setRelationship(relationship);
-                    chemblEntry.setCompoundRole(compoundRole);
-                    chemblEntry.setUrl(url);
-                    chemblEntry.setNote(note);
-                    chemblEntry.setUniprotAccession(accession);
+                            moleculeName = computeMoleculeName(compoundName);
+                        }
 
-                    compounds.add(chemblEntry);
+                        String compoundId = molecule.getMoleculeChemblId();
+                        String compoundSource = MmDatabase.ChEMBL.name();
+                        String relationship = Relationship.is_inhibitor_of.name();
+                        String compoundRole = CompoundUtil.computeRole(compoundId, relationship);
+                        String url = "https://www.ebi.ac.uk/chembl/compound/inspect/" + compoundId;
+                        String accession = protein;
+                        String note = null;
 
+                        TempCompoundCompare chemblEntry = new TempCompoundCompare();
+
+                        chemblEntry.setCompoundId(molecule.getMoleculeChemblId());
+                        chemblEntry.setCompoundSource(compoundSource);
+                        chemblEntry.setCompoundName(moleculeName);
+                        chemblEntry.setRelationship(relationship);
+                        chemblEntry.setCompoundRole(compoundRole);
+                        chemblEntry.setUrl(url);
+                        chemblEntry.setNote(note);
+                        chemblEntry.setUniprotAccession(accession);
+
+                        compounds.add(chemblEntry);
+
+                    }
                 }
             }
         }
-  
+
     }
 
     private void computeChemblActivators(String prefNameUrl, String protein, List<TempCompoundCompare> compounds) {
