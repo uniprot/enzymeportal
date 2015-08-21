@@ -31,5 +31,11 @@ public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePort
             + "(UNIPROT_ACCESSION,PATHWAY_ID,PATHWAY_URL,PATHWAY_NAME,STATUS,SPECIES) VALUES (?1,?2,?3,?4,?5,?6)", nativeQuery = true)
     void createPathwayIgnoreDup(String accession, String pathwayId, String pathwayUrl, String pathwayName, String status, String species);
 
-     //Insert into ENZYME_PORTAL_PATHWAYS (UNIPROT_ACCESSION,PATHWAY_ID,PATHWAY_URL,PATHWAY_NAME,STATUS,SPECIES) values ('O43462','REACT_147797','http://www.reactome.org/PathwayBrowser/#REACT_147797','Regulation of cholesterol biosynthesis by SREBP (SREBF)','TAS','Homo sapiens');
+     @Transactional(readOnly = true)
+    @Query(value = "SELECT /*+ PARALLEL(auto) */  DISTINCT(UNIPROT_ACCESSION) FROM ENZYME_PORTAL_PATHWAYS WHERE LOWER(PATHWAY_NAME) = :PATHWAY_NAME", nativeQuery = true)
+    List<String> findAccessionsByPathwayName(@Param("PATHWAY_NAME") String pathwayName);
+    
+        @Query(value = "SELECT /*+ PARALLEL(auto) */  DISTINCT(UNIPROT_ACCESSION) FROM ENZYME_PORTAL_PATHWAYS WHERE PATHWAY_ID = :PATHWAY_ID", nativeQuery = true)
+    List<String> findAccessionsByPathwayId(@Param("PATHWAY_ID") String pathwayId);
+
 }

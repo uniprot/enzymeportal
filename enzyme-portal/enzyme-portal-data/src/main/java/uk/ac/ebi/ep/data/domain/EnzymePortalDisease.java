@@ -191,10 +191,7 @@ public class EnzymePortalDisease extends Disease implements Serializable, Compar
             return false;
         }
         final EnzymePortalDisease other = (EnzymePortalDisease) obj;
-        if (!Objects.equals(this.diseaseName, other.diseaseName)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.diseaseName, other.diseaseName);
     }
 
     @Override

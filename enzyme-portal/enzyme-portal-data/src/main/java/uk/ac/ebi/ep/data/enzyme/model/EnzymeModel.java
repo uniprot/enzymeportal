@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
@@ -70,7 +71,7 @@ public class EnzymeModel extends UniprotEntry implements Serializable {
         if (pathways == null) {
             pathways = new ArrayList<>();
         }
-        return pathways;
+        return pathways.stream().distinct().collect(Collectors.toList());
     }
 
     public void setPathways(List<Pathway> pathways) {

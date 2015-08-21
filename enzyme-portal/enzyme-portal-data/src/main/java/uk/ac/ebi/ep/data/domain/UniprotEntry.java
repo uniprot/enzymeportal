@@ -23,7 +23,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
@@ -112,7 +111,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
 
-    @Lob
+   // @Lob
     @Column(name = "SYNONYM_NAMES")
     private String synonymNames;
 

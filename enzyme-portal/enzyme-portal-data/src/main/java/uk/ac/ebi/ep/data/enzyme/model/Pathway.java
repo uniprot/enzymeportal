@@ -181,10 +181,7 @@ public class Pathway
             return false;
         }
         final Pathway other = (Pathway) obj;
-        if (!Objects.equals(this.pathwayName, other.pathwayName)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.pathwayName, other.pathwayName);
     }
 
 }

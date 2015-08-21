@@ -18,6 +18,6 @@ import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 public interface EnzymePortalPathwaysRepositoryCustom {
     
 
-     List<String> findAccessionsByPathwayId(String pathwayId);
+     //List<String> findAccessionsByPathwayId(String pathwayId);
     List<Pathway> findPathwaysByName(String pathwayName);
 }

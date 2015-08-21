@@ -291,6 +291,12 @@ public class EnzymePortalService {
 
         return pathwaysRepository.findAccessionsByPathwayId(pathwayId);
     }
+    
+        @Transactional(readOnly = true)
+    public List<String> findAccessionsByPathwayName(String pathwayName) {
+
+        return pathwaysRepository.findAccessionsByPathwayName(pathwayName);
+    }
 
     @Transactional(readOnly = true)
     public List<String> findAccessionsByTaxId(Long taxId) {
@@ -405,6 +411,7 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findEnzymesByNamePrefixes(namePrefixes);
     }
 
+    @Deprecated
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByPathwayId(String pathwayId) {
 
@@ -459,6 +466,7 @@ public class EnzymePortalService {
         return pathwaysRepository.findPathwaysByName(pathwayName);
     }
 
+    @Deprecated
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByMeshId(String meshId) {
 
@@ -494,6 +502,17 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId) {
         return ecNumbersRepository.findEnzymeFamiliesByTaxId(taxId);
+
+    }
+        @Transactional(readOnly = true)
+    public List<String> findAccessionsByEcNumber(String ecNumber) {
+        return ecNumbersRepository.findAccessionsByEcNumber(ecNumber);
+
+    }
+    
+            @Transactional(readOnly = true)
+    public List<String> findAccessionsByOmimNumber(String omimNumber) {
+        return diseaseRepository.findAccessionsByOmimNumber(omimNumber);
 
     }
 

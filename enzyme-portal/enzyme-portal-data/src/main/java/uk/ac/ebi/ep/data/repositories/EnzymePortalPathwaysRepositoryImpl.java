@@ -7,13 +7,11 @@ package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.Projections;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalPathways;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 
@@ -40,23 +38,23 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
         return pathways;
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<String> findAccessionsByPathwayId(String pathwayId) {
-
-        List<String> enzymes = new ArrayList<>();
-        JPAQuery query = new JPAQuery(entityManager);
-
-        List<EnzymePortalPathways> entries = query.from($).where($.pathwayId.equalsIgnoreCase(pathwayId)).distinct().list($)
-                .stream().distinct().collect(Collectors.toList());
-
-        entries.stream().forEach(e -> {
-            enzymes.add(e.getUniprotAccession().getAccession());
-        });
-
-        return enzymes;
-
-    }
+//    @Transactional(readOnly = true)
+//    @Override
+//    public List<String> findAccessionsByPathwayId(String pathwayId) {
+//
+//        List<String> enzymes = new ArrayList<>();
+//        JPAQuery query = new JPAQuery(entityManager);
+//
+//        List<EnzymePortalPathways> entries = query.from($).where($.pathwayId.equalsIgnoreCase(pathwayId)).distinct().list($)
+//                .stream().distinct().collect(Collectors.toList());
+//
+//        entries.stream().forEach(e -> {
+//            enzymes.add(e.getUniprotAccession().getAccession());
+//        });
+//
+//        return enzymes;
+//
+//    }
 
     @Transactional(readOnly = true)
     @Override
