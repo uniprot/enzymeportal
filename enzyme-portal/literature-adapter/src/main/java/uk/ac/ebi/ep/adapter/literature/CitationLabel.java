@@ -13,12 +13,13 @@ public enum CitationLabel {
     SMALL_MOLECULES("Small molecules"),
     DISEASES("Diseases");
 
-    private String label;
+    private final String label;
 
     private CitationLabel(String label){
         this.label = label;
     }
 
+    @Override
     public String toString(){ return label; }
 
     public String getCode(){ return name(); }
