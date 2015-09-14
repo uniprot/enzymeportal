@@ -17,6 +17,7 @@ $(document).ready(function() {
         // Create an instance of PCViz
         var pcviz = new biojspcviz({
             el: $('#pcviz-widget-container'),
+            baseurl: "http://sanderlab.org/pcviz/",
             query: uid,
             onLoad: function(msg) {
                 // Show overall stats
