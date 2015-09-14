@@ -24,13 +24,16 @@ import java.util.Map;
 "pmcid",
 "title",
 "authorString",
-"journalTitle",
-"issue",
-"journalVolume",
-"pubYear",
-"journalIssn",
+"authorList",
+"journalInfo",
 "pageInfo",
-"pubType",
+"abstractText",
+"affiliation",
+"language",
+"pubModel",
+"pubTypeList",
+"subsetList",
+"fullTextUrlList",
 "isOpenAccess",
 "inEPMC",
 "inPMC",
@@ -40,10 +43,20 @@ import java.util.Map;
 "hasDbCrossReferences",
 "hasLabsLinks",
 "hasTMAccessionNumbers",
+"dateOfCreation",
+"dateOfRevision",
+"electronicPublicationDate",
+"firstPublicationDate",
 "luceneScore",
 "doi",
+"authorIdList",
+"grantsList",
+"meshHeadingList",
+"chemicalList",
+"dateOfCompletion",
 "dbCrossReferenceList",
-"tmAccessionTypeList"
+"tmAccessionTypeList",
+"keywordList"
 })
 /**
  *
@@ -63,20 +76,26 @@ private String pmcid;
 private String title;
 @JsonProperty("authorString")
 private String authorString;
-@JsonProperty("journalTitle")
-private String journalTitle;
-@JsonProperty("issue")
-private String issue;
-@JsonProperty("journalVolume")
-private String journalVolume;
-@JsonProperty("pubYear")
-private String pubYear;
-@JsonProperty("journalIssn")
-private String journalIssn;
+@JsonProperty("authorList")
+private AuthorList authorList;
+@JsonProperty("journalInfo")
+private JournalInfo journalInfo;
 @JsonProperty("pageInfo")
 private String pageInfo;
-@JsonProperty("pubType")
-private String pubType;
+@JsonProperty("abstractText")
+private String abstractText;
+@JsonProperty("affiliation")
+private String affiliation;
+@JsonProperty("language")
+private String language;
+@JsonProperty("pubModel")
+private String pubModel;
+@JsonProperty("pubTypeList")
+private PubTypeList pubTypeList;
+@JsonProperty("subsetList")
+private SubsetList subsetList;
+@JsonProperty("fullTextUrlList")
+private FullTextUrlList fullTextUrlList;
 @JsonProperty("isOpenAccess")
 private String isOpenAccess;
 @JsonProperty("inEPMC")
@@ -95,14 +114,34 @@ private String hasDbCrossReferences;
 private String hasLabsLinks;
 @JsonProperty("hasTMAccessionNumbers")
 private String hasTMAccessionNumbers;
+@JsonProperty("dateOfCreation")
+private String dateOfCreation;
+@JsonProperty("dateOfRevision")
+private String dateOfRevision;
+@JsonProperty("electronicPublicationDate")
+private String electronicPublicationDate;
+@JsonProperty("firstPublicationDate")
+private String firstPublicationDate;
 @JsonProperty("luceneScore")
 private String luceneScore;
 @JsonProperty("doi")
 private String doi;
+@JsonProperty("authorIdList")
+private AuthorIdList authorIdList;
+@JsonProperty("grantsList")
+private GrantsList grantsList;
+@JsonProperty("meshHeadingList")
+private MeshHeadingList meshHeadingList;
+@JsonProperty("chemicalList")
+private ChemicalList chemicalList;
+@JsonProperty("dateOfCompletion")
+private String dateOfCompletion;
 @JsonProperty("dbCrossReferenceList")
 private DbCrossReferenceList dbCrossReferenceList;
 @JsonProperty("tmAccessionTypeList")
 private TmAccessionTypeList tmAccessionTypeList;
+@JsonProperty("keywordList")
+private KeywordList keywordList;
 @JsonIgnore
 private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -229,101 +268,41 @@ this.authorString = authorString;
 /**
 * 
 * @return
-* The journalTitle
+* The authorList
 */
-@JsonProperty("journalTitle")
-public String getJournalTitle() {
-return journalTitle;
+@JsonProperty("authorList")
+public AuthorList getAuthorList() {
+return authorList;
 }
 
 /**
 * 
-* @param journalTitle
-* The journalTitle
+* @param authorList
+* The authorList
 */
-@JsonProperty("journalTitle")
-public void setJournalTitle(String journalTitle) {
-this.journalTitle = journalTitle;
-}
-
-/**
-* 
-* @return
-* The issue
-*/
-@JsonProperty("issue")
-public String getIssue() {
-return issue;
-}
-
-/**
-* 
-* @param issue
-* The issue
-*/
-@JsonProperty("issue")
-public void setIssue(String issue) {
-this.issue = issue;
+@JsonProperty("authorList")
+public void setAuthorList(AuthorList authorList) {
+this.authorList = authorList;
 }
 
 /**
 * 
 * @return
-* The journalVolume
+* The journalInfo
 */
-@JsonProperty("journalVolume")
-public String getJournalVolume() {
-return journalVolume;
+@JsonProperty("journalInfo")
+public JournalInfo getJournalInfo() {
+return journalInfo;
 }
 
 /**
 * 
-* @param journalVolume
-* The journalVolume
+* @param journalInfo
+* The journalInfo
 */
-@JsonProperty("journalVolume")
-public void setJournalVolume(String journalVolume) {
-this.journalVolume = journalVolume;
-}
-
-/**
-* 
-* @return
-* The pubYear
-*/
-@JsonProperty("pubYear")
-public String getPubYear() {
-return pubYear;
-}
-
-/**
-* 
-* @param pubYear
-* The pubYear
-*/
-@JsonProperty("pubYear")
-public void setPubYear(String pubYear) {
-this.pubYear = pubYear;
-}
-
-/**
-* 
-* @return
-* The journalIssn
-*/
-@JsonProperty("journalIssn")
-public String getJournalIssn() {
-return journalIssn;
-}
-
-/**
-* 
-* @param journalIssn
-* The journalIssn
-*/
-@JsonProperty("journalIssn")
-public void setJournalIssn(String journalIssn) {
-this.journalIssn = journalIssn;
+@JsonProperty("journalInfo")
+public void setJournalInfo(JournalInfo journalInfo) {
+this.journalInfo = journalInfo;
 }
 
 /**
@@ -349,21 +328,141 @@ this.pageInfo = pageInfo;
 /**
 * 
 * @return
-* The pubType
+* The abstractText
 */
-@JsonProperty("pubType")
-public String getPubType() {
-return pubType;
+@JsonProperty("abstractText")
+public String getAbstractText() {
+return abstractText;
 }
 
 /**
 * 
-* @param pubType
-* The pubType
+* @param abstractText
+* The abstractText
 */
-@JsonProperty("pubType")
-public void setPubType(String pubType) {
-this.pubType = pubType;
+@JsonProperty("abstractText")
+public void setAbstractText(String abstractText) {
+this.abstractText = abstractText;
+}
+
+/**
+* 
+* @return
+* The affiliation
+*/
+@JsonProperty("affiliation")
+public String getAffiliation() {
+return affiliation;
+}
+
+/**
+* 
+* @param affiliation
+* The affiliation
+*/
+@JsonProperty("affiliation")
+public void setAffiliation(String affiliation) {
+this.affiliation = affiliation;
+}
+
+/**
+* 
+* @return
+* The language
+*/
+@JsonProperty("language")
+public String getLanguage() {
+return language;
+}
+
+/**
+* 
+* @param language
+* The language
+*/
+@JsonProperty("language")
+public void setLanguage(String language) {
+this.language = language;
+}
+
+/**
+* 
+* @return
+* The pubModel
+*/
+@JsonProperty("pubModel")
+public String getPubModel() {
+return pubModel;
+}
+
+/**
+* 
+* @param pubModel
+* The pubModel
+*/
+@JsonProperty("pubModel")
+public void setPubModel(String pubModel) {
+this.pubModel = pubModel;
+}
+
+/**
+* 
+* @return
+* The pubTypeList
+*/
+@JsonProperty("pubTypeList")
+public PubTypeList getPubTypeList() {
+return pubTypeList;
+}
+
+/**
+* 
+* @param pubTypeList
+* The pubTypeList
+*/
+@JsonProperty("pubTypeList")
+public void setPubTypeList(PubTypeList pubTypeList) {
+this.pubTypeList = pubTypeList;
+}
+
+/**
+* 
+* @return
+* The subsetList
+*/
+@JsonProperty("subsetList")
+public SubsetList getSubsetList() {
+return subsetList;
+}
+
+/**
+* 
+* @param subsetList
+* The subsetList
+*/
+@JsonProperty("subsetList")
+public void setSubsetList(SubsetList subsetList) {
+this.subsetList = subsetList;
+}
+
+/**
+* 
+* @return
+* The fullTextUrlList
+*/
+@JsonProperty("fullTextUrlList")
+public FullTextUrlList getFullTextUrlList() {
+return fullTextUrlList;
+}
+
+/**
+* 
+* @param fullTextUrlList
+* The fullTextUrlList
+*/
+@JsonProperty("fullTextUrlList")
+public void setFullTextUrlList(FullTextUrlList fullTextUrlList) {
+this.fullTextUrlList = fullTextUrlList;
 }
 
 /**
@@ -549,6 +648,86 @@ this.hasTMAccessionNumbers = hasTMAccessionNumbers;
 /**
 * 
 * @return
+* The dateOfCreation
+*/
+@JsonProperty("dateOfCreation")
+public String getDateOfCreation() {
+return dateOfCreation;
+}
+
+/**
+* 
+* @param dateOfCreation
+* The dateOfCreation
+*/
+@JsonProperty("dateOfCreation")
+public void setDateOfCreation(String dateOfCreation) {
+this.dateOfCreation = dateOfCreation;
+}
+
+/**
+* 
+* @return
+* The dateOfRevision
+*/
+@JsonProperty("dateOfRevision")
+public String getDateOfRevision() {
+return dateOfRevision;
+}
+
+/**
+* 
+* @param dateOfRevision
+* The dateOfRevision
+*/
+@JsonProperty("dateOfRevision")
+public void setDateOfRevision(String dateOfRevision) {
+this.dateOfRevision = dateOfRevision;
+}
+
+/**
+* 
+* @return
+* The electronicPublicationDate
+*/
+@JsonProperty("electronicPublicationDate")
+public String getElectronicPublicationDate() {
+return electronicPublicationDate;
+}
+
+/**
+* 
+* @param electronicPublicationDate
+* The electronicPublicationDate
+*/
+@JsonProperty("electronicPublicationDate")
+public void setElectronicPublicationDate(String electronicPublicationDate) {
+this.electronicPublicationDate = electronicPublicationDate;
+}
+
+/**
+* 
+* @return
+* The firstPublicationDate
+*/
+@JsonProperty("firstPublicationDate")
+public String getFirstPublicationDate() {
+return firstPublicationDate;
+}
+
+/**
+* 
+* @param firstPublicationDate
+* The firstPublicationDate
+*/
+@JsonProperty("firstPublicationDate")
+public void setFirstPublicationDate(String firstPublicationDate) {
+this.firstPublicationDate = firstPublicationDate;
+}
+
+/**
+* 
+* @return
 * The luceneScore
 */
 @JsonProperty("luceneScore")
@@ -584,6 +763,106 @@ return doi;
 @JsonProperty("doi")
 public void setDoi(String doi) {
 this.doi = doi;
+}
+
+/**
+* 
+* @return
+* The authorIdList
+*/
+@JsonProperty("authorIdList")
+public AuthorIdList getAuthorIdList() {
+return authorIdList;
+}
+
+/**
+* 
+* @param authorIdList
+* The authorIdList
+*/
+@JsonProperty("authorIdList")
+public void setAuthorIdList(AuthorIdList authorIdList) {
+this.authorIdList = authorIdList;
+}
+
+/**
+* 
+* @return
+* The grantsList
+*/
+@JsonProperty("grantsList")
+public GrantsList getGrantsList() {
+return grantsList;
+}
+
+/**
+* 
+* @param grantsList
+* The grantsList
+*/
+@JsonProperty("grantsList")
+public void setGrantsList(GrantsList grantsList) {
+this.grantsList = grantsList;
+}
+
+/**
+* 
+* @return
+* The meshHeadingList
+*/
+@JsonProperty("meshHeadingList")
+public MeshHeadingList getMeshHeadingList() {
+return meshHeadingList;
+}
+
+/**
+* 
+* @param meshHeadingList
+* The meshHeadingList
+*/
+@JsonProperty("meshHeadingList")
+public void setMeshHeadingList(MeshHeadingList meshHeadingList) {
+this.meshHeadingList = meshHeadingList;
+}
+
+/**
+* 
+* @return
+* The chemicalList
+*/
+@JsonProperty("chemicalList")
+public ChemicalList getChemicalList() {
+return chemicalList;
+}
+
+/**
+* 
+* @param chemicalList
+* The chemicalList
+*/
+@JsonProperty("chemicalList")
+public void setChemicalList(ChemicalList chemicalList) {
+this.chemicalList = chemicalList;
+}
+
+/**
+* 
+* @return
+* The dateOfCompletion
+*/
+@JsonProperty("dateOfCompletion")
+public String getDateOfCompletion() {
+return dateOfCompletion;
+}
+
+/**
+* 
+* @param dateOfCompletion
+* The dateOfCompletion
+*/
+@JsonProperty("dateOfCompletion")
+public void setDateOfCompletion(String dateOfCompletion) {
+this.dateOfCompletion = dateOfCompletion;
 }
 
 /**
@@ -626,6 +905,26 @@ public void setTmAccessionTypeList(TmAccessionTypeList tmAccessionTypeList) {
 this.tmAccessionTypeList = tmAccessionTypeList;
 }
 
+/**
+* 
+* @return
+* The keywordList
+*/
+@JsonProperty("keywordList")
+public KeywordList getKeywordList() {
+return keywordList;
+}
+
+/**
+* 
+* @param keywordList
+* The keywordList
+*/
+@JsonProperty("keywordList")
+public void setKeywordList(KeywordList keywordList) {
+this.keywordList = keywordList;
+}
+
 @JsonAnyGetter
 public Map<String, Object> getAdditionalProperties() {
 return this.additionalProperties;
@@ -636,5 +935,11 @@ public void setAdditionalProperty(String name, Object value) {
 this.additionalProperties.put(name, value);
 }
 
-}
+    @Override
+    public String toString() {
+        return "Result{" + "id=" + id + ", source=" + source + ", title=" + title + ", authorList=" + authorList + ", journalInfo=" + journalInfo + ", dateOfCreation=" + dateOfCreation + ", doi=" + doi + ", authorIdList=" + authorIdList + '}';
+    }
 
+
+
+}
