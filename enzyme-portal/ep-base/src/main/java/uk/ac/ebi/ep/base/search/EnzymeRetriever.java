@@ -12,7 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml_cml.schema.cml2.react.Reaction;
 import uk.ac.ebi.ep.adapter.bioportal.BioPortalService;
 import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
@@ -62,7 +63,7 @@ import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
  */
 public class EnzymeRetriever extends EnzymeFinder {
     
-    private static final Logger LOGGER = Logger.getLogger(EnzymeRetriever.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnzymeRetriever.class);
     protected IRheaAdapter rheaAdapter;
     private IReactomeAdapter reactomeAdapter;
     protected IChebiAdapter chebiAdapter;
@@ -232,7 +233,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         try {
             intenzAdapter.getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
-            LOGGER.fatal("Error getting enzyme details from Intenz webservice", ex);
+            LOGGER.error("Error getting enzyme details from Intenz webservice", ex);
         }
         List<String> prov = new LinkedList<>();
         prov.add("IntEnz");
