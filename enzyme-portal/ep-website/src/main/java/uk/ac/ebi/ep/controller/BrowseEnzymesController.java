@@ -16,7 +16,6 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,7 +39,7 @@ import uk.ac.ebi.ep.enzymes.IntenzEnzyme;
 @Controller
 public class BrowseEnzymesController extends AbstractController {
 
-    private static final Logger LOGGER = Logger.getLogger(BrowseEnzymesController.class);
+ 
     //concrete jsp's
     private static final String BROWSE_ENZYMES = "/browse_enzymes";
     private static final String EC = "/ec";

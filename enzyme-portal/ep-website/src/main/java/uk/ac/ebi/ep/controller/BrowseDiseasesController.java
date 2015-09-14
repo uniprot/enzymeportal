@@ -13,7 +13,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,7 +37,7 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 @Controller
 public class BrowseDiseasesController extends AbstractController {
 
-    private static final Logger LOGGER = Logger.getLogger(BrowseDiseasesController.class);
+  
     private static final String BROWSE = "/browse-diseases";
     private static final String BROWSE_DISEASE = "/browse/disease";
     private static final String SEARCH_DISEASE = "/search-disease";
@@ -159,8 +158,8 @@ public class BrowseDiseasesController extends AbstractController {
 
         finder.setSearchParams(searchParams);
 
-      String meshId = diseaseId.trim();
-            results = finder.computeEnzymeSummariesByMeshId(meshId);
+      String omimNUmber = diseaseId.trim();
+            results = finder.computeEnzymeSummariesByOmimNumber(omimNUmber);
         
 
         if (results == null) {

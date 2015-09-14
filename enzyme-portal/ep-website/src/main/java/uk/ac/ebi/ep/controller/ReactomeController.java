@@ -29,6 +29,10 @@ public class ReactomeController {
         ReactomeWsCallable callable =
     			new ReactomeWsCallable(reactomeConfig, reactomePathwayId);
         Pathway pathway = callable.call();
+        if(pathway.getName() == null){
+          pathway.setName("No data found for "+ pathway.getId() +" in Reactome");
+        }
+
         model.addAttribute("pathway", pathway);
         return "pathway";
     }

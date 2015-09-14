@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +37,7 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 @Controller
 public class BasketController extends AbstractController {
 
-    private final Logger LOGGER = Logger.getLogger(BasketController.class);
-
+ 
     @Autowired
     protected ReactomeConfig reactomeConfig;
     @Autowired
@@ -163,6 +161,7 @@ public class BasketController extends AbstractController {
             model.addAttribute("pdbStructureCompareUrl", pdbStructureCompareUrl);
             model.addAttribute("uniprotAlignUrl", uniprotAlignUrl);
             model.addAttribute("reactomeConfig", reactomeConfig);
+             model.addAttribute("intenzConfig", intenzConfig);
             
 
             return "comparison";

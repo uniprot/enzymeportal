@@ -15,8 +15,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,7 +46,7 @@ import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
  */
 public abstract class AbstractController {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractController.class);
+    protected static final Logger LOGGER = Logger.getLogger(AbstractController.class);
 
     @Autowired
     protected Config searchConfig;

@@ -223,6 +223,7 @@
 
                                                     </c:otherwise>
                                                 </c:choose>
+                                                    <%--
                                                 <c:forEach var="i" begin="${beginIndex}" end="${endIndex}">
 
                                                     <c:choose>
@@ -242,6 +243,9 @@
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </c:forEach> 
+                                                            --%>
+                                                            
+                                                    Page ${page.number + 1} of ${page.totalPages}        
                                                     <c:choose>
                                                         <c:when test="${currentIndex == page.totalPages}">
                                                        <a class="disabled" href="#">next</a>
@@ -291,13 +295,21 @@
     </c:if>             
                  
     <c:if test='${not empty enzyme.proteinName }'>
-        <a href="${pageContext.request.contextPath}/search/${enzyme.accession}/enzyme">
+        <h4> <a href="${pageContext.request.contextPath}/search/${enzyme.accession}/enzyme">
             <span class="enzymeName">${fn:substring(enzyme.proteinName, 0, 100)}</span>
             <span class="hidden">${enzyme.proteinName}</span>
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :
                 theSpecies.species.commonname}]
-        </a>
+            </a></h4>
+             <c:choose>
+                    <c:when test="${enzyme.entryType eq 0}">
+             <small title="Reviewed by ....??? Todo" class="icon-uniprot reviewed-icon" data-icon="s"></small>             
+                    </c:when>
+                    <c:otherwise>
+          <small title=Unreviewed"" class="icon-uniprot unreviewed-icon" data-icon="t"></small>              
+                    </c:otherwise>
+                </c:choose>
     </c:if>
         
  

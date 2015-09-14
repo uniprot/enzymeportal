@@ -818,4 +818,28 @@ figure.compound.structure figcaption {
 	text-align: center;
 	margin: 0ex 2em;
 }
+/*reviewed and unreviewed tag in search result*/
+@font-face {
+  font-family: 'uniprot';
+  src: url('../css/style/fonts/uniprot/fonts/uniprot.eot');
+  src: url('../css/style/fonts/uniprot/fonts/uniprot.eot?#iefix') format("embedded-opentype"), url('../css/style/fonts/uniprot/fonts/uniprot.svg#uniprot') format("svg"), url('../css/style/fonts/uniprot/fonts/uniprot.woff') format("woff"), url('../css/style/fonts/uniprot/fonts/uniprot.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon-uniprot:before {
+  font-family: 'uniprot';
+  font-size: 162.5%;
+  content: attr(data-icon);
+  margin: 0 0.3em 0 0;
+  font-weight: normal;
+}
+
+.reviewed-icon:before {
+  color: #C39B00;
+}
+
+.unreviewed-icon:before {
+  color:  #93CFFA;
+}
 

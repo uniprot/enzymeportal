@@ -155,6 +155,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${org.springframework-version}</version>
+                        <exclusions>
+<!--                 Exclude Commons Logging in favor of SLF4j -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency> 
          
         
@@ -167,13 +174,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${org.springframework-version}</version>
-<!--            <exclusions>
-                 Exclude Commons Logging in favor of SLF4j 
+            <exclusions>
+<!--                 Exclude Commons Logging in favor of SLF4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
-            </exclusions>-->
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -335,7 +342,6 @@
             <version>${spring.data.commons.version}</version>
         </dependency>
         
-
         
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>

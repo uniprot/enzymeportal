@@ -188,15 +188,15 @@
                                     </fieldset> 
                                 </div>
                                 <script>
-                                    if (document.getElementById('${pathway.id}')) {
-                                        $('#pathway-${rpVs.index}-${pathway.id}')
-                                                .html('<fieldset><legend>${pathway.id}</legend>See <a href="#${pathway.id}">above</a>.</fieldset>');
-                                    } else {
+//                                    if (document.getElementById('${pathway.id}')) {
+//                                        $('#pathway-${rpVs.index}-${pathway.id}')
+//                                                .html('<fieldset><legend>${pathway.id}</legend>See <a href="#${pathway.id}">above</a>.</fieldset>');
+//                                    } else {
                                         $('#pathway-${rpVs.index}-${pathway.id}')
                                                 .load("${pageContext.request.contextPath}/ajax/reactome/${pathway.id}");
                                                         $('#pathway-${rpVs.index}-${pathway.id}')
-                                                                .before('<span id="${pathway.id}"></span>')
-                                                    }
+                                                                .before('<span id="${pathway.id}"></span>');
+                                                    //}
                              
                                                     
                                 </script>

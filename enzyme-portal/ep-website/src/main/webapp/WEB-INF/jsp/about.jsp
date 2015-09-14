@@ -144,7 +144,7 @@
                                        class="icon icon-generic icon-c1" data-icon="t">Quick Tour</a></li>
                                 <li><a href="http://nar.oxfordjournals.org/content/41/D1/D773.full"
                                        class="icon icon-conceptual icon-c8" data-icon="l">Publications</a></li>
-                                <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/"
+                                <li><a href="https://github.com/uniprot/enzymeportal"
                                        class="icon icon-generic icon-c8" data-icon=";">Documentation</a></li>
 
                             </ul>
@@ -194,9 +194,9 @@
                                     href="https://github.com/ebi-cheminf/enzymeportal">GitHub</a>, an online project hosting service. </span>
                             </p>
 
-                            <p><span>Additionally, the technical documentation (Javadoc, project information) is also <a
+<!--                            <p><span>Additionally, the technical documentation (Javadoc, project information) is also <a
                                     href="http://ebi-cheminf.github.com/enzymeportal/ep/">available online</a> </span>
-                            </p>
+                            </p>-->
 
                         </div>
 

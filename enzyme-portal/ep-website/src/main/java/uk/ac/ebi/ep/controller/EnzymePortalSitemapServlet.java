@@ -12,7 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import uk.ac.ebi.ep.mBean.FilesConfig;
@@ -25,7 +26,7 @@ import uk.ac.ebi.ep.mBean.FilesConfig;
 //
 public class EnzymePortalSitemapServlet extends HttpServlet {
 
-    public Logger LOGGER = Logger.getLogger(EnzymePortalSitemapServlet.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(EnzymePortalSitemapServlet.class);
     private FilesConfig sitemapConfig;
     
     public FilesConfig getSitemapConfig() {

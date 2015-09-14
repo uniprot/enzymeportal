@@ -223,6 +223,7 @@
                                 <div class="action-buttons">
                                     <%@include file="basket-buttons.jspf" %>
                                 </div>
+<!--                                <div class="action-buttons"><small title="" class="icon-uniprot reviewed-icon" data-icon="s">Reviewed</small>  <small title="" class="icon-uniprot unreviewed-icon" data-icon="t">Unreviewed</small></div>-->
                                 <div id="paginationNav" style="text-align: right;">
                                     <form:form modelAttribute="pagination" >
                                         <c:if test="${totalPages gt pagination.maxDisplayedPages}">

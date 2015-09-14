@@ -45,21 +45,19 @@ public class EnzymePortalConfig {
         interceptor.setParamName("lang");
         return interceptor;
     }
-    
-    
-            
-         @Bean
+
+    @Bean
     public String uniprotAlignUrl() {
         String alignUrl = env.getProperty("uniprot.align.url");
         return alignUrl;
-    }       
+    }
 
     @Bean
     public String pdbImgUrl() {
         String pdbImgUrl = env.getProperty("pdb.structure.img.url");
         return pdbImgUrl;
     }
-    
+
     @Bean
     public String pdbStructureCompareUrl() {
         String pdbStructureCompareUrl = env.getProperty("pdb.structure.compare.url");
@@ -134,7 +132,6 @@ public class EnzymePortalConfig {
         return chemblConfig;
     }
 
-   
     @Bean
     public LiteratureConfig literatureConfig() {
         LiteratureConfig lc = new LiteratureConfig();
@@ -172,34 +169,32 @@ public class EnzymePortalConfig {
         return filesConfig;
     }
 
-    
-        @Bean
+    @Bean
     public EbeyeRestService ebeyeRestService() {
         return new EbeyeRestService();
     }
-    
-    
-            @Bean
+
+    @Bean
     public PdbService pdbService() {
         return new PdbService(pdbeRestService());
     }
-    
-        @Bean
+
+    @Bean
     public PDBeRestService pdbeRestService() {
 
         return new PDBeRestService();
     }
-    
-        @Bean
+
+    @Bean
     public PDBeUrl pDBeUrl() {
         PDBeUrl pdBeUrl = new PDBeUrl();
-        
+
         String summaryUrl = env.getProperty("pdb.summary.url");
         String experimentUrl = env.getProperty("pdb.experiment.url");
         String publicationsUrl = env.getProperty("pdb.publications.url");
         String moleculesUrl = env.getProperty("pdb.molecules.url");
         String structuralDomainUrl = env.getProperty("pdb.structuralDomain.url");
-        
+
         pdBeUrl.setSummaryUrl(summaryUrl);
         pdBeUrl.setExperimentUrl(experimentUrl);
         pdBeUrl.setPublicationsUrl(publicationsUrl);
@@ -207,14 +202,13 @@ public class EnzymePortalConfig {
         pdBeUrl.setStructuralDomainUrl(structuralDomainUrl);
         return pdBeUrl;
     }
-    
+
 //        @Bean
 //    public UniprotBlastService blastService(){
 //        return new UniprotBlastService();
 //    }
-    
     @Bean
-    public UniprotProdBlastService blastService(){
+    public UniprotProdBlastService blastService() {
         return new UniprotProdBlastService();
     }
 
