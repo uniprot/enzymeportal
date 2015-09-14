@@ -111,7 +111,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
 
-   // @Lob
+    //@Lob
     @Column(name = "SYNONYM_NAMES")
     private String synonymNames;
 

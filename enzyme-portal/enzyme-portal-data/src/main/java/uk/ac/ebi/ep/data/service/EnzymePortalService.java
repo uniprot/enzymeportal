@@ -308,7 +308,7 @@ public class EnzymePortalService {
     public List<Taxonomy> getCountForOrganisms(List<Long> taxids) {
         return uniprotEntryRepository.getCountForOrganisms(taxids);
     }
-
+    
     public List<UniprotEntry> findEnzymesByTaxId(Long taxId) {
         return uniprotEntryRepository.findEnzymesByTaxId(taxId);
     }
