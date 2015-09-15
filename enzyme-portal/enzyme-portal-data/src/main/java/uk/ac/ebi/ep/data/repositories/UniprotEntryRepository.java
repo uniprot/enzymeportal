@@ -79,4 +79,8 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     @Async
     Future<List<UniprotEntry>> findFutureSummariesByAccessions(@Param("ACCESSION") List<String> accessions);
+    
+//    @Transactional(readOnly = true)
+//    @Query(name ="browseTaxonomy", value = "select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in (:TAX_ID) group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name", nativeQuery = true)
+//    List<Taxonomy> getCountForOrganisms(@Param("TAX_ID")List<Long> taxids);
 }

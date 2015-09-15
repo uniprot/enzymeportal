@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -30,6 +32,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,6 +44,7 @@ import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.search.model.Species;
+import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 /**
  *
@@ -77,6 +81,21 @@ import uk.ac.ebi.ep.data.search.model.Species;
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
 
 })
+
+   @SqlResultSetMapping(
+       name="browseTaxonomy",
+       classes={
+          @ConstructorResult(
+               targetClass=Taxonomy.class,
+                 columns={
+                    @ColumnResult(name="tax_Id",type = Long.class),
+                    @ColumnResult(name="scientific_Name"),
+                    @ColumnResult(name="common_Name"),
+                    @ColumnResult(name="numEnzymes",type = Long.class)
+                    }
+          )
+       }
+      )
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
