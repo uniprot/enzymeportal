@@ -379,7 +379,7 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
             LOGGER.info("Parsing end");
 
         } catch (IOException | SAXException e) {
-            LOGGER.error("During parsing", e);
+            LOGGER.error("Error During parsing", e);
 
             throw e;
         }

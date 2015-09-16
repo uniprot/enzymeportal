@@ -112,7 +112,7 @@ public abstract class CompoundParser {
                     entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString="+chebiId);
                     break;
                 } else {
-                    LOGGER.warn("Not found in ChEBI: " + name);
+                    //LOGGER.warn("Not found in ChEBI: " + name);
                 }
             } catch (ChebiWebServiceFault_Exception e) {
                 LOGGER.error("ChebiWebServiceFault_Exception while Searching for " + name, e);
