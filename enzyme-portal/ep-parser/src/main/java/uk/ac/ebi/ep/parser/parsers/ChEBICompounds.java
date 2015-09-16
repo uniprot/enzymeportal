@@ -26,15 +26,15 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntity;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
+import uk.ac.ebi.ep.centralservice.helper.CompoundUtil;
+import uk.ac.ebi.ep.centralservice.helper.EPUtil;
+import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
+import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.centralservice.helper.CompoundUtil;
-import uk.ac.ebi.ep.centralservice.helper.EPUtil;
-import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
-import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 
 /**
@@ -75,7 +75,7 @@ public class ChEBICompounds {
     public void computeAndLoadChEBICompounds() {
 
         List<EnzymePortalSummary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
-        LOGGER.warn("Number of Regulation Text from EnzymeSummary Table " + enzymeSummary.size());
+        //LOGGER.warn("Number of Regulation Text from EnzymeSummary Table " + enzymeSummary.size());
 
         //String text = "Activated by cell stresses such as DNA damage, heat shock, osmotic shock, anisomycin and sodium arsenite, as well as pro-inflammatory stimuli such as bacterial lipopolysaccharide (LPS) and interleukin-1. Activation occurs through dual phosphorylation of Thr-180 and Tyr-182 by either of two dual specificity kinases, MAP2K3/MKK3 or MAP2K6/MKK6, and potentially also MAP2K4/MKK4, as well as by TAB1-mediated autophosphorylation. MAPK14 phosphorylated on both Thr-180 and Tyr-182 is 10-20-fold more active than MAPK14 phosphorylated only on Thr-180, whereas MAPK14 phosphorylated on Tyr-182 alone is inactive. whereas Thr-180 is necessary for catalysis, Tyr-182 may be required for auto-activation and substrate recognition. Phosphorylated at Tyr-323 by ZAP70 in an alternative activation pathway in response to TCR signaling in T-cells. This alternative pathway is inhibited by GADD45A. Inhibited by dual specificity phosphatases, such as DUSP1, DUSP10, and DUSP16. Specifically inhibited by the binding of pyridinyl-imidazole compounds, which are cytokine-suppressive anti-inflammatory drugs (CSAID). Isoform Mxi2 is 100-fold less sensitive to these agents than the other isoforms and is not inhibited by DUSP1. Isoform Exip is not activated by MAP2K6. SB203580 is an inhibitor of MAPK14.";   
         //Java 7 and before only. uncomment if Java 8 is not available in your env
