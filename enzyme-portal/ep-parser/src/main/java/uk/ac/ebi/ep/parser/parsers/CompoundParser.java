@@ -21,7 +21,6 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
@@ -64,9 +63,9 @@ public abstract class CompoundParser {
      * @param moleculeName the compound name.
      * @return an entry with a ChEBI ID, or <code>null</code> if not found.
      */
-    protected EnzymePortalCompound searchCompoundInChEBI(String moleculeName) {
+    protected LiteCompound searchCompoundInChEBI(String moleculeName) {
 
-        EnzymePortalCompound entry = null;
+        LiteCompound entry = null;
         // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
         // sometimes as "moleculeName (concentration)":
         Matcher m = COMPOUND_NAME_PATTERN.matcher(moleculeName);
@@ -105,7 +104,7 @@ public abstract class CompoundParser {
                 }
 
                 if (chebiId != null && !blackList.contains(chebiName) && !StringUtils.isEmpty(chebiName)) {
-                    entry = new EnzymePortalCompound();
+                    entry = new LiteCompound();
                     entry.setCompoundSource(MmDatabase.ChEBI.name());
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(chebiName);
@@ -129,9 +128,9 @@ public abstract class CompoundParser {
      * @param moleculeName the compound name.
      * @return an entry with a ChEBI ID, or <code>null</code> if not found.
      */
-    protected EnzymePortalCompound searchMoleculeInChEBI(String moleculeName) {
+    protected LiteCompound searchMoleculeInChEBI(String moleculeName) {
 
-        EnzymePortalCompound entry = null;
+        LiteCompound entry = null;
         // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
         // sometimes as "moleculeName (concentration)":
         Matcher m = COMPOUND_NAME_PATTERN.matcher(moleculeName);
@@ -174,7 +173,7 @@ public abstract class CompoundParser {
                 }
 
                 if (chebiId != null && !blackList.contains(name) && !StringUtils.isEmpty(name)) {
-                    entry = new EnzymePortalCompound();
+                    entry = new LiteCompound();
                     entry.setCompoundSource(MmDatabase.ChEBI.name());
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(name);

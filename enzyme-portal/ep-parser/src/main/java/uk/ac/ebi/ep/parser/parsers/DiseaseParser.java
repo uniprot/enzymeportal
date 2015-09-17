@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
-import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.service.BioPortalService;
@@ -45,6 +44,7 @@ import uk.ac.ebi.xchars.domain.EncodingType;
  */
 @Transactional
 @Service
+@Deprecated
 public class DiseaseParser {
 
     @Autowired
@@ -134,7 +134,7 @@ public class DiseaseParser {
                     } else {
                         definition = bioPortalService.getDiseaseDescription(meshIdsCell[i].trim());
                     }
-                    Optional<EnzymePortalSummary> summary = enzymeSummaryRepository.findDiseaseEvidence(accession);
+                    Optional<String> summary = Optional.ofNullable(enzymeSummaryRepository.findDiseaseEvidence(accession));
 
                     String uniprotAccession = enzyme.get().getAccession();
                     String omimId = omimCell[0];
@@ -144,7 +144,9 @@ public class DiseaseParser {
                     String diseaseName = name.replaceAll(",", "").trim();
                     String evidence = null;
                     if (summary.isPresent()) {
-                        evidence = summary.get().getCommentText();
+                        evidence = summary.get();
+                        
+                        System.out.println("EVIDENCE "+ evidence);
                     }
                     String diseaseDefinition = definition;
                     if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
@@ -163,7 +165,7 @@ public class DiseaseParser {
                     disease.setDefinition(definition);
                     disease.setUniprotAccession(enzyme.get());
                     if (summary.isPresent()) {
-                        disease.setEvidence(summary.get().getCommentText());
+                        disease.setEvidence(summary.get());
                     }
 
                     disease.setUrl(url);
