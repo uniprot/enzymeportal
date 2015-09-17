@@ -6,11 +6,8 @@
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
-import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
-import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
+import uk.ac.ebi.ep.data.entry.Summary;
 
 /**
  *
@@ -19,16 +16,17 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 @NoRepositoryBean
 public interface EnzymePortalSummaryRepositoryCustom {
 
-    Optional<EnzymePortalSummary> findDiseaseEvidence(String accession);
 
-    EnzymePortalSummary findEnzymeSummaryByAccession(String accession);
+    List<Summary> findSummariesByCommentType(String commentType);
 
-    List<EnzymePortalSummary> findEnzymeSummariesByAccession(String accessions);
-
-    List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> namePrefixes);
-
-    List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions);
-
-    Page<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions, Pageable pageable);
+//    EnzymePortalSummary findEnzymeSummaryByAccession(String accession);
+//
+//    List<EnzymePortalSummary> findEnzymeSummariesByAccession(String accessions);
+//
+//    List<EnzymePortalSummary> findEnzymesByNamePrefixes(List<String> namePrefixes);
+//
+//    List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions);
+//
+//    Page<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions, Pageable pageable);
 
 }

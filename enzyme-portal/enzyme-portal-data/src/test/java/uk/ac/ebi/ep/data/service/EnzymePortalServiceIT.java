@@ -15,7 +15,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
-import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
@@ -173,80 +172,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
      * Test of findEnzymeSummariesByNamePrefixes method, of class
      * EnzymePortalService.
      */
-    @Test
-    public void testFindEnzymeSummariesByNamePrefixes() {
-        LOGGER.info("findEnzymeSummariesByNamePrefixes");
-        List<String> namePrefixes = new ArrayList<>();
-        namePrefixes.add("CP24A");
-        namePrefixes.add("FAKEGENE");
-        namePrefixes.add("CP7B1");
-        namePrefixes.add("PDE5A");
-
-        int expResult = 3;
-        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSummariesByNamePrefixes(namePrefixes).stream().distinct().collect(Collectors.toList());
-        assertEquals(expResult, result.size());
-        
-
-    }
-
-    /**
-     * Test of findEnzymeSumariesByAccessions method, of class
-     * EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSumariesByAccessions_List() {
-        LOGGER.info("findEnzymeSumariesByAccessions");
-        List<String> accessions = new ArrayList<>();
-        accessions.add("Q07973");
-        accessions.add("Q63688");
-        accessions.add("O75881");
-        accessions.add("Q64441");
-        accessions.add("fakeAccession");
-
-        boolean expResult = true;
-        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSumariesByAccessions(accessions);
-
-        assertEquals(expResult, result.size() > 0);
-
-    }
-
-    /**
-     * Test of findEnzymeSumariesByAccession method, of class
-     * EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSumariesByAccession() {
-        LOGGER.info("findEnzymeSumariesByAccession");
-        String acc = "Q07973";
-        int expResult = 12;
-        List<EnzymePortalSummary> result = enzymePortalService.findEnzymeSumariesByAccession(acc);
-
-        assertEquals(expResult, result.size());
-
-    }
-
-    /**
-     * Test of findEnzymeSumariesByAccessions method, of class
-     * EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSumariesByAccessions_List_Pageable() {
-        LOGGER.info("findEnzymeSumariesByAccessions");
-        List<String> accessions = new ArrayList<>();
-        accessions.add("Q07973");
-        accessions.add("Q63688");
-        accessions.add("O75881");
-        accessions.add("Q64441");
-        accessions.add("fakeAccession");
-
-        int expResult = 3;
-        Page<EnzymePortalSummary> result = enzymePortalService.findEnzymeSumariesByAccessions(accessions, PAGEABLE);
-        assertEquals(expResult, result.getContent().size());
-        assertEquals(3, result.getTotalElements());
-        assertEquals(1, result.getTotalPages());
-
-    }
-
+    
     /**
      * Test of findDiseasesByAccession method, of class EnzymePortalService.
      */

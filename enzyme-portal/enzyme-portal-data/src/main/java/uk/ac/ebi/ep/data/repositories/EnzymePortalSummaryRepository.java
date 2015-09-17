@@ -23,10 +23,25 @@ public interface EnzymePortalSummaryRepository extends JpaRepository<EnzymePorta
     @Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE='REGULATION' ", nativeQuery = true)
     List<EnzymePortalSummary> findSummariesByRegulation();
 
-    @Transactional(readOnly = true)
-    //@Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TEXT IS NOT NULL AND ROWNUM <= 2000 AND COMMENT_TYPE = :COMMENT_TYPE ", nativeQuery = true)
-    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE", nativeQuery = true)
-    List<EnzymePortalSummary> findSummariesByCommentType(@Param("COMMENT_TYPE") String commentType);
+//    @Transactional(readOnly = true)
+//    //@Query(value = "SELECT * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TEXT IS NOT NULL AND ROWNUM <= 2000 AND COMMENT_TYPE = :COMMENT_TYPE ", nativeQuery = true)
+//    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE", nativeQuery = true)
+//    List<EnzymePortalSummary> findSummariesByCommentType(@Param("COMMENT_TYPE") String commentType);
+//    
+    
+//     @Transactional(readOnly = true)
+//    @Query(name ="findCommentTextAndAccession", value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE", nativeQuery = true)
+//    List<Summary> findSummariesByCommentType(@Param("COMMENT_TYPE") String commentType);
+//    
+//         @Transactional(readOnly = true)
+//    @Query( value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE AND UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+//    EnzymePortalSummary findDiseaseEvidence(@Param("COMMENT_TYPE") String commentType,@Param("UNIPROT_ACCESSION") String accession);
+// 
+    
+        @Transactional(readOnly = true)
+    @Query( value = "SELECT DISTINCT /*+ PARALLEL(auto) */ COMMENT_TEXT  FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = 'DISEASE' AND UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)
+    String findDiseaseEvidence( @Param("UNIPROT_ACCESSION") String accession);
+
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT COMMENT_TEXT FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE='CATALYTIC_ACTIVITY' AND UNIPROT_ACCESSION = :UNIPROT_ACCESSION", nativeQuery = true)

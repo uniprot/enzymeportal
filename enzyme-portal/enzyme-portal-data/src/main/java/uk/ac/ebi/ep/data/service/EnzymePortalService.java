@@ -26,7 +26,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
-import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -100,18 +99,7 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findEnzymeByAccession(accession);
     }
 
-    /**
-     *
-     * @param accession
-     * @return
-     * @deprecated(to be removed in 1.0.14)
-     */
-    @Deprecated
-    @Transactional(readOnly = true)
-    public EnzymePortalSummary findEnzymeSummaryByAccession(String accession) {
 
-        return enzymeSummaryRepository.findEnzymeSummaryByAccession(accession);
-    }
 
     @Transactional(readOnly = true)
     public List<String> findAllUniprotAccessions() {
@@ -143,23 +131,7 @@ public class EnzymePortalService {
         return enzymePortalCompoundRepository.findCompoundsByNameprefixes(namePrefixes);
     }
 
-    @Transactional(readOnly = true)
-    public List<EnzymePortalSummary> findEnzymeSummariesByNamePrefixes(List<String> namePrefixes) {
 
-        return enzymeSummaryRepository.findEnzymesByNamePrefixes(namePrefixes);
-    }
-
-    @Transactional(readOnly = true)
-    public List<EnzymePortalSummary> findEnzymeSumariesByAccessions(List<String> accessions) {
-
-        return enzymeSummaryRepository.findEnzymeSummariesByAccessions(accessions);
-    }
-
-    @Transactional(readOnly = true)
-    public List<EnzymePortalSummary> findEnzymeSumariesByAccession(String accession) {
-
-        return enzymeSummaryRepository.findEnzymeSummariesByAccession(accession);
-    }
 
     @Transactional(readOnly = true)
     public List<String> findCatalyticActivitiesByAccession(String accession) {
@@ -168,11 +140,7 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findCatalyticActivitiesByAccession(accession);
     }
 
-    @Transactional(readOnly = true)
-    public Page<EnzymePortalSummary> findEnzymeSumariesByAccessions(List<String> accessions, Pageable pageable) {
 
-        return enzymeSummaryRepository.findEnzymeSummariesByAccessions(accessions, pageable);
-    }
 
     @Transactional(readOnly = true)
     public List<Disease> findDiseasesByAccession(String accession) {
