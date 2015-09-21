@@ -165,13 +165,15 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
             reactants.add(createChebiEntry(attributes));
         } else if (isProduct) {
             products.add(createChebiEntry(attributes));
-        } else if (isCofactor) {
-            EnzymePortalCompound cofactor = new EnzymePortalCompound();
-            cofactor.setCompoundSource(MmDatabase.ChEBI.name());
-            cofactor.setCompoundId(attributes.getValue("", "accession"));
-            cofactors.add(cofactor);
-
-        }
+        } 
+        
+//        else if (isCofactor) {
+//            EnzymePortalCompound cofactor = new EnzymePortalCompound();
+//            cofactor.setCompoundSource(MmDatabase.ChEBI.name());
+//            cofactor.setCompoundId(attributes.getValue("", "accession"));
+//            cofactors.add(cofactor);
+//
+//        }
     }
 
     private EnzymePortalCompound createChebiEntry(Attributes attributes) {
@@ -275,11 +277,13 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
 
                 }
             }//end if ec does not return protein
-        } else if (isCofactor) {
-            // Add the missing name:
-            cofactors.get(cofactors.size() - 1)
-                    .setCompoundName(currentChars.toString());
-        } else if (isEnzyme) {
+        } 
+//        else if (isCofactor) {
+//            // Add the missing name:
+//            cofactors.get(cofactors.size() - 1)
+//                    .setCompoundName(currentChars.toString());
+//        }
+        else if (isEnzyme) {
 
             //we now get cofactors from uniprot -- comment out for now
 //            if (cofactors != null || !cofactors.isEmpty()) {
