@@ -200,7 +200,7 @@ public class BasketController extends AbstractController {
 
             retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService);
             retriever.getIntenzAdapter().setConfig(intenzConfig);
-            retriever.getReactomeAdapter().setConfig(reactomeConfig);
+            //retriever.getReactomeAdapter().setConfig(reactomeConfig);
             retriever.getChebiAdapter().setConfig(chebiConfig);
             return retriever.getWholeModel(acc);
 

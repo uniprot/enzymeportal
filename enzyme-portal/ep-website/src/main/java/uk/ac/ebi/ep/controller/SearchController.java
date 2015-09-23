@@ -133,7 +133,7 @@ public class SearchController extends AbstractController {
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
                 case REACTIONSPATHWAYS:
-                    retriever.getReactomeAdapter().setConfig(reactomeConfig);
+                    //retriever.getReactomeAdapter().setConfig(reactomeConfig);
                     enzymeModel = retriever.getReactionsPathways(accession);
                     break;
                 case MOLECULES:

@@ -205,7 +205,10 @@ public abstract class AbstractController {
 
         switch (searchParams.getType()) {
             case KEYWORD:
+                
+                if(!StringUtils.isEmpty(searchParams.getText())){
                 key = searchParams.getText().trim().toLowerCase();
+                }
                 break;
             case SEQUENCE:
                 key = searchParams.getSequence().trim().toUpperCase()
