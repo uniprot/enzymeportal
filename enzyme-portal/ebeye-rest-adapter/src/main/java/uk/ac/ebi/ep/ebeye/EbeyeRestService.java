@@ -50,7 +50,7 @@ public class EbeyeRestService {
     private RestTemplate restTemplate;
     
     private  final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private  final int HITCOUNT = 9000;
+    private  final int HITCOUNT = 7000;
     private  final int QUERY_LIMIT = 800;
 
     /**
@@ -118,7 +118,7 @@ public class EbeyeRestService {
 
                 int hitcount = searchResult.getHitCount();
 
-                 //for now limit hitcount to 5k
+                 //for now limit hitcount to 7k
                 if (hitcount > HITCOUNT) {
                     hitcount = HITCOUNT;
                 }
@@ -137,7 +137,7 @@ public class EbeyeRestService {
                 int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
 
                 List<String> accessionList = query(query, numIteration);
-                LOGGER.warn("Number of Accessions to be processed (Pagination = true)  :  " + accessionList.size());
+                LOGGER.warn("Total Hitcount = "+ hitcount+",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
                 return accessionList;
 
             }
@@ -196,7 +196,7 @@ public class EbeyeRestService {
             return r;
 
         }).collect(Collectors.toList());
-        
+
         if(result != null && !result.isEmpty()){
         result.stream().map(ebeye -> ebeye.getEntries().stream().distinct().collect(Collectors.toList())).forEach(entries -> {
             entries.stream().forEach(entry -> {
@@ -211,7 +211,7 @@ public class EbeyeRestService {
 //                accessions.add(e.getUniprotAccession());
 //            }
 //        }
-
+        
         return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
 
     }
