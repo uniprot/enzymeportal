@@ -374,10 +374,12 @@ public class EnzymeFinder {
         partitioned.parallel().forEach((chunk) -> {
             List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk);//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
+            if(enzymes != null){
             if (StringUtils.isEmpty(keyword)) {
                 enzymeList.addAll(computeUniqueEnzymes(enzymes));
             } else {
                 enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
+            }
             }
 
         });
@@ -432,7 +434,7 @@ public class EnzymeFinder {
         List<UniprotEntry> enzymeList = new LinkedList<>();
         if (!accessions.isEmpty()) {
 
-            if (accessions.size() < 800) {
+            if (accessions.size() < 600) {
 
                 long startTime = System.nanoTime();
                 enzymeList = useParallelExec(accessions, keyword);
@@ -444,7 +446,7 @@ public class EnzymeFinder {
 
                 return enzymeList.stream().distinct().collect(Collectors.toList());
 
-            } else if (accessions.size() >= 800) {
+            } else if (accessions.size() >= 600) {
 
                 long startTime = System.nanoTime();
                 enzymeList = useSpliterator(accessions, keyword);

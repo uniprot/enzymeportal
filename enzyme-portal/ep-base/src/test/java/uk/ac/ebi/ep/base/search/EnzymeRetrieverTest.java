@@ -10,7 +10,6 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import org.junit.Test;
-import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
@@ -20,7 +19,6 @@ import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
-import uk.ac.ebi.ep.enzymeservices.reactome.IReactomeAdapter;
 
 /**
  *
@@ -32,30 +30,6 @@ public class EnzymeRetrieverTest extends BaseTest {
     private static final String uniprotAccession = "Q07973";
 
 
-    /**
-     * Test of getBioportalAdapter method, of class EnzymeRetriever.
-     */
-    @Test
-    public void testGetBioportalAdapter() {
-        System.out.println("getBioportalAdapter");
-
-       // EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-        IBioportalAdapter result = instance.getBioportalAdapter();
-        assertNotNull(result);
-
-    }
-
-    /**
-     * Test of getReactomeAdapter method, of class EnzymeRetriever.
-     */
-    @Test
-    public void testGetReactomeAdapter() {
-        System.out.println("getReactomeAdapter");
-        //EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-
-        IReactomeAdapter result = instance.getReactomeAdapter();
-        assertNotNull(result);
-    }
 
     /**
      * Test of getChebiAdapter method, of class EnzymeRetriever.
@@ -63,8 +37,7 @@ public class EnzymeRetrieverTest extends BaseTest {
     @Test
     public void testGetChebiAdapter() {
         System.out.println("getChebiAdapter");
-        //EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-        IChebiAdapter result = instance.getChebiAdapter();
+             IChebiAdapter result = instance.getChebiAdapter();
         assertNotNull(result);
     }
 
@@ -276,54 +249,5 @@ public class EnzymeRetrieverTest extends BaseTest {
         //assertEquals(expResult.getPathways().stream().findAny().get().getPathwayId().trim(), result.getPathways().stream().findAny().get().getPathwayId().trim());
     }
 
-//    @Bean
-//    public LiteratureConfig literatureConfig() {
-//        LiteratureConfig lc = new LiteratureConfig();
-//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-//        return lc;
-//    }
-//
-//    @Bean
-//    public IntenzConfig intenzConfig() {
-//        IntenzConfig config = new IntenzConfig();
-//
-//        config.setTimeout(Integer.parseInt(env.getProperty("intenz.ws.timeout")));
-//        config.setIntenzXmlUrl(env.getProperty("intenz.xml.url"));
-//        return config;
-//    }
-//
-//    @Bean
-//    public IntenzAdapter intenzAdapter() {
-//        IntenzAdapter intenz = new IntenzAdapter();
-//        intenz.setConfig(intenzConfig());
-//        return intenz;
-//    }
-//
-//    @Bean
-//    public ReactomeConfig reactomeConfig() {
-//        ReactomeConfig rc = new ReactomeConfig();
-//        rc.setTimeout(Integer.parseInt(env.getProperty("reactome.ws.timeout")));
-//        rc.setUseProxy(Boolean.parseBoolean(env.getProperty("reactome.ws.proxy")));
-//        rc.setWsBaseUrl(env.getProperty("reactome.ws.url"));
-//
-//        return rc;
-//    }
-//
-//    @Bean
-//    public ChebiConfig chebiConfig() {
-//        ChebiConfig chebiConfig = new ChebiConfig();
-//        chebiConfig.setTimeout(Integer.parseInt(env.getProperty("chebi.ws.timeout")));
-//        chebiConfig.setMaxThreads(Integer.parseInt(env.getProperty("chebi.threads.max")));
-//        chebiConfig.setSearchStars(env.getProperty("chebi.search.stars"));
-//        chebiConfig.setMaxRetrievedMolecules(Integer.parseInt(env.getProperty("chebi.results.max")));
-//        chebiConfig.setCompoundBaseUrl(env.getProperty("chebi.compound.base.url"));
-//        chebiConfig.setCompoundImgBaseUrl(env.getProperty("chebi.compound.img.base.url"));
-//
-//        return chebiConfig;
-//    }
+
 }
