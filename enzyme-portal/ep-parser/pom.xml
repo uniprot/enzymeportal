@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-parser</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
     
     <description>
@@ -12,7 +12,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4</version>
     </parent>
     
     
@@ -46,17 +46,17 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>centralService</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.13-SNAPSHOT</version>
+            <version>1.0.13</version>
         </dependency> 
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>PDBeAdapter</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
         
         <dependency>
