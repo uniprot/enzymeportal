@@ -41,7 +41,7 @@
                 </c:when>
                 <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
                     <c:set var="errorCode" value="search"/>
-                    <c:set var="errorParam" value="sequence search"/>
+                    <c:set var="errorParam" value="search"/>
                     <c:set var="searchText" value="your sequence search"/>	
                 </c:when>
                 <c:otherwise>

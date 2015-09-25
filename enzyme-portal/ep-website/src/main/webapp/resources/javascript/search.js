@@ -733,6 +733,7 @@ function ajaxBasket(id, checked) {
         },
         error: function (xhr, status, message) {
             alert(message);
+            console.log(message);
         }
     });
 }
