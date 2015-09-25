@@ -722,8 +722,7 @@ function ajaxBasket(id, checked) {
     var params = {};
     params.id = id;
     params.checked = checked;
-    jQuery.ajax({
-        dataType: "text",
+    jQuery.getJSON({
         url: window.location.pathname.replace(/search.*|basket|taxonomy.*/, "ajax/basket"),
         data: params,
         context: thisFunction,
