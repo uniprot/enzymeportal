@@ -1,6 +1,8 @@
 package uk.ac.ebi.ep.controller;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +24,8 @@ import uk.ac.ebi.ep.data.enzyme.model.ProteinStructure;
 @Controller
 public class PdbeController {
 
-    private final Logger LOGGER = Logger.getLogger(PdbeController.class);
+  
+     private final Logger LOGGER = LoggerFactory.getLogger(PdbeController.class);
 
     //@RequestMapping(value = "/ajax/pdbe/{pdbId}")
     protected String getStructure(Model model, @PathVariable String pdbId) {

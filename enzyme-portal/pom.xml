@@ -7,7 +7,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
     <name>Enzyme Portal</name>
     <description>
         The Enzyme Portal is for people who are interested in the biology of

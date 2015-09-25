@@ -6,6 +6,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="Fn" uri="/WEB-INF/epTagLibray.tld" %> 
 
+
 <%-- Indentation in this page is broken in purpose, in order to minimise the
     amount of white space (which multiplies with these big loops). Empty lines
     have been also been avoided. --%>
@@ -36,6 +37,7 @@
         <div id="species_filters_n"></div>
 
 <script>
+     $(document).ready(function () {
 // (See search.js if in doubt)
 
 // Initialise variables:
@@ -45,18 +47,16 @@ uncheckedFilters[group] = [];
 displayedFilters[group] = 0;
 
 // Populate js variables with data from server:
-//<c:forEach var="sp" items="${speciesList}">
-var sp = { "id": "${sp.scientificname}", "name": "${sp.commonname}","taxId":"${sp.taxId}" };
-//$('#filtersForm').append('<input type="hidden" name="taxId" value="${sp.taxId}" />');
-//$('#filtersForm').append('<input type="hidden" name="organismName" value="${sp.scientificname}" />');
-<c:choose><c:when test="${Fn:contains(speciesParams, sp.scientificname)}">
+//<c:forEach var="specie" items="${speciesList}">
+var sp = { "id": "${specie.scientificname}", "name": "${specie.commonname}","taxId":"${specie.taxId}" };
+<c:choose><c:when test="${Fn:contains(speciesParams, specie.scientificname)}">
 checkedFilters[group][checkedFilters[group].length] = sp; //</c:when>
 <c:otherwise>
 uncheckedFilters[group][uncheckedFilters[group].length] = sp; //</c:otherwise>
 </c:choose>
 speciesAutocompleteDataSource.push({
-    label: "${not empty sp.commonname? sp.commonname : sp.scientificname}",
-    value: "${sp.scientificname}"}); //</c:forEach>
+    label: "${not empty specie.commonname? specie.commonname : specie.scientificname}",
+    value: "${specie.scientificname}"}); //</c:forEach>
 
 // Display filters:
 for (var i = 0; i < checkedFilters[group].length; i++){
@@ -66,17 +66,19 @@ for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
         && displayedFilters[group] < ${speciesListSize}; i++){
     addCheckbox(group, uncheckedFilters[group][i], false);
 }
-
+  });
 </script>
 
         <c:if test="${speciesListSize gt filterSizeDefault}">
             <img id="loading_more_sf" src="${pageContext.request.contextPath}/resources/images/loading16.gif"
                 style="display: none"/>
+           
             <a id="more_sf" href="javascript:void(0)"
                 onclick="addUnselectedCheckboxes('species',
                 displayedFilters['species'],
                 ${speciesListSize}-displayedFilters['species'], this)">See all
                 ${speciesListSize}</a>
+                   
         </c:if>
 
         <c:if test="${speciesListSize gt 12}">

@@ -67,7 +67,7 @@ $(document).ready(function () {
     //            $(jqClickedId).html(linkValue.replace('fewer','more'));
     //        }
     //    });
-
+    
     $("a.showLink").click(function (event) {
         var clickedId = event.target.id;
         var idClickedSplit = clickedId.split("_");
@@ -357,6 +357,11 @@ function addCheckbox(filterGroup, obj, selected) {
         "value": obj.id
     }).appendTo("#filtersForm");
 
+    $('<input/>', {
+        "type": "hidden",
+        "name": "id",
+        "value": obj.id
+    }).appendTo("#filtersForm");
 
 
 
@@ -535,6 +540,7 @@ function addCheckboxEc(filterGroup, obj, selected) {
  */
 function addUnselectedCheckboxes(filterGroup, from, num, link) {
     var loading = $('#loading_' + link.getAttribute('id'));
+        console.log(" filtergroup "+ filterGroup + " from "+ from + " num "+ num + " link "+ link);
     $(link).hide();
     loading.show();
     for (var i = from; i < from + num; i++) {
@@ -726,6 +732,7 @@ function ajaxBasket(id, checked) {
         },
         error: function (xhr, status, message) {
             alert(message);
+            console.log(message);
         }
     });
 }

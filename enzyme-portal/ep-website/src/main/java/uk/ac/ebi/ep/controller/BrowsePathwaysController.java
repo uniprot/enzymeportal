@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,7 +32,6 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 @Controller
 public class BrowsePathwaysController extends AbstractController {
 
-    private static final Logger LOGGER = Logger.getLogger(BrowsePathwaysController.class);
 
     private static final String PATHWAYS = "/pathways";
 
@@ -136,7 +134,8 @@ public class BrowsePathwaysController extends AbstractController {
 
     
        
-            results = finder.computeEnzymeSummariesByPathwayId(pathwayId);
+            String simplePathwayName = pathwayName.toLowerCase();
+            results = finder.computeEnzymeSummariesByPathwayName(simplePathwayName);
         
 
         if (results == null) {

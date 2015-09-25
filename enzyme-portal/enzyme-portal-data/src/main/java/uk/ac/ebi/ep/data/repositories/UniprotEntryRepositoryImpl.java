@@ -139,8 +139,15 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         JPAQuery query = new JPAQuery(entityManager);
         // List<Tuple> tuple =    query.from($).groupBy($.taxId,$.scientificName,$.commonName).orderBy($.taxId.count().desc()).limit(11).list($.taxId,$.scientificName,$.commonName,$.taxId.count());
 
-        List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).groupBy($.taxId, $.scientificName, $.commonName).
+        List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).distinct().groupBy($.taxId, $.scientificName, $.commonName).
                 list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
+        
+//                List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).distinct().groupBy($.taxId, $.scientificName, $.commonName).
+//                list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName));
+// 
+//        String nativeQuery = "select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in (:TAX_ID) group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name";
+//        Query query = entityManager.createNativeQuery(nativeQuery, "browseTaxonomy");
+//        List<Taxonomy> result = query.setParameter("TAX_ID", taxids).getResultList();
 
         return result;
     }

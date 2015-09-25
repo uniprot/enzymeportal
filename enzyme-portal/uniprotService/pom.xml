@@ -4,10 +4,10 @@
     <parent>
         <groupId>uk.ac.ebi.ep</groupId>
         <artifactId>ep</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4</version>
     </parent>
     <artifactId>uniprotService</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     
@@ -52,12 +52,26 @@
             <groupId>uk.ac.ebi.uniprot</groupId>
             <artifactId>japi</artifactId>
             <version>1.0.0</version>
+            <exclusions>
+<!--                Exclude Commons Logging -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--    production-->
         <dependency>
             <groupId>uk.ac.ebi.uniprot.kraken</groupId>
             <artifactId>uniprotjapi</artifactId>
             <version>2015.07</version>
+            <exclusions>
+<!--                Exclude Commons Logging-->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--                <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -135,11 +149,6 @@
             </exclusions>
         </dependency> 
         
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
         
         <dependency>
             <groupId>org.springframework</groupId>

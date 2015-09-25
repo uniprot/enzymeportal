@@ -5,23 +5,18 @@
  */
 package uk.ac.ebi.ep.base.search;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml_cml.schema.cml2.react.Reaction;
-import uk.ac.ebi.ep.adapter.bioportal.BioPortalService;
-import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
-import uk.ac.ebi.ep.adapter.das.IDASFeaturesAdapter;
-import uk.ac.ebi.ep.adapter.das.SimpleDASFeaturesAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.LabelledCitation;
 import uk.ac.ebi.ep.adapter.literature.SimpleLiteratureAdapter;
-import uk.ac.ebi.ep.biomart.adapter.BiomartAdapter;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
@@ -50,8 +45,6 @@ import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiFetchDataException;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
-import uk.ac.ebi.ep.enzymeservices.reactome.IReactomeAdapter;
-import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeAdapter;
 import uk.ac.ebi.ep.enzymeservices.rhea.IRheaAdapter;
 import uk.ac.ebi.ep.enzymeservices.rhea.RheaWsAdapter;
 import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
@@ -62,44 +55,21 @@ import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
  */
 public class EnzymeRetriever extends EnzymeFinder {
     
-    private static final Logger LOGGER = Logger.getLogger(EnzymeRetriever.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnzymeRetriever.class);
     protected IRheaAdapter rheaAdapter;
-    private IReactomeAdapter reactomeAdapter;
     protected IChebiAdapter chebiAdapter;
-    protected IDASFeaturesAdapter pdbeAdapter;
     protected ILiteratureAdapter litAdapter;
-    protected BiomartAdapter biomartAdapter;
-    private static IBioportalAdapter bioportalAdapter;
+
     
     public EnzymeRetriever(EnzymePortalService service, EbeyeRestService eService) {
         super(service, eService);
         
         rheaAdapter = new RheaWsAdapter();
-        biomartAdapter = new BiomartAdapter();
-        
-        bioportalAdapter = new BioPortalService();
-        try {
-            pdbeAdapter = new SimpleDASFeaturesAdapter(IDASFeaturesAdapter.PDBE_DAS_URL);
-        } catch (IOException e) {
-            LOGGER.error("Unable to create a PDBe adapter", e);
-        }
+
     }
     
-    public IBioportalAdapter getBioportalAdapter() {
-        return bioportalAdapter;
-    }
 
-    /**
-     * Lazily constructs a new adapter if needed.
-     *
-     * @return a Reactome adapter.
-     */
-    public IReactomeAdapter getReactomeAdapter() {
-        if (reactomeAdapter == null) {
-            reactomeAdapter = new ReactomeAdapter();
-        }
-        return reactomeAdapter;
-    }
+
 
     /**
      * Lazily constructs a new adapter if needed.
@@ -228,11 +198,11 @@ public class EnzymeRetriever extends EnzymeFinder {
     
     public EnzymeModel getEnzyme(String uniprotAccession) {
         
-        EnzymeModel model = getEnzymeModel(uniprotAccession);
+        EnzymeModel model = getEnzymeModel(uniprotAccession);       
         try {
             intenzAdapter.getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
-            LOGGER.fatal("Error getting enzyme details from Intenz webservice", ex);
+            LOGGER.error("Error getting enzyme details from Intenz webservice", ex);
         }
         List<String> prov = new LinkedList<>();
         prov.add("IntEnz");

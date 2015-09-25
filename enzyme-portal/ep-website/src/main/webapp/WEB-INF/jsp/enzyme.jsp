@@ -50,8 +50,17 @@
                                     <c:forEach var="i" begin="0" end="${ecClassSize-1}">
                                         <c:if test='${i <= 2}'>
                                             <c:set var="ecNumber" value="${ecClass[i].ec}"/>
-                                            <a target="blank" href="${intenzEntryBaseUrl}${ecNumber}"><c:out value="${ecClass[i].name}"/></a>
-                                            &gt;
+                                            <c:choose>
+                                                <c:when test="${not empty ecClass[i].name}">
+                             <a target="_blank" href="${intenzEntryBaseUrl}${ecNumber}"><c:out value="${ecClass[i].name}"/></a>
+                                            &gt;      
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:set var="webLink" value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
+                                        <a target="_blank" href="${webLink}${ecNumber}"><c:out value="${ecNumber}"/></a>            
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:if>
 
                                         <c:if test='${i > 2}'>

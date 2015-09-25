@@ -10,7 +10,7 @@
 <c:forEach var="i" begin="0" end="1">
     <c:set var="item" value="${theComparison.value.compared[i]}"/>
     <section class="grid_12 
-        ${(theComparison.value.different and not empty item)? 'diff':'same'}">
+             ${(theComparison.value.different and not empty item)? 'diff':'same'}" >
         <%@include file="comparison-item.jsp" %>
     </section>
 </c:forEach>

@@ -10,7 +10,10 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,11 +21,10 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import uk.ac.ebi.ep.data.entry.Summary;
 
 /**
  *
@@ -35,6 +37,20 @@ import org.hibernate.annotations.FetchMode;
 @NamedEntityGraph(name = "summary.graph", attributeNodes = {
     @NamedAttributeNode("uniprotAccession")
 })
+
+@SqlResultSetMapping(
+        name = "findCommentTextAndAccession",
+        classes = {
+            @ConstructorResult(
+                    targetClass = Summary.class,
+                    columns = {
+                        @ColumnResult(name = "UNIPROT_ACCESSION"),
+                        @ColumnResult(name = "COMMENT_TEXT")
+
+                    }
+            )
+        }
+)
 
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalSummary.findAll", query = "SELECT e FROM EnzymePortalSummary e"),
@@ -60,10 +76,10 @@ public class EnzymePortalSummary implements Serializable {
     private String commentText;
 
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    //@ManyToOne(optional = false,fetch = FetchType.LAZY)
-    @ManyToOne(optional = false)
-    @BatchSize(size = 10)
-    @Fetch(FetchMode.SELECT)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+//    @ManyToOne(optional = false)
+//    @BatchSize(size = 10)
+//    @Fetch(FetchMode.SELECT)
     private UniprotEntry uniprotAccession;
 
     public EnzymePortalSummary() {

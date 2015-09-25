@@ -49,7 +49,7 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
 
     @Transactional(readOnly = true)
-   @Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     //@Query(value = "SELECT DISTINCT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
 
     List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION") List<String> accession);
@@ -63,7 +63,7 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<UniprotEntry> findEnzymePortalByAccession(@Param("accession") String accession);
 
     @Transactional(readOnly = true)
-     @Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(4) */ ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(4) */ ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     //@Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     List<String> filterEnzymesFromAccessions(@Param("ACCESSION") List<String> accession);
 
@@ -76,7 +76,11 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     Slice<UniprotEntry> findSlicedSummariesByAccessions(@Param("ACCESSION") List<String> accessions, Pageable pageable);
 
     //@Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession IN (:ACCESSION)")
-       @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     @Async
     Future<List<UniprotEntry>> findFutureSummariesByAccessions(@Param("ACCESSION") List<String> accessions);
+    
+//    @Transactional(readOnly = true)
+//    @Query(name ="browseTaxonomy", value = "select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in (:TAX_ID) group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name", nativeQuery = true)
+//    List<Taxonomy> getCountForOrganisms(@Param("TAX_ID")List<Long> taxids);
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -153,19 +154,22 @@ public class IntenzAdapter implements IintenzAdapter{
          List<Intenz> results = new ArrayList<>();
          ExecutorService pool = Executors.newCachedThreadPool();
          CompletionService<Intenz> ecs =
-        		 new ExecutorCompletionService<Intenz>(pool);
+        		 new ExecutorCompletionService<>(pool);
          try {
 //        	 LOGGER.debug("SEARCH before callables loop");
-        	 List<String> incompleteEcs = new ArrayList<String>();
+        	 List<String> incompleteEcs = new ArrayList<>();
              for (String ec : ecList) {
             	 if (ec.indexOf('-') > -1){
             		 incompleteEcs.add(ec);
             		 continue; // ignore incomplete ECs
             	 }
+                
+              
                 Callable<Intenz> callable = new GetIntenzCaller(
                 		IntenzUtil.createIntenzEntryUrl(
                 				config.getIntenzXmlUrl(), ec));
                 ecs.submit(callable);
+                 
              }
              if (!incompleteEcs.isEmpty()){
             	 LOGGER.warn("Unable to retrieve info from IntEnz on " +
@@ -183,7 +187,7 @@ public class IntenzAdapter implements IintenzAdapter{
                      } else {
                     	 LOGGER.warn("Job not returned!");
                      }
-            	 } catch (Exception e){
+            	 } catch (InterruptedException | ExecutionException e){
             		 // Don't stop the others
  	            	LOGGER.error("Callable " + (i+1) + " of " + completeEcs
 	            			+ " - " + e.getMessage(), e);

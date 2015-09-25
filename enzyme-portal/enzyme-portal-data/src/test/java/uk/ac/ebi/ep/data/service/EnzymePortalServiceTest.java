@@ -19,7 +19,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
-import uk.ac.ebi.ep.data.domain.EnzymePortalSummary;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
@@ -71,19 +70,7 @@ public class EnzymePortalServiceTest extends AbstractDataTest {
 
     }
 
-    /**
-     * Test of findEnzymeSummaryByAccession method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSummaryByAccession() {
-        System.out.println("findEnzymeSummaryByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        EnzymePortalSummary expResult = null;
-        EnzymePortalSummary result = instance.findEnzymeSummaryByAccession(accession);
-        assertEquals(expResult, result);
 
-    }
 
     /**
      * Test of findAllUniprotAccessions method, of class EnzymePortalService.
@@ -181,47 +168,9 @@ public class EnzymePortalServiceTest extends AbstractDataTest {
  
     }
 
-    /**
-     * Test of findEnzymeSummariesByNamePrefixes method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSummariesByNamePrefixes() {
-        System.out.println("findEnzymeSummariesByNamePrefixes");
-        List<String> namePrefixes = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalSummary> expResult = null;
-        List<EnzymePortalSummary> result = instance.findEnzymeSummariesByNamePrefixes(namePrefixes);
-        assertEquals(expResult, result);
- 
-    }
 
-    /**
-     * Test of findEnzymeSumariesByAccessions method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSumariesByAccessions_List() {
-        System.out.println("findEnzymeSumariesByAccessions");
-        List<String> accessions = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalSummary> expResult = null;
-        List<EnzymePortalSummary> result = instance.findEnzymeSumariesByAccessions(accessions);
-        assertEquals(expResult, result);
-   
-    }
 
-    /**
-     * Test of findEnzymeSumariesByAccession method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSumariesByAccession() {
-        System.out.println("findEnzymeSumariesByAccession");
-        String accession = "";
-        EnzymePortalService instance = new EnzymePortalService();
-        List<EnzymePortalSummary> expResult = null;
-        List<EnzymePortalSummary> result = instance.findEnzymeSumariesByAccession(accession);
-        assertEquals(expResult, result);
 
-    }
 
     /**
      * Test of findCatalyticActivitiesByAccession method, of class EnzymePortalService.
@@ -236,20 +185,7 @@ public class EnzymePortalServiceTest extends AbstractDataTest {
 
     }
 
-    /**
-     * Test of findEnzymeSumariesByAccessions method, of class EnzymePortalService.
-     */
-    @Test
-    public void testFindEnzymeSumariesByAccessions_List_Pageable() {
-        System.out.println("findEnzymeSumariesByAccessions");
-        List<String> accessions = null;
-        Pageable pageable = null;
-        EnzymePortalService instance = new EnzymePortalService();
-        Page<EnzymePortalSummary> expResult = null;
-        Page<EnzymePortalSummary> result = instance.findEnzymeSumariesByAccessions(accessions, pageable);
-        assertEquals(expResult, result);
 
-    }
 
     /**
      * Test of findDiseasesByAccession method, of class EnzymePortalService.

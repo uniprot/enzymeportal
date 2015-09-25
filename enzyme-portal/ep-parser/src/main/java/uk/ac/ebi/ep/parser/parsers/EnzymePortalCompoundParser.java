@@ -84,9 +84,10 @@ public class EnzymePortalCompoundParser {
     //@Transactional
     public void loadChEBICompounds() {
 
-        ChEBICompounds chebi = new ChEBICompounds(enzymeSummaryRepository, compoundRepository);
+        //ChEBICompounds chebi = new ChEBICompounds(enzymeSummaryRepository, compoundRepository);
 
-        chebi.computeAndLoadChEBICompounds();
+       // chebi.computeAndLoadChEBICompounds();
+        throw new UnsupportedOperationException("Not supported yet... This method is muted for now. Please call loadCofactors() or loadChemblMolecules() for Chembl compounds");
 
     }
 

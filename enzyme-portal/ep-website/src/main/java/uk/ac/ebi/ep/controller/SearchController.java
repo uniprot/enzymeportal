@@ -16,9 +16,8 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,8 +67,7 @@ import uk.ac.ebi.xchars.domain.EncodingType;
 @Controller
 public class SearchController extends AbstractController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchController.class);
-
+ 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
     
@@ -136,7 +134,7 @@ public class SearchController extends AbstractController {
                     enzymeModel = retriever.getProteinStructure(accession);
                     break;
                 case REACTIONSPATHWAYS:
-                    retriever.getReactomeAdapter().setConfig(reactomeConfig);
+                    //retriever.getReactomeAdapter().setConfig(reactomeConfig);
                     enzymeModel = retriever.getReactionsPathways(accession);
                     break;
                 case MOLECULES:
@@ -316,13 +314,17 @@ public class SearchController extends AbstractController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModel, Model model,
-            HttpSession session, HttpServletRequest request) {
+            HttpSession session, HttpServletRequest request,HttpServletResponse response) {
         String view = "error";
 
 
         String searchKey = null;
         SearchResults results = null;
-
+       response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+    response.setHeader("Access-Control-Max-Age", "3600");
+    response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+        
         try {
 
             // See if it is already there, perhaps we are paginating:
@@ -539,8 +541,8 @@ public class SearchController extends AbstractController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String getSearchResults(SearchModel searchModel, BindingResult result,
-            Model model, HttpSession session, HttpServletRequest request) {
-        return postSearchResult(searchModel, model, session, request);
+            Model model, HttpSession session, HttpServletRequest request,HttpServletResponse response) {
+        return postSearchResult(searchModel, model, session, request,response);
     }
 
     @RequestMapping(value = "/advanceSearch",

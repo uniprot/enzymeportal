@@ -8,6 +8,57 @@
 <%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<!-- <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
+
+<!--<script>
+    $(document).ready(function () {
+    $("a.showLink").click(function (event) {
+        var clickedId = event.target.id;
+        var idClickedSplit = clickedId.split("_");
+        /*id of the link is made up by 3 parts:
+         part 1: name of the div (eg.: syn) this is used to distinguish the show more
+         link of synonyms from the show more link in other divs
+         part 2: "link" to distinguish the link for show more link from other
+         ordinary links
+         part 3: the order of the result item to distinguish the show more button
+         in the result list is click. In case of filters of species or compounds
+         the order is always 0
+         */
+        var idPrefixClicked = idClickedSplit[0];
+        var itemClicked = idClickedSplit[1];
+        var orderOfItemClicked = idClickedSplit[2];
+        var idOfHiddenText = "#" + idPrefixClicked + "_" + orderOfItemClicked;
+        var jqClickedId = "#" + clickedId;
+        var linkValue = $(jqClickedId).text();
+        var splitLinkName = linkValue.split(" ");
+        console.log("show more "+jQuery.inArray('more', splitLinkName));
+        console.log("id "+ idOfHiddenText);
+        if (jQuery.inArray('more', splitLinkName) > -1) {
+            $(idOfHiddenText).show();
+            $(idOfHiddenText).css("display","inline");
+            if (jQuery.inArray('function', splitLinkName) > -1) {
+                $(jqClickedId).html(linkValue.replace('more', 'less'));
+            } else {
+                $(jqClickedId).html(linkValue.replace('more', 'fewer'));
+            }
+        } else {
+            $(idOfHiddenText).hide();
+            $(jqClickedId).html(linkValue.replace(/less|fewer/g, 'more'));
+        }
+    });
+    });
+</script>-->
+
+<script>
+    $(document).ready(function () {
+      $('#relSpecies_${resultItemId}').hide();
+      $('#dis_${resultItemId}').hide();
+      $('#syn_${resultItemId}').hide();
+      $('#fun_${resultItemId}').hide();
+
+    });
+</script>
 
 <%@include file="util/prioritiseSpecies.jsp" %>
 
@@ -29,7 +80,20 @@
             [${empty theSpecies.species.commonname?
                 theSpecies.species.scientificname :
                 theSpecies.species.commonname}]
-        </a></h4>
+        </a>
+        </h4>
+                <c:choose>
+                    <c:when test="${enzyme.entryType eq 0}">
+             <small title="Reviewed by UniProt" class="icon-uniprot reviewed-icon" data-icon="s"></small>             
+                    </c:when>
+                    <c:otherwise>
+          <small title="UniProt unreviewed" class="icon-uniprot unreviewed-icon" data-icon="t"></small>              
+                    </c:otherwise>
+                </c:choose>
+                
+
+        
+        
     </c:if>
 </div>
 <%--${not empty basket and--%>
@@ -101,7 +165,7 @@
                 <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt searchConfig.maxTextLength}">
                     <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
                         begin="0" end="${searchConfig.maxTextLength-1}"> ${word}</c:forEach>
-                    <span id="fun_${resultItemId}" style="display: none">
+                    <span id="fun_${resultItemId}">
                         <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
                             begin="${searchConfig.maxTextLength}"> ${word}</c:forEach>
                     </span>
@@ -130,7 +194,7 @@
 
             </c:forEach>
             <c:if test="${synonymSize>synLimitedDisplay}">
-                <span id='syn_${resultItemId}' style="display: none">
+                <span id='syn_${resultItemId}' >
                     <c:forEach var="i" begin="${synLimitedDisplay}" end="${synonymSize-1}">
                         <c:out value="${synonym[i]}"/>;
 
@@ -161,7 +225,7 @@
             </c:forEach>
 
             <c:if test="${enzymeDiseaseSize>disLimitedDisplay}">
-                <span id='dis_${resultItemId}' style="display: none">
+                <span id='dis_${resultItemId}' >
                     <c:forEach var="i" begin="${disLimitedDisplay}" end="${enzymeDiseaseSize-1}">
                         <xchars:translate>
                             <span class="resultPageDisease" style="border-bottom-style:none">${enzymeDisease[i].name}</span>;

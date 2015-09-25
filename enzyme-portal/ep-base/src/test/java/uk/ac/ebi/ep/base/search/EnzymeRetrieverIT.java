@@ -13,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
-import uk.ac.ebi.ep.adapter.bioportal.IBioportalAdapter;
 import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
@@ -28,8 +27,6 @@ import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
-import uk.ac.ebi.ep.enzymeservices.reactome.IReactomeAdapter;
-import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 
 /**
  *
@@ -41,30 +38,8 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 public class EnzymeRetrieverIT extends BaseTest {
 
 
-    /**
-     * Test of getBioportalAdapter method, of class EnzymeRetriever.
-     */
-    @Test
-    public void testGetBioportalAdapter() {
-        System.out.println("getBioportalAdapter");
 
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-        IBioportalAdapter result = instance.getBioportalAdapter();
-        assertNotNull(result);
 
-    }
-
-    /**
-     * Test of getReactomeAdapter method, of class EnzymeRetriever.
-     */
-    @Test
-    public void testGetReactomeAdapter() {
-        System.out.println("getReactomeAdapter");
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-
-        IReactomeAdapter result = instance.getReactomeAdapter();
-        assertNotNull(result);
-    }
 
     /**
      * Test of getChebiAdapter method, of class EnzymeRetriever.
@@ -72,7 +47,7 @@ public class EnzymeRetrieverIT extends BaseTest {
     @Test
     public void testGetChebiAdapter() {
         System.out.println("getChebiAdapter");
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+         instance = new EnzymeRetriever(service, ebeyeService);
         IChebiAdapter result = instance.getChebiAdapter();
         assertNotNull(result);
     }
@@ -83,7 +58,7 @@ public class EnzymeRetrieverIT extends BaseTest {
     @Test
     public void testGetLiteratureAdapter() {
         System.out.println("getLiteratureAdapter");
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+         instance = new EnzymeRetriever(service, ebeyeService);
         ILiteratureAdapter result = instance.getLiteratureAdapter();
         assertNotNull(result);
     }
@@ -201,10 +176,10 @@ public class EnzymeRetrieverIT extends BaseTest {
     public void testGetWholeModel() throws Exception {
         System.out.println("getWholeModel");
         String acc = "O76074";
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+         instance = new EnzymeRetriever(service, ebeyeService);
 
         instance.getIntenzAdapter().setConfig(intenzConfig());
-        instance.getReactomeAdapter().setConfig(reactomeConfig());
+       
         instance.getChebiAdapter().setConfig(chebiConfig());
 
         EnzymeModel result = instance.getWholeModel(acc);
@@ -309,15 +284,7 @@ public class EnzymeRetrieverIT extends BaseTest {
         return intenz;
     }
 
-    @Bean
-    public ReactomeConfig reactomeConfig() {
-        ReactomeConfig rc = new ReactomeConfig();
-        rc.setTimeout(Integer.parseInt(env.getProperty("reactome.ws.timeout")));
-        rc.setUseProxy(Boolean.parseBoolean(env.getProperty("reactome.ws.proxy")));
-        rc.setWsBaseUrl(env.getProperty("reactome.ws.url"));
 
-        return rc;
-    }
 
     @Bean
     public ChebiConfig chebiConfig() {

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +43,7 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 @Controller
 public class BrowseTaxonomyController extends AbstractController {
 
-    private static final Logger LOGGER = Logger.getLogger(BrowseTaxonomyController.class);
+  
     private static final String ORGANISMS = "/organisms";
     private static final String BROWSE_TAXONOMY = "/browse/taxonomy";
 

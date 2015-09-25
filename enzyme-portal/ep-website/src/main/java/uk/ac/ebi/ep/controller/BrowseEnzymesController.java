@@ -16,7 +16,6 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,7 +39,6 @@ import uk.ac.ebi.ep.enzymes.IntenzEnzyme;
 @Controller
 public class BrowseEnzymesController extends AbstractController {
 
-    private static final Logger LOGGER = Logger.getLogger(BrowseEnzymesController.class);
     //concrete jsp's
     private static final String BROWSE_ENZYMES = "/browse_enzymes";
     private static final String EC = "/ec";
@@ -50,7 +48,7 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String BROWSE_ENZYME_CLASSIFICATION = "/browse/enzymes";
     private static final String BROWSE_EC = "/browse/enzyme";
     //private static final String SEARCH_ENZYMES = "/search/enzymes";
-     private static final String SEARCH_ENZYMES = "/search-enzymes";
+    private static final String SEARCH_ENZYMES = "/search-enzymes";
     private static final String EC_NUMBER = "ec";
     private static final String NAME = "name";
     private static final String DESCRIPTION = "description";
@@ -117,7 +115,7 @@ public class BrowseEnzymesController extends AbstractController {
             setLastSummaries(session, results.getSummaryentries());
             searchModel.setSearchresults(results);
             applyFilters(searchModel, request);
-             model.addAttribute("searchConfig", searchConfig);
+            model.addAttribute("searchConfig", searchConfig);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
             clearHistory(session);
@@ -167,7 +165,7 @@ public class BrowseEnzymesController extends AbstractController {
             @RequestParam(value = "subecname", required = false) String subecname,
             @RequestParam(value = "subsubecname", required = false) String subsubecname,
             @RequestParam(value = "entryecname", required = false) String entryecname, Model model, HttpSession session, HttpServletRequest request) throws MalformedURLException, IOException {
-model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
+        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
         if (ec != null && ec.length() >= 7) {
             model.addAttribute("entryid", ec);
             searchModel = searchform(ec);
@@ -190,6 +188,13 @@ model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
         model.addAttribute("entryid", ec);
         model.addAttribute("entryname", entryecname);
         model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
+        SearchModel searchModelForm = new SearchModel();
+        SearchParams searchParams = new SearchParams();
+        searchParams.setStart(0);
+        searchParams.setText(ec);
+        searchModelForm.setSearchparams(searchParams);
+        model.addAttribute("searchModel", searchModelForm);
+        request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
         return computeResult(searchModel, ec, entryecname, model, session, request);
 
     }

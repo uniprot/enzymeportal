@@ -5,7 +5,6 @@
  */
 package uk.ac.ebi.ep.controller;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +20,7 @@ import uk.ac.ebi.ep.pdbeadapter.PdbService;
 @Controller
 public class PDBeRestController {
     
-    private static final Logger LOGGER = Logger.getLogger(PDBeRestController.class);
-
+ 
     @Autowired
     private PdbService pdbService;
     

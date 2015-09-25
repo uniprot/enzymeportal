@@ -162,10 +162,7 @@ public class TempCompoundCompare implements Serializable {
         if (!Objects.equals(this.compoundId, other.compoundId)) {
             return false;
         }
-        if (!Objects.equals(this.uniprotAccession, other.uniprotAccession)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.uniprotAccession, other.uniprotAccession);
     }
 
 

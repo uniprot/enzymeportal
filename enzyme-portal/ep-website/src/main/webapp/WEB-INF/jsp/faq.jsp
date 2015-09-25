@@ -1,6 +1,7 @@
 <%-- 
     Document   : faq
     Created on : Sep 5, 2012, 1:49:51 PM
+    Updated on : Sep 24, 2015, 11:20:58 AM
     Author     : joseph
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -34,76 +35,47 @@
                 </nav>
 
 
-                <!-- Example layout containers -->
-
-                <!--    <section>
-                                <h2>Frequently Asked Questions</h2>
-                                <p>Your content</p>										
-                                </section> -->
-
-                <!--		<section>
-                                        <h3>Level 3 heading</h3>
-                                        <p>More content in a full-width container.</p>
-                                
-                                        <h4>Level 4 heading</h4>
-                                        <p>More content in a full-width container.</p>
-                                </section>-->
 
                 <section>
                     <h3>Frequently Asked Questions</h3>
                     <ul>
                         <li><a href="faq#01">How is the Enzyme Portal different from BRENDA?</a></li>
-                        <li><a href="faq#02">What is the meaning of those compounds used as filters for the search results?</a></li>
-                        <li><a href="faq#03">What are the figures in colourful labels which appear with the results of a protein sequence search?</a></li>
-                        <li><a href="#04">Why does the small molecules tab show
-                                fewer Inhibitors than the ChEMBL page?</a></li>
-                       <li><a href="#05">How can I combine search filters?</a></li>
-                       <li>
-                      <a href="faq#06">
-                        How to use the "Disease", "Enzyme Classification", "Taxonomy" and "Pathways" boxes on the home page?
-                    </a>    
-                       </li>
-                       <li>
-                   <a href="#07">
-                        What can I do using "Advanced" search functionality on Enzyme Portal?
-                    </a>     
-                       </li>
-                       <li>
-                     <a href="faq#08">
-                        What can do I with enzymes in my basket?
-                    </a>       
-                       </li>
+                        <li><a href="faq#02">How can I see species-related information for a given enzyme?</a></li>
+                        <li><a href="faq#03">How can I combine search filters?</a></li>
+                        <li><a href="faq#04">What is the meaning of those compounds used as filters for the search results?</a></li>
+                        <li><a href="faq#05">Why does the small molecules tab show fewer Inhibitors than the ChEMBL page?</a></li>
+                        <li> <a href="faq#06"> How to use the "Disease", "Enzyme Classification", "Taxonomy" and "Pathways" boxes on the home page? </a></li>
+
+                        <li><a href="faq#07">How can I search for a disease or a pathway that is not displayed on the Disease or Pathways pages?</a></li>
+
+                        <li><a href="faq#08">Are all species available from the "Taxonomy" page?</a></li>
+
+                        <li> <a href="faq#09">What can do I with enzymes in my basket?</a>  </li>
+
+                        <li><a href="faq#10">Can I download the results from the search?</a></li>
+                        <li><a href="faq#11">Where can I find the old Enzyme Portal pages?</a></li>
+
                     </ul>
-                    <a name="01"></a><h4>How is the Enzyme Portal different from BRENDA?</h4>
+
+                    <!--     text-->
+
+                    <a id="01"></a><h4>How is the Enzyme Portal different from BRENDA?</h4>
                     <fieldset>
-                        <p>The <a href="/enzymeportal" class="showLink" >EnzymePortal</a>  is a one-stop shop for enzyme-related information in resources developed at the EBI. It accumulated this information and aims to present it to the scientist with a unified user experience. The EnzymePortal team does not curate enzyme information and therefore is a secondary information resource or portal. At some point, a user interested in more detail will always leave the EP pages and refer to the information in the underlying primary database (Uniprot, PDB, etc.) directly.
-                        </p><p><a href="http://www.brenda-enzymes.info/" >BRENDA</a>  is the most comprehensive resource about enzymes world-wide and has invested a great amount into the abstraction and curation about enzymes and their related information. BRENDA contains valuable information that can not be found in the EnzymePortal at the moment, such as kinetic, specifity, stability, application, disease-related and engineering data. As a primary resource, BRENDA could be a candidate for an information source for the EP in the future.</p>
+                        <p>The <a href="/enzymeportal" class="showLink" >EnzymePortal</a>  is a one-stop shop for enzyme-related information in resources developed at the EBI. It accumulated this information and aims to present it to the scientist with a unified user experience. The EnzymePortal team does not curate enzyme information and therefore is a secondary information resource or portal. At some point, a user interested in more detail will always leave the Enzyme Portal pages and refer to the information in the underlying primary database (UniprotKB, PDB, etc.) directly. </p>
+                        <p><a href="http://www.brenda-enzymes.info/" target="_blank" >BRENDA</a>  is the most comprehensive resource about enzymes worldwide and has invested a great amount into the abstraction and curation about enzymes and their related information. BRENDA contains valuable information that cannot be found in the EnzymePortal at the moment, such as kinetic, specificity, stability, application, and disease-related data. As a primary resource, BRENDA could be a candidate for an information source for the EnzymePortal in the future.</p>
                     </fieldset>
-                    <a name="02"></a><h4>What is the meaning of those compounds used as filters for the search results?</h4>
+
+
+                    <a id="02"></a><h4>How can I see species-related information for a given enzyme?</h4>
                     <fieldset>
-                        <p>The compounds listed along the search results are any small molecules which are related to them, be it as reactants, products, activators, inhibitors or cofactors of those enzymes. They can be used as filters to narrow your search if you are particularly interested in the biochemistry of concrete chemicals, for example enzymes using manganese as a cofactor.</p>
+                        <p>When enzymes have identical name but belong to different species they are grouped into one entry. To see the information related to one particular species use the drop down menu at the top of the enzyme page. Please see <a class="showLink" href="https://www.youtube.com/watch?v=7doCBhF_XrQ" target="_blank">video</a> </p>     
                     </fieldset>
-                    <a name="03"></a><h4>What are the figures in colourful labels which appear with the results of a protein sequence search?</h4>
-                    <fieldset>
-                        <p>The figures are <a href="http://www.ncbi.nlm.nih.gov/books/NBK21097/#A614">bit scores</a> for the blast search of the given sequence against the shown enzyme. The colour is a hint for the match: red means a close match, blue a loose one. It helps to locate best results at first sight.</p><p>For more information about scores, please refer to the <a href="http://www.ncbi.nlm.nih.gov/books/NBK21097/">BLAST documentation</a>.</p>
-                    </fieldset>
-                    <a id="04"></a><h4>Why does the small molecules tab show fewer
-                        Inhibitors than the ChEMBL page?</h4>
-                    <fieldset>
-                        <p>The small molecules tab shows any Inhibitors
-                            described in ChEMBL as inhibiting the enzyme. The
-                            link <i>See all inhibitors in ChEMBL</i> will
-                            link to a ChEMBL page where you may see many more. The
-                            difference is due to a filter applied by the Enzyme
-                            Portal, whereby only those compounds more likely to have
-                            a significative activity on the function of the enzyme
-                            are shown.</p>
-                    </fieldset>
-                    <a id="05"><h4>How can I combine search filters?</h4></a>
+
+                    <a id="03"><h4>How can I combine search filters?</h4></a>
                     <fieldset>
                         <p>Search results can be filtered using the facets shown on
                             the left hand side in three blocks: species, chemical
-                            compounds and diseases. Checking more than one filter
+                            compounds, diseases and enzyme family. Checking more than one filter
                             in the same block narrows the search to those results
                             matching <i>any</i> of them. Checking filters in
                             different blocks shows only results matching <i>all</i>
@@ -118,49 +90,66 @@
                             Drug > Sildenafil</i>, for example - the results shown
                         will be those enzymes affected by sildenafil <i>and</i>
                         present in <i>either</i> human or mouse.</p>
-                    </fieldset>
-                    <a id="06">
-                        <h4>How to use the "Disease", "Enzyme Classification", "Taxonomy" and "Pathways" boxes on the home page?</h4>
-                    </a>
-                    <fieldset>
-                        <p>
-                            The home page presents boxes that represent the types of data you can browse using Enzyme Portal. For example, you can click on "Disease" and view a list of all diseases that have enzymes linked to them in Enzyme Portal. You can also search for your disease of interest within this list. Clicking on a disease name will take you to a results page listing all enzymes related to that disease. You can explore data in similar ways through the "Enzyme Classification", "Taxonomy" and "Pathways" boxes as well.
-                        </p>
-                    </fieldset>
-                    <a id="07">
-                        <h4> What can I do using "Advanced" search functionality on Enzyme Portal?</h4>
-                    </a>
-                    <fieldset>
-                        <p>
-                            The advanced search functionality allows you to switch between normal keyword search and a protein sequence similarity search where you can start your search with a sequence.
-                        </p>
-                    </fieldset>
-                    <a id="08">
-                        <h4> What can do I with enzymes in my basket?</h4>
-                    </a>
-                    <fieldset>
-                        <p>
-                            The Enzyme Portal basket offers a tool to compare two enzymes. Just select your enzymes of interest and add them to your basket. Once inside your basket, select an organism for the enzymes you wish to compare using the dropdowns under the button called "Compare selected". Then click on the button to compare the selected enzymes. The results will show you a comparison of the content for each enzyme, a comparison of their structures (if available) and a button to launch a comparison of the protein sequences.  
-                        </p>
-                    </fieldset>
-                    <a id="09"></a>
-                    <fieldset>
+                    </fieldset>               
 
-                    </fieldset>
-                    <a id="10"></a>
+                    <a id="04"></a><h4>What is the meaning of those compounds used as filters for the search results?</h4>
                     <fieldset>
+                        <p>The compounds listed along the search results are any small molecules which are related to them, be it as activators, inhibitors or cofactors of those enzymes. They can be used as filters to narrow your search if you are particularly interested in the biochemistry of concrete chemicals, for example enzymes using manganese as a cofactor.</p>
+                    </fieldset> 
 
-                    </fieldset>
-                    <a id="11"></a>
+                    <a id="05"></a><h4>Why does the small molecules tab show fewer
+                        Inhibitors than the ChEMBL page?</h4>
                     <fieldset>
+                        <p>The small molecules tab shows any Inhibitors
+                            described in ChEMBL as inhibiting the enzyme. The
+                            link <i>See all inhibitors in ChEMBL</i> will
+                            link to a ChEMBL page where you may see many more. The
+                            difference is due to a filter applied by the Enzyme
+                            Portal, whereby only those compounds more likely to have
+                            a significative activity on the function of the enzyme
+                            are shown.</p>
+                    </fieldset>
 
+                    <a id="06"></a><h4>How to use the "Disease", "Enzyme Classification", "Taxonomy" and "Pathways" boxes on the home page?</h4>           
+                    <fieldset>
+                        <p>The home page shows boxes that represent the types of data you can browse using Enzyme Portal. For example, you can click on "Disease" and view a list of all diseases that have enzymes linked to them in Enzyme Portal. You can also search for your disease of interest within this list. Clicking on a disease name will take you to a results page listing all enzymes related to that disease. You can explore data in similar ways through the "Enzyme Classification", "Taxonomy" and "Pathways" boxes.</p> 
+                    </fieldset>        
+
+                    <a id="07"><h4>How can I search for a disease or a pathway that is not displayed on the Disease or Pathways pages?</h4></a>
+                    <fieldset>
+                        <p>The Disease or Pathways pages display only a limited list of the diseases or pathways available in alphabetical order. To search for a disease or a pathway that is not displayed on the page, use the search box on the top of the page. The search box uses a controlled vocabulary. Just start typing the first few letters of the disease or pathway and a drop down menu will appear where the most relevant suggestion can be selected.</p>  
+                    </fieldset>           
+
+
+                    <a id="08"><h4>Are all species available from the "Taxonomy" page?</h4></a>
+                    <fieldset>
+                        <p>At the moment, only model organisms of major taxa such as Homo sapiens or Escherichia coli are available through the "Taxonomy" browse page.</p>
+                    </fieldset>
+
+                    <a id="09"><h4>What can do I with enzymes in my basket?</h4></a>
+                    <fieldset>
+                        <p>The Enzyme Portal basket offers a tool to compare two enzymes. Just select your enzymes of interest and add them to your basket. Once inside your basket, select an organism for the enzymes you wish to compare using the dropdowns under the button called "Compare selected". Then click on the button to compare the selected enzymes. The results will show you a comparison of the content for each enzyme, a comparison of their structures (if available) and a button to launch a comparison of the protein sequences. </p>    
+                    </fieldset>
+
+
+                    <a id="10"><h4>Can I download the results from the search?</h4></a>
+
+                    <fieldset>
+                        <p>Currently it is not possible to download search results, however, this feature will be available in future releases of the enzyme portal.</p>
+                    </fieldset>
+
+
+
+                    <a id="11"><h4>Where can I find the old Enzyme Portal pages?</h4></a>
+                    <fieldset>
+                        <p>The old Enzyme Portal pages can be found at <a href="http://www.ebi.ac.uk/enzymeportal/legacy/">http://www.ebi.ac.uk/enzymeportal/legacy/</a>. Please note that these pages are no longer updated and will be phased out at the end of 2015.</p>
                     </fieldset>
                     <a id="12"></a>
                     <fieldset>
 
                     </fieldset>
                 </section>
-                <!-- End example layout containers -->
+                <!-- End layout containers -->
 
             </div>
 
