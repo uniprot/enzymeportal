@@ -90,7 +90,7 @@
                                                 <a id="add-to-basket" href="#" class="icon icon-generic btn" data-icon="b">Add to Basket</a>
                                                 <script>
                                                     $('#add-to-basket').click(function(){
-                                                        ajaxBasket($('#enzymeId').val(), true);
+                                                        ajaxBasket($('#enzymeId').val(), true, ${pageContext.session.id});
                                                         $(this).hide();
                                                     });
                                                 </script>
