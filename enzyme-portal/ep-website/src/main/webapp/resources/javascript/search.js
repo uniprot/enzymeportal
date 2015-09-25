@@ -683,7 +683,7 @@ function basketAll(allcheckbox) {
 /**
  * Saves whatever entries are selected to the basket
  */
-function saveSelectionToBasket() {
+function saveSelectionToBasket(sessionId) {
     var id = '';
     $('input.forBasket').each(function (index, elem) {
         if (elem.checked === true) {
@@ -692,7 +692,7 @@ function saveSelectionToBasket() {
             id += elem.value;
         }
     });
-    ajaxBasket(id, true);
+    ajaxBasket(id, true, sessionId);
 }
 
 /**
