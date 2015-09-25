@@ -41,7 +41,7 @@
                 </c:when>
                 <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
                     <c:set var="errorCode" value="search"/>
-                    <c:set var="errorParam" value="search"/>
+                    <c:set var="errorParam" value="sequence search"/>
                     <c:set var="searchText" value="your sequence search"/>	
                 </c:when>
                 <c:otherwise>
@@ -54,7 +54,7 @@
             </c:choose>
             
             <section>
-                  <c:set var="errorParam" value="sequence search"/>
+                  <c:set var="errorParam" value=" search"/>
                 <h2><spring:message htmlEscape="false"
                     code="error.${errorCode}.title"/>
                 </h2>
