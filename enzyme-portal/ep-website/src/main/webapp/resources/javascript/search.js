@@ -67,7 +67,7 @@ $(document).ready(function () {
     //            $(jqClickedId).html(linkValue.replace('fewer','more'));
     //        }
     //    });
-    
+
     $("a.showLink").click(function (event) {
         var clickedId = event.target.id;
         var idClickedSplit = clickedId.split("_");
@@ -175,11 +175,11 @@ function ResultAutoComplete(id, dataArray, theForm, hiddenCheckbox) {
     //        //var output = item.label.replace(new RegExp("(" + keywords + ")", "gi"), '<strong>$1</strong>');
     //
     //
-    //        return $( "<li></li>" ) 
+    //        return $( "<li></li>" )
     //        .data( "item.autocomplete", item )
     //        .append( $( "<a></a>" ).html( output ) )
     //        .appendTo( ul );
-    //    };  
+    //    };
 
 
 
@@ -357,12 +357,11 @@ function addCheckbox(filterGroup, obj, selected) {
         "value": obj.id
     }).appendTo("#filtersForm");
 
-    $('<input/>', {
-        "type": "hidden",
-        "name": "id",
-        "value": obj.id
-    }).appendTo("#filtersForm");
-
+	$('<input/>', {
+		"type": "hidden",
+		"name": "id",
+		"value": obj.id
+	}).appendTo("#filtersForm");
 
 
 
@@ -401,7 +400,7 @@ function addCheckboxCompound(filterGroup, obj, selected) {
 //    }).appendTo("#filtersForm");
 
 
-    //add the link to the source of this item 
+    //add the link to the source of this item
     var link = $("<a>", {
         href: "" + obj.url + "",
         target: "_blank"
@@ -469,7 +468,7 @@ function addCheckboxDisease(filterGroup, obj, selected) {
 
 
 
-    //add the link to the source of this item 
+    //add the link to the source of this item
     var link = $("<a>", {
         href: "" + obj.url + "",
         target: "_blank"
@@ -540,7 +539,6 @@ function addCheckboxEc(filterGroup, obj, selected) {
  */
 function addUnselectedCheckboxes(filterGroup, from, num, link) {
     var loading = $('#loading_' + link.getAttribute('id'));
-        console.log(" filtergroup "+ filterGroup + " from "+ from + " num "+ num + " link "+ link);
     $(link).hide();
     loading.show();
     for (var i = from; i < from + num; i++) {
@@ -717,12 +715,13 @@ function removeFromBasket(event) {
  * @param checked <code>true</code> if the enzyme is added, <code>false</code>
  * 		if removed.
  */
-function ajaxBasket(id, checked) {
+function ajaxBasket(id, checked, sessionId) {
     var thisFunction = this;
     var params = {};
     params.id = id;
     params.checked = checked;
-    jQuery.getJSON({
+	params.JSESSIONID = sessionId;
+    jQuery.ajax({
         url: window.location.pathname.replace(/search.*|basket|taxonomy.*/, "ajax/basket"),
         data: params,
         context: thisFunction,
@@ -732,7 +731,6 @@ function ajaxBasket(id, checked) {
         },
         error: function (xhr, status, message) {
             alert(message);
-            console.log(message);
         }
     });
 }
