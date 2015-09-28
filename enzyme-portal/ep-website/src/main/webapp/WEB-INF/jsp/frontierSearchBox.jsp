@@ -45,7 +45,7 @@
 						     with whatever features you want available -->
 <!--						<span class="adv"><a href="${pageContext.request.contextPath}/advanceSearch" id="adv-search" title="Advanced">Advanced</a></span>-->
 <!--                                                <span style="font-size: 76%;" class="adv"><a href="${pageContext.request.contextPath}/advanceSearch" id="adv-search" title="Advanced">Sequence Search</a></span>-->
-                                                  <span style="font-size: 76%;" class="adv"><a href="http://wwwdev.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" id="adv-search" title="Advanced">Sequence Search</a></span>
+                                                  <span style="font-size: 76%;" class="adv"><a href="http://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal" id="adv-search" title="Advanced">Sequence Search</a></span>
                                                 
                              
 					</div>									

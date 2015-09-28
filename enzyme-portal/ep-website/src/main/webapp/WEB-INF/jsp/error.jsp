@@ -60,7 +60,7 @@
                 </h2>
                 
                 <p class="alert">
-            We are sorry but we couldn't find anything that matched your ${errorParam} Please try again later        
+            We are sorry but we couldn't find anything that matched your ${errorParam}. Please try again later        
                 </p>
                 
                

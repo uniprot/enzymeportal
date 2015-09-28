@@ -5,7 +5,7 @@
         });
 
         $('#add-to-basket').click(function(){
-            saveSelectionToBasket('${pageContext.session.id}');
+            saveSelectionToBasket();
         });
 
     });

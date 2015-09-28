@@ -683,7 +683,7 @@ function basketAll(allcheckbox) {
 /**
  * Saves whatever entries are selected to the basket
  */
-function saveSelectionToBasket(sessionId) {
+function saveSelectionToBasket() {
     var id = '';
     $('input.forBasket').each(function (index, elem) {
         if (elem.checked === true) {
@@ -692,7 +692,7 @@ function saveSelectionToBasket(sessionId) {
             id += elem.value;
         }
     });
-    ajaxBasket(id, true, sessionId);
+    ajaxBasket(id, true);
 }
 
 /**
@@ -715,12 +715,11 @@ function removeFromBasket(event) {
  * @param checked <code>true</code> if the enzyme is added, <code>false</code>
  * 		if removed.
  */
-function ajaxBasket(id, checked, sessionId) {
+function ajaxBasket(id, checked) {
     var thisFunction = this;
     var params = {};
     params.id = id;
     params.checked = checked;
-	params.JSESSIONID = sessionId;
     jQuery.ajax({
         url: window.location.pathname.replace(/search.*|basket|taxonomy.*/, "ajax/basket"),
         data: params,
