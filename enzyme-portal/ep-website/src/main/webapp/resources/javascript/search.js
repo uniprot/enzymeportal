@@ -508,6 +508,13 @@ function addCheckboxEc(filterGroup, obj, selected) {
     });
     if (selected)
         cb.attr("checked", "checked");
+    
+    
+//        $('<input/>', {
+//        "type": "hidden",
+//        "name": "ec",
+//        "value": obj.id
+//    }).appendTo("#filtersForm");
 
 
     var label = $('<span>');

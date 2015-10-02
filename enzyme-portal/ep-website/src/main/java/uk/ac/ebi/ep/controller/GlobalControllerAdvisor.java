@@ -28,13 +28,13 @@ public class GlobalControllerAdvisor {
 
     @ExceptionHandler(Exception.class)
     public String handleException(HttpServletRequest request, Exception ex) {
-        logger.error("Exception Occured while requesting this url = " + request.getRequestURL() + " : exception is :: "+ ex.getMessage());
+        logger.error("Exception Occured while requesting this url = " + request.getRequestURL() + " : exception is :: "+ ex);
         return "error";
     }
 
     @ExceptionHandler(SQLException.class)
     public String handleSQLException(HttpServletRequest request, Exception ex) {
-        logger.error("SQLException Occured:: URL=" + request.getRequestURL() + " :: "+ ex.getLocalizedMessage());
+        logger.error("SQLException Occured:: URL=" + request.getRequestURL() + " :: "+ ex);
         return "error";
     }
 
@@ -44,7 +44,7 @@ public class GlobalControllerAdvisor {
 //        logger.error("IOException handler executed");
 //       
 //    }
-    @ModelAttribute
+    @ModelAttribute(value = "searchModel")
     public void addAttributes(HttpServletRequest request, Model model) {
 
         model.addAttribute("searchModel", newEmptySearchModel());
@@ -61,6 +61,8 @@ public class GlobalControllerAdvisor {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
         searchParams.setStart(0);
+         searchParams.setType(SearchParams.SearchType.KEYWORD);//default
+         searchParams.setPrevioustext("");
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
     }

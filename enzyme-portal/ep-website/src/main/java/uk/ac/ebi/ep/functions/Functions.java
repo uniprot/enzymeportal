@@ -201,12 +201,11 @@ public final class Functions {
     
     public static String getSummaryBasketId(UniprotEntry summary) {
         List<String> accs = new ArrayList<>();
-        summary.getRelatedspecies().stream().forEach((acc) -> {
-            accs.add(acc.getUniprotaccessions().get(0));
-        });
+        accs.add(summary.getAccession());
+//        summary.getRelatedspecies().stream().forEach((acc) -> {
+//            accs.add(acc.getUniprotaccessions().get(0));
+//        });
         
-        Collections.sort(accs);
-       
         return accs.toString();
 
         // return summary.getAccession();

@@ -4,7 +4,7 @@
 
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-website</artifactId>
-    <version>2.0.5</version>
+    <version>2.0.6-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>enzymeportal</name>
@@ -66,7 +66,7 @@
                <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.13</version>
+            <version>1.0.14-SNAPSHOT</version>
         </dependency>
 
                 <dependency>
@@ -77,7 +77,7 @@
        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-base</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1-SNAPSHOT</version>
           <exclusions>
              <exclusion>
                 <groupId>org.mortbay.jetty</groupId>

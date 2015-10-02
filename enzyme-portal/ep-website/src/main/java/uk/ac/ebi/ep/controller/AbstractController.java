@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EcNumber;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
+import uk.ac.ebi.ep.data.search.model.SearchParams.SearchType;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
@@ -202,6 +204,11 @@ public abstract class AbstractController {
     protected String getSearchKey(SearchParams searchParams) {
 
         String key = null;
+        Optional<SearchType> type = Optional.ofNullable(searchParams.getType());
+
+        if(!type.isPresent()){
+            searchParams.setType(SearchParams.SearchType.KEYWORD);
+        }
 
         switch (searchParams.getType()) {
             case KEYWORD:
