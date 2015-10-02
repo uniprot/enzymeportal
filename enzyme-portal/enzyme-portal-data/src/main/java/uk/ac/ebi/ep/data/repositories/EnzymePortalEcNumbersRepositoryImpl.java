@@ -59,4 +59,14 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
         return result;
     }
     public static Comparator<EcNumber> SORT_BY_EC = (EcNumber ec1, EcNumber ec2) -> ec1.getEc().compareTo(ec2.getEc());
+
+    @Override
+    public List<EcNumber> findEnzymeFamiliesByEcNumber(String ecNumber) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<EcNumber> result = query.from($).where($.ecNumber.eq(ecNumber))
+                .list(Projections.constructor(EcNumber.class, $.ecFamily)).stream().distinct().collect(Collectors.toList());
+
+        result.sort(SORT_BY_EC);
+        return result;
+    }
 }

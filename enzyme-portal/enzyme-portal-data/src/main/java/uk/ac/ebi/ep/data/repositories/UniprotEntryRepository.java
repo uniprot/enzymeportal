@@ -83,4 +83,12 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 //    @Transactional(readOnly = true)
 //    @Query(name ="browseTaxonomy", value = "select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in (:TAX_ID) group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name", nativeQuery = true)
 //    List<Taxonomy> getCountForOrganisms(@Param("TAX_ID")List<Long> taxids);
+        @Transactional(readOnly = true)
+    @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.FETCH)
+   // @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
+            @Query(value = "SELECT DISTINCT e FROM UniprotEntry e "
+                    + "left join e.enzymePortalEcNumbersSet ec "
+                    + "WHERE ec.uniprotAccession = e.accession "
+                    + "AND ec.ecNumber = :ecNumber order by e.entryType ASC",countQuery = "" )
+    Page<UniprotEntry> findEnzymesByEcNumber(@Param("ecNumber") String ecNumber, Pageable pageable);
 }

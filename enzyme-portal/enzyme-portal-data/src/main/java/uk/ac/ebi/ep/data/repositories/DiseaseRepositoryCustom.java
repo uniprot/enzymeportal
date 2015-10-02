@@ -30,5 +30,7 @@ public interface DiseaseRepositoryCustom {
     List<Disease> findDiseasesByTaxId(Long taxId);
     
      List<Disease> findDiseasesByAccession(String accession);
+     
+     List<Disease> findDiseasesByEcNumber(String ecNumber);
 
 }

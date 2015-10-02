@@ -53,5 +53,6 @@ public interface UniprotEntryRepositoryCustom {
     List<UniprotEntry> findSummariesByAcc(List<String> accession);
     
     List<Protein> findProteinByEc(String ec);
+    List<Species> findSpeciesByEcNumber(String ecNumber);
 
 }

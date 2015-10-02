@@ -99,8 +99,6 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findEnzymeByAccession(accession);
     }
 
-
-
     @Transactional(readOnly = true)
     public List<String> findAllUniprotAccessions() {
 
@@ -131,16 +129,12 @@ public class EnzymePortalService {
         return enzymePortalCompoundRepository.findCompoundsByNameprefixes(namePrefixes);
     }
 
-
-
     @Transactional(readOnly = true)
     public List<String> findCatalyticActivitiesByAccession(String accession) {
 
         ///return enzymeSummaryRepository.findCatalyticActivitiesByAccession(accession);
         return uniprotEntryRepository.findCatalyticActivitiesByAccession(accession);
     }
-
-
 
     @Transactional(readOnly = true)
     public List<Disease> findDiseasesByAccession(String accession) {
@@ -259,8 +253,8 @@ public class EnzymePortalService {
 
         return pathwaysRepository.findAccessionsByPathwayId(pathwayId);
     }
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<String> findAccessionsByPathwayName(String pathwayName) {
 
         return pathwaysRepository.findAccessionsByPathwayName(pathwayName);
@@ -276,7 +270,7 @@ public class EnzymePortalService {
     public List<Taxonomy> getCountForOrganisms(List<Long> taxids) {
         return uniprotEntryRepository.getCountForOrganisms(taxids);
     }
-    
+
     public List<UniprotEntry> findEnzymesByTaxId(Long taxId) {
         return uniprotEntryRepository.findEnzymesByTaxId(taxId);
     }
@@ -308,20 +302,20 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public  Stream<List<UniprotEntry>> findStreamedSummariesByAccessions(List<String> accessions,Pageable pageable) {
+    public Stream<List<UniprotEntry>> findStreamedSummariesByAccessions(List<String> accessions, Pageable pageable) {
         //return uniprotEntryRepository.findStreamedSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
 
-        return uniprotEntryRepository.findStreamedSummariesByAccessions(accessions,pageable);
+        return uniprotEntryRepository.findStreamedSummariesByAccessions(accessions, pageable);
     }
 
     @Transactional(readOnly = true)
-    public Slice<UniprotEntry> findSlicedSummariesByAccessions(List<String> accessions,Pageable pageable) {
+    public Slice<UniprotEntry> findSlicedSummariesByAccessions(List<String> accessions, Pageable pageable) {
 
-        return uniprotEntryRepository.findSlicedSummariesByAccessions(accessions,pageable);
+        return uniprotEntryRepository.findSlicedSummariesByAccessions(accessions, pageable);
 
     }
-    
-       @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public Future<List<UniprotEntry>> findFutureSummariesByAccessions(List<String> accessions) {
 
         return uniprotEntryRepository.findFutureSummariesByAccessions(accessions);
@@ -472,13 +466,14 @@ public class EnzymePortalService {
         return ecNumbersRepository.findEnzymeFamiliesByTaxId(taxId);
 
     }
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<String> findAccessionsByEcNumber(String ecNumber) {
         return ecNumbersRepository.findAccessionsByEcNumber(ecNumber);
 
     }
-    
-            @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<String> findAccessionsByOmimNumber(String omimNumber) {
         return diseaseRepository.findAccessionsByOmimNumber(omimNumber);
 
@@ -486,9 +481,9 @@ public class EnzymePortalService {
 
     //filter facets search
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseases(Long taxId, List<String> compoudNames, List<String> diseaseNames, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseases(Long taxId, List<String> compoudNames, List<String> omimNumber, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseases(taxId, compoudNames, diseaseNames), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseases(taxId, compoudNames, omimNumber), pageable);
     }
 
     @Transactional(readOnly = true)
@@ -498,9 +493,9 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndDiseases(Long taxId, List<String> diseaseNames, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndDiseases(Long taxId, List<String> omimNumber, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndDiseases(taxId, diseaseNames), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndDiseases(taxId, omimNumber), pageable);
     }
 
     @Transactional(readOnly = true)
@@ -522,15 +517,15 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndDiseasesAndEc(Long taxId, List<String> diseaseNames, List<Integer> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndDiseasesAndEc(Long taxId, List<String> omimNumber, List<Integer> ecList, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndDiseasesAndEc(taxId, diseaseNames, ecList), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndDiseasesAndEc(taxId, omimNumber, ecList), pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> diseaseNames, List<Integer> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> omimNumber, List<Integer> ecList, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseasesAndEc(taxId, compoudNames, diseaseNames, ecList), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseasesAndEc(taxId, compoudNames, omimNumber, ecList), pageable);
     }
 
     private static Predicate filterBySpecie(Long taxId) {
@@ -552,22 +547,22 @@ public class EnzymePortalService {
 
     }
 
-    private static Predicate filterBySpecieAndDiseases(Long taxId, List<String> diseaseNames) {
+    private static Predicate filterBySpecieAndDiseases(Long taxId, List<String> omimNumber) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate disease = enzyme.enzymePortalDiseaseSet.any().diseaseName.in(diseaseNames);
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumber);
 
         return enzyme.taxId.eq(taxId).and(disease);
 
     }
 
-    private static Predicate filterBySpecieAndCompoundsAndDiseases(Long taxId, List<String> compoudNames, List<String> diseaseNames) {
+    private static Predicate filterBySpecieAndCompoundsAndDiseases(Long taxId, List<String> compoudNames, List<String> omimNumber) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
         Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
-        Predicate disease = enzyme.enzymePortalDiseaseSet.any().diseaseName.in(diseaseNames);
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumber);
 
         return enzyme.taxId.eq(taxId).and(compound).and(disease);
 
@@ -583,12 +578,12 @@ public class EnzymePortalService {
 
     }
 
-    private static Predicate filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> diseaseNames, List<Integer> ecList) {
+    private static Predicate filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> omimNumber, List<Integer> ecList) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
         Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
-        Predicate disease = enzyme.enzymePortalDiseaseSet.any().diseaseName.in(diseaseNames);
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumber);
         Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
 
         return enzyme.taxId.eq(taxId).and(compound).and(disease).and(ec);
@@ -605,14 +600,181 @@ public class EnzymePortalService {
 
     }
 
-    private static Predicate filterBySpecieAndDiseasesAndEc(Long taxId, List<String> diseaseNames, List<Integer> ecList) {
+    private static Predicate filterBySpecieAndDiseasesAndEc(Long taxId, List<String> omimNumber, List<Integer> ecList) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate disease = enzyme.enzymePortalDiseaseSet.any().diseaseName.in(diseaseNames);
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumber);
         Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
 
         return enzyme.taxId.eq(taxId).and(disease).and(ec);
+
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UniprotEntry> findEnzymesByEcNumber(String ecNumber, Pageable pageable) {
+        //return uniprotEntryRepository.findAll(enzymesByEcNumber(ecNumber), pageable);
+        return uniprotEntryRepository.findEnzymesByEcNumber(ecNumber, pageable);
+    }
+
+    private static Predicate enzymesByEcNumber(String ecNumber) {
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+        return enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber);
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<Species> findSpeciesByEcNumber(String ecNumber) {
+        return uniprotEntryRepository.findSpeciesByEcNumber(ecNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Compound> findCompoundsByEcNumber(String ecNumber) {
+        return enzymePortalCompoundRepository.findCompoundsByEcNumber(ecNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Disease> findDiseasesByEcNumber(String ecNumber) {
+        return diseaseRepository.findDiseasesByEcNumber(ecNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EcNumber> findEnzymeFamiliesByEcNumber(String ecNumber) {
+
+        return ecNumbersRepository.findEnzymeFamiliesByEcNumber(ecNumber);
+    }
+
+    public Page<UniprotEntry> filterByEc(String ec, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterByEc(ec), pageable);
+    }
+
+    private static Predicate filterByEc(String ec) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec);
+
+        return result;
+
+    }
+
+    public Page<UniprotEntry> filterByEcAndSpecies(String ec, List<String> specieFilter, Pageable pageable) {
+        return uniprotEntryRepository.findAll(filterByEcAndSpecies(ec, specieFilter), pageable);
+    }
+
+    private static Predicate filterByEcAndSpecies(String ec, List<String> specieFilter) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate sp = enzyme.scientificName.in(specieFilter);
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp);
+
+        return result;
+
+    }
+
+    public Page<UniprotEntry> filterByEcAndCompounds(String ec, List<String> compoundFilter, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterByEcAndCompounds(ec, compoundFilter), pageable);
+    }
+
+    private static Predicate filterByEcAndCompounds(String ec, List<String> compoundFilter) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate sp = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp);
+
+        return result;
+
+    }
+
+    public Page<UniprotEntry> filterByEcAndDiseases(String ec, List<String> diseaseFilter, Pageable pageable) {
+        return uniprotEntryRepository.findAll(filterByEcAndDiseases(ec, diseaseFilter), pageable);
+    }
+
+    private static Predicate filterByEcAndDiseases(String ec, List<String> diseaseFilter) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate dis = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(diseaseFilter);
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(dis);
+
+        return result;
+
+    }
+
+    public Page<UniprotEntry> filterByEcAndSpeciesAndCompound(String ec, List<String> specieFilter, List<String> compoundFilter, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterByEcAndSpeciesAndCompound(ec, specieFilter, compoundFilter), pageable);
+    }
+
+    private static Predicate filterByEcAndSpeciesAndCompound(String ec, List<String> specieFilter, List<String> compoundFilter) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate sp = enzyme.scientificName.in(specieFilter);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp).and(compound);
+
+        return result;
+
+    }
+
+    public Page<UniprotEntry> filterByEcAndSpeciesAndDiseases(String ec, List<String> specieFilter, List<String> diseaseFilter, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterByEcAndSpeciesAndDiseases(ec, specieFilter, diseaseFilter), pageable);
+    }
+
+    private static Predicate filterByEcAndSpeciesAndDiseases(String ec, List<String> specieFilter, List<String> diseaseFilter) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate sp = enzyme.scientificName.in(specieFilter);
+
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(diseaseFilter);
+
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp).and(disease);
+
+        return result;
+
+    }
+
+    public Page<UniprotEntry> filterByEcAndSpeciesAndCompoundAndDiseases(String ec, List<String> specieFilter, List<String> compoundFilter, List<String> diseaseFilter, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterByEcAndSpeciesAndCompoundAndDiseases(ec, specieFilter, compoundFilter, diseaseFilter), pageable);
+    }
+
+    private static Predicate filterByEcAndSpeciesAndCompoundAndDiseases(String ec, List<String> specieFilter, List<String> compoundFilter, List<String> diseaseFilter) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate sp = enzyme.scientificName.in(specieFilter);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(diseaseFilter);
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp).and(compound).and(disease);
+
+        return result;
+
+    }
+
+    public Page<UniprotEntry> filterByEcAndCompoundAndDiseases(String ec, List<String> compoundFilter, List<String> diseaseFilter, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterByEcAndCompoundAndDiseases(ec, compoundFilter, diseaseFilter), pageable);
+    }
+
+    private static Predicate filterByEcAndCompoundAndDiseases(String ec, List<String> compoundFilter, List<String> diseaseFilter) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(diseaseFilter);
+
+        Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(compound).and(disease);
+
+        return result;
 
     }
 

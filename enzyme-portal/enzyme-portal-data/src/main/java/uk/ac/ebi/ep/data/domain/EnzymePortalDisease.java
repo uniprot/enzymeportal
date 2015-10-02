@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import uk.ac.ebi.ep.data.search.model.Disease;
@@ -38,6 +41,21 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 @NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
     @NamedAttributeNode("uniprotAccession")
 })
+
+   @SqlResultSetMapping(
+       name="diseaseMapping",
+       classes={
+          @ConstructorResult(
+               targetClass=Disease.class,
+                 columns={
+                    @ColumnResult(name="OMIM_NUMBER"),
+                    @ColumnResult(name="DISEASE_NAME"),
+                    @ColumnResult(name="URL")
+                   
+                    }
+          )
+       }
+      )
 
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalDisease.findAll", query = "SELECT e FROM EnzymePortalDisease e"),

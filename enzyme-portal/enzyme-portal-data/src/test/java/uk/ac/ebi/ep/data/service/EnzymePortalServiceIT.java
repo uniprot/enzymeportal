@@ -719,11 +719,11 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     public void testFilterBySpecieAndDiseases() {
         LOGGER.info("filterBySpecieAndDiseases");
         Long taxId = 9606L;
-        List<String> diseaseNames = new ArrayList<>();
-        diseaseNames.add("spastic paraplegia hereditary");
+        List<String> omimNUmbers = new ArrayList<>();
+        omimNUmbers.add("270800");
 
         int expResult = 1;
-        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndDiseases(taxId, diseaseNames, PAGEABLE);
+        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndDiseases(taxId, omimNUmbers, PAGEABLE);
 
         assertEquals(expResult, result.getContent().size());
 

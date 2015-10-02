@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,6 +27,7 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -42,6 +45,21 @@ import uk.ac.ebi.ep.data.search.model.Compound;
 @NamedEntityGraph(name = "CompoundEntityGraph", attributeNodes = {
     @NamedAttributeNode("uniprotAccession")
 })
+
+   @SqlResultSetMapping(
+       name="compoundMapping",
+       classes={
+          @ConstructorResult(
+               targetClass=Compound.class,
+                 columns={
+                    @ColumnResult(name="COMPOUND_ID"),
+                    @ColumnResult(name="COMPOUND_NAME"),
+                    @ColumnResult(name="URL"),
+                    @ColumnResult(name="COMPOUND_ROLE")
+                    }
+          )
+       }
+      )
 
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e"),

@@ -26,5 +26,6 @@ public interface EnzymePortalCompoundRepositoryCustom {
 //    List<String> findEnzymesByCompound(String compoundId);
     
     List<Compound> findCompoundsByTaxId(Long taxId);
+    List<Compound> findCompoundsByEcNumber(String ecNumber);
 
 }

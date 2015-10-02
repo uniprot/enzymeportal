@@ -18,5 +18,6 @@ public interface EnzymePortalEcNumbersRepositoryCustom {
     
     List<String> findAccessionsByEc(String ecNumber);
     List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId);
+   List<EcNumber> findEnzymeFamiliesByEcNumber(String ecNumber);
 
 }

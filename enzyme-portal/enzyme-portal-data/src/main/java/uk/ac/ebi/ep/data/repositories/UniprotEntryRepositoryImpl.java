@@ -245,4 +245,13 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return result.stream().distinct().collect(Collectors.toList());
     }
 
+    @Override
+    public List<Species> findSpeciesByEcNumber(String ecNumber) {
+             JPAQuery query = new JPAQuery(entityManager);
+        List<Species> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct()
+                .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
+
+        return result;
+    }
+
 }

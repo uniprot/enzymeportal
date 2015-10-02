@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalCompound;
@@ -72,21 +73,6 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
 
     }
 
-//    @Override
-//    public List<String> findEnzymesByCompound(String compoundId) {
-//
-//        Set<String> enzymes = new TreeSet<>();
-//        JPAQuery query = new JPAQuery(entityManager);
-//        BooleanExpression compound = $.compoundId.equalsIgnoreCase(compoundId);
-//
-//        List<EnzymePortalCompound> compounds = query.from($).where(compound).distinct().list($);
-//
-//        compounds.stream().forEach(c -> {
-//            enzymes.add(c.getUniprotAccession().getAccession());
-//        });
-//
-//        return enzymes.stream().distinct().collect(Collectors.toList());
-//    }
 
     @Override
     @Transactional(readOnly = true)
@@ -103,5 +89,15 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
         return result;
     }
 
+    @Override
+    public List<Compound> findCompoundsByEcNumber(String ecNumber) {
+        String nativeQuery = "SELECT cp.COMPOUND_ID,cp.COMPOUND_NAME,cp.URL,cp.COMPOUND_ROLE FROM ENZYME_PORTAL_COMPOUND cp, ENZYME_PORTAL_EC_NUMBERS e \n"
+                + "WHERE cp.UNIPROT_ACCESSION=e.UNIPROT_ACCESSION AND e.EC_NUMBER = :EC_NUMBER GROUP BY cp.COMPOUND_ID,cp.COMPOUND_NAME,cp.URL,cp.COMPOUND_ROLE";
+        Query query = entityManager.createNativeQuery(nativeQuery, "compoundMapping");
+        List<Compound> result = query.setParameter("EC_NUMBER", ecNumber).getResultList();
+
+        return result.stream().distinct().collect(Collectors.toList());
+
+    }
 
 }

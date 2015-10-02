@@ -139,13 +139,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private long dbentryId;
     @Id
     @Basic(optional = false)
-    @Column(name = "ACCESSION")
+    @Column(name = "ACCESSION",unique = true)
     private String accession;
     @Column(name = "NAME")
     private String name;
     @Column(name = "TAX_ID")
     private Long taxId;
-    @Column(name = "PROTEIN_NAME")
+    @Column(name = "PROTEIN_NAME",unique = true)
     private String proteinName;
     @Column(name = "SCIENTIFIC_NAME")
     private String scientificName;

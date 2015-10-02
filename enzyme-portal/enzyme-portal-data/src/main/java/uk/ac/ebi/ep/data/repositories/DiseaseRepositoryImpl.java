@@ -66,7 +66,6 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         return query.distinct().list($);
     }
 
-
     /**
      * Note: meshId is used as default disease id for now as some omim entries
      * are null and we don't have efo yet
@@ -97,15 +96,15 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
         JPAQuery query = new JPAQuery(entityManager);
         query.setHint("javax.persistence.fetchgraph", eGraph);
         return query.from($).list($);
-        
+
     }
 
-   /**
-    * 
-    * @param name
-    * @return
-    * @deprecated(To be removed in version 1.0.14)
-    */
+    /**
+     *
+     * @param name
+     * @return
+     * @deprecated(To be removed in version 1.0.14)
+     */
     @Deprecated
     public List<String> findDiseasesByName(String name) {
         JPAQuery query = new JPAQuery(entityManager);
@@ -115,7 +114,7 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     }
 
     @Override
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<Disease> findDiseasesByTaxId(Long taxId) {
 
         EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
@@ -142,12 +141,32 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
 
     @Override
     public List<Disease> findDiseasesByAccession(String accession) {
-              JPAQuery query = new JPAQuery(entityManager);
-     
-        List<Disease> result = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
-                .list(Projections.constructor(Disease.class, $.omimNumber, $.diseaseName,$.definition,$.url,$.evidence));
+        JPAQuery query = new JPAQuery(entityManager);
 
-        return result.stream().distinct().collect(Collectors.toList()); 
+        List<Disease> result = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
+                .list(Projections.constructor(Disease.class, $.omimNumber, $.diseaseName, $.definition, $.url, $.evidence));
+
+        return result.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Disease> findDiseasesByEcNumber(String ecNumber) {
+
+        JPAQuery query = new JPAQuery(entityManager);
+        List<Disease> result = query.from($).where($.uniprotAccession.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber))
+                .list(Projections.constructor(Disease.class, $.omimNumber, $.diseaseName, $.url)).stream().distinct().collect(Collectors.toList());
+
+        return result;
+        
+        //TODO benchmark QueryDSL vs Native Query to evaluate which has faster response time and delete one later
+
+//        String nativeQuery = "SELECT d.OMIM_NUMBER,d.DISEASE_NAME,d.URL FROM ENZYME_PORTAL_DISEASE d,ENZYME_PORTAL_EC_NUMBERS e \n"
+//                + "WHERE d.UNIPROT_ACCESSION=e.UNIPROT_ACCESSION AND e.EC_NUMBER= :EC_NUMBER GROUP BY d.OMIM_NUMBER,d.DISEASE_NAME,d.URL";
+//        Query query = entityManager.createNativeQuery(nativeQuery, "diseaseMapping");
+//        List<Disease> result = query.setParameter("EC_NUMBER", ecNumber).getResultList();
+//
+//        return result.stream().distinct().collect(Collectors.toList());
+
     }
 
 }
