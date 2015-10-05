@@ -19,10 +19,10 @@
 
 <body class="level2 ${totalfound eq 0? 'noresults' : ''}">
 
-<!-- <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+ <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 
- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
+
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
    <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
  
 <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />-->
@@ -646,13 +646,8 @@
             </div>
             </section>
                           </div>
-
-    <%@include file="footer.jspf" %>
-    
-        </div> <!--! end of #wrapper -->
-        
-        
-        
+              
+          
      
         <script type="text/javascript">
             jQuery(document).ready(function() {
@@ -687,7 +682,21 @@
 
 
 
-        </script>       
+        </script>             
+              
+              
+              
+              
+              
+              
+              
+
+    <%@include file="footer.jspf" %>
+    
+        </div> <!--! end of #wrapper -->
+        
+        
+      
         
         
         

@@ -8,47 +8,7 @@
 <%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray.tld" %>
 <%@ taglib prefix="xchars" uri="http://www.ebi.ac.uk/xchars"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!-- <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
 
-<!--<script>
-    $(document).ready(function () {
-    $("a.showLink").click(function (event) {
-        var clickedId = event.target.id;
-        var idClickedSplit = clickedId.split("_");
-        /*id of the link is made up by 3 parts:
-         part 1: name of the div (eg.: syn) this is used to distinguish the show more
-         link of synonyms from the show more link in other divs
-         part 2: "link" to distinguish the link for show more link from other
-         ordinary links
-         part 3: the order of the result item to distinguish the show more button
-         in the result list is click. In case of filters of species or compounds
-         the order is always 0
-         */
-        var idPrefixClicked = idClickedSplit[0];
-        var itemClicked = idClickedSplit[1];
-        var orderOfItemClicked = idClickedSplit[2];
-        var idOfHiddenText = "#" + idPrefixClicked + "_" + orderOfItemClicked;
-        var jqClickedId = "#" + clickedId;
-        var linkValue = $(jqClickedId).text();
-        var splitLinkName = linkValue.split(" ");
-        console.log("show more "+jQuery.inArray('more', splitLinkName));
-        console.log("id "+ idOfHiddenText);
-        if (jQuery.inArray('more', splitLinkName) > -1) {
-            $(idOfHiddenText).show();
-            $(idOfHiddenText).css("display","inline");
-            if (jQuery.inArray('function', splitLinkName) > -1) {
-                $(jqClickedId).html(linkValue.replace('more', 'less'));
-            } else {
-                $(jqClickedId).html(linkValue.replace('more', 'fewer'));
-            }
-        } else {
-            $(idOfHiddenText).hide();
-            $(jqClickedId).html(linkValue.replace(/less|fewer/g, 'more'));
-        }
-    });
-    });
-</script>-->
 
 <script>
     $(document).ready(function () {
