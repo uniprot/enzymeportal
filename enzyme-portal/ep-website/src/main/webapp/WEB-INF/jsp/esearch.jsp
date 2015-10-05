@@ -19,10 +19,10 @@
 
 <body class="level2 ${totalfound eq 0? 'noresults' : ''}">
 
- <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<!-- <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 
-<!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
-  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+ <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>-->
    <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
  
 <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />-->
@@ -171,6 +171,7 @@
                                 <form:hidden path="searchparams.previoustext" />
                                 <input type="hidden" id="filtersFormStart"
                                        name="searchparams.start" value="0"/>
+                                <input id="pageNumber" type="hidden" name="pageNumber" value="0"/>
                                 <input type="hidden" name="ec" value="${ec}"/>
                                 <input type="hidden" name="ecname" value="${ecname}"/>
                                 <%@ include file="filter-species.jspf"%>
@@ -204,7 +205,7 @@
               </div>
    
 
-              
+                 <%--
                   <c:choose>
                       <c:when test="${filtering eq true}">
                               <c:url var="firstUrl" value="/search-enzymes/filter/page=1?ec=${ec}&ecname=${ecname}" />
@@ -219,24 +220,27 @@
                                 <c:url var="nextUrl" value="/search-enzymes/page=${currentIndex + 1}?ec=${ec}&ecname=${ecname}" /> 
                       </c:otherwise>
                   </c:choose>
-              
+               --%>
                           
               
 </div>
    </c:if>  
        <c:if test="${page.totalElements gt page.size}">	
 
+           <form>
 
-<div id="paginationNav" style="text-align: right;">
+<div id="paginationNavi" style="text-align: right;">
 
                                                 <c:choose>
                                                     <c:when test="${currentIndex == 1}">
                                                        <a class="disabled" href="#">previous</a>
-
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <a id="prevButton" href="${prevUrl}">previous</a>
-
+<!--                                                        <a id="prevButton" href="${prevUrl}">previous</a>-->
+                                                          <a id="prevButton" href="javascript:void(0);">previous</a>
+                                                            <input id="prevPage" type="hidden"value="${currentIndex - 1}">
+                                                                  <input id="ec" type="hidden"value="${ec}">
+                                                          <input id="ecname" type="hidden"value="${ecname}">
                                                     </c:otherwise>
                                                 </c:choose>
                                                     <%--
@@ -260,39 +264,30 @@
                                                         </c:choose>
                                                     </c:forEach> 
                                                             --%>
-              
-                                                    
+                <%-- 
+                                                            <c:set var="currentIndexPage" value="1"/>
                                                    <c:forEach var="i" begin="${beginIndex}" end="${endIndex}">
-
-                                                    <c:choose>
-
-                                                        <c:when test="${not empty summaryEntries}">
-                                                            <c:if test="${empty filtering}">
-                                                                <c:url var="pageUrl" value="/search-enzymes/page=${i}?ec=${ec}&ecname=${ecname}" /> 
-                                                            </c:if>
-                                                                <c:if test="${not empty filtering}">
-                                                                <c:url var="pageUrl" value="/search-enzymes/filter/page=${i}?ec=${ec}&ecname=${ecname}" /> 
-                                                            </c:if>
-                                                           
-                                                        </c:when>
-                                                    </c:choose> 
-
+                                                       
 
                                                     <c:choose>
                                                         <c:when test="${i == currentIndex}">
-                                                            <a class="active" href="${pageUrl}"><c:out value="${i}" /></a>
+                                                            <a id="currentPageButtonS" class="active" href="javascript:void(0);" style="color: #e3823e;"><c:out value="${i}"  /></a>
+                                                            <input id="currentPageS" type="hidden"value="${i}">
                                                             </c:when>
                                                             <c:otherwise>
-                                                            <a href="${pageUrl}"><c:out value="${i}" /></a>
+                                                                <a id="currentIndexButton"  href="javascript:void(0);"><c:out value="${i}" /></a>
+                                                
+                                                           <c:set var="currentIndexPage" value="${i}"/>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </c:forEach>                 
                                                     
+                                                         <input id="currentIndexPage" type="hidden" value="${currentIndexPage}">
 <!--                                                            advance pagination ends here-->
 
-                                              <%--      
-                                                    Page ${page.number + 1} of ${page.totalPages} 
                                                     --%>
+                                                    Page ${page.number + 1} of ${page.totalPages} 
+                                                 
                                                     
                                                     <c:choose>
                                                         <c:when test="${currentIndex == page.totalPages}">
@@ -300,14 +295,25 @@
 
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <a id="nextButton" href="${nextUrl}">next </a>
+                                                        <a id="nextButton" href="javascript:void(0);">next </a>
+                                                        <input id="nextPage" type="hidden"value="${currentIndex + 1}">
+                                                         <input id="ec" type="hidden"value="${ec}">
+                                                          <input id="ecname" type="hidden"value="${ecname}">
                                                         </c:otherwise>
                                                     </c:choose>                        
 
                                             </div>
                                             <div class="clearfix"></div>
                                             <!-- // Pagination END -->
-
+                                            
+                                               <%-- Add species filter to this form, don't lose it: --%>
+                                        <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
+                                            <input type="checkbox" style="display: none;" 
+                                                   name="searchparams.species"
+                                                   value="${filterSp.scientificname}" />
+                                        </c:forEach>
+                                        <%-- TODO: add also compounds and disease filters --%>
+           </form>
                                         </c:if>            
               
               
@@ -519,7 +525,7 @@
     <div>
         <div>
             <!--display = 3 = 2 related species + 1 default species -->
-            <c:set var="relSpeciesMaxDisplay" value="${6}"/>
+            <c:set var="relSpeciesMaxDisplay" value="${5}"/>
             <c:if test="${not empty enzyme}">
              <c:set var="relspecies" value="${enzyme.relatedspecies}"/>    
             </c:if>

@@ -22,7 +22,7 @@
     <c:if test="${fn:length(searchFilter.species) gt 12}">
         <!--auto-complete search box-->
         <div class="ui-widget grid_12zzz">
-            <input id="specieAT" itemtype="text" name="speciefilter" class="filterSearchBox" placeholder="Enter Species to filter" />
+            <input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />
             <input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>
         </div>
     </c:if>
@@ -36,8 +36,8 @@
             'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>
         <div id="species_filters_n"></div>
 
-<script>
-     $(document).ready(function () {
+        <script>
+//   $(document).ready(function () {
 // (See search.js if in doubt)
 
 // Initialise variables:
@@ -66,18 +66,19 @@ for (var i = 0; displayedFilters[group] < ${filterSizeDefault}
         && displayedFilters[group] < ${speciesListSize}; i++){
     addCheckbox(group, uncheckedFilters[group][i], false);
 }
-  });
+//  });
 </script>
 
         <c:if test="${speciesListSize gt filterSizeDefault}">
             <img id="loading_more_sf" src="${pageContext.request.contextPath}/resources/images/loading16.gif"
                 style="display: none"/>
-           
+      
             <a id="more_sf" href="javascript:void(0)"
                 onclick="addUnselectedCheckboxes('species',
                 displayedFilters['species'],
                 ${speciesListSize}-displayedFilters['species'], this)">See all
                 ${speciesListSize}</a>
+             
                    
         </c:if>
 

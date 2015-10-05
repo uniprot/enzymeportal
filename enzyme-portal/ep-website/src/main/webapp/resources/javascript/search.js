@@ -116,6 +116,42 @@ $(document).ready(function () {
         }
     });
 
+    $("#paginationNavi").click(function (event) {
+        var clickedId = event.target.id;
+        var nextStart = $("#nextPage").val();
+        var prevStart = $("#prevPage").val();
+        var currentPage = $("#currentIndexPage").val();
+        var ec = $("#ec").val();
+        var ecname = $("#ecname").val();
+        if (clickedId === "prevButton") {
+            $("#filtersFormStart").val(prevStart);
+            $("#pageNumber").val(prevStart);
+            $("#ec").val(ec);
+            $("#ecname").val(ecname);
+            pageClicked = true;
+            document.forms.filtersForm.submit();
+        }else  
+        if (clickedId === "nextButton") {
+            $("#filtersFormStart").val(nextStart);
+            $("#pageNumber").val(nextStart);
+
+            $("#ec").val(ec);
+            $("#ecname").val(ecname);
+            pageClicked = true;
+            document.forms['filtersForm'].submit();
+        } 
+//         if (clickedId === "currentIndexButton") {
+//          
+//            $("#filtersFormStart").val(currentPage);
+//            $("#pageNumber").val(currentPage);
+//
+//            $("#ec").val(ec);
+//            $("#ecname").val(ecname);
+//            pageClicked = true;
+//            document.forms['filtersForm'].submit();
+//        }
+    });
+
     $("#searchButton").click(function (event) {
         if (!pageClicked)
             $("#start").val(0);
@@ -357,11 +393,11 @@ function addCheckbox(filterGroup, obj, selected) {
         "value": obj.id
     }).appendTo("#filtersForm");
 
-	$('<input/>', {
-		"type": "hidden",
-		"name": "id",
-		"value": obj.id
-	}).appendTo("#filtersForm");
+    $('<input/>', {
+        "type": "hidden",
+        "name": "id",
+        "value": obj.id
+    }).appendTo("#filtersForm");
 
 
 
@@ -508,8 +544,8 @@ function addCheckboxEc(filterGroup, obj, selected) {
     });
     if (selected)
         cb.attr("checked", "checked");
-    
-    
+
+
 //        $('<input/>', {
 //        "type": "hidden",
 //        "name": "ec",

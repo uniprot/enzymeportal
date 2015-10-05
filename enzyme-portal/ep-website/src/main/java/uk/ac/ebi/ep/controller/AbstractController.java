@@ -74,6 +74,7 @@ public abstract class AbstractController {
         SearchParams searchParams = new SearchParams();
         searchParams.setStart(0);
         searchParams.setType(SearchParams.SearchType.KEYWORD);
+        searchParams.setPrevioustext("");
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
     }
