@@ -613,8 +613,8 @@ public class EnzymePortalService {
 
     @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByEcNumber(String ecNumber, Pageable pageable) {
-        //return uniprotEntryRepository.findAll(enzymesByEcNumber(ecNumber), pageable);
-        return uniprotEntryRepository.findEnzymesByEcNumber(ecNumber, pageable);
+        return uniprotEntryRepository.findAll(enzymesByEcNumber(ecNumber), pageable);
+        //return uniprotEntryRepository.findEnzymesByEcNumber(ecNumber, pageable);
     }
 
     private static Predicate enzymesByEcNumber(String ecNumber) {

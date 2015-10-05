@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalCompound;
@@ -93,8 +92,17 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
     public List<Compound> findCompoundsByEcNumber(String ecNumber) {
         String nativeQuery = "SELECT cp.COMPOUND_ID,cp.COMPOUND_NAME,cp.URL,cp.COMPOUND_ROLE FROM ENZYME_PORTAL_COMPOUND cp, ENZYME_PORTAL_EC_NUMBERS e \n"
                 + "WHERE cp.UNIPROT_ACCESSION=e.UNIPROT_ACCESSION AND e.EC_NUMBER = :EC_NUMBER GROUP BY cp.COMPOUND_ID,cp.COMPOUND_NAME,cp.URL,cp.COMPOUND_ROLE";
-        Query query = entityManager.createNativeQuery(nativeQuery, "compoundMapping");
-        List<Compound> result = query.setParameter("EC_NUMBER", ecNumber).getResultList();
+        //Query query = entityManager.createNativeQuery(nativeQuery, "compoundMapping");
+       // List<Compound> result = query.setParameter("EC_NUMBER", ecNumber).getResultList();
+        
+        
+               JPAQuery query = new JPAQuery(entityManager);
+   
+        List<Compound> result = query.from($).where($.uniprotAccession.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct()
+                .list(Projections.constructor(Compound.class, $.compoundId, $.compoundName, $.url, $.compoundRole)).stream().distinct().collect(Collectors.toList());
+
+        
+        
 
         return result.stream().distinct().collect(Collectors.toList());
 

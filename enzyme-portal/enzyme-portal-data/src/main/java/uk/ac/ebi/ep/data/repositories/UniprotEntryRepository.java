@@ -84,11 +84,33 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 //    @Query(name ="browseTaxonomy", value = "select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in (:TAX_ID) group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name", nativeQuery = true)
 //    List<Taxonomy> getCountForOrganisms(@Param("TAX_ID")List<Long> taxids);
         @Transactional(readOnly = true)
-    @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.FETCH)
-   // @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
+    //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.FETCH)
+    //@Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
             @Query(value = "SELECT DISTINCT e FROM UniprotEntry e "
                     + "left join e.enzymePortalEcNumbersSet ec "
                     + "WHERE ec.uniprotAccession = e.accession "
-                    + "AND ec.ecNumber = :ecNumber order by e.entryType ASC",countQuery = "" )
+                    + "AND ec.ecNumber = :ecNumber order by e.entryType ASC")
+            
+            
+//     @Query(value="SELECT * FROM\n" +
+//"              (SELECT /*+ PARALLEL */DBENTRY_ID, ACCESSION, NAME, TAX_ID, PROTEIN_NAME, SCIENTIFIC_NAME, COMMON_NAME,\n" +
+//"                      SEQUENCE_LENGTH, RELATED_PROTEINS_ID, LAST_UPDATE_TIMESTAMP, FUNCTION, ENTRY_TYPE,\n" +
+//"                      FUNCTION_LENGTH, SYNONYM_NAMES, ec_number, \n" +
+//"                      ROW_NUMBER() OVER (PARTITION BY PROTEIN_NAME ORDER BY ENTRY_TYPE) AS rec_id\n" +
+//"                 FROM UNIPROT_ENTRY, enzyme_portal_ec_numbers\n" +
+//"                 WHERE accession = uniprot_accession\n" +
+//"                   and ec_number = :ecNumber)\n" +
+//"         WHERE rec_id =1") 
+            
+//    String x = "SELECT e FROM\n" +
+//"              (SELECT /*+ PARALLEL */DBENTRY_ID, ACCESSION, NAME, TAX_ID, PROTEIN_NAME, SCIENTIFIC_NAME, COMMON_NAME,\n" +
+//"                      SEQUENCE_LENGTH, RELATED_PROTEINS_ID, LAST_UPDATE_TIMESTAMP, FUNCTION, ENTRY_TYPE,\n" +
+//"                      FUNCTION_LENGTH, SYNONYM_NAMES, ec_number, \n" +
+//"                      ROW_NUMBER() OVER (PARTITION BY PROTEIN_NAME ORDER BY ENTRY_TYPE) AS rec_id\n" +
+//"                 FROM UniprotEntry e, enzyme_portal_ec_numbers\n" +
+//"                 WHERE e.accession = uniprot_accession\n" +
+//"                   and ec_number = :ecNumber)\n" +
+//"         WHERE rec_id =1";        
+            
     Page<UniprotEntry> findEnzymesByEcNumber(@Param("ecNumber") String ecNumber, Pageable pageable);
 }

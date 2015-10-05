@@ -117,11 +117,11 @@ public class DiseaseRepositoryImpl implements DiseaseRepositoryCustom {
     @Transactional(readOnly = true)
     public List<Disease> findDiseasesByTaxId(Long taxId) {
 
-        EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
-        eGraph.addAttributeNodes("uniprotAccession");
+       // EntityGraph eGraph = entityManager.getEntityGraph("DiseaseEntityGraph");
+       // eGraph.addAttributeNodes("uniprotAccession");
 
         JPAQuery query = new JPAQuery(entityManager);
-        query.setHint("javax.persistence.fetchgraph", eGraph);
+       // query.setHint("javax.persistence.fetchgraph", eGraph);
         List<Disease> result = query.from($).where($.uniprotAccession.taxId.eq(taxId))
                 .list(Projections.constructor(Disease.class, $.omimNumber, $.diseaseName, $.url)).stream().distinct().collect(Collectors.toList());
 
