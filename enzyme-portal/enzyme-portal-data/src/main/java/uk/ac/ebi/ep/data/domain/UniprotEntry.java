@@ -517,9 +517,9 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         //current specie is the default specie
         this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
 
-            if(entry.getIdentity() > 0.0f){
-                relatedspecies.add(entry); 
-            }else{
+//            if(entry.getIdentity() > 0.0f){
+//                relatedspecies.add(entry); 
+//            }else{
             if (entry.getScientificName() != null && entry.getScientificName().equalsIgnoreCase(getSpecies().getScientificname())) {
                 entry.getUniprotaccessions().add(getAccession());
                 relatedspecies.add(0, entry);
@@ -528,7 +528,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
                 relatedspecies.add(entry);
 
             }
-            }
+            //}
 
         });
        }
@@ -545,9 +545,11 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //            }
 //
 //        });
-        Collections.sort(relatedspecies, (id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity())));
+       
+       List<EnzymeAccession> relSpecies = relatedspecies.stream().distinct().limit(50).collect(Collectors.toList());
+        Collections.sort(relSpecies, (id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity())));
         //return relatedspecies.stream().sorted((id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity()))).collect(Collectors.toList());
-        return relatedspecies;
+        return relatedspecies.stream().distinct().limit(50).collect(Collectors.toList());
     }
     
     @Override
@@ -579,7 +581,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         List<String> uniprotAccessions = new ArrayList<>();
 
         uniprotAccessions.add(getAccession());
-        return uniprotAccessions;
+        return uniprotAccessions.stream().distinct().collect(Collectors.toList());
     }
 
     @XmlTransient

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzyme-portal-data</artifactId>
-    <version>1.0.15</version>
+    <version>1.0.16-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>ep-data</name>
@@ -46,7 +46,7 @@
                 <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>EnzymePortalTestKit</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
             <scope>test</scope>
         </dependency> 
         

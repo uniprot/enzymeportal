@@ -481,15 +481,15 @@ public class EnzymePortalService {
 
     //filter facets search
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseases(Long taxId, List<String> compoudNames, List<String> omimNumber, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseases(Long taxId, List<String> compoundIds, List<String> omimNumber, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseases(taxId, compoudNames, omimNumber), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseases(taxId, compoundIds, omimNumber), pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompounds(Long taxId, List<String> compoudNames, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompounds(Long taxId, List<String> compoundIds, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndCompounds(taxId, compoudNames), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndCompounds(taxId, compoundIds), pageable);
     }
 
     @Transactional(readOnly = true)
@@ -511,9 +511,9 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompoundsAndEc(Long taxId, List<String> compoudNames, List<Integer> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompoundsAndEc(Long taxId, List<String> compoundIds, List<Integer> ecList, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndEc(taxId, compoudNames, ecList), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndEc(taxId, compoundIds, ecList), pageable);
     }
 
     @Transactional(readOnly = true)
@@ -523,9 +523,9 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoudNames, List<String> omimNumber, List<Integer> ecList, Pageable pageable) {
+    public Page<UniprotEntry> filterBySpecieAndCompoundsAndDiseasesAndEc(Long taxId, List<String> compoundIds, List<String> omimNumber, List<Integer> ecList, Pageable pageable) {
 
-        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseasesAndEc(taxId, compoudNames, omimNumber, ecList), pageable);
+        return uniprotEntryRepository.findAll(filterBySpecieAndCompoundsAndDiseasesAndEc(taxId, compoundIds, omimNumber, ecList), pageable);
     }
 
     private static Predicate filterBySpecie(Long taxId) {
@@ -537,11 +537,11 @@ public class EnzymePortalService {
         return predicate;
     }
 
-    private static Predicate filterBySpecieAndCompounds(Long taxId, List<String> compoudNames) {
+    private static Predicate filterBySpecieAndCompounds(Long taxId, List<String> compoundIds) {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundIds);
 
         return enzyme.taxId.eq(taxId).and(compound);
 
@@ -561,7 +561,7 @@ public class EnzymePortalService {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoudNames);
         Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumber);
 
         return enzyme.taxId.eq(taxId).and(compound).and(disease);
@@ -582,7 +582,7 @@ public class EnzymePortalService {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoudNames);
         Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumber);
         Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
 
@@ -594,7 +594,7 @@ public class EnzymePortalService {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoudNames);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoudNames);
         Predicate ec = enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecList);
         return enzyme.taxId.eq(taxId).and(compound).and(ec);
 
@@ -683,7 +683,7 @@ public class EnzymePortalService {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate sp = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+        Predicate sp = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundFilter);
         Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp);
 
         return result;
@@ -715,7 +715,7 @@ public class EnzymePortalService {
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
         Predicate sp = enzyme.scientificName.in(specieFilter);
-        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundFilter);
 
         Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp).and(compound);
 
@@ -752,7 +752,7 @@ public class EnzymePortalService {
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
         Predicate sp = enzyme.scientificName.in(specieFilter);
-        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundFilter);
         Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(diseaseFilter);
         Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(sp).and(compound).and(disease);
 
@@ -769,7 +769,7 @@ public class EnzymePortalService {
 
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundName.in(compoundFilter);
+        Predicate compound = enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundFilter);
         Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(diseaseFilter);
 
         Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(compound).and(disease);

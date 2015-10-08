@@ -295,7 +295,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     @Test
     public void testFindEnzymesByCompound() {
         LOGGER.info("findEnzymesByCompound");
-        String compoundId = "CHEBI:9139";
+        String compoundId = "CHEMBL192";
 
         int expResult = 1;
         List<String> result = enzymePortalService.findEnzymesByCompound(compoundId);
@@ -685,12 +685,12 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     public void testFilterBySpecieAndCompoundsAndDiseases() {
         LOGGER.info("filterBySpecieAndCompoundsAndDiseases");
         Long taxId = 9606L;
-        List<String> compoudNames = new ArrayList<>();
-        compoudNames.add("Sildenafil");
+        List<String> compoudIds = new ArrayList<>();
+        compoudIds.add("CHEMBL192");
         List<String> diseaseNames = new ArrayList<>();
         diseaseNames.add("spastic paraplegia hereditary");
 
-        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndCompoundsAndDiseases(taxId, compoudNames, diseaseNames, PAGEABLE);
+        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndCompoundsAndDiseases(taxId, compoudIds, diseaseNames, PAGEABLE);
         assertTrue(result.getTotalPages() == 0);
 
     }
@@ -702,11 +702,11 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     public void testFilterBySpecieAndCompounds() {
         LOGGER.info("filterBySpecieAndCompounds");
         Long taxId = 9606L;
-        List<String> compoudNames = new ArrayList<>();
-        compoudNames.add("Sildenafil");
+        List<String> compoudId = new ArrayList<>();
+        compoudId.add("CHEMBL192");
 
         int expResult = 1;
-        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndCompounds(taxId, compoudNames, PAGEABLE);
+        Page<UniprotEntry> result = enzymePortalService.filterBySpecieAndCompounds(taxId, compoudId, PAGEABLE);
 
         assertEquals(expResult, result.getContent().size());
 
@@ -787,16 +787,5 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
 
     }
 
-//                @Test
-//    public void testfindEnzymeCatalyticActivities() {
-//        LOGGER.info("findEnzymeCatalyticActivities");
-//       
-//
-//        List<EnzymeCatalyticActivity> result = enzymePortalService.findEnzymeCatalyticActivities();
-//                    System.out.println("how many activities "+ result);
-//       
-//
-//      
-//
-//    }
+
 }

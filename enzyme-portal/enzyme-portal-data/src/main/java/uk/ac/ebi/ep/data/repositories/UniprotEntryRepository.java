@@ -49,8 +49,8 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
 
     @Transactional(readOnly = true)
-    @Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
-    //@Query(value = "SELECT DISTINCT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    //@Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
 
     List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION") List<String> accession);
 
