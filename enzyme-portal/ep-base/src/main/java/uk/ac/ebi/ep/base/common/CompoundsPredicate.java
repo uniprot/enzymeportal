@@ -43,7 +43,7 @@ public class CompoundsPredicate implements Predicate {
             UniprotEntry es = (UniprotEntry) obj;
             for (EnzymeAccession ea : es.getRelatedspecies()) {
                 for (Compound compound : ea.getCompounds()) {
-                    String id = compound.getName();
+                    String id = compound.getId();
                     if (compoundsFilter.contains(id)) {
                         eval = true;
                         break;

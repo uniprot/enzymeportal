@@ -841,11 +841,25 @@ public class EnzymeFinder {
     public SearchResults computeEnzymeSummariesByPathwayName(String pathwayName) {
         SearchResults searchResults = new SearchResults();
         List<String> accessions = service.findAccessionsByPathwayName(pathwayName);
+        
+         List<UniprotEntry> enzymeList = getEnzymesByAccessions(accessions).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
-        List<UniprotEntry> enzymeList = getEnzymesByAccessions(accessions).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+        searchResults.setSummaryentries(enzymeList);
+        searchResults.setTotalfound(enzymeList.size());
 
-        //System.out.println("NUM ENZYMES PER PATHWAY "+ enzymes.size());
-        //List<UniprotEntry> enzymeList = computeUniqueEnzymes(enzymes);
+        LOGGER.debug("Building filters...");
+        buildFilters(searchResults);
+        LOGGER.debug("Finished search");
+
+        return searchResults;
+    }
+    
+        public SearchResults computeEnzymeSummariesByPathwayId(String pathwayId) {
+        SearchResults searchResults = new SearchResults();
+        List<String> accessions = service.findAccessionsByPathwayId(pathwayId);
+        
+         List<UniprotEntry> enzymeList = getEnzymesByAccessions(accessions).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+
         searchResults.setSummaryentries(enzymeList);
         searchResults.setTotalfound(enzymeList.size());
 
