@@ -423,7 +423,7 @@ function addCheckboxCompound(filterGroup, obj, selected) {
         "name": "searchparams." + filterGroup,
         //"value":$.trim(obj.name),
         //"value": obj.id,
-        "value": (filterGroup === 'compounds' ? removeWhiteSpace(obj.name) : obj.id),
+        "value": (filterGroup === 'compounds' ? obj.id : removeWhiteSpace(obj.name)),
         onclick: "form.submit()"
     });
     if (selected)

@@ -712,7 +712,7 @@ public class BrowseEnzymesController extends AbstractController {
         resetSelectedCompounds(defaultCompoundList);
 
         searchParameters.getCompounds().stream().forEach((SelectedCompounds) -> {
-            defaultCompoundList.stream().filter((theCompound) -> (SelectedCompounds.equals(theCompound.getName()))).forEach((theCompound) -> {
+            defaultCompoundList.stream().filter((theCompound) -> (SelectedCompounds.equals(theCompound.getId()))).forEach((theCompound) -> {
                 theCompound.setSelected(true);
             });
         });
@@ -1069,8 +1069,7 @@ public class BrowseEnzymesController extends AbstractController {
         AtomicInteger key = new AtomicInteger(50);
         AtomicInteger customKey = new AtomicInteger(6);
 
-        for (Species sp : uniqueSpecies) {
-
+        uniqueSpecies.stream().forEach((sp) -> {
             if (commonSpecieList.contains(sp.getScientificname().split("\\(")[0].trim())) {
                 // HUMAN, MOUSE, RAT, Fly, WORM, Yeast, ECOLI 
                 // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
@@ -1095,7 +1094,7 @@ public class BrowseEnzymesController extends AbstractController {
                 priorityMapper.put(key.getAndIncrement(), sp);
 
             }
-        }
+        });
 
         List<Species> speciesFilters = new LinkedList<>();
         priorityMapper.entrySet().stream().forEach(map -> {

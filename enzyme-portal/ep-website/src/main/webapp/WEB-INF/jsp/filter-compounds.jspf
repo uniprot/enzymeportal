@@ -45,14 +45,14 @@
         <div id="accordion">
 <!--            <h3 class="head">Bioactive <span class="num"></span></h3>
             <div id="bioactive" class="scroll" style="max-height: 24ex"></div>               -->
-            <h3 class="head">Drug <span class="num"></span></h3>
-            <div id="drug" class="scroll"></div>
+<!--            <h3 class="head">Drug <span class="num"></span></h3>
+            <div id="drug" class="scroll"></div>-->
             <h3 class="head">Inhibitor <span class="num"></span></h3>
             <div id="inhibitor" class="scroll"></div>
             <h3 class="head">Activator <span class="num"></span></h3>
             <div id="activator" class="scroll"></div>
-            <h3 class="head">Substrate or Product <span class="num"></span></h3>
-            <div id="substrate_or_product" class="scroll"></div>
+<!--            <h3 class="head">Substrate or Product <span class="num"></span></h3>
+            <div id="substrate_or_product" class="scroll"></div>-->
             <h3 class="head">Cofactor <span class="num"></span></h3> 
             <div id="cofactor" class="scroll"></div>
         </div>
@@ -71,7 +71,7 @@ displayedFilters[group] = 0;
 <c:forEach var="compound" items="${compoundsList}">
     var cmp = { "id": "${compound.id}", "name": "${fn:trim(compound.name)}", "role": "${compound.role}","url":"${compound.url}" };
     <c:choose>
-        <c:when test="${Fn:contains(compoundsParams, compound.name)}">
+        <c:when test="${Fn:contains(compoundsParams, compound.id)}">
             checkedFilters[group][checkedFilters[group].length] = cmp; 
         </c:when>
         <c:otherwise>
@@ -80,7 +80,7 @@ displayedFilters[group] = 0;
     </c:choose>
     compoundsAutoCompleteDataSource.push({
     label: "${not empty compound.name? compound.name : compound.id}",
-    value: "${compound.name}"});
+    value: "${compound.id}"});
 </c:forEach>
 // Display filters:
 for (i = 0; i < checkedFilters[group].length; i++){

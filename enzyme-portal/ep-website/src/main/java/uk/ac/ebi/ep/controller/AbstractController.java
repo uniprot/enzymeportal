@@ -336,7 +336,7 @@ public abstract class AbstractController {
             for (String SelectedCompounds : searchParameters.getCompounds()) {
                 for (Compound theCompound : defaultCompoundList) {
 
-                    if (SelectedCompounds.equals(theCompound.getName())) {
+                    if (SelectedCompounds.equals(theCompound.getId())) {
                         theCompound.setSelected(true);
 
                     }

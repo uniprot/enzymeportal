@@ -121,7 +121,7 @@ public class BrowsePathwaysController extends AbstractController {
 
     private SearchResults findEnzymesByPathway(String pathwayId, String pathwayName) {
 
-        SearchResults results = null;
+        SearchResults results = new SearchResults();
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         SearchParams searchParams = new SearchParams();
@@ -135,12 +135,18 @@ public class BrowsePathwaysController extends AbstractController {
     
        
             String simplePathwayName = pathwayName.toLowerCase();
+      
             results = finder.computeEnzymeSummariesByPathwayName(simplePathwayName);
+            
+          if(results.getTotalfound() == 0){
+                results = finder.computeEnzymeSummariesByPathwayId(pathwayId);
+          }
+  
         
 
-        if (results == null) {
+        if (results.getTotalfound() == 0) {
 
-            return getEnzymes(finder, searchParams);
+               return getEnzymes(finder, searchParams);
         }
 
         return results;

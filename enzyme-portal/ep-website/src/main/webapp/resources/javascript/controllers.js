@@ -116,7 +116,6 @@ enzymeApp.directive('taxonomyTree', ['$q','organismService', function($q,organis
 
             var organismPromise = organismService.getOrganismHierarchy();
             organismPromise.then(function(organisms){
-                var taxids = [];
                 getTaxids(organisms, taxids);
                 var organismCountsPromise = organismService.getOrganismCount(taxids);
                 organismCountsPromise.then(function(count){
