@@ -63,7 +63,7 @@ public class FDA {
                 String protein = targets.getKey();
                 for (String targetId : targets.getValue()) {
 
-                    LOGGER.warn("counter : " + count.getAndIncrement() + " accession " + protein + " targetId " + targetId);
+                    LOGGER.info("counter : " + count.getAndIncrement() + " accession " + protein + " targetId " + targetId);
                     chemblService.getMoleculesByCuratedMechanism(targetId, protein);
 
                 }

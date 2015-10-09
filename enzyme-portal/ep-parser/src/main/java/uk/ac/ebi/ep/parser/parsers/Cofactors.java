@@ -45,7 +45,7 @@ public class Cofactors extends CompoundParser {
     public void loadCofactors() {
         List<Summary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
         
-        LOGGER.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
+        LOGGER.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
      
    
         parseCofactorText(enzymeSummary);
@@ -82,7 +82,7 @@ public class Cofactors extends CompoundParser {
                     compound.setCompoundRole(compoundRole);
                     compound.setNote(note);
                     compounds.add(compound);
-                    LOGGER.warn("added compound for special case " + compound.getCompoundId() + " <> " + compound.getCompoundName());
+                    LOGGER.info("added compound for special case " + compound.getCompoundId() + " <> " + compound.getCompoundName());
                     
                 }
                 

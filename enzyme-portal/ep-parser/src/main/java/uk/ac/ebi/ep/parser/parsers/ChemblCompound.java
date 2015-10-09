@@ -64,7 +64,7 @@ public class ChemblCompound {
                 String protein = targets.getKey();
 
                 for (String targetId : targets.getValue()) {
-                    LOGGER.warn("counter : " + count.getAndIncrement() + " protein : " + protein + " target id : " + targetId);
+                    LOGGER.info("counter : " + count.getAndIncrement() + " protein : " + protein + " target id : " + targetId);
                     chemblService.chemblSmallMolecules(targetId, protein);
 
                 }
