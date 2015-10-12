@@ -64,7 +64,7 @@ public class Cofactors extends CompoundParser {
                 try{
                    compound = searchCompoundInChEBI(xref);  
                 }catch(Exception e){
-                   LOGGER.error("Chebi webservice error", e);
+                   LOGGER.error("Chebi webservice error while searching "+ xref, e);
                 }
                 
                 if (compound != null) {
