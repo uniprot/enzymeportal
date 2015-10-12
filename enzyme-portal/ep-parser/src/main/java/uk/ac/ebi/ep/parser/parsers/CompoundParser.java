@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.parser.parsers;
 
+import com.sun.xml.ws.server.UnsupportedMediaException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,7 @@ public abstract class CompoundParser {
     public static final String[] BLACKLISTED_COMPOUNDS = {"ACID", "acid", "H(2)O", "H(+)", "ACID", "WATER", "water", "ion", "ION", "", " "};
     protected List<String> blackList = Arrays.asList(BLACKLISTED_COMPOUNDS);
 
-    public CompoundParser(ChebiWebServiceClient chebiWsClient, EnzymePortalCompoundRepository compoundRepository, EnzymePortalSummaryRepository enzymeSummaryRepository,EnzymePortalParserService pService) {
+    public CompoundParser(ChebiWebServiceClient chebiWsClient, EnzymePortalCompoundRepository compoundRepository, EnzymePortalSummaryRepository enzymeSummaryRepository, EnzymePortalParserService pService) {
         this.chebiWsClient = chebiWsClient;
         this.compoundRepository = compoundRepository;
         this.enzymeSummaryRepository = enzymeSummaryRepository;
@@ -80,8 +81,13 @@ public abstract class CompoundParser {
             }
             try {
 
-                LiteEntityList lites = chebiWsClient.getLiteEntity(
-                        name, SearchCategory.ALL_NAMES, 25, StarsCategory.ALL);
+                LiteEntityList lites = null;
+                try {
+                    lites = chebiWsClient.getLiteEntity(
+                            name, SearchCategory.ALL_NAMES, 25, StarsCategory.ALL);
+                } catch (Exception e) {
+                    LOGGER.error("Error while searching ChEBI using the name : " + name, e);
+                }
                 String chebiId = null;
                 String chebiName = null;
 
@@ -91,12 +97,20 @@ public abstract class CompoundParser {
                         chebiId = lite.getChebiId();
                         chebiName = lite.getChebiAsciiName();//default
 
-                        Entity completeEntity = chebiWsClient
-                                .getCompleteEntity(lite.getChebiId());
-                        for (DataItem dataItem : completeEntity.getSynonyms()) {
+                        Entity completeEntity = null;
+                        try {
+                            completeEntity = chebiWsClient
+                                    .getCompleteEntity(lite.getChebiId());
+                        } catch (UnsupportedMediaException e) {
+                            LOGGER.error("Error getting Chebi entity using chebi ID " + lite.getChebiId(), e);
+                        }
 
-                            if ("UniProt".equalsIgnoreCase(dataItem.getSource())) {
-                                chebiName = dataItem.getData();
+                        if (completeEntity != null) {
+                            for (DataItem dataItem : completeEntity.getSynonyms()) {
+
+                                if ("UniProt".equalsIgnoreCase(dataItem.getSource())) {
+                                    chebiName = dataItem.getData();
+                                }
                             }
                         }
 
@@ -108,7 +122,7 @@ public abstract class CompoundParser {
                     entry.setCompoundSource(MmDatabase.ChEBI.name());
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(chebiName);
-                    entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString="+chebiId);
+                    entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
                     break;
                 } else {
                     //LOGGER.warn("Not found in ChEBI: " + name);
@@ -177,14 +191,14 @@ public abstract class CompoundParser {
                     entry.setCompoundSource(MmDatabase.ChEBI.name());
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(name);
-                     entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString="+chebiId);
+                    entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
                     break;
                 }
 //                else {
 //                    LOGGER.warn("Not found in ChEBI: " + name);
 //                }
             } catch (ChebiWebServiceFault_Exception e) {
-                LOGGER.error("Searching for " + name, e);
+                LOGGER.error("Error while Searching for Chebi name : " + name, e);
             }
         }
         return entry;
