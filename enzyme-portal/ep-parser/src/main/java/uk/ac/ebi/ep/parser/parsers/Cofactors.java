@@ -60,7 +60,12 @@ public class Cofactors extends CompoundParser {
             String xref = xrefMatcher.group(1).replaceAll(";", "");
             
             if (xref != null) {
-                LiteCompound compound = searchCompoundInChEBI(xref);
+                LiteCompound compound = null;
+                try{
+                   compound = searchCompoundInChEBI(xref);  
+                }catch(Exception e){
+                   LOGGER.error("Chebi webservice error", e);
+                }
                 
                 if (compound != null) {
                     
