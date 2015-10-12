@@ -12,11 +12,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -506,8 +504,8 @@ public class BrowseEnzymesController extends AbstractController {
 
         searchResults.setTotalfound(page.getTotalElements());
         SearchFilters filters = new SearchFilters();
-        Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
-        List<Species> speciesFacets = applySpeciesFilter(speciesFilter);
+        //Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
+        List<Species> speciesFacets = applySpeciesFilter(species);
         filters.setSpecies(speciesFacets);
         filters.setCompounds(compouds);
         filters.setEcNumbers(enzymeFamilies);
@@ -585,8 +583,8 @@ public class BrowseEnzymesController extends AbstractController {
 
         searchResults.setTotalfound(page.getTotalElements());
         SearchFilters filters = new SearchFilters();
-        Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
-        List<Species> speciesFacets = applySpeciesFilter(speciesFilter);
+        //Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
+        List<Species> speciesFacets = applySpeciesFilter(species);
         filters.setSpecies(speciesFacets);
         filters.setCompounds(compouds);
         filters.setEcNumbers(enzymeFamilies);
@@ -642,8 +640,8 @@ public class BrowseEnzymesController extends AbstractController {
         List<EcNumber> enzymeFamilies = enzymePortalService.findEnzymeFamiliesByEcNumber(ec);
 
         SearchFilters filters = new SearchFilters();
-        Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
-        List<Species> speciesFacets = applySpeciesFilter(speciesFilter);
+        //Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
+        List<Species> speciesFacets = applySpeciesFilter(species);
         filters.setSpecies(speciesFacets);
         filters.setCompounds(compouds);
         filters.setDiseases(diseases);
@@ -1055,7 +1053,7 @@ public class BrowseEnzymesController extends AbstractController {
 
     }
 
-    private List<Species> applySpeciesFilter(Set<Species> uniqueSpecies) {
+    private List<Species> applySpeciesFilter(List<Species> uniqueSpecies) {
         //  String[] commonSpecie = {"HUMAN", "MOUSE", "RAT", "Fruit fly", "WORM", "Yeast", "ECOLI"};
         // CommonSpecies [] commonSpecie = {"Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","Saccharomyces cerevisiae"};
         // List<String> commonSpecieList = Arrays.asList(commonSpecie);
@@ -1068,7 +1066,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         AtomicInteger key = new AtomicInteger(50);
         AtomicInteger customKey = new AtomicInteger(6);
-
+        
         uniqueSpecies.stream().forEach((sp) -> {
             if (commonSpecieList.contains(sp.getScientificname().split("\\(")[0].trim())) {
                 // HUMAN, MOUSE, RAT, Fly, WORM, Yeast, ECOLI 
