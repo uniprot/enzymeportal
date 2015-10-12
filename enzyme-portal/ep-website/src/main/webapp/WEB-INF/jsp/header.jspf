@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<div id="beta-banner"></div>
+<!--<div id="beta-banner"></div>-->
 <header>
     <div id="global-masthead" class="masthead grid_24">
         <!--This has to be one line and no newline characters-->
