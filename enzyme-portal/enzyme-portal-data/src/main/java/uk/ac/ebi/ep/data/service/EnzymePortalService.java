@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.EnzymeCatalyticActivity;
@@ -26,6 +27,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
+import uk.ac.ebi.ep.data.domain.ProjectedSpecies;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -40,7 +42,6 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
@@ -66,8 +67,6 @@ public class EnzymePortalService {
     @Autowired
     private EnzymePortalCompoundRepository enzymePortalCompoundRepository;
 
-    @Autowired
-    private EnzymePortalSummaryRepository enzymeSummaryRepository;
 
     @Autowired
     private EnzymePortalReactionRepository reactionRepository;
@@ -86,6 +85,8 @@ public class EnzymePortalService {
 
     @Autowired
     private EnzymeCatalyticActivityRepository catalyticActivityRepository;
+    @Autowired
+    private ProjectionFactory projectionFactory;
 
     @Transactional(readOnly = true)
     public List<EnzymeCatalyticActivity> findEnzymeCatalyticActivities() {
@@ -627,7 +628,7 @@ public class EnzymePortalService {
     public List<Species> findSpeciesByEcNumber(String ecNumber) {
         return uniprotEntryRepository.findSpeciesByEcNumber(ecNumber);
     }
-
+   
     @Transactional(readOnly = true)
     public List<Compound> findCompoundsByEcNumber(String ecNumber) {
         return enzymePortalCompoundRepository.findCompoundsByEcNumber(ecNumber);
@@ -775,6 +776,34 @@ public class EnzymePortalService {
         Predicate result = enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ec).and(compound).and(disease);
 
         return result;
+
+    }
+
+    public Slice<UniprotEntry> findSlicedEnzymesByEcNumber(String ecNumber, Pageable pageable) {
+
+        return uniprotEntryRepository.findSlicedEnzymesByEcNumber(ecNumber, pageable);
+    }
+
+    public Page<ProjectedSpecies> findProjectedSpecies(String ec, Pageable pageable) {
+        return uniprotEntryRepository.findEnzymesByEcNumber(ec, pageable).map(sp -> projectionFactory.createProjection(ProjectedSpecies.class,sp));
+    }
+    
+    public UniprotEntry findByUniprotAccession(String ac){
+       return uniprotEntryRepository.findByUniprotAccession(ac);
+    }
+    
+//        @Transactional(readOnly = true)
+//    public Page<Species> readPages(String ecNumber,Pageable pageable) {
+//        return uniprotEntryRepository.readPage(ecNumber,pageable);
+//        //QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+//        //return uniprotEntryRepository.findAll(ec(ecNumber), pageable);
+//       // return uniprotEntryRepository.findAll(Projections.bean(UniprotEntry.class, enzyme.scientificName, enzyme.commonName, enzyme.taxId), ec(ecNumber), pageable);
+//
+//    }
+
+    private static Predicate ec(String ecNumber) {
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+        return enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber);
 
     }
 

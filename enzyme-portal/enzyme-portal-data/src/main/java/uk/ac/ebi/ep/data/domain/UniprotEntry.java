@@ -8,9 +8,9 @@ package uk.ac.ebi.ep.data.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -82,20 +82,20 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 })
 
-   @SqlResultSetMapping(
-       name="browseTaxonomy",
-       classes={
-          @ConstructorResult(
-               targetClass=Taxonomy.class,
-                 columns={
-                    @ColumnResult(name="tax_Id",type = Long.class),
-                    @ColumnResult(name="scientific_Name"),
-                    @ColumnResult(name="common_Name"),
-                    @ColumnResult(name="numEnzymes",type = Long.class)
+@SqlResultSetMapping(
+        name = "browseTaxonomy",
+        classes = {
+            @ConstructorResult(
+                    targetClass = Taxonomy.class,
+                    columns = {
+                        @ColumnResult(name = "tax_Id", type = Long.class),
+                        @ColumnResult(name = "scientific_Name"),
+                        @ColumnResult(name = "common_Name"),
+                        @ColumnResult(name = "numEnzymes", type = Long.class)
                     }
-          )
-       }
-      )
+            )
+        }
+)
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
@@ -123,7 +123,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Fetch(FetchMode.JOIN)
     private RelatedProteins relatedProteinsId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     //@BatchSize(size = 10)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
@@ -139,13 +139,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private long dbentryId;
     @Id
     @Basic(optional = false)
-    @Column(name = "ACCESSION",unique = true)
+    @Column(name = "ACCESSION", unique = true)
     private String accession;
     @Column(name = "NAME")
     private String name;
     @Column(name = "TAX_ID")
     private Long taxId;
-    @Column(name = "PROTEIN_NAME",unique = true)
+    @Column(name = "PROTEIN_NAME", unique = true)
     private String proteinName;
     @Column(name = "SCIENTIFIC_NAME")
     private String scientificName;
@@ -153,7 +153,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private String commonName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "accession", fetch = FetchType.LAZY)
-     @Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.JOIN)
     private Set<UniprotXref> uniprotXrefSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
@@ -162,7 +162,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private List<EnzymePortalSummary> enzymePortalSummarySet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     //@BatchSize(size = 10)
     @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
@@ -340,7 +340,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return Objects.equals(this.proteinName, other.proteinName);
     }
 
-
     public String getScientificname() {
         return getScientificName();
     }
@@ -416,7 +415,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
 
-        e.getUniprotXrefSet().stream().filter(x -> "PDB".equalsIgnoreCase(x.getSource())).limit(50).collect(Collectors.toList()).stream().forEach(xref -> {
+        e.getUniprotXrefSet().stream().filter(x -> "PDB".equalsIgnoreCase(x.getSource())).limit(500).collect(Collectors.toList()).stream().forEach(xref -> {
             pdbcodes.add(xref.getSourceId());
         });
 
@@ -437,7 +436,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         List<String> synonym = new ArrayList<>();
 
         Optional<String> synonymName = Optional.ofNullable(this.getSynonymNames());
-
 
         if (synonymName.isPresent()) {
             List<String> syn = Arrays.asList(synonymName.get().split("^[,;]+$"));
@@ -510,28 +508,36 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public List<EnzymeAccession> getRelatedspecies() {
 
-        List<EnzymeAccession> relatedspecies = new ArrayList<>();
+        //getSpecies();
+        LinkedList<EnzymeAccession> relatedspecies = new LinkedList<>();
         //String defaultSpecies = CommonSpecies.Human.getScientificName();
 
-       if(this.getRelatedProteinsId() != null){
-        //current specie is the default specie
-        this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
-
+        if (this.getRelatedProteinsId() != null) {
+            //current specie is the default specie
+            this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
+//
+//              if (!entry.getPdbeaccession().isEmpty()) {
+//                  relatedspecies.push(entry);
+//              }else{
+//                 relatedspecies.offer(entry); 
+//              }   
+//                
+                
 //            if(entry.getIdentity() > 0.0f){
 //                relatedspecies.add(entry); 
 //            }else{
             if (entry.getScientificName() != null && entry.getScientificName().equalsIgnoreCase(getSpecies().getScientificname())) {
-                entry.getUniprotaccessions().add(getAccession());
-                relatedspecies.add(0, entry);
+                    entry.getUniprotaccessions().add(getAccession());
+                        relatedspecies.add(0, entry);
 
             } else if (entry.getScientificName() != null && !entry.getScientificName().equalsIgnoreCase(getSpecies().getScientificname())) {
                 relatedspecies.add(entry);
 
-            }
-            //}
+                    }
+                //}
 
-        });
-       }
+            });
+        }
 
         //human is default specie
 //        this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
@@ -545,17 +551,16 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //            }
 //
 //        });
-       
-       List<EnzymeAccession> relSpecies = relatedspecies.stream().distinct().limit(50).collect(Collectors.toList());
-        Collections.sort(relSpecies, (id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity())));
+        // List<EnzymeAccession> relSpecies = relatedspecies.stream().distinct().limit(50).collect(Collectors.toList());
+        //Collections.sort(relSpecies, (id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity())));
         //return relatedspecies.stream().sorted((id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity()))).collect(Collectors.toList());
         return relatedspecies.stream().distinct().limit(50).collect(Collectors.toList());
     }
-    
+
     @Override
     public int compareTo(UniprotEntry o) {
         return this.entryType.compareTo(o.getEntryType());
-    
+
     }
 
     @Override

@@ -54,5 +54,6 @@ public interface UniprotEntryRepositoryCustom {
     
     List<Protein> findProteinByEc(String ec);
     List<Species> findSpeciesByEcNumber(String ecNumber);
+    // Page<Species> readPage(String ecNumber,Pageable pageable);
 
 }

@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.data.dataconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import uk.ac.ebi.ep.data.service.BioPortalService;
 import uk.ac.ebi.ep.data.service.DiseaseService;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
@@ -63,6 +64,9 @@ public class GlobalConfig {
     public EnzymePortalParserService enzymePortalParserService(){
         return new EnzymePortalParserService();
     }
-
+  @Bean
+  public SpelAwareProxyProjectionFactory projectionFactory() {
+    return new SpelAwareProxyProjectionFactory();
+  }
 
 }

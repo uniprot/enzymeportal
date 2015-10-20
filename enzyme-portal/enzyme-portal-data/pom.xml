@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzyme-portal-data</artifactId>
-    <version>1.0.17</version>
+    <version>1.0.18-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>ep-data</name>
@@ -87,8 +87,12 @@
             <scope>compile</scope>
         </dependency>
  
-
-        
+<!--spring data rest-->
+        <dependency>
+  <groupId>org.springframework.data</groupId>
+  <artifactId>spring-data-rest-webmvc</artifactId>
+  <version>2.4.0.RELEASE</version>
+</dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>

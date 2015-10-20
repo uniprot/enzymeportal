@@ -141,14 +141,13 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).distinct().groupBy($.taxId, $.scientificName, $.commonName).
                 list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
-        
+
 //                List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).distinct().groupBy($.taxId, $.scientificName, $.commonName).
 //                list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName));
 // 
 //        String nativeQuery = "select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in (:TAX_ID) group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name";
 //        Query query = entityManager.createNativeQuery(nativeQuery, "browseTaxonomy");
 //        List<Taxonomy> result = query.setParameter("TAX_ID", taxids).getResultList();
-
         return result;
     }
 
@@ -227,7 +226,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         EntityGraph eGraph = entityManager.getEntityGraph("UniprotEntryEntityGraph");
 
         JPAQuery query = new JPAQuery(entityManager);
-        
+
         query.setHint("javax.persistence.loadgraph", eGraph);
 
         List<UniprotEntry> result = query.from($).where($.accession.in(accessions)).distinct().list($);
@@ -247,11 +246,33 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
     @Override
     public List<Species> findSpeciesByEcNumber(String ecNumber) {
-             JPAQuery query = new JPAQuery(entityManager);
+        JPAQuery query = new JPAQuery(entityManager);
         List<Species> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct().orderBy($.scientificName.asc())
                 .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
 
         return result;
     }
+
+//    @Override
+//    public  Page<Species> readPage(String ecNumber, Pageable pageable) {
+//        String q = "SELECT e FROM UniprotEntry e "
+//            + "left join e.enzymePortalEcNumbersSet ec "
+//            + "WHERE ec.uniprotAccession = e.accession "
+//            + "AND ec.ecNumber = :ecNumber order by e.entryType ASC";
+//      
+//        TypedQuery<Species> query = entityManager.createQuery(null);
+//
+//        query.setFirstResult(pageable.getOffset());
+//        query.setMaxResults(pageable.getPageSize());
+////        List<Species> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct().orderBy($.scientificName.asc())
+////                .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
+//
+//        List<Species> result = query.getResultList();
+//     
+//
+//    //List<T> content = total > pageable.getOffset() ? query.getResultList() : Collections.<T> emptyList();
+//        return new PageImpl<>(result, pageable, result.size());
+//    }
+
 
 }
