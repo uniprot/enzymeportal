@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.adapter.das.DASConfig;
@@ -211,5 +212,10 @@ public class EnzymePortalConfig {
     public UniprotProdBlastService blastService() {
         return new UniprotProdBlastService();
     }
+    
+      @Bean
+  public SpelAwareProxyProjectionFactory projectionFactory() {
+    return new SpelAwareProxyProjectionFactory();
+  }
 
 }

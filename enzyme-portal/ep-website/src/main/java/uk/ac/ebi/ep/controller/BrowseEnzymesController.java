@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -34,8 +35,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
+import static uk.ac.ebi.ep.controller.AbstractController.LOGGER;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -67,7 +70,7 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String BROWSE_ENZYME_CLASSIFICATION = "/browse/enzymes";
     private static final String BROWSE_EC = "/browse/enzyme";
 
-//    private static final String SEARCH_BY_EC = "/ecnumber";
+    private static final String FIND_SPECIES_BY_EC = "/species-by-ec";
 //     private static final String SEARCH_EC_NUMBER = "/search/ecnumber";
     private static final String FILTER_BY_FACETS = "/search-enzymes/filter";
 
@@ -84,7 +87,113 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String SUBSUBCLASS = "SUBSUBCLASS";
     private static final String selectedEc = "selectedEc";
 
-    private static final int SEARCH_PAGESIZE = 10;
+    private static final String STATUS = "status";
+
+    private static final int SEARCH_PAGESIZE = 5;
+
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    public String statusCheck(Model model, HttpServletRequest request, RedirectAttributes attributes) {
+
+        String status = "UP";
+        long startTime = System.nanoTime();
+
+        String accession = "O76074";
+        UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Status Check took :  (" + elapsedtime + " sec)");
+        if (entry == null) {
+            status = "DOWN";
+        }
+
+        model.addAttribute("status", status);
+        request.setAttribute("status", status);
+
+        return STATUS;
+    }
+
+    @RequestMapping(value = "/species/{ec}", method = RequestMethod.GET)
+    public String getSpecies(@PathVariable("ec") String ec, Model model, RedirectAttributes attributes) {
+
+        long startTime = System.nanoTime();
+        Pageable pageable = new PageRequest(0, SEARCH_PAGESIZE);
+
+        Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByEcNumber(ec, pageable);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+
+        List<UniprotEntry> species = page.getContent();//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, page.getTotalPages());
+
+        model.addAttribute("page", page);
+        model.addAttribute("beginIndex", begin);
+        model.addAttribute("endIndex", end);
+        model.addAttribute("currentIndex", current);
+
+        model.addAttribute("species", species);
+        model.addAttribute("ec", ec);
+
+        return "species";
+    }
+
+    //@PathVariable Integer pageNumber
+    @RequestMapping(value = "/species/{ec}/page/{pageNumber}/", method = RequestMethod.GET)
+    public String getSpeciesPaginated(@PathVariable("ec") String ec, @PathVariable("pageNumber") Integer pageNumber, Model model, RedirectAttributes attributes) {
+
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        }
+
+        long startTime = System.nanoTime();
+        Pageable pageable = new PageRequest(pageNumber - 1, SEARCH_PAGESIZE);
+
+        Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByEcNumber(ec, pageable);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+
+        List<UniprotEntry> species = page.getContent();//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, page.getTotalPages());
+
+        model.addAttribute("page", page);
+        model.addAttribute("beginIndex", begin);
+        model.addAttribute("endIndex", end);
+        model.addAttribute("currentIndex", current);
+
+        model.addAttribute("species", species);
+        model.addAttribute("ec", ec);
+
+        return "species";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = FIND_SPECIES_BY_EC, method = RequestMethod.GET)
+    public List<Species> findSpeciesByEc(@RequestParam(value = "ec", required = true) String ec) {
+
+        long startTime = System.nanoTime();
+
+        List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+
+        return species.stream().limit(50).collect(Collectors.toList());
+    }
 
     private SearchResults findEnzymesByEc(String ec) {
 
@@ -1066,7 +1175,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         AtomicInteger key = new AtomicInteger(50);
         AtomicInteger customKey = new AtomicInteger(6);
-        
+
         uniqueSpecies.stream().forEach((sp) -> {
             if (commonSpecieList.contains(sp.getScientificname().split("\\(")[0].trim())) {
                 // HUMAN, MOUSE, RAT, Fly, WORM, Yeast, ECOLI 
