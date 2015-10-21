@@ -20,7 +20,9 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -88,8 +90,32 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String selectedEc = "selectedEc";
 
     private static final String STATUS = "status";
+    private static final String STAT = "stat";
 
     private static final int SEARCH_PAGESIZE = 5;
+    
+            @RequestMapping(value = "/service/status", method = RequestMethod.GET)
+    public String formattedStatCheck(Model model, HttpServletRequest request, RedirectAttributes attributes) {
+
+        String status = "UP";
+        long startTime = System.nanoTime();
+
+        String accession = "O76074";
+        UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Status Check took :  (" + elapsedtime + " sec)");
+        if (entry == null) {
+            status = "DOWN";
+        }
+
+        model.addAttribute("status", status);
+        request.setAttribute("status", status);
+
+        return STATUS;
+    }
 
     @RequestMapping(value = "/status", method = RequestMethod.GET)
     public String statusCheck(Model model, HttpServletRequest request, RedirectAttributes attributes) {
@@ -111,7 +137,65 @@ public class BrowseEnzymesController extends AbstractController {
         model.addAttribute("status", status);
         request.setAttribute("status", status);
 
-        return STATUS;
+        return STAT;
+    }
+    
+
+
+    @ResponseBody
+    @RequestMapping(value = "/status/json", method = RequestMethod.GET)
+    public String statusCheckJson(Model model, HttpServletRequest request, RedirectAttributes attributes) {
+
+        String status = "UP";
+        long startTime = System.nanoTime();
+
+        String accession = "O76074";
+        UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Status Check .json took :  (" + elapsedtime + " sec)");
+
+        if (entry == null) {
+            status = "DOWN";
+        }
+
+        model.addAttribute("status", status);
+        request.setAttribute("status", status);
+
+        return status;
+    }
+
+
+    @RequestMapping(value = "/status/text", method = RequestMethod.GET)
+    public void statusCheckTextFile(HttpServletResponse response, Model model, HttpServletRequest request, RedirectAttributes attributes)
+            throws IOException {
+
+        String status = "UP";
+        long startTime = System.nanoTime();
+
+        String accession = "O76074";
+        UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Status Check .txt took :  (" + elapsedtime + " sec)");
+
+        if (entry == null) {
+            status = "DOWN";
+        }
+
+        model.addAttribute("status", status);
+        request.setAttribute("status", status);
+
+        response.setContentType("text/plain");
+        response.setHeader("Content-Disposition", "attachment;filename=status.txt");
+        try (ServletOutputStream out = response.getOutputStream()) {
+            out.println(status);
+            out.flush();
+        }
     }
 
     @RequestMapping(value = "/species/{ec}", method = RequestMethod.GET)

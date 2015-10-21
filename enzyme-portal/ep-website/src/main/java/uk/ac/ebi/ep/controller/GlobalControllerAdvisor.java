@@ -28,13 +28,13 @@ public class GlobalControllerAdvisor {
 
     @ExceptionHandler(Exception.class)
     public String handleException(HttpServletRequest request, Exception ex) {
-        logger.error("Exception Occured while requesting this url = " + request.getRequestURL() + " : exception is :: "+ ex);
+        logger.error("Exception Occured while requesting this url = " + request.getRequestURL() + " : exception is :: " + ex);
         return "error";
     }
 
     @ExceptionHandler(SQLException.class)
     public String handleSQLException(HttpServletRequest request, Exception ex) {
-        logger.error("SQLException Occured:: URL=" + request.getRequestURL() + " :: "+ ex);
+        logger.error("SQLException Occured:: URL=" + request.getRequestURL() + " :: " + ex);
         return "error";
     }
 
@@ -61,9 +61,15 @@ public class GlobalControllerAdvisor {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
         searchParams.setStart(0);
-         searchParams.setType(SearchParams.SearchType.KEYWORD);//default
-         searchParams.setPrevioustext("");
+        searchParams.setType(SearchParams.SearchType.KEYWORD);//default
+        searchParams.setPrevioustext("");
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
     }
+
+    //    @RequestMapping(value = "/files/{file_name}", method = RequestMethod.GET)
+//@ResponseBody
+//public FileSystemResource getFile(@PathVariable("file_name") String fileName) {
+//    return new FileSystemResource(myService.getFileFor(fileName)); 
+//}
 }
