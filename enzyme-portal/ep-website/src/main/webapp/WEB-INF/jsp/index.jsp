@@ -61,8 +61,7 @@
                 <p>To build its reports, the Enzyme Portal uses data from <a href="http://www.uniprot.org" target="_blank">UniProtKb</a>,
                     <a href="http://www.ebi.ac.uk/pdbe/" target="_blank">PDBe</a>, <a href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>,
                     <a href="http://www.ebi.ac.uk/chebi/" target="_blank">ChEBI</a>, <a href="http://www.reactome.org/" target="_blank">REACTOME</a>,
-                    <a href="http://www.ebi.ac.uk/thornton-srv/databases/MACiE/" target="_blank">MACiE</a>, <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>,
-                    <a href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a> and many more resources.</p>
+                    <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>, <a href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a> and many more resources.</p>
                 <p><a href="about">more...</a></p>
             </div>
             <div class="grid_6">
