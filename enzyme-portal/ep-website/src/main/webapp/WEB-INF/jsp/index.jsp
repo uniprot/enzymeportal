@@ -71,7 +71,7 @@
             </div>
             <div class="grid_6">
                 <h4>Tools</h4>
-                <p><strong>Protein sequence search:</strong> search Enzyme Portal with a sequence by clicking on the "Advanced" link in the search area.</p>
+                <p><strong>Protein sequence search:</strong> search Enzyme Portal with a sequence by clicking on the <a href="http://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal"> Sequence search link </a> in the search area.</p>
                 <p><strong>Compare enzymes:</strong> the Enzyme Portal basket provides a tool for comparing two enzymes. Select your enzymes from search results and add them to your basket to access the tool.</p>
             </div>
         </section>
