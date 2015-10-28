@@ -8,8 +8,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import org.sitemaps.Url;
-
 import org.xml.sax.SAXException;
 
 /**
@@ -164,8 +162,6 @@ public class SitemapIndexGenerator {
      */
     public SitemapIndexGenerator addUrl(SitemapIndexUrl url) {
         
-
-        //System.out.println("baseURLstring "+ baseUrlString);
         UrlUtils.checkUrl(url.url.toString(), baseUrlString);
         if (urls.size() >= maxUrls) {
             throw new RuntimeException("More than " + maxUrls + " urls");

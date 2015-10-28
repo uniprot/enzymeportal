@@ -6,7 +6,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>SitemapGenerator</artifactId>
@@ -35,7 +35,7 @@
                 <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.18</version>
         </dependency>
  
         
@@ -150,8 +150,8 @@
              <artifactId>maven-compiler-plugin</artifactId>
              <version>2.3.2</version>
              <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
+                <source>1.8</source>
+                <target>1.8</target>
              </configuration>
           </plugin>
        </plugins>

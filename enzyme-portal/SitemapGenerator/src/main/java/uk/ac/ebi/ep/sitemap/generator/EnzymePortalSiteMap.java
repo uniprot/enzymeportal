@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 import javax.xml.bind.Marshaller;
 import org.apache.log4j.Logger;
 import org.sitemaps.ObjectFactory;
@@ -131,6 +132,6 @@ public class EnzymePortalSiteMap extends SiteMapGenerator<File> {
 
     private List<String> getAccessions() {
 
-        return uniprotEntryService.findAllUniprotAccessions();
+        return uniprotEntryService.findAllUniprotAccessions().stream().distinct().collect(Collectors.toList());
     }
 }

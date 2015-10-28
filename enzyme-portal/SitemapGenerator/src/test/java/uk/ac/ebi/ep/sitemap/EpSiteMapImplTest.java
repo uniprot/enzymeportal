@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.transaction.Transactional;
 import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import uk.ac.ebi.ep.data.dataconfig.DataConfig;
+import uk.ac.ebi.ep.data.dataconfig.DevDataConfig;
+import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
+import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
 import uk.ac.ebi.ep.data.service.UniprotEntryService;
 import uk.ac.ebi.ep.sitemap.generator.EnzymePortalSiteMap;
 import uk.ac.ebi.ep.sitemap.generator.SiteMapGenerator;
@@ -31,24 +33,17 @@ public class EpSiteMapImplTest {
     private final String fileDirectory = System.getProperty("user.home");
     private final String filename = "SiteMapTest";
 
-    public EpSiteMapImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
 
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.getEnvironment().setActiveProfiles("vezpdev");
-        context.scan("uk.ac.ebi.ep.data.dataconfig");
-        context.refresh();
+            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+            context.getEnvironment().setActiveProfiles("uzpdev");
+            context.register(DataConfig.class);
+            context.register(ProdDataConfig.class);
+            context.register(DevDataConfig.class);
+            context.register(GlobalConfig.class);
+            context.scan("uk.ac.ebi.ep.data.dataconfig");
+            context.refresh();
 
         UniprotEntryService service = context.getBean(UniprotEntryService.class);
 
@@ -80,10 +75,7 @@ public class EpSiteMapImplTest {
         File output = new File(fileDirectory);
 
         instance.generateSitemap(inputData, output, filename_prefix, true);
-
-        System.out.println("Does File exists : " + output.exists());
         assertTrue(output.exists());
-        //System.out.println("Passed!");
 
     }
 
