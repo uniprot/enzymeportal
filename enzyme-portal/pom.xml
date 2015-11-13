@@ -657,16 +657,16 @@
         <!--        <module>SitemapGenerator</module>-->
         <module>EnzymePortalTestKit</module>
         <module>enzyme-portal-data</module>
-         <module>uniprotService</module>
+        <module>SitemapGenerator</module>
         <module>PDBeAdapter</module>
         <module>centralService</module>
         <module>ep-parser</module>
         <module>ebeye-rest-adapter</module>
-        <module>enzymeservices</module>     
-        <module>literature-adapter</module>
+        <module>enzymeservices</module>
+       <module>LiteratureService</module>
         <module>ep-base</module>
         <module>ep-website</module>
-       
+    
     </modules>
     
     <profiles>
