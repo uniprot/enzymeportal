@@ -146,7 +146,7 @@ public class DiseaseParser {
                     if (summary.isPresent()) {
                         evidence = summary.get();
                         
-                        System.out.println("EVIDENCE "+ evidence);
+                       
                     }
                     String diseaseDefinition = definition;
                     if (!StringUtils.isEmpty(omimCell[0]) && !omimCell[0].equals("-")) {
