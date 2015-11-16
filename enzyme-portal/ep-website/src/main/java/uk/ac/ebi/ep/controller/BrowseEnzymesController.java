@@ -23,13 +23,11 @@ import javax.json.JsonReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,15 +62,14 @@ public class BrowseEnzymesController extends AbstractController {
     //concrete jsp's
     private static final String BROWSE_ENZYMES = "/browse_enzymes";
     private static final String EC = "/ec";
-    //private static final String RESULT = "/search_result_ec";
-    private static final String RESULT = "/esearch";
+  
+    private static final String RESULT = "/searches";
     //abtract url
     private static final String BROWSE_ENZYME_CLASSIFICATION = "/browse/enzymes";
     private static final String BROWSE_EC = "/browse/enzyme";
 
     private static final String FIND_SPECIES_BY_EC = "/species-by-ec";
-//     private static final String SEARCH_EC_NUMBER = "/search/ecnumber";
-    private static final String FILTER_BY_FACETS = "/search-enzymes/filter";
+
 
     private static final String SEARCH_ENZYMES = "/search-enzymes";
     private static final String EC_NUMBER = "ec";
@@ -88,7 +85,7 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String selectedEc = "selectedEc";
 
 
-    private static final int SEARCH_PAGESIZE = 5;
+    private static final int SEARCH_PAGESIZE = 10;
     
 
 
@@ -122,7 +119,7 @@ public class BrowseEnzymesController extends AbstractController {
         return "species";
     }
 
-    //@PathVariable Integer pageNumber
+  
     @RequestMapping(value = "/species/{ec}/page/{pageNumber}/", method = RequestMethod.GET)
     public String getSpeciesPaginated(@PathVariable("ec") String ec, @PathVariable("pageNumber") Integer pageNumber, Model model, RedirectAttributes attributes) {
 
@@ -291,39 +288,6 @@ public class BrowseEnzymesController extends AbstractController {
         return EC;
     }
 
-//    @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.GET)
-//    public String showEnzymeByEC(@ModelAttribute("searchModel") SearchModel searchModel,
-//            @RequestParam(value = "ec", required = false) String ec, @RequestParam(value = "ecname", required = false) String ecname,
-//            @RequestParam(value = "subecname", required = false) String subecname,
-//            @RequestParam(value = "subsubecname", required = false) String subsubecname,
-//            @RequestParam(value = "entryecname", required = false) String entryecname, Model model, HttpSession session, HttpServletRequest request) throws MalformedURLException, IOException {
-//
-//        model.addAttribute("entryid", ec);
-//        model.addAttribute("entryname", entryecname);
-//        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
-//        SearchModel searchModelForm = new SearchModel();
-//        SearchParams searchParams = new SearchParams();
-//        searchParams.setStart(0);
-//        searchParams.setText(ec);
-//        searchModelForm.setSearchparams(searchParams);
-//        model.addAttribute("searchModel", searchModelForm);
-//        request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
-//        return computeResult(searchModel, ec, entryecname, model, session, request);
-//
-//    }
-//    @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.POST)
-//    public String searchEnzymesByEcPost(@ModelAttribute("searchModel") SearchModel searchModel,
-//            @RequestParam(value = "ec", required = false) String ec, @RequestParam(value = "ecname", required = false) String ecname,
-//            @RequestParam(value = "subecname", required = false) String subecname,
-//            @RequestParam(value = "subsubecname", required = false) String subsubecname,
-//            @RequestParam(value = "entryecname", required = false) String entryecname, Model model, HttpSession session, HttpServletRequest request) throws MalformedURLException, IOException {
-//
-//        model.addAttribute("entryid", ec);
-//        model.addAttribute("entryname", entryecname);
-//
-//        return computeResult(searchModel, ec, entryecname, model, session, request);
-//
-//    }
     private void browseEc(Model model, HttpSession session, String ecname, String sub_ecname, String subsub_ecname, String entry_ecname, String ec) throws MalformedURLException, IOException {
 
         String intenz_url = String.format("%s/%s.json", INTENZ_URL, ec);
@@ -500,11 +464,7 @@ public class BrowseEnzymesController extends AbstractController {
 
     }
 
-    ///enhancement to how we query and show search by ec numbers
-//    
-//        private String computeResultXX(@ModelAttribute("searchModel") SearchModel searchModel,
-//            @RequestParam(value = "entryid", required = false) String entryID, @RequestParam(value = "entryname", required = false) String entryname,
-//            Model model, HttpSession session, HttpServletRequest request) {
+
     @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.GET)
     public String searchByEcNumber(@ModelAttribute("searchModel") SearchModel searchModel,
             @RequestParam(value = "ec", required = false) String ec, @RequestParam(value = "ecname", required = false) String ecname,
@@ -513,34 +473,6 @@ public class BrowseEnzymesController extends AbstractController {
             @RequestParam(value = "entryecname", required = false) String entryecname,
             Model model, HttpServletRequest request, HttpSession session, Pageable pageable, RedirectAttributes attributes) {
 
-        //String view = RESULT;// "error";
-//        Map<String, SearchResults> prevSearches
-//                = getPreviousSearches(session.getServletContext());
-//        String searchKey = getSearchKey(searchModel.getSearchparams());
-//
-//        SearchResults results = prevSearches.get(searchKey);
-//
-//        if (results == null) {
-//            // New search:
-//            clearHistory(session);
-//            results = findEnzymesByEc(entryID);
-//
-//        }
-//
-//        if (results != null) {
-//            cacheSearch(session.getServletContext(), searchKey, results);
-//            setLastSummaries(session, results.getSummaryentries());
-//            searchModel.setSearchresults(results);
-//            applyFilters(searchModel, request);
-//            model.addAttribute("searchConfig", searchConfig);
-//            model.addAttribute("searchModel", searchModel);
-//            model.addAttribute("pagination", getPagination(searchModel));
-//            clearHistory(session);
-//            addToHistory(session, searchModel.getSearchparams().getType(),
-//                    searchKey);
-//            request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
-//            view = RESULT;
-//        }
         pageable = new PageRequest(0, SEARCH_PAGESIZE, Sort.Direction.ASC, "entryType", "function");
 
         long startTime = System.nanoTime();
@@ -700,432 +632,7 @@ public class BrowseEnzymesController extends AbstractController {
         return RESULT;
     }
 
-    @RequestMapping(value = FILTER_BY_FACETS, method = RequestMethod.POST)
-    public String filterByFacetsPost(@ModelAttribute("searchModel") SearchModel searchModel, @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(value = "ec", required = true) String ec, @RequestParam(value = "ecname", required = false) String ecname,
-            Model model, HttpServletRequest request, HttpSession session, RedirectAttributes attributes) {
 
-        return filterByFacets(searchModel, pageNumber, ec, ecname, model, request, session, attributes);
-    }
-
-    @RequestMapping(value = FILTER_BY_FACETS, method = RequestMethod.GET)
-    public String filterByFacets(@ModelAttribute("searchModel") SearchModel searchModel, @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(value = "ec", required = true) String ec, @RequestParam(value = "ecname", required = false) String ecname,
-            Model model, HttpServletRequest request, HttpSession session, RedirectAttributes attributes) {
-
-        if (pageNumber < 1) {
-            pageNumber = 1;
-        }
-
-        Pageable pageable = new PageRequest(pageNumber - 1, SEARCH_PAGESIZE, Sort.Direction.ASC, "entryType", "function");
-        Page<UniprotEntry> page = new PageImpl<>(new ArrayList<>(), pageable, 0);
-
-        List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec);
-        List<Compound> compouds = enzymePortalService.findCompoundsByEcNumber(ec);
-        List<Disease> diseases = enzymePortalService.findDiseasesByEcNumber(ec);
-
-        List<EcNumber> enzymeFamilies = enzymePortalService.findEnzymeFamiliesByEcNumber(ec);
-
-        SearchFilters filters = new SearchFilters();
-        //Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
-        List<Species> speciesFacets = applySpeciesFilter(species);
-        filters.setSpecies(speciesFacets);
-        filters.setCompounds(compouds);
-        filters.setDiseases(diseases);
-        filters.setEcNumbers(enzymeFamilies);
-
-        SearchParams searchParams = searchModel.getSearchparams();
-        searchParams.setText(ec);
-        searchParams.setSize(SEARCH_PAGESIZE);
-        searchParams.setType(SearchParams.SearchType.KEYWORD);
-        searchParams.setPrevioustext("");
-        searchModel.setSearchparams(searchParams);
-
-        SearchResults searchResults = new SearchResults();
-
-        searchResults.setSearchfilters(filters);
-        searchModel.setSearchresults(searchResults);
-
-        SearchParams searchParameters = searchModel.getSearchparams();
-
-        String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
-        String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
-        String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
-
-        // Filter:
-        List<String> specieFilter = searchParameters.getSpecies();
-        List<String> compoundFilter = searchParameters.getCompounds();
-        List<String> diseaseFilter = searchParameters.getDiseases();
-        List<Integer> ecFilter = searchParameters.getEcFamilies();
-
-//remove empty string in the filter to avoid unsual behavior of the filter facets
-        if (specieFilter.contains("")) {
-            specieFilter.remove("");
-
-        }
-        if (compoundFilter.contains("")) {
-            compoundFilter.remove("");
-
-        }
-        if (diseaseFilter.contains("")) {
-            diseaseFilter.remove("");
-        }
-
-        //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
-        if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
-            specieFilter.add(specie_autocompleteFilter);
-
-        }
-
-        if ((diseases_autocompleteFilter != null && StringUtils.hasLength(diseases_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(specie_autocompleteFilter)) {
-            diseaseFilter.add(diseases_autocompleteFilter);
-
-        }
-
-//both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
-        //SearchResults searchResults = resultSet;
-        List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
-        resetSelectedSpecies(defaultSpeciesList);
-
-        searchParameters.getSpecies().stream().forEach((selectedItems) -> {
-            defaultSpeciesList.stream().filter((theSpecies) -> (selectedItems.equals(theSpecies.getScientificname()))).forEach((theSpecies) -> {
-                theSpecies.setSelected(true);
-            });
-        });
-
-        List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
-        resetSelectedCompounds(defaultCompoundList);
-
-        searchParameters.getCompounds().stream().forEach((SelectedCompounds) -> {
-            defaultCompoundList.stream().filter((theCompound) -> (SelectedCompounds.equals(theCompound.getId()))).forEach((theCompound) -> {
-                theCompound.setSelected(true);
-            });
-        });
-
-        List<Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
-        resetSelectedDisease(defaultDiseaseList);
-
-        searchParameters.getDiseases().stream().forEach((selectedDisease) -> {
-            defaultDiseaseList.stream().filter((disease) -> (selectedDisease.equals(disease.getName()))).forEach((disease) -> {
-                disease.setSelected(true);
-            });
-        });
-
-        List<EcNumber> defaultEcNumberList = searchResults.getSearchfilters().getEcNumbers();
-
-        resetSelectedEcNumber(defaultEcNumberList);
-
-        searchParameters.getEcFamilies().stream().forEach((selectedEcFamily) -> {
-            defaultEcNumberList.stream().filter((ecn) -> (selectedEcFamily.equals(ecn.getEc()))).forEach((ecn) -> {
-                ecn.setSelected(true);
-            });
-        });
-
-        //methods
-        //ec only
-        if (specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty() && !StringUtils.isEmpty(ec)) {
-            page = enzymePortalService.filterByEc(ec, pageable);
-            System.out.println("EC ONLY");
-
-        }
-
-        //specie only
-        if (!specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {
-            page = enzymePortalService.filterByEcAndSpecies(ec, specieFilter, pageable);
-            System.out.println("species only");
-
-        }
-
-        // compounds only
-        if (!compoundFilter.isEmpty() && specieFilter.isEmpty() && diseaseFilter.isEmpty()) {
-            page = enzymePortalService.filterByEcAndCompounds(ec, compoundFilter, pageable);
-            System.out.println("compound only");
-
-        }
-        // disease only
-        if (specieFilter.isEmpty() && compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-            page = enzymePortalService.filterByEcAndDiseases(ec, diseaseFilter, pageable);
-            System.out.println("disease only");
-
-        }
-
-        //species, compound and ec
-        if (!specieFilter.isEmpty() && !compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {
-            page = enzymePortalService.filterByEcAndSpeciesAndCompound(ec, specieFilter, compoundFilter, pageable);
-        }
-
-        //species, disease and ec
-        if (!specieFilter.isEmpty() && compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-            page = enzymePortalService.filterByEcAndSpeciesAndDiseases(ec, specieFilter, diseaseFilter, pageable);
-        }
-
-        //species,compounds, disease and ec
-        if (!specieFilter.isEmpty() && !compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-            page = enzymePortalService.filterByEcAndSpeciesAndCompoundAndDiseases(ec, specieFilter, compoundFilter, diseaseFilter, pageable);
-        }
-
-        //compound, diseases and ec
-        if (specieFilter.isEmpty() && !compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-            page = enzymePortalService.filterByEcAndCompoundAndDiseases(ec, compoundFilter, diseaseFilter, pageable);
-        }
-
-        List<UniprotEntry> result = page.getContent();
-
-        int current = page.getNumber() + 1;
-        int begin = Math.max(1, current - 5);
-        int end = Math.min(begin + 10, page.getTotalPages());
-
-        model.addAttribute("page", page);
-        model.addAttribute("beginIndex", begin);
-        model.addAttribute("endIndex", end);
-        model.addAttribute("currentIndex", current);
-
-        model.addAttribute("ecname", ecname);
-        model.addAttribute("ec", ec);
-
-        model.addAttribute("summaryEntries", result);
-
-        searchResults.setTotalfound(page.getTotalElements());
-        searchResults.setSearchfilters(filters);
-        searchResults.setSummaryentries(result);
-        searchModel.setSearchresults(searchResults);
-
-        String searchKey = getSearchKey(searchModel.getSearchparams());
-
-        cacheSearch(session.getServletContext(), searchKey, searchResults);
-        setLastSummaries(session, searchResults.getSummaryentries());
-
-        clearHistory(session);
-        addToHistory(session, searchModel.getSearchparams().getType(),
-                searchKey);
-        model.addAttribute("searchFilter", filters);
-        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
-        request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
-        model.addAttribute("searchModel", searchModel);
-        model.addAttribute("searchConfig", searchConfig);
-
-        return RESULT;
-
-    }
-
-//    @RequestMapping(value = FILTER_BY_FACETS + "/page={pageNumber}", method = RequestMethod.POST)
-//    public String filterByFacetsPaginatedPost(@PathVariable Integer pageNumber, @ModelAttribute("searchModel") SearchModel searchModel,
-//            @RequestParam(value = "ec", required = true) String ec, @RequestParam(value = "ecname", required = false) String ecname,
-//            Model model, HttpServletRequest request, HttpSession session, RedirectAttributes attributes) {
-//
-//        if (pageNumber < 1) {
-//            pageNumber = 1;
-//        }
-//        SearchParams searchParameters = searchModel.getSearchparams();
-//        List<String> specieFilter = searchParameters.getSpecies();
-//
-//        System.out.println("POST FACETS SPECIE IN FILTER " + specieFilter);
-//        return filterByFacetsPaginated(pageNumber, searchModel, ec, ecname, model, request, session, attributes);
-//    }
-//
-//    @RequestMapping(value = FILTER_BY_FACETS + "/page={pageNumber}", method = RequestMethod.GET)
-//    public String filterByFacetsPaginated(@PathVariable Integer pageNumber, @ModelAttribute("searchModel") SearchModel searchModel,
-//            @RequestParam(value = "ec", required = true) String ec, @RequestParam(value = "ecname", required = false) String ecname,
-//            Model model, HttpServletRequest request, HttpSession session, RedirectAttributes attributes) {
-//
-//        if (pageNumber < 1) {
-//            pageNumber = 1;
-//        }
-//
-//        Pageable pageable = new PageRequest(pageNumber - 1, SEARCH_PAGESIZE, Sort.Direction.ASC, "entryType", "function");
-//
-//        Page<UniprotEntry> page = new PageImpl<>(new ArrayList<>(), pageable, 0);
-//
-//        List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec);
-//        List<Compound> compouds = enzymePortalService.findCompoundsByEcNumber(ec);
-//        List<Disease> diseases = enzymePortalService.findDiseasesByEcNumber(ec);
-//
-//        List<EcNumber> enzymeFamilies = enzymePortalService.findEnzymeFamiliesByEcNumber(ec);
-//
-//        SearchFilters filters = new SearchFilters();
-//        Set<Species> speciesFilter = species.stream().collect(Collectors.toSet());
-//        List<Species> speciesFacets = applySpeciesFilter(speciesFilter);
-//        filters.setSpecies(speciesFacets);
-//        filters.setCompounds(compouds);
-//        filters.setDiseases(diseases);
-//        filters.setEcNumbers(enzymeFamilies);
-//
-//        SearchParams searchParams = searchModel.getSearchparams();
-//        searchParams.setText(ec);
-//        searchParams.setSize(SEARCH_PAGESIZE);
-//        searchParams.setType(SearchParams.SearchType.KEYWORD);
-//        searchParams.setPrevioustext("");
-//        searchModel.setSearchparams(searchParams);
-//
-//        SearchResults searchResults = new SearchResults();
-//
-//        searchResults.setSearchfilters(filters);
-//        searchModel.setSearchresults(searchResults);
-//
-//        SearchParams searchParameters = searchModel.getSearchparams();
-//
-//        String compound_autocompleteFilter = request.getParameter("searchparams.compounds");
-//        String specie_autocompleteFilter = request.getParameter("_ctempList_selected");
-//        String diseases_autocompleteFilter = request.getParameter("_DtempList_selected");
-//
-//        // Filter:
-//        List<String> specieFilter = searchParameters.getSpecies();
-//        List<String> compoundFilter = searchParameters.getCompounds();
-//        List<String> diseaseFilter = searchParameters.getDiseases();
-//        List<Integer> ecFilter = searchParameters.getEcFamilies();
-//
-//        System.out.println("EC IN FILTER " + ec + " eclist " + ecFilter);
-//
-//        System.out.println("SP " + specieFilter + " CP " + compoundFilter + " DS " + diseaseFilter);
-//
-//        System.out.println("AUTO sp " + specie_autocompleteFilter + " CP " + compound_autocompleteFilter + " dis " + diseases_autocompleteFilter);
-//
-//        //remove empty string in the filter to avoid unsual behavior of the filter facets
-//        if (specieFilter.contains("")) {
-//            specieFilter.remove("");
-//
-//        }
-//        if (compoundFilter.contains("")) {
-//            compoundFilter.remove("");
-//
-//        }
-//        if (diseaseFilter.contains("")) {
-//            diseaseFilter.remove("");
-//        }
-//
-//        //to ensure that the seleted item is used in species filter, add the selected to the list. this is a workaround. different JS were used for auto complete and normal filter
-//        if ((specie_autocompleteFilter != null && StringUtils.hasLength(specie_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(diseases_autocompleteFilter)) {
-//            specieFilter.add(specie_autocompleteFilter);
-//
-//        }
-//
-//        if ((diseases_autocompleteFilter != null && StringUtils.hasLength(diseases_autocompleteFilter) == true) && StringUtils.isEmpty(compound_autocompleteFilter) && StringUtils.isEmpty(specie_autocompleteFilter)) {
-//            diseaseFilter.add(diseases_autocompleteFilter);
-//
-//        }
-//
-////both from auto complete and normal selection. selected items are displayed on top the list and returns back to the orignial list when not selected.
-//        //SearchResults searchResults = resultSet;
-//        List<Species> defaultSpeciesList = searchResults.getSearchfilters().getSpecies();
-//        resetSelectedSpecies(defaultSpeciesList);
-//
-//        searchParameters.getSpecies().stream().forEach((selectedItems) -> {
-//            defaultSpeciesList.stream().filter((theSpecies) -> (selectedItems.equals(theSpecies.getScientificname()))).forEach((theSpecies) -> {
-//                theSpecies.setSelected(true);
-//            });
-//        });
-//
-//        List<Compound> defaultCompoundList = searchResults.getSearchfilters().getCompounds();
-//        resetSelectedCompounds(defaultCompoundList);
-//
-//        searchParameters.getCompounds().stream().forEach((SelectedCompounds) -> {
-//            defaultCompoundList.stream().filter((theCompound) -> (SelectedCompounds.equals(theCompound.getName()))).forEach((theCompound) -> {
-//                theCompound.setSelected(true);
-//            });
-//        });
-//
-//        List<Disease> defaultDiseaseList = searchResults.getSearchfilters().getDiseases();
-//        resetSelectedDisease(defaultDiseaseList);
-//
-//        searchParameters.getDiseases().stream().forEach((selectedDisease) -> {
-//            defaultDiseaseList.stream().filter((disease) -> (selectedDisease.equals(disease.getName()))).forEach((disease) -> {
-//                disease.setSelected(true);
-//            });
-//        });
-//
-//        List<EcNumber> defaultEcNumberList = searchResults.getSearchfilters().getEcNumbers();
-//
-//        resetSelectedEcNumber(defaultEcNumberList);
-//
-//        searchParameters.getEcFamilies().stream().forEach((selectedEcFamily) -> {
-//            defaultEcNumberList.stream().filter((ecn) -> (selectedEcFamily.equals(ecn.getEc()))).forEach((ecn) -> {
-//                ecn.setSelected(true);
-//            });
-//        });
-//
-//        //methods
-//        //ec only
-//        if (specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty() && !StringUtils.isEmpty(ec)) {
-//            page = enzymePortalService.filterByEc(ec, pageable);
-//
-//        }
-//
-//        //specie only
-//        if (!specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {
-//            page = enzymePortalService.filterByEcAndSpecies(ec, specieFilter, pageable);
-//
-//        }
-//
-//        // compounds only
-//        if (!compoundFilter.isEmpty() && specieFilter.isEmpty() && diseaseFilter.isEmpty()) {
-//            page = enzymePortalService.filterByEcAndCompounds(ec, compoundFilter, pageable);
-//
-//        }
-//        // disease only
-//        if (specieFilter.isEmpty() && compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-//            page = enzymePortalService.filterByEcAndDiseases(ec, diseaseFilter, pageable);
-//
-//        }
-//
-//        //species, compound and ec
-//        if (!specieFilter.isEmpty() && !compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {
-//            page = enzymePortalService.filterByEcAndSpeciesAndCompound(ec, specieFilter, compoundFilter, pageable);
-//        }
-//
-//        //species, disease and ec
-//        if (!specieFilter.isEmpty() && compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-//            page = enzymePortalService.filterByEcAndSpeciesAndDiseases(ec, specieFilter, diseaseFilter, pageable);
-//        }
-//
-//        //species,compounds, disease and ec
-//        if (!specieFilter.isEmpty() && !compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-//            page = enzymePortalService.filterByEcAndSpeciesAndCompoundAndDiseases(ec, specieFilter, compoundFilter, diseaseFilter, pageable);
-//        }
-//
-//        //compound, diseases and ec
-//        if (specieFilter.isEmpty() && !compoundFilter.isEmpty() && !diseaseFilter.isEmpty()) {
-//            page = enzymePortalService.filterByEcAndCompoundAndDiseases(ec, compoundFilter, diseaseFilter, pageable);
-//        }
-//
-//        List<UniprotEntry> result = page.getContent();
-//
-//        int current = page.getNumber() + 1;
-//        int begin = Math.max(1, current - 5);
-//        int end = Math.min(begin + 10, page.getTotalPages());
-//
-//        model.addAttribute("page", page);
-//        model.addAttribute("beginIndex", begin);
-//        model.addAttribute("endIndex", end);
-//        model.addAttribute("currentIndex", current);
-//
-//        model.addAttribute("ecname", ecname);
-//        model.addAttribute("ec", ec);
-//
-//        model.addAttribute("summaryEntries", result);
-//
-//        searchResults.setTotalfound(page.getTotalElements());
-//        searchResults.setSearchfilters(filters);
-//        searchResults.setSummaryentries(result);
-//        searchModel.setSearchresults(searchResults);
-//
-//        String searchKey = getSearchKey(searchModel.getSearchparams());
-//
-//        cacheSearch(session.getServletContext(), searchKey, searchResults);
-//        setLastSummaries(session, searchResults.getSummaryentries());
-//
-//        clearHistory(session);
-//        addToHistory(session, searchModel.getSearchparams().getType(),
-//                searchKey);
-//        model.addAttribute("searchFilter", filters);
-//        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
-//        request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
-//        model.addAttribute("searchModel", searchModel);
-//        model.addAttribute("searchConfig", searchConfig);
-//        model.addAttribute("filtering", true);
-//
-//        return RESULT;
-//        //return "redirect:" + RESULT;
-//    }
     @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.POST)
     public String searchEnzymesByEcPost(@ModelAttribute("searchModel") SearchModel searchModel,
             @RequestParam(value = "ec", required = false) String ec, @RequestParam(value = "ecname", required = false) String ecname,

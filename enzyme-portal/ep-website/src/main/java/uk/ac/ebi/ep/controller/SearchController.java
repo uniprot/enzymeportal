@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uk.ac.ebi.ep.adapter.literature.CitexploreWSClientPool;
-import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Field;
@@ -54,9 +51,6 @@ import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
-import uk.ac.ebi.kraken.model.blast.JobStatus;
-import uk.ac.ebi.uniprot.dataservice.client.exception.EBIServiceException;
-import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 import uk.ac.ebi.xchars.SpecialCharacters;
 import uk.ac.ebi.xchars.domain.EncodingType;
 
@@ -74,8 +68,7 @@ public class SearchController extends AbstractController {
 
     
 
-    @Autowired
-    private LiteratureConfig literatureConfig;
+
     @Autowired
     private ReactomeConfig reactomeConfig;
     @Autowired
@@ -83,6 +76,7 @@ public class SearchController extends AbstractController {
 
     @Autowired
     protected IntenzConfig intenzConfig;
+    private final Integer maxCitations = 50;
 
     private enum ResponsePage {
 
@@ -98,16 +92,6 @@ public class SearchController extends AbstractController {
         return Character.isDigit(data.charAt(0));
     }
 
-    @PostConstruct
-    public void init() {
-        try {
-            CitexploreWSClientPool.setSize(
-                    literatureConfig.getCitexploreClientPoolSize());
-            LOGGER.info("CiteXplore client pool size set successfuly");
-        } catch (Exception e) {
-            LOGGER.error("Unable to set CiteXplore client pool size", e);
-        }
-    }
 
     /**
      * Process the entry page,
@@ -123,7 +107,7 @@ public class SearchController extends AbstractController {
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Field requestedField = Field.valueOf(field.toUpperCase());
-        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService);
+        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService,literatureService);
 
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
@@ -146,8 +130,9 @@ public class SearchController extends AbstractController {
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case LITERATURE:
-                    retriever.getLiteratureAdapter().setConfig(literatureConfig);
+                    //retriever.getLiteratureAdapter().setConfig(literatureConfig);
                     enzymeModel = retriever.getLiterature(accession);
+                     model.addAttribute("maxCitations", maxCitations);
                     break;
                 default:
                     enzymeModel = retriever.getEnzyme(accession);
@@ -344,7 +329,7 @@ public class SearchController extends AbstractController {
                         LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
                         break;
                     case SEQUENCE:
-                        view = searchSequence(model, searchModel);
+                        //view = searchSequence(model, searchModel);
                           model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
                         break;
                     case COMPOUND:
@@ -607,86 +592,6 @@ public class SearchController extends AbstractController {
         return "about";
     }
 
-    /**
-     * Sends a search to a BLAST server. The job ID returned is stored in the
-     * model as <code>jobId</code> attribute.
-     *
-     * @param model the Spring model.
-     * @param searchModel the EP search model.
-     * @return the view according to the search: <code>running</code> if
-     * everything went ok and the search job is running, <code>error</code>
-     * otherwise.
-     */
-    private String searchSequence(Model model, SearchModel searchModel) {
-        String view = "error";
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService, blastService);
-
-        try {
-
-            String sequence = searchModel.getSearchparams().getSequence();
-            String jobId = finder.blast(sequence);
-            searchModel.getSearchparams().setPrevioustext(sequence);
-            searchModel.getSearchparams().setType(SearchParams.SearchType.SEQUENCE);
-            model.addAttribute("jobId", jobId);
-            LOGGER.debug("BLAST job running: " + jobId);
-            view = "running";
-        } catch (EBIServiceException e) {
-            LOGGER.error("EBIServiceException", e);
-            view = "error";
-        }
-        return view;
-    }
-
-    @RequestMapping(value = "/checkJob", method = RequestMethod.POST)
-    public String checkJob(@RequestParam(value = "jobId", required = true) String jobId, Model model,
-            SearchModel searchModel, HttpSession session) {
-        String view = "search";
-        try {
-            EnzymeFinder enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeRestService, blastService);
-            JobStatus status = enzymeFinder.getJobStatus(jobId);
-
-            switch (status) {
-                case ERROR:
-                case FAILURE:
-                    LOGGER.error("Blast job returned status " + status);
-                    model.addAttribute("searchModel", searchModel);
-                    view = "error";
-                    break;
-                case NOT_FOUND:
-                    LOGGER.error("Blast job returned status " + status);
-                    model.addAttribute("searchModel", searchModel);
-                    view = "error";
-                    break;
-                case FINISHED:
-                    LOGGER.debug("BLAST job finished");
-
-                    SearchResults results = enzymeFinder.getUniprotBlastResult(jobId);
-
-                    SearchParams searchParams = searchModel.getSearchparams();
-                    String resultKey = getSearchKey(searchParams);
-                    cacheSearch(session.getServletContext(), resultKey, results);
-
-                    searchParams.setSize(searchConfig.getResultsPerPage());
-                    searchModel.setSearchresults(results);
-                    model.addAttribute("searchModel", searchModel);
-                    model.addAttribute("pagination", getPagination(searchModel));
-                    view = "search";
-                    break;
-                case RUNNING:
-                    model.addAttribute("jobId", jobId);
-                    view = "running";
-                    break;
-                default:
-            }
-
-        } catch (EBIServiceException e) {
-            LOGGER.error("EBIServiceException While checking BLAST job", e);
-            view = "error";
-        } catch (ServiceException ex) {
-            LOGGER.error("ServiceException While checking BLAST job", ex);
-            view = "error";
-        }
-        return view;
-    }
+   
 
 }

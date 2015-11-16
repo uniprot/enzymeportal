@@ -39,7 +39,7 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
  * @author joseph
  */
 @Configuration
-@ComponentScan(basePackages = {"uk.ac.ebi.ep.config","uk.ac.ebi.ep.controller","uk.ac.ebi.ep.base", "uk.ac.ebi.ep.ebeye","uk.ac.ebi.ep.data.service"})
+@ComponentScan(basePackages = {"uk.ac.ebi.ep.config","uk.ac.ebi.ep.controller","uk.ac.ebi.ep.base", "uk.ac.ebi.ep.ebeye","uk.ac.ebi.ep.data.service","uk.ac.ebi.ep.literatureservice.config"})
 @EnableWebMvc
 @EnableSpringDataWebSupport
 @Import({EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class, PowerGateConfig.class, OliverYardConfig.class, DataConfig.class})

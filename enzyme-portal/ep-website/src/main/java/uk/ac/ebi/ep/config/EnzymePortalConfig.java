@@ -14,8 +14,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
-import uk.ac.ebi.ep.adapter.das.DASConfig;
-import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
@@ -23,11 +21,12 @@ import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.functions.Functions;
+import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 import uk.ac.ebi.ep.mBean.FilesConfig;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
 import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
-import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
+
 
 /**
  *
@@ -133,24 +132,24 @@ public class EnzymePortalConfig {
         return chemblConfig;
     }
 
-    @Bean
-    public LiteratureConfig literatureConfig() {
-        LiteratureConfig lc = new LiteratureConfig();
-        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-        return lc;
-    }
-
-    @Bean
-    public DASConfig dasConfig() {
-        DASConfig dASConfig = new DASConfig();
-        dASConfig.setClientPoolSize(Integer.parseInt(env.getProperty("das.client.pool.size")));
-        return dASConfig;
-    }
+//    @Bean
+//    public LiteratureConfig literatureConfig() {
+//        LiteratureConfig lc = new LiteratureConfig();
+//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
+//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
+//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
+//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
+//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
+//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
+//        return lc;
+//    }
+//
+//    @Bean
+//    public DASConfig dasConfig() {
+//        DASConfig dASConfig = new DASConfig();
+//        dASConfig.setClientPoolSize(Integer.parseInt(env.getProperty("das.client.pool.size")));
+//        return dASConfig;
+//    }
 
     @Bean
     public Functions functions() {
@@ -208,14 +207,19 @@ public class EnzymePortalConfig {
 //    public UniprotBlastService blastService(){
 //        return new UniprotBlastService();
 //    }
-    @Bean
-    public UniprotProdBlastService blastService() {
-        return new UniprotProdBlastService();
-    }
+//    @Bean
+//    public UniprotProdBlastService blastService() {
+//        return new UniprotProdBlastService();
+//    }
     
       @Bean
   public SpelAwareProxyProjectionFactory projectionFactory() {
     return new SpelAwareProxyProjectionFactory();
   }
+  
+      @Bean
+    public LiteratureService literatureService(){
+        return new LiteratureService();
+    }
 
 }

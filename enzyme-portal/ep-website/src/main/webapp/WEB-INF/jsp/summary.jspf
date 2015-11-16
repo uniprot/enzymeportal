@@ -278,9 +278,11 @@
             
 
             <c:if test="${not empty enzyme.ec}">
-               <b>Ec : </b> 
+               <b>EC : </b> 
                <span>
-                 ${enzyme.ec}  
+        <c:set var="webLink" value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
+        <a target="_blank" href="${webLink}${enzyme.ec}"><c:out value="${enzyme.ec}"/></a>
+                 
                </span><br/>
             </c:if>
             

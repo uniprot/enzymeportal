@@ -40,7 +40,7 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
-import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
+import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 
 /**
  *
@@ -57,10 +57,9 @@ public abstract class AbstractController {
 
     @Autowired
     protected EbeyeRestService ebeyeRestService;
-//    @Autowired
-//    protected UniprotBlastService blastService;
     @Autowired
-    protected UniprotProdBlastService blastService;
+    protected LiteratureService literatureService;
+
 
     protected static final String BROWSE_VIDEO = "browseVideo";
     protected static final String ENTRY_VIDEO = "entryVideo";
@@ -207,15 +206,15 @@ public abstract class AbstractController {
         String key = null;
         Optional<SearchType> type = Optional.ofNullable(searchParams.getType());
 
-        if(!type.isPresent()){
+        if (!type.isPresent()) {
             searchParams.setType(SearchParams.SearchType.KEYWORD);
         }
 
         switch (searchParams.getType()) {
             case KEYWORD:
-                
-                if(!StringUtils.isEmpty(searchParams.getText())){
-                key = searchParams.getText().trim().toLowerCase();
+
+                if (!StringUtils.isEmpty(searchParams.getText())) {
+                    key = searchParams.getText().trim().toLowerCase();
                 }
                 break;
             case SEQUENCE:

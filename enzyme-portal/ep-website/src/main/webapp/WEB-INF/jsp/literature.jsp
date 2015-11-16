@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
 	import="java.util.EnumSet,
-		uk.ac.ebi.ep.adapter.literature.CitationLabel"%>
+		uk.ac.ebi.ep.uniprotservice.transferObjects.CitationLabel"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -34,14 +34,17 @@
 			<c:set var="citationClass" value="journal" />
 			<c:set var="numOfJournals" value="${numOfJournals + 1}"/>
 		</c:when>
+                 <%-- 
 		<c:when test="${not empty cit.bookOrReportDetails}">
 			<c:set var="citationClass" value="book" />
 			<c:set var="numOfBooks" value="${numOfBooks + 1}"/>
 		</c:when>
+               
 		<c:when test="${not empty cit.patentDetails}">
 			<c:set var="citationClass" value="patent" />
 			<c:set var="numOfPatents" value="${numOfPatents + 1}"/>
 		</c:when>
+                 --%>
 		<c:otherwise>
 			<c:set var="citationClass" value="other" />
 			<c:set var="numOfOthers" value="${numOfOthers + 1}"/>
@@ -102,9 +105,11 @@
 				<c:when test="${not empty cit.journalInfo}">
 					(${cit.journalInfo.yearOfPublication})
 				</c:when>
+                                <%-- 
 				<c:when test="${not empty cit.bookOrReportDetails}">
 					(${cit.bookOrReportDetails.yearOfPublication})
 				</c:when>
+                                --%>
 				<c:otherwise>
 					(${cit.pubYear})
 				</c:otherwise>
@@ -117,12 +122,14 @@
 		            <b>${cit.journalInfo.volume}</b>
                     ${empty cit.pageInfo? '':','} ${cit.pageInfo}
 				</c:when>
+                                <%--
 				<c:when test="${not empty cit.bookOrReportDetails}">
 					${cit.brSummary}
 				</c:when>
 				<c:when test="${not empty cit.patentDetails}">
 					<i>Patent ${cit.id}</i>
 				</c:when>
+                                        --%>
 				<c:otherwise>
 				</c:otherwise>
 			</c:choose>
@@ -178,7 +185,7 @@ function filterCitations(){
     <span style="color: black;">${fn:length(enzymeModel.literature)}
     <span style="font-weight: normal;">references.</span>
     <c:if test="${fn:length(enzymeModel.literature)
-        eq requestScope['uk.ac.ebi.ep:name=literatureConfig'].maxCitations}"><a
+        eq maxCitations}"><a
         title="Europe PubMed Central"
         href="http://europepmc.org/search/?page=1&query=UNIPROT_PUBS:${enzymeModel.uniprotaccessions[0]}" target="_blank">
         See more in EPMC...</a>
@@ -256,7 +263,7 @@ function filterCitations(){
 <div class="provenance">
 	<ul>
 		<li class="note_0">Data Source:
-			<a href="http://europepmc.org/">Europe PMC</a></li>
+			<a href="http://europepmc.org/search/?page=1&query=UNIPROT_PUBS:${enzymeModel.uniprotaccessions[0]}">Europe PMC</a></li>
 		<li class="note_1">Europe PubMed Central (Europe PMC) offers free access
 		    to biomedical literature resources.</li>
 	</ul>
