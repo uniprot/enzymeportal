@@ -792,19 +792,5 @@ public class EnzymePortalService {
        return uniprotEntryRepository.findByUniprotAccession(ac);
     }
     
-//        @Transactional(readOnly = true)
-//    public Page<Species> readPages(String ecNumber,Pageable pageable) {
-//        return uniprotEntryRepository.readPage(ecNumber,pageable);
-//        //QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
-//        //return uniprotEntryRepository.findAll(ec(ecNumber), pageable);
-//       // return uniprotEntryRepository.findAll(Projections.bean(UniprotEntry.class, enzyme.scientificName, enzyme.commonName, enzyme.taxId), ec(ecNumber), pageable);
-//
-//    }
-
-    private static Predicate ec(String ecNumber) {
-        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
-        return enzyme.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber);
-
-    }
 
 }
