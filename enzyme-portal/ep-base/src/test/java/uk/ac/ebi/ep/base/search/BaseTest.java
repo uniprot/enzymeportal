@@ -34,8 +34,7 @@ import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 @ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class, EbeyeRestService.class,PmcConfig.class})
 public abstract class BaseTest {
 
-//RestTemplate restTemplate = new RestTemplate();
-// MockRestServiceServer mockServer = MockRestServiceServer.createServer(restTemplate);
+
     @Autowired
     protected EnzymePortalService service;
     @Autowired
@@ -59,22 +58,6 @@ public abstract class BaseTest {
         instance = new EnzymeRetriever(service, ebeyeService);
     }
 
-//    @Before
-//    //@Override
-//    public void setUp() {
-//
-////        context = new AnnotationConfigApplicationContext();
-////        context.getEnvironment().setActiveProfiles("uzpdev");
-////        context.register(SpringDataMockConfig.class,GlobalConfig.class, EbeyeRestService.class);
-////        context.scan("uk.ac.ebi.ep.data.testConfig","uk.ac.ebi.ep.ebeye");
-////        context.refresh();
-////
-////        //service = context.getBean(EnzymePortalService.class);
-////        ebeyeService = context.getBean(EbeyeRestService.class);
-////        env = context.getEnvironment();
-//    }
-
-    //@Override
     @After
     public void tearDown() throws Exception {
         //context.close();
@@ -82,17 +65,7 @@ public abstract class BaseTest {
 
     }
 
-//    @Bean
-//    public LiteratureConfig literatureConfig() {
-//        LiteratureConfig lc = new LiteratureConfig();
-//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-//        return lc;
-//    }
+
 
     @Bean
     public IntenzConfig intenzConfig() {

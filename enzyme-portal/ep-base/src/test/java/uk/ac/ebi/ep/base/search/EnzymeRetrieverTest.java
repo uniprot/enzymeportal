@@ -40,16 +40,6 @@ public class EnzymeRetrieverTest extends BaseTest {
         assertNotNull(result);
     }
 
-    /**
-     * Test of getLiteratureAdapter method, of class EnzymeRetriever.
-     */
-//    @Test
-//    public void testGetLiteratureAdapter() {
-//        System.out.println("getLiteratureAdapter");
-//        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-//        ILiteratureAdapter result = instance.getLiteratureAdapter();
-//        assertNotNull(result);
-//    }
 
     /**
      * Test of getIntenzAdapter method, of class EnzymeRetriever.
@@ -152,62 +142,12 @@ public class EnzymeRetrieverTest extends BaseTest {
 
         String uniprotAccession1 = "O76074";
         EnzymeRetriever instance1 = new EnzymeRetriever(service, ebeyeService,literatureService);
-        //instance.getLiteratureAdapter().setConfig(literatureConfig());
-
-        EnzymeModel result = instance1.getLiterature(uniprotAccession1);
+         EnzymeModel result = instance1.getLiterature(uniprotAccession1);
       
         assertNotNull(result.getLiterature().size());
 
     }
-//
-//    /**
-//     * Test of getWholeModel method, of class EnzymeRetriever.
-//     *
-//     * @throws java.lang.Exception
-//     */
-//    @Test
-//    public void testGetWholeModel() throws Exception {
-//        System.out.println("getWholeModel");
-//        String acc = "O76074";
-//        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-//
-//        instance.getIntenzAdapter().setConfig(intenzConfig());
-//        instance.getReactomeAdapter().setConfig(reactomeConfig());
-//        instance.getChebiAdapter().setConfig(chebiConfig());
-//
-//        EnzymeModel result = instance.getWholeModel(acc);
-//        assertNotNull(result);
-//
-//    }
-//
-//    /**
-//     * Test of getMolecules method, of class EnzymeRetriever.
-//     *
-//     * @throws java.lang.Exception
-//     */
-//    @Test
-//    public void testGetMolecules() throws Exception {
-//        System.out.println("getMolecules");
-//        String uniprotAccession = "O76074";
-//        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-//        instance.getChebiAdapter().setConfig(chebiConfig());
-//
-//        EnzymeModel expResult = new EnzymeModel();
-//
-//        ChemicalEntity chemicalEntity = new ChemicalEntity();
-//
-//        CountableMolecules molecules = new CountableMolecules();
-//        molecules.setTotalFound(1);
-//
-//        chemicalEntity.setInhibitors(molecules);
-//
-//        expResult.setMolecule(chemicalEntity);
-//
-//        EnzymeModel result = instance.getMolecules(uniprotAccession);
-//
-//        assertEquals(expResult.getMolecule().getInhibitors().getTotalFound(), result.getMolecule().getInhibitors().getTotalFound());
-//
-//    }
+
 
     /**
      * Test of getReactionsPathways method, of class EnzymeRetriever.

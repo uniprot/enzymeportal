@@ -40,17 +40,6 @@ public class EnzymesConfig {
         return chebiConfig;
     }
 
-//    @Bean
-//    public LiteratureConfig literatureConfig() {
-//        LiteratureConfig lc = new LiteratureConfig();
-//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-//        return lc;
-//    }
     
     @Bean
     public EbeyeRestService ebeyeRestService() {
@@ -74,15 +63,7 @@ public class EnzymesConfig {
         
     }
     
-//    @Bean
-//    public UniprotBlastService blastService(){
-//        return new UniprotBlastService();
-//    }
-//    
-//    @Bean
-//    public UniprotProdBlastService prodBlastService(){
-//        return new UniprotProdBlastService();
-//    }
+
     
     @Bean
     public LiteratureService literatureService(){

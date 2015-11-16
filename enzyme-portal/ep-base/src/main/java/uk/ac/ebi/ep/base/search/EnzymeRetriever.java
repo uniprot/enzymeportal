@@ -57,8 +57,7 @@ public class EnzymeRetriever extends EnzymeFinder {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnzymeRetriever.class);
     protected IRheaAdapter rheaAdapter;
     protected IChebiAdapter chebiAdapter;
-    //protected ILiteratureAdapter litAdapter;
-    //@Autowired
+
     private LiteratureService literatureService;
 
     public EnzymeRetriever(EnzymePortalService service, EbeyeRestService eService) {
@@ -87,12 +86,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         return chebiAdapter;
     }
 
-//    public ILiteratureAdapter getLiteratureAdapter() {
-//        if (litAdapter == null) {
-//            litAdapter = new SimpleLiteratureAdapter();
-//        }
-//        return litAdapter;
-//    }
+
     public IntenzAdapter getIntenzAdapter() {
         if (intenzAdapter == null) {
             intenzAdapter = new IntenzAdapter();
@@ -272,15 +266,10 @@ public class EnzymeRetriever extends EnzymeFinder {
 
     public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException {
 
-        //UniprotEntry uniprotEntry = super.getService().findByAccession(uniprotAccession);
+   
         EnzymeModel model = getEnzymeModel(uniprotAccession);
 
-        // model.setPdbeaccession(uniprotEntry.getPdbeaccession());
-       
-
         List<LabelledCitation> citations = literatureService.getCitations(uniprotAccession);
-//        getLiteratureAdapter().getCitations(
-//                uniprotAccession, model.getPdbeaccession());
 
         if (citations != null) {
 
