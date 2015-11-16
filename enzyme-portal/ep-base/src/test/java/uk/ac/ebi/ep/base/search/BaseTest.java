@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
@@ -24,13 +23,15 @@ import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
+import uk.ac.ebi.ep.literatureservice.config.PmcConfig;
+import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 
 /**
  *
  * @author joseph
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class, EbeyeRestService.class})
+@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class, EbeyeRestService.class,PmcConfig.class})
 public abstract class BaseTest {
 
 //RestTemplate restTemplate = new RestTemplate();
@@ -39,6 +40,9 @@ public abstract class BaseTest {
     protected EnzymePortalService service;
     @Autowired
     protected EbeyeRestService ebeyeService;
+    
+    @Autowired
+    protected   LiteratureService literatureService;
 
   
     @Autowired
@@ -78,17 +82,17 @@ public abstract class BaseTest {
 
     }
 
-    @Bean
-    public LiteratureConfig literatureConfig() {
-        LiteratureConfig lc = new LiteratureConfig();
-        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-        return lc;
-    }
+//    @Bean
+//    public LiteratureConfig literatureConfig() {
+//        LiteratureConfig lc = new LiteratureConfig();
+//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
+//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
+//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
+//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
+//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
+//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
+//        return lc;
+//    }
 
     @Bean
     public IntenzConfig intenzConfig() {
@@ -127,5 +131,10 @@ public abstract class BaseTest {
         chebiConfig.setCompoundImgBaseUrl(env.getProperty("chebi.compound.img.base.url"));
 
         return chebiConfig;
+    }
+    
+        @Bean
+    public LiteratureService literatureService(){
+        return new LiteratureService();
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 import org.junit.Test;
-import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
@@ -44,13 +43,13 @@ public class EnzymeRetrieverTest extends BaseTest {
     /**
      * Test of getLiteratureAdapter method, of class EnzymeRetriever.
      */
-    @Test
-    public void testGetLiteratureAdapter() {
-        System.out.println("getLiteratureAdapter");
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-        ILiteratureAdapter result = instance.getLiteratureAdapter();
-        assertNotNull(result);
-    }
+//    @Test
+//    public void testGetLiteratureAdapter() {
+//        System.out.println("getLiteratureAdapter");
+//        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+//        ILiteratureAdapter result = instance.getLiteratureAdapter();
+//        assertNotNull(result);
+//    }
 
     /**
      * Test of getIntenzAdapter method, of class EnzymeRetriever.
@@ -147,19 +146,19 @@ public class EnzymeRetrieverTest extends BaseTest {
 //     *
 //     * @throws java.lang.Exception
 //     */
-//    @Test
-//    public void testGetLiterature() throws Exception {
-//        System.out.println("getLiterature");
-//
-//        String uniprotAccession = "O76074";
-//        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-//        instance.getLiteratureAdapter().setConfig(literatureConfig());
-//
-//        EnzymeModel result = instance.getLiterature(uniprotAccession);
-//
-//        assertNotNull(result.getLiterature().size());
-//
-//    }
+    @Test
+    public void testGetLiterature() throws Exception {
+        System.out.println("getLiterature");
+
+        String uniprotAccession1 = "O76074";
+        EnzymeRetriever instance1 = new EnzymeRetriever(service, ebeyeService,literatureService);
+        //instance.getLiteratureAdapter().setConfig(literatureConfig());
+
+        EnzymeModel result = instance1.getLiterature(uniprotAccession1);
+      
+        assertNotNull(result.getLiterature().size());
+
+    }
 //
 //    /**
 //     * Test of getWholeModel method, of class EnzymeRetriever.
@@ -219,7 +218,7 @@ public class EnzymeRetrieverTest extends BaseTest {
     public void testGetReactionsPathways() throws Exception {
         System.out.println("getReactionsPathways");
         //String uniprotAccession = "O76074";
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+        //EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
 
         EnzymeModel expResult = new EnzymeModel();
 

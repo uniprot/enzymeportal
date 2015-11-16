@@ -13,11 +13,9 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
-import uk.ac.ebi.ep.uniprotservice.blast.UniprotBlastService;
-import uk.ac.ebi.ep.uniprotservice.blast.UniprotProdBlastService;
+import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 
 /**
  *
@@ -42,17 +40,17 @@ public class EnzymesConfig {
         return chebiConfig;
     }
 
-    @Bean
-    public LiteratureConfig literatureConfig() {
-        LiteratureConfig lc = new LiteratureConfig();
-        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-        return lc;
-    }
+//    @Bean
+//    public LiteratureConfig literatureConfig() {
+//        LiteratureConfig lc = new LiteratureConfig();
+//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
+//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
+//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
+//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
+//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
+//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
+//        return lc;
+//    }
     
     @Bean
     public EbeyeRestService ebeyeRestService() {
@@ -76,14 +74,19 @@ public class EnzymesConfig {
         
     }
     
-    @Bean
-    public UniprotBlastService blastService(){
-        return new UniprotBlastService();
-    }
+//    @Bean
+//    public UniprotBlastService blastService(){
+//        return new UniprotBlastService();
+//    }
+//    
+//    @Bean
+//    public UniprotProdBlastService prodBlastService(){
+//        return new UniprotProdBlastService();
+//    }
     
     @Bean
-    public UniprotProdBlastService prodBlastService(){
-        return new UniprotProdBlastService();
+    public LiteratureService literatureService(){
+        return new LiteratureService();
     }
 
 }

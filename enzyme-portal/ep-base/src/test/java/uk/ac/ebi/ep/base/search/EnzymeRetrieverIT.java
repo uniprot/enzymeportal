@@ -13,8 +13,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
-import uk.ac.ebi.ep.adapter.literature.ILiteratureAdapter;
-import uk.ac.ebi.ep.adapter.literature.LiteratureConfig;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
 import uk.ac.ebi.ep.data.enzyme.model.CountableMolecules;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
@@ -55,13 +53,13 @@ public class EnzymeRetrieverIT extends BaseTest {
     /**
      * Test of getLiteratureAdapter method, of class EnzymeRetriever.
      */
-    @Test
-    public void testGetLiteratureAdapter() {
-        System.out.println("getLiteratureAdapter");
-         instance = new EnzymeRetriever(service, ebeyeService);
-        ILiteratureAdapter result = instance.getLiteratureAdapter();
-        assertNotNull(result);
-    }
+//    @Test
+//    public void testGetLiteratureAdapter() {
+//        System.out.println("getLiteratureAdapter");
+//         instance = new EnzymeRetriever(service, ebeyeService);
+//        ILiteratureAdapter result = instance.getLiteratureAdapter();
+//        assertNotNull(result);
+//    }
 
     /**
      * Test of getIntenzAdapter method, of class EnzymeRetriever.
@@ -159,7 +157,7 @@ public class EnzymeRetrieverIT extends BaseTest {
 
         String uniprotAccession = "O76074";
         EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-        instance.getLiteratureAdapter().setConfig(literatureConfig());
+        //instance.getLiteratureAdapter().setConfig(literatureConfig());
 
         EnzymeModel result = instance.getLiterature(uniprotAccession);
 
@@ -256,17 +254,17 @@ public class EnzymeRetrieverIT extends BaseTest {
         assertEquals(expResult.getPathways().stream().findAny().get().getPathwayId().trim(), result.getPathways().stream().findAny().get().getPathwayId().trim());
     }
 
-    @Bean
-    public LiteratureConfig literatureConfig() {
-        LiteratureConfig lc = new LiteratureConfig();
-        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-        return lc;
-    }
+//    @Bean
+//    public LiteratureConfig literatureConfig() {
+//        LiteratureConfig lc = new LiteratureConfig();
+//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
+//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
+//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
+//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
+//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
+//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
+//        return lc;
+//    }
 
     @Bean
     public IntenzConfig intenzConfig() {
