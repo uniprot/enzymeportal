@@ -85,10 +85,7 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
         return hash;
     }
 
-//    @Override
-//    public int compareTo(LabelledCitation o) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
+
     /**
      * By default, citations are sorted by date of creation (if not available,
      * year of publication).
