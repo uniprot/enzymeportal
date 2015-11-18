@@ -127,10 +127,7 @@ public final class Entry  implements Comparable<Entry> {
             return false;
         }
         final Entry other = (Entry) obj;
-        if (!Objects.equals(this.getTitle(), other.getTitle())) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.getTitle(), other.getTitle());
     }
 
 
