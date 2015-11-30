@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -25,12 +26,12 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  * @author joseph
  */
 //@RepositoryRestResource(excerptProjection = ProjectedSpecies.class)
+@RepositoryRestResource (itemResourceRel="uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
 public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, UniprotEntryRepositoryCustom {
 
     default UniprotEntry findByUniprotAccession(String acc) {
         return findByAccession(acc);
     }
-//     @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraphType.LOAD)
 
     UniprotEntry findByAccession(String accession);
 
@@ -101,5 +102,15 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
             + "WHERE ec.uniprotAccession = e.accession "
             + "AND ec.ecNumber = :ecNumber order by e.entryType ASC")
     Slice<UniprotEntry> findSlicedEnzymesByEcNumber(@Param("ecNumber") String ecNumber, Pageable pageable);
+    
+    
+        @Transactional(readOnly = true)
+    @Query(value = "select * from enzyme_portal_ec_numbers_v where ec_number = :EC_NUMBER", nativeQuery = true)
+    List<UniprotEntry> findEnzymeViewByEc(@Param("EC_NUMBER") String ec);
+ 
+    
+     @Transactional(readOnly = true)
+    @Query(value = "select ACCESSION from enzyme_portal_ec_numbers_mv where ec_number = :EC_NUMBER", nativeQuery = true)
+    List<String> findAccessionViewByEc(@Param("EC_NUMBER") String ec);
 
 }

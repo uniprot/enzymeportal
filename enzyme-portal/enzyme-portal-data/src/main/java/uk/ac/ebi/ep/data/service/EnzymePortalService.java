@@ -67,7 +67,6 @@ public class EnzymePortalService {
     @Autowired
     private EnzymePortalCompoundRepository enzymePortalCompoundRepository;
 
-
     @Autowired
     private EnzymePortalReactionRepository reactionRepository;
 
@@ -628,7 +627,7 @@ public class EnzymePortalService {
     public List<Species> findSpeciesByEcNumber(String ecNumber) {
         return uniprotEntryRepository.findSpeciesByEcNumber(ecNumber);
     }
-   
+
     @Transactional(readOnly = true)
     public List<Compound> findCompoundsByEcNumber(String ecNumber) {
         return enzymePortalCompoundRepository.findCompoundsByEcNumber(ecNumber);
@@ -785,12 +784,23 @@ public class EnzymePortalService {
     }
 
     public Page<ProjectedSpecies> findProjectedSpecies(String ec, Pageable pageable) {
-        return uniprotEntryRepository.findEnzymesByEcNumber(ec, pageable).map(sp -> projectionFactory.createProjection(ProjectedSpecies.class,sp));
+        return uniprotEntryRepository.findEnzymesByEcNumber(ec, pageable).map(sp -> projectionFactory.createProjection(ProjectedSpecies.class, sp));
     }
-    
-    public UniprotEntry findByUniprotAccession(String ac){
-       return uniprotEntryRepository.findByUniprotAccession(ac);
+
+    public UniprotEntry findByUniprotAccession(String ac) {
+        return uniprotEntryRepository.findByUniprotAccession(ac);
     }
-    
+
+    public List<UniprotEntry> findM(String ec) {
+        return uniprotEntryRepository.findEnzymeViewByEc(ec);
+    }
+
+    public Page<UniprotEntry> findEnzymeViewByEc(String ec, Pageable pageable) {
+        List<String> accessions = uniprotEntryRepository.findAccessionViewByEc(ec);
+
+        Page page = uniprotEntryRepository.findByAccessionIn(accessions, pageable);
+        return page;
+
+    }
 
 }
