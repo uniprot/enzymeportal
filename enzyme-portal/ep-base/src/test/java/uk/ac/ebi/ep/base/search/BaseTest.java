@@ -55,7 +55,8 @@ public abstract class BaseTest {
 
     @Before
     public void setUp() {
-        instance = new EnzymeRetriever(service, ebeyeService);
+        instance = new EnzymeRetriever(service, literatureService);
+        
     }
 
     @After

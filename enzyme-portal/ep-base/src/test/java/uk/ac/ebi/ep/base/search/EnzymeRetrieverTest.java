@@ -47,7 +47,7 @@ public class EnzymeRetrieverTest extends BaseTest {
     @Test
     public void testGetIntenzAdapter() {
         System.out.println("getIntenzAdapter");
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
         IntenzAdapter result = instance.getIntenzAdapter();
         assertNotNull(result);
     }
@@ -62,7 +62,7 @@ public class EnzymeRetrieverTest extends BaseTest {
         EnzymeModel expResult = new EnzymeModel();
         expResult.setAccession(uniprotAccession);
 
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
         EnzymeModel result = instance.getEnzyme(uniprotAccession);
         assertEquals(expResult.getAccession(), result.getAccession());
         assertNotNull(result.getName());
@@ -95,7 +95,7 @@ public class EnzymeRetrieverTest extends BaseTest {
         expResult.setScientificName("Rattus norvegicus");
         expResult.setCommonName("Rat");
 
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
         EnzymeModel result = instance.getProteinStructure(accession);
 
         //result.setProteinstructure(proteinstructure);
@@ -125,7 +125,7 @@ public class EnzymeRetrieverTest extends BaseTest {
 
         expResult.setDisease(diseases);
 
-        EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
+        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
         EnzymeModel result = instance.getDiseases(uniprotAccession);
         assertEquals(expResult.getDisease().stream().findFirst().get(), result.getDisease().stream().findAny().get());
 
@@ -141,7 +141,7 @@ public class EnzymeRetrieverTest extends BaseTest {
         System.out.println("getLiterature");
 
         String uniprotAccession1 = "O76074";
-        EnzymeRetriever instance1 = new EnzymeRetriever(service, ebeyeService,literatureService);
+        EnzymeRetriever instance1 = new EnzymeRetriever(service,literatureService);
          EnzymeModel result = instance1.getLiterature(uniprotAccession1);
       
         assertNotNull(result.getLiterature().size());

@@ -37,7 +37,6 @@ import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiFetchDataException;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
@@ -52,25 +51,23 @@ import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
  *
  * @author joseph
  */
-public class EnzymeRetriever extends EnzymeFinder {
+public class EnzymeRetriever extends EnzymeBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EnzymeRetriever.class);
-    protected IRheaAdapter rheaAdapter;
-    protected IChebiAdapter chebiAdapter;
+    private final IRheaAdapter rheaAdapter;
+    private IChebiAdapter chebiAdapter;
+    private IntenzAdapter intenzAdapter;
 
-    private LiteratureService literatureService;
+    private final LiteratureService literatureService;
 
-    public EnzymeRetriever(EnzymePortalService service, EbeyeRestService eService) {
-        super(service, eService);
 
-        rheaAdapter = new RheaWsAdapter();
 
-    }
-
-    public EnzymeRetriever(EnzymePortalService service, EbeyeRestService eService, LiteratureService pmc) {
-        this(service, eService);
+    public EnzymeRetriever(EnzymePortalService service, LiteratureService pmc) {
+        super(service);
 
         this.literatureService = pmc;
+         rheaAdapter = new RheaWsAdapter();
+          intenzAdapter = new IntenzAdapter();
 
     }
 
@@ -117,7 +114,7 @@ public class EnzymeRetriever extends EnzymeFinder {
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
         // TODO query for related proteins and use the obj. possible null pointer if db is not populated with related protein
 
-        List<EnzymePortalCompound> compounds = super.getService().findCompoundsByAccession(uniprotEntry.getAccession());
+        List<EnzymePortalCompound> compounds = service.findCompoundsByAccession(uniprotEntry.getAccession());
         for (UniprotEntry e : uniprotEntry.getRelatedProteinsId().getUniprotEntrySet()) {
 
             EnzymeAccession ea = new EnzymeAccession();
@@ -145,7 +142,7 @@ public class EnzymeRetriever extends EnzymeFinder {
     }
 
     private EnzymeModel getEnzymeModel(String uniprotAccession) {
-        UniprotEntry uniprotEntry = super.getService().findByAccession(uniprotAccession);
+        UniprotEntry uniprotEntry = service.findByAccession(uniprotAccession);
 
         EnzymeModel model = new EnzymeModel();
 
@@ -173,7 +170,7 @@ public class EnzymeRetriever extends EnzymeFinder {
             model.setAccession(uniprotEntry.getAccession());
             model.getUniprotaccessions().add(uniprotEntry.getAccession());
             //model.setSpecies(uniprotEntry.getSpecies());
-            Set<EnzymePortalEcNumbers> ecNumbers = getService().findByEcNumbersByAccession(uniprotAccession)
+            Set<EnzymePortalEcNumbers> ecNumbers = service.findByEcNumbersByAccession(uniprotAccession)
                     .stream().collect(Collectors.toSet());
             model.setEnzymePortalEcNumbersSet(ecNumbers);
             // uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
@@ -197,7 +194,8 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         EnzymeModel model = getEnzymeModel(uniprotAccession);
         try {
-            intenzAdapter.getEnzymeDetails(model);
+            
+            getIntenzAdapter().getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
             LOGGER.error("Error getting enzyme details from Intenz webservice", ex);
         }
@@ -225,7 +223,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 
     private void addProteinStructures(EnzymeModel model) {
 
-        List<UniprotXref> pdbcodes = super.getService().findPDBcodesByAccession(model.getAccession());
+        List<UniprotXref> pdbcodes = service.findPDBcodesByAccession(model.getAccession());
 
         for (UniprotXref pdb : pdbcodes) {
 
@@ -258,7 +256,7 @@ public class EnzymeRetriever extends EnzymeFinder {
      */
     protected void addDiseases(EnzymeModel enzymeModel) {
 
-        List<Disease> diseases = super.getService().findDiseasesByAccession(enzymeModel.getAccession());
+        List<Disease> diseases = service.findDiseasesByAccession(enzymeModel.getAccession());
 
         enzymeModel.setDisease(diseases);
 
@@ -323,7 +321,7 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         try {
 
-            List<EnzymePortalCompound> compounds = super.getService().findCompoundsByAccession(model.getAccession());
+            List<EnzymePortalCompound> compounds = service.findCompoundsByAccession(model.getAccession());
 
             CountableMolecules activators = null, inhibitors = null,
                     cofactors = null, drugs = null, bioactive = null;
@@ -409,7 +407,7 @@ public class EnzymeRetriever extends EnzymeFinder {
             throws EnzymeRetrieverException {
 
         EnzymeModel model = getEnzymeModel(uniprotAccession);
-        List<String> catalyticActivities = super.getService().findCatalyticActivitiesByAccession(model.getAccession());
+        List<String> catalyticActivities = service.findCatalyticActivitiesByAccession(model.getAccession());
         model.setCatalyticActivities(catalyticActivities);
         addReactionsPathways(model);
         return model;
@@ -430,9 +428,9 @@ public class EnzymeRetriever extends EnzymeFinder {
         //EnzymeModel model = getEnzymeModel(uniprotAccession);
         ReactionPathway reactionPathway = new ReactionPathway();
 
-        List<EnzymeReaction> reactions = super.getService().findReactionsByAccession(model.getAccession());
+        List<EnzymeReaction> reactions = service.findReactionsByAccession(model.getAccession());
 
-        List<Pathway> pathways = super.getService().findPathwaysByAccession(model.getAccession());
+        List<Pathway> pathways = service.findPathwaysByAccession(model.getAccession());
         model.setPathways(pathways);
         reactionPathway.setPathways(pathways);
 
@@ -460,9 +458,9 @@ public class EnzymeRetriever extends EnzymeFinder {
 
         ReactionPathway reactionPathway = new ReactionPathway();
 
-        List<EnzymeReaction> reactions = super.getService().findReactionsByAccession(model.getAccession());
+        List<EnzymeReaction> reactions = service.findReactionsByAccession(model.getAccession());
 
-        List<Pathway> pathways = super.getService().findPathwaysByAccession(model.getAccession());
+        List<Pathway> pathways = service.findPathwaysByAccession(model.getAccession());
 
         model.setPathways(pathways);
         reactionPathway.setPathways(pathways);
