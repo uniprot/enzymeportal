@@ -30,10 +30,34 @@ public class LiteratureService {
     private final Logger LOGGER = Logger.getLogger(LiteratureService.class);
     @Autowired
     private PmcRestService pmcRestService;
+    private static final Comparator<LabelledCitation> SORT_BY_DATE_ASC = (LabelledCitation key1, LabelledCitation key2) -> -(key1.getCitation().getDateOfCreation().compareTo(key2.getCitation().getDateOfCreation()));
 
-    public List<LabelledCitation> getCitations(String accession) {
+    private Optional<EuropePMC> citationsByAccession(String accession) {
 
-        Optional<EuropePMC> europePMC = pmcRestService.getPmcByAccession(accession);
+        Optional<EuropePMC> europePMC = pmcRestService.findPmcByAccession(accession);
+
+        return europePMC;
+    }
+
+    private Optional<EuropePMC> citationsByKeyword(String keyword) {
+
+        Optional<EuropePMC> europePMC = pmcRestService.findPmcByKeyword(keyword);
+
+        return europePMC;
+    }
+
+    /**
+     * This method assumes that the term is an accession and makes a search to
+     * the Pubmed service, if no result if found, term is assumed to be a
+     * keyword.
+     *
+     *
+     * @param term could be accession or keyword
+     * @return List of LabelledCitation
+     */
+    public List<LabelledCitation> getCitations(String term) {
+
+        Optional<EuropePMC> europePMC = citationsByAccession(term);
 
         if (europePMC.isPresent()) {
             EuropePMC pmc = europePMC.get();
@@ -42,31 +66,21 @@ public class LiteratureService {
             //sort by pub date
             return citations.stream().distinct().sorted(SORT_BY_DATE_ASC).collect(Collectors.toList());
 
-        }
-        return new ArrayList<>();
-    }
-
-    private static final Comparator<LabelledCitation> SORT_BY_DATE_ASC = (LabelledCitation key1, LabelledCitation key2) -> -(key1.getCitation().getDateOfCreation().compareTo(key2.getCitation().getDateOfCreation()));
-
-    public List<LabelledCitation> getCitationsByKeyword(String keyword) {
-
-        Optional<EuropePMC> europePMC = pmcRestService.getGenericPMC(keyword);
-
-        if (europePMC.isPresent()) {
-            EuropePMC pmc = europePMC.get();
-
-            List<LabelledCitation> citations = computeLabelledCitation(pmc);
-
-            //sort by pub date
-            return citations;
-
+        } else {
+            LOGGER.warn("No results was found for accession " + term + ". keyword search is activated!");
+            europePMC = citationsByKeyword(term);
+            if (europePMC.isPresent()) {
+                EuropePMC pmc = europePMC.get();
+                List<LabelledCitation> citations = computeLabelledCitation(pmc);
+                //sort by pub date
+                return citations.stream().distinct().sorted(SORT_BY_DATE_ASC).collect(Collectors.toList());
+            }
         }
         return new ArrayList<>();
     }
 
     private List<LabelledCitation> computeLabelledCitation(EuropePMC pmc) {
         List<LabelledCitation> citations = new LinkedList<>();
-        System.out.println("PMC "+ pmc);
         pmc.getResultList().getResult().stream().forEach((result) -> {
             EnumSet<CitationLabel> labels = getLabels(result);
             LabelledCitation citation = new LabelledCitation(result, labels);

@@ -22,7 +22,7 @@ import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
 public class PmcRestService {
 
     private final Logger LOGGER = Logger.getLogger(PmcRestService.class);
-    private RestTemplate restTemplate = null;// new RestTemplate(clientHttpRequestFactory());
+    private RestTemplate restTemplate = null;
     @Autowired
     private PmcConfig pmcConfig;
 
@@ -30,7 +30,7 @@ public class PmcRestService {
         restTemplate = new RestTemplate(clientHttpRequestFactoryTimeout());
     }
 
-    private ClientHttpRequestFactory clientHttpRequestFactory() {
+    protected ClientHttpRequestFactory clientHttpRequestFactory() {
         return new HttpComponentsClientHttpRequestFactory();
 
     }
@@ -42,7 +42,7 @@ public class PmcRestService {
         return factory;
     }
 
-    public Optional<EuropePMC> getGenericPMC(String keyword) {
+    public Optional<EuropePMC> findPmcByKeyword(String keyword) {
         String url = pmcConfig.pmcServiceUrl().getGenericUrl() + keyword + "&format=json&resulttype=core";
         Optional<EuropePMC> pmc = Optional.empty();
         try {
@@ -58,7 +58,7 @@ public class PmcRestService {
 
     }
 
-    public Optional<EuropePMC> getPmcByAccession(String accession) {
+    public Optional<EuropePMC> findPmcByAccession(String accession) {
         String url = pmcConfig.pmcServiceUrl().getSpecificUrl() + accession + "&format=json&pageSize=100&resulttype=core";
         Optional<EuropePMC> pmc = Optional.empty();
         try {
