@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzymeservices</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     
     <description>
@@ -12,7 +12,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
     
     <properties>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.13</version>
+            <version>1.0.19</version>
         </dependency>
 
       
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>uk.ac.ebi.rhea</groupId>
             <artifactId>rhea-domain</artifactId>
-            <version>1.8.1</version>
+            <version>1.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.reactome</groupId>
