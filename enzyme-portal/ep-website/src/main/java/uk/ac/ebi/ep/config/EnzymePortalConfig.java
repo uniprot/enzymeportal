@@ -203,14 +203,6 @@ public class EnzymePortalConfig {
         return pdBeUrl;
     }
 
-//        @Bean
-//    public UniprotBlastService blastService(){
-//        return new UniprotBlastService();
-//    }
-//    @Bean
-//    public UniprotProdBlastService blastService() {
-//        return new UniprotProdBlastService();
-//    }
     
       @Bean
   public SpelAwareProxyProjectionFactory projectionFactory() {
@@ -221,5 +213,5 @@ public class EnzymePortalConfig {
     public LiteratureService literatureService(){
         return new LiteratureService();
     }
-
+    
 }

@@ -85,4 +85,10 @@
         <function-class>uk.ac.ebi.ep.functions.Functions</function-class>
         <function-signature>java.util.List sortBlastResult(java.util.List)</function-signature>
     </function>
+    
+        <function>
+        <name>removeSlash</name>
+        <function-class>uk.ac.ebi.ep.functions.Functions</function-class>
+        <function-signature>java.lang.String removeSlash(java.lang.String)</function-signature>
+    </function>
 </taglib>

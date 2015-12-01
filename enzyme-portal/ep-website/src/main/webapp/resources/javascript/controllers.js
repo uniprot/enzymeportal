@@ -98,7 +98,7 @@ enzymeApp.factory('organismService', function($http){
         getOrganismCount: function(taxids) {
             return $http.get('/enzymeportal/service/organism-count', {
                 params: {
-                    taxids: taxids
+                    taxids: taxids.toString()
                 }
             }).then(function(resp){
                 return resp.data;
@@ -112,7 +112,7 @@ enzymeApp.directive('taxonomyTree', ['$q','organismService', function($q,organis
     return {
         link: function(scope, element, attrs) {
             $("#spinner").show();
-            var taxids = [224308,83333,83332,44689,559292,284812,39947,3702,7227,6239,7955,9913,9606,10090,10116];
+            var taxids = [];
 
             var organismPromise = organismService.getOrganismHierarchy();
             organismPromise.then(function(organisms){

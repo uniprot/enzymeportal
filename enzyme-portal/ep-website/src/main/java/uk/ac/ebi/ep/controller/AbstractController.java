@@ -59,7 +59,7 @@ public abstract class AbstractController {
     protected EbeyeRestService ebeyeRestService;
     @Autowired
     protected LiteratureService literatureService;
-
+    
 
     protected static final String BROWSE_VIDEO = "browseVideo";
     protected static final String ENTRY_VIDEO = "entryVideo";
@@ -237,10 +237,9 @@ public abstract class AbstractController {
      * @return the search results.
      */
     protected SearchResults searchKeyword(SearchParams searchParameters) {
-        SearchResults results = null;
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
-        results = finder.getEnzymes(searchParameters);
+       SearchResults results = finder.getEnzymes(searchParameters);
 
         return results;
     }
@@ -289,7 +288,7 @@ public abstract class AbstractController {
             List<String> compoundsFilter = searchParameters.getCompounds();
             List<String> diseasesFilter = searchParameters.getDiseases();
             List<Integer> ecNumbersFilter = searchParameters.getEcFamilies();
-
+            
             //remove empty string in the filter to avoid unsual behavior of the filter facets
             if (speciesFilter.contains("")) {
                 speciesFilter.remove("");
@@ -347,7 +346,7 @@ public abstract class AbstractController {
 
             for (String selectedDisease : searchParameters.getDiseases()) {
                 for (Disease disease : defaultDiseaseList) {
-                    if (selectedDisease.equals(disease.getName())) {
+                    if (selectedDisease.equals(disease.getId())) {
                         disease.setSelected(true);
                     }
                 }
@@ -365,7 +364,7 @@ public abstract class AbstractController {
                     }
                 }
             }
-
+  
             //if an item is seleted, then filter the list
             if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty() || !ecNumbersFilter.isEmpty()) {
                 List<UniprotEntry> filteredResults
@@ -379,7 +378,7 @@ public abstract class AbstractController {
                         new DiseasesPredicate(diseasesFilter));
                 CollectionUtils.filter(filteredResults,
                         new EcNumberPredicate(ecNumbersFilter.stream().sorted().collect(Collectors.toList())));
-
+                
                 // Create a new SearchResults, don't modify the one in session
                 SearchResults sr = new SearchResults();
 

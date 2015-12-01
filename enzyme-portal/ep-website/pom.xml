@@ -4,7 +4,7 @@
 
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-website</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>enzymeportal</name>
@@ -12,10 +12,10 @@
     <description>
         The Enzyme Portal web application.
     </description>
-        <parent>
+    <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
     
     <properties>
@@ -24,14 +24,8 @@
 
         <spring.data.jpa.version> 1.8.1.RELEASE</spring.data.jpa.version>
 
-         <spring.data.commons.version>1.10.1.RELEASE</spring.data.commons.version>
-        
-<!--        <spring.data.jpa.version>1.6.2.RELEASE</spring.data.jpa.version>
-        <spring.data.commons.version>1.8.2.RELEASE</spring.data.commons.version>
-        <querydsl.version>3.3.1</querydsl.version>-->
+        <spring.data.commons.version>1.10.1.RELEASE</spring.data.commons.version>
         <org.springframework-version>4.1.7.RELEASE</org.springframework-version> 
-<!--        <hibernate.entitymanager.version>4.3.5.Final</hibernate.entitymanager.version>
-        <hibernate.jpa-api.version>1.0.0.Final</hibernate.jpa-api.version>-->
         <cglib.version>3.1</cglib.version>
         <aspectj.version>1.7.4</aspectj.version>
 
@@ -63,28 +57,23 @@
 
 
     <dependencies>
-<!--               <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.19-SNAPSHOT</version>
-        </dependency>-->
 
-                <dependency>
+        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>PDBeAdapter</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4</version>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ep-base</artifactId>
-            <version>1.0.4-SNAPSHOT</version>
-          <exclusions>
-             <exclusion>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>servlet-api</artifactId>
-             </exclusion>
-          </exclusions>
-       </dependency>
+            <version>1.0.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -107,7 +96,7 @@
         <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-core</artifactId>
-            <version>0.16</version>
+            <version>0.20</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -155,8 +144,8 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${org.springframework-version}</version>
-                        <exclusions>
-<!--                 Exclude Commons Logging in favor of SLF4j -->
+            <exclusions>
+                <!--                 Exclude Commons Logging in favor of SLF4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
@@ -170,12 +159,12 @@
             <artifactId>spring-context-support</artifactId>
             <version>${org.springframework-version}</version>
         </dependency>
-                <dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${org.springframework-version}</version>
             <exclusions>
-<!--                 Exclude Commons Logging in favor of SLF4j -->
+                <!--                 Exclude Commons Logging in favor of SLF4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
@@ -207,11 +196,11 @@
             <scope>compile</scope>
         </dependency>
     
-<dependency>
-	<groupId>org.springframework</groupId>
-	<artifactId>spring-jdbc</artifactId>
-	<version>${org.springframework-version}</version>
-</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
      
         
 
@@ -237,19 +226,19 @@
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
         </dependency>
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>${javax.jstl-taglibs.version}</version>
         </dependency>-->
         
-               <dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
         
-<!--             <dependency>
+        <!--             <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
@@ -271,7 +260,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api.version}</version>
-<!--            <scope>provided</scope>-->
+            <!--            <scope>provided</scope>-->
         </dependency>
 
 
@@ -285,7 +274,7 @@
             <groupId>taglibs</groupId>
             <artifactId>standard</artifactId>
             <version>${javax.jstl-taglibs.version}</version>
-              <scope>provided</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -329,7 +318,7 @@
             <artifactId>spring-aop</artifactId>
             <version>${org.springframework-version}</version>
         </dependency>
-                <!--    spring data jpa-->
+        <!--    spring data jpa-->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
@@ -430,7 +419,7 @@
 
 
     <build>
-<!--        <finalName>enzymeportal</finalName>-->
+        <!--        <finalName>enzymeportal</finalName>-->
         <plugins>
            
             <plugin>

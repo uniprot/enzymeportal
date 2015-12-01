@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
@@ -302,6 +303,39 @@ public class BrowseTaxonomyController extends AbstractController {
 
       
         return organisms;
+    }
+    
+        @RequestMapping(value = "/taxonomy-test", method = RequestMethod.GET)
+    public String testTaxonomy(@RequestParam(value = "taxids", required = false) List<Long> taxids,Model model) {
+
+           taxids = new ArrayList<>();
+
+        taxids.add(224308L);
+        taxids.add(83333L);
+        taxids.add(83332L);
+        taxids.add(44689L);
+        taxids.add(559292L);
+        taxids.add(284812L);
+        taxids.add(39947L);
+        taxids.add(3702L);
+        taxids.add(7227L);
+        taxids.add(6239L);
+        taxids.add(7955L);
+        taxids.add(9913L);
+        taxids.add(9606L);
+        taxids.add(10090L);
+        taxids.add(10116L);
+        long startTime = System.nanoTime();
+
+        List<Taxonomy> organisms = enzymePortalService.getCountForOrganisms(taxids);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+         model.addAttribute("taxonomy", organisms);
+      
+        return "taxonomy-test";
     }
 
 }

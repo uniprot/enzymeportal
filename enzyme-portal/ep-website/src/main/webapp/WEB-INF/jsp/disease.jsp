@@ -24,27 +24,28 @@
     </c:if>
     <c:if test='${diseasesSize > 0}'>
         <p><spring:message code="label.entry.disease.found" arguments="${diseasesSize},${plural}"/></p>
+        <c:set var="evidence" value="" />
         <c:forEach items="${diseases}" var="disease" varStatus="count">
-            <br/><b style=" font-size:medium" ><a href="${disease.url}" target="_blank" > <c:out value="${disease.name}"/></a></b><br/>
+            <br/><b id="omim${disease.id}" style=" font-size:medium" ><a href="${disease.url}" target="_blank" > <c:out value="${disease.name}"/></a></b><br/>
             <c:out value="${disease.description}"/><br/>
 
-            <c:set var="ev" value="${disease.evidences}" />
+            <c:set var="evidence" value="${disease.evidences}" />
         </c:forEach>
             <hr/>
             <br/>
             <section>
-         <c:if test="${fn:length(disease.evidences) > 0}">
+         <c:if test="${fn:length(evidence) > 0}">
             <h3>Disease Evidence</h3>
-           
-        <c:forEach items="${ev}" var="v">
-            <ul>
-                <li> <c:out value="${v}"/></li>
+            
+        <c:forEach items="${evidence}" var="ev">
+                 <ul>
+                <li> <c:out value="${ev}"/></li>
 
             </ul>
         </c:forEach>
             </c:if>
         <div class="note_0">
-            <a class="note_0" href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}.html#section_comments" target="_blank">View disease evidence in UniProt</a>
+            <a class="note_0" href="http://www.uniprot.org/uniprot/${enzymeModel.uniprotaccessions[0]}#pathology_and_biotech" target="_blank">View disease evidence in UniProt</a>
         </div>
                 
             </section>
@@ -53,14 +54,15 @@
         <div class="provenance">
             <ul>
                 <li class="note_0">Data Sources:
-                	<a href="http://www.ebi.ac.uk/efo">EFO</a> and
+                	<a href="http://omim.org/">OMIM</a> and
                     <a href="http://www.uniprot.org">UniProt</a></li>
                 <li class="note_1">The mission of UniProt is to provide the
                     scientific community with a comprehensive, high-quality and freely
                     accessible resource of protein sequence and functional information</li>
-                <li class="note_2">The Experimental Factor Ontology (EFO) is an
-                	application focused ontology modelling the experimental
-                	factors in ArrayExpress.</li>
+                <li class="note_2">
+                    Online Mendelian Inheritance in Man (OMIM) is a comprehensive, authoritative compendium of human genes and genetic phenotypes 
+                    that is freely available and updated daily.
+               </li>
             </ul>
         </div>
     </c:if>

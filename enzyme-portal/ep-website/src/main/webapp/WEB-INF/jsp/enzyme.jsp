@@ -35,7 +35,7 @@
     <dl>
         <dt>EC Classification</dt>
         <dd>
-            <ul>
+            <ul id="intenz-ec">
                 <li>
                     <c:set var="echierarchies" value="${enzyme.echierarchies}"/>
                     <c:set var="echierarchiesSize" value="${fn:length(echierarchies)}"/>

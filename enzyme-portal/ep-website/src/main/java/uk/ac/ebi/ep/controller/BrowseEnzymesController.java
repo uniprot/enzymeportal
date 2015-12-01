@@ -477,6 +477,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         long startTime = System.nanoTime();
         Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByEcNumber(ec, pageable);
+         //Page<UniprotEntry> page = this.enzymePortalService.findEnzymeViewByEc(ec, pageable);
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
 
@@ -568,6 +569,7 @@ public class BrowseEnzymesController extends AbstractController {
         Pageable pageable = new PageRequest(pageNumber - 1, SEARCH_PAGESIZE, Sort.Direction.ASC, "entryType", "function");
 
         Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByEcNumber(ec, pageable);
+        //Page<UniprotEntry> page = this.enzymePortalService.findEnzymeViewByEc(ec, pageable);
 
         List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec);
         List<Compound> compouds = enzymePortalService.findCompoundsByEcNumber(ec);

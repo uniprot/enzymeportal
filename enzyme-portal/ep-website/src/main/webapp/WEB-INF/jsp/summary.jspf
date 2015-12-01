@@ -170,17 +170,20 @@
     <c:set var="enzymeDiseaseSize" value="${fn:length(enzymeDisease)}"/>
     <c:set var="disLimitedDisplayDefault" value="${5}"/>
     <c:set var="disLimitedDisplay" value="${disLimitedDisplayDefault}"/>
+     <c:set var="disLink" value="${pageContext.request.contextPath}/search/${primAcc}/diseaseDrugs/"/>
     
     <div id="enzymeDisease ">
         <c:if test="${ enzymeDiseaseSize >0}">
+             
             <b>Diseases :</b>
             <c:if test="${enzymeDiseaseSize > 0 && enzymeDiseaseSize <= disLimitedDisplay}">
                 <c:set var="disLimitedDisplay" value="${enzymeDiseaseSize}"/>
             </c:if>
             <c:set var="hiddenDis" value=""/>
             <c:forEach var="i" begin="0" end="${disLimitedDisplay-1}">
+               
                 <xchars:translate>
-                    <span class="resultPageDisease" style="border-bottom-style:none">${enzymeDisease[i].name}</span>;
+                    <span class="resultPageDisease" style="border-bottom-style:none"><a href="${pageContext.request.contextPath}/search/${primAcc}/diseaseDrugs${epfn:removeSlash(enzymeDisease[i].id)}">${enzymeDisease[i].name}</a></span>;
                 </xchars:translate>
             </c:forEach>
 
@@ -188,7 +191,7 @@
                 <span id='dis_${resultItemId}' >
                     <c:forEach var="i" begin="${disLimitedDisplay}" end="${enzymeDiseaseSize-1}">
                         <xchars:translate>
-                            <span class="resultPageDisease" style="border-bottom-style:none">${enzymeDisease[i].name}</span>;
+                            <span class="resultPageDisease" style="border-bottom-style:none"><a href="${pageContext.request.contextPath}/search/${primAcc}/diseaseDrugs${epfn:removeSlash(enzymeDisease[i].id)}">${enzymeDisease[i].name}</a></span>;
                         </xchars:translate>
                     </c:forEach>
                 </span>
@@ -280,8 +283,8 @@
             <c:if test="${not empty enzyme.ec}">
                <b>EC : </b> 
                <span>
-        <c:set var="webLink" value="http://www.ebi.ac.uk/intenz/query?cmd=SearchEC&ec="/>
-        <a target="_blank" href="${webLink}${enzyme.ec}"><c:out value="${enzyme.ec}"/></a>
+      
+        <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme#intenz-ec"><c:out value="${enzyme.ec}"/></a>
                  
                </span><br/>
             </c:if>

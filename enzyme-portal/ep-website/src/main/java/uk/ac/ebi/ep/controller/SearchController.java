@@ -48,7 +48,6 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
-import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
 import uk.ac.ebi.xchars.SpecialCharacters;
@@ -65,12 +64,6 @@ public class SearchController extends AbstractController {
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
     
-
-    
-
-
-    @Autowired
-    private ReactomeConfig reactomeConfig;
     @Autowired
     private ChebiConfig chebiConfig;
 
@@ -102,12 +95,12 @@ public class SearchController extends AbstractController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/search/{accession}/{field}")
+    @RequestMapping(value = "/search/{accession}/{field}", method = RequestMethod.GET)
     protected String getEnzymeModel(Model model,
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Field requestedField = Field.valueOf(field.toUpperCase());
-        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, ebeyeRestService,literatureService);
+        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService,literatureService);
 
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
@@ -130,7 +123,7 @@ public class SearchController extends AbstractController {
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case LITERATURE:
-                    //retriever.getLiteratureAdapter().setConfig(literatureConfig);
+                    
                     enzymeModel = retriever.getLiterature(accession);
                      model.addAttribute("maxCitations", maxCitations);
                     break;
@@ -295,6 +288,7 @@ public class SearchController extends AbstractController {
      * @param model
      * @param session
      * @param request
+     * @param response
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -480,9 +474,9 @@ public class SearchController extends AbstractController {
      */
     @Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
-        SearchResults results = null;
+        
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-        results = finder.getEnzymes(searchParameters);
+       SearchResults results = finder.getEnzymes(searchParameters);
 
         return results;
     }
@@ -522,6 +516,7 @@ public class SearchController extends AbstractController {
      * @param model
      * @param session
      * @param request
+     * @param response
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)

@@ -24,26 +24,26 @@ import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
  * @author joseph
  */
 public final class Functions {
-    
+
     private static ChebiConfig chebiConfig;
     private static ChemblConfig chemblConfig;
     private static Map<String, String> drugbankConfig;
-    
+
     public Functions() {
     }
-    
+
     public static void setChebiConfig(ChebiConfig chebiConfig) {
         Functions.chebiConfig = chebiConfig;
     }
-    
+
     public static void setChemblConfig(ChemblConfig chemblConfig) {
         Functions.chemblConfig = chemblConfig;
     }
-    
+
     public static void setDrugbankConfig(Map<String, String> config) {
         Functions.drugbankConfig = config;
     }
-    
+
     public static boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
     }
@@ -60,7 +60,7 @@ public final class Functions {
         String current = data;
         if (startsWithDigit(data)) {
             current = data.replaceAll("(-)?\\d+(\\-\\d*)?", "").trim();
-            
+
         }
         //return current.startsWith(letter.toLowerCase());
         return current.startsWith(letter);
@@ -85,12 +85,12 @@ public final class Functions {
     public static boolean alphaOmegaIsNotNull(Object alpha, Object omega) {
         boolean eval = true;
         if (alpha == null | omega == null) {
-            
+
             eval = false;
         }
-        
+
         return eval;
-        
+
     }
 
     /**
@@ -102,20 +102,20 @@ public final class Functions {
     public static boolean omegaIsNull(Object alpha, Object omega) {
         boolean eval = false;
         if (alpha == null) {
-            
+
             eval = false;
         }
-        
+
         if (alpha != null && omega == null) {
-            
+
             eval = true;
         }
-        
+
         if ((alpha != null && !alpha.equals("") && !alpha.equals(" ")) && (omega == null || omega.equals("") || omega.equals(" "))) {
-            
+
             eval = true;
         }
-        
+
         return eval;
     }
 
@@ -133,11 +133,21 @@ public final class Functions {
         }
         return eval;
     }
-    
+
     public static String escapeHTML(String value) {
-        
+
         String text = HtmlUtility.cleanText(value);
         return text;
+    }
+
+    public static String removeSlash(String url) {
+        String link = url;
+        if (url.contains("/")) {
+            link = url.replace("/", "");
+ 
+        }
+
+        return "#omim"+link;
     }
 
     /**
@@ -171,7 +181,7 @@ public final class Functions {
                 url = Functions.chebiConfig.getCompoundBaseUrl()
                         + molecule.getId();
             }
-            
+
         }
         return url;
     }
@@ -198,19 +208,19 @@ public final class Functions {
         }
         return imgSrc;
     }
-    
+
     public static String getSummaryBasketId(UniprotEntry summary) {
         List<String> accs = new ArrayList<>();
         accs.add(summary.getAccession());
 //        summary.getRelatedspecies().stream().forEach((acc) -> {
 //            accs.add(acc.getUniprotaccessions().get(0));
 //        });
-        
+
         return accs.toString();
 
         // return summary.getAccession();
     }
-    
+
     public static List<UniprotEntry> sortBlastResult(List<UniprotEntry> enzymes) {
 
         List<UniprotEntry> enzymeSummaries = enzymes.stream().sorted((id1, id2) -> -(Float.compare(id1.getIdentity(), id2.getIdentity()))).collect(Collectors.toList());
