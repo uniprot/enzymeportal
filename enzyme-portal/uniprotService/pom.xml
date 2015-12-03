@@ -61,23 +61,19 @@
             </exclusions>
         </dependency>
         <!--    production-->
-        <dependency>
+<!--        <dependency>
             <groupId>uk.ac.ebi.uniprot.kraken</groupId>
             <artifactId>uniprotjapi</artifactId>
             <version>2015.07</version>
             <exclusions>
-<!--                Exclude Commons Logging-->
+                Exclude Commons Logging
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!--                <dependency>
-            <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.13-SNAPSHOT</version>
-        </dependency> -->
+        </dependency>-->
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

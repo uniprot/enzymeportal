@@ -25,41 +25,42 @@ import java.util.Map;
 @JsonPropertyOrder({
 "authorId"
 })
+@Deprecated
 public class AuthorIdList {
 
 @JsonProperty("authorId")
 private List<AuthorId> authorId = new ArrayList<AuthorId>();
-@JsonIgnore
-private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-/**
-* 
+    /**
+     *
 * @return
 * The authorId
-*/
+     */
 @JsonProperty("authorId")
 public List<AuthorId> getAuthorId() {
 return authorId;
-}
+    }
 
-/**
-* 
+    /**
+     *
 * @param authorId
 * The authorId
-*/
+     */
 @JsonProperty("authorId")
 public void setAuthorId(List<AuthorId> authorId) {
 this.authorId = authorId;
-}
+    }
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
 }

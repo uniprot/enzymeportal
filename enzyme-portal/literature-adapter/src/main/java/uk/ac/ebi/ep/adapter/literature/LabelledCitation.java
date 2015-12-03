@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.adapter.literature;
 
 import java.util.EnumSet;
-
 import uk.ac.ebi.cdb.webservice.Result;
 
 /**

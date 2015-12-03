@@ -25,7 +25,8 @@ import java.util.Map;
 "fullName",
 "firstName",
 "lastName",
-"initials"
+"initials",
+"affiliation"
 })
 public class Author {
 
@@ -37,6 +38,8 @@ private String firstName;
 private String lastName;
 @JsonProperty("initials")
 private String initials;
+@JsonProperty("affiliation")
+private String affiliation;
 @JsonIgnore
 private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -118,6 +121,27 @@ return initials;
 @JsonProperty("initials")
 public void setInitials(String initials) {
 this.initials = initials;
+}
+
+
+/**
+* 
+* @return
+* The affiliation
+*/
+@JsonProperty("affiliation")
+public String getAffiliation() {
+return affiliation;
+}
+
+/**
+* 
+* @param affiliation
+* The affiliation
+*/
+@JsonProperty("affiliation")
+public void setAffiliation(String affiliation) {
+this.affiliation = affiliation;
 }
 
 @JsonAnyGetter

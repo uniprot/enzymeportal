@@ -5,10 +5,16 @@
 
 <properties>
 	<title>EBI enzyme portal change log</title>
-	<author email="rafael.alcantara@ebi.ac.uk">Rafael Alcántara</author>
+	<author email="joseph@ebi.ac.uk">Joseph Onwubiko</author>
 </properties>
 
 <body>
+    	<release version="1.0.5" date="2015-12-01" description="Release">
+		<action dev="joseph" type="update">
+			A new release of the enzyme portal
+		</action>
+	
+	</release>
 	<release version="1.0.3" date="" description="Using GitHub">
 		<action dev="rafalcan" type="fix">
 			Modified scm and distributionManagement configuration to use GitHub.

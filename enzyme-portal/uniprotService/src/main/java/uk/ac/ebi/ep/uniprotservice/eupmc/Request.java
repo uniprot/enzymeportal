@@ -5,8 +5,6 @@
  */
 package uk.ac.ebi.ep.uniprotservice.eupmc;
 
-
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,10 +16,11 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-"resultType",
-"synonym",
-"query",
-"page"
+    "query",
+    "resultType",
+    "synonym",
+    "page",
+    "pageSize"
 })
 /**
  *
@@ -29,105 +28,117 @@ import java.util.Map;
  */
 public class Request {
 
-@JsonProperty("resultType")
-private String resultType;
-@JsonProperty("synonym")
-private Boolean synonym;
-@JsonProperty("query")
-private String query;
-@JsonProperty("page")
-private Integer page;
-@JsonIgnore
-private final Map<String, Object> additionalProperties = new HashMap<>();
+    @JsonProperty("query")
+    private String query;
+    @JsonProperty("resultType")
+    private String resultType;
+    @JsonProperty("synonym")
+    private Boolean synonym;
+    @JsonProperty("page")
+    private Integer page;
+    @JsonProperty("pageSize")
+    private Integer pageSize;
+    @JsonIgnore
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
-/**
-* 
-* @return
-* The resultType
-*/
-@JsonProperty("resultType")
-public String getResultType() {
-return resultType;
-}
+    /**
+     *
+     * @return The query
+     */
+    @JsonProperty("query")
+    public String getQuery() {
+        return query;
+    }
 
-/**
-* 
-* @param resultType
-* The resultType
-*/
-@JsonProperty("resultType")
-public void setResultType(String resultType) {
-this.resultType = resultType;
-}
+    /**
+     *
+     * @param query The query
+     */
+    @JsonProperty("query")
+    public void setQuery(String query) {
+        this.query = query;
+    }
 
-/**
-* 
-* @return
-* The synonym
-*/
-@JsonProperty("synonym")
-public Boolean getSynonym() {
-return synonym;
-}
+    /**
+     *
+     * @return The resultType
+     */
+    @JsonProperty("resultType")
+    public String getResultType() {
+        return resultType;
+    }
 
-/**
-* 
-* @param synonym
-* The synonym
-*/
-@JsonProperty("synonym")
-public void setSynonym(Boolean synonym) {
-this.synonym = synonym;
-}
+    /**
+     *
+     * @param resultType The resultType
+     */
+    @JsonProperty("resultType")
+    public void setResultType(String resultType) {
+        this.resultType = resultType;
+    }
 
-/**
-* 
-* @return
-* The query
-*/
-@JsonProperty("query")
-public String getQuery() {
-return query;
-}
+    /**
+     *
+     * @return The synonym
+     */
+    @JsonProperty("synonym")
+    public Boolean getSynonym() {
+        return synonym;
+    }
 
-/**
-* 
-* @param query
-* The query
-*/
-@JsonProperty("query")
-public void setQuery(String query) {
-this.query = query;
-}
+    /**
+     *
+     * @param synonym The synonym
+     */
+    @JsonProperty("synonym")
+    public void setSynonym(Boolean synonym) {
+        this.synonym = synonym;
+    }
 
-/**
-* 
-* @return
-* The page
-*/
-@JsonProperty("page")
-public Integer getPage() {
-return page;
-}
+    /**
+     *
+     * @return The page
+     */
+    @JsonProperty("page")
+    public Integer getPage() {
+        return page;
+    }
 
-/**
-* 
-* @param page
-* The page
-*/
-@JsonProperty("page")
-public void setPage(Integer page) {
-this.page = page;
-}
+    /**
+     *
+     * @param page The page
+     */
+    @JsonProperty("page")
+    public void setPage(Integer page) {
+        this.page = page;
+    }
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+    /**
+     *
+     * @return The pageSize
+     */
+    @JsonProperty("pageSize")
+    public Integer getPageSize() {
+        return pageSize;
+    }
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+    /**
+     *
+     * @param pageSize The pageSize
+     */
+    @JsonProperty("pageSize")
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
 }

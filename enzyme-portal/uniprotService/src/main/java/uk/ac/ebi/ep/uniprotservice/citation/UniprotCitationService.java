@@ -25,8 +25,6 @@ import uk.ac.ebi.kraken.interfaces.uniprot.citationsNew.JournalArticle;
 import uk.ac.ebi.kraken.interfaces.uniprot.citationsNew.JournalName;
 import uk.ac.ebi.kraken.interfaces.uniprot.citationsNew.Page;
 import uk.ac.ebi.kraken.interfaces.uniprot.citationsNew.Volume;
-import uk.ac.ebi.kraken.uuw.services.remoting.EntryRetrievalService;
-import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
 import uk.ac.ebi.uniprot.dataservice.client.Client;
 import uk.ac.ebi.uniprot.dataservice.client.ServiceFactory;
 import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
@@ -50,9 +48,8 @@ public class UniprotCitationService {
     }
 
     public List<Result> computeCitation(String accession) throws ServiceException {
-        EntryRetrievalService entryRetrievalService = UniProtJAPI.factory.getEntryRetrievalService();
-        UniProtEntry entry = (UniProtEntry) entryRetrievalService.getUniProtEntry(accession);
-        //UniProtEntry entry =   uniProtService().getEntry(accession);
+
+        UniProtEntry entry =   uniProtService().getEntry(accession);
 
         final HashSet<Result> results = new HashSet<>();
 

@@ -24,6 +24,7 @@ import java.util.Map;
  *
  * @author joseph
  */
+@Deprecated
 public class TmAccessionTypeList {
 
     @JsonProperty("accessionType")

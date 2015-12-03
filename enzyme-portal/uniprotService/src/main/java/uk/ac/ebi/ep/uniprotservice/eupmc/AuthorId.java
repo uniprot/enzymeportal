@@ -24,6 +24,7 @@ import java.util.Map;
 "type",
 "value"
 })
+@Deprecated
 public class AuthorId {
 
 @JsonProperty("type")
