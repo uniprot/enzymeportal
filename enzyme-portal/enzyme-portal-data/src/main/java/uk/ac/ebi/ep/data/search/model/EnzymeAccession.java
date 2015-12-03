@@ -30,6 +30,8 @@ public class EnzymeAccession implements Serializable {
     protected Integer score = 0;
 
     protected String uniprotid;
+    
+    protected Boolean expEvidence;
 
     /**
      * Gets the value of the uniprotaccessions property.
@@ -332,7 +334,7 @@ public class EnzymeAccession implements Serializable {
 
     @Override
     public String toString() {
-        return "EnzymeAccession{" + "species=" + species + ", identity=" + identity + ", score=" + score + '}';
+        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + '}';
     }
 
 
@@ -343,5 +345,15 @@ public class EnzymeAccession implements Serializable {
     public void setUniprotid(String uniprotid) {
         this.uniprotid = uniprotid;
     }
+
+    public Boolean getExpEvidence() {
+        return expEvidence;
+    }
+
+    public void setExpEvidence(Boolean expEvidence) {
+        this.expEvidence = expEvidence;
+    }
+
+   
 
 }
