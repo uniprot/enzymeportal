@@ -18,7 +18,8 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @Configuration
-@PropertySource({"classpath:service.properties", "classpath:service.urlConfig"})
+//@PropertySource({"classpath:service.properties", "classpath:service.urlConfig"})
+@PropertySource({"classpath:service.urlConfig"})
 public class AnalysisConfig {
 
     @Autowired
