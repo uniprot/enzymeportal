@@ -777,6 +777,31 @@ function ajaxBasket(id, checked) {
     });
 }
 
+function openDownload() {
+	updateDownloadUrl();
+	$('#download-dropdown').toggle();
+}
+
+function updateDownloadUrl() {
+	var ids = [];
+	$('input.forBasket').each(function (index, elem) {
+		if (elem.checked === true) {
+			ids.push(elem.value.replace(/[\[\]']/g,''));
+		}
+	});
+	$('#download-count').text(ids.length);
+	if(ids.length <= 0) {
+		$('#download-submit').attr('href', '#');
+		return;
+	}
+	var url = 'http://www.uniprot.org/uniprot/?query='
+		+ ids
+		+ '&columns=id%2Ccomment(FUNCTION)%2Ccomment(COFACTOR)%2Ccomment(ENZYME%20REGULATION)%2Ccomment(CATALYTIC%20ACTIVITY)&compress=yes&format='
+		+ $('#download-format').val();
+	$('#download-submit').attr('href', url);
+	$('#download-count').text(ids.length);
+}
+
 /**
  * Updates the compare button (disabled/enabled) according to the number of
  * selected enzymes to compare, and also the text shown according to the

@@ -445,3 +445,36 @@ ul.catalytic-activity-list li {
     z-index: 999999;
     background: url(../images/beta-banner.png) top left no-repeat;
 }
+
+.dropdown-menu-box {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left:0;
+	z-index: 1000;
+	float: left;
+	min-width: 160px;
+	padding: 5px;
+	margin: 2px 0 0;
+	text-align: left;
+	list-style: none;
+	background-color: #FFFFFF;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0,0,0,.15);
+	border-radius: 4px;
+	box-shadow: 0 6px 12px rgba(0,0,0,.175);
+	-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.pull-left {
+	float:left;
+}
+
+.pull-right {
+	float:right;
+}
+.no-wrap {
+	white-space: nowrap;
+}
