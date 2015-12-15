@@ -6,9 +6,11 @@
     species filter) is selected and exported as a 'theSpecies'.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%--
+<c:set var="theSpecies" value="${enzyme.relatedspecies[0]}" />
+--%>
 
 <c:set var="theSpecies" value="${enzyme.relatedspecies[0]}" />
-
 <c:if test="${not empty searchModel
     and not empty searchModel.searchparams
     and not empty searchModel.searchparams.species}">

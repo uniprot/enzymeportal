@@ -22,6 +22,11 @@
 
 <%@include file="util/prioritiseSpecies.jsp" %>
 
+
+
+<%--
+<c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
+--%>
 <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
 <div class="resultItem grid_24">
@@ -117,22 +122,22 @@
 </c:choose>
 
 <div class="desc grid_21">
-    <c:if test="${not empty enzyme.function}">
+    <c:if test="${not empty theSpecies.enzymeFunction}">
         <div>
-          
+            <c:set var="function" value='${theSpecies.enzymeFunction}'/>
             <b>Function </b>:
             <c:choose>
-                <c:when test="${fn:length(fn:split(enzyme.function, ' ')) gt searchConfig.maxTextLength}">
-                    <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
+                <c:when test="${fn:length(fn:split(function, ' ')) gt searchConfig.maxTextLength}">
+                    <c:forEach var="word" items="${fn:split(function,' ')}"
                         begin="0" end="${searchConfig.maxTextLength-1}"> ${word}</c:forEach>
                     <span id="fun_${resultItemId}">
-                        <c:forEach var="word" items="${fn:split(enzyme.function,' ')}"
+                        <c:forEach var="word" items="${fn:split(function,' ')}"
                             begin="${searchConfig.maxTextLength}"> ${word}</c:forEach>
                     </span>
                     <a class="showLink" id="fun_link_${resultItemId}">... Show more about function</a>
                 </c:when>
                 <c:otherwise>
-                    ${enzyme.function}
+                    ${function}
                 </c:otherwise>
             </c:choose>
         </div>
