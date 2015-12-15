@@ -648,7 +648,7 @@
        <module>LiteratureService</module>
         <module>ep-base</module>
         <module>ep-website</module>
-    
+        <module>DataAnalysis</module>
     </modules>
     
     <profiles>
