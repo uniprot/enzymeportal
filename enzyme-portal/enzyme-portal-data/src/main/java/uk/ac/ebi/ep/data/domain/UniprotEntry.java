@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import uk.ac.ebi.ep.data.common.CommonSpecies;
+import uk.ac.ebi.ep.data.common.ModelOrganisms;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
@@ -524,13 +524,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         AtomicInteger customKey = new AtomicInteger(6);
 
         LinkedList<EnzymeAccession> relatedspecies = new LinkedList<>();
-      
 
         if (this.getRelatedProteinsId() != null) {
 
             this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
                 Species sp = new Species(entry.getScientificName(), entry.getCommonName());
                 entry.setSpecies(sp);
+
                 if (entry.getExpEvidenceFlag().equals(BigInteger.ONE)) {
                     entry.setExpEvidence(Boolean.TRUE);
                 } else {
@@ -547,38 +547,37 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             relatedspecies.add(map.getValue());
         });
 
-       
         List<EnzymeAccession> sortedSpecies = relatedspecies.stream().distinct()
                 .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence).reversed().
                         thenComparing(EnzymeAccession::getSpecies))
                 .collect(Collectors.toList());
+
         return sortedSpecies.stream().distinct().limit(50).collect(Collectors.toList());
     }
 
     private void sortSpecies(Species sp, EnzymeAccession entry, Map<Integer, EnzymeAccession> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
-        // HUMAN, MOUSE, RAT, Fly, WORM, Yeast, ECOLI 
+        //Human,Mouse, Mouse-ear cress, fruit fly, yeast, e.coli, Rat,worm
         // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
-        if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.HUMAN.getScientificName())) {
+        if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.HUMAN.getScientificName())) {
 
             priorityMapper.put(1, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.MOUSE.getScientificName())) {
+        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.MOUSE.getScientificName())) {
 
             priorityMapper.put(2, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.RAT.getScientificName())) {
+        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.MOUSE_EAR_CRESS.getScientificName())) {
 
             priorityMapper.put(3, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.FRUIT_FLY.getScientificName())) {
+        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getScientificName())) {
 
             priorityMapper.put(4, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.WORM.getScientificName())) {
+        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.ECOLI.getScientificName())) {
 
             priorityMapper.put(5, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(CommonSpecies.ECOLI.getScientificName())) {
-
+        } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(ModelOrganisms.BAKER_YEAST.getScientificName())) {
             priorityMapper.put(6, entry);
-        } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.BAKER_YEAST.getScientificName())) {
-            priorityMapper.put(customKey.getAndIncrement(), entry);
 
+        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.RAT.getScientificName())) {
+            priorityMapper.put(customKey.getAndIncrement(), entry);
         } else {
             priorityMapper.put(key.getAndIncrement(), entry);
         }
@@ -667,6 +666,16 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public void setExpEvidenceFlag(BigInteger expEvidenceFlag) {
         this.expEvidenceFlag = expEvidenceFlag;
+    }
+
+    @Override
+    public String getUniprotaccession() {
+        return this.getAccession();
+    }
+
+    @Override
+    public String getEnzymeFunction() {
+        return getFunction();
     }
 
 }

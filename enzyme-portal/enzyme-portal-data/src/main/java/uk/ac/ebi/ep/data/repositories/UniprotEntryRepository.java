@@ -43,6 +43,9 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findAccessions();
+    
+        @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0 AND ACCESSION IS NOT NULL", nativeQuery = true)
+    List<String> findSwissProtAccessions();
 
     @Query(value = "SELECT * FROM UNIPROT_ENTRY", nativeQuery = true)
     List<UniprotEntry> findUniprotEntries();

@@ -32,6 +32,8 @@ public class EnzymeAccession implements Serializable {
     protected String uniprotid;
     
     protected Boolean expEvidence;
+    protected String uniprotaccession;
+    protected String enzymeFunction;
 
     /**
      * Gets the value of the uniprotaccessions property.
@@ -352,6 +354,22 @@ public class EnzymeAccession implements Serializable {
 
     public void setExpEvidence(Boolean expEvidence) {
         this.expEvidence = expEvidence;
+    }
+
+    public String getUniprotaccession() {
+        return uniprotaccession;
+    }
+
+    public void setUniprotaccession(String uniprotaccession) {
+        this.uniprotaccession = uniprotaccession;
+    }
+
+    public String getEnzymeFunction() {
+        return enzymeFunction;
+    }
+
+    public void setEnzymeFunction(String enzymeFunction) {
+        this.enzymeFunction = enzymeFunction;
     }
 
    

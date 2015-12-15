@@ -106,6 +106,12 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
+    public List<String> findAllSwissProtAccessions() {
+
+        return uniprotEntryRepository.findSwissProtAccessions();
+    }
+
+    @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findAllDiseases() {
 
         return diseaseRepository.findAll();
