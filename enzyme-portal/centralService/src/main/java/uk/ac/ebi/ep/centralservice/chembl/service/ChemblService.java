@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.log4j.Logger;
@@ -79,7 +80,7 @@ public class ChemblService {
                 //LOGGER.warn("Num Assays found for target " + targetId + " == " + chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList()).size());
                 for (Assay assay : chemblAssay.get().getAssays().stream().distinct().collect(Collectors.toList())) {
                     String assayId = assay.getAssayChemblId();
-                //get activities for a given assay id
+                    //get activities for a given assay id
                     //TODO process in parallel the standard types inhibition and ic50 
                     String activityUrl = chemblServiceUrl.getActivityUrl() + assayId;
                     String ic50ActivityUrl = chemblServiceUrl.getIc50ActivityUrl() + assayId;
@@ -171,11 +172,13 @@ public class ChemblService {
 
     private String computeSynonyms(Molecule molecule) {
         String synonyms = molecule.getMoleculeSynonyms().stream().findFirst().get().getSynonyms();
-
+        String result = synonyms;
+        String[] parts;
         if (synonyms.contains("|")) {
-            synonyms = synonyms.split("|")[0];
+            parts = synonyms.split(Pattern.quote("|"));
+            result = parts[0];
         }
-        return synonyms;
+        return result;
 
     }
 
