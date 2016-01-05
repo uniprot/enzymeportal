@@ -1,6 +1,6 @@
 #This is how to run this script
 # ./writeToFile.sh db /dir filename.extension true or false
-# e.g ./writeToFile.sh uzpdev /life evidence.txt false
+# e.g ./writeToFile.sh uzpdev /evidence evidence.txt false
 
 
 EP_SCRIPTS=$(cd $(dirname $0) && pwd)
