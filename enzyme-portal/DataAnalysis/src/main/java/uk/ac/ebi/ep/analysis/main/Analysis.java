@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.analysis.main;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import uk.ac.ebi.ep.analysis.config.AnalysisConfig;
 import uk.ac.ebi.ep.analysis.service.DataAnalyzer;
@@ -19,12 +20,18 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
  */
 public class Analysis {
 
+    private final static Logger logger = Logger.getLogger(Analysis.class);
+
+    private Analysis() {
+
+    }
+
     public static void main(String args[]) throws Exception {
 
         String profile = "";
 
         if (args == null || args.length == 0) {
-            System.out.println("Please provide required parameters");
+            logger.error("Please provide required parameters");
             System.exit(0);
         }
 
@@ -44,7 +51,6 @@ public class Analysis {
 
             DataAnalyzer analyzer = context.getBean(DataAnalyzer.class);
             analyzer.populateEnzymesWithEvidences();
-            
 
         }
 
