@@ -104,13 +104,13 @@ public class DataAnalyzer {
     public void writeToFile(String fileDir, String filename, Boolean deleteFile) {
         try {
             List<SpEnzymeEvidence> enzymeEvidences = computeAccessionsWithEvidences();
-
+            String fileName = filename;
             if (StringUtil.isNullOrEmpty(filename)) {
-                filename = "evidence.tsv";
+                fileName = "evidence.tsv";
             }
-            logger.warn("num evidences written to file [" + filename + "] " + enzymeEvidences.size());
+            logger.warn("num evidences written to file [" + fileName + "] " + enzymeEvidences.size());
 
-            writeToFile(enzymeEvidences, fileDir, filename, deleteFile);
+            writeToFile(enzymeEvidences, fileDir, fileName, deleteFile);
         } catch (InterruptedException | ExecutionException ex) {
             logger.error("InterruptedException | ExecutionException ", ex);
         }
@@ -130,12 +130,12 @@ public class DataAnalyzer {
 
         List<String> dataList = new CopyOnWriteArrayList<>();
 
-        enzymeEvidences.stream().map((ev) -> {
+        enzymeEvidences.stream().map(ev -> {
             String acc = ev.getAccession();
             String evidence = ev.getEvidenceLine();
             String data = "Accession : " + acc + " : EvidenType : " + evidence;
             return data;
-        }).forEach((data) -> {
+        }).forEach(data -> {
             dataList.add(data);
         });
 
@@ -196,7 +196,7 @@ public class DataAnalyzer {
         }
     }
 
-    /**
+    /**<note>adaptation from Diego code</note>
      * 048 Write a big list of Strings to a file - Use a BufferedWriter 049
      *
      * @param content
@@ -257,7 +257,7 @@ public class DataAnalyzer {
 
             chunk.stream()
                     .filter(accession -> (enzymes.contains(accession)))
-                    .map((accession) -> createSpEnzymeEvidence(accession, evidenceType))
+                    .map(accession -> createSpEnzymeEvidence(accession, evidenceType))
                     .forEach(evidence -> {
                         evidences.add(evidence);
                     });

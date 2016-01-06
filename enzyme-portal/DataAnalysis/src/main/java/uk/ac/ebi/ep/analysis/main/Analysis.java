@@ -20,13 +20,13 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
  */
 public class Analysis {
 
-    private final static Logger logger = Logger.getLogger(Analysis.class);
+    private static final Logger logger = Logger.getLogger(Analysis.class);
 
     private Analysis() {
 
     }
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
 
         String profile = "";
 

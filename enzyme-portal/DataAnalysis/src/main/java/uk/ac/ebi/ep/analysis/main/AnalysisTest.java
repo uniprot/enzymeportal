@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.analysis.main;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import uk.ac.ebi.ep.analysis.config.AnalysisConfig;
 import uk.ac.ebi.ep.analysis.service.DataAnalyzer;
@@ -18,7 +19,7 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 public class AnalysisTest {
-
+private static final Logger logger = Logger.getLogger(AnalysisTest.class);
     private AnalysisTest() {
 
     }
@@ -26,7 +27,7 @@ public class AnalysisTest {
     public static void main(String... args) throws Exception {
 
         if (args == null || args.length == 0) {
-            System.out.println("Please provide required parameters");
+            logger.error("Please provide required parameters");
             System.exit(0);
         }
 
@@ -59,7 +60,6 @@ public class AnalysisTest {
         context.scan("uk.ac.ebi.ep.analysis.config");
         context.refresh();
 
-        DataAnalyzer analyzer = context.getBean(DataAnalyzer.class);
-        return analyzer;
+        return context.getBean(DataAnalyzer.class);
     }
 }
