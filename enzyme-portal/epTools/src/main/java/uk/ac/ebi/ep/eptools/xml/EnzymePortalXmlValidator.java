@@ -61,6 +61,7 @@ public class EnzymePortalXmlValidator {
                     + Arrays.toString(xsdFilesPathsAndNames) + "...";
 
             logger.warn(msg);
+            System.out.println("ERROR MSG "+ msg);
             validator.validate(new StreamSource(new File(xmlFilePathAndName)));
         } catch (IOException | SAXException exception) 
         {
@@ -69,6 +70,7 @@ public class EnzymePortalXmlValidator {
                     + " against XSDs " + Arrays.toString(xsdFilesPathsAndNames)
                     + " - " + exception);
 
+             System.out.println("EXP MSG "+ error);
             logger.error(error);
         }
 
