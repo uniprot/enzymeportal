@@ -43,12 +43,25 @@
 
     </build>
     
-      <dependencies>
-      <dependency>
+    <dependencies>
+        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>dataAnalysis</artifactId>
             <version>1.0.0</version>
-        </dependency>         
+        </dependency>   
+        
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>ep-parser</artifactId>
+            <version>1.0.7</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>SitemapGenerator</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+                    
     </dependencies> 
     
 </project>

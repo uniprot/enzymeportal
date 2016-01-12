@@ -1,4 +1,4 @@
-
+#This computes the experimental evidence and populates the database with the result.
 EP_SCRIPTS=$(cd $(dirname $0) && pwd)
 
 
@@ -16,5 +16,5 @@ WD=$(pwd)
 cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.analysis.main.Analysis" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG"
 cd $WD
-echo "[INFO] Finished computing EEV and loading data to database  - $(date)"
+echo "[INFO] Finished computing experimental evidences and loaded results to enzyme portal database  - $(date)"
 

@@ -1,3 +1,4 @@
+#This computes the experimental evidence and write to a file
 #This is how to run this script
 # ./writeToFile.sh db /dir filename.extension true or false
 # e.g ./writeToFile.sh uzpdev /evidence evidence.txt false
