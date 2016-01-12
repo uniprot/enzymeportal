@@ -26,7 +26,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  * @author joseph
  */
 //@RepositoryRestResource(excerptProjection = ProjectedSpecies.class)
-@RepositoryRestResource (itemResourceRel="uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
+@RepositoryRestResource(itemResourceRel = "uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
 public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, UniprotEntryRepositoryCustom {
 
     default UniprotEntry findByUniprotAccession(String acc) {
@@ -43,8 +43,8 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findAccessions();
-    
-        @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0 AND ACCESSION IS NOT NULL", nativeQuery = true)
+
+    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0 AND ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findSwissProtAccessions();
 
     @Query(value = "SELECT * FROM UNIPROT_ENTRY", nativeQuery = true)
@@ -105,15 +105,17 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
             + "WHERE ec.uniprotAccession = e.accession "
             + "AND ec.ecNumber = :ecNumber order by e.entryType ASC")
     Slice<UniprotEntry> findSlicedEnzymesByEcNumber(@Param("ecNumber") String ecNumber, Pageable pageable);
-    
-    
-        @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Query(value = "select * from enzyme_portal_ec_numbers_v where ec_number = :EC_NUMBER", nativeQuery = true)
     List<UniprotEntry> findEnzymeViewByEc(@Param("EC_NUMBER") String ec);
- 
-    
-     @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Query(value = "select ACCESSION from enzyme_portal_ec_numbers_mv where ec_number = :EC_NUMBER", nativeQuery = true)
     List<String> findAccessionViewByEc(@Param("EC_NUMBER") String ec);
+
+    @Transactional(readOnly = true)
+    @Query(value = "select ACCESSION from enzyme_portal_ec_numbers_mv where ec_number = :EC_NUMBER and SCIENTIFIC_NAME in (:SCIENTIFIC_NAME)", nativeQuery = true)
+    List<String> findAccessionViewByEcAndSpecies(@Param("EC_NUMBER") String ec, @Param("SCIENTIFIC_NAME") List<String> species);
 
 }

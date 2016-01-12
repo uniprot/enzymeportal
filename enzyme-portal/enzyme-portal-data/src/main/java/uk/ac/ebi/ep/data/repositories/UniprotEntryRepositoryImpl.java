@@ -253,6 +253,24 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return result;
     }
 
+    @Transactional(readOnly = true)
+    private List<String> findAccessionsByEC(String ecNumber) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<String> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct().list($.accession);
+        return result.stream().distinct().limit(1000).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Species> findSpeciesByEcNumberViaAccessions(String ecNumber, List<String> accessions) {
+        accessions = findAccessionsByEC(ecNumber);
+        JPAQuery query = new JPAQuery(entityManager);
+        List<Species> result = query.from($).where($.accession.in(accessions)).distinct().orderBy($.scientificName.asc())
+                .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
+
+        return result;
+    }
+
 //    @Override
 //    public  Page<Species> readPage(String ecNumber, Pageable pageable) {
 //        String q = "SELECT e FROM UniprotEntry e "
@@ -273,6 +291,4 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 //    //List<T> content = total > pageable.getOffset() ? query.getResultList() : Collections.<T> emptyList();
 //        return new PageImpl<>(result, pageable, result.size());
 //    }
-
-
 }

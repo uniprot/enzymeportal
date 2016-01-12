@@ -1,8 +1,6 @@
 package uk.ac.ebi.ep.data.dataconfig;
 
 import javax.sql.DataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +17,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @PropertySource({"classpath:ep-db-uzpdev.properties"})
 public class DevDataConfig extends AbstractConfig {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DevDataConfig.class);
     @Autowired
     private Environment env;
 
@@ -34,7 +31,7 @@ public class DevDataConfig extends AbstractConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource(url, username, password);
 
         ds.setDriverClassName("oracle.jdbc.OracleDriver");
-        //LOGGER.warn("The connection url "+ url);//DELETE LATER
+     
 
         return ds;
     }

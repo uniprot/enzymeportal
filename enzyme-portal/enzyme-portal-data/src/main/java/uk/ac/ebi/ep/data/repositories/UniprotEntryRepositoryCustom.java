@@ -51,9 +51,11 @@ public interface UniprotEntryRepositoryCustom {
 
     //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     List<UniprotEntry> findSummariesByAcc(List<String> accession);
-    
+
     List<Protein> findProteinByEc(String ec);
+
     List<Species> findSpeciesByEcNumber(String ecNumber);
-    // Page<Species> readPage(String ecNumber,Pageable pageable);
+
+    List<Species> findSpeciesByEcNumberViaAccessions(String ecNumber, List<String> accessions);
 
 }
