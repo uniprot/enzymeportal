@@ -10,7 +10,7 @@ echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
 cd $(dirname $0)/..
-mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.CofactorParser" -Dexec.args="$DB_CONFIG"
+mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.parser.main.CofactorParser" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG"
 cd $WD
 echo "[INFO] Finished querying and parsing UniProt data and updating Enzyme Portal database with ChEBI Compounds  - $(date)"
 

@@ -7,8 +7,10 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.data.entry.Summary;
@@ -16,6 +18,7 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 
 /**
  *
@@ -42,7 +45,7 @@ public class Cofactors extends CompoundParser {
     public void loadCofactors() {
         List<Summary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
         
-        LOGGER.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
+        LOGGER.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
      
    
         parseCofactorText(enzymeSummary);
@@ -59,7 +62,8 @@ public class Cofactors extends CompoundParser {
             if (xref != null) {
                 LiteCompound compound = null;
                 try{
-                   compound = searchCompoundInChEBI(xref);  
+                   LOGGER.warn("Special case : xref search in CHEBI "+ xref);
+                    compound = searchCompoundInChEBI(xref);  
                 }catch(Exception e){
                    LOGGER.error("Chebi webservice error while searching "+ xref, e);
                 }
@@ -96,19 +100,19 @@ public class Cofactors extends CompoundParser {
     
     private void parseCofactorText(List<Summary> enzymeSummary) {
         
-//        Stream<Summary> existingStream = enzymeSummary.stream();
-//        Stream<List<Summary>> partitioned = partition(existingStream, 100, 1);
-//        AtomicInteger count = new AtomicInteger(1);
-//        partitioned.parallel().forEach((chunk) -> {
-//            chunk.stream().forEach((summary) -> {
-//                processCofactors(summary);
-//            });
-//        });
-
-        enzymeSummary.forEach(summary ->{
-         processCofactors(summary);
-     
+        Stream<Summary> existingStream = enzymeSummary.stream();
+        Stream<List<Summary>> partitioned = partition(existingStream, 100, 1);
+        AtomicInteger count = new AtomicInteger(1);
+        partitioned.parallel().forEach((chunk) -> {
+            chunk.stream().forEach((summary) -> {
+                processCofactors(summary);
+            });
         });
+
+//        enzymeSummary.forEach(summary ->{
+//         processCofactors(summary);
+//     
+//        });
         //save compounds
         LOGGER.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
         
@@ -141,6 +145,7 @@ public class Cofactors extends CompoundParser {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
             
             if (cofactorName != null) {
+                 LOGGER.warn("cofactor name search in CHEBI "+ cofactorName);
                 LiteCompound compound = searchMoleculeInChEBI(cofactorName);
                 
                 if (compound != null) {
