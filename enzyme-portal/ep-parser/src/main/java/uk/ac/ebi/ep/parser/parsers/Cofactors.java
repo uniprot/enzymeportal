@@ -7,8 +7,10 @@ package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
 import uk.ac.ebi.ep.data.entry.Summary;
@@ -16,6 +18,7 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 
 /**
  *
@@ -41,6 +44,7 @@ public class Cofactors extends CompoundParser {
     @Override
     public void loadCofactors() {
         List<Summary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
+        System.out.println("NUMBER OF COFACTORS FOUND "+ enzymeSummary.size());
         
         LOGGER.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
      
@@ -59,8 +63,8 @@ public class Cofactors extends CompoundParser {
             if (xref != null) {
                 LiteCompound compound = null;
                 try{
-                   LOGGER.warn("Special case : xref search in CHEBI "+ xref);
-                    compound = searchCompoundInChEBI(xref);  
+                   LOGGER.info("Special case : xref search in CHEBI "+ xref);
+                    compound = findByChEBIiD(xref);  
                 }catch(Exception e){
                    LOGGER.error("Chebi webservice error while searching "+ xref, e);
                 }
@@ -73,9 +77,7 @@ public class Cofactors extends CompoundParser {
                     String relationship = Relationship.is_cofactor_of.name();
                     String compoundRole = Compound.Role.COFACTOR.name();
                     String url = compound.getUrl();
-                    //String accession = summary.getUniprotAccession().getAccession();
 
-                    //parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
                     compound.setCompoundId(compoundId);
                     compound.setCompoundName(compoundName);
                     compound.setCompoundSource(compoundSource);
@@ -97,19 +99,19 @@ public class Cofactors extends CompoundParser {
     
     private void parseCofactorText(List<Summary> enzymeSummary) {
         
-//        Stream<Summary> existingStream = enzymeSummary.stream();
-//        Stream<List<Summary>> partitioned = partition(existingStream, 100, 1);
-//        AtomicInteger count = new AtomicInteger(1);
-//        partitioned.parallel().forEach((chunk) -> {
-//            chunk.stream().forEach((summary) -> {
-//                processCofactors(summary);
-//            });
-//        });
-
-        enzymeSummary.forEach(summary ->{
-         processCofactors(summary);
-     
+        Stream<Summary> existingStream = enzymeSummary.stream().distinct();
+        Stream<List<Summary>> partitioned = partition(existingStream, 100, 1);
+        AtomicInteger count = new AtomicInteger(1);
+        partitioned.parallel().forEach((chunk) -> {
+            chunk.stream().forEach((summary) -> {
+                processCofactors(summary);
+            });
         });
+
+//        enzymeSummary.forEach(summary ->{
+//         processCofactors(summary);
+//     
+//        });
         //save compounds
         LOGGER.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
         
@@ -142,8 +144,8 @@ public class Cofactors extends CompoundParser {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
             
             if (cofactorName != null) {
-                 LOGGER.warn("cofactor name search in CHEBI "+ cofactorName);
-                LiteCompound compound = searchMoleculeInChEBI(cofactorName);
+                 LOGGER.info("cofactor name search in CHEBI "+ cofactorName);
+                LiteCompound compound = findByCompoundName(cofactorName);
                 
                 if (compound != null) {
                     
@@ -153,13 +155,7 @@ public class Cofactors extends CompoundParser {
                     String relationship = Relationship.is_cofactor_of.name();
                     String compoundRole = Compound.Role.COFACTOR.name();
                     String url = compound.getUrl();
-                    //String accession = summary.getUniprotAccession().getAccession();
 
-                    //parserService.createCompound(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
-                    //deprecate later
-//                    compound.setRelationship(Relationship.is_cofactor_of.name());
-//                    compound.setUniprotAccession(summary.getUniprotAccession());
-//                    compound.setCompoundRole(Compound.Role.COFACTOR.name());
                     compound.setCompoundId(compoundId);
                     compound.setCompoundName(compoundName);
                     compound.setCompoundSource(compoundSource);
