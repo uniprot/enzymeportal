@@ -20,7 +20,7 @@ import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
 
 /**
  *
- * @author joseph
+ * @author joseph <joseph@ebi.ac.uk>
  */
 public class Cofactors extends CompoundParser {
 
@@ -37,13 +37,13 @@ public class Cofactors extends CompoundParser {
 
     /**
      * parse cofactor comments from uniprot and validates compound names in
-     * chebi before storing them at enzyme portal database
+     * chebi before storing them to enzyme portal database
      */
     @Override
     public void loadCofactors() {
         List<Summary> enzymeSummary = enzymeSummaryRepository.findSummariesByCommentType(COMMENT_TYPE);
 
-        LOGGER.warn("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
+        LOGGER.info("Number of Regulation Text from EnzymeSummary Table to parse for cofactors " + enzymeSummary.size());
 
         parseCofactorText(enzymeSummary);
     }
@@ -94,7 +94,7 @@ public class Cofactors extends CompoundParser {
     }
 
     private void parseCofactorText(List<Summary> enzymeSummary) {
-
+//parallel processing
 //        Stream<Summary> existingStream = enzymeSummary.stream();
 //        Stream<List<Summary>> partitioned = partition(existingStream, 100, 1);
 //        //AtomicInteger count = new AtomicInteger(1);
@@ -104,9 +104,9 @@ public class Cofactors extends CompoundParser {
 //            });
 //        });
 
-        enzymeSummary.forEach(summary ->{
-         processCofactors(summary);
-     
+        enzymeSummary.forEach(summary -> {
+            processCofactors(summary);
+
         });
         //save compounds
         LOGGER.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());

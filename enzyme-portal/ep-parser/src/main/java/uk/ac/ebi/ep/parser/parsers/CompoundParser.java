@@ -5,8 +5,6 @@
  */
 package uk.ac.ebi.ep.parser.parsers;
 
-import com.sun.xml.ws.server.UnsupportedMediaException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +14,6 @@ import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.DataItem;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntity;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
@@ -29,7 +25,7 @@ import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
 
 /**
  *
- * @author joseph
+ * @author joseph <joseph@ebi.ac.uk>
  */
 public abstract class CompoundParser {
 
@@ -106,7 +102,7 @@ public abstract class CompoundParser {
                 entry.setCompoundId(chebiId);
                 entry.setCompoundName(chebiName);
                 entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-                //break;
+          
             } else {
                 LOGGER.info("Not found in ChEBI: " + name);
             }
@@ -152,9 +148,6 @@ public abstract class CompoundParser {
                         chebiId = lite.getChebiId();
                         chebiName = lite.getChebiAsciiName();//name is used instead of chebiName as to maintain names from uniprot
 
-//                        if (chebiId != null) {
-//                            break;
-//                        }
                     }
                 }
 
@@ -165,8 +158,7 @@ public abstract class CompoundParser {
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(name);
                     entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-                   // break;
-                } else {
+                 } else {
                     LOGGER.info("Not found in ChEBI: " + name);
                 }
             } catch (ChebiWebServiceFault_Exception e) {
@@ -176,154 +168,6 @@ public abstract class CompoundParser {
         return entry;
     }
     
-    
-        /**
-     * Searches a compound name in ChEBI. Please note that if the name does not
-     * match <i>exactly</i> any names/synonyms returned by ChEBI, the result
-     * will be <code>null</code>.
-     *
-     * @param moleculeName the compound name.
-     * @return an entry with a ChEBI ID, or <code>null</code> if not found.
-     */
-    protected LiteCompound searchCompoundInChEBI_OLD(String moleculeName) {
 
-        LiteCompound entry = null;
-        // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
-        // sometimes as "moleculeName (concentration)":
-        Matcher m = COMPOUND_NAME_PATTERN.matcher(moleculeName);
-        m.matches(); // always
-        String[] nameAcronym = {m.group(1), m.group(2)};
-        // first name, then acronym (if any):
-        nameLoop:
-        for (String name : nameAcronym) {
-
-            if (name == null) {
-                continue; // acronym, usually
-            }
-            try {
-
-                LiteEntityList lites = null;
-                try {
-                    lites = chebiWsClient.getLiteEntity(
-                            name, SearchCategory.ALL_NAMES, 25, StarsCategory.ALL);
-                } catch (Exception e) {
-                    LOGGER.error("Error while searching ChEBI using the name : " + name, e);
-                }
-                String chebiId = null;
-                String chebiName = null;
-
-                if (lites != null) {
-                    liteLoop:
-                    for (LiteEntity lite : lites.getListElement()) {
-                        chebiId = lite.getChebiId();
-                        chebiName = lite.getChebiAsciiName();//default
-
-                        Entity completeEntity = null;
-                        try {
-                            completeEntity = chebiWsClient
-                                    .getCompleteEntity(lite.getChebiId());
-                        } catch (UnsupportedMediaException e) {
-                            LOGGER.error("Error getting Chebi entity using chebi ID " + lite.getChebiId(), e);
-                        }
-
-                        if (completeEntity != null) {
-                            for (DataItem dataItem : completeEntity.getSynonyms()) {
-
-                                if ("UniProt".equalsIgnoreCase(dataItem.getSource())) {
-                                    chebiName = dataItem.getData();
-                                }
-                            }
-                        }
-
-                    }
-                }
-
-                if (chebiId != null && !blackList.contains(chebiName) && !StringUtils.isEmpty(chebiName)) {
-                    entry = new LiteCompound();
-                    entry.setCompoundSource(MmDatabase.ChEBI.name());
-                    entry.setCompoundId(chebiId);
-                    entry.setCompoundName(chebiName);
-                    entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-                    break;
-                } else {
-                    //LOGGER.warn("Not found in ChEBI: " + name);
-                }
-            } catch (ChebiWebServiceFault_Exception e) {
-                LOGGER.error("ChebiWebServiceFault_Exception while Searching for " + name, e);
-            }
-        }
-        return entry;
-    }
-
-    /**
-     * Searches a compound name in ChEBI. Please note that if the name does not
-     * match <i>exactly</i> any names/synonyms returned by ChEBI, the result
-     * will be <code>null</code>.
-     *
-     * @param moleculeName the compound name.
-     * @return an entry with a ChEBI ID, or <code>null</code> if not found.
-     */
-    protected LiteCompound searchMoleculeInChEBI_OLD(String moleculeName) {
-
-        LiteCompound entry = null;
-        // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
-        // sometimes as "moleculeName (concentration)":
-        Matcher m = COMPOUND_NAME_PATTERN.matcher(moleculeName);
-        m.matches(); // always
-        String[] nameAcronym = {m.group(1), m.group(2)};
-        // first name, then acronym (if any):
-        nameLoop:
-        for (String name : nameAcronym) {
-            if (name == null) {
-                continue; // acronym, usually
-            }
-            try {
-                LiteEntityList lites = chebiWsClient.getLiteEntity(
-                        name, SearchCategory.ALL_NAMES, 25, StarsCategory.ALL);
-                String chebiId = null;
-
-                if (lites != null) {
-                    liteLoop:
-                    for (LiteEntity lite : lites.getListElement()) {
-
-                        Entity completeEntity = chebiWsClient
-                                .getCompleteEntity(lite.getChebiId());
-                        List<String> synonyms = new ArrayList<>();
-                        for (DataItem dataItem : completeEntity.getSynonyms()) {
-                            synonyms.add(dataItem.getData().toLowerCase());
-                        }
-                        List<String> formulae = new ArrayList<>();
-                        for (DataItem formula : completeEntity.getFormulae()) {
-                            formulae.add(formula.getData());
-                        }
-
-                        if (completeEntity.getChebiAsciiName()
-                                .equalsIgnoreCase(name)
-                                || synonyms.contains(name.toLowerCase())
-                                || formulae.contains(name)) {
-                            chebiId = completeEntity.getChebiId();
-                        }
-                        if (chebiId != null) {
-                            break;
-                        }
-                    }
-                }
-
-                if (chebiId != null && !blackList.contains(name) && !StringUtils.isEmpty(name)) {
-                    entry = new LiteCompound();
-                    entry.setCompoundSource(MmDatabase.ChEBI.name());
-                    entry.setCompoundId(chebiId);
-                    entry.setCompoundName(name);
-                    entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-                    break;
-                } else {
-                    LOGGER.warn("Not found in ChEBI: " + name);
-                }
-            } catch (ChebiWebServiceFault_Exception e) {
-                LOGGER.error("Error while Searching for Chebi name : " + name, e);
-            }
-        }
-        return entry;
-    }
 
 }
