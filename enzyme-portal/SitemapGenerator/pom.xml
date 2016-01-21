@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 		http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -10,18 +10,18 @@
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>SitemapGenerator</artifactId>
-    <version>2.0.5</version>
+    <version>2.0.6</version>
     <packaging>jar</packaging>
 
-    <name>SitemapGenerator</name>
+    <name>sitemapGenerator</name>
 
     <properties>
-      <org.springframework-version>4.1.7.RELEASE</org.springframework-version>
+        <org.springframework-version>4.1.7.RELEASE</org.springframework-version>
         
         <slf4j.version>1.7.5</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-           <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
@@ -38,12 +38,12 @@
         </dependency>
 
         
-                <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.18</version>
+            <version>1.0.20</version>
         </dependency>
-<!--         <dependency>
+        <!--         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
             <version>1.0.18</version>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-           <version>${org.springframework-version}</version>
+            <version>${org.springframework-version}</version>
         </dependency>
         
         <dependency>
@@ -69,7 +69,7 @@
             <scope>test</scope>
         </dependency> 
  
-                       <dependency>
+        <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
             <version>2.6.0</version>
@@ -78,13 +78,13 @@
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
             <version>2.6.0</version>
-<!--            <scope>provided</scope>-->
+            <!--            <scope>provided</scope>-->
         </dependency> 
-               <dependency>
-	<groupId>jaxen</groupId>
-	<artifactId>jaxen</artifactId>
-	<version>1.1.6</version>
-</dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1.6</version>
+        </dependency>
         
         
         

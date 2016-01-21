@@ -2,7 +2,7 @@
 # Generates the Enzyme Portal sitemap using the latest stable version of SitemapGenerator module.
 # This script should be run from the root of an EP working copy managed by git.
 
-[ ! -d .git ] && echo 'Not a git-managed working copy' && exit 1
+#[ ! -d .git ] && echo 'Not a git-managed working copy' && exit 1
 
 # Make sure the current branch is not another tag (ep-parser, for example),
 # as we need to have the SitemapGenerator pom file available in order to find

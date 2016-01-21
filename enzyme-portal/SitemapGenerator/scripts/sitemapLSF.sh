@@ -5,7 +5,7 @@
 
 echo
 echo "**************************** W A R N I N G ****************************"
-echo "Tis will generate sitemap at /ebi/uniprot/production/enzyme_portal/sitemap"
+echo "This will generate sitemap at /ebi/uniprot/production/enzyme_portal/sitemap"
 echo "(Ctrl-C to cancel, Enter to continue)"
 read ok
 

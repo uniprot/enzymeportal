@@ -23,9 +23,9 @@ public class SiteMapMain {
     public static void main(String... args) throws Exception {
 
         //////////////comment out here ///////////////////////
-        //args = new String[4];
-       
-//        String dbConfig = "uzpdev";
+//        args = new String[4];
+//       
+//        String dbConfig = "uzprel";
 //        String userHome = System.getProperty("user.home");
 //        String filename = "SiteMap";
 //        String testing = "true";
