@@ -33,6 +33,6 @@ public class Summary {
     public void setCommentText(String commentText) {
         this.commentText = commentText;
     }
-    
-    
+
+ 
 }
