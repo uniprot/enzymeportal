@@ -26,6 +26,8 @@ echo "[INFO] You are about to run the SitemapGenerator using these parameters :"
 echo "[INFO] *******************************************************************"
 echo "[INFO] " $DB_CONFIG $FILE_DIR $FILE_NAME $TEST_MODE
 echo "[INFO] *******************************************************************"
+WD=$(pwd)
+cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.eptools.main.SiteMapMain" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG $FILE_DIR $FILE_NAME $TEST_MODE"
 echo "[INFO] Running complete -  $(date)"
 
