@@ -3,8 +3,10 @@
 # Param:
 # $1: fileDirectory  /ebi/uniprot/production/enzyme_portal/sitemap
 
-SITEMAP_CONFIG=$(dirname $0)/sitemapProp.properties
-FILE_DIR=$(grep '^fileDir=' $SITEMAP_CONFIG | cut -d '=' -f 2)
+#SITEMAP_CONFIG=$(dirname $0)/sitemapProp.properties
+#FILE_DIR=$(grep '^fileDir=' $SITEMAP_CONFIG | cut -d '=' -f 2)
+
+FILE_DIR=/ebi/uniprot/production/enzyme_portal/sitemap
 
 
 echo "About to copy sitemap to this directory /nfs/public/rw/uniprot/enzyme_portal/sitemap "
