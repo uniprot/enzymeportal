@@ -13,11 +13,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.SpEnzymeEvidence;
 
@@ -29,9 +35,20 @@ public class DataAnalyzerTest {
 
     private final Logger logger = Logger.getLogger(DataAnalyzerTest.class);
     private DataAnalyzer instance = null;
-    private final List<SpEnzymeEvidence> evidences = new ArrayList<>();
+    private final List<SpEnzymeEvidence> evidences = new CopyOnWriteArrayList<>();
 
-    public DataAnalyzerTest() {
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+
+    private String resolvePath(String folder) {
+        return temporaryFolder
+                .getRoot().toPath()
+                .resolve(folder)
+                .toString();
     }
 
     @Before
@@ -45,6 +62,31 @@ public class DataAnalyzerTest {
         evidence1.setEvidenceLine("COFACTOR");
         evidences.add(evidence);
         evidences.add(evidence1);
+    }
+
+    /**
+     * Test of writeToFile method, of class DataAnalyzer.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testWriteFileToTempFolder() throws IOException {
+        logger.warn("Test testWriteFileToTempFolder ..");
+
+        String filename = "evidence.txt";
+        Boolean deleteFile = false;// must be false as the file will be deleted before the assertThat condition
+        File output = temporaryFolder.newFile(filename);
+
+        // thrown.expect(IOException.class);
+        //thrown.expectMessage("folder already exists");
+        String fileDir = output.getParent();
+        List<SpEnzymeEvidence> data = evidences.stream().limit(1).collect(Collectors.toList());
+        instance.writeToFile(data, fileDir, filename, deleteFile);
+
+        assertThat(output).hasExtension("txt").
+                hasContent("Accession : Acc123 : EvidenType : FUNCTION".trim())
+                .hasParent(resolvePath(fileDir));
+
     }
 
     /**
