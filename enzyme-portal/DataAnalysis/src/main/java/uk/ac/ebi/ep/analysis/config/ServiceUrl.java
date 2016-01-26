@@ -6,7 +6,7 @@
 package uk.ac.ebi.ep.analysis.config;
 
 /**
- *
+ *Holds the URL links to Uniprot website
  * @author Joseph <joseph@ebi.ac.uk>
  */
 public class ServiceUrl {

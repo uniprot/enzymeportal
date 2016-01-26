@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>dataAnalysis</artifactId>
-     <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-        <parent>
+    <parent>
         <groupId>uk.ac.ebi.ep</groupId>
         <artifactId>ep</artifactId>
         <version>1.0.5</version>
@@ -40,7 +40,7 @@
     </build>
     <dependencies>
         
-                <dependency>
+        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
             <version>1.0.20</version>
@@ -133,11 +133,15 @@
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
-         
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.2.0</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>

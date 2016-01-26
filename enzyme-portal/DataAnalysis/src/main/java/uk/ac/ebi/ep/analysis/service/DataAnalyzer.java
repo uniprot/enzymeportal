@@ -5,18 +5,26 @@
  */
 package uk.ac.ebi.ep.analysis.service;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -148,7 +156,7 @@ public class DataAnalyzer {
     }
 
     /**
-     *
+     *This writes file to ${user.home}
      * @param dataList data to write
      * @param filename filename
      * @param deleteFile set to true if needs to delete file after creation
@@ -157,7 +165,7 @@ public class DataAnalyzer {
         try {
             String userHome = System.getProperty("user.home");
 
-            String filePath = userHome + "/" + filename;
+            String filePath = String.format("%s/%s", userHome, filename);
             bufferedWrite(dataList, filePath);
             if (deleteFile) {
                 Path path = Paths.get(filePath);
@@ -171,21 +179,25 @@ public class DataAnalyzer {
 
     /**
      *
-     * @param dataList
-     * @param fileLocation
-     * @param filename
-     * @param deleteFile
+     * @param dataList data
+     * @param fileLocation where file will be writen
+     * @param filename filename
+     * @param deleteFile true if file is to be deleted (use afterwards)
      */
     private void createDirAndFile(List<String> dataList, String fileLocation, String filename, Boolean deleteFile) {
         try {
-            String userHome = System.getProperty("user.home");
 
-            String fileDir = userHome + fileLocation;
-            Files.createDirectories(Paths.get(fileDir));
+            String fileDir = fileLocation;
+            Set<PosixFilePermission> perms
+                    = PosixFilePermissions.fromString("rwxr-x---");
+            FileAttribute<Set<PosixFilePermission>> attr
+                    = PosixFilePermissions.asFileAttribute(perms);
+            Files.createDirectories(Paths.get(fileDir), attr);
 
-            String filePath = fileDir + "/" + filename;
+            String filePath = String.format("%s/%s", fileLocation, filename);
 
             bufferedWrite(dataList, filePath);
+            //bufferedStream(dataList, filePath);
 
             if (deleteFile) {
                 Path path = Paths.get(filePath);
@@ -196,7 +208,23 @@ public class DataAnalyzer {
         }
     }
 
-    /**<note>adaptation from Diego code</note>
+    void bufferedStream(List<String> content, String filePath) {
+        Path p = Paths.get(filePath);
+
+        try (OutputStream out = new BufferedOutputStream(
+                Files.newOutputStream(p, CREATE, TRUNCATE_EXISTING))) {
+            for (String element : content) {
+                out.write(element.getBytes(), 0, element.length());
+
+            }
+
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+    }
+
+    /**
+     * <note>adaptation from Diego code</note>
      * 048 Write a big list of Strings to a file - Use a BufferedWriter 049
      *
      * @param content
