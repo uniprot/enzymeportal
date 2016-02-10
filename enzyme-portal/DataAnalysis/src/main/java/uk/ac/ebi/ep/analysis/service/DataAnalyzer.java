@@ -94,6 +94,8 @@ public class DataAnalyzer {
             logger.warn("num evidences written to enzyme portal database " + enzymeEvidences.size());
 
             analysisService.populateEvidences(enzymeEvidences);
+            logger.warn("finished updating the evidence table. Starting to update UniprotEntry table with evidence Flag");
+            enzymePortalService.updateExpEvidenceFlag();
         } catch (InterruptedException | ExecutionException ex) {
             logger.error("InterruptedException | ExecutionException ", ex);
         }
@@ -297,7 +299,7 @@ public class DataAnalyzer {
 
     private List<SpEnzymeEvidence> computeAccessionsWithEvidences() throws InterruptedException, ExecutionException {
         List<String> enzymes = enzymePortalService.findAllSwissProtAccessions();
-        logger.warn("num swissprot enzymes from enzyme portal database " + enzymes.size());
+        logger.info("num swissprot enzymes from enzyme portal database " + enzymes.size());
 
         CompletableFuture<List<SpEnzymeEvidence>> functionFuture = CompletableFuture
                 .supplyAsync(() -> tagEvidences(serviceUrl.getFunctionUrl(), EvidenceType.FUNCTION.getEvidenceName(), enzymes));
@@ -322,7 +324,7 @@ public class DataAnalyzer {
 
         List<SpEnzymeEvidence> evidences = futures.get().stream().collect(Collectors.toList());
 
-        logger.warn("Number of Accessions with Evidences found :: " + evidences.size());
+        logger.info("Number of Accessions with Evidences found :: " + evidences.size());
 
         return evidences;
 
