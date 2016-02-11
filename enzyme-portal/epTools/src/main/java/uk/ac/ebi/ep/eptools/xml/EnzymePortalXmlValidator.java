@@ -7,9 +7,7 @@ package uk.ac.ebi.ep.eptools.xml;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
@@ -35,87 +33,53 @@ public class EnzymePortalXmlValidator {
     /**
      * Validate provided XML against the provided XSD schema files.
      *
-     * @param xmlFilePathAndName Path/name of XML file to be validated; should
-     * not be null or empty.
-     * @param xsdFilesPathsAndNames XSDs against which to validate the XML;
-     * should not be null or empty.
+     * @param xmlFile XML file to be validated; should not be null or empty.
+     * @param xsdFiles XSDs against which to validate the XML should not be null
+     * or empty.
      */
-    public static void validateXmlAgainstXsds(
-            final String xmlFilePathAndName, final String[] xsdFilesPathsAndNames) {
-        if (xmlFilePathAndName == null || xmlFilePathAndName.isEmpty()) {
-            logger.error("ERROR: Path/name of XML to be validated cannot be null.");
+    public static void validateXml( final String xmlFile, final String[] xsdFiles) {
+        if (xmlFile == null || xmlFile.isEmpty()) {
+            logger.error("ERROR: XML file to be validated cannot be null.");
             return;
         }
-        if (xsdFilesPathsAndNames == null || xsdFilesPathsAndNames.length < 1) {
-            logger.error("ERROR: At least one XSD must be provided to validate XML against.");
+        if (xsdFiles == null || xsdFiles.length < 1) {
+            logger.error("ERROR: At least an XSD File must be provided for XML validation to proceed.");
             return;
         }
         final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-        final StreamSource[] xsdSources = generateStreamSourcesFromXsdPathsJdk8(xsdFilesPathsAndNames);
+        final StreamSource[] streamSources = streamSourcesFromXsdFiles(xsdFiles);
 
         try {
-            final Schema schema = schemaFactory.newSchema(xsdSources);
+            final Schema schema = schemaFactory.newSchema(streamSources);
             final Validator validator = schema.newValidator();
-            String msg = "Validating " + xmlFilePathAndName + " against XSDs "
-                    + Arrays.toString(xsdFilesPathsAndNames) + "...";
+            String info = "Started validating " + xmlFile + " against XSDs " + Arrays.toString(xsdFiles) + "...";
 
-            logger.info(msg);
-            validator.validate(new StreamSource(new File(xmlFilePathAndName)));
-        } catch (IOException | SAXException exception) 
-        {
+            logger.info(info);
+            validator.validate(new StreamSource(new File(xmlFile)));
+        } catch (IOException | SAXException exception) {
 
-            String error = ("ERROR: Unable to validate " + xmlFilePathAndName
-                    + " against XSDs " + Arrays.toString(xsdFilesPathsAndNames)
-                    + " - " + exception);
+            String errorMsg = ("ERROR: Unable to validate " + xmlFile + " against XSDs " + Arrays.toString(xsdFiles) + " - " + exception);
 
-            logger.error(error);
+            logger.error(errorMsg);
         }
 
         logger.info("XML Validation process is now completed.");
     }
 
     /**
-     * Generates array of StreamSource instances representing XSDs associated
-     * with the file paths/names provided and use JDK 8 Stream API.
+     * Generates an array of StreamSource instances for the XSD file provided
      *
-     * This method can be commented out if using a version of Java prior to JDK
-     * 8.
      *
-     * @param xsdFilesPaths String representations of paths/names of XSD files.
-     * @return StreamSource instances representing XSDs.
+     *
+     * @param xsdFiles XSD files.
+     * @return StreamSource instances of XSDs.
      */
-    private static StreamSource[] generateStreamSourcesFromXsdPathsJdk8(
-            final String[] xsdFilesPaths) {
-        return Arrays.stream(xsdFilesPaths)
+    private static StreamSource[] streamSourcesFromXsdFiles(final String... xsdFiles) {
+        return Arrays.stream(xsdFiles)
                 .map(StreamSource::new)
                 .collect(Collectors.toList())
-                .toArray(new StreamSource[xsdFilesPaths.length]);
-    }
-
-    /**
-     * Generates array of StreamSource instances representing XSDs associated
-     * with the file paths/names provided and uses pre-JDK 8 Java APIs.
-     *
-     * This method can be commented out (or better yet, removed altogether) if
-     * using JDK 8 or later.
-     *
-     * @param xsdFilesPaths String representations of paths/names of XSD files.
-     * @return StreamSource instances representing XSDs.
-     * @deprecated Use generateStreamSourcesFromXsdPathsJdk8 instead when JDK 8
-     * or later is available.
-     */
-    @Deprecated
-    private static StreamSource[] generateStreamSourcesFromXsdPathsJdk7(
-            final String[] xsdFilesPaths) {
-        // Diamond operator used here requires JDK 7; add type of
-        // StreamSource to generic specification of ArrayList for
-        // JDK 5 or JDK 6
-        final List<StreamSource> streamSources = new ArrayList<>();
-        for (final String xsdPath : xsdFilesPaths) {
-            streamSources.add(new StreamSource(xsdPath));
-        }
-        return streamSources.toArray(new StreamSource[xsdFilesPaths.length]);
+                .toArray(new StreamSource[xsdFiles.length]);
     }
 
 }

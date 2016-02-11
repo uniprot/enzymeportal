@@ -19,20 +19,19 @@ public class ValidatorMain {
     /**
      * Validates provided XML against provided XSD.
      *
-     * @param arguments XML file to be validated (first argument) and XSD
-     * against which it should be validated (second and later arguments).
+     * @param arguments XML file to be validated and XSD files against which it the XML should be validated.
      */
     public static void main(final String[] arguments) {
 
         if (arguments.length < 2) {
-            out.println("\nUSAGE: java XmlValidator <xmlFile> <xsdFile1> ... <xsdFileN>\n");
-            out.println("\tOrder of XSDs can be significant (place XSDs according to their dependencies ...");
+            out.println("\nUSAGE: EnzymePortalXmlValidator <xmlFile> <xsdFile1> ... <xsdFileN>\n");
+            out.println("\tNOte: place XSDs according to their dependencies ...");
            
             System.exit(-1);
         }
 
         final String[] schemas = Arrays.copyOfRange(arguments, 1, arguments.length);
-        EnzymePortalXmlValidator.validateXmlAgainstXsds(arguments[0], schemas);
+        EnzymePortalXmlValidator.validateXml(arguments[0], schemas);
 
     }
 }

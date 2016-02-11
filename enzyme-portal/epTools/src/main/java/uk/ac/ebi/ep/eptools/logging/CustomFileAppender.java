@@ -36,7 +36,6 @@ public class CustomFileAppender extends FileAppender {
     }
 
     private static String prependDate(String filename) {
-        //return System.currentTimeMillis() + "_" + filename;
         return filename;
 
     }
