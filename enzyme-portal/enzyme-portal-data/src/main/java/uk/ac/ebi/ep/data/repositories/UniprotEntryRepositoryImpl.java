@@ -10,6 +10,7 @@ import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.Projections;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.entry.EnzymePortal;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.Species;
@@ -270,25 +272,18 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         return result;
     }
+    
+            @Transactional(readOnly = true)
+    @Override
+    public Page<UniprotEntry> findPageableEntryByEc(String ec, Pageable pageable) {
+        JPAQuery query = new JPAQuery(entityManager);
+        int pageSize =pageable.getPageSize();
+        int page = pageable.getPageNumber();
+        List<UniprotEntry> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ec))
+                .distinct().limit(pageSize).offset((page) * pageSize)
+                .list($).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+        return new PageImpl<>(result, pageable, result.size());
 
-//    @Override
-//    public  Page<Species> readPage(String ecNumber, Pageable pageable) {
-//        String q = "SELECT e FROM UniprotEntry e "
-//            + "left join e.enzymePortalEcNumbersSet ec "
-//            + "WHERE ec.uniprotAccession = e.accession "
-//            + "AND ec.ecNumber = :ecNumber order by e.entryType ASC";
-//      
-//        TypedQuery<Species> query = entityManager.createQuery(null);
-//
-//        query.setFirstResult(pageable.getOffset());
-//        query.setMaxResults(pageable.getPageSize());
-////        List<Species> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct().orderBy($.scientificName.asc())
-////                .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
-//
-//        List<Species> result = query.getResultList();
-//     
-//
-//    //List<T> content = total > pageable.getOffset() ? query.getResultList() : Collections.<T> emptyList();
-//        return new PageImpl<>(result, pageable, result.size());
-//    }
+    }
+    
 }

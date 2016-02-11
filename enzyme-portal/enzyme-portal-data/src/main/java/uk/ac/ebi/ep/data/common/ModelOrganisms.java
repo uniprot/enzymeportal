@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.data.common;
 
 import java.util.LinkedList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -33,7 +34,7 @@ public enum ModelOrganisms {
     }
     private String scientificName;
 
-    private ModelOrganisms(String name) {
+    private ModelOrganisms(@NotNull String name) {
         this.scientificName = name;
     }
 

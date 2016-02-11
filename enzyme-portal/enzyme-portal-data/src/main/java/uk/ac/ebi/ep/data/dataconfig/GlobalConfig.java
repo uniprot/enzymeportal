@@ -25,7 +25,6 @@ import uk.ac.ebi.ep.data.service.UniprotEntryService;
 @Configuration
 public class GlobalConfig {
 
-
     @Bean
     public DiseaseService diseaseService() {
         return new DiseaseService();
@@ -55,24 +54,25 @@ public class GlobalConfig {
     public EnzymePortalSummaryService enzymePortalSummaryService() {
         return new EnzymePortalSummaryService();
     }
-    
+
     @Bean
-    public EnzymePortalXmlService enzymePortalXmlService(){
+    public EnzymePortalXmlService enzymePortalXmlService() {
         return new EnzymePortalXmlService();
     }
-    
+
     @Bean
-    public EnzymePortalParserService enzymePortalParserService(){
+    public EnzymePortalParserService enzymePortalParserService() {
         return new EnzymePortalParserService();
     }
-  @Bean
-  public SpelAwareProxyProjectionFactory projectionFactory() {
-    return new SpelAwareProxyProjectionFactory();
-  }
-  
-  @Bean
-  public AnalysisService analysisService(){
-      return new AnalysisService();
-  }
+
+    @Bean
+    public SpelAwareProxyProjectionFactory projectionFactory() {
+        return new SpelAwareProxyProjectionFactory();
+    }
+
+    @Bean
+    public AnalysisService analysisService() {
+        return new AnalysisService();
+    }
 
 }

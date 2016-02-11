@@ -1,5 +1,7 @@
 package uk.ac.ebi.ep.data.dataconfig;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,10 +21,28 @@ public class DevDataConfig extends AbstractConfig {
 
     @Autowired
     private Environment env;
-
+    
     @Bean
     @Override
     public DataSource dataSource() {
+        String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
+                env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
+
+        String user = env.getRequiredProperty("ep.db.username");
+        String password = env.getRequiredProperty("ep.db.password");
+
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(url);
+        config.setUsername(user);
+        config.setPassword(password);
+        config.setDriverClassName("oracle.jdbc.OracleDriver");
+
+        HikariDataSource ds = new HikariDataSource(config);
+        return ds;
+    }
+
+    @Override
+    public DataSource driverManagerDataSource() {
         String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                 env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
 
@@ -31,18 +51,12 @@ public class DevDataConfig extends AbstractConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource(url, username, password);
 
         ds.setDriverClassName("oracle.jdbc.OracleDriver");
-     
 
         return ds;
     }
 
     @Override
     protected DataSource comboPooledDataSource() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    protected DataSource driverManagerDataSource() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

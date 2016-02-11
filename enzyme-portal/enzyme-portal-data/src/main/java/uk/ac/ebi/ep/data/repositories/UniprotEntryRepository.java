@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
@@ -27,7 +29,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 //@RepositoryRestResource(excerptProjection = ProjectedSpecies.class)
 @RepositoryRestResource(itemResourceRel = "uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
-public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, UniprotEntryRepositoryCustom {
+public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, JpaSpecificationExecutor<UniprotEntry>, UniprotEntryRepositoryCustom {
 
     default UniprotEntry findByUniprotAccession(String acc) {
         return findByAccession(acc);
@@ -36,9 +38,7 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     UniprotEntry findByAccession(String accession);
 
     @Transactional(readOnly = true)
-    //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE ACCESSION = :ACCESSION ", nativeQuery = true)
-    //@Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
     UniprotEntry findEnzymeByAccession(@Param("ACCESSION") String accession);
 
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
@@ -58,9 +58,7 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<String> findCatalyticActivitiesByAccession(@Param("UNIPROT_ACCESSION") String accession);
 
     @Transactional(readOnly = true)
-    //@Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     @Query(value = "SELECT DISTINCT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
-
     List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION") List<String> accession);
 
     @Transactional(readOnly = true)
@@ -73,25 +71,20 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(4) */ ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
-    //@Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     List<String> filterEnzymesFromAccessions(@Param("ACCESSION") List<String> accession);
 
     @Transactional(readOnly = true)
-    //@Query(value = "SELECT DISTINCT /*+ FIRST_ROWS(1000) PARALLEL(4) */ * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession IN (:ACCESSION)")
     Stream<List<UniprotEntry>> findStreamedSummariesByAccessions(@Param("ACCESSION") List<String> accessions, Pageable pageable);
 
     @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession IN (:ACCESSION)")
     Slice<UniprotEntry> findSlicedSummariesByAccessions(@Param("ACCESSION") List<String> accessions, Pageable pageable);
 
-    //@Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession IN (:ACCESSION)")
-    @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
+    @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession IN (:ACCESSION)")
     @Async
     Future<List<UniprotEntry>> findFutureSummariesByAccessions(@Param("ACCESSION") List<String> accessions);
 
-//    @Transactional(readOnly = true)
-//    @Query(name ="browseTaxonomy", value = "select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in (:TAX_ID) group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name", nativeQuery = true)
-//    List<Taxonomy> getCountForOrganisms(@Param("TAX_ID")List<Long> taxids);
+
     @Transactional(readOnly = true)
     @Query(value = "SELECT e FROM UniprotEntry e "
             + "left join e.enzymePortalEcNumbersSet ec "
@@ -107,15 +100,16 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     Slice<UniprotEntry> findSlicedEnzymesByEcNumber(@Param("ecNumber") String ecNumber, Pageable pageable);
 
     @Transactional(readOnly = true)
-    @Query(value = "select * from enzyme_portal_ec_numbers_v where ec_number = :EC_NUMBER", nativeQuery = true)
-    List<UniprotEntry> findEnzymeViewByEc(@Param("EC_NUMBER") String ec);
-
-    @Transactional(readOnly = true)
     @Query(value = "select ACCESSION from enzyme_portal_ec_numbers_mv where ec_number = :EC_NUMBER", nativeQuery = true)
     List<String> findAccessionViewByEc(@Param("EC_NUMBER") String ec);
 
     @Transactional(readOnly = true)
     @Query(value = "select ACCESSION from enzyme_portal_ec_numbers_mv where ec_number = :EC_NUMBER and SCIENTIFIC_NAME in (:SCIENTIFIC_NAME)", nativeQuery = true)
     List<String> findAccessionViewByEcAndSpecies(@Param("EC_NUMBER") String ec, @Param("SCIENTIFIC_NAME") List<String> species);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional(readOnly = true)
+    @Query(value = "UPDATE UNIPROT_ENTRY SET EXP_EVIDENCE_FLAG = 1 WHERE ACCESSION IN (SELECT distinct accession from SP_ENZYME_EVIDENCE)", nativeQuery = true)
+    void updateExpEvidenceFlag();
 
 }

@@ -86,9 +86,9 @@ public class EnzymePortalService {
     private EnzymeCatalyticActivityRepository catalyticActivityRepository;
     @Autowired
     private ProjectionFactory projectionFactory;
-    
-    private static final int ORACLE_IN_CLAUSE_LIMIT=1000;
-    private static final int QUERY_LIMIT=999;
+
+    private static final int ORACLE_IN_CLAUSE_LIMIT = 1000;
+    private static final int QUERY_LIMIT = 999;
     private static final int START_INDEX = 0;
 
     @Transactional(readOnly = true)
@@ -637,9 +637,10 @@ public class EnzymePortalService {
     public List<Species> findSpeciesByEcNumber(String ecNumber) {
         return uniprotEntryRepository.findSpeciesByEcNumber(ecNumber);
     }
-        @Transactional(readOnly = true)
-    public List<Species> findSpeciesByEcNumber(String ecNumber,List<String> accessions) {
-        return uniprotEntryRepository.findSpeciesByEcNumberViaAccessions(ecNumber,accessions);
+
+    @Transactional(readOnly = true)
+    public List<Species> findSpeciesByEcNumber(String ecNumber, List<String> accessions) {
+        return uniprotEntryRepository.findSpeciesByEcNumberViaAccessions(ecNumber, accessions);
     }
 
     @Transactional(readOnly = true)
@@ -805,10 +806,6 @@ public class EnzymePortalService {
         return uniprotEntryRepository.findByUniprotAccession(ac);
     }
 
-    public List<UniprotEntry> findM(String ec) {
-        return uniprotEntryRepository.findEnzymeViewByEc(ec);
-    }
-
     public Page<UniprotEntry> findEnzymeViewByEc(String ec, Pageable pageable) {
         List<String> accessions = uniprotEntryRepository.findAccessionViewByEc(ec);
         if (accessions.size() >= ORACLE_IN_CLAUSE_LIMIT) {
@@ -818,9 +815,9 @@ public class EnzymePortalService {
         return page;
 
     }
-    
-        public Page<UniprotEntry> findEnzymeViewByEcAndSpecies(String ec,List<String> species, Pageable pageable) {
-        List<String> accessions = uniprotEntryRepository.findAccessionViewByEcAndSpecies(ec,species);
+
+    public Page<UniprotEntry> findEnzymeViewByEcAndSpecies(String ec, List<String> species, Pageable pageable) {
+        List<String> accessions = uniprotEntryRepository.findAccessionViewByEcAndSpecies(ec, species);
         if (accessions.size() >= ORACLE_IN_CLAUSE_LIMIT) {
             accessions = accessions.subList(START_INDEX, QUERY_LIMIT);
         }
@@ -829,4 +826,7 @@ public class EnzymePortalService {
 
     }
 
+    public void updateExpEvidenceFlag() {
+        uniprotEntryRepository.updateExpEvidenceFlag();
+    }
 }

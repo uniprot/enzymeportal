@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.data.domain;
 
+import com.mysema.query.annotations.QueryInit;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -137,6 +138,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     //@BatchSize(size = 10)
     @Fetch(FetchMode.JOIN)
+    @QueryInit("enzymePortalEcNumbersSet")
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @Column(name = "SEQUENCE_LENGTH")
     private Integer sequenceLength;
@@ -528,13 +530,18 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         if (this.getRelatedProteinsId() != null) {
 
             this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
-                Species sp = new Species(entry.getScientificName(), entry.getCommonName());
+
+                Species sp = buildSpeciesFromEntry(entry);
                 entry.setSpecies(sp);
 
-                if (entry.getExpEvidenceFlag().equals(BigInteger.ONE)) {
-                    entry.setExpEvidence(Boolean.TRUE);
-                } else {
-                    entry.setExpEvidence(Boolean.FALSE);
+                Optional<BigInteger> evidence = Optional.ofNullable(entry.getExpEvidenceFlag());
+
+                if (evidence.isPresent()) {
+                    if (evidence.get().equals(BigInteger.ONE)) {
+                        entry.setExpEvidence(Boolean.TRUE);
+                    } else {
+                        entry.setExpEvidence(Boolean.FALSE);
+                    }
                 }
 
                 sortSpecies(sp, entry, priorityMapper, customKey, key);
@@ -553,6 +560,15 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
                 .collect(Collectors.toList());
 
         return sortedSpecies.stream().distinct().limit(50).collect(Collectors.toList());
+    }
+
+    private Species buildSpeciesFromEntry(UniprotEntry entry) {
+        Species sp = new Species();
+        sp.setScientificname(entry.getScientificName());
+        sp.setCommonname(entry.getCommonName());
+        sp.setSelected(false);
+        sp.setTaxId(entry.getTaxId());
+        return sp;
     }
 
     private void sortSpecies(Species sp, EnzymeAccession entry, Map<Integer, EnzymeAccession> priorityMapper, AtomicInteger customKey, AtomicInteger key) {

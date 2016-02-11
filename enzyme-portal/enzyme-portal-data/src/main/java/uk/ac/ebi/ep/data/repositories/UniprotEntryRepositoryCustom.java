@@ -49,7 +49,6 @@ public interface UniprotEntryRepositoryCustom {
 
     List<String> findEnzymesByCompound(String compoundId);
 
-    //@EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     List<UniprotEntry> findSummariesByAcc(List<String> accession);
 
     List<Protein> findProteinByEc(String ec);
@@ -58,4 +57,5 @@ public interface UniprotEntryRepositoryCustom {
 
     List<Species> findSpeciesByEcNumberViaAccessions(String ecNumber, List<String> accessions);
 
+    Page<UniprotEntry> findPageableEntryByEc(String ec, Pageable pageable);
 }
