@@ -149,8 +149,6 @@ public class EnzymeFinder extends EnzymeBase {
             query = query.trim();
         }
         List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true, LIMIT);
-        // List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true);
-        //List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query);
         LOGGER.warn("Number of Processed Accession for  " + query + " :=:" + accessions.size());
 
         uniprotAccessions = accessions.stream().distinct().limit(ACCESSION_LIMIT).collect(Collectors.toList());

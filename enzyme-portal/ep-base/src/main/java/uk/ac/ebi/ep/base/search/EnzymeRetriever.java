@@ -156,6 +156,10 @@ public class EnzymeRetriever extends EnzymeBase {
             //suppliment info
             model.setCommonName(uniprotEntry.getCommonName());
             model.setFunction(uniprotEntry.getFunction());
+            model.setEnzymeFunction(uniprotEntry.getEnzymeFunction());
+            model.setEntryType(uniprotEntry.getEntryType());
+            model.setExpEvidenceFlag(uniprotEntry.getExpEvidenceFlag());
+            model.setFunctionLength(uniprotEntry.getFunctionLength());
             model.setProteinName(uniprotEntry.getProteinName());
             model.setSpecies(uniprotEntry.getSpecies());
             model.setScientificName(uniprotEntry.getScientificName());

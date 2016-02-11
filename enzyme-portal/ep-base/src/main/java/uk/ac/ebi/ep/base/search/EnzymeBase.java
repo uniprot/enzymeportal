@@ -17,21 +17,16 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
  */
 public abstract class EnzymeBase {
 
-    //protected IRheaAdapter rheaAdapter;
-    //protected IChebiAdapter chebiAdapter;
-
-    //protected LiteratureService literatureService;
     protected EnzymePortalService service;
-
-    //protected IntenzAdapter intenzAdapter;
-
-    //protected EbeyeRestService ebeyeRestService;
+    private EnzymeBase(){
+        
+    }
 
     public EnzymeBase(EnzymePortalService service) {
         this.service = service;
     }
 
-        /**
+    /**
      * Retrieves the protein recommended name as well as any synonyms.
      *
      * @param namesColumn the column returned by the web service
@@ -57,6 +52,5 @@ public abstract class EnzymeBase {
         }
         return nameSynonyms;
     }
-
 
 }

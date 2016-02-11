@@ -40,7 +40,7 @@ public class SummaryComparison extends AbstractComparison<EnzymeModel> {
         }       
         subComparisons.put("Species", new StringComparison(
                 sb1.toString(), sb2.toString()));
-        subComparisons.put("Function", new StringComparison(
+                subComparisons.put("Function", new StringComparison(
                 e1.getFunction(), e2.getFunction()));
         subComparisons.put("EC classification", new ListComparison(
                 e1.getEc(), e2.getEc()));
