@@ -48,7 +48,11 @@ import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
 public class ApplicationContext extends WebMvcConfigurerAdapter {
 
 
-    // Maps resources path to webapp/resources
+    
+    /**Maps resources path to webapp/resources
+     * 
+     * @param registry ResourceHandlerRegistry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -68,16 +72,7 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
 
     }
 
-    // Only needed if we are using @Value and ${...} when referencing properties
-//    @Bean
-//    public static PropertySourcesPlaceholderConfigurer properties() {
-//        PropertySourcesPlaceholderConfigurer propertySources = new PropertySourcesPlaceholderConfigurer();
-//        Resource[] resources = new ClassPathResource[]{
-//            new ClassPathResource("spring.properties")};
-//        propertySources.setLocations(resources);
-//        propertySources.setIgnoreUnresolvablePlaceholders(true);
-//        return propertySources;
-//    }
+
     // Provides internationalization of messages
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
@@ -94,9 +89,6 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
         cookieLocaleResolver.setCookieName("locale");
         return cookieLocaleResolver;
     }
-    // public CookieLocaleResolver
-//
-    // Basic jsp view resolver ...
 
     @Bean
     public InternalResourceViewResolver internalResourceViewResolver() {
@@ -109,14 +101,6 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
 
     }
 
-//    @Bean
-//    public UrlBasedViewResolver urlBasedViewResolver() {
-//        UrlBasedViewResolver resolver = new UrlBasedViewResolver();
-//        resolver.setPrefix("/WEB-INF/jsp/");
-//        resolver.setSuffix(".jsp");
-//        resolver.setViewClass(JstlView.class);
-//        return resolver;
-//    }
 
     @Bean
     public FormattingConversionService formattingConversionService() {

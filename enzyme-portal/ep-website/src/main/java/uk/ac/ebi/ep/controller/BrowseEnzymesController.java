@@ -62,14 +62,13 @@ public class BrowseEnzymesController extends AbstractController {
     //concrete jsp's
     private static final String BROWSE_ENZYMES = "/browse_enzymes";
     private static final String EC = "/ec";
-  
+
     private static final String RESULT = "/searches";
     //abtract url
     private static final String BROWSE_ENZYME_CLASSIFICATION = "/browse/enzymes";
     private static final String BROWSE_EC = "/browse/enzyme";
 
     private static final String FIND_SPECIES_BY_EC = "/species-by-ec";
-
 
     private static final String SEARCH_ENZYMES = "/search-enzymes";
     private static final String EC_NUMBER = "ec";
@@ -84,10 +83,7 @@ public class BrowseEnzymesController extends AbstractController {
     private static final String SUBSUBCLASS = "SUBSUBCLASS";
     private static final String selectedEc = "selectedEc";
 
-
     private static final int SEARCH_PAGESIZE = 10;
-    
-
 
     @RequestMapping(value = "/species/{ec}", method = RequestMethod.GET)
     public String getSpecies(@PathVariable("ec") String ec, Model model, RedirectAttributes attributes) {
@@ -119,7 +115,6 @@ public class BrowseEnzymesController extends AbstractController {
         return "species";
     }
 
-  
     @RequestMapping(value = "/species/{ec}/page/{pageNumber}/", method = RequestMethod.GET)
     public String getSpeciesPaginated(@PathVariable("ec") String ec, @PathVariable("pageNumber") Integer pageNumber, Model model, RedirectAttributes attributes) {
 
@@ -464,7 +459,6 @@ public class BrowseEnzymesController extends AbstractController {
 
     }
 
-
     @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.GET)
     public String searchByEcNumber(@ModelAttribute("searchModel") SearchModel searchModel,
             @RequestParam(value = "ec", required = false) String ec, @RequestParam(value = "ecname", required = false) String ecname,
@@ -478,6 +472,7 @@ public class BrowseEnzymesController extends AbstractController {
         long startTime = System.nanoTime();
         Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByEcNumber(ec, pageable);
          //Page<UniprotEntry> page = this.enzymePortalService.findEnzymeViewByEc(ec, pageable);
+
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
 
@@ -486,6 +481,7 @@ public class BrowseEnzymesController extends AbstractController {
 
         long startTime1 = System.nanoTime();
         List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec);
+        //List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec,new ArrayList<>());
         List<Compound> compouds = enzymePortalService.findCompoundsByEcNumber(ec);
         List<Disease> diseases = enzymePortalService.findDiseasesByEcNumber(ec);
 
@@ -570,7 +566,6 @@ public class BrowseEnzymesController extends AbstractController {
 
         Page<UniprotEntry> page = this.enzymePortalService.findEnzymesByEcNumber(ec, pageable);
         //Page<UniprotEntry> page = this.enzymePortalService.findEnzymeViewByEc(ec, pageable);
-
         List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec);
         List<Compound> compouds = enzymePortalService.findCompoundsByEcNumber(ec);
         List<Disease> diseases = enzymePortalService.findDiseasesByEcNumber(ec);
@@ -585,7 +580,7 @@ public class BrowseEnzymesController extends AbstractController {
         searchParams.setPrevioustext("");
         searchModel.setSearchparams(searchParams);
 
-        List<UniprotEntry> result = page.getContent();
+        List<UniprotEntry> result = page.getContent();//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
         int current = page.getNumber() + 1;
         int begin = Math.max(1, current - 5);
@@ -633,7 +628,6 @@ public class BrowseEnzymesController extends AbstractController {
 
         return RESULT;
     }
-
 
     @RequestMapping(value = SEARCH_ENZYMES, method = RequestMethod.POST)
     public String searchEnzymesByEcPost(@ModelAttribute("searchModel") SearchModel searchModel,

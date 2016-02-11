@@ -15,11 +15,11 @@
 
 		$('.dropdown-menu-box').click(function(e){
 			e.stopPropagation();
-		})
+		});
 
 		$('#select-all-checkbox,.forBasket,#download-format').change(function(){
 			updateDownloadUrl();
-		})
+		});
 
 		$('body,#download-submit').click(function(event){
 			$('.dropdown-menu-box').hide();

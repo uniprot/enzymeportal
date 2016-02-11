@@ -217,8 +217,6 @@ public final class Functions {
 //        });
 
         return accs.toString();
-
-        // return summary.getAccession();
     }
 
     public static List<UniprotEntry> sortBlastResult(List<UniprotEntry> enzymes) {

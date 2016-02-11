@@ -65,9 +65,11 @@
 <%--not empty basket[epfn:getSummaryBasketId(enzyme)]? 'checked': ''}--%>
 
 <c:choose>
+    <%--
     <c:when test="${empty enzyme.relatedProteinsId}">
         <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a>
     </c:when>
+        --%>
    <c:when test="${not empty errorMessage}">
         <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a>
     </c:when>

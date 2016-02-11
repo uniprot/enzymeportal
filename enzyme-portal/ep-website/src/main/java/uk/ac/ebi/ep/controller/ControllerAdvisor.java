@@ -188,18 +188,20 @@ public class ControllerAdvisor extends AbstractController {
                 ecn.setSelected(true);
             });
         });
-
+        
         //methods
         //ec only
         if (specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty() && !StringUtils.isEmpty(ec)) {
             page = enzymePortalService.filterByEc(ec, pageable);
-
+          // page = this.enzymePortalService.findEnzymeViewByEc(ec, pageable);
+            
         }
 
         //specie only
         if (!specieFilter.isEmpty() && compoundFilter.isEmpty() && diseaseFilter.isEmpty()) {
             page = enzymePortalService.filterByEcAndSpecies(ec, specieFilter, pageable);
-
+             //page = enzymePortalService.findEnzymeViewByEcAndSpecies(ec, specieFilter, pageable);
+             
         }
 
         // compounds only
@@ -233,7 +235,7 @@ public class ControllerAdvisor extends AbstractController {
             page = enzymePortalService.filterByEcAndCompoundAndDiseases(ec, compoundFilter, diseaseFilter, pageable);
         }
 
-        List<UniprotEntry> result = page.getContent();
+        List<UniprotEntry> result = page.getContent();//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
         int current = page.getNumber() + 1;
         int begin = Math.max(1, current - 5);

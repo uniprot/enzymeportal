@@ -176,7 +176,7 @@
                                 <form:hidden path="searchparams.previoustext" />
                                 <input type="hidden" id="filtersFormStart"
                                        name="searchparams.start" value="0"/>
-                                <input id="pageNumber" type="hidden" name="pageNumber" value="0"/>
+                                <input id="pageNumber" type="hidden" name="pageNumber" value="${currentIndex}"/>
                                 <input type="hidden" name="ec" value="${ec}"/>
                                 <input type="hidden" name="ecname" value="${ecname}"/>
                                 

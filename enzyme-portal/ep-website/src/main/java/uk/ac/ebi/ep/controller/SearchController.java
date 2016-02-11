@@ -60,10 +60,9 @@ import uk.ac.ebi.xchars.domain.EncodingType;
 @Controller
 public class SearchController extends AbstractController {
 
- 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
-    
+
     @Autowired
     private ChebiConfig chebiConfig;
 
@@ -85,7 +84,6 @@ public class SearchController extends AbstractController {
         return Character.isDigit(data.charAt(0));
     }
 
-
     /**
      * Process the entry page,
      *
@@ -100,7 +98,7 @@ public class SearchController extends AbstractController {
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Field requestedField = Field.valueOf(field.toUpperCase());
-        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService,literatureService);
+        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, literatureService);
 
         retriever.getIntenzAdapter().setConfig(intenzConfig);
         EnzymeModel enzymeModel = null;
@@ -123,33 +121,35 @@ public class SearchController extends AbstractController {
                     enzymeModel = retriever.getDiseases(accession);
                     break;
                 case LITERATURE:
-                    
+
                     enzymeModel = retriever.getLiterature(accession);
-                     model.addAttribute("maxCitations", maxCitations);
+                    model.addAttribute("maxCitations", maxCitations);
                     break;
                 default:
                     enzymeModel = retriever.getEnzyme(accession);
                     requestedField = Field.ENZYME;
-                    
+
                     break;
             }
             if (enzymeModel != null) {
+
+                UniprotEntry entry = enzymePortalService.findByAccession(accession);
+                // If we got here from a bookmark, the summary might not be cached:
+                String summId = Functions.getSummaryBasketId(entry);
+                @SuppressWarnings("unchecked")
+                final Map<String, UniprotEntry> sls = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
+                if (sls == null) {
+                    setLastSummaries(session, Collections.singletonList(
+                             entry));
+                } else if (sls.get(summId) == null) {
+                    sls.put(summId, entry);
+                }
 
                 enzymeModel.setRequestedfield(requestedField.name().toLowerCase());
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 model.addAttribute(ENTRY_VIDEO, ENTRY_VIDEO);
                 addToHistory(session, accession);
 
-                // If we got here from a bookmark, the summary might not be cached:
-                String summId = Functions.getSummaryBasketId(enzymeModel);
-                @SuppressWarnings("unchecked")
-                final Map<String, UniprotEntry> sls = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
-                if (sls == null) {
-                    setLastSummaries(session, Collections.singletonList(
-                            (UniprotEntry) enzymeModel));
-                } else if (sls.get(summId) == null) {
-                    sls.put(summId, enzymeModel);
-                }
             }
         } catch (EnzymeRetrieverException ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
@@ -249,7 +249,7 @@ public class SearchController extends AbstractController {
         searchParams.setStart(0);
         searchModelForm.setSearchparams(searchParams);
         model.addAttribute("searchModel", searchModelForm);
-         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
+        model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         clearHistory(session);
         return "index";
     }
@@ -258,7 +258,7 @@ public class SearchController extends AbstractController {
     public SearchModel getabout(Model model) {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
-          model.addAttribute(HOME_VIDEO, HOME_VIDEO);
+        model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return new SearchModel();
     }
 
@@ -267,7 +267,7 @@ public class SearchController extends AbstractController {
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
-          model.addAttribute(HOME_VIDEO, HOME_VIDEO);
+        model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return searchModelForm;
 
     }
@@ -276,7 +276,7 @@ public class SearchController extends AbstractController {
     public SearchModel getSearch(Model model) {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
-          model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
+        model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
         return searchModelForm;
     }
 
@@ -293,17 +293,16 @@ public class SearchController extends AbstractController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModel, Model model,
-            HttpSession session, HttpServletRequest request,HttpServletResponse response) {
+            HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String view = "error";
-
 
         String searchKey = null;
         SearchResults results = null;
-       response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-    response.setHeader("Access-Control-Max-Age", "3600");
-    response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-        
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+
         try {
 
             // See if it is already there, perhaps we are paginating:
@@ -319,12 +318,12 @@ public class SearchController extends AbstractController {
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
                         results = searchKeyword(searchModel.getSearchparams());
-                          model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
+                        model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
                         LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
                         break;
                     case SEQUENCE:
                         //view = searchSequence(model, searchModel);
-                          model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
+                        model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
                         break;
                     case COMPOUND:
                         results = searchCompound(model, searchModel);
@@ -474,9 +473,9 @@ public class SearchController extends AbstractController {
      */
     @Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
-        
+
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-       SearchResults results = finder.getEnzymes(searchParameters);
+        SearchResults results = finder.getEnzymes(searchParameters);
 
         return results;
     }
@@ -521,15 +520,15 @@ public class SearchController extends AbstractController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String getSearchResults(SearchModel searchModel, BindingResult result,
-            Model model, HttpSession session, HttpServletRequest request,HttpServletResponse response) {
-        return postSearchResult(searchModel, model, session, request,response);
+            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        return postSearchResult(searchModel, model, session, request, response);
     }
 
     @RequestMapping(value = "/advanceSearch",
             method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {
         model.addAttribute("chebiConfig", chebiConfig);
-          model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
+        model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
         return "advanceSearch";
     }
 
@@ -583,10 +582,8 @@ public class SearchController extends AbstractController {
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String getAbout(Model model) {
-          model.addAttribute(HOME_VIDEO, HOME_VIDEO);
+        model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return "about";
     }
-
-   
 
 }

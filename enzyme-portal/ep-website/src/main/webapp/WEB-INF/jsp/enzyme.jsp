@@ -16,7 +16,7 @@
         <dt>Function</dt>
         <dd>
             <ul>
-                <li>
+                <li>          
                     <c:choose>
                         <c:when test="${empty enzymeModel.function}">
                             No description has been found for the function of this enzyme.
