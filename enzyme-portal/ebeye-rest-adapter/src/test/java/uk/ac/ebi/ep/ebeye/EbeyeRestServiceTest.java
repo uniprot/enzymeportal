@@ -94,9 +94,9 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
            
             Set<String> accessions = new LinkedHashSet<>();
 
-            for (Entry entry : searchResult.getEntries()) {
+            searchResult.getEntries().stream().forEach((entry) -> {
                 accessions.add(entry.getUniprotAccession());
-            }
+            });
 
             List<String> expResult = accessions.stream().distinct().collect(Collectors.toList());
 
