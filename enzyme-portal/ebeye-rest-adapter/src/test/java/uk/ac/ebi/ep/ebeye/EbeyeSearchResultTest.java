@@ -22,7 +22,7 @@ public class EbeyeSearchResultTest extends AbstractEbeyeTest {
      */
     @Test
     public void testGetEntries() {
-        LOGGER.info("getEntries");
+        logger.info("getEntries");
         EbeyeSearchResult instance = new EbeyeSearchResult();
 
         Entry entry1 = new Entry();

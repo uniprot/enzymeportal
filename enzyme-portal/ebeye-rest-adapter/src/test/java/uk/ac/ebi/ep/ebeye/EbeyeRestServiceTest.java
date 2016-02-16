@@ -43,7 +43,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
     @Test
     public void testEbeyeAutocompleteSearch() {
         try {
-            LOGGER.info("ebeyeAutocompleteSearch");
+            logger.info("ebeyeAutocompleteSearch");
 
             String searchTerm = "phos";
 
@@ -66,7 +66,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
             assertThat(result, hasItem(suggestion));
 
         } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
 
     }
@@ -77,7 +77,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
     @Test
     public void testQueryEbeyeForAccessions_String() {
         try {
-            LOGGER.info("queryEbeyeForAccessions");
+            logger.info("queryEbeyeForAccessions");
 
             
 
@@ -110,7 +110,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
 
             assertTrue(result.size() > 0);
         } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
 
     }
@@ -120,7 +120,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
      */
     @Test
     public void testQueryEbeyeForAccessions_String_boolean() {
-        LOGGER.info("queryEbeyeForAccessions paginate:false");
+        logger.info("queryEbeyeForAccessions paginate:false");
 
         try {
 
@@ -153,7 +153,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
 
             assertTrue(result.size() > 0);
         } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
 
     }
@@ -163,7 +163,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
      */
     @Test
     public void testQueryEbeyeForAccessions_3args() {
-        LOGGER.info("queryEbeyeForAccessions paginate :true:limit:yes");
+        logger.info("queryEbeyeForAccessions paginate :true:limit:yes");
 
         try {
 
@@ -197,7 +197,7 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
 
             assertTrue(result.size() > 0);
         } catch (IOException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
 
     }
