@@ -39,7 +39,7 @@ import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
  */
 public class EbeyeRestService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(EbeyeRestService.class);
+    private final Logger logger = LoggerFactory.getLogger(EbeyeRestService.class);
 
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
@@ -48,9 +48,9 @@ public class EbeyeRestService {
     @Autowired
     private RestTemplate restTemplate;
     
-    private  final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private  final int HITCOUNT = 7000;
-    private  final int QUERY_LIMIT = 800;
+    private  static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
+    private  static final int HITCOUNT = 7000;
+    private  static final int QUERY_LIMIT = 800;
 
     /**
      *
@@ -98,7 +98,7 @@ public class EbeyeRestService {
 
         try {
             EbeyeSearchResult searchResult = queryEbeye(query.trim());
-            LOGGER.warn("Number of hits for search for " + query + " : " + searchResult.getHitCount());
+            logger.warn("Number of hits for search for " + query + " : " + searchResult.getHitCount());
 
             Set<String> accessions = new LinkedHashSet<>();
 
@@ -108,7 +108,7 @@ public class EbeyeRestService {
                 });
 
                 List<String> accessionList = accessions.stream().distinct().collect(Collectors.toList());
-                LOGGER.warn("Number of Accessions to be processed (Pagination = false) :  " + accessionList.size());
+                logger.warn("Number of Accessions to be processed (Pagination = false) :  " + accessionList.size());
                 return accessionList;
 
             }
@@ -136,13 +136,13 @@ public class EbeyeRestService {
                 int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
 
                 List<String> accessionList = query(query, numIteration);
-                LOGGER.warn("Total Hitcount = "+ hitcount+",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
+                logger.warn("Total Hitcount = "+ hitcount+",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
                 return accessionList;
 
             }
 
         } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
         return new ArrayList<>();
     }
@@ -161,7 +161,7 @@ public class EbeyeRestService {
                 searchResult = getEbeyeSearchResult(url.trim());
 
             } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-                LOGGER.error(ex.getMessage(), ex);
+                logger.error(ex.getMessage(), ex);
             }
 
             return searchResult;
@@ -190,7 +190,7 @@ public class EbeyeRestService {
                 r = searchEbeyeDomain(url).get();
 
             } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-                LOGGER.error(ex.getMessage(), ex);
+                logger.error(ex.getMessage(), ex);
             }
             return r;
 
@@ -240,7 +240,7 @@ public class EbeyeRestService {
             ResponseEntity<EbeyeSearchResult> results = future.get();
             return results.getBody();
         } catch (HttpClientErrorException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return null;
