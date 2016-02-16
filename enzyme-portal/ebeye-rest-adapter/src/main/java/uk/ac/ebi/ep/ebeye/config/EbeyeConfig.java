@@ -27,7 +27,7 @@ public class EbeyeConfig {
 
     @Autowired
     private Environment env;
-
+    
     @Bean
     public EbeyeRestService ebeyeRestService() {
         return new EbeyeRestService();

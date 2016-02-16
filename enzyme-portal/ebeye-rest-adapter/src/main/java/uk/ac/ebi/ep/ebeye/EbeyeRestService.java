@@ -32,7 +32,6 @@ import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
-import uk.ac.ebi.ep.ebeye.search.Entry;
 
 /**
  *
@@ -104,9 +103,9 @@ public class EbeyeRestService {
             Set<String> accessions = new LinkedHashSet<>();
 
             if (!paginate) {
-                for (Entry entry : searchResult.getEntries()) {
+                searchResult.getEntries().stream().forEach((entry) -> {
                     accessions.add(entry.getUniprotAccession());
-                }
+                });
 
                 List<String> accessionList = accessions.stream().distinct().collect(Collectors.toList());
                 LOGGER.warn("Number of Accessions to be processed (Pagination = false) :  " + accessionList.size());

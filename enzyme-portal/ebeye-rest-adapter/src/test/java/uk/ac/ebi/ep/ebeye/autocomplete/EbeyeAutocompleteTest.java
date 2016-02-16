@@ -23,8 +23,11 @@ public class EbeyeAutocompleteTest {
     public void testGetSuggestions() {
 
         EbeyeAutocomplete instance = new EbeyeAutocomplete();
+        Suggestion suggestion = new Suggestion("phos");
+        instance.getSuggestions().add(suggestion);
 
         List<Suggestion> expResult = new ArrayList<>();
+        expResult.add(suggestion);
         List<Suggestion> result = instance.getSuggestions();
 
         assertEquals(expResult, result);

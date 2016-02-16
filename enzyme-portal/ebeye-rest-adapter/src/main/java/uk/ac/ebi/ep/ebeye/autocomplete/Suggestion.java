@@ -18,6 +18,16 @@ public class Suggestion implements Comparable<Suggestion>{
 
     @JsonProperty("suggestion")
     private String suggestedKeyword;
+    
+    private Suggestion(){
+        
+    }
+
+    public Suggestion(String suggestedKeyword) {
+        this.suggestedKeyword = suggestedKeyword;
+    }
+    
+    
 
     public String getSuggestedKeyword() {
         return suggestedKeyword;

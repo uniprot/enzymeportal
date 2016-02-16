@@ -20,7 +20,7 @@ public class EbeyeAutocomplete {
     @JsonProperty("suggestions")
     private List<Suggestion> suggestions;
 
-    public List<Suggestion> getSuggestions() {
+    public final List<Suggestion> getSuggestions() {
         if (suggestions == null) {
             suggestions = new ArrayList<>();
         }

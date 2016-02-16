@@ -21,7 +21,7 @@ public class SuggestionTest {
 
     @Before
     public void setUp() {
-        instance = new Suggestion();
+        instance = new Suggestion("phos");
 
     }
 
@@ -30,7 +30,7 @@ public class SuggestionTest {
      */
     @Test
     public void testGetSuggestion() {
-        String expResult = null;
+        String expResult = "phos";
         String result = instance.getSuggestedKeyword();
         assertEquals(expResult, result);
 
@@ -42,7 +42,7 @@ public class SuggestionTest {
     @Test
     public void testToString() {
 
-        String expResult = null;
+        String expResult = "phos";
         String result = instance.toString();
         assertEquals(expResult, result);
 
