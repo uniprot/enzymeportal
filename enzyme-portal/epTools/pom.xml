@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>epTools</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
     
     <parent>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>dataAnalysis</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4</version>
         </dependency>   
         
         <dependency>
@@ -60,6 +60,13 @@
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>SitemapGenerator</artifactId>
             <version>2.0.7</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.univocity</groupId>
+            <artifactId>univocity-parsers</artifactId>
+            <version>1.5.6</version>
+            <type>jar</type>
         </dependency>
                     
     </dependencies> 
