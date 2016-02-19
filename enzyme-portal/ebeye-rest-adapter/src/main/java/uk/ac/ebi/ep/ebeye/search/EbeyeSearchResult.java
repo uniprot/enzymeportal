@@ -5,7 +5,6 @@
  */
 package uk.ac.ebi.ep.ebeye.search;
 
-import uk.ac.ebi.ep.ebeye.search.Entry;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  *
@@ -29,7 +29,7 @@ public class EbeyeSearchResult {
     private List<Entry> entries;
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
-    
+
     /**
      *
      * @return The hitCount
@@ -81,4 +81,9 @@ public class EbeyeSearchResult {
         this.additionalProperties.put(name, value);
     }
 
+    @JsonIgnore
+    public Stream<Entry> entryStreams() {
+        return entries == null ? Stream.empty() : entries.stream();
     }
+
+}
