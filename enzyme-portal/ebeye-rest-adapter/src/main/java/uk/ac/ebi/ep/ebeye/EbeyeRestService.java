@@ -1,19 +1,20 @@
 /*
-Copyright (c) 2015 The European Bioinformatics Institute (EMBL-EBI).
-All rights reserved. Please see the file LICENSE
-in the root directory of this distribution.
-*/
+ Copyright (c) 2015 The European Bioinformatics Institute (EMBL-EBI).
+ All rights reserved. Please see the file LICENSE
+ in the root directory of this distribution.
+ */
 package uk.ac.ebi.ep.ebeye;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
+import uk.ac.ebi.ep.ebeye.search.Entry;
 
 /**
  *
@@ -47,10 +49,10 @@ public class EbeyeRestService {
     private EbeyeIndexUrl ebeyeIndexUrl;
     @Autowired
     private RestTemplate restTemplate;
-    
-    private  static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private  static final int HITCOUNT = 7000;
-    private  static final int QUERY_LIMIT = 800;
+
+    private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
+    private static final int HITCOUNT = 7000;
+    private static final int QUERY_LIMIT = 800;
 
     /**
      *
@@ -117,7 +119,7 @@ public class EbeyeRestService {
 
                 int hitcount = searchResult.getHitCount();
 
-                 //for now limit hitcount to 7k
+                //for now limit hitcount to 7k
                 if (hitcount > HITCOUNT) {
                     hitcount = HITCOUNT;
                 }
@@ -136,7 +138,7 @@ public class EbeyeRestService {
                 int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
 
                 List<String> accessionList = query(query, numIteration);
-                logger.warn("Total Hitcount = "+ hitcount+",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
+                logger.warn("Total Hitcount = " + hitcount + ",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
                 return accessionList;
 
             }
@@ -172,46 +174,24 @@ public class EbeyeRestService {
     }
 
     private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
-        List<String> ebeyeDomains = new LinkedList<>();
+        final Set<String> accessions = new CopyOnWriteArraySet<>();
 
-        for (int index = 0; index <= iteration; index++) {
+        IntStream.rangeClosed(0, iteration).parallel().forEachOrdered(index -> {
+            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
 
-            String link = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=";
-            ebeyeDomains.add(link);
-        }
-
-        Set<String> accessions = new LinkedHashSet<>();
-        // get element as soon as it is available
-        List<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
-            String url = base + query;
-
-            EbeyeSearchResult r = null;
             try {
-                r = searchEbeyeDomain(url).get();
+                EbeyeSearchResult ebeyeSearchResult = searchEbeyeDomain(url).get();
 
+                List<Entry> entries = ebeyeSearchResult.getEntries().stream().distinct().collect(Collectors.toList());
+                entries.stream().forEach((entry) -> {
+                    accessions.add(entry.getUniprotAccession());
+                });
             } catch (InterruptedException | NullPointerException | ExecutionException ex) {
                 logger.error(ex.getMessage(), ex);
             }
-            return r;
 
-        }).collect(Collectors.toList());
-
-        if(result != null && !result.isEmpty()){
-        result.stream().map(ebeye -> ebeye.getEntries().stream().distinct().collect(Collectors.toList())).forEach(entries -> {
-            entries.stream().forEach(entry -> {
-                accessions.add(entry.getUniprotAccession());
-            });
         });
-        
-        }   
-//        for(EbeyeSearchResult r : result){
-//            
-//            for(Entry e : r.getEntries().stream().distinct().collect(Collectors.toList())){
-//                accessions.add(e.getUniprotAccession());
-//            }
-//        }
-        
-        return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
+        return accessions.stream().limit(QUERY_LIMIT).collect(Collectors.toList());
 
     }
 

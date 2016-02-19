@@ -54,13 +54,13 @@ public class EbeyeRestServiceTest extends AbstractEbeyeTest {
             
             mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
                     .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
-
+            
             EbeyeAutocomplete aut = restTemplate.getForObject(url.trim(), EbeyeAutocomplete.class);
             List<Suggestion> expResult = aut.getSuggestions().stream().sorted().collect(Collectors.toList());
 
             List<Suggestion> result = ebeyeRestService.ebeyeAutocompleteSearch(searchTerm).stream().sorted().collect(Collectors.toList());
             Suggestion suggestion = expResult.stream().sorted().findAny().get();
-
+            
             mockRestServer.verify();
 
             assertThat(result, hasItem(suggestion));
