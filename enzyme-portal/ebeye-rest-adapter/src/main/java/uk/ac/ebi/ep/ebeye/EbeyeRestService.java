@@ -1,19 +1,11 @@
-/*
-Copyright (c) 2015 The European Bioinformatics Institute (EMBL-EBI).
-All rights reserved. Please see the file LICENSE
-in the root directory of this distribution.
-*/
 package uk.ac.ebi.ep.ebeye;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,228 +14,177 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
+import uk.ac.ebi.ep.ebeye.search.Entry;
 
 /**
+ * REST client that communicates with the EBeye search web-service.
  *
  * @author joseph
  */
 public class EbeyeRestService {
+    public static final int NO_RESULT_LIMIT = 0;
 
-    private final Logger logger = LoggerFactory.getLogger(EbeyeRestService.class);
+    private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
+    private static final int QUERY_LIMIT = 800;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
+
     @Autowired
     private EbeyeIndexUrl ebeyeIndexUrl;
+
     @Autowired
     private RestTemplate restTemplate;
-    
-    private  static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private  static final int HITCOUNT = 7000;
-    private  static final int QUERY_LIMIT = 800;
 
     /**
+     * Generates an RPC call to the EBeye suggestion service in order to produce a list of suggestions for the client
+     * to use.
      *
-     * @param searchTerm
-     * @return suggestions
+     * @param searchTerm the partial term that will be used by the EBeye service to generate suggestions
+     * @return suggestions a list of suggestions generated from the EBeye service
      */
     public List<Suggestion> ebeyeAutocompleteSearch(String searchTerm) {
         String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
 
-        EbeyeAutocomplete autocomplete = restTemplate.getForObject(url.trim(), EbeyeAutocomplete.class);
+        EbeyeAutocomplete autocomplete = restTemplate.getForObject(url, EbeyeAutocomplete.class);
 
         return autocomplete.getSuggestions();
-
     }
 
     /**
+     * Sends a query to the Ebeye search service and creates a response with the accessions of the entries that
+     * fulfill the search criteria.
      *
-     * @param query user query
-     * @return list of accessions
+     * @param query the client query
+     * @param limit limit the number of results from Ebeye service. Use {@link #NO_RESULT_LIMIT}
+     * @return list of accessions that fulfill the query
      */
-    public List<String> queryEbeyeForAccessions(String query) {
-
-        return queryEbeyeForAccessions(query, false, 0);
-    }
-
-    /**
-     *
-     * @param query user query
-     * @param paginate paginate ebeye service
-     * @return list of accessions
-     */
-    public List<String> queryEbeyeForAccessions(String query, boolean paginate) {
-        return queryEbeyeForAccessions(query, paginate, 0);
-    }
-
-    /**
-     *
-     * @param query
-     * @param paginate
-     * @param limit limit the number of results from Ebeye service. default is
-     * 100 and only used when pagination is true.
-     * @return list of accessions
-     */
-    public List<String> queryEbeyeForAccessions(String query, boolean paginate, int limit) {
+    public List<String> queryEbeyeForUniqueAccessions(String query, int limit) {
+        List<String> accessions;
 
         try {
-            EbeyeSearchResult searchResult = queryEbeye(query.trim());
-            logger.warn("Number of hits for search for " + query + " : " + searchResult.getHitCount());
+            EbeyeSearchResult searchResult = queryEbeye(query);
 
-            Set<String> accessions = new LinkedHashSet<>();
+            int hitcount = searchResult.getHitCount();
 
-            if (!paginate) {
-                searchResult.getEntries().stream().forEach((entry) -> {
-                    accessions.add(entry.getUniprotAccession());
-                });
+            logger.debug("Number of hits for search for [" + query + "] : " + searchResult.getHitCount());
 
-                List<String> accessionList = accessions.stream().distinct().collect(Collectors.toList());
-                logger.warn("Number of Accessions to be processed (Pagination = false) :  " + accessionList.size());
-                return accessionList;
-
+            if (hitcount < DEFAULT_EBI_SEARCH_LIMIT) {
+                accessions = searchResult.getEntries().stream()
+                        .map(Entry::getUniprotAccession)
+                        .distinct()
+                        .limit(limit)
+                        .collect(Collectors.toList());
+            } else {
+                accessions = partitionQuery(query, hitcount, limit);
             }
 
-            if (paginate) {
-
-                int hitcount = searchResult.getHitCount();
-
-                 //for now limit hitcount to 7k
-                if (hitcount > HITCOUNT) {
-                    hitcount = HITCOUNT;
-                }
-
-                int resultLimit = 0;
-
-                if (limit < 0) {
-                    resultLimit = DEFAULT_EBI_SEARCH_LIMIT;
-                }
-
-                //for now limit results
-                if (resultLimit > 0 && hitcount > resultLimit) {
-                    hitcount = resultLimit;
-                }
-
-                int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
-
-                List<String> accessionList = query(query, numIteration);
-                logger.warn("Total Hitcount = "+ hitcount+",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
-                return accessionList;
-
-            }
-
+            logger.debug("Total amount of returned accessions: " + accessions.size());
         } catch (InterruptedException | NullPointerException | ExecutionException ex) {
             logger.error(ex.getMessage(), ex);
+            accessions = new ArrayList<>();
         }
-        return new ArrayList<>();
+
+        return accessions;
     }
 
     private EbeyeSearchResult queryEbeye(String query) throws InterruptedException, ExecutionException {
+        String url = buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
+                query,
+                DEFAULT_EBI_SEARCH_LIMIT,
+                0);
 
-        List<String> ebeyeDomains = new ArrayList<>();
-        ebeyeDomains.add(ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=");
+        ListenableFuture<ResponseEntity<EbeyeSearchResult>> searchResult = getEbeyeSearchFutureResponse(url);
 
-        // get element as soon as it is available
-        Optional<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
-            String url = base + query;
-            // open connection and fetch the result
-            EbeyeSearchResult searchResult = null;
-            try {
-                searchResult = getEbeyeSearchResult(url.trim());
-
-            } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-                logger.error(ex.getMessage(), ex);
-            }
-
-            return searchResult;
-
-        }).findAny();
-
-        return result.get();
+        return searchResult.get().getBody();
     }
 
-    private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
-        List<String> ebeyeDomains = new LinkedList<>();
+    /**
+     * Breaks down the client query into smaller chunks, submitting these to the server, and then merging the result.
+     *
+     * @param query the client query to run
+     * @param hitcount the number of entries that the query is expected to hit
+     * @param limit the maximum number of entries the client wants returned
+     * @return a list of distinct accessions from the merged queries
+     *
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
+    private List<String> partitionQuery(String query, int hitcount, int limit)
+            throws InterruptedException, ExecutionException {
+        int numQueries = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
 
-        for (int index = 0; index <= iteration; index++) {
+        List<String> paginatedQueries = createPaginatedQueries(query, numQueries);
 
-            String link = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=";
-            ebeyeDomains.add(link);
+        List<ListenableFuture<ResponseEntity<EbeyeSearchResult>>> futureResults = paginatedQueries
+                .stream()
+                .map(this::getEbeyeSearchFutureResponse)
+                .collect(Collectors.toList());
+
+        return futureResults.stream()
+                .map(this::extractAccessionsFromFuture)
+                .flatMap(Collection::stream)
+                .distinct()
+                .limit(limit == NO_RESULT_LIMIT ? Integer.MAX_VALUE : limit)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> createPaginatedQueries(String query, int pages) {
+        return IntStream.rangeClosed(0, pages)
+                .mapToObj(index -> buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
+                        query,
+                        DEFAULT_EBI_SEARCH_LIMIT,
+                        index * DEFAULT_EBI_SEARCH_LIMIT))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> extractAccessionsFromFuture(ListenableFuture<ResponseEntity<EbeyeSearchResult>> future) {
+        List<String> accessions;
+
+        try {
+            ResponseEntity<EbeyeSearchResult> response = future.get();
+            EbeyeSearchResult searchResult = response.getBody();
+
+            accessions = searchResult.getEntries()
+                    .stream()
+                    .map(Entry::getUniprotAccession)
+                    .collect(Collectors.toList());
+        } catch (InterruptedException | ExecutionException e) {
+            logger.warn("Unable to read response from future:", e);
+            accessions = new ArrayList<>();
         }
 
-        Set<String> accessions = new LinkedHashSet<>();
-        // get element as soon as it is available
-        List<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
-            String url = base + query;
-
-            EbeyeSearchResult r = null;
-            try {
-                r = searchEbeyeDomain(url).get();
-
-            } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-                logger.error(ex.getMessage(), ex);
-            }
-            return r;
-
-        }).collect(Collectors.toList());
-
-        if(result != null && !result.isEmpty()){
-        result.stream().map(ebeye -> ebeye.getEntries().stream().distinct().collect(Collectors.toList())).forEach(entries -> {
-            entries.stream().forEach(entry -> {
-                accessions.add(entry.getUniprotAccession());
-            });
-        });
-        
-        }   
-//        for(EbeyeSearchResult r : result){
-//            
-//            for(Entry e : r.getEntries().stream().distinct().collect(Collectors.toList())){
-//                accessions.add(e.getUniprotAccession());
-//            }
-//        }
-        
-        return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
-
+        return accessions;
     }
 
-    @Async
-    private Future<EbeyeSearchResult> searchEbeyeDomain(String url) throws InterruptedException, ExecutionException {
-        EbeyeSearchResult results = getEbeyeSearchResult(url);
-        return new AsyncResult<>(results);
-    }
+    private ListenableFuture<ResponseEntity<EbeyeSearchResult>> getEbeyeSearchFutureResponse(String queryUrl) {
+        assert queryUrl != null : "URL to send to Ebeye search service can't be null";
 
-    private EbeyeSearchResult getEbeyeSearchResult(String url) throws InterruptedException, ExecutionException {
         HttpMethod method = HttpMethod.GET;
 
-        // Define response type
         Class<EbeyeSearchResult> responseType = EbeyeSearchResult.class;
 
-        // Define headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
 
-        ListenableFuture<ResponseEntity<EbeyeSearchResult>> future = asyncRestTemplate
-                .exchange(url, method, requestEntity, responseType);
-
-        try {
-            ResponseEntity<EbeyeSearchResult> results = future.get();
-            return results.getBody();
-        } catch (HttpClientErrorException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
-        return null;
+        return asyncRestTemplate.exchange(queryUrl, method, requestEntity, responseType);
     }
 
+    private String buildAccessionQueryUrl(String endpoint, String query, int resultSize, int start) {
+        String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
+
+        return String.format(ebeyeAccessionQuery, endpoint, query, resultSize, start);
+    }
 }
