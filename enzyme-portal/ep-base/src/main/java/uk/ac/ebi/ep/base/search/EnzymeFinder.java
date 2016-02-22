@@ -143,16 +143,17 @@ public class EnzymeFinder extends EnzymeBase {
     }
 
     private void getResultsFromEpIndex() {
-
         String query = searchParams.getText();
+
         if (!StringUtils.isEmpty(query)) {
             query = query.trim();
         }
-        List<String> accessions = ebeyeRestService.queryEbeyeForAccessions(query, true, LIMIT);
+
+        List<String> accessions = ebeyeRestService.queryEbeyeForUniqueAccessions(query, LIMIT);
+
         LOGGER.warn("Number of Processed Accession for  " + query + " :=:" + accessions.size());
 
         uniprotAccessions = accessions.stream().distinct().limit(ACCESSION_LIMIT).collect(Collectors.toList());
-
     }
 
     /**
