@@ -17,7 +17,7 @@
 			e.stopPropagation();
 		});
 
-		$('#select-all-checkbox,.forBasket,#download-format').change(function(){
+		$('#select-all-checkbox,.forBasket,#download-format,#compress-download').change(function(){
 			updateDownloadUrl();
 		});
 
@@ -37,6 +37,7 @@
 			Download <strong id="download-count"></strong> entries from UniProt
 		</p>
 		<p class="no-wrap">
+			Format:
 			<select name="format" id="download-format">
 				<option value="fasta">FASTA (canonical)</option>
 				<option value="tab">Tab-separated</option>
@@ -47,7 +48,12 @@
 				<option value="rdf">RDF/XML</option>
 				<option value="list">List</option>
 			</select>
-			<a id="download-submit" class="btn">Go</a>
+			<p>
+				<label><input type="checkbox" checked id="compress-download"> Compressed</label>
+			</p>
+			<div>
+				<a id="download-submit" class="btn pull-right">Go</a>
+			</div>
 		</p>
 	</div>
 	</span>

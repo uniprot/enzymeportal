@@ -796,10 +796,16 @@ function updateDownloadUrl() {
 	}
 	var url = 'http://www.uniprot.org/uniprot/?query='
 		+ ids
-		+ '&columns=id%2Ccomment(FUNCTION)%2Ccomment(COFACTOR)%2Ccomment(ENZYME%20REGULATION)%2Ccomment(CATALYTIC%20ACTIVITY)&compress=yes&format='
+		+ '&columns=id%2Ccomment(FUNCTION)%2Ccomment(COFACTOR)%2Ccomment(ENZYME%20REGULATION)%2Ccomment(CATALYTIC%20ACTIVITY)&compress='
+		+ yesOrNo($('#compress-download').is(':checked'))
+		+ '&format='
 		+ $('#download-format').val();
 	$('#download-submit').attr('href', url);
 	$('#download-count').text(ids.length);
+}
+
+function yesOrNo(input) {
+	return (input === true) ? 'yes' : 'no';
 }
 
 /**
