@@ -1,205 +1,95 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye;
 
+import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
+import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.LinkedHashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.junit.Assert.assertThat;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.RestTemplate;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
-import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
-import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
-import uk.ac.ebi.ep.ebeye.search.Entry;
 
 /**
- *
- * @author joseph
+ * Tests the behaviour of the {@link uk.ac.ebi.ep.ebeye.EbeyeRestService} class.
  */
-public class EbeyeRestServiceTest extends AbstractEbeyeTest {
+public class EbeyeRestServiceTest {
+    private static final String SERVER_URL = "http://www.myserver.com/ebeye";
+    private static final String AUTOCOMPLETE_REQUEST = SERVER_URL + "/autocomplete?term=%s&format=json";
 
-    @Autowired
-    private EbeyeRestService ebeyeRestService;
-    
-    private static final  String query = "sildenafil";
-    private static final String ebeyeJsonFile = "ebeye.json";
+    private EbeyeRestService restService;
 
-    /**
-     * Test of ebeyeAutocompleteSearch method, of class EbeyeRestService.
-     */
-    @Test
-    public void testEbeyeAutocompleteSearch() {
-        try {
-            logger.info("ebeyeAutocompleteSearch");
+    private MockRestServiceServer mockRestServer;
 
-            String searchTerm = "phos";
+    @Before
+    public void setUp() {
+        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
+        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
 
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
+        mockRestServer = MockRestServiceServer.createServer(restTemplate);
 
-            String filename = "suggestions.json";
-            String json = getJsonFile(filename);
-            
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
+        serverUrl.setDefaultSearchIndexUrl(SERVER_URL);
 
-            EbeyeAutocomplete aut = restTemplate.getForObject(url.trim(), EbeyeAutocomplete.class);
-            List<Suggestion> expResult = aut.getSuggestions().stream().sorted().collect(Collectors.toList());
-
-            List<Suggestion> result = ebeyeRestService.ebeyeAutocompleteSearch(searchTerm).stream().sorted().collect(Collectors.toList());
-            Suggestion suggestion = expResult.stream().sorted().findAny().get();
-
-            mockRestServer.verify();
-
-            assertThat(result, hasItem(suggestion));
-
-        } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
+        restService = new EbeyeRestService(serverUrl, restTemplate, asyncRestTemplate);
     }
 
-    /**
-     * Test of queryEbeyeForAccessions method, of class EbeyeRestService.
-     */
-    @Test
-    public void testQueryEbeyeForAccessions_String() {
-        try {
-            logger.info("queryEbeyeForAccessions");
-
-            
-
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
-
-            
-            String json = getJsonFile(ebeyeJsonFile);
-
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
-
-            EbeyeSearchResult searchResult = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
-
-           
-            Set<String> accessions = new LinkedHashSet<>();
-
-            searchResult.getEntries().stream().forEach((entry) -> {
-                accessions.add(entry.getUniprotAccession());
-            });
-
-            List<String> expResult = accessions.stream().distinct().collect(Collectors.toList());
-
-            String accession = expResult.stream().findAny().get();
-
-            List<String> result = ebeyeRestService.queryEbeyeForAccessions(query);
-
-            mockRestServer.verify();
-
-            assertThat(result.stream().findAny().get(), containsString(accession));
-
-            assertTrue(result.size() > 0);
-        } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
+    private ClientHttpRequestFactory clientHttpRequestFactory() {
+        return new HttpComponentsClientHttpRequestFactory();
     }
 
-    /**
-     * Test of queryEbeyeForAccessions method, of class EbeyeRestService.
-     */
     @Test
-    public void testQueryEbeyeForAccessions_String_boolean() {
-        logger.info("queryEbeyeForAccessions paginate:false");
+    public void partial_term_phos_sent_to_Ebeye_autocomplete_returns_valid_suggestions() throws Exception {
+        String searchTerm = "phos";
 
-        try {
+        String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);
 
-            boolean paginate = false;
+        List<Suggestion> expectedSuggestions =
+                createSuggestions("phosphate", "phosphoenolpyruvate", "phosphohydrolase");
 
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
+        EbeyeAutocomplete autocompleteResponse = createAutoCompleteResponse(expectedSuggestions);
 
-            String json = getJsonFile(ebeyeJsonFile);
+        mockRestServer.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(convertToJson(autocompleteResponse), MediaType.APPLICATION_JSON));
 
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+        List<Suggestion> actualSuggestions = restService.ebeyeAutocompleteSearch(searchTerm);
 
-            EbeyeSearchResult searchResult = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
+        mockRestServer.verify();
 
-               Set<String> accessions = new LinkedHashSet<>();
-
-            for (Entry entry : searchResult.getEntries()) {
-                accessions.add(entry.getUniprotAccession());
-            }
-
-            List<String> expResult = accessions.stream().distinct().collect(Collectors.toList());
-
-            String accession = expResult.stream().findAny().get();
-
-            List<String> result = ebeyeRestService.queryEbeyeForAccessions(query, paginate);
-
-            mockRestServer.verify();
-
-            assertThat(result.stream().findAny().get(), containsString(accession));
-
-            assertTrue(result.size() > 0);
-        } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
+        assertThat(actualSuggestions, is(expectedSuggestions));
     }
 
-    /**
-     * Test of queryEbeyeForAccessions method, of class EbeyeRestService.
-     */
-    @Test
-    public void testQueryEbeyeForAccessions_3args() {
-        logger.info("queryEbeyeForAccessions paginate :true:limit:yes");
+    private EbeyeAutocomplete createAutoCompleteResponse(List<Suggestion> suggestedKeywords) {
+        EbeyeAutocomplete autocompleteResponse = new EbeyeAutocomplete();
+        autocompleteResponse.getSuggestions().addAll(suggestedKeywords);
 
-        try {
-
-            int limit = 2;
-            boolean paginate = true;
-   
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=";
-
-            String json = getJsonFile(ebeyeJsonFile);
-
-            mockRestServer.expect(requestTo(url)).andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
-
-            EbeyeSearchResult searchResult = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
-
-            Set<String> accessions = new LinkedHashSet<>();
-
-            for (Entry entry : searchResult.getEntries()) {
-                accessions.add(entry.getUniprotAccession());
-            }
-
-            List<String> expResult = accessions.stream().distinct().collect(Collectors.toList());
-
-            String accession = expResult.stream().findAny().get();
-
-            List<String> result = ebeyeRestService.queryEbeyeForAccessions(query, paginate, limit);
-            
-            mockRestServer.verify();
-
-            assertThat(result.stream().findAny().get(), containsString(accession));
-
-            assertTrue(result.size() > 0);
-        } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
+        return autocompleteResponse;
     }
 
+    private List<Suggestion> createSuggestions(String... suggestedKeyword) {
+        return Arrays.stream(suggestedKeyword)
+                .map(Suggestion::new)
+                .collect(Collectors.toList());
+    }
+
+    private String convertToJson(Object object) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(object);
+    }
 }
