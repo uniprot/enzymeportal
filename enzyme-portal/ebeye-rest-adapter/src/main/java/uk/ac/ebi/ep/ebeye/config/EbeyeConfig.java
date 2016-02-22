@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +9,8 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 
 /**
  *
@@ -24,16 +19,13 @@ import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 @Configuration
 @PropertySource({"classpath:ebeyeUrl.es"})
 public class EbeyeConfig {
-
     @Autowired
     private Environment env;
-    
+
     @Bean
     public EbeyeRestService ebeyeRestService() {
         return new EbeyeRestService();
     }
-
-
 
     @Bean
     public AsyncRestTemplate asyncRestTemplate() {
@@ -47,7 +39,6 @@ public class EbeyeConfig {
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         return new HttpComponentsClientHttpRequestFactory();
-        
     }
 
     @Bean
@@ -55,8 +46,6 @@ public class EbeyeConfig {
         EbeyeIndexUrl url = new EbeyeIndexUrl();
 
         String defaultSearchIndexUrl = env.getProperty("ep.default.search.url");
-        //String defaultSearchIndexUrl = env.getProperty("ep.default.dev.search.url");
-
         url.setDefaultSearchIndexUrl(defaultSearchIndexUrl);
 
         return url;
