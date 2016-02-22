@@ -20,7 +20,6 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -52,6 +51,26 @@ public class EbeyeRestServiceTest {
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         return new HttpComponentsClientHttpRequestFactory();
+    }
+
+    @Test
+    public void non_matching_term_ppp_sent_to_Ebeye_autocomplete_returns_no_suggestions() throws Exception {
+        String searchTerm = "ppp";
+
+        String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);
+
+        List<Suggestion> expectedSuggestions = createSuggestions();
+
+        EbeyeAutocomplete autocompleteResponse = createAutoCompleteResponse(expectedSuggestions);
+
+        mockRestServer.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(convertToJson(autocompleteResponse), MediaType.APPLICATION_JSON));
+
+        List<Suggestion> actualSuggestions = restService.ebeyeAutocompleteSearch(searchTerm);
+
+        mockRestServer.verify();
+
+        assertThat(actualSuggestions, is(expectedSuggestions));
     }
 
     @Test
