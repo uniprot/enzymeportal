@@ -36,6 +36,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
  */
 public class EbeyeRestServiceTest {
     private static final int MAX_ENTRIES_IN_RESPONSE = 10;
+    private static final int CHUNK_SIZE = 10;
 
     private static final String SERVER_URL = "http://www.myserver.com/ebeye";
     private static final String AUTOCOMPLETE_REQUEST = SERVER_URL + "/autocomplete?term=%s&format=json";
@@ -57,7 +58,8 @@ public class EbeyeRestServiceTest {
         syncRestServerMock = MockRestServiceServer.createServer(restTemplate);
         asyncRestServerMock = MockRestServiceServer.createServer(asyncRestTemplate);
 
-        restService = new EbeyeRestService(serverUrl, restTemplate, asyncRestTemplate, MAX_ENTRIES_IN_RESPONSE);
+        restService = new EbeyeRestService(serverUrl, restTemplate, asyncRestTemplate, MAX_ENTRIES_IN_RESPONSE,
+                CHUNK_SIZE);
     }
 
     @Test
