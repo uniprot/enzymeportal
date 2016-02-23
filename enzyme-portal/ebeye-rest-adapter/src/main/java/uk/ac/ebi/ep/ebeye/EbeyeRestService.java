@@ -91,9 +91,8 @@ public class EbeyeRestService {
             logger.debug("Number of hits for search for [" + query + "] : " + searchResult.getHitCount());
 
             if (hitCount <= maxEbiSearchLimit) {
-                accessions = searchResult.getEntries().stream()
-                        .map(Entry::getUniprotAccession)
-                        .distinct()
+                accessions = extractUniqueAccessions(searchResult)
+                        .stream()
                         .limit(limit == NO_RESULT_LIMIT ? hitCount : limit)
                         .collect(Collectors.toList());
             } else {
@@ -142,7 +141,6 @@ public class EbeyeRestService {
 
             try {
                 List<String> retrievedAccessions = processQueryChunks(paginatedQueries);
-
                 uniqueAccessions.addAll(retrievedAccessions);
             } catch (RestClientException e) {
                 logger.error("Error occurred whilst sending REST request:", e);
@@ -184,16 +182,20 @@ public class EbeyeRestService {
             ResponseEntity<EbeyeSearchResult> response = future.get();
             EbeyeSearchResult searchResult = response.getBody();
 
-            accessions = searchResult.getEntries()
-                    .stream()
-                    .map(Entry::getUniprotAccession)
-                    .collect(Collectors.toList());
+            accessions = extractUniqueAccessions(searchResult);
         } catch (InterruptedException | ExecutionException | RestClientException e) {
             logger.warn("Unable to read response from future:", e);
             accessions = new ArrayList<>();
         }
 
         return accessions;
+    }
+
+    private List<String> extractUniqueAccessions(EbeyeSearchResult searchResult) {
+        return searchResult.getEntries().stream()
+                .map(Entry::getUniprotAccession)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private ListenableFuture<ResponseEntity<EbeyeSearchResult>> getEbeyeSearchFutureResponse(String queryUrl)
