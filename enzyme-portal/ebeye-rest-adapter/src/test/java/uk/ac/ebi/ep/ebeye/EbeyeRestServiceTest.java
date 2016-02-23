@@ -8,6 +8,7 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -254,7 +255,6 @@ public class EbeyeRestServiceTest {
         int expectedEntryNum = MAX_ENTRIES_IN_RESPONSE;
         int entryNum = expectedEntryNum * 2;
 
-
         List<Entry> entries = createEntries(entryNum);
 
         String queryChunkUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
@@ -278,6 +278,55 @@ public class EbeyeRestServiceTest {
         asyncRestServerMock.verify();
 
         assertThat(actualAccessions, hasSize(expectedEntryNum));
+    }
+
+    @Test
+    public void duplicate_accessions_in_synchronous_request_in_accessionSearch_are_removed_in_response()
+            throws Exception {
+        String query = "query";
+
+        Entry entry = createEntryWithIdAndDefaultName("entry1");
+        Entry duplicateEntry = createEntryWithIdAndDefaultName("entry1");
+
+        String requestUrl = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult searchResult = createAccessionResult(Arrays.asList(entry, duplicateEntry));
+
+        mockServerResponse(syncRestServerMock, requestUrl, searchResult);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
+
+        syncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(1));
+    }
+
+    @Test
+    public void duplicate_accessions_in_asynchronous_request_in_accessionSearch_are_removed_in_response()
+            throws Exception {
+        String query = "query";
+        int uniqueEntryNum = MAX_ENTRIES_IN_RESPONSE;
+        int totalEntryNum = uniqueEntryNum * 2;
+
+        List<Entry> entries = createEntries(uniqueEntryNum);
+
+        String queryChunkRequestUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult chunkedResult1 = createAccessionResult(entries, totalEntryNum);
+
+        mockServerResponse(syncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
+        mockServerResponse(asyncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
+
+        List<Entry> duplicateEntries = new ArrayList<>(entries);
+        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, uniqueEntryNum);
+        EbeyeSearchResult chunkedResult2 = createAccessionResult(duplicateEntries, totalEntryNum);
+
+        mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, chunkedResult2);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(uniqueEntryNum));
     }
 
     private EbeyeAutocomplete createAutoCompleteResponse(List<Suggestion> suggestedKeywords) {
