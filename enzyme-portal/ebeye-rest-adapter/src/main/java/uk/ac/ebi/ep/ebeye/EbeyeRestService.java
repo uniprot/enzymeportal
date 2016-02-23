@@ -31,27 +31,28 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
 public class EbeyeRestService {
     public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
 
-    private static final int DEFAULT_CHUNK_SIZE = 10;
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final AsyncRestTemplate asyncRestTemplate;
     private final EbeyeIndexUrl ebeyeIndexUrl;
     private final RestTemplate restTemplate;
     private final int maxEbiSearchLimit;
+    private final int chunkSize;
 
     @Autowired
     public EbeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
-            AsyncRestTemplate asyncRestTemplate, int maxEbiSearchLimit) {
+            AsyncRestTemplate asyncRestTemplate, int maxEbiSearchLimit, int chunkSize) {
         Preconditions.checkArgument(ebeyeIndexUrl != null, "Index URL can't be null");
         Preconditions.checkArgument(restTemplate != null, "Synchronous REST template can't be null");
         Preconditions.checkArgument(asyncRestTemplate != null, "Asynchronous REST template can't be null");
         Preconditions.checkArgument(maxEbiSearchLimit > 0, "Max EBI seach limit can't be less than 1");
+        Preconditions.checkArgument(chunkSize > 0, "Processable chunk sizes should be greater than 0");
 
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
         this.asyncRestTemplate = asyncRestTemplate;
         this.maxEbiSearchLimit = maxEbiSearchLimit;
+        this.chunkSize=chunkSize;
     }
 
     /**
@@ -134,7 +135,7 @@ public class EbeyeRestService {
         Set<String> uniqueAccessions = new LinkedHashSet<>();
 
         int startPage = 0;
-        int endPage = Math.min(DEFAULT_CHUNK_SIZE, totalPaginatedQueries);
+        int endPage = Math.min(chunkSize, totalPaginatedQueries);
 
         while (startPage < totalPaginatedQueries && uniqueAccessions.size() < limit) {
             List<String> paginatedQueries = createPaginatedQueries(query, startPage, endPage);
@@ -147,7 +148,7 @@ public class EbeyeRestService {
             }
 
             startPage = endPage;
-            endPage = Math.min(endPage + DEFAULT_CHUNK_SIZE, totalPaginatedQueries);
+            endPage = Math.min(endPage + chunkSize, totalPaginatedQueries);
         }
 
         return uniqueAccessions.stream().limit(limit).collect(Collectors.toList());

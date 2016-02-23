@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,12 +20,16 @@ import uk.ac.ebi.ep.ebeye.EbeyeRestService;
  * @author joseph
  */
 @Configuration
-@PropertySource({"classpath:ebeyeUrl.es"})
+@PropertySource({"classpath:ebeye.es"})
 public class EbeyeConfig {
-    private static final int MAX_EBI_REQUESTS = 100;
-
     @Value("${ep.default.search.url}")
     private String searchUrl;
+
+    @Value("${ebeye.max.ebi.requests}")
+    private int maxEbiRequests;
+
+    @Value("${ebeye.chunk.size}")
+    private int chunkSize;
 
     @Bean
     static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
@@ -33,12 +39,21 @@ public class EbeyeConfig {
     @Bean
     public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
             AsyncRestTemplate asyncRestTemplate) {
-        return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate, MAX_EBI_REQUESTS);
+        return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate, maxEbiRequests, chunkSize);
     }
 
     @Bean
     public AsyncRestTemplate asyncRestTemplate() {
-        return new AsyncRestTemplate();
+        return new AsyncRestTemplate(threadPoolTaskExecutor());
+    }
+
+    private AsyncListenableTaskExecutor threadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(chunkSize);
+        executor.setMaxPoolSize(chunkSize * 3);
+        executor.setDaemon(true);
+
+        return executor;
     }
 
     @Bean
