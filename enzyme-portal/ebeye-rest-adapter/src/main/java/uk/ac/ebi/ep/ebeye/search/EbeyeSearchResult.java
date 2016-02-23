@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.search;
 
-import uk.ac.ebi.ep.ebeye.search.Entry;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,12 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author joseph
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EbeyeSearchResult {
-
     @JsonProperty("hitCount")
     private Integer hitCount;
     @JsonProperty("entries")
@@ -31,7 +23,6 @@ public class EbeyeSearchResult {
     private final Map<String, Object> additionalProperties = new HashMap<>();
     
     /**
-     *
      * @return The hitCount
      */
     @JsonProperty("hitCount")
@@ -40,7 +31,6 @@ public class EbeyeSearchResult {
     }
 
     /**
-     *
      * @param hitCount The hitCount
      */
     @JsonProperty("hitCount")
@@ -49,12 +39,10 @@ public class EbeyeSearchResult {
     }
 
     /**
-     *
      * @return The entries
      */
     @JsonProperty("entries")
     public List<Entry> getEntries() {
-
         if (entries == null) {
             entries = new ArrayList<>();
         }
@@ -63,7 +51,6 @@ public class EbeyeSearchResult {
     }
 
     /**
-     *
      * @param entries The entries
      */
     @JsonProperty("entries")
@@ -80,5 +67,4 @@ public class EbeyeSearchResult {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
-    }
+}
