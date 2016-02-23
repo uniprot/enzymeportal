@@ -36,7 +36,7 @@ public class EbeyeRestServiceIT {
         String searchTerm = "phos";
 
         List<Suggestion> result =
-                ebeyeRestService.ebeyeAutocompleteSearch(searchTerm).stream().sorted().collect(Collectors.toList());
+                ebeyeRestService.autocompleteSearch(searchTerm).stream().sorted().collect(Collectors.toList());
 
         assertThat(result, hasSize(greaterThan(0)));
 
@@ -47,7 +47,7 @@ public class EbeyeRestServiceIT {
     public void query_with_limit_of_5_sent_to_ebeyeSearch_returns_at_most_5_accessions() throws Exception {
         int limit = 5;
 
-        List<String> actualAccs = ebeyeRestService.queryEbeyeForUniqueAccessions(QUERY, limit);
+        List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(QUERY, limit);
         assertThat(actualAccs, hasSize(lessThanOrEqualTo(limit)));
     }
 
@@ -55,7 +55,7 @@ public class EbeyeRestServiceIT {
     public void query_with_no_limit_sent_to_ebeyeSearch_returns_at_most_5_accession() throws Exception {
         int limit = EbeyeRestService.NO_RESULT_LIMIT;
 
-        List<String> actualAccs = ebeyeRestService.queryEbeyeForUniqueAccessions(QUERY, limit);
+        List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(QUERY, limit);
         assertThat(actualAccs, hasSize(greaterThan(0)));
     }
 }
