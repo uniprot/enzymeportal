@@ -43,11 +43,12 @@ public class EbeyeConfig {
     }
 
     @Bean
-    public AsyncRestTemplate asyncRestTemplate() {
-        return new AsyncRestTemplate(threadPoolTaskExecutor());
+    public AsyncRestTemplate asyncRestTemplate(AsyncListenableTaskExecutor threadPoolTaskExecutor) {
+        return new AsyncRestTemplate(threadPoolTaskExecutor);
     }
 
-    private AsyncListenableTaskExecutor threadPoolTaskExecutor() {
+    @Bean
+    public AsyncListenableTaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(chunkSize);
         executor.setMaxPoolSize(chunkSize * 3);
