@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
@@ -46,10 +46,10 @@ public class EbeyeConfig {
     }
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
-        return new HttpComponentsClientHttpRequestFactory();
+        return new HttpComponentsAsyncClientHttpRequestFactory();
         
     }
-
+    
     @Bean
     public EbeyeIndexUrl ebeyeIndexUrl() {
         EbeyeIndexUrl url = new EbeyeIndexUrl();
