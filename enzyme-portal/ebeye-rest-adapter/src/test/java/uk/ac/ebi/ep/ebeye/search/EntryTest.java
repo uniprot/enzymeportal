@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.search;
 
 import java.util.ArrayList;
@@ -17,11 +12,9 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author joseph
  */
 public class EntryTest {
-
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EntryTest.class);
 
     private Entry instance;
@@ -29,7 +22,6 @@ public class EntryTest {
 
     @Before
     public void setUp() {
-
         List<String> fieldNames = new ArrayList<>();
         fieldNames.add(name);
         Fields fields = new Fields();
@@ -40,7 +32,6 @@ public class EntryTest {
         instance = new Entry(acc, geneName);
         instance.setTitle("cGMP-specific 3',5'-cyclic phosphodiesterase");
         instance.set(name, fields);
-
     }
 
     @Test
@@ -59,7 +50,6 @@ public class EntryTest {
         String expResult = "ABC";
         String result = instance.getUniprotName();
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -72,7 +62,6 @@ public class EntryTest {
         String expResult = "O76074";
         String result = instance.getUniprotAccession();
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -85,7 +74,6 @@ public class EntryTest {
         String expResult = null;
         String result = instance.getSource();
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -99,7 +87,6 @@ public class EntryTest {
         String result = instance.toString();
 
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -112,8 +99,8 @@ public class EntryTest {
 
         int expResult = 0;
         int result = instance.compareTo(obj);
-        assertEquals(expResult, result);
 
+        assertEquals(expResult, result);
     }
 
     /**
@@ -130,7 +117,6 @@ public class EntryTest {
         Fields expResult = f;
         Fields result = instance.get(name);
         assertNotSame(expResult, result);
-
     }
 
     /**
@@ -152,7 +138,6 @@ public class EntryTest {
         Map<String, Fields> result = instance.any();
 
         assertEquals(expResult.keySet(), result.keySet());
-
     }
 
     /**
@@ -179,7 +164,6 @@ public class EntryTest {
         int result = instance.hashCode();
 
         assertNotSame(expResult, result);
-
     }
 
     /**
@@ -195,5 +179,4 @@ public class EntryTest {
         assertEquals(expResult, result);
 
     }
-
 }
