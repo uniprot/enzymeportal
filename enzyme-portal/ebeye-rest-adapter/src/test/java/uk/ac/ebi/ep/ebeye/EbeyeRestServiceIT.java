@@ -26,8 +26,6 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {EbeyeConfig.class})
 public class EbeyeRestServiceIT {
-    private static final String QUERY = "kinase";
-
     @Autowired
     private EbeyeRestService ebeyeRestService;
 
@@ -45,17 +43,19 @@ public class EbeyeRestServiceIT {
 
     @Test
     public void query_with_limit_of_5_sent_to_ebeyeSearch_returns_at_most_5_accessions() throws Exception {
+        String query = "kinase";
         int limit = 5;
 
-        List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(QUERY, limit);
+        List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(query, limit);
         assertThat(actualAccs, hasSize(lessThanOrEqualTo(limit)));
     }
 
     @Test
-    public void query_with_no_limit_sent_to_ebeyeSearch_returns_at_most_5_accession() throws Exception {
-        int limit = EbeyeRestService.NO_RESULT_LIMIT;
+    public void query_with_limit_of_800_sent_to_ebeyeSearch_returns_at_most_5_accessions() throws Exception {
+        String query = "kinase";
+        int limit = 800;
 
-        List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(QUERY, limit);
-        assertThat(actualAccs, hasSize(greaterThan(0)));
+        List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(query, limit);
+        assertThat(actualAccs, hasSize(lessThanOrEqualTo(limit)));
     }
 }
