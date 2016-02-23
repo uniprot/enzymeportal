@@ -135,7 +135,7 @@
                     <a id="10"><h4>Can I download the results from the search?</h4></a>
 
                     <fieldset>
-                        <p>Currently it is not possible to download search results, however, this feature will be available in future releases of the enzyme portal.</p>
+                        <p>Yes, You can download search results and in several formats. The download will be a zipped file by default but you can de-select this option using the provided checkbox</p>
                     </fieldset>
 
 
