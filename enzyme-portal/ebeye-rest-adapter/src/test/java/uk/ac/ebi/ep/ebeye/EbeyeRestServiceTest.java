@@ -3,95 +3,281 @@ package uk.ac.ebi.ep.ebeye;
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
+import uk.ac.ebi.ep.ebeye.search.Entry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 /**
  * Tests the behaviour of the {@link uk.ac.ebi.ep.ebeye.EbeyeRestService} class.
  */
 public class EbeyeRestServiceTest {
+    private static final int MAX_ENTRIES_IN_RESPONSE = 10;
+
     private static final String SERVER_URL = "http://www.myserver.com/ebeye";
     private static final String AUTOCOMPLETE_REQUEST = SERVER_URL + "/autocomplete?term=%s&format=json";
+    private static final String ACCESSION_REQUEST = SERVER_URL + "?query=%s&size=%d&start=%d&fields=name&format=json";
 
     private EbeyeRestService restService;
 
-    private MockRestServiceServer mockRestServer;
+    private MockRestServiceServer syncRestServerMock;
+    private MockRestServiceServer asyncRestServerMock;
 
     @Before
     public void setUp() {
-        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
-        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
-
-        mockRestServer = MockRestServiceServer.createServer(restTemplate);
-
         EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
         serverUrl.setDefaultSearchIndexUrl(SERVER_URL);
 
-        restService = new EbeyeRestService(serverUrl, restTemplate, asyncRestTemplate);
-    }
+        RestTemplate restTemplate = new RestTemplate();
+        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
 
-    private ClientHttpRequestFactory clientHttpRequestFactory() {
-        return new HttpComponentsClientHttpRequestFactory();
+        syncRestServerMock = MockRestServiceServer.createServer(restTemplate);
+        asyncRestServerMock = MockRestServiceServer.createServer(asyncRestTemplate);
+
+        restService = new EbeyeRestService(serverUrl, restTemplate, asyncRestTemplate, MAX_ENTRIES_IN_RESPONSE);
     }
 
     @Test
-    public void non_matching_term_ppp_sent_to_Ebeye_autocomplete_returns_no_suggestions() throws Exception {
+    public void non_matching_term_ppp_sent_to_autocomplete_returns_no_suggestions() throws Exception {
         String searchTerm = "ppp";
 
         String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);
 
         List<Suggestion> expectedSuggestions = createSuggestions();
-
         EbeyeAutocomplete autocompleteResponse = createAutoCompleteResponse(expectedSuggestions);
 
-        mockRestServer.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
+        syncRestServerMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(convertToJson(autocompleteResponse), MediaType.APPLICATION_JSON));
 
-        List<Suggestion> actualSuggestions = restService.ebeyeAutocompleteSearch(searchTerm);
+        List<Suggestion> actualSuggestions = restService.autocompleteSearch(searchTerm);
 
-        mockRestServer.verify();
+        syncRestServerMock.verify();
 
         assertThat(actualSuggestions, is(expectedSuggestions));
     }
 
     @Test
-    public void partial_term_phos_sent_to_Ebeye_autocomplete_returns_valid_suggestions() throws Exception {
+    public void partial_term_phos_sent_to_autocomplete_returns_valid_suggestions() throws Exception {
         String searchTerm = "phos";
 
         String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);
 
         List<Suggestion> expectedSuggestions =
                 createSuggestions("phosphate", "phosphoenolpyruvate", "phosphohydrolase");
-
         EbeyeAutocomplete autocompleteResponse = createAutoCompleteResponse(expectedSuggestions);
 
-        mockRestServer.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
+        syncRestServerMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess(convertToJson(autocompleteResponse), MediaType.APPLICATION_JSON));
 
-        List<Suggestion> actualSuggestions = restService.ebeyeAutocompleteSearch(searchTerm);
+        List<Suggestion> actualSuggestions = restService.autocompleteSearch(searchTerm);
 
-        mockRestServer.verify();
+        syncRestServerMock.verify();
 
         assertThat(actualSuggestions, is(expectedSuggestions));
+    }
+
+    @Test
+    public void null_query_sent_to_accession_search_throws_exception() throws Exception {
+        String query = null;
+        int limit = 1;
+
+        try {
+            restService.queryForUniqueAccessions(query, limit);
+            fail();
+        } catch (IllegalArgumentException e) {
+            Assert.assertThat(e.getMessage(), is("Query can not be null"));
+        }
+    }
+
+    @Test
+    public void negative_limit_sent_to_accession_search_throws_exception() throws Exception {
+        String query = "query";
+        int limit = -1;
+
+        try {
+            restService.queryForUniqueAccessions(query, limit);
+            fail();
+        } catch (IllegalArgumentException e) {
+            Assert.assertThat(e.getMessage(), is("Limit can not be less than 1"));
+        }
+    }
+
+    @Test
+    public void zero_limit_sent_to_accession_search_throws_exception() throws Exception {
+        String query = "query";
+        int limit = 0;
+
+        try {
+            restService.queryForUniqueAccessions(query, limit);
+            fail();
+        } catch (IllegalArgumentException e) {
+            Assert.assertThat(e.getMessage(), is("Limit can not be less than 1"));
+        }
+    }
+
+    @Test
+    public void query_to_accessionSearch_has_hitCount_less_than_maxEntriesPerResponse_only_synchronous_request_used()
+            throws Exception {
+        String query = "query";
+        int limit = MAX_ENTRIES_IN_RESPONSE;
+
+        String requestUrl = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult searchResult = createAccessionResult(createEntries(limit));
+        mockServerResponse(syncRestServerMock, requestUrl, searchResult);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(limit));
+    }
+
+    @Test
+    public void query_to_accessionSearch_has_hitCount_greater_than_maxEntriesPerResponse_both_requests_used()
+            throws Exception {
+        String query = "query";
+        int limit = MAX_ENTRIES_IN_RESPONSE + 1;
+
+        List<Entry> entries = createEntries(limit);
+
+        String queryChunkUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult chunkedResult1 = createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), limit);
+
+        mockServerResponse(syncRestServerMock, queryChunkUrl1, chunkedResult1);
+        mockServerResponse(asyncRestServerMock, queryChunkUrl1, chunkedResult1);
+
+        EbeyeSearchResult resultSet2 = createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, limit), limit);
+        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
+
+        mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, resultSet2);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(limit));
+    }
+
+    @Test
+    public void query_limited_to_1_entry_in_accessionSearch_returns_1_entry() throws Exception {
+        String query = "query";
+        int limit = 1;
+
+        String requestUrl = String.format(ACCESSION_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, 0);
+        List<Entry> entries = createEntries(MAX_ENTRIES_IN_RESPONSE);
+        EbeyeSearchResult searchResult = createAccessionResult(entries);
+
+        mockServerResponse(syncRestServerMock, requestUrl, searchResult);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(limit));
+        assertThat(actualAccessions.get(0), is(entries.get(0).getUniprotAccession()));
+    }
+
+    @Test
+    public void query_with_no_limits_in_accessionSearch_returns_all_entries() throws Exception {
+        String query = "query";
+        int entryNum = MAX_ENTRIES_IN_RESPONSE * 2;
+
+        List<Entry> entries = createEntries(entryNum);
+
+        String queryChunkUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult chunkedResult1 =
+                createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
+
+        mockServerResponse(syncRestServerMock, queryChunkUrl1, chunkedResult1);
+        mockServerResponse(asyncRestServerMock, queryChunkUrl1, chunkedResult1);
+
+        EbeyeSearchResult resultSet2 =
+                createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, entryNum), entryNum);
+        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
+
+        mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, resultSet2);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(entryNum));
+    }
+
+    @Test
+    public void exception_is_thrown_on_synchronous_request_accessionSearch_returns_empty_accession_list()
+            throws Exception {
+        String query = "query";
+
+        String requestUrl = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        syncRestServerMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
+                .andRespond(withServerError());
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(0));
+    }
+
+    @Test
+    public void exception_is_thrown_on_first_asynchronous_chunk_accessionSearch_returns_remaining_chunks()
+            throws Exception {
+        String query = "query";
+        int expectedEntryNum = MAX_ENTRIES_IN_RESPONSE;
+        int entryNum = expectedEntryNum * 2;
+
+
+        List<Entry> entries = createEntries(entryNum);
+
+        String queryChunkUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult chunkedResult1 =
+                createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
+
+        mockServerResponse(syncRestServerMock, queryChunkUrl1, chunkedResult1);
+
+        asyncRestServerMock.expect(requestTo(queryChunkUrl1)).andExpect(method(HttpMethod.GET))
+                .andRespond(withServerError());
+
+        EbeyeSearchResult resultSet2 =
+                createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, entryNum), entryNum);
+        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
+
+        mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, resultSet2);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(expectedEntryNum));
     }
 
     private EbeyeAutocomplete createAutoCompleteResponse(List<Suggestion> suggestedKeywords) {
@@ -110,5 +296,41 @@ public class EbeyeRestServiceTest {
     private String convertToJson(Object object) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(object);
+    }
+
+    private EbeyeSearchResult createAccessionResult(List<Entry> entries) {
+        EbeyeSearchResult result = new EbeyeSearchResult();
+        result.setEntries(entries);
+        result.setHitCount(entries.size());
+
+        return result;
+    }
+
+    private EbeyeSearchResult createAccessionResult(List<Entry> entries, int hitCount) {
+        EbeyeSearchResult result = new EbeyeSearchResult();
+        result.setEntries(entries);
+        result.setHitCount(hitCount);
+
+        return result;
+    }
+
+    private List<Entry> createEntries(int num) {
+        return IntStream.range(0, num)
+                .mapToObj(index -> createEntryWithIdAndDefaultName("entry" + index))
+                .collect(Collectors.toList());
+    }
+
+    private Entry createEntryWithIdAndDefaultName(String id) {
+        return new Entry(id, id + "_" + id);
+    }
+
+    private void mockServerResponse(MockRestServiceServer serverMock, String requestUrl, EbeyeSearchResult searchResult)
+            throws IOException {
+        serverMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(convertToJson(searchResult), MediaType.APPLICATION_JSON));
+    }
+
+    private String createAccessionUrl(String query, int size, int start) {
+        return String.format(ACCESSION_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, start);
     }
 }
