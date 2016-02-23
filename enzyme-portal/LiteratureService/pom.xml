@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>LiteratureService</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     
@@ -11,7 +11,7 @@
     <description>
         The Enzyme Portal Literature Service.
     </description>
-        <parent>
+    <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
         <version>1.0.5</version>
@@ -64,7 +64,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.6</version>
+            <version>4.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>4.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

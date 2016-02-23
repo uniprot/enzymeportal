@@ -19,11 +19,11 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
        
-<!--        <spring.data.jpa.version>1.6.4.RELEASE</spring.data.jpa.version>-->
+        <!--        <spring.data.jpa.version>1.6.4.RELEASE</spring.data.jpa.version>-->
         <spring.data.jpa.version> 1.8.1.RELEASE</spring.data.jpa.version>
        
-<!--        <spring.data.commons.version>1.8.4.RELEASE</spring.data.commons.version>-->
-         <spring.data.commons.version>1.10.1.RELEASE</spring.data.commons.version>
+        <!--        <spring.data.commons.version>1.8.4.RELEASE</spring.data.commons.version>-->
+        <spring.data.commons.version>1.10.1.RELEASE</spring.data.commons.version>
         <querydsl.version>3.6.5</querydsl.version>
         <org.springframework-version>4.1.7.RELEASE</org.springframework-version>
  
@@ -43,7 +43,7 @@
     <dependencies>
         
    
-                <dependency>
+        <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>EnzymePortalTestKit</artifactId>
             <version>1.0.2</version>
@@ -87,29 +87,29 @@
             <scope>compile</scope>
         </dependency>
  
-<!--spring data rest-->
+        <!--spring data rest-->
         <dependency>
-  <groupId>org.springframework.data</groupId>
-  <artifactId>spring-data-rest-webmvc</artifactId>
-  <version>2.4.1.RELEASE</version>
-</dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-rest-webmvc</artifactId>
+            <version>2.4.1.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${org.springframework-version}</version>
             <exclusions>
-<!--                 Exclude Commons Logging in favor of SLF4j -->
+                <!--                 Exclude Commons Logging in favor of SLF4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-                <dependency>
-	<groupId>org.springframework</groupId>
-	<artifactId>spring-orm</artifactId>
-	<version>${org.springframework-version}</version>
-</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
     
         <!--    spring data jpa-->
         <dependency>
@@ -125,10 +125,10 @@
         </dependency>
         
         <dependency>
-	<groupId>com.mchange</groupId>
-	<artifactId>c3p0</artifactId>
-	<version>0.9.5</version>
-</dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5</version>
+        </dependency>
         
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -162,13 +162,13 @@
             <artifactId>querydsl-jpa</artifactId>
             <version>${querydsl.version}</version>
             <type>jar</type>
-<!--            <scope>compile</scope>-->
+            <!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>com.mysema.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
             <version>${querydsl.version}</version>
-<!--            <scope>provided</scope>-->
+            <!--            <scope>provided</scope>-->
         </dependency>
         
         <dependency>
@@ -182,21 +182,21 @@
             <version>11.2.0.3</version>
         </dependency>
         
-   <dependency>
-	<groupId>org.apache.tomcat</groupId>
-	<artifactId>tomcat-jdbc</artifactId>
-	<version>8.0.23</version>
-</dependency>
-   <dependency>
-        <groupId>com.zaxxer</groupId>
-        <artifactId>HikariCP</artifactId>
-        <version>2.4.3</version>
-    </dependency>
-       <dependency>
-	<groupId>org.javassist</groupId>
-	<artifactId>javassist</artifactId>
-	<version>3.20.0-GA</version>
-</dependency> 
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>8.0.23</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.20.0-GA</version>
+        </dependency> 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -221,13 +221,13 @@
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
             <version>2.6.0</version>
-<!--            <scope>provided</scope>-->
+            <!--            <scope>provided</scope>-->
         </dependency>
         <dependency>
-	<groupId>jaxen</groupId>
-	<artifactId>jaxen</artifactId>
-	<version>1.1.6</version>
-</dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1.6</version>
+        </dependency>
 
     </dependencies>
     <build>
