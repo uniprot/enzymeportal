@@ -56,7 +56,7 @@ public class EbeyeRestService {
 
     private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
     private static final int HITCOUNT = 7000;
-    private static final int QUERY_LIMIT = 800;
+    private static final int QUERY_LIMIT = 8000;
 
     /**
      *
@@ -178,10 +178,10 @@ public class EbeyeRestService {
     }
 
     @Deprecated
-    private List<String> queryMuted(String query, int iteration) throws InterruptedException, ExecutionException {
+    private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
         final Set<String> accessions = new CopyOnWriteArraySet<>();
 
-        IntStream.rangeClosed(0, iteration).parallel().forEachOrdered(index -> {
+        IntStream.rangeClosed(0, iteration).forEachOrdered(index -> {
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
 
             try {
@@ -233,7 +233,7 @@ public class EbeyeRestService {
         return null;
     }
 
-    private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
+    private List<String> queryM(String query, int iteration) throws InterruptedException, ExecutionException {
         final List<String> urls = new CopyOnWriteArrayList<>();
         IntStream.rangeClosed(0, iteration).parallel().forEachOrdered(index -> {
             String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
@@ -279,7 +279,7 @@ public class EbeyeRestService {
             });
         }
 
-        return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
+        return accessions.stream().distinct().collect(Collectors.toList());
     }
 
 }
