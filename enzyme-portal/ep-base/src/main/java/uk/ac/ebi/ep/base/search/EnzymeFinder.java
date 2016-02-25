@@ -387,7 +387,7 @@ public class EnzymeFinder extends EnzymeBase {
                 long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
                 LOGGER.warn("Final Time taken to process accessions of size (" + accessions.size() + ") :  (" + elapsedtime + " sec)");
 
-                return enzymeList.stream().distinct().collect(Collectors.toList());
+                return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
 
             }
 
