@@ -474,7 +474,7 @@ public class SearchController extends AbstractController {
     @Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
 
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService);
         SearchResults results = finder.getEnzymes(searchParameters);
 
         return results;
@@ -493,7 +493,7 @@ public class SearchController extends AbstractController {
         SearchResults results = null;
         EnzymeFinder finder = null;
         try {
-            finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+            finder = new EnzymeFinder(enzymePortalService);
 
             results = finder.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);

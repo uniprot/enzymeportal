@@ -237,7 +237,7 @@ public abstract class AbstractController {
      * @return the search results.
      */
     protected SearchResults searchKeyword(SearchParams searchParameters) {
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService);
 
        SearchResults results = finder.getEnzymes(searchParameters);
 
