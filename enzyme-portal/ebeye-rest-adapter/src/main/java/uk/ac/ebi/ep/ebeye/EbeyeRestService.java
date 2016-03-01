@@ -1,6 +1,10 @@
 package uk.ac.ebi.ep.ebeye;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -16,7 +20,6 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
@@ -39,7 +42,7 @@ public class EbeyeRestService {
     private final int maxEbiSearchLimit;
     private final int chunkSize;
 
-    @Autowired
+    @Autowired//org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'ebeyeRestService': Unsatisfied dependency expressed through constructor argument with index 3 of type [int]: : No qualifying bean of type [int] found for dependency:
     public EbeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
             AsyncRestTemplate asyncRestTemplate, int maxEbiSearchLimit, int chunkSize) {
         Preconditions.checkArgument(ebeyeIndexUrl != null, "Index URL can't be null");
