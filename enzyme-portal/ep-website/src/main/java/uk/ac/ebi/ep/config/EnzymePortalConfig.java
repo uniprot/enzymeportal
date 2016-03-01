@@ -15,7 +15,6 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.common.Config;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
@@ -169,10 +168,10 @@ public class EnzymePortalConfig {
         return filesConfig;
     }
 
-    @Bean
-    public EbeyeRestService ebeyeRestService() {
-        return new EbeyeRestService();
-    }
+//    @Bean
+//    public EbeyeRestService ebeyeRestService() {
+//        return new EbeyeRestService();
+//    }
 
     @Bean
     public PdbService pdbService() {

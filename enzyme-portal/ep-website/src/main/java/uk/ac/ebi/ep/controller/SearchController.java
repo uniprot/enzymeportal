@@ -538,7 +538,7 @@ public class SearchController extends AbstractController {
         if (name != null && name.length() >= 3) {
             String keyword = String.format("%%%s%%", name);
 
-            List<Suggestion> suggestions = ebeyeRestService.ebeyeAutocompleteSearch(keyword.trim());
+            List<Suggestion> suggestions = ebeyeRestService.autocompleteSearch(keyword.trim());
 
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());
