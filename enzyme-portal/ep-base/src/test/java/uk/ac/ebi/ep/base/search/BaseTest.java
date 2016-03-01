@@ -31,7 +31,7 @@ import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
  * @author joseph
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class, EbeyeRestService.class,PmcConfig.class})
+@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class,PmcConfig.class})
 public abstract class BaseTest {
 
 

@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import static uk.ac.ebi.ep.data.batch.PartitioningSpliterator.partition;
@@ -60,7 +61,8 @@ public class EnzymeFinder extends EnzymeBase {
     List<String> compoundFilter;
     List<UniprotEntry> enzymeSummaryList;
 
-    private final  EbeyeRestService ebeyeRestService;
+    @Autowired
+    private  EbeyeRestService ebeyeRestService;
 
     Set<Species> uniqueSpecies;
     List<Disease> diseaseFilters;
@@ -75,10 +77,8 @@ public class EnzymeFinder extends EnzymeBase {
 
 
 
-    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
+    public EnzymeFinder(EnzymePortalService service) {
         super(service);
-
-        this.ebeyeRestService = ebeyeRestService;
 
         enzymeSearchResults = new SearchResults();
 
@@ -149,7 +149,7 @@ public class EnzymeFinder extends EnzymeBase {
             query = query.trim();
         }
 
-        List<String> accessions = ebeyeRestService.queryEbeyeForUniqueAccessions(query, LIMIT);
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessions(query, LIMIT);
 
         LOGGER.warn("Number of Processed Accession for  " + query + " :=:" + accessions.size());
 
