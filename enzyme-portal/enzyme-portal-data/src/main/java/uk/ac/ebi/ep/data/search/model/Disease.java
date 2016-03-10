@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
 
+
 /**
  * <p>
  * Java class for Disease complex type.

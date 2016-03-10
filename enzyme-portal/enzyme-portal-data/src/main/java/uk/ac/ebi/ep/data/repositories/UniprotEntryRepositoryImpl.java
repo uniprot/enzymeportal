@@ -269,7 +269,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         JPAQuery query = new JPAQuery(entityManager);
         List<Species> result = query.from($).where($.accession.in(accessions)).distinct().orderBy($.scientificName.asc())
                 .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
-
+                
         return result;
     }
     

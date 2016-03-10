@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -451,16 +452,15 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         Optional<String> synonymName = Optional.ofNullable(this.getSynonymNames());
 
         if (synonymName.isPresent()) {
-            List<String> syn = Arrays.asList(synonymName.get().split("^[,;]+$"));
 
-            for (String otherName : syn) {
-                if (!otherName.trim().equalsIgnoreCase(getProteinName().trim())) {
-                    synonym.add(otherName);
-                }
-            }
+            synonym = Stream.of(synonymName.get().split(";")).distinct()
+                    .filter(otherName -> (!otherName.trim().equalsIgnoreCase(getProteinName().trim())))
+                    .distinct()
+                    .collect(Collectors.toList());
+
         }
 
-        return synonym.stream().distinct().collect(Collectors.toList());
+        return synonym;
     }
 
     public List<String> parseNameSynonyms(String namesColumn) {
@@ -693,5 +693,12 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public String getEnzymeFunction() {
         return getFunction();
     }
+
+    @Override
+    public String toString() {
+        return "UniprotEntry{" + "entryType=" + entryType + ", accession=" + accession + ", name=" + name + ", taxId=" + taxId + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
+    }
+    
+    
 
 }

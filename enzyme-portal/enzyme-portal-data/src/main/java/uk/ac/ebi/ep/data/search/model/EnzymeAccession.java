@@ -334,10 +334,10 @@ public class EnzymeAccession implements Serializable {
         return Objects.equals(this.species.getScientificname(), other.species.getScientificname());
     }
 
-    @Override
-    public String toString() {
-        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + '}';
+//    }
 
 
     public String getUniprotid() {

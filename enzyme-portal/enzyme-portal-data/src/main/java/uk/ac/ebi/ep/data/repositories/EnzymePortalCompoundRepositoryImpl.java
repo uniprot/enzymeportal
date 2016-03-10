@@ -12,7 +12,6 @@ import com.mysema.query.types.expr.BooleanExpression;
 import com.mysema.query.types.expr.StringExpression;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,11 +76,11 @@ public class EnzymePortalCompoundRepositoryImpl implements EnzymePortalCompoundR
     @Transactional(readOnly = true)
     public List<Compound> findCompoundsByTaxId(Long taxId) {
 
-        EntityGraph eGraph = entityManager.getEntityGraph("CompoundEntityGraph");
-        eGraph.addAttributeNodes("uniprotAccession");
+        //EntityGraph eGraph = entityManager.getEntityGraph("CompoundEntityGraph");
+        //eGraph.addAttributeNodes("uniprotAccession");
 
         JPAQuery query = new JPAQuery(entityManager);
-        query.setHint("javax.persistence.fetchgraph", eGraph);
+       // query.setHint("javax.persistence.fetchgraph", eGraph);
         List<Compound> result = query.from($).where($.uniprotAccession.taxId.eq(taxId)).distinct()
                 .list(Projections.constructor(Compound.class, $.compoundId, $.compoundName, $.url, $.compoundRole)).stream().distinct().collect(Collectors.toList());
 

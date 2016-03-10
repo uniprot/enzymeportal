@@ -102,10 +102,7 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
             return false;
         }
         RelatedProteins other = (RelatedProteins) object;
-        if ((this.relProtInternalId == null && other.relProtInternalId != null) || (this.relProtInternalId != null && !this.relProtInternalId.equals(other.relProtInternalId))) {
-            return false;
-        }
-        return true;
+        return !((this.relProtInternalId == null && other.relProtInternalId != null) || (this.relProtInternalId != null && !this.relProtInternalId.equals(other.relProtInternalId)));
     }
 
     @Override

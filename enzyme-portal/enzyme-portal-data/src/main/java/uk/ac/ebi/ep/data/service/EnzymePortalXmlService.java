@@ -9,10 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.EnzymePortalNames;
-import uk.ac.ebi.ep.data.domain.EnzymeXmlStore;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalNamesRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymeXmlStoreRepository;
+import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
+import uk.ac.ebi.ep.data.repositories.IntenzEnzymesRepository;
 
 /**
  *
@@ -23,19 +21,12 @@ import uk.ac.ebi.ep.data.repositories.EnzymeXmlStoreRepository;
 public class EnzymePortalXmlService {
 
     @Autowired
-    private EnzymePortalNamesRepository enzymePortalNamesRepository;
-    @Autowired
-    private EnzymeXmlStoreRepository enzymeXmlStoreRepository;
+    private IntenzEnzymesRepository intenzEnzymesRepository;
 
     @Transactional(readOnly = true)
-    public List<EnzymePortalNames> findEnzymeNames() {
+    public List<IntenzEnzymes> findAllIntenzEnzymes() {
 
-        return enzymePortalNamesRepository.findEnzymeNames();
+        return intenzEnzymesRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
-    public List<EnzymeXmlStore> findEnzymeXmlEnteries() {
-
-        return enzymeXmlStoreRepository.findEnzymeXmlEnteries();
-    }
 }

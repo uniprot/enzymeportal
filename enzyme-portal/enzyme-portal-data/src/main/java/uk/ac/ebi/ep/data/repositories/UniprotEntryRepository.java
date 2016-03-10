@@ -8,6 +8,8 @@ package uk.ac.ebi.ep.data.repositories;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
+import javax.persistence.QueryHint;
+import static org.hibernate.jpa.QueryHints.HINT_FETCH_SIZE;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -16,6 +18,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -84,7 +87,6 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Async
     Future<List<UniprotEntry>> findFutureSummariesByAccessions(@Param("ACCESSION") List<String> accessions);
 
-
     @Transactional(readOnly = true)
     @Query(value = "SELECT e FROM UniprotEntry e "
             + "left join e.enzymePortalEcNumbersSet ec "
@@ -111,5 +113,29 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Transactional(readOnly = true)
     @Query(value = "UPDATE UNIPROT_ENTRY SET EXP_EVIDENCE_FLAG = 1 WHERE ACCESSION IN (SELECT distinct accession from SP_ENZYME_EVIDENCE)", nativeQuery = true)
     void updateExpEvidenceFlag();
+
+    @Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER AND ROWNUM <100 AND u.ENTRY_TYPE=0", nativeQuery = true)
+    List<UniprotEntry> findSwissprotEnzymesByEc(@Param("EC_NUMBER") String ecNumber);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT e FROM UniprotEntry e "
+            + "left join e.enzymePortalEcNumbersSet ec "
+            + "WHERE ec.uniprotAccession = e.accession "
+            + "AND ec.ecNumber = :ecNumber AND e.entryType =0")
+    Stream<List<UniprotEntry>> findStreamedSwissprotEnzymesByEc(@Param("ecNumber") String ecNumber);
+
+    //@Transactional(readOnly = true)
+    @Query(value = "SELECT * FROM UNIPROT_ENTRY ORDER BY ENTRY_TYPE ASC", nativeQuery = true)
+    List<UniprotEntry> findUniprotEntriesOrderedByEntryType();
+
+    //@QueryHints(value = @QueryHint(name = HINT_FETCH_SIZE, value = "" + 0))
+       @QueryHints(value = {
+            @QueryHint(name = "org.hibernate.ScrollMode", value = "FORWARD_ONLY"),
+           @QueryHint(name = HINT_FETCH_SIZE, value = "" + 0)
+//            @QueryHint(name = "org.hibernate.cacheMode", value = "NORMAL"),
+//            @QueryHint(name = "org.hibernate.cacheRegion", value = "myCacheRegion")
+    })
+    @Query(value = "SELECT e FROM UniprotEntry e")
+    Stream<UniprotEntry> streamEnzymes();
 
 }
