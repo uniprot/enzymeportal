@@ -132,7 +132,7 @@ public class EnzymeCentric extends XmlGenerator {
             // Write to File
             m.marshal(database, writer);
             //m.marshal(database, new File(enzymeCentricXmlDir));
-            //m.marshal(database, System.out);
+            m.marshal(database, System.out);
             logger.info("Done writing XML to this Dir :" + enzymeCentricXmlDir);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
