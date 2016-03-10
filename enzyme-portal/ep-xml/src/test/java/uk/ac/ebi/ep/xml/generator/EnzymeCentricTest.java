@@ -7,6 +7,7 @@ package uk.ac.ebi.ep.xml.generator;
 
 import java.sql.SQLException;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
@@ -15,6 +16,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Ignore
 public class EnzymeCentricTest extends BaseTest {
 
     @Rule

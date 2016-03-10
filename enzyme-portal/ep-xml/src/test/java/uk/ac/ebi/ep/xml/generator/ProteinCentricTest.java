@@ -9,12 +9,14 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Ignore
 public class ProteinCentricTest {
     
     public ProteinCentricTest() {
