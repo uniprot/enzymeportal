@@ -59,7 +59,7 @@ public class ProteinCentric extends XmlGenerator {
     }
 
     private void paginate(int page, List<UniprotEntry> enzymes) {
-        System.out.println("about to query "+ page);
+
         Page<UniprotEntry> pages = enzymePortalService.findPageableUniprotEntries(new PageRequest(page, 10, Sort.Direction.ASC, "entryType"));
         Iterator<UniprotEntry> it = pages.iterator();
         if (it.hasNext()) {
@@ -72,14 +72,18 @@ public class ProteinCentric extends XmlGenerator {
     @Override
     public void generateXmL() throws JAXBException {
 
-        //*******************************TODO*******
+        generateXmL(proteinCentricXmlDir);
+    }
 
+    @Override
+    public void generateXmL(String xmlFileLocation) throws JAXBException {
+
+        //*******************************TODO*******
         Pageable pageable = new PageRequest(5, 10, Sort.Direction.ASC, "entryType");
         Page<UniprotEntry> page = enzymePortalService.findPageableUniprotEntries(pageable);
 
         List<UniprotEntry> enzymes = new ArrayList<>();
         int total = Long.valueOf(page.getTotalElements()).intValue();
-        total = 1000;
         IntStream.rangeClosed(0, total).parallel()
                 .forEach(i -> paginate(i, enzymes));
 
@@ -87,16 +91,14 @@ public class ProteinCentric extends XmlGenerator {
 //               .forEach(i -> enzymePortalService.findPageableUniprotEntries(pageable));    
 //       
 //  
-        System.out.println("Num enttries found "+ enzymes.size());   
         enzymes.stream().forEach((e) -> {
-            System.out.println("ACC "+ e.getAccession() + " Name "+ e.getProteinName());
-        }); 
+            // System.out.println("ACC "+ e.getAccession() + " Name "+ e.getProteinName());
+        });
 //****************************     
-        
-        
+
         List<UniprotEntry> uniprotEntries = enzymePortalService.findUniprotEntriesOrderedByEntryType()
                 //List<UniprotEntry> uniprotEntries = enzymePortalService.findSwissprotEnzymesByEc("6.1.2.1")
-                .stream().limit(10).collect(Collectors.toList());
+                .stream().collect(Collectors.toList());
 
         int entryCount = uniprotEntries.size();
         logger.info("Number of entries found " + entryCount);
@@ -145,14 +147,14 @@ public class ProteinCentric extends XmlGenerator {
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        Path path = Paths.get(proteinCentricXmlDir);
+        Path path = Paths.get(xmlFileLocation);
         try {
             Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             // Write to File
             m.marshal(database, writer);
             //m.marshal(database, new File(enzymeCentricXmlDir));
             //m.marshal(database, System.out);
-            logger.info("Done writing XML to this Dir :" + proteinCentricXmlDir);
+            logger.info("Done writing XML to this Dir :" + xmlFileLocation);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }

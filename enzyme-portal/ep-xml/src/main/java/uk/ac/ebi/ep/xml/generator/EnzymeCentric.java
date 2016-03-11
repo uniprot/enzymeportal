@@ -69,9 +69,15 @@ public class EnzymeCentric extends XmlGenerator {
 
     @Override
     public void generateXmL() throws JAXBException {
+
+        generateXmL(enzymeCentricXmlDir);
+    }
+
+    @Override
+    public void generateXmL(String xmlFileLocation) throws JAXBException {
         List<Entry> entryList = new LinkedList<>();
         Entries entries = new Entries();
-        List<IntenzEnzymes> enzymes = enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().limit(1).collect(Collectors.toList());
+        List<IntenzEnzymes> enzymes = enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
         int entryCount = enzymes.size();
         logger.info("Number of Intenz enzymes ready to be processed : " + entryCount);
 
@@ -126,14 +132,14 @@ public class EnzymeCentric extends XmlGenerator {
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        Path path = Paths.get(enzymeCentricXmlDir);
+        Path path = Paths.get(xmlFileLocation);
         try {
             Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             // Write to File
             m.marshal(database, writer);
             //m.marshal(database, new File(enzymeCentricXmlDir));
             m.marshal(database, System.out);
-            logger.info("Done writing XML to this Dir :" + enzymeCentricXmlDir);
+            logger.info("Done writing XML to this Dir :" + xmlFileLocation);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }

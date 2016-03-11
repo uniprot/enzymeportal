@@ -34,7 +34,8 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 @Configuration
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class XmlConfig {
-        @Autowired
+
+    @Autowired
     private DataSource dataSource;
     @Autowired
     private EnzymePortalService enzymePortalService;
@@ -74,6 +75,7 @@ public class XmlConfig {
 
     }
 
+    //spring batch
     @Bean
     public ItemReader<UniprotEntry> databaseItemReader() {
         JdbcCursorItemReader<UniprotEntry> databaseReader = new JdbcCursorItemReader<>();

@@ -11,7 +11,7 @@ import uk.ac.ebi.ep.data.dataconfig.DataConfig;
 import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfig;
 import uk.ac.ebi.ep.xml.generator.ProteinCentric;
-import uk.ac.ebi.ep.xml.service.XmlService;
+import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 
 /**
  *
@@ -45,10 +45,9 @@ public class ProteinCentricXmlGenerator {
             context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.xml.config");
             context.refresh();
 
-            XmlService service = context.getBean(ProteinCentric.class);
-            service.generateXmL();
-            service.validateXML();
-
+            XmlGenerator xmlGenerator = context.getBean(ProteinCentric.class);
+            xmlGenerator.generateXmL();
+            xmlGenerator.validateXML();
         }
 
     }

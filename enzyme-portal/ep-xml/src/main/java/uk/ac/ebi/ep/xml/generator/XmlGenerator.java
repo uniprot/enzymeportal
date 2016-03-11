@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.xml.bind.JAXBException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -23,6 +24,8 @@ import uk.ac.ebi.ep.xml.model.Ref;
 import uk.ac.ebi.ep.xml.service.XmlService;
 import uk.ac.ebi.ep.xml.util.DatabaseName;
 import uk.ac.ebi.ep.xml.util.FieldName;
+import uk.ac.ebi.ep.xml.util.Preconditions;
+import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 /**
  *
@@ -48,6 +51,35 @@ public abstract class XmlGenerator implements XmlService {
     public XmlGenerator(final EnzymePortalService enzymePortalService, final EnzymePortalXmlService xmlService) {
         this.enzymePortalService = enzymePortalService;
         this.enzymePortalXmlService = xmlService;
+    }
+
+    /**
+     * generate the XML in the default location declared in the config files
+     *
+     * @throws JAXBException
+     */
+    public abstract void generateXmL() throws JAXBException;
+
+    /**
+     * uses default directories & XSDs provided by the implementing class.
+     * implementing class must provide XML file location and XSD files to
+     * validate against
+     */
+    public abstract void validateXML();
+
+    /**
+     * uses default XSDs provided to validate the generated XML file
+     *
+     * @param xmlFile xml dir/file
+     * @return true if validated otherwise false
+     */
+    public boolean validateXML(String xmlFile) {
+        Preconditions.checkArgument(ebeyeXSDs == null, "XSD file to be validated against cannot be null. Please ensure that ep-xml-config.properties is in the classpath.");
+        Preconditions.checkArgument(xmlFile == null, "At least an XML File must be provided for XML validation to proceed.");
+        String[] xsdFiles = ebeyeXSDs.split(",");
+
+        return EnzymePortalXmlValidator.validateXml(xmlFile, xsdFiles);
+
     }
 
     private Set<String> computeSynonyms(Optional<String> synonymName, String proteinName) {

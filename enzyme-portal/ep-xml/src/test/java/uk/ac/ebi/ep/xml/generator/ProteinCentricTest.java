@@ -5,47 +5,67 @@
  */
 package uk.ac.ebi.ep.xml.generator;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import javax.xml.bind.JAXBException;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import static uk.ac.ebi.ep.xml.generator.BaseTest.logger;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @Ignore
-public class ProteinCentricTest {
-    
-    public ProteinCentricTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
+public class ProteinCentricTest extends BaseTest {
+
     @After
-    public void tearDown() {
+    @Override
+    public void tearDown() throws SQLException {
+        mockDataSource.getConnection().close();
+        enzymes.clear();
     }
 
     /**
      * Test of generateXmL method, of class ProteinCentric.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testGenerateXmL() throws Exception {
-        System.out.println("generateXmL");
-        ProteinCentric instance = null;
-        instance.generateXmL();
+        String filename = "protein.xml";
+        File output = temporaryFolder.newFile(filename);
+
+        try {
+            proteinCentricInstance.generateXmL(output.getAbsolutePath());
+        } catch (JAXBException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+
+        String fileDir = output.getParent();
+
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<database>\n"
+                + "    <name>Enzyme Portal</name>\n"
+                + "    <description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description>\n"
+                + "    <release_date>11-Mar-2016</release_date>\n"
+                + "    <entry_count>2</entry_count>\n"
+                + "    <entries>\n"
+                + "        <entry id=\"1.1.1.1\">\n"
+                + "            <name>alcohol dehydrogenase</name>\n"
+                + "        </entry>\n"
+                + "        <entry id=\"6.1.1.1\">\n"
+                + "            <name>tyrosine—tRNA ligase</name>\n"
+                + "        </entry>\n"
+                + "    </entries>\n"
+                + "</database>";
+
+        assertThat(output).hasExtension("xml")
+                .hasContent(xml.trim())
+                .hasParent(resolvePath(fileDir));
 
     }
 
@@ -53,11 +73,42 @@ public class ProteinCentricTest {
      * Test of validateXML method, of class ProteinCentric.
      */
     @Test
-    public void testValidateXML() {
-        System.out.println("validateXML");
-        ProteinCentric instance = null;
-        instance.validateXML();
+    public void testValidateXML() throws IOException {
+        logger.info("testValidateXML");
+        String filename = "enzymes.xml";
+        File output = temporaryFolder.newFile(filename);
 
+        try {
+            proteinCentricInstance.generateXmL(output.getAbsolutePath());
+        } catch (JAXBException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+
+        String fileDir = output.getParent();
+
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<database>\n"
+                + "    <name>Enzyme Portal</name>\n"
+                + "    <description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description>\n"
+                + "    <release_date>11-Mar-2016</release_date>\n"
+                + "    <entry_count>2</entry_count>\n"
+                + "    <entries>\n"
+                + "        <entry id=\"1.1.1.1\">\n"
+                + "            <name>alcohol dehydrogenase</name>\n"
+                + "        </entry>\n"
+                + "        <entry id=\"6.1.1.1\">\n"
+                + "            <name>tyrosine—tRNA ligase</name>\n"
+                + "        </entry>\n"
+                + "    </entries>\n"
+                + "</database>";
+
+        assertThat(output).hasExtension("xml")
+                .hasContent(xml.trim())
+                .hasParent(resolvePath(fileDir));
+        String[] xsd = {"http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd"};
+        Boolean validate = proteinCentricInstance.validateXML(output.getAbsolutePath(), xsd);
+
+        assertThat(validate).isTrue();
     }
-    
+
 }

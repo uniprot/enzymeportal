@@ -43,14 +43,6 @@ public class Entry {
         this.id = id;
     }
 
-//    public String getEntryDbName() {
-//        return entryDbName;
-//    }
-//
-//    @XmlAttribute(name = "dbname")
-//    public void setEntryDbName(String entryDbName) {
-//        this.entryDbName = entryDbName;
-//    }
 
     public String getName() {
         return name;

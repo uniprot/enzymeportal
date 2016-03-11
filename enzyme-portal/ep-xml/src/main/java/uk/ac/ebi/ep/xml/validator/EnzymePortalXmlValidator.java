@@ -16,6 +16,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
+import uk.ac.ebi.ep.xml.util.Preconditions;
 
 /**
  * Validates an XML against a supplied XSDs.
@@ -29,7 +30,6 @@ public class EnzymePortalXmlValidator {
     private EnzymePortalXmlValidator() {
 
     }
-    
 
     /**
      * Validate provided XML against the provided XSD schema files.
@@ -37,17 +37,12 @@ public class EnzymePortalXmlValidator {
      * @param xmlFile XML file to be validated; should not be null or empty.
      * @param xsdFiles XSDs against which to validate the XML should not be null
      * or empty.
+     * @return true if validated otherwise false
      */
-    public static void validateXml( final String xmlFile, final String[] xsdFiles) {
-        
-        if (xmlFile == null || xmlFile.isEmpty()) {
-            logger.error("ERROR: XML file to be validated cannot be null.");
-            return;
-        }
-        if (xsdFiles == null || xsdFiles.length < 1) {
-            logger.error("ERROR: At least an XSD File must be provided for XML validation to proceed.");
-            return;
-        }
+    public static boolean validateXml(final String xmlFile, final String[] xsdFiles) {
+        Preconditions.checkArgument(xmlFile == null || xmlFile.isEmpty(), "XML file to be validated cannot be null.");
+        Preconditions.checkArgument(xsdFiles == null || xsdFiles.length < 1, "At least an XSD File must be provided for XML validation to proceed.");
+
         final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         final StreamSource[] streamSources = streamSourcesFromXsdFiles(xsdFiles);
@@ -64,10 +59,11 @@ public class EnzymePortalXmlValidator {
             String errorMsg = ("ERROR: Unable to validate " + xmlFile + " against XSDs " + Arrays.toString(xsdFiles) + " - " + exception);
 
             logger.error(errorMsg);
+            return false;
         }
 
         logger.info("XML Validation process is now completed.Please check the logs for more info.");
-        
+        return true;
     }
 
     /**

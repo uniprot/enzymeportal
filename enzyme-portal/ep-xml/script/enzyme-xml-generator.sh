@@ -1,5 +1,6 @@
 #Generate enzyme-centric XML for indexing
 #This is how to run this script
+#DB_Config e.g uzpdev
 # ./enzyme-xml-generator.sh DB_CONFIG
 
 EP_SCRIPTS=$(cd $(dirname $0) && pwd)
