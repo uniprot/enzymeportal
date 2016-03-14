@@ -77,7 +77,7 @@ public class EnzymeCentricTest extends BaseTest {
 
 //  peek the generated file here <note>Delete later</note>              
         try (Stream<String> data = Files.lines(output.toPath(), StandardCharsets.UTF_8)) {
-            data.forEach(d -> System.out.print("xml generated : " + d));
+            data.forEach(d -> System.out.println(d));
         }
     }
 
