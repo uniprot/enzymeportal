@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,12 +49,13 @@ public class EnzymeCentricTest extends BaseTest {
         }
 
         String fileDir = output.getParent();
-
+        LocalDate date = LocalDate.now();
+        String releaseDate = date.format(DateTimeFormatter.ofPattern("d-MMM-uuuu"));
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<database>\n"
                 + "    <name>Enzyme Portal</name>\n"
                 + "    <description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description>\n"
-                + "    <release_date>11-Mar-2016</release_date>\n"
+                + "    <release_date>" + releaseDate + "</release_date>\n"
                 + "    <entry_count>2</entry_count>\n"
                 + "    <entries>\n"
                 + "        <entry id=\"1.1.1.1\">\n"
@@ -97,12 +100,13 @@ public class EnzymeCentricTest extends BaseTest {
         }
 
         String fileDir = output.getParent();
-
+        LocalDate date = LocalDate.now();
+        String releaseDate = date.format(DateTimeFormatter.ofPattern("d-MMM-uuuu"));
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<database>\n"
                 + "    <name>Enzyme Portal</name>\n"
                 + "    <description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description>\n"
-                + "    <release_date>11-Mar-2016</release_date>\n"
+                + "    <release_date>" + releaseDate + "</release_date>\n"
                 + "    <entry_count>2</entry_count>\n"
                 + "    <entries>\n"
                 + "        <entry id=\"1.1.1.1\">\n"
