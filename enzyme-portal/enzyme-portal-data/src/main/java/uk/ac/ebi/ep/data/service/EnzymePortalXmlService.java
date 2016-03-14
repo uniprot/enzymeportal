@@ -23,6 +23,23 @@ public class EnzymePortalXmlService {
     @Autowired
     private IntenzEnzymesRepository intenzEnzymesRepository;
 
+    /**
+     * Note : This method should only used for Unit Test.
+     * @param enzyme the Intenz enzyme 
+     */
+    public void addIntenzEnzyme(IntenzEnzymes enzyme) {
+        intenzEnzymesRepository.save(enzyme);
+    }
+    
+        /**
+     * Note : This method should only used for Unit Test.
+     * @param enzymes the Intenz enzymes
+     */
+    public void addIntenzEnzymes(List<IntenzEnzymes> enzymes) {
+        intenzEnzymesRepository.save(enzymes);
+    }
+
+
     @Transactional(readOnly = true)
     public List<IntenzEnzymes> findAllIntenzEnzymes() {
 
