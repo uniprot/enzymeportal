@@ -12,21 +12,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
@@ -79,21 +76,21 @@ public class ProteinCentric extends XmlGenerator {
     public void generateXmL(String xmlFileLocation) throws JAXBException {
 
         //*******************************TODO*******
-        Pageable pageable = new PageRequest(5, 10, Sort.Direction.ASC, "entryType");
-        Page<UniprotEntry> page = enzymePortalService.findPageableUniprotEntries(pageable);
-
-        List<UniprotEntry> enzymes = new ArrayList<>();
-        int total = Long.valueOf(page.getTotalElements()).intValue();
-        IntStream.rangeClosed(0, total).parallel()
-                .forEach(i -> paginate(i, enzymes));
-
-//           IntStream.rangeClosed(0, 4).parallel()
-//               .forEach(i -> enzymePortalService.findPageableUniprotEntries(pageable));    
-//       
-//  
-        enzymes.stream().forEach((e) -> {
-            // System.out.println("ACC "+ e.getAccession() + " Name "+ e.getProteinName());
-        });
+//        Pageable pageable = new PageRequest(5, 10, Sort.Direction.ASC, "entryType");
+//        Page<UniprotEntry> page = enzymePortalService.findPageableUniprotEntries(pageable);
+//
+//        List<UniprotEntry> enzymes = new ArrayList<>();
+//        int total = Long.valueOf(page.getTotalElements()).intValue();
+//        IntStream.rangeClosed(0, total).parallel()
+//                .forEach(i -> paginate(i, enzymes));
+//
+////           IntStream.rangeClosed(0, 4).parallel()
+////               .forEach(i -> enzymePortalService.findPageableUniprotEntries(pageable));    
+////       
+////  
+//        enzymes.stream().forEach((e) -> {
+//            // System.out.println("ACC "+ e.getAccession() + " Name "+ e.getProteinName());
+//        });
 //****************************     
 
         List<UniprotEntry> uniprotEntries = enzymePortalService.findUniprotEntriesOrderedByEntryType()
