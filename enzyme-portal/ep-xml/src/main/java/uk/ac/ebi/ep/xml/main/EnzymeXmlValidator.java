@@ -18,7 +18,8 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 public class EnzymeXmlValidator {
-        private static final Logger logger = Logger.getLogger(EnzymeXmlValidator.class);
+
+    private static final Logger logger = Logger.getLogger(EnzymeXmlValidator.class);
 
     private EnzymeXmlValidator() {
 
