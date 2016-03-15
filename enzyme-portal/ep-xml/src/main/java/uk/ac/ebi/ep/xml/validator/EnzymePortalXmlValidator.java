@@ -54,6 +54,7 @@ public class EnzymePortalXmlValidator {
 
             logger.info(info);
             validator.validate(new StreamSource(new File(xmlFile)));
+            logger.warn("The validation of the XML file in this dir ["+xmlFile+"] seems successful.");
         } catch (IOException | SAXException exception) {
 
             String errorMsg = ("ERROR: Unable to validate " + xmlFile + " against XSDs " + Arrays.toString(xsdFiles) + " - " + exception);
