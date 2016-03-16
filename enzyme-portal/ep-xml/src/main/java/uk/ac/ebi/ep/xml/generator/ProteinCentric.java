@@ -6,21 +6,13 @@
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.xml.bind.JAXBContext;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -91,24 +83,39 @@ public class ProteinCentric extends XmlGenerator {
 //        enzymes.stream().forEach((e) -> {
 //            // System.out.println("ACC "+ e.getAccession() + " Name "+ e.getProteinName());
 //        });
-//****************************     
+//**************************** 
+        ForkJoinPool commonPool = ForkJoinPool.commonPool();
+        //Returns the targeted parallelism level of the common pool.
+        int numCores = commonPool.getParallelism();
 
-        List<UniprotEntry> uniprotEntries = enzymePortalService.findUniprotEntriesOrderedByEntryType()
-                //List<UniprotEntry> uniprotEntries = enzymePortalService.findSwissprotEnzymesByEc("6.1.2.1")
-                .stream().collect(Collectors.toList());
+        System.out.println("ForkJoinPool :: " + numCores);
+        long startTime = System.nanoTime();
+        logger.warn("About to query uniprot for all entries ..... with machine cores @ " + numCores);
+
+        List<UniprotEntry> uniprotEntries = enzymePortalService.findUniprotEntries();
+        //List<UniprotEntry> uniprotEntries = enzymePortalService.findSwissprotEnzymesByEc("6.1.2.1")
+        //.stream().collect(Collectors.toList());
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+
+        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
 
         int entryCount = uniprotEntries.size();
+        logger.warn("Time taken to retrieve " + entryCount + " entries from database is : " + elapsedtime);
+
         logger.info("Number of entries found " + entryCount);
 
         Database database = buildDatabaseInfo(entryCount);
 
-        List<Entry> entryList = new LinkedList<>();
+        List<Entry> entryList = new CopyOnWriteArrayList<>();
         Entries entries = new Entries();
-
-        uniprotEntries.stream().forEach((uniprotEntry) -> {
+        //uniprotEntries.stream().forEach((uniprotEntry) -> {
+        uniprotEntries.parallelStream().forEach((uniprotEntry) -> {
             AdditionalFields additionalFields = new AdditionalFields();
-            Set<Field> fields = new HashSet<>();
-            Set<Ref> refs = new HashSet<>();
+            CopyOnWriteArraySet<Field> fields = new CopyOnWriteArraySet<>();
+            CopyOnWriteArraySet<Ref> refs = new CopyOnWriteArraySet<>();
+
             Entry entry = new Entry();
             entry.setAcc(uniprotEntry.getAccession());
             entry.setId(uniprotEntry.getUniprotid());
@@ -139,22 +146,8 @@ public class ProteinCentric extends XmlGenerator {
         entries.setEntry(entryList);
         database.setEntries(entries);
 
-        // create JAXB context and instantiate marshaller
-        JAXBContext context = JAXBContext.newInstance(Database.class);
-        Marshaller m = context.createMarshaller();
-        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-        Path path = Paths.get(xmlFileLocation);
-        try {
-            Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-            // Write to File
-            m.marshal(database, writer);
-            //m.marshal(database, new File(enzymeCentricXmlDir));
-            //m.marshal(database, System.out);
-            logger.info("Done writing XML to this Dir :" + xmlFileLocation);
-        } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
+        //write xml
+        writeXml(database, xmlFileLocation);
     }
 
     @Override
