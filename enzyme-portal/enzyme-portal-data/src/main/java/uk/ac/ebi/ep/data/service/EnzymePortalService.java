@@ -848,6 +848,12 @@ public class EnzymePortalService {
 
         return uniprotEntryRepository.findUniprotEntriesOrderedByEntryType();
     }
+    
+        @Transactional(readOnly = true)
+    public List<UniprotEntry> findUniprotEntries() {
+
+        return uniprotEntryRepository.findUniprotEntries();
+    }
 
     @Transactional(readOnly = true)
     public Iterable<UniprotEntry> findSwissprotEnzymesByEcNumber(String ec) {

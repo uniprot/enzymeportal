@@ -50,7 +50,8 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0 AND ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findSwissProtAccessions();
 
-    @Query(value = "SELECT * FROM UNIPROT_ENTRY", nativeQuery = true)
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY", nativeQuery = true)
     List<UniprotEntry> findUniprotEntries();
 
     @Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER", nativeQuery = true)
@@ -124,14 +125,14 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
             + "AND ec.ecNumber = :ecNumber AND e.entryType =0")
     Stream<List<UniprotEntry>> findStreamedSwissprotEnzymesByEc(@Param("ecNumber") String ecNumber);
 
-    //@Transactional(readOnly = true)
-    @Query(value = "SELECT * FROM UNIPROT_ENTRY ORDER BY ENTRY_TYPE ASC", nativeQuery = true)
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY ORDER BY ENTRY_TYPE ASC", nativeQuery = true)
     List<UniprotEntry> findUniprotEntriesOrderedByEntryType();
 
     //@QueryHints(value = @QueryHint(name = HINT_FETCH_SIZE, value = "" + 0))
-       @QueryHints(value = {
-            @QueryHint(name = "org.hibernate.ScrollMode", value = "FORWARD_ONLY"),
-           @QueryHint(name = HINT_FETCH_SIZE, value = "" + 0)
+    @QueryHints(value = {
+        @QueryHint(name = "org.hibernate.ScrollMode", value = "FORWARD_ONLY"),
+        @QueryHint(name = HINT_FETCH_SIZE, value = "" + 0)
 //            @QueryHint(name = "org.hibernate.cacheMode", value = "NORMAL"),
 //            @QueryHint(name = "org.hibernate.cacheRegion", value = "myCacheRegion")
     })
