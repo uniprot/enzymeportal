@@ -12,6 +12,7 @@ import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfig;
 import uk.ac.ebi.ep.xml.generator.EnzymeCentric;
 import uk.ac.ebi.ep.xml.generator.XmlGenerator;
+import uk.ac.ebi.ep.xml.util.Preconditions;
 
 /**
  *
@@ -32,6 +33,7 @@ public class EnzymeCentricXmlGenerator {
 
         if (args == null || args.length == 0) {
             logger.error("Please provide required parameters");
+               Preconditions.checkArgument(args == null || args.length == 0, "Please provide required parameters. e.g DBconfig instance");
             System.exit(0);
         }
 

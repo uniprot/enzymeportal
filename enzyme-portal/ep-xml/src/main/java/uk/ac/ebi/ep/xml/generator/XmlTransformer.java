@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.generator;
 
 import java.time.LocalDate;
@@ -12,7 +7,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import static uk.ac.ebi.ep.xml.generator.XmlTransformer.enzymePortal;
+import static uk.ac.ebi.ep.xml.generator.XmlTransformer.ENZYME_PORTAL;
 import uk.ac.ebi.ep.xml.model.Database;
 import uk.ac.ebi.ep.xml.model.Field;
 import uk.ac.ebi.ep.xml.model.Ref;
@@ -25,22 +20,23 @@ import uk.ac.ebi.ep.xml.util.FieldName;
  */
 public class XmlTransformer {
 
-    @Autowired
-    protected String releaseNumber;
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
 
-    protected static final String enzymePortal = "Enzyme Portal";
-    protected static final String enzymePortalDescription = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
+    protected static final String ENZYME_PORTAL = "Enzyme Portal";
+    protected static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
+
+    @Autowired
+    protected static String RELEASE_NUMBER;
 
     protected Database buildDatabaseInfo(int entryCount) {
         Database database = new Database();
-        database.setName(enzymePortal);
-        database.setDescription(enzymePortalDescription);
-        database.setRelease(releaseNumber);
+        database.setName(ENZYME_PORTAL);
+        database.setDescription(ENZYME_PORTAL_DESCRIPTION);
+        database.setRelease(RELEASE_NUMBER);
         LocalDate date = LocalDate.now();
-        database.setRelease_date(date);
-        database.setEntry_count(entryCount);
+        database.setReleaseDate(date);
+        database.setEntryCount(entryCount);
         return database;
     }
 

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.xml.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -18,7 +14,6 @@ public class Entry {
 
     private String id;
     private String acc;
-    //private String entryDbName;
     private String name;
     private String description;
 

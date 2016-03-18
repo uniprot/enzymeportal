@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.File;
@@ -13,6 +8,8 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,12 +24,13 @@ import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 public class EnzymeCentricTest extends BaseTest {
 
     private XmlGenerator enzymeCentricInstance;
+    private List<IntenzEnzymes> enzymes;
 
     @Before
     @Override
     public void setUp() {
-        enzymeCentricInstance = new EnzymeCentric(enzymePortalService, xmlService);
-
+        enzymeCentricInstance = new EnzymeCentric(xmlService);
+        enzymes = new ArrayList<>();
         IntenzEnzymes enzyme_1 = new IntenzEnzymes();
         enzyme_1.setInternalId(BigDecimal.ONE);
         enzyme_1.setEcNumber("1.1.1.1");
@@ -61,6 +59,21 @@ public class EnzymeCentricTest extends BaseTest {
     public void tearDown() throws SQLException {
         dataSource.getConnection().close();
         enzymes.clear();
+    }
+
+    @org.junit.Test//(expected = IllegalArgumentException.class)
+    public void testWhenXMLDoesNotExist() throws IOException {
+        logger.info("testWhenXMLDoesNotExist with parameters");
+
+        String filename = "enzymes.xml";
+        File output = temporaryFolder.newFile(filename);
+        generateXml(output);
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("XML file does not exist");
+        String[] xsd = {"http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd"};
+        enzymeCentricInstance.validateXML(output.getAbsolutePath() + "BLA", xsd);
+
+
     }
 
     /**

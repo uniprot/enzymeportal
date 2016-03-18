@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.FileNotFoundException;
@@ -18,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import static uk.ac.ebi.ep.xml.generator.XmlGenerator.logger;
 import uk.ac.ebi.ep.xml.model.AdditionalFields;
@@ -39,17 +33,13 @@ public class ProteinCentric extends XmlGenerator {
     @Autowired
     private String proteinCentricXmlDir;
 
-//    @Autowired
-//    private ItemReader<UniprotEntry> databaseItemReader;
-//    @Autowired
-//    private ItemReader<UniprotEntry> databaseItemReaderPageable;
-    public ProteinCentric(EnzymePortalService enzymePortalService, EnzymePortalXmlService xmlService) {
-        super(enzymePortalService, xmlService);
+    public ProteinCentric(EnzymePortalXmlService xmlService) {
+        super(xmlService);
     }
 
     private void paginate(int page, List<UniprotEntry> enzymes) {
 
-        Page<UniprotEntry> pages = enzymePortalService.findPageableUniprotEntries(new PageRequest(page, 10, Sort.Direction.ASC, "entryType"));
+        Page<UniprotEntry> pages = enzymePortalXmlService.findPageableUniprotEntries(new PageRequest(page, 10, Sort.Direction.ASC, "entryType"));
         Iterator<UniprotEntry> it = pages.iterator();
         if (it.hasNext()) {
             UniprotEntry entry = it.next();
@@ -88,11 +78,12 @@ public class ProteinCentric extends XmlGenerator {
         //Returns the targeted parallelism level of the common pool.
         int numCores = commonPool.getParallelism();
 
-        System.out.println("ForkJoinPool :: " + numCores);
+        Long numUniprotEntries = enzymePortalXmlService.countUniprotEntries();
+
         long startTime = System.nanoTime();
         logger.warn("About to query uniprot for all entries ..... with machine cores @ " + numCores);
 
-        List<UniprotEntry> uniprotEntries = enzymePortalService.findUniprotEntries();
+        List<UniprotEntry> uniprotEntries = enzymePortalXmlService.findUniprotEntries();
         //List<UniprotEntry> uniprotEntries = enzymePortalService.findSwissprotEnzymesByEc("6.1.2.1")
         //.stream().collect(Collectors.toList());
 
