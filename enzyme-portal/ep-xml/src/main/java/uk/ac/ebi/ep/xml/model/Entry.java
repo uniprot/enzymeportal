@@ -7,12 +7,14 @@ package uk.ac.ebi.ep.xml.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author joseph
  */
+@XmlRootElement
 @XmlType(propOrder = {"id", "acc", "name", "description", "additionalFields", "crossReferences"})
 public class Entry {
 
