@@ -41,7 +41,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class ProteinBatchConfig extends DefaultBatchConfigurer {
     public static final String PROTEIN_CENTRIC_JOB = "PROTEIN_CENTRIC_JOB";
-
+    public static final String PROTEIN_CENTRIC_DB_TO_XML_STEP = "readFromDbWriteToXMLStep";
     @Autowired
     private Environment env;
 
@@ -82,7 +82,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
     @Bean
     public Step readFromDbWriteToXMLStep() {
-        return stepBuilders.get("readFromDbWriteToXMLStep")
+        return stepBuilders.get(PROTEIN_CENTRIC_DB_TO_XML_STEP)
                 .<UniprotEntry, Entry>chunk(chunkSize())
                 .<UniprotEntry>reader(uniProtEntryReader())
                 .processor(uniProtEntryToEntryConverter())
