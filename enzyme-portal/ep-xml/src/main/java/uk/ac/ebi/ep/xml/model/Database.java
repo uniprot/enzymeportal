@@ -5,6 +5,8 @@
  */
 package uk.ac.ebi.ep.xml.model;
 
+import uk.ac.ebi.ep.xml.util.LocalDateAdapter;
+
 import java.time.LocalDate;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
