@@ -5,9 +5,13 @@ import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
 import uk.ac.ebi.ep.xml.model.Entry;
+import uk.ac.ebi.ep.xml.util.LogJobListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -70,8 +74,9 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
     @Bean
     public Job proteinCentricJob() {
-        return jobBuilders.get("PROTEIN_CENTRIC_JOB")
+        return jobBuilders.get(PROTEIN_CENTRIC_JOB)
                 .start(readFromDbWriteToXMLStep())
+                .listener(logListener(PROTEIN_CENTRIC_JOB))
                 .build();
     }
 
@@ -112,6 +117,10 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
         return xmlWriter;
     }
 
+    private JobExecutionListener logListener(String jobName) {
+        return new LogJobListener(jobName);
+    }
+
     /**
      * Creates a job repository that uses an in memory map to register the job's progress. This should be changed to
      * use a real data source in the following cases:
@@ -133,6 +142,12 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     private Marshaller entryMarshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         marshaller.setClassesToBeBound(Entry.class);
+
+        Map<String, Object> jaxbProps = new HashMap<>();
+        jaxbProps.put(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        marshaller.setMarshallerProperties(jaxbProps);
+
         return marshaller;
     }
 
