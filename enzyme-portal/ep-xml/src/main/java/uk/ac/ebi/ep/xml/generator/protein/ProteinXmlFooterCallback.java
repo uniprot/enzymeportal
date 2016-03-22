@@ -20,7 +20,7 @@ public class ProteinXmlFooterCallback implements StaxWriterCallback {
             XMLEvent event = eventFactory.createEndElement("", "", "entries");
             writer.add(event);
         } catch (XMLStreamException ex) {
-            throw new RuntimeException("Unable to write the footer on the XML file");
+            throw new RuntimeException("Unable to write the footer on the XML file", ex);
         }
     }
 }
