@@ -38,7 +38,7 @@ public class ProteinXmlHeaderCallback implements StaxWriterCallback {
     @Override public void write(XMLEventWriter writer) throws IOException {
         try {
             XMLEventFactory eventFactory = XMLEventFactory.newInstance();
-            //TODO move names to somewhere else
+
             appendTag(DB_NAME_ELEMENT, XmlTransformer.enzymePortal, eventFactory, writer);
             appendTag(DB_DESCRIPTION_ELEMENT, XmlTransformer.enzymePortalDescription, eventFactory, writer);
             appendTag(RELEASE_VERSION_ELEMENT, release, eventFactory, writer);
