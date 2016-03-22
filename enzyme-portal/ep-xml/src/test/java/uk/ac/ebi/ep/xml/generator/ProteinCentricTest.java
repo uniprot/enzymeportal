@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.File;
@@ -12,12 +7,15 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import static uk.ac.ebi.ep.xml.generator.BaseTest.logger;
 import uk.ac.ebi.ep.xml.service.XmlService;
 
@@ -28,11 +26,13 @@ import uk.ac.ebi.ep.xml.service.XmlService;
 public class ProteinCentricTest extends BaseTest {
 
     private XmlService proteinCentricInstance;
+    private List<IntenzEnzymes> enzymes;
 
     @Before
     @Override
     public void setUp() {
-        proteinCentricInstance = new ProteinCentric(enzymePortalService, xmlService);
+        proteinCentricInstance = new ProteinCentric(xmlService);
+        enzymes = new ArrayList<>();
     }
 
     @After
@@ -40,6 +40,20 @@ public class ProteinCentricTest extends BaseTest {
     public void tearDown() throws SQLException {
         dataSource.getConnection().close();
         enzymes.clear();
+    }
+
+    @org.junit.Test//(expected = IllegalArgumentException.class)
+    public void testWhenProteinXMLDoesNotExist() throws IOException {
+        logger.info("testWhenProteinXMLDoesNotExist with parameters");
+
+        String filename = "protein.xml";
+        File output = temporaryFolder.newFile(filename);
+        generateXml(output);
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("XML file does not exist");
+        String[] xsd = {"http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd"};
+        proteinCentricInstance.validateXML(output.getAbsolutePath() + "NoneExistingPath", xsd);
+
     }
 
     /**

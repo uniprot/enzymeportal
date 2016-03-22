@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.FileNotFoundException;
@@ -17,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.model.AdditionalFields;
 import uk.ac.ebi.ep.xml.model.CrossReferences;
@@ -39,8 +33,8 @@ public class EnzymeCentric extends XmlGenerator {
     @Autowired
     private String enzymeCentricXmlDir;
 
-    public EnzymeCentric(EnzymePortalService enzymePortalService, EnzymePortalXmlService xmlService) {
-        super(enzymePortalService, xmlService);
+    public EnzymeCentric( EnzymePortalXmlService xmlService) {
+        super(xmlService);
     }
 
     @Override
@@ -86,7 +80,7 @@ public class EnzymeCentric extends XmlGenerator {
             entry.setName(enzyme.getEnzymeName());
             entry.setDescription(enzyme.getCatalyticActivity());
 
-            Iterable<UniprotEntry> iterableEntry = enzymePortalService.findSwissprotEnzymesByEcNumber(enzyme.getEcNumber());
+            Iterable<UniprotEntry> iterableEntry = enzymePortalXmlService.findSwissprotEnzymesByEcNumber(enzyme.getEcNumber());
 
             StreamUtils.stream(iterableEntry.iterator()).parallel().forEach((uniprotEntry) -> {
                 addUniprotIdFields(uniprotEntry, fields);

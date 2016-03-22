@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.IOException;
@@ -19,7 +14,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.model.Database;
 import uk.ac.ebi.ep.xml.service.XmlService;
@@ -31,17 +25,16 @@ import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 public abstract class XmlGenerator extends XmlTransformer implements XmlService {
+  protected static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(XmlGenerator.class);
 
     @Autowired
     protected String ebeyeXSDs;
 
-    protected EnzymePortalService enzymePortalService;
     protected EnzymePortalXmlService enzymePortalXmlService;
 
-    protected static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(XmlGenerator.class);
+  
+    public XmlGenerator(final EnzymePortalXmlService xmlService) {
 
-    public XmlGenerator(final EnzymePortalService enzymePortalService, final EnzymePortalXmlService xmlService) {
-        this.enzymePortalService = enzymePortalService;
         this.enzymePortalXmlService = xmlService;
     }
 
@@ -96,7 +89,7 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
     //use stream once proven working with latest spring data release
     // see issues https://jira.spring.io/browse/DATAJPA-742
     private void usingSpringDataStream(String ec) {
-        try (Stream<List<UniprotEntry>> streamEntries = enzymePortalService.findStreamedSwissprotEnzymesByEc(ec)) {
+        try (Stream<List<UniprotEntry>> streamEntries = enzymePortalXmlService.findStreamedSwissprotEnzymesByEc(ec)) {
             //collect stream
             List<UniprotEntry> flatEntries
                     = streamEntries.flatMap(List::stream)
@@ -104,14 +97,14 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
 
             // System.out.println("num items  found " + flatEntries.size());
             //save instead of printing
-            try (Stream<List<UniprotEntry>> streamEntries1 = enzymePortalService.findStreamedSwissprotEnzymesByEc(ec)) {
+            try (Stream<List<UniprotEntry>> streamEntries1 = enzymePortalXmlService.findStreamedSwissprotEnzymesByEc(ec)) {
                 streamEntries1
                         .flatMap(l -> l.stream())
                         .forEach(x -> System.out.println("entry " + x));
 
             }
 
-            try (Stream<UniprotEntry> streamEntries2 = enzymePortalService.streamEnzymes()) {
+            try (Stream<UniprotEntry> streamEntries2 = enzymePortalXmlService.streamEnzymes()) {
                 streamEntries2
                         //.flatMap(l -> l.stream())
                         .forEach(x -> System.out.println("entry " + x));

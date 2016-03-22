@@ -139,4 +139,8 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Query(value = "SELECT e FROM UniprotEntry e")
     Stream<UniprotEntry> streamEnzymes();
 
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT /*+ PARALLEL(auto) */ COUNT(*) FROM UNIPROT_ENTRY", nativeQuery = true)
+    Long countUniprotEntries();
+
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.validator;
 
 import java.io.File;
@@ -43,6 +38,9 @@ public class EnzymePortalXmlValidator {
         Preconditions.checkArgument(xmlFile == null || xmlFile.isEmpty(), "XML file to be validated cannot be null.");
         Preconditions.checkArgument(xsdFiles == null || xsdFiles.length < 1, "At least an XSD File must be provided for XML validation to proceed.");
 
+        File file = new File(xmlFile);
+        Preconditions.checkArgument(file.exists() == false, "XML file does not exist.");
+
         final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         final StreamSource[] streamSources = streamSourcesFromXsdFiles(xsdFiles);
@@ -54,7 +52,7 @@ public class EnzymePortalXmlValidator {
 
             logger.info(info);
             validator.validate(new StreamSource(new File(xmlFile)));
-            logger.warn("The validation of the XML file in this dir ["+xmlFile+"] seems successful.");
+            logger.warn("The validation of the XML file in this dir [" + xmlFile + "] seems successful.");
         } catch (IOException | SAXException exception) {
 
             String errorMsg = ("ERROR: Unable to validate " + xmlFile + " against XSDs " + Arrays.toString(xsdFiles) + " - " + exception);
