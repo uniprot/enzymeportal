@@ -830,51 +830,6 @@ public class EnzymePortalService {
         uniprotEntryRepository.updateExpEvidenceFlag();
     }
 
-    private static Predicate swissprotEnzymesByEcNumber(String ecNumber) {
-        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
 
-        return enzyme.entryType.eq(Integer.valueOf(0).shortValue()).and(enzyme.enzymePortalEcNumbersSet.any().ecNumber.equalsIgnoreCase(ecNumber));
-
-    }
-
-    @Transactional(readOnly = true)
-    public Page<UniprotEntry> findPageableUniprotEntries(Pageable pageable) {
-
-        return uniprotEntryRepository.findAll(pageable);
-    }
-
-    @Transactional(readOnly = true)
-    public List<UniprotEntry> findUniprotEntriesOrderedByEntryType() {
-
-        return uniprotEntryRepository.findUniprotEntriesOrderedByEntryType();
-    }
-    
-        @Transactional(readOnly = true)
-    public List<UniprotEntry> findUniprotEntries() {
-
-        return uniprotEntryRepository.findUniprotEntries();
-    }
-
-    @Transactional(readOnly = true)
-    public Iterable<UniprotEntry> findSwissprotEnzymesByEcNumber(String ec) {
-
-        return uniprotEntryRepository.findAll(swissprotEnzymesByEcNumber(ec));
-    }
-
-    @Transactional(readOnly = true)
-    public List<UniprotEntry> findSwissprotEnzymesByEc(String ec) {
-
-        return uniprotEntryRepository.findSwissprotEnzymesByEc(ec);
-    }
-
-    @Transactional(readOnly = true)
-    public Stream<List<UniprotEntry>> findStreamedSwissprotEnzymesByEc(String ec) {
-        return uniprotEntryRepository.findStreamedSwissprotEnzymesByEc(ec);
-    }
-
-    @Transactional(readOnly = true)
-    public Stream<UniprotEntry> streamEnzymes() {
-        return uniprotEntryRepository.streamEnzymes();
-    }
 
 }
