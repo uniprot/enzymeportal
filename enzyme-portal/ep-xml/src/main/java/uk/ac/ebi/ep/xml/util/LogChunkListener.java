@@ -1,11 +1,10 @@
 package uk.ac.ebi.ep.xml.util;
 
 import java.util.concurrent.TimeUnit;
-import javax.batch.api.chunk.listener.ChunkListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.core.annotation.AfterWrite;
-import org.springframework.batch.core.annotation.BeforeRead;
+import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.scope.context.ChunkContext;
 
 /**
  * Logs events related to chunk processing.
@@ -27,21 +26,21 @@ public class LogChunkListener implements ChunkListener {
         this.chunkSize = chunkSize;
     }
 
-    @Override public void beforeChunk() throws Exception {
+    @Override public void beforeChunk(ChunkContext context) {
         startProcessingTime = System.nanoTime();
     }
 
-    @Override public void onError(Exception e) throws Exception {
-
-    }
-
-    @Override public void afterChunk() throws Exception {
+    @Override public void afterChunk(ChunkContext context) {
         long finishProcessing = System.nanoTime();
         counter += chunkSize;
 
         String timeText = TimeUtil.convertToText(startProcessingTime, finishProcessing, TimeUnit.NANOSECONDS);
 
-        logger.info("Time taken to process current chunk [" + counter + "]: " + timeText + ". Total processed: "
+        logger.info("Time taken to process current chunk [" + chunkSize + "]: " + timeText + ". Total processed: "
                 + counter);
+    }
+
+    @Override public void afterChunkError(ChunkContext context) {
+        //do nothing
     }
 }

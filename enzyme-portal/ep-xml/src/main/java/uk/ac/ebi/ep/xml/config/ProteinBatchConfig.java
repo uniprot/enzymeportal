@@ -12,8 +12,8 @@ import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.batch.api.chunk.listener.ChunkListener;
 import javax.persistence.EntityManagerFactory;
+import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -94,7 +94,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
                 .<UniprotEntry>reader(uniProtEntryReader())
                 .processor(uniProtEntryToEntryConverter())
                 .writer(entryToXmlWriter())
-//                .listener(logChunkListener())
+                .listener(logChunkListener())
                 .build();
     }
 
