@@ -41,12 +41,12 @@ public class EbeyeConfig {
         return new EbeyeRestService();
     }
 
-//    @Bean
-//    public AsyncRestTemplate asyncRestTemplate() {
-//        return new AsyncRestTemplate();
-//    }
     @Bean
-    public AsyncRestTemplate asyncRestTemplate() throws IOReactorException {
+    public AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate();
+    }
+    //@Bean
+    public AsyncRestTemplate asyncRestTemplate1() throws IOReactorException {
 
         // Configure Apache Http Client
         PoolingNHttpClientConnectionManager connectionManager = new PoolingNHttpClientConnectionManager( //

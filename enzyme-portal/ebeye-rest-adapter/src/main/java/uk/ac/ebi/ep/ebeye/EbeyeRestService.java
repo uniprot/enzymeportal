@@ -7,14 +7,13 @@ package uk.ac.ebi.ep.ebeye;
 
 import com.aol.simple.react.stream.lazy.LazyReact;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -127,7 +126,6 @@ public class EbeyeRestService {
                 if (hitcount > HITCOUNT) {
                     hitcount = HITCOUNT;
                 }
-
                 int resultLimit = 0;
 
                 if (limit < 0) {
@@ -178,12 +176,29 @@ public class EbeyeRestService {
     }
 
     @Deprecated
-    private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
+    private List<String> queryOld(String query, int iteration) throws InterruptedException, ExecutionException {
         final Set<String> accessions = new CopyOnWriteArraySet<>();
 
-        IntStream.rangeClosed(0, iteration).forEachOrdered(index -> {
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
+//        IntStream.rangeClosed(0, iteration).forEachOrdered(index -> {
+//            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
+//
+//            try {
+//                EbeyeSearchResult ebeyeSearchResult = searchEbeyeDomain(url).get();
+//
+//                List<Entry> entries = ebeyeSearchResult.getEntries().stream().distinct().collect(Collectors.toList());
+//                entries.stream().forEach((entry) -> {
+//                    accessions.add(entry.getUniprotAccession());
+//                });
+//            } catch (InterruptedException | NullPointerException | ExecutionException ex) {
+//                logger.error(ex.getMessage(), ex);
+//            }
+//
+//        });
+        final List<String> urls = IntStream.rangeClosed(0, iteration)
+                .mapToObj(index -> ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query)
+                .collect(Collectors.toList());
 
+        urls.parallelStream().forEach((url) -> {
             try {
                 EbeyeSearchResult ebeyeSearchResult = searchEbeyeDomain(url).get();
 
@@ -194,8 +209,8 @@ public class EbeyeRestService {
             } catch (InterruptedException | NullPointerException | ExecutionException ex) {
                 logger.error(ex.getMessage(), ex);
             }
-
         });
+
         return accessions.stream().limit(QUERY_LIMIT).collect(Collectors.toList());
 
     }
@@ -233,19 +248,40 @@ public class EbeyeRestService {
         return null;
     }
 
-    private List<String> queryM(String query, int iteration) throws InterruptedException, ExecutionException {
-        final List<String> urls = new CopyOnWriteArrayList<>();
-        IntStream.rangeClosed(0, iteration).parallel().forEachOrdered(index -> {
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
+    private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
+        //final List<String> urls = new CopyOnWriteArrayList<>();
+//        IntStream.rangeClosed(0, iteration).parallel().forEachOrdered(index -> {
+//            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
+//
+//            urls.add(url);
+//
+//        });
+//
+//        List<String> urlList = urls.stream().distinct().collect(Collectors.toList());
 
-            urls.add(url);
+        final List<String> urls = IntStream.rangeClosed(0, iteration)
+                .mapToObj(index -> ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query)
+                .collect(Collectors.toList());
 
-        });
 
-        List<String> urlList = urls.stream().distinct().collect(Collectors.toList());
 
-        return searchEbeyeDomain(urlList);
+        return searchEbeyeDomain(urls);
 
+    }
+
+    private List<String> createPaginatedQueries(String query, int startIndex, int endIndex) {
+        return IntStream.range(startIndex, endIndex)
+                .mapToObj(index -> buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
+                                query,
+                                DEFAULT_EBI_SEARCH_LIMIT,
+                                index * DEFAULT_EBI_SEARCH_LIMIT))
+                .collect(Collectors.toList());
+    }
+
+    private String buildAccessionQueryUrl(String endpoint, String query, int resultSize, int start) {
+        String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
+
+        return String.format(ebeyeAccessionQuery, endpoint, query, resultSize, start);
     }
 
     public List<String> searchEbeyeDomain(List<String> urls) {
@@ -263,21 +299,30 @@ public class EbeyeRestService {
 
         HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
 
-        LazyReact lazyReact = new LazyReact();
 
-        List<List<Entry>> result
-                = lazyReact.fromStream(urls.stream().map(x -> toCompletableFuture(asyncRestTemplate.exchange(x, method, requestEntity, responseType))))
+        LazyReact lazyReact = new LazyReact().autoOptimizeOn().async();
+  
+        ForkJoinPool commonPool = ForkJoinPool.commonPool();
+        ///System.out.println("POOL "+commonPool.getParallelism()); 
+
+ 
+        List<Entry> result
+         = 
+        lazyReact.fromStream(urls.stream().map(x -> toCompletableFuture(asyncRestTemplate.exchange(x, method, requestEntity, responseType))))
                 .map(ResponseEntity<EbeyeSearchResult>::getBody)
-                .map(EbeyeSearchResult::getEntries).distinct().collect(Collectors.toList());
+                .flatMap(x -> x.getEntries().stream().distinct()).limit(800).block();
+                //.batchBySize(800)
+                 // .onePer(1, TimeUnit.MICROSECONDS)
+                //.peek(batch -> System.out.println("batched : " + 
+                               // batch))
+                //.forEach(this::save);
 
-        Iterator<List<Entry>> it = result.iterator();
 
-        while (it.hasNext()) {
-            List<Entry> entries = it.next().stream().distinct().collect(Collectors.toList());
-            entries.stream().forEach((entry) -> {
-                accessions.add(entry.getUniprotAccession());
-            });
-        }
+        
+         accessions =result.stream().map(x->x.getUniprotAccession())
+                .collect(Collectors.toList());
+        
+     
 
         return accessions.stream().distinct().collect(Collectors.toList());
     }
