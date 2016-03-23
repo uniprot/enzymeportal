@@ -11,9 +11,10 @@ public final class TimeUtil {
     public static String convertToText(long start, long end, TimeUnit unit) {
         long processingTimeNano = end - start;
 
-        return String.format("%d:%d:%d",
+        return String.format("%d:%d:%d:%d",
                 unit.toHours(processingTimeNano),
                 unit.toMinutes(processingTimeNano) - TimeUnit.HOURS.toSeconds(unit.toHours(processingTimeNano)),
-                unit.toSeconds(processingTimeNano) - TimeUnit.MINUTES.toSeconds(unit.toMinutes(processingTimeNano)));
+                unit.toSeconds(processingTimeNano) - TimeUnit.MINUTES.toSeconds(unit.toMinutes(processingTimeNano)),
+                unit.toMillis(processingTimeNano) -TimeUnit.SECONDS.toSeconds(unit.toSeconds(processingTimeNano)));
     }
 }
