@@ -28,16 +28,8 @@ public class LogJobListener implements JobExecutionListener {
     @Override public void afterJob(JobExecution jobExecution) {
         logger.info(jobName + "job complete.");
 
-        // compute duration
-        long durationMillis = jobExecution.getEndTime().getTime() - jobExecution.getStartTime().getTime();
-
-        String duration = String.format("%d hrs, %d min, %d sec",
-                TimeUnit.MILLISECONDS.toHours(durationMillis),
-                TimeUnit.MILLISECONDS.toMinutes(durationMillis) - TimeUnit.HOURS.toSeconds(TimeUnit.MILLISECONDS
-                        .toHours(durationMillis)),
-                TimeUnit.MILLISECONDS.toSeconds(durationMillis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
-                        .toMinutes(durationMillis))
-        );
+        String duration = TimeUtil.convertToText(jobExecution.getStartTime().getTime(),
+                jobExecution.getEndTime().getTime(), TimeUnit.MILLISECONDS);
 
         logger.info("=====================================================");
         logger.info("              " + jobName + " Job Statistics                 ");
