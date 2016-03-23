@@ -23,8 +23,8 @@ public class XmlTransformer {
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
 
-    protected static final String ENZYME_PORTAL = "Enzyme Portal";
-    protected static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
+    public static final String ENZYME_PORTAL = "Enzyme Portal";
+    public static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
 
     @Autowired
     protected static String RELEASE_NUMBER;
