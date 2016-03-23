@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.xml.config;
 
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
@@ -23,10 +24,9 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.xml.StaxEventItemWriter;
+import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -42,6 +42,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 public class ProteinBatchConfig extends DefaultBatchConfigurer {
     public static final String PROTEIN_CENTRIC_JOB = "PROTEIN_CENTRIC_JOB";
     public static final String PROTEIN_CENTRIC_DB_TO_XML_STEP = "readFromDbWriteToXMLStep";
+
     @Autowired
     private Environment env;
 
@@ -62,6 +63,10 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     @Bean
     public Resource proteinCentricXmlDir() {
         return new FileSystemResource(env.getProperty("ep.protein.centric.xml.dir"));
+    }
+
+    @Bean public EnzymePortalXmlService enzymeXmlService() {
+        return new EnzymePortalXmlService();
     }
 
     @Bean
@@ -111,10 +116,14 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
         xmlWriter.setResource(proteinCentricXmlDir());
         xmlWriter.setRootTagName("database");
         xmlWriter.setMarshaller(entryMarshaller());
-        xmlWriter.setHeaderCallback(new ProteinXmlHeaderCallback(releaseNumber()));
+        xmlWriter.setHeaderCallback(xmlHeaderCallback());
         xmlWriter.setFooterCallback(new ProteinXmlFooterCallback());
 
         return xmlWriter;
+    }
+
+    private StaxWriterCallback xmlHeaderCallback() {
+        return new ProteinXmlHeaderCallback(releaseNumber(), enzymeXmlService());
     }
 
     private JobExecutionListener logListener(String jobName) {
