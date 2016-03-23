@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.xml.model;
 
-import java.text.DateFormat;
+import uk.ac.ebi.ep.xml.util.DateUtil;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import org.junit.Test;
@@ -9,43 +10,43 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Tests the behaviour of the {@link ModelDateUtil} class.
+ * Tests the behaviour of the {@link DateUtil} class.
  */
-public class ModelDateUtilTest {
+public class DateUtilTest {
 
     @Test(expected = NullPointerException.class)
     public void throwsExceptionConvertingNullDate() throws Exception {
-        ModelDateUtil.convertDateToString(null);
+        DateUtil.convertDateToString(null);
     }
 
     @Test
     public void convertsValidDate() throws Exception {
         LocalDate todayDate = LocalDate.now();
 
-        String dateText = ModelDateUtil.convertDateToString(LocalDate.now());
-        LocalDate convertedDate = ModelDateUtil.convertStringToDate(dateText);
+        String dateText = DateUtil.convertDateToString(LocalDate.now());
+        LocalDate convertedDate = DateUtil.convertStringToDate(dateText);
 
         assertThat(convertedDate, is(todayDate));
     }
 
     @Test(expected = NullPointerException.class)
     public void throwsExceptionConvertingNullDateString() throws Exception {
-        ModelDateUtil.convertStringToDate(null);
+        DateUtil.convertStringToDate(null);
     }
 
     @Test(expected = DateTimeException.class)
     public void throwsExceptionConvertingDateStringWithInvalidFormat() throws Exception {
         String dateString = "03/03/2003";
 
-        ModelDateUtil.convertStringToDate(dateString);
+        DateUtil.convertStringToDate(dateString);
     }
 
     @Test
     public void convertsValidDateString() throws Exception {
         String dateText = "3-Mar-2003";
 
-        LocalDate convertedDate = ModelDateUtil.convertStringToDate(dateText);
-        String convertedDateText = ModelDateUtil.convertDateToString(convertedDate);
+        LocalDate convertedDate = DateUtil.convertStringToDate(dateText);
+        String convertedDateText = DateUtil.convertDateToString(convertedDate);
 
         assertThat(convertedDateText, is(dateText));
     }
