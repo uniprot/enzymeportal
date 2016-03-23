@@ -7,7 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.EnzymeCentric;
-import uk.ac.ebi.ep.xml.generator.ProteinCentric;
 import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 
 /**
@@ -26,11 +25,6 @@ public class XmlConfig {
     @Bean(name = "enzymeCentric")
     public XmlGenerator enzymeCentric() {
         return new EnzymeCentric(xmlService);
-    }
-
-    @Bean(name = "proteinCentric")
-    public XmlGenerator proteinCentric() {
-        return new ProteinCentric(xmlService);
     }
 
     @Bean
