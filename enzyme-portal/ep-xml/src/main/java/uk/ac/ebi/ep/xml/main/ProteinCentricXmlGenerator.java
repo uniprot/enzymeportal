@@ -1,54 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.main;
 
-import org.apache.log4j.Logger;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.configuration.JobLocator;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import uk.ac.ebi.ep.data.dataconfig.DataConfig;
-import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
-import uk.ac.ebi.ep.xml.config.XmlConfig;
-import uk.ac.ebi.ep.xml.generator.ProteinCentric;
-import uk.ac.ebi.ep.xml.generator.XmlGenerator;
+import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
+import uk.ac.ebi.ep.xml.util.Preconditions;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-public class ProteinCentricXmlGenerator {
-
-    private static final Logger logger = Logger.getLogger(ProteinCentricXmlGenerator.class);
-
-    private ProteinCentricXmlGenerator() {
-
-    }
+public final class ProteinCentricXmlGenerator {
+    private ProteinCentricXmlGenerator() {}
 
     public static void main(String[] args) throws Exception {
-
         String profile;
-        //profile = "";
 
-        if (args == null || args.length == 0) {
-            logger.error("Please provide required parameters");
-            System.exit(0);
-        }
+        Preconditions.checkArgument(args.length != 1, "Please provide required parameters: \n\t0 - profile name");
 
-        if (args.length == 1) {
+        profile = args[0];
 
-            profile = args[0];
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.getEnvironment().setActiveProfiles(profile);
+        context.register(DataConfig.class, ProteinBatchConfig.class);
+        context.refresh();
 
-            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-            context.getEnvironment().setActiveProfiles(profile);
-            context.register(DataConfig.class, XmlConfig.class, GlobalConfig.class);
-            context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.xml.config");
-            context.refresh();
+        JobLocator jobLocator = context.getBean(JobLocator.class);
 
-            XmlGenerator xmlGenerator = context.getBean(ProteinCentric.class);
-            xmlGenerator.generateXmL();
-            xmlGenerator.validateXML();
-        }
+        Job job = jobLocator.getJob(ProteinBatchConfig.PROTEIN_CENTRIC_JOB);
 
+        JobLauncher launcher = context.getBean(JobLauncher.class);
+        launcher.run(job, new JobParameters());
     }
 }
