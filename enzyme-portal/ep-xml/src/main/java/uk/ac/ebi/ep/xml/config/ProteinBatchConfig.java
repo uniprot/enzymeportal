@@ -7,6 +7,7 @@ import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
 import uk.ac.ebi.ep.xml.model.Entry;
 import uk.ac.ebi.ep.xml.util.LogJobListener;
+import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.batch.item.xml.StaxEventItemWriter;
 import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
@@ -112,13 +112,12 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
     @Bean
     public ItemWriter<Entry> entryToXmlWriter() {
-        StaxEventItemWriter<Entry> xmlWriter = new StaxEventItemWriter<>();
+        PrettyPrintStaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();
         xmlWriter.setResource(proteinCentricXmlDir());
         xmlWriter.setRootTagName("database");
         xmlWriter.setMarshaller(entryMarshaller());
         xmlWriter.setHeaderCallback(xmlHeaderCallback());
         xmlWriter.setFooterCallback(new ProteinXmlFooterCallback());
-
         return xmlWriter;
     }
 
