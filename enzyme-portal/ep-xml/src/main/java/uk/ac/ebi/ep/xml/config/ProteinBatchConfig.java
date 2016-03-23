@@ -6,11 +6,13 @@ import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
 import uk.ac.ebi.ep.xml.model.Entry;
+import uk.ac.ebi.ep.xml.util.LogChunkListener;
 import uk.ac.ebi.ep.xml.util.LogJobListener;
 import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.batch.api.chunk.listener.ChunkListener;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -81,7 +83,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     public Job proteinCentricJob() {
         return jobBuilders.get(PROTEIN_CENTRIC_JOB)
                 .start(readFromDbWriteToXMLStep())
-                .listener(logListener(PROTEIN_CENTRIC_JOB))
+                .listener(logJobListener(PROTEIN_CENTRIC_JOB))
                 .build();
     }
 
@@ -92,6 +94,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
                 .<UniprotEntry>reader(uniProtEntryReader())
                 .processor(uniProtEntryToEntryConverter())
                 .writer(entryToXmlWriter())
+//                .listener(logChunkListener())
                 .build();
     }
 
@@ -125,8 +128,12 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
         return new ProteinXmlHeaderCallback(releaseNumber(), enzymeXmlService());
     }
 
-    private JobExecutionListener logListener(String jobName) {
+    private JobExecutionListener logJobListener(String jobName) {
         return new LogJobListener(jobName);
+    }
+
+    private ChunkListener logChunkListener() {
+        return new LogChunkListener(chunkSize());
     }
 
     /**
