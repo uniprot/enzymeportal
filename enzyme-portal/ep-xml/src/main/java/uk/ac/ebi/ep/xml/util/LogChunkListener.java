@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import javax.batch.api.chunk.listener.ChunkListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.annotation.AfterWrite;
+import org.springframework.batch.core.annotation.BeforeRead;
 
 /**
  * Logs events related to chunk processing.
@@ -21,6 +23,7 @@ public class LogChunkListener implements ChunkListener {
     private final int chunkSize;
 
     public LogChunkListener(int chunkSize) {
+        Preconditions.checkArgument(chunkSize < 1, "Chunk size can not be negative");
         this.chunkSize = chunkSize;
     }
 
