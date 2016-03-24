@@ -2,7 +2,7 @@ package uk.ac.ebi.ep.xml.generator.protein;
 
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.XmlTransformer;
-import uk.ac.ebi.ep.xml.util.DateUtil;
+import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 
 import java.time.LocalDate;
 import org.junit.Before;
@@ -84,7 +84,7 @@ public class ProteinXmlHeaderCallbackTest extends AbstractCallbackSetup {
         LocalDate todayDate = LocalDate.now();
 
         assertElementAppearsNTimesInDoc(RELEASE_DATE_ELEMENT, 1, xmlDoc);
-        assertElementHasMessageInDoc(RELEASE_DATE_ELEMENT, DateUtil.convertDateToString(todayDate), xmlDoc);
+        assertElementHasMessageInDoc(RELEASE_DATE_ELEMENT, DateTimeUtil.convertDateToString(todayDate), xmlDoc);
     }
 
     @Test

@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.xml.util;
 
-import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;
@@ -28,8 +27,8 @@ public class LogJobListener implements JobExecutionListener {
     @Override public void afterJob(JobExecution jobExecution) {
         logger.info(jobName + "job complete.");
 
-        String duration = TimeUtil.convertToText(jobExecution.getStartTime().getTime(),
-                jobExecution.getEndTime().getTime(), TimeUnit.MILLISECONDS);
+        String duration = DateTimeUtil.convertToText(jobExecution.getStartTime().getTime(),
+                jobExecution.getEndTime().getTime());
 
         logger.info("=====================================================");
         logger.info("              " + jobName + " Job Statistics                 ");
