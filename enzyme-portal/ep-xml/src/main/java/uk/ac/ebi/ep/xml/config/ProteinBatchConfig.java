@@ -1,15 +1,5 @@
 package uk.ac.ebi.ep.xml.config;
 
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
-import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
-import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
-import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
-import uk.ac.ebi.ep.xml.model.Entry;
-import uk.ac.ebi.ep.xml.util.LogChunkListener;
-import uk.ac.ebi.ep.xml.util.LogJobListener;
-import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
-
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -17,7 +7,10 @@ import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.*;
+import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
@@ -28,12 +21,23 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
+import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
+import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
+import uk.ac.ebi.ep.xml.model.Entry;
+import uk.ac.ebi.ep.xml.util.LogChunkListener;
+import uk.ac.ebi.ep.xml.util.LogJobListener;
+import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 
 /**
  * Configures the protein centric XML generator to use Spring batch.

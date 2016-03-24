@@ -35,7 +35,7 @@ public class LogJobListener implements JobExecutionListener {
         logger.info("Exit status   : {}", jobExecution.getExitStatus().getExitCode());
         logger.info("Start time    : {}", jobExecution.getStartTime());
         logger.info("End time      : {}", jobExecution.getEndTime());
-        logger.info("Duration      : {}", duration);
+        logger.warn("Duration      : {}", duration);
 
         long skipCount = 0L;
         long readSkips = 0L;
