@@ -2,7 +2,7 @@ package uk.ac.ebi.ep.xml.generator.protein;
 
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.XmlTransformer;
-import uk.ac.ebi.ep.xml.util.DateUtil;
+import uk.ac.ebi.ep.xml.util.DateTimeUtil;
 
 import com.google.common.base.Preconditions;
 import java.io.IOException;
@@ -69,7 +69,7 @@ public class ProteinXmlHeaderCallback implements StaxWriterCallback {
     }
 
     private String createTodayDate() {
-        return DateUtil.convertDateToString(LocalDate.now());
+        return DateTimeUtil.convertDateToString(LocalDate.now());
     }
 
     private String queryNumberOfUniProtEntries() {

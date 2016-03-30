@@ -1,6 +1,5 @@
 package uk.ac.ebi.ep.xml.util;
 
-import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ChunkListener;
@@ -27,14 +26,14 @@ public class LogChunkListener implements ChunkListener {
     }
 
     @Override public void beforeChunk(ChunkContext context) {
-        startProcessingTime = System.nanoTime();
+        startProcessingTime = System.currentTimeMillis();
     }
 
     @Override public void afterChunk(ChunkContext context) {
-        long finishProcessing = System.nanoTime();
+        long finishProcessing = System.currentTimeMillis();
         counter += chunkSize;
 
-        String timeText = TimeUtil.convertToText(startProcessingTime, finishProcessing, TimeUnit.NANOSECONDS);
+        String timeText = DateTimeUtil.convertToText(startProcessingTime, finishProcessing);
 
         logger.warn("Time taken to process current chunk [" + chunkSize + "]: " + timeText + ". Total processed: "
                 + counter);
