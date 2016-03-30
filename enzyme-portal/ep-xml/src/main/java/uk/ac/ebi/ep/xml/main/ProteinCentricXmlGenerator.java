@@ -11,7 +11,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
-
 import uk.ac.ebi.ep.data.dataconfig.DataConfig;
 import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
 import uk.ac.ebi.ep.xml.util.Preconditions;

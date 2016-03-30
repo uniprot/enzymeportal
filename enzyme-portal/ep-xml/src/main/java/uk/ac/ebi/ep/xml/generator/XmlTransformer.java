@@ -27,7 +27,7 @@ public class XmlTransformer {
     public static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
 
     @Autowired
-    protected static String RELEASE_NUMBER;
+    protected String RELEASE_NUMBER;
 
     protected Database buildDatabaseInfo(int entryCount) {
         Database database = new Database();

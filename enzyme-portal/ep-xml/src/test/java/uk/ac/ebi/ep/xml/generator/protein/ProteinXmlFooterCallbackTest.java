@@ -4,16 +4,15 @@ import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import org.junit.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import org.junit.Test;
 
 /**
  * Tests the behaviour of the {@link ProteinXmlFooterCallback} class.
  */
 public class ProteinXmlFooterCallbackTest extends AbstractCallbackSetup {
-    private ProteinXmlFooterCallback footerCallback = new ProteinXmlFooterCallback();
+    private final ProteinXmlFooterCallback footerCallback = new ProteinXmlFooterCallback();
 
     @Test
     public void missingStartEntriesElementTagThrowsException() throws Exception {
