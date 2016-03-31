@@ -132,7 +132,7 @@ public class EbeyeRestService {
 
         logger.debug("Possible number of paginated queries: {}", totalPaginatedQueries);
 
-        Set<String> uniqueAccessions = new LinkedHashSet<>(limit);
+        Set<String> uniqueAccessions = new LinkedHashSet<>(limit > hitCount ? hitCount : limit);
 
         int startPage = 0;
         int endPage = Math.min(chunkSize, totalPaginatedQueries);
