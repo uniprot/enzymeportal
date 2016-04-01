@@ -304,7 +304,7 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void duplicate_entries_in_asynchronous_request_in_accessionSearch_are_removed_in_response()
+    public void duplicate_entries_in_asynchronous_request_in_unique_accession_search_are_removed_in_response()
             throws Exception {
         String query = "query";
         int uniqueEntryNum = MAX_ENTRIES_IN_RESPONSE;
@@ -330,6 +330,32 @@ public class EbeyeRestServiceTest {
         asyncRestServerMock.verify();
 
         assertThat(actualAccessions, hasSize(uniqueEntryNum));
+    }
+
+    @Test
+    public void maxRetrievableEntries_is_15_and_number_of_hits_is_20_unique_accession_search_returns_only_15()
+            throws Exception {
+        int maxRetrievableEntries = 10;
+        restService.setMaxRetrievableHits(maxRetrievableEntries);
+
+        String query = "query";
+
+        int entryNum = 15;
+
+        List<Entry> entries = createEntries(entryNum);
+
+        String queryChunkRequestUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult chunkedResult1 = createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
+
+        mockServerResponse(syncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
+        mockServerResponse(asyncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(maxRetrievableEntries));
     }
 
     private EbeyeAutocomplete createAutoCompleteResponse(List<Suggestion> suggestedKeywords) {
