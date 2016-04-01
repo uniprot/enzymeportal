@@ -21,7 +21,7 @@ public class DevDataConfig extends AbstractConfig {
 
     @Autowired
     private Environment env;
-    
+
     @Bean
     @Override
     public DataSource dataSource() {
