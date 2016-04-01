@@ -98,14 +98,10 @@ public class EbeyeRestService {
             logger.debug("Number of hits for search for [" + query + "] : " + searchResult.getHitCount());
 
             if (hitCount <= maxEbiSearchLimit) {
-                accessions = extractAccessionsFromEntries(searchResult.getEntries())
-                        .stream()
-                        .distinct()
-                        .limit(limit == NO_RESULT_LIMIT ? hitCount : limit)
-                        .collect(Collectors.toList());
+                accessions = extractDistinctAccessionsUpToLimit(searchResult.getEntries(),
+                        limit == NO_RESULT_LIMIT ? hitCount : limit);
             } else {
-                int hitsToRetrieve = calculateNumberOfHitsToRetrieve(hitCount);
-                accessions = executeQueryInChunks(query, hitsToRetrieve, limit);
+                accessions = executeQueryInChunks(query, hitCount, limit);
             }
 
             logger.debug("Total amount of returned accessions: " + accessions.size());
@@ -136,7 +132,7 @@ public class EbeyeRestService {
      * @param hitCount number of potential retrievable hits
      * @return the number of hits to retrieve.
      */
-    private int calculateNumberOfHitsToRetrieve(int hitCount) {
+    private int calculateMaxNumberOfHitsToRetrieve(int hitCount, int maxRetrievableHits) {
         return hitCount < maxRetrievableHits ? hitCount : maxRetrievableHits;
     }
 
@@ -149,6 +145,8 @@ public class EbeyeRestService {
      * @return a list of distinct accessions from the merged queries
      */
     private List<String> executeQueryInChunks(String query, int hitCount, int limit) {
+        hitCount = calculateMaxNumberOfHitsToRetrieve(hitCount, maxRetrievableHits);
+
         int totalPaginatedQueries = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
 
         logger.debug("Possible number of paginated queries: {}", totalPaginatedQueries);
@@ -172,9 +170,7 @@ public class EbeyeRestService {
             endPage = Math.min(endPage + chunkSize, totalPaginatedQueries);
         }
 
-        List<String> accessions = extractAccessionsFromEntries(uniqueEntries);
-
-        return accessions.stream().limit(limit).collect(Collectors.toList());
+        return extractDistinctAccessionsUpToLimit(uniqueEntries, limit);
     }
 
     private List<Entry> processQueryChunks(List<String> paginatedQueries) throws RestClientException {
@@ -190,10 +186,11 @@ public class EbeyeRestService {
                 .collect(Collectors.toList());
     }
 
-    private List<String> extractAccessionsFromEntries(Collection<Entry> entries) {
+    private List<String> extractDistinctAccessionsUpToLimit(Collection<Entry> entries, int limit) {
         return entries.stream()
                 .map(Entry::getUniprotAccession)
                 .distinct()
+                .limit(limit)
                 .collect(Collectors.toList());
     }
 
