@@ -102,7 +102,7 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void null_query_sent_to_accession_search_throws_exception() throws Exception {
+    public void null_query_in_unique_accession_search_throws_exception() throws Exception {
         String query = null;
         int limit = 1;
 
@@ -115,7 +115,7 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void negative_limit_sent_to_accession_search_throws_exception() throws Exception {
+    public void negative_limit_in_unique_accession_search_throws_exception() throws Exception {
         String query = "query";
         int limit = -1;
 
@@ -128,7 +128,7 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void zero_limit_sent_to_accession_search_throws_exception() throws Exception {
+    public void zero_limit_in_accession_search_throws_exception() throws Exception {
         String query = "query";
         int limit = 0;
 
@@ -141,12 +141,13 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void query_to_accessionSearch_has_hitCount_less_than_maxEntriesPerResponse_only_synchronous_request_used()
+    public void
+    query_response_in_unique_accession_search_has_hitCount_less_than_maxEntries_only_synchronous_request_used()
             throws Exception {
         String query = "query";
         int limit = MAX_ENTRIES_IN_RESPONSE;
 
-        String requestUrl = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
         EbeyeSearchResult searchResult = createAccessionResult(createEntries(limit));
         mockServerResponse(syncRestServerMock, requestUrl, searchResult);
 
@@ -159,21 +160,21 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void query_to_accessionSearch_has_hitCount_greater_than_maxEntriesPerResponse_both_requests_used()
+    public void query_response_in_unique_accessions_has_hitCount_greater_than_maxEntries_both_requests_used()
             throws Exception {
         String query = "query";
         int limit = MAX_ENTRIES_IN_RESPONSE + 1;
 
         List<Entry> entries = createEntries(limit);
 
-        String queryChunkUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        String queryChunkUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
         EbeyeSearchResult chunkedResult1 = createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), limit);
 
         mockServerResponse(syncRestServerMock, queryChunkUrl1, chunkedResult1);
         mockServerResponse(asyncRestServerMock, queryChunkUrl1, chunkedResult1);
 
         EbeyeSearchResult resultSet2 = createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, limit), limit);
-        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
+        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
 
         mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, resultSet2);
 
@@ -186,7 +187,7 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void query_limited_to_1_entry_in_accessionSearch_returns_1_entry() throws Exception {
+    public void query_limited_to_1_entry_in_unique_accession_search_returns_1_entry() throws Exception {
         String query = "query";
         int limit = 1;
 
@@ -206,13 +207,13 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void query_with_no_limits_in_accessionSearch_returns_all_entries() throws Exception {
+    public void query_with_no_limits_in_unique_accession_search_returns_all_entries() throws Exception {
         String query = "query";
         int entryNum = MAX_ENTRIES_IN_RESPONSE * 2;
 
         List<Entry> entries = createEntries(entryNum);
 
-        String queryChunkUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        String queryChunkUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
         EbeyeSearchResult chunkedResult1 =
                 createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
 
@@ -221,7 +222,7 @@ public class EbeyeRestServiceTest {
 
         EbeyeSearchResult resultSet2 =
                 createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, entryNum), entryNum);
-        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
+        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
 
         mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, resultSet2);
 
@@ -234,11 +235,11 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void exception_is_thrown_on_synchronous_request_accessionSearch_returns_empty_accession_list()
+    public void exception_is_thrown_on_synchronous_request_for_unique_accessions_search_returns_empty_accession_list()
             throws Exception {
         String query = "query";
 
-        String requestUrl = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
         syncRestServerMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
                 .andRespond(withServerError());
 
@@ -251,7 +252,7 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void exception_is_thrown_on_first_asynchronous_chunk_accessionSearch_returns_remaining_chunks()
+    public void exception_is_thrown_on_first_asynchronous_chunk_to_unique_accession_search_returns_remaining_chunks()
             throws Exception {
         String query = "query";
         int expectedEntryNum = MAX_ENTRIES_IN_RESPONSE;
@@ -259,7 +260,7 @@ public class EbeyeRestServiceTest {
 
         List<Entry> entries = createEntries(entryNum);
 
-        String queryChunkUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        String queryChunkUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
         EbeyeSearchResult chunkedResult1 =
                 createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
 
@@ -270,7 +271,7 @@ public class EbeyeRestServiceTest {
 
         EbeyeSearchResult resultSet2 =
                 createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, entryNum), entryNum);
-        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
+        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
 
         mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, resultSet2);
 
@@ -283,14 +284,14 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void duplicate_accessions_in_synchronous_request_in_accessionSearch_are_removed_in_response()
+    public void duplicate_entry_in_synchronous_request_in_unique_accession_search_is_removed_in_response()
             throws Exception {
         String query = "query";
 
-        Entry entry = createEntryWithIdAndDefaultName("entry1");
-        Entry duplicateEntry = createEntryWithIdAndDefaultName("entry1");
+        Entry entry = createEntryWithIdAndDefaultNameAndTitle("entry1");
+        Entry duplicateEntry = createEntryWithIdAndDefaultNameAndTitle("entry1");
 
-        String requestUrl = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
         EbeyeSearchResult searchResult = createAccessionResult(Arrays.asList(entry, duplicateEntry));
 
         mockServerResponse(syncRestServerMock, requestUrl, searchResult);
@@ -303,7 +304,7 @@ public class EbeyeRestServiceTest {
     }
 
     @Test
-    public void duplicate_accessions_in_asynchronous_request_in_accessionSearch_are_removed_in_response()
+    public void duplicate_entries_in_asynchronous_request_in_unique_accession_search_are_removed_in_response()
             throws Exception {
         String query = "query";
         int uniqueEntryNum = MAX_ENTRIES_IN_RESPONSE;
@@ -311,14 +312,14 @@ public class EbeyeRestServiceTest {
 
         List<Entry> entries = createEntries(uniqueEntryNum);
 
-        String queryChunkRequestUrl1 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        String queryChunkRequestUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
         EbeyeSearchResult chunkedResult1 = createAccessionResult(entries, totalEntryNum);
 
         mockServerResponse(syncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
         mockServerResponse(asyncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
 
         List<Entry> duplicateEntries = new ArrayList<>(entries);
-        String queryChunkRequestUrl2 = createAccessionUrl(query, MAX_ENTRIES_IN_RESPONSE, uniqueEntryNum);
+        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, uniqueEntryNum);
         EbeyeSearchResult chunkedResult2 = createAccessionResult(duplicateEntries, totalEntryNum);
 
         mockServerResponse(asyncRestServerMock, queryChunkRequestUrl2, chunkedResult2);
@@ -329,6 +330,32 @@ public class EbeyeRestServiceTest {
         asyncRestServerMock.verify();
 
         assertThat(actualAccessions, hasSize(uniqueEntryNum));
+    }
+
+    @Test
+    public void maxRetrievableEntries_is_15_and_number_of_hits_is_20_unique_accession_search_returns_only_15()
+            throws Exception {
+        int maxRetrievableEntries = 10;
+        restService.setMaxRetrievableHits(maxRetrievableEntries);
+
+        String query = "query";
+
+        int entryNum = 15;
+
+        List<Entry> entries = createEntries(entryNum);
+
+        String queryChunkRequestUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        EbeyeSearchResult chunkedResult1 = createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
+
+        mockServerResponse(syncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
+        mockServerResponse(asyncRestServerMock, queryChunkRequestUrl1, chunkedResult1);
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
+
+        syncRestServerMock.verify();
+        asyncRestServerMock.verify();
+
+        assertThat(actualAccessions, hasSize(maxRetrievableEntries));
     }
 
     private EbeyeAutocomplete createAutoCompleteResponse(List<Suggestion> suggestedKeywords) {
@@ -367,12 +394,14 @@ public class EbeyeRestServiceTest {
 
     private List<Entry> createEntries(int num) {
         return IntStream.range(0, num)
-                .mapToObj(index -> createEntryWithIdAndDefaultName("entry" + index))
+                .mapToObj(index -> createEntryWithIdAndDefaultNameAndTitle("entry" + index))
                 .collect(Collectors.toList());
     }
 
-    private Entry createEntryWithIdAndDefaultName(String id) {
-        return new Entry(id, id + "_" + id);
+    private Entry createEntryWithIdAndDefaultNameAndTitle(String id) {
+        Entry entry = new Entry(id, id + "_" + id);
+        entry.setTitle("title_" + id);
+        return entry;
     }
 
     private void mockServerResponse(MockRestServiceServer serverMock, String requestUrl, EbeyeSearchResult searchResult)
@@ -381,7 +410,7 @@ public class EbeyeRestServiceTest {
                 .andRespond(withSuccess(convertToJson(searchResult), MediaType.APPLICATION_JSON));
     }
 
-    private String createAccessionUrl(String query, int size, int start) {
+    private String createQueryUrl(String query, int size, int start) {
         return String.format(ACCESSION_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, start);
     }
 }

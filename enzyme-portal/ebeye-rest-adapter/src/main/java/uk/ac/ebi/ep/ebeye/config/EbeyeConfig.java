@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.task.AsyncListenableTaskExecutor;
+import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
@@ -30,6 +30,9 @@ public class EbeyeConfig {
     @Value("${ebeye.chunk.size}")
     private int chunkSize;
 
+    @Value("${request.timeout.millis:5000}")
+    private int requestTimeout;
+
     @Bean
     static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
@@ -42,18 +45,8 @@ public class EbeyeConfig {
     }
 
     @Bean
-    public AsyncRestTemplate asyncRestTemplate(AsyncListenableTaskExecutor threadPoolTaskExecutor) {
-        return new AsyncRestTemplate(threadPoolTaskExecutor);
-    }
-
-    @Bean
-    public AsyncListenableTaskExecutor threadPoolTaskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(chunkSize);
-        executor.setMaxPoolSize(chunkSize * 3);
-        executor.setDaemon(true);
-
-        return executor;
+    public AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate(asyncClientHttpRequestFactory());
     }
 
     @Bean
@@ -62,7 +55,19 @@ public class EbeyeConfig {
     }
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
-        return new HttpComponentsClientHttpRequestFactory();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setReadTimeout(requestTimeout);
+        factory.setConnectTimeout(requestTimeout);
+
+        return factory;
+    }
+
+    private AsyncClientHttpRequestFactory asyncClientHttpRequestFactory() {
+        HttpComponentsAsyncClientHttpRequestFactory factory = new HttpComponentsAsyncClientHttpRequestFactory();
+        factory.setReadTimeout(requestTimeout);
+        factory.setConnectTimeout(requestTimeout);
+
+        return factory;
     }
 
     @Bean

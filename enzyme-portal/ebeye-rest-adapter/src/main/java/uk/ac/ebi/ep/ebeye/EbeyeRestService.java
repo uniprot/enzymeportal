@@ -2,7 +2,7 @@ package uk.ac.ebi.ep.ebeye;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +32,11 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  * @author joseph
  */
 public class EbeyeRestService {
+
     public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
+
+    //Maximum number of entries that this service will ask from the EbeyeSearch
+    private static final int MAX_HITS_TO_RETRIEVE = 7000;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -43,6 +47,9 @@ public class EbeyeRestService {
     private final int chunkSize;
 
     @Autowired//org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'ebeyeRestService': Unsatisfied dependency expressed through constructor argument with index 3 of type [int]: : No qualifying bean of type [int] found for dependency:
+    private int maxRetrievableHits;
+
+    @Autowired
     public EbeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
             AsyncRestTemplate asyncRestTemplate, int maxEbiSearchLimit, int chunkSize) {
         Preconditions.checkArgument(ebeyeIndexUrl != null, "Index URL can't be null");
@@ -55,15 +62,18 @@ public class EbeyeRestService {
         this.restTemplate = restTemplate;
         this.asyncRestTemplate = asyncRestTemplate;
         this.maxEbiSearchLimit = maxEbiSearchLimit;
-        this.chunkSize=chunkSize;
+        this.chunkSize = chunkSize;
+        this.maxRetrievableHits = MAX_HITS_TO_RETRIEVE;
     }
 
     /**
-     * Generates an RPC call to the EBeye suggestion service in order to produce a list of suggestions for the client
-     * to use.
+     * Generates an RPC call to the EBeye suggestion service in order to produce
+     * a list of suggestions for the client to use.
      *
-     * @param searchTerm the partial term that will be used by the EBeye service to generate suggestions
-     * @return suggestions a list of suggestions generated from the EBeye service
+     * @param searchTerm the partial term that will be used by the EBeye service
+     * to generate suggestions
+     * @return suggestions a list of suggestions generated from the EBeye
+     * service
      */
     public List<Suggestion> autocompleteSearch(String searchTerm) {
         String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
@@ -74,11 +84,12 @@ public class EbeyeRestService {
     }
 
     /**
-     * Sends a query to the Ebeye search service and creates a response with the accessions of the entries that
-     * fulfill the search criteria.
+     * Sends a query to the Ebeye search service and creates a response with the
+     * accessions of the entries that fulfill the search criteria.
      *
      * @param query the client query
-     * @param limit limit the number of results from Ebeye service. Use {@link #NO_RESULT_LIMIT}
+     * @param limit limit the number of results from Ebeye service. Use
+     * {@link #NO_RESULT_LIMIT}
      * @return list of accessions that fulfill the query
      */
     public List<String> queryForUniqueAccessions(String query, int limit) {
@@ -95,10 +106,8 @@ public class EbeyeRestService {
             logger.debug("Number of hits for search for [" + query + "] : " + searchResult.getHitCount());
 
             if (hitCount <= maxEbiSearchLimit) {
-                accessions = extractUniqueAccessions(searchResult)
-                        .stream()
-                        .limit(limit == NO_RESULT_LIMIT ? hitCount : limit)
-                        .collect(Collectors.toList());
+                accessions = extractDistinctAccessionsUpToLimit(searchResult.getEntries(),
+                        limit == NO_RESULT_LIMIT ? hitCount : limit);
             } else {
                 accessions = executeQueryInChunks(query, hitCount, limit);
             }
@@ -123,7 +132,22 @@ public class EbeyeRestService {
     }
 
     /**
-     * Breaks down the client query into smaller chunks, submitting these to the server, and then merging the result.
+     * Method that defines the cutoff of entries to retrieve from the server.
+     *
+     * If the number of potential retrievable entries is above the
+     * {@link #maxRetrievableHits} value, then the number of retrievable hits is
+     * reduced to {@link #maxRetrievableHits}, otherwise return the hitCount.
+     *
+     * @param hitCount number of potential retrievable hits
+     * @return the number of hits to retrieve.
+     */
+    private int calculateMaxNumberOfHitsToRetrieve(int hitCount, int maxRetrievableHits) {
+        return hitCount < maxRetrievableHits ? hitCount : maxRetrievableHits;
+    }
+
+    /**
+     * Breaks down the client query into smaller chunks, submitting these to the
+     * server, and then merging the result.
      *
      * @param query the client query to run
      * @param hitCount the number of entries that the query is expected to hit
@@ -131,75 +155,78 @@ public class EbeyeRestService {
      * @return a list of distinct accessions from the merged queries
      */
     private List<String> executeQueryInChunks(String query, int hitCount, int limit) {
+        hitCount = calculateMaxNumberOfHitsToRetrieve(hitCount, maxRetrievableHits);
+
         int totalPaginatedQueries = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
 
         logger.debug("Possible number of paginated queries: {}", totalPaginatedQueries);
 
-        Set<String> uniqueAccessions = new LinkedHashSet<>();
+        Set<Entry> uniqueEntries = new HashSet<>(limit > hitCount ? hitCount : limit);
 
         int startPage = 0;
         int endPage = Math.min(chunkSize, totalPaginatedQueries);
 
-        while (startPage < totalPaginatedQueries && uniqueAccessions.size() < limit) {
+        while (startPage < totalPaginatedQueries && uniqueEntries.size() < limit) {
             List<String> paginatedQueries = createPaginatedQueries(query, startPage, endPage);
 
             try {
-                List<String> retrievedAccessions = processQueryChunks(paginatedQueries);
-                uniqueAccessions.addAll(retrievedAccessions);
+                List<Entry> retrievedEntries = processQueryChunks(paginatedQueries);
+                uniqueEntries.addAll(retrievedEntries);
             } catch (RestClientException e) {
-                logger.error("Error occurred whilst sending REST request:", e);
+                logger.error("Error occurred whilst sending REST request", e);
             }
 
             startPage = endPage;
             endPage = Math.min(endPage + chunkSize, totalPaginatedQueries);
         }
 
-        return uniqueAccessions.stream().limit(limit).collect(Collectors.toList());
+        return extractDistinctAccessionsUpToLimit(uniqueEntries, limit);
     }
 
-    private List<String> processQueryChunks(List<String> paginatedQueries) throws RestClientException {
+    private List<Entry> processQueryChunks(List<String> paginatedQueries) throws RestClientException {
         List<ListenableFuture<ResponseEntity<EbeyeSearchResult>>> futureResults = paginatedQueries
                 .stream()
                 .map(this::getEbeyeSearchFutureResponse)
                 .collect(Collectors.toList());
 
         return futureResults.stream()
-                .map(this::extractAccessionsFromFuture)
+                .map(this::extractEntriesFromFuture)
                 .flatMap(Collection::stream)
                 .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private List<String> extractDistinctAccessionsUpToLimit(Collection<Entry> entries, int limit) {
+        return entries.stream()
+                .map(Entry::getUniprotAccession)
+                .distinct()
+                .limit(limit)
                 .collect(Collectors.toList());
     }
 
     private List<String> createPaginatedQueries(String query, int startIndex, int endIndex) {
         return IntStream.range(startIndex, endIndex)
                 .mapToObj(index -> buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
-                        query,
-                        maxEbiSearchLimit,
-                        index * maxEbiSearchLimit))
+                                query,
+                                maxEbiSearchLimit,
+                                index * maxEbiSearchLimit))
                 .collect(Collectors.toList());
     }
 
-    private List<String> extractAccessionsFromFuture(ListenableFuture<ResponseEntity<EbeyeSearchResult>> future) {
-        List<String> accessions;
+    private List<Entry> extractEntriesFromFuture(ListenableFuture<ResponseEntity<EbeyeSearchResult>> future) {
+        List<Entry> entries;
 
         try {
             ResponseEntity<EbeyeSearchResult> response = future.get();
             EbeyeSearchResult searchResult = response.getBody();
 
-            accessions = extractUniqueAccessions(searchResult);
+            entries = searchResult.getEntries();
         } catch (InterruptedException | ExecutionException | RestClientException e) {
             logger.warn("Unable to read response from future:", e);
-            accessions = new ArrayList<>();
+            entries = new ArrayList<>();
         }
 
-        return accessions;
-    }
-
-    private List<String> extractUniqueAccessions(EbeyeSearchResult searchResult) {
-        return searchResult.getEntries().stream()
-                .map(Entry::getUniprotAccession)
-                .distinct()
-                .collect(Collectors.toList());
+        return entries;
     }
 
     private ListenableFuture<ResponseEntity<EbeyeSearchResult>> getEbeyeSearchFutureResponse(String queryUrl)
@@ -222,5 +249,11 @@ public class EbeyeRestService {
         String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
 
         return String.format(ebeyeAccessionQuery, endpoint, query, resultSize, start);
+    }
+
+    void setMaxRetrievableHits(int maxRetrievableHits) {
+        assert maxRetrievableHits > 1 : "Number of hits to retrieve can not be less than 1";
+
+        this.maxRetrievableHits = maxRetrievableHits;
     }
 }
