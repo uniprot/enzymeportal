@@ -278,7 +278,7 @@ public class EbeyeRestService {
                 accessions.add(entry.getUniprotAccession());
             });
         }
-
+        
         return accessions.stream().distinct().collect(Collectors.toList());
     }
 
