@@ -2,19 +2,17 @@ package uk.ac.ebi.ep.ebeye;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
-
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 
@@ -29,7 +27,8 @@ public class EbeyeRestServiceIT {
     @Autowired
     private EbeyeRestService ebeyeRestService;
 
-    @Test
+    //@Test
+    @Ignore(value = "EBeye Autocomplete search was done.")
     public void partial_term_phos_sent_to_Ebeye_autocomplete_search_returns_valid_suggestions() throws Exception {
         String searchTerm = "phos";
 

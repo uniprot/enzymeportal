@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,7 +17,9 @@ import java.util.Objects;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class Entry implements Comparable<Entry> {
+public final class Entry extends EnzymeEntry implements Serializable, Comparable<Entry> {
+
+    private static final long serialVersionUID = 1L;
     @JsonProperty("acc")
     private String uniprotAccession;
     @JsonProperty("id")
@@ -29,7 +32,14 @@ public final class Entry implements Comparable<Entry> {
     @JsonIgnore
     private final Map<String, Fields> fields = new HashMap<>();
 
-    public Entry() {}
+    public Entry() {
+    }
+
+    public Entry(String ec, String source, String title) {
+        super(ec);
+        this.source = source;
+        this.title = title;
+    }
 
     public Entry(String uniprotAccession, String uniprotName) {
         this.uniprotAccession = uniprotAccession;
@@ -57,10 +67,15 @@ public final class Entry implements Comparable<Entry> {
         return source;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" +
+//                source + '}';
+//    }
     @Override
     public String toString() {
-        return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" +
-                source + '}';
+        return "Entry{" + "uniprotAccession=" + uniprotAccession
+                + ", uniprotName=" + uniprotName + ", source=" + source + ", title=" + title + ", ec=" + getEc() + '}';
     }
 
     @Override

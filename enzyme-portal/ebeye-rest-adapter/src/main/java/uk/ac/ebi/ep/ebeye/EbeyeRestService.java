@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,6 +24,7 @@ import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
+import uk.ac.ebi.ep.ebeye.utils.Preconditions;
 
 /**
  * REST client that communicates with the EBeye search web-service.
@@ -36,33 +36,31 @@ public class EbeyeRestService {
     public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
 
     //Maximum number of entries that this service will ask from the EbeyeSearch
-    private static final int MAX_HITS_TO_RETRIEVE = 7000;
+    private static final int MAX_HITS_TO_RETRIEVE = 10_000;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final AsyncRestTemplate asyncRestTemplate;
     private final EbeyeIndexUrl ebeyeIndexUrl;
     private final RestTemplate restTemplate;
-    private final int maxEbiSearchLimit;
-    private final int chunkSize;
+    // private final int maxEbiSearchLimit;
+    //private final int chunkSize;
 
-    @Autowired//org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'ebeyeRestService': Unsatisfied dependency expressed through constructor argument with index 3 of type [int]: : No qualifying bean of type [int] found for dependency:
     private int maxRetrievableHits;
 
-    @Autowired
     public EbeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
-            AsyncRestTemplate asyncRestTemplate, int maxEbiSearchLimit, int chunkSize) {
+            AsyncRestTemplate asyncRestTemplate) {
         Preconditions.checkArgument(ebeyeIndexUrl != null, "Index URL can't be null");
         Preconditions.checkArgument(restTemplate != null, "Synchronous REST template can't be null");
         Preconditions.checkArgument(asyncRestTemplate != null, "Asynchronous REST template can't be null");
-        Preconditions.checkArgument(maxEbiSearchLimit > 0, "Max EBI seach limit can't be less than 1");
-        Preconditions.checkArgument(chunkSize > 0, "Processable chunk sizes should be greater than 0");
+        //Preconditions.checkArgument(maxEbiSearchLimit > 0, "Max EBI seach limit can't be less than 1");
+        //Preconditions.checkArgument(chunkSize > 0, "Processable chunk sizes should be greater than 0");
 
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
         this.asyncRestTemplate = asyncRestTemplate;
-        this.maxEbiSearchLimit = maxEbiSearchLimit;
-        this.chunkSize = chunkSize;
+       // this.maxEbiSearchLimit = maxEbiSearchLimit;
+        // this.chunkSize = chunkSize;
         this.maxRetrievableHits = MAX_HITS_TO_RETRIEVE;
     }
 
@@ -105,7 +103,7 @@ public class EbeyeRestService {
 
             logger.debug("Number of hits for search for [" + query + "] : " + searchResult.getHitCount());
 
-            if (hitCount <= maxEbiSearchLimit) {
+            if (hitCount <= ebeyeIndexUrl.getMaxEbiSearchLimit()) {
                 accessions = extractDistinctAccessionsUpToLimit(searchResult.getEntries(),
                         limit == NO_RESULT_LIMIT ? hitCount : limit);
             } else {
@@ -125,7 +123,7 @@ public class EbeyeRestService {
             throws InterruptedException, ExecutionException, RestClientException {
         String url = buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
                 query,
-                maxEbiSearchLimit,
+                ebeyeIndexUrl.getMaxEbiSearchLimit(),
                 0);
 
         return restTemplate.getForObject(url, EbeyeSearchResult.class);
@@ -157,14 +155,14 @@ public class EbeyeRestService {
     private List<String> executeQueryInChunks(String query, int hitCount, int limit) {
         hitCount = calculateMaxNumberOfHitsToRetrieve(hitCount, maxRetrievableHits);
 
-        int totalPaginatedQueries = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
+        int totalPaginatedQueries = (int) Math.ceil((double) hitCount / (double) ebeyeIndexUrl.getMaxEbiSearchLimit());
 
         logger.debug("Possible number of paginated queries: {}", totalPaginatedQueries);
 
         Set<Entry> uniqueEntries = new HashSet<>(limit > hitCount ? hitCount : limit);
 
         int startPage = 0;
-        int endPage = Math.min(chunkSize, totalPaginatedQueries);
+        int endPage = Math.min(ebeyeIndexUrl.getChunkSize(), totalPaginatedQueries);
 
         while (startPage < totalPaginatedQueries && uniqueEntries.size() < limit) {
             List<String> paginatedQueries = createPaginatedQueries(query, startPage, endPage);
@@ -177,7 +175,7 @@ public class EbeyeRestService {
             }
 
             startPage = endPage;
-            endPage = Math.min(endPage + chunkSize, totalPaginatedQueries);
+            endPage = Math.min(endPage + ebeyeIndexUrl.getChunkSize(), totalPaginatedQueries);
         }
 
         return extractDistinctAccessionsUpToLimit(uniqueEntries, limit);
@@ -208,8 +206,8 @@ public class EbeyeRestService {
         return IntStream.range(startIndex, endIndex)
                 .mapToObj(index -> buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
                                 query,
-                                maxEbiSearchLimit,
-                                index * maxEbiSearchLimit))
+                                ebeyeIndexUrl.getMaxEbiSearchLimit(),
+                                index * ebeyeIndexUrl.getMaxEbiSearchLimit()))
                 .collect(Collectors.toList());
     }
 

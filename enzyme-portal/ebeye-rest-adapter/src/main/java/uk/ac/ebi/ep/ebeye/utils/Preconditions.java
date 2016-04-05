@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.ebeye;
+package uk.ac.ebi.ep.ebeye.utils;
 
 /**
  * Created by rantunes on 22/02/16.

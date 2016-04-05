@@ -1,11 +1,5 @@
 package uk.ac.ebi.ep.ebeye;
 
-import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
-import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
-import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
-import uk.ac.ebi.ep.ebeye.search.Entry;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,23 +7,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import org.junit.Assert;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
+import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
+import uk.ac.ebi.ep.ebeye.search.Entry;
 
 /**
  * Tests the behaviour of the {@link uk.ac.ebi.ep.ebeye.EbeyeRestService} class.
@@ -51,6 +49,10 @@ public class EbeyeRestServiceTest {
     public void setUp() {
         EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
         serverUrl.setDefaultSearchIndexUrl(SERVER_URL);
+        serverUrl.setChunkSize(CHUNK_SIZE);
+        serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
+                
+                
 
         RestTemplate restTemplate = new RestTemplate();
         AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
@@ -58,8 +60,7 @@ public class EbeyeRestServiceTest {
         syncRestServerMock = MockRestServiceServer.createServer(restTemplate);
         asyncRestServerMock = MockRestServiceServer.createServer(asyncRestTemplate);
 
-        restService = new EbeyeRestService(serverUrl, restTemplate, asyncRestTemplate, MAX_ENTRIES_IN_RESPONSE,
-                CHUNK_SIZE);
+        restService = new EbeyeRestService(serverUrl, restTemplate, asyncRestTemplate);
     }
 
     @Test

@@ -1,10 +1,11 @@
 package uk.ac.ebi.ep.ebeye.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
@@ -12,6 +13,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
+import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
+import uk.ac.ebi.ep.ebeye.ProteinCentricService;
 
 /**
  * Configures the services that interface with the Ebeye search.
@@ -21,17 +24,12 @@ import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 @Configuration
 @PropertySource({"classpath:ebeye.es"})
 public class EbeyeConfig {
-    @Value("${ep.default.search.url}")
-    private String searchUrl;
 
-    @Value("${ebeye.max.ebi.requests}")
-    private int maxEbiRequests;
+    //@Value("${request.timeout.millis:5000}") 
+    private final int requestTimeout = 0b111110100;//binary
 
-    @Value("${ebeye.chunk.size}")
-    private int chunkSize;
-
-    @Value("${request.timeout.millis:5000}")
-    private int requestTimeout;
+    @Autowired
+    private Environment env;
 
     @Bean
     static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
@@ -41,7 +39,7 @@ public class EbeyeConfig {
     @Bean
     public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
             AsyncRestTemplate asyncRestTemplate) {
-        return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate, maxEbiRequests, chunkSize);
+        return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
     }
 
     @Bean
@@ -72,8 +70,28 @@ public class EbeyeConfig {
 
     @Bean
     public EbeyeIndexUrl ebeyeIndexUrl() {
+        String defaultSearchUrl = env.getProperty("ep.default.search.url");
+
+        int maxEbiRequests = Integer.parseInt(env.getProperty("ebeye.max.ebi.requests"));
+        int chunkSize = Integer.parseInt(env.getProperty("ebeye.chunk.size"));
+        String enzymeCentriUrl = env.getProperty("ep.enzyme.centric.search.url");
+
         EbeyeIndexUrl url = new EbeyeIndexUrl();
-        url.setDefaultSearchIndexUrl(searchUrl);
+        url.setDefaultSearchIndexUrl(defaultSearchUrl);
+        url.setEnzymeCentricSearchUrl(enzymeCentriUrl);
+        url.setChunkSize(chunkSize);
+        url.setMaxEbiSearchLimit(maxEbiRequests);
         return url;
+    }
+
+    @Bean
+    public EnzymeCentricService enzymeCentricService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
+            AsyncRestTemplate asyncRestTemplate) {
+        return new EnzymeCentricService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
+    }
+
+    @Bean
+    public ProteinCentricService proteinCentricService() {
+        return new ProteinCentricService();
     }
 }

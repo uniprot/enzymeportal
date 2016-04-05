@@ -15,13 +15,14 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EbeyeSearchResult {
+
     @JsonProperty("hitCount")
     private Integer hitCount;
     @JsonProperty("entries")
     private List<Entry> entries;
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
-    
+
     /**
      * @return The hitCount
      */
