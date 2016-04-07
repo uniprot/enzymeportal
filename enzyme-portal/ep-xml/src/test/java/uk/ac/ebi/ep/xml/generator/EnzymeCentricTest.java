@@ -29,7 +29,7 @@ public class EnzymeCentricTest extends BaseTest {
     @Before
     @Override
     public void setUp() {
-        enzymeCentricInstance = new EnzymeCentric(xmlService);
+        enzymeCentricInstance = new EnzymeCentric(xmlService, xmlConfigParams);
         enzymes = new ArrayList<>();
         IntenzEnzymes enzyme_1 = new IntenzEnzymes();
         enzyme_1.setInternalId(BigDecimal.ONE);
@@ -72,7 +72,6 @@ public class EnzymeCentricTest extends BaseTest {
         thrown.expectMessage("XML file does not exist");
         String[] xsd = {"http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd"};
         enzymeCentricInstance.validateXML(output.getAbsolutePath() + "BLA", xsd);
-
 
     }
 
@@ -131,11 +130,13 @@ public class EnzymeCentricTest extends BaseTest {
 
         LocalDate date = LocalDate.now();
         String releaseDate = date.format(DateTimeFormatter.ofPattern("d-MMM-uuuu"));
+        String release = xmlConfigParams.getReleaseNumber();
 
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<database>\n"
                 + "    <name>Enzyme Portal</name>\n"
                 + "    <description>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.</description>\n"
+                + "    <release>" + release + "</release>\n"
                 + "    <release_date>" + releaseDate + "</release_date>\n"
                 + "    <entry_count>3</entry_count>\n"
                 + "    <entries>\n"
@@ -146,20 +147,31 @@ public class EnzymeCentricTest extends BaseTest {
                 + "        <entry id=\"3.4.24.85\">\n"
                 + "            <name>S2P endopeptidase</name>\n"
                 + "            <additional_fields>\n"
-                + "                <field name=\"uniprot_name\">MBTP2_BOVIN</field>\n"
+                + "                <field name=\"uniprot_name\">Q1CFF4_YERPN</field>\n"
+                + "                <field name=\"protein_name\">Zinc metalloprotease</field>\n"
+                + "                <field name=\"scientific_name\">Yersinia pestis bv. Antiqua (strain Nepal516)</field>\n"
+                + "                <field name=\"synonym\">Inner membrane zinc RIP metalloprotease</field>\n"
+                + "                <field name=\"uniprot_name\">MBTP2_MOUSE</field>\n"
                 + "                <field name=\"protein_name\">Membrane-bound transcription factor site-2 protease</field>\n"
-                + "                <field name=\"scientific_name\">Bos taurus</field>\n"
+                + "                <field name=\"scientific_name\">Mus musculus</field>\n"
                 + "                <field name=\"synonym\">-</field>\n"
                 + "                <field name=\"synonym\">sterol-regulatory element-binding proteins intramembrane protease</field>\n"
                 + "                <field name=\"synonym\">sterol regulatory element-binding protein site 2 protease</field>\n"
                 + "                <field name=\"synonym\">membrane-bound transcription factor site 2 protease</field>\n"
                 + "                <field name=\"synonym\">S2P endopeptidase</field>\n"
                 + "                <field name=\"synonym\">site-2 protease</field>\n"
-                + "                <field name=\"uniprot_name\">MBTP2_MOUSE</field>\n"
-                + "                <field name=\"scientific_name\">Mus musculus</field>\n"
+                + "                <field name=\"uniprot_name\">MBTP2_BOVIN</field>\n"
+                + "                <field name=\"scientific_name\">Bos taurus</field>\n"
+                + "                <field name=\"uniprot_name\">E0SCD6_DICD3</field>\n"
+                + "                <field name=\"scientific_name\">Dickeya dadantii (strain 3937)</field>\n"
+                + "                <field name=\"uniprot_name\">C9XWA9_CROTZ</field>\n"
+                + "                <field name=\"scientific_name\">Cronobacter turicensis (strain DSM 18703 / LMG 23827 / z3032)</field>\n"
                 + "            </additional_fields>\n"
                 + "            <cross_references>\n"
+                + "                <ref dbkey=\"E0SCD6\" dbname=\"UNIPROTKB\"/>\n"
+                + "                <ref dbkey=\"Q1CFF4\" dbname=\"UNIPROTKB\"/>\n"
                 + "                <ref dbkey=\"Q8CHX6\" dbname=\"UNIPROTKB\"/>\n"
+                + "                <ref dbkey=\"C9XWA9\" dbname=\"UNIPROTKB\"/>\n"
                 + "                <ref dbkey=\"3.4.24.85\" dbname=\"INTENZ\"/>\n"
                 + "                <ref dbkey=\"Q0III2\" dbname=\"UNIPROTKB\"/>\n"
                 + "            </cross_references>\n"
@@ -170,6 +182,7 @@ public class EnzymeCentricTest extends BaseTest {
                 + "        </entry>\n"
                 + "    </entries>\n"
                 + "</database>";
+
         return xml;
     }
 

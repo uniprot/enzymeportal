@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import static uk.ac.ebi.ep.xml.generator.XmlTransformer.ENZYME_PORTAL;
 import uk.ac.ebi.ep.xml.model.Database;
 import uk.ac.ebi.ep.xml.model.Field;
@@ -26,14 +26,17 @@ public class XmlTransformer {
     public static final String ENZYME_PORTAL = "Enzyme Portal";
     public static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
 
-    @Autowired
-    protected String RELEASE_NUMBER;
+    private final XmlConfigParams xmlConfigParams;
+
+    public XmlTransformer(XmlConfigParams xmlConfigParams) {
+        this.xmlConfigParams = xmlConfigParams;
+    }
 
     protected Database buildDatabaseInfo(int entryCount) {
         Database database = new Database();
         database.setName(ENZYME_PORTAL);
         database.setDescription(ENZYME_PORTAL_DESCRIPTION);
-        database.setRelease(RELEASE_NUMBER);
+        database.setRelease(xmlConfigParams.getReleaseNumber());
         LocalDate date = LocalDate.now();
         database.setReleaseDate(date);
         database.setEntryCount(entryCount);

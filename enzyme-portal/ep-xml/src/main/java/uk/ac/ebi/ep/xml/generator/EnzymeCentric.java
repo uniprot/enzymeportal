@@ -6,13 +6,15 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.model.AdditionalFields;
 import uk.ac.ebi.ep.xml.model.CrossReferences;
 import uk.ac.ebi.ep.xml.model.Database;
@@ -30,16 +32,19 @@ import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
  */
 public class EnzymeCentric extends XmlGenerator {
 
-    @Autowired
-    private String enzymeCentricXmlDir;
+    private final XmlConfigParams xmlConfigParams;
+    private  ForkJoinPool forkJoinPool;
 
-    public EnzymeCentric( EnzymePortalXmlService xmlService) {
-        super(xmlService);
+    public EnzymeCentric(EnzymePortalXmlService enzymePortalXmlService, XmlConfigParams xmlConfigParams) {
+        super(enzymePortalXmlService, xmlConfigParams);
+        this.xmlConfigParams = xmlConfigParams;
+
     }
 
     @Override
     public void validateXML() {
-
+        String ebeyeXSDs = xmlConfigParams.getEbeyeXSDs();
+        String enzymeCentricXmlDir = xmlConfigParams.getEnzymeCentricXmlDir();
         if (ebeyeXSDs == null || enzymeCentricXmlDir == null) {
             try {
                 String msg = "Xsd files or XML directory cannot be Null. Please ensure that ep-xml-config.properties is in the classpath.";
@@ -56,8 +61,20 @@ public class EnzymeCentric extends XmlGenerator {
     @Override
     public void generateXmL() throws JAXBException {
 
-        generateXmL(enzymeCentricXmlDir);
+        generateXmL(xmlConfigParams.getEnzymeCentricXmlDir());
     }
+
+    public ForkJoinPool getForkJoinPool() {
+        if(forkJoinPool == null){
+         int availableProcessors = Runtime.getRuntime().availableProcessors();
+        logger.warn("Number of availableProcessors : " + availableProcessors);
+            forkJoinPool = new ForkJoinPool(availableProcessors); 
+           logger.warn("created FJPool info :  "+ forkJoinPool);
+
+        }
+        return forkJoinPool;
+    }
+    
 
     @Override
     public void generateXmL(String xmlFileLocation) throws JAXBException {
@@ -65,7 +82,8 @@ public class EnzymeCentric extends XmlGenerator {
         Entries entries = new Entries();
         List<IntenzEnzymes> enzymes = enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
         int entryCount = enzymes.size();
-        logger.info("Number of Intenz enzymes ready to be processed : " + entryCount);
+
+        logger.warn("Number of Intenz enzymes ready to be processed : " + entryCount);
 
         Database database = buildDatabaseInfo(entryCount);
 
@@ -79,43 +97,54 @@ public class EnzymeCentric extends XmlGenerator {
             entry.setId(enzyme.getEcNumber());
             entry.setName(enzyme.getEnzymeName());
             entry.setDescription(enzyme.getCatalyticActivity());
-
-            Iterable<UniprotEntry> iterableEntry = enzymePortalXmlService.findSwissprotEnzymesByEcNumber(enzyme.getEcNumber());
-
-            StreamUtils.stream(iterableEntry.iterator()).parallel().forEach((uniprotEntry) -> {
-                addUniprotIdFields(uniprotEntry, fields);
-                addProteinNameFields(uniprotEntry, fields);
-
-                addScientificNameFields(uniprotEntry, fields);
-
-                addSynonymFields(uniprotEntry, fields);
-                addSource(enzyme, refs);
-                addAccessionXrefs(uniprotEntry, refs);
-
-                addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
-
-                addDiseaseFields(uniprotEntry, fields);
-
-                CrossReferences cr = new CrossReferences();
-                cr.setRef(refs);
-
-                additionalFields.setField(fields);
-
-                entry.setAdditionalFields(additionalFields);
-                entry.setCrossReferences(cr);
-
-            });
-
-            entryList.add(entry);
+           
+            List<UniprotEntry> iterableEntry = enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
+            Entry processedEntry = null;
+            try {
+                processedEntry = getForkJoinPool().submit(() -> processEntries(iterableEntry, enzyme, entry, fields, refs, additionalFields)).get();
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+ 
+            entryList.add(processedEntry);
 
         });
 
         entries.setEntry(entryList);
         database.setEntries(entries);
-
         //write xml
         writeXml(database, xmlFileLocation);
+         logger.warn(" FJPool activity info before shutdown :  "+ forkJoinPool);
+         forkJoinPool.shutdown();
 
+    }
+
+    private synchronized Entry processEntries(Iterable<UniprotEntry> iterableEntry, IntenzEnzymes enzyme, Entry entry, Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields) {
+
+        StreamUtils.stream(iterableEntry.iterator()).forEach((uniprotEntry) -> {
+            addUniprotIdFields(uniprotEntry, fields);
+            addProteinNameFields(uniprotEntry, fields);
+
+            addScientificNameFields(uniprotEntry, fields);
+
+            addSynonymFields(uniprotEntry, fields);
+            addSource(enzyme, refs);
+            addAccessionXrefs(uniprotEntry, refs);
+
+            addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
+
+            addDiseaseFields(uniprotEntry, fields);
+
+            CrossReferences cr = new CrossReferences();
+            cr.setRef(refs);
+
+            additionalFields.setField(fields);
+
+            entry.setAdditionalFields(additionalFields);
+            entry.setCrossReferences(cr);
+
+        });
+        return entry;
     }
 
     private void addSource(IntenzEnzymes enzyme, Set<Ref> refs) {

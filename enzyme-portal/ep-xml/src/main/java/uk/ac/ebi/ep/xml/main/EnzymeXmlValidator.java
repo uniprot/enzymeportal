@@ -27,28 +27,17 @@ public class EnzymeXmlValidator {
 
     public static void main(String[] args) throws Exception {
 
-        String profile;
-        //profile = "";
+        String profile = "uzpdev";//validation is meant to be done in development areas hence the default database param.
 
-        if (args == null || args.length == 0) {
-            logger.error("Please provide required parameters");
-            System.exit(0);
-        }
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.getEnvironment().setActiveProfiles(profile);
+        context.register(DataConfig.class, XmlConfig.class, GlobalConfig.class);
+        context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.xml.config");
+        context.refresh();
 
-        if (args.length == 1) {
-
-            profile = args[0];
-
-            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-            context.getEnvironment().setActiveProfiles(profile);
-            context.register(DataConfig.class, XmlConfig.class, GlobalConfig.class);
-            context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.xml.config");
-            context.refresh();
-
-            XmlGenerator xmlGenerator = context.getBean(EnzymeCentric.class);
-            xmlGenerator.validateXML();
-
-        }
+        XmlGenerator xmlGenerator = context.getBean(EnzymeCentric.class);
+        xmlGenerator.validateXML();
+        logger.info("Enzyme-centric XML Validation is complete. Please check the logs.");
 
     }
 }

@@ -77,4 +77,9 @@ public class Entry {
         this.crossReferences = crossReferences;
     }
 
+    @Override
+    public String toString() {
+        return "Entry{" + "id=" + id + ", acc=" + acc + ", name=" + name + ", description=" + description + ", additionalFields=" + additionalFields + ", crossReferences=" + crossReferences + '}';
+    }
+
 }

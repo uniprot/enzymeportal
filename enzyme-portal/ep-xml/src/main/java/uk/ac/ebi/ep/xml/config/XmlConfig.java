@@ -10,6 +10,7 @@ import uk.ac.ebi.ep.xml.generator.EnzymeCentric;
 import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 
 /**
+ * main configuration for this module
  *
  * @author joseph
  */
@@ -18,34 +19,46 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 public class XmlConfig {
 
     @Autowired
-    private EnzymePortalXmlService xmlService;
+    private EnzymePortalXmlService enzymePortalXmlService;
     @Autowired
     private Environment env;
 
     @Bean(name = "enzymeCentric")
     public XmlGenerator enzymeCentric() {
-        return new EnzymeCentric(xmlService);
+        return new EnzymeCentric(enzymePortalXmlService, xmlConfigParams());
     }
 
     @Bean
+    public XmlConfigParams xmlConfigParams() {
+        XmlConfigParams params = new XmlConfigParams();
+        params.setChunkSize(chunkSize());
+        params.setEbeyeXSDs(ebeyeXSDs());
+        params.setEnzymeCentricXmlDir(enzymeCentricXmlDir());
+        params.setProteinCentricXmlDir(proteinCentricXmlDir());
+        params.setReleaseNumber(releaseNumber());
+
+        return params;
+    }
+
     public String releaseNumber() {
         return env.getProperty("release.number");
     }
 
-    @Bean
     public String enzymeCentricXmlDir() {
         return env.getProperty("ep.enzyme.centric.xml.dir");
     }
 
-    @Bean
     public String proteinCentricXmlDir() {
         return env.getProperty("ep.protein.centric.xml.dir");
     }
 
-    @Bean
     public String ebeyeXSDs() {
         return env.getProperty("ep.ebeye.xsd");
 
+    }
+
+    private int chunkSize() {
+        return Integer.parseInt(env.getProperty("ep.protein.centric.chunk"));
     }
 
 }

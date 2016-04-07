@@ -1,14 +1,15 @@
 package uk.ac.ebi.ep.xml.generator;
 
-import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
-import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
-
 import java.io.File;
 import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import org.junit.*;
+import static org.hamcrest.CoreMatchers.is;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.BatchStatus;
@@ -18,14 +19,16 @@ import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
+import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
+import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
+import uk.ac.ebi.ep.xml.config.XmlConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-        classes = {ProteinBatchConfig.class, JobTestRunnerConfig.class, SpringDataMockConfig.class})
+        classes = {ProteinBatchConfig.class, XmlConfig.class, JobTestRunnerConfig.class, SpringDataMockConfig.class})
 public class ProteinCentricBatchIT {
+
     @ClassRule
     public static TemporaryFolder temporaryFolder = new TemporaryFolder();
 

@@ -1,20 +1,31 @@
 package uk.ac.ebi.ep.xml.generator.protein;
 
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.xml.generator.XmlTransformer;
-import uk.ac.ebi.ep.xml.model.*;
-
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import org.springframework.batch.item.ItemProcessor;
+import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.xml.config.XmlConfigParams;
+import uk.ac.ebi.ep.xml.generator.XmlTransformer;
+import uk.ac.ebi.ep.xml.model.AdditionalFields;
+import uk.ac.ebi.ep.xml.model.CrossReferences;
+import uk.ac.ebi.ep.xml.model.Entry;
+import uk.ac.ebi.ep.xml.model.Field;
+import uk.ac.ebi.ep.xml.model.Ref;
 
 /**
- * Converts a {@link UniprotEntry} into an {@link Entry} so that it can then be persisted into some form of storage.
+ * Converts a {@link UniprotEntry} into an {@link Entry} so that it can then be
+ * persisted into some form of storage.
  *
  * @author Ricardo Antunes
  */
 public class UniProtEntryToEntryConverter extends XmlTransformer implements ItemProcessor<UniprotEntry, Entry> {
-    @Override public Entry process(UniprotEntry uniprotEntry) throws Exception {
+
+    public UniProtEntryToEntryConverter(XmlConfigParams xmlConfigParams) {
+        super(xmlConfigParams);
+    }
+
+    @Override
+    public Entry process(UniprotEntry uniprotEntry) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
         Set<Field> fields = new CopyOnWriteArraySet<>();
         Set<Ref> refs = new CopyOnWriteArraySet<>();
@@ -23,7 +34,7 @@ public class UniProtEntryToEntryConverter extends XmlTransformer implements Item
         entry.setAcc(uniprotEntry.getAccession());
         entry.setId(uniprotEntry.getUniprotid());
         entry.setName(uniprotEntry.getProteinName());
-        entry.setDescription("");
+        entry.setDescription(uniprotEntry.getProteinName());
 
         addStatus(uniprotEntry, fields);
         addScientificNameFields(uniprotEntry, fields);

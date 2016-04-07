@@ -23,6 +23,7 @@ import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
@@ -44,8 +45,10 @@ import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
  */
 @Configuration
 @EnableBatchProcessing
+@Import({EnzymePortalXmlService.class, XmlConfig.class})
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class ProteinBatchConfig extends DefaultBatchConfigurer {
+
     public static final String PROTEIN_CENTRIC_JOB = "PROTEIN_CENTRIC_JOB";
     public static final String PROTEIN_CENTRIC_DB_TO_XML_STEP = "readFromDbWriteToXMLStep";
 
@@ -61,18 +64,14 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    @Bean
-    public String releaseNumber() {
-        return env.getProperty("release.number");
-    }
+    @Autowired
+    private EnzymePortalXmlService enzymePortalXmlService;
+    @Autowired
+    private XmlConfigParams xmlConfigParams;
 
     @Bean
     public Resource proteinCentricXmlDir() {
         return new FileSystemResource(env.getProperty("ep.protein.centric.xml.dir"));
-    }
-
-    @Bean public EnzymePortalXmlService enzymeXmlService() {
-        return new EnzymePortalXmlService();
     }
 
     @Bean
@@ -94,7 +93,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     @Bean
     public Step readFromDbWriteToXMLStep() {
         return stepBuilders.get(PROTEIN_CENTRIC_DB_TO_XML_STEP)
-                .<UniprotEntry, Entry>chunk(chunkSize())
+                .<UniprotEntry, Entry>chunk(xmlConfigParams.getChunkSize())
                 .<UniprotEntry>reader(uniProtEntryReader())
                 .processor(uniProtEntryToEntryConverter())
                 .writer(entryToXmlWriter())
@@ -107,14 +106,13 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
         JpaPagingItemReader<UniprotEntry> databaseReader = new JpaPagingItemReader<>();
         databaseReader.setEntityManagerFactory(entityManagerFactory);
         databaseReader.setQueryString("select u from UniprotEntry u");
-        databaseReader.setPageSize(chunkSize());
-
+        databaseReader.setPageSize(xmlConfigParams.getChunkSize());
         return databaseReader;
     }
 
     @Bean
     public ItemProcessor<UniprotEntry, Entry> uniProtEntryToEntryConverter() {
-        return new UniProtEntryToEntryConverter();
+        return new UniProtEntryToEntryConverter(xmlConfigParams);
     }
 
     @Bean
@@ -129,7 +127,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     }
 
     private StaxWriterCallback xmlHeaderCallback() {
-        return new ProteinXmlHeaderCallback(releaseNumber(), enzymeXmlService());
+        return new ProteinXmlHeaderCallback(xmlConfigParams.getReleaseNumber(), enzymePortalXmlService);
     }
 
     private JobExecutionListener logJobListener(String jobName) {
@@ -137,16 +135,16 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     }
 
     private ChunkListener logChunkListener() {
-        return new LogChunkListener(chunkSize());
+        return new LogChunkListener(xmlConfigParams.getChunkSize());
     }
 
     /**
-     * Creates a job repository that uses an in memory map to register the job's progress. This should be changed to
-     * use a real data source in the following cases:
-     *    - If you want to be able to resume a failed job
-     *    - If you want more than one of the same job (with the same parameters) to be launched simultaneously
-     *    - If you want to multi thread the job
-     *    - If you have a locally partitioned step.
+     * Creates a job repository that uses an in memory map to register the job's
+     * progress. This should be changed to use a real data source in the
+     * following cases: - If you want to be able to resume a failed job - If you
+     * want more than one of the same job (with the same parameters) to be
+     * launched simultaneously - If you want to multi thread the job - If you
+     * have a locally partitioned step.
      *
      * @return a JobRepository
      * @throws Exception if an error is encountered whilst creating the job repo
@@ -170,7 +168,4 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
         return marshaller;
     }
 
-    private int chunkSize() {
-        return Integer.parseInt(env.getProperty("ep.protein.centric.chunk"));
-    }
 }
