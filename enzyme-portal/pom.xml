@@ -639,7 +639,8 @@
        
         <module>EnzymePortalTestKit</module>
         <module>enzyme-portal-data</module>
-         <module>DataAnalysis</module>
+        <module>ep-xml</module>
+        <module>DataAnalysis</module>
         <module>SitemapGenerator</module>
         <module>PDBeAdapter</module>
         <module>centralService</module>
@@ -647,7 +648,7 @@
         <module>epTools</module>
         <module>ebeye-rest-adapter</module>
         <module>enzymeservices</module>
-       <module>LiteratureService</module>
+        <module>LiteratureService</module>
         <module>ep-base</module>
         <module>ep-website</module>
     </modules>
