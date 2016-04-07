@@ -39,6 +39,13 @@ public class EnzymePortalXmlService {
 
     }
 
+    private static Predicate enzymesByEcNumber(String ecNumber) {
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+
+        return enzyme.enzymePortalEcNumbersSet.any().ecNumber.equalsIgnoreCase(ecNumber);
+
+    }
+
     /**
      * Note : This method should only used for Unit Test.
      *
@@ -60,13 +67,30 @@ public class EnzymePortalXmlService {
     @Transactional(readOnly = true)
     public List<IntenzEnzymes> findAllIntenzEnzymes() {
 
-        return intenzEnzymesRepository.findAll();
+        return intenzEnzymesRepository.findIntenzEnzymes();
     }
 
     @Transactional(readOnly = true)
     public Iterable<UniprotEntry> findSwissprotEnzymesByEcNumber(String ec) {
 
         return uniprotEntryRepository.findAll(swissprotEnzymesByEcNumber(ec));
+    }
+
+    @Transactional(readOnly = true)
+    public Iterable<UniprotEntry> findEnzymesByEcNumber(String ec) {
+
+        return uniprotEntryRepository.findAll(enzymesByEcNumber(ec));
+    }
+
+    @Transactional(readOnly = true)
+    public List<UniprotEntry> findEnzymesByEcNumberNativeQuery(String ec) {
+
+        return uniprotEntryRepository.findEnzymesByEc(ec);
+    }
+
+    public Page<UniprotEntry> findPageableEnzymesByEcNumber(Pageable pageable, String ec) {
+
+        return uniprotEntryRepository.findAll(enzymesByEcNumber(ec), pageable);
     }
 
     @Transactional(readOnly = true)
