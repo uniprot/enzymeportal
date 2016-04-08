@@ -6,12 +6,10 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBException;
 import org.springframework.util.StringUtils;
-
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
@@ -24,7 +22,6 @@ import uk.ac.ebi.ep.xml.model.Entry;
 import uk.ac.ebi.ep.xml.model.Field;
 import uk.ac.ebi.ep.xml.model.Ref;
 import uk.ac.ebi.ep.xml.util.DatabaseName;
-import uk.ac.ebi.ep.xml.util.StreamUtils;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 /**
@@ -48,9 +45,9 @@ public class EnzymeCentric extends XmlGenerator {
 
         if (ebeyeXSDs == null || enzymeCentricXmlDir == null) {
             try {
-                String msg =
-                        "Xsd files or XML directory cannot be Null. Please ensure that ep-xml-config.properties is in" +
-                                " the classpath.";
+                String msg
+                        = "Xsd files or XML directory cannot be Null. Please ensure that ep-xml-config.properties is in"
+                        + " the classpath.";
                 throw new FileNotFoundException(msg);
             } catch (FileNotFoundException ex) {
                 logger.error(ex.getMessage(), ex);
@@ -71,8 +68,8 @@ public class EnzymeCentric extends XmlGenerator {
     public void generateXmL(String xmlFileLocation) throws JAXBException {
         List<Entry> entryList = new LinkedList<>();
 
-        List<IntenzEnzymes> enzymes =
-                enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
+        List<IntenzEnzymes> enzymes
+                = enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
 
         int entryCount = enzymes.size();
 
@@ -87,19 +84,15 @@ public class EnzymeCentric extends XmlGenerator {
             entry.setName(enzyme.getEnzymeName());
             entry.setDescription(enzyme.getCatalyticActivity());
 
-            List<UniprotEntry> iterableEntry =
-                    enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
+            List<UniprotEntry> entries
+                    = enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
 
-            try {
-                Entry processedEntry = getForkJoinPool()
-                        .submit(() -> processEntries(iterableEntry, enzyme, entry, new LinkedHashSet<>(),
-                                new HashSet<>(), new AdditionalFields()))
-                        .get();
+            Entry processedEntry = getForkJoinPool()
+                    .submit(() -> processEntries(entries, enzyme, entry, new LinkedHashSet<>(),
+                                    new HashSet<>(), new AdditionalFields()))
+                    .join();
 
-                entryList.add(processedEntry);
-            } catch (InterruptedException | ExecutionException ex) {
-                logger.error(ex.getMessage(), ex);
-            }
+            entryList.add(processedEntry);
         });
 
         Entries entries = new Entries();
@@ -113,10 +106,10 @@ public class EnzymeCentric extends XmlGenerator {
         forkJoinPool.shutdown();
     }
 
-    private synchronized Entry processEntries(Iterable<UniprotEntry> iterableEntry, IntenzEnzymes enzyme, Entry entry,
+    private synchronized Entry processEntries(List<UniprotEntry> entries, IntenzEnzymes enzyme, Entry entry,
             Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields) {
 
-        StreamUtils.stream(iterableEntry.iterator()).forEach((uniprotEntry) -> {
+        entries.stream().parallel().forEach((uniprotEntry) -> {
             addUniprotIdFields(uniprotEntry, fields);
             addProteinNameFields(uniprotEntry, fields);
 
@@ -150,7 +143,7 @@ public class EnzymeCentric extends XmlGenerator {
     }
 
     private ForkJoinPool getForkJoinPool() {
-        if(forkJoinPool == null) {
+        if (forkJoinPool == null) {
             forkJoinPool = new ForkJoinPool();
         }
 
