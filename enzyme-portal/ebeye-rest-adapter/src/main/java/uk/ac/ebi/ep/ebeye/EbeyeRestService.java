@@ -7,7 +7,7 @@ package uk.ac.ebi.ep.ebeye;
 
 import com.aol.simple.react.stream.lazy.LazyReact;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -55,8 +55,8 @@ public class EbeyeRestService {
     private RestTemplate restTemplate;
 
     private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private static final int HITCOUNT = 7000;
-    private static final int QUERY_LIMIT = 8000;
+    private static final int HITCOUNT = 7_000;
+    private static final int QUERY_LIMIT = 800;
 
     /**
      *
@@ -141,7 +141,8 @@ public class EbeyeRestService {
 
                 int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
 
-                List<String> accessionList = query(query, numIteration);
+                //List<String> accessionList = queryUsingLazyReact(query, numIteration);
+                 List<String> accessionList = query(query, numIteration);
                 logger.warn("Total Hitcount = " + hitcount + ",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
                 return accessionList;
 
@@ -182,7 +183,7 @@ public class EbeyeRestService {
         final Set<String> accessions = new CopyOnWriteArraySet<>();
 
         IntStream.rangeClosed(0, iteration).forEachOrdered(index -> {
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
+            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name,status&query=" + query;
 
             try {
                 EbeyeSearchResult ebeyeSearchResult = searchEbeyeDomain(url).get();
@@ -233,10 +234,10 @@ public class EbeyeRestService {
         return null;
     }
 
-    private List<String> queryM(String query, int iteration) throws InterruptedException, ExecutionException {
+    private List<String> queryUsingLazyReact(String query, int iteration) throws InterruptedException, ExecutionException {
         final List<String> urls = new CopyOnWriteArrayList<>();
         IntStream.rangeClosed(0, iteration).parallel().forEachOrdered(index -> {
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name&query=" + query;
+            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name,status&query=" + query;
 
             urls.add(url);
 
@@ -250,8 +251,7 @@ public class EbeyeRestService {
 
     public List<String> searchEbeyeDomain(List<String> urls) {
 
-        List<String> accessions = new ArrayList<>();
-
+       // List<String> accessions = new ArrayList<>();
         HttpMethod method = HttpMethod.GET;
 
         // Define response type
@@ -265,21 +265,29 @@ public class EbeyeRestService {
 
         LazyReact lazyReact = new LazyReact();
 
-        List<List<Entry>> result
-                = lazyReact.fromStream(urls.stream().map(x -> toCompletableFuture(asyncRestTemplate.exchange(x, method, requestEntity, responseType))))
+        List<String> accessions = lazyReact
+                .fromStream(urls.stream()
+                        .map(url -> toCompletableFuture(asyncRestTemplate.exchange(url, method, requestEntity, responseType))))
                 .map(ResponseEntity<EbeyeSearchResult>::getBody)
-                .map(EbeyeSearchResult::getEntries).distinct().collect(Collectors.toList());
+                .map(EbeyeSearchResult::getEntries).distinct()
+                .flatMap(Collection::stream).distinct()
+                .map(entry -> entry.getUniprotAccession())
+                .collect(Collectors.toList());
 
-        Iterator<List<Entry>> it = result.iterator();
-
-        while (it.hasNext()) {
-            List<Entry> entries = it.next().stream().distinct().collect(Collectors.toList());
-            entries.stream().forEach((entry) -> {
-                accessions.add(entry.getUniprotAccession());
-            });
-        }
-
-        return accessions.stream().distinct().collect(Collectors.toList());
+//        List<List<Entry>> result
+//                = lazyReact.fromStream(urls.stream().map(x -> toCompletableFuture(asyncRestTemplate.exchange(x, method, requestEntity, responseType))))
+//                .map(ResponseEntity<EbeyeSearchResult>::getBody)
+//                .map(EbeyeSearchResult::getEntries).distinct().collect(Collectors.toList());
+//
+//        Iterator<List<Entry>> it = result.iterator();
+//
+//        while (it.hasNext()) {
+//            List<Entry> entries = it.next().stream().distinct().collect(Collectors.toList());
+//            entries.stream().forEach((entry) -> {
+//                accessions.add(entry.getUniprotAccession());
+//            });
+//        }
+        return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
     }
 
 }

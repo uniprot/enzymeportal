@@ -5,13 +5,6 @@
  */
 package uk.ac.ebi.ep.ebeye.config;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager;
-import org.apache.http.impl.nio.reactor.DefaultConnectingIOReactor;
-import org.apache.http.impl.nio.reactor.IOReactorConfig;
-import org.apache.http.nio.reactor.IOReactorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +28,7 @@ public class EbeyeConfig {
 
     @Autowired
     private Environment env;
+     private final int requestTimeout = 0b111110100;
 
     @Bean
     public EbeyeRestService ebeyeRestService() {
@@ -45,28 +39,41 @@ public class EbeyeConfig {
 //    public AsyncRestTemplate asyncRestTemplate() {
 //        return new AsyncRestTemplate();
 //    }
-    @Bean
-    public AsyncRestTemplate asyncRestTemplate() throws IOReactorException {
+//    @Bean
+//    public AsyncRestTemplate asyncRestTemplate() throws IOReactorException {
+//
+//        // Configure Apache Http Client
+//        PoolingNHttpClientConnectionManager connectionManager = new PoolingNHttpClientConnectionManager( //
+//                new DefaultConnectingIOReactor(IOReactorConfig.DEFAULT));
+//        connectionManager.setMaxTotal(1000); //Total Connections
+//        connectionManager.setDefaultMaxPerRoute(900); //Max connections per host
+//
+//        RequestConfig config = RequestConfig.custom() //
+//                .setConnectTimeout(60 * 1000) // milliseconds
+//                .build();
+//
+//        CloseableHttpAsyncClient httpclient = HttpAsyncClientBuilder.create() //
+//                .setConnectionManager(connectionManager) //
+//                .setDefaultRequestConfig(config) //
+//                .build();
+//
+//        AsyncRestTemplate restTemplate = new AsyncRestTemplate( //
+//                new HttpComponentsAsyncClientHttpRequestFactory(httpclient), restTemplate());
+//
+//        return restTemplate;
+//    }
+    
+     @Bean
+    public AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate(asyncClientHttpRequestFactory());
+    }
+    
+     private AsyncClientHttpRequestFactory asyncClientHttpRequestFactory() {
+        HttpComponentsAsyncClientHttpRequestFactory factory = new HttpComponentsAsyncClientHttpRequestFactory();
+        factory.setReadTimeout(requestTimeout);
+        factory.setConnectTimeout(requestTimeout);
 
-        // Configure Apache Http Client
-        PoolingNHttpClientConnectionManager connectionManager = new PoolingNHttpClientConnectionManager( //
-                new DefaultConnectingIOReactor(IOReactorConfig.DEFAULT));
-        connectionManager.setMaxTotal(1000); //Total Connections
-        connectionManager.setDefaultMaxPerRoute(900); //Max connections per host
-
-        RequestConfig config = RequestConfig.custom() //
-                .setConnectTimeout(60 * 1000) // milliseconds
-                .build();
-
-        CloseableHttpAsyncClient httpclient = HttpAsyncClientBuilder.create() //
-                .setConnectionManager(connectionManager) //
-                .setDefaultRequestConfig(config) //
-                .build();
-
-        AsyncRestTemplate restTemplate = new AsyncRestTemplate( //
-                new HttpComponentsAsyncClientHttpRequestFactory(httpclient), restTemplate());
-
-        return restTemplate;
+        return factory;
     }
 
     @Bean
@@ -74,10 +81,10 @@ public class EbeyeConfig {
         return new RestTemplate(clientHttpRequestFactory());
     }
 
-    private AsyncClientHttpRequestFactory asyncClientHttpRequestFactory() {
-        return new HttpComponentsAsyncClientHttpRequestFactory();
-
-    }
+//    private AsyncClientHttpRequestFactory asyncClientHttpRequestFactory() {
+//        return new HttpComponentsAsyncClientHttpRequestFactory();
+//
+//    }
 
     private ClientHttpRequestFactory clientHttpRequestFactory() {
         return new HttpComponentsClientHttpRequestFactory();
