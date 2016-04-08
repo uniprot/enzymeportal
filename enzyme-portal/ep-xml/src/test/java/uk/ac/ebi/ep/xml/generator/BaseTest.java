@@ -1,23 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.xml.generator;
 
 import javax.sql.DataSource;
 import junit.framework.TestCase;
-import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
-import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfig;
-import uk.ac.ebi.ep.xml.service.XmlService;
+import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 
 /**
  *
@@ -27,23 +24,28 @@ import uk.ac.ebi.ep.xml.service.XmlService;
 @ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, XmlConfig.class})
 public abstract class BaseTest extends TestCase {
 
+    protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(BaseTest.class);
+
     @Autowired
-    protected EnzymePortalService enzymePortalService;
-    @Autowired
-    private EnzymePortalXmlService xmlService;
+    protected EnzymePortalXmlService xmlService;
 
     @Autowired
     protected DataSource dataSource;
 
-    protected XmlService enzymeCentricInstance;
-    protected XmlService proteinCentricInstance;
+    @Autowired
+    protected XmlConfigParams xmlConfigParams;
 
-    @Before
-    @Override
-    public void setUp() {
-        enzymeCentricInstance = new EnzymeCentric(enzymePortalService, xmlService);
-        proteinCentricInstance = new ProteinCentric(enzymePortalService, xmlService);
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    protected String resolvePath(String folder) {
+        return temporaryFolder
+                .getRoot().toPath()
+                .resolve(folder)
+                .toString();
     }
-    
 
 }

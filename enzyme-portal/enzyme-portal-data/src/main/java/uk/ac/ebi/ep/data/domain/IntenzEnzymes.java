@@ -107,11 +107,9 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
         return Objects.equals(this.ecNumber, other.ecNumber);
     }
 
-
-
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.IntenzEnzymes[ internalId=" + internalId + " ]";
+        return "IntenzEnzymes{" + "ecNumber=" + ecNumber + ", enzymeName=" + enzymeName + '}';
     }
 
     @Override

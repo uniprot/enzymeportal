@@ -1,24 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.xml.model;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author joseph
  */
+@XmlRootElement
 @XmlType(propOrder = {"id", "acc", "name", "description", "additionalFields", "crossReferences"})
 public class Entry {
 
     private String id;
     private String acc;
-    //private String entryDbName;
     private String name;
     private String description;
 
@@ -43,14 +40,6 @@ public class Entry {
         this.id = id;
     }
 
-//    public String getEntryDbName() {
-//        return entryDbName;
-//    }
-//
-//    @XmlAttribute(name = "dbname")
-//    public void setEntryDbName(String entryDbName) {
-//        this.entryDbName = entryDbName;
-//    }
 
     public String getName() {
         return name;
@@ -86,6 +75,11 @@ public class Entry {
     @XmlElement(name = "cross_references")
     public void setCrossReferences(CrossReferences crossReferences) {
         this.crossReferences = crossReferences;
+    }
+
+    @Override
+    public String toString() {
+        return "Entry{" + "id=" + id + ", acc=" + acc + ", name=" + name + ", description=" + description + ", additionalFields=" + additionalFields + ", crossReferences=" + crossReferences + '}';
     }
 
 }

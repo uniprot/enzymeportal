@@ -288,6 +288,6 @@ public class EbeyeRestService {
 //            });
 //        }
         return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
-    }
+        }
 
 }
