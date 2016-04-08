@@ -11,6 +11,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import javax.xml.bind.JAXBException;
 import org.springframework.util.StringUtils;
+
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
@@ -33,54 +34,46 @@ import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 public class EnzymeCentric extends XmlGenerator {
 
     private final XmlConfigParams xmlConfigParams;
-    private  ForkJoinPool forkJoinPool;
+    private ForkJoinPool forkJoinPool;
 
     public EnzymeCentric(EnzymePortalXmlService enzymePortalXmlService, XmlConfigParams xmlConfigParams) {
         super(enzymePortalXmlService, xmlConfigParams);
         this.xmlConfigParams = xmlConfigParams;
-
     }
 
     @Override
     public void validateXML() {
         String ebeyeXSDs = xmlConfigParams.getEbeyeXSDs();
         String enzymeCentricXmlDir = xmlConfigParams.getEnzymeCentricXmlDir();
+
         if (ebeyeXSDs == null || enzymeCentricXmlDir == null) {
             try {
-                String msg = "Xsd files or XML directory cannot be Null. Please ensure that ep-xml-config.properties is in the classpath.";
+                String msg =
+                        "Xsd files or XML directory cannot be Null. Please ensure that ep-xml-config.properties is in" +
+                                " the classpath.";
                 throw new FileNotFoundException(msg);
             } catch (FileNotFoundException ex) {
                 logger.error(ex.getMessage(), ex);
             }
         } else {
             String[] xsdFiles = ebeyeXSDs.split(",");
+
             EnzymePortalXmlValidator.validateXml(enzymeCentricXmlDir, xsdFiles);
         }
     }
 
     @Override
     public void generateXmL() throws JAXBException {
-
         generateXmL(xmlConfigParams.getEnzymeCentricXmlDir());
     }
-
-    public ForkJoinPool getForkJoinPool() {
-        if(forkJoinPool == null){
-         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        logger.warn("Number of availableProcessors : " + availableProcessors);
-            forkJoinPool = new ForkJoinPool(availableProcessors); 
-           logger.warn("created FJPool info :  "+ forkJoinPool);
-
-        }
-        return forkJoinPool;
-    }
-    
 
     @Override
     public void generateXmL(String xmlFileLocation) throws JAXBException {
         List<Entry> entryList = new LinkedList<>();
-        Entries entries = new Entries();
-        List<IntenzEnzymes> enzymes = enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
+
+        List<IntenzEnzymes> enzymes =
+                enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
+
         int entryCount = enzymes.size();
 
         logger.warn("Number of Intenz enzymes ready to be processed : " + entryCount);
@@ -88,38 +81,40 @@ public class EnzymeCentric extends XmlGenerator {
         Database database = buildDatabaseInfo(entryCount);
 
         enzymes.forEach((enzyme) -> {
-            AdditionalFields additionalFields = new AdditionalFields();
-
-            Set<Field> fields = new LinkedHashSet<>();
-            Set<Ref> refs = new HashSet<>();
             Entry entry = new Entry();
 
             entry.setId(enzyme.getEcNumber());
             entry.setName(enzyme.getEnzymeName());
             entry.setDescription(enzyme.getCatalyticActivity());
-           
-            List<UniprotEntry> iterableEntry = enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
-            Entry processedEntry = null;
+
+            List<UniprotEntry> iterableEntry =
+                    enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
+
             try {
-                processedEntry = getForkJoinPool().submit(() -> processEntries(iterableEntry, enzyme, entry, fields, refs, additionalFields)).get();
+                Entry processedEntry = getForkJoinPool()
+                        .submit(() -> processEntries(iterableEntry, enzyme, entry, new LinkedHashSet<>(),
+                                new HashSet<>(), new AdditionalFields()))
+                        .get();
+
+                entryList.add(processedEntry);
             } catch (InterruptedException | ExecutionException ex) {
                 logger.error(ex.getMessage(), ex);
             }
- 
-            entryList.add(processedEntry);
-
         });
 
+        Entries entries = new Entries();
         entries.setEntry(entryList);
         database.setEntries(entries);
+
         //write xml
         writeXml(database, xmlFileLocation);
-         logger.warn(" FJPool activity info before shutdown :  "+ forkJoinPool);
-         forkJoinPool.shutdown();
 
+        logger.warn(" FJPool activity info before shutdown :  " + forkJoinPool);
+        forkJoinPool.shutdown();
     }
 
-    private synchronized Entry processEntries(Iterable<UniprotEntry> iterableEntry, IntenzEnzymes enzyme, Entry entry, Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields) {
+    private synchronized Entry processEntries(Iterable<UniprotEntry> iterableEntry, IntenzEnzymes enzyme, Entry entry,
+            Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields) {
 
         StreamUtils.stream(iterableEntry.iterator()).forEach((uniprotEntry) -> {
             addUniprotIdFields(uniprotEntry, fields);
@@ -142,8 +137,8 @@ public class EnzymeCentric extends XmlGenerator {
 
             entry.setAdditionalFields(additionalFields);
             entry.setCrossReferences(cr);
-
         });
+
         return entry;
     }
 
@@ -151,8 +146,14 @@ public class EnzymeCentric extends XmlGenerator {
         if (!StringUtils.isEmpty(enzyme.getEcNumber())) {
             Ref xref = new Ref(enzyme.getEcNumber(), DatabaseName.INTENZ.getDbName());
             refs.add(xref);
-
         }
     }
 
+    private ForkJoinPool getForkJoinPool() {
+        if(forkJoinPool == null) {
+            forkJoinPool = new ForkJoinPool();
+        }
+
+        return forkJoinPool;
+    }
 }
