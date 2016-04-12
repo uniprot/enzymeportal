@@ -74,7 +74,7 @@ public class EnzymeCentric extends XmlGenerator {
 
         int entryCount = enzymes.size();
 
-        logger.warn("Number of Intenz enzymes ready to be processed : " + entryCount);
+        logger.info("Number of Intenz enzymes ready to be processed : " + entryCount);
 
         Database database = buildDatabaseInfo(entryCount);
 
