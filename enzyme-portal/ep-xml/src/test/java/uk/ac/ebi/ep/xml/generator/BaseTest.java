@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
-import uk.ac.ebi.ep.xml.config.XmlConfig;
+import uk.ac.ebi.ep.xml.config.MockXmlConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 
 /**
@@ -21,7 +21,7 @@ import uk.ac.ebi.ep.xml.config.XmlConfigParams;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, XmlConfig.class})
+@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, MockXmlConfig.class})
 public abstract class BaseTest extends TestCase {
 
     protected static final org.slf4j.Logger logger = LoggerFactory.getLogger(BaseTest.class);
