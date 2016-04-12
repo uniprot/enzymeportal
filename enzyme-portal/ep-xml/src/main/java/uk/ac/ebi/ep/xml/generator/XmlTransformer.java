@@ -45,24 +45,22 @@ public class XmlTransformer {
 
     protected void addUniprotIdFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getUniprotid())) {
-            Field field = new Field();
-            field.setField(FieldName.UNIPROT_NAME.getName());
-            field.setValue(uniprotEntry.getUniprotid());
+            Field field = new Field(FieldName.UNIPROT_NAME.getName(), uniprotEntry.getUniprotid());
             fields.add(field);
+            
         }
     }
 
     protected void addStatus(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (uniprotEntry.getEntryType() != null) {
             int entryType = uniprotEntry.getEntryType().intValue();
-            Field field = new Field();
-            field.setField(FieldName.STATUS.getName());
+
             if (entryType == 0) {
-                field.setValue(REVIEWED);
+                Field field = new Field(FieldName.STATUS.getName(), REVIEWED);
                 fields.add(field);
             }
             if (entryType == 1) {
-                field.setValue(UNREVIEWED);
+                Field field = new Field(FieldName.STATUS.getName(), UNREVIEWED);
                 fields.add(field);
             }
 
@@ -71,9 +69,7 @@ public class XmlTransformer {
 
     protected void addProteinNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
-            Field field = new Field();
-            field.setField(FieldName.PROTEIN_NAME.getName());
-            field.setValue(uniprotEntry.getProteinName());
+            Field field = new Field(FieldName.PROTEIN_NAME.getName(), uniprotEntry.getProteinName());
             fields.add(field);
 
         }
@@ -81,9 +77,7 @@ public class XmlTransformer {
 
     protected void addScientificNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getScientificName())) {
-            Field field = new Field();
-            field.setField(FieldName.SCIENTIFIC_NAME.getName());
-            field.setValue(uniprotEntry.getScientificName());
+            Field field = new Field(FieldName.SCIENTIFIC_NAME.getName(), uniprotEntry.getScientificName());
             fields.add(field);
 
         }
@@ -94,9 +88,7 @@ public class XmlTransformer {
             Stream.of(synonymName.get().split(";")).distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
                     .map((syn) -> {
-                        Field field = new Field();
-                        field.setField(FieldName.SYNONYM.getName());
-                        field.setValue(syn);
+                        Field field = new Field(FieldName.SYNONYM.getName(), syn);
                         return field;
                     }).forEach((field) -> {
                         fields.add(field);
@@ -137,9 +129,7 @@ public class XmlTransformer {
         if (!uniprotEntry.getEnzymePortalCompoundSet().isEmpty()) {
 
             uniprotEntry.getEnzymePortalCompoundSet().stream().map(compound -> {
-                Field field = new Field();
-                field.setField(FieldName.COMPOUND_NAME.getName());
-                field.setValue(compound.getCompoundName());
+                Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
                 fields.add(field);
                 Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource());
                 return xref;
@@ -152,9 +142,7 @@ public class XmlTransformer {
     protected void addDiseaseFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!uniprotEntry.getEnzymePortalDiseaseSet().isEmpty()) {
             uniprotEntry.getEnzymePortalDiseaseSet().stream().map(disease -> {
-                Field field = new Field();
-                field.setField(FieldName.DISEASE_NAME.getName());
-                field.setValue(disease.getDiseaseName());
+                Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
                 return field;
             }).forEach(field -> {
                 fields.add(field);

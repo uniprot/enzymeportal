@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.xml.model;
 
 import java.util.Objects;
@@ -15,6 +14,11 @@ public class Field {
 
     private String field;
     private String value;
+
+    public Field(String field, String value) {
+        this.field = field;
+        this.value = value;
+    }
 
     public String getField() {
         return field;
@@ -52,7 +56,5 @@ public class Field {
         final Field other = (Field) obj;
         return Objects.equals(this.value, other.value);
     }
-    
-    
 
 }

@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.xml.model;
 
 import java.util.Set;

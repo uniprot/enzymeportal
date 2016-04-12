@@ -75,7 +75,7 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
         Path path = Paths.get(xmlFileLocation);
         try {
             Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-            m.marshal(database, System.out);
+            //m.marshal(database, System.out);
             // Write to File
             m.marshal(database, writer);
             //m.marshal(database, new File(enzymeCentricXmlDir));
