@@ -39,7 +39,7 @@ public abstract class BaseTest extends TestCase {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-
+    
     protected String resolvePath(String folder) {
         return temporaryFolder
                 .getRoot().toPath()

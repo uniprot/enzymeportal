@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.xml.generator.protein;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import org.springframework.batch.item.ItemProcessor;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
@@ -27,8 +27,8 @@ public class UniProtEntryToEntryConverter extends XmlTransformer implements Item
     @Override
     public Entry process(UniprotEntry uniprotEntry) throws Exception {
         AdditionalFields additionalFields = new AdditionalFields();
-        Set<Field> fields = new CopyOnWriteArraySet<>();
-        Set<Ref> refs = new CopyOnWriteArraySet<>();
+        Set<Field> fields = new HashSet<>();
+        Set<Ref> refs = new HashSet<>();
 
         Entry entry = new Entry();
         entry.setAcc(uniprotEntry.getAccession());

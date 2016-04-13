@@ -29,7 +29,6 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 @Configuration
 public class MockXmlConfig {
 
-
     @Bean(name = "enzymeCentric")
     public XmlGenerator enzymeCentric() {
         return new EnzymeCentric(enzymePortalXmlService(), xmlConfigParams());
@@ -50,7 +49,7 @@ public class MockXmlConfig {
 
         return params;
     }
-
+    
     public String releaseNumber() {
         return "2016_04";
     }
@@ -60,7 +59,7 @@ public class MockXmlConfig {
         return userHome + File.separator + "ebeye.xml";
     }
 
-    public String proteinCentricXmlDir() {
+    public String proteinCentricXmlDir() {       
         String userHome = System.getProperty("user.home");
         return userHome + File.separator + "4ebeies.xml";
     }

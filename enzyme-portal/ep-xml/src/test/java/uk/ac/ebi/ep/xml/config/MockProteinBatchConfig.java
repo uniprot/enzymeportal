@@ -1,3 +1,18 @@
+/*
+ * Copyright 2016 EMBL-EBI.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.ac.ebi.ep.xml.config;
 
 import java.util.HashMap;
@@ -24,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
@@ -40,14 +54,14 @@ import uk.ac.ebi.ep.xml.util.LogJobListener;
 import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 
 /**
- * Configures the protein centric XML generator to use Spring batch.
+ *
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 @Configuration
 @EnableBatchProcessing
-@Import({EnzymePortalXmlService.class, XmlConfig.class})
-@PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
-public class ProteinBatchConfig extends DefaultBatchConfigurer {
-
+@Import({EnzymePortalXmlService.class, MockXmlConfig.class})
+public class MockProteinBatchConfig extends DefaultBatchConfigurer {
+    
     public static final String PROTEIN_CENTRIC_JOB = "PROTEIN_CENTRIC_JOB";
     public static final String PROTEIN_CENTRIC_DB_TO_XML_STEP = "readFromDbWriteToXMLStep";
 
