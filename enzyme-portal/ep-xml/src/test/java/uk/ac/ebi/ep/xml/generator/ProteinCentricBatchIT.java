@@ -21,12 +21,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
+import uk.ac.ebi.ep.xml.config.MockXmlConfig;
 import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
-import uk.ac.ebi.ep.xml.config.XmlConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-        classes = {ProteinBatchConfig.class, XmlConfig.class, JobTestRunnerConfig.class, SpringDataMockConfig.class})
+        classes = {ProteinBatchConfig.class, MockXmlConfig.class, JobTestRunnerConfig.class, SpringDataMockConfig.class})
 public class ProteinCentricBatchIT {
 
     @ClassRule
@@ -39,10 +39,12 @@ public class ProteinCentricBatchIT {
     private EntityManagerFactory entityManagerFactory;
 
     private EntityManager entityManager;
+    
+    static File xmlFile;
 
     @BeforeClass
     public static void setupXmlFileLocation() throws IOException {
-        File xmlFile = temporaryFolder.newFile();
+        xmlFile = temporaryFolder.newFile();
         System.setProperty("ep.protein.centric.xml.dir", xmlFile.getAbsolutePath());
     }
 

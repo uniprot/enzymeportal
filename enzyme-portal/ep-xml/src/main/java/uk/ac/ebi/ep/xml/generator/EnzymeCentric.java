@@ -92,7 +92,7 @@ public class EnzymeCentric extends XmlGenerator {
                 entryList.add(processedEntry);
             } else {
                 Entry processedEntry = getForkJoinPool()
-                        .submit(() -> processEntriesInParallel(entries, enzyme, entry))//195,158
+                        .submit(() -> processEntriesInParallel(entries, enzyme, entry))
                         .join();
                 entryList.add(processedEntry);
             }

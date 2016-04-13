@@ -16,7 +16,6 @@
 package uk.ac.ebi.ep.xml.config;
 
 import java.io.File;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
@@ -30,12 +29,14 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 @Configuration
 public class MockXmlConfig {
 
-    @Autowired
-    private EnzymePortalXmlService enzymePortalXmlService;
 
     @Bean(name = "enzymeCentric")
     public XmlGenerator enzymeCentric() {
-        return new EnzymeCentric(enzymePortalXmlService, xmlConfigParams());
+        return new EnzymeCentric(enzymePortalXmlService(), xmlConfigParams());
+    }
+    @Bean
+    public EnzymePortalXmlService enzymePortalXmlService(){
+        return new EnzymePortalXmlService();
     }
 
     @Bean
