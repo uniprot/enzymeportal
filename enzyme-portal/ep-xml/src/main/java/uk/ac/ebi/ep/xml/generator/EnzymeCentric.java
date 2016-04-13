@@ -78,7 +78,7 @@ public class EnzymeCentric extends XmlGenerator {
 
         Database database = buildDatabaseInfo(entryCount);
 
-        enzymes.forEach((enzyme) -> {
+        enzymes.forEach(enzyme -> {
             Entry entry = new Entry();
 
             entry.setId(enzyme.getEcNumber());
@@ -114,7 +114,7 @@ public class EnzymeCentric extends XmlGenerator {
         Set<Ref> refs = Collections.synchronizedSet(new HashSet<>());
         CrossReferences cr = new CrossReferences();
 
-        entries.stream().parallel().forEach((uniprotEntry) -> {
+        entries.stream().parallel().forEach(uniprotEntry -> {
             addUniprotIdFields(uniprotEntry, fields);
             addProteinNameFields(uniprotEntry, fields);
 
@@ -142,7 +142,7 @@ public class EnzymeCentric extends XmlGenerator {
         AdditionalFields additionalFields = new AdditionalFields();
         CrossReferences cr = new CrossReferences();
 
-        entries.stream().forEach((uniprotEntry) -> {
+        entries.stream().forEach(uniprotEntry -> {
             addUniprotIdFields(uniprotEntry, fields);
             addProteinNameFields(uniprotEntry, fields);
             addScientificNameFields(uniprotEntry, fields);
