@@ -6,13 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.model.Database;
@@ -86,31 +82,5 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
         }
     }
 
-    //use stream once proven working with latest spring data release
-    // see issues https://jira.spring.io/browse/DATAJPA-742
-    private void usingSpringDataStream(String ec) {
-        try (Stream<List<UniprotEntry>> streamEntries = enzymePortalXmlService.findStreamedSwissprotEnzymesByEc(ec)) {
-            //collect stream
-            List<UniprotEntry> flatEntries
-                    = streamEntries.flatMap(List::stream)
-                    .collect(Collectors.toList());
 
-            // System.out.println("num items  found " + flatEntries.size());
-            //save instead of printing
-            try (Stream<List<UniprotEntry>> streamEntries1 = enzymePortalXmlService.findStreamedSwissprotEnzymesByEc(ec)) {
-                streamEntries1
-                        .flatMap(l -> l.stream())
-                        .forEach(x -> System.out.println("entry " + x));
-
-            }
-
-            try (Stream<UniprotEntry> streamEntries2 = enzymePortalXmlService.streamEnzymes()) {
-                streamEntries2
-                        //.flatMap(l -> l.stream())
-                        .forEach(x -> System.out.println("entry " + x));
-
-            }
-
-        }
-    }
 }
