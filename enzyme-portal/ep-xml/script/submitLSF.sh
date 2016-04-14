@@ -1,5 +1,6 @@
 #!/bin/bash
 # Submits job to LSF
+#usage : ./submitLSF.sh <the script>  DB_CONFIG example : ./submitLSF.sh protein-xml-generator.sh uzprel
 # Param:
 # $1: database environment (uzpdev|uzprel)
 # $2 : the script to be submitted to the farm with extension e.g protein-xml-generator.sh
