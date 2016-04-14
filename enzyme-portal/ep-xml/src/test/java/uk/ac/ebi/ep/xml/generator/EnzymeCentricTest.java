@@ -30,7 +30,7 @@ public class EnzymeCentricTest extends BaseTest {
     @Before
     @Override
     public void setUp() {
-        enzymeCentricInstance = new EnzymeCentric(xmlService, xmlConfigParams);
+        enzymeCentricInstance = new EnzymeCentric(xmlService, mockXmlConfigParams);
         enzymes = new ArrayList<>();
         IntenzEnzymes enzyme_1 = new IntenzEnzymes();
         enzyme_1.setInternalId(BigDecimal.ONE);
@@ -133,8 +133,7 @@ public class EnzymeCentricTest extends BaseTest {
 
         LocalDate date = LocalDate.now();
         String releaseDate = date.format(DateTimeFormatter.ofPattern("d-MMM-uuuu"));
-        String release = xmlConfigParams.getReleaseNumber();
-
+        String release = mockXmlConfigParams.getReleaseNumber();
 
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<database>\n"

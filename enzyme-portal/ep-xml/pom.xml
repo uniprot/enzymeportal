@@ -36,14 +36,14 @@
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
+<!--        <resources>
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
                     <include>ep-xml-config.properties</include>
                 </includes>
             </resource>
-        </resources>
+        </resources>-->
     </build>
 
     <dependencyManagement>

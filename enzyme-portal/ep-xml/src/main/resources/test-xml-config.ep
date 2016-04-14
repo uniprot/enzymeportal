@@ -1,0 +1,4 @@
+release.number=2016_04
+ep.enzyme.centric.xml.dir=/Users/joseph/ep-xml/ebeye.xml
+ep.protein.centric.xml.dir=/Users/joseph/ep-xml/4ebeies.xml
+ep.ebeye.xsd=http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd

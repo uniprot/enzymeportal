@@ -24,6 +24,7 @@ import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.xml.config.MockProteinBatchConfig;
 import uk.ac.ebi.ep.xml.config.MockXmlConfig;
 import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
+import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
@@ -40,9 +41,11 @@ public class ProteinCentricBatchIT {
     private EntityManagerFactory entityManagerFactory;
 
     private EntityManager entityManager;
-    
+
     static File xmlFile;
-    
+    @Autowired
+    protected XmlConfigParams mockXmlConfigParams;
+
     @BeforeClass
     public static void setupXmlFileLocation() throws IOException {
         xmlFile = temporaryFolder.newFile();
@@ -52,6 +55,7 @@ public class ProteinCentricBatchIT {
     @Before
     public void setUp() throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
+        mockXmlConfigParams.setProteinCentricXmlDir(xmlFile.getAbsolutePath());
     }
 
     @Test

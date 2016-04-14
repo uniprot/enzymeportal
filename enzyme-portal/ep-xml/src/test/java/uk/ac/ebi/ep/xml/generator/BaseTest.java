@@ -32,14 +32,14 @@ public abstract class BaseTest extends TestCase {
     protected DataSource dataSource;
 
     @Autowired
-    protected XmlConfigParams xmlConfigParams;
+    protected XmlConfigParams mockXmlConfigParams;
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-    
+
     protected String resolvePath(String folder) {
         return temporaryFolder
                 .getRoot().toPath()

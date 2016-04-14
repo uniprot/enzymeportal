@@ -59,12 +59,11 @@ import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
  */
 @Configuration
 @EnableBatchProcessing
-@Import({EnzymePortalXmlService.class, MockXmlConfig.class})
+@Import({MockXmlConfig.class})
 public class MockProteinBatchConfig extends DefaultBatchConfigurer {
-    
+
     public static final String PROTEIN_CENTRIC_JOB = "PROTEIN_CENTRIC_JOB";
     public static final String PROTEIN_CENTRIC_DB_TO_XML_STEP = "readFromDbWriteToXMLStep";
-
 
     @Autowired
     private JobBuilderFactory jobBuilders;
@@ -76,13 +75,13 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
     private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    private EnzymePortalXmlService enzymePortalXmlService;
+    private EnzymePortalXmlService xmlService;
     @Autowired
-    private XmlConfigParams xmlConfigParams;
+    private XmlConfigParams mockXmlConfigParams;
 
     @Bean
     public Resource proteinCentricXmlDir() {
-        return new FileSystemResource(xmlConfigParams.getProteinCentricXmlDir());
+        return new FileSystemResource(mockXmlConfigParams.getProteinCentricXmlDir());
     }
 
     @Bean
@@ -104,7 +103,7 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
     @Bean
     public Step readFromDbWriteToXMLStep() {
         return stepBuilders.get(PROTEIN_CENTRIC_DB_TO_XML_STEP)
-                .<UniprotEntry, Entry>chunk(xmlConfigParams.getChunkSize())
+                .<UniprotEntry, Entry>chunk(mockXmlConfigParams.getChunkSize())
                 .<UniprotEntry>reader(uniProtEntryReader())
                 .processor(uniProtEntryToEntryConverter())
                 .writer(entryToXmlWriter())
@@ -117,13 +116,13 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
         JpaPagingItemReader<UniprotEntry> databaseReader = new JpaPagingItemReader<>();
         databaseReader.setEntityManagerFactory(entityManagerFactory);
         databaseReader.setQueryString("select u from UniprotEntry u");
-        databaseReader.setPageSize(xmlConfigParams.getChunkSize());
+        databaseReader.setPageSize(mockXmlConfigParams.getChunkSize());
         return databaseReader;
     }
 
     @Bean
     public ItemProcessor<UniprotEntry, Entry> uniProtEntryToEntryConverter() {
-        return new UniProtEntryToEntryConverter(xmlConfigParams);
+        return new UniProtEntryToEntryConverter(mockXmlConfigParams);
     }
 
     @Bean
@@ -138,7 +137,7 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
     }
 
     private StaxWriterCallback xmlHeaderCallback() {
-        return new ProteinXmlHeaderCallback(xmlConfigParams.getReleaseNumber(), enzymePortalXmlService);
+        return new ProteinXmlHeaderCallback(mockXmlConfigParams.getReleaseNumber(), xmlService);
     }
 
     private JobExecutionListener logJobListener(String jobName) {
@@ -146,7 +145,7 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
     }
 
     private ChunkListener logChunkListener() {
-        return new LogChunkListener(xmlConfigParams.getChunkSize());
+        return new LogChunkListener(mockXmlConfigParams.getChunkSize());
     }
 
     /**

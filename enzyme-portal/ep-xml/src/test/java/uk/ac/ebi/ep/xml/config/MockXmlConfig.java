@@ -15,31 +15,30 @@
  */
 package uk.ac.ebi.ep.xml.config;
 
-import java.io.File;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
-import uk.ac.ebi.ep.xml.generator.EnzymeCentric;
-import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @Configuration
+@PropertySource(value = "classpath:test-xml-config.ep", ignoreResourceNotFound = true)
 public class MockXmlConfig {
+    @Autowired
+    private Environment env;
 
-    @Bean(name = "enzymeCentric")
-    public XmlGenerator enzymeCentric() {
-        return new EnzymeCentric(enzymePortalXmlService(), xmlConfigParams());
-    }
     @Bean
-    public EnzymePortalXmlService enzymePortalXmlService(){
+    public EnzymePortalXmlService xmlService(){
         return new EnzymePortalXmlService();
     }
 
-    @Bean
-    public XmlConfigParams xmlConfigParams() {
+    @Bean(name = "mockXmlConfigParams")
+    public XmlConfigParams mockXmlConfigParams() {
         XmlConfigParams params = new XmlConfigParams();
         params.setChunkSize(chunkSize());
         params.setEbeyeXSDs(ebeyeXSDs());
@@ -49,19 +48,17 @@ public class MockXmlConfig {
 
         return params;
     }
-    
-    public String releaseNumber() {
-        return "2016_04";
+       
+        public String releaseNumber() {
+        return env.getProperty("release.number");
     }
 
     public String enzymeCentricXmlDir() {
-        String userHome = System.getProperty("user.home");
-        return userHome + File.separator + "ebeye.xml";
+        return env.getProperty("ep.enzyme.centric.xml.dir");
     }
 
-    public String proteinCentricXmlDir() {       
-        String userHome = System.getProperty("user.home");
-        return userHome + File.separator + "4ebeies.xml";
+    public String proteinCentricXmlDir() {
+        return env.getProperty("ep.protein.centric.xml.dir");
     }
 
     public String ebeyeXSDs() {
