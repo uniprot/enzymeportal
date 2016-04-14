@@ -126,6 +126,7 @@ public class EbeyeRestService {
                 if (hitcount > HITCOUNT) {
                     hitcount = HITCOUNT;
                 }
+
                 int resultLimit = 0;
 
                 if (limit < 0) {
@@ -301,28 +302,28 @@ public class EbeyeRestService {
 
 
         LazyReact lazyReact = new LazyReact().autoOptimizeOn().async();
-  
-        ForkJoinPool commonPool = ForkJoinPool.commonPool();
-        ///System.out.println("POOL "+commonPool.getParallelism()); 
 
- 
+        ForkJoinPool commonPool = ForkJoinPool.commonPool();
+        ///System.out.println("POOL "+commonPool.getParallelism());
+
+
         List<Entry> result
-         = 
+         =
         lazyReact.fromStream(urls.stream().map(x -> toCompletableFuture(asyncRestTemplate.exchange(x, method, requestEntity, responseType))))
                 .map(ResponseEntity<EbeyeSearchResult>::getBody)
                 .flatMap(x -> x.getEntries().stream().distinct()).limit(800).block();
                 //.batchBySize(800)
                  // .onePer(1, TimeUnit.MICROSECONDS)
-                //.peek(batch -> System.out.println("batched : " + 
+                //.peek(batch -> System.out.println("batched : " +
                                // batch))
                 //.forEach(this::save);
 
 
-        
+
          accessions =result.stream().map(x->x.getUniprotAccession())
                 .collect(Collectors.toList());
-        
-     
+
+
 
         return accessions.stream().distinct().collect(Collectors.toList());
     }

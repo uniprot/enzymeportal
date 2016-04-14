@@ -53,8 +53,8 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY", nativeQuery = true)
     List<UniprotEntry> findUniprotEntries();
-
-    @Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER", nativeQuery = true)
+    //@Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER", nativeQuery = true)
+     @Query(value = "SELECT * FROM UNIPROT_ENTRY u, ENZYME_PORTAL_EC_NUMBERS ec WHERE u.ACCESSION = ec.UNIPROT_ACCESSION AND ec.EC_NUMBER = :EC_NUMBER", nativeQuery = true)
     List<UniprotEntry> findEnzymesByEc(@Param("EC_NUMBER") String ecNumber);
 
     @Transactional(readOnly = true)
@@ -115,7 +115,7 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Query(value = "UPDATE UNIPROT_ENTRY SET EXP_EVIDENCE_FLAG = 1 WHERE ACCESSION IN (SELECT distinct accession from SP_ENZYME_EVIDENCE)", nativeQuery = true)
     void updateExpEvidenceFlag();
 
-    @Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER AND ROWNUM <100 AND u.ENTRY_TYPE=0", nativeQuery = true)
+    @Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER AND u.ENTRY_TYPE=0", nativeQuery = true)
     List<UniprotEntry> findSwissprotEnzymesByEc(@Param("EC_NUMBER") String ecNumber);
 
     @Transactional(readOnly = true)
@@ -142,5 +142,5 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ COUNT(*) FROM UNIPROT_ENTRY", nativeQuery = true)
     Long countUniprotEntries();
-
+    
 }

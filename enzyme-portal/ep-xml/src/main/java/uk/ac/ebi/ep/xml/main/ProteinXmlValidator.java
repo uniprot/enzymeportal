@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2016 EMBL-EBI.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package uk.ac.ebi.ep.xml.main;
 
@@ -10,8 +20,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import uk.ac.ebi.ep.data.dataconfig.DataConfig;
 import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfig;
-import uk.ac.ebi.ep.xml.generator.ProteinCentric;
-import uk.ac.ebi.ep.xml.generator.XmlGenerator;
+import uk.ac.ebi.ep.xml.config.XmlConfigParams;
+import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 /**
  *
@@ -20,34 +30,27 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 public class ProteinXmlValidator {
     
     private static final Logger logger = Logger.getLogger(ProteinXmlValidator.class);
-
+    
     private ProteinXmlValidator() {
-
+        
     }
-
+    
     public static void main(String[] args) throws Exception {
-
-        String profile;
-        //profile = "";
-
-        if (args == null || args.length == 0) {
-            logger.error("Please provide required parameters");
-            System.exit(0);
-        }
-
-        if (args.length == 1) {
-
-            profile = args[0];
-
-            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-            context.getEnvironment().setActiveProfiles(profile);
-            context.register(DataConfig.class, XmlConfig.class, GlobalConfig.class);
-            context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.xml.config");
-            context.refresh();
-
-            XmlGenerator xmlGenerator = context.getBean(ProteinCentric.class);
-            xmlGenerator.validateXML();
-        }
-
+        
+        String profile = "uzpdev";//validation is meant to be done in development areas hence the default database param.
+        
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.getEnvironment().setActiveProfiles(profile);
+        context.register(DataConfig.class, XmlConfig.class, GlobalConfig.class);
+        context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.xml.config");
+        context.refresh();
+        
+        XmlConfigParams xmlConfigParams = context.getBean(XmlConfigParams.class);
+        String xmlFile = xmlConfigParams.getProteinCentricXmlDir();
+        String[] xsdFiles = xmlConfigParams.getEbeyeXSDs().split(",");
+        
+        EnzymePortalXmlValidator.validateXml(xmlFile, xsdFiles);
+        logger.info("Protein-centric XML Validation is complete. Please check the logs.");
+        
     }
 }

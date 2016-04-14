@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import static uk.ac.ebi.ep.xml.generator.XmlTransformer.ENZYME_PORTAL;
 import uk.ac.ebi.ep.xml.model.Database;
 import uk.ac.ebi.ep.xml.model.Field;
@@ -23,17 +23,20 @@ public class XmlTransformer {
     protected static final String REVIEWED = "reviewed";
     protected static final String UNREVIEWED = "unreviewed";
 
-    protected static final String ENZYME_PORTAL = "Enzyme Portal";
-    protected static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
+    public static final String ENZYME_PORTAL = "Enzyme Portal";
+    public static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
 
-    @Autowired
-    protected static String RELEASE_NUMBER;
+    private final XmlConfigParams xmlConfigParams;
+
+    public XmlTransformer(XmlConfigParams xmlConfigParams) {
+        this.xmlConfigParams = xmlConfigParams;
+    }
 
     protected Database buildDatabaseInfo(int entryCount) {
         Database database = new Database();
         database.setName(ENZYME_PORTAL);
         database.setDescription(ENZYME_PORTAL_DESCRIPTION);
-        database.setRelease(RELEASE_NUMBER);
+        database.setRelease(xmlConfigParams.getReleaseNumber());
         LocalDate date = LocalDate.now();
         database.setReleaseDate(date);
         database.setEntryCount(entryCount);
@@ -42,24 +45,22 @@ public class XmlTransformer {
 
     protected void addUniprotIdFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getUniprotid())) {
-            Field field = new Field();
-            field.setField(FieldName.UNIPROT_NAME.getName());
-            field.setValue(uniprotEntry.getUniprotid());
+            Field field = new Field(FieldName.UNIPROT_NAME.getName(), uniprotEntry.getUniprotid());
             fields.add(field);
+            
         }
     }
 
     protected void addStatus(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (uniprotEntry.getEntryType() != null) {
             int entryType = uniprotEntry.getEntryType().intValue();
-            Field field = new Field();
-            field.setField(FieldName.STATUS.getName());
+
             if (entryType == 0) {
-                field.setValue(REVIEWED);
+                Field field = new Field(FieldName.STATUS.getName(), REVIEWED);
                 fields.add(field);
             }
             if (entryType == 1) {
-                field.setValue(UNREVIEWED);
+                Field field = new Field(FieldName.STATUS.getName(), UNREVIEWED);
                 fields.add(field);
             }
 
@@ -68,9 +69,7 @@ public class XmlTransformer {
 
     protected void addProteinNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
-            Field field = new Field();
-            field.setField(FieldName.PROTEIN_NAME.getName());
-            field.setValue(uniprotEntry.getProteinName());
+            Field field = new Field(FieldName.PROTEIN_NAME.getName(), uniprotEntry.getProteinName());
             fields.add(field);
 
         }
@@ -78,9 +77,7 @@ public class XmlTransformer {
 
     protected void addScientificNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getScientificName())) {
-            Field field = new Field();
-            field.setField(FieldName.SCIENTIFIC_NAME.getName());
-            field.setValue(uniprotEntry.getScientificName());
+            Field field = new Field(FieldName.SCIENTIFIC_NAME.getName(), uniprotEntry.getScientificName());
             fields.add(field);
 
         }
@@ -91,9 +88,7 @@ public class XmlTransformer {
             Stream.of(synonymName.get().split(";")).distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
                     .map((syn) -> {
-                        Field field = new Field();
-                        field.setField(FieldName.SYNONYM.getName());
-                        field.setValue(syn);
+                        Field field = new Field(FieldName.SYNONYM.getName(), syn);
                         return field;
                     }).forEach((field) -> {
                         fields.add(field);
@@ -134,9 +129,7 @@ public class XmlTransformer {
         if (!uniprotEntry.getEnzymePortalCompoundSet().isEmpty()) {
 
             uniprotEntry.getEnzymePortalCompoundSet().stream().map(compound -> {
-                Field field = new Field();
-                field.setField(FieldName.COMPOUND_NAME.getName());
-                field.setValue(compound.getCompoundName());
+                Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
                 fields.add(field);
                 Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource());
                 return xref;
@@ -149,9 +142,7 @@ public class XmlTransformer {
     protected void addDiseaseFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!uniprotEntry.getEnzymePortalDiseaseSet().isEmpty()) {
             uniprotEntry.getEnzymePortalDiseaseSet().stream().map(disease -> {
-                Field field = new Field();
-                field.setField(FieldName.DISEASE_NAME.getName());
-                field.setValue(disease.getDiseaseName());
+                Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
                 return field;
             }).forEach(field -> {
                 fields.add(field);

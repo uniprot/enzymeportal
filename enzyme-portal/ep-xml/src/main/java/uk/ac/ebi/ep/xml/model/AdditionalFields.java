@@ -1,7 +1,5 @@
-
 package uk.ac.ebi.ep.xml.model;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -13,14 +11,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType
 public class AdditionalFields {
 
-    private Set<Field> field = new LinkedHashSet<>();
-    
+    private Set<Field> field;
 
     public void setField(Set<Field> field) {
         this.field = field;
     }
 
-     @XmlElement(name = "field")
+    @XmlElement(name = "field")
     public Set<Field> getField() {
         return field;
     }
