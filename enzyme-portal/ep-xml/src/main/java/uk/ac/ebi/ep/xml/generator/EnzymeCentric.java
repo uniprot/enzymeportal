@@ -1,14 +1,13 @@
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import org.springframework.util.StringUtils;
 
@@ -24,7 +23,6 @@ import uk.ac.ebi.ep.xml.model.Entry;
 import uk.ac.ebi.ep.xml.model.Field;
 import uk.ac.ebi.ep.xml.model.Ref;
 import uk.ac.ebi.ep.xml.util.DatabaseName;
-import uk.ac.ebi.ep.xml.util.StreamUtils;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 /**
@@ -35,6 +33,7 @@ public class EnzymeCentric extends XmlGenerator {
 
     private final XmlConfigParams xmlConfigParams;
     private ForkJoinPool forkJoinPool;
+    private static final int SEQUENCE_THRESHOLD = 10_000;
 
     public EnzymeCentric(EnzymePortalXmlService enzymePortalXmlService, XmlConfigParams xmlConfigParams) {
         super(enzymePortalXmlService, xmlConfigParams);
@@ -48,9 +47,9 @@ public class EnzymeCentric extends XmlGenerator {
 
         if (ebeyeXSDs == null || enzymeCentricXmlDir == null) {
             try {
-                String msg =
-                        "Xsd files or XML directory cannot be Null. Please ensure that ep-xml-config.properties is in" +
-                                " the classpath.";
+                String msg
+                        = "Xsd files or XML directory cannot be Null. Please ensure that ep-xml-config.properties is in"
+                        + " the classpath.";
                 throw new FileNotFoundException(msg);
             } catch (FileNotFoundException ex) {
                 logger.error(ex.getMessage(), ex);
@@ -69,54 +68,56 @@ public class EnzymeCentric extends XmlGenerator {
 
     @Override
     public void generateXmL(String xmlFileLocation) throws JAXBException {
-        List<Entry> entryList = new LinkedList<>();
-
-        List<IntenzEnzymes> enzymes =
-                enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
+        List<IntenzEnzymes> enzymes
+                = enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());
 
         int entryCount = enzymes.size();
 
-        logger.warn("Number of Intenz enzymes ready to be processed : " + entryCount);
+        logger.info("Number of Intenz enzymes ready to be processed : " + entryCount);
 
         Database database = buildDatabaseInfo(entryCount);
 
-        enzymes.forEach((enzyme) -> {
-            Entry entry = new Entry();
+        List<Entry> entryList = enzymes.stream().map(enzyme -> {
+            List<UniprotEntry> entries = enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
 
-            entry.setId(enzyme.getEcNumber());
-            entry.setName(enzyme.getEnzymeName());
-            entry.setDescription(enzyme.getCatalyticActivity());
+            Entry processedEntry;
 
-            List<UniprotEntry> iterableEntry =
-                    enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
+            if (entries.size() <= SEQUENCE_THRESHOLD) {
+                Stream<UniprotEntry> sequentialUniProtEntryStream = entries.stream();
 
-            try {
-                Entry processedEntry = getForkJoinPool()
-                        .submit(() -> processEntries(iterableEntry, enzyme, entry, new LinkedHashSet<>(),
-                                new HashSet<>(), new AdditionalFields()))
-                        .get();
+                Set<Field> seqFields = new HashSet<>();
+                Set<Ref> seqRefs = new HashSet<>();
 
-                entryList.add(processedEntry);
-            } catch (InterruptedException | ExecutionException ex) {
-                logger.error(ex.getMessage(), ex);
+                processedEntry = processEntries(sequentialUniProtEntryStream, enzyme, seqFields, seqRefs);
+            } else {
+                Stream<UniprotEntry> parallelUniProtEntryStream = entries.stream().parallel();
+
+                Set<Field> seqFields = Collections.synchronizedSet(new HashSet<>());
+                Set<Ref> seqRefs = Collections.synchronizedSet(new HashSet<>());
+
+                processedEntry = getForkJoinPool()
+                        .submit(() -> processEntries(parallelUniProtEntryStream, enzyme, seqFields, seqRefs))
+                        .join();
             }
-        });
+
+            return processedEntry;
+        }).collect(Collectors.toList());
 
         Entries entries = new Entries();
         entries.setEntry(entryList);
         database.setEntries(entries);
 
-        //write xml
         writeXml(database, xmlFileLocation);
-
-        logger.warn(" FJPool activity info before shutdown :  " + forkJoinPool);
-        forkJoinPool.shutdown();
     }
 
-    private synchronized Entry processEntries(Iterable<UniprotEntry> iterableEntry, IntenzEnzymes enzyme, Entry entry,
-            Set<Field> fields, Set<Ref> refs, AdditionalFields additionalFields) {
+    private Entry processEntries(Stream<UniprotEntry> entries, IntenzEnzymes enzyme, Set<Field> fields, Set<Ref> refs) {
+        Entry entry = new Entry();
 
-        StreamUtils.stream(iterableEntry.iterator()).forEach((uniprotEntry) -> {
+        entry.setId(enzyme.getEcNumber());
+        entry.setName(enzyme.getEnzymeName());
+        entry.setDescription(enzyme.getCatalyticActivity());
+
+        entries.forEach((uniprotEntry) -> {
             addUniprotIdFields(uniprotEntry, fields);
             addProteinNameFields(uniprotEntry, fields);
 
@@ -129,15 +130,15 @@ public class EnzymeCentric extends XmlGenerator {
             addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
 
             addDiseaseFields(uniprotEntry, fields);
-
-            CrossReferences cr = new CrossReferences();
-            cr.setRef(refs);
-
-            additionalFields.setField(fields);
-
-            entry.setAdditionalFields(additionalFields);
-            entry.setCrossReferences(cr);
         });
+
+        AdditionalFields additionalFields = new AdditionalFields();
+        additionalFields.setField(fields);
+        entry.setAdditionalFields(additionalFields);
+
+        CrossReferences cr = new CrossReferences();
+        cr.setRef(refs);
+        entry.setCrossReferences(cr);
 
         return entry;
     }
@@ -150,7 +151,7 @@ public class EnzymeCentric extends XmlGenerator {
     }
 
     private ForkJoinPool getForkJoinPool() {
-        if(forkJoinPool == null) {
+        if (forkJoinPool == null) {
             forkJoinPool = new ForkJoinPool();
         }
 

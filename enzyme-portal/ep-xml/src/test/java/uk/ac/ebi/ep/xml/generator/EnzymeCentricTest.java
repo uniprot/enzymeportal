@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.contentOf;
 import org.junit.After;
 import org.junit.Before;
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
@@ -87,10 +88,9 @@ public class EnzymeCentricTest extends BaseTest {
         String filename = "enzymes.xml";
         File output = temporaryFolder.newFile(filename);
         generateXml(output);
-
+        assertThat(output).exists().isFile();
         String[] xsd = {"http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd"};
         Boolean validate = enzymeCentricInstance.validateXML(output.getAbsolutePath(), xsd);
-
         assertThat(validate).isTrue();
 
     }
@@ -110,9 +110,12 @@ public class EnzymeCentricTest extends BaseTest {
         String xml = generateXml(output);
         String fileDir = output.getParent();
 
+        assertThat(output).exists().isFile();
         assertThat(output).hasExtension("xml")
+                .exists()
                 .hasContent(xml.trim())
                 .hasParent(resolvePath(fileDir));
+        assertThat(contentOf(output)).containsIgnoringCase(xml.trim());
 
         //  peek the generated file              
         try (Stream<String> data = Files.lines(output.toPath(), StandardCharsets.UTF_8)) {
@@ -132,6 +135,7 @@ public class EnzymeCentricTest extends BaseTest {
         String releaseDate = date.format(DateTimeFormatter.ofPattern("d-MMM-uuuu"));
         String release = xmlConfigParams.getReleaseNumber();
 
+
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<database>\n"
                 + "    <name>Enzyme Portal</name>\n"
@@ -143,29 +147,31 @@ public class EnzymeCentricTest extends BaseTest {
                 + "        <entry id=\"1.1.1.1\">\n"
                 + "            <name>alcohol dehydrogenase</name>\n"
                 + "            <description> (1) An alcohol + NAD(+) = an aldehyde or ketone + NADH. (2) A secondary alcohol + NAD(+) = a ketone + NADH.</description>\n"
+                + "            <additional_fields/>\n"
+                + "            <cross_references/>\n"
                 + "        </entry>\n"
                 + "        <entry id=\"3.4.24.85\">\n"
                 + "            <name>S2P endopeptidase</name>\n"
                 + "            <additional_fields>\n"
                 + "                <field name=\"uniprot_name\">Q1CFF4_YERPN</field>\n"
-                + "                <field name=\"protein_name\">Zinc metalloprotease</field>\n"
                 + "                <field name=\"scientific_name\">Yersinia pestis bv. Antiqua (strain Nepal516)</field>\n"
-                + "                <field name=\"synonym\">Inner membrane zinc RIP metalloprotease</field>\n"
-                + "                <field name=\"uniprot_name\">MBTP2_MOUSE</field>\n"
-                + "                <field name=\"protein_name\">Membrane-bound transcription factor site-2 protease</field>\n"
-                + "                <field name=\"scientific_name\">Mus musculus</field>\n"
-                + "                <field name=\"synonym\">-</field>\n"
                 + "                <field name=\"synonym\">sterol-regulatory element-binding proteins intramembrane protease</field>\n"
-                + "                <field name=\"synonym\">sterol regulatory element-binding protein site 2 protease</field>\n"
-                + "                <field name=\"synonym\">membrane-bound transcription factor site 2 protease</field>\n"
-                + "                <field name=\"synonym\">S2P endopeptidase</field>\n"
+                + "                <field name=\"scientific_name\">Cronobacter turicensis (strain DSM 18703 / LMG 23827 / z3032)</field>\n"
                 + "                <field name=\"synonym\">site-2 protease</field>\n"
                 + "                <field name=\"uniprot_name\">MBTP2_BOVIN</field>\n"
-                + "                <field name=\"scientific_name\">Bos taurus</field>\n"
-                + "                <field name=\"uniprot_name\">E0SCD6_DICD3</field>\n"
-                + "                <field name=\"scientific_name\">Dickeya dadantii (strain 3937)</field>\n"
                 + "                <field name=\"uniprot_name\">C9XWA9_CROTZ</field>\n"
-                + "                <field name=\"scientific_name\">Cronobacter turicensis (strain DSM 18703 / LMG 23827 / z3032)</field>\n"
+                + "                <field name=\"synonym\">Inner membrane zinc RIP metalloprotease</field>\n"
+                + "                <field name=\"protein_name\">Zinc metalloprotease</field>\n"
+                + "                <field name=\"scientific_name\">Mus musculus</field>\n"
+                + "                <field name=\"synonym\">membrane-bound transcription factor site 2 protease</field>\n"
+                + "                <field name=\"synonym\">sterol regulatory element-binding protein site 2 protease</field>\n"
+                + "                <field name=\"synonym\">S2P endopeptidase</field>\n"
+                + "                <field name=\"scientific_name\">Dickeya dadantii (strain 3937)</field>\n"
+                + "                <field name=\"uniprot_name\">E0SCD6_DICD3</field>\n"
+                + "                <field name=\"uniprot_name\">MBTP2_MOUSE</field>\n"
+                + "                <field name=\"scientific_name\">Bos taurus</field>\n"
+                + "                <field name=\"protein_name\">Membrane-bound transcription factor site-2 protease</field>\n"
+                + "                <field name=\"synonym\">-</field>\n"
                 + "            </additional_fields>\n"
                 + "            <cross_references>\n"
                 + "                <ref dbkey=\"E0SCD6\" dbname=\"UNIPROTKB\"/>\n"
@@ -179,11 +185,14 @@ public class EnzymeCentricTest extends BaseTest {
                 + "        <entry id=\"6.1.1.1\">\n"
                 + "            <name>tyrosine—tRNA ligase</name>\n"
                 + "            <description>ATP + L-tyrosine + tRNA(Tyr) = AMP + diphosphate + L-tyrosyl-tRNA(Tyr).</description>\n"
+                + "            <additional_fields/>\n"
+                + "            <cross_references/>\n"
                 + "        </entry>\n"
                 + "    </entries>\n"
                 + "</database>";
 
         return xml;
+
     }
 
 }
