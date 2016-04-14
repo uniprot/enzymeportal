@@ -22,11 +22,11 @@ import org.xml.sax.SAXException;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-public class EnzymePortalXmlValidator {
+public class EnzymePortalXmlValidatorExample {
 
-    private static final Logger logger = Logger.getLogger(EnzymePortalXmlValidator.class);
+    private static final Logger logger = Logger.getLogger(EnzymePortalXmlValidatorExample.class);
 
-    private EnzymePortalXmlValidator() {
+    private EnzymePortalXmlValidatorExample() {
 
     }
 

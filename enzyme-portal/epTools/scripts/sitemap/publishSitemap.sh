@@ -16,9 +16,6 @@ FILE_DIR=$(grep '^fileDir=' $SITEMAP_CONFIG | cut -d '=' -f 2)
 FILE_NAME=$(grep '^fileName=' $SITEMAP_CONFIG | cut -d '=' -f 2)
 TEST_MODE=$(grep '^testMode=' $SITEMAP_CONFIG | cut -d '=' -f 2)
 
-#build the application using maven
-#. $(dirname $0)/mvnBuild.sh
-
 
 # Running the application:
 echo "[INFO] Running siteMap Generator -  $(date)"

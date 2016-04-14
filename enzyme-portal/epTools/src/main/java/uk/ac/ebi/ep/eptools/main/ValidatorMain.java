@@ -8,7 +8,8 @@ package uk.ac.ebi.ep.eptools.main;
 //import static uk.ac.ebi.ep.eptools.xml.EnzymePortalXmlValidator.validateXmlAgainstXsds;
 import static java.lang.System.out;
 import java.util.Arrays;
-import uk.ac.ebi.ep.eptools.xml.EnzymePortalXmlValidator;
+import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
+
 
 /**
  *

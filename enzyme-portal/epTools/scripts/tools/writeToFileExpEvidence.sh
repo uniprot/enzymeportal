@@ -10,7 +10,7 @@ FILE_DIR=$2
 FILE_NAME=$3
 DELETE_FILE=$4
 
-SCRIPT_DIR=/ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools/scripts
+SCRIPT_DIR=/ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools/scripts/evidence
 
 $SCRIPT_DIR/checkParams.sh
 

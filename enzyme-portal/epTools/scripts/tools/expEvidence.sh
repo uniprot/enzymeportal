@@ -2,7 +2,7 @@
 #The database (uzpdev|uzprel) must be passed as a parameter
 
 DB_CONFIG=$1
-SCRIPT_DIR=/ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools/scripts
+SCRIPT_DIR=/ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools/scripts/evidence
 
 $SCRIPT_DIR/checkParams.sh
 

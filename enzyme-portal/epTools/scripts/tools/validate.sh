@@ -9,7 +9,7 @@ echo "XSD USED : $XSD_FILE"
 
 git checkout master
 cd /ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools
-/ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/tools/runScriptWithLastRelease.sh /ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools/scripts/validateXML.sh $XML_FILE $XSD_FILE
+/ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/tools/runScriptWithLastRelease.sh /ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools/scripts/xml/validateXML.sh $XML_FILE $XSD_FILE
 
 rm -rf /ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/tools/logs/validation.log
 cp /ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/enzyme-portal/epTools/logs/ep-tools.log /ebi/uniprot/production/enzyme_portal/enzyme_portal_release/ep-releases/tools/logs/validation.log
