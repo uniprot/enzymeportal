@@ -131,31 +131,31 @@
         </dependency>
         
         <dependency>
-    <groupId>org.hibernate</groupId>
-    <artifactId>hibernate-core</artifactId>
-    <version>5.1.0.Final</version>
-</dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.1.0.Final</version>
+        </dependency>
 
-<!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
-<dependency>
-    <groupId>org.hibernate</groupId>
-    <artifactId>hibernate-entitymanager</artifactId>
-    <version>5.1.0.Final</version>
-</dependency>
+        <!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.1.0.Final</version>
+        </dependency>
         
-<!--  querydsl      -->
-<dependency>
-  <groupId>com.mysema.querydsl</groupId>
-  <artifactId>querydsl-apt</artifactId>
-  <version>${querydsl.version}</version>
-  <scope>provided</scope>
-</dependency>
+        <!--  querydsl      -->
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-<dependency>
-  <groupId>com.mysema.querydsl</groupId>
-  <artifactId>querydsl-jpa</artifactId>
-  <version>${querydsl.version}</version>
-</dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>com.oracle</groupId>
@@ -217,8 +217,8 @@
    
                 
             <plugin>
-                      <groupId>com.mysema.maven</groupId>
-                    <artifactId>apt-maven-plugin</artifactId>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
                 <version>1.1.3</version>
                 <executions>
                     <execution>
@@ -230,7 +230,7 @@
                             
                             <outputDirectory>target/generated-sources/java</outputDirectory>
                             <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
-<!--                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>-->
+                            <!--                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -276,6 +276,7 @@
                     <!--                 This one configures the ChEMBL adapter: -->
                     <include>chembl-adapter.properties</include>
                     <include>log4j.properties</include>
+                    <include>ep-xml-config.properties</include>
                     <!--                    <include>data.sql</include>
                     <include>schema.sql</include>-->
                    
