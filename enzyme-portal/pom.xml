@@ -7,7 +7,7 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
     <name>Enzyme Portal</name>
     <description>
         The Enzyme Portal is for people who are interested in the biology of
@@ -554,6 +554,17 @@
             </extension>
         </extensions>
     </build>
+            <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.spring.platform</groupId>
+                <artifactId>platform-bom</artifactId>
+                <version>2.0.3.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 <!--
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

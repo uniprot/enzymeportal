@@ -17,6 +17,7 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalPDBeParser;
  *
  * @author joseph
  */
+@Deprecated
 public class PDBeParser {
 
     private static final Logger logger = Logger.getLogger(PDBeParser.class);

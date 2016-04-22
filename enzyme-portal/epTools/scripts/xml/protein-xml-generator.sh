@@ -15,7 +15,7 @@ echo "[INFO] Request to start generating protein-centric XML - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
-cd $(dirname $0)/..
+cd $(dirname $0)/../..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.xml.main.ProteinCentricXmlGenerator" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG"
 cd $WD
 echo "[INFO] Finished generating Protein-centric XML.  - $(date)"

@@ -17,6 +17,7 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author joseph
  */
+@Deprecated
 public class MoleculeParser {
     private static final Logger logger = Logger.getLogger(MoleculeParser.class);
     public static void main(String args[]) throws Exception {

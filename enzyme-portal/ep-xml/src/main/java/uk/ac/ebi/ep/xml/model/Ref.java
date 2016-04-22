@@ -15,6 +15,8 @@ public class Ref {
     private String dbKey;
     private String dbName;
 
+    public Ref() {
+    }
     public Ref(String dbKey, String dbName) {
         this.dbKey = dbKey;
         this.dbName = dbName;

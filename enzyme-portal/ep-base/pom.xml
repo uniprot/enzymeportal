@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-base</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <description>
@@ -12,16 +12,16 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.5</version>
+        <version>1.0.6-SNAPSHOT</version>
     </parent>
     
     
     <properties>
         
-        <org.springframework-version>4.1.7.RELEASE</org.springframework-version>
+<!--        <org.springframework-version>4.1.7.RELEASE</org.springframework-version>
         
         <slf4j.version>1.7.5</slf4j.version>
-        <log4j.version>1.2.17</log4j.version>
+        <log4j.version>1.2.17</log4j.version>-->
          
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -51,42 +51,42 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>LiteratureService</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency> 
         
         
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>ebeye-rest-adapter</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzymeservices</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency> 
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.2-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>EnzymePortalTestKit</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${org.springframework-version}</version>
+<!--            <version>${org.springframework-version}</version>-->
         </dependency>
         
     
@@ -101,14 +101,14 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
+<!--            <version>${log4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
+<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency> 
@@ -116,7 +116,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -124,7 +124,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
+<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -134,20 +134,14 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${org.springframework-version}</version>
-            <!--            <exclusions>
-                 Exclude Commons Logging in favor of SLF4j 
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>-->
+<!--            <version>${org.springframework-version}</version>-->
+
         </dependency>
         
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${org.springframework-version}</version>
+<!--            <version>${org.springframework-version}</version>-->
             <scope>test</scope>
         </dependency> 
         
@@ -165,7 +159,7 @@
         <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
-            <version>1.1.6</version>
+<!--            <version>1.1.6</version>-->
         </dependency> 
         
         

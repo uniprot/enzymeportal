@@ -12,7 +12,7 @@ XSD_FILE=$2
 echo "[INFO] Request to start validating XML File - $(date)"
 echo "[INFO] *******************************************************************"
 WD=$(pwd)
-cd $(dirname $0)/..
+cd $(dirname $0)/../..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.eptools.main.ValidatorMain" -Dexec.cleanupDaemonThreads=false -Dexec.args="$XML_FILE $XSD_FILE"
 cd $WD
 echo "[INFO] Finished validating the XML file against the provided XSD  - $(date)"

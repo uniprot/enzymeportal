@@ -17,6 +17,7 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author joseph
  */
+@Deprecated
 public class CofactorParser {
 
     private static final Logger logger = Logger.getLogger(CofactorParser.class);

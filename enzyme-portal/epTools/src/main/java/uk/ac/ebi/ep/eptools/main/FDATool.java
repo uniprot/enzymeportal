@@ -17,9 +17,10 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
  *
  * @author joseph
  */
-public class FDAParser {
+@Deprecated
+public class FDATool {
 
-    private static final Logger logger = Logger.getLogger(FDAParser.class);
+    private static final Logger logger = Logger.getLogger(FDATool.class);
 
     public static void main(String args[]) throws Exception {
 
@@ -33,6 +34,7 @@ public class FDAParser {
         if (args.length == 1) {
 
             profile = args[0];
+          
 
             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
             context.getEnvironment().setActiveProfiles(profile);
@@ -42,8 +44,8 @@ public class FDAParser {
             context.register(GlobalConfig.class);
             context.scan("uk.ac.ebi.ep.parser.config");
             context.refresh();
-
-            EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
+            
+             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
             compoundService.loadChemblFDA();
 
         }

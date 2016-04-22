@@ -12,17 +12,17 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.5</version>
+        <version>1.0.6-SNAPSHOT</version>
     </parent>
     
     
     
     
     <properties>
-        <org.springframework-version>4.1.7.RELEASE</org.springframework-version>
+<!--        <org.springframework-version>4.1.7.RELEASE</org.springframework-version>-->
         
-        <slf4j.version>1.7.5</slf4j.version>
-        <log4j.version>1.2.17</log4j.version>
+<!--        <slf4j.version>1.7.5</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>-->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -46,17 +46,17 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>centralService</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.0.19</version>
+            <version>1.1.2-SNAPSHOT</version>
         </dependency> 
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>PDBeAdapter</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.6-SNAPSHOT</version>
         </dependency>
         
         <dependency>
@@ -84,14 +84,14 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
+<!--            <version>${log4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
+<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency> 
@@ -99,7 +99,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -107,25 +107,25 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
+<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
  
 
         
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${org.springframework-version}</version>
             <exclusions>
-                <!-- Exclude Commons Logging in favor of SLF4j -->
+                 Exclude Commons Logging in favor of SLF4j 
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
         
         
         
