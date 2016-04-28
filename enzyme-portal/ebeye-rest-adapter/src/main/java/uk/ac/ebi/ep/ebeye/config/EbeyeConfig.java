@@ -35,10 +35,10 @@ public class EbeyeConfig {
         return new EbeyeRestService();
     }
 
-//    @Bean
-//    public AsyncRestTemplate asyncRestTemplate() {
-//        return new AsyncRestTemplate();
-//    }
+    @Bean
+    public AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate();
+    }
 //    @Bean
 //    public AsyncRestTemplate asyncRestTemplate() throws IOReactorException {
 //
@@ -63,10 +63,10 @@ public class EbeyeConfig {
 //        return restTemplate;
 //    }
 
-     @Bean
-    public AsyncRestTemplate asyncRestTemplate() {
-        return new AsyncRestTemplate(asyncClientHttpRequestFactory());
-    }
+//     @Bean
+//    public AsyncRestTemplate asyncRestTemplate() {
+//        return new AsyncRestTemplate(asyncClientHttpRequestFactory());
+//    }
 
      private AsyncClientHttpRequestFactory asyncClientHttpRequestFactory() {
         HttpComponentsAsyncClientHttpRequestFactory factory = new HttpComponentsAsyncClientHttpRequestFactory();

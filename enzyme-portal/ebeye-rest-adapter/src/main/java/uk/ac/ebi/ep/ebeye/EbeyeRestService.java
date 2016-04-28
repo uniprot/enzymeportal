@@ -89,7 +89,8 @@ public class EbeyeRestService {
      * @return list of accessions
      */
     public List<String> queryEbeyeForAccessions(String query, boolean paginate) {
-        return queryEbeyeForAccessions(query, paginate, 0);
+       // return queryEbeyeForAccessions(query, paginate, 0);
+        return queryEbeyeForAccessionsLazyReact(query, paginate, 0);
     }
 
     /**
@@ -153,11 +154,65 @@ public class EbeyeRestService {
         }
         return new ArrayList<>();
     }
+    
+        public List<String> queryEbeyeForAccessionsLazyReact(String query, boolean paginate, int limit) {
+
+        try {
+            EbeyeSearchResult searchResult = queryEbeye(query.trim());
+            logger.warn("Number of hits for search for " + query + " : " + searchResult.getHitCount());
+
+            Set<String> accessions = new LinkedHashSet<>();
+
+            if (!paginate) {
+                searchResult.getEntries().stream().forEach((entry) -> {
+                    accessions.add(entry.getUniprotAccession());
+                });
+
+                List<String> accessionList = accessions.stream().distinct().collect(Collectors.toList());
+                logger.warn("Number of Accessions to be processed (Pagination = false) :  " + accessionList.size());
+                return accessionList;
+
+            }
+
+            if (paginate) {
+
+                int hitcount = searchResult.getHitCount();
+
+                //for now limit hitcount to 7k
+                if (hitcount > HITCOUNT) {
+                    hitcount = HITCOUNT;
+                }
+
+                int resultLimit = 0;
+
+                if (limit < 0) {
+                    resultLimit = DEFAULT_EBI_SEARCH_LIMIT;
+                }
+
+                //for now limit results
+                if (resultLimit > 0 && hitcount > resultLimit) {
+                    hitcount = resultLimit;
+                }
+
+                int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
+
+                List<String> accessionList = queryUsingLazyReact(query, numIteration);
+               
+                logger.warn("Total Hitcount = " + hitcount + ",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
+                return accessionList;
+
+            }
+
+        } catch (InterruptedException | NullPointerException | ExecutionException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return new ArrayList<>();
+    }
 
     private EbeyeSearchResult queryEbeye(String query) throws InterruptedException, ExecutionException {
 
         List<String> ebeyeDomains = new ArrayList<>();
-        ebeyeDomains.add(ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=");
+        ebeyeDomains.add(ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&fields=status&query=");
 
         // get element as soon as it is available
         Optional<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
