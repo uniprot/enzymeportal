@@ -32,7 +32,6 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  * @author joseph
  */
 public class EbeyeRestService {
-
     public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
 
     //Maximum number of entries that this service will ask from the EbeyeSearch
@@ -43,8 +42,6 @@ public class EbeyeRestService {
     private final AsyncRestTemplate asyncRestTemplate;
     private final EbeyeIndexUrl ebeyeIndexUrl;
     private final RestTemplate restTemplate;
-    // private final int maxEbiSearchLimit;
-    //private final int chunkSize;
 
     private int maxRetrievableHits;
 
@@ -53,14 +50,10 @@ public class EbeyeRestService {
         Preconditions.checkArgument(ebeyeIndexUrl != null, "Index URL can't be null");
         Preconditions.checkArgument(restTemplate != null, "Synchronous REST template can't be null");
         Preconditions.checkArgument(asyncRestTemplate != null, "Asynchronous REST template can't be null");
-        //Preconditions.checkArgument(maxEbiSearchLimit > 0, "Max EBI seach limit can't be less than 1");
-        //Preconditions.checkArgument(chunkSize > 0, "Processable chunk sizes should be greater than 0");
 
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
         this.asyncRestTemplate = asyncRestTemplate;
-       // this.maxEbiSearchLimit = maxEbiSearchLimit;
-        // this.chunkSize = chunkSize;
         this.maxRetrievableHits = MAX_HITS_TO_RETRIEVE;
     }
 
