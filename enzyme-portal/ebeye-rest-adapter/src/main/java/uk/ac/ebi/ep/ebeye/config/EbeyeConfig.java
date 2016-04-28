@@ -1,11 +1,15 @@
 package uk.ac.ebi.ep.ebeye.config;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
+import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
@@ -42,9 +46,17 @@ public class EbeyeConfig {
         return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
     }
 
+    //private final AsyncListenableTaskExecutor executor = new TaskExecutorAdapter(Runnable::run);
+
+    private AsyncListenableTaskExecutor constructAsyncListenableTaskExecutor() {
+        ExecutorService executor = Executors.newWorkStealingPool();
+        AsyncListenableTaskExecutor asyncListenableTaskExecutor = new TaskExecutorAdapter(executor);
+        return asyncListenableTaskExecutor;
+    }
+
     @Bean
     public AsyncRestTemplate asyncRestTemplate() {
-        return new AsyncRestTemplate(asyncClientHttpRequestFactory());
+        return new AsyncRestTemplate(constructAsyncListenableTaskExecutor());
     }
 
     @Bean
