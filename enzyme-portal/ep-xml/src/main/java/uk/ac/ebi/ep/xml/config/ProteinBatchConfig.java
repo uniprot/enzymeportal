@@ -29,6 +29,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
@@ -51,7 +52,6 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     public static final String PROTEIN_CENTRIC_JOB = "PROTEIN_CENTRIC_JOB";
     public static final String PROTEIN_CENTRIC_DB_TO_XML_STEP = "readFromDbWriteToXMLStep";
 
-
     @Autowired
     private JobBuilderFactory jobBuilders;
 
@@ -63,6 +63,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
     @Autowired
     private EnzymePortalXmlService enzymePortalXmlService;
+
     @Autowired
     private XmlConfigParams xmlConfigParams;
 
@@ -164,5 +165,4 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
         return marshaller;
     }
-
 }
