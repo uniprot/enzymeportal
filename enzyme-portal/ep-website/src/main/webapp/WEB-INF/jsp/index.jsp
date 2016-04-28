@@ -65,7 +65,7 @@
                 <p><a href="about">more...</a></p>
             </div>
             <div class="grid_6">
-                <h4>Technical document</h4>
+                <h4>Technical documents</h4>
                 <p>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available and can be downloaded from <a href="https://github.com/computingfacts/enzymeportal" target="_blank">GitHub</a>, an online project hosting service.</p>
                 <p>Additionally, the technical documentation (Javadoc, project information) is also available online.</p>
             </div>
