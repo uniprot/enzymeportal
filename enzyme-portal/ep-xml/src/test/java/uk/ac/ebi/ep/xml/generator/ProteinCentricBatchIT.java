@@ -1,16 +1,15 @@
 package uk.ac.ebi.ep.xml.generator;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
+
 import static org.hamcrest.CoreMatchers.is;
+
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
@@ -19,43 +18,39 @@ import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
+
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.xml.config.MockProteinBatchConfig;
 import uk.ac.ebi.ep.xml.config.MockXmlConfig;
 import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
+import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        classes = {MockProteinBatchConfig.class, MockXmlConfig.class, JobTestRunnerConfig.class, SpringDataMockConfig.class})
+@ContextConfiguration(classes = {MockProteinBatchConfig.class, MockXmlConfig.class, JobTestRunnerConfig.class,
+        SpringDataMockConfig.class})
 public class ProteinCentricBatchIT {
-
-    @ClassRule
-    public static TemporaryFolder temporaryFolder = new TemporaryFolder();
-
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    private EntityManager entityManager;
-
-    static File xmlFile;
     @Autowired
-    protected XmlConfigParams mockXmlConfigParams;
+    private XmlConfigParams mockXmlConfigParams;
 
-    @BeforeClass
-    public static void setupXmlFileLocation() throws IOException {
-        xmlFile = temporaryFolder.newFile();
-        System.setProperty("ep.protein.centric.xml.dir", xmlFile.getAbsolutePath());
-    }
+    private EntityManager entityManager;
 
     @Before
     public void setUp() throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
-        mockXmlConfigParams.setProteinCentricXmlDir(xmlFile.getAbsolutePath());
+    }
+
+    @After
+    public void closeResources() {
+        entityManager.close();
     }
 
     @Test
@@ -72,6 +67,23 @@ public class ProteinCentricBatchIT {
         assertThat(step.getReadCount(), is(expectedEntries));
         assertThat(step.getWriteCount(), is(expectedEntries));
         assertThat(step.getSkipCount(), is(0));
+
+        printXml();
+    }
+
+    @Test
+    public void validatesXmlFromSuccessfulJobRun() throws Exception {
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob();
+
+        BatchStatus status = jobExecution.getStatus();
+        assertThat(status, is(BatchStatus.COMPLETED));
+
+        String xmlFilePath = mockXmlConfigParams.getProteinCentricXmlDir();
+        String[] ebeyeXSDs = mockXmlConfigParams.getEbeyeXSDs().split(",");
+
+        printXml();
+
+        assertThat(EnzymePortalXmlValidator.validateXml(xmlFilePath, ebeyeXSDs), is(true));
     }
 
     private StepExecution getStepByName(String stepName, JobExecution jobExecution) {
@@ -88,5 +100,17 @@ public class ProteinCentricBatchIT {
         Query query = entityManager.createQuery("select count(u.dbentryId) from UniprotEntry u");
 
         return ((Long) query.getSingleResult()).intValue();
+    }
+
+    private void printXml() throws IOException {
+        try (FileReader fileReader = new FileReader(mockXmlConfigParams.getProteinCentricXmlDir());
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
     }
 }
