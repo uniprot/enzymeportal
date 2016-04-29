@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.ebeye;
 
 import com.aol.simple.react.stream.lazy.LazyReact;
@@ -27,7 +23,6 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
-import uk.ac.ebi.ep.ebeye.utils.Preconditions;
 
 /**
  * REST client that communicates with the EBeye search web-service retrieving
@@ -45,7 +40,9 @@ public class EnzymeCentricService {
 
     private final RestTemplate restTemplate;
     //Maximum number of entries that this service will ask from the EbeyeSearch
-    private final int MAX_HITS_TO_PROCESS = 4;
+    private final int MAX_HITS_TO_PROCESS = 20_000;
+    private final int FJP_TRIGGER = 4;
+    private final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
 
     public EnzymeCentricService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate, AsyncRestTemplate asyncRestTemplate) {
         Assert.notNull(restTemplate, "'restTemplate' must not be null");
@@ -56,21 +53,19 @@ public class EnzymeCentricService {
         this.restTemplate = restTemplate;
     }
 
-    public List<String> queryEbeyeForEcNumbers(String query, int limit) throws InterruptedException, ExecutionException {
+    public List<String> queryEbeyeForEcNumbers(String query, int limit) {
         Assert.notNull(query, "Query cannot be null");
-        Preconditions.checkArgument(limit > 0, "Limit must be greater than 0");
         Assert.isTrue(limit > 0, "Limit must be greater than 0");
         EbeyeSearchResult searchResult = synchronousQuery(query);
 
         int synchronousHitCount = searchResult.getHitCount();
         int hitCount = synchronousHitCount < MAX_HITS_TO_PROCESS ? synchronousHitCount : MAX_HITS_TO_PROCESS;
-        //hitCount = 20_000;
 
         logger.debug("Number of hits for search for [" + query + "] : " + hitCount);
 
         if (hitCount <= ebeyeIndexUrl.getMaxEbiSearchLimit()) {
 
-            return extractDistinctEcNumbersFromSynchronousQuery(query);
+            return extractDistinctEcNumbersFromSynchronousQuery(searchResult);
         } else {
 
             int numIteration = (int) Math.ceil((double) hitCount / (double) ebeyeIndexUrl.getMaxEbiSearchLimit());
@@ -88,8 +83,8 @@ public class EnzymeCentricService {
         return restTemplate.getForObject(url, EbeyeSearchResult.class);
     }
 
-    private List<String> extractDistinctEcNumbersFromSynchronousQuery(String query) {
-        EbeyeSearchResult searchResult = synchronousQuery(query);
+    private List<String> extractDistinctEcNumbersFromSynchronousQuery(EbeyeSearchResult searchResult) {
+
         return searchResult
                 .getEntries().stream()
                 .map(ec -> (ec.getEc()))
@@ -117,15 +112,15 @@ public class EnzymeCentricService {
 
     }
 
-    private List<String> asynchronousQuery(String query, int iteration, int limit) throws InterruptedException, ExecutionException {
+    private List<String> asynchronousQuery(String query, int iteration, int limit) {
 
-        int availableProcessors = Runtime.getRuntime().availableProcessors();
-        logger.info("Number of availableProcessors : " + availableProcessors);
-        //availableProcessors = 20;
+        if (AVAILABLE_PROCESSORS >= FJP_TRIGGER) {
 
-        if (availableProcessors > 10) {
-
-            return executeUsingFJP(availableProcessors, query, iteration, limit).get();
+            try {
+                return executeUsingFJP(AVAILABLE_PROCESSORS, query, iteration, limit).get();
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
         }
 
         return searchEbeyeDomain(buildUrlsForAsyncRequest(query, iteration), limit);

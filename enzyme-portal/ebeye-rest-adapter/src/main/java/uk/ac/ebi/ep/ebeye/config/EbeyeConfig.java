@@ -18,7 +18,6 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
-import uk.ac.ebi.ep.ebeye.ProteinCentricService;
 
 /**
  * Configures the services that interface with the Ebeye search.
@@ -30,7 +29,7 @@ import uk.ac.ebi.ep.ebeye.ProteinCentricService;
 public class EbeyeConfig {
 
     //@Value("${request.timeout.millis:5000}") 
-    private final int requestTimeout = 0b111110100;//binary
+    private final int requestTimeout = 0b111110100;
 
     @Autowired
     private Environment env;
@@ -46,6 +45,10 @@ public class EbeyeConfig {
         return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
     }
 
+    /**
+     * 
+     * TODO - benchmark performance and side effects against WorkStealingPool 
+     */
     //private final AsyncListenableTaskExecutor executor = new TaskExecutorAdapter(Runnable::run);
 
     private AsyncListenableTaskExecutor constructAsyncListenableTaskExecutor() {
@@ -102,8 +105,4 @@ public class EbeyeConfig {
         return new EnzymeCentricService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
     }
 
-    @Bean
-    public ProteinCentricService proteinCentricService() {
-        return new ProteinCentricService();
-    }
 }
