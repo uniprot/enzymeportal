@@ -49,7 +49,7 @@ public class BrowseDiseasesController extends AbstractController {
 
     @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
     public String showDiseases(Model model) {
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService);
 
         diseaseList = finder.findDiseases();
         SearchModel searchModelForm = searchform();
@@ -148,7 +148,7 @@ public class BrowseDiseasesController extends AbstractController {
     private SearchResults findEnzymesByDisease(String diseaseId, String diseaseName) {
 
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService);
 
         SearchParams searchParams = new SearchParams();
         searchParams.setText(diseaseName);

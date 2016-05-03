@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.search;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -10,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,22 +17,28 @@ import java.util.Objects;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class Entry  implements Comparable<Entry> {
+public final class Entry extends EnzymeEntry implements Serializable, Comparable<Entry> {
 
+    private static final long serialVersionUID = 1L;
     @JsonProperty("acc")
     private String uniprotAccession;
     @JsonProperty("id")
     private String uniprotName;
     @JsonProperty("source")
     private String source;
-    
+
     private String title;
-        @JsonIgnore
+
+    @JsonIgnore
     private final Map<String, Fields> fields = new HashMap<>();
 
     public Entry() {
-     
-       
+    }
+
+    public Entry(String ec, String source, String title) {
+        super(ec);
+        this.source = source;
+        this.title = title;
     }
 
     public Entry(String uniprotAccession, String uniprotName) {
@@ -44,18 +46,14 @@ public final class Entry  implements Comparable<Entry> {
         this.uniprotName = uniprotName;
     }
 
-
     /**
-     *
      * @return The uniprot name
      */
     public String getUniprotName() {
         return uniprotName.substring(0, uniprotName.indexOf("_"));
-       
     }
 
     /**
-     *
      * @return uniprot accession
      */
     public String getUniprotAccession() {
@@ -63,28 +61,29 @@ public final class Entry  implements Comparable<Entry> {
     }
 
     /**
-     *
      * @return source data index
      */
     public String getSource() {
         return source;
     }
 
-
+//    @Override
+//    public String toString() {
+//        return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" +
+//                source + '}';
+//    }
     @Override
     public String toString() {
-        return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" + source + '}';
+        return "Entry{" + "uniprotAccession=" + uniprotAccession
+                + ", uniprotName=" + uniprotName + ", source=" + source + ", title=" + title + ", ec=" + getEc() + '}';
     }
-
 
     @Override
     public int compareTo(Entry obj) {
         int compare = obj.getUniprotName().compareToIgnoreCase(this.getUniprotName());
+
         return compare == 0 ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare;
-
     }
-
-
 
     public Fields get(String name) {
         return fields.get(name);
@@ -101,8 +100,8 @@ public final class Entry  implements Comparable<Entry> {
     }
 
     public String getTitle() {
-        if(get("fields") != null){
-        title = get("fields").getName().stream().findFirst().get(); 
+        if (get("fields") != null) {
+            title = get("fields").getName().stream().findFirst().get();
         }
         return title;
     }
@@ -115,6 +114,7 @@ public final class Entry  implements Comparable<Entry> {
     public int hashCode() {
         int hash = 3;
         hash = 67 * hash + Objects.hashCode(this.getTitle());
+
         return hash;
     }
 
@@ -127,11 +127,7 @@ public final class Entry  implements Comparable<Entry> {
             return false;
         }
         final Entry other = (Entry) obj;
+
         return Objects.equals(this.getTitle(), other.getTitle());
     }
-
-
-    
-    
-    
 }

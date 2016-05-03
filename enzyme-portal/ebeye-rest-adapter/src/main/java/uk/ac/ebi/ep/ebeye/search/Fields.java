@@ -15,7 +15,8 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Fields {
-     @JsonProperty("name")
+
+    @JsonProperty("name")
     private List<String> name;
 
     public List<String> getName() {
@@ -26,7 +27,4 @@ public class Fields {
         this.name = name;
     }
 
-
-    
-    
 }

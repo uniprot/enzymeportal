@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : index
     Created on : Sep 3, 2012, 12:11:34 PM
     Author     : joseph
@@ -23,11 +23,11 @@
 
 
     <div id="wrapper" class="container_24">
-    
+
     <%@include file="header.jspf" %>
-               
+
     <div id="content" role="main" class="grid_24 clearfix">
-        
+
         <section class="grid_24">
             <div id="browse-box-container" class="prefix_4 grid_24">
                 <a href="browse/disease" class="browse-box disease-box grid_4">
@@ -77,7 +77,7 @@
         </section>
 
     <%@include file="footer.jspf" %>
-    
+
   </div> <!--! end of #wrapper -->
     </div>
   <script src="resources/javascript/search.js" type="text/javascript"></script>

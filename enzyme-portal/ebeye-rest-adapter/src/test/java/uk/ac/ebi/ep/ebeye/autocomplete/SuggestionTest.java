@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.autocomplete;
 
 import java.util.ArrayList;
@@ -12,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *
  * @author joseph
  */
 public class SuggestionTest {
@@ -22,7 +16,6 @@ public class SuggestionTest {
     @Before
     public void setUp() {
         instance = new Suggestion("phos");
-
     }
 
     /**
@@ -32,8 +25,8 @@ public class SuggestionTest {
     public void testGetSuggestion() {
         String expResult = "phos";
         String result = instance.getSuggestedKeyword();
-        assertEquals(expResult, result);
 
+        assertEquals(expResult, result);
     }
 
     /**
@@ -41,11 +34,10 @@ public class SuggestionTest {
      */
     @Test
     public void testToString() {
-
         String expResult = "phos";
         String result = instance.toString();
-        assertEquals(expResult, result);
 
+        assertEquals(expResult, result);
     }
 
     /**
@@ -53,11 +45,10 @@ public class SuggestionTest {
      */
     @Test
     public void testHashCode() {
-
         int expResult = 0;
         int result = instance.hashCode();
-        assertNotEquals(expResult, result);
 
+        assertNotEquals(expResult, result);
     }
 
     /**
@@ -70,7 +61,5 @@ public class SuggestionTest {
         boolean expResult = false;
         boolean result = instance.equals(obj);
         assertEquals(expResult, result);
-
     }
-
 }

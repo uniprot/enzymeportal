@@ -17,11 +17,11 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 @Configuration
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class XmlConfig {
+    @Autowired
+    private Environment env;
 
     @Autowired
     private EnzymePortalXmlService enzymePortalXmlService;
-    @Autowired
-    private Environment env;
 
     @Bean(name = "enzymeCentric")
     public XmlGenerator enzymeCentric() {
@@ -54,11 +54,9 @@ public class XmlConfig {
 
     public String ebeyeXSDs() {
         return env.getProperty("ep.ebeye.xsd");
-
     }
 
     private int chunkSize() {
         return Integer.parseInt(env.getProperty("ep.protein.centric.chunk"));
     }
-
 }
