@@ -10,11 +10,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestClientException;
@@ -32,10 +34,11 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  * @author joseph
  */
 public class EbeyeRestService {
+
     public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
 
     //Maximum number of entries that this service will ask from the EbeyeSearch
-    private static final int MAX_HITS_TO_RETRIEVE = 10_000;
+    private static final int MAX_HITS_TO_RETRIEVE = 20_000;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -44,6 +47,8 @@ public class EbeyeRestService {
     private final RestTemplate restTemplate;
 
     private int maxRetrievableHits;
+    @Autowired
+    private HttpComponentsAsyncClientHttpRequestFactory httpComponentsAsyncClientHttpRequestFactory;
 
     public EbeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
             AsyncRestTemplate asyncRestTemplate) {
@@ -220,8 +225,14 @@ public class EbeyeRestService {
         return entries;
     }
 
+    //TODO (shutdown at the end of all requests)
+    protected void destroy() throws Exception {
+        httpComponentsAsyncClientHttpRequestFactory.destroy();
+    }
+
     private ListenableFuture<ResponseEntity<EbeyeSearchResult>> getEbeyeSearchFutureResponse(String queryUrl)
             throws RestClientException {
+
         assert queryUrl != null : "URL to send to Ebeye search service can't be null";
 
         HttpMethod method = HttpMethod.GET;
@@ -237,7 +248,7 @@ public class EbeyeRestService {
     }
 
     private String buildAccessionQueryUrl(String endpoint, String query, int resultSize, int start) {
-        String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
+        String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,status&format=json";
 
         return String.format(ebeyeAccessionQuery, endpoint, query, resultSize, start);
     }

@@ -1,11 +1,16 @@
 package uk.ac.ebi.ep.ebeye.config;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
+import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.http.client.AsyncClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
@@ -23,15 +28,13 @@ import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 @Configuration
 @PropertySource({"classpath:ebeye.es"})
 public class EbeyeConfig {
-      private final int requestTimeout = 5000;
+
+    private final int requestTimeout = 5000;
+    private final int HTTP_CLIENT_MAX_CONNECTION_TOTAL = 500;
+    private final int HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE = 500;
 
     @Autowired
     private Environment env;
-
-    @Bean
-    static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
 
     @Bean
     public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
@@ -40,7 +43,7 @@ public class EbeyeConfig {
     }
 
     @Bean
-    public AsyncRestTemplate asyncRestTemplate() {
+    public AsyncRestTemplate chunkBasedAsyncRestTemplate() {
         return new AsyncRestTemplate(asyncClientHttpRequestFactory());
     }
 
@@ -58,11 +61,29 @@ public class EbeyeConfig {
     }
 
     private AsyncClientHttpRequestFactory asyncClientHttpRequestFactory() {
+        return httpComponentsAsyncClientHttpRequestFactory();
+    }
+
+    @Bean
+    public HttpComponentsAsyncClientHttpRequestFactory httpComponentsAsyncClientHttpRequestFactory() {
+        CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
+                .setMaxConnTotal(HTTP_CLIENT_MAX_CONNECTION_TOTAL)
+                .setMaxConnPerRoute(HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE)
+                .build();
+
         HttpComponentsAsyncClientHttpRequestFactory factory = new HttpComponentsAsyncClientHttpRequestFactory();
         factory.setReadTimeout(requestTimeout);
         factory.setConnectTimeout(requestTimeout);
-
+        factory.setHttpAsyncClient(httpclient);
         return factory;
+
+    }
+
+    //TODO
+    private AsyncListenableTaskExecutor asyncListenableTaskExecutor() {
+        ExecutorService executor = Executors.newWorkStealingPool();
+        AsyncListenableTaskExecutor asyncListenableTaskExecutor = new TaskExecutorAdapter(executor);
+        return asyncListenableTaskExecutor;
     }
 
     @Bean

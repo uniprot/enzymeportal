@@ -14,6 +14,8 @@ import static org.hamcrest.Matchers.hasSize;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
+import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -46,9 +48,9 @@ public class EnzymeCentricServiceTest {
         EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
         serverUrl.setEnzymeCentricSearchUrl(SERVER_URL);
         serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
-
+        final AsyncListenableTaskExecutor executor = new TaskExecutorAdapter(Runnable::run);
         RestTemplate restTemplate = new RestTemplate();
-        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
+        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate(executor);
 
         syncRestServerMock = MockRestServiceServer.createServer(restTemplate);
         asyncRestServerMock = MockRestServiceServer.createServer(asyncRestTemplate);
