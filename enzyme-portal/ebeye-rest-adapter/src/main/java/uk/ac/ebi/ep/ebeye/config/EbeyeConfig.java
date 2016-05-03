@@ -23,9 +23,7 @@ import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 @Configuration
 @PropertySource({"classpath:ebeye.es"})
 public class EbeyeConfig {
-
-    //@Value("${request.timeout.millis:5000}")
-    private final int requestTimeout = 5000;//binary
+    private final int requestTimeout = 5000;
 
     @Autowired
     private Environment env;
