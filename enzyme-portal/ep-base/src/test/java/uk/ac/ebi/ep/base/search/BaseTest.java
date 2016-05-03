@@ -31,29 +31,32 @@ import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
  * @author joseph
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class, EbeyeRestService.class, PmcConfig.class})
+@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class,PmcConfig.class})
 public abstract class BaseTest {
+
 
     @Autowired
     protected EnzymePortalService service;
     @Autowired
     protected EbeyeRestService ebeyeService;
-
+    
     @Autowired
-    protected LiteratureService literatureService;
+    protected   LiteratureService literatureService;
 
+  
     @Autowired
     protected Environment env;
 
     @Autowired
     protected DataSource dataSource;
-
-    protected EnzymeRetriever instance;
+    
+    
+        protected EnzymeRetriever instance;
 
     @Before
     public void setUp() {
         instance = new EnzymeRetriever(service, literatureService);
-
+        
     }
 
     @After
@@ -62,6 +65,8 @@ public abstract class BaseTest {
         dataSource.getConnection().close();
 
     }
+
+
 
     @Bean
     public IntenzConfig intenzConfig() {
@@ -101,9 +106,9 @@ public abstract class BaseTest {
 
         return chebiConfig;
     }
-
-    @Bean
-    public LiteratureService literatureService() {
+    
+        @Bean
+    public LiteratureService literatureService(){
         return new LiteratureService();
     }
 }

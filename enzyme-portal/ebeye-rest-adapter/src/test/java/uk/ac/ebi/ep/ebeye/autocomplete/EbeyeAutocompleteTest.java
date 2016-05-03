@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.autocomplete;
 
 import java.util.ArrayList;
@@ -11,11 +6,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- *
  * @author joseph
  */
 public class EbeyeAutocompleteTest {
-
     /**
      * Test of getSuggestions method, of class EbeyeAutocomplete.
      */
@@ -31,7 +24,5 @@ public class EbeyeAutocompleteTest {
         List<Suggestion> result = instance.getSuggestions();
 
         assertEquals(expResult, result);
-
     }
-
 }

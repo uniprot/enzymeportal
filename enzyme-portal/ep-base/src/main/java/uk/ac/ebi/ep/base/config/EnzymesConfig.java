@@ -9,11 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 
@@ -41,27 +36,34 @@ public class EnzymesConfig {
     }
 
     
-    @Bean
-    public EbeyeRestService ebeyeRestService() {
-        return new EbeyeRestService();
-    }
+//    @Bean
+//    public EbeyeRestService ebeyeRestService() {
+//        //return new EbeyeRestService();
+//        System.out.println("SERVICE URL "+ ebeyeIndexUrl().getDefaultSearchIndexUrl());
+//            return  new EbeyeRestService(asyncRestTemplate(),ebeyeIndexUrl(), restTemplate());
+//    }
 
-
-
-    @Bean
-    public AsyncRestTemplate asyncRestTemplate() {
-        return new AsyncRestTemplate();
-    }
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate(clientHttpRequestFactory());
-    }
-
-    private ClientHttpRequestFactory clientHttpRequestFactory() {
-        return new HttpComponentsClientHttpRequestFactory();
-        
-    }
+//    @Bean
+//    public EbeyeIndexUrl ebeyeIndexUrl() {
+//        EbeyeIndexUrl url = new EbeyeIndexUrl();
+//        url.setDefaultSearchIndexUrl(env.getProperty("ep.default.search.url"));
+//        return url;
+//    }
+//
+//    @Bean
+//    public AsyncRestTemplate asyncRestTemplate() {
+//        return new AsyncRestTemplate();
+//    }
+//
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        return new RestTemplate(clientHttpRequestFactory());
+//    }
+//
+//    private ClientHttpRequestFactory clientHttpRequestFactory() {
+//        return new HttpComponentsClientHttpRequestFactory();
+//        
+//    }
     
 
     
