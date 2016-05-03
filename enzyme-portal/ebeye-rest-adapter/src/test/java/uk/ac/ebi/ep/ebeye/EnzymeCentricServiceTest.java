@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Ignore
 public class EnzymeCentricServiceTest {
 
     private static final int MAX_ENTRIES_IN_RESPONSE = 4;
