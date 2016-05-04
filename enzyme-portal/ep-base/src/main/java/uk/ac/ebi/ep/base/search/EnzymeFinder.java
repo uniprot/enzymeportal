@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.biobabel.lucene.LuceneParser;
 import static uk.ac.ebi.ep.data.batch.PartitioningSpliterator.partition;
@@ -61,9 +60,7 @@ public class EnzymeFinder extends EnzymeBase {
     List<String> compoundFilter;
     List<UniprotEntry> enzymeSummaryList;
 
-    @Autowired
-    private  EbeyeRestService ebeyeRestService;
-
+   
     Set<Species> uniqueSpecies;
     List<Disease> diseaseFilters;
     List<Compound> compoundFilters;
@@ -75,10 +72,8 @@ public class EnzymeFinder extends EnzymeBase {
     private final int LIMIT = 7000;
     private final int ACCESSION_LIMIT = 800;
 
-
-
-    public EnzymeFinder(EnzymePortalService service) {
-        super(service);
+    public EnzymeFinder(EnzymePortalService service,EbeyeRestService ebeyeRestService) {
+        super(service,ebeyeRestService);
 
         enzymeSearchResults = new SearchResults();
 
@@ -140,6 +135,17 @@ public class EnzymeFinder extends EnzymeBase {
             searchParams.getSpecies().clear();
             searchParams.getCompounds().clear();
         }
+    }
+
+    public List<String> findAccessionsforSearchTerm(String searchTerm, int limit) {
+        if (!StringUtils.isEmpty(searchTerm)) {
+            searchTerm = searchTerm.trim();
+        }
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessions(searchTerm, limit);
+
+        LOGGER.warn("Number of Processed Accession for  " + searchTerm + " :=:" + accessions.size());
+
+        return accessions;
     }
 
     private void getResultsFromEpIndex() {
