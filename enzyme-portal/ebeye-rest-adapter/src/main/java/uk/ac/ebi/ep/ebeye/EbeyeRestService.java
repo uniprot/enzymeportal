@@ -99,7 +99,7 @@ public class EbeyeRestService {
 
             int hitCount = searchResult.getHitCount();
 
-            logger.debug("Number of hits for search for [" + query + "] : " + searchResult.getHitCount());
+            logger.info("Number of hits for a search for [" + query + "] : " + searchResult.getHitCount());
 
             if (hitCount <= ebeyeIndexUrl.getMaxEbiSearchLimit()) {
                 accessions = extractDistinctAccessionsUpToLimit(searchResult.getEntries(),
@@ -108,7 +108,7 @@ public class EbeyeRestService {
                 accessions = executeQueryInChunks(query, hitCount, limit);
             }
 
-            logger.debug("Total amount of returned accessions: " + accessions.size());
+            logger.info("Total number of accessions found : " + accessions.size());
         } catch (RestClientException | InterruptedException | ExecutionException e) {
             logger.error(e.getMessage(), e);
             accessions = new ArrayList<>();
