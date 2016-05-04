@@ -28,7 +28,7 @@ public class EbeyeRestService {
     public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
 
     //Maximum number of entries that this service will ask from the EbeyeSearch
-    private static final int MAX_HITS_TO_RETRIEVE = 10_000;
+    private static final int MAX_HITS_TO_RETRIEVE = 20_000;
 
     private static final int MULTIPLE_QUERY_START_INDEX = 1;
 
