@@ -69,8 +69,8 @@ public class EnzymeFinder extends EnzymeBase {
     Set<Compound> uniquecompounds;
     Set<Disease> uniqueDiseases;
 
-    private final int LIMIT = 7000;
-    private final int ACCESSION_LIMIT = 800;
+    private final int LIMIT = 8_00;
+    private final int ACCESSION_LIMIT = 8_00;
 
     public EnzymeFinder(EnzymePortalService service,EbeyeRestService ebeyeRestService) {
         super(service,ebeyeRestService);
