@@ -29,7 +29,7 @@ import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 @PropertySource({"classpath:ebeye.es"})
 public class EbeyeConfig {
 
-    private final int requestTimeout = 5000;
+    private final int requestTimeout = 2500;
     private final int HTTP_CLIENT_MAX_CONNECTION_TOTAL = 500;
     private final int HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE = 500;
 
