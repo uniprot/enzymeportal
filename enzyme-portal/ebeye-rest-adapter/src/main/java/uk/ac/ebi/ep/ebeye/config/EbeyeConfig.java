@@ -37,9 +37,8 @@ public class EbeyeConfig {
     private Environment env;
 
     @Bean
-    public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
-            AsyncRestTemplate asyncRestTemplate) {
-        return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
+    public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
+        return new EbeyeRestService(ebeyeIndexUrl, restTemplate);
     }
 
     @Bean

@@ -1,26 +1,17 @@
 package uk.ac.ebi.ep.ebeye;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
+import java.net.URI;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import rx.Observable;
+import rx.schedulers.Schedulers;
+
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
@@ -34,31 +25,26 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  * @author joseph
  */
 public class EbeyeRestService {
-
     public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
 
     //Maximum number of entries that this service will ask from the EbeyeSearch
-    private static final int MAX_HITS_TO_RETRIEVE = 20_000;
+    private static final int MAX_HITS_TO_RETRIEVE = 10_000;
+
+    private static final int MULTIPLE_QUERY_START_INDEX = 1;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final AsyncRestTemplate asyncRestTemplate;
     private final EbeyeIndexUrl ebeyeIndexUrl;
     private final RestTemplate restTemplate;
 
     private int maxRetrievableHits;
-    @Autowired
-    private HttpComponentsAsyncClientHttpRequestFactory httpComponentsAsyncClientHttpRequestFactory;
 
-    public EbeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
-            AsyncRestTemplate asyncRestTemplate) {
+    public EbeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
         Preconditions.checkArgument(ebeyeIndexUrl != null, "Index URL can't be null");
         Preconditions.checkArgument(restTemplate != null, "Synchronous REST template can't be null");
-        Preconditions.checkArgument(asyncRestTemplate != null, "Asynchronous REST template can't be null");
 
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
-        this.asyncRestTemplate = asyncRestTemplate;
         this.maxRetrievableHits = MAX_HITS_TO_RETRIEVE;
     }
 
@@ -92,39 +78,43 @@ public class EbeyeRestService {
         Preconditions.checkArgument(query != null, "Query can not be null");
         Preconditions.checkArgument(limit > 0, "Limit can not be less than 1");
 
-        List<String> accessions;
+        limit = calculateMaxNumberOfHitsToRetrieve(limit);
+
+        List<String> uniqueAccessions;
 
         try {
-            EbeyeSearchResult searchResult = synchronousQuery(query);
+            Observable<URI> firstUrlRequest = generateUrlRequests(0, 1, query);
 
-            int hitCount = searchResult.getHitCount();
+            EbeyeSearchResult firstSearchResult = executeQueryRequest(firstUrlRequest).toBlocking().single();
 
-            logger.debug("Number of hits for search for [" + query + "] : " + searchResult.getHitCount());
+            int hitCount = firstSearchResult.getHitCount();
+
+            logger.debug("Number of hits for search for [{}] : {}", query, firstSearchResult.getHitCount());
 
             if (hitCount <= ebeyeIndexUrl.getMaxEbiSearchLimit()) {
-                accessions = extractDistinctAccessionsUpToLimit(searchResult.getEntries(),
+                uniqueAccessions = extractDistinctAccessionsUpToLimit(firstSearchResult.getEntries(),
                         limit == NO_RESULT_LIMIT ? hitCount : limit);
             } else {
-                accessions = executeQueryInChunks(query, hitCount, limit);
-            }
+                int newHitCount = hitCount - firstSearchResult.getEntries().size();
 
-            logger.debug("Total amount of returned accessions: " + accessions.size());
-        } catch (RestClientException | InterruptedException | ExecutionException e) {
+                Observable<Entry> remainingEntries = concurrentQueryRequests(query, newHitCount);
+
+                Observable<Entry> distinctEntries = remainingEntries
+                        .mergeWith(Observable.from(firstSearchResult.getEntries()))
+                        .distinct();
+
+                uniqueAccessions = getDistinctAccessionsFromEntries(distinctEntries)
+                        .limit(limit)
+                        .toList()
+                        .toBlocking()
+                        .single();
+            }
+        } catch (RestClientException e) {
             logger.error(e.getMessage(), e);
-            accessions = new ArrayList<>();
+            uniqueAccessions = new ArrayList<>();
         }
 
-        return accessions;
-    }
-
-    private EbeyeSearchResult synchronousQuery(String query)
-            throws InterruptedException, ExecutionException, RestClientException {
-        String url = buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
-                query,
-                ebeyeIndexUrl.getMaxEbiSearchLimit(),
-                0);
-
-        return restTemplate.getForObject(url, EbeyeSearchResult.class);
+        return uniqueAccessions;
     }
 
     /**
@@ -132,64 +122,21 @@ public class EbeyeRestService {
      *
      * If the number of potential retrievable entries is above the
      * {@link #maxRetrievableHits} value, then the number of retrievable hits is
-     * reduced to {@link #maxRetrievableHits}, otherwise return the hitCount.
+     * reduced to {@link #maxRetrievableHits}, otherwise return the value.
      *
-     * @param hitCount number of potential retrievable hits
+     * @param value number of potential retrievable hits
      * @return the number of hits to retrieve.
      */
-    private int calculateMaxNumberOfHitsToRetrieve(int hitCount, int maxRetrievableHits) {
-        return hitCount < maxRetrievableHits ? hitCount : maxRetrievableHits;
+    private int calculateMaxNumberOfHitsToRetrieve(int value) {
+        return value < maxRetrievableHits ? value : maxRetrievableHits;
     }
 
-    /**
-     * Breaks down the client query into smaller chunks, submitting these to the
-     * server, and then merging the result.
-     *
-     * @param query the client query to run
-     * @param hitCount the number of entries that the query is expected to hit
-     * @param limit the maximum number of entries the client wants returned
-     * @return a list of distinct accessions from the merged queries
-     */
-    private List<String> executeQueryInChunks(String query, int hitCount, int limit) {
-        hitCount = calculateMaxNumberOfHitsToRetrieve(hitCount, maxRetrievableHits);
+    private Observable<Entry> concurrentQueryRequests(String query, int hitCount) {
+        hitCount = calculateMaxNumberOfHitsToRetrieve(hitCount);
 
         int totalPaginatedQueries = (int) Math.ceil((double) hitCount / (double) ebeyeIndexUrl.getMaxEbiSearchLimit());
 
-        logger.debug("Possible number of paginated queries: {}", totalPaginatedQueries);
-
-        Set<Entry> uniqueEntries = new HashSet<>(limit > hitCount ? hitCount : limit);
-
-        int startPage = 0;
-        int endPage = Math.min(ebeyeIndexUrl.getChunkSize(), totalPaginatedQueries);
-
-        while (startPage < totalPaginatedQueries && uniqueEntries.size() < limit) {
-            List<String> paginatedQueries = createPaginatedQueries(query, startPage, endPage);
-
-            try {
-                List<Entry> retrievedEntries = processQueryChunks(paginatedQueries);
-                uniqueEntries.addAll(retrievedEntries);
-            } catch (RestClientException e) {
-                logger.error("Error occurred whilst sending REST request", e);
-            }
-
-            startPage = endPage;
-            endPage = Math.min(endPage + ebeyeIndexUrl.getChunkSize(), totalPaginatedQueries);
-        }
-
-        return extractDistinctAccessionsUpToLimit(uniqueEntries, limit);
-    }
-
-    private List<Entry> processQueryChunks(List<String> paginatedQueries) throws RestClientException {
-        List<ListenableFuture<ResponseEntity<EbeyeSearchResult>>> futureResults = paginatedQueries
-                .stream()
-                .map(this::getEbeyeSearchFutureResponse)
-                .collect(Collectors.toList());
-
-        return futureResults.stream()
-                .map(this::extractEntriesFromFuture)
-                .flatMap(Collection::stream)
-                .distinct()
-                .collect(Collectors.toList());
+        return reactiveRequests(MULTIPLE_QUERY_START_INDEX, totalPaginatedQueries, query);
     }
 
     private List<String> extractDistinctAccessionsUpToLimit(Collection<Entry> entries, int limit) {
@@ -200,57 +147,53 @@ public class EbeyeRestService {
                 .collect(Collectors.toList());
     }
 
-    private List<String> createPaginatedQueries(String query, int startIndex, int endIndex) {
-        return IntStream.range(startIndex, endIndex)
-                .mapToObj(index -> buildAccessionQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
-                                query,
-                                ebeyeIndexUrl.getMaxEbiSearchLimit(),
-                                index * ebeyeIndexUrl.getMaxEbiSearchLimit()))
-                .collect(Collectors.toList());
+    private Observable<Entry> reactiveRequests(int startIndex, int endIndex, String query) {
+        ExecutorService executorService = Executors.newFixedThreadPool(ebeyeIndexUrl.getChunkSize());
+
+        return generateUrlRequests(startIndex, endIndex, query)
+                .flatMap(reqUrl ->
+                        executeQueryRequest(Observable.just(reqUrl))
+                                .subscribeOn(Schedulers.from(executorService))
+                                .map(EbeyeSearchResult::getEntries)
+                                .flatMap(Observable::from)
+                                .onExceptionResumeNext(Observable.empty()))
+                .doOnCompleted(executorService::shutdown);
     }
 
-    private List<Entry> extractEntriesFromFuture(ListenableFuture<ResponseEntity<EbeyeSearchResult>> future) {
-        List<Entry> entries;
+    /**
+     * Creates an Observable that generates url requests as needed by the calling subscriber.
+     *
+     * @param start the start index of the URL
+     * @param end the end index of the URL
+     * @param query the
+     * @return a URI that represents the request to make to the Ebeye search service
+     */
+    private Observable<URI> generateUrlRequests(int start, int end, String query) {
+        final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
+        final int resultSize = ebeyeIndexUrl.getMaxEbiSearchLimit();
+        final String endpoint = ebeyeIndexUrl.getDefaultSearchIndexUrl();
 
-        try {
-            ResponseEntity<EbeyeSearchResult> response = future.get();
-            EbeyeSearchResult searchResult = response.getBody();
-
-            entries = searchResult.getEntries();
-        } catch (InterruptedException | ExecutionException | RestClientException e) {
-            logger.warn("Unable to read response from future:", e);
-            entries = new ArrayList<>();
-        }
-
-        return entries;
+        return Observable.range(start, end)
+                .map(index ->
+                        URI.create(String.format(ebeyeAccessionQuery, endpoint, query, resultSize,
+                                index * ebeyeIndexUrl.getMaxEbiSearchLimit())));
     }
 
-    //TODO (shutdown at the end of all requests)
-    protected void destroy() throws Exception {
-        httpComponentsAsyncClientHttpRequestFactory.destroy();
+    /**
+     * Creates an {@link Observable} that holds reference to a request to the Ebeye search service for the given reqUrl.
+     * The request will only be executed once it is subscribed upon.
+     *
+     * @param reqUrlObs Observable creating request URL to call
+     * @return the potential {@link EbeyeSearchResult} that results from the call.
+     */
+    private Observable<EbeyeSearchResult> executeQueryRequest(Observable<URI> reqUrlObs) {
+        return reqUrlObs.map(reqUrl -> restTemplate.getForObject(reqUrl, EbeyeSearchResult.class));
     }
 
-    private ListenableFuture<ResponseEntity<EbeyeSearchResult>> getEbeyeSearchFutureResponse(String queryUrl)
-            throws RestClientException {
-
-        assert queryUrl != null : "URL to send to Ebeye search service can't be null";
-
-        HttpMethod method = HttpMethod.GET;
-
-        Class<EbeyeSearchResult> responseType = EbeyeSearchResult.class;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
-
-        return asyncRestTemplate.exchange(queryUrl, method, requestEntity, responseType);
-    }
-
-    private String buildAccessionQueryUrl(String endpoint, String query, int resultSize, int start) {
-        String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,status&format=json";
-
-        return String.format(ebeyeAccessionQuery, endpoint, query, resultSize, start);
+    private Observable<String> getDistinctAccessionsFromEntries(Observable<Entry> accessionObservable) {
+        return accessionObservable
+                .map(Entry::getUniprotAccession)
+                .distinct();
     }
 
     void setMaxRetrievableHits(int maxRetrievableHits) {
