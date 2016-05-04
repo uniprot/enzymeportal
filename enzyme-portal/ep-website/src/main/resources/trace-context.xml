@@ -20,6 +20,7 @@
 	  <aop:advisor advice-ref="customizableTraceInterceptor" pointcut="execution(public * uk.ac.ebi.ep.service..*(..))"/>
 	  <aop:advisor advice-ref="customizableTraceInterceptor" pointcut="execution(public * uk.ac.ebi.ep.controller..*(..))"/>
           <aop:advisor advice-ref="customizableTraceInterceptor" pointcut="execution(public * uk.ac.ebi.ep.base..*(..))"/>
+          <aop:advisor advice-ref="customizableTraceInterceptor" pointcut="execution(public * uk.ac.ebi.ep.ebeye..*(..))"/>
 	</aop:config>
 
 </beans>
