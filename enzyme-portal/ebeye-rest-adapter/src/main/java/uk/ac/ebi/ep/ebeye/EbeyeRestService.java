@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestClientException;
@@ -152,14 +151,6 @@ public class EbeyeRestService {
         int totalPaginatedQueries = (int) Math.ceil((double) hitCount / (double) ebeyeIndexUrl.getMaxEbiSearchLimit());
 
         return reactiveRequests(MULTIPLE_QUERY_START_INDEX, totalPaginatedQueries, query);
-    }
-
-    private List<String> extractDistinctAccessionsUpToLimit(Collection<Entry> entries, int limit) {
-        return entries.stream()
-                .map(Entry::getUniprotAccession)
-                .distinct()
-                .limit(limit)
-                .collect(Collectors.toList());
     }
 
     private Observable<Entry> reactiveRequests(int startIndex, int endIndex, String query) {
