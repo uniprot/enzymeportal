@@ -71,29 +71,48 @@ public class EbeyeRestService {
      *
      * @param query the client query
      * @param limit limit the number of results from Ebeye service. Use
-     * {@link #NO_RESULT_LIMIT}
+     * {@link #NO_RESULT_LIMIT} if no limit is to be specified
      * @return list of accessions that fulfill the query
      */
     public List<String> queryForUniqueAccessions(String query, int limit) {
-        Preconditions.checkArgument(query != null, "Query can not be null");
         Preconditions.checkArgument(limit > 0, "Limit can not be less than 1");
 
         limit = calculateMaxNumberOfHitsToRetrieve(limit);
 
-        List<String> uniqueAccessions;
+        return queryForUniqueAccessions(query)
+                .limit(limit)
+                .toList()
+                .toBlocking()
+                .single();
+    }
+
+    /**
+     * Sends a query to the Ebeye search service and creates an {@link Observable} which pushes the results as they
+     * are calculated. This allows the results to be processed asynchronously by the client calling the method.
+     *
+     * @param query the client query
+     * @return Observable of accessions that fulfill the query
+     */
+    public Observable<String> queryForUniqueAccessions(String query) {
+        Preconditions.checkArgument(query != null, "Query can not be null");
+
+        Observable<String> uniqueAccessions;
 
         try {
             Observable<URI> firstUrlRequest = generateUrlRequests(0, 1, query);
 
-            EbeyeSearchResult firstSearchResult = executeQueryRequest(firstUrlRequest).toBlocking().single();
+            EbeyeSearchResult firstSearchResult = executeQueryRequest(firstUrlRequest)
+                    .toBlocking()
+                    .single();
 
             int hitCount = firstSearchResult.getHitCount();
 
             logger.debug("Number of hits for search for [{}] : {}", query, firstSearchResult.getHitCount());
 
             if (hitCount <= ebeyeIndexUrl.getMaxEbiSearchLimit()) {
-                uniqueAccessions = extractDistinctAccessionsUpToLimit(firstSearchResult.getEntries(),
-                        limit == NO_RESULT_LIMIT ? hitCount : limit);
+                uniqueAccessions = Observable.from(firstSearchResult.getEntries())
+                        .map(Entry::getUniprotAccession)
+                        .distinct();
             } else {
                 int newHitCount = hitCount - firstSearchResult.getEntries().size();
 
@@ -103,15 +122,11 @@ public class EbeyeRestService {
                         .mergeWith(Observable.from(firstSearchResult.getEntries()))
                         .distinct();
 
-                uniqueAccessions = getDistinctAccessionsFromEntries(distinctEntries)
-                        .limit(limit)
-                        .toList()
-                        .toBlocking()
-                        .single();
+                uniqueAccessions = getDistinctAccessionsFromEntries(distinctEntries);
             }
         } catch (RestClientException e) {
             logger.error(e.getMessage(), e);
-            uniqueAccessions = new ArrayList<>();
+            uniqueAccessions = Observable.empty();
         }
 
         return uniqueAccessions;
