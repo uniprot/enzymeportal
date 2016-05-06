@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 
 /**
  *
@@ -18,12 +19,23 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
 public abstract class EnzymeBase {
 
     protected EnzymePortalService service;
-    private EnzymeBase(){
-        
+    protected EbeyeRestService ebeyeRestService;
+
+    private EnzymeBase() {
+
     }
 
     public EnzymeBase(EnzymePortalService service) {
         this.service = service;
+    }
+
+    public EnzymeBase(EbeyeRestService ebeyeRestService) {
+        this.ebeyeRestService = ebeyeRestService;
+    }
+
+    public EnzymeBase(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
+        this.service = service;
+        this.ebeyeRestService = ebeyeRestService;
     }
 
     /**

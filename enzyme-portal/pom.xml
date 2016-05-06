@@ -566,7 +566,7 @@
             </extension>
         </extensions>
     </build>
-            <dependencyManagement>
+      <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.spring.platform</groupId>
