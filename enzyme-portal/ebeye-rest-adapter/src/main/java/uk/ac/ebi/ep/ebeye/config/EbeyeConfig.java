@@ -29,7 +29,7 @@ import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 @PropertySource({"classpath:ebeye.es"})
 public class EbeyeConfig {
 
-    private final int requestTimeout = 5000;
+    private final int requestTimeout = 2500;
     private final int HTTP_CLIENT_MAX_CONNECTION_TOTAL = 500;
     private final int HTTP_CLIENT_MAX_CONNECTION_PER_ROUTE = 500;
 
@@ -37,9 +37,8 @@ public class EbeyeConfig {
     private Environment env;
 
     @Bean
-    public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
-            AsyncRestTemplate asyncRestTemplate) {
-        return new EbeyeRestService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
+    public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
+        return new EbeyeRestService(ebeyeIndexUrl, restTemplate);
     }
 
     @Bean
