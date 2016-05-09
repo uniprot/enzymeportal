@@ -251,7 +251,8 @@ public class SearchController extends AbstractController {
         model.addAttribute("searchModel", searchModelForm);
         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         clearHistory(session);
-        return "index";
+       // return "index";
+        return "enzymes";
     }
 
     @ModelAttribute("/about")
