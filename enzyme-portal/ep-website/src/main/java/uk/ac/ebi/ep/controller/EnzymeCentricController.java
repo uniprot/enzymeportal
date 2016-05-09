@@ -51,13 +51,13 @@ public class EnzymeCentricController extends AbstractController {
         EnzymePortalEnzyme enzyme = new EnzymePortalEnzyme();
         enzyme.setInternalId(id);
         enzyme.setEcNumber(ecClass + ".1.1." + id);
-        enzyme.setEnzymeName("enzyme-name-" + id);
+        enzyme.setEnzymeName("cGMP-specific 3',5'-cyclic phosphodiesterase-" + id);
         
         if(ecClass == 1){
-           enzyme.getCatalyticActivity().add("catalytic activity-" + id);
-           enzyme.getCatalyticActivity().add("more catalytic activities-" + id);
+           enzyme.getCatalyticActivity().add("Guanosine 3',5'-cyclic phosphate + H(2)O = guanosine 5'-phosphate-" + id);
+           enzyme.getCatalyticActivity().add("mAdenosine 3',5'-cyclic phosphate + H(2)O = adenosine 5'-phosphate-" + id);
         }else{
-           enzyme.getCatalyticActivity().add("catalytic activity-" + id); 
+           enzyme.getCatalyticActivity().add("Adenosine 3',5'-cyclic phosphate + H(2)O = adenosine 5'-phosphate-" + id); 
         }
         //enzyme.setCatalyticActivity("catalytic activity-" + id);
         //build species
