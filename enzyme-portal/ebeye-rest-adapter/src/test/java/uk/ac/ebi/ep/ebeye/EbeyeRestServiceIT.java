@@ -27,8 +27,7 @@ public class EbeyeRestServiceIT {
     @Autowired
     private EbeyeRestService ebeyeRestService;
 
-    //@Test
-    @Ignore(value = "EBeye Autocomplete search was done.")
+    @Test
     public void partial_term_phos_sent_to_Ebeye_autocomplete_search_returns_valid_suggestions() throws Exception {
         String searchTerm = "phos";
 
