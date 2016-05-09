@@ -374,27 +374,27 @@ div#local-masthead ul.dropdown-menu li {
 
 /* D3 
 ------------------------*/
-.node circle {
+#taxonomy-tree .node circle {
   fill: #fff;
   stroke: steelblue;
   stroke-width: 1.5px;
 }
 
-.node text{
+#taxonomy-tree .node text{
   font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
   font-size: 1em;
 }
 
-.node text.endnode {
+#taxonomy-tree .node text.endnode {
     fill:#0C4452;
 }
 
 
-.node text.endnode:hover {
+#taxonomy-tree .node text.endnode:hover {
     fill:#0B5448;
 }
 
-.link {
+#taxonomy-tree .link {
   fill: none;
   stroke: #ccc;
   stroke-width: 1.5px;
