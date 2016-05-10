@@ -104,6 +104,6 @@ public class EbeyeConfig {
     @Bean
     public EnzymeCentricService enzymeCentricService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
             AsyncRestTemplate asyncRestTemplate) {
-        return new EnzymeCentricService(ebeyeIndexUrl, restTemplate, asyncRestTemplate);
+        return new EnzymeCentricService(ebeyeIndexUrl, restTemplate);
     }
 }
