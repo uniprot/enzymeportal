@@ -7,7 +7,6 @@ package uk.ac.ebi.ep.dummy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -15,7 +14,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import uk.ac.ebi.ep.data.search.model.EcNumber;
-import uk.ac.ebi.ep.data.search.model.Species;
 
 /**
  *
@@ -34,7 +32,7 @@ public class EnzymePortalEnzyme extends EcNumber implements Comparable<EnzymePor
     //@Size(max = 4000)
     private List<String> catalyticActivity;
     private String enzymeFamily;
-    private Set<Species> species;
+    //private Set<Species> species;
     //@ManyToMany(mappedBy = "enzymes")
     private Set<DummyProtein> dummyProteinSet;
 
@@ -92,16 +90,16 @@ public class EnzymePortalEnzyme extends EcNumber implements Comparable<EnzymePor
         this.enzymeFamily = enzymeFamily;
     }
 
-    public Set<Species> getSpecies() {
-        if (species == null) {
-            species = new HashSet<>();
-        }
-        return species;
-    }
-
-    public void setSpecies(Set<Species> species) {
-        this.species = species;
-    }
+//    public Set<Species> getSpecies() {
+//        if (species == null) {
+//            species = new HashSet<>();
+//        }
+//        return species;
+//    }
+//
+//    public void setSpecies(Set<Species> species) {
+//        this.species = species;
+//    }
 
     public Set<DummyProtein> getDummyProteinSet() {
         return dummyProteinSet;

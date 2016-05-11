@@ -6,6 +6,7 @@
 package uk.ac.ebi.ep.dummy;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Id;
@@ -15,14 +16,16 @@ import javax.persistence.Id;
  * @author Joseph <joseph@ebi.ac.uk>
  */
 public class DummyProtein implements Serializable {
-     private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
     @Id
     private String accession;
     private String proteinName;
     private String scientificName;
     private String commonName;
     //@ManyToMany
-    Set<EnzymePortalEnzyme> enzymePortalEnzymeSet;
+    private Set<EnzymePortalEnzyme> enzymePortalEnzymeSet;
+    private Set<Species> speciesSet;
 
     public DummyProtein() {
     }
@@ -71,6 +74,17 @@ public class DummyProtein implements Serializable {
         this.enzymePortalEnzymeSet = enzymePortalEnzymeSet;
     }
 
+    public Set<Species> getSpeciesSet() {
+        if (speciesSet == null) {
+            speciesSet = new HashSet<>();
+        }
+        return speciesSet;
+    }
+
+    public void setSpeciesSet(Set<Species> speciesSet) {
+        this.speciesSet = speciesSet;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -93,6 +107,12 @@ public class DummyProtein implements Serializable {
         }
         return Objects.equals(this.proteinName, other.proteinName);
     }
+
+    @Override
+    public String toString() {
+        return "DummyProtein{" + "speciesSet=" + speciesSet + '}';
+    }
     
     
+
 }
