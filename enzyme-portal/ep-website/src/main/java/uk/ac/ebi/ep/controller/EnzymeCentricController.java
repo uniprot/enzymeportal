@@ -79,11 +79,11 @@ public class EnzymeCentricController extends AbstractController {
         return dp;
     }
 
-    public static void main(String[] args) {
-        List<EnzymePortalEnzyme> enzymes = createEnzymes(100);
-
-        enzymes.stream().forEach(e -> System.out.println("Data : " + e));
-    }
+//    public static void main(String[] args) {
+//        List<EnzymePortalEnzyme> enzymes = createEnzymes(100);
+//
+//        enzymes.stream().forEach(e -> System.out.println("Data : " + e));
+//    }
 
     private static int randomEcClass(long id) {
 
