@@ -77,7 +77,7 @@ public class EbeyeQueryServiceImplTest {
         RestTemplate restTemplate = new RestTemplate();
 
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("'ebeyeIndexUrl' must not be null");
+        thrown.expectMessage("'ebeyeIndexProps' must not be null");
 
         ebeyeQueryService = new EbeyeQueryServiceImpl(serverUrl, restTemplate);
     }
