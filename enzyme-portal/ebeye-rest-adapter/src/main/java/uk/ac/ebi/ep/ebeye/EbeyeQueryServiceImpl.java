@@ -78,8 +78,8 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd > -1 : "End can not be a negative value";
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
-        //TODO: adjust pool size to pagination
-        ExecutorService executorService = Executors.newFixedThreadPool(ebeyeIndexProps.getChunkSize());
+        int threadPoolSize = Math.max(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
+        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
         return generateUrlRequests(query, requestStart, requestEnd)
                 .flatMap(reqUrl ->
