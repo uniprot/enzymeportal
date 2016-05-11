@@ -1,5 +1,6 @@
-package uk.ac.ebi.ep.ebeye;
+package uk.ac.ebi.ep.ebeye.autocomplete;
 
+import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
