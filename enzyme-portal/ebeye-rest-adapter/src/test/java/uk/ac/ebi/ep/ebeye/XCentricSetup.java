@@ -1,24 +1,13 @@
 package uk.ac.ebi.ep.ebeye;
 
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
-import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 

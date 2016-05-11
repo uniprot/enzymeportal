@@ -2,7 +2,7 @@ package uk.ac.ebi.ep.ebeye;
 
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.utils.Preconditions;
 
 import java.util.List;
@@ -14,14 +14,14 @@ import org.springframework.web.client.RestTemplate;
  * @author Ricardo Antunes
  */
 public class EbeyeSuggestionService {
-    private final EbeyeIndexUrl ebeyeIndexUrl;
+    private final EbeyeIndexProps ebeyeIndexProps;
     private final RestTemplate restTemplate;
 
-    public EbeyeSuggestionService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
+    public EbeyeSuggestionService(EbeyeIndexProps ebeyeIndexProps, RestTemplate restTemplate) {
         Preconditions.checkArgument(restTemplate != null, "'restTemplate' must not be null");
-        Preconditions.checkArgument(ebeyeIndexUrl != null, "'ebeyeIndexUrl' must not be null");
+        Preconditions.checkArgument(ebeyeIndexProps != null, "'ebeyeIndexProps' must not be null");
 
-        this.ebeyeIndexUrl = ebeyeIndexUrl;
+        this.ebeyeIndexProps = ebeyeIndexProps;
         this.restTemplate = restTemplate;
     }
 
@@ -35,7 +35,7 @@ public class EbeyeSuggestionService {
      * service
      */
     public List<Suggestion> autocompleteSearch(String searchTerm) {
-        String url = ebeyeIndexUrl.getEbeyeSearchUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
+        String url = ebeyeIndexProps.getEbeyeSearchUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
 
         EbeyeAutocomplete autocompleteResult = restTemplate.getForObject(url, EbeyeAutocomplete.class);
 

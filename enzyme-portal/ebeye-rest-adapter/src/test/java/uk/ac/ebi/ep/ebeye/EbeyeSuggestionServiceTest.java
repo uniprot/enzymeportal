@@ -2,7 +2,7 @@ package uk.ac.ebi.ep.ebeye;
 
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class EbeyeSuggestionServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
+        EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         serverUrl.setChunkSize(CHUNK_SIZE);
         serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
         serverUrl.setEbeyeSearchUrl(SERVER_URL);

@@ -1,6 +1,6 @@
 package uk.ac.ebi.ep.ebeye;
 
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
 
@@ -46,7 +46,7 @@ public class EbeyeQueryServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
+        EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         serverUrl.setChunkSize(CHUNK_SIZE);
         serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
         serverUrl.setEbeyeSearchUrl(SERVER_URL);
@@ -62,7 +62,7 @@ public class EbeyeQueryServiceImplTest {
 
     @Test
     public void null_rest_template_in_constructor_throws_exception() throws Exception {
-        EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
+        EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         RestTemplate restTemplate = null;
 
         thrown.expect(IllegalArgumentException.class);
@@ -73,7 +73,7 @@ public class EbeyeQueryServiceImplTest {
 
     @Test
     public void null_service_configuration_object_in_constructor_throws_exception() throws Exception {
-        EbeyeIndexUrl serverUrl = null;
+        EbeyeIndexProps serverUrl = null;
         RestTemplate restTemplate = new RestTemplate();
 
         thrown.expect(IllegalArgumentException.class);

@@ -1,6 +1,6 @@
 package uk.ac.ebi.ep.ebeye;
 
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
 import uk.ac.ebi.ep.ebeye.utils.Preconditions;
@@ -27,16 +27,16 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final EbeyeIndexUrl ebeyeIndexUrl;
+    private final EbeyeIndexProps ebeyeIndexProps;
     private final RestTemplate restTemplate;
 
     private int maxRetrievableHits;
 
-    public EbeyeQueryServiceImpl(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
+    public EbeyeQueryServiceImpl(EbeyeIndexProps ebeyeIndexProps, RestTemplate restTemplate) {
         Preconditions.checkArgument(restTemplate != null, "'restTemplate' must not be null");
-        Preconditions.checkArgument(ebeyeIndexUrl != null, "'ebeyeIndexUrl' must not be null");
+        Preconditions.checkArgument(ebeyeIndexProps != null, "'ebeyeIndexProps' must not be null");
 
-        this.ebeyeIndexUrl = ebeyeIndexUrl;
+        this.ebeyeIndexProps = ebeyeIndexProps;
         this.restTemplate = restTemplate;
 
         this.maxRetrievableHits = MAX_RETRIEVABLE_ENTRIES;
@@ -53,7 +53,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
 
         Observable<Entry> entries;
 
-        if (entryHitCount <= ebeyeIndexUrl.getMaxEbiSearchLimit()) {
+        if (entryHitCount <= ebeyeIndexProps.getMaxEbiSearchLimit()) {
             entries = Observable.from(firstSearchResult.getEntries());
         } else {
             entryHitCount = entryHitCount - firstSearchResult.getEntries().size();
@@ -61,7 +61,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
             int maxEntriesToRetrieve = calculateMaxNumberOfHitsToRetrieve(entryHitCount);
 
             int totalPaginatedQueries =
-                    (int) Math.ceil((double) maxEntriesToRetrieve / (double) ebeyeIndexUrl.getMaxEbiSearchLimit());
+                    (int) Math.ceil((double) maxEntriesToRetrieve / (double) ebeyeIndexProps.getMaxEbiSearchLimit());
 
             Observable<Entry> remainingEntries = executeConcurrentPaginatedQueries(query, 1, totalPaginatedQueries);
 
@@ -79,7 +79,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
         //TODO: adjust pool size to pagination
-        ExecutorService executorService = Executors.newFixedThreadPool(ebeyeIndexUrl.getChunkSize());
+        ExecutorService executorService = Executors.newFixedThreadPool(ebeyeIndexProps.getChunkSize());
 
         return generateUrlRequests(query, requestStart, requestEnd)
                 .flatMap(reqUrl ->
@@ -114,13 +114,13 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
      */
     private Observable<URI> generateUrlRequests(String query, int start, int end) {
         final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
-        final int resultSize = ebeyeIndexUrl.getMaxEbiSearchLimit();
-        final String endpoint = ebeyeIndexUrl.getEbeyeSearchUrl();
+        final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
+        final String endpoint = ebeyeIndexProps.getEbeyeSearchUrl();
 
         return Observable.range(start, end)
                 .map(index ->
                         URI.create(String.format(ebeyeAccessionQuery, endpoint, query, resultSize,
-                                index * ebeyeIndexUrl.getMaxEbiSearchLimit())));
+                                index * ebeyeIndexProps.getMaxEbiSearchLimit())));
     }
 
     /**
