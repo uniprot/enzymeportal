@@ -10,28 +10,18 @@ package uk.ac.ebi.ep.ebeye.config;
  * @author joseph
  */
 public class EbeyeIndexUrl {
-
-    private String defaultSearchIndexUrl;
-    private String enzymeCentricSearchUrl;
+    private String ebeyeSearchUrl;
 
     private int maxEbiSearchLimit;
 
     private int chunkSize;
 
-    public String getEnzymeCentricSearchUrl() {
-        return enzymeCentricSearchUrl;
+    public String getEbeyeSearchUrl() {
+        return ebeyeSearchUrl;
     }
 
-    public void setEnzymeCentricSearchUrl(String enzymeCentricSearchUrl) {
-        this.enzymeCentricSearchUrl = enzymeCentricSearchUrl;
-    }
-
-    public String getDefaultSearchIndexUrl() {
-        return defaultSearchIndexUrl;
-    }
-
-    public void setDefaultSearchIndexUrl(String defaultSearchIndexUrl) {
-        this.defaultSearchIndexUrl = defaultSearchIndexUrl;
+    public void setEbeyeSearchUrl(String ebeyeSearchUrl) {
+        this.ebeyeSearchUrl = ebeyeSearchUrl;
     }
 
     public int getMaxEbiSearchLimit() {

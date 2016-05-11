@@ -17,8 +17,8 @@ import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFacto
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
-import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
+
+import uk.ac.ebi.ep.ebeye.*;
 
 /**
  * Configures the services that interface with the Ebeye search.
@@ -35,11 +35,6 @@ public class EbeyeConfig {
 
     @Autowired
     private Environment env;
-
-    @Bean
-    public EbeyeRestService ebeyeRestService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
-        return new EbeyeRestService(ebeyeIndexUrl, restTemplate);
-    }
 
     @Bean
     public AsyncRestTemplate chunkBasedAsyncRestTemplate() {
@@ -86,24 +81,54 @@ public class EbeyeConfig {
     }
 
     @Bean
-    public EbeyeIndexUrl ebeyeIndexUrl() {
-        String defaultSearchUrl = env.getProperty("ep.default.search.url");
+    public EbeyeRestService ebeyeRestService(EbeyeQueryService proteinQueryService) {
+        return new EbeyeRestService(proteinQueryService);
+    }
 
+    @Bean
+    public EbeyeQueryService proteinQueryService(EbeyeIndexUrl proteinCentricProps, RestTemplate restTemplate) {
+        return new EbeyeQueryServiceImpl(proteinCentricProps, restTemplate);
+    }
+
+    @Bean
+    public EbeyeIndexUrl proteinCentricProps() {
         int maxEbiRequests = Integer.parseInt(env.getProperty("ebeye.max.ebi.requests"));
         int chunkSize = Integer.parseInt(env.getProperty("ebeye.chunk.size"));
-        String enzymeCentriUrl = env.getProperty("ep.enzyme.centric.search.url");
+        String defaultSearchUrl = env.getProperty("ep.default.search.url");
 
         EbeyeIndexUrl url = new EbeyeIndexUrl();
-        url.setDefaultSearchIndexUrl(defaultSearchUrl);
-        url.setEnzymeCentricSearchUrl(enzymeCentriUrl);
+        url.setEbeyeSearchUrl(defaultSearchUrl);
         url.setChunkSize(chunkSize);
         url.setMaxEbiSearchLimit(maxEbiRequests);
         return url;
     }
 
     @Bean
-    public EnzymeCentricService enzymeCentricService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate,
-            AsyncRestTemplate asyncRestTemplate) {
-        return new EnzymeCentricService(ebeyeIndexUrl, restTemplate);
+    public EnzymeCentricService enzymeCentricService(EbeyeQueryService enzymeQueryService) {
+        return new EnzymeCentricService(enzymeQueryService);
+    }
+
+    @Bean
+    public EbeyeQueryService enzymeQueryService(EbeyeIndexUrl enzymeCentricProps, RestTemplate restTemplate) {
+        return new EbeyeQueryServiceImpl(enzymeCentricProps, restTemplate);
+    }
+
+    @Bean
+    public EbeyeIndexUrl enzymeCentricProps() {
+        int maxEbiRequests = Integer.parseInt(env.getProperty("ebeye.max.ebi.requests"));
+        int chunkSize = Integer.parseInt(env.getProperty("ebeye.chunk.size"));
+        String enzymeCentricUrl = env.getProperty("ep.enzyme.centric.search.url");
+
+        EbeyeIndexUrl url = new EbeyeIndexUrl();
+        url.setEbeyeSearchUrl(enzymeCentricUrl);
+        url.setChunkSize(chunkSize);
+        url.setMaxEbiSearchLimit(maxEbiRequests);
+
+        return url;
+    }
+
+    @Bean
+    public EbeyeSuggestionService ebeyeSuggestionService(EbeyeIndexUrl proteinCentricProps, RestTemplate restTemplate) {
+        return new EbeyeSuggestionService(proteinCentricProps, restTemplate);
     }
 }
