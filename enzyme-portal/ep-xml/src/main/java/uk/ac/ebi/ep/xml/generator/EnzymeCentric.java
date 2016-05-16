@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import org.springframework.util.StringUtils;
-
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
@@ -33,7 +32,7 @@ public class EnzymeCentric extends XmlGenerator {
 
     private final XmlConfigParams xmlConfigParams;
     private ForkJoinPool forkJoinPool;
-    private static final int SEQUENCE_THRESHOLD = 10_000;
+    private static final int SEQUENTIAL_THRESHOLD = 10_000;
 
     public EnzymeCentric(EnzymePortalXmlService enzymePortalXmlService, XmlConfigParams xmlConfigParams) {
         super(enzymePortalXmlService, xmlConfigParams);
@@ -82,7 +81,7 @@ public class EnzymeCentric extends XmlGenerator {
 
             Entry processedEntry;
 
-            if (entries.size() <= SEQUENCE_THRESHOLD) {
+            if (entries.size() <= SEQUENTIAL_THRESHOLD) {
                 Stream<UniprotEntry> sequentialUniProtEntryStream = entries.stream();
 
                 Set<Field> seqFields = new HashSet<>();
@@ -92,11 +91,11 @@ public class EnzymeCentric extends XmlGenerator {
             } else {
                 Stream<UniprotEntry> parallelUniProtEntryStream = entries.stream().parallel();
 
-                Set<Field> seqFields = Collections.synchronizedSet(new HashSet<>());
-                Set<Ref> seqRefs = Collections.synchronizedSet(new HashSet<>());
+                Set<Field> parallelFields = Collections.synchronizedSet(new HashSet<>());
+                Set<Ref> parallelRefs = Collections.synchronizedSet(new HashSet<>());
 
                 processedEntry = getForkJoinPool()
-                        .submit(() -> processEntries(parallelUniProtEntryStream, enzyme, seqFields, seqRefs))
+                        .submit(() -> processEntries(parallelUniProtEntryStream, enzyme, parallelFields, parallelRefs))
                         .join();
             }
 
@@ -116,20 +115,21 @@ public class EnzymeCentric extends XmlGenerator {
         entry.setId(enzyme.getEcNumber());
         entry.setName(enzyme.getEnzymeName());
         entry.setDescription(enzyme.getCatalyticActivity());
-
+        addEnzymeFamilyField(enzyme.getEcNumber(), fields);
         entries.forEach((uniprotEntry) -> {
             addUniprotIdFields(uniprotEntry, fields);
             addProteinNameFields(uniprotEntry, fields);
 
             addScientificNameFields(uniprotEntry, fields);
+            addCommonNameFields(uniprotEntry, fields);
 
             addSynonymFields(uniprotEntry, fields);
             addSource(enzyme, refs);
             addAccessionXrefs(uniprotEntry, refs);
+            addTaxonomyXrefs(uniprotEntry, refs);
 
             addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
-
-            addDiseaseFields(uniprotEntry, fields);
+            addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
         });
 
         AdditionalFields additionalFields = new AdditionalFields();

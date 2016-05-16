@@ -38,13 +38,14 @@ public class UniProtEntryToEntryConverter extends XmlTransformer implements Item
 
         addStatus(uniprotEntry, fields);
         addScientificNameFields(uniprotEntry, fields);
+        addCommonNameFields(uniprotEntry, fields);
 
         addSynonymFields(uniprotEntry, fields);
         addAccessionXrefs(uniprotEntry, refs);
 
         addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
 
-        addDiseaseFields(uniprotEntry, fields);
+        addDiseaseFieldsAndXrefs(uniprotEntry, fields,refs);
         addEcXrefs(uniprotEntry, refs);
 
         CrossReferences cr = new CrossReferences();
