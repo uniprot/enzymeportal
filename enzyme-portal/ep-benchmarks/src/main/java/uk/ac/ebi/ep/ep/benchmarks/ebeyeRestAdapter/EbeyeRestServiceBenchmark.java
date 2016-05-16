@@ -28,7 +28,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
-import uk.ac.ebi.ep.ebeye.testing.EbeyeService;
+
 
 /**
  *
@@ -54,7 +54,7 @@ public class EbeyeRestServiceBenchmark {
     public void setup() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 
-        context.register(EbeyeService.class);
+        context.register(EbeyeRestService.class);
         context.scan("uk.ac.ebi.ep.ebeye");
         context.refresh();
 
