@@ -478,3 +478,78 @@ ul.catalytic-activity-list li {
 .no-wrap {
 	white-space: nowrap;
 }
+
+
+/*********** ENZYME VIEW  **********/
+
+#enzymeResults th{
+background-color: #ECF0F1;
+}
+#enzymeResultsProteins th{
+    background-color: #fff;
+    font-weight: bold;
+}
+
+#enzymeResults td{
+    vertical-align: top;
+}
+
+.enzymeName{
+	cursor: pointer;
+    padding-left: 15px;
+
+}
+
+table#enzymeResults tr:nth-child(4n+2){
+    background-color:#CBE8EC;
+}
+
+table#enzymeResults tr.enzymeRow{
+
+
+}
+
+
+
+table#enzymeResults tr.proteinSectionOpen{
+    border-left: solid 1px #ccc;
+    border-top: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+}
+table#enzymeResults tr#proteinList td{
+    margin-bottom:10px;
+}
+
+table#enzymeResults tr#proteinList {
+    border-left: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+}
+
+
+table#enzymeResultsProteins tr.proteinRow{
+    background-color: #fff;
+}
+
+
+table#enzymeResultsProteins tr{
+    background-color: #0e6a0e;
+}
+
+.alternate{
+    background-color: #0e6a0e;
+}
+
+.sideTwizzle{
+    background-image: url("../images/sideTwizzle.png");
+
+    background-position: top left;
+    background-repeat: no-repeat;
+    ba
+
+
+}
+
+.downTwizzle{
+    background-image: url("../images/downTwizzle.png");
+}
