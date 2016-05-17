@@ -13,7 +13,6 @@ echo "THIS WILL RUN THIS SCRIPT $1 AGAINST THE DATABASE $2. DO YOU WANT TO CONTI
 echo "(Ctrl-C to cancel, Enter to continue)"
 read ok
 
-#bsub -R "rusage[mem=32000]" -M 32000 -q production-rh6 $(dirname $0)/$2 $1
 #bsub -R "rusage[mem=32000]" -M 32000 -q production-rh6 $(dirname $0)/$1 $2
 
 bsub -R "rusage[mem=32000]" -M 32000 -q production-rh6 $1 $2
