@@ -20,6 +20,10 @@ import static uk.ac.ebi.ep.controller.AbstractController.BROWSE_VIDEO;
 import uk.ac.ebi.ep.dummy.DummyProtein;
 import uk.ac.ebi.ep.dummy.EnzymePortalEnzyme;
 import uk.ac.ebi.ep.dummy.Species;
+import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
+import uk.ac.ebi.ep.ebeye.model.EnzymeView;
+import uk.ac.ebi.ep.ebeye.model.Facet;
+import uk.ac.ebi.ep.ebeye.model.ModelService;
 
 /**
  *
@@ -29,9 +33,11 @@ import uk.ac.ebi.ep.dummy.Species;
 public class EnzymeCentricController extends AbstractController {
 
     private static final String SHOW_ENZYMES = "/enzymes";
-    private static final String ENZYME_CENTRIC_PAGE = "enzymes";
-
-    @RequestMapping(value = SHOW_ENZYMES, method = RequestMethod.GET)
+    private static final String ENZYME_CENTRIC_PAGE ="enzymes";
+     private static final String SHOW_ENZYMES_V = "/eview";
+     private static final String ENZYME_CENTRIC_PAGE_V ="eview";
+    
+        @RequestMapping(value = SHOW_ENZYMES, method = RequestMethod.GET)
     public String showEnzymes(Model model) {
 
         List<EnzymePortalEnzyme> enzymes = createEnzymes(100);
@@ -40,6 +46,25 @@ public class EnzymeCentricController extends AbstractController {
         model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
 
         return ENZYME_CENTRIC_PAGE;
+    }
+
+    @RequestMapping(value = SHOW_ENZYMES_V, method = RequestMethod.GET)
+    public String showEnzymesView(Model model) {
+        String query = "kinase";
+        ModelService service = new ModelService();
+
+        EBISearchResult eBISearchResult = service.getModelSearchResult(query);
+
+        model.addAttribute("ebiResult", eBISearchResult);
+        model.addAttribute("enzymeView", eBISearchResult.getEntries());
+        model.addAttribute("enzymeFacet", eBISearchResult.getFacets());
+
+       // List<EnzymePortalEnzyme> enzymes = createEnzymes(100);
+
+       // model.addAttribute("enzymes", enzymes);
+        model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
+
+        return ENZYME_CENTRIC_PAGE_V;
     }
 
     private static List<EnzymePortalEnzyme> createEnzymes(int num) {
@@ -79,7 +104,7 @@ public class EnzymeCentricController extends AbstractController {
         DummyProtein dp = new DummyProtein("ACCESSION-12" + index);
         dp.setCommonName("common-name-" + index);
         dp.setProteinName("protein-name-" + index);
-         Set<Species> dummySpecies = dummySpecies(index);
+        Set<Species> dummySpecies = dummySpecies(index);
         dp.setSpeciesSet(dummySpecies);
         return dp;
     }
@@ -117,7 +142,22 @@ public class EnzymeCentricController extends AbstractController {
         return s;
     }
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
+     String query = "kinase";
+        ModelService service = new ModelService();
+
+        EBISearchResult result = service.getModelSearchResult(query);
+        for (EnzymeView entry : result.getEntries()) {
+            //System.out.println(""+ entry.getFields().getProteinName().size());
+            //entry.getFields().getProteinName().stream().forEach(name -> System.out.println("protein "+ name));
+            //System.out.println("ENTRRY " + entry.getEc() + " : " + entry.getEnzymeName() + " "+ entry.getEnzymeFamily() + " "+ entry.getNumEnzymeHits() + " "+ entry.getSpecies() );
+            System.out.println(" protein "+ entry.getProteins());
+        }
+        for (Facet facet : result.getFacets()) {
+           System.out.println(facet.getTotal() + "FACETS " + facet.getId() + " " + facet.getLabel() + " value : " + facet.getFacetValues());
+        }
+
+
 //        List<EnzymePortalEnzyme> enzymes = createEnzymes(100);
 //
 //        enzymes.stream().forEach(e -> System.out.println("Data : " + e.getDummyProteinSet()));
@@ -126,8 +166,7 @@ public class EnzymeCentricController extends AbstractController {
 ////                System.out.println("SP "+ p.getSpeciesSet());
 ////            }
 ////        }
-//    }
-
+    }
     private static int randomEcClass(long id) {
 
         Random random = new Random(id);
