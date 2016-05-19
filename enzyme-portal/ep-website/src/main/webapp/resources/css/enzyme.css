@@ -542,14 +542,22 @@ table#enzymeResultsProteins tr{
 
 .sideTwizzle{
     background-image: url("../images/sideTwizzle.png");
-
     background-position: top left;
     background-repeat: no-repeat;
-    ba
-
-
 }
 
 .downTwizzle{
     background-image: url("../images/downTwizzle.png");
+}
+
+.speciesFullList{
+    display: none;
+}
+
+.toggleSpeciesList{
+	cursor: pointer;
+}
+
+#search-results ul{
+    list-style-type: disc;
 }

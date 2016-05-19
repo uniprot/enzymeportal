@@ -98,10 +98,6 @@
 
         <section class="grid_18 alpha" id="search-results">
 
-
-
-
-
          <c:if test="${not empty enzymes}">
             <div>
 
@@ -122,7 +118,58 @@
                                <td>${enzyme.enzymeFamily}</td>
                                <td>${enzyme.ec}</td>
                                <td>${enzyme.catalyticActivities}</td>
-                               <td>${enzyme.species}</td>
+                               <td>
+                                   <c:set var="enzymeSpeciesSize" value="${fn:length(enzyme.species)}"/>
+                                   <c:set var="enzymeSpecies" value="${enzyme.species}"/>
+                                   <c:set var="enzymeSpeciesMaxDisplay" value="${5}"/>
+
+
+                                   <c:if test="${enzymeSpeciesSize gt 0}">
+                                       <c:if test="${enzymeSpeciesSize <= enzymeSpeciesMaxDisplay}">
+
+
+                                            <%--Found ${enzymeSpeciesSize}<br />--%>
+                                           <ul>
+                                               <c:forEach var="i" begin="0" end="${enzymeSpeciesSize-1}">
+                                                 <li>${enzyme.species[i]}</li>
+                                               </c:forEach>
+                                           </ul>
+
+                                       </c:if>
+                                       <c:if test="${enzymeSpeciesSize > enzymeSpeciesMaxDisplay}">
+
+                                           <%--Found ${enzymeSpeciesSize} <br />--%>
+
+                                           <ul>
+                                               <c:forEach var="i" begin="0" end="${enzymeSpeciesMaxDisplay-1}">
+                                                 <li>${enzyme.species[i]}</li>
+                                               </c:forEach>
+                                                <li class="toggleSpeciesList">...</li>
+                                           </ul>
+
+                                           <div class="speciesFullList">
+
+                                               <ul>
+                                                   <c:forEach var="i" begin="4" end="${enzymeSpeciesSize-1}">
+                                                     <li>${enzyme.species[i]}</li>
+                                                   </c:forEach>
+
+                                               </ul>
+                                           </div>
+
+
+
+
+                                       </c:if>
+
+
+
+                                   </c:if>
+
+                                 <%--${enzyme.species}--%>
+
+
+                               </td>
 
                            </tr>
                            <tr id="proteinList" style="display: none">

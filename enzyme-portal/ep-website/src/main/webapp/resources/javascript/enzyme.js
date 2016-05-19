@@ -28,13 +28,16 @@ $( document ).ready(function() {
 
 
     $(".enzymeName").click(function() {
-        console.log("inside");
         $(this).parent().next("#proteinList").toggle();
         $(this).toggleClass("downTwizzle");
         $(this).parent().toggleClass("proteinSectionOpen");
 
     });
 
+    $(".toggleSpeciesList").click(function() {
+          console.log("inside");
+          $(this).parent().next(".speciesFullList").toggle();
+      });
 
 
 
