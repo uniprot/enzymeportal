@@ -561,3 +561,7 @@ table#enzymeResultsProteins tr{
 #search-results ul{
     list-style-type: disc;
 }
+
+#search-filters ul{
+    list-style-type: none;
+}

@@ -53,7 +53,7 @@
                                  <div class="subTitle">Enzyme Family</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -61,7 +61,7 @@
                                  <div class="subTitle">Compounds</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -69,7 +69,7 @@
                                   <div class="subTitle">Diseases</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -77,7 +77,7 @@
                                 <div class="subTitle">Organism</div>
                                 <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
