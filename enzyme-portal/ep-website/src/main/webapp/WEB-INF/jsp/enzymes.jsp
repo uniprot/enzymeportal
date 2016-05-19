@@ -46,49 +46,40 @@
 
                 <div class="sublevel1">
 
-                    <div class="subTitle">
-                         Species test
-                     </div>
-
-
-                    ${enzymeFacet}
-
                     <c:forEach var="facet" items="${enzymeFacet}">
                          <div>
 
-
                              <c:if test="${facet.id eq 'enzyme_family'}">
-                                 <h3>Enzyme Family</h3>
+                                 <div class="subTitle">Enzyme Family</div>
                                  <ul>
-                                 <c:forEach var="v" items="${facet.facetValues}">
-                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
-                                 </c:forEach>
+                                     <c:forEach var="v" items="${facet.facetValues}">
+                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                     </c:forEach>
                                  </ul>
                              </c:if>
                              <c:if test="${facet.id eq 'compound_type'}">
-                                 <h3>compounds</h3>
+                                 <div class="subTitle">Compounds</div>
                                  <ul>
-                                 <c:forEach var="v" items="${facet.facetValues}">
-                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
-                                 </c:forEach>
+                                     <c:forEach var="v" items="${facet.facetValues}">
+                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                     </c:forEach>
                                  </ul>
                              </c:if>
                               <c:if test="${facet.id eq 'disease_name'}">
-                                 <h3>Diseases</h3>
+                                  <div class="subTitle">Diseases</div>
                                  <ul>
-                                 <c:forEach var="v" items="${facet.facetValues}">
-                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
-                                 </c:forEach>
+                                     <c:forEach var="v" items="${facet.facetValues}">
+                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                     </c:forEach>
                                  </ul>
                              </c:if>
-                                <c:if test="${facet.id eq 'TAXONOMY'}">
-                                    <h3>Organism</h3>
-                                    <ul>
-                                 <c:forEach var="v" items="${facet.facetValues}">
-                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
-                                 </c:forEach>
-                                     </ul>
-
+                            <c:if test="${facet.id eq 'TAXONOMY'}">
+                                <div class="subTitle">Organism</div>
+                                <ul>
+                                     <c:forEach var="v" items="${facet.facetValues}">
+                                         <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                     </c:forEach>
+                                 </ul>
                              </c:if>
                          </div>
                      </c:forEach>
@@ -149,6 +140,8 @@
                                             <a href="#">
                                             ${protein}</a>
                                         </td>
+
+
                                         <td>
                                             Species will be here
                                             <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
