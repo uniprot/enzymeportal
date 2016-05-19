@@ -124,15 +124,14 @@
                            <th>Species</th>
                        </tr>
 
-                       <c:forEach var="enzyme" items="${enzymes}">
+                       <c:forEach var="enzyme" items="${enzymeView}">
                            <tr class="enzymeRow">
                                <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
-                               <td>${fn:length(enzyme.dummyProteinSet)}</td>
-                               <td>Enzyme Family Name here</td>
-                               <td>${enzyme.ecNumber}</td>
-                               <td>${enzyme.catalyticActivity}</td>
-                               <td>Human, cow, Gazelle etc</td>
-                               <%--<td>${enzyme.species}</td>--%>
+                               <td>${enzyme.numEnzymeHits}</td>
+                               <td>${enzyme.enzymeFamily}</td>
+                               <td>${enzyme.ec}</td>
+                               <td>${enzyme.catalyticActivities}</td>
+                               <td>${enzyme.species}</td>
 
                            </tr>
                            <tr id="proteinList" style="display: none">
@@ -142,63 +141,41 @@
                                         <th> </th>
                                         <th>Associated Proteins:</th>
                                     </tr>
-                                    <c:forEach var="protein" items="${enzyme.dummyProteinSet}">
+                                    <c:forEach var="protein" items="${enzyme.proteins}">
                                     <tr class="proteinRow">
                                         <td> </td>
                                         <td width="50%">
 
-                                            <a href="${pageContext.request.contextPath}/search/${protein.accession}/enzyme">
-                                            [Pyruvate dehydrogenase (acetyl-transferring)] kinase isozyme 2, mitochondrial</a>
+                                            <a href="#">
+                                            ${protein}</a>
                                         </td>
                                         <td>
-
-                                            <c:set var="proteinSpeciesSize" value="${fn:length(protein.speciesSet)}"/>
-                                            <c:set var="proteinSpecies" value="${protein.speciesSet}"/>
-                                            <c:set var="speciesMaxDisplay" value="${5}"/>
-
-                                            ${proteinSpeciesSize} species found<br />
-
-                                            <c:if test="${proteinSpeciesSize gt 0}">
+                                            Species will be here
+                                            <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
+                                              <%--${sp.commonName},--%>
+                                            <%--</c:forEach>--%>
 
 
-                                                <c:if test="${proteinSpeciesSize <= speciesMaxDisplay}">
+                                            <%--<c:set var="proteinSpeciesSize" value="${fn:length(protein.speciesSet)}"/>--%>
+                                            <%--<c:set var="proteinSpecies" value="${protein.speciesSet}"/>--%>
+                                            <%--<c:set var="speciesMaxDisplay" value="${5}"/>--%>
 
+                                            <%--${proteinSpeciesSize} species found<br />--%>
 
-                                                  <c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">
-                                                    ${sp.commonName},
-
-
-
-                                                  </c:forEach>
-
-                                                </c:if>
-
-                                                <c:if test="${proteinSpeciesSize > speciesMaxDisplay}">
-
-
-
-                                                    <c:forEach var="i" begin="0" end="${speciesMaxDisplay-1}">
-                                                        thing2
-                                                          <%--${proteinSpecies[i]}--%>
-                                                          <%--${proteinSpecies[i].commonName},--%>
-                                                          <%--${proteinSpecies[i].commonName}--%>
-
-
-                                                    </c:forEach>
-
-                                                    **** More link***
-
-                                                </c:if>
-
-
-                                            </c:if>
-
-
+                                            <%--<c:if test="${proteinSpeciesSize gt 0}">--%>
+                                                <%--<c:if test="${proteinSpeciesSize <= speciesMaxDisplay}">--%>
+                                                  <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
+                                                    <%--${sp.commonName},--%>
+                                                  <%--</c:forEach>--%>
+                                                <%--</c:if>--%>
+                                                <%--<c:if test="${proteinSpeciesSize > speciesMaxDisplay}">--%>
+                                                    <%--<c:forEach var="i" begin="0" end="${speciesMaxDisplay-1}">--%>
+                                                        <%--thing2--%>
+                                                    <%--</c:forEach>--%>
+                                                    <%--**** More link***--%>
+                                                <%--</c:if>--%>
+                                            <%--</c:if>--%>
                                         </td>
-
-
-
-
 
 
                                     </tr>
