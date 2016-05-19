@@ -114,7 +114,7 @@
                                     <c:forEach var="protein" items="${enzyme.proteins}">
                                     <tr class="proteinRow">
                                         <td> </td>
-                                        <td>${protein}[Human]</td>
+                                        <td><a href="#">${protein}[Human]</a></td>
 
 <!--                                        <td>Human, Greater horseshoe bat, Rat, Mouse, Thirtenn-lined ground squirrel</td>-->
 
