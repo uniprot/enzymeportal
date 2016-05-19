@@ -38,7 +38,7 @@
     <%@include file="header.jspf" %>
 
     <div id="content" role="main" class="grid_24 clearfix" >
-        <h1> Enzymes</h1>
+        <h1>${ebiResult.hitCount} Enzymes found for ${searchKey}</h1>
 
          <c:if test="${not empty enzymeView}">
              <div class="grid_6">
@@ -114,7 +114,7 @@
                                     <c:forEach var="protein" items="${enzyme.proteins}">
                                     <tr class="proteinRow">
                                         <td> </td>
-                                        <td>${protein}[Human]</td>
+                                        <td><a href="#">${protein}[Human]</a></td>
 
 <!--                                        <td>Human, Greater horseshoe bat, Rat, Mouse, Thirtenn-lined ground squirrel</td>-->
 
