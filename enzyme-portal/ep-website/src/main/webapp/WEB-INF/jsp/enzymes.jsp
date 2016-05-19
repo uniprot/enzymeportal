@@ -43,29 +43,60 @@
         <section class="grid_6 alpha" id="search-filters">
 
             <div class="filter">
-                <div class="title">
-                    Search Filters
-                </div>
-                <div class="line"></div>
-                <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="${pageContext.request.contextPath}/enzymes/filter" method="POST">
 
-                    <form:hidden path="searchparams.type" />
-                    <form:hidden path="searchparams.text" />
-                    <form:hidden path="searchparams.sequence" />
-                    <form:hidden path="searchparams.previoustext" />
-                    <input type="hidden" id="filtersFormStart" name="searchparams.start" value="0"/>
-                    <input id="pageNumber" type="hidden" name="pageNumber" value="0"/>
-                    <input type="hidden" name="ec" value="${ec}"/>
-                    <input type="hidden" name="ecname" value="${ecname}"/>
-                    <%@ include file="filter-species.jspf"%>
-                    <br/>
-                    <%@ include file="filter-compounds.jspf"%>
-                    <br/>
-                    <%@ include file="filter-diseases.jspf"%>
-                    <br/>
-                    <%@ include file="filter-family.jsp"%>
+                <div class="sublevel1">
 
-                </form:form>
+                    <div class="subTitle">
+                         Species test
+                     </div>
+
+
+                    ${enzymeFacet}
+
+                    <c:forEach var="facet" items="${enzymeFacet}">
+                         <div>
+
+
+                             <c:if test="${facet.id eq 'enzyme_family'}">
+                                 <h3>Enzyme Family</h3>
+                                 <ul>
+                                 <c:forEach var="v" items="${facet.facetValues}">
+                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                 </c:forEach>
+                                 </ul>
+                             </c:if>
+                             <c:if test="${facet.id eq 'compound_type'}">
+                                 <h3>compounds</h3>
+                                 <ul>
+                                 <c:forEach var="v" items="${facet.facetValues}">
+                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                 </c:forEach>
+                                 </ul>
+                             </c:if>
+                              <c:if test="${facet.id eq 'disease_name'}">
+                                 <h3>Diseases</h3>
+                                 <ul>
+                                 <c:forEach var="v" items="${facet.facetValues}">
+                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                 </c:forEach>
+                                 </ul>
+                             </c:if>
+                                <c:if test="${facet.id eq 'TAXONOMY'}">
+                                    <h3>Organism</h3>
+                                    <ul>
+                                 <c:forEach var="v" items="${facet.facetValues}">
+                                     <li><a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                 </c:forEach>
+                                     </ul>
+
+                             </c:if>
+                         </div>
+                     </c:forEach>
+
+
+
+
+            </div>
             </div>
             <%--filter --%>
 
@@ -101,6 +132,7 @@
                                <td>${enzyme.ecNumber}</td>
                                <td>${enzyme.catalyticActivity}</td>
                                <td>Human, cow, Gazelle etc</td>
+                               <%--<td>${enzyme.species}</td>--%>
 
                            </tr>
                            <tr id="proteinList" style="display: none">
@@ -163,69 +195,6 @@
 
 
                                         </td>
-
-                                        <%--<td>
-                                        <c:set var="relSpeciesMaxDisplay" value="${5}"/>
-                                         <c:set var="relspecies" value="${protein.speciesSet}"/>
-                                         <c:set var="relSpeciesSize" value="${fn:length(protein.speciesSet)}"/>
-                                         <c:if test="${relSpeciesSize gt 0}">
-                                             <b>Species:</b>
-                                             <c:if test="${relSpeciesSize <= relSpeciesMaxDisplay}">
-                                                 <c:set var="relSpeciesMaxDisplay" value="${relSpeciesSize}"/>
-                                             </c:if>
-                                             <c:forEach var="i" begin="0" end="${relSpeciesMaxDisplay-1}">
-                                                 <c:choose>
-                                                     <c:when test="${empty relspecies[i].species.commonname}">
-
-                                                         [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a>
-                                                         <c:if test="${relspecies[i].scoring eq true}">
-                                                             <span class="score S${fn:substringBefore(relspecies[i].identity/10 , '.') }" title="Score = ${relspecies[i].score}"> ${relspecies[i].identity}&#37;</span>
-                                                         </c:if>]
-
-                                                     </c:when>
-                                                     <c:otherwise>
-
-                                                         [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a>
-                                                         <c:if test="${ relspecies[i].scoring eq true}">
-                                                             <span class="score S${fn:substringBefore(relspecies[i].identity/10 , '.') }" title="Score = ${relspecies[i].score}"> ${relspecies[i].identity}&#37;</span>
-                                                         </c:if>]
-
-                                                     </c:otherwise>
-                                                 </c:choose>
-                                             </c:forEach>
-
-
-                                             <c:if test="${relSpeciesSize > relSpeciesMaxDisplay}">
-                                                 <span id="relSpecies_${resultItemId}" style="display: none">
-                                                     <c:forEach var = "i" begin="${relSpeciesMaxDisplay}" end="${relSpeciesSize-1}">
-                                                         <c:choose>
-                                                             <c:when test="${empty relspecies[i].species.commonname}">
-                                                                 [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>${relspecies[i].species.scientificname}<span>${relspecies[i].species.scientificname}</span></a>
-                                                                 <c:if test="${relspecies[i].scoring eq true}">
-                                                                     <span class="score S${fn:substringBefore(relspecies[i].identity/10 , '.') }" title="Score = ${relspecies[i].score}"> ${relspecies[i].identity}&#37;</span>
-                                                                 </c:if>]
-                                                             </c:when>
-                                                             <c:otherwise>
-                                                                 [<a class="popup" href='search/${relspecies[i].uniprotaccessions[0]}/enzyme'>${relspecies[i].species.commonname}<span>${relspecies[i].species.scientificname}</span></a>
-                                                                 <c:if test="${relspecies[i].scoring eq true}">
-                                                                     <span class="score S${fn:substringBefore(relspecies[i].identity/10 , '.') }" title="Score = ${relspecies[i].score}"> ${relspecies[i].identity}&#37;</span>
-                                                                 </c:if>]
-                                                             </c:otherwise>
-                                                         </c:choose>
-                                                     </c:forEach>
-                                                 </span>
-                                                 <a class="showLink" id="<c:out value='relSpecies_link_${resultItemId}'/>">Show more species</a>
-                                             </c:if>
-                                         </c:if>
-
-
-                                        </td>
-
-                                           --%>
-
-
-
-
 
 
 
