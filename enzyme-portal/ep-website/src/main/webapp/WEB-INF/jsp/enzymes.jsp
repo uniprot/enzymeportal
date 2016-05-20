@@ -37,7 +37,7 @@
 
     <div id="content" role="main" class="grid_24 clearfix" >
 
-        <h1>Enzyme Results</h1>
+        <h1>Enzyme Results - ${ebiResult.hitCount} Enzymes found for ${searchKey}</h1>
 
 
         <section class="grid_6 alpha" id="search-filters">
@@ -98,7 +98,7 @@
 
         <section class="grid_18 alpha" id="search-results">
 
-         <c:if test="${not empty enzymes}">
+         <c:if test="${not empty enzymeView}">
             <div>
 
                    <table id="enzymeResults" cellpadding="60px">
@@ -184,13 +184,13 @@
                                         <td> </td>
                                         <td width="50%">
 
-                                            <a href="#">
+                                            <a href="${pageContext.request.contextPath}/search/${protein}/enzyme">
                                             ${protein}</a>
                                         </td>
 
 
                                         <td>
-                                            Species will be here
+                                            [Species will be here]
                                             <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
                                               <%--${sp.commonName},--%>
                                             <%--</c:forEach>--%>
@@ -219,7 +219,7 @@
 
 
                                     </tr>
-                                    </c:forEach>
+                                                                       </c:forEach>
                                     <tr class="proteinRow">
                                         <td></td>
                                         <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>

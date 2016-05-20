@@ -114,7 +114,7 @@
                                     <c:forEach var="protein" items="${enzyme.proteins}">
                                     <tr class="proteinRow">
                                         <td> </td>
-                                        <td><a href="#">${protein}[Human]</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/search/${protein.accession}/enzyme">${protein.proteinName}[Human]</a></td>
 
 <!--                                        <td>Human, Greater horseshoe bat, Rat, Mouse, Thirtenn-lined ground squirrel</td>-->
 
