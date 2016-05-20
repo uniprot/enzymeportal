@@ -37,7 +37,7 @@
 
     <div id="content" role="main" class="grid_24 clearfix" >
 
-        <h1>Enzyme Results - ${ebiResult.hitCount} Enzymes found for ${searchKey}</h1>
+        <h1>Enzyme Results - ${ebiResult.hitCount} Enzymes found for "${searchKey}"</h1>
 
         <nav class="paginationContainer">
           <ul class="pagination">
@@ -65,7 +65,7 @@
             <div class="filter">
 
                 <div class="sublevel1">
-
+                    <form id="breadcrumbs-form" action="${pageContext.request.contextPath}/search" method="POST">
                     <c:forEach var="facet" items="${enzymeFacet}">
                          <div>
 
@@ -73,7 +73,7 @@
                                  <div class="subTitle">Enzyme Family</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -81,7 +81,7 @@
                                  <div class="subTitle">Compound Type</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -89,7 +89,7 @@
                                  <div class="subTitle">Compounds</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -97,7 +97,7 @@
                                   <div class="subTitle">Diseases</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -105,14 +105,14 @@
                                 <div class="subTitle">Organism</div>
                                 <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filter" value="TAXONOMY:${v.value}" type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input name="filter" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
                          </div>
                      </c:forEach>
 
-
+                    </form>
 
 
             </div>
@@ -190,9 +190,13 @@
                                     <tr class="proteinRow">
                                         <td> </td>
                                         <td width="50%">
+                                                                  ${protein}
 
-                                            <a href="${pageContext.request.contextPath}/search/${protein}/enzyme">
-                                            ${protein}</a>
+                                            <%--<c:forEach var="i" begin="1" end="5">--%>
+                                                <%--<a href="${pageContext.request.contextPath}/search/${protein}/enzyme">${protein}</a>--%>
+                                             <%--</c:forEach>--%>
+
+
                                         </td>
 
 
