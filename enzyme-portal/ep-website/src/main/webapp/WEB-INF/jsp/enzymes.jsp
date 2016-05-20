@@ -78,6 +78,14 @@
                                  </ul>
                              </c:if>
                              <c:if test="${facet.id eq 'compound_type'}">
+                                 <div class="subTitle">Compound Type</div>
+                                 <ul>
+                                     <c:forEach var="v" items="${facet.facetValues}">
+                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                     </c:forEach>
+                                 </ul>
+                             </c:if>
+                             <c:if test="${facet.id eq 'compound_name'}">
                                  <div class="subTitle">Compounds</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
@@ -97,7 +105,7 @@
                                 <div class="subTitle">Organism</div>
                                 <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input name="filter" value="TAXONOMY:${v.value}" type="checkbox"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>

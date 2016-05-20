@@ -27,6 +27,7 @@ import uk.ac.ebi.ep.ebeye.model.ModelService;
 public class EnzymeCentricController extends AbstractController {
 
     private static final String SEARCH = "/search";
+    private static final String FILTER = "/filter";
     private static final String ENZYME_CENTRIC_PAGE = "enzymes";
 
     @RequestMapping(value = SEARCH, method = RequestMethod.GET)
@@ -38,9 +39,31 @@ public class EnzymeCentricController extends AbstractController {
     @RequestMapping(value = SEARCH, method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModel, Model model, HttpServletRequest request) {
         String view = "error";
+        int page = 0;
 
         String searchKey = searchModel.getSearchparams().getText().trim().toLowerCase();
-        EBISearchResult ebiSearchResult = getEbiSearchResult(searchKey);
+        EBISearchResult ebiSearchResult = getEbiSearchResult(searchKey,page);
+        if (ebiSearchResult != null) {
+
+            model.addAttribute("searchKey", searchKey);
+            model.addAttribute("searchModel", searchModel);
+            model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
+            model.addAttribute("ebiResult", ebiSearchResult);
+            model.addAttribute("enzymeView", ebiSearchResult.getEntries());
+            model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
+            view = ENZYME_CENTRIC_PAGE;
+        }
+
+        return view;
+    }
+    
+        @RequestMapping(value = FILTER, method = RequestMethod.POST)
+    public String filterSearchResult(SearchModel searchModel, Model model, HttpServletRequest request) {
+        String view = "error";
+        int page = 0;
+
+        String searchKey = searchModel.getSearchparams().getText().trim().toLowerCase();
+        EBISearchResult ebiSearchResult = getEbiSearchResult(searchKey,page);
         if (ebiSearchResult != null) {
 
             model.addAttribute("searchKey", searchKey);
@@ -55,10 +78,10 @@ public class EnzymeCentricController extends AbstractController {
         return view;
     }
 
-    private EBISearchResult getEbiSearchResult(String query) {
+    private EBISearchResult getEbiSearchResult(String query,int page) {
         ModelService service = new ModelService();
 
-        return service.getModelSearchResult(query);
+        return service.getModelSearchResult(query,page);
     }
 
 //for testing purposes only ...to be deleted later
@@ -68,9 +91,10 @@ public class EnzymeCentricController extends AbstractController {
     @RequestMapping(value = SHOW_ENZYMES_V, method = RequestMethod.GET)
     public String showEnzymesView(Model model) {
         String query = "kinase";
+        int page =0;
         ModelService service = new ModelService();
 
-        EBISearchResult eBISearchResult = service.getModelSearchResult(query);
+        EBISearchResult eBISearchResult = service.getModelSearchResult(query,page);
 
         model.addAttribute("ebiResult", eBISearchResult);
         model.addAttribute("enzymeView", eBISearchResult.getEntries());
@@ -85,7 +109,7 @@ public class EnzymeCentricController extends AbstractController {
         query ="sildenafil";
         ModelService service = new ModelService();
 
-        EBISearchResult result = service.getModelSearchResult(query);
+        EBISearchResult result = service.getModelSearchResult(query,0);
         for (EnzymeView entry : result.getEntries()) {
             //System.out.println(""+ entry.getFields().getProteinName().size());
             //entry.getFields().getProteinName().stream().forEach(name -> System.out.println("protein "+ name));
