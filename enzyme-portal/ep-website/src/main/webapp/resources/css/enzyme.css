@@ -565,3 +565,7 @@ table#enzymeResultsProteins tr{
 #search-filters ul{
     list-style-type: none;
 }
+
+.paginationContainer{
+    float: right;
+}

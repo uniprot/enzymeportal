@@ -39,6 +39,26 @@
 
         <h1>Enzyme Results - ${ebiResult.hitCount} Enzymes found for ${searchKey}</h1>
 
+        <nav class="paginationContainer">
+          <ul class="pagination">
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
 
         <section class="grid_6 alpha" id="search-filters">
 
@@ -123,54 +143,33 @@
                                    <c:set var="enzymeSpecies" value="${enzyme.species}"/>
                                    <c:set var="enzymeSpeciesMaxDisplay" value="${5}"/>
 
-
                                    <c:if test="${enzymeSpeciesSize gt 0}">
                                        <c:if test="${enzymeSpeciesSize <= enzymeSpeciesMaxDisplay}">
-
-
-                                            <%--Found ${enzymeSpeciesSize}<br />--%>
                                            <ul>
                                                <c:forEach var="i" begin="0" end="${enzymeSpeciesSize-1}">
                                                  <li>${enzyme.species[i]}</li>
                                                </c:forEach>
                                            </ul>
-
                                        </c:if>
                                        <c:if test="${enzymeSpeciesSize > enzymeSpeciesMaxDisplay}">
-
-                                           <%--Found ${enzymeSpeciesSize} <br />--%>
-
                                            <ul>
                                                <c:forEach var="i" begin="0" end="${enzymeSpeciesMaxDisplay-1}">
                                                  <li>${enzyme.species[i]}</li>
                                                </c:forEach>
-                                                <li class="toggleSpeciesList">...</li>
+                                                <li class="toggleSpeciesList">${enzymeSpeciesSize-5} more...</li>
                                            </ul>
 
                                            <div class="speciesFullList">
-
                                                <ul>
-                                                   <c:forEach var="i" begin="4" end="${enzymeSpeciesSize-1}">
+                                                   <c:forEach var="i" begin="5" end="${enzymeSpeciesSize-1}">
                                                      <li>${enzyme.species[i]}</li>
                                                    </c:forEach>
 
                                                </ul>
                                            </div>
-
-
-
-
                                        </c:if>
-
-
-
                                    </c:if>
-
-                                 <%--${enzyme.species}--%>
-
-
                                </td>
-
                            </tr>
                            <tr id="proteinList" style="display: none">
                                <td colspan="6">
