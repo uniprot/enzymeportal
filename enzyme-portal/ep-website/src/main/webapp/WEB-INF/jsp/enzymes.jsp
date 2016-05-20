@@ -65,7 +65,7 @@
             <div class="filter">
 
                 <div class="sublevel1">
-                    <form id="breadcrumbs-form" action="${pageContext.request.contextPath}/search" method="POST">
+
                     <c:forEach var="facet" items="${enzymeFacet}">
                          <div>
 
@@ -112,7 +112,7 @@
                          </div>
                      </c:forEach>
 
-                    </form>
+
 
 
             </div>
