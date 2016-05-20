@@ -65,6 +65,7 @@
             <div class="filter">
 
                 <div class="sublevel1">
+                    <form id="facetFilterForm" action="${pageContext.request.contextPath}/filter" method="POST">
 
                     <c:forEach var="facet" items="${enzymeFacet}">
                          <div>
@@ -113,7 +114,7 @@
                      </c:forEach>
 
 
-
+                    </form>
 
             </div>
             </div>
