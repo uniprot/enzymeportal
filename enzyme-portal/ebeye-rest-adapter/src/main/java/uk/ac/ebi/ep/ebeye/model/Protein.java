@@ -19,6 +19,13 @@ public class Protein {
     private String proteinName;
     private List<String> species;
 
+    public Protein(String accession, String proteinName) {
+        this.accession = accession;
+        this.proteinName = proteinName;
+    }
+    
+    
+
     public Protein(String accession, String proteinName, List<String> species) {
         this.accession = accession;
         this.proteinName = proteinName;
@@ -54,9 +61,8 @@ public class Protein {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 31 * hash + Objects.hashCode(this.accession);
-        hash = 31 * hash + Objects.hashCode(this.proteinName);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.proteinName);
         return hash;
     }
 
@@ -69,14 +75,10 @@ public class Protein {
             return false;
         }
         final Protein other = (Protein) obj;
-        if (!Objects.equals(this.accession, other.accession)) {
-            return false;
-        }
-        if (!Objects.equals(this.proteinName, other.proteinName)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.proteinName, other.proteinName);
     }
+
+
 
     @Override
     public String toString() {

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,11 +27,14 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
     private String uniprotName;
     @JsonProperty("source")
     private String source;
+    @JsonProperty("fields")
+    private Fields fields;
 
     private String title;
+    private List<String> scientificName;
 
     @JsonIgnore
-    private final Map<String, Fields> fields = new HashMap<>();
+    private final Map<String, Fields> fieldsMap = new HashMap<>();
 
     public Entry() {
     }
@@ -67,6 +71,31 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
         return source;
     }
 
+    /**
+     *
+     * @return The fields
+     */
+    @JsonProperty("fields")
+    public Fields getFields() {
+        return fields;
+    }
+
+    /**
+     *
+     * @param fields The fields
+     */
+    @JsonProperty("fields")
+    public void setFields(Fields fields) {
+        this.fields = fields;
+    }
+
+    public List<String> getScientificName() {
+       scientificName = fields.getScientificName();
+        return scientificName;
+    }
+    
+   
+
 //    @Override
 //    public String toString() {
 //        return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" +
@@ -86,23 +115,24 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
     }
 
     public Fields get(String name) {
-        return fields.get(name);
+        return fieldsMap.get(name);
     }
 
     @JsonAnyGetter
     public Map<String, Fields> any() {
-        return fields;
+        return fieldsMap;
     }
 
     @JsonAnySetter
     public void set(String name, Fields value) {
-        fields.put(name, value);
+        fieldsMap.put(name, value);
     }
 
     public String getTitle() {
-        if (get("fields") != null) {
-            title = get("fields").getName().stream().findFirst().get();
-        }
+//        if (get("fields") != null) {
+//            title = get("fields").getName().stream().findFirst().get();
+//        }
+        title = fields.getName().stream().findFirst().orElse("");
         return title;
     }
 

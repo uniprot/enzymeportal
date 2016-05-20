@@ -20,7 +20,7 @@ public class EnzymeView {
     private String ec;
     private List<String> catalyticActivities;
     private List<String> species;
-    //private List<Protein> proteins;
+   // private List<Protein> proteins;
     private List<String> proteins;
 
     public String getEnzymeName() {
@@ -72,9 +72,6 @@ public class EnzymeView {
     }
 
 //    public List<Protein> getProteins() {
-//        if(proteins == null){
-//            proteins = new ArrayList<>();
-//        }
 //        return proteins;
 //    }
 //

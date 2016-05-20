@@ -8,12 +8,14 @@ import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author joseph
  */
+@Ignore
 public class EntryTest {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EntryTest.class);

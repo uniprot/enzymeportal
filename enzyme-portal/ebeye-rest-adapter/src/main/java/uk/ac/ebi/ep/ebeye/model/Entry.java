@@ -13,8 +13,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 public class Entry extends EnzymeView {
 
     @JsonProperty("id")
-    private String ec;
+    private String id;
     @JsonProperty("source")
     private String source;
     @JsonProperty("fields")
@@ -45,24 +47,28 @@ public class Entry extends EnzymeView {
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Set<Protein> proteins = null;
 
-    /**
-     *
-     * @return The ec
-     */
-    @JsonProperty("id")
-    @Override
-    public String getEc() {
-        return ec;
+    public Entry() {
+        proteins = new HashSet<>();
     }
 
     /**
      *
-     * @param ec The ec
+     * @return The id
      */
     @JsonProperty("id")
-    public void setEc(String ec) {
-        this.ec = ec;
+    public String getId() {
+        return id;
+    }
+
+    /**
+     *
+     * @param id The id
+     */
+    @JsonProperty("id")
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -102,6 +108,11 @@ public class Entry extends EnzymeView {
     }
 
     @Override
+    public String getEc() {
+        return id;
+    }
+
+    @Override
     public String getEnzymeName() {
         return fields.getName().stream().findFirst().orElse("");
 
@@ -135,7 +146,32 @@ public class Entry extends EnzymeView {
     @Override
     public List<String> getProteins() {
         return fields.getProteinName().stream().collect(Collectors.toList());
-       
+
+    }
+//    @Override
+//    public List<Protein> getProteins() {
+//        return buildProtein();
+//
+//    }
+
+    private List<Protein> buildProtein() {
+        List<String> accessions = fields.getUNIPROTKB().stream().limit(50).collect(Collectors.toList());
+        ProteinService ps = new ProteinService();
+
+        do {
+            if (proteins.size() == 11) {
+                break;
+            }
+            for (String accession : accessions) {
+                List<uk.ac.ebi.ep.ebeye.search.Entry> entries = ps.getProteinView(id, accession);
+                for (uk.ac.ebi.ep.ebeye.search.Entry entry : entries) {
+                    Protein protein = new Protein(entry.getUniprotAccession(), entry.getTitle(), entry.getScientificName());
+                    proteins.add(protein);
+                }
+            }
+        } while (proteins.size() <= 11);
+
+        return proteins.stream().collect(Collectors.toList());
     }
 
     @JsonAnyGetter

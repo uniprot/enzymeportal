@@ -29,7 +29,7 @@ import java.util.Set;
     "id",
     "name",
     "description",
-    "acc",
+    "UNIPROTKB",
     "protein_name",
     "common_name",
     "scientific_name",
@@ -45,8 +45,8 @@ public class Fields {
     private List<String> name = new ArrayList<>();
     @JsonProperty("description")
     private List<String> description = new ArrayList<>();
-    @JsonProperty("acc")
-    private List<String> acc = new ArrayList<>();
+    @JsonProperty("UNIPROTKB")
+    private List<String> UNIPROTKB = new ArrayList<String>();
     @JsonProperty("protein_name")
     private Set<String> proteinName = new HashSet<>();
     @JsonProperty("common_name")
@@ -118,20 +118,20 @@ public class Fields {
 
     /**
      *
-     * @return The accession
+     * @return The uniprot accession
      */
-    @JsonProperty("acc")
-    public List<String> getAcc() {
-        return acc;
+    @JsonProperty("UNIPROTKB")
+    public List<String> getUNIPROTKB() {
+        return UNIPROTKB;
     }
 
     /**
      *
-     * @param acc The accession
+     * @param UNIPROTKB The uniprot accession
      */
-    @JsonProperty("acc")
-    public void setAcc(List<String> acc) {
-        this.acc = acc;
+    @JsonProperty("UNIPROTKB")
+    public void setUNIPROTKB(List<String> UNIPROTKB) {
+        this.UNIPROTKB = UNIPROTKB;
     }
 
     /**
