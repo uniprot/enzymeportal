@@ -73,7 +73,7 @@ public class EnzymeCentricController extends AbstractController {
         EBISearchResult ebiSearchResult = filterEbiSearchResult(searchKey, page, filters);
         if (ebiSearchResult != null) {
 
-            model.addAttribute("filtersApplied",filters);
+            model.addAttribute("filtersApplied", filters);
             model.addAttribute("searchKey", searchKey);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
@@ -81,7 +81,6 @@ public class EnzymeCentricController extends AbstractController {
             model.addAttribute("enzymeView", ebiSearchResult.getEntries());
             model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
             view = ENZYME_CENTRIC_PAGE;
-            //return "redirect:"+view;
         }
 
         return view;
@@ -117,26 +116,22 @@ public class EnzymeCentricController extends AbstractController {
 ////
 ////
 //    }
-    
-    
-    
-    
-    
-    
-    
-        private static final String SHOW_ENZYMES_V = "/eview";
+    private static final String SHOW_ENZYMES_V = "/eview";
     private static final String ENZYME_CENTRIC_PAGE_V = "eview";
 
     @RequestMapping(value = SHOW_ENZYMES_V, method = RequestMethod.GET)
-    public String showEnzymesView(Model model) {
-        String query = "cathepsin";
-        query = "mTOR";
+    public String showEnzymesView(@RequestParam(required = false, value = "s") String searchKey, Model model) {
+        if (searchKey == null) {
+            searchKey = "mTOR";
+            //searchKey = "cathepsin";
+        }
+
         int page = 0;
         ModelService service = new ModelService();
 
-        EBISearchResult eBISearchResult = service.getModelSearchResult(query, page);
+        EBISearchResult eBISearchResult = service.getModelSearchResult(searchKey, page);
 
-         model.addAttribute("searchKey", query);
+        model.addAttribute("searchKey", searchKey);
         model.addAttribute("ebiResult", eBISearchResult);
         model.addAttribute("enzymeView", eBISearchResult.getEntries());
         model.addAttribute("enzymeFacet", eBISearchResult.getFacets());
