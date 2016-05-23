@@ -6,7 +6,7 @@ package uk.ac.ebi.ep.xml.util;
  */
 public enum FieldName {
 
-    UNIPROT_NAME("uniprot_name"), PROTEIN_NAME("protein_name"),
+    UNIPROT_NAME("uniprot_name"), PROTEIN_NAME("protein_name"),PROTEIN_INFO("protein_info"),
     SCIENTIFIC_NAME("scientific_name"), COMMON_NAME("common_name"), SYNONYM("synonym"), STATUS("status"), SOURCE("source"),
     COMPOUND_NAME("compound_name"), COMPOUND_TYPE("compound_type"), DISEASE_NAME("disease_name"),ENZYME_FAMILY("enzyme_family");
 

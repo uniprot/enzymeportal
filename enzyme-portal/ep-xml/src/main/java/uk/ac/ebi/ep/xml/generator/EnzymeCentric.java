@@ -119,6 +119,7 @@ public class EnzymeCentric extends XmlGenerator {
         entries.forEach((uniprotEntry) -> {
             addUniprotIdFields(uniprotEntry, fields);
             addProteinNameFields(uniprotEntry, fields);
+            addProteinInfoFields(uniprotEntry, fields);
 
             addScientificNameFields(uniprotEntry, fields);
             addCommonNameFields(uniprotEntry, fields);

@@ -76,6 +76,20 @@ public class XmlTransformer {
         }
     }
 
+    protected void addProteinInfoFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
+            String specie = uniprotEntry.getScientificName();
+            if (!StringUtils.isEmpty(uniprotEntry.getCommonName())) {
+                specie = uniprotEntry.getCommonName();
+            }
+            String proteinInfo = uniprotEntry.getAccession() + "|" + uniprotEntry.getProteinName() + "_" + specie;
+
+            Field field = new Field(FieldName.PROTEIN_INFO.getName(), proteinInfo);
+            fields.add(field);
+
+        }
+    }
+
     protected void addScientificNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getScientificName())) {
             Field field = new Field(FieldName.SCIENTIFIC_NAME.getName(), uniprotEntry.getScientificName());
