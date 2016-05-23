@@ -47,7 +47,7 @@ public class EbeyeRestServiceBenchmark {
     @Bean
     public EbeyeRestService ebeyeRestService() {
 
-        return new EbeyeRestService();
+        return null;// new EbeyeRestService();//TODO
     }
 
     @Setup
@@ -78,7 +78,7 @@ public class EbeyeRestServiceBenchmark {
         query = "kinase";
         //query="ligase";
         //query = "sildenafil";
-        List<String> accessions = service.queryEbeyeForAccessions(query, true);
+        List<String> accessions = null;//service.queryEbeyeForAccessions(query, true);
         blackhole.consume(accessions);
 
     }
@@ -93,7 +93,7 @@ public class EbeyeRestServiceBenchmark {
         query = "kinase";
         //query="ligase";
         //query = "sildenafil";
-        List<String> accessions = service.queryEbeyeForAccessionsLazyReact(query, true, 0);
+        List<String> accessions = null;// service.queryEbeyeForAccessionsLazyReact(query, true, 0);
         blackhole.consume(accessions);
 
     }
