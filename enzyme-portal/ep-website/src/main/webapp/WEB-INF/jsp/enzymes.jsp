@@ -93,7 +93,7 @@
                                  <div class="subTitle">Compounds</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="compound_name_${v.value}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                         <li><input id="compound_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -101,7 +101,7 @@
                                   <div class="subTitle">Diseases</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="disease_name_${v.value}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                         <li><input id="disease_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>

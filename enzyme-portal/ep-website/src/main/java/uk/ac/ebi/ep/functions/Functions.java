@@ -144,10 +144,20 @@ public final class Functions {
         String link = url;
         if (url.contains("/")) {
             link = url.replace("/", "");
- 
+
         }
 
-        return "#omim"+link;
+        return "#omim" + link;
+    }
+
+    public static String replaceSpacesWithUnderScore(String text) {
+
+        if (text.contains(" ")) {
+            String refinedText = text.replaceAll(" ", "_");
+            return refinedText;
+        }
+
+        return text;
     }
 
     /**
