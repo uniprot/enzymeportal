@@ -130,7 +130,7 @@
          <c:if test="${not empty enzymeView}">
             <div>
 
-                   <table id="enzymeResults" cellpadding="60px">
+                   <table id="enzymeResults" cellpadding="60" cellspacing="60">
                        <tr>
                            <th>Name</th>
                            <th>Hits</th>
@@ -186,55 +186,19 @@
                                     <tr>
                                         <th> </th>
                                         <th>Associated Proteins:</th>
+                                        <th> </th>
                                     </tr>
-                                    <c:forEach var="protein" items="${enzyme.proteins}">
+                                    <c:forEach var="protein" begin="0" end="4" items="${enzyme.proteins}">
+                                        <tr class="proteinRow">
+                                            <td> </td>
+                                            <td width="50%">${protein}</td>
+                                            <td>[Species will be here]</td>
+                                        </tr>
+                                    </c:forEach>
                                     <tr class="proteinRow">
                                         <td> </td>
-                                        <td width="50%">
-                                                                  ${protein}
-
-                                            <%--<c:forEach var="i" begin="1" end="5">--%>
-                                                <%--<a href="${pageContext.request.contextPath}/search/${protein}/enzyme">${protein}</a>--%>
-                                             <%--</c:forEach>--%>
-
-
-                                        </td>
-
-
-                                        <td>
-                                            [Species will be here]
-                                            <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
-                                              <%--${sp.commonName},--%>
-                                            <%--</c:forEach>--%>
-
-
-                                            <%--<c:set var="proteinSpeciesSize" value="${fn:length(protein.speciesSet)}"/>--%>
-                                            <%--<c:set var="proteinSpecies" value="${protein.speciesSet}"/>--%>
-                                            <%--<c:set var="speciesMaxDisplay" value="${5}"/>--%>
-
-                                            <%--${proteinSpeciesSize} species found<br />--%>
-
-                                            <%--<c:if test="${proteinSpeciesSize gt 0}">--%>
-                                                <%--<c:if test="${proteinSpeciesSize <= speciesMaxDisplay}">--%>
-                                                  <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
-                                                    <%--${sp.commonName},--%>
-                                                  <%--</c:forEach>--%>
-                                                <%--</c:if>--%>
-                                                <%--<c:if test="${proteinSpeciesSize > speciesMaxDisplay}">--%>
-                                                    <%--<c:forEach var="i" begin="0" end="${speciesMaxDisplay-1}">--%>
-                                                        <%--thing2--%>
-                                                    <%--</c:forEach>--%>
-                                                    <%--**** More link***--%>
-                                                <%--</c:if>--%>
-                                            <%--</c:if>--%>
-                                        </td>
-
-
-                                    </tr>
-                                                                       </c:forEach>
-                                    <tr class="proteinRow">
-                                        <td></td>
                                         <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>
+                                        <td> </td>
                                     </tr>
                                 </table>
                                 </td>
