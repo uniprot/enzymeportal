@@ -69,12 +69,15 @@
 <!--                        <input type="hidden" name="searchKey" value="${searchKey}"/>-->
                     <c:forEach var="facet" items="${enzymeFacet}">
                          <div>
-                             <h3>${filtersApplied}</h3>
+                             <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
+
+
+
                              <c:if test="${facet.id eq 'enzyme_family'}">
                                  <div class="subTitle">Enzyme Family</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" checked="checked" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -82,7 +85,7 @@
                                  <div class="subTitle">Compound Type</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="compound_type_${v.value}" name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -90,7 +93,7 @@
                                  <div class="subTitle">Compounds</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="compound_name_${v.value}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -98,7 +101,7 @@
                                   <div class="subTitle">Diseases</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="disease_name_${v.value}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -106,7 +109,7 @@
                                 <div class="subTitle">Organism</div>
                                 <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
