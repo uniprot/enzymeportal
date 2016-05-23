@@ -490,8 +490,9 @@ background-color: #ECF0F1;
     font-weight: bold;
 }
 
-#enzymeResults td{
+#enzymeResults td, #enzymeResults th{
     vertical-align: top;
+    padding: inherit;
 }
 
 .enzymeName{
@@ -510,6 +511,13 @@ table#enzymeResults tr.enzymeRow{
 }
 
 
+table#enzymeResults td, table#enzymeResults th{
+    padding: 7px 10px 10px 10px;
+}
+
+table#enzymeResults td:first-child{
+    padding-left: 20px;
+}
 
 table#enzymeResults tr.proteinSectionOpen{
     border-left: solid 1px #ccc;

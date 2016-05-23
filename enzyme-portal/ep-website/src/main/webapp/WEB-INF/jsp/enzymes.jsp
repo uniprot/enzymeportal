@@ -69,12 +69,15 @@
 <!--                        <input type="hidden" name="searchKey" value="${searchKey}"/>-->
                     <c:forEach var="facet" items="${enzymeFacet}">
                          <div>
-                             <h3>${filtersApplied}</h3>
+                             <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
+
+
+
                              <c:if test="${facet.id eq 'enzyme_family'}">
                                  <div class="subTitle">Enzyme Family</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" checked="checked" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -82,7 +85,7 @@
                                  <div class="subTitle">Compound Type</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="compound_type_${v.value}" name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -90,7 +93,7 @@
                                  <div class="subTitle">Compounds</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="compound_name_${v.value}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -98,7 +101,7 @@
                                   <div class="subTitle">Diseases</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="disease_name_${v.value}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -106,7 +109,7 @@
                                 <div class="subTitle">Organism</div>
                                 <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> <a href="${v.value} ">${v.label} </a>(${v.count})</li>
+                                         <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -130,7 +133,7 @@
          <c:if test="${not empty enzymeView}">
             <div>
 
-                   <table id="enzymeResults" cellpadding="60px">
+                   <table id="enzymeResults" cellpadding="60" cellspacing="60">
                        <tr>
                            <th>Name</th>
                            <th>Hits</th>
@@ -186,55 +189,19 @@
                                     <tr>
                                         <th> </th>
                                         <th>Associated Proteins:</th>
+                                        <th> </th>
                                     </tr>
-                                    <c:forEach var="protein" items="${enzyme.proteins}">
+                                    <c:forEach var="protein" begin="0" end="4" items="${enzyme.proteins}">
+                                        <tr class="proteinRow">
+                                            <td> </td>
+                                            <td width="50%">${protein}</td>
+                                            <td>[Species will be here]</td>
+                                        </tr>
+                                    </c:forEach>
                                     <tr class="proteinRow">
                                         <td> </td>
-                                        <td width="50%">
-                                                                  ${protein}
-
-                                            <%--<c:forEach var="i" begin="1" end="5">--%>
-                                                <%--<a href="${pageContext.request.contextPath}/search/${protein}/enzyme">${protein}</a>--%>
-                                             <%--</c:forEach>--%>
-
-
-                                        </td>
-
-
-                                        <td>
-                                            [Species will be here]
-                                            <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
-                                              <%--${sp.commonName},--%>
-                                            <%--</c:forEach>--%>
-
-
-                                            <%--<c:set var="proteinSpeciesSize" value="${fn:length(protein.speciesSet)}"/>--%>
-                                            <%--<c:set var="proteinSpecies" value="${protein.speciesSet}"/>--%>
-                                            <%--<c:set var="speciesMaxDisplay" value="${5}"/>--%>
-
-                                            <%--${proteinSpeciesSize} species found<br />--%>
-
-                                            <%--<c:if test="${proteinSpeciesSize gt 0}">--%>
-                                                <%--<c:if test="${proteinSpeciesSize <= speciesMaxDisplay}">--%>
-                                                  <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
-                                                    <%--${sp.commonName},--%>
-                                                  <%--</c:forEach>--%>
-                                                <%--</c:if>--%>
-                                                <%--<c:if test="${proteinSpeciesSize > speciesMaxDisplay}">--%>
-                                                    <%--<c:forEach var="i" begin="0" end="${speciesMaxDisplay-1}">--%>
-                                                        <%--thing2--%>
-                                                    <%--</c:forEach>--%>
-                                                    <%--**** More link***--%>
-                                                <%--</c:if>--%>
-                                            <%--</c:if>--%>
-                                        </td>
-
-
-                                    </tr>
-                                                                       </c:forEach>
-                                    <tr class="proteinRow">
-                                        <td></td>
                                         <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>
+                                        <td> </td>
                                     </tr>
                                 </table>
                                 </td>
