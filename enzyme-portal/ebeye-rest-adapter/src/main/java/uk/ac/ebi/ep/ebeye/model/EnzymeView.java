@@ -20,7 +20,7 @@ public class EnzymeView {
     private String ec;
     private List<String> catalyticActivities;
     private List<String> species;
-   // private List<Protein> proteins;
+    private List<Protein> protein;
     private List<String> proteins;
 
     public String getEnzymeName() {
@@ -71,13 +71,13 @@ public class EnzymeView {
         this.species = species;
     }
 
-//    public List<Protein> getProteins() {
-//        return proteins;
-//    }
-//
-//    public void setProteins(List<Protein> proteins) {
-//        this.proteins = proteins;
-//    }
+    public List<Protein> getProtein() {
+        return protein;
+    }
+
+    public void setProtein(List<Protein> proteins) {
+        this.protein = proteins;
+    }
     
     
 
