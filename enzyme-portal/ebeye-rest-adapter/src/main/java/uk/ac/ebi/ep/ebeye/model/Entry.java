@@ -148,11 +148,11 @@ public class Entry extends EnzymeView {
         return fields.getProteinName().stream().collect(Collectors.toList());
 
     }
-//    @Override
-//    public List<Protein> getProteins() {
-//        return buildProtein();
-//
-//    }
+    @Override
+    public List<Protein> getProtein() {
+        return buildProtein();
+
+    }
 
     private List<Protein> buildProtein() {
         List<String> accessions = fields.getUNIPROTKB().stream().limit(50).collect(Collectors.toList());
