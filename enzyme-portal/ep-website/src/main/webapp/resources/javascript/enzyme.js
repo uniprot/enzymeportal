@@ -35,9 +35,14 @@ $( document ).ready(function() {
     });
 
     $(".toggleSpeciesList").click(function() {
-          console.log("inside");
           $(this).parent().next(".speciesFullList").toggle();
       });
+
+    $(".toggleOrganismList").click(function() {
+          $(".organismFullList").toggle();
+      });
+
+
 
 
     var filtersAppliedList = $("#filtersApplied").val();

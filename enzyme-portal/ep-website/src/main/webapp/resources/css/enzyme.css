@@ -564,11 +564,11 @@ table#enzymeResultsProteins tr{
     background-image: url("../images/downTwizzle.png");
 }
 
-.speciesFullList{
+.speciesFullList, .organismFullList{
     display: none;
 }
 
-.toggleSpeciesList{
+.toggleSpeciesList, .toggleOrganismList{
 	cursor: pointer;
 }
 
