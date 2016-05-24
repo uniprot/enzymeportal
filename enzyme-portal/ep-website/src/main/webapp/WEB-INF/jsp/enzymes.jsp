@@ -77,7 +77,7 @@
                                  <div class="subTitle">Enzyme Family</div>
                                  <ul>
                                      <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" checked="checked" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                         <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                      </c:forEach>
                                  </ul>
                              </c:if>
@@ -145,7 +145,14 @@
 
                        <c:forEach var="enzyme" items="${enzymeView}">
                            <tr class="enzymeRow">
-                               <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
+                               <c:choose>
+                                    <c:when test='${enzyme.numEnzymeHits > 0}'>
+                                        <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
+                                    </c:when>
+                                   <c:otherwise>
+                                       <td>${enzyme.enzymeName}</td>
+                                   </c:otherwise>
+                               </c:choose>
                                <td>${enzyme.numEnzymeHits}</td>
                                <td>${enzyme.enzymeFamily}</td>
                                <td>${enzyme.ec}</td>
