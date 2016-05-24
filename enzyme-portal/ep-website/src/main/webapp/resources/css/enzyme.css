@@ -515,6 +515,12 @@ table#enzymeResults td, table#enzymeResults th{
     padding: 7px 10px 10px 10px;
 }
 
+table#enzymeResultsProteins td, table#enzymeResultsProteins th{
+    padding: 1px 1px 1px 1px;
+}
+
+
+
 table#enzymeResults td:first-child{
     padding-left: 20px;
 }
@@ -558,11 +564,11 @@ table#enzymeResultsProteins tr{
     background-image: url("../images/downTwizzle.png");
 }
 
-.speciesFullList{
+.speciesFullList, .organismFullList{
     display: none;
 }
 
-.toggleSpeciesList{
+.toggleSpeciesList, .toggleOrganismList{
 	cursor: pointer;
 }
 
@@ -576,4 +582,8 @@ table#enzymeResultsProteins tr{
 
 .paginationContainer{
     float: right;
+}
+
+#full-view{
+    margin-top: 15px;
 }

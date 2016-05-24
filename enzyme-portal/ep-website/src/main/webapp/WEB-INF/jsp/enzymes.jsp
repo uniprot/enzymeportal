@@ -66,72 +66,78 @@
 
                 <div class="sublevel1">
                     <form id="facetFilterForm" action="${pageContext.request.contextPath}/search/filter?searchKey=${searchKey}" method="POST">
-<!--                        <input type="hidden" name="searchKey" value="${searchKey}"/>-->
-                    <c:forEach var="facet" items="${enzymeFacet}">
-                         <div>
-                             <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
-
-
-
-                             <c:if test="${facet.id eq 'enzyme_family'}">
-                                 <div class="subTitle">Enzyme Family</div>
-                                 <ul>
-                                     <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" checked="checked" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                     </c:forEach>
-                                 </ul>
-                             </c:if>
-                             <c:if test="${facet.id eq 'compound_type'}">
-                                 <div class="subTitle">Compound Type</div>
-                                 <ul>
-                                     <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="compound_type_${v.value}" name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                     </c:forEach>
-                                 </ul>
-                             </c:if>
-                             <c:if test="${facet.id eq 'compound_name'}">
-                                 <div class="subTitle">Compounds</div>
-                                 <ul>
-                                     <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="compound_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                     </c:forEach>
-                                 </ul>
-                             </c:if>
-                              <c:if test="${facet.id eq 'disease_name'}">
-                                  <div class="subTitle">Diseases</div>
-                                 <ul>
-                                     <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="disease_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                     </c:forEach>
-                                 </ul>
-                             </c:if>
-                            <c:if test="${facet.id eq 'TAXONOMY'}">
-                                <div class="subTitle">Organism</div>
-                                <ul>
-                                     <c:forEach var="v" items="${facet.facetValues}">
-                                         <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                     </c:forEach>
-                                 </ul>
-                             </c:if>
-                         </div>
-                     </c:forEach>
-
-
+                        <c:forEach var="facet" items="${enzymeFacet}">
+                             <div>
+                                 <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
+                                 <c:if test="${facet.id eq 'enzyme_family'}">
+                                     <div class="subTitle">Enzyme Family</div>
+                                     <ul>
+                                         <c:forEach var="v" items="${facet.facetValues}">
+                                             <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                         </c:forEach>
+                                     </ul>
+                                 </c:if>
+                                 <c:if test="${facet.id eq 'compound_type'}">
+                                     <div class="subTitle">Compound Type</div>
+                                     <ul>
+                                         <c:forEach var="v" items="${facet.facetValues}">
+                                             <li><input id="compound_type_${v.value}" name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                         </c:forEach>
+                                     </ul>
+                                 </c:if>
+                                 <c:if test="${facet.id eq 'compound_name'}">
+                                     <div class="subTitle">Compounds</div>
+                                     <ul>
+                                         <c:forEach var="v" items="${facet.facetValues}">
+                                             <li><input id="compound_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                         </c:forEach>
+                                     </ul>
+                                 </c:if>
+                                  <c:if test="${facet.id eq 'disease_name'}">
+                                      <div class="subTitle">Diseases</div>
+                                     <ul>
+                                         <c:forEach var="v" items="${facet.facetValues}">
+                                             <li><input id="disease_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                         </c:forEach>
+                                     </ul>
+                                 </c:if>
+                                <c:if test="${facet.id eq 'TAXONOMY'}">
+                                    <div class="subTitle">Organism</div>
+                                    <ul>
+                                        <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
+                                        <c:choose>
+                                             <c:when test='${facetSize > 10}'>
+                                                 <c:forEach begin="0" end="9" var="v" items="${facet.facetValues}">
+                                                    <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                                 </c:forEach>
+                                                 <li class="toggleOrganismList">${facetSize - 10} more...</li>
+                                                     <div class="organismFullList">
+                                                         <c:forEach begin="10" var="vMore" items="${facet.facetValues}">
+                                                            <li><input id="TAXONOMY_${vMore.value}" name="filterFacet" value="TAXONOMY:${vMore.value}" type="checkbox" onChange="this.form.submit()"> ${vMore.label} (${vMore.count})</li>
+                                                         </c:forEach>
+                                                     </div>
+                                             </c:when>
+                                             <c:otherwise>
+                                                 <c:forEach var="v" items="${facet.facetValues}">
+                                                    <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                                 </c:forEach>
+                                             </c:otherwise>
+                                         </c:choose>
+                                     </ul>
+                                 </c:if>
+                             </div>
+                         </c:forEach>
                     </form>
-
-            </div>
+                </div>
             </div>
             <%--filter --%>
 
         </section>
 
-
-
-
         <section class="grid_18 alpha" id="search-results">
 
-         <c:if test="${not empty enzymeView}">
-            <div>
+             <c:if test="${not empty enzymeView}">
+                <div>
 
                    <table id="enzymeResults" cellpadding="60" cellspacing="60">
                        <tr>
@@ -145,7 +151,14 @@
 
                        <c:forEach var="enzyme" items="${enzymeView}">
                            <tr class="enzymeRow">
-                               <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
+                               <c:choose>
+                                    <c:when test='${enzyme.numEnzymeHits > 0}'>
+                                        <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
+                                    </c:when>
+                                   <c:otherwise>
+                                       <td>${enzyme.enzymeName}</td>
+                                   </c:otherwise>
+                               </c:choose>
                                <td>${enzyme.numEnzymeHits}</td>
                                <td>${enzyme.enzymeFamily}</td>
                                <td>${enzyme.ec}</td>
@@ -211,13 +224,9 @@
 
                    </table>
 
+                </div>
 
-
-                </ul>
-
-            </div>
-
-        </c:if>
+            </c:if>
 
         </section>
     </div>
