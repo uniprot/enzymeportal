@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
+import uk.ac.ebi.ep.ebeye.model.Entry;
 import uk.ac.ebi.ep.ebeye.model.ModelService;
 
 /**
@@ -48,17 +53,34 @@ public class EnzymeCentricController extends AbstractController {
     @RequestMapping(value = SEARCH, method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModel, Model model, HttpServletRequest request) {
         String view = "error";
-        int page = 0;
+        int startPage = 0;
+        int pageSize = 10;
 
         String searchKey = searchModel.getSearchparams().getText().trim().toLowerCase();
-        EBISearchResult ebiSearchResult = getEbiSearchResult(searchKey, page);
+        EBISearchResult ebiSearchResult = getEbiSearchResult(searchKey, startPage);
+
         if (ebiSearchResult != null) {
+            long hitCount = ebiSearchResult.getHitCount();
+            Pageable pageable = new PageRequest(startPage, pageSize);
+            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+
+            List<Entry> enzymeView = page.getContent();
+
+            int current = page.getNumber() + 1;
+            int begin = Math.max(1, current - 5);
+            int end = Math.min(begin + 10, page.getTotalPages());
+
+            model.addAttribute("page", page);
+            model.addAttribute("beginIndex", begin);
+            model.addAttribute("endIndex", end);
+            model.addAttribute("currentIndex", current);
+            model.addAttribute("enzymeView", enzymeView);
 
             model.addAttribute("searchKey", searchKey);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
             model.addAttribute("ebiResult", ebiSearchResult);
-            model.addAttribute("enzymeView", ebiSearchResult.getEntries());
+//            model.addAttribute("enzymeView", ebiSearchResult.getEntries());
             model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
             view = ENZYME_CENTRIC_PAGE;
         }
