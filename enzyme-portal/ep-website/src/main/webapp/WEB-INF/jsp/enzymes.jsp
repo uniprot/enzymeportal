@@ -37,8 +37,11 @@
 
     <div id="content" role="main" class="grid_24 clearfix" >
 
-        <h1>Enzyme Results - ${ebiResult.hitCount} Enzymes found for "${searchKey}"</h1>
-
+        <section class="grid_18 alpha">
+        <h1>Enzyme Results</h1>
+        <h2>${ebiResult.hitCount} Enzymes found for "${searchKey}"</h2>
+        </section>
+        <section class="grid_6 alpha">
         <nav class="paginationContainer">
           <ul class="pagination">
             <li>
@@ -58,7 +61,9 @@
             </li>
           </ul>
         </nav>
+        </section>
 
+        <section class="grid_24">
 
         <section class="grid_6 alpha" id="search-filters">
 
@@ -251,6 +256,7 @@
 
             </c:if>
 
+        </section>
         </section>
     </div>
 

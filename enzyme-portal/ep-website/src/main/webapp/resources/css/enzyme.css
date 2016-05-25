@@ -612,3 +612,7 @@ ul, ol{
 #facetFilterForm{
     padding: 0px;
 }
+
+.paginationContainer{
+    margin-top: 65px;
+}
