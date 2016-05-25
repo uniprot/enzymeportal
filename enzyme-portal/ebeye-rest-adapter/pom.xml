@@ -38,6 +38,10 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency> 
@@ -48,11 +52,11 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
-               </dependency>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-             </dependency>
+        </dependency>
         <dependency>
             <groupId>com.aol.simplereact</groupId>
             <artifactId>simple-react</artifactId>
@@ -71,27 +75,27 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-              <type>jar</type>
+            <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-             <type>jar</type>
+            <type>jar</type>
             <scope>compile</scope>
         </dependency> 
         
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-               <type>jar</type>
+            <type>jar</type>
             <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-                 <type>jar</type>
+            <type>jar</type>
             <scope>compile</scope>
         </dependency>
  
@@ -100,7 +104,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-                      <exclusions>
+            <exclusions>
                 <!-- Exclude Commons Logging in favor of SLF4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -113,11 +117,11 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-               </dependency>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-               </dependency>
+        </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
@@ -127,7 +131,7 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
-                </dependency>
+        </dependency>
          
         <dependency>
             <groupId>junit</groupId>
