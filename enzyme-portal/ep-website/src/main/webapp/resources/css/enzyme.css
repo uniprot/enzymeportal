@@ -600,3 +600,15 @@ label{
 dl{
     margin-top: 15px;
 }
+input[type=checkbox], input[type=radio]{
+    margin: 0px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+ul, ol{
+    padding-left: 5px;
+}
+
+#facetFilterForm{
+    padding: 0px;
+}
