@@ -587,3 +587,16 @@ table#enzymeResultsProteins tr{
 #full-view{
     margin-top: 15px;
 }
+
+*{
+    -webkit-box-sizing: inherit;
+}
+label{
+    font-weight: normal;
+}
+.panel{
+    margin-bottom: 0px;
+}
+dl{
+    margin-top: 15px;
+}
