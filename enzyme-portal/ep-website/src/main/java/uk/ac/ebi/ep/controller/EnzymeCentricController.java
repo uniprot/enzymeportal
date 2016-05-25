@@ -69,8 +69,8 @@ public class EnzymeCentricController extends AbstractController {
             int current = page.getNumber() + 1;
             int begin = Math.max(1, current - 5);
             int end = Math.min(begin + 10, page.getTotalPages());
-
-            model.addAttribute("page", page);
+            
+             model.addAttribute("page", page);
             model.addAttribute("beginIndex", begin);
             model.addAttribute("endIndex", end);
             model.addAttribute("currentIndex", current);
@@ -94,7 +94,7 @@ public class EnzymeCentricController extends AbstractController {
         int page = 0;
         EBISearchResult ebiSearchResult = filterEbiSearchResult(searchKey, page, filters);
         if (ebiSearchResult != null) {
-
+            System.out.println("APPLIED FILTERS "+ filters);
             model.addAttribute("filtersApplied", filters);
             model.addAttribute("searchKey", searchKey);
             model.addAttribute("searchModel", searchModel);
