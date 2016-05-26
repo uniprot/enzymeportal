@@ -42,7 +42,16 @@ $( document ).ready(function() {
           $(".organismFullList").toggle();
       });
 
-
+    function testCheckBoxes(){
+        var counter = 0;
+        $('.organismFullList li input:checked').each(function() {
+            counter = counter+1;
+        });
+        if(counter >= 1){
+            $(".organismFullList").toggle();
+        }
+    }
+    setTimeout(testCheckBoxes, 500);
 
 
     var filtersAppliedList = $("#filtersApplied").val();

@@ -37,8 +37,11 @@
 
     <div id="content" role="main" class="grid_24 clearfix" >
 
-        <h1>Enzyme Results - ${ebiResult.hitCount} Enzymes found for "${searchKey}"</h1>
-
+        <section class="grid_18 alpha">
+        <h1>Enzyme Results</h1>
+        <h2>${ebiResult.hitCount} Enzymes found for "${searchKey}"</h2>
+        </section>
+        <section class="grid_6 alpha">
         <nav class="paginationContainer">
           <ul class="pagination">
             <li>
@@ -58,50 +61,73 @@
             </li>
           </ul>
         </nav>
+        </section>
 
+        <section class="grid_24">
 
         <section class="grid_6 alpha" id="search-filters">
 
             <div class="filter">
 
-                <div class="sublevel1">
                     <form id="facetFilterForm" action="${pageContext.request.contextPath}/search/filter?searchKey=${searchKey}" method="POST">
                         <c:forEach var="facet" items="${enzymeFacet}">
                              <div>
+
                                  <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
                                  <c:if test="${facet.id eq 'enzyme_family'}">
+                                 <div class="sublevel1">
                                      <div class="subTitle">Enzyme Family</div>
                                      <ul>
                                          <c:forEach var="v" items="${facet.facetValues}">
                                              <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                          </c:forEach>
                                      </ul>
+                                 </div>
                                  </c:if>
+
+
+
                                  <c:if test="${facet.id eq 'compound_type'}">
+                                 <div class="sublevel1">
                                      <div class="subTitle">Compound Type</div>
                                      <ul>
                                          <c:forEach var="v" items="${facet.facetValues}">
                                              <li><input id="compound_type_${v.value}" name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                          </c:forEach>
                                      </ul>
+                                 </div>
                                  </c:if>
+
+
+
                                  <c:if test="${facet.id eq 'compound_name'}">
+                                 <div class="sublevel1">
                                      <div class="subTitle">Compounds</div>
                                      <ul>
                                          <c:forEach var="v" items="${facet.facetValues}">
                                              <li><input id="compound_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                          </c:forEach>
                                      </ul>
+                                 </div>
                                  </c:if>
+
+
+
                                   <c:if test="${facet.id eq 'disease_name'}">
+                                 <div class="sublevel1">
                                       <div class="subTitle">Diseases</div>
                                      <ul>
                                          <c:forEach var="v" items="${facet.facetValues}">
                                              <li><input id="disease_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                          </c:forEach>
                                      </ul>
+                                 </div>
                                  </c:if>
+
+
+
                                 <c:if test="${facet.id eq 'TAXONOMY'}">
+                                 <div class="sublevel1">
                                     <div class="subTitle">Organism</div>
                                     <ul>
                                         <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
@@ -124,11 +150,13 @@
                                              </c:otherwise>
                                          </c:choose>
                                      </ul>
+                                 </div>
                                  </c:if>
+
                              </div>
                          </c:forEach>
                     </form>
-                </div>
+
             </div>
             <%--filter --%>
 
@@ -228,6 +256,7 @@
 
             </c:if>
 
+        </section>
         </section>
     </div>
 
