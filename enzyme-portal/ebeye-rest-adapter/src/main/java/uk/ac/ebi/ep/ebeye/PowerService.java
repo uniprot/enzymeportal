@@ -23,7 +23,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 import uk.ac.ebi.ep.ebeye.model.Protein;
@@ -143,8 +145,40 @@ public class PowerService {
 
         return searchEbeyeDomainProtein(buildUrlsForAsyncRequestProtein(query, iteration), limit);
     }
+    
+    
+   private List<Protein> searchEbeyeDomainProtein(List<String> urls, int limit)  {
+        HttpMethod method = HttpMethod.GET;
 
-    private List<Protein> searchEbeyeDomainProtein(List<String> urls, int limit) {
+        // Define response type
+        Class<EbeyeSearchResult> responseType = EbeyeSearchResult.class;
+
+        // Define headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
+
+        for(String url : urls){
+        ListenableFuture<ResponseEntity<EbeyeSearchResult>> future = asyncRestTemplate
+                .exchange(url, method, requestEntity, responseType);
+
+        try {
+            ResponseEntity<EbeyeSearchResult> results = future.get();
+            List<Protein> proteins = results.getBody()
+                    .getEntries().stream().distinct().map(Entry::getProtein).distinct().limit(limit).collect(Collectors.toList());
+            return proteins;
+        } catch (HttpClientErrorException ex) {
+            logger.error(ex.getMessage(), ex);
+        }   catch (InterruptedException | ExecutionException ex) {
+              logger.error(ex.getMessage(), ex); 
+            }
+        }
+
+        return null;
+    }
+
+    private List<Protein> searchEbeyeDomainProteinXXX(List<String> urls, int limit) {
 
         HttpMethod method = HttpMethod.GET;
 

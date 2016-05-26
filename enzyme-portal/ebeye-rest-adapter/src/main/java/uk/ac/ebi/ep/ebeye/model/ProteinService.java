@@ -23,12 +23,16 @@ public class ProteinService {
         restTemplate = new RestTemplate();
     }
 
-    public EbeyeSearchResult getEbeyeSearchResult(String ec, String accession) {
+        public EbeyeSearchResult getEbeyeSearchResult(String ec, String query) {
 //http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query=INTENZ:3.1.4.35AND%20UNIPROTKB:P52731&fields=id,name&size=7&format=json
         //String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query=INTENZ:" + ec + "AND UNIPROTKB:" + accession + "&fields=id,name,scientific_name&size=5&format=json";
- String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query=INTENZ:" + ec + "&fields=id,name,scientific_name&size=100&format=json";
-
-        EbeyeSearchResult results = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
+// String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query=INTENZ:" + ec + "&fields=id,name,scientific_name&size=100&format=json";
+//CORRECT QUERY
+ //String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query=cancer%20AND%20INTENZ:3.6.1.15&fields=id,name,status,INTENZ&size=7&format=json";
+       
+ String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+"AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
+ 
+ EbeyeSearchResult results = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
         return results;
     }
 

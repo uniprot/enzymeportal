@@ -13,6 +13,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.ebeye.EbeyeProteinService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 import uk.ac.ebi.ep.ebeye.ModelService;
@@ -39,10 +40,10 @@ public class EbeyeConfig {
         return new EbeyeRestService(ebeyeIndexUrl, restTemplate);
     }
 
-//    @Bean
-//    public EbeyeProteinService ebeyeProteinService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
-//        return new EbeyeProteinService(ebeyeIndexUrl, restTemplate);
-//    }
+    @Bean
+    public EbeyeProteinService ebeyeProteinService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
+        return new EbeyeProteinService(ebeyeIndexUrl, restTemplate);
+    }
 
     @Bean
     public PowerService powerService(EbeyeIndexUrl ebeyeIndexUrl,AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate ){

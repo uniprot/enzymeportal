@@ -162,7 +162,7 @@ public class Entry extends EnzymeView {
 
     @Override
     public List<Protein> getProtein() {
-       // System.out.println("calling protein .."+ id);
+        System.out.println("calling protein .."+ id);
         List<Protein>  p = this.powerService.queryForUniqueProteins(id, 5);
      
         return p;
