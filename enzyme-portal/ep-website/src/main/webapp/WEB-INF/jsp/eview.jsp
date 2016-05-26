@@ -185,7 +185,7 @@
                            </tr>
                            <!--    please use variables where applicable -- I used static numbers for testing purposes-->
                                      <c:set var="proteinSize" value="${fn:length(enzyme.protein)}"/>
-                                     <c:if test="${proteinSize-1 > 0}">
+                                     <c:if test="${proteinSize > 0}">
                            <tr id="proteinList" style="display: none">
                                <td colspan="6">
                                 <table id="enzymeResultsProteins">
@@ -195,7 +195,7 @@
                                     </tr>
 
                                      <c:choose>
-                                         <c:when test="${proteinSize-1 >= 5}">
+                                         <c:when test="${proteinSize >= 5}">
                                     
                                       <c:forEach var="p" begin="0" end="${4}">
                                    <%-- <c:forEach var="p" items="${enzyme.protein}">--%>
