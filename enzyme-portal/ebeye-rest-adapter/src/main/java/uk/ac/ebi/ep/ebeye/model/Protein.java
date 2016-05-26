@@ -5,8 +5,6 @@
  */
 package uk.ac.ebi.ep.ebeye.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -17,7 +15,7 @@ public class Protein {
 
     private String accession;
     private String proteinName;
-    private List<String> species;
+    private String species;
 
     public Protein(String accession, String proteinName) {
         this.accession = accession;
@@ -26,7 +24,7 @@ public class Protein {
     
     
 
-    public Protein(String accession, String proteinName, List<String> species) {
+    public Protein(String accession, String proteinName, String species) {
         this.accession = accession;
         this.proteinName = proteinName;
         this.species = species;
@@ -48,14 +46,12 @@ public class Protein {
         this.proteinName = proteinName;
     }
 
-    public List<String> getSpecies() {
-        if (species == null) {
-            species = new ArrayList<>();
-        }
+    public String getSpecies() {
+
         return species;
     }
 
-    public void setSpecies(List<String> species) {
+    public void setSpecies(String species) {
         this.species = species;
     }
 

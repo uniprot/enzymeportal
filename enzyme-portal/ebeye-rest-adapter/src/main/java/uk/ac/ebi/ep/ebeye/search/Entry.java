@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import uk.ac.ebi.ep.ebeye.model.Protein;
 
 /**
  * Represents the result object from Enzyme Portal domain in Ebeye Search Index
@@ -32,6 +33,7 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
 
     private String title;
     private List<String> scientificName;
+    private Protein protein;
 
     @JsonIgnore
     private final Map<String, Fields> fieldsMap = new HashMap<>();
@@ -90,11 +92,20 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
     }
 
     public List<String> getScientificName() {
-       scientificName = fields.getScientificName();
+        scientificName = fields.getScientificName();
         return scientificName;
     }
-    
-   
+
+    public Protein getProtein() {
+        String t = fields.getName().stream().findFirst().orElse("");
+        String sci = getScientificName().stream().findFirst().orElse("");
+        Protein p = new Protein(getUniprotAccession(), t, sci);
+        return p;
+    }
+
+    public void setProtein(Protein protein) {
+        this.protein = protein;
+    }
 
 //    @Override
 //    public String toString() {

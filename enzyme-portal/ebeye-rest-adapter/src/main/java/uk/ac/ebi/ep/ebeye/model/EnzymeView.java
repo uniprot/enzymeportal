@@ -7,11 +7,14 @@ package uk.ac.ebi.ep.ebeye.model;
 
 import java.util.List;
 import java.util.Objects;
+import org.springframework.context.annotation.Import;
+import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Import({EbeyeConfig.class, })
 public class EnzymeView {
 
     private String enzymeName;
@@ -22,7 +25,8 @@ public class EnzymeView {
     private List<String> species;
     private List<Protein> protein;
     private List<String> proteins;
-
+    private int numProteins;
+    
     public String getEnzymeName() {
         return enzymeName;
     }
@@ -88,6 +92,16 @@ public class EnzymeView {
     public void setProteins(List<String> proteins) {
         this.proteins = proteins;
     }
+
+    public int getNumProteins() {
+        return numProteins;
+    }
+
+    public void setNumProteins(int numProteins) {
+        this.numProteins = numProteins;
+    }
+    
+    
 
     @Override
     public int hashCode() {

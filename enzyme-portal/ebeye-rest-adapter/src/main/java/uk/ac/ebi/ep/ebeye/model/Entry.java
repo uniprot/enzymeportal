@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.ebeye.PowerService;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
 
 /**
  * Represents the result object from Enzyme Portal domain in EBI Search service
@@ -39,18 +43,24 @@ public class Entry extends EnzymeView {
     private String source;
     @JsonProperty("fields")
     private Fields fields;
-//    private String enzymeName;
-//    private String enzymeFamily;
-//    private List<String> catalyticActivities;
-//    private int numEnzymeHits;
-//    private List<String> species;
+
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private Set<Protein> proteins = null;
 
+    private PowerService powerService;
+
     public Entry() {
+
         proteins = new HashSet<>();
+        EbeyeIndexUrl ebeyeIndexUrl = new EbeyeIndexUrl();
+        ebeyeIndexUrl.setChunkSize(10);
+        ebeyeIndexUrl.setMaxEbiSearchLimit(100);
+        ebeyeIndexUrl.setDefaultSearchIndexUrl("http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal");
+        // proteinService = new EbeyeProteinService(ebeyeIndexUrl, new RestTemplate());
+        powerService = new PowerService(ebeyeIndexUrl, new AsyncRestTemplate(), new RestTemplate());
+      
     }
 
     /**
@@ -145,31 +155,39 @@ public class Entry extends EnzymeView {
 
     @Override
     public List<String> getProteins() {
+        //System.out.println("calling protins name "+ id);
         return fields.getProteinName().stream().collect(Collectors.toList());
 
     }
+
     @Override
     public List<Protein> getProtein() {
-        return buildProtein();
+       // System.out.println("calling protein .."+ id);
+        List<Protein>  p = this.powerService.queryForUniqueProteins(id, 5);
+     
+        return p;
 
     }
 
     private List<Protein> buildProtein() {
-        List<String> accessions = fields.getUNIPROTKB().stream().limit(50).collect(Collectors.toList());
-        ProteinService ps = new ProteinService();
+        List<String> accessions = fields.getUNIPROTKB().stream().collect(Collectors.toList());
+   
 
         do {
-            if (proteins.size() == 11) {
+            if (proteins.size() == 5) {
                 break;
             }
-            for (String accession : accessions) {
-                List<uk.ac.ebi.ep.ebeye.search.Entry> entries = ps.getProteinView(id, accession);
-                for (uk.ac.ebi.ep.ebeye.search.Entry entry : entries) {
-                    Protein protein = new Protein(entry.getUniprotAccession(), entry.getTitle(), entry.getScientificName());
-                    proteins.add(protein);
-                }
+            //for (String accession : accessions) {
+            String accession = "";
+            List<uk.ac.ebi.ep.ebeye.search.Entry> entries =null;// ps.getProteinView(id, accession).stream().distinct().collect(Collectors.toList());
+     
+            for (uk.ac.ebi.ep.ebeye.search.Entry entry : entries) {
+               String sc = entry.getScientificName().stream().findFirst().orElse("");
+                Protein protein = new Protein(entry.getUniprotAccession(), entry.getTitle(), sc);
+                proteins.add(protein);
             }
-        } while (proteins.size() <= 11);
+            //}
+        } while (proteins.size() <= 5);
 
         return proteins.stream().collect(Collectors.toList());
     }

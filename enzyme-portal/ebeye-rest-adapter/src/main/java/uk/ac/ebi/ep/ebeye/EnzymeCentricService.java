@@ -12,13 +12,11 @@ import java.util.stream.IntStream;
 import static net.javacrumbs.futureconverter.springjava.FutureConverter.toCompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
@@ -45,8 +43,8 @@ public class EnzymeCentricService {
     private final int FJP_TRIGGER = 4;
     private final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
     
-    @Autowired
-    private HttpComponentsAsyncClientHttpRequestFactory httpComponentsAsyncClientHttpRequestFactory;
+    //@Autowired
+   // private HttpComponentsAsyncClientHttpRequestFactory httpComponentsAsyncClientHttpRequestFactory;
     
     public EnzymeCentricService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate, AsyncRestTemplate asyncRestTemplate) {
         Assert.notNull(restTemplate, "'restTemplate' must not be null");
@@ -173,7 +171,7 @@ public class EnzymeCentricService {
     }
     
     protected void destroyHttpComponentsAsyncClientHttpRequestFactory() throws Exception {
-        httpComponentsAsyncClientHttpRequestFactory.destroy();
+        //httpComponentsAsyncClientHttpRequestFactory.destroy();
     }
     
 }
