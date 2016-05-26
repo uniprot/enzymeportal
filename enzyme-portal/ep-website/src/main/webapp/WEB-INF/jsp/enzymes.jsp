@@ -42,25 +42,59 @@
         <h2>${ebiResult.hitCount} Enzymes found for "${searchKey}"</h2>
         </section>
         <section class="grid_6 alpha">
+            <c:if test="${page.totalElements gt page.size}">
         <nav class="paginationContainer">
           <ul class="pagination">
-            <li>
-              <a href="#" aria-label="Previous">
+           
+
+                
+        <c:choose>
+         <c:when test="${currentIndex == 1}">
+             <li>
+             <a href="#" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-              <a href="#" aria-label="Next">
+         </c:when>
+         <c:otherwise>
+             <li>
+             <a href="javascript:void(0);" aria-label="Previous">
+                <span>&laquo;</span>
+              </a>
+             </li>
+              <input id="prevPage" type="hidden"value="${currentIndex - 1}">
+         </c:otherwise>
+     </c:choose>             
+
+                
+       
+            
+               Page ${page.number + 1} of ${page.totalPages} 
+          
+           
+
+    <c:choose>
+        <c:when test="${currentIndex == page.totalPages}">
+              <li>
+            <a href="#" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
               </a>
             </li>
+
+    </c:when>
+    <c:otherwise>
+       <li>
+      <a id="nextButton" href="javascript:void(0);" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+      </a>   
+       </li>
+        <input id="nextPage" type="hidden"value="${currentIndex + 1}">
+        </c:otherwise>
+    </c:choose>     
+     
           </ul>
         </nav>
+        </c:if>
         </section>
 
         <section class="grid_24">
