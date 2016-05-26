@@ -19,6 +19,7 @@
 <head>
     <c:set var="pageTitle" value="Enzymes"/>
     <%@include file="head.jspf" %>
+  
 
 
 </head>
@@ -182,6 +183,9 @@
                                    </c:if>
                                </td>
                            </tr>
+                           <!--    please use variables where applicable -- I used static numbers for testing purposes-->
+                                     <c:set var="proteinSize" value="${fn:length(enzyme.protein)}"/>
+                                     <c:if test="${proteinSize-1 > 0}">
                            <tr id="proteinList" style="display: none">
                                <td colspan="6">
                                 <table id="enzymeResultsProteins">
@@ -189,12 +193,45 @@
                                         <th> </th>
                                         <th>Associated Proteins:</th>
                                     </tr>
-                                    <c:forEach var="p" items="${enzyme.protein}">
+
+                                     <c:choose>
+                                         <c:when test="${proteinSize-1 >= 5}">
+                                    
+                                      <c:forEach var="p" begin="0" end="${4}">
+                                   <%-- <c:forEach var="p" items="${enzyme.protein}">--%>
                                     <tr class="proteinRow">
                                         <td> </td>
                                         <td width="50%">
                                        
-                                         <a href="${pageContext.request.contextPath}/search/${p.accession}/enzyme">${p.proteinName}</a>
+                                         <a href="${pageContext.request.contextPath}/search/${enzyme.protein[p].accession}/enzyme">${enzyme.protein[p].proteinName}</a>
+
+                                        </td>
+
+
+                                        <td>
+                                            ${enzyme.protein[p].species}
+  
+                                        </td>
+
+
+                                    </tr>
+                                    </c:forEach>
+                                    <tr class="proteinRow">
+                                        <td></td>
+                                       
+                                        <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>    
+                                      
+                                        
+                                    </tr>         
+                                          </c:when>
+                                         <c:otherwise>
+                                    <c:forEach var="p" begin="0" end="${proteinSize-1}">
+                                   <%-- <c:forEach var="p" items="${enzyme.protein}">--%>
+                                    <tr class="proteinRow">
+                                        <td> </td>
+                                        <td width="50%">
+                                       
+                                         <a href="${pageContext.request.contextPath}/search/${enzyme.protein[p].accession}/enzyme">${enzyme.protein[p].proteinName}</a>
 
                                          
 
@@ -203,44 +240,22 @@
 
 
                                         <td>
-                                            ${p.species}
-                                            <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
-                                              <%--${sp.commonName},--%>
-                                            <%--</c:forEach>--%>
-
-
-                                            <%--<c:set var="proteinSpeciesSize" value="${fn:length(protein.speciesSet)}"/>--%>
-                                            <%--<c:set var="proteinSpecies" value="${protein.speciesSet}"/>--%>
-                                            <%--<c:set var="speciesMaxDisplay" value="${5}"/>--%>
-
-                                            <%--${proteinSpeciesSize} species found<br />--%>
-
-                                            <%--<c:if test="${proteinSpeciesSize gt 0}">--%>
-                                                <%--<c:if test="${proteinSpeciesSize <= speciesMaxDisplay}">--%>
-                                                  <%--<c:forEach var="sp" items="${proteinSpecies}" varStatus="bingo">--%>
-                                                    <%--${sp.commonName},--%>
-                                                  <%--</c:forEach>--%>
-                                                <%--</c:if>--%>
-                                                <%--<c:if test="${proteinSpeciesSize > speciesMaxDisplay}">--%>
-                                                    <%--<c:forEach var="i" begin="0" end="${speciesMaxDisplay-1}">--%>
-                                                        <%--thing2--%>
-                                                    <%--</c:forEach>--%>
-                                                    <%--**** More link***--%>
-                                                <%--</c:if>--%>
-                                            <%--</c:if>--%>
+                                            ${enzyme.protein[p].species}
+  
                                         </td>
 
 
                                     </tr>
-                                                                       </c:forEach>
-                                    <tr class="proteinRow">
-                                        <td></td>
-                                        <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>
-                                    </tr>
+                                    </c:forEach>  
+                                         </c:otherwise>
+                                     </c:choose> 
+                                   
+
                                 </table>
                                 </td>
 
                            </tr>
+                            </c:if>
                        </c:forEach>
 
                    </table>
