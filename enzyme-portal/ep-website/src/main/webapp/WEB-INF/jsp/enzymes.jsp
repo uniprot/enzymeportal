@@ -262,15 +262,18 @@
                                <td colspan="6">
                                 <table id="enzymeResultsProteins">
                                     <tr>
-                                        <th> </th>
-                                        <th>Associated Proteins:</th>
-                                        <th> </th>
+                                        <th width="3%"> </th>
+                                        <th width="40%">Associated Proteins:</th>
+                                        <th width="57%"> </th>
                                     </tr>
-                                    <c:forEach var="protein" begin="0" end="4" items="${enzyme.proteins}">
+                                    <%--<c:forEach var="protein" begin="0" end="4" items="${enzyme.proteins}">--%>
+                                    <c:set var="proteinSize" value="${fn:length(enzyme.protein)}"/>
+
+                                    <c:forEach var="p" begin="0" end="4">
                                         <tr class="proteinRow">
                                             <td> </td>
-                                            <td width="50%">${protein}</td>
-                                            <td>[Species will be here]</td>
+                                            <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.protein[p].accession}/enzyme">${enzyme.protein[p].proteinName}</a></td>
+                                            <td>${enzyme.protein[p].species}</td>
                                         </tr>
                                     </c:forEach>
                                     <tr class="proteinRow">
