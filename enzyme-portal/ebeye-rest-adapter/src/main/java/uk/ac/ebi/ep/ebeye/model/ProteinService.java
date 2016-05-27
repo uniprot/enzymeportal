@@ -30,7 +30,7 @@ public class ProteinService {
 //CORRECT QUERY
  //String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query=cancer%20AND%20INTENZ:3.6.1.15&fields=id,name,status,INTENZ&size=7&format=json";
        
- String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+"AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
+ String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+" AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
  
  EbeyeSearchResult results = restTemplate.getForObject(url.trim(), EbeyeSearchResult.class);
         return results;

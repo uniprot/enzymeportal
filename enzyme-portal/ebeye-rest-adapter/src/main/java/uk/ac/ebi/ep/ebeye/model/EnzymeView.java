@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.ebeye.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.context.annotation.Import;
@@ -86,6 +87,9 @@ public class EnzymeView {
     
 
     public List<String> getProteins() {
+        if(protein == null){
+            protein = new ArrayList<>();
+        }
         return proteins;
     }
 
