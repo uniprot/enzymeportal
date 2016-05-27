@@ -38,7 +38,7 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  */
 public class PowerService {
 
-    private final Logger logger = LoggerFactory.getLogger(ProteinCentricService.class);
+    private final Logger logger = LoggerFactory.getLogger(PowerService.class);
 
     //@Autowired
     private AsyncRestTemplate asyncRestTemplate;
