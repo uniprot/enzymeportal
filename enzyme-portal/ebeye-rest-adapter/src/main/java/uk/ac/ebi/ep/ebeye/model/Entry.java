@@ -141,7 +141,6 @@ public class Entry extends EnzymeView {
 //        return fields.getProteinName().size();
 //
 //    }
-
     @Override
     public List<String> getSpecies() {
         Map<Integer, String> priorityMapper = new TreeMap<>();
@@ -150,18 +149,10 @@ public class Entry extends EnzymeView {
         LinkedList<String> sortedSpecies = new LinkedList<>();
 
         List<String> species = fields.getCommonName();
-        //species.stream().filter(s -> s.equalsIgnoreCase("Human"));
 
-        for (String name : species) {
-//            if (name.equalsIgnoreCase("Human")) {
-//                sortedSpecies.offerFirst(name);
-//            } else if (name.equalsIgnoreCase("Mouse")) {
-//                sortedSpecies.add(0, name);
-//            } else {
-//                sortedSpecies.offer(name);
-//            }
+        species.stream().forEach((name) -> {
             sortSpecies(name, priorityMapper, customKey, key);
-        }
+        });
 
         priorityMapper.entrySet().stream().forEach(map -> {
             sortedSpecies.add(map.getValue());
@@ -220,26 +211,25 @@ public class Entry extends EnzymeView {
 
     private void sortSpecies(String specieName, Map<Integer, String> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
 
-        //LinkedList<String> species = new LinkedList<>();
-        // String specieName = "";
-        //LinkedList<String> sortedSpecies = new LinkedList<>();
         if (specieName.equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
 
             priorityMapper.put(1, specieName);
         } else if (specieName.equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
 
             priorityMapper.put(2, specieName);
+        } else if (specieName.equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
+            priorityMapper.put(3, specieName);
+
+        } else if (specieName.equalsIgnoreCase(ModelOrganisms.RAT.getCommonName())) {
+            priorityMapper.put(customKey.getAndIncrement(), specieName);
+
         } else {
             priorityMapper.put(key.getAndIncrement(), specieName);
         }
-
-//        priorityMapper.entrySet().stream().forEach(map -> {
-//            sortedSpecies.add(map.getValue());
-//        });
-        // return sortedSpecies;
     }
 
-    private void sortSpeciesXXX(String specieName, String entry, Map<Integer, String> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
+    @Deprecated
+    private void sortSpeciesDeprecated(String specieName, String entry, Map<Integer, String> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
         //Human,Mouse, Mouse-ear cress, fruit fly, yeast, e.coli, Rat,worm
         // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
         if (specieName.equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {

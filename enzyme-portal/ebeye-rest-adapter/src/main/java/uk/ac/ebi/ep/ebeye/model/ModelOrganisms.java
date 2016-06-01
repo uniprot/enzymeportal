@@ -27,10 +27,10 @@ public enum ModelOrganisms {
         HUMAN("Human"),
     MOUSE("Mouse"),
     MOUSE_EAR_CRESS("Arabidopsis thaliana"),
-    FRUIT_FLY("Drosophila melanogaster"),
+    FRUIT_FLY("Fruit fly"),
     BAKER_YEAST("Saccharomyces cerevisiae"),
     ECOLI("Escherichia coli"),
-    RAT("Rattus norvegicus");
+    RAT("Rat");
     // WORM("Caenorhabditis elegans");// WORM("Caenorhabditis elegans");
 
     private static final List<String> allCommonNames = new LinkedList<>();
