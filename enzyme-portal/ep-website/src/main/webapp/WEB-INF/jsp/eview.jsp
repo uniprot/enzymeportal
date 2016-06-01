@@ -40,8 +40,8 @@
 
     <div id="content" role="main" class="grid_24 clearfix" >
 
-        <h1>Enzyme Results - ${ebiResult.hitCount} Enzymes found for "${searchKey}"</h1>
-
+             <h1>Enzyme Results</h1>
+        <h2>${ebiResult.hitCount} Enzymes found for "${searchKey}"</h2>
         <nav class="paginationContainer">
           <ul class="pagination">
             <li>
