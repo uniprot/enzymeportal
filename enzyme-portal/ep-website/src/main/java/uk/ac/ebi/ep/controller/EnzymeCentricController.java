@@ -62,10 +62,14 @@ public class EnzymeCentricController extends AbstractController {
     @RequestMapping(value = SEARCH, method = RequestMethod.POST)
     public String postSearchResult(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters,@RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, Model model, HttpServletRequest request) {
         String view = "error";
-        if(servicePage <0){
+        int startPage =0;
+        if(servicePage != null){
+            if(servicePage < 0){
             servicePage = 1;
+            }
+            startPage = servicePage-1;//EBI search paging starts from 0
         }
-        int startPage = servicePage-1;//EBI search paging starts from 0
+       
         int pageSize = 10;
         int facetCount = 20;
         int associatedProteinLimit = 5;
@@ -78,7 +82,7 @@ public class EnzymeCentricController extends AbstractController {
            
         }
         final String searchTerm = searchKey;
-
+        //System.out.println("searchTerm "+ searchTerm + " startPage "+ startPage + " filters "+ filters);
         EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage, pageSize, facetCount, filters);
 
         if (ebiSearchResult != null) {
