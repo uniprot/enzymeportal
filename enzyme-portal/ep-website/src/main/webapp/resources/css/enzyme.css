@@ -538,7 +538,7 @@ table#enzymeResults tr.proteinSectionOpen{
 }
 
 table#enzymeResults tr:nth-child(4n+3){
-    background-color:#CBE8EC; /* #CBE8EC    4n+1 showed the white alternat sub rows*/
+    background-color:#CBE8EC;
 }
 
 
