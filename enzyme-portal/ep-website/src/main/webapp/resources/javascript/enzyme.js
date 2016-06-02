@@ -31,6 +31,11 @@ $( document ).ready(function() {
          $( "#facetFilterForm" ).submit();
      });
 
+    $("#full-view").click(function() {
+        console.log("full-view button fired");
+        $( "#proteinViewForm" ).submit();
+    });
+
 
     $(".enzymeName").click(function() {
         $(this).parent().next("#proteinList").toggle();

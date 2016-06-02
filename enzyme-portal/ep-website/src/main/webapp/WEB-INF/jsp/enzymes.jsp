@@ -360,24 +360,23 @@
                                         <th width="40%">Associated Proteins:</th>
                                         <th width="57%"> </th>
                                     </tr>
-                                    <%--<c:forEach var="protein" begin="0" end="4" items="${enzyme.proteins}">--%>
                                     <c:set var="proteinSize" value="${fn:length(enzyme.protein)}"/>
-
-                                    <c:forEach var="p" begin="0" end="4">
+                                    <form id="proteinViewForm" action="${pageContext.request.contextPath}/search" method="POST">
+                                        <c:forEach var="p" begin="0" end="4">
+                                            <tr class="proteinRow">
+                                                <td> </td>
+                                                <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.protein[p].accession}/enzyme">${enzyme.protein[p].proteinName}</a></td>
+                                                <td>${enzyme.protein[p].species}</td>
+                                            </tr>
+                                        </c:forEach>
                                         <tr class="proteinRow">
                                             <td> </td>
-                                            <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.protein[p].accession}/enzyme">${enzyme.protein[p].proteinName}</a></td>
-                                            <td>${enzyme.protein[p].species}</td>
+                                            <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>
+                                            <td> </td>
                                         </tr>
-                                    </c:forEach>
-                                    <tr class="proteinRow">
-                                        <td> </td>
-                                        <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>
-                                        <td> </td>
-                                    </tr>
+                                    </form>
                                 </table>
                                 </td>
-
                            </tr>
                        </c:forEach>
 
