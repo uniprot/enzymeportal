@@ -62,7 +62,7 @@
                 <span>&laquo;</span>
               </a>
              </li>
-              <input id="prevPage" type="hidden"value="${currentIndex - 1}">
+             <input id="prevPage" name="servicePage" type="hidden"value="${currentIndex - 1}">
          </c:otherwise>
      </c:choose>             
 
@@ -88,7 +88,7 @@
                 <span aria-hidden="true">&raquo;</span>
       </a>   
        </li>
-        <input id="nextPage" type="hidden"value="${currentIndex + 1}">
+       <input id="nextPage" type="hidden" name="servicePage" value="${currentIndex + 1}">
         </c:otherwise>
     </c:choose>     
      
@@ -103,10 +103,11 @@
 
             <div class="filter">
 
-                    <form id="facetFilterForm" action="${pageContext.request.contextPath}/search/filter?searchKey=${searchKey}" method="POST">
+                    <form id="facetFilterForm" action="${pageContext.request.contextPath}/search" method="POST">
+                        <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
                         <c:forEach var="facet" items="${enzymeFacet}">
                              <div>
-
+                                 
                                  <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
                                  <c:if test="${facet.id eq 'enzyme_family'}">
                                  <div class="sublevel1">
