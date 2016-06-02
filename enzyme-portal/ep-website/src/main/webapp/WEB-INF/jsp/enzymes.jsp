@@ -49,17 +49,24 @@
         <h1>Enzyme Results</h1>
         <h2>${ebiResult.hitCount} Enzymes found for "${searchKey}"</h2>
         </section>
+
+        <form id="facetFilterForm" action="${pageContext.request.contextPath}/search" method="POST">
+
+
         <section class="grid_6 alpha">
+
+            <input id="paginationPage" name="servicePage" type="hidden" value="99">
+
             <c:if test="${page.totalElements gt page.size}">
                 <nav class="paginationContainer">
-                    <form id="paginationForm" action="${pageContext.request.contextPath}/search" method="POST">
                       <ul class="pagination">
                         <c:choose>
                             <c:when test="${currentIndex == 1}">
                                 <li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
                             </c:when>
                             <c:otherwise>
-                                <li><a onclick="document.getElementById('paginationForm').submit();" href="#" id="prevButton" aria-label="Previous"><span>&laquo;</span></a><input id="prevPage" name="servicePage" type="hidden"value="${currentIndex - 1}"></li>
+                                <li><a class="paginationLink" id="${currentIndex - 1}" href="#" aria-label="Previous"><span>&laquo;</span></a>
+                                    <%--<input id="prevPage" name="servicePage" type="hidden" value="${currentIndex - 1}"></li>--%>
                             </c:otherwise>
                         </c:choose>
 
@@ -70,11 +77,11 @@
                                 <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
                             </c:when>
                             <c:otherwise>
-                               <li><a onclick="document.getElementById('paginationForm').submit();" href="#" id="nextButton" aria-label="Next"><span>&raquo;</span></a><input id="nextPage" type="hidden" name="servicePage" value="${currentIndex + 1}"></li>
+                               <li><a class="paginationLink" id="${currentIndex + 1}" href="#" aria-label="Next"><span>&raquo;</span></a>
+                                   <%--<input id="nextPage" name="servicePage" type="hidden" value="${currentIndex + 1}"></li>--%>
                             </c:otherwise>
                         </c:choose>
                       </ul>
-                    </form>
                 </nav>
             </c:if>
         </section>
@@ -85,7 +92,7 @@
 
             <div class="filter">
 
-                    <form id="facetFilterForm" action="${pageContext.request.contextPath}/search" method="POST">
+
                         <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
                         <c:forEach var="facet" items="${enzymeFacet}">
                              <div>
@@ -158,14 +165,14 @@
                                                 var options = {
                                                 	//url: "resources/colors.js"
 
-                                                                  ${facet.facetValues}
+                                                                  <%--${facet.facetValues}--%>
 
 
                                                 };
 
-                                                console.log("options: ",options);
+//                                                console.log("options: ",options);
 
-                                                $("#organismsSearch").easyAutocomplete(options);
+//                                                $("#organismsSearch").easyAutocomplete(options);
 
 
 
@@ -281,13 +288,14 @@
 
                              </div>
                          </c:forEach>
-                    </form>
+                    <%--</form>--%>
 
             </div>
             <%--filter --%>
 
         </section>
 
+        </form>
 
 
         <section class="grid_18 alpha" id="search-results">
