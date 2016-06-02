@@ -42,6 +42,7 @@ th{
 
 table{
     border: none;
+    background-color: inherit;
 }
 
 /*.epBox , fieldset {
@@ -482,11 +483,12 @@ ul.catalytic-activity-list li {
 
 /*********** ENZYME VIEW  **********/
 
+
 #enzymeResults th{
 background-color: #ECF0F1;
 }
 #enzymeResultsProteins th{
-    background-color: #fff;
+    background-color: inherit;
     font-weight: bold;
 }
 
@@ -515,6 +517,10 @@ table#enzymeResults td, table#enzymeResults th{
     padding: 7px 10px 10px 10px;
 }
 
+table#enzymeResults th{
+    border-bottom: 1px solid #ccc;
+}
+
 table#enzymeResultsProteins td, table#enzymeResultsProteins th{
     padding: 1px 1px 1px 1px;
 }
@@ -530,6 +536,13 @@ table#enzymeResults tr.proteinSectionOpen{
     border-top: solid 1px #ccc;
     border-right: solid 1px #ccc;
 }
+
+table#enzymeResults tr:nth-child(4n+3){
+    background-color:#CBE8EC; /* #CBE8EC    4n+1 showed the white alternat sub rows*/
+}
+
+
+
 table#enzymeResults tr#proteinList td{
     margin-bottom:10px;
 }
@@ -542,17 +555,17 @@ table#enzymeResults tr#proteinList {
 
 
 table#enzymeResultsProteins tr.proteinRow{
-    background-color: #fff;
+    background-color: inherit;
 }
 
 
-table#enzymeResultsProteins tr{
-    background-color: #0e6a0e;
-}
+/*table#enzymeResultsProteins tr{*/
+    /*background-color: #0e6a0e;*/
+/*}*/
 
-.alternate{
-    background-color: #0e6a0e;
-}
+/*.alternate{*/
+    /*background-color: #0e6a0e;*/
+/*}*/
 
 .sideTwizzle{
     background-image: url("../images/sideTwizzle.png");
@@ -573,7 +586,9 @@ table#enzymeResultsProteins tr{
 }
 
 #search-results ul{
-    list-style-type: disc;
+    list-style-type: circle;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
 
 #search-filters ul{
