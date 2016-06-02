@@ -18,6 +18,8 @@
     <c:set var="pageTitle" value="Enzymes"/>
     <%@include file="head.jspf" %>
 
+    <script src="${pageContext.request.contextPath}/resources/javascript/jquery.easy-autocomplete.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.themes.min.css" type="text/css" />
 
 </head>
 
@@ -31,6 +33,12 @@
         </li>
     </ul>
 </div>
+<script>
+    var speciesAutocompleteDataSource = [];
+    var compoundsAutoCompleteDataSource = [];
+    var diseaseAutoCompleteDataSource = [];
+    var ecAutoCompleteDataSource = [];
+</script>
 
 <div id="wrapper" class="container_24">
     <%@include file="header.jspf" %>
@@ -165,63 +173,106 @@
                                     <div class="subTitle">Organism</div>
                                     <ul>
                                         <li>
-                                        <div class="ui-widget grid_12zzz">
-                                            <input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />
-                                            <input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>
-                                        </div>
+
+
+
+                                            <input id="organismsSearch" />
+
+                                            <script>
+
+                                                var options = {
+                                                	//url: "resources/colors.js"
+
+                                                                  ${facet.facetValues}
+
+
+                                                };
+
+                                                console.log("options: ",options);
+
+                                                $("#organismsSearch").easyAutocomplete(options);
+
+
+
+
+
+                                            </script>
+
+
+                                            <%----%>
+                                        <%--<div class="ui-widget grid_12zzz">--%>
+                                            <%--<input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
+                                            <%--<input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
+                                        <%--</div>--%>
+                                            <%----%>
+                                            <%----%>
+
+
                                             <div class="filterContent">
                                                  <c:set var="speciesList" value="${facet.facetValues}"/>
                                                  <c:set var="speciesListSize" value="${fn:length(facet.facetValues)}"/>
                                                  <c:set var="speciesParams" value="${searchModel.searchparams.species}"/>
 
-                                                 <div id="species_filters_y"
-                                                     style="${empty searchModel.searchparams.species?
-                                                     'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>
-                                                 <div id="species_filters_n"></div>
-
-                                                 <script>
-                                               			$(document).ready(function () {
-                                               				// (See search.js if in doubt)
-                                                             // code copied from  filter-species.jspf
-
-
-                                     //                            <input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />
-                                     //                            <input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>
 
 
 
-                                               				// Initialise variables:
-                                               				var group = 'species';
-                                               				checkedFilters[group] = [];
-                                               				uncheckedFilters[group] = [];
-                                               				displayedFilters[group] = 0;
 
-                                               				// Populate js variables with data from server:
-                                               				<c:forEach var="specie" items="${facet.facetValues}">
-                                               					var sp = { "id": "${specie.value}", "name": "${specie.label}","taxId":"${specie.value}" };
-                                               					<c:choose>
-                                               						<c:when test="${Fn:contains(speciesParams, specie.label)}">
-                                               							checkedFilters[group][checkedFilters[group].length] = sp;
-                                               						</c:when>
-                                               						<c:otherwise>
-                                               							uncheckedFilters[group][uncheckedFilters[group].length] = sp;
-                                               						</c:otherwise>
-                                               					</c:choose>
-                                               					speciesAutocompleteDataSource.push({
-                                               						label: "${specie.label}",
-                                               						value: "${specie.value}"});
-                                               				</c:forEach>
+                                                <%--${speciesParams}--%>
 
-                                               				// Display filters:
-                                               				<%--for (var i = 0; i < checkedFilters[group].length; i++){--%>
-                                               					<%--addCheckbox(group, checkedFilters[group][i], true);--%>
-                                               				<%--}--%>
-                                               				<%--for (var i = 0; displayedFilters[group] < ${filterSizeDefault}--%>
-                                               				<%--&& displayedFilters[group] < ${speciesListSize}; i++){--%>
-                                               					<%--addCheckbox(group, uncheckedFilters[group][i], false);--%>
-                                               				<%--}--%>
-                                               			});
-                                               		</script>
+                                                 <%--<div id="species_filters_y"--%>
+                                                     <%--style="${empty searchModel.searchparams.species?--%>
+                                                     <%--'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>--%>
+                                                 <%--<div id="species_filters_n"></div>--%>
+
+                                                 <%--<script>--%>
+                                               			<%--$(document).ready(function () {--%>
+                                               				<%--// (See search.js if in doubt)--%>
+                                                             <%--// code copied from  filter-species.jspf--%>
+
+                                     <%--//                            <input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
+                                     <%--//                            <input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
+
+                                               				<%--// Initialise variables:--%>
+                                               				<%--var group = 'species';--%>
+                                               				<%--checkedFilters[group] = [];--%>
+                                               				<%--uncheckedFilters[group] = [];--%>
+                                               				<%--displayedFilters[group] = 0;--%>
+
+                                               				<%--// Populate js variables with data from server:--%>
+                                               				<%--<c:forEach var="specie" items="${facet.facetValues}">--%>
+                                               					<%--var sp = { "id": "${specie.label}", "name": "${specie.label}","taxId":"${specie.value}" };--%>
+                                               					<%--<c:choose>--%>
+                                               						<%--<c:when test="${Fn:contains(speciesParams, specie.label)}">--%>
+                                               							<%--checkedFilters[group][checkedFilters[group].length] = sp;--%>
+                                               						<%--</c:when>--%>
+                                               						<%--<c:otherwise>--%>
+                                               							<%--uncheckedFilters[group][uncheckedFilters[group].length] = sp;--%>
+                                               						<%--</c:otherwise>--%>
+                                               					<%--</c:choose>--%>
+
+                                                            <%--&lt;%&ndash;&ndash;%&gt;--%>
+                                                            <%--&lt;%&ndash;speciesAutocompleteDataSource.push({&ndash;%&gt;--%>
+                                                                    <%--&lt;%&ndash;label: "${not empty specie.commonname? specie.commonname : specie.scientificname}",&ndash;%&gt;--%>
+                                                       			    <%--&lt;%&ndash;value: "${specie.scientificname}"});&ndash;%&gt;--%>
+
+                                               					<%--speciesAutocompleteDataSource.push({--%>
+                                               						<%--label: "${specie.label}",--%>
+                                               						<%--value: "${specie.label}"--%>
+                                                                <%--});--%>
+                                               				<%--</c:forEach>--%>
+
+                                                            <%--console.log("speciesAutocompleteDataSource: ",speciesAutocompleteDataSource);--%>
+
+                                               				<%--// Display filters:--%>
+                                               				<%--&lt;%&ndash;for (var i = 0; i < checkedFilters[group].length; i++){&ndash;%&gt;--%>
+                                               					<%--&lt;%&ndash;addCheckbox(group, checkedFilters[group][i], true);&ndash;%&gt;--%>
+                                               				<%--&lt;%&ndash;}&ndash;%&gt;--%>
+                                               				<%--&lt;%&ndash;for (var i = 0; displayedFilters[group] < ${filterSizeDefault}&ndash;%&gt;--%>
+                                               				<%--&lt;%&ndash;&& displayedFilters[group] < ${speciesListSize}; i++){&ndash;%&gt;--%>
+                                               					<%--&lt;%&ndash;addCheckbox(group, uncheckedFilters[group][i], false);&ndash;%&gt;--%>
+                                               				<%--&lt;%&ndash;}&ndash;%&gt;--%>
+                                               			<%--});--%>
+                                               		<%--</script>--%>
 
                                                      </div>
 
@@ -271,12 +322,12 @@
 
                    <table id="enzymeResults" cellpadding="60" cellspacing="60">
                        <tr>
-                           <th>Name</th>
-                           <th>Hits</th>
-                           <th>Enzyme Family</th>
-                           <th>EC</th>
-                           <th>Catalytic Activity</th>
-                           <th>Species</th>
+                           <th width="20%">Name</th>
+                           <th width="5%">Hits</th>
+                           <th width="15%">Enzyme Family</th>
+                           <th width="10%">EC</th>
+                           <th width="30%">Catalytic Activity</th>
+                           <th width="20%">Species</th>
                        </tr>
 
                        <c:forEach var="enzyme" items="${enzymeView}">
@@ -311,7 +362,7 @@
                                                <c:forEach var="i" begin="0" end="${enzymeSpeciesMaxDisplay-1}">
                                                  <li>${enzyme.species[i]}</li>
                                                </c:forEach>
-                                                <li>${enzymeSpeciesSize-5} more</li>
+                                                <li>${enzymeSpeciesSize-5} others</li>
                                            </ul>
 
                                        </c:if>
