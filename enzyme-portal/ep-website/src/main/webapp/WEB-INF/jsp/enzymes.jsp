@@ -51,58 +51,32 @@
         </section>
         <section class="grid_6 alpha">
             <c:if test="${page.totalElements gt page.size}">
-        <nav class="paginationContainer">
-          <ul class="pagination">
-           
+                <nav class="paginationContainer">
+                    <form id="paginationForm" action="${pageContext.request.contextPath}/search" method="POST">
+                      <ul class="pagination">
+                        <c:choose>
+                            <c:when test="${currentIndex == 1}">
+                                <li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><a onclick="document.getElementById('paginationForm').submit();" href="#" id="prevButton" aria-label="Previous"><span>&laquo;</span></a><input id="prevPage" name="servicePage" type="hidden"value="${currentIndex - 1}"></li>
+                            </c:otherwise>
+                        </c:choose>
 
-                
-        <c:choose>
-         <c:when test="${currentIndex == 1}">
-             <li>
-             <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-         </c:when>
-         <c:otherwise>
-             <li>
-             <a href="javascript:void(0);" aria-label="Previous">
-                <span>&laquo;</span>
-              </a>
-             </li>
-             <input id="prevPage" name="servicePage" type="hidden"value="${currentIndex - 1}">
-         </c:otherwise>
-     </c:choose>             
+                        Page ${page.number + 1} of ${page.totalPages}
 
-                
-       
-            
-               Page ${page.number + 1} of ${page.totalPages} 
-          
-           
-
-    <c:choose>
-        <c:when test="${currentIndex == page.totalPages}">
-              <li>
-            <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-
-    </c:when>
-    <c:otherwise>
-       <li>
-      <a id="nextButton" href="javascript:void(0);" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-      </a>   
-       </li>
-       <input id="nextPage" type="hidden" name="servicePage" value="${currentIndex + 1}">
-        </c:otherwise>
-    </c:choose>     
-     
-          </ul>
-        </nav>
-        </c:if>
+                        <c:choose>
+                            <c:when test="${currentIndex == page.totalPages}">
+                                <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                            </c:when>
+                            <c:otherwise>
+                               <li><a onclick="document.getElementById('paginationForm').submit();" href="#" id="nextButton" aria-label="Next"><span>&raquo;</span></a><input id="nextPage" type="hidden" name="servicePage" value="${currentIndex + 1}"></li>
+                            </c:otherwise>
+                        </c:choose>
+                      </ul>
+                    </form>
+                </nav>
+            </c:if>
         </section>
 
         <section class="grid_24">
