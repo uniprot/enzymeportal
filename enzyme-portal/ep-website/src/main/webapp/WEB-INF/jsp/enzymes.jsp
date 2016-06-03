@@ -53,247 +53,233 @@
         <form id="facetFilterForm" action="${pageContext.request.contextPath}/search" method="POST">
 
 
-        <section class="grid_6 alpha">
+            <section class="grid_6 alpha">
 
-            <input id="paginationPage" name="servicePage" type="hidden" value="99">
+                <input id="paginationPage" name="servicePage" type="hidden" value="99">
+                <c:if test="${page.totalElements gt page.size}">
+                    <nav class="paginationContainer">
+                          <ul class="pagination">
+                            <c:if test="${currentIndex >= 2}">
+                                <li><a class="paginationLink" id="${currentIndex - 1}" href="#" aria-label="Previous"><span>&laquo;</span></a></li>
+                            </c:if>
+                            <li class="paginationText">Page ${page.number + 1} of ${page.totalPages}</li>
+                            <c:if test="${currentIndex < page.totalPages}">
+                                <li><a class="paginationLink" id="${currentIndex + 1}" href="#" aria-label="Next"><span>&raquo;</span></a></li>
+                            </c:if>
+                          </ul>
+                    </nav>
+                </c:if>
 
-            <c:if test="${page.totalElements gt page.size}">
-                <nav class="paginationContainer">
-                      <ul class="pagination">
-                        <c:choose>
-                            <c:when test="${currentIndex == 1}">
-                                <li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                            </c:when>
-                            <c:otherwise>
-                                <li><a class="paginationLink" id="${currentIndex - 1}" href="#" aria-label="Previous"><span>&laquo;</span></a>
-                                    <%--<input id="prevPage" name="servicePage" type="hidden" value="${currentIndex - 1}"></li>--%>
-                            </c:otherwise>
-                        </c:choose>
+            </section>
 
-                        Page ${page.number + 1} of ${page.totalPages}
+            <section class="grid_24">
 
-                        <c:choose>
-                            <c:when test="${currentIndex == page.totalPages}">
-                                <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-                            </c:when>
-                            <c:otherwise>
-                               <li><a class="paginationLink" id="${currentIndex + 1}" href="#" aria-label="Next"><span>&raquo;</span></a>
-                                   <%--<input id="nextPage" name="servicePage" type="hidden" value="${currentIndex + 1}"></li>--%>
-                            </c:otherwise>
-                        </c:choose>
-                      </ul>
-                </nav>
-            </c:if>
-        </section>
+            <section class="grid_6 alpha" id="search-filters">
 
-        <section class="grid_24">
-
-        <section class="grid_6 alpha" id="search-filters">
-
-            <div class="filter">
+                <div class="filter">
 
 
-                        <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
-                        <c:forEach var="facet" items="${enzymeFacet}">
-                             <div>
-                                 
-                                 <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
-                                 <c:if test="${facet.id eq 'enzyme_family'}">
-                                 <div class="sublevel1">
-                                     <div class="subTitle">Enzyme Family</div>
-                                     <ul>
-                                         <c:forEach var="v" items="${facet.facetValues}">
-                                             <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                         </c:forEach>
-                                     </ul>
+                            <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
+                            <c:forEach var="facet" items="${enzymeFacet}">
+                                 <div>
+
+                                     <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
+                                     <c:if test="${facet.id eq 'enzyme_family'}">
+                                     <div class="sublevel1">
+                                         <div class="subTitle">Enzyme Family</div>
+                                         <ul>
+                                             <c:forEach var="v" items="${facet.facetValues}">
+                                                 <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                             </c:forEach>
+                                         </ul>
+                                     </div>
+                                     </c:if>
+
+
+
+                                     <c:if test="${facet.id eq 'compound_type'}">
+                                     <div class="sublevel1">
+                                         <div class="subTitle">Compound Type</div>
+                                         <ul>
+                                             <c:forEach var="v" items="${facet.facetValues}">
+                                                 <li><input id="compound_type_${v.value}" name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                             </c:forEach>
+                                         </ul>
+                                     </div>
+                                     </c:if>
+
+
+
+                                     <c:if test="${facet.id eq 'compound_name'}">
+                                     <div class="sublevel1">
+                                         <div class="subTitle">Compounds</div>
+                                         <ul>
+                                             <c:forEach var="v" items="${facet.facetValues}">
+                                                 <li><input id="compound_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                             </c:forEach>
+                                         </ul>
+                                     </div>
+                                     </c:if>
+
+
+
+                                      <c:if test="${facet.id eq 'disease_name'}">
+                                     <div class="sublevel1">
+                                          <div class="subTitle">Diseases</div>
+                                         <ul>
+                                             <c:forEach var="v" items="${facet.facetValues}">
+                                                 <li><input id="disease_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                             </c:forEach>
+                                         </ul>
+                                     </div>
+                                     </c:if>
+
+
+
+                                    <c:if test="${facet.id eq 'TAXONOMY'}">
+                                     <div class="sublevel1">
+                                        <div class="subTitle">Organism</div>
+                                        <ul>
+                                            <li>
+
+
+
+                                                <input id="organismsSearch" />
+
+                                                <script>
+
+                                                    var options = {
+                                                        //url: "resources/colors.js"
+
+                                                                      <%--${facet.facetValues}--%>
+
+
+                                                    };
+
+    //                                                console.log("options: ",options);
+
+    //                                                $("#organismsSearch").easyAutocomplete(options);
+
+
+
+
+
+                                                </script>
+
+
+                                                <%----%>
+                                            <%--<div class="ui-widget grid_12zzz">--%>
+                                                <%--<input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
+                                                <%--<input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
+                                            <%--</div>--%>
+                                                <%----%>
+                                                <%----%>
+
+
+                                                <div class="filterContent">
+                                                     <c:set var="speciesList" value="${facet.facetValues}"/>
+                                                     <c:set var="speciesListSize" value="${fn:length(facet.facetValues)}"/>
+                                                     <c:set var="speciesParams" value="${searchModel.searchparams.species}"/>
+
+
+
+
+
+                                                    <%--${speciesParams}--%>
+
+                                                     <%--<div id="species_filters_y"--%>
+                                                         <%--style="${empty searchModel.searchparams.species?--%>
+                                                         <%--'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>--%>
+                                                     <%--<div id="species_filters_n"></div>--%>
+
+                                                     <%--<script>--%>
+                                                            <%--$(document).ready(function () {--%>
+                                                                <%--// (See search.js if in doubt)--%>
+                                                                 <%--// code copied from  filter-species.jspf--%>
+
+                                         <%--//                            <input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
+                                         <%--//                            <input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
+
+                                                                <%--// Initialise variables:--%>
+                                                                <%--var group = 'species';--%>
+                                                                <%--checkedFilters[group] = [];--%>
+                                                                <%--uncheckedFilters[group] = [];--%>
+                                                                <%--displayedFilters[group] = 0;--%>
+
+                                                                <%--// Populate js variables with data from server:--%>
+                                                                <%--<c:forEach var="specie" items="${facet.facetValues}">--%>
+                                                                    <%--var sp = { "id": "${specie.label}", "name": "${specie.label}","taxId":"${specie.value}" };--%>
+                                                                    <%--<c:choose>--%>
+                                                                        <%--<c:when test="${Fn:contains(speciesParams, specie.label)}">--%>
+                                                                            <%--checkedFilters[group][checkedFilters[group].length] = sp;--%>
+                                                                        <%--</c:when>--%>
+                                                                        <%--<c:otherwise>--%>
+                                                                            <%--uncheckedFilters[group][uncheckedFilters[group].length] = sp;--%>
+                                                                        <%--</c:otherwise>--%>
+                                                                    <%--</c:choose>--%>
+
+                                                                <%--&lt;%&ndash;&ndash;%&gt;--%>
+                                                                <%--&lt;%&ndash;speciesAutocompleteDataSource.push({&ndash;%&gt;--%>
+                                                                        <%--&lt;%&ndash;label: "${not empty specie.commonname? specie.commonname : specie.scientificname}",&ndash;%&gt;--%>
+                                                                        <%--&lt;%&ndash;value: "${specie.scientificname}"});&ndash;%&gt;--%>
+
+                                                                    <%--speciesAutocompleteDataSource.push({--%>
+                                                                        <%--label: "${specie.label}",--%>
+                                                                        <%--value: "${specie.label}"--%>
+                                                                    <%--});--%>
+                                                                <%--</c:forEach>--%>
+
+                                                                <%--console.log("speciesAutocompleteDataSource: ",speciesAutocompleteDataSource);--%>
+
+                                                                <%--// Display filters:--%>
+                                                                <%--&lt;%&ndash;for (var i = 0; i < checkedFilters[group].length; i++){&ndash;%&gt;--%>
+                                                                    <%--&lt;%&ndash;addCheckbox(group, checkedFilters[group][i], true);&ndash;%&gt;--%>
+                                                                <%--&lt;%&ndash;}&ndash;%&gt;--%>
+                                                                <%--&lt;%&ndash;for (var i = 0; displayedFilters[group] < ${filterSizeDefault}&ndash;%&gt;--%>
+                                                                <%--&lt;%&ndash;&& displayedFilters[group] < ${speciesListSize}; i++){&ndash;%&gt;--%>
+                                                                    <%--&lt;%&ndash;addCheckbox(group, uncheckedFilters[group][i], false);&ndash;%&gt;--%>
+                                                                <%--&lt;%&ndash;}&ndash;%&gt;--%>
+                                                            <%--});--%>
+                                                        <%--</script>--%>
+
+                                                         </div>
+
+
+
+
+                                            </li>
+
+                                            <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
+                                            <c:choose>
+                                                 <c:when test='${facetSize > 10}'>
+                                                     <c:forEach begin="0" end="9" var="v" items="${facet.facetValues}">
+                                                        <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                                     </c:forEach>
+                                                     <li class="toggleOrganismList">${facetSize - 10} more...</li>
+                                                         <div class="organismFullList">
+                                                             <c:forEach begin="10" var="vMore" items="${facet.facetValues}">
+                                                                <li><input id="TAXONOMY_${vMore.value}" name="filterFacet" value="TAXONOMY:${vMore.value}" type="checkbox" onChange="this.form.submit()"> ${vMore.label} (${vMore.count})</li>
+                                                             </c:forEach>
+                                                         </div>
+                                                 </c:when>
+                                                 <c:otherwise>
+                                                     <c:forEach var="v" items="${facet.facetValues}">
+                                                        <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                                     </c:forEach>
+                                                 </c:otherwise>
+                                             </c:choose>
+                                         </ul>
+                                     </div>
+                                     </c:if>
+
                                  </div>
-                                 </c:if>
+                             </c:forEach>
+                        <%--</form>--%>
 
+                </div>
+                <%--filter --%>
 
-
-                                 <c:if test="${facet.id eq 'compound_type'}">
-                                 <div class="sublevel1">
-                                     <div class="subTitle">Compound Type</div>
-                                     <ul>
-                                         <c:forEach var="v" items="${facet.facetValues}">
-                                             <li><input id="compound_type_${v.value}" name="filterFacet" value="compound_type:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                         </c:forEach>
-                                     </ul>
-                                 </div>
-                                 </c:if>
-
-
-
-                                 <c:if test="${facet.id eq 'compound_name'}">
-                                 <div class="sublevel1">
-                                     <div class="subTitle">Compounds</div>
-                                     <ul>
-                                         <c:forEach var="v" items="${facet.facetValues}">
-                                             <li><input id="compound_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="compound_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                         </c:forEach>
-                                     </ul>
-                                 </div>
-                                 </c:if>
-
-
-
-                                  <c:if test="${facet.id eq 'disease_name'}">
-                                 <div class="sublevel1">
-                                      <div class="subTitle">Diseases</div>
-                                     <ul>
-                                         <c:forEach var="v" items="${facet.facetValues}">
-                                             <li><input id="disease_name_${Fn:replaceSpacesWithUnderScore(v.value)}" name="filterFacet" value="disease_name:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                         </c:forEach>
-                                     </ul>
-                                 </div>
-                                 </c:if>
-
-
-
-                                <c:if test="${facet.id eq 'TAXONOMY'}">
-                                 <div class="sublevel1">
-                                    <div class="subTitle">Organism</div>
-                                    <ul>
-                                        <li>
-
-
-
-                                            <input id="organismsSearch" />
-
-                                            <script>
-
-                                                var options = {
-                                                	//url: "resources/colors.js"
-
-                                                                  <%--${facet.facetValues}--%>
-
-
-                                                };
-
-//                                                console.log("options: ",options);
-
-//                                                $("#organismsSearch").easyAutocomplete(options);
-
-
-
-
-
-                                            </script>
-
-
-                                            <%----%>
-                                        <%--<div class="ui-widget grid_12zzz">--%>
-                                            <%--<input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
-                                            <%--<input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
-                                        <%--</div>--%>
-                                            <%----%>
-                                            <%----%>
-
-
-                                            <div class="filterContent">
-                                                 <c:set var="speciesList" value="${facet.facetValues}"/>
-                                                 <c:set var="speciesListSize" value="${fn:length(facet.facetValues)}"/>
-                                                 <c:set var="speciesParams" value="${searchModel.searchparams.species}"/>
-
-
-
-
-
-                                                <%--${speciesParams}--%>
-
-                                                 <%--<div id="species_filters_y"--%>
-                                                     <%--style="${empty searchModel.searchparams.species?--%>
-                                                     <%--'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>--%>
-                                                 <%--<div id="species_filters_n"></div>--%>
-
-                                                 <%--<script>--%>
-                                               			<%--$(document).ready(function () {--%>
-                                               				<%--// (See search.js if in doubt)--%>
-                                                             <%--// code copied from  filter-species.jspf--%>
-
-                                     <%--//                            <input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
-                                     <%--//                            <input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
-
-                                               				<%--// Initialise variables:--%>
-                                               				<%--var group = 'species';--%>
-                                               				<%--checkedFilters[group] = [];--%>
-                                               				<%--uncheckedFilters[group] = [];--%>
-                                               				<%--displayedFilters[group] = 0;--%>
-
-                                               				<%--// Populate js variables with data from server:--%>
-                                               				<%--<c:forEach var="specie" items="${facet.facetValues}">--%>
-                                               					<%--var sp = { "id": "${specie.label}", "name": "${specie.label}","taxId":"${specie.value}" };--%>
-                                               					<%--<c:choose>--%>
-                                               						<%--<c:when test="${Fn:contains(speciesParams, specie.label)}">--%>
-                                               							<%--checkedFilters[group][checkedFilters[group].length] = sp;--%>
-                                               						<%--</c:when>--%>
-                                               						<%--<c:otherwise>--%>
-                                               							<%--uncheckedFilters[group][uncheckedFilters[group].length] = sp;--%>
-                                               						<%--</c:otherwise>--%>
-                                               					<%--</c:choose>--%>
-
-                                                            <%--&lt;%&ndash;&ndash;%&gt;--%>
-                                                            <%--&lt;%&ndash;speciesAutocompleteDataSource.push({&ndash;%&gt;--%>
-                                                                    <%--&lt;%&ndash;label: "${not empty specie.commonname? specie.commonname : specie.scientificname}",&ndash;%&gt;--%>
-                                                       			    <%--&lt;%&ndash;value: "${specie.scientificname}"});&ndash;%&gt;--%>
-
-                                               					<%--speciesAutocompleteDataSource.push({--%>
-                                               						<%--label: "${specie.label}",--%>
-                                               						<%--value: "${specie.label}"--%>
-                                                                <%--});--%>
-                                               				<%--</c:forEach>--%>
-
-                                                            <%--console.log("speciesAutocompleteDataSource: ",speciesAutocompleteDataSource);--%>
-
-                                               				<%--// Display filters:--%>
-                                               				<%--&lt;%&ndash;for (var i = 0; i < checkedFilters[group].length; i++){&ndash;%&gt;--%>
-                                               					<%--&lt;%&ndash;addCheckbox(group, checkedFilters[group][i], true);&ndash;%&gt;--%>
-                                               				<%--&lt;%&ndash;}&ndash;%&gt;--%>
-                                               				<%--&lt;%&ndash;for (var i = 0; displayedFilters[group] < ${filterSizeDefault}&ndash;%&gt;--%>
-                                               				<%--&lt;%&ndash;&& displayedFilters[group] < ${speciesListSize}; i++){&ndash;%&gt;--%>
-                                               					<%--&lt;%&ndash;addCheckbox(group, uncheckedFilters[group][i], false);&ndash;%&gt;--%>
-                                               				<%--&lt;%&ndash;}&ndash;%&gt;--%>
-                                               			<%--});--%>
-                                               		<%--</script>--%>
-
-                                                     </div>
-
-
-
-
-                                        </li>
-
-                                        <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
-                                        <c:choose>
-                                             <c:when test='${facetSize > 10}'>
-                                                 <c:forEach begin="0" end="9" var="v" items="${facet.facetValues}">
-                                                    <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                                 </c:forEach>
-                                                 <li class="toggleOrganismList">${facetSize - 10} more...</li>
-                                                     <div class="organismFullList">
-                                                         <c:forEach begin="10" var="vMore" items="${facet.facetValues}">
-                                                            <li><input id="TAXONOMY_${vMore.value}" name="filterFacet" value="TAXONOMY:${vMore.value}" type="checkbox" onChange="this.form.submit()"> ${vMore.label} (${vMore.count})</li>
-                                                         </c:forEach>
-                                                     </div>
-                                             </c:when>
-                                             <c:otherwise>
-                                                 <c:forEach var="v" items="${facet.facetValues}">
-                                                    <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                                 </c:forEach>
-                                             </c:otherwise>
-                                         </c:choose>
-                                     </ul>
-                                 </div>
-                                 </c:if>
-
-                             </div>
-                         </c:forEach>
-                    <%--</form>--%>
-
-            </div>
-            <%--filter --%>
-
-        </section>
+            </section>
 
         </form>
 
