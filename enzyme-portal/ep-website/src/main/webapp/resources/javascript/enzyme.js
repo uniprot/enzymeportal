@@ -31,9 +31,9 @@ $( document ).ready(function() {
          $( "#facetFilterForm" ).submit();
      });
 
-    $("#full-view").click(function() {
-        console.log("full-view button fired");
-        $( "#proteinViewForm" ).submit();
+    $(".full-view").click(function() {
+        var formToSubmit = "proteinViewForm-" + this.id;
+        $('#' + formToSubmit).submit();
     });
 
 

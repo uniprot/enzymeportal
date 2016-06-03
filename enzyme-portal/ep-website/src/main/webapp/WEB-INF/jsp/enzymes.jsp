@@ -361,7 +361,7 @@
                                         <th width="57%"> </th>
                                     </tr>
                                     <c:set var="proteinSize" value="${fn:length(enzyme.protein)}"/>
-                                    <form id="proteinViewForm" action="${pageContext.request.contextPath}/search" method="POST">
+                                    <form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" method="POST">
                                         <c:forEach var="p" begin="0" end="4">
                                             <tr class="proteinRow">
                                                 <td> </td>
@@ -371,7 +371,7 @@
                                         </c:forEach>
                                         <tr class="proteinRow">
                                             <td> </td>
-                                            <td><a id="full-view" href="#" class="icon icon-functional btn" data-icon="F">Full View</a></td>
+                                            <td><a id="${enzyme.ec}" href="#" class="full-view icon icon-functional btn" data-icon="F">Full View</a></td>
                                             <td> </td>
                                         </tr>
                                     </form>
