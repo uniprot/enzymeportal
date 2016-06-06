@@ -63,7 +63,7 @@
                             </c:otherwise>
                         </c:choose>
 
-                        Page ${page.number + 1} of ${page.totalPages}
+                        Page ${page.number + 1} of ${page.totalPages} 
 
                         <c:choose>
                             <c:when test="${currentIndex == page.totalPages}">
