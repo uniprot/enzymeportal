@@ -129,6 +129,17 @@
        
       
     </dl>
+      <script>
+		window.onload = function() {
+			var yourDiv = document.getElementById('yourDiv');
+			var biojs_vis_proteinFeaturesViewer = require('biojs-vis-proteinfeaturesviewer');
+			var instance = new biojs_vis_proteinFeaturesViewer({
+				el: '#feature-viewer',
+				uniprotacc : '${accession}'
+			});
+		}
+	</script>
+	<div id="feature-viewer"></div>                  
     <c:set var="provenance" value="${enzyme.provenance}"/>
     <div class="provenance">
         <ul>
