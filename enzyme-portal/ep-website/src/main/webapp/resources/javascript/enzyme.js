@@ -26,6 +26,16 @@ $( document ).ready(function() {
 
 
 
+    $(".paginationLink").click(function() {
+          $("#paginationPage").val(this.id);
+         $( "#facetFilterForm" ).submit();
+     });
+
+    $(".full-view").click(function() {
+        var formToSubmit = "proteinViewForm-" + this.id;
+        $('#' + formToSubmit).submit();
+    });
+
 
     $(".enzymeName").click(function() {
         $(this).parent().next("#proteinList").toggle();

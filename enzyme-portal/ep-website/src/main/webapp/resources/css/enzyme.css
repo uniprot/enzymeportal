@@ -542,6 +542,11 @@ table#enzymeResults tr:nth-child(4n+3){
 }
 
 
+.paginationText{
+    height: 50px;
+    float: left;
+    padding: 5px 20px 5px 20px;
+}
 
 table#enzymeResults tr#proteinList td{
     margin-bottom:10px;
