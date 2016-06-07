@@ -40,6 +40,7 @@ import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.ebeye.AccessionService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 
 /**
@@ -60,7 +61,6 @@ public class EnzymeFinder extends EnzymeBase {
     List<String> compoundFilter;
     List<UniprotEntry> enzymeSummaryList;
 
-   
     Set<Species> uniqueSpecies;
     List<Disease> diseaseFilters;
     List<Compound> compoundFilters;
@@ -71,9 +71,10 @@ public class EnzymeFinder extends EnzymeBase {
 
     private final int LIMIT = 8_00;
     private final int ACCESSION_LIMIT = 8_00;
+     private AccessionService accessionService;
 
-    public EnzymeFinder(EnzymePortalService service,EbeyeRestService ebeyeRestService) {
-        super(service,ebeyeRestService);
+    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
+        super(service, ebeyeRestService);
 
         enzymeSearchResults = new SearchResults();
 
@@ -92,6 +93,14 @@ public class EnzymeFinder extends EnzymeBase {
         uniquecompounds = new HashSet<>();
         uniqueDiseases = new HashSet<>();
     }
+
+    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, AccessionService accessionService) {
+        this(service, ebeyeRestService);
+        this.accessionService = accessionService;
+        
+    }
+
+
 
     public EnzymePortalService getService() {
         return service;
@@ -425,6 +434,39 @@ public class EnzymeFinder extends EnzymeBase {
         List<UniprotEntry> summaries = getEnzymesByAccessions(accessions, keyword);
 
         return summaries;
+    }
+
+    public SearchResults getAssociatedproteins(String ec, String searchTerm, int limit) {
+
+        List<String> accessions = accessionService.queryForUniqueAccessions(ec, searchTerm, limit);
+
+        LOGGER.info("Number of Processed Accession for  " + ec + " " + searchTerm + " :=:" + accessions.size());
+
+        uniprotAccessions = accessions.stream().distinct().collect(Collectors.toList());
+        uniprotAccessionSet.addAll(uniprotAccessions.stream().distinct().collect(Collectors.toList()));
+
+        List<String> accessionList
+                = new ArrayList<>(uniprotAccessionSet);
+
+        String keyword = HtmlUtility.cleanText(searchTerm);
+        keyword = keyword.replaceAll("&quot;", "");
+
+        LOGGER.debug("Getting enzyme summaries...");
+
+        enzymeSummaryList = getEnzymeSummariesByAccessions(accessionList, keyword);
+
+        enzymeSearchResults.setSummaryentries(enzymeSummaryList);
+        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+        if (uniprotAccessionSet.size() != enzymeSummaryList.size()) {
+            LOGGER.warn((uniprotAccessionSet.size() - enzymeSummaryList.size())
+                    + " Some UniProt Accession have been lost");
+        }
+        LOGGER.debug("Building filters...");
+        buildFilters(enzymeSearchResults);
+        LOGGER.debug("Finished search");
+
+        return enzymeSearchResults;
+
     }
 
     public SearchResults getEnzymes(SearchParams searchParams) {

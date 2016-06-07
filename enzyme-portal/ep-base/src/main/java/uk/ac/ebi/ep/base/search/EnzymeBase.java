@@ -20,7 +20,7 @@ public abstract class EnzymeBase {
 
     protected EnzymePortalService service;
     protected EbeyeRestService ebeyeRestService;
-
+   
     private EnzymeBase() {
 
     }
@@ -37,7 +37,7 @@ public abstract class EnzymeBase {
         this.service = service;
         this.ebeyeRestService = ebeyeRestService;
     }
-
+ 
     /**
      * Retrieves the protein recommended name as well as any synonyms.
      *
