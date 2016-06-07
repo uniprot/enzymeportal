@@ -99,7 +99,8 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
     public Protein getProtein() {
         String t = fields.getName().stream().findFirst().orElse("");
         String sci = getScientificName().stream().findFirst().orElse("");
-        Protein p = new Protein(getUniprotAccession(), t, sci);
+        String status = fields.getStatus().stream().findFirst().orElse("");
+        Protein p = new Protein(getUniprotAccession(), t, sci,status);
         return p;
     }
 
@@ -107,11 +108,6 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
         this.protein = protein;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Entry{" + "uniprot_accession=" + uniprotAccession + ", uniport_name=" + uniprotName + ", source=" +
-//                source + '}';
-//    }
     @Override
     public String toString() {
         return "Entry{" + "uniprotAccession=" + uniprotAccession

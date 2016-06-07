@@ -5,17 +5,13 @@
  */
 package uk.ac.ebi.ep.ebeye;
 
-import com.aol.simple.react.stream.lazy.LazyReact;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import static net.javacrumbs.futureconverter.springjava.FutureConverter.toCompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -28,7 +24,6 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
-import uk.ac.ebi.ep.ebeye.model.Protein;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
 
@@ -36,9 +31,9 @@ import uk.ac.ebi.ep.ebeye.search.Entry;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-public class PowerService {
+public class AccessionService {
 
-    private final Logger logger = LoggerFactory.getLogger(PowerService.class);
+    private final Logger logger = LoggerFactory.getLogger(AccessionService.class);
 
     //@Autowired
     private AsyncRestTemplate asyncRestTemplate;
@@ -51,22 +46,13 @@ public class PowerService {
     //Maximum number of entries that this service will ask from the EbeyeSearch
     private static final int MAX_HITS_TO_PROCESS = 7_000;
 
-    public PowerService(EbeyeIndexUrl ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
+    public AccessionService(EbeyeIndexUrl ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
         this.asyncRestTemplate = asyncRestTemplate;
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
     }
 
-    public List<Protein> queryForUniqueProteins1(String ec, String searchTerm, int limit) {
-        // Preconditions.checkArgument(query != null, "Query can not be null");
-// String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+" AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
-        String query = searchTerm + " AND INTENZ:" + ec;
-        return extractDistinctProteinsFromSynchronousQuery(query);
-
-    }
-
-public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int limit) {
-    //public List<Protein> queryForUniqueProteinsNotNeededAsWeAreOnlyInterestedIn10Items(String ec, String searchTerm, int limit) {
+    public List<String> queryForUniqueAccessions(String ec, String searchTerm, int limit) {
         // Preconditions.checkArgument(query != null, "Query can not be null");
 // String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+" AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
         String query = searchTerm + " AND INTENZ:" + ec;
@@ -81,7 +67,7 @@ public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int li
 
         if (hitCount <= maxEbiSearchLimit) {
 
-            return extractDistinctProteinsFromSynchronousQuery(query);
+            return extractDistinctAccessionsFromSynchronousQuery(query);
         } else {
 
             int numIteration = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
@@ -118,17 +104,17 @@ public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int li
         return restTemplate.getForObject(url, EbeyeSearchResult.class);
     }
 
-    private List<Protein> extractDistinctProteinsFromSynchronousQuery(String query) {
+    private List<String> extractDistinctAccessionsFromSynchronousQuery(String query) {
         EbeyeSearchResult searchResult = synchronousQueryProtein(query);
 
         return searchResult
                 .getEntries().stream().distinct()
-                .map(e -> e.getProtein())
+                .map(e -> e.getUniprotAccession())
                 .distinct()
                 .collect(Collectors.toList());
     }
 
-    private List<Protein> asynchronousQuery(String query, int iteration, int limit) {
+    private List<String> asynchronousQuery(String query, int iteration, int limit) {
 
         int availableProcessors = Runtime.getRuntime().availableProcessors();
         logger.info("Number of availableProcessors : " + availableProcessors);
@@ -137,8 +123,8 @@ public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int li
         if (availableProcessors > 20) {//10
 
             final ForkJoinPool forkJoinPool = new ForkJoinPool(availableProcessors);
-            CompletableFuture<List<Protein>> entries = CompletableFuture.supplyAsync(()
-                    -> searchEbeyeDomainProtein(buildUrlsForAsyncRequestProtein(query, iteration), limit),
+            CompletableFuture<List<String>> entries = CompletableFuture.supplyAsync(()
+                    -> searchEbeyeDomainAccession(buildUrlsForAsyncRequestProtein(query, iteration), limit),
                     forkJoinPool
             );
             try {
@@ -148,10 +134,10 @@ public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int li
             }
         }
 
-        return searchEbeyeDomainProtein(buildUrlsForAsyncRequestProtein(query, iteration), limit);
+        return searchEbeyeDomainAccession(buildUrlsForAsyncRequestProtein(query, iteration), limit);
     }
 
-    private List<Protein> searchEbeyeDomainProtein(List<String> urls, int limit) {
+    private List<String> searchEbeyeDomainAccession(List<String> urls, int limit) {
         HttpMethod method = HttpMethod.GET;
 
         // Define response type
@@ -164,70 +150,22 @@ public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int li
         HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
 
         for (String url : urls) {
-        ListenableFuture<ResponseEntity<EbeyeSearchResult>> future = asyncRestTemplate
-                .exchange(url, method, requestEntity, responseType);
+            ListenableFuture<ResponseEntity<EbeyeSearchResult>> future = asyncRestTemplate
+                    .exchange(url, method, requestEntity, responseType);
 
-        try {
-            ResponseEntity<EbeyeSearchResult> results = future.get();
-            List<Protein> proteins = results.getBody()
-                    .getEntries().stream().distinct().map(Entry::getProtein).distinct().limit(limit).collect(Collectors.toList());
-            return proteins;
-        } catch (HttpClientErrorException ex) {
-            logger.error(ex.getMessage(), ex);
-        } catch (InterruptedException | ExecutionException ex) {
-            logger.error(ex.getMessage(), ex);
-        }
+            try {
+                ResponseEntity<EbeyeSearchResult> results = future.get();
+                List<String> acc = results.getBody()
+                        .getEntries().stream().distinct().map(Entry::getUniprotAccession).distinct().limit(limit).collect(Collectors.toList());
+                return acc;
+            } catch (HttpClientErrorException ex) {
+                logger.error(ex.getMessage(), ex);
+            } catch (InterruptedException | ExecutionException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
         }
 
         return null;
-    }
-
-    private List<Protein> searchEbeyeDomainProteinXXX(List<String> urls, int limit) {
-
-        HttpMethod method = HttpMethod.GET;
-
-        // Define response type
-        Class<EbeyeSearchResult> responseType = EbeyeSearchResult.class;
-
-        // Define headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
-
-        LazyReact lazyReact = new LazyReact();
-
-//       List<Protein> result =  lazyReact
-//                .fromStream(urls.stream()
-//                        .map(url -> toCompletableFuture(asyncRestTemplate.exchange(url, method, requestEntity, responseType))))
-//                .map(ResponseEntity<EbeyeSearchResult>::getBody)
-//                .map(EbeyeSearchResult::getEntries)
-//                .flatMap(Collection::stream).distinct()
-//                .map(entry -> entry.getProtein())
-//                .limit(limit)
-//                .collect(Collectors.toList());
-        List<Entry> entries = lazyReact
-                .fromStream(urls.stream()
-                        .map(url -> toCompletableFuture(asyncRestTemplate.exchange(url, method, requestEntity, responseType))))
-                .map(ResponseEntity<EbeyeSearchResult>::getBody)
-                .map(EbeyeSearchResult::getEntries)
-                .flatMap(Collection::stream).distinct()
-                //.map(entry -> entry.getProtein())
-                .limit(limit)
-                .collect(Collectors.toList());
-        List<Protein> result = new LinkedList<>();
-        for (Entry e : entries) {
-            Protein p = new Protein(e.getUniprotAccession(), e.getTitle(), e.getScientificName().stream().findFirst().orElse(""));
-            result.add(p);
-        }
-
-//            try {
-//            destroyHttpComponentsAsyncClientHttpRequestFactory();
-//        } catch (Exception ex) {
-//            logger.error(ex.getMessage(), ex);
-//        }
-        return result;
-
     }
 
 //    protected void destroyHttpComponentsAsyncClientHttpRequestFactory() throws Exception {

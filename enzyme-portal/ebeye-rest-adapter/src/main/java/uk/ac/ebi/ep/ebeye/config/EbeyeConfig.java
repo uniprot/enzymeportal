@@ -13,6 +13,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.ebeye.AccessionService;
 import uk.ac.ebi.ep.ebeye.EbeyeProteinService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
@@ -46,13 +47,18 @@ public class EbeyeConfig {
     }
 
     @Bean
-    public PowerService powerService(EbeyeIndexUrl ebeyeIndexUrl,AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate ){
+    public PowerService powerService(EbeyeIndexUrl ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
         return new PowerService(ebeyeIndexUrl, asyncRestTemplate, restTemplate);
     }
 
     @Bean
     public ModelService modelService(RestTemplate restTemplate) {
         return new ModelService(restTemplate);
+    }
+
+    @Bean
+    public AccessionService accessionService(EbeyeIndexUrl ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
+        return new AccessionService(ebeyeIndexUrl, asyncRestTemplate, restTemplate);
     }
 
     @Bean
@@ -92,7 +98,6 @@ public class EbeyeConfig {
 //        return factory;
 //
 //    }
-
     //TODO
     private AsyncListenableTaskExecutor asyncListenableTaskExecutor() {
         ExecutorService executor = Executors.newWorkStealingPool();

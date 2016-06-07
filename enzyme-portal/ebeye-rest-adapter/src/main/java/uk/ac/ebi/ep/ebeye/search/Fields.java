@@ -22,6 +22,8 @@ public class Fields {
     private List<String> name;
     @JsonProperty("scientific_name")
     private List<String> scientificName = new ArrayList<>();
+    @JsonProperty("status")
+    private List<String> status;
 
     public List<String> getName() {
         return name.stream().distinct().collect(Collectors.toList());
@@ -47,6 +49,16 @@ public class Fields {
     @JsonProperty("scientific_name")
     public void setScientificName(List<String> scientificName) {
         this.scientificName = scientificName;
+    }
+
+    @JsonProperty("status")
+    public List<String> getStatus() {
+        return status;
+    }
+
+    @JsonProperty("status")
+    public void setStatus(List<String> status) {
+        this.status = status;
     }
 
 }
