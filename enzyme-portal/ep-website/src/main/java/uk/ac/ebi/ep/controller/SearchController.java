@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +44,7 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
+import uk.ac.ebi.ep.ebeye.AccessionService;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
@@ -59,6 +62,9 @@ public class SearchController extends AbstractController {
 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
+        @Autowired
+    private AccessionService accessionService;
+    
 
     @Autowired
     private ChebiConfig chebiConfig;
@@ -137,7 +143,7 @@ public class SearchController extends AbstractController {
                 final Map<String, UniprotEntry> sls = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
                 if (sls == null) {
                     setLastSummaries(session, Collections.singletonList(
-                             entry));
+                            entry));
                 } else if (sls.get(summId) == null) {
                     sls.put(summId, entry);
                 }
@@ -283,73 +289,81 @@ public class SearchController extends AbstractController {
      *
      * @param searchModel
      * @param model
+     * @param searchTerm
      * @param session
+     * @param ec
      * @param request
      * @param response
      * @return
      */
-//    @RequestMapping(value = "/search", method = RequestMethod.POST)
-//    public String postSearchResult(SearchModel searchModel, Model model,
-//            HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-//        String view = "error";
-//
-//        String searchKey = null;
-//        SearchResults results = null;
-//        response.setHeader("Access-Control-Allow-Origin", "*");
-//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-//        response.setHeader("Access-Control-Max-Age", "3600");
-//        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-//
-//        try {
-//
-//            // See if it is already there, perhaps we are paginating:
-//            Map<String, SearchResults> prevSearches
-//                    = getPreviousSearches(session.getServletContext());
-//            searchKey = getSearchKey(searchModel.getSearchparams());
-//
-//            results = prevSearches.get(searchKey);
-//            if (results == null) {
-//                // New search:
-//                clearHistory(session);
-//
-//                switch (searchModel.getSearchparams().getType()) {
-//                    case KEYWORD:
-//                        results = searchKeyword(searchModel.getSearchparams());
-//                        model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
-//                        LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
-//                        break;
-//                    case SEQUENCE:
-//                        //view = searchSequence(model, searchModel);
-//                        model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
-//                        break;
-//                    case COMPOUND:
-//                        results = searchCompound(model, searchModel);
-//                        break;
-//                    default:
-//                }
-//            }
-//
-//            if (results != null) { // something to show
-//                cacheSearch(session.getServletContext(), searchKey, results);
-//                setLastSummaries(session, results.getSummaryentries());
-//                searchModel.setSearchresults(results);
-//                applyFilters(searchModel, request);
-//                model.addAttribute("searchConfig", searchConfig);
-//                model.addAttribute("searchModel", searchModel);
-//                model.addAttribute("pagination", getPagination(searchModel));
-//                request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
-//
-//                clearHistory(session);
-//                addToHistory(session, searchModel.getSearchparams().getType(),
-//                        searchKey);
-//                view = "search";
-//            }
-//        } catch (Exception e) {
-//            LOGGER.error("one of the search params (Text or Sequence is :" + searchKey, e);
-//        }
-//
-//        return view;
-//    }
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public String postSearchResult(SearchModel searchModel, Model model,@RequestParam(required = false, value = "searchTerm") String searchTerm,
+            @RequestParam(required = false, value = "ec") String ec,
+            HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        String view = "error";
+        int limit = 800;
+        String searchKey = null;
+        SearchResults results = null;
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+
+        try {
+
+          
+            // See if it is already there, perhaps we are paginating:
+            Map<String, SearchResults> prevSearches
+                    = getPreviousSearches(session.getServletContext());
+                     searchKey = getSearchKey(searchModel.getSearchparams());
+           
+            results = prevSearches.get(searchKey);
+                      
+            if (results == null) {
+                // New search:
+                clearHistory(session);
+
+                switch (searchModel.getSearchparams().getType()) {
+                    case KEYWORD:
+                        //results = searchKeyword(searchModel.getSearchparams());
+                       
+                        results = searchKeyword(ec, searchTerm, limit);
+                       
+                        model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
+                        LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
+                        break;
+                    case SEQUENCE:
+                        //view = searchSequence(model, searchModel);
+                        model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
+                        break;
+                    case COMPOUND:
+                        results = searchCompound(model, searchModel);
+                        break;
+                    default:
+                }
+            }
+
+            if (results != null) { // something to show
+                cacheSearch(session.getServletContext(), searchKey, results);
+                setLastSummaries(session, results.getSummaryentries());
+                searchModel.setSearchresults(results);
+                applyFilters(searchModel, request);
+                model.addAttribute("searchConfig", searchConfig);
+                model.addAttribute("searchModel", searchModel);
+                model.addAttribute("pagination", getPagination(searchModel));
+                request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
+
+                clearHistory(session);
+                addToHistory(session, searchModel.getSearchparams().getType(),
+                        searchKey);
+                view = "search";
+            }
+        } catch (Exception e) {
+            LOGGER.error("one of the search params (Text or Sequence is :" + searchKey, e);
+        }
+
+        return view;
+    }
 
     @Override
     protected void clearHistory(HttpSession session) {
@@ -471,8 +485,18 @@ public class SearchController extends AbstractController {
     @Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
 
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeRestService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         SearchResults results = finder.getEnzymes(searchParameters);
+
+        return results;
+    }
+
+   
+    private SearchResults searchKeyword(String ec, String searchTerm, int limit) {
+
+       
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService, accessionService);
+        SearchResults results = finder.getAssociatedproteins(ec, searchTerm, limit);
 
         return results;
     }
@@ -490,7 +514,7 @@ public class SearchController extends AbstractController {
         SearchResults results = null;
         EnzymeFinder finder = null;
         try {
-            finder = new EnzymeFinder(enzymePortalService,ebeyeRestService);
+            finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
             results = finder.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
@@ -520,7 +544,6 @@ public class SearchController extends AbstractController {
 //            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 //        return postSearchResult(searchModel, model, session, request, response);
 //    }
-
     @RequestMapping(value = "/advanceSearch",
             method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {

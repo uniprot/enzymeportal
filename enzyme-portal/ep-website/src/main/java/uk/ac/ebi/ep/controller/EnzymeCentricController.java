@@ -37,7 +37,7 @@ import uk.ac.ebi.ep.ebeye.model.Protein;
 @Controller
 public class EnzymeCentricController extends AbstractController {
 
-    private static final String SEARCH = "/search";
+    private static final String SEARCH = "/enzymes";
     private static final String FILTER = "/search/filter";
     private static final String ENZYME_CENTRIC_PAGE = "enzymes";
 
@@ -72,7 +72,7 @@ public class EnzymeCentricController extends AbstractController {
        
         int pageSize = 10;
         int facetCount = 20;
-        int associatedProteinLimit = 5;
+        int associatedProteinLimit = 800;
         if (filters == null) {
             filters = new ArrayList<>();
         }
@@ -82,7 +82,6 @@ public class EnzymeCentricController extends AbstractController {
            
         }
         final String searchTerm = searchKey;
-        //System.out.println("searchTerm "+ searchTerm + " startPage "+ startPage + " filters "+ filters);
         EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage, pageSize, facetCount, filters);
 
         if (ebiSearchResult != null) {
@@ -93,7 +92,8 @@ public class EnzymeCentricController extends AbstractController {
             List<Entry> entries = page.getContent();
             List<Entry> enzymeView = new LinkedList<>();
             entries.stream().map((entry) -> {
-                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit);
+                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
+                        .stream().sorted().collect(Collectors.toList());
                 entry.setProtein(proteins);
                 entry.setNumEnzymeHits(proteins.size());
                 return entry;

@@ -50,12 +50,12 @@
         <h2>${ebiResult.hitCount} Enzymes found for "${searchKey}"</h2>
         </section>
 
-        <form id="facetFilterForm" action="${pageContext.request.contextPath}/search" method="POST">
+        <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
 
 
             <section class="grid_6 alpha">
 
-                <input id="paginationPage" name="servicePage" type="hidden" value="99">
+                <input id="paginationPage" name="servicePage" type="hidden" value="">
                 <c:if test="${page.totalElements gt page.size}">
                     <nav class="paginationContainer">
                           <ul class="pagination">
@@ -347,7 +347,14 @@
                                         <th width="57%"> </th>
                                     </tr>
                                     <c:set var="proteinSize" value="${fn:length(enzyme.protein)}"/>
-                                    <form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" method="POST">
+     <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
+          
+    <input name="searchTerm" type="hidden" value="${searchKey}">
+     <input name="ec" type="hidden" value="${enzyme.ec}">                   
+    <form:hidden path="searchparams.previoustext" />
+    <form:hidden path="searchparams.text" value="${enzyme.ec}-${searchKey}" />
+    <form:hidden path="searchparams.type" value="KEYWORD"/>
+
                                         <c:forEach var="p" begin="0" end="4">
                                             <tr class="proteinRow">
                                                 <td> </td>
@@ -355,12 +362,19 @@
                                                 <td>${enzyme.protein[p].species}</td>
                                             </tr>
                                         </c:forEach>
+                                        <c:if test="${proteinSize >= 5}">
                                         <tr class="proteinRow">
+                                          
                                             <td> </td>
-                                            <td><a id="${enzyme.ec}" href="#" class="full-view icon icon-functional btn" data-icon="F">Full View</a></td>
+
+<!--                                            <td><a id="${enzyme.ec}" href="#" class="full-view icon icon-functional btn" data-icon="F">Full View</a></td>-->
+                                            <td><button class="full-view icon icon-functional btn" type="submit">Change me Full View Button</button></td>
+                                            
                                             <td> </td>
+                                            
                                         </tr>
-                                    </form>
+                                        </c:if>
+                                   </form:form>
                                 </table>
                                 </td>
                            </tr>
