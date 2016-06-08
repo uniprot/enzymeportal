@@ -42,6 +42,7 @@ th{
 
 table{
     border: none;
+    background-color: inherit;
 }
 
 /*.epBox , fieldset {
@@ -634,4 +635,9 @@ ul, ol{
 
 .paginationContainer{
     margin-top: 65px;
+}
+
+
+#organismsSearch{
+    width:280px;
 }

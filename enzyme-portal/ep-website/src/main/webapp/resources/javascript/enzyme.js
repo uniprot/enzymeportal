@@ -36,6 +36,12 @@ $( document ).ready(function() {
         $('#' + formToSubmit).submit();
     });
 
+    $("#organismsSearch").click(function() {
+            var formToSubmit = "proteinViewForm-" + this.id;
+            $('#' + formToSubmit).submit();
+    });
+
+
 
     $(".enzymeName").click(function() {
         $(this).parent().next("#proteinList").toggle();
