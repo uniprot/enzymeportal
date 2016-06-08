@@ -76,6 +76,7 @@ public class XmlTransformer {
         }
     }
 
+    @Deprecated
     protected void addProteinInfoFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
             String specie = uniprotEntry.getScientificName();
