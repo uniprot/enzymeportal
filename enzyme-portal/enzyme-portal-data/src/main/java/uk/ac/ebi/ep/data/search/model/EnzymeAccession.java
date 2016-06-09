@@ -349,6 +349,9 @@ public class EnzymeAccession implements Serializable {
     }
 
     public Boolean getExpEvidence() {
+        if(expEvidence == null){
+            expEvidence = Boolean.FALSE;//.valueOf("0");
+        }
         return expEvidence;
     }
 

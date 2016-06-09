@@ -261,6 +261,9 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public String getCommonName() {
+        if(commonName == null){
+            commonName = scientificName;
+        }
         return commonName;
     }
 
@@ -554,9 +557,11 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             relatedspecies.add(map.getValue());
         });
 
-        List<EnzymeAccession> sortedSpecies = relatedspecies.stream().distinct()
-                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence).reversed().
-                        thenComparing(EnzymeAccession::getSpecies))
+        List<EnzymeAccession> sortedSpecies = relatedspecies.stream()
+                .distinct()
+                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
+                .reversed()
+                .thenComparing(EnzymeAccession::getSpecies))
                 .collect(Collectors.toList());
 
         return sortedSpecies.stream().distinct().limit(50).collect(Collectors.toList());
