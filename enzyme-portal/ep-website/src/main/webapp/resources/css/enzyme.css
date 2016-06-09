@@ -6,15 +6,6 @@
         Purpose of the stylesheet follows.
 */
 
-/*.tab.reaction .inner_tab .icon {
-	background-image: url("../images/reaction.png");
-}
-.tab.disease .inner_tab .icon {
-	background-image: url("../images/disease.png");
-}
-.tab.molecule .inner_tab .icon {
-	background-image: url("../images/molecule.png");
-}*/
 
 html {
     -webkit-font-smoothing:antialiased;
@@ -34,8 +25,6 @@ th,td{
     border:none;
     vertical-align: inherit;
 }
-td{
-}
 th{
     background-color:inherit;
 }
@@ -45,16 +34,7 @@ table{
     background-color: inherit;
 }
 
-/*.epBox , fieldset {
-    border-radius: 8px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-}*/
-
-
 /*frontier overridding ends*/
-
-
 
 .reaction.block {
 	border: thin solid grey;
@@ -81,14 +61,7 @@ table{
     margin-top: 10px;
     margin-bottom: 10px;
 }
-/*
-.pathwayDesc
-  {
-    float: left;
-    max-width:50%;
-    min-width: 250px;
-  }
-*/
+
 .pathwayImg{
 	display: block;
 	margin: 1.5ex auto 1ex;
@@ -106,7 +79,6 @@ legend {
 }
 
 .epBox {
-    /*min-height: 200px;*/
     min-width: 200px;
     max-width: 200px;
     display: inline;
@@ -246,8 +218,8 @@ section.omega > div.diff {
     margin: 0.3ex 1em 0.3ex 0em;
 }
 button.comparison {
-  width: 100%;
-  text-align: center;
+    width: 100%;
+    text-align: center;
 }
 
 #compareButton[disabled]:before {
@@ -315,7 +287,6 @@ a.browse-box:hover {
 .gene-box {
     background-color: #3c5561;
 }
-
 
 .disease-overview-box ul {
     margin-bottom: 0;
@@ -390,15 +361,14 @@ div#local-masthead ul.dropdown-menu li {
     fill:#0C4452;
 }
 
-
 #taxonomy-tree .node text.endnode:hover {
     fill:#0B5448;
 }
 
 #taxonomy-tree .link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
 }
 
 /* Buttons */
@@ -480,12 +450,10 @@ ul.catalytic-activity-list li {
 	white-space: nowrap;
 }
 
-
 /*********** ENZYME VIEW  **********/
 
-
 #enzymeResults th{
-background-color: #ECF0F1;
+    background-color: #ECF0F1;
 }
 #enzymeResultsProteins th{
     background-color: inherit;
@@ -500,15 +468,10 @@ background-color: #ECF0F1;
 .enzymeName{
 	cursor: pointer;
     padding-left: 15px;
-
 }
 
 table#enzymeResults tr:nth-child(4n+2){
     background-color:#CBE8EC;
-}
-
-table#enzymeResults tr.enzymeRow{
-
 }
 
 table#enzymeResults td, table#enzymeResults th{
@@ -537,7 +500,6 @@ table#enzymeResults tr:nth-child(4n+3){
     background-color:#CBE8EC;
 }
 
-
 .paginationText{
     height: 50px;
     float: left;
@@ -558,15 +520,6 @@ table#enzymeResults tr#proteinList {
 table#enzymeResultsProteins tr.proteinRow{
     background-color: inherit;
 }
-
-
-/*table#enzymeResultsProteins tr{*/
-    /*background-color: #0e6a0e;*/
-/*}*/
-
-/*.alternate{*/
-    /*background-color: #0e6a0e;*/
-/*}*/
 
 .sideTwizzle{
     background-image: url("../images/sideTwizzle.png");
