@@ -40,6 +40,8 @@ public class EnzymeCentricController extends AbstractController {
     private static final String SEARCH = "/enzymes";
     private static final String FILTER = "/search/filter";
     private static final String ENZYME_CENTRIC_PAGE = "enzymes";
+    private static final int DEFAULT_EBI_SEARCH_FACET_COUNT = 1_000;
+    private static final int ASSOCIATED_PROTEIN_LIMIT = 8_00;
 
     @Autowired
     private ModelService modelService;
@@ -47,7 +49,7 @@ public class EnzymeCentricController extends AbstractController {
     private PowerService powerService;
 
     @RequestMapping(value = SEARCH, method = RequestMethod.GET)
-    public String getSearchResults(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters,@RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, BindingResult result,
+    public String getSearchResults(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters, @RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, BindingResult result,
             Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         if (filters == null) {
             filters = new ArrayList<>();
@@ -56,30 +58,30 @@ public class EnzymeCentricController extends AbstractController {
 //            return filterSearchResult(searchKey, filters, searchModel, model, request);
 //        }
 
-        return postSearchResult(searchKey, filters,servicePage, searchModel, model, request);
+        return postSearchResult(searchKey, filters, servicePage, searchModel, model, request);
     }
 
     @RequestMapping(value = SEARCH, method = RequestMethod.POST)
-    public String postSearchResult(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters,@RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, Model model, HttpServletRequest request) {
+    public String postSearchResult(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters, @RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, Model model, HttpServletRequest request) {
         String view = "error";
-        int startPage =0;
-        if(servicePage != null){
-            if(servicePage < 0){
-            servicePage = 1;
+        int startPage = 0;
+        if (servicePage != null) {
+            if (servicePage < 0) {
+                servicePage = 1;
             }
-            startPage = servicePage-1;//EBI search paging starts from 0
+            startPage = servicePage - 1;//EBI search paging starts from 0
         }
-       
+
         int pageSize = 10;
-        int facetCount = 20;
-        int associatedProteinLimit = 800;
+        int facetCount = DEFAULT_EBI_SEARCH_FACET_COUNT;
+        int associatedProteinLimit = ASSOCIATED_PROTEIN_LIMIT;
         if (filters == null) {
             filters = new ArrayList<>();
         }
 
-        if(searchModel.getSearchparams().getText() != null){
-         searchKey = searchModel.getSearchparams().getText().trim().toLowerCase();
-           
+        if (searchModel.getSearchparams().getText() != null) {
+            searchKey = searchModel.getSearchparams().getText().trim().toLowerCase();
+
         }
         final String searchTerm = searchKey;
         EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage, pageSize, facetCount, filters);
@@ -109,7 +111,7 @@ public class EnzymeCentricController extends AbstractController {
             model.addAttribute("endIndex", end);
             model.addAttribute("currentIndex", current);
             model.addAttribute("enzymeView", enzymeView);
-             model.addAttribute("filtersApplied", filters);
+            model.addAttribute("filtersApplied", filters);
 
             model.addAttribute("searchKey", searchTerm);
             model.addAttribute("searchModel", searchModel);
@@ -167,7 +169,7 @@ public class EnzymeCentricController extends AbstractController {
         return modelService.getSearchResult(query, startPage, pageSize, facets, facetCount);
     }
 
-     @Deprecated
+    @Deprecated
     private EBISearchResult filterEbiSearchResult(String query, int page, List<String> filters) {
         // ModelService modelService = new ModelService(new RestTemplate());
         String facets = filters.stream().collect(Collectors.joining(","));
