@@ -36,7 +36,9 @@ public class ModelService {
      */
     public EBISearchResult getSearchResult(String query, int startPage, int pageSize, String facets, int facetCount) {
         //todo validate query paging, facets etc
-
+        if(facetCount > 1000){
+            facetCount = 1_000;
+        }
         String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=" + query + "&facetcount=" + facetCount + "&facets:TAXONOMY,OMIM,compound_type&compound_name&start=" + startPage + "&size=" + pageSize + "&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
         System.out.println("facets "+ facets);
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
