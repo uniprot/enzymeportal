@@ -80,8 +80,11 @@ $( document ).ready(function() {
         facetToTick = $.trim(value);
         facetToTick = facetToTick.replace(/\:/g, '_');
         $("#"+facetToTick).prop('checked', true);
-    });
+        $("#"+facetToTick).parent().insertBefore("#activeOrganisms");
+   });
 
-
+    if (filtersAppliedArray.length >= 2){
+        $("#activeFilters").show();
+    }
 
 });
