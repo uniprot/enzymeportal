@@ -83,9 +83,19 @@
                     <div class="filter">
 
                         <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
+
+
+                        <div id="activeFilters" class="sublevel1">
+                            <div class="subTitle">Active filters</div>
+                            <ul>
+                                <li id="activeOrganisms"></li>
+
+                            </ul>
+                        </div>
+
+
                         <c:forEach var="facet" items="${enzymeFacet}">
                              <div>
-
                                  <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
                                  <c:if test="${facet.id eq 'enzyme_family'}">
                                  <div class="sublevel1">
@@ -136,25 +146,14 @@
 
                                             </li>
 
+                                            <div id="organismList">
                                             <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
-                                            <c:choose>
-                                                 <c:when test='${facetSize > 10}'>
-                                                     <c:forEach begin="0" end="9" var="v" items="${facet.facetValues}">
-                                                        <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                                     </c:forEach>
-                                                     <li class="toggleOrganismList">${facetSize - 10} more...</li>
-                                                         <div class="organismFullList">
-                                                             <c:forEach begin="10" var="vMore" items="${facet.facetValues}">
-                                                                <li><input id="TAXONOMY_${vMore.value}" name="filterFacet" value="TAXONOMY:${vMore.value}" type="checkbox" onChange="this.form.submit()"> ${vMore.label} (${vMore.count})</li>
-                                                             </c:forEach>
-                                                         </div>
-                                                 </c:when>
-                                                 <c:otherwise>
+
                                                      <c:forEach var="v" items="${facet.facetValues}">
                                                         <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
                                                      </c:forEach>
-                                                 </c:otherwise>
-                                             </c:choose>
+
+                                            </div>
                                          </ul>
                                      </div>
                                  </c:if>

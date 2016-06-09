@@ -509,9 +509,7 @@ table#enzymeResults tr:nth-child(4n+2){
 
 table#enzymeResults tr.enzymeRow{
 
-
 }
-
 
 table#enzymeResults td, table#enzymeResults th{
     padding: 7px 10px 10px 10px;
@@ -524,8 +522,6 @@ table#enzymeResults th{
 table#enzymeResultsProteins td, table#enzymeResultsProteins th{
     padding: 1px 1px 1px 1px;
 }
-
-
 
 table#enzymeResults td:first-child{
     padding-left: 20px;
@@ -582,7 +578,7 @@ table#enzymeResultsProteins tr.proteinRow{
     background-image: url("../images/downTwizzle.png");
 }
 
-.speciesFullList, .organismFullList{
+.speciesFullList, .organismFullList, #activeFilters{
     display: none;
 }
 
@@ -637,6 +633,10 @@ ul, ol{
     margin-top: 65px;
 }
 
+div#organismList{
+    height: 300px;
+    overflow: auto;
+}
 
 #organismsSearch{
     width:280px;
