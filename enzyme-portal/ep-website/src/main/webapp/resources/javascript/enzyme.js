@@ -83,7 +83,7 @@ $( document ).ready(function() {
         $("#"+facetToTick).parent().insertBefore("#activeOrganisms");
    });
 
-    if (filtersAppliedArray.length >= 2){
+    if (filtersAppliedArray.length >= 1){
         $("#activeFilters").show();
     }
 
