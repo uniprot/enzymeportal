@@ -51,12 +51,6 @@ public class EnzymeCentricController extends AbstractController {
     @RequestMapping(value = SEARCH, method = RequestMethod.GET)
     public String getSearchResults(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters, @RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, BindingResult result,
             Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-//        if (filters == null) {
-//            filters = new ArrayList<>();
-//        }
-//        if (!filters.isEmpty()) {
-//            return filterSearchResult(searchKey, filters, searchModel, model, request);
-//        }
 
         return postSearchResult(searchKey, filters, servicePage, searchModel, model, request);
     }
@@ -69,7 +63,7 @@ public class EnzymeCentricController extends AbstractController {
             if (servicePage < 0) {
                 servicePage = 1;
             }
-            startPage = servicePage - 1;//EBI search paging starts from 0
+            startPage = servicePage - 1;//EBI search paging index starts at 0
         }
 
         int pageSize = 10;
@@ -115,17 +109,14 @@ public class EnzymeCentricController extends AbstractController {
             model.addAttribute("endIndex", end);
             model.addAttribute("currentIndex", current);
             model.addAttribute("enzymeView", enzymeView);
-            System.out.println("applied filters "+ filters);
             model.addAttribute("filtersApplied", filters);
 
             model.addAttribute("searchKey", searchTerm);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
             model.addAttribute("ebiResult", ebiSearchResult);
-//            model.addAttribute("enzymeView", ebiSearchResult.getEntries());
             model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
             view = ENZYME_CENTRIC_PAGE;
-            //view = ENZYME_CENTRIC_PAGE_V;
         }
 
         return view;
