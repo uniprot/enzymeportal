@@ -230,7 +230,7 @@
                                        <input name="searchTerm" type="hidden" value="${searchKey}">
                                         <input name="ec" type="hidden" value="${enzyme.ec}">
                                        <form:hidden path="searchparams.previoustext" />
-                                       <form:hidden path="searchparams.text" value="${enzyme.ec}-${searchKey}" />
+                                       <form:hidden path="searchparams.text" value="${searchKey}" />
                                        <form:hidden path="searchparams.type" value="KEYWORD"/>
 
 

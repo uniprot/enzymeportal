@@ -161,6 +161,21 @@ public final class Functions {
     }
 
     /**
+     * 
+     * @param text of this format searchparams.text=cathepsin for example
+     * @return index[1] - cathepsin
+     */
+    public static String splitAndGetValue(String text) {
+        String result = "";
+        String data[] = text.split("=");
+
+        if (data[1] != null) {
+            result = data[1];
+        }
+        return result;
+    }
+
+    /**
      * Retrieves the URL to the source of the molecule, or builds it if it is
      * not set yet.
      *
