@@ -90,10 +90,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
                                 .retry(RETRY_LIMIT)
                                 .doOnError(throwable -> logger.error("Error executing request: {}", reqUrl, throwable))
                                 .onExceptionResumeNext(Observable.empty()))
-                .doOnUnsubscribe(() -> {
-                    System.out.println("shutting down pool for query: " + query);
-                    executorService.shutdown();
-                });
+                .doOnUnsubscribe(executorService::shutdown);
     }
 
     private EbeyeSearchResult executeFirstQuery(String query) {
