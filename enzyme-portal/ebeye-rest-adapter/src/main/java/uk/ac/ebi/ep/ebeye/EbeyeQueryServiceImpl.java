@@ -78,7 +78,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd > -1 : "End can not be a negative value";
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
-        int threadPoolSize = Math.max(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
+        int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
         ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
         return generateUrlRequests(query, requestStart, requestEnd)
@@ -90,7 +90,10 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
                                 .retry(RETRY_LIMIT)
                                 .doOnError(throwable -> logger.error("Error executing request: {}", reqUrl, throwable))
                                 .onExceptionResumeNext(Observable.empty()))
-                .doOnCompleted(executorService::shutdown);
+                .doOnUnsubscribe(() -> {
+                    System.out.println("shutting down pool for query: " + query);
+                    executorService.shutdown();
+                });
     }
 
     private EbeyeSearchResult executeFirstQuery(String query) {
