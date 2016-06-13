@@ -1,109 +1,171 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
+import java.util.function.BiFunction;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import rx.Observable;
+import rx.observers.TestSubscriber;
+
+import uk.ac.ebi.ep.ebeye.search.Entry;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.core.task.AsyncListenableTaskExecutor;
-import org.springframework.core.task.support.TaskExecutorAdapter;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.client.MockRestServiceServer;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import static org.mockito.Mockito.when;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-@Ignore
-public class EnzymeCentricServiceTest {
-
-    private static final int MAX_ENTRIES_IN_RESPONSE = 4;
-    private static final String SERVER_URL = "http://www.myserver.com/ebeye";
-    private static final String AUTOCOMPLETE_REQUEST = SERVER_URL + "/autocomplete?term=%s&format=json";
-    private static final String EC_REQUEST = SERVER_URL + "?query=%s&size=%d&start=%d&fields=name&format=json";
-
-    private MockRestServiceServer syncRestServerMock;
-    private MockRestServiceServer asyncRestServerMock;
+@RunWith(MockitoJUnitRunner.class)
+public class EnzymeCentricServiceTest extends XCentricSetup {
+    private BiFunction<String, String, Entry> entryCreator;
 
     private EnzymeCentricService enzymeCentricService;
 
+    @Mock
+    private EbeyeQueryService ebeyeQueryService;
+
     @Before
-    public void setUp() {
-        EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
-        serverUrl.setEnzymeCentricSearchUrl(SERVER_URL);
-        serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
-        final AsyncListenableTaskExecutor executor = new TaskExecutorAdapter(Runnable::run);
-        RestTemplate restTemplate = new RestTemplate();
-        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate(executor);
+    public void setUp() throws Exception {
+        entryCreator = createEntry();
 
-        syncRestServerMock = MockRestServiceServer.createServer(restTemplate);
-        asyncRestServerMock = MockRestServiceServer.createServer(asyncRestTemplate);
-
-        enzymeCentricService = new EnzymeCentricService(serverUrl, restTemplate, asyncRestTemplate);
-
+        enzymeCentricService = new EnzymeCentricService(ebeyeQueryService);
     }
 
     @Test
-    public void
-            query_response_in_unique_accession_search_has_hitCount_less_than_maxEntries_only_synchronous_request_used()
-            throws Exception {
+    public void null_ebeye_query_service_throws_exception() throws Exception {
+        EbeyeQueryService ebeyeQueryService = null;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("'EbeyeQueryService' must not be null");
+
+        enzymeCentricService = new EnzymeCentricService(ebeyeQueryService);
+    }
+
+    @Test
+    public void null_EcQuery_in_query_for_EcNumbers_throws_exception() throws Exception {
+        String query = null;
+        int limit = EnzymeCentricService.NO_RESULT_LIMIT;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Query can not be null");
+
+        enzymeCentricService.queryEbeyeForEcNumbers(query, limit);
+    }
+
+    @Test
+    public void negative_retrieval_limit_value_in_query_for_EcNumbers_throws_exception() throws Exception {
+        String query = "kinase";
+        int limit = -1;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Limit must be greater than 0");
+
+        enzymeCentricService.queryEbeyeForEcNumbers(query, limit);
+    }
+
+    @Test
+    public void zero_retrieval_limit_value_in_query_for_EcNumbers_throws_exception() throws Exception {
+        String query = "kinase";
+        int limit = 0;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Limit must be greater than 0");
+
+        enzymeCentricService.queryEbeyeForEcNumbers(query, limit);
+    }
+
+    @Test
+    public void no_accessions_generated_because_ebeye_query_service_returns_empty_response() {
         String query = "query";
-        String filename = "enzyme.json";
-        int limit = MAX_ENTRIES_IN_RESPONSE;
 
-        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.empty());
 
-        mockServerResponse(syncRestServerMock, requestUrl, limit, filename);
+        Observable<String> actualAccessions = enzymeCentricService.queryEbeyeForEcNumbers(query);
 
-        List<String> actualEcNumbers = enzymeCentricService.queryEbeyeForEcNumbers(query, limit);
+        TestSubscriber<String> testSubscriber = subscribe(actualAccessions);
 
-        syncRestServerMock.verify();
-
-        assertThat(actualEcNumbers, hasSize(limit));
+        testSubscriber.assertCompleted();
+        testSubscriber.assertNoValues();
     }
 
-    private void mockServerResponse(MockRestServiceServer serverMock, String requestUrl, int limit, String filename)
-            throws IOException {
-        //String filename = "enzyme.json";
-        String json = getJsonFile(filename);
-        for (int i = 1; i < limit - 1; i++) {
-            serverMock.expect(requestTo(requestUrl))
-                    .andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
-        }
+    @Test
+    public void returns_ec_numbers_of_entries_with_the_distinct_ec_numbers() {
+        String query = "query";
+
+        String commonEC = "1.2.3.4";
+
+        String acc1 = "1";
+        Entry entry1 = entryCreator.apply(acc1, commonEC);
+
+        String acc2 = "2";
+        Entry entry2 = entryCreator.apply(acc2, commonEC);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.just(entry1, entry2));
+
+        Observable<String> actualAccessions = enzymeCentricService.queryEbeyeForEcNumbers(query);
+
+        TestSubscriber<String> testSubscriber = subscribe(actualAccessions);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValue(commonEC);
     }
 
-    private String createQueryUrl(String query, int size, int start) {
-        return String.format(EC_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, start);
+    @Test
+    public void returns_all_ec_numbers_of_distinct_entries() {
+        String query = "query";
+        int entriesSize = 10;
+
+        List<Entry> distinctEntries = createEntries(entriesSize, entryCreator);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.from(distinctEntries));
+
+        Observable<String> actualAccessions = enzymeCentricService.queryEbeyeForEcNumbers(query);
+
+        TestSubscriber<String> testSubscriber = subscribe(actualAccessions);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValueCount(entriesSize);
     }
 
-    protected String getJsonFile(String filename) {
-        try {
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream(filename);
+    @Test
+    public void accession_list_is_empty_because_ebeye_query_service_returns_empty_response() {
+        String query = "query";
+        int limit = EbeyeRestService.NO_RESULT_LIMIT;
 
-            return IOUtils.toString(in);
-        } catch (IOException ex) {
-            //LOGGER.error(ex.getMessage(), ex);
-        }
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.empty());
 
-        return null;
+        List<String> actualAccessions = enzymeCentricService.queryEbeyeForEcNumbers(query, limit);
+
+        assertThat(actualAccessions, hasSize(0));
     }
 
+    @Test
+    public void list_contains_5_accessions_because_limit_is_set_to_5() {
+        String query = "query";
+        int limit = 5;
+
+        int entriesSize = 10;
+
+        List<Entry> distinctEntries = createEntries(entriesSize, entryCreator);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.from(distinctEntries));
+
+        List<String> actualAccessions = enzymeCentricService.queryEbeyeForEcNumbers(query, limit);
+
+        assertThat(actualAccessions, hasSize(5));
+    }
+
+    private BiFunction<String, String, Entry> createEntry() {
+        return (id, ec) -> {
+            Entry entry = new Entry(id, id + "_" + id);
+            entry.setEc(ec);
+            return entry;
+        };
+    }
 }
