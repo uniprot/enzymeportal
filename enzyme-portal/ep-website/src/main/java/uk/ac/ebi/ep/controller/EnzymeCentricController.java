@@ -78,10 +78,10 @@ public class EnzymeCentricController extends AbstractController {
         }
         final String searchTerm = searchKey;
         if (filters.contains("")) {
-             filters.remove("");
+            filters.remove("");
 
         }
-        EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage*10, pageSize, facetCount, filters);
+        EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage * 10, pageSize, facetCount, filters);
 
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
@@ -99,6 +99,27 @@ public class EnzymeCentricController extends AbstractController {
             }).forEach((entry) -> {
                 enzymeView.add(entry);
             });
+//            entries.stream().forEach( entry -> {
+//                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
+//                        .stream().sorted().collect(Collectors.toList());
+//
+//                if(proteins.isEmpty()){
+//                 String input =   HtmlUtils.htmlEscape(entry.getEnzymeName().trim());
+//                    String cleanedName = input.replace("[", "").replace("]", "")
+//                            .replace("(", "").replace(")", "")
+//                            .replace("-", "").replace("/", "");
+//                         proteins = powerService.queryForUniqueProteins(entry.getEc(), cleanedName, associatedProteinLimit)
+//                        .stream().sorted().collect(Collectors.toList()); 
+//
+//                }
+//                int proteinHits = proteins.size();
+//                if (proteinHits > 0) {
+//                    entry.setProtein(proteins);
+//                    entry.setNumEnzymeHits(proteins.size());
+//                    enzymeView.add(entry);
+//                }
+//            });
+
             int current = page.getNumber() + 1;
             int begin = Math.max(1, current - 5);
             int end = Math.min(begin + 10, page.getTotalPages());
@@ -120,7 +141,8 @@ public class EnzymeCentricController extends AbstractController {
 
         return view;
     }
-        private EBISearchResult getEbiSearchResult(String query, int startPage, int pageSize, int facetCount, List<String> filters) {
+
+    private EBISearchResult getEbiSearchResult(String query, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
         return modelService.getSearchResult(query, startPage, pageSize, facets, facetCount);
     }
@@ -162,16 +184,12 @@ public class EnzymeCentricController extends AbstractController {
 //
 //        return view;
 //    }
-
-
-
 //    @Deprecated
 //    private EBISearchResult filterEbiSearchResult(String query, int page, List<String> filters) {
 //        // ModelService modelService = new ModelService(new RestTemplate());
 //        String facets = filters.stream().collect(Collectors.joining(","));
 //        return modelService.filterSearchResult(query, page, facets);
 //    }
-
 //    public static void main(String[] args) {
 //        String query = "kinase";
 //        //query = "sildenafil";
