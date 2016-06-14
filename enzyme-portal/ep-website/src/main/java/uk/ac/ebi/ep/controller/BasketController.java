@@ -37,13 +37,12 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 @Controller
 public class BasketController extends AbstractController {
 
- 
     @Autowired
     protected ReactomeConfig reactomeConfig;
     @Autowired
     protected ChebiConfig chebiConfig;
-    
-        @Autowired
+
+    @Autowired
     protected IntenzConfig intenzConfig;
 
     @Autowired
@@ -100,7 +99,7 @@ public class BasketController extends AbstractController {
     @RequestMapping(value = "/basket")
     protected String getBasket(Model model) {
         model.addAttribute("searchModel", newEmptySearchModel());
-         model.addAttribute("searchConfig", searchConfig);
+        model.addAttribute("searchConfig", searchConfig);
         return Attribute.basket.name();
     }
 
@@ -157,12 +156,12 @@ public class BasketController extends AbstractController {
                     = new EnzymeComparison(models[0], models[1]);
             LOGGER.debug("Comparison finished");
             model.addAttribute("comparison", comparison);
+            //pdbImgUrl = http://www.ebi.ac.uk/pdbe/static/entry/{0}_deposited_chain_front_image-200x200.png
             model.addAttribute("pdbImgUrl", pdbImgUrl);
             model.addAttribute("pdbStructureCompareUrl", pdbStructureCompareUrl);
             model.addAttribute("uniprotAlignUrl", uniprotAlignUrl);
             model.addAttribute("reactomeConfig", reactomeConfig);
-             model.addAttribute("intenzConfig", intenzConfig);
-            
+            model.addAttribute("intenzConfig", intenzConfig);
 
             return "comparison";
         } catch (InterruptedException | ExecutionException e) {
@@ -182,8 +181,8 @@ public class BasketController extends AbstractController {
         SearchModel searchModelForm = new SearchModel();
         SearchParams searchParams = new SearchParams();
         searchParams.setStart(0);
-         searchParams.setType(SearchParams.SearchType.KEYWORD);
-         searchParams.setPrevioustext("");
+        searchParams.setType(SearchParams.SearchType.KEYWORD);
+        searchParams.setPrevioustext("");
         searchModelForm.setSearchparams(searchParams);
         return searchModelForm;
     }
@@ -200,7 +199,7 @@ public class BasketController extends AbstractController {
         public EnzymeModel call() throws Exception {
             EnzymeRetriever retriever = null;
 
-            retriever = new EnzymeRetriever(enzymePortalService,literatureService);
+            retriever = new EnzymeRetriever(enzymePortalService, literatureService);
             retriever.getIntenzAdapter().setConfig(intenzConfig);
             //retriever.getReactomeAdapter().setConfig(reactomeConfig);
             retriever.getChebiAdapter().setConfig(chebiConfig);
