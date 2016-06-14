@@ -274,6 +274,30 @@
 
             </section>
         </section>
+
+
+
+        <section class="grid_24 alpha">
+
+            <c:if test="${page.totalElements gt page.size}">
+                <nav class="paginationContainer">
+                      <ul class="pagination">
+                        <c:if test="${currentIndex >= 2}">
+                            <li><a class="paginationLink" id="${currentIndex - 1}" aria-label="Previous"><span>&laquo;</span></a></li>
+                        </c:if>
+                        <li class="paginationText">Page ${page.number + 1} of ${page.totalPages}</li>
+                        <c:if test="${currentIndex < page.totalPages}">
+                            <li><a class="paginationLink" id="${currentIndex + 1}" aria-label="Next"><span>&raquo;</span></a></li>
+                        </c:if>
+                      </ul>
+                </nav>
+            </c:if>
+
+
+        </section>
+
+
+
     </div>
 
 

@@ -601,3 +601,7 @@ div#organismList{
 	line-height: 12pt;
 	height: auto;
 }
+
+.paginationLink{
+    cursor: pointer;
+}
