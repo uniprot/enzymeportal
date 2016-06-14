@@ -51,7 +51,7 @@
 
         <section class="grid_18 alpha">
             <h1>Enzyme Results</h1>
-            <h2>${ebiResult.hitCount} Enzymes found for "${searchKey}"</h2>
+            <h2>${ebiResult.hitCount} enzymatic activities found for "${searchKey}"</h2>
         </section>
 
         <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
