@@ -592,5 +592,12 @@ div#organismList{
 }
 
 #organismsSearch{
-    width:280px;
+    width:80%;
+}
+.box .name {
+	display: block;
+	font-weight: bold;
+	padding: 4px 4px 0px 4px;
+	line-height: 12pt;
+	height: auto;
 }
