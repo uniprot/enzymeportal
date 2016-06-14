@@ -436,7 +436,7 @@ public class EnzymeFinder extends EnzymeBase {
         return summaries;
     }
 
-    public SearchResults getAssociatedproteins(String ec, String searchTerm, int limit) {
+    public SearchResults getAssociatedProteins(String ec, String searchTerm, int limit) {
 
         List<String> accessions = accessionService.queryForUniqueAccessions(ec, searchTerm, limit);
 
