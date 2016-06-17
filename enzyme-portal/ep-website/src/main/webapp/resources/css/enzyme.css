@@ -584,6 +584,7 @@ ul, ol{
 
 .paginationContainer{
     margin-top: 65px;
+    margin-right: 10px;
 }
 
 div#organismList{
@@ -605,3 +606,4 @@ div#organismList{
 .paginationLink{
     cursor: pointer;
 }
+
