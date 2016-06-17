@@ -42,20 +42,10 @@ public class Entry extends EnzymeView {
     private Fields fields;
 
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    //private Set<Protein> proteins = null;
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
-    //private PowerService powerService;
     public Entry() {
-
-//        proteins = new HashSet<>();
-//        EbeyeIndexUrl ebeyeIndexUrl = new EbeyeIndexUrl();
-//        ebeyeIndexUrl.setChunkSize(10);
-//        ebeyeIndexUrl.setMaxEbiSearchLimit(100);
-//        ebeyeIndexUrl.setDefaultSearchIndexUrl("http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal");
-//        // proteinService = new EbeyeProteinService(ebeyeIndexUrl, new RestTemplate());
-//        powerService = new PowerService(ebeyeIndexUrl, new AsyncRestTemplate(), new RestTemplate());
-//      
+     
     }
 
     /**
@@ -136,11 +126,6 @@ public class Entry extends EnzymeView {
 
     }
 
-//    @Override
-//    public int getNumEnzymeHits() {
-//        return fields.getProteinName().size();
-//
-//    }
     @Override
     public List<String> getSpecies() {
         Map<Integer, String> priorityMapper = new TreeMap<>();
@@ -149,6 +134,9 @@ public class Entry extends EnzymeView {
         LinkedList<String> sortedSpecies = new LinkedList<>();
 
         List<String> species = fields.getCommonName();
+        if(species.isEmpty()){
+            species = fields.getScientificName();
+        }
 
         species.stream().forEach((name) -> {
             sortSpecies(name, priorityMapper, customKey, key);
@@ -164,41 +152,11 @@ public class Entry extends EnzymeView {
 
     @Override
     public List<String> getProteins() {
-        //System.out.println("calling protins name "+ id);
         return fields.getProteinName().stream().collect(Collectors.toList());
 
     }
 
-//    @Override
-//    public List<Protein> getProtein() {
-//        System.out.println("calling protein .."+ id);
-//       // List<Protein>  p = this.powerService.queryForUniqueProteins(id, 5);
-//     
-//        return super;
-//
-//    }
-//    private List<Protein> buildProtein() {
-//        List<String> accessions = fields.getUNIPROTKB().stream().collect(Collectors.toList());
-//   
-//
-//        do {
-//            if (proteins.size() == 5) {
-//                break;
-//            }
-//            //for (String accession : accessions) {
-//            String accession = "";
-//            List<uk.ac.ebi.ep.ebeye.search.Entry> entries =null;// ps.getProteinView(id, accession).stream().distinct().collect(Collectors.toList());
-//     
-//            for (uk.ac.ebi.ep.ebeye.search.Entry entry : entries) {
-//               String sc = entry.getScientificName().stream().findFirst().orElse("");
-//                Protein protein = new Protein(entry.getUniprotAccession(), entry.getTitle(), sc);
-//                proteins.add(protein);
-//            }
-//            //}
-//        } while (proteins.size() <= 5);
-//
-//        return proteins.stream().collect(Collectors.toList());
-//    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -228,33 +186,5 @@ public class Entry extends EnzymeView {
         }
     }
 
-    @Deprecated
-    private void sortSpeciesDeprecated(String specieName, String entry, Map<Integer, String> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
-        //Human,Mouse, Mouse-ear cress, fruit fly, yeast, e.coli, Rat,worm
-        // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
-        if (specieName.equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
 
-            priorityMapper.put(1, entry);
-        } else if (specieName.equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
-
-            priorityMapper.put(2, entry);
-        } //        else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.MOUSE_EAR_CRESS.getScientificName())) {
-        //
-        //            priorityMapper.put(3, entry);
-        //        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getScientificName())) {
-        //
-        //            priorityMapper.put(4, entry);
-        //        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.ECOLI.getScientificName())) {
-        //
-        //            priorityMapper.put(5, entry);
-        //        } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(ModelOrganisms.BAKER_YEAST.getScientificName())) {
-        //            priorityMapper.put(6, entry);
-        //
-        //        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.RAT.getScientificName())) {
-        //            priorityMapper.put(customKey.getAndIncrement(), entry);
-        //        } 
-        else {
-            priorityMapper.put(key.getAndIncrement(), entry);
-        }
-    }
 }

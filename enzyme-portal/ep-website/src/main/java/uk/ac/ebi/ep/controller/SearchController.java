@@ -62,9 +62,8 @@ public class SearchController extends AbstractController {
 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
-        @Autowired
+    @Autowired
     private AccessionService accessionService;
-    
 
     @Autowired
     private ChebiConfig chebiConfig;
@@ -297,7 +296,7 @@ public class SearchController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String postSearchResult(SearchModel searchModel, Model model,@RequestParam(required = false, value = "searchTerm") String searchTerm,
+    public String postSearchResult(SearchModel searchModel, Model model, @RequestParam(required = false, value = "searchTerm") String searchTerm,
             @RequestParam(required = false, value = "ec") String ec,
             HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String view = "error";
@@ -311,14 +310,13 @@ public class SearchController extends AbstractController {
 
         try {
 
-          
             // See if it is already there, perhaps we are paginating:
             Map<String, SearchResults> prevSearches
                     = getPreviousSearches(session.getServletContext());
-                     searchKey = getSearchKey(searchModel.getSearchparams());
-           
+            searchKey = getSearchKey(searchModel.getSearchparams());
+
             results = prevSearches.get(searchKey);
-                      
+
             if (results == null) {
                 // New search:
                 clearHistory(session);
@@ -326,9 +324,9 @@ public class SearchController extends AbstractController {
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
                         //results = searchKeyword(searchModel.getSearchparams());
-                       
+
                         results = searchKeyword(ec, searchTerm, limit);
-                       
+
                         model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
                         LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
                         break;
@@ -491,12 +489,14 @@ public class SearchController extends AbstractController {
         return results;
     }
 
-   
-    private SearchResults searchKeyword(String ec, String searchTerm, int limit) {
+    private SearchResults searchKeyword(String ec, String keyword, int limit) {
 
        
+        String searchTerm = HtmlUtility.cleanText(keyword);
+        searchTerm = searchTerm.replaceAll("&quot;", "");
+      
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService, accessionService);
-        SearchResults results = finder.getAssociatedproteins(ec, searchTerm, limit);
+        SearchResults results = finder.getAssociatedProteins(ec, searchTerm, limit);
 
         return results;
     }

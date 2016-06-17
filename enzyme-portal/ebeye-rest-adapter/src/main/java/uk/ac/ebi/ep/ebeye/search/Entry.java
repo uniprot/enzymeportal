@@ -33,7 +33,7 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
 
     private String title;
     private List<String> scientificName;
-    private Protein protein;
+    protected Protein protein;
 
     @JsonIgnore
     private final Map<String, Fields> fieldsMap = new HashMap<>();
@@ -97,11 +97,10 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
     }
 
     public Protein getProtein() {
-        String t = fields.getName().stream().findFirst().orElse("");
-        String sci = getScientificName().stream().findFirst().orElse("");
+        String name = fields.getName().stream().findFirst().orElse("");
+        String scienceName = getScientificName().stream().findFirst().orElse("");
         String status = fields.getStatus().stream().findFirst().orElse("");
-        Protein p = new Protein(getUniprotAccession(), t, sci,status);
-        return p;
+        return new Protein(getUniprotAccession(), name, scienceName,status);
     }
 
     public void setProtein(Protein protein) {

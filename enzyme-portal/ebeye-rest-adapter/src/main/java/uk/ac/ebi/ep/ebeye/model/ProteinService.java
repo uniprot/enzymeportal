@@ -13,6 +13,7 @@ import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Deprecated
 public class ProteinService {
 
     private RestTemplate restTemplate = null;

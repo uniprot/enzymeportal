@@ -51,7 +51,6 @@ public class EnzymeCentricController extends AbstractController {
     @RequestMapping(value = SEARCH, method = RequestMethod.GET)
     public String getSearchResults(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters, @RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, BindingResult result,
             Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-
         return postSearchResult(searchKey, filters, servicePage, searchModel, model, request);
     }
 
@@ -79,10 +78,10 @@ public class EnzymeCentricController extends AbstractController {
         }
         final String searchTerm = searchKey;
         if (filters.contains("")) {
-             filters.remove("");
+            filters.remove("");
 
         }
-        EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage*10, pageSize, facetCount, filters);
+        EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage * 10, pageSize, facetCount, filters);
 
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
@@ -100,6 +99,27 @@ public class EnzymeCentricController extends AbstractController {
             }).forEach((entry) -> {
                 enzymeView.add(entry);
             });
+//            entries.stream().forEach( entry -> {
+//                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
+//                        .stream().sorted().collect(Collectors.toList());
+//
+//                if(proteins.isEmpty()){
+//                 String input =   HtmlUtils.htmlEscape(entry.getEnzymeName().trim());
+//                    String cleanedName = input.replace("[", "").replace("]", "")
+//                            .replace("(", "").replace(")", "")
+//                            .replace("-", "").replace("/", "");
+//                         proteins = powerService.queryForUniqueProteins(entry.getEc(), cleanedName, associatedProteinLimit)
+//                        .stream().sorted().collect(Collectors.toList()); 
+//
+//                }
+//                int proteinHits = proteins.size();
+//                if (proteinHits > 0) {
+//                    entry.setProtein(proteins);
+//                    entry.setNumEnzymeHits(proteins.size());
+//                    enzymeView.add(entry);
+//                }
+//            });
+
             int current = page.getNumber() + 1;
             int begin = Math.max(1, current - 5);
             int end = Math.min(begin + 10, page.getTotalPages());
@@ -122,56 +142,54 @@ public class EnzymeCentricController extends AbstractController {
         return view;
     }
 
-    @Deprecated
-    @RequestMapping(value = FILTER, method = RequestMethod.POST)
-    public String filterSearchResult(@RequestParam(required = true, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters, SearchModel searchModel, Model model, HttpServletRequest request) {
-        String view = "error";
-        int startPage = 0;
-        int pageSize = 10;
-        int associatedProteinLimit = 5;
-        EBISearchResult ebiSearchResult = filterEbiSearchResult(searchKey, startPage, filters);
-        if (ebiSearchResult != null) {
-            long hitCount = ebiSearchResult.getHitCount();
-            Pageable pageable = new PageRequest(startPage, pageSize);
-            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
-
-            List<Entry> entries = page.getContent();
-            List<Entry> enzymeView = new LinkedList<>();
-            entries.stream().map((entry) -> {
-                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchKey, associatedProteinLimit);
-                entry.setProtein(proteins);
-                entry.setNumEnzymeHits(proteins.size());
-                return entry;
-            }).forEach((entry) -> {
-                enzymeView.add(entry);
-            });
-
-            model.addAttribute("filtersApplied", filters);
-            model.addAttribute("searchKey", searchKey);
-            model.addAttribute("searchModel", searchModel);
-            model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
-            model.addAttribute("ebiResult", ebiSearchResult);
-            model.addAttribute("enzymeView", enzymeView);
-            model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
-            view = ENZYME_CENTRIC_PAGE;
-            //view = ENZYME_CENTRIC_PAGE_V;
-        }
-
-        return view;
-    }
-
     private EBISearchResult getEbiSearchResult(String query, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
         return modelService.getSearchResult(query, startPage, pageSize, facets, facetCount);
     }
 
-    @Deprecated
-    private EBISearchResult filterEbiSearchResult(String query, int page, List<String> filters) {
-        // ModelService modelService = new ModelService(new RestTemplate());
-        String facets = filters.stream().collect(Collectors.joining(","));
-        return modelService.filterSearchResult(query, page, facets);
-    }
-
+//    @Deprecated
+//    @RequestMapping(value = FILTER, method = RequestMethod.POST)
+//    public String filterSearchResult(@RequestParam(required = true, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters, SearchModel searchModel, Model model, HttpServletRequest request) {
+//        String view = "error";
+//        int startPage = 0;
+//        int pageSize = 10;
+//        int associatedProteinLimit = 5;
+//        EBISearchResult ebiSearchResult = filterEbiSearchResult(searchKey, startPage, filters);
+//        if (ebiSearchResult != null) {
+//            long hitCount = ebiSearchResult.getHitCount();
+//            Pageable pageable = new PageRequest(startPage, pageSize);
+//            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+//
+//            List<Entry> entries = page.getContent();
+//            List<Entry> enzymeView = new LinkedList<>();
+//            entries.stream().map((entry) -> {
+//                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchKey, associatedProteinLimit);
+//                entry.setProtein(proteins);
+//                entry.setNumEnzymeHits(proteins.size());
+//                return entry;
+//            }).forEach((entry) -> {
+//                enzymeView.add(entry);
+//            });
+//
+//            model.addAttribute("filtersApplied", filters);
+//            model.addAttribute("searchKey", searchKey);
+//            model.addAttribute("searchModel", searchModel);
+//            model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
+//            model.addAttribute("ebiResult", ebiSearchResult);
+//            model.addAttribute("enzymeView", enzymeView);
+//            model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
+//            view = ENZYME_CENTRIC_PAGE;
+//            //view = ENZYME_CENTRIC_PAGE_V;
+//        }
+//
+//        return view;
+//    }
+//    @Deprecated
+//    private EBISearchResult filterEbiSearchResult(String query, int page, List<String> filters) {
+//        // ModelService modelService = new ModelService(new RestTemplate());
+//        String facets = filters.stream().collect(Collectors.joining(","));
+//        return modelService.filterSearchResult(query, page, facets);
+//    }
 //    public static void main(String[] args) {
 //        String query = "kinase";
 //        //query = "sildenafil";
@@ -191,42 +209,42 @@ public class EnzymeCentricController extends AbstractController {
 ////
 ////
 //    }
-    private static final String SHOW_ENZYMES_V = "/eview";
-    private static final String ENZYME_CENTRIC_PAGE_V = "eview";
-
-    @RequestMapping(value = SHOW_ENZYMES_V, method = RequestMethod.GET)
-    public String showEnzymesView(@RequestParam(required = false, value = "s") final String searchKey, Model model) {
-        if (searchKey != null) {
-            //searchKey = "mTOR";
-            //searchKey = "cathepsin";
-
-            int startPage = 0;
-            int pageSize = 10;
-            int associatedProteinLimit = 5;
-            // ModelService modelService = new ModelService(new RestTemplate());
-            EBISearchResult ebiSearchResult = modelService.getModelSearchResult(searchKey, startPage);
-            long hitCount = ebiSearchResult.getHitCount();
-            Pageable pageable = new PageRequest(startPage, pageSize);
-            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
-
-            List<Entry> entries = page.getContent();
-            List<Entry> enzymeView = new LinkedList<>();
-            entries.stream().map((entry) -> {
-                final List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchKey, associatedProteinLimit);
-                entry.setProtein(proteins);
-                entry.setNumEnzymeHits(proteins.size());
-                return entry;
-            }).forEach((entry) -> {
-                enzymeView.add(entry);
-            });
-            model.addAttribute("searchKey", searchKey);
-            model.addAttribute("ebiResult", ebiSearchResult);
-            model.addAttribute("enzymeView", enzymeView);
-            model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
-            model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
-
-            return ENZYME_CENTRIC_PAGE_V;
-        }
-        return "error";
-    }
+//    private static final String SHOW_ENZYMES_V = "/eview";
+//    private static final String ENZYME_CENTRIC_PAGE_V = "eview";
+//
+//    @RequestMapping(value = SHOW_ENZYMES_V, method = RequestMethod.GET)
+//    public String showEnzymesView(@RequestParam(required = false, value = "s") final String searchKey, Model model) {
+//        if (searchKey != null) {
+//            //searchKey = "mTOR";
+//            //searchKey = "cathepsin";
+//
+//            int startPage = 0;
+//            int pageSize = 10;
+//            int associatedProteinLimit = 5;
+//            // ModelService modelService = new ModelService(new RestTemplate());
+//            EBISearchResult ebiSearchResult = modelService.getModelSearchResult(searchKey, startPage);
+//            long hitCount = ebiSearchResult.getHitCount();
+//            Pageable pageable = new PageRequest(startPage, pageSize);
+//            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+//
+//            List<Entry> entries = page.getContent();
+//            List<Entry> enzymeView = new LinkedList<>();
+//            entries.stream().map((entry) -> {
+//                final List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchKey, associatedProteinLimit);
+//                entry.setProtein(proteins);
+//                entry.setNumEnzymeHits(proteins.size());
+//                return entry;
+//            }).forEach((entry) -> {
+//                enzymeView.add(entry);
+//            });
+//            model.addAttribute("searchKey", searchKey);
+//            model.addAttribute("ebiResult", ebiSearchResult);
+//            model.addAttribute("enzymeView", enzymeView);
+//            model.addAttribute("enzymeFacet", ebiSearchResult.getFacets());
+//            model.addAttribute(BROWSE_VIDEO, BROWSE_VIDEO);
+//
+//            return ENZYME_CENTRIC_PAGE_V;
+//        }
+//        return "error";
+//    }
 }

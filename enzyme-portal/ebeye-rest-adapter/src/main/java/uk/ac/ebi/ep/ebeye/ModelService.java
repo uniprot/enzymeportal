@@ -17,8 +17,6 @@ import uk.ac.ebi.ep.ebeye.model.Entry;
  */
 public class ModelService {
 
-    //@Autowired
-    //private PowerService powerService;
     private final RestTemplate restTemplate;// = new RestTemplate();
 
     public ModelService(RestTemplate restTemplate) {
@@ -39,7 +37,8 @@ public class ModelService {
         if(facetCount > 1_000){
             facetCount = 1_000;
         }
-        System.out.println("FACETS "+ facets);
+        //http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=3.4.24.55&facetcount=10&facets:TAXONOMY,OMIM,compound_type&compound_name&start=0&size=10&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json
+        //System.out.println("FACETS "+ facets);
         String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=" + query + "&facetcount=" + facetCount + "&facets:TAXONOMY,OMIM,compound_type&compound_name&start=" + startPage + "&size=" + pageSize + "&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
             url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=" + query + "&facetcount=" + facetCount + "&facets=" + facets + "&start=" + startPage + "&size=" + pageSize + "&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";

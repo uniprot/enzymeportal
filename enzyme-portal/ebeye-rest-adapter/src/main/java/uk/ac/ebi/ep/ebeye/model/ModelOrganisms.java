@@ -23,8 +23,7 @@ public enum ModelOrganisms {
 //    ECOLI("Escherichia coli"),
 //    RAT("Rattus norvegicus");
 //    // WORM("Caenorhabditis elegans");
-    
-        HUMAN("Human"),
+    HUMAN("Human"),
     MOUSE("Mouse"),
     MOUSE_EAR_CRESS("Arabidopsis thaliana"),
     FRUIT_FLY("Fruit fly"),
