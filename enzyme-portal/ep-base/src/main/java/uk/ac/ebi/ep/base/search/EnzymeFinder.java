@@ -439,6 +439,9 @@ public class EnzymeFinder extends EnzymeBase {
     public SearchResults getAssociatedProteins(String ec, String searchTerm, int limit) {
 
         List<String> accessions = accessionService.queryForUniqueAccessions(ec, searchTerm, limit);
+        if(accessions.isEmpty()){
+          accessions = accessionService.queryForUniqueAccessions(ec, limit);  
+        }
 
         LOGGER.info("Number of Processed Accession for  " + ec + " " + searchTerm + " :=:" + accessions.size());
 
