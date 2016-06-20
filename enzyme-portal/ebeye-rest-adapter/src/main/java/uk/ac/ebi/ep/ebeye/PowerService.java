@@ -64,6 +64,31 @@ public class PowerService {
         return extractDistinctProteinsFromSynchronousQuery(query);
 
     }
+    
+    public List<Protein> queryForUniqueProteins(String ec, int limit) {
+    //public List<Protein> queryForUniqueProteinsNotNeededAsWeAreOnlyInterestedIn10Items(String ec, String searchTerm, int limit) {
+        // Preconditions.checkArgument(query != null, "Query can not be null");
+// String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+" AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
+        String query = "INTENZ:" + ec;
+
+        EbeyeSearchResult searchResult = synchronousQueryProtein(query);
+
+        int synchronousHitCount = searchResult.getHitCount();
+        int hitCount = synchronousHitCount < MAX_HITS_TO_PROCESS ? synchronousHitCount : MAX_HITS_TO_PROCESS;
+        // hitCount = 20_000;
+        //System.out.println("HITCOUNT " + hitCount);
+        logger.debug("Number of hits for search for [" + query + "] : " + hitCount);
+
+        if (hitCount <= maxEbiSearchLimit) {
+
+            return extractDistinctProteinsFromSynchronousQuery(query);
+        } else {
+
+            int numIteration = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
+            return asynchronousQuery(query, numIteration, limit);
+        }
+
+    }
 
 public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int limit) {
     //public List<Protein> queryForUniqueProteinsNotNeededAsWeAreOnlyInterestedIn10Items(String ec, String searchTerm, int limit) {
