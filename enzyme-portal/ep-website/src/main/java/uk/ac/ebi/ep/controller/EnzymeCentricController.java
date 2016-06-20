@@ -90,35 +90,35 @@ public class EnzymeCentricController extends AbstractController {
 
             List<Entry> entries = page.getContent();
             List<Entry> enzymeView = new LinkedList<>();
-            entries.stream().map((entry) -> {
-                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
-                        .stream().sorted().collect(Collectors.toList());
-                entry.setProtein(proteins);
-                entry.setNumEnzymeHits(proteins.size());
-                return entry;
-            }).forEach((entry) -> {
-                enzymeView.add(entry);
-            });
-//            entries.stream().forEach( entry -> {
+//            entries.stream().map((entry) -> {
 //                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
 //                        .stream().sorted().collect(Collectors.toList());
-//
-//                if(proteins.isEmpty()){
+//                entry.setProtein(proteins);
+//                entry.setNumEnzymeHits(proteins.size());
+//                return entry;
+//            }).forEach((entry) -> {
+//                enzymeView.add(entry);
+//            });
+            entries.stream().forEach( entry -> {
+                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
+                        .stream().sorted().collect(Collectors.toList());
+
+                if(proteins.isEmpty()){
 //                 String input =   HtmlUtils.htmlEscape(entry.getEnzymeName().trim());
 //                    String cleanedName = input.replace("[", "").replace("]", "")
 //                            .replace("(", "").replace(")", "")
 //                            .replace("-", "").replace("/", "");
-//                         proteins = powerService.queryForUniqueProteins(entry.getEc(), cleanedName, associatedProteinLimit)
-//                        .stream().sorted().collect(Collectors.toList()); 
-//
-//                }
-//                int proteinHits = proteins.size();
-//                if (proteinHits > 0) {
-//                    entry.setProtein(proteins);
-//                    entry.setNumEnzymeHits(proteins.size());
-//                    enzymeView.add(entry);
-//                }
-//            });
+                         proteins = powerService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
+                        .stream().sorted().collect(Collectors.toList()); 
+
+                }
+                int proteinHits = proteins.size();
+                if (proteinHits > 0) {
+                    entry.setProtein(proteins);
+                    entry.setNumEnzymeHits(proteins.size());
+                    enzymeView.add(entry);
+                }
+            });
 
             int current = page.getNumber() + 1;
             int begin = Math.max(1, current - 5);

@@ -160,9 +160,9 @@ public final class Functions {
         return text;
     }
 
-    /**
+    /**split with = and - to return only the search term
      * 
-     * @param text of this format searchparams.text=cathepsin for example
+     * @param text of this format searchparams.text=cathepsin-1.1.1.1 for example
      * @return index[1] - cathepsin
      */
     public static String splitAndGetValue(String text) {
@@ -170,7 +170,8 @@ public final class Functions {
         String data[] = text.split("=");
 
         if (data[1] != null) {
-            result = data[1];
+           String keyword[] = data[1].split("-");
+           result =keyword[0];
         }
         return result;
     }

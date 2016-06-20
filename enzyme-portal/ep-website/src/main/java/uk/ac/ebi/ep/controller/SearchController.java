@@ -497,7 +497,6 @@ public class SearchController extends AbstractController {
       
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService, accessionService);
         SearchResults results = finder.getAssociatedProteins(ec, searchTerm, limit);
-
         return results;
     }
 
