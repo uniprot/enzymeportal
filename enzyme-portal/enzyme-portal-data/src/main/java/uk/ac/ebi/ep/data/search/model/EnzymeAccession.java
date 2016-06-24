@@ -30,7 +30,7 @@ public class EnzymeAccession implements Serializable {
     protected Integer score = 0;
 
     protected String uniprotid;
-    
+
     protected Boolean expEvidence;
     protected String uniprotaccession;
     protected String enzymeFunction;
@@ -338,8 +338,6 @@ public class EnzymeAccession implements Serializable {
 //    public String toString() {
 //        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + '}';
 //    }
-
-
     public String getUniprotid() {
         return uniprotid;
     }
@@ -349,6 +347,9 @@ public class EnzymeAccession implements Serializable {
     }
 
     public Boolean getExpEvidence() {
+        if (expEvidence == null) {
+            expEvidence = Boolean.FALSE;//.valueOf("0");
+        }
         return expEvidence;
     }
 
@@ -372,6 +373,6 @@ public class EnzymeAccession implements Serializable {
         this.enzymeFunction = enzymeFunction;
     }
 
-   
-
 }
+
+
