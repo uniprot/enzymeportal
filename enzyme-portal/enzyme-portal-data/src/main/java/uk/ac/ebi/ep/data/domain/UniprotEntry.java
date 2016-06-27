@@ -698,12 +698,19 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public String getEnzymeFunction() {
         return getFunction();
     }
-
+ 
     @Override
-    public String toString() {
-        return "UniprotEntry{" + "entryType=" + entryType + ", accession=" + accession + ", name=" + name + ", taxId=" + taxId + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
-    }
-    
-    
+   public String toString() {
+        final StringBuilder sb = new StringBuilder("UniprotEntry{");
+        sb.append("entryType=").append(entryType);
+        sb.append(", accession=").append(accession);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", taxId='").append(taxId).append('\'');
+        sb.append(", proteinName=").append(proteinName);
+        sb.append(", scientificName=").append(scientificName);
+        sb.append(", commonName=").append(commonName);
+        sb.append('}');
+        return sb.toString();
+    } 
 
 }

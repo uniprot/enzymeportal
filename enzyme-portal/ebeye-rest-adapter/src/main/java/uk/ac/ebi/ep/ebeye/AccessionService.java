@@ -51,6 +51,29 @@ public class AccessionService {
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
     }
+    
+        public List<String> queryForUniqueAccessions(String query, int limit) {
+        // Preconditions.checkArgument(query != null, "Query can not be null");
+
+
+        EbeyeSearchResult searchResult = synchronousQueryProtein(query);
+
+        int synchronousHitCount = searchResult.getHitCount();
+        int hitCount = synchronousHitCount < MAX_HITS_TO_PROCESS ? synchronousHitCount : MAX_HITS_TO_PROCESS;
+        // hitCount = 20_000;
+        //System.out.println("HITCOUNT " + hitCount);
+        logger.debug("Number of hits for search for [" + query + "] : " + hitCount);
+
+        if (hitCount <= maxEbiSearchLimit) {
+
+            return extractDistinctAccessionsFromSynchronousQuery(query);
+        } else {
+
+            int numIteration = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
+            return asynchronousQuery(query, numIteration, limit);
+        }
+
+    }
 
     public List<String> queryForUniqueAccessions(String ec, String searchTerm, int limit) {
         // Preconditions.checkArgument(query != null, "Query can not be null");
