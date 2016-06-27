@@ -175,7 +175,7 @@
                        <table id="enzymeResults" cellpadding="60" cellspacing="60">
                            <tr>
                                <th width="20%">Name</th>
-                               <th width="5%">Hits</th>
+                               <th width="5%">Protein Hits</th>
                                <th width="15%">Enzyme Family</th>
                                <th width="10%">EC</th>
                                <th width="30%">Catalytic Activity</th>
