@@ -23,7 +23,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
 
@@ -38,7 +38,7 @@ public class AccessionService {
     //@Autowired
     private AsyncRestTemplate asyncRestTemplate;
     //@Autowired
-    private EbeyeIndexUrl ebeyeIndexUrl;
+    private EbeyeIndexProps ebeyeIndexUrl;
     //@Autowired
     private RestTemplate restTemplate;
 
@@ -46,7 +46,7 @@ public class AccessionService {
     //Maximum number of entries that this service will ask from the EbeyeSearch
     private static final int MAX_HITS_TO_PROCESS = 7_000;
 
-    public AccessionService(EbeyeIndexUrl ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
+    public AccessionService(EbeyeIndexProps ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
         this.asyncRestTemplate = asyncRestTemplate;
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
@@ -61,7 +61,7 @@ public class AccessionService {
         int synchronousHitCount = searchResult.getHitCount();
         int hitCount = synchronousHitCount < MAX_HITS_TO_PROCESS ? synchronousHitCount : MAX_HITS_TO_PROCESS;
         // hitCount = 20_000;
-        //System.out.println("HITCOUNT " + hitCount);
+        
         logger.debug("Number of hits for search for [" + query + "] : " + hitCount);
 
         if (hitCount <= maxEbiSearchLimit) {
@@ -79,23 +79,25 @@ public class AccessionService {
         // Preconditions.checkArgument(query != null, "Query can not be null");
 // String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+" AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
         String query = searchTerm + " AND INTENZ:" + ec;
+        
+        return queryForUniqueAccessions(query, limit);
 
-        EbeyeSearchResult searchResult = synchronousQueryProtein(query);
-
-        int synchronousHitCount = searchResult.getHitCount();
-        int hitCount = synchronousHitCount < MAX_HITS_TO_PROCESS ? synchronousHitCount : MAX_HITS_TO_PROCESS;
-        // hitCount = 20_000;
-        //System.out.println("HITCOUNT " + hitCount);
-        logger.debug("Number of hits for search for [" + query + "] : " + hitCount);
-
-        if (hitCount <= maxEbiSearchLimit) {
-
-            return extractDistinctAccessionsFromSynchronousQuery(query);
-        } else {
-
-            int numIteration = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
-            return asynchronousQuery(query, numIteration, limit);
-        }
+//        EbeyeSearchResult searchResult = synchronousQueryProtein(query);
+//
+//        int synchronousHitCount = searchResult.getHitCount();
+//        int hitCount = synchronousHitCount < MAX_HITS_TO_PROCESS ? synchronousHitCount : MAX_HITS_TO_PROCESS;
+//        // hitCount = 20_000;
+//        //System.out.println("HITCOUNT " + hitCount);
+//        logger.debug("Number of hits for search for [" + query + "] : " + hitCount);
+//
+//        if (hitCount <= maxEbiSearchLimit) {
+//
+//            return extractDistinctAccessionsFromSynchronousQuery(query);
+//        } else {
+//
+//            int numIteration = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
+//            return asynchronousQuery(query, numIteration, limit);
+//        }
 
     }
 

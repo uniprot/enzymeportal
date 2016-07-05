@@ -17,7 +17,7 @@ import rx.Observable;
 import rx.schedulers.Schedulers;
 import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.model.Protein;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
@@ -38,12 +38,12 @@ public class EbeyeProteinService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final EbeyeIndexUrl ebeyeIndexUrl;
+    private final EbeyeIndexProps ebeyeIndexUrl;
     private final RestTemplate restTemplate;
 
     private int maxRetrievableHits;
 
-    public EbeyeProteinService(EbeyeIndexUrl ebeyeIndexUrl, RestTemplate restTemplate) {
+    public EbeyeProteinService(EbeyeIndexProps ebeyeIndexUrl, RestTemplate restTemplate) {
         Preconditions.checkArgument(ebeyeIndexUrl != null, "Index URL can't be null");
         Preconditions.checkArgument(restTemplate != null, "Synchronous REST template can't be null");
 

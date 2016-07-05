@@ -27,7 +27,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.model.Protein;
 import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
 import uk.ac.ebi.ep.ebeye.search.Entry;
@@ -43,7 +43,7 @@ public class PowerService {
     //@Autowired
     private AsyncRestTemplate asyncRestTemplate;
     //@Autowired
-    private EbeyeIndexUrl ebeyeIndexUrl;
+    private EbeyeIndexProps ebeyeIndexUrl;
     //@Autowired
     private RestTemplate restTemplate;
 
@@ -51,7 +51,7 @@ public class PowerService {
     //Maximum number of entries that this service will ask from the EbeyeSearch
     private static final int MAX_HITS_TO_PROCESS = 7_000;
 
-    public PowerService(EbeyeIndexUrl ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
+    public PowerService(EbeyeIndexProps ebeyeIndexUrl, AsyncRestTemplate asyncRestTemplate, RestTemplate restTemplate) {
         this.asyncRestTemplate = asyncRestTemplate;
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
@@ -124,7 +124,7 @@ public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int li
 
         List<String> urls = IntStream.range(0, numIteration)
                 .parallel()
-                .mapToObj(index -> buildQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
+                .mapToObj(index -> buildQueryUrl(ebeyeIndexUrl.getProteinCentricSearchUrl(),
                                 query,
                                 maxEbiSearchLimit,
                                 index * maxEbiSearchLimit))
@@ -136,7 +136,7 @@ public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int li
 
     private EbeyeSearchResult synchronousQueryProtein(String query) {
 
-        String url = buildQueryUrl(ebeyeIndexUrl.getDefaultSearchIndexUrl(),
+        String url = buildQueryUrl(ebeyeIndexUrl.getProteinCentricSearchUrl(),
                 query,
                 maxEbiSearchLimit,
                 0);
