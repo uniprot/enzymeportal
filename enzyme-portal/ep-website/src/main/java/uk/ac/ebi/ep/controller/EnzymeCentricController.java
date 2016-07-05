@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -76,7 +78,8 @@ public class EnzymeCentricController extends AbstractController {
             searchKey = searchModel.getSearchparams().getText().trim().toLowerCase();
 
         }
-        final String searchTerm = searchKey;
+        
+        final String searchTerm = Jsoup.clean(searchKey, Whitelist.basic());
         if (filters.contains("")) {
             filters.remove("");
 

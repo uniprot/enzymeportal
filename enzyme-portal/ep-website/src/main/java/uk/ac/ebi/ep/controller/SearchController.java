@@ -17,6 +17,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -557,7 +559,8 @@ public class SearchController extends AbstractController {
         if (name != null && name.length() >= 3) {
             String keyword = String.format("%%%s%%", name);
 
-            List<Suggestion> suggestions = ebeyeRestService.autocompleteSearch(keyword.trim());
+             String cleanedKeyword = Jsoup.clean(keyword, Whitelist.basic());
+            List<Suggestion> suggestions = ebeyeRestService.autocompleteSearch(cleanedKeyword.trim());
 
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());
