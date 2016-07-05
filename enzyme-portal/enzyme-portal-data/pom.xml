@@ -19,7 +19,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-           <oracle.version>11.2.0.3</oracle.version>
+        <oracle.version>11.2.0.3</oracle.version>
     
         <!-- Plugins -->
       
@@ -178,6 +178,11 @@
         <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <type>jar</type>
         </dependency>
 
     </dependencies>
