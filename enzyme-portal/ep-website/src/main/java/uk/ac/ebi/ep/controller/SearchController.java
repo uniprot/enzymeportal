@@ -17,6 +17,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -309,6 +311,7 @@ public class SearchController extends AbstractController {
             Map<String, SearchResults> prevSearches
                     = getPreviousSearches(session.getServletContext());
             searchKey = getSearchKey(searchModel.getSearchparams());
+            searchKey = Jsoup.clean(searchKey, Whitelist.basic());
 
             results = prevSearches.get(searchKey);
             if (results == null) {
