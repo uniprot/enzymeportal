@@ -20,7 +20,7 @@ import org.springframework.core.env.Environment;
  */
 @Configuration
 @HXFB
-@PropertySource({"classpath:ep-db-uzppub-hx-fb.properties"})
+@PropertySource({"classpath:ep-db-uzppub-fb.properties"})
 public class HXFBConfig implements EnzymePortalDataConfig {
 
     @Autowired
@@ -31,7 +31,7 @@ public class HXFBConfig implements EnzymePortalDataConfig {
     public DataSource dataSource() {
         String url = String.format("jdbc:oracle:thin:@%s:%s:%s",
                 env.getRequiredProperty("ep.db.host"), env.getRequiredProperty("ep.db.port"), env.getRequiredProperty("ep.db.instance"));
-        
+
         String user = env.getRequiredProperty("ep.db.username");
         String password = env.getRequiredProperty("ep.db.password");
 
