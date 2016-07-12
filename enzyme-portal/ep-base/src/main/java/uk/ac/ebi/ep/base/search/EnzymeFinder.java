@@ -40,7 +40,6 @@ import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
-import uk.ac.ebi.ep.ebeye.AccessionService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 
 /**
@@ -71,7 +70,7 @@ public class EnzymeFinder extends EnzymeBase {
 
     private final int LIMIT = 8_00;
     private final int ACCESSION_LIMIT = 8_00;
-     private AccessionService accessionService;
+    // private AccessionService accessionService;
 
     public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
         super(service, ebeyeRestService);
@@ -94,11 +93,11 @@ public class EnzymeFinder extends EnzymeBase {
         uniqueDiseases = new HashSet<>();
     }
 
-    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, AccessionService accessionService) {
-        this(service, ebeyeRestService);
-        this.accessionService = accessionService;
-        
-    }
+//    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, AccessionService accessionService) {
+//        this(service, ebeyeRestService);
+//        this.accessionService = accessionService;
+//        
+//    }
 
 
 
@@ -438,9 +437,9 @@ public class EnzymeFinder extends EnzymeBase {
 
     public SearchResults getAssociatedProteins(String ec, String searchTerm, int limit) {
 
-        List<String> accessions = accessionService.queryForUniqueAccessions(ec, searchTerm, limit);
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessions(ec, searchTerm, limit);
         if(accessions.isEmpty()){
-          accessions = accessionService.queryForUniqueAccessions(ec, limit);  
+          accessions = ebeyeRestService.queryForUniqueAccessions(ec, limit);  
         }
 
         LOGGER.info("Number of Processed Accession for  " + ec + " " + searchTerm + " :=:" + accessions.size());
