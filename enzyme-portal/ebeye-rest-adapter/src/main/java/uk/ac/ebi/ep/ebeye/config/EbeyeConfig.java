@@ -100,6 +100,7 @@ public class EbeyeConfig {
         EbeyeIndexProps url = new EbeyeIndexProps();
         //url.setEbeyeSearchUrl(enzymeCentricUrl);
         //url.setDefaultSearchIndexUrl(enzymeCentricUrl);
+        url.setDefaultSearchIndexUrl(proteinCentricUrl);
 
         url.setProteinCentricSearchUrl(proteinCentricUrl);
         url.setEnzymeCentricSearchUrl(enzymeCentricUrl);

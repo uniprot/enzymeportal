@@ -6,10 +6,13 @@
 package uk.ac.ebi.ep.ebeye;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
@@ -51,17 +54,16 @@ public class AccessionService {
         this.ebeyeIndexUrl = ebeyeIndexUrl;
         this.restTemplate = restTemplate;
     }
-    
-        public List<String> queryForUniqueAccessions(String query, int limit) {
-        // Preconditions.checkArgument(query != null, "Query can not be null");
 
+    public List<String> queryForUniqueAccessions(String query, int limit) {
+        // Preconditions.checkArgument(query != null, "Query can not be null");
 
         EbeyeSearchResult searchResult = synchronousQueryProtein(query);
 
         int synchronousHitCount = searchResult.getHitCount();
         int hitCount = synchronousHitCount < MAX_HITS_TO_PROCESS ? synchronousHitCount : MAX_HITS_TO_PROCESS;
         // hitCount = 20_000;
-        
+
         logger.debug("Number of hits for search for [" + query + "] : " + hitCount);
 
         if (hitCount <= maxEbiSearchLimit) {
@@ -79,7 +81,7 @@ public class AccessionService {
         // Preconditions.checkArgument(query != null, "Query can not be null");
 // String url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query="+query+" AND INTENZ:" + ec + "&fields=id,name,scientific_name,status&size=100&format=json";
         String query = searchTerm + " AND INTENZ:" + ec;
-        
+
         return queryForUniqueAccessions(query, limit);
 
 //        EbeyeSearchResult searchResult = synchronousQueryProtein(query);
@@ -98,7 +100,6 @@ public class AccessionService {
 //            int numIteration = (int) Math.ceil((double) hitCount / (double) maxEbiSearchLimit);
 //            return asynchronousQuery(query, numIteration, limit);
 //        }
-
     }
 
     private String buildQueryUrl(String endpoint, String query, int resultSize, int start) {
@@ -164,7 +165,6 @@ public class AccessionService {
 
     private List<String> searchEbeyeDomainAccession(List<String> urls, int limit) {
         HttpMethod method = HttpMethod.GET;
-
         // Define response type
         Class<EbeyeSearchResult> responseType = EbeyeSearchResult.class;
 
@@ -173,24 +173,41 @@ public class AccessionService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
+        Set<String> accessions = new HashSet<>(limit);
+        boolean found = false;
+        AtomicInteger count = new AtomicInteger(0);
 
-        for (String url : urls) {
-            ListenableFuture<ResponseEntity<EbeyeSearchResult>> future = asyncRestTemplate
-                    .exchange(url, method, requestEntity, responseType);
+        do {
+            for (String url : urls) {
+                System.out.println(count.getAndIncrement() + " URL sent to EBI  " + url);
 
-            try {
-                ResponseEntity<EbeyeSearchResult> results = future.get();
-                List<String> acc = results.getBody()
-                        .getEntries().stream().distinct().map(Entry::getUniprotAccession).distinct().limit(limit).collect(Collectors.toList());
-                return acc;
-            } catch (HttpClientErrorException ex) {
-                logger.error(ex.getMessage(), ex);
-            } catch (InterruptedException | ExecutionException ex) {
-                logger.error(ex.getMessage(), ex);
+                ListenableFuture<ResponseEntity<EbeyeSearchResult>> future = asyncRestTemplate
+                        .exchange(url, method, requestEntity, responseType);
+
+                try {
+                    ResponseEntity<EbeyeSearchResult> results = future.get();
+                    List<String> acc = results.getBody()
+                            .getEntries().stream().distinct().map(Entry::getUniprotAccession).distinct().collect(Collectors.toList());
+                    //return acc;
+                    if (accessions.size() < limit) {
+                        accessions.addAll(acc);
+                    }
+                    if (accessions.size() >= limit) {
+                        found = true;
+                    }
+                    if (found) {
+                        break;
+                    }
+
+                } catch (HttpClientErrorException ex) {
+                    logger.error(ex.getMessage(), ex);
+                } catch (InterruptedException | ExecutionException ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
             }
-        }
+        } while (!found);
 
-        return null;
+        return accessions.stream().limit(limit).collect(Collectors.toList());
     }
 
 //    protected void destroyHttpComponentsAsyncClientHttpRequestFactory() throws Exception {

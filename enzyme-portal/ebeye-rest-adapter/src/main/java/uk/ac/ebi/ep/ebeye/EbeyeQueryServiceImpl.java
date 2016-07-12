@@ -2,8 +2,8 @@ package uk.ac.ebi.ep.ebeye;
 
 import java.net.URI;
 import java.util.Collections;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -60,8 +60,8 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
 
             int maxEntriesToRetrieve = calculateMaxNumberOfHitsToRetrieve(entryHitCount);
 
-            int totalPaginatedQueries =
-                    (int) Math.ceil((double) maxEntriesToRetrieve / (double) ebeyeIndexProps.getMaxEbiSearchLimit());
+            int totalPaginatedQueries
+                    = (int) Math.ceil((double) maxEntriesToRetrieve / (double) ebeyeIndexProps.getMaxEbiSearchLimit());
 
             Observable<Entry> remainingEntries = executeConcurrentPaginatedQueries(query, 1, totalPaginatedQueries);
 
@@ -79,18 +79,22 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
         int threadPoolSize = Math.max(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
-        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
-
+        System.out.println("THREAD POOL "+ threadPoolSize); 
+        threadPoolSize = 10;
+       // ExecutorService executorService = Executors.newWorkStealingPool();//.newFixedThreadPool(threadPoolSize);
+        final ForkJoinPool executorService = new ForkJoinPool();
+        AtomicInteger count = new AtomicInteger(0);
         return generateUrlRequests(query, requestStart, requestEnd)
-                .flatMap(reqUrl ->
-                        executeQueryRequest(Observable.just(reqUrl))
-                                .subscribeOn(Schedulers.from(executorService))
-                                .map(EbeyeSearchResult::getEntries)
-                                .flatMap(Observable::from)
-                                .retry(RETRY_LIMIT)
-                                .doOnError(throwable -> logger.error("Error executing request: {}", reqUrl, throwable))
-                                .onExceptionResumeNext(Observable.empty()))
-                .doOnCompleted(executorService::shutdown);
+                .flatMap(reqUrl
+                        -> executeQueryRequest(Observable.just(reqUrl).doOnEach(out -> System.out.println(count.getAndIncrement() + " URL SENT " + out + "starts " + requestStart + " ends " + requestEnd)))
+                        .subscribeOn(Schedulers.from(executorService))
+                        .map(EbeyeSearchResult::getEntries)
+                        .flatMap(Observable::from)
+                        .retry(RETRY_LIMIT)
+                        .doOnError(throwable -> logger.error("Error executing request: {}", reqUrl, throwable))
+                        .onExceptionResumeNext(Observable.empty()))
+                .doOnUnsubscribe(executorService::shutdown);
+                //.doOnCompleted(executorService::shutdown);
     }
 
     private EbeyeSearchResult executeFirstQuery(String query) {
@@ -105,31 +109,35 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
     }
 
     /**
-     * Creates an Observable that generates url requests as needed by the calling subscriber.
+     * Creates an Observable that generates url requests as needed by the
+     * calling subscriber.
      *
      * @param start the start index of the URL
      * @param end the end index of the URL
      * @param query the query to search for
-     * @return a URI that represents the request to make to the Ebeye search service
+     * @return a URI that represents the request to make to the Ebeye search
+     * service
      */
     private Observable<URI> generateUrlRequests(String query, int start, int end) {
         //final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
-        final String ebeyeAccessionQuery= "%s?query=%s&size=%d&start=%d&fields=id,name,scientific_name,status&format=json";
+        final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=id,name,scientific_name,status&format=json";
         final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
         final String endpoint = ebeyeIndexProps.getDefaultSearchIndexUrl();
 
         return Observable.range(start, end)
-                .map(index ->
-                        URI.create(String.format(ebeyeAccessionQuery, endpoint, query, resultSize,
-                                index * ebeyeIndexProps.getMaxEbiSearchLimit())));
+                .map(index
+                        -> URI.create(String.format(ebeyeAccessionQuery, endpoint, query, resultSize,
+                                        index * ebeyeIndexProps.getMaxEbiSearchLimit())));
     }
 
     /**
-     * Creates an {@link Observable} that holds reference to a request to the Ebeye search service for the given reqUrl.
-     * The request will only be executed once it is subscribed upon.
+     * Creates an {@link Observable} that holds reference to a request to the
+     * Ebeye search service for the given reqUrl. The request will only be
+     * executed once it is subscribed upon.
      *
      * @param reqUrlObs Observable creating request URL to call
-     * @return the potential {@link EbeyeSearchResult} that results from the call.
+     * @return the potential {@link EbeyeSearchResult} that results from the
+     * call.
      */
     private Observable<EbeyeSearchResult> executeQueryRequest(Observable<URI> reqUrlObs) {
         return reqUrlObs.map(reqUrl -> restTemplate.getForObject(reqUrl, EbeyeSearchResult.class));

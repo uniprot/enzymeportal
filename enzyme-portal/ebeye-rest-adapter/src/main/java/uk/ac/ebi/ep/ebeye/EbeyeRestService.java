@@ -16,7 +16,7 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  */
 public class EbeyeRestService {
   
-   public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
+  // public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
