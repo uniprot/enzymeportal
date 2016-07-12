@@ -184,6 +184,10 @@
             <artifactId>hibernate-validator</artifactId>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>
