@@ -47,6 +47,7 @@ import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.ebeye.AccessionService;
+import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
@@ -64,6 +65,8 @@ public class SearchController extends AbstractController {
 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
+    @Autowired
+    private EbeyeSuggestionService ebeyeSuggestionService;
     @Autowired
     private AccessionService accessionService;
 
@@ -497,7 +500,7 @@ public class SearchController extends AbstractController {
         String searchTerm = HtmlUtility.cleanText(keyword);
         searchTerm = searchTerm.replaceAll("&quot;", "");
       
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService, accessionService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         SearchResults results = finder.getAssociatedProteins(ec, searchTerm, limit);
         return results;
     }
@@ -560,7 +563,7 @@ public class SearchController extends AbstractController {
             String keyword = String.format("%%%s%%", name);
 
              String cleanedKeyword = Jsoup.clean(keyword, Whitelist.basic());
-            List<Suggestion> suggestions = ebeyeRestService.autocompleteSearch(cleanedKeyword.trim());
+            List<Suggestion> suggestions = ebeyeSuggestionService.autocompleteSearch(cleanedKeyword.trim());
 
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());
