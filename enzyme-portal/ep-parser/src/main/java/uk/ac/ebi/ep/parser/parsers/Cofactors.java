@@ -26,7 +26,8 @@ public class Cofactors extends CompoundParser {
 
     private List<LiteCompound> compounds = null;
     private static final String COMMENT_TYPE = "COFACTORS";
-    private static final String NAME = "Name=([^\\s]+)";
+    ///private static final String NAME = "Name=([^\\s]+)";//use when spaces not needed
+    private static final String NAME = "Name=([\\w \\-+\\)\\(]+)";//includes spaces, - and + sign and brackets e.g ca(2+),(R)-lipoate
     private static final String XREF = "Xref=ChEBI:([^\\s]+)";
     private static final String NOTE = "Note=([^\\*]+)";
 
@@ -48,6 +49,76 @@ public class Cofactors extends CompoundParser {
         parseCofactorText(enzymeSummary);
     }
 
+    private void processCofactorsFromText(Summary summary) {
+        String cofactorText = summary.getCommentText();
+        String note = "";
+        String uniprotCofactorName = null;
+        final Pattern notePattern = Pattern.compile(NOTE);
+        final Matcher noteMatcher = notePattern.matcher(cofactorText);
+
+        while (noteMatcher.find()) {
+
+            note = noteMatcher.group(1);
+
+        }
+
+        final Pattern xrefPattern = Pattern.compile(XREF);
+        final Matcher xrefMatcher = xrefPattern.matcher(cofactorText);
+
+        final Pattern namePattern = Pattern.compile(NAME);
+        final Matcher nameMatcher = namePattern.matcher(cofactorText);
+
+        while (nameMatcher.find()) {
+
+            uniprotCofactorName = nameMatcher.group(1).replaceAll(";", "");
+        }
+
+        while (xrefMatcher.find()) {
+
+            String xref = xrefMatcher.group(1).replaceAll(";", "");
+
+            if (xref != null) {
+                Optional<LiteCompound> liteCompound = Optional.empty();
+                try {
+                    LOGGER.info("Search chebi using the CHEBI ID " + xref);
+                    liteCompound = Optional.ofNullable(findByChEBIiD(xref));
+
+                } catch (Exception e) {
+                    LOGGER.error("Chebi webservice error while searching " + xref, e);
+                }
+
+                if (liteCompound.isPresent()) {
+                    LiteCompound compound = liteCompound.get();
+                    String compoundId = compound.getCompoundId();
+                    String compoundName = compound.getCompoundName();
+                    String compoundSource = compound.getCompoundSource();
+                    String relationship = Relationship.is_cofactor_of.name();
+                    String compoundRole = Compound.Role.COFACTOR.name();
+                    String url = compound.getUrl();
+
+                    compound.setCompoundId(compoundId);
+                    if (uniprotCofactorName != null) {
+                        compound.setCompoundName(uniprotCofactorName);
+                    } else {
+                        compound.setCompoundName(compoundName);
+                    }
+
+                    compound.setCompoundSource(compoundSource);
+                    compound.setRelationship(relationship);
+                    compound.setUniprotAccession(summary.getAccession());
+                    compound.setUrl(url);
+                    compound.setCompoundRole(compoundRole);
+                    compound.setNote(note);
+                    compounds.add(compound);
+                    LOGGER.info("added compound with ID " + compound.getCompoundId() + " <> Name : " + compound.getCompoundName());
+
+                }
+
+            }
+        }
+
+    }
+
     private void computeSpecialCases(String text, Summary summary, String note) {
         final Pattern xrefPattern = Pattern.compile(XREF);
         final Matcher xrefMatcher = xrefPattern.matcher(text);
@@ -60,7 +131,7 @@ public class Cofactors extends CompoundParser {
                 Optional<LiteCompound> liteCompound = Optional.empty();
                 try {
                     LOGGER.info("Special case : xref search in CHEBI " + xref);
-                    liteCompound = Optional.ofNullable(findByChEBIiD(xref));
+                    liteCompound = Optional.ofNullable(findByChEBIiDLiteEntityList(xref));
                 } catch (Exception e) {
                     LOGGER.error("Chebi webservice error while searching " + xref, e);
                 }
@@ -105,7 +176,8 @@ public class Cofactors extends CompoundParser {
 //        });
 
         enzymeSummary.forEach(summary -> {
-            processCofactors(summary);
+            // processCofactors(summary);
+            processCofactorsFromText(summary);
 
         });
         //save compounds
@@ -113,13 +185,14 @@ public class Cofactors extends CompoundParser {
 
         compounds.stream().filter((compound) -> (compound != null)).forEach((compound) -> {
             parserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-
+         
         });
         LOGGER.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
 
     }
 
+    @Deprecated
     private void processCofactors(Summary summary) {
         String cofactorText = summary.getCommentText();
         String note = "";

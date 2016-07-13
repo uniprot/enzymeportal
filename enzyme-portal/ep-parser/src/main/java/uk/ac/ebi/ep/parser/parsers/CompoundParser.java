@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
+import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntity;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
@@ -54,6 +55,46 @@ public abstract class CompoundParser {
     public abstract void loadCofactors();
 
     /**
+     * searches for compound in ChEBI using ChEBI ID
+     *
+     * @param chebi_ID the ChEBI id
+     * @return complete compound information
+     */
+    protected LiteCompound findByChEBIiD(String chebi_ID) {
+   
+        LiteCompound entry = null;
+        Optional<Entity> entity = Optional.empty();
+        try {
+            entity = Optional.ofNullable(chebiWsClient.getCompleteEntity(chebi_ID));
+        } catch (ChebiWebServiceFault_Exception ex) {
+            LOGGER.error("Error while searching ChEBI using the ChEBI ID : " + chebi_ID, ex);
+        }
+
+        String chebiId = null;
+        String chebiName = null;
+
+        if (entity.isPresent()) {
+            chebiId = entity.get().getChebiId();
+            chebiName = entity.get().getChebiAsciiName();//default  
+
+        }
+
+        if (chebiId != null && !blackList.contains(chebiName) && !StringUtils.isEmpty(chebiName)) {
+
+            entry = new LiteCompound();
+            entry.setCompoundSource(MmDatabase.ChEBI.name());
+            entry.setCompoundId(chebiId);
+            entry.setCompoundName(chebiName);
+            entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
+
+        } else {
+            LOGGER.info("Not found in ChEBI: " + chebi_ID);
+        }
+        return entry;
+
+    }
+
+    /**
      * Searches a compound name in ChEBI. Please note that if the name does not
      * match <i>exactly</i> any names/synonyms returned by ChEBI, the result
      * will be <code>null</code>.
@@ -61,7 +102,8 @@ public abstract class CompoundParser {
      * @param moleculeName the compound name (special cases are chebi ID's.
      * @return an entry with a ChEBI ID, or <code>null</code> if not found.
      */
-    protected LiteCompound findByChEBIiD(String moleculeName) {
+    @Deprecated
+    protected LiteCompound findByChEBIiDLiteEntityList(String moleculeName) {
 
         LiteCompound entry = null;
         // Sometimes moleculeName comes as "moleculeName (ACRONYM)"
@@ -102,7 +144,7 @@ public abstract class CompoundParser {
                 entry.setCompoundId(chebiId);
                 entry.setCompoundName(chebiName);
                 entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-          
+
             } else {
                 LOGGER.info("Not found in ChEBI: " + name);
             }
@@ -110,8 +152,6 @@ public abstract class CompoundParser {
         }
         return entry;
     }
-
-
 
     /**
      * Searches a compound name in ChEBI. Please note that if the name does not
@@ -158,7 +198,7 @@ public abstract class CompoundParser {
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(name);
                     entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-                 } else {
+                } else {
                     LOGGER.info("Not found in ChEBI: " + name);
                 }
             } catch (ChebiWebServiceFault_Exception e) {
@@ -167,7 +207,5 @@ public abstract class CompoundParser {
         }
         return entry;
     }
-    
-
 
 }
