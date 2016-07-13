@@ -195,4 +195,16 @@ public class XmlTransformer {
         fields.add(field);
     }
 
+    protected void addGeneNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (!uniprotEntry.getEntryToGeneMappingSet().isEmpty()) {
+
+            uniprotEntry.getEntryToGeneMappingSet().stream()
+                    .map(geneMapping -> new Field(FieldName.GENE_NAME.getName(), geneMapping.getGeneName()))
+                    .forEach(field -> {
+                        fields.add(field);
+                    });
+
+        }
+    }
+
 }

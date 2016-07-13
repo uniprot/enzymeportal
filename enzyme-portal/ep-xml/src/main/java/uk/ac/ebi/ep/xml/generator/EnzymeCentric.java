@@ -122,6 +122,7 @@ public class EnzymeCentric extends XmlGenerator {
            
             addScientificNameFields(uniprotEntry, fields);
             addCommonNameFields(uniprotEntry, fields);
+            addGeneNameFields(uniprotEntry, fields);
 
             addSynonymFields(uniprotEntry, fields);
             addSource(enzyme, refs);
