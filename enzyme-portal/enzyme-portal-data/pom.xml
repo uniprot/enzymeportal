@@ -298,9 +298,9 @@
         </profile>
         <profile>
             <!--             Profile to work with the release database -->
-            <id>uzppub-fb</id>
+            <id>uzppub-hxfb</id>
             <properties>
-                <ep.db.config>uzppub-fb</ep.db.config>
+                <ep.db.config>uzppub-hxfb</ep.db.config>
             </properties>
         </profile>
         
