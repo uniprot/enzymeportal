@@ -20,7 +20,7 @@ import org.springframework.core.env.Environment;
  */
 @Configuration
 @HXFB
-@PropertySource({"classpath:ep-db-uzppub-fb.properties"})
+@PropertySource({"classpath:ep-db-uzppub-hxfb.properties"})
 public class HXFBConfig implements EnzymePortalDataConfig {
 
     @Autowired

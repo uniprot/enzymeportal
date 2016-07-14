@@ -236,7 +236,7 @@
                 <directory>${ep.config.dir}</directory>
                 <includes>
                     <include>ep-db-uzppub-hh.properties</include>
-                    <include>ep-db-uzppub-fb.properties</include>
+                    <include>ep-db-uzppub-hxfb.properties</include>
                     <include>ep-db-uzppub-pg.properties</include>
                     <include>ep-db-uzppub-oy.properties</include>
                     <include>ep-db-uzprel.properties</include>
