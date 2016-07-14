@@ -239,11 +239,13 @@
             </plugin>
             
 
-        </plugins>
+         </plugins>
         <resources>
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
+                    <include>ep-db-uzppub-hh.properties</include>
+                    <include>ep-db-uzppub-hxfb.properties</include>
                     <include>ep-db-uzppub-pg.properties</include>
                     <include>ep-db-uzppub-oy.properties</include>
                     <include>ep-db-uzprel.properties</include>
@@ -294,6 +296,20 @@
             <id>uzppub-oy</id>
             <properties>
                 <ep.db.config>uzppub-oy</ep.db.config>
+            </properties>
+        </profile>
+        <profile>
+            <!--             Profile to work with the release database -->
+            <id>uzppub-hh</id>
+            <properties>
+                <ep.db.config>uzppub-hh</ep.db.config>
+            </properties>
+        </profile>
+        <profile>
+            <!--             Profile to work with the release database -->
+            <id>uzppub-hxfb</id>
+            <properties>
+                <ep.db.config>uzppub-hxfb</ep.db.config>
             </properties>
         </profile>
         
