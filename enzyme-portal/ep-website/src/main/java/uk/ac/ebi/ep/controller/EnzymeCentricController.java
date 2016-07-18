@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
-import uk.ac.ebi.ep.ebeye.ModelService;
-import uk.ac.ebi.ep.ebeye.PowerService;
 import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
 import uk.ac.ebi.ep.ebeye.model.Entry;
 import uk.ac.ebi.ep.ebeye.model.Protein;
@@ -45,10 +42,10 @@ public class EnzymeCentricController extends AbstractController {
     private static final int DEFAULT_EBI_SEARCH_FACET_COUNT = 1_000;
     private static final int ASSOCIATED_PROTEIN_LIMIT = 8_00;
 
-    @Autowired
-    private ModelService modelService;
-    @Autowired
-    private PowerService powerService;
+//    @Autowired
+//    private ModelService modelService;
+//    @Autowired
+//    private PowerService powerService;
 
     @RequestMapping(value = SEARCH, method = RequestMethod.GET)
     public String getSearchResults(@RequestParam(required = false, value = "searchKey") String searchKey, @RequestParam(required = false, value = "filterFacet") List<String> filters, @RequestParam(required = false, value = "servicePage") Integer servicePage, SearchModel searchModel, BindingResult result,
@@ -103,7 +100,7 @@ public class EnzymeCentricController extends AbstractController {
 //                enzymeView.add(entry);
 //            });
             entries.stream().forEach( entry -> {
-                List<Protein> proteins = powerService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
+                List<Protein> proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
                         .stream().sorted().collect(Collectors.toList());
 
                 if(proteins.isEmpty()){
@@ -111,7 +108,7 @@ public class EnzymeCentricController extends AbstractController {
 //                    String cleanedName = input.replace("[", "").replace("]", "")
 //                            .replace("(", "").replace(")", "")
 //                            .replace("-", "").replace("/", "");
-                         proteins = powerService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
+                         proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
                         .stream().sorted().collect(Collectors.toList()); 
 
                 }
@@ -147,7 +144,7 @@ public class EnzymeCentricController extends AbstractController {
 
     private EBISearchResult getEbiSearchResult(String query, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
-        return modelService.getSearchResult(query, startPage, pageSize, facets, facetCount);
+        return enzymeCentricService.getSearchResult(query, startPage, pageSize, facets, facetCount);
     }
 
 //    @Deprecated
