@@ -76,8 +76,7 @@ public class EnzymeCentricService {
 //            url = "http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=" + query + "&facetcount=" + facetCount + "&facets=" + facets + "&start=" + startPage + "&size=" + pageSize + "&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
 //
 //        }
-        System.out.println("INDEX " + enzymeCentricProps.getEnzymeCentricSearchUrl());
-
+     
         return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetCount, facets, startPage, pageSize));
     }
 

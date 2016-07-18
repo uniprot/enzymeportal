@@ -13,6 +13,7 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  * @author Ricardo Antunes
  */
 public class EbeyeSuggestionService {
+
     private final EbeyeIndexProps ebeyeIndexProps;
     private final RestTemplate restTemplate;
 
@@ -34,7 +35,8 @@ public class EbeyeSuggestionService {
      * service
      */
     public List<Suggestion> autocompleteSearch(String searchTerm) {
-        String url = ebeyeIndexProps.getDefaultSearchIndexUrl()+ "/autocomplete?term=" + searchTerm + "&format=json";
+        //String url = ebeyeIndexProps.getDefaultSearchIndexUrl()+ "/autocomplete?term=" + searchTerm + "&format=json";
+        String url = ebeyeIndexProps.getEnzymeCentricSearchUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
 
         EbeyeAutocomplete autocompleteResult = restTemplate.getForObject(url, EbeyeAutocomplete.class);
 

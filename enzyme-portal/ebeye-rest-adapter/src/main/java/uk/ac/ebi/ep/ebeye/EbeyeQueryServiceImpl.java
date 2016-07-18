@@ -20,7 +20,7 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  * @author Ricardo Antunes
  */
 public class EbeyeQueryServiceImpl implements EbeyeQueryService {
-    private static final int MAX_RETRIEVABLE_ENTRIES = 20_000;
+    private static final int MAX_RETRIEVABLE_ENTRIES = 10_000;
 
     private static final int RETRY_LIMIT = 1;
 
@@ -79,14 +79,12 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
         int threadPoolSize = Math.max(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
-        System.out.println("THREAD POOL "+ threadPoolSize); 
-        threadPoolSize = 10;
        // ExecutorService executorService = Executors.newWorkStealingPool();//.newFixedThreadPool(threadPoolSize);
         final ForkJoinPool executorService = new ForkJoinPool();
         AtomicInteger count = new AtomicInteger(0);
         return generateUrlRequests(query, requestStart, requestEnd)
                 .flatMap(reqUrl
-                        -> executeQueryRequest(Observable.just(reqUrl).doOnEach(out -> System.out.println(count.getAndIncrement() + " URL SENT " + out + "starts " + requestStart + " ends " + requestEnd)))
+                        -> executeQueryRequest(Observable.just(reqUrl))
                         .subscribeOn(Schedulers.from(executorService))
                         .map(EbeyeSearchResult::getEntries)
                         .flatMap(Observable::from)
@@ -100,7 +98,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
     private EbeyeSearchResult executeFirstQuery(String query) {
         Observable<URI> urlRequest = generateUrlRequests(query, 0, 1);
 
-        return executeQueryRequest(urlRequest)
+        return executeQueryRequest(urlRequest)//.doOnEach(i -> System.out.println("URL "+i))
                 .retry(RETRY_LIMIT)
                 .doOnError((throwable -> logger.error("Error retrieving first response", throwable)))
                 .onErrorReturn(throwable -> createEmptySearchResult())
