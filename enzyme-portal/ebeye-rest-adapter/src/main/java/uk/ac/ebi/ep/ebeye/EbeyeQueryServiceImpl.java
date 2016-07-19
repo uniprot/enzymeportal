@@ -3,7 +3,6 @@ package uk.ac.ebi.ep.ebeye;
 import java.net.URI;
 import java.util.Collections;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -79,9 +78,8 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
         int threadPoolSize = Math.max(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
-       // ExecutorService executorService = Executors.newWorkStealingPool();//.newFixedThreadPool(threadPoolSize);
-        final ForkJoinPool executorService = new ForkJoinPool();
-        AtomicInteger count = new AtomicInteger(0);
+        // ExecutorService executorService = Executors.newWorkStealingPool();//.newFixedThreadPool(threadPoolSize);
+        final ForkJoinPool executorService = new ForkJoinPool(threadPoolSize);
         return generateUrlRequests(query, requestStart, requestEnd)
                 .flatMap(reqUrl
                         -> executeQueryRequest(Observable.just(reqUrl))
@@ -92,7 +90,6 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
                         .doOnError(throwable -> logger.error("Error executing request: {}", reqUrl, throwable))
                         .onExceptionResumeNext(Observable.empty()))
                 .doOnUnsubscribe(executorService::shutdown);
-                //.doOnCompleted(executorService::shutdown);
     }
 
     private EbeyeSearchResult executeFirstQuery(String query) {
@@ -117,10 +114,9 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
      * service
      */
     private Observable<URI> generateUrlRequests(String query, int start, int end) {
-        //final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name&format=json";
         final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=id,name,scientific_name,status&format=json";
         final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
-        final String endpoint = ebeyeIndexProps.getDefaultSearchIndexUrl();
+        final String endpoint = ebeyeIndexProps.getProteinCentricSearchUrl();
 
         return Observable.range(start, end)
                 .map(index
