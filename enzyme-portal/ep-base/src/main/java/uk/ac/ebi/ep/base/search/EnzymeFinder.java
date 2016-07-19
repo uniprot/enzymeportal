@@ -321,11 +321,14 @@ public class EnzymeFinder extends EnzymeBase {
             List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk);//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
             if (enzymes != null) {
-                if (StringUtils.isEmpty(keyword)) {
-                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
-                } else {
-                    enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
-                }
+                //enzyme centric don't require to do this check
+//                if (StringUtils.isEmpty(keyword)) {
+//                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
+//                } else {
+//                    enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
+//                }
+                
+                enzymeList.addAll(computeUniqueEnzymes(enzymes));
             }
 
         });
