@@ -46,7 +46,6 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
-import uk.ac.ebi.ep.ebeye.AccessionService;
 import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
@@ -67,8 +66,6 @@ public class SearchController extends AbstractController {
     private static final String ERROR = "error";
     @Autowired
     private EbeyeSuggestionService ebeyeSuggestionService;
-    @Autowired
-    private AccessionService accessionService;
 
     @Autowired
     private ChebiConfig chebiConfig;
