@@ -19,6 +19,8 @@
     <%@include file="head.jspf" %>
 
     <script src="${pageContext.request.contextPath}/resources/javascript/jquery.easy-autocomplete.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/javascript/jquery.slidereveal.js"></script>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.min.css" type="text/css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.themes.min.css" type="text/css" />
 
@@ -48,6 +50,27 @@
     <%@include file="header.jspf" %>
 
     <div id="content" role="main" class="grid_24 clearfix" >
+
+
+
+
+
+<!-- Feedback widget code  -->
+
+        <img id="trigger" src="${pageContext.request.contextPath}/resources/images/feedback.png" />
+        <div id='slider'>
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScvxggSYUe_6rmsLmJ-wBEm8BLz0SBH_RmHD3Bvp7DiN4G4JA/viewform?embedded=true" width="300" height="100%" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+        </div>
+        <script>
+            $('#slider').slideReveal({
+              trigger: $("#trigger"),
+                position: "right",
+                width: "300"
+            });
+        </script>
+<!-- END of Feedback widget code  -->
+
+
 
         <section class="grid_18 alpha">
             <h1>Enzyme Results</h1>
@@ -165,6 +188,8 @@
                 </section>
 
         </form>
+
+
 
 
             <section class="grid_18 alpha" id="search-results">
