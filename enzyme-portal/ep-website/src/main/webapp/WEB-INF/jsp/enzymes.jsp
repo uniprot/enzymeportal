@@ -80,7 +80,7 @@
         <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
 
 
-            <section class="grid_6 alpha">
+            <section class="grid_6 alpha pagination-container">
 
                 <input id="paginationPage" name="servicePage" type="hidden" value="">
                 <c:if test="${page.totalElements gt page.size}">

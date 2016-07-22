@@ -549,7 +549,7 @@ table#enzymeResultsProteins tr.proteinRow{
     list-style-type: none;
 }
 
-.paginationContainer{
+.paginationContainer, .pagination-container{
     float: right;
 }
 
