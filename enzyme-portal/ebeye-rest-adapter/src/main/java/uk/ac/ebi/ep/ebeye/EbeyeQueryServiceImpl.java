@@ -78,7 +78,10 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd > -1 : "End can not be a negative value";
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
-        int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
+        int totalPagesToRequest = totalPagesToRequest(requestStart, requestEnd);
+
+        int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), totalPagesToRequest);
+
         ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
         return generateUrlRequests(query, requestStart, requestEnd)
@@ -91,6 +94,24 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
                                 .doOnError(throwable -> logger.error("Error executing request: {}", reqUrl, throwable))
                                 .onExceptionResumeNext(Observable.empty()))
                 .doOnUnsubscribe(executorService::shutdown);
+    }
+
+    /**
+     * Calculates the total number of pages to send requests for.
+     *
+     *
+     * @param requestStart the number first page to request
+     * @param requestEnd the number final page to request
+     * @return 1 if {@param requestStart} and {@param requestEnd} are equal, > 1 if end is larger than start
+     */
+    private int totalPagesToRequest(int requestStart, int requestEnd) {
+        int totalPagesToRequest = 1;
+
+        if (requestEnd - requestStart > 0) {
+            totalPagesToRequest = requestEnd - requestStart;
+        }
+
+        return totalPagesToRequest;
     }
 
     private EbeyeSearchResult executeFirstQuery(String query) {
