@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.ebeye.search;
+package uk.ac.ebi.ep.ebeye.protein.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNotSame;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.ep.ebeye.model.Protein;
+import uk.ac.ebi.ep.ebeye.model.Fields;
 
 /**
  * @author joseph
@@ -33,9 +33,10 @@ public class EntryTest {
         fields.setName(fieldNames);
         fields.setStatus(status);
         String acc = "O76074";
-        String geneName = "ABC_HUMAN";
+        String uniprotName = "ABC_HUMAN";
+        String source = "enzymeportal";
 
-        instance = new Entry(acc, geneName);
+        instance = new Entry(acc, uniprotName,source,fields);
         instance.setTitle("cGMP-specific 3',5'-cyclic phosphodiesterase");
         instance.set(name, fields);
         instance.setFields(fields);
@@ -82,23 +83,11 @@ public class EntryTest {
     public void testGetSource() {
         LOGGER.info("getSource");
 
-        String expResult = null;
+        String expResult = "enzymeportal";
         String result = instance.getSource();
         assertEquals(expResult, result);
     }
 
-    /**
-     * Test of toString method, of class Entry.
-     */
-    @Test
-    public void testToString() {
-        LOGGER.info("toString");
-
-        String expResult = "Entry{uniprotAccession=O76074, uniprotName=ABC_HUMAN, source=null, title=cGMP-specific 3',5'-cyclic phosphodiesterase, ec=null}";
-        String result = instance.toString();
-
-        assertEquals(expResult, result);
-    }
 
     /**
      * Test of compareTo method, of class Entry.
@@ -106,7 +95,7 @@ public class EntryTest {
     @Test
     public void testCompareTo() {
         LOGGER.info("compareTo");
-        Entry obj = new Entry("O76074", "ABC_HUMAN");
+        Entry obj = new Entry("O76074", "ABC_HUMAN","ENZYMEPORTAL");
 
         int expResult = 0;
         int result = instance.compareTo(obj);

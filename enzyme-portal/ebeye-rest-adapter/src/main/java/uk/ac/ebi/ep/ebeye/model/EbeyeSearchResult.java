@@ -1,4 +1,4 @@
-package uk.ac.ebi.ep.ebeye.search;
+package uk.ac.ebi.ep.ebeye.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import uk.ac.ebi.ep.ebeye.protein.model.Entry;
 
 /**
  * @author joseph

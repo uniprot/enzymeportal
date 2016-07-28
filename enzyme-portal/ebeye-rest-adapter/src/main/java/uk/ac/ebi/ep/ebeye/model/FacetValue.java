@@ -35,7 +35,7 @@ public class FacetValue {
     @JsonProperty("count")
     private Integer count;
     @JsonIgnore
-    private final Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      *

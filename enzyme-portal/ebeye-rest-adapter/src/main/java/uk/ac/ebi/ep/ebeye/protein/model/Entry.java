@@ -1,16 +1,18 @@
-package uk.ac.ebi.ep.ebeye.search;
+package uk.ac.ebi.ep.ebeye.protein.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import uk.ac.ebi.ep.ebeye.model.Protein;
+import uk.ac.ebi.ep.ebeye.model.Fields;
 
 /**
  * Represents the result object from Enzyme Portal domain in Ebeye Search Index
@@ -19,7 +21,15 @@ import uk.ac.ebi.ep.ebeye.model.Protein;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public final class Entry extends EnzymeEntry implements Serializable, Comparable<Entry> {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "acc",
+    "id",
+    "source",
+    "fields"
+})
+//public final class Entry extends EnzymeEntry implements Serializable, Comparable<Entry> {
+public final class Entry extends ProteinView implements Serializable, Comparable<Entry> {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("acc")
@@ -31,25 +41,37 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
     @JsonProperty("fields")
     private Fields fields;
 
-    private String title;
-    private List<String> scientificName;
-    protected Protein protein;
-
+//    private String title;
+//    private List<String> scientificName = new ArrayList<>();
+//    protected Protein protein;
+    //private String ec;
     @JsonIgnore
     private final Map<String, Fields> fieldsMap = new HashMap<>();
 
     public Entry() {
     }
 
-    public Entry(String ec, String source, String title) {
-        super(ec);
-        this.source = source;
-        this.title = title;
+    public Entry(String uniprotAccession) {
+        this.uniprotAccession = uniprotAccession;
     }
 
-    public Entry(String uniprotAccession, String uniprotName) {
+    public Entry(String uniprotAccession, String uniprotName, String source) {
         this.uniprotAccession = uniprotAccession;
         this.uniprotName = uniprotName;
+        this.source = source;
+    }
+
+    public Entry(String uniprotAccession, String uniprotName, Fields fields) {
+        this.uniprotAccession = uniprotAccession;
+        this.uniprotName = uniprotName;
+        this.fields = fields;
+    }
+
+    public Entry(String uniprotAccession, String uniprotName, String source, Fields fields) {
+        this.uniprotAccession = uniprotAccession;
+        this.uniprotName = uniprotName;
+        this.source = source;
+        this.fields = fields;
     }
 
     /**
@@ -73,6 +95,10 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
         return source;
     }
 
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     /**
      *
      * @return The fields
@@ -91,26 +117,29 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
         this.fields = fields;
     }
 
+    @Override
     public List<String> getScientificName() {
-        scientificName = fields.getScientificName();
-        return scientificName;
+
+        return fields.getScientificName();
     }
 
+    @Override
     public Protein getProtein() {
         String name = fields.getName().stream().findFirst().orElse("");
         String scienceName = getScientificName().stream().findFirst().orElse("");
         String status = fields.getStatus().stream().findFirst().orElse("");
-        return new Protein(getUniprotAccession(), name, scienceName,status);
+      
+        return new Protein(getUniprotAccession(), name, scienceName, status);
     }
 
+    @Override
     public void setProtein(Protein protein) {
         this.protein = protein;
     }
 
     @Override
     public String toString() {
-        return "Entry{" + "uniprotAccession=" + uniprotAccession
-                + ", uniprotName=" + uniprotName + ", source=" + source + ", title=" + title + ", ec=" + getEc() + '}';
+        return "Entry{" + "uniprotAccession=" + uniprotAccession + ", uniprotName=" + uniprotName +", Title="+getTitle() + ", source=" + source + '}';
     }
 
     @Override
@@ -134,16 +163,13 @@ public final class Entry extends EnzymeEntry implements Serializable, Comparable
         fieldsMap.put(name, value);
     }
 
+    @Override
     public String getTitle() {
 //        if (get("fields") != null) {
 //            title = get("fields").getName().stream().findFirst().get();
 //        }
-        title = fields.getName().stream().findFirst().orElse("");
-        return title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
+        return fields.getName().stream().findFirst().orElse("");
     }
 
     @Override

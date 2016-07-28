@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.ebeye.model;
+package uk.ac.ebi.ep.ebeye.protein.model;
 
 import java.util.LinkedList;
 import java.util.List;

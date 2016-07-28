@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package uk.ac.ebi.ep.ebeye.model;
+package uk.ac.ebi.ep.ebeye.enzyme.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -19,6 +14,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import uk.ac.ebi.ep.ebeye.model.Fields;
+import uk.ac.ebi.ep.ebeye.protein.model.ModelOrganisms;
 
 /**
  * Represents the result object from Enzyme Portal domain in EBI Search service
@@ -45,7 +42,29 @@ public class Entry extends EnzymeView {
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
     public Entry() {
-     
+
+    }
+
+    /**
+     *
+     * @param id ec number
+     * @param fields
+     */
+    public Entry(String id, Fields fields) {
+        this.id = id;
+        this.fields = fields;
+    }
+
+    /**
+     *
+     * @param id ec number
+     * @param source
+     * @param fields
+     */
+    public Entry(String id, String source, Fields fields) {
+        this.id = id;
+        this.source = source;
+        this.fields = fields;
     }
 
     /**
@@ -134,7 +153,7 @@ public class Entry extends EnzymeView {
         LinkedList<String> sortedSpecies = new LinkedList<>();
 
         List<String> species = fields.getCommonName();
-        if(species.isEmpty()){
+        if (species.isEmpty()) {
             species = fields.getScientificName();
         }
 
@@ -145,17 +164,9 @@ public class Entry extends EnzymeView {
         priorityMapper.entrySet().stream().forEach(map -> {
             sortedSpecies.add(map.getValue());
         });
-        //return fields.getCommonName();
-        return sortedSpecies;
+        return sortedSpecies.stream().distinct().collect(Collectors.toList());
 
     }
-
-    @Override
-    public List<String> getProteins() {
-        return fields.getProteinName().stream().collect(Collectors.toList());
-
-    }
-
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
@@ -185,6 +196,5 @@ public class Entry extends EnzymeView {
             priorityMapper.put(key.getAndIncrement(), specieName);
         }
     }
-
 
 }

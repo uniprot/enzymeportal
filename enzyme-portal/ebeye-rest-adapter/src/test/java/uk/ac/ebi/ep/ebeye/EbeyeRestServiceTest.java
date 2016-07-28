@@ -1,367 +1,272 @@
 package uk.ac.ebi.ep.ebeye;
 
-import org.junit.Ignore;
-import org.springframework.test.web.client.MockRestServiceServer;
+import java.util.List;
+import java.util.function.BiFunction;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.runners.MockitoJUnitRunner;
+import rx.Observable;
+import rx.observers.TestSubscriber;
+import uk.ac.ebi.ep.ebeye.model.Fields;
+import uk.ac.ebi.ep.ebeye.protein.model.Entry;
+import uk.ac.ebi.ep.ebeye.protein.model.Protein;
+import uk.ac.ebi.ep.ebeye.utils.UrlUtil;
 
 /**
  * Tests the behaviour of the {@link uk.ac.ebi.ep.ebeye.EbeyeRestService} class.
  */
-@Ignore
-public class EbeyeRestServiceTest {
-    private static final int MAX_ENTRIES_IN_RESPONSE = 10;
-    private static final int CHUNK_SIZE = 10;
+@RunWith(MockitoJUnitRunner.class)
+public class EbeyeRestServiceTest extends XCentricSetup {
 
-    private static final String SERVER_URL = "http://www.myserver.com/ebeye";
-    private static final String AUTOCOMPLETE_REQUEST = SERVER_URL + "/autocomplete?term=%s&format=json";
-    private static final String ACCESSION_REQUEST = SERVER_URL + "?query=%s&size=%d&start=%d&fields=name&format=json";
-
+    public static final int NO_RESULT_LIMIT = Integer.MAX_VALUE;
+    private BiFunction<String, String, Entry> entryCreator;
     private EbeyeRestService restService;
 
-    private MockRestServiceServer restServerMock;
+    @Mock
+    private EbeyeQueryService ebeyeQueryService;
 
-//    @Before
-//    public void setUp() {
-//        EbeyeIndexProps serverUrl = new EbeyeIndexProps();
-//        serverUrl.setDefaultSearchIndexUrl(SERVER_URL);
-//        serverUrl.setChunkSize(CHUNK_SIZE);
-//        serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        restServerMock = MockRestServiceServer.createServer(restTemplate);
-//
-//        restService = new EbeyeRestService(serverUrl, restTemplate);
-//    }
-//
-//    @Test
-//    public void non_matching_term_ppp_sent_to_autocomplete_returns_no_suggestions() throws Exception {
-//        String searchTerm = "ppp";
-//
-//        String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);
-//
-//        List<Suggestion> expectedSuggestions = createSuggestions();
-//        EbeyeAutocomplete autocompleteResponse = createAutoCompleteResponse(expectedSuggestions);
-//
-//        restServerMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
-//                .andRespond(withSuccess(convertToJson(autocompleteResponse), MediaType.APPLICATION_JSON));
-//
-//        List<Suggestion> actualSuggestions = restService.autocompleteSearch(searchTerm);
-//
-//        restServerMock.verify();
-//
-//        assertThat(actualSuggestions, is(expectedSuggestions));
-//    }
-//
-//    @Test
-//    public void partial_term_phos_sent_to_autocomplete_returns_valid_suggestions() throws Exception {
-//        String searchTerm = "phos";
-//
-//        String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);
-//
-//        List<Suggestion> expectedSuggestions =
-//                createSuggestions("phosphate", "phosphoenolpyruvate", "phosphohydrolase");
-//        EbeyeAutocomplete autocompleteResponse = createAutoCompleteResponse(expectedSuggestions);
-//
-//        restServerMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
-//                .andRespond(withSuccess(convertToJson(autocompleteResponse), MediaType.APPLICATION_JSON));
-//
-//        List<Suggestion> actualSuggestions = restService.autocompleteSearch(searchTerm);
-//
-//        restServerMock.verify();
-//
-//        assertThat(actualSuggestions, is(expectedSuggestions));
-//    }
-//
-//    @Test
-//    public void null_query_in_unique_accession_search_throws_exception() throws Exception {
-//        String query = null;
-//        int limit = 1;
-//
-//        try {
-//            restService.queryForUniqueAccessions(query, limit);
-//            fail();
-//        } catch (IllegalArgumentException e) {
-//            Assert.assertThat(e.getMessage(), is("Query can not be null"));
-//        }
-//    }
-//
-//    @Test
-//    public void negative_limit_in_unique_accession_search_throws_exception() throws Exception {
-//        String query = "query";
-//        int limit = -1;
-//
-//        try {
-//            restService.queryForUniqueAccessions(query, limit);
-//            fail();
-//        } catch (IllegalArgumentException e) {
-//            Assert.assertThat(e.getMessage(), is("Limit can not be less than 1"));
-//        }
-//    }
-//
-//    @Test
-//    public void zero_limit_in_accession_search_throws_exception() throws Exception {
-//        String query = "query";
-//        int limit = 0;
-//
-//        try {
-//            restService.queryForUniqueAccessions(query, limit);
-//            fail();
-//        } catch (IllegalArgumentException e) {
-//            Assert.assertThat(e.getMessage(), is("Limit can not be less than 1"));
-//        }
-//    }
-//
-//    @Test
-//    public void
-//    query_response_in_unique_accession_search_has_hitCount_less_than_maxEntries_only_single_request_used()
-//            throws Exception {
-//        String query = "query";
-//        int limit = MAX_ENTRIES_IN_RESPONSE;
-//
-//        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        EbeyeSearchResult searchResult = createAccessionResult(createEntries(limit));
-//        mockServerResponse(restServerMock, requestUrl, searchResult);
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
-//
-//        restServerMock.verify();
-//
-//        assertThat(actualAccessions, hasSize(limit));
-//    }
-//
-//    @Test
-//    public void
-//    query_response_in_unique_accessions_has_hitCount_greater_than_maxEntries_single_and_multi_requests_used()
-//            throws Exception {
-//        String query = "query";
-//        int limit = MAX_ENTRIES_IN_RESPONSE + 1;
-//
-//        List<Entry> entries = createEntries(limit);
-//
-//        String queryChunkUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        EbeyeSearchResult chunkedResult1 = createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), limit);
-//
-//        mockServerResponse(restServerMock, queryChunkUrl1, chunkedResult1);
-//
-//        EbeyeSearchResult resultSet2 = createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, limit), limit);
-//        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
-//
-//        mockServerResponse(restServerMock, queryChunkRequestUrl2, resultSet2);
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
-//
-//        assertThat(actualAccessions, hasSize(limit));
-//    }
-//
-//    @Test
-//    public void query_limited_to_1_entry_in_unique_accession_search_returns_1_entry() throws Exception {
-//        String query = "query";
-//        int limit = 1;
-//
-//        String requestUrl = String.format(ACCESSION_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        List<Entry> entries = createEntries(MAX_ENTRIES_IN_RESPONSE);
-//        EbeyeSearchResult searchResult = createAccessionResult(entries);
-//
-//        mockServerResponse(restServerMock, requestUrl, searchResult);
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
-//
-//        restServerMock.verify();
-//
-//        assertThat(actualAccessions, hasSize(limit));
-//        assertThat(actualAccessions.get(0), is(entries.get(0).getUniprotAccession()));
-//    }
-//
-//    @Test
-//    public void query_with_no_limits_in_unique_accession_search_returns_all_entries() throws Exception {
-//        String query = "query";
-//        int entryNum = MAX_ENTRIES_IN_RESPONSE * 2;
-//
-//        List<Entry> entries = createEntries(entryNum);
-//
-//        String queryChunkUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        EbeyeSearchResult chunkedResult1 =
-//                createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
-//
-//        mockServerResponse(restServerMock, queryChunkUrl1, chunkedResult1);
-//
-//        EbeyeSearchResult resultSet2 =
-//                createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, entryNum), entryNum);
-//        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
-//
-//        mockServerResponse(restServerMock, queryChunkRequestUrl2, resultSet2);
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
-//
-//        assertThat(actualAccessions, hasSize(entryNum));
-//    }
-//
-//    @Test
-//    public void exception_is_thrown_on_single_request_for_unique_accessions_search_returns_empty_accession_list()
-//            throws Exception {
-//        String query = "query";
-//
-//        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        restServerMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
-//                .andRespond(withServerError());
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
-//
-//        restServerMock.verify();
-//
-//        assertThat(actualAccessions, hasSize(0));
-//    }
-//
-//    @Test
-//    public void
-//    exception_is_thrown_on_last_multi_threaded_request_to_unique_accession_search_returns_remaining_requests()
-//            throws Exception {
-//        String query = "query";
-//        int expectedEntryNum = MAX_ENTRIES_IN_RESPONSE;
-//        int entryNum = expectedEntryNum * 2;
-//
-//        List<Entry> entries = createEntries(entryNum);
-//
-//        String queryChunkUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        EbeyeSearchResult chunkedResult1 =
-//                createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
-//
-//        mockServerResponse(restServerMock, queryChunkUrl1, chunkedResult1);
-//
-//        String queryChunkUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
-//        restServerMock.expect(requestTo(queryChunkUrl2)).andExpect(method(HttpMethod.GET))
-//                .andRespond(withServerError());
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);restServerMock.verify();
-//
-//        assertThat(actualAccessions, hasSize(expectedEntryNum));
-//    }
-//
-//    @Test
-//    public void duplicate_entry_in_single_request_in_unique_accession_search_is_removed_in_response()
-//            throws Exception {
-//        String query = "query";
-//
-//        Entry entry = createEntryWithIdAndDefaultNameAndTitle("entry1");
-//        Entry duplicateEntry = createEntryWithIdAndDefaultNameAndTitle("entry1");
-//
-//        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        EbeyeSearchResult searchResult = createAccessionResult(Arrays.asList(entry, duplicateEntry));
-//
-//        mockServerResponse(restServerMock, requestUrl, searchResult);
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
-//
-//        restServerMock.verify();
-//
-//        assertThat(actualAccessions, hasSize(1));
-//    }
-//
-//    @Test
-//    public void duplicate_entries_in_multi_threaded_request_in_unique_accession_search_are_removed_in_response()
-//            throws Exception {
-//        String query = "query";
-//        int uniqueEntryNum = MAX_ENTRIES_IN_RESPONSE;
-//        int totalEntryNum = uniqueEntryNum * 2;
-//
-//        List<Entry> entries = createEntries(uniqueEntryNum);
-//
-//        String queryChunkRequestUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        EbeyeSearchResult chunkedResult1 = createAccessionResult(entries, totalEntryNum);
-//
-//        mockServerResponse(restServerMock, queryChunkRequestUrl1, chunkedResult1);
-//
-//        List<Entry> duplicateEntries = new ArrayList<>(entries);
-//        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, uniqueEntryNum);
-//        EbeyeSearchResult chunkedResult2 = createAccessionResult(duplicateEntries, totalEntryNum);
-//
-//        mockServerResponse(restServerMock, queryChunkRequestUrl2, chunkedResult2);
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
-//
-//        assertThat(actualAccessions, hasSize(uniqueEntryNum));
-//    }
-//
-//    @Test
-//    public void maxRetrievableEntries_is_15_and_number_of_hits_is_20_unique_accession_search_returns_only_15()
-//            throws Exception {
-//        int maxRetrievableEntries = 15;
-//        restService.setMaxRetrievableHits(maxRetrievableEntries);
-//
-//        String query = "query";
-//
-//        int entryNum = 20;
-//
-//        List<Entry> entries = createEntries(entryNum);
-//
-//        String queryChunkRequestUrl1 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
-//        EbeyeSearchResult chunkedResult1 = createAccessionResult(entries.subList(0, MAX_ENTRIES_IN_RESPONSE), entryNum);
-//
-//        mockServerResponse(restServerMock, queryChunkRequestUrl1, chunkedResult1);
-//
-//        String queryChunkRequestUrl2 = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, MAX_ENTRIES_IN_RESPONSE);
-//        EbeyeSearchResult chunkedResult2 = createAccessionResult(entries.subList(MAX_ENTRIES_IN_RESPONSE, entryNum), entryNum);
-//
-//        mockServerResponse(restServerMock, queryChunkRequestUrl2, chunkedResult2);
-//
-//        List<String> actualAccessions = restService.queryForUniqueAccessions(query, EbeyeRestService.NO_RESULT_LIMIT);
-//
-//        assertThat(actualAccessions, hasSize(maxRetrievableEntries));
-//    }
-//
-//    private EbeyeAutocomplete createAutoCompleteResponse(List<Suggestion> suggestedKeywords) {
-//        EbeyeAutocomplete autocompleteResponse = new EbeyeAutocomplete();
-//        autocompleteResponse.getSuggestions().addAll(suggestedKeywords);
-//
-//        return autocompleteResponse;
-//    }
-//
-//    private List<Suggestion> createSuggestions(String... suggestedKeyword) {
-//        return Arrays.stream(suggestedKeyword)
-//                .map(Suggestion::new)
-//                .collect(Collectors.toList());
-//    }
-//
-//    private String convertToJson(Object object) throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        return mapper.writeValueAsString(object);
-//    }
-//
-//    private EbeyeSearchResult createAccessionResult(List<Entry> entries) {
-//        EbeyeSearchResult result = new EbeyeSearchResult();
-//        result.setEntries(entries);
-//        result.setHitCount(entries.size());
-//
-//        return result;
-//    }
-//
-//    private EbeyeSearchResult createAccessionResult(List<Entry> entries, int hitCount) {
-//        EbeyeSearchResult result = new EbeyeSearchResult();
-//        result.setEntries(entries);
-//        result.setHitCount(hitCount);
-//
-//        return result;
-//    }
-//
-//    private List<Entry> createEntries(int num) {
-//        return IntStream.range(0, num)
-//                .mapToObj(index -> createEntryWithIdAndDefaultNameAndTitle("entry" + index))
-//                .collect(Collectors.toList());
-//    }
-//
-//    private Entry createEntryWithIdAndDefaultNameAndTitle(String id) {
-//        Entry entry = new Entry(id, id + "_" + id);
-//        entry.setTitle("title_" + id);
-//        return entry;
-//    }
-//
-//    private void mockServerResponse(MockRestServiceServer serverMock, String requestUrl, EbeyeSearchResult searchResult)
-//            throws IOException {
-//        serverMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
-//                .andRespond(withSuccess(convertToJson(searchResult), MediaType.APPLICATION_JSON));
-//    }
-//
-//    private String createQueryUrl(String query, int size, int start) {
-//        return String.format(ACCESSION_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, start);
-//    }
+    @Before
+    public void setUp() throws Exception {
+        entryCreator = createEntry();
+
+        restService = new EbeyeRestService(ebeyeQueryService);
+    }
+
+    @Test
+    public void null_ebeye_query_service_throws_exception() throws Exception {
+        EbeyeQueryService ebeyeQueryServiceLocal = null;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("'EbeyeQueryService' must not be null");
+
+        restService = new EbeyeRestService(ebeyeQueryServiceLocal);
+    }
+
+    @Test
+    public void null_query_in_unique_accession_search_throws_exception() throws Exception {
+        String query = null;
+        int limit = 1;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Query can not be null");
+
+        restService.queryForUniqueAccessions(query, limit);
+    }
+
+    @Test
+    public void negative_limit_in_unique_accession_search_throws_exception() throws Exception {
+        String query = "query";
+        int limit = -1;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Limit can not be less than 1");
+
+        restService.queryForUniqueAccessions(query, limit);
+    }
+
+    @Test
+    public void zero_limit_in_accession_search_throws_exception() throws Exception {
+        String query = "query";
+        int limit = 0;
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Limit can not be less than 1");
+
+        restService.queryForUniqueAccessions(query, limit);
+    }
+
+    @Test
+    public void no_accessions_generated_because_ebeye_query_service_returns_empty_response() {
+        String query = "query";
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.empty());
+
+        Observable<String> actualAccessions = restService.queryForUniqueAccessions(query);
+
+        TestSubscriber<String> testSubscriber = subscribe(actualAccessions);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertNoValues();
+    }
+
+    // @Test
+    public void returns_accessions_of_entries_with_the_distinct_titles() {
+        String query = "query";
+
+        String commonTitle = "title";
+
+        String acc1 = "1";
+        Entry entry1 = entryCreator.apply(acc1, commonTitle);
+
+        String acc2 = "2";
+        Entry entry2 = entryCreator.apply(acc2, commonTitle);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.just(entry1, entry2));
+
+        Observable<String> actualAccessions = restService.queryForUniqueAccessions(query);
+
+        TestSubscriber<String> testSubscriber = subscribe(actualAccessions);
+
+        testSubscriber.awaitTerminalEvent();
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValue(acc1);
+    }
+
+    @Test
+    public void returns_accessions_of_entries_with_distinct_accessions() {
+        String query = "query";
+
+        String commonAccession = "1";
+
+        String title1 = "title1";
+        Entry entry1 = entryCreator.apply(commonAccession, title1);
+
+        String title2 = "title2";
+        Entry entry2 = entryCreator.apply(commonAccession, title2);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.just(entry1, entry2));
+
+        Observable<String> actualAccessions = restService.queryForUniqueAccessions(query);
+
+        TestSubscriber<String> testSubscriber = subscribe(actualAccessions);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValue(commonAccession);
+    }
+
+    @Test
+    public void returns_all_accessions_of_distinct_entries() {
+        String query = "query";
+        int entriesSize = 10;
+
+        List<Entry> distinctEntries = createEntries(entriesSize, entryCreator);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.from(distinctEntries));
+
+        Observable<String> actualAccessions = restService.queryForUniqueAccessions(query);
+
+        TestSubscriber<String> testSubscriber = subscribe(actualAccessions);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValueCount(entriesSize);
+    }
+
+    @Test
+    public void accession_list_is_empty_because_ebeye_query_service_returns_empty_response() {
+        String query = "query";
+        int limit = NO_RESULT_LIMIT;
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.empty());
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
+
+        assertThat(actualAccessions, hasSize(0));
+    }
+
+    @Test
+    public void list_contains_5_accessions_because_limit_is_set_to_5() {
+        String query = "query";
+        int limit = 5;
+
+        int entriesSize = 10;
+
+        List<Entry> distinctEntries = createEntries(entriesSize, entryCreator);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.from(distinctEntries));
+
+        List<String> actualAccessions = restService.queryForUniqueAccessions(query, limit);
+
+        assertThat(actualAccessions, hasSize(5));
+    }
+
+    private BiFunction<String, String, Entry> createEntry() {
+        return (id, title) -> {
+            Fields fields = new Fields();
+            Entry entry = new Entry(id, "uniprotname_" + id, "enzymeportal", fields);
+
+            fields.getName().add(title + id);
+            fields.getScientificName().add("homo_" + id);
+            fields.getStatus().add("Reviewed" + id);
+
+            entry.setFields(fields);
+
+            Protein protein = createProtein().apply(id, "_prtoeinName_" + id);
+            entry.setProtein(protein);
+
+            return entry;
+        };
+    }
+
+    private BiFunction<String, String, Protein> createProtein() {
+        return (acc, name) -> {
+            return new Protein(acc, "proteinName_" + name, "human", "reviewed");
+        };
+    }
+
+    /**
+     * Test of queryForUniqueProteins method, of class EbeyeRestService.
+     */
+    @Test
+    public void testQueryForUniqueProteins() {
+        String query = "query";
+        int entriesSize = 10;
+
+        List<Entry> distinctEntries = createEntries(entriesSize, entryCreator);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.from(distinctEntries));
+
+        Observable<Protein> actualProteins = restService.queryForUniqueProteins(query);
+
+        TestSubscriber<Protein> testSubscriber = subscribe(actualProteins);
+
+        testSubscriber.assertCompleted();
+        testSubscriber.assertValueCount(entriesSize);
+
+    }
+
+    /**
+     * Test of queryForUniqueAccessions method, of class EbeyeRestService.
+     */
+    @Test
+    public void testQuery_with_term_and_ec_ForUniqueProteins_with_limit() {
+        String searchTerm = "query";
+        String ec = "1.1.1.1";
+        int entriesSize = 10;
+        int limit = 5;
+        String query = searchTerm + " AND INTENZ:" + ec;
+        query = UrlUtil.encode(query);
+        List<Entry> distinctEntries = createEntries(entriesSize, entryCreator);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.from(distinctEntries));
+        List<Protein> actualProteins = restService.queryForUniqueProteins(ec, searchTerm, limit);
+
+        assertThat(actualProteins, hasSize(lessThanOrEqualTo(limit)));
+
+    }
+
+    /**
+     * Test of searchForUniqueProteins method, of class EbeyeRestService.
+     */
+    @Test
+    public void testSearchForUniqueProteins_with_ec_and_limit_in_size() {
+
+        String ec = "1.1.1.1";
+        int entriesSize = 10;
+        int limit = 5;
+        String query = "INTENZ:" + ec;
+        query = UrlUtil.encode(query);
+        List<Entry> distinctEntries = createEntries(entriesSize, entryCreator);
+
+        when(ebeyeQueryService.executeQuery(query)).thenReturn(Observable.from(distinctEntries));
+        List<Protein> actualProteins = restService.queryForUniqueProteins(ec, limit);
+
+        assertThat(actualProteins, hasSize(lessThanOrEqualTo(limit)));
+
+    }
 }

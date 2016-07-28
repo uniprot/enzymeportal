@@ -40,7 +40,7 @@ public class Facet {
     @JsonProperty("facetValues")
     private List<FacetValue> facetValues = new ArrayList<>();
     @JsonIgnore
-    private final Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      *

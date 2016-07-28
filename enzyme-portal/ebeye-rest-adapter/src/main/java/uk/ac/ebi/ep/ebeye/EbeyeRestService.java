@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
 import org.springframework.web.client.RestClientException;
 import rx.Observable;
-import uk.ac.ebi.ep.ebeye.model.Protein;
-import uk.ac.ebi.ep.ebeye.search.Entry;
+import uk.ac.ebi.ep.ebeye.protein.model.Entry;
+import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 import uk.ac.ebi.ep.ebeye.utils.Preconditions;
 import uk.ac.ebi.ep.ebeye.utils.UrlUtil;
 
@@ -50,9 +50,7 @@ public class EbeyeRestService {
         Preconditions.checkArgument(ec != null, "ec can not be null");
         Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
         String query = searchTerm + " AND INTENZ:" + ec;
-
         query = UrlUtil.encode(query);
-
         return searchForUniqueProteins(query, limit);
 
     }
@@ -164,10 +162,8 @@ public class EbeyeRestService {
         Preconditions.checkArgument(query != null, "Query can not be null");
 
         Observable<Protein> uniqueProteins;
-
         try {
             Observable<Entry> distinctEntries = queryService.executeQuery(query).distinct();
-
             uniqueProteins = getDistinctProteinsFromEntries(distinctEntries);
         } catch (RestClientException e) {
             logger.error(e.getMessage(), e);

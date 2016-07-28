@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.ebeye.model;
 
+import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

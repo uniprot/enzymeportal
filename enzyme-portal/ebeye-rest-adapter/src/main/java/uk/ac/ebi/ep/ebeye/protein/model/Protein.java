@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.ebeye.model;
+package uk.ac.ebi.ep.ebeye.protein.model;
 
 import java.util.Objects;
 
@@ -18,17 +18,40 @@ public class Protein implements Comparable<Protein> {
     private String species;
     private String status;
 
+    public Protein() {
+    }
+    
+    
+
+    /**
+     *
+     * @param accession
+     * @param proteinName
+     */
     public Protein(String accession, String proteinName) {
         this.accession = accession;
         this.proteinName = proteinName;
     }
 
+    /**
+     * 
+     * @param accession
+     * @param proteinName
+     * @param species 
+     */
     public Protein(String accession, String proteinName, String species) {
         this.accession = accession;
         this.proteinName = proteinName;
         this.species = species;
     }
 
+    /**
+     * 
+     * @param accession
+     * @param proteinName
+     * @param species
+     * @param status reviewed or unreviewed
+     */
     public Protein(String accession, String proteinName, String species, String status) {
         this.accession = accession;
         this.proteinName = proteinName;

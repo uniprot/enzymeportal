@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
-import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
-import uk.ac.ebi.ep.ebeye.search.Entry;
+import uk.ac.ebi.ep.ebeye.model.EbeyeSearchResult;
+import uk.ac.ebi.ep.ebeye.protein.model.Entry;
 import uk.ac.ebi.ep.ebeye.utils.Preconditions;
 
 /**
@@ -19,6 +19,7 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  * @author Ricardo Antunes
  */
 public class EbeyeQueryServiceImpl implements EbeyeQueryService {
+
     private static final int MAX_RETRIEVABLE_ENTRIES = 10_000;
 
     private static final int RETRY_LIMIT = 1;
@@ -77,12 +78,15 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd > -1 : "End can not be a negative value";
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
-        int threadPoolSize = Math.max(ebeyeIndexProps.getChunkSize(), requestEnd - requestStart);
-        // ExecutorService executorService = Executors.newWorkStealingPool();//.newFixedThreadPool(threadPoolSize);
-        final ForkJoinPool executorService = new ForkJoinPool(threadPoolSize);
+        int totalPagesToRequest = totalPagesToRequest(requestStart, requestEnd);
+
+        //int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), totalPagesToRequest);
+        final ForkJoinPool executorService = new ForkJoinPool();
+       // ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
+
         return generateUrlRequests(query, requestStart, requestEnd)
                 .flatMap(reqUrl
-                        -> executeQueryRequest(Observable.just(reqUrl))
+                        -> executeQueryRequest(Observable.just(reqUrl))//.doOnEach(i -> System.out.println("exec :::  "+i))
                         .subscribeOn(Schedulers.from(executorService))
                         .map(EbeyeSearchResult::getEntries)
                         .flatMap(Observable::from)
@@ -90,6 +94,26 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
                         .doOnError(throwable -> logger.error("Error executing request: {}", reqUrl, throwable))
                         .onExceptionResumeNext(Observable.empty()))
                 .doOnUnsubscribe(executorService::shutdown);
+    }
+
+    /**
+     * Calculates the total number of pages to send requests for.
+     *
+     *
+     * @param requestStart the number first page to request
+     * @param requestEnd the number final page to request
+     * @return 1 if {
+     * @param requestStart} and {
+     * @param requestEnd} are equal, > 1 if end is larger than start
+     */
+    private int totalPagesToRequest(int requestStart, int requestEnd) {
+        int totalPagesToRequest = 1;
+
+        if (requestEnd - requestStart > 0) {
+            totalPagesToRequest = requestEnd - requestStart;
+        }
+
+        return totalPagesToRequest;
     }
 
     private EbeyeSearchResult executeFirstQuery(String query) {
@@ -114,7 +138,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
      * service
      */
     private Observable<URI> generateUrlRequests(String query, int start, int end) {
-        final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=id,name,scientific_name,status&format=json";
+        final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=_relevance&reverse=true&format=json";
         final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
         final String endpoint = ebeyeIndexProps.getProteinCentricSearchUrl();
 

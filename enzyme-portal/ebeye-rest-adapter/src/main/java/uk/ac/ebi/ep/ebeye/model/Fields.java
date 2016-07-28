@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,18 +24,18 @@ import java.util.Set;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "id",
-    "name",
-    "description",
-    "UNIPROTKB",
-    "protein_name",
-    "common_name",
-    "scientific_name",
-    "compound_name",
-    "disease_name",
-    "enzyme_family"
-})
+//@JsonPropertyOrder({
+//    "id",
+//    "name",
+//    "description",
+//    "UNIPROTKB",
+//    "protein_name",
+//    "common_name",
+//    "scientific_name",
+//    "compound_name",
+//    "disease_name",
+//    "enzyme_family"
+//})
 public class Fields {
 
     @JsonProperty("id")
@@ -46,7 +45,7 @@ public class Fields {
     @JsonProperty("description")
     private List<String> description = new ArrayList<>();
     @JsonProperty("UNIPROTKB")
-    private List<String> UNIPROTKB = new ArrayList<String>();
+    private List<String> UNIPROTKB = new ArrayList<>();
     @JsonProperty("protein_name")
     private Set<String> proteinName = new HashSet<>();
     @JsonProperty("common_name")
@@ -59,6 +58,8 @@ public class Fields {
     private List<String> diseaseName = new ArrayList<>();
     @JsonProperty("enzyme_family")
     private List<String> enzymeFamily = new ArrayList<>();
+    @JsonProperty("status")
+    private List<String> status = new ArrayList<>();
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -253,6 +254,16 @@ public class Fields {
     @Override
     public String toString() {
         return "Fields{" + "id=" + ec + ", name=" + name + ", description=" + description + ", proteinName=" + proteinName + ", commonName=" + commonName + ", scientificName=" + scientificName + ", compoundName=" + compoundName + ", diseaseName=" + diseaseName + ", enzymeFamily=" + enzymeFamily + '}';
+    }
+    
+        @JsonProperty("status")
+    public List<String> getStatus() {
+        return status;
+    }
+
+    @JsonProperty("status")
+    public void setStatus(List<String> status) {
+        this.status = status;
     }
 
 }

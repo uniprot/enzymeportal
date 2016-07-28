@@ -3,31 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.ebeye.model;
+package uk.ac.ebi.ep.ebeye.enzyme.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.context.annotation.Import;
-import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
+import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-@Import({EbeyeConfig.class, })
 public class EnzymeView {
 
     private String enzymeName;
-    private int numEnzymeHits;
+    private long numEnzymeHits;
     private String enzymeFamily;
     private String ec;
     private List<String> catalyticActivities;
     private List<String> species;
-    private List<Protein> protein;
-    private List<String> proteins;
+    private List<Protein> proteins;
+    //private List<String> proteins;
     private int numProteins;
-    
+
     public String getEnzymeName() {
         return enzymeName;
     }
@@ -36,11 +34,11 @@ public class EnzymeView {
         this.enzymeName = enzymeName;
     }
 
-    public int getNumEnzymeHits() {
+    public long getNumEnzymeHits() {
         return numEnzymeHits;
     }
 
-    public void setNumEnzymeHits(int numEnzymeHits) {
+    public void setNumEnzymeHits(long numEnzymeHits) {
         this.numEnzymeHits = numEnzymeHits;
     }
 
@@ -61,6 +59,10 @@ public class EnzymeView {
     }
 
     public List<String> getCatalyticActivities() {
+        if (catalyticActivities == null) {
+            catalyticActivities = new ArrayList<>();
+        }
+
         return catalyticActivities;
     }
 
@@ -69,6 +71,10 @@ public class EnzymeView {
     }
 
     public List<String> getSpecies() {
+        if (species == null) {
+            species = new ArrayList<>();
+        }
+
         return species;
     }
 
@@ -76,24 +82,14 @@ public class EnzymeView {
         this.species = species;
     }
 
-    public List<Protein> getProtein() {
-        return protein;
-    }
-
-    public void setProtein(List<Protein> proteins) {
-        this.protein = proteins;
-    }
-    
-    
-
-    public List<String> getProteins() {
-        if(protein == null){
-            protein = new ArrayList<>();
+    public List<Protein> getProteins() {
+        if (proteins == null) {
+            proteins = new ArrayList<>();
         }
         return proteins;
     }
 
-    public void setProteins(List<String> proteins) {
+    public void setProteins(List<Protein> proteins) {
         this.proteins = proteins;
     }
 
@@ -104,8 +100,6 @@ public class EnzymeView {
     public void setNumProteins(int numProteins) {
         this.numProteins = numProteins;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -126,6 +120,4 @@ public class EnzymeView {
         return Objects.equals(this.enzymeName, other.enzymeName);
     }
 
-    
-    
 }

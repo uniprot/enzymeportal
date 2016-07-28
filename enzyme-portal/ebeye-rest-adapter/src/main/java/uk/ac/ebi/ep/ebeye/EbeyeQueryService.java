@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.ebeye;
 
 import rx.Observable;
-import uk.ac.ebi.ep.ebeye.search.Entry;
+import uk.ac.ebi.ep.ebeye.protein.model.Entry;
 
 /**
  * Service responsible for querying the EbeyeSearch REST webservice.
