@@ -108,7 +108,8 @@ public class EnzymeCentricController extends AbstractController {
                 if (proteinHits > 0) {
                     entry.setProteins(proteins);
                     entry.setNumProteins(proteins.size());
-                    entry.setNumEnzymeHits(hitCount);
+                    //entry.setNumEnzymeHits(hitCount);
+                     entry.setNumEnzymeHits(proteins.size());
                     enzymeView.add(entry);
                 }
             });

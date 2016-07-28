@@ -217,7 +217,7 @@
                                            <td>${enzyme.enzymeName}</td>
                                        </c:otherwise>
                                    </c:choose>
-                                   <td>${enzyme.numProteins}</td>
+                                   <td>${enzyme.numEnzymeHits}</td>
                                    <td>${enzyme.enzymeFamily}</td>
                                    <td>${enzyme.ec}</td>
                                    <td>${enzyme.catalyticActivities}</td>
