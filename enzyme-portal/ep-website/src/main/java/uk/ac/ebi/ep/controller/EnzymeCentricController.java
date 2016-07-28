@@ -25,9 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
+import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
 import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
-import uk.ac.ebi.ep.ebeye.model.Entry;
-import uk.ac.ebi.ep.ebeye.model.Protein;
+import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 
 /**
  *
@@ -106,8 +106,9 @@ public class EnzymeCentricController extends AbstractController {
                 }
                 int proteinHits = proteins.size();
                 if (proteinHits > 0) {
-                    entry.setProtein(proteins);
-                    entry.setNumEnzymeHits(proteins.size());
+                    entry.setProteins(proteins);
+                    entry.setNumProteins(proteins.size());
+                    entry.setNumEnzymeHits(hitCount);
                     enzymeView.add(entry);
                 }
             });
