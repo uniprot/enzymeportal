@@ -1,0 +1,59 @@
+
+package uk.ac.ebi.ep.ebeye;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
+import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
+import uk.ac.ebi.ep.ebeye.model.FacetValue;
+
+/**
+ * Tests the behaviour of the {@link EnzymeCentricService}.
+ *
+ * @author joseph
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {EbeyeConfig.class})
+public class EnzymeCentricServiceIT {
+
+    @Autowired
+    private EnzymeCentricService enzymeCentricService;
+
+    /**
+     * Test of getSearchResult method, of class EnzymeCentricService.
+     */
+    @Test
+    public void testGetSearchResult_with_query_and_zeroStartPage_and_pageSize_of_10_and_filter_for_human_with_facetCount_of_5() {
+
+        String query = "kinase";
+        int startPage = 0;
+        int pageSize = 10;
+        String filter = "TAXONOMY:9606";
+        List<String> filters = new ArrayList<>();
+        filters.add(filter);
+        String facets = filters.stream().collect(Collectors.joining(","));
+        int facetCount = 5;
+
+        EBISearchResult result = enzymeCentricService.getSearchResult(query, startPage, pageSize, facets, facetCount);
+        int hitcount = result.getHitCount();
+        List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
+
+        assertNotNull(result);
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
+        assertThat(result.getEntries(), hasSize(pageSize));
+        assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
+        assertThat(facetValue, hasSize(facetCount + 1));
+
+    }
+}

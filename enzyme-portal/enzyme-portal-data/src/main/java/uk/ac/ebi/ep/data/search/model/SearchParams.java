@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.hibernate.validator.constraints.SafeHtml;
 
 /**
  *
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class SearchParams implements Serializable {
 
-    protected String text;
+    @SafeHtml protected String text;
 
     protected String sequence;
 

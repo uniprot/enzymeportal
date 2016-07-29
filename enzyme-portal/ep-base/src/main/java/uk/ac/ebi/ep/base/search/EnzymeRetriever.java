@@ -38,7 +38,6 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
-import uk.ac.ebi.ep.enzymeservices.chebi.ChebiFetchDataException;
 import uk.ac.ebi.ep.enzymeservices.chebi.IChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.rhea.IRheaAdapter;
@@ -323,7 +322,7 @@ public class EnzymeRetriever extends EnzymeBase {
     protected void addMolecules(EnzymeModel model)
             throws EnzymeRetrieverException {
 
-        try {
+       // try {
 
             List<EnzymePortalCompound> compounds = service.findCompoundsByAccession(model.getAccession());
 
@@ -359,7 +358,8 @@ public class EnzymeRetriever extends EnzymeBase {
                     .withBioactiveLigands(bioactive));
 
             LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
-            getChebiAdapter().getMoleculeCompleteEntries(model);
+            //disable calls to ChEBI for now as it returns inconsistent data for cofactors sometimes.
+            //getChebiAdapter().getMoleculeCompleteEntries(model);
             LOGGER.debug("MOLECULES before provenance");
             List<String> prov = new LinkedList<>();
             prov.add("ChEBI");
@@ -374,10 +374,10 @@ public class EnzymeRetriever extends EnzymeBase {
             if (model.getMolecule() != null) {
                 model.getMolecule().setProvenance(prov);
             }
-        } catch (ChebiFetchDataException ex) {
-            throw new EnzymeRetrieverException(
-                    "Failed to get small molecule details from Chebi", ex);
-        }
+        //} catch (ChebiFetchDataException ex) {
+            //throw new EnzymeRetrieverException(
+                   // "Failed to get small molecule details from Chebi", ex);
+        //}
 
     }
 

@@ -22,7 +22,6 @@ import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +46,7 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
+import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
@@ -64,6 +64,8 @@ public class SearchController extends AbstractController {
 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
+    @Autowired
+    private EbeyeSuggestionService ebeyeSuggestionService;
 
     @Autowired
     private ChebiConfig chebiConfig;
@@ -142,7 +144,7 @@ public class SearchController extends AbstractController {
                 final Map<String, UniprotEntry> sls = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
                 if (sls == null) {
                     setLastSummaries(session, Collections.singletonList(
-                             entry));
+                            entry));
                 } else if (sls.get(summId) == null) {
                     sls.put(summId, entry);
                 }
@@ -288,16 +290,19 @@ public class SearchController extends AbstractController {
      *
      * @param searchModel
      * @param model
+     * @param searchTerm
      * @param session
+     * @param ec
      * @param request
      * @param response
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String postSearchResult(SearchModel searchModel, Model model,
+    public String postSearchResult(SearchModel searchModel, Model model, @RequestParam(required = false, value = "searchTerm") String searchTerm,
+            @RequestParam(required = false, value = "ec") String ec,
             HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String view = "error";
-
+        int limit = 800;
         String searchKey = null;
         SearchResults results = null;
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -314,13 +319,17 @@ public class SearchController extends AbstractController {
             searchKey = Jsoup.clean(searchKey, Whitelist.basic());
 
             results = prevSearches.get(searchKey);
+
             if (results == null) {
                 // New search:
                 clearHistory(session);
 
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
-                        results = searchKeyword(searchModel.getSearchparams());
+                        //results = searchKeyword(searchModel.getSearchparams());
+
+                        results = searchKeyword(ec, searchTerm, limit);
+
                         model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
                         LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
                         break;
@@ -477,9 +486,20 @@ public class SearchController extends AbstractController {
     @Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
 
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeRestService);
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         SearchResults results = finder.getEnzymes(searchParameters);
 
+        return results;
+    }
+
+    private SearchResults searchKeyword(String ec, String keyword, int limit) {
+
+       
+        String searchTerm = HtmlUtility.cleanText(keyword);
+        searchTerm = searchTerm.replaceAll("&quot;", "");
+      
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+        SearchResults results = finder.getAssociatedProteins(ec, searchTerm, limit);
         return results;
     }
 
@@ -496,7 +516,7 @@ public class SearchController extends AbstractController {
         SearchResults results = null;
         EnzymeFinder finder = null;
         try {
-            finder = new EnzymeFinder(enzymePortalService,ebeyeRestService);
+            finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
             results = finder.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
@@ -521,12 +541,11 @@ public class SearchController extends AbstractController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String getSearchResults(SearchModel searchModel, BindingResult result,
-            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-        return postSearchResult(searchModel, model, session, request, response);
-    }
-
+//    @RequestMapping(value = "/search", method = RequestMethod.GET)
+//    public String getSearchResults(SearchModel searchModel, BindingResult result,
+//            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+//        return postSearchResult(searchModel, model, session, request, response);
+//    }
     @RequestMapping(value = "/advanceSearch",
             method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {
@@ -541,7 +560,8 @@ public class SearchController extends AbstractController {
         if (name != null && name.length() >= 3) {
             String keyword = String.format("%%%s%%", name);
 
-            List<Suggestion> suggestions = ebeyeRestService.autocompleteSearch(keyword.trim());
+             String cleanedKeyword = Jsoup.clean(keyword, Whitelist.basic());
+            List<Suggestion> suggestions = ebeyeSuggestionService.autocompleteSearch(cleanedKeyword.trim());
 
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());

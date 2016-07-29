@@ -179,6 +179,15 @@
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+        </dependency>
 
     </dependencies>
     <build>
@@ -230,7 +239,7 @@
             </plugin>
             
 
-        </plugins>
+         </plugins>
         <resources>
             <resource>
                 <directory>${ep.config.dir}</directory>

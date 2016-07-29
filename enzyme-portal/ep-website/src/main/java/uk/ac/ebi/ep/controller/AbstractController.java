@@ -38,6 +38,7 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
+import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
@@ -57,6 +58,8 @@ public abstract class AbstractController {
 
     @Autowired
     protected EbeyeRestService ebeyeRestService;
+    @Autowired
+    protected EnzymeCentricService enzymeCentricService;
     @Autowired
     protected LiteratureService literatureService;
     

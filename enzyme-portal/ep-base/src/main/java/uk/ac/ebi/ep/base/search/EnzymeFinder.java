@@ -60,7 +60,6 @@ public class EnzymeFinder extends EnzymeBase {
     List<String> compoundFilter;
     List<UniprotEntry> enzymeSummaryList;
 
-   
     Set<Species> uniqueSpecies;
     List<Disease> diseaseFilters;
     List<Compound> compoundFilters;
@@ -71,9 +70,10 @@ public class EnzymeFinder extends EnzymeBase {
 
     private final int LIMIT = 8_00;
     private final int ACCESSION_LIMIT = 8_00;
+    // private AccessionService accessionService;
 
-    public EnzymeFinder(EnzymePortalService service,EbeyeRestService ebeyeRestService) {
-        super(service,ebeyeRestService);
+    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService) {
+        super(service, ebeyeRestService);
 
         enzymeSearchResults = new SearchResults();
 
@@ -92,6 +92,14 @@ public class EnzymeFinder extends EnzymeBase {
         uniquecompounds = new HashSet<>();
         uniqueDiseases = new HashSet<>();
     }
+
+//    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, AccessionService accessionService) {
+//        this(service, ebeyeRestService);
+//        this.accessionService = accessionService;
+//        
+//    }
+
+
 
     public EnzymePortalService getService() {
         return service;
@@ -313,11 +321,14 @@ public class EnzymeFinder extends EnzymeBase {
             List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk);//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
             if (enzymes != null) {
-                if (StringUtils.isEmpty(keyword)) {
-                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
-                } else {
-                    enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
-                }
+                //enzyme centric don't require to do this check
+//                if (StringUtils.isEmpty(keyword)) {
+//                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
+//                } else {
+//                    enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
+//                }
+                
+                enzymeList.addAll(computeUniqueEnzymes(enzymes));
             }
 
         });
@@ -425,6 +436,42 @@ public class EnzymeFinder extends EnzymeBase {
         List<UniprotEntry> summaries = getEnzymesByAccessions(accessions, keyword);
 
         return summaries;
+    }
+
+    public SearchResults getAssociatedProteins(String ec, String searchTerm, int limit) {
+
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessions(ec, searchTerm, limit);
+        if(accessions.isEmpty()){
+          accessions = ebeyeRestService.queryForUniqueAccessions(ec, limit);  
+        }
+
+        LOGGER.info("Number of Processed Accession for  " + ec + " " + searchTerm + " :=:" + accessions.size());
+
+        uniprotAccessions = accessions.stream().distinct().collect(Collectors.toList());
+        uniprotAccessionSet.addAll(uniprotAccessions.stream().distinct().collect(Collectors.toList()));
+
+        List<String> accessionList
+                = new ArrayList<>(uniprotAccessionSet);
+
+        String keyword = HtmlUtility.cleanText(searchTerm);
+        keyword = keyword.replaceAll("&quot;", "");
+
+        LOGGER.debug("Getting enzyme summaries...");
+
+        enzymeSummaryList = getEnzymeSummariesByAccessions(accessionList, keyword);
+
+        enzymeSearchResults.setSummaryentries(enzymeSummaryList);
+        enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
+        if (uniprotAccessionSet.size() != enzymeSummaryList.size()) {
+            LOGGER.warn((uniprotAccessionSet.size() - enzymeSummaryList.size())
+                    + " Some UniProt Accession have been lost");
+        }
+        LOGGER.debug("Building filters...");
+        buildFilters(enzymeSearchResults);
+        LOGGER.debug("Finished search");
+
+        return enzymeSearchResults;
+
     }
 
     public SearchResults getEnzymes(SearchParams searchParams) {

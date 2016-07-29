@@ -1,109 +1,262 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.core.task.AsyncListenableTaskExecutor;
-import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
+import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
+import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
+import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
+import uk.ac.ebi.ep.ebeye.model.Facet;
+import uk.ac.ebi.ep.ebeye.model.FacetValue;
+import uk.ac.ebi.ep.ebeye.model.Fields;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-@Ignore
 public class EnzymeCentricServiceTest {
 
     private static final int MAX_ENTRIES_IN_RESPONSE = 4;
     private static final String SERVER_URL = "http://www.myserver.com/ebeye";
-    private static final String AUTOCOMPLETE_REQUEST = SERVER_URL + "/autocomplete?term=%s&format=json";
-    private static final String EC_REQUEST = SERVER_URL + "?query=%s&size=%d&start=%d&fields=name&format=json";
 
     private MockRestServiceServer syncRestServerMock;
-    private MockRestServiceServer asyncRestServerMock;
+    private Function<String, Entry> entryCreator;
+    private Function<String, Facet> facetCreator;
+
+    private static final int FACET_COUNT = 20;
 
     private EnzymeCentricService enzymeCentricService;
 
     @Before
     public void setUp() {
-        EbeyeIndexUrl serverUrl = new EbeyeIndexUrl();
+        EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         serverUrl.setEnzymeCentricSearchUrl(SERVER_URL);
         serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
-        final AsyncListenableTaskExecutor executor = new TaskExecutorAdapter(Runnable::run);
+
         RestTemplate restTemplate = new RestTemplate();
-        AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate(executor);
 
         syncRestServerMock = MockRestServiceServer.createServer(restTemplate);
-        asyncRestServerMock = MockRestServiceServer.createServer(asyncRestTemplate);
+        enzymeCentricService = new EnzymeCentricService(restTemplate, serverUrl);
 
-        enzymeCentricService = new EnzymeCentricService(serverUrl, restTemplate, asyncRestTemplate);
+        entryCreator = createEntry();
+        facetCreator = createFacet();
+
+    }
+
+    private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
+
+        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family&sort=_relevance&reverse=true&format=json";
+
+        if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family&sort=_relevance&reverse=true&format=json";
+            return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
+        }
+        return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
+    }
+
+    @Test
+    public void query_for_search_result_with_startPage_and_pageSize_and_facetCount_with_NO_limit() throws IOException {
+
+        int limit = 800;
+        int startPage = 0;
+        int pageSize = 10;
+        int facetCount = FACET_COUNT;
+        String facetsList = "";
+        String query = "query";
+
+        List<Entry> entries = createEntries(limit, entryCreator);
+        List<Facet> facets = createFacets(facetCount, facetCreator);
+
+        String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
+
+        EBISearchResult resultSet = createSearchResult(entries, facets);
+
+        mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
+
+        EBISearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+        List<FacetValue> facetValue = searchResult.getFacets().stream().findAny().get().getFacetValues();
+
+        assertThat(searchResult.getEntries(), hasSize(limit));
+        assertThat(searchResult.getFacets(), hasSize(facetCount));
+        assertNotNull(searchResult);
+        assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
+        assertThat(searchResult.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
+        assertThat(facetValue, hasSize(facetCount));
+        syncRestServerMock.verify();
 
     }
 
     @Test
-    public void
-            query_response_in_unique_accession_search_has_hitCount_less_than_maxEntries_only_synchronous_request_used()
-            throws Exception {
+    public void query_for_search_result_with_startPage_and_pageSize_and_facetCount_with_limit() throws IOException {
+
+        int limit = 800;
+        int startPage = 0;
+        int pageSize = 10;
+        int facetCount = FACET_COUNT;
+        String facetsList = "";
         String query = "query";
-        String filename = "enzyme.json";
-        int limit = MAX_ENTRIES_IN_RESPONSE;
 
-        String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
+        List<Entry> entries = createEntries(limit, entryCreator);
+        List<Facet> facets = createFacets(facetCount, facetCreator);
 
-        mockServerResponse(syncRestServerMock, requestUrl, limit, filename);
+        String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        List<String> actualEcNumbers = enzymeCentricService.queryEbeyeForEcNumbers(query, limit);
+        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
 
+        mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
+
+        EBISearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+
+        assertNotNull(searchResult);
+        assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
+        assertThat(searchResult.getEntries(), hasSize(limit));
+        assertThat(searchResult.getFacets(), hasSize(facetCount));
         syncRestServerMock.verify();
 
-        assertThat(actualEcNumbers, hasSize(limit));
     }
 
-    private void mockServerResponse(MockRestServiceServer serverMock, String requestUrl, int limit, String filename)
+    private List<Entry> createEntries(int num, Function< String, Entry> entryCreator) {
+        return IntStream.range(0, num)
+                .mapToObj(String::valueOf)
+                .map(id -> entryCreator.apply(id))
+                .collect(Collectors.toList());
+    }
+
+    private List<Facet> createFacets(int num, Function<String, Facet> facetCreator) {
+        return IntStream.range(0, num)
+                .mapToObj(String::valueOf)
+                .map(id -> facetCreator.apply(id))
+                .collect(Collectors.toList());
+    }
+
+    private EBISearchResult createSearchResult(List<Entry> entries, List<Facet> facets, int hitCount) {
+        EBISearchResult result = new EBISearchResult();
+
+        result.setEntries(entries);
+        result.setHitCount(hitCount);
+        result.setFacets(facets);
+
+        return result;
+    }
+
+    private EBISearchResult createSearchResult(List<Entry> entries, List<Facet> facets) {
+        return createSearchResult(entries, facets, entries.size());
+    }
+
+    private void mockSuccessfulServerResponse(MockRestServiceServer serverMock, String requestUrl,
+            EBISearchResult searchResult)
             throws IOException {
-        //String filename = "enzyme.json";
-        String json = getJsonFile(filename);
-        for (int i = 1; i < limit - 1; i++) {
-            serverMock.expect(requestTo(requestUrl))
-                    .andExpect(method(HttpMethod.GET))
-                    .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+
+        serverMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(convertToJson(searchResult), MediaType.APPLICATION_JSON));
+    }
+
+    private String convertToJson(Object object) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(object);
+    }
+
+    private FacetValue buildFacetValue(int x) {
+        FacetValue facetValue = new FacetValue();
+        facetValue.setCount(x);
+        facetValue.setLabel("common_name_" + x);
+        facetValue.setValue("human_" + x);
+        return facetValue;
+    }
+
+    private List<FacetValue> createFacetValue() {
+        return IntStream.range(0, FACET_COUNT)
+                .mapToObj(String::valueOf)
+                .map(facetValue -> buildFacetValue(FACET_COUNT))
+                .collect(Collectors.toList());
+    }
+
+    private Function<String, Facet> createFacet() {
+        List<String> name = new ArrayList<>();
+        name.add("title");
+        Fields fields = new Fields();
+        fields.setName(name);
+        List<String> sciName = new ArrayList<>();
+        sciName.add("homo sapien");
+        fields.setScientificName(sciName);
+
+        List<String> family = new ArrayList<>();
+        family.add("Ligase");
+        fields.setEnzymeFamily(family);
+
+        String id = "1.1.1.";
+        Facet facet = new Facet();
+        facet.setId("TAXONOMY");
+        facet.setLabel("someLabel");
+        facet.setFacetValues(createFacetValue());
+        return new FunctionFacetImpl(facet);
+    }
+
+    private static class FunctionFacetImpl implements Function<String, Facet> {
+
+        private final Facet f;
+
+        public FunctionFacetImpl(Facet ff) {
+            this.f = ff;
+        }
+
+        @Override
+        public Facet apply(String e) {
+            return f;
         }
     }
 
-    private String createQueryUrl(String query, int size, int start) {
-        return String.format(EC_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, start);
+    private Function<String, Entry> createEntry() {
+        List<String> name = new ArrayList<>();
+        name.add("title");
+        Fields fields = new Fields();
+        fields.setName(name);
+        List<String> sciName = new ArrayList<>();
+        sciName.add("homo sapien");
+        fields.setScientificName(sciName);
+
+        List<String> family = new ArrayList<>();
+        family.add("Ligase");
+        fields.setEnzymeFamily(family);
+
+        String id = "1.1.1.";
+        Entry entry = new Entry(id, "enzymeportal", fields);
+        entry.setEnzymeName("enzyme_name_" + id);
+
+        return new FunctionImpl(entry);
     }
 
-    protected String getJsonFile(String filename) {
-        try {
-            InputStream in = this.getClass().getClassLoader()
-                    .getResourceAsStream(filename);
+    private static class FunctionImpl implements Function<String, Entry> {
 
-            return IOUtils.toString(in);
-        } catch (IOException ex) {
-            //LOGGER.error(ex.getMessage(), ex);
+        private final Entry entry;
+
+        public FunctionImpl(Entry entry) {
+            this.entry = entry;
         }
 
-        return null;
+        @Override
+        public Entry apply(String e) {
+            return entry;
+        }
     }
 
 }

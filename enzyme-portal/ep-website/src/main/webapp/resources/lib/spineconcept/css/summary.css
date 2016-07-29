@@ -41,7 +41,7 @@
 	border: none;
 }
 
-.classification .label {
+.classification .labelEP {
 	background: #207a7a;
 	border-top-left-radius: 5px;
 	-moz-border-radius-topLeft: 5px;
@@ -356,18 +356,18 @@
 	opacity: 1;
 }
 
-.tab .label {
+.tab .labelEP {
 	display: block;
 	margin: 0 1em;
 	color: white;
 	/*font-size: 9pt;*/
 }
 
-.tab .label.icon:before {
+.tab .labelEP.icon:before {
 	color: #ffffff;
 }
 
-.tab.selected .label, .tab.selected .label.icon:before {
+.tab.selected .labelEP, .tab.selected .labelEP.icon:before {
 	color: #333;
 }
 

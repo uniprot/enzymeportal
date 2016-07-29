@@ -144,10 +144,36 @@ public final class Functions {
         String link = url;
         if (url.contains("/")) {
             link = url.replace("/", "");
- 
+
         }
 
-        return "#omim"+link;
+        return "#omim" + link;
+    }
+
+    public static String replaceSpacesWithUnderScore(String text) {
+
+        if (text.contains(" ")) {
+            String refinedText = text.replaceAll(" ", "_");
+            return refinedText;
+        }
+
+        return text;
+    }
+
+    /**split with = and - to return only the search term
+     * 
+     * @param text of this format searchparams.text=cathepsin-1.1.1.1 for example
+     * @return index[1] - cathepsin
+     */
+    public static String splitAndGetValue(String text) {
+        String result = "";
+        String data[] = text.split("=");
+
+        if (data[1] != null) {
+           String keyword[] = data[1].split("-");
+           result =keyword[0];
+        }
+        return result;
     }
 
     /**
