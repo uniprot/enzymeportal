@@ -265,14 +265,14 @@
                                             <th width="40%">Associated Proteins:</th>
                                             <th width="57%"> </th>
                                         </tr>
-                                        <c:set var="proteinSize" value="${fn:length(enzyme.protein)}"/>
+                                        <c:set var="proteinSize" value="${fn:length(enzyme.proteins)}"/>
 
 
                                             <c:forEach var="p" begin="0" end="4">
                                                 <tr class="proteinRow">
                                                     <td> </td>
-                                                    <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.protein[p].accession}/enzyme">${enzyme.protein[p].proteinName}</a></td>
-                                                    <td>${enzyme.protein[p].species}</td>
+                                                    <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.proteins[p].accession}/enzyme">${enzyme.proteins[p].proteinName}</a></td>
+                                                    <td>${enzyme.proteins[p].species}</td>
                                                 </tr>
                                             </c:forEach>
                                             <c:if test="${proteinSize >= 5}">
