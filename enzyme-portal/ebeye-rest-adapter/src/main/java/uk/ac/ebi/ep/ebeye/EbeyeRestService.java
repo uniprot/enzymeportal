@@ -77,7 +77,7 @@ public class EbeyeRestService {
                 .single();
 
         stopWatch.stop();
-        logger.debug("Executing query:{}, took: {}", query, stopWatch.getTotalTimeMillis());
+        logger.debug("Executing query:{}, took: {}", query, stopWatch.getTotalTimeSeconds() + " sec");
 
         return uniqueAccessions;
     }
@@ -104,7 +104,7 @@ public class EbeyeRestService {
                 .single();
 
         stopWatch.stop();
-        logger.error("Executing query:{}, took: {}", query, stopWatch.getTotalTimeMillis());
+        logger.error("Executing query:{}, took: {}", query, stopWatch.getTotalTimeSeconds() + " sec");
 
         return uniqueProteins;
     }

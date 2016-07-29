@@ -15,7 +15,7 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
 public class EbeyeSuggestionService {
 
     private final EbeyeIndexProps ebeyeIndexProps;
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;  
 
     public EbeyeSuggestionService(EbeyeIndexProps ebeyeIndexProps, RestTemplate restTemplate) {
         Preconditions.checkArgument(restTemplate != null, "'restTemplate' must not be null");
