@@ -24,7 +24,7 @@ import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 @PropertySource({"classpath:ebeye.es"})
 public class EbeyeConfig {
 
-    private static final int REQUEST_TIMEOUT_MILLIS = 2500;
+    private static final int REQUEST_TIMEOUT_MILLIS = 5000;
 
     @Autowired
     private Environment env;
