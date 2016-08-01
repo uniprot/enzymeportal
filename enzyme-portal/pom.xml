@@ -7,13 +7,13 @@
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.6</version>
     <name>Enzyme Portal</name>
     <description>
         The Enzyme Portal is for people who are interested in the biology of
         enzymes and proteins with enzymatic activity.
     </description>
-    <url>http://ebi-cheminf.github.com/enzymeportal/ep</url>
+    <url>https://github.com/uniprot/enzymeportal</url>
     <licenses>
         <license>
             <name>Creative Commons Attribution (CC BY) 3.0</name>
@@ -57,9 +57,9 @@
     <properties>
      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
      <github.global.server>github</github.global.server>
-                 <http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>
+<!--                 <http-uniprot-private-url>http://wwwdev.ebi.ac.uk/uniprot/artifactory</http-uniprot-private-url>-->
     <ebi.maven.repo.deploy.url>
-         scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo
+         scpexe://login.ebi.ac.uk:/homes/maven/public_html/m2repo
     </ebi.maven.repo.deploy.url>
     <ebi.maven.repo.snapshots.deploy.url>
          scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
@@ -79,8 +79,7 @@
 
         <!-- Test coverage -->
        
-<!--        <jacoco.outputDir>${project.build.directory}</jacoco.outputDir>-->
-         
+        
           <jacoco.outputDir>${project.basedir}/../target</jacoco.outputDir>
 
         <!-- Unit test report path -->
@@ -94,33 +93,7 @@
     </properties>
     <repositories>
         
-<!--          <repository>
-        <id>uniprot-artifactory-release</id>
-        <name>UniProt Artifactory for Releases</name>
-        <releases>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>warn</checksumPolicy>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <url>${http-uniprot-private-url}/release</url>
-    </repository>
- 
-    <repository>
-        <id>uniprot-artifactory-snapshots</id>
-        <name>UniProt Artifactory for Snapshots</name>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-            <checksumPolicy>warn</checksumPolicy>
-        </snapshots>
-        <url>${http-uniprot-private-url}/snapshot</url>
-    </repository>      -->
-        
+       
                <repository>
             <releases/>
             <snapshots>
@@ -191,41 +164,15 @@
         
     </repositories>
     <distributionManagement>
-       
+
         <repository>
             <id>ebi-repo</id>
             <name>EBI Maven Repository</name>
             <url>${ebi.maven.repo.deploy.url}</url>
         </repository>
         
-<!--         <repository>
-        <id>uniprot-artifactory-release</id>
-        <name>UniProt Artifactory for Releases</name>
-        <releases>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>warn</checksumPolicy>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <url>${http-uniprot-private-url}/release</url>
-    </repository>
- 
-    <snapshotRepository>
-        <id>uniprot-artifactory-snapshots</id>
-        <name>UniProt Artifactory for Snapshots</name>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-            <checksumPolicy>warn</checksumPolicy>
-        </snapshots>
-        <url>${http-uniprot-private-url}/snapshot</url>
-    </snapshotRepository> -->
-        
-              <snapshotRepository>
+       
+        <snapshotRepository>
             <id>ebi-repo-snapshots</id>
             <name>EBI Maven Snapshots Repository</name>
             <url>${ebi.maven.repo.snapshots.deploy.url}</url>
@@ -255,6 +202,11 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.0</version>
                     <configuration>
@@ -271,7 +223,7 @@
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
                 </plugin>
-<!--                <plugin>
+                <!--                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.12.4</version>
@@ -442,6 +394,11 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
                     <reportPlugins>
@@ -490,7 +447,7 @@
                 </configuration>
             </plugin>
             
-                  <!-- Generate the source jar. -->
+            <!-- Generate the source jar. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -502,14 +459,14 @@
                 <artifactId>maven-help-plugin</artifactId>
                 <version>2.2</version>
             </plugin>
-<!--            <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-surefire-plugin</artifactId>
-    <version>2.9</version>
-    <configuration>
-        <argLine>-Xmx256M</argLine>
-    </configuration>
-</plugin>-->
+            <!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <argLine>-Xmx256M</argLine>
+                </configuration>
+            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -559,14 +516,20 @@
             
         </plugins>
         <extensions>
-            <extension>
+<!--            <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
-                <version>2.3</version>
-            </extension>
+                <version>2.6</version>
+            </extension>-->
+                  <!-- Enabling the use of SSH -->
+         <extension>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh-external</artifactId>
+              <version>1.0-beta-6</version>
+          </extension>
         </extensions>
     </build>
-      <dependencyManagement>
+    <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.spring.platform</groupId>
@@ -594,7 +557,7 @@
         <module>LiteratureService</module>
         <module>ep-base</module>
         <module>ep-website</module>
-<!--        <module>ep-benchmarks</module>-->
+<!--                <module>ep-benchmarks</module>-->
     </modules>
     
     <profiles>
