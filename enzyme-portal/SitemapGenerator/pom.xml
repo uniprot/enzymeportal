@@ -6,11 +6,11 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.0.6</version>
     </parent>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>SitemapGenerator</artifactId>
-    <version>2.0.8-SNAPSHOT</version>
+    <version>2.0.8</version>
     <packaging>jar</packaging>
 
     <name>sitemapGenerator</name>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
+            <version>1.1.2</version>
         </dependency>
 
 
