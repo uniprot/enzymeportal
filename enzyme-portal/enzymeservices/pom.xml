@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzymeservices</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     
     <description>
@@ -12,7 +12,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.0.6</version>
     </parent>
     
     <properties>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
+            <version>1.1.2</version>
         </dependency>
 
       
