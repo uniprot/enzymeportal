@@ -143,11 +143,8 @@ public class DataAnalyzer {
         enzymeEvidences.stream().map(ev -> {
             String acc = ev.getAccession();
             String evidence = ev.getEvidenceLine();
-            String data = "Accession : " + acc + " : EvidenType : " + evidence;
-            return data;
-        }).forEach(data -> {
-            dataList.add(data);
-        });
+            return "Accession : " + acc + " : EvidenType : " + evidence;
+        }).forEach(data -> dataList.add(data));
 
         if (!StringUtil.isNullOrEmpty(fileDir)) {
             createDirAndFile(dataList, fileDir, filename, deleteFile);
@@ -286,11 +283,9 @@ public class DataAnalyzer {
         partitioned.parallel().forEach(chunk -> {
 
             chunk.stream()
-                    .filter(accession -> (enzymes.contains(accession)))
+                    .filter(accession -> enzymes.contains(accession))
                     .map(accession -> createSpEnzymeEvidence(accession, evidenceType))
-                    .forEach(evidence -> {
-                        evidences.add(evidence);
-                    });
+                    .forEach(evidence ->  evidences.add(evidence));
 
         });
 

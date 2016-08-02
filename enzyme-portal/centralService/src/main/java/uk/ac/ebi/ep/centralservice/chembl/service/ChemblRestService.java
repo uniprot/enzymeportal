@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.centralservice.chembl.service;
 
 import java.util.Optional;
@@ -22,14 +17,14 @@ import uk.ac.ebi.ep.centralservice.chembl.molecule.ChemblMolecule;
  */
 public class ChemblRestService {
 
-    private final Logger LOGGER = Logger.getLogger(ChemblRestService.class);
-    private RestTemplate restTemplate = null;// new RestTemplate(clientHttpRequestFactory());
+    private final Logger logger = Logger.getLogger(ChemblRestService.class);
+    private RestTemplate restTemplate = null;
 
     public ChemblRestService() {
         restTemplate = new RestTemplate(clientHttpRequestFactoryTimeout());
     }
 
-    private ClientHttpRequestFactory clientHttpRequestFactory() {
+    protected ClientHttpRequestFactory clientHttpRequestFactory() {
         return new HttpComponentsClientHttpRequestFactory();
 
     }
@@ -49,9 +44,9 @@ public class ChemblRestService {
             fda = Optional.ofNullable(restTemplate.getForObject(url.trim(), FdaApproved.class));
 
         } catch (RestClientException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return fda;
 
@@ -64,9 +59,9 @@ public class ChemblRestService {
             mol = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblMolecule.class));
 
         } catch (RestClientException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return mol;
     }
@@ -78,9 +73,9 @@ public class ChemblRestService {
             assay = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblAssay.class));
 
         } catch (RestClientException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return assay;
 
@@ -93,9 +88,9 @@ public class ChemblRestService {
             activity = Optional.ofNullable(restTemplate.getForObject(url.trim(), ChemblActivity.class));
 
         } catch (RestClientException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return activity;
     }

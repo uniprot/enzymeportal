@@ -515,6 +515,5 @@ public class Assay {
         }
         return true;
     }
-    
-    
+
 }

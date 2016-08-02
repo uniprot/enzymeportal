@@ -37,8 +37,7 @@ public class DevDataConfig extends AbstractConfig {
         config.setPassword(password);
         config.setDriverClassName("oracle.jdbc.OracleDriver");
 
-        HikariDataSource ds = new HikariDataSource(config);
-        return ds;
+        return new HikariDataSource(config);
     }
 
     @Override

@@ -1,14 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.centralservice.chembl.molecule;
-
-/**
- *
- * @author joseph
- */
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -61,11 +51,6 @@ public class MoleculeSynonym {
      */
     @JsonProperty("synonyms")
     public String getSynonyms() {
-//        if (synonyms != null && synonyms.contains("|")) {
-//            String name = synonyms.split("|")[0];
-//            synonyms = name;
-//        }
-
         return synonyms;
     }
 

@@ -14,6 +14,9 @@ import uk.ac.ebi.ep.data.search.model.Compound;
  */
 public class CompoundUtil {
 
+    private CompoundUtil() {
+    }
+
     public static EnzymePortalCompound computeRole(EnzymePortalCompound compound, String relationship) {
         switch (Relationship.valueOf(relationship)) {
             case is_reactant_or_product_of:
@@ -63,8 +66,7 @@ public class CompoundUtil {
                 break;
             case is_drug_for:
             case is_target_of:
-                role = (compoundId.startsWith("CHEMBL")
-                        ? Compound.Role.BIOACTIVE.name() : Compound.Role.DRUG.name());
+                role = compoundId.startsWith("CHEMBL") ? Compound.Role.BIOACTIVE.name() : Compound.Role.DRUG.name();
                 break;
             default:
         }
