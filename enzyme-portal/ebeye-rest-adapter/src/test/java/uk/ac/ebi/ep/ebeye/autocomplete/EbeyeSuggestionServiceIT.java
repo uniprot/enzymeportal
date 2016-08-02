@@ -7,7 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.StringStartsWith.startsWith;
-import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,7 +24,8 @@ public class EbeyeSuggestionServiceIT {
     @Autowired
     private EbeyeSuggestionService ebeyeSuggestionService;
 
-    @Test
+    //@Test
+    @Ignore("remote service intermittent timeouts affects build stability")
     public void partial_term_phos_sent_to_Ebeye_autocomplete_search_returns_valid_suggestions() {
         String searchTerm = "phos";
 
