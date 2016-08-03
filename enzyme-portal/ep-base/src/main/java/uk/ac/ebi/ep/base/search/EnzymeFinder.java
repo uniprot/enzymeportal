@@ -318,7 +318,7 @@ public class EnzymeFinder extends EnzymeBase {
         Stream<List<String>> partitioned = partition(existingStream, 100, 1);
 
         partitioned.parallel().forEach((chunk) -> {
-            List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk);//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+            List<UniprotEntry> enzymes = service.findEnzymesByAccessions(chunk).stream().sorted().collect(Collectors.toList());//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
             if (enzymes != null) {
                 //enzyme centric don't require to do this check
@@ -333,7 +333,7 @@ public class EnzymeFinder extends EnzymeBase {
 
         });
 
-        return enzymeList.stream().collect(Collectors.toList());
+        return enzymeList.stream().sorted().collect(Collectors.toList());
     }
 
     private <T> Integer divide(List<T> list) {
@@ -370,7 +370,7 @@ public class EnzymeFinder extends EnzymeBase {
 
             return future.thenCombineAsync(future2, (a, b) -> combine(a, b))
                     .thenCombineAsync(future3, (c, d) -> combine(c, d))
-                    .thenCombineAsync(future4, (x, y) -> combine(x, y)).get().stream().distinct().collect(Collectors.toList());
+                    .thenCombineAsync(future4, (x, y) -> combine(x, y)).get().stream().distinct().sorted().collect(Collectors.toList());
 
         } catch (InterruptedException | ExecutionException ex) {
             LOGGER.error("InterruptedException | ExecutionException exception", ex);
@@ -393,7 +393,7 @@ public class EnzymeFinder extends EnzymeBase {
                 long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
                 LOGGER.warn("Time taken to process accessions of size (" + accessions.size() + ") :  (" + elapsedtime + " sec)");
 
-                return enzymeList.stream().distinct().collect(Collectors.toList());
+                return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
 
             } else if (accessions.size() >= 600) {
 
@@ -668,7 +668,7 @@ public class EnzymeFinder extends EnzymeBase {
             computeFilterFacets(e);
         });
 
-        return enzymeList.stream().distinct().sorted(SWISSPROT_FIRST).collect(Collectors.toList());
+        return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
     }
 
     private List<UniprotEntry> getEnzymesByAccessions(List<String> accessions) {
@@ -684,7 +684,7 @@ public class EnzymeFinder extends EnzymeBase {
             long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
             LOGGER.warn("Final Time taken to process accessions of size (" + accessions.size() + ") :  (" + elapsedtime + " sec)");
 
-            return enzymeList.stream().distinct().sorted(SWISSPROT_FIRST).collect(Collectors.toList());
+            return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
 
         }
         return enzymeList;
