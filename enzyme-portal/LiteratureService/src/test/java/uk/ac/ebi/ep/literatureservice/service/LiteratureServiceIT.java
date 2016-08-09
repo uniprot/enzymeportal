@@ -1,0 +1,67 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package uk.ac.ebi.ep.literatureservice.service;
+
+import java.util.List;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import uk.ac.ebi.ep.literatureservice.config.PmcConfig;
+import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
+import uk.ac.ebi.ep.uniprotservice.transferObjects.LabelledCitation;
+
+/**
+ *
+ * @author Joseph <joseph@ebi.ac.uk>
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {PmcConfig.class})
+public class LiteratureServiceIT {
+
+    @Autowired
+    private LiteratureService literatureService;
+
+    /**
+     * Test of getEuropePmcCitationsByKeyword method, of class
+     * LiteratureService.
+     */
+    @Test
+    public void testGetEuropePmcCitationsByKeyword() {
+        String keyword = "sildenafil";
+        int expectedResultSize = 15;
+
+        EuropePMC result = literatureService.getEuropePmcCitationsByKeyword(keyword);
+
+        assertNotNull(result);
+        assertThat(result.getResultList().getResult(), hasSize(greaterThan(1)));
+        assertThat(result.getResultList().getResult(), hasSize(greaterThanOrEqualTo(expectedResultSize)));
+
+    }
+
+    /**
+     * Test of getCitations method, of class LiteratureService.
+     */
+    @Test
+    public void testGetCitations() {
+        String term = "P42346";
+        int limit = 100;
+
+        List<LabelledCitation> result = literatureService.getCitations(term, limit);
+        assertNotNull(result);
+        assertThat(result, hasSize(greaterThan(1)));
+        assertThat(result, hasSize(lessThanOrEqualTo(limit)));
+
+    }
+
+}

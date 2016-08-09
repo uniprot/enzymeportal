@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.uniprotservice.transferObjects;
 
 import java.util.EnumSet;
@@ -85,10 +80,10 @@ public class LabelledCitation implements Comparable<LabelledCitation> {
         return hash;
     }
 
-
     /**
      * By default, citations are sorted by date of creation (if not available,
      * year of publication).
+     *
      * @param other
      */
     @Override
