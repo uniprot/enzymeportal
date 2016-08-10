@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
-import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 
 /**
  *
@@ -67,9 +66,9 @@ public class EnzymesConfig {
     
 
     
-    @Bean
-    public LiteratureService literatureService(){
-        return new LiteratureService();
-    }
+//    @Bean
+//    public LiteratureService literatureService(){
+//        return new LiteratureService();
+//    }
 
 }

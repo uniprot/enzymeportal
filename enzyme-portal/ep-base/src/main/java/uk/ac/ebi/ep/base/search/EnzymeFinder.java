@@ -93,14 +93,6 @@ public class EnzymeFinder extends EnzymeBase {
         uniqueDiseases = new HashSet<>();
     }
 
-//    public EnzymeFinder(EnzymePortalService service, EbeyeRestService ebeyeRestService, AccessionService accessionService) {
-//        this(service, ebeyeRestService);
-//        this.accessionService = accessionService;
-//        
-//    }
-
-
-
     public EnzymePortalService getService() {
         return service;
     }
@@ -311,6 +303,15 @@ public class EnzymeFinder extends EnzymeBase {
         return enzymeList.stream().collect(Collectors.toList());
     }
 
+    private List<UniprotEntry> findUniprotEntriesbyAccessions(List<String> accessions) {
+        Set<UniprotEntry> enzymeList = new LinkedHashSet<>();
+        List<UniprotEntry> enzymes = service.findEnzymesByAccessions(accessions);//.stream().sorted().collect(Collectors.toList());//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+        if (enzymes != null) {
+            enzymeList.addAll(computeUniqueEnzymes(enzymes));
+        }
+        return enzymeList.stream().sorted().collect(Collectors.toList());
+    }
+
     private List<UniprotEntry> useSpliterator(List<String> accessions, String keyword) {
         Set<UniprotEntry> enzymeList = new LinkedHashSet<>();
 
@@ -327,7 +328,7 @@ public class EnzymeFinder extends EnzymeBase {
 //                } else {
 //                    enzymeList.addAll(computeUniqueEnzymes(enzymes, keyword));
 //                }
-                
+
                 enzymeList.addAll(computeUniqueEnzymes(enzymes));
             }
 
@@ -438,28 +439,78 @@ public class EnzymeFinder extends EnzymeBase {
         return summaries;
     }
 
-    public SearchResults getAssociatedProteins(String ec, String searchTerm, int limit) {
+    public SearchResults getAssociatedProteinsByEc(String ec, int limit) {
+
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessions(ec, limit);
+
+        LOGGER.info("Number of Processed Accession for  EC " + ec + " :: " + accessions.size());
+        return getSearchResultsFromAccessions(accessions);
+    }
+
+    /**
+     * build a searchResult (protein entries) by querying EBI service using EC
+     * and OMIM number
+     *
+     * @param omimId OMIM number
+     * @param ec
+     * @param limit
+     * @return SearchResults (AssociatedProteins)
+     */
+    public SearchResults getAssociatedProteinsByOmimIdAndEc(String omimId, String ec, int limit) {
+
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessionsByOmimIdAndEc(omimId, ec, limit);
+
+        LOGGER.info("Number of Processed Accession for  EC " + ec + " AND OMIM " + omimId + " :=:" + accessions.size());
+        return getSearchResultsFromAccessions(accessions);
+    }
+
+    public SearchResults getAssociatedProteinsByTaxIdAndEc(String taxId, String ec, int limit) {
+
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessionsByTaxIdAndEc(taxId, ec, limit);
+
+        LOGGER.info("Number of Processed Accession for  EC " + ec + " AND TAXID " + taxId + " :=:" + accessions.size());
+        return getSearchResultsFromAccessions(accessions);
+    }
+
+    public SearchResults getAssociatedProteinsByPathwayIdAndEc(String pathwayId, String ec, int limit) {
+
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessionsByPathwayIdAndEc(pathwayId, ec, limit);
+
+        LOGGER.info("Number of Processed Accession for  EC " + ec + " AND PathwayId " + pathwayId + " :=:" + accessions.size());
+        return getSearchResultsFromAccessions(accessions);
+    }
+
+    /**
+     * build a searchResult (protein entries) by querying EBI service using EC
+     * and a keyword (FullText search)
+     *
+     * @param ec
+     * @param searchTerm the keyword
+     * @param limit
+     * @return SearchResults (AssociatedProteins)
+     */
+    public SearchResults getAssociatedProteinsByEcAndFulltextSearch(String ec, String searchTerm, int limit) {
 
         List<String> accessions = ebeyeRestService.queryForUniqueAccessions(ec, searchTerm, limit);
-        if(accessions.isEmpty()){
-          accessions = ebeyeRestService.queryForUniqueAccessions(ec, limit);  
+        if (accessions.isEmpty()) {
+            accessions = ebeyeRestService.queryForUniqueAccessions(ec, limit);
         }
 
         LOGGER.info("Number of Processed Accession for  " + ec + " " + searchTerm + " :=:" + accessions.size());
 
+        return getSearchResultsFromAccessions(accessions);
+
+    }
+
+    private SearchResults getSearchResultsFromAccessions(List<String> accessions) {
         uniprotAccessions = accessions.stream().distinct().collect(Collectors.toList());
         uniprotAccessionSet.addAll(uniprotAccessions.stream().distinct().collect(Collectors.toList()));
 
         List<String> accessionList
                 = new ArrayList<>(uniprotAccessionSet);
 
-        String keyword = HtmlUtility.cleanText(searchTerm);
-        keyword = keyword.replaceAll("&quot;", "");
-
         LOGGER.debug("Getting enzyme summaries...");
-
-        enzymeSummaryList = getEnzymeSummariesByAccessions(accessionList, keyword);
-
+        enzymeSummaryList = findUniprotEntriesbyAccessions(accessionList);
         enzymeSearchResults.setSummaryentries(enzymeSummaryList);
         enzymeSearchResults.setTotalfound(enzymeSummaryList.size());
         if (uniprotAccessionSet.size() != enzymeSummaryList.size()) {
@@ -471,7 +522,6 @@ public class EnzymeFinder extends EnzymeBase {
         LOGGER.debug("Finished search");
 
         return enzymeSearchResults;
-
     }
 
     public SearchResults getEnzymes(SearchParams searchParams) {

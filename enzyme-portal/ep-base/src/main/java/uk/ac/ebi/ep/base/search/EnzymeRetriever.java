@@ -59,14 +59,12 @@ public class EnzymeRetriever extends EnzymeBase {
 
     private final LiteratureService literatureService;
 
-
-
     public EnzymeRetriever(EnzymePortalService service, LiteratureService pmc) {
         super(service);
 
         this.literatureService = pmc;
-         rheaAdapter = new RheaWsAdapter();
-          intenzAdapter = new IntenzAdapter();
+        rheaAdapter = new RheaWsAdapter();
+        intenzAdapter = new IntenzAdapter();
 
     }
 
@@ -81,7 +79,6 @@ public class EnzymeRetriever extends EnzymeBase {
         }
         return chebiAdapter;
     }
-
 
     public IntenzAdapter getIntenzAdapter() {
         if (intenzAdapter == null) {
@@ -197,7 +194,7 @@ public class EnzymeRetriever extends EnzymeBase {
 
         EnzymeModel model = getEnzymeModel(uniprotAccession);
         try {
-            
+
             getIntenzAdapter().getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
             LOGGER.error("Error getting enzyme details from Intenz webservice", ex);
@@ -265,13 +262,11 @@ public class EnzymeRetriever extends EnzymeBase {
 
     }
 
-    public EnzymeModel getLiterature(String uniprotAccession) throws EnzymeRetrieverException {
+    public EnzymeModel getLiterature(String uniprotAccession, int limit) throws EnzymeRetrieverException {
 
-   
         EnzymeModel model = getEnzymeModel(uniprotAccession);
 
-        List<LabelledCitation> citations = literatureService.getCitations(uniprotAccession);
-
+        List<LabelledCitation> citations = literatureService.getCitationsByAccession(uniprotAccession, limit);
         if (citations != null) {
 
             model.setLiterature(new ArrayList<>(citations));
@@ -323,60 +318,59 @@ public class EnzymeRetriever extends EnzymeBase {
             throws EnzymeRetrieverException {
 
        // try {
+        List<EnzymePortalCompound> compounds = service.findCompoundsByAccession(model.getAccession());
 
-            List<EnzymePortalCompound> compounds = service.findCompoundsByAccession(model.getAccession());
-
-            CountableMolecules activators = null, inhibitors = null,
-                    cofactors = null, drugs = null, bioactive = null;
-            if (compounds != null) {
-                for (Compound compound : compounds) {
-                    // Classify compounds from the DB:
-                    switch (compound.getRole()) {
-                        case ACTIVATOR:
-                            activators = addMoleculeToGroup(activators, compound);
-                            break;
-                        case INHIBITOR:
-                            inhibitors = addMoleculeToGroup(inhibitors, compound);
-                            break;
-                        case COFACTOR:
-                            cofactors = addMoleculeToGroup(cofactors, compound);
-                            break;
-                        case DRUG:
-                            drugs = addMoleculeToGroup(drugs, compound);
-                            break;
-                        case BIOACTIVE:
-                            bioactive = addMoleculeToGroup(bioactive, compound);
-                            break;
-                    }
+        CountableMolecules activators = null, inhibitors = null,
+                cofactors = null, drugs = null, bioactive = null;
+        if (compounds != null) {
+            for (Compound compound : compounds) {
+                // Classify compounds from the DB:
+                switch (compound.getRole()) {
+                    case ACTIVATOR:
+                        activators = addMoleculeToGroup(activators, compound);
+                        break;
+                    case INHIBITOR:
+                        inhibitors = addMoleculeToGroup(inhibitors, compound);
+                        break;
+                    case COFACTOR:
+                        cofactors = addMoleculeToGroup(cofactors, compound);
+                        break;
+                    case DRUG:
+                        drugs = addMoleculeToGroup(drugs, compound);
+                        break;
+                    case BIOACTIVE:
+                        bioactive = addMoleculeToGroup(bioactive, compound);
+                        break;
                 }
             }
-            model.setMolecule(new ChemicalEntity()
-                    .withActivators(activators)
-                    .withInhibitors(inhibitors)
-                    .withCofactors(cofactors)
-                    .withDrugs(drugs)
-                    .withBioactiveLigands(bioactive));
+        }
+        model.setMolecule(new ChemicalEntity()
+                .withActivators(activators)
+                .withInhibitors(inhibitors)
+                .withCofactors(cofactors)
+                .withDrugs(drugs)
+                .withBioactiveLigands(bioactive));
 
-            LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
+        LOGGER.debug("MOLECULES before getting complete entries from ChEBI");
             //disable calls to ChEBI for now as it returns inconsistent data for cofactors sometimes.
-            //getChebiAdapter().getMoleculeCompleteEntries(model);
-            LOGGER.debug("MOLECULES before provenance");
-            List<String> prov = new LinkedList<>();
-            prov.add("ChEBI");
-            prov.add("ChEMBL");
-            // prov.add("RELEASED DATE = " + new Date());
-            prov.add("ChEBI - (Chemical Entities of Biological Interest) is a freely available dictionary of molecular entities focused on ‘small’ chemical compounds.");
-            prov.add("ChEMBL is a database of bioactive drug-like small"
-                    + " molecules, it contains 2-D structures, calculated"
-                    + " properties (e.g. logP, Molecular Weight, Lipinski"
-                    + " Parameters, etc.) and abstracted bioactivities (e.g."
-                    + " binding constants, pharmacology and ADMET data).");
-            if (model.getMolecule() != null) {
-                model.getMolecule().setProvenance(prov);
-            }
+        //getChebiAdapter().getMoleculeCompleteEntries(model);
+        LOGGER.debug("MOLECULES before provenance");
+        List<String> prov = new LinkedList<>();
+        prov.add("ChEBI");
+        prov.add("ChEMBL");
+        // prov.add("RELEASED DATE = " + new Date());
+        prov.add("ChEBI - (Chemical Entities of Biological Interest) is a freely available dictionary of molecular entities focused on ‘small’ chemical compounds.");
+        prov.add("ChEMBL is a database of bioactive drug-like small"
+                + " molecules, it contains 2-D structures, calculated"
+                + " properties (e.g. logP, Molecular Weight, Lipinski"
+                + " Parameters, etc.) and abstracted bioactivities (e.g."
+                + " binding constants, pharmacology and ADMET data).");
+        if (model.getMolecule() != null) {
+            model.getMolecule().setProvenance(prov);
+        }
         //} catch (ChebiFetchDataException ex) {
-            //throw new EnzymeRetrieverException(
-                   // "Failed to get small molecule details from Chebi", ex);
+        //throw new EnzymeRetrieverException(
+        // "Failed to get small molecule details from Chebi", ex);
         //}
 
     }
