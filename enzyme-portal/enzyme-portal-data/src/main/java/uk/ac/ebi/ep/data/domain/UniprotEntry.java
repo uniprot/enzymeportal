@@ -106,7 +106,8 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 )
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
-    @OneToMany(mappedBy = "uniprotAccession",fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<EntryToGeneMapping> entryToGeneMappingSet;
 
@@ -173,6 +174,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Fetch(FetchMode.JOIN)
     private Set<UniprotXref> uniprotXrefSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
