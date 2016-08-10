@@ -80,8 +80,8 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
 
         int totalPagesToRequest = totalPagesToRequest(requestStart, requestEnd);
 
-        //int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), totalPagesToRequest);
-        final ForkJoinPool executorService = new ForkJoinPool();
+        int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), totalPagesToRequest);
+        final ForkJoinPool executorService = new ForkJoinPool(threadPoolSize);
        // ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
         return generateUrlRequests(query, requestStart, requestEnd)
@@ -141,7 +141,7 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=_relevance&reverse=true&format=json";
         final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
         final String endpoint = ebeyeIndexProps.getProteinCentricSearchUrl();
-
+        
         return Observable.range(start, end)
                 .map(index
                         -> URI.create(String.format(ebeyeAccessionQuery, endpoint, query, resultSize,

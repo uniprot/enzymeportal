@@ -38,21 +38,74 @@ public class EbeyeRestService {
         return queryForUniqueAccessions(query, limit);
     }
 
-    public List<Protein> queryForUniqueProteins(String ec, int limit) {
+    /**
+     *
+     * @param omimId omim number
+     * @param ec ec number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
+     */
+    public List<String> queryForUniqueAccessionsByOmimIdAndEc(String omimId, String ec, int limit) {
+        Preconditions.checkArgument(omimId != null, "omimId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
-        String query = "INTENZ:" + ec;
+
+        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+
         query = UrlUtil.encode(query);
 
-        return searchForUniqueProteins(query, limit);
+        return queryForUniqueAccessions(query, limit);
     }
 
-    public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int limit) {
+    /**
+     *
+     * @param ec EC number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
+     */
+    public List<String> queryForUniqueAccessionsByEc(String ec, int limit) {
         Preconditions.checkArgument(ec != null, "ec can not be null");
-        Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
-        String query = searchTerm + " AND INTENZ:" + ec;
-        query = UrlUtil.encode(query);
-        return searchForUniqueProteins(query, limit);
 
+        String query = "INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+
+        return queryForUniqueAccessions(query, limit);
+    }
+
+    /**
+     *
+     * @param taxId taxId
+     * @param ec ec number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
+     */
+    public List<String> queryForUniqueAccessionsByTaxIdAndEc(String taxId, String ec, int limit) {
+        Preconditions.checkArgument(taxId != null, "taxId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+
+        return queryForUniqueAccessions(query, limit);
+    }
+
+    /**
+     *
+     * @param pathwayId pathwayId
+     * @param ec ec number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
+     */
+    public List<String> queryForUniqueAccessionsByPathwayIdAndEc(String pathwayId, String ec, int limit) {
+        Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "REACT:" + pathwayId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+
+        return queryForUniqueAccessions(query, limit);
     }
 
     /**
@@ -171,6 +224,56 @@ public class EbeyeRestService {
         }
 
         return uniqueProteins;
+    }
+
+    public List<Protein> queryForUniqueProteins(String ec, int limit) {
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+        String query = "INTENZ:" + ec;
+        query = UrlUtil.encode(query);
+
+        return searchForUniqueProteins(query, limit);
+    }
+
+    public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int limit) {
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+        Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
+        String query = searchTerm + " AND INTENZ:" + ec;
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
+
+    }
+
+    public List<Protein> findUniqueProteinsByOmimIdAndEc(String omimId, String ec, int limit) {
+        Preconditions.checkArgument(omimId != null, "omimId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
+
+    }
+
+    public List<Protein> findUniqueProteinsByTaxIdAndEc(String taxId, String ec, int limit) {
+        Preconditions.checkArgument(taxId != null, "taxId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
+
+    }
+
+    public List<Protein> findUniqueProteinsByPathwayIdAndEc(String pathwayId, String ec, int limit) {
+        Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "REACT:" + pathwayId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
+
     }
 
 }

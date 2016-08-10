@@ -65,8 +65,49 @@ public class EnzymeCentricService {
     }
 
     private EBISearchResult getEbiSearchResult(String url) {
+
+        logger.info("URL sent to EBI Service " + url);
+
         EBISearchResult results = restTemplate.getForObject(url.trim(), EBISearchResult.class);
         return results;
     }
 
+    //http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=OMIM:114500
+    public EBISearchResult findEbiSearchResultsByOmimId(String omimId, int startPage, int pageSize, String facets, int facetCount) {
+        Preconditions.checkArgument(omimId != null, "'omimId' must not be null");
+
+        String query = "OMIM:" + omimId;
+
+        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+
+    }
+
+    public EBISearchResult findEbiSearchResultsByPathwayId(String pathwayId, int startPage, int pageSize, String facets, int facetCount) {
+        Preconditions.checkArgument(pathwayId != null, "'pathwayId' must not be null");
+
+        String query = "REACT:" + pathwayId;
+
+        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+
+    }
+
+    //http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=INTENZ:1.1.1.1
+    public EBISearchResult findEbiSearchResultsByEC(String ec, int startPage, int pageSize, String facets, int facetCount) {
+        Preconditions.checkArgument(ec != null, "'ec' must not be null");
+
+        String query = "INTENZ:" + ec;
+
+        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+
+    }
+
+    //http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=TAXONOMY:9606
+    public EBISearchResult findEbiSearchResultsByTaxId(String taxId, int startPage, int pageSize, String facets, int facetCount) {
+        Preconditions.checkArgument(taxId != null, "'taxId' must not be null");
+
+        String query = "TAXONOMY:" + taxId;
+
+        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+
+    }
 }
