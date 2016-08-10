@@ -33,35 +33,35 @@ public class LiteratureServiceIT {
     private LiteratureService literatureService;
 
     /**
-     * Test of getEuropePmcCitationsByKeyword method, of class
-     * LiteratureService.
+     * Test of getCitationsByAccession method, of class LiteratureService.
      */
     @Test
-    public void testGetEuropePmcCitationsByKeyword() {
-        String keyword = "sildenafil";
-        int expectedResultSize = 15;
+    public void testGetCitationsByAccession() {
 
-        EuropePMC result = literatureService.getEuropePmcCitationsByKeyword(keyword);
+        String accession = "P42346";
+        int limit = 20;
 
-        assertNotNull(result);
-        assertThat(result.getResultList().getResult(), hasSize(greaterThan(1)));
-        assertThat(result.getResultList().getResult(), hasSize(greaterThanOrEqualTo(expectedResultSize)));
-
-    }
-
-    /**
-     * Test of getCitations method, of class LiteratureService.
-     */
-    @Test
-    public void testGetCitations() {
-        String term = "P42346";
-        int limit = 100;
-
-        List<LabelledCitation> result = literatureService.getCitations(term, limit);
+        List<LabelledCitation> result = literatureService.getCitationsByAccession(accession, limit);
         assertNotNull(result);
         assertThat(result, hasSize(greaterThan(1)));
         assertThat(result, hasSize(lessThanOrEqualTo(limit)));
 
+    }
+
+    /**
+     * Test of getCitationsBySearchTerm method, of class LiteratureService.
+     */
+    @Test
+    public void testGetCitationsBySearchTerm() {
+        String term = "cGMP-specific 3',5'-cyclic phosphodiesterase";
+
+        int estimatedResultSize = 15;
+
+        EuropePMC result = literatureService.getCitationsBySearchTerm(term);
+
+        assertNotNull(result);
+        assertThat(result.getResultList().getResult(), hasSize(greaterThan(1)));
+        assertThat(result.getResultList().getResult(), hasSize(greaterThanOrEqualTo(estimatedResultSize)));
     }
 
 }

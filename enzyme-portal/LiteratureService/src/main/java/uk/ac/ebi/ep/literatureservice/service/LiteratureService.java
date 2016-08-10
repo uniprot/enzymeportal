@@ -26,40 +26,42 @@ public class LiteratureService {
         this.pmcRestService = pmcRestService;
     }
 
-    private Optional<EuropePMC> getEuropePmcCitationsByAccession(String accession, int limit) {
+    private Optional<EuropePMC> findCitationsByAccession(String accession, int limit) {
 
         return pmcRestService.findPublicationsByAccession(accession, limit);
 
     }
 
-    private Optional<EuropePMC> citationsByKeyword(String keyword) {
+    private Optional<EuropePMC> findCitationsByKeyword(String keyword) {
 
         return pmcRestService.findPublicationsByKeyword(keyword);
     }
 
-    public EuropePMC getEuropePmcCitationsByKeyword(String keyword) {
-
-        return citationsByKeyword(keyword).orElse(new EuropePMC());
+    /**
+     * searches EUPMC service using a keyword (term)
+     *
+     * @param term could be (enzyme|protein name)
+     * @return EuropePMC
+     */
+    public EuropePMC getCitationsBySearchTerm(String term) {
+        return findCitationsByKeyword(term).orElse(new EuropePMC());
 
     }
 
-    /**
-     * This method assumes that the term is an accession and makes a search to
-     * the Pubmed service, if no result if found, term is assumed to be a
-     * keyword.
-     *
-     *
-     * @param term could be accession or keyword
-     * @param limit max number of citations to find
-     * @return List of LabelledCitation
-     */
-    public List<LabelledCitation> getCitations(String term, int limit) {
+    public List<LabelledCitation> getCitationsByAccession(String accession, int limit) {
 
-        EuropePMC pmc = getEuropePmcCitationsByAccession(term, limit).orElse(getEuropePmcCitationsByKeyword(term));
+        EuropePMC pmc = findCitationsByAccession(accession, limit).orElse(new EuropePMC());
+        return getLabelledCitations(pmc, limit);
 
-        List<LabelledCitation> citations = computeLabelledCitation(pmc);
-        return citations.stream().distinct().sorted(SORT_BY_DATE_ASC).limit(limit).collect(Collectors.toList());
+    }
 
+    private List<LabelledCitation> getLabelledCitations(EuropePMC pmc, int limit) {
+        return computeLabelledCitation(pmc)
+                .stream()
+                .distinct()
+                .sorted(SORT_BY_DATE_ASC)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     private List<LabelledCitation> computeLabelledCitation(EuropePMC pmc) {
@@ -72,6 +74,7 @@ public class LiteratureService {
                 if (!citation.getLabels().isEmpty()) {
                     citations.get(citations.indexOf(citation))
                             .addLabels(labels);
+
                 }
             } else {
                 if (!citation.getLabels().isEmpty()) {
