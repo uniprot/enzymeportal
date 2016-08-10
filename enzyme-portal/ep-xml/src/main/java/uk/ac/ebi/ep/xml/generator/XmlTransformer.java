@@ -207,4 +207,16 @@ public class XmlTransformer {
         }
     }
 
+    protected void addPathwaysXrefs(UniprotEntry uniprotEntry, Set<Ref> refs) {
+
+        if (!uniprotEntry.getEnzymePortalPathwaysSet().isEmpty()) {
+            uniprotEntry.getEnzymePortalPathwaysSet()
+                    .stream()
+                    .map(pathway -> new Ref(pathway.getPathwayId(), DatabaseName.REACTOME.getDbName()))
+                    .forEach(xref -> {
+                        refs.add(xref);
+                    });
+        }
+    }
+
 }
