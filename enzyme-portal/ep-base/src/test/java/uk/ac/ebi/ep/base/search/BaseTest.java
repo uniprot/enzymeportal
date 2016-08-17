@@ -35,7 +35,7 @@ import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 public abstract class BaseTest {
 
     @Autowired
-    protected EnzymePortalService service;
+    protected EnzymePortalService enzymePortalService;
     @Autowired
     protected EbeyeRestService ebeyeService;
 
@@ -47,12 +47,16 @@ public abstract class BaseTest {
 
     @Autowired
     protected DataSource dataSource;
-
+    
     protected EnzymeRetriever enzymeRetriever;
+    protected EnzymeFinder enzymeFinder;
 
     @Before
     public void setUp() {
-        enzymeRetriever = new EnzymeRetriever(service, literatureService);
+        enzymeRetriever = new EnzymeRetriever(enzymePortalService, literatureService);
+        enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeService);
+     
+        
 
     }
 
