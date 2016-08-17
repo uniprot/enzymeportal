@@ -65,7 +65,7 @@ public class LiteratureService {
     }
 
     private List<LabelledCitation> computeLabelledCitation(EuropePMC pmc) {
-        List<LabelledCitation> citations = new LinkedList<>();
+        List<LabelledCitation> citations = new LinkedList<>();   
         pmc.getResultList().getResult().stream().forEach(result -> {
             EnumSet<CitationLabel> labels = getLabels(result);
             LabelledCitation citation = new LabelledCitation(result, labels);
