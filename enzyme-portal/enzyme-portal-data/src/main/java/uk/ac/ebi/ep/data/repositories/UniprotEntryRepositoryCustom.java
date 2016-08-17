@@ -31,6 +31,7 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
     List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
 
+    @Deprecated
     List<Taxonomy> getCountForOrganisms(List<Long> taxids);
 
     List<String> findAccessionsByTaxId(Long taxId);

@@ -42,6 +42,7 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
+import uk.ac.ebi.ep.data.repositories.EnzymesToTaxonomyRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
@@ -86,6 +87,9 @@ public class EnzymePortalService {
     private EnzymeCatalyticActivityRepository catalyticActivityRepository;
     @Autowired
     private ProjectionFactory projectionFactory;
+    
+    @Autowired
+    private EnzymesToTaxonomyRepository enzymesToTaxonomyRepository;
 
     private static final int ORACLE_IN_CLAUSE_LIMIT = 1000;
     private static final int QUERY_LIMIT = 999;
@@ -278,7 +282,7 @@ public class EnzymePortalService {
 
     @Transactional(readOnly = true)
     public List<Taxonomy> getCountForOrganisms(List<Long> taxids) {
-        return uniprotEntryRepository.getCountForOrganisms(taxids);
+        return enzymesToTaxonomyRepository.getCountForOrganisms(taxids);
     }
 
     public List<UniprotEntry> findEnzymesByTaxId(Long taxId) {

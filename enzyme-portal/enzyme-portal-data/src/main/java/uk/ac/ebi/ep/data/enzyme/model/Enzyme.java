@@ -55,7 +55,7 @@ public class Enzyme
      */
     public List<EnzymeHierarchy> getEchierarchies() {
         if (echierarchies == null) {
-            echierarchies = new ArrayList<EnzymeHierarchy>();
+            echierarchies = new ArrayList<>();
         }
         return this.echierarchies;
     }
@@ -84,7 +84,7 @@ public class Enzyme
      */
     public List<String> getEnzymetype() {
         if (enzymetype == null) {
-            enzymetype = new ArrayList<String>();
+            enzymetype = new ArrayList<>();
         }
         return this.enzymetype;
     }
@@ -134,10 +134,11 @@ public class Enzyme
      * {@link String }
      * 
      * 
+     * @return 
      */
     public List<String> getProvenance() {
         if (provenance == null) {
-            provenance = new ArrayList<String>();
+            provenance = new ArrayList<>();
         }
         return this.provenance;
     }
