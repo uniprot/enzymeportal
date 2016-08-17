@@ -101,7 +101,7 @@ public class EbeyeRestService {
         Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "REACT:" + pathwayId + " AND INTENZ:" + ec;
+        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
 
         query = UrlUtil.encode(query);
 
@@ -157,7 +157,7 @@ public class EbeyeRestService {
                 .single();
 
         stopWatch.stop();
-        logger.error("Executing query:{}, took: {}", query, stopWatch.getTotalTimeSeconds() + " sec");
+        logger.debug("Executing query:{}, took: {}", query, stopWatch.getTotalTimeSeconds() + " sec");
 
         return uniqueProteins;
     }
@@ -269,7 +269,7 @@ public class EbeyeRestService {
         Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        String query = "REACT:" + pathwayId + " AND INTENZ:" + ec;
+        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
 
         query = UrlUtil.encode(query);
         return searchForUniqueProteins(query, limit);

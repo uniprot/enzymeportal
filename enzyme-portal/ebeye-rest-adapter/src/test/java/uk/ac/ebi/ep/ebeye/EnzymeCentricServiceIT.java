@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.ebeye;
 
 import java.util.ArrayList;
@@ -55,5 +54,113 @@ public class EnzymeCentricServiceIT {
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
         assertThat(facetValue, hasSize(facetCount + 1));
 
+    }
+
+    /**
+     * Test of findEbiSearchResultsByOmimId method, of class
+     * EnzymeCentricService.
+     */
+    @Test
+    public void testFindEbiSearchResultsByOmimId() {
+
+        String omimId = "615522";
+        int startPage = 0;
+        int pageSize = 10;
+        String filter = "TAXONOMY:9606";
+        List<String> filters = new ArrayList<>();
+        filters.add(filter);
+        String facets = filters.stream().collect(Collectors.joining(","));
+        int facetCount = 5;
+
+        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facets, facetCount);
+        int hitcount = result.getHitCount();
+        List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
+
+        assertNotNull(result);
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(2)));
+        assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
+        assertThat(facetValue, hasSize(facetCount));
+    }
+
+    /**
+     * Test of findEbiSearchResultsByPathwayId method, of class
+     * EnzymeCentricService.
+     */
+    @Test
+    public void testFindEbiSearchResultsByPathwayId() {
+
+        String pathwayId = "R-GGA-189451";
+        int startPage = 0;
+        int pageSize = 10;
+        String filter = "TAXONOMY:9606";
+        List<String> filters = new ArrayList<>();
+        filters.add(filter);
+        String facets = filters.stream().collect(Collectors.joining(","));
+        int facetCount = 5;
+
+        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facets, facetCount);
+        int hitcount = result.getHitCount();
+        List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
+       
+
+        assertNotNull(result);
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(2)));
+        assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
+        assertThat(facetValue, hasSize(facetCount + 1));
+    }
+
+    /**
+     * Test of findEbiSearchResultsByEC method, of class EnzymeCentricService.
+     */
+    @Test
+    public void testFindEbiSearchResultsByEC() {
+
+        String ec = "6.1.1.1";
+        int startPage = 0;
+        int pageSize = 10;
+        String filter = "TAXONOMY:9606";
+        List<String> filters = new ArrayList<>();
+        filters.add(filter);
+        String facets = filters.stream().collect(Collectors.joining(","));
+        int facetCount = 5;
+
+        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facets, facetCount);
+        int hitcount = result.getHitCount();
+        List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
+
+        assertNotNull(result);
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
+        assertThat(result.getEntries(), hasSize(1));
+        assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
+        assertThat(facetValue, hasSize(facetCount+1));
+    }
+
+    /**
+     * Test of findEbiSearchResultsByTaxId method, of class
+     * EnzymeCentricService.
+     */
+    @Test
+    public void testFindEbiSearchResultsByTaxId() {
+
+        String taxId = "9606";
+        int startPage = 0;
+        int pageSize = 10;
+        String filter = "TAXONOMY:9606";
+        List<String> filters = new ArrayList<>();
+        filters.add(filter);
+        String facets = filters.stream().collect(Collectors.joining(","));
+        int facetCount = 5;
+
+        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facets, facetCount);
+        int hitcount = result.getHitCount();
+        List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
+
+        assertNotNull(result);
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
+        assertThat(result.getEntries(), hasSize(pageSize));
+        assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
+        assertThat(facetValue, hasSize(facetCount));
     }
 }

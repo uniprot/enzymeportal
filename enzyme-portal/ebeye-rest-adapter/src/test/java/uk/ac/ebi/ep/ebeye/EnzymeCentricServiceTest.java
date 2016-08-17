@@ -259,4 +259,172 @@ public class EnzymeCentricServiceTest {
         }
     }
 
+    /**
+     * Test of getSearchResult method, of class EnzymeCentricService.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testGetSearchResult() throws IOException {
+        int limit = 800;
+        int startPage = 0;
+        int pageSize = 10;
+        int facetCount = FACET_COUNT;
+        String facetsList = "";
+        String query = "query";
+
+        List<Entry> entries = createEntries(limit, entryCreator);
+        List<Facet> facets = createFacets(facetCount, facetCreator);
+
+        String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
+
+        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+
+        mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
+
+        EBISearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+
+        assertNotNull(searchResult);
+        assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
+        assertThat(searchResult.getEntries(), hasSize(limit));
+        assertThat(searchResult.getFacets(), hasSize(facetCount));
+        syncRestServerMock.verify();
+    }
+
+    /**
+     * Test of findEbiSearchResultsByOmimId method, of class
+     * EnzymeCentricService.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testFindEbiSearchResultsByOmimId() throws IOException {
+
+        int limit = 800;
+        int startPage = 0;
+        int pageSize = 10;
+        int facetCount = FACET_COUNT;
+        String facetsList = "";
+        String omimId = "12345";
+        String query = "OMIM:" + omimId;
+
+        List<Entry> entries = createEntries(limit, entryCreator);
+        List<Facet> facets = createFacets(facetCount, facetCreator);
+
+        String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
+
+        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+
+        mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
+
+        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facetsList, facetCount);
+
+        assertNotNull(searchResult);
+        assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
+        assertThat(searchResult.getEntries(), hasSize(limit));
+        assertThat(searchResult.getFacets(), hasSize(facetCount));
+        syncRestServerMock.verify();
+    }
+
+    /**
+     * Test of findEbiSearchResultsByPathwayId method, of class
+     * EnzymeCentricService.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testFindEbiSearchResultsByPathwayId() throws IOException {
+        int limit = 800;
+        int startPage = 0;
+        int pageSize = 10;
+        int facetCount = FACET_COUNT;
+        String facetsList = "";
+        String pathwayId = "R-GGA-189451";
+        String query = "REACTOME:" + pathwayId;
+
+        List<Entry> entries = createEntries(limit, entryCreator);
+        List<Facet> facets = createFacets(facetCount, facetCreator);
+
+        String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
+
+        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+
+        mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
+
+        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facetsList, facetCount);
+
+        assertNotNull(searchResult);
+        assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
+        assertThat(searchResult.getEntries(), hasSize(limit));
+        assertThat(searchResult.getFacets(), hasSize(facetCount));
+        syncRestServerMock.verify();
+    }
+
+    /**
+     * Test of findEbiSearchResultsByEC method, of class EnzymeCentricService.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testFindEbiSearchResultsByEC() throws IOException {
+        int limit = 800;
+        int startPage = 0;
+        int pageSize = 10;
+        int facetCount = FACET_COUNT;
+        String facetsList = "";
+        String ec = "1.1.1.1";
+        String query = "INTENZ:" + ec;
+
+        List<Entry> entries = createEntries(limit, entryCreator);
+        List<Facet> facets = createFacets(facetCount, facetCreator);
+
+        String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
+
+        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+
+        mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
+
+        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facetsList, facetCount);
+
+        assertNotNull(searchResult);
+        assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
+        assertThat(searchResult.getEntries(), hasSize(limit));
+        assertThat(searchResult.getFacets(), hasSize(facetCount));
+        syncRestServerMock.verify();
+    }
+
+    /**
+     * Test of findEbiSearchResultsByTaxId method, of class
+     * EnzymeCentricService.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testFindEbiSearchResultsByTaxId() throws IOException {
+        int limit = 800;
+        int startPage = 0;
+        int pageSize = 10;
+        int facetCount = FACET_COUNT;
+        String facetsList = "";
+        String taxId = "9606";
+        String query = "TAXONOMY:" + taxId;
+
+        List<Entry> entries = createEntries(limit, entryCreator);
+        List<Facet> facets = createFacets(facetCount, facetCreator);
+
+        String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
+
+        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+
+        mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
+
+        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facetsList, facetCount);
+
+        assertNotNull(searchResult);
+        assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
+        assertThat(searchResult.getEntries(), hasSize(limit));
+        assertThat(searchResult.getFacets(), hasSize(facetCount));
+        syncRestServerMock.verify();
+    }
+
 }

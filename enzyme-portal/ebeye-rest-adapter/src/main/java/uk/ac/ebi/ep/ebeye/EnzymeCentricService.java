@@ -81,11 +81,11 @@ public class EnzymeCentricService {
         return getSearchResult(query, startPage, pageSize, facets, facetCount);
 
     }
-
+//http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=REACTOME:R-GGA-189451
     public EBISearchResult findEbiSearchResultsByPathwayId(String pathwayId, int startPage, int pageSize, String facets, int facetCount) {
         Preconditions.checkArgument(pathwayId != null, "'pathwayId' must not be null");
 
-        String query = "REACT:" + pathwayId;
+        String query = "REACTOME:" + pathwayId;
 
         return getSearchResult(query, startPage, pageSize, facets, facetCount);
 
