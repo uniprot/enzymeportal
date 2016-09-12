@@ -373,7 +373,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     public void testFindPathways() {
         LOGGER.info("findPathways");
 
-        int expResult = 8;
+        int expResult = 10;
         List<EnzymePortalPathways> result = enzymePortalService.findPathways();
         assertEquals(expResult, result.size());
 
