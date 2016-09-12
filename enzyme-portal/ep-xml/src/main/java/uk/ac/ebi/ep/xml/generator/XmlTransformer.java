@@ -212,11 +212,22 @@ public class XmlTransformer {
         if (!uniprotEntry.getEnzymePortalPathwaysSet().isEmpty()) {
             uniprotEntry.getEnzymePortalPathwaysSet()
                     .stream()
-                    .map(pathway -> new Ref(pathway.getPathwayId(), DatabaseName.REACTOME.getDbName()))
+                    .map(pathway -> new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()))
                     .forEach(xref -> {
                         refs.add(xref);
                     });
         }
+    }
+
+    private static final String REACTOME_PATHWAY_ID_REGEX = "^R-.*-.*";
+
+    private String parseReactomePathwayId(String reactomePathwayId) {
+        if (reactomePathwayId.matches(REACTOME_PATHWAY_ID_REGEX)) {
+            String[] sections = reactomePathwayId.split("-");
+            reactomePathwayId = sections[0] + "-" + sections[2];
+        }
+
+        return reactomePathwayId;
     }
 
 }
