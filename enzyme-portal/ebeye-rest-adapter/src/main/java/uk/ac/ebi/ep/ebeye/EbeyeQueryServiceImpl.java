@@ -138,7 +138,8 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
      * service
      */
     private Observable<URI> generateUrlRequests(String query, int start, int end) {
-        final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=_relevance&reverse=true&format=json";
+       // final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=_relevance&reverse=true&format=json";
+        final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=status&reverse=true&format=json";
         final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
         final String endpoint = ebeyeIndexProps.getProteinCentricSearchUrl();
         

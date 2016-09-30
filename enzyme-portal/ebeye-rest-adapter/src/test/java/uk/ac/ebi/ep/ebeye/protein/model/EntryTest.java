@@ -36,7 +36,7 @@ public class EntryTest {
         String uniprotName = "ABC_HUMAN";
         String source = "enzymeportal";
 
-        instance = new Entry(acc, uniprotName,source,fields);
+        instance = new Entry(acc, uniprotName, source, fields);
         instance.setTitle("cGMP-specific 3',5'-cyclic phosphodiesterase");
         instance.set(name, fields);
         instance.setFields(fields);
@@ -88,14 +88,20 @@ public class EntryTest {
         assertEquals(expResult, result);
     }
 
-
     /**
      * Test of compareTo method, of class Entry.
      */
     @Test
     public void testCompareTo() {
         LOGGER.info("compareTo");
-        Entry obj = new Entry("O76074", "ABC_HUMAN","ENZYMEPORTAL");
+        List<String> fieldNames = new ArrayList<>();
+        fieldNames.add(name);
+        List<String> status = new ArrayList<>();
+        status.add("reviewed");
+        Fields fields = new Fields();
+        fields.setName(fieldNames);
+        fields.setStatus(status);
+        Entry obj = new Entry("O76074", "ABC_HUMAN", "ENZYMEPORTAL", fields);
 
         int expResult = 0;
         int result = instance.compareTo(obj);

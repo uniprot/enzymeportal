@@ -38,7 +38,7 @@ public class EbeyeQueryServiceImplTest {
     private static final String SERVER_URL = "http://www.myserver.com/ebeye";
     private static final int MAX_ENTRIES_IN_RESPONSE = 10;
     private static final int CHUNK_SIZE = 10;
-    private static final String EBEYE_REQUEST = SERVER_URL + "?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=_relevance&reverse=true&format=json";
+    private static final String EBEYE_REQUEST = SERVER_URL + "?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=status&reverse=true&format=json";
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

@@ -70,7 +70,7 @@ public class EnzymeCentricServiceIT {
         List<String> filters = new ArrayList<>();
         filters.add(filter);
         String facets = filters.stream().collect(Collectors.joining(","));
-        int facetCount = 5;
+        int facetCount = 6;
 
         EBISearchResult result = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
@@ -80,7 +80,7 @@ public class EnzymeCentricServiceIT {
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(2)));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
-        assertThat(facetValue, hasSize(facetCount));
+        assertThat(facetValue, hasSize(greaterThanOrEqualTo(facetCount)));
     }
 
     /**
@@ -90,7 +90,7 @@ public class EnzymeCentricServiceIT {
     @Test
     public void testFindEbiSearchResultsByPathwayId() {
 
-        String pathwayId = "R-GGA-189451";
+        String pathwayId = "R-189451";
         int startPage = 0;
         int pageSize = 10;
         String filter = "TAXONOMY:9606";
@@ -106,7 +106,7 @@ public class EnzymeCentricServiceIT {
 
         assertNotNull(result);
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
-        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(2)));
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(9)));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
         assertThat(facetValue, hasSize(facetCount + 1));
     }

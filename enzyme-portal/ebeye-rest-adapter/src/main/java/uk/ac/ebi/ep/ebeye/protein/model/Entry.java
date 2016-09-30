@@ -41,10 +41,6 @@ public final class Entry extends ProteinView implements Serializable, Comparable
     @JsonProperty("fields")
     private Fields fields;
 
-//    private String title;
-//    private List<String> scientificName = new ArrayList<>();
-//    protected Protein protein;
-    //private String ec;
     @JsonIgnore
     private final Map<String, Fields> fieldsMap = new HashMap<>();
 
@@ -128,7 +124,7 @@ public final class Entry extends ProteinView implements Serializable, Comparable
         String name = fields.getName().stream().findFirst().orElse("");
         String scienceName = getScientificName().stream().findFirst().orElse("");
         String status = fields.getStatus().stream().findFirst().orElse("");
-      
+
         return new Protein(getUniprotAccession(), name, scienceName, status);
     }
 
@@ -139,14 +135,20 @@ public final class Entry extends ProteinView implements Serializable, Comparable
 
     @Override
     public String toString() {
-        return "Entry{" + "uniprotAccession=" + uniprotAccession + ", uniprotName=" + uniprotName +", Title="+getTitle() + ", source=" + source + '}';
+        return "Entry{" + "uniprotAccession=" + uniprotAccession + ", uniprotName=" + uniprotName + ", Title=" + getTitle() + ", source=" + source + '}';
     }
 
     @Override
     public int compareTo(Entry obj) {
-        int compare = obj.getUniprotName().compareToIgnoreCase(this.getUniprotName());
+//        int compare = obj.getUniprotName().compareToIgnoreCase(this.getUniprotName());
+//
+//        return compare == 0 ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare;
+//        
 
-        return compare == 0 ? obj.getUniprotName().compareToIgnoreCase(this.getUniprotName()) : compare;
+        int compare = obj.getFields().getStatus().stream().findFirst().orElse("").compareToIgnoreCase(this.getFields().getStatus().stream().findFirst().orElse(""));
+
+        return compare == 0 ? obj.getFields().getStatus().stream().findFirst().orElse("").compareToIgnoreCase(this.getFields().getStatus().stream().findFirst().orElse("")) : compare;
+
     }
 
     public Fields get(String name) {
