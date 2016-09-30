@@ -12,6 +12,7 @@ import java.util.Optional;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -53,7 +54,8 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
     @Column(name = "EC_NUMBER")
     private String ecNumber;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne
+   // @ManyToOne
+     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     public EnzymePortalEcNumbers() {

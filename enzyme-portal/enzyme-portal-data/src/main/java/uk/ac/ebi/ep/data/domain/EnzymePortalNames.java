@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -52,7 +53,7 @@ public class EnzymePortalNames implements java.io.Serializable {
     @Column(name = "ENZYME_NAME_ID")
     private BigDecimal enzymeNameId;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     public EnzymePortalNames() {

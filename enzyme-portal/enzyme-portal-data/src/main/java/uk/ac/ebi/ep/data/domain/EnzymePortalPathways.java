@@ -15,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,6 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalPathways.findByStatus", query = "SELECT e FROM EnzymePortalPathways e WHERE e.status = :status"),
     @NamedQuery(name = "EnzymePortalPathways.findBySpecies", query = "SELECT e FROM EnzymePortalPathways e WHERE e.species = :species")})
 public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePortalPathways> {
+    @Size(max = 15)
+    @Column(name = "PATHWAY_GROUP_ID")
+    private String pathwayGroupId;
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -134,17 +138,14 @@ public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePor
             return false;
         }
         final EnzymePortalPathways other = (EnzymePortalPathways) obj;
-        if (!Objects.equals(this.pathwayName, other.pathwayName)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.pathwayName, other.pathwayName);
     }
 
 
 
     @Override
     public String toString() {
-        return "EnzymePortalPathways{" + "pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species +  '}';
+        return "EnzymePortalPathways{" + "pathwayGroupId=" + pathwayGroupId + ", pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species +  '}';
     }
 
 
@@ -152,6 +153,14 @@ public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePor
     @Override
     public int compareTo(EnzymePortalPathways o) {
      return this.pathwayName.compareToIgnoreCase(o.getPathwayName());
+    }
+
+    public String getPathwayGroupId() {
+        return pathwayGroupId;
+    }
+
+    public void setPathwayGroupId(String pathwayGroupId) {
+        this.pathwayGroupId = pathwayGroupId;
     }
 
    

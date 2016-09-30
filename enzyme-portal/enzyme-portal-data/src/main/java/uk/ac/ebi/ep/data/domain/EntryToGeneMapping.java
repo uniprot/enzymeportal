@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EntryToGeneMapping.findByGeneName", query = "SELECT e FROM EntryToGeneMapping e WHERE e.geneName = :geneName"),
     @NamedQuery(name = "EntryToGeneMapping.findByUniprotGeneId", query = "SELECT e FROM EntryToGeneMapping e WHERE e.uniprotGeneId = :uniprotGeneId")})
 public class EntryToGeneMapping implements Serializable {
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -46,7 +48,8 @@ public class EntryToGeneMapping implements Serializable {
     @Column(name = "UNIPROT_GENE_ID")
     private BigInteger uniprotGeneId;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne
+    //@ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     public EntryToGeneMapping() {
@@ -112,5 +115,5 @@ public class EntryToGeneMapping implements Serializable {
     public String toString() {
         return "uk.ac.ebi.ep.data.domain.EntryToGeneMapping[ geneInternalId=" + geneInternalId + " ]";
     }
-    
+
 }
