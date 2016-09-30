@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzymeservices</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <description>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.1.2</version>
+            <version>1.1.3-SNAPSHOT</version>
         </dependency>
 
       
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>uk.ac.ebi.chebi.webapps.chebiWS.client</groupId>
             <artifactId>chebiWS-client</artifactId>
-            <version>2.0</version>
+            <version>2.2.2</version>
         </dependency>
  
         <dependency>
