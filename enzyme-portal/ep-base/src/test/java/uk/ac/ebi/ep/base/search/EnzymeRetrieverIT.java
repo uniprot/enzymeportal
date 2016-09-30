@@ -21,7 +21,7 @@ import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
  */
 public class EnzymeRetrieverIT extends BaseTest {
 
-    private static final String uniprotAccession = "Q07973";
+    private static final String uniprotAccession ="Q07973";
 
     /**
      * Test of getChebiAdapter method, of class EnzymeRetriever.

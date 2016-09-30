@@ -59,7 +59,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzymeservices</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency> 
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>EnzymePortalTestKit</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
