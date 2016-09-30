@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.functions;
 
 import java.text.MessageFormat;
@@ -160,20 +156,34 @@ public final class Functions {
         return text;
     }
 
-    /**split with = and - to return only the search term
-     * 
-     * @param text of this format searchparams.text=cathepsin-1.1.1.1 for example
+    /**
+     * split with = and - to return only the search term
+     *
+     * @param text of this format searchparams.text=cathepsin-1.1.1.1 for
+     * example
      * @return index[1] - cathepsin
      */
     public static String splitAndGetValue(String text) {
         String result = "";
-        String data[] = text.split("=");
+        String data[] = text.split("searchKey=");
 
         if (data[1] != null) {
-           String keyword[] = data[1].split("-");
-           result =keyword[0];
+            String keyword[] = data[1].split("-");
+            result = keyword[0];
         }
         return result;
+    }
+
+    /**
+     * 
+     * @param text text with hyphen e.g human-1.1.1.1
+     * @return the text before the hyphen e.g human
+     */
+    public static String splitHyphen(String text) {
+
+        String data[] = text.split("-");
+
+        return data[0];
     }
 
     /**

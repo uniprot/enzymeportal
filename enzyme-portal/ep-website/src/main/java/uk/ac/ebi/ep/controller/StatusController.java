@@ -6,17 +6,17 @@
 package uk.ac.ebi.ep.controller;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import static uk.ac.ebi.ep.controller.AbstractController.LOGGER;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 
 /**
@@ -25,6 +25,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 @Controller
 public class StatusController extends AbstractController {
+ private static final Logger logger = Logger.getLogger(StatusController.class);
 
     private static final String STATUS = "status";
     private static final String STAT = "stat";
@@ -33,15 +34,13 @@ public class StatusController extends AbstractController {
     public String formattedStatCheck(Model model, HttpServletRequest request, RedirectAttributes attributes) {
 
         String status = "UP";
-        long startTime = System.nanoTime();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
         String accession = "O76074";
         UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
-
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.info("Status Check took :  (" + elapsedtime + " sec)");
+        stopWatch.stop();
+        logger.info("Status Check took :  (" + stopWatch.getTotalTimeSeconds() + " sec)");
         if (entry == null) {
             status = "DOWN";
         }
@@ -56,15 +55,14 @@ public class StatusController extends AbstractController {
     public String statusCheck(Model model, HttpServletRequest request, RedirectAttributes attributes) {
 
         String status = "UP";
-        long startTime = System.nanoTime();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
         String accession = "O76074";
         UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
 
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.info("Status Check took :  (" + elapsedtime + " sec)");
+        stopWatch.stop();
+        logger.info("Status Check took :  (" + stopWatch.getTotalTimeSeconds() + " sec)");
         if (entry == null) {
             status = "DOWN";
         }
@@ -80,15 +78,14 @@ public class StatusController extends AbstractController {
     public String statusCheckJson(Model model, HttpServletRequest request, RedirectAttributes attributes) {
 
         String status = "UP";
-        long startTime = System.nanoTime();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
         String accession = "O76074";
         UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
 
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.info("Status Check .json took :  (" + elapsedtime + " sec)");
+        stopWatch.stop();
+        logger.info("Status Check .json took :  (" + stopWatch.getTotalTimeSeconds() + " sec)");
 
         if (entry == null) {
             status = "DOWN";
@@ -105,15 +102,13 @@ public class StatusController extends AbstractController {
             throws IOException {
 
         String status = "UP";
-        long startTime = System.nanoTime();
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
         String accession = "O76074";
         UniprotEntry entry = enzymePortalService.findByUniprotAccession(accession);
-
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-        long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.info("Status Check .txt took :  (" + elapsedtime + " sec)");
+        stopWatch.stop();
+        logger.info("Status Check .txt took :  (" + stopWatch.getTotalTimeSeconds() + " sec)");
 
         if (entry == null) {
             status = "DOWN";

@@ -30,7 +30,7 @@
                                     <c:set var="count" value="${count + 1}"/>
 
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/search-pathways?entryid=${data.pathwayId}&entryname=${data.pathwayName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.pathwayName}&searchparams.start=0&searchparams.text=${data.pathwayName}">${data.pathwayName}</a>
+                                           <a href="${pageContext.request.contextPath}/enzymes?searchKey=${data.pathwayGroupId}&searchparams.type=KEYWORD&searchparams.previoustext=${data.pathwayName}&searchparams.start=0&searchparams.text=${data.pathwayName}&keywordType=PATHWAYS&searchId=${data.pathwayGroupId}">${data.pathwayName}</a>
                                     </li>
                                 </c:if>
                             </c:when>
@@ -39,7 +39,7 @@
                                     <c:set var="count" value="${count + 1}"/>
 
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/search-disease?entryid=${data.omimNumber}&entryname=${data.diseaseName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}">${data.diseaseName}</a>
+                                        <a href="${pageContext.request.contextPath}/enzymes?searchKey=${data.omimNumber}&searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}&keywordType=DISEASE&searchId=${data.omimNumber}">${data.diseaseName}</a>
                                     </li>
                                 </c:if>
                             </c:when>

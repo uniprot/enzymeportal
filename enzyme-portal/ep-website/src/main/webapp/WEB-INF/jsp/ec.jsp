@@ -154,7 +154,7 @@
                                        
                                         <div class="result"  style="display: table-row;vertical-align: top;padding-left: 1em;padding-top: 1ex; min-height: 10px">
                                           
-                                            <a  href="${pageContext.request.contextPath}/search-enzymes?ec=${entry.ec}&amp;entryecname=${entry.name}&AMP;entryid=${entry.ec}&entryname=${entry.name}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${entry.ec}&searchparams.start=0&searchparams.text=${entry.ec}"> ${entry.ec}</a>  - ${entry.name} 
+                                              <a href="${pageContext.request.contextPath}/enzymes?searchKey=${entry.ec}&searchparams.type=KEYWORD&searchparams.previoustext=${entry.ec}&searchparams.start=0&searchparams.text=${entry.ec}&keywordType=EC&searchId=${entry.ec}">${entry.ec}</a>  - ${entry.name}
                                         </div>
 
 

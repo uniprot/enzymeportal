@@ -11,22 +11,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.ep.base.comparison.EnzymeComparison;
-import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.data.exceptions.EnzymeRetrieverException;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
-import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
-import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
-import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 
 /**
  * Controller for basket actions.
@@ -37,20 +33,8 @@ import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
 @Controller
 public class BasketController extends AbstractController {
 
-    @Autowired
-    protected ReactomeConfig reactomeConfig;
-    @Autowired
-    protected ChebiConfig chebiConfig;
+    private static final Logger LOGGER = Logger.getLogger(BasketController.class);
 
-    @Autowired
-    protected IntenzConfig intenzConfig;
-
-    @Autowired
-    private String pdbStructureCompareUrl;
-    @Autowired
-    private String pdbImgUrl;
-    @Autowired
-    protected String uniprotAlignUrl;
 
     /**
      * Updates the basket with enzymes (summaries) to compare or download.
@@ -197,13 +181,12 @@ public class BasketController extends AbstractController {
 
         @Override
         public EnzymeModel call() throws Exception {
-            EnzymeRetriever retriever = null;
+            enzymeRetriever.setEnzymePortalService(enzymePortalService);
+            enzymeRetriever.setLiteratureService(literatureService);
+            enzymeRetriever.setIntenzAdapter(intenzAdapter);
+            enzymeRetriever.setChebiAdapter(chebiAdapter);
 
-            retriever = new EnzymeRetriever(enzymePortalService, literatureService);
-            retriever.getIntenzAdapter().setConfig(intenzConfig);
-            //retriever.getReactomeAdapter().setConfig(reactomeConfig);
-            retriever.getChebiAdapter().setConfig(chebiConfig);
-            return retriever.getWholeModel(acc);
+            return enzymeRetriever.getWholeModel(acc);
 
         }
 

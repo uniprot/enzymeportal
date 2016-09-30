@@ -21,8 +21,8 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-         <cglib.version>3.1</cglib.version>
-          <javax.jstl-taglibs.version>1.1.2</javax.jstl-taglibs.version>
+        <cglib.version>3.1</cglib.version>
+        <javax.jstl-taglibs.version>1.1.2</javax.jstl-taglibs.version>
 
         <!-- Plugins -->
         <tomcat7.maven.plugin.version>2.0</tomcat7.maven.plugin.version>
@@ -53,6 +53,26 @@
                 </exclusion>
             </exclusions>
         </dependency>
+<!--                <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>ep-base</artifactId>
+            <version>1.0.7-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
+        <dependency>
+            <groupId>uk.ac.ebi.ep</groupId>
+            <artifactId>enzyme-portal-data</artifactId>
+            <version>1.1.3-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
         
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
@@ -72,12 +92,12 @@
             <version>2.6.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>uk.ac.ebi.biobabel</groupId>
             <artifactId>biobabel-core</artifactId>
             <version>0.20</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -274,7 +294,11 @@
             <type>jar</type>
             <scope>test</scope>
         </dependency>
-
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <scope>test</scope>
+</dependency>
 
         <dependency>
             <groupId>uk.ac.ebi.xchars</groupId>

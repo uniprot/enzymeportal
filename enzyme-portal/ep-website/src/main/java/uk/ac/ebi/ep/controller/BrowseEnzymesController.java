@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.controller;
 
 import java.io.IOException;
@@ -22,6 +19,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
-import static uk.ac.ebi.ep.controller.AbstractController.LOGGER;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -58,6 +55,7 @@ import uk.ac.ebi.ep.enzymes.IntenzEnzyme;
  */
 @Controller
 public class BrowseEnzymesController extends AbstractController {
+ private static final Logger logger = Logger.getLogger(BrowseEnzymesController.class);
 
     //concrete jsp's
     private static final String BROWSE_ENZYMES = "/browse_enzymes";
@@ -96,7 +94,7 @@ public class BrowseEnzymesController extends AbstractController {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+        logger.warn("Duration :  (" + elapsedtime + " sec)");
 
         List<UniprotEntry> species = page.getContent();//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
@@ -130,7 +128,7 @@ public class BrowseEnzymesController extends AbstractController {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+        logger.warn("Duration :  (" + elapsedtime + " sec)");
 
         List<UniprotEntry> species = page.getContent();//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
@@ -160,7 +158,7 @@ public class BrowseEnzymesController extends AbstractController {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+        logger.warn("Duration :  (" + elapsedtime + " sec)");
 
         return species.stream().limit(50).collect(Collectors.toList());
     }
@@ -477,7 +475,7 @@ public class BrowseEnzymesController extends AbstractController {
         long duration = endTime - startTime;
 
         long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.warn("findEnzymesByEcNumber took  :  (" + elapsedtime + " sec)");
+        logger.warn("findEnzymesByEcNumber took  :  (" + elapsedtime + " sec)");
 
         long startTime1 = System.nanoTime();
         List<Species> species = enzymePortalService.findSpeciesByEcNumber(ec);
@@ -491,7 +489,7 @@ public class BrowseEnzymesController extends AbstractController {
         long duration1 = endTime1 - startTime1;
 
         long elapsedtime1 = TimeUnit.SECONDS.convert(duration1, TimeUnit.NANOSECONDS);
-        LOGGER.warn("findEnzymesByEcNumber Filter Facets took  :  (" + elapsedtime1 + " sec)");
+        logger.warn("findEnzymesByEcNumber Filter Facets took  :  (" + elapsedtime1 + " sec)");
 
         SearchParams searchParams = searchModel.getSearchparams();
         searchParams.setStart(0);

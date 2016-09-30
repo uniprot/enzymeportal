@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="description" content="EMBL-EBI">
     <meta name="keywords" content="bioinformatics, europe, institute">
-    <meta name="author" content="EMBL-EBI, Cheminformatics and Metabolism Team">
+    <meta name="author" content="EMBL-EBI, Uniprot Team">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
     <%-- Pages which should not be cached --%>

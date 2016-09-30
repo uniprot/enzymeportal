@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.config;
+package uk.ac.ebi.ep.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,24 +16,20 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
-import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Config;
-import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
-import uk.ac.ebi.ep.enzymeservices.rhea.RheaWsAdapter;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.mBean.FilesConfig;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
 import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
-import uk.ac.ebi.ep.web.utils.SearchUtil;
 
 /**
  *
- * @author joseph
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 @Configuration
 @PropertySources({
@@ -42,8 +38,8 @@ import uk.ac.ebi.ep.web.utils.SearchUtil;
     @PropertySource("classpath:chembl-adapter.properties")
 
 })
-public class EnzymePortalConfig {
-
+public class ApplicationContextMock {
+    
     @Autowired
     private Environment env;
 
@@ -91,11 +87,6 @@ public class EnzymePortalConfig {
     }
 
     @Bean
-    public RheaWsAdapter rheaAdapter() {
-        return new RheaWsAdapter();
-    }
-
-    @Bean
     public Config searchConfig() {
         Config config = new Config();
 
@@ -131,13 +122,6 @@ public class EnzymePortalConfig {
         return chebiConfig;
     }
 
-    @Bean
-    public ChebiAdapter chebiAdapter() {
-        ChebiAdapter chebiAdapter = new ChebiAdapter();
-        chebiAdapter.setConfig(chebiConfig());
-        return chebiAdapter;
-    }
-
     public Map<String, String> drugbankConfig() {
         Map<String, String> drugbankConfig = new HashMap<>();
         drugbankConfig.put("compound.base.url", env.getProperty("drugbank.compound.base.url"));
@@ -152,6 +136,7 @@ public class EnzymePortalConfig {
 
         return chemblConfig;
     }
+
 
     @Bean
     public Functions functions() {
@@ -170,6 +155,7 @@ public class EnzymePortalConfig {
         filesConfig.setSitemapUrl(env.getProperty("sitemap.directory"));
         return filesConfig;
     }
+
 
     @Bean
     public PdbService pdbService() {
@@ -200,19 +186,10 @@ public class EnzymePortalConfig {
         return pdBeUrl;
     }
 
-    @Bean
-    public SpelAwareProxyProjectionFactory projectionFactory() {
-        return new SpelAwareProxyProjectionFactory();
-    }
-
-    @Bean
-    public EnzymeRetriever enzymeRetriever() {
-        return new EnzymeRetriever();
-    }
     
-    @Bean
-    public SearchUtil searchUtil(){
-        return new SearchUtil();
-    }
-
+      @Bean
+  public SpelAwareProxyProjectionFactory projectionFactory() {
+    return new SpelAwareProxyProjectionFactory();
+  }
+  
 }

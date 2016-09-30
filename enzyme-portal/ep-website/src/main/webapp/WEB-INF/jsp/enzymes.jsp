@@ -73,8 +73,8 @@
 
 
         <section class="grid_18 alpha">
-            <h1>Enzyme Results</h1>
-            <h2>${ebiResult.hitCount} enzymatic activities found for "${searchKey}"</h2>
+            <h1>Enzyme Results</h1> 
+            <h2>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h2>
         </section>
 
         <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
@@ -83,6 +83,8 @@
             <section class="grid_6 alpha pagination-container">
 
                 <input id="paginationPage" name="servicePage" type="hidden" value="">
+                 <input name="keywordType" type="hidden" value="${keywordType}">
+                  <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
                 <c:if test="${page.totalElements gt page.size}">
                     <nav class="paginationContainer">
                           <ul class="pagination">
@@ -251,12 +253,14 @@
 
 
                                        <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
-
+                                       <input name="keywordType" type="hidden" value="${keywordType}">
                                        <input name="searchTerm" type="hidden" value="${searchKey}">
+                                       <input name="searchId" type="hidden" value="${searchId}">
+                                       
                                         <input name="ec" type="hidden" value="${enzyme.ec}">
                                        <form:hidden path="searchparams.previoustext" />
                                        <form:hidden path="searchparams.text" value="${searchKey}-${enzyme.ec}" />
-                                       <form:hidden path="searchparams.type" value="KEYWORD"/>
+                                       <form:hidden path="searchparams.type" value="${searchType}"/>
 
 
                                     <table id="enzymeResultsProteins">
