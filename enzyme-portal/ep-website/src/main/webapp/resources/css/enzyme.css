@@ -6,15 +6,6 @@
         Purpose of the stylesheet follows.
 */
 
-/*.tab.reaction .inner_tab .icon {
-	background-image: url("../images/reaction.png");
-}
-.tab.disease .inner_tab .icon {
-	background-image: url("../images/disease.png");
-}
-.tab.molecule .inner_tab .icon {
-	background-image: url("../images/molecule.png");
-}*/
 
 html {
     -webkit-font-smoothing:antialiased;
@@ -34,26 +25,16 @@ th,td{
     border:none;
     vertical-align: inherit;
 }
-td{
-}
 th{
     background-color:inherit;
 }
 
 table{
     border: none;
+    background-color: inherit;
 }
 
-/*.epBox , fieldset {
-    border-radius: 8px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-}*/
-
-
 /*frontier overridding ends*/
-
-
 
 .reaction.block {
 	border: thin solid grey;
@@ -80,14 +61,7 @@ table{
     margin-top: 10px;
     margin-bottom: 10px;
 }
-/*
-.pathwayDesc
-  {
-    float: left;
-    max-width:50%;
-    min-width: 250px;
-  }
-*/
+
 .pathwayImg{
 	display: block;
 	margin: 1.5ex auto 1ex;
@@ -105,7 +79,6 @@ legend {
 }
 
 .epBox {
-    /*min-height: 200px;*/
     min-width: 200px;
     max-width: 200px;
     display: inline;
@@ -245,8 +218,8 @@ section.omega > div.diff {
     margin: 0.3ex 1em 0.3ex 0em;
 }
 button.comparison {
-  width: 100%;
-  text-align: center;
+    width: 100%;
+    text-align: center;
 }
 
 #compareButton[disabled]:before {
@@ -315,7 +288,6 @@ a.browse-box:hover {
     background-color: #3c5561;
 }
 
-
 .disease-overview-box ul {
     margin-bottom: 0;
 }
@@ -374,30 +346,29 @@ div#local-masthead ul.dropdown-menu li {
 
 /* D3 
 ------------------------*/
-.node circle {
+#taxonomy-tree .node circle {
   fill: #fff;
   stroke: steelblue;
   stroke-width: 1.5px;
 }
 
-.node text{
+#taxonomy-tree .node text{
   font-family: "Helvetica neue", Helvetica, Arial, sans-serif;
   font-size: 1em;
 }
 
-.node text.endnode {
+#taxonomy-tree .node text.endnode {
     fill:#0C4452;
 }
 
-
-.node text.endnode:hover {
+#taxonomy-tree .node text.endnode:hover {
     fill:#0B5448;
 }
 
-.link {
-  fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+#taxonomy-tree .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
 }
 
 /* Buttons */
@@ -479,11 +450,174 @@ ul.catalytic-activity-list li {
 	white-space: nowrap;
 }
 
+
 .two-columns{
     width:45%;
     padding: 0 10px 0 10px;
 }
 
-.video-panel{
+.video-panel {
     margin-top: 20px;
+}
+/*********** ENZYME VIEW  **********/
+
+#enzymeResults th{
+    background-color: #ECF0F1;
+}
+#enzymeResultsProteins th{
+    background-color: inherit;
+    font-weight: bold;
+}
+
+#enzymeResults td, #enzymeResults th{
+    vertical-align: top;
+    padding: inherit;
+}
+
+.enzymeName{
+	cursor: pointer;
+    padding-left: 15px;
+}
+
+table#enzymeResults tr:nth-child(4n+2){
+    background-color:#CBE8EC;
+}
+
+table#enzymeResults td, table#enzymeResults th{
+    padding: 7px 10px 10px 10px;
+}
+
+table#enzymeResults th{
+    border-bottom: 1px solid #ccc;
+}
+
+table#enzymeResultsProteins td, table#enzymeResultsProteins th{
+    padding: 1px 1px 1px 1px;
+}
+
+table#enzymeResults td:first-child{
+    padding-left: 20px;
+}
+
+table#enzymeResults tr.proteinSectionOpen{
+    border-left: solid 1px #ccc;
+    border-top: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+}
+
+table#enzymeResults tr:nth-child(4n+3){
+    background-color:#CBE8EC;
+}
+
+.paginationText{
+    /*height: 50px;*/
+    float: left;
+    padding: 5px 20px 5px 20px;
+}
+
+table#enzymeResults tr#proteinList td{
+    margin-bottom:10px;
+}
+
+table#enzymeResults tr#proteinList {
+    border-left: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+}
+
+
+table#enzymeResultsProteins tr.proteinRow{
+    background-color: inherit;
+}
+
+.sideTwizzle{
+    background-image: url("../images/sideTwizzle.png");
+    background-position: top left;
+    background-repeat: no-repeat;
+}
+
+.downTwizzle{
+    background-image: url("../images/downTwizzle.png");
+}
+
+.speciesFullList, .organismFullList, #activeFilters{
+    display: none;
+}
+
+.toggleSpeciesList, .toggleOrganismList{
+	cursor: pointer;
+}
+
+#search-results ul{
+    list-style-type: circle;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+#search-filters ul{
+    list-style-type: none;
+}
+
+.paginationContainer, .pagination-container{
+    float: right;
+}
+
+#full-view{
+    margin-top: 15px;
+}
+
+*{
+    -webkit-box-sizing: inherit;
+}
+label{
+    font-weight: normal;
+}
+.panel{
+    margin-bottom: 0px;
+}
+dl{
+    margin-top: 15px;
+}
+input[type=checkbox], input[type=radio]{
+    margin: 0px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+ul, ol{
+    padding-left: 5px;
+}
+
+#facetFilterForm{
+    padding: 0px;
+}
+
+.paginationContainer{
+    margin-right: 30px;
+}
+
+div#organismList{
+    height: 300px;
+    overflow: auto;
+}
+
+#organismsSearch{
+    width:80%;
+}
+.box .name {
+	display: block;
+	font-weight: bold;
+	padding: 4px 4px 0px 4px;
+	line-height: 12pt;
+	height: auto;
+}
+
+.paginationLink{
+    cursor: pointer;
+}
+
+
+#trigger{
+    float: right;
+    cursor: pointer;
+>>>>>>> a5a1018e8d122658aa1f7db4f864847c61b03e81
 }
