@@ -478,3 +478,12 @@ ul.catalytic-activity-list li {
 .no-wrap {
 	white-space: nowrap;
 }
+
+.two-columns{
+    width:45%;
+    padding: 0 10px 0 10px;
+}
+
+.video-panel{
+    margin-top: 20px;
+}

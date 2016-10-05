@@ -36,7 +36,37 @@
 
 
 
+
                 <section>
+
+                    <div class="pull-right two-columns"><h3>Help videos for Enzyme Portal</h3>
+
+                        <div class="pane-content video-panel">
+                            <iframe width="400" height="250" src="https://www.youtube.com/embed/Wq273CZrgSM" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="pane-content video-panel">
+                            <iframe width="400" height="250" src="https://www.youtube.com/embed/eCHWYLVN230" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="pane-content video-panel">
+                            <iframe width="400" height="250" src="https://www.youtube.com/embed/K2hmCb6aDq4" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="pane-content video-panel">
+                            <iframe width="400" height="250" src="https://www.youtube.com/embed/QuyZFNFO1aM" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="pane-content video-panel">
+                            <iframe width="400" height="250" src="https://www.youtube.com/embed/AS7u1L4Bw0U" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="pane-content video-panel">
+                            <iframe width="400" height="250" src="https://www.youtube.com/embed/kUk92ljRuDM" frameborder="0" allowfullscreen></iframe>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="pull-left two-columns">
+
                     <h3>Frequently Asked Questions</h3>
                     <ul>
                         <li><a href="faq#01">How is the Enzyme Portal different from BRENDA?</a></li>
@@ -148,6 +178,8 @@
                     <fieldset>
 
                     </fieldset>
+
+                    </div>
                 </section>
                 <!-- End layout containers -->
 
