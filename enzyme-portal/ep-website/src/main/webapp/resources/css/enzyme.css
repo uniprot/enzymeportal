@@ -450,6 +450,7 @@ ul.catalytic-activity-list li {
 	white-space: nowrap;
 }
 
+
 /*********** ENZYME VIEW  **********/
 
 #enzymeResults th{
@@ -610,4 +611,14 @@ div#organismList{
 #trigger{
     float: right;
     cursor: pointer;
+
+
+.two-columns{
+    width:45%;
+    padding: 0 10px 0 10px;
+}
+
+.video-panel{
+    margin-top: 20px;
+
 }

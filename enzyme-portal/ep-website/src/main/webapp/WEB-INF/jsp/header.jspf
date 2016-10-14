@@ -21,8 +21,8 @@
     </div>
 
     <div id="local-masthead" class="masthead grid_24 nomenu">
-        
-        <div id="local-title" class="grid_12 alpha logo-title"> 
+
+        <div id="local-title" class="grid_12 alpha logo-title">
             <a href="${pageContext.request.contextPath}"
                 title="Back to Enzyme Portal homepage">
                 <img src="${pageContext.request.contextPath}/resources/images/enzymeportal_logo.png"
@@ -66,7 +66,7 @@
                 <%-- If you need to include functional (as opposed to purely
                     navigational) links in your local menu, add them here, and
                     give them a class of "functional". Remember: you'll need a
-                    class of "last" for whichever one will show up last... 
+                    class of "last" for whichever one will show up last...
                     For example:
                     <li class="functional last">
                         <a href="#" class="icon icon-functional"
@@ -75,46 +75,46 @@
                 --%>
                 <li class="functional last">
                     <c:choose>
-                        
+
                     <c:when test="${not empty browseVideo}">
-                             <a target="_blanc" href="https://www.youtube.com/watch?v=AS7u1L4Bw0U"
+                             <a target="_blank" href="https://www.youtube.com/watch?v=AS7u1L4Bw0U"
                        class=""  >
                         <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                         Video
-                    </a>               
+                    </a>
                     </c:when>
                       <c:when test="${not empty searchVideo}">
-                             <a target="_blanc" href="https://www.youtube.com/watch?v=m0uF1PxWPZc"
+                             <a target="_blank" href="https://www.youtube.com/watch?v=eCHWYLVN230"
                        class=""  >
                         <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                         Video
-                    </a>               
+                    </a>
                     </c:when>
                        <c:when test="${not empty entryVideo}">
-                             <a target="_blanc" href="https://www.youtube.com/watch?v=7doCBhF_XrQ"
+                             <a target="_blank" href="https://www.youtube.com/watch?v=QuyZFNFO1aM"
                        class=""  >
                         <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                         Video
-                    </a>               
+                    </a>
                     </c:when>
                        <c:when test="${not empty sequenceVideo}">
-                             <a target="_blanc" href="https://www.youtube.com/watch?v=kUk92ljRuDM"
+                             <a target="_blank" href="https://www.youtube.com/watch?v=kUk92ljRuDM"
                        class=""  >
                         <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                         Video
-                    </a>               
+                    </a>
                     </c:when>
                     <c:otherwise>
-                             <a target="_blanc" href="https://www.youtube.com/watch?v=Wq273CZrgSM"
+                             <a target="_blank" href="https://www.youtube.com/watch?v=Wq273CZrgSM"
                        class=""   >
                         <img style="height: 21px;" src="${pageContext.request.contextPath}/resources/images/ytube.png">
                        Video
-                    </a>               
+                    </a>
                     </c:otherwise>
                     </c:choose>
                 </li>
                 <li class="functional ">
-                    <a target="_blanc" href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
+                    <a target="_blank" href="http://www.ebi.ac.uk/support/index.php?query=Enzyme+portal&referrer=http://www.ebi.ac.uk/enzymeportal/"
                         class="icon icon-static" data-icon="f">Feedback</a>
                 </li>
                 <li class="functional
