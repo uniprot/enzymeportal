@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +53,7 @@ import uk.ac.ebi.rhea.ws.client.RheaFetchDataException;
  *
  * @author joseph
  */
-public class EnzymeRetriever{//  extends EnzymeBase {
+public class EnzymeRetriever {//  extends EnzymeBase {
 
     private static final Logger logger = LoggerFactory.getLogger(EnzymeRetriever.class);
     private IRheaAdapter rheaAdapter;
@@ -61,7 +63,6 @@ public class EnzymeRetriever{//  extends EnzymeBase {
     private LiteratureService literatureService;
     private EnzymePortalService enzymePortalService;
 
-
     public void setLiteratureService(LiteratureService literatureService) {
         this.literatureService = literatureService;
     }
@@ -69,8 +70,7 @@ public class EnzymeRetriever{//  extends EnzymeBase {
     public void setEnzymePortalService(EnzymePortalService enzymePortalService) {
         this.enzymePortalService = enzymePortalService;
     }
-    
-    
+
     /**
      * Lazily constructs a new adapter if needed.
      *
@@ -111,42 +111,71 @@ public class EnzymeRetriever{//  extends EnzymeBase {
         this.intenzAdapter = intenzAdapter;
     }
 
-    private List<EnzymeAccession> getRelatedSPecies(UniprotEntry uniprotEntry) {
+    private List<EnzymeAccession> relatedSpeciesWithHumanOnTop(EnzymeAccession ea, UniprotEntry e) {
         String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
 
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
-        // TODO query for related proteins and use the obj. possible null pointer if db is not populated with related protein
 
-        List<EnzymePortalCompound> compounds = enzymePortalService.findCompoundsByAccession(uniprotEntry.getAccession());
-        for (UniprotEntry e : uniprotEntry.getRelatedProteinsId().getUniprotEntrySet()) {
+        if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
 
-            EnzymeAccession ea = new EnzymeAccession();
-            //ea.setCompounds(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
-            ea.setCompounds(compounds.stream().distinct().collect(Collectors.toList()));
-            ea.setDiseases(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
+            relatedSpecies.add(0, ea);
 
-            ea.setPdbeaccession(e.getPdbeaccession());
-            ea.getUniprotaccessions().add(e.getAccession());
-            ea.setSpecies(e.getSpecies());
-            ea.setUniprotid(e.getName());
-
-            if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
-
-                relatedSpecies.add(0, ea);
-
-            } else if (e.getScientificName() != null && !e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
-                relatedSpecies.add(ea);
-
-            }
+        } else if (e.getScientificName() != null && !e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+            relatedSpecies.add(ea);
 
         }
+
         return relatedSpecies.stream().distinct().collect(Collectors.toList());
+    }
+
+    private List<EnzymeAccession> getRelatedSPecies(UniprotEntry uniprotEntry) {
+//        String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
+//
+        List<EnzymeAccession> relatedSpecies = new LinkedList<>();
+        // TODO query for related proteins and use the obj. possible null pointer if db is not populated with related protein
+
+        if (uniprotEntry.getRelatedProteinsId() != null) {
+
+            List<EnzymePortalCompound> compounds = enzymePortalService.findCompoundsByAccession(uniprotEntry.getAccession());
+            for (UniprotEntry e : uniprotEntry.getRelatedProteinsId().getUniprotEntrySet()) {
+
+                EnzymeAccession ea = new EnzymeAccession();
+                //ea.setCompounds(e.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList()));
+                ea.setCompounds(compounds.stream().distinct().collect(Collectors.toList()));
+                ea.setDiseases(e.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList()));
+
+                ea.setPdbeaccession(e.getPdbeaccession());
+                ea.getUniprotaccessions().add(e.getAccession());
+                ea.setSpecies(e.getSpecies());
+                ea.setUniprotid(e.getName());
+
+//            if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+//
+//                relatedSpecies.add(0, ea);
+//
+//            } else if (e.getScientificName() != null && !e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
+//                relatedSpecies.add(ea);
+//
+//            }
+                relatedSpecies = relatedSpeciesWithHumanOnTop(ea, e);
+            }
+        }
+        return relatedSpecies;
 
     }
 
     private EnzymeModel getEnzymeModel(String uniprotAccession) {
-        
-        UniprotEntry uniprotEntry = enzymePortalService.findByAccession(uniprotAccession);
+        final ForkJoinPool executorService = new ForkJoinPool();
+
+        CompletableFuture<UniprotEntry> completableFutureUniprotEntry = CompletableFuture
+                .supplyAsync(() -> enzymePortalService.findByAccession(uniprotAccession), executorService);
+
+        CompletableFuture<Set<EnzymePortalEcNumbers>> completableFutureEcNumbers = CompletableFuture
+                .supplyAsync(() -> enzymePortalService.findByEcNumbersByAccession(uniprotAccession).stream().collect(Collectors.toSet()), executorService);
+
+        UniprotEntry uniprotEntry = completableFutureUniprotEntry.join();
+        Set<EnzymePortalEcNumbers> ecNumbers = completableFutureEcNumbers.join();
+
         EnzymeModel model = new EnzymeModel();
 
         if (uniprotEntry != null) {
@@ -176,13 +205,8 @@ public class EnzymeRetriever{//  extends EnzymeBase {
 
             model.setAccession(uniprotEntry.getAccession());
             model.getUniprotaccessions().add(uniprotEntry.getAccession());
-            //model.setSpecies(uniprotEntry.getSpecies());
-            Set<EnzymePortalEcNumbers> ecNumbers = enzymePortalService.findByEcNumbersByAccession(uniprotAccession)
-                    .stream().collect(Collectors.toSet());
             model.setEnzymePortalEcNumbersSet(ecNumbers);
-            // uniprotEntry.getEnzymePortalEcNumbersSet().stream().forEach((ec) -> {
             ecNumbers.stream().forEach(ec -> {
-                //Enzyme enzyme = new Enzyme();
                 EnzymeHierarchy enzymeHierarchy = new EnzymeHierarchy();
                 EcClass ecClass = new EcClass();
                 ecClass.setEc(ec.getEcNumber());
@@ -190,9 +214,9 @@ public class EnzymeRetriever{//  extends EnzymeBase {
                 enzyme.getEchierarchies().add(enzymeHierarchy);
 
                 model.getEc().add(ec.getEcNumber());
-                //model.setEnzyme(enzyme);
             });
             model.setEnzyme(enzyme);
+            executorService.shutdown();
             return model;
         }
         return model;
@@ -202,20 +226,24 @@ public class EnzymeRetriever{//  extends EnzymeBase {
 
         EnzymeModel model = getEnzymeModel(uniprotAccession);
         try {
-        
+
             getIntenzAdapter().getEnzymeDetails(model);
         } catch (MultiThreadingException ex) {
             LOGGER.error("Error getting enzyme details from Intenz webservice", ex);
         }
+        List<String> prov = addIntenzProvenance();
+        model.getEnzyme().setProvenance(prov);
+
+        return model;
+    }
+
+    private List<String> addIntenzProvenance() {
         List<String> prov = new LinkedList<>();
         prov.add("IntEnz");
         prov.add("UniProt");
         prov.add("IntEnz - (Integrated relational Enzyme database) is a freely available resource focused on enzyme nomenclature.\n");
         prov.add("UniProt - The mission of UniProt is to provide the scientific community with a comprehensive, high-quality and freely accessible resource of protein sequence and functional information");
-
-        model.getEnzyme().setProvenance(prov);
-
-        return model;
+        return prov;
     }
 
     public EnzymeModel getProteinStructure(String uniprotAccession)
@@ -233,17 +261,14 @@ public class EnzymeRetriever{//  extends EnzymeBase {
 
         List<UniprotXref> pdbcodes = enzymePortalService.findPDBcodesByAccession(model.getAccession());
 
-        for (UniprotXref pdb : pdbcodes) {
-
+        pdbcodes.stream().map(pdb -> {
             String pdbId = pdb.getSourceId().toLowerCase();
             model.getPdbeaccession().add(pdbId);
-
             ProteinStructure structure = new ProteinStructure();
             structure.setId(pdbId);
             structure.setName(pdb.getSourceName());
-            model.getProteinstructure().add(structure);
-
-        }
+            return structure;
+        }).forEach(structure -> model.getProteinstructure().add(structure));
 
     }
 
