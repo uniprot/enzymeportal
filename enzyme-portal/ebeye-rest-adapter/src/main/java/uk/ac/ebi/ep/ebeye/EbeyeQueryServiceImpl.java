@@ -78,11 +78,10 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
         assert requestEnd > -1 : "End can not be a negative value";
         assert requestEnd >= requestStart : "End value can not be smaller than start value";
 
-        int totalPagesToRequest = totalPagesToRequest(requestStart, requestEnd);
-
-        int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), totalPagesToRequest);
-        final ForkJoinPool executorService = new ForkJoinPool(threadPoolSize);
-       // ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
+        //int totalPagesToRequest = totalPagesToRequest(requestStart, requestEnd);
+        //int threadPoolSize = Math.min(ebeyeIndexProps.getChunkSize(), totalPagesToRequest);
+        // ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
+        final ForkJoinPool executorService = new ForkJoinPool();
 
         return generateUrlRequests(query, requestStart, requestEnd)
                 .flatMap(reqUrl
@@ -138,11 +137,11 @@ public class EbeyeQueryServiceImpl implements EbeyeQueryService {
      * service
      */
     private Observable<URI> generateUrlRequests(String query, int start, int end) {
-       // final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=_relevance&reverse=true&format=json";
+        // final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=_relevance&reverse=true&format=json";
         final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=status&reverse=true&format=json";
         final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
         final String endpoint = ebeyeIndexProps.getProteinCentricSearchUrl();
-        
+
         return Observable.range(start, end)
                 .map(index
                         -> URI.create(String.format(ebeyeAccessionQuery, endpoint, query, resultSize,
