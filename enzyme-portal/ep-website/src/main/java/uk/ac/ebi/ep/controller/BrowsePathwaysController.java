@@ -167,5 +167,17 @@ public class BrowsePathwaysController extends AbstractController {
             return new ArrayList<>();
         }
     }
-
+    
+//        @ResponseBody
+//    @RequestMapping(value = FIND_PATHWAYS_BY_NAME, method = RequestMethod.GET)
+//    public Callable<List<Pathway>> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
+//        if (name != null && name.length() >= 3) {
+//            //name = String.format("%%%s%%", name).toLowerCase();
+//            logger.info("ASYNC Executions ...... "+ name);
+//            return () -> enzymePortalService.findPathwaysByName(name).stream().distinct().collect(Collectors.toList());
+//        } else {
+//            return () -> new ArrayList<>();
+//        }
+//    }
+    
 }
