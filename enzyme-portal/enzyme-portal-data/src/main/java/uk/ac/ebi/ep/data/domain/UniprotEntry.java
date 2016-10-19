@@ -107,6 +107,10 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
+    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    private Set<EntryToGeneMapping> entryToGeneMappingSet;
+
     @Column(name = "FUNCTION_LENGTH")
     private BigInteger functionLength;
     @Column(name = "EXP_EVIDENCE_FLAG")
@@ -170,6 +174,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Fetch(FetchMode.JOIN)
     private Set<UniprotXref> uniprotXrefSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
@@ -261,6 +266,10 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public String getCommonName() {
+        if (commonName == null) {
+            commonName = scientificName;
+        }
+
         return commonName;
     }
 
@@ -554,9 +563,11 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             relatedspecies.add(map.getValue());
         });
 
-        List<EnzymeAccession> sortedSpecies = relatedspecies.stream().distinct()
-                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence).reversed().
-                        thenComparing(EnzymeAccession::getSpecies))
+        List<EnzymeAccession> sortedSpecies = relatedspecies.stream()
+                .distinct()
+                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
+                        .reversed()
+                        .thenComparing(EnzymeAccession::getSpecies))
                 .collect(Collectors.toList());
 
         return sortedSpecies.stream().distinct().limit(50).collect(Collectors.toList());
@@ -696,9 +707,25 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     @Override
     public String toString() {
-        return "UniprotEntry{" + "entryType=" + entryType + ", accession=" + accession + ", name=" + name + ", taxId=" + taxId + ", proteinName=" + proteinName + ", scientificName=" + scientificName + ", commonName=" + commonName + '}';
+        final StringBuilder sb = new StringBuilder("UniprotEntry{");
+        sb.append("entryType=").append(entryType);
+        sb.append(", accession=").append(accession);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", taxId='").append(taxId).append('\'');
+        sb.append(", proteinName=").append(proteinName);
+        sb.append(", scientificName=").append(scientificName);
+        sb.append(", commonName=").append(commonName);
+        sb.append('}');
+        return sb.toString();
     }
-    
-    
+
+    @XmlTransient
+    public Set<EntryToGeneMapping> getEntryToGeneMappingSet() {
+        return entryToGeneMappingSet;
+    }
+
+    public void setEntryToGeneMappingSet(Set<EntryToGeneMapping> entryToGeneMappingSet) {
+        this.entryToGeneMappingSet = entryToGeneMappingSet;
+    }
 
 }

@@ -10,29 +10,38 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
+import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Config;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
+import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
+import uk.ac.ebi.ep.enzymeservices.rhea.RheaWsAdapter;
 import uk.ac.ebi.ep.functions.Functions;
-import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 import uk.ac.ebi.ep.mBean.FilesConfig;
 import uk.ac.ebi.ep.pdbeadapter.PDBeRestService;
 import uk.ac.ebi.ep.pdbeadapter.PdbService;
 import uk.ac.ebi.ep.pdbeadapter.config.PDBeUrl;
-
+import uk.ac.ebi.ep.web.utils.SearchUtil;
 
 /**
  *
  * @author joseph
  */
 @Configuration
+@PropertySources({
+    @PropertySource(value = "classpath:log4j.properties", ignoreResourceNotFound = true),
+    @PropertySource("classpath:ep-web-client.properties"),
+    @PropertySource("classpath:chembl-adapter.properties")
+
+})
 public class EnzymePortalConfig {
 
     @Autowired
@@ -82,6 +91,11 @@ public class EnzymePortalConfig {
     }
 
     @Bean
+    public RheaWsAdapter rheaAdapter() {
+        return new RheaWsAdapter();
+    }
+
+    @Bean
     public Config searchConfig() {
         Config config = new Config();
 
@@ -117,6 +131,13 @@ public class EnzymePortalConfig {
         return chebiConfig;
     }
 
+    @Bean
+    public ChebiAdapter chebiAdapter() {
+        ChebiAdapter chebiAdapter = new ChebiAdapter();
+        chebiAdapter.setConfig(chebiConfig());
+        return chebiAdapter;
+    }
+
     public Map<String, String> drugbankConfig() {
         Map<String, String> drugbankConfig = new HashMap<>();
         drugbankConfig.put("compound.base.url", env.getProperty("drugbank.compound.base.url"));
@@ -131,25 +152,6 @@ public class EnzymePortalConfig {
 
         return chemblConfig;
     }
-
-//    @Bean
-//    public LiteratureConfig literatureConfig() {
-//        LiteratureConfig lc = new LiteratureConfig();
-//        lc.setMaxThreads(Integer.parseInt(env.getProperty("literature.threads.max")));
-//        lc.setUseCitexploreWs(Boolean.parseBoolean(env.getProperty("literature.citexplore.ws")));
-//        lc.setMaxCitations(Integer.parseInt(env.getProperty("literature.results.max")));
-//        lc.setCitexploreClientPoolSize(Integer.parseInt(env.getProperty("literature.citexplore.client.pool.size")));
-//        lc.setCitexploreConnectTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.connect")));
-//        lc.setCitexploreReadTimeout(Integer.parseInt(env.getProperty("literature.citexplore.ws.timeout.read")));
-//        return lc;
-//    }
-//
-//    @Bean
-//    public DASConfig dasConfig() {
-//        DASConfig dASConfig = new DASConfig();
-//        dASConfig.setClientPoolSize(Integer.parseInt(env.getProperty("das.client.pool.size")));
-//        return dASConfig;
-//    }
 
     @Bean
     public Functions functions() {
@@ -167,11 +169,6 @@ public class EnzymePortalConfig {
         filesConfig.setSitemapIndex(env.getProperty("sitemap.index"));
         filesConfig.setSitemapUrl(env.getProperty("sitemap.directory"));
         return filesConfig;
-    }
-
-    @Bean
-    public EbeyeRestService ebeyeRestService() {
-        return new EbeyeRestService();
     }
 
     @Bean
@@ -203,15 +200,19 @@ public class EnzymePortalConfig {
         return pdBeUrl;
     }
 
-    
-      @Bean
-  public SpelAwareProxyProjectionFactory projectionFactory() {
-    return new SpelAwareProxyProjectionFactory();
-  }
-  
-      @Bean
-    public LiteratureService literatureService(){
-        return new LiteratureService();
+    @Bean
+    public SpelAwareProxyProjectionFactory projectionFactory() {
+        return new SpelAwareProxyProjectionFactory();
+    }
+
+    @Bean
+    public EnzymeRetriever enzymeRetriever() {
+        return new EnzymeRetriever();
     }
     
+    @Bean
+    public SearchUtil searchUtil(){
+        return new SearchUtil();
+    }
+
 }

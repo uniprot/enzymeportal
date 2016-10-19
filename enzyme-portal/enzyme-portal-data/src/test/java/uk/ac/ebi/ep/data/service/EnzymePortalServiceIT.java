@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,7 +59,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         expResult.setName("CP24A_MOUSE");
 
         UniprotEntry result = enzymePortalService.findByAccession(ACCESSION);
-           assertEquals(expResult, result);
+        assertEquals(expResult, result);
 
     }
 
@@ -161,9 +165,8 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         accessions.add("fakeAccession");
 
         //int expResult = 4;
-
         List<UniprotEntry> result = enzymePortalService.findEnzymesByAccessions(accessions);
-        
+
         assertTrue(result.size() > 1);
 
     }
@@ -172,7 +175,6 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
      * Test of findEnzymeSummariesByNamePrefixes method, of class
      * EnzymePortalService.
      */
-    
     /**
      * Test of findDiseasesByAccession method, of class EnzymePortalService.
      */
@@ -371,7 +373,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     public void testFindPathways() {
         LOGGER.info("findPathways");
 
-        int expResult = 8;
+        int expResult = 10;
         List<EnzymePortalPathways> result = enzymePortalService.findPathways();
         assertEquals(expResult, result.size());
 
@@ -450,10 +452,22 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         taxids.add(10090L);
         taxids.add(10090L);
 
-        int expResult = 2;
+        int expectedResult = 2;
         List<Taxonomy> result = enzymePortalService.getCountForOrganisms(taxids);
 
-        assertEquals(expResult, result.size());
+        assertNotNull(result);
+        assertThat(result, hasSize(lessThan(Integer.MAX_VALUE)));
+        assertThat(result, hasSize(greaterThan(0)));
+        assertThat(result, hasSize(expectedResult));
+
+        long numEnzymeForHuman = 4;
+
+        result
+                .stream()
+                .filter(taxonomy -> taxonomy.getTaxId() == 9606)
+                .forEach(taxonomy -> {
+                    assertTrue(taxonomy.getNumEnzymes() == numEnzymeForHuman);
+                });
 
     }
 
@@ -782,10 +796,9 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         ecList.add(ecNumber2);
 
         List<EcNumber> result = enzymePortalService.findEnzymeFamiliesByTaxId(taxId);
- 
+
         assertEquals(ecList.size(), result.size());
 
     }
-
 
 }

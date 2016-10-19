@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.search.model.EcNumber;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import static uk.ac.ebi.ep.xml.generator.XmlTransformer.ENZYME_PORTAL;
 import uk.ac.ebi.ep.xml.model.Database;
@@ -47,7 +48,7 @@ public class XmlTransformer {
         if (!StringUtils.isEmpty(uniprotEntry.getUniprotid())) {
             Field field = new Field(FieldName.UNIPROT_NAME.getName(), uniprotEntry.getUniprotid());
             fields.add(field);
-            
+
         }
     }
 
@@ -75,9 +76,32 @@ public class XmlTransformer {
         }
     }
 
+    @Deprecated
+    protected void addProteinInfoFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
+            String specie = uniprotEntry.getScientificName();
+            if (!StringUtils.isEmpty(uniprotEntry.getCommonName())) {
+                specie = uniprotEntry.getCommonName();
+            }
+            String proteinInfo = uniprotEntry.getAccession() + "|" + uniprotEntry.getProteinName() + "_" + specie;
+
+            Field field = new Field(FieldName.PROTEIN_INFO.getName(), proteinInfo);
+            fields.add(field);
+
+        }
+    }
+
     protected void addScientificNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getScientificName())) {
             Field field = new Field(FieldName.SCIENTIFIC_NAME.getName(), uniprotEntry.getScientificName());
+            fields.add(field);
+
+        }
+    }
+
+    protected void addCommonNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (!StringUtils.isEmpty(uniprotEntry.getCommonName())) {
+            Field field = new Field(FieldName.COMMON_NAME.getName(), uniprotEntry.getCommonName());
             fields.add(field);
 
         }
@@ -113,6 +137,15 @@ public class XmlTransformer {
         }
     }
 
+    protected void addTaxonomyXrefs(UniprotEntry uniprotEntry, Set<Ref> refs) {
+        String taxId = Long.toString(uniprotEntry.getTaxId());
+        if (!StringUtils.isEmpty(taxId)) {
+            Ref xref = new Ref(taxId, DatabaseName.TAXONOMY.getDbName());
+            refs.add(xref);
+
+        }
+    }
+
     protected void addEcXrefs(UniprotEntry uniprotEntry, Set<Ref> refs) {
 
         if (!uniprotEntry.getEnzymePortalEcNumbersSet().isEmpty()) {
@@ -130,7 +163,9 @@ public class XmlTransformer {
 
             uniprotEntry.getEnzymePortalCompoundSet().stream().map(compound -> {
                 Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
+                Field compoundType = new Field(FieldName.COMPOUND_TYPE.getName(), compound.getCompoundRole());
                 fields.add(field);
+                fields.add(compoundType);
                 Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource());
                 return xref;
             }).forEach(xref -> {
@@ -139,15 +174,60 @@ public class XmlTransformer {
         }
     }
 
-    protected void addDiseaseFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+    protected void addDiseaseFieldsAndXrefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
         if (!uniprotEntry.getEnzymePortalDiseaseSet().isEmpty()) {
             uniprotEntry.getEnzymePortalDiseaseSet().stream().map(disease -> {
                 Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
-                return field;
-            }).forEach(field -> {
                 fields.add(field);
+                Ref xref = new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
+                return xref;
+            }).forEach(xref -> {
+                refs.add(xref);
             });
         }
+    }
+
+    protected void addEnzymeFamilyField(String ec, Set<Field> fields) {
+
+        EcNumber ecNumber = new EcNumber();
+        String enzymeFamily = ecNumber.computeFamily(ec);
+        Field field = new Field(FieldName.ENZYME_FAMILY.getName(), enzymeFamily);
+        fields.add(field);
+    }
+
+    protected void addGeneNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (!uniprotEntry.getEntryToGeneMappingSet().isEmpty()) {
+
+            uniprotEntry.getEntryToGeneMappingSet().stream()
+                    .map(geneMapping -> new Field(FieldName.GENE_NAME.getName(), geneMapping.getGeneName()))
+                    .forEach(field -> {
+                        fields.add(field);
+                    });
+
+        }
+    }
+
+    protected void addPathwaysXrefs(UniprotEntry uniprotEntry, Set<Ref> refs) {
+
+        if (!uniprotEntry.getEnzymePortalPathwaysSet().isEmpty()) {
+            uniprotEntry.getEnzymePortalPathwaysSet()
+                    .stream()
+                    .map(pathway -> new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()))
+                    .forEach(xref -> {
+                        refs.add(xref);
+                    });
+        }
+    }
+
+    private static final String REACTOME_PATHWAY_ID_REGEX = "^R-.*-.*";
+
+    private String parseReactomePathwayId(String reactomePathwayId) {
+        if (reactomePathwayId.matches(REACTOME_PATHWAY_ID_REGEX)) {
+            String[] sections = reactomePathwayId.split("-");
+            reactomePathwayId = sections[0] + "-" + sections[2];
+        }
+
+        return reactomePathwayId;
     }
 
 }

@@ -25,6 +25,7 @@ import uk.ac.ebi.ep.base.common.DiseasesPredicate;
 import uk.ac.ebi.ep.base.common.EcNumberPredicate;
 import uk.ac.ebi.ep.base.common.SpeciesPredicate;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
+import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.common.Pagination;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
@@ -38,9 +39,18 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
+import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
+import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
+import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
+import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
+import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
+import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
+import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
+import uk.ac.ebi.ep.enzymeservices.rhea.RheaWsAdapter;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
+import uk.ac.ebi.ep.web.utils.SearchUtil;
 
 /**
  *
@@ -48,7 +58,7 @@ import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
  */
 public abstract class AbstractController {
 
-    protected static final Logger LOGGER = Logger.getLogger(AbstractController.class);
+    private static final Logger logger = Logger.getLogger(AbstractController.class);
 
     @Autowired
     protected Config searchConfig;
@@ -58,8 +68,40 @@ public abstract class AbstractController {
     @Autowired
     protected EbeyeRestService ebeyeRestService;
     @Autowired
+    protected EbeyeSuggestionService ebeyeSuggestionService;
+    @Autowired
+    protected EnzymeCentricService enzymeCentricService;
+    @Autowired
     protected LiteratureService literatureService;
+
+    @Autowired
+    protected RheaWsAdapter rheaAdapter;
+    @Autowired
+    protected ChebiAdapter chebiAdapter;
+    @Autowired
+    protected IntenzAdapter intenzAdapter;
+
+    //
+    @Autowired
+    protected ReactomeConfig reactomeConfig;
+    @Autowired
+    protected ChebiConfig chebiConfig;
+
+    @Autowired
+    protected IntenzConfig intenzConfig;
+
+    @Autowired
+    protected String pdbStructureCompareUrl;
+    @Autowired
+    protected String pdbImgUrl;
+    @Autowired
+    protected String uniprotAlignUrl;
     
+    @Autowired
+    protected SearchUtil searchUtil;
+
+    @Autowired
+    protected EnzymeRetriever enzymeRetriever;
 
     protected static final String BROWSE_VIDEO = "browseVideo";
     protected static final String ENTRY_VIDEO = "entryVideo";
@@ -178,7 +220,7 @@ public abstract class AbstractController {
     protected void addToHistory(HttpSession session, SearchParams.SearchType searchType, String s) {
         switch (searchType) {
             case KEYWORD:
-                addToHistory(session, "searchparams.text=" + s);
+                addToHistory(session, "searchparams.type=KEYWORD&searchparams.text=" + s);
                 break;
             case COMPOUND:
                 addToHistory(session,
@@ -186,6 +228,34 @@ public abstract class AbstractController {
                 break;
             case SEQUENCE:
                 addToHistory(session, "searchparams.sequence=" + s);
+                break;
+        }
+    }
+
+    /**
+     * Adds a search to the user history. The history item (String) actually
+     * stored depends on the type of search, so that the links can be re-created
+     * in the web page properly (see <code>breadcrumbs.jsp</code>).
+     *
+     * @param session the user session.
+     * @param searchType the search type.
+     * @param searchKey the text to be added to history.
+     * @param searchId
+     * @param keywordType
+     */
+    protected void addToHistory(HttpSession session, SearchParams.SearchType searchType, String searchKey, String searchId, String keywordType) {
+        switch (searchType) {
+            case KEYWORD:
+                //addToHistory(session, "searchparams.text=" + searchKey);
+
+                addToHistory(session, "searchparams.type=KEYWORD&searchparams.text=" + Functions.splitHyphen(searchKey) + "&searchId=" + searchId + "&keywordType=" + keywordType + "&searchKey=" + Functions.splitHyphen(searchKey));
+                break;
+            case COMPOUND:
+                addToHistory(session,
+                        "searchparams.type=COMPOUND&searchparams.text=" + searchKey);
+                break;
+            case SEQUENCE:
+                addToHistory(session, "searchparams.sequence=" + searchKey);
                 break;
         }
     }
@@ -206,9 +276,7 @@ public abstract class AbstractController {
         String key = null;
         Optional<SearchType> type = Optional.ofNullable(searchParams.getType());
 
-        if (!type.isPresent()) {
-            searchParams.setType(SearchParams.SearchType.KEYWORD);
-        }
+        searchParams.setType(type.orElse(SearchType.KEYWORD));
 
         switch (searchParams.getType()) {
             case KEYWORD:
@@ -239,7 +307,7 @@ public abstract class AbstractController {
     protected SearchResults searchKeyword(SearchParams searchParameters) {
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
-       SearchResults results = finder.getEnzymes(searchParameters);
+        SearchResults results = finder.getEnzymes(searchParameters);
 
         return results;
     }
@@ -288,7 +356,7 @@ public abstract class AbstractController {
             List<String> compoundsFilter = searchParameters.getCompounds();
             List<String> diseasesFilter = searchParameters.getDiseases();
             List<Integer> ecNumbersFilter = searchParameters.getEcFamilies();
-            
+
             //remove empty string in the filter to avoid unsual behavior of the filter facets
             if (speciesFilter.contains("")) {
                 speciesFilter.remove("");
@@ -356,15 +424,15 @@ public abstract class AbstractController {
 
             resetSelectedEcNumber(defaultEcNumberList);
 
-            for (Integer selectedEcFamily : searchParameters.getEcFamilies()) {
-                for (EcNumber ec : defaultEcNumberList) {
+            searchParameters.getEcFamilies()
+                    .stream()
+                    .forEach(selectedEcFamily -> {
+                        defaultEcNumberList
+                        .stream()
+                        .filter(ec -> selectedEcFamily.equals(ec.getEc()))
+                        .forEach(ec -> ec.setSelected(true));
+                    });
 
-                    if (selectedEcFamily.equals(ec.getEc())) {
-                        ec.setSelected(true);
-                    }
-                }
-            }
-  
             //if an item is seleted, then filter the list
             if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty() || !ecNumbersFilter.isEmpty()) {
                 List<UniprotEntry> filteredResults
@@ -378,7 +446,7 @@ public abstract class AbstractController {
                         new DiseasesPredicate(diseasesFilter));
                 CollectionUtils.filter(filteredResults,
                         new EcNumberPredicate(ecNumbersFilter.stream().sorted().collect(Collectors.toList())));
-                
+
                 // Create a new SearchResults, don't modify the one in session
                 SearchResults sr = new SearchResults();
 
@@ -398,28 +466,20 @@ public abstract class AbstractController {
     }
 
     protected void resetSelectedSpecies(List<Species> speciesList) {
-        for (Species sp : speciesList) {
+        speciesList.stream().forEach(sp -> sp.setSelected(false));
 
-            sp.setSelected(false);
-
-        }
     }
 
     protected void resetSelectedCompounds(List<Compound> compounds) {
-        for (Compound compound : compounds) {
-            compound.setSelected(false);
-        }
+        compounds.stream().forEach(compound -> compound.setSelected(false));
+
     }
 
     protected void resetSelectedDisease(List<Disease> diseases) {
-        for (Disease disease : diseases) {
-            disease.setSelected(false);
-        }
+        diseases.stream().forEach(disease -> disease.setSelected(false));
     }
 
     protected void resetSelectedEcNumber(List<EcNumber> ecNumbers) {
-        ecNumbers.stream().forEach((ec) -> {
-            ec.setSelected(false);
-        });
+        ecNumbers.stream().forEach(ec -> ec.setSelected(false));
     }
 }

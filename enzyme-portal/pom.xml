@@ -65,7 +65,8 @@
          scp://login.ebi.ac.uk:/homes/maven/public_html/m2repo_snapshots
     </ebi.maven.repo.snapshots.deploy.url>
     <biobabel.maven.repo.url>
-         http://www.ebi.ac.uk/~biobabel/maven2_repo
+<!--           http://www.ebi.ac.uk/~biobabel/maven2_repo-->
+         http://www.ebi.ac.uk/~biobabel/public_html/maven2_repo
     </biobabel.maven.repo.url>
     <biobabel.maven.repo.deploy.url>
          scp://login.ebi.ac.uk:/ebi/sp/pro1/chebi/maven2_repo
@@ -128,7 +129,8 @@
             </snapshots>
             <id>ebi-repo</id>
             <name>EBI maven repository</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+<!--            <url>http://www.ebi.ac.uk/~maven/m2repo</url>-->
+             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo</url>
         </repository> 
         
         <repository>
@@ -146,7 +148,8 @@
             <snapshots/>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+<!--            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>-->
+             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo_snapshots</url>
         </repository>
         <repository>
             <id>biobabel-repo</id>

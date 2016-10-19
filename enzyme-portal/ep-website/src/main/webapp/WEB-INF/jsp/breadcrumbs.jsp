@@ -48,18 +48,17 @@
                             </c:otherwise>
                         </c:choose>
                     </c:when>
-                    <c:when test="${fn:startsWith(hItem, 'searchparams.text=')}">
-                        <c:if test="${not Fn:lastInList(history, hItem)}">
+                    <c:when test="${fn:startsWith(hItem, 'searchparams.type=KEYWORD')}">
+                         <c:choose>
+                        <c:when test="${not Fn:lastInList(history, hItem)}">
                       
-                                
-                            <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&${hItem}&searchparams.start=0&searchparams.previoustext=">Search
-							for <i>"${fn:substringAfter(hItem, '=')}"</i></a>
-                            </c:if>
-
-
-                        <c:if test="${Fn:lastInList(history, hItem)}">
-                            Search for <i>"${fn:substringAfter(hItem, '=')}"</i>
-                        </c:if>
+                                   <a href="${pageContext.request.contextPath}/enzymes?${hItem}&searchparams.start=0&searchparams.previoustext=">Search
+							for  <i>"${Fn:splitAndGetValue(hItem)}"</i></a>
+                            </c:when>
+                        <c:otherwise>
+                            Search for  <i>"${Fn:splitAndGetValue(hItem)}"</i>
+                        </c:otherwise>
+                            </c:choose>
                     </c:when>
                     <c:when test="${fn:startsWith(hItem, 'searchparams.sequence=')}">
                         <c:if test="${not Fn:lastInList(history, hItem)}">

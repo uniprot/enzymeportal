@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,10 +16,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.ep.base.search.EnzymeFinder;
-import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Field;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
@@ -46,10 +45,9 @@ import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
 import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
-import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
-import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.functions.Functions;
 import uk.ac.ebi.ep.functions.HtmlUtility;
+import uk.ac.ebi.ep.web.utils.KeywordType;
 import uk.ac.ebi.xchars.SpecialCharacters;
 import uk.ac.ebi.xchars.domain.EncodingType;
 
@@ -59,27 +57,24 @@ import uk.ac.ebi.xchars.domain.EncodingType;
  */
 @Controller
 public class SearchController extends AbstractController {
-
+    private static final Logger logger = Logger.getLogger(SearchController.class);
+ 
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
+    private static final int ASSOCIATED_PROTEIN_LIMIT = 8_00;
 
-    @Autowired
-    private ChebiConfig chebiConfig;
-
-    @Autowired
-    protected IntenzConfig intenzConfig;
     private final Integer maxCitations = 50;
 
     private enum ResponsePage {
-
+        
         ENTRY, ERROR;
-
+        
         @Override
         public String toString() {
             return name().toLowerCase();
         }
     }
-
+    
     private boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
     }
@@ -98,41 +93,41 @@ public class SearchController extends AbstractController {
             @PathVariable String accession, @PathVariable String field,
             HttpSession session) {
         Field requestedField = Field.valueOf(field.toUpperCase());
-        EnzymeRetriever retriever = new EnzymeRetriever(enzymePortalService, literatureService);
 
-        retriever.getIntenzAdapter().setConfig(intenzConfig);
+        enzymeRetriever.setEnzymePortalService(enzymePortalService);
+        enzymeRetriever.setLiteratureService(literatureService);
+        enzymeRetriever.setIntenzAdapter(intenzAdapter);
         EnzymeModel enzymeModel = null;
         String responsePage = ResponsePage.ENTRY.toString();
         try {
             switch (requestedField) {
                 case PROTEINSTRUCTURE:
-                    enzymeModel = retriever.getProteinStructure(accession);
+                    enzymeModel = enzymeRetriever.getProteinStructure(accession);
                     break;
                 case REACTIONSPATHWAYS:
-                    //retriever.getReactomeAdapter().setConfig(reactomeConfig);
-                    enzymeModel = retriever.getReactionsPathways(accession);
+                    enzymeRetriever.setRheaAdapter(rheaAdapter);
+                    enzymeModel = enzymeRetriever.getReactionsPathways(accession);
                     break;
                 case MOLECULES:
-                    retriever.getChebiAdapter().setConfig(chebiConfig);
-                    enzymeModel = retriever.getMolecules(accession);
+                    enzymeRetriever.setChebiAdapter(chebiAdapter);
+                    enzymeModel = enzymeRetriever.getMolecules(accession);
                     break;
                 case DISEASEDRUGS:
-
-                    enzymeModel = retriever.getDiseases(accession);
+                    
+                    enzymeModel = enzymeRetriever.getDiseases(accession);
                     break;
                 case LITERATURE:
-
-                    enzymeModel = retriever.getLiterature(accession);
+                    
+                    enzymeModel = enzymeRetriever.getLiterature(accession, maxCitations);
                     model.addAttribute("maxCitations", maxCitations);
                     break;
                 default:
-                    enzymeModel = retriever.getEnzyme(accession);
+                    enzymeModel = enzymeRetriever.getEnzyme(accession);
                     requestedField = Field.ENZYME;
-
                     break;
             }
             if (enzymeModel != null) {
-
+                
                 UniprotEntry entry = enzymePortalService.findByAccession(accession);
                 // If we got here from a bookmark, the summary might not be cached:
                 String summId = Functions.getSummaryBasketId(entry);
@@ -140,20 +135,20 @@ public class SearchController extends AbstractController {
                 final Map<String, UniprotEntry> sls = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
                 if (sls == null) {
                     setLastSummaries(session, Collections.singletonList(
-                             entry));
+                            entry));
                 } else if (sls.get(summId) == null) {
                     sls.put(summId, entry);
                 }
-
+                
                 enzymeModel.setRequestedfield(requestedField.name().toLowerCase());
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 model.addAttribute(ENTRY_VIDEO, ENTRY_VIDEO);
                 addToHistory(session, accession);
-
+                
             }
         } catch (EnzymeRetrieverException ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
-            LOGGER.error("Unable to retrieve the entry!", ex);
+            logger.error("Unable to retrieve the entry!", ex);
             if (requestedField.getName().equalsIgnoreCase(Field.DISEASEDRUGS.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setName("Diseases");
@@ -162,7 +157,7 @@ public class SearchController extends AbstractController {
                 d.setName(ERROR);
                 enzymeModel.getDisease().add(0, d);
                 model.addAttribute("enzymeModel", enzymeModel);
-                LOGGER.error("Error in retrieving Disease Information");
+                logger.error("Error in retrieving Disease Information");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.MOLECULES.getName())) {
                 enzymeModel = new EnzymeModel();
@@ -176,19 +171,19 @@ public class SearchController extends AbstractController {
                 chemicalEntity.getDrugs().getMolecule().add(molecule);
                 enzymeModel.setMolecule(chemicalEntity);
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
-                LOGGER.error("Error in retrieving Molecules Information");
+                logger.error("Error in retrieving Molecules Information");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.ENZYME.getName())) {
-
+                
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Enzymes");
                 Enzyme enzyme = new Enzyme();
                 enzyme.getEnzymetype().add(0, ERROR);
                 enzymeModel.setEnzyme(enzyme);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
-                LOGGER.error("Error in retrieving Enzymes");
+                logger.error("Error in retrieving Enzymes");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.PROTEINSTRUCTURE.getName())) {
                 enzymeModel = new EnzymeModel();
@@ -197,40 +192,40 @@ public class SearchController extends AbstractController {
                 ProteinStructure structure = new ProteinStructure();
                 structure.setName(ERROR);
                 enzymeModel.getProteinstructure().add(0, structure);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
-                LOGGER.error("Error in retrieving ProteinStructure");
+                logger.error("Error in retrieving ProteinStructure");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.REACTIONSPATHWAYS.getName())) {
                 enzymeModel = new EnzymeModel();
-
+                
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Reactions and Pathways");
                 ReactionPathway pathway = new ReactionPathway();
                 EnzymeReaction reaction = new EnzymeReaction();
-
+                
                 reaction.setName(ERROR);
                 pathway.setReaction(reaction);
                 enzymeModel.getReactionpathway().add(0, pathway);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
-                LOGGER.error("Error in retrieving Reaction Pathways");
-
+                logger.error("Error in retrieving Reaction Pathways");
+                
             }
             if (requestedField.getName().equalsIgnoreCase(Field.LITERATURE.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Literatures");
-
+                
                 enzymeModel.getLiterature().add(0, ERROR);
-
+                
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
-                LOGGER.error("Error in retrieving Literature Information");
-
+                logger.error("Error in retrieving Literature Information");
+                
             }
-
+            
         }
-
+        
         return responsePage;
     }
 
@@ -253,7 +248,7 @@ public class SearchController extends AbstractController {
         clearHistory(session);
         return "index";
     }
-
+    
     @ModelAttribute("/about")
     public SearchModel getabout(Model model) {
         SearchModel searchModelForm = searchform();
@@ -261,17 +256,17 @@ public class SearchController extends AbstractController {
         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return new SearchModel();
     }
-
+    
     @RequestMapping(value = "/faq")
     public SearchModel getfaq(Model model) {
-
+        
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return searchModelForm;
-
+        
     }
-
+    
     @RequestMapping(value = "/search")
     public SearchModel getSearch(Model model) {
         SearchModel searchModelForm = searchform();
@@ -286,40 +281,45 @@ public class SearchController extends AbstractController {
      *
      * @param searchModel
      * @param model
+     * @param searchTerm
      * @param session
+     * @param searchId
+     * @param keywordType
+     * @param ec
      * @param request
      * @param response
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String postSearchResult(SearchModel searchModel, Model model,
+    public String postSearchResult(SearchModel searchModel, Model model, @RequestParam(required = false, value = "searchTerm") String searchTerm,
+            @RequestParam(required = false, value = "ec") String ec, @RequestParam(required = false, value = "searchId") String searchId, @RequestParam(required = false, value = "keywordType") String keywordType,
             HttpSession session, HttpServletRequest request, HttpServletResponse response) {
         String view = "error";
-
         String searchKey = null;
         SearchResults results = null;
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-
         try {
 
             // See if it is already there, perhaps we are paginating:
             Map<String, SearchResults> prevSearches
                     = getPreviousSearches(session.getServletContext());
-            searchKey = getSearchKey(searchModel.getSearchparams());
-
+            String modelSearchKey = getSearchKey(searchModel.getSearchparams());
+            searchKey = Jsoup.clean(modelSearchKey, Whitelist.basic());
             results = prevSearches.get(searchKey);
             if (results == null) {
                 // New search:
                 clearHistory(session);
-
+                
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
-                        results = searchKeyword(searchModel.getSearchparams());
+                        //results = searchKeyword(searchModel.getSearchparams());
+                        results = searchKeyword(ec, searchTerm, searchId, keywordType, ASSOCIATED_PROTEIN_LIMIT);
+                        
                         model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
-                        LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
+                        //LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
                         break;
                     case SEQUENCE:
                         //view = searchSequence(model, searchModel);
@@ -331,7 +331,7 @@ public class SearchController extends AbstractController {
                     default:
                 }
             }
-
+            
             if (results != null) { // something to show
                 cacheSearch(session.getServletContext(), searchKey, results);
                 setLastSummaries(session, results.getSummaryentries());
@@ -341,73 +341,72 @@ public class SearchController extends AbstractController {
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
                 request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
-
+                
                 clearHistory(session);
                 addToHistory(session, searchModel.getSearchparams().getType(),
-                        searchKey);
+                        searchKey, searchId, keywordType);
                 view = "search";
             }
         } catch (Exception e) {
-            LOGGER.error("one of the search params (Text or Sequence is :" + searchKey, e);
+            logger.error("one of the search params (Text or Sequence is :" + searchKey, e);
         }
-
+        
         return view;
     }
 
-    @Override
-    protected void clearHistory(HttpSession session) {
-        @SuppressWarnings("unchecked")
-        List<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
-        if (history == null) {
-            history = new LinkedList<>();
-            session.setAttribute(Attribute.history.getName(), history);
-        } else {
-            history.clear();
-        }
-    }
-
-    @Override
-    protected void addToHistory(HttpSession session, String s) {
-        @SuppressWarnings("unchecked")
-        List<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
-        if (history == null) {
-            history = new LinkedList<>();
-            session.setAttribute(Attribute.history.getName(), history);
-        }
-        if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
-            String cleanedText = HtmlUtility.cleanText(s);
-            history.add(cleanedText);
-        }
-    }
-
-    /**
-     * Adds a search to the user history. The history item (String) actually
-     * stored depends on the type of search, so that the links can be re-created
-     * in the web page properly (see <code>breadcrumbs.jsp</code>).
-     *
-     * @param session the user session.
-     * @param searchType the search type.
-     * @param s the text to be added to history.
-     */
-    @Override
-    protected void addToHistory(HttpSession session, SearchParams.SearchType searchType, String s) {
-        switch (searchType) {
-            case KEYWORD:
-                addToHistory(session, "searchparams.text=" + s);
-                break;
-            case COMPOUND:
-                addToHistory(session,
-                        "searchparams.type=COMPOUND&searchparams.text=" + s);
-                break;
-            case SEQUENCE:
-                addToHistory(session, "searchparams.sequence=" + s);
-                break;
-            default:
-                addToHistory(session, "searchparams.text=" + s);
-
-        }
-    }
-
+//    @Override
+//    protected void clearHistory(HttpSession session) {
+//        @SuppressWarnings("unchecked")
+//        List<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
+//        if (history == null) {
+//            history = new LinkedList<>();
+//            session.setAttribute(Attribute.history.getName(), history);
+//        } else {
+//            history.clear();
+//        }
+//    }
+//
+//    @Override
+//    protected void addToHistory(HttpSession session, String s) {
+//        @SuppressWarnings("unchecked")
+//        List<String> history = (LinkedList<String>) session.getAttribute(Attribute.history.getName());
+//        if (history == null) {
+//            history = new LinkedList<>();
+//            session.setAttribute(Attribute.history.getName(), history);
+//        }
+//        if (history.isEmpty() || !history.get(history.size() - 1).equals(s)) {
+//            String cleanedText = HtmlUtility.cleanText(s);
+//            history.add(cleanedText);
+//        }
+//    }
+//
+//    /**
+//     * Adds a search to the user history. The history item (String) actually
+//     * stored depends on the type of search, so that the links can be re-created
+//     * in the web page properly (see <code>breadcrumbs.jsp</code>).
+//     *
+//     * @param session the user session.
+//     * @param searchType the search type.
+//     * @param s the text to be added to history.
+//     */
+//    @Override
+//    protected void addToHistory(HttpSession session, SearchParams.SearchType searchType, String s) {
+//        switch (searchType) {
+//            case KEYWORD:
+//                addToHistory(session, "searchparams.text=" + s);
+//                break;
+//            case COMPOUND:
+//                addToHistory(session,
+//                        "searchparams.type=COMPOUND&searchparams.text=" + s);
+//                break;
+//            case SEQUENCE:
+//                addToHistory(session, "searchparams.sequence=" + s);
+//                break;
+//            default:
+//                addToHistory(session, "searchparams.text=" + s);
+//
+//        }
+//    }
     /**
      * Retrieves any previous searches stored in the application context.
      *
@@ -424,10 +423,10 @@ public class SearchController extends AbstractController {
             prevSearches = Collections.synchronizedMap(
                     new LinkedHashMap<String, SearchResults>(
                             searchConfig.getSearchCacheSize(), 1, true));
-
+            
             servletContext.setAttribute(Attribute.prevSearches.getName(),
                     prevSearches);
-
+            
         }
         return prevSearches;
     }
@@ -445,9 +444,9 @@ public class SearchController extends AbstractController {
      */
     @Override
     protected String getSearchKey(SearchParams searchParams) {
-
+        
         String key = null;
-
+        
         switch (searchParams.getType()) {
             case KEYWORD:
                 key = searchParams.getText().trim().toLowerCase();
@@ -473,10 +472,49 @@ public class SearchController extends AbstractController {
      */
     @Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
-
+        
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
         SearchResults results = finder.getEnzymes(searchParameters);
+        
+        return results;
+    }
 
+    /**
+     *
+     * @param ec the EC
+     * @param keyword this could be users search term
+     * @param searchId OMIM number, REACTOME id
+     * @param keywordType could be KEYWORD, DISEASE, PATHWAYS
+     * @param limit number of associated proteins to find
+     * @return searchResults
+     */
+    protected SearchResults searchKeyword(String ec, String keyword, String searchId, String keywordType, int limit) {
+        
+        String searchTerm = HtmlUtility.cleanText(keyword);
+        searchTerm = searchTerm.replaceAll("&quot;", "");
+        SearchResults results = null;
+        
+        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+        if (keywordType.equalsIgnoreCase(KeywordType.KEYWORD.name())) {
+            results = finder.getAssociatedProteinsByEcAndFulltextSearch(ec, searchTerm, limit);
+        }
+        if (keywordType.equalsIgnoreCase(KeywordType.DISEASE.name())) {
+            String omimId = searchId;
+            results = finder.getAssociatedProteinsByOmimIdAndEc(omimId, ec, limit);
+        }
+        if (keywordType.equalsIgnoreCase(KeywordType.EC.name())) {
+            
+            results = finder.getAssociatedProteinsByEc(ec, limit);
+        }
+        if (keywordType.equalsIgnoreCase(KeywordType.TAXONOMY.name())) {
+            String taxId = searchId;
+            results = finder.getAssociatedProteinsByTaxIdAndEc(taxId, ec, limit);
+        }
+        if (keywordType.equalsIgnoreCase(KeywordType.PATHWAYS.name())) {
+            String pathwayId = searchId;
+            results = finder.getAssociatedProteinsByPathwayIdAndEc(pathwayId, ec, limit);
+        }
+        
         return results;
     }
 
@@ -494,14 +532,14 @@ public class SearchController extends AbstractController {
         EnzymeFinder finder = null;
         try {
             finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-
+            
             results = finder.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
             model.addAttribute("searchConfig", searchConfig);
         } catch (EnzymeFinderException e) {
-            LOGGER.error("Unable to get enzymes by compound", e);
+            logger.error("Unable to get enzymes by compound", e);
         }
         return results;
     }
@@ -518,42 +556,42 @@ public class SearchController extends AbstractController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String getSearchResults(SearchModel searchModel, BindingResult result,
-            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-        return postSearchResult(searchModel, model, session, request, response);
-    }
-
+//    @RequestMapping(value = "/search", method = RequestMethod.GET)
+//    public String getSearchResults(SearchModel searchModel, BindingResult result,
+//            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+//        return postSearchResult(searchModel, model, session, request, response);
+//    }
     @RequestMapping(value = "/advanceSearch",
             method = RequestMethod.GET)
     public String getAdvanceSearch(Model model) {
-        model.addAttribute("chebiConfig", chebiConfig);
+        //model.addAttribute("chebiConfig", chebiConfig);
         model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
         return "advanceSearch";
     }
-
+    
     @ResponseBody
     @RequestMapping("/service/search")
     public List<Suggestion> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length() >= 3) {
             String keyword = String.format("%%%s%%", name);
-
-            List<Suggestion> suggestions = ebeyeRestService.ebeyeAutocompleteSearch(keyword.trim());
-
+            
+            String cleanedKeyword = Jsoup.clean(keyword, Whitelist.basic());
+            List<Suggestion> suggestions = ebeyeSuggestionService.autocompleteSearch(cleanedKeyword.trim());
+            
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions.stream().distinct().collect(Collectors.toList());
             } else {
                 return new ArrayList<>();
             }
-
+            
         }
-
+        
         return new ArrayList<>();
-
+        
     }
-
+    
     public String resolveSpecialCharacters(String data) {
-
+        
         SpecialCharacters xchars = SpecialCharacters.getInstance(null);
         EncodingType[] encodings = {
             EncodingType.CHEBI_CODE,
@@ -566,24 +604,24 @@ public class SearchController extends AbstractController {
             EncodingType.SWISSPROT_CODE,
             EncodingType.UNICODE
         };
-
+        
         if (!xchars.validate(data)) {
-            LOGGER.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
-
+            logger.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
+            
         }
-        LOGGER.info("available encodings " + Arrays.toString(encodings));
+        logger.info("available encodings " + Arrays.toString(encodings));
         return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
-
+    
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
     public String getSearchResult(Model model) {
         return "underconstruction";
     }
-
+    
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String getAbout(Model model) {
         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return "about";
     }
-
+    
 }

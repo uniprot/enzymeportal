@@ -17,7 +17,7 @@
 
 
 				<form:form id="local-search" name="local-search" modelAttribute="searchModel"
-                                      action="${pageContext.request.contextPath}/search" method="POST">
+                                      action="${pageContext.request.contextPath}/enzymes" method="POST">
 						<form:hidden path="searchparams.previoustext" />		
 					<fieldset>
 					
@@ -28,12 +28,13 @@
                                <%--     <form:input id="local-searchbox" name="first" path="searchparams.text" /> --%>
                                <input autocomplete="off" id="local-searchbox" name="searchparams.text" maxlength="100"  type="text" ng-model="searchTypeAheadController" placeholder="search for enzymes" typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
             <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>
-                                   <input type="hidden" name="search-term" value="${searchTerm}"/>
+                                   <input type="hidden" name="searchTerm" value="${searchTerm}"/>
+                                    <input type="hidden" name="keywordType" value="KEYWORD"/>
 						</label>
 						<!-- Include some example searchterms - keep them short and few! -->
-                                                <span class="examples">Examples:  <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil">sildenafil</a>, <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=mTOR">mTOR</a>,  <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=cathepsin">cathepsin</a>, 
-                                                    <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=P27361">P27361</a>,
-                                                             <a href="${pageContext.request.contextPath}/search?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=pyruvate kinase">pyruvate kinase</a></span>
+                                                <span class="examples">Examples:  <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil&keywordType=KEYWORD">sildenafil</a>, <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=mTOR&keywordType=KEYWORD">mTOR</a>,  <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=cathepsin&keywordType=KEYWORD">cathepsin</a>, 
+                                                    <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=P27361&keywordType=KEYWORD">P27361</a>,
+                                                             <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=pyruvate kinase&keywordType=KEYWORD">pyruvate kinase</a></span>
 					</div>
 					
 					<div class="right">

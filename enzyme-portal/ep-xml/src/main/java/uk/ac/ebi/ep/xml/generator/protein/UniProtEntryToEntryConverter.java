@@ -46,6 +46,8 @@ public class UniProtEntryToEntryConverter extends XmlTransformer implements Item
 
         addDiseaseFields(uniprotEntry, fields);
         addEcXrefs(uniprotEntry, refs);
+        addPathwaysXrefs(uniprotEntry, refs);
+        addTaxonomyXrefs(uniprotEntry, refs);
 
         CrossReferences cr = new CrossReferences();
         cr.setRef(refs);

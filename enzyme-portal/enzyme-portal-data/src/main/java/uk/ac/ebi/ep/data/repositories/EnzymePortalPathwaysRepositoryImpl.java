@@ -63,7 +63,7 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
 
           String pathwayName = String.format("%%%s%%", name).toLowerCase();
         List<Pathway> entries = query.from($).where($.pathwayName.toLowerCase().like(pathwayName))
-                .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName));
+                .list(Projections.constructor(Pathway.class,$.pathwayGroupId, $.pathwayId, $.pathwayName));
 
         return entries.stream().distinct().collect(Collectors.toList());
 

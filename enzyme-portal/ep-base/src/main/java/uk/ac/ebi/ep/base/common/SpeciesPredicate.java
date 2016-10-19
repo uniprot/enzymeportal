@@ -33,6 +33,7 @@ public class SpeciesPredicate implements Predicate {
 	 * @return <code>true</code> if the enzyme summary contains any of the
 	 * 		species in the filter, <code>false</code> otherwise.
 	 */
+        @Override
 	public boolean evaluate(Object obj) {
 		if (speciesFilter == null || speciesFilter.isEmpty()){
 			return true;

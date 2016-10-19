@@ -37,15 +37,13 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 @Controller
 public class BrowseDiseasesController extends AbstractController {
 
-  
     private static final String BROWSE = "/browse-diseases";
     private static final String BROWSE_DISEASE = "/browse/disease";
     private static final String SEARCH_DISEASE = "/search-disease";
-    //private static final String RESULT = "/search_result_disease";
- private static final String RESULT = "/search";
+    private static final String RESULT = "/search";
     private static final String FIND_DISEASES_BY_NAME = "/service/diseases";
 
-    private List<EnzymePortalDisease> diseaseList = new ArrayList<>();
+    private List<EnzymePortalDisease> diseaseList = new ArrayList<>(); 
 
     @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
     public String showDiseases(Model model) {
@@ -132,7 +130,7 @@ public class BrowseDiseasesController extends AbstractController {
             setLastSummaries(session, results.getSummaryentries());
             searchModel.setSearchresults(results);
             applyFilters(searchModel, request);
-             model.addAttribute("searchConfig", searchConfig);
+            model.addAttribute("searchConfig", searchConfig);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
             clearHistory(session);
@@ -158,9 +156,8 @@ public class BrowseDiseasesController extends AbstractController {
 
         finder.setSearchParams(searchParams);
 
-      String omimNUmber = diseaseId.trim();
-            results = finder.computeEnzymeSummariesByOmimNumber(omimNUmber);
-        
+        String omimNUmber = diseaseId.trim();
+        results = finder.computeEnzymeSummariesByOmimNumber(omimNUmber);
 
         if (results == null) {
 
@@ -193,15 +190,15 @@ public class BrowseDiseasesController extends AbstractController {
 
     /**
      * Note: to access name and id, use diseaseName & meshId respectively
-     * 
+     *
      * @param name diseaseName
      * @return Diseases
      */
     @ResponseBody
     @RequestMapping(value = FIND_DISEASES_BY_NAME, method = RequestMethod.GET)
     public List<Disease> getDiseases(@RequestParam(value = "name", required = true) String name) {
-        if (name != null && name.length()>=3) {
-           // name = String.format("%%%s%%", name);
+        if (name != null && name.length() >= 3) {
+            // name = String.format("%%%s%%", name);
             return enzymePortalService.findDiseasesLike(name).stream().distinct().collect(Collectors.toList());
         } else {
             return new ArrayList<>();

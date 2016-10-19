@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -46,7 +47,7 @@ public class EnzymeXmlStore implements Serializable {
     @Column(name = "ENZYME_XML_ID")
     private BigDecimal enzymeXmlId;
     @JoinColumn(name = "ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry accession;
 
     public EnzymeXmlStore() {

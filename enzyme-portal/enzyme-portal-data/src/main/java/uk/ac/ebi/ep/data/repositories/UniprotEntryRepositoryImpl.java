@@ -140,7 +140,10 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
 
         JPAQuery query = new JPAQuery(entityManager);
         // List<Tuple> tuple =    query.from($).groupBy($.taxId,$.scientificName,$.commonName).orderBy($.taxId.count().desc()).limit(11).list($.taxId,$.scientificName,$.commonName,$.taxId.count());
+//select distinct uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name, count(uniprotEntry.tax_Id) as numEnzymes from UNIPROT_ENTRY uniprotEntry where uniprotEntry.tax_Id in ('9606') group by uniprotEntry.tax_Id, uniprotEntry.scientific_Name, uniprotEntry.common_Name;
 
+//select distinct uniprotEntry.tax_Id, count(uniprotEntry.tax_Id) as numEnzymes from ENZYMES_TO_TAXONOMY uniprotEntry where uniprotEntry.tax_Id in ('9606') group by uniprotEntry.tax_Id;
+//
         List<Taxonomy> result = query.from($).where($.taxId.in(taxids)).distinct().groupBy($.taxId, $.scientificName, $.commonName).
                 list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
 

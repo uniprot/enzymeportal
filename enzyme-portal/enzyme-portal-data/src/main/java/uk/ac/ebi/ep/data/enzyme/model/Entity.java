@@ -21,6 +21,7 @@ public class Entity
 
   
     protected String id;
+    protected String groupId;
   
     protected String name;
  
@@ -54,6 +55,14 @@ public class Entity
      */
     public void setId(String value) {
         this.id = value;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     /**

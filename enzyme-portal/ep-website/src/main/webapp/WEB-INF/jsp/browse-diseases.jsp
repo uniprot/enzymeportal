@@ -63,7 +63,7 @@
         <c:if test="${not empty diseaseList}">
             <ep:alphabeticalDisplay items="${diseaseList}" type="diseases" maxDisplay="5"/>
         </c:if>
-
+<%-- 
         <c:if test="${not empty alldiseaseList}">
             <div class="grid_24">
 
@@ -82,6 +82,7 @@
             </div>
 
         </c:if>
+            --%>
 
     </div>
 

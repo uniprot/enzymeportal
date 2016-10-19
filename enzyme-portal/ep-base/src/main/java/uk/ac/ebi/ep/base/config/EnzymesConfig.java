@@ -15,7 +15,6 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
-import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 
 /**
  *
@@ -65,9 +64,9 @@ public class EnzymesConfig {
     
 
     
-    @Bean
-    public LiteratureService literatureService(){
-        return new LiteratureService();
-    }
+//    @Bean
+//    public LiteratureService literatureService(){
+//        return new LiteratureService();
+//    }
 
 }

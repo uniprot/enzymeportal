@@ -31,6 +31,7 @@ public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
 
+    @Deprecated
     List<Taxonomy> getCountForOrganisms(List<Long> taxids);
 
     List<String> findAccessionsByTaxId(Long taxId);

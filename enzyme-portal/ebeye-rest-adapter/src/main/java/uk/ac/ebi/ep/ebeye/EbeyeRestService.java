@@ -1,293 +1,279 @@
-/*
- Copyright (c) 2015 The European Bioinformatics Institute (EMBL-EBI).
- All rights reserved. Please see the file LICENSE
- in the root directory of this distribution.
- */
 package uk.ac.ebi.ep.ebeye;
 
-import com.aol.simple.react.stream.lazy.LazyReact;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import static net.javacrumbs.futureconverter.springjava.FutureConverter.toCompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-import uk.ac.ebi.ep.ebeye.autocomplete.EbeyeAutocomplete;
-import uk.ac.ebi.ep.ebeye.autocomplete.Suggestion;
-import uk.ac.ebi.ep.ebeye.config.EbeyeIndexUrl;
-import uk.ac.ebi.ep.ebeye.search.EbeyeSearchResult;
-import uk.ac.ebi.ep.ebeye.search.Entry;
+import org.springframework.util.StopWatch;
+import org.springframework.web.client.RestClientException;
+import rx.Observable;
+import uk.ac.ebi.ep.ebeye.protein.model.Entry;
+import uk.ac.ebi.ep.ebeye.protein.model.Protein;
+import uk.ac.ebi.ep.ebeye.utils.Preconditions;
+import uk.ac.ebi.ep.ebeye.utils.UrlUtil;
 
 /**
+ * REST client that communicates with the EBeye search web-service.
  *
  * @author joseph
  */
 public class EbeyeRestService {
 
-    private final Logger logger = LoggerFactory.getLogger(EbeyeRestService.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Autowired
-    private EbeyeIndexUrl ebeyeIndexUrl;
-    @Autowired
-    private RestTemplate restTemplate;
+    private final EbeyeQueryService queryService;
 
-    private static final int DEFAULT_EBI_SEARCH_LIMIT = 100;
-    private static final int HITCOUNT = 7_000;
-    private static final int QUERY_LIMIT = 800;
+    public EbeyeRestService(EbeyeQueryService queryService) {
+        Preconditions.checkArgument(queryService != null, "'EbeyeQueryService' must not be null");
 
-    /**
-     *
-     * @param searchTerm
-     * @return suggestions
-     */
-    public List<Suggestion> ebeyeAutocompleteSearch(String searchTerm) {
-        String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "/autocomplete?term=" + searchTerm + "&format=json";
+        this.queryService = queryService;
+    }
 
-        EbeyeAutocomplete autocomplete = restTemplate.getForObject(url.trim(), EbeyeAutocomplete.class);
+    public List<String> queryForUniqueAccessions(String ec, String searchTerm, int limit) {
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+        Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
+        String query = searchTerm + " AND INTENZ:" + ec;
 
-        return autocomplete.getSuggestions();
+        query = UrlUtil.encode(query);
 
+        return queryForUniqueAccessions(query, limit);
     }
 
     /**
      *
-     * @param query user query
-     * @return list of accessions
+     * @param omimId omim number
+     * @param ec ec number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
      */
-    public List<String> queryEbeyeForAccessions(String query) {
+    public List<String> queryForUniqueAccessionsByOmimIdAndEc(String omimId, String ec, int limit) {
+        Preconditions.checkArgument(omimId != null, "omimId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        return queryEbeyeForAccessions(query, false, 0);
+        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+
+        return queryForUniqueAccessions(query, limit);
     }
 
     /**
      *
-     * @param query user query
-     * @param paginate paginate ebeye service
-     * @return list of accessions
+     * @param ec EC number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
      */
-    public List<String> queryEbeyeForAccessions(String query, boolean paginate) {
-        return queryEbeyeForAccessions(query, paginate, 0);
+    public List<String> queryForUniqueAccessionsByEc(String ec, int limit) {
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+
+        return queryForUniqueAccessions(query, limit);
     }
 
     /**
      *
-     * @param query
-     * @param paginate
-     * @param limit limit the number of results from Ebeye service. default is
-     * 100 and only used when pagination is true.
-     * @return list of accessions
+     * @param taxId taxId
+     * @param ec ec number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
      */
-    public List<String> queryEbeyeForAccessions(String query, boolean paginate, int limit) {
+    public List<String> queryForUniqueAccessionsByTaxIdAndEc(String taxId, String ec, int limit) {
+        Preconditions.checkArgument(taxId != null, "taxId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+
+        return queryForUniqueAccessions(query, limit);
+    }
+
+    /**
+     *
+     * @param pathwayId pathwayId
+     * @param ec ec number
+     * @param limit max number of Accessions to retrieve
+     * @return list of unique accessions
+     */
+    public List<String> queryForUniqueAccessionsByPathwayIdAndEc(String pathwayId, String ec, int limit) {
+        Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+
+        return queryForUniqueAccessions(query, limit);
+    }
+
+    /**
+     * Sends a query to the Ebeye search service and creates a response with the
+     * accessions of the entries that fulfill the search criteria.
+     *
+     * @param query the client query
+     * @param limit limit the number of results from Ebeye service. Use
+     * {@link #NO_RESULT_LIMIT} if no limit is to be specified
+     * @return list of accessions that fulfill the query
+     */
+    public List<String> queryForUniqueAccessions(String query, int limit) {
+        Preconditions.checkArgument(limit > 0, "Limit can not be less than 1");
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
+        List<String> uniqueAccessions = queryForUniqueAccessions(query)
+                .limit(limit)
+                .toList()
+                .toBlocking()
+                .single();
+
+        stopWatch.stop();
+        logger.debug("Executing query:{}, took: {}", query, stopWatch.getTotalTimeSeconds() + " sec");
+
+        return uniqueAccessions;
+    }
+
+    /**
+     * Sends a query to the Ebeye search service and creates a response with the
+     * proteins of the entries that fulfill the search criteria.
+     *
+     * @param query the client query
+     * @param limit limit the number of results from Ebeye service. Use
+     * {@link #NO_RESULT_LIMIT} if no limit is to be specified
+     * @return list of Proteins that fulfill the query
+     */
+    public List<Protein> searchForUniqueProteins(String query, int limit) {
+        Preconditions.checkArgument(limit > 0, "Limit can not be less than 1");
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
+        List<Protein> uniqueProteins = queryForUniqueProteins(query)
+                .limit(limit)
+                .toList()
+                .toBlocking()
+                .single();
+
+        stopWatch.stop();
+        logger.debug("Executing query:{}, took: {}", query, stopWatch.getTotalTimeSeconds() + " sec");
+
+        return uniqueProteins;
+    }
+
+    /**
+     * Sends a query to the Ebeye search service and creates an
+     * {@link Observable} which pushes the results as they are calculated. This
+     * allows the results to be processed asynchronously by the client calling
+     * the method.
+     *
+     * @param query the client query
+     * @return Observable of accessions that fulfill the query
+     */
+    public Observable<String> queryForUniqueAccessions(String query) {
+        Preconditions.checkArgument(query != null, "Query can not be null");
+
+        Observable<String> uniqueAccessions;
 
         try {
-            EbeyeSearchResult searchResult = queryEbeye(query.trim());
-            logger.warn("Number of hits for search for " + query + " : " + searchResult.getHitCount());
+            Observable<Entry> distinctEntries = queryService.executeQuery(query).distinct();
 
-            Set<String> accessions = new LinkedHashSet<>();
-
-            if (!paginate) {
-                searchResult.getEntries().stream().forEach((entry) -> {
-                    accessions.add(entry.getUniprotAccession());
-                });
-
-                List<String> accessionList = accessions.stream().distinct().collect(Collectors.toList());
-                logger.warn("Number of Accessions to be processed (Pagination = false) :  " + accessionList.size());
-                return accessionList;
-
-            }
-
-            if (paginate) {
-
-                int hitcount = searchResult.getHitCount();
-
-                //for now limit hitcount to 7k
-                if (hitcount > HITCOUNT) {
-                    hitcount = HITCOUNT;
-                }
-
-                int resultLimit = 0;
-
-                if (limit < 0) {
-                    resultLimit = DEFAULT_EBI_SEARCH_LIMIT;
-                }
-
-                //for now limit results
-                if (resultLimit > 0 && hitcount > resultLimit) {
-                    hitcount = resultLimit;
-                }
-
-                int numIteration = hitcount / DEFAULT_EBI_SEARCH_LIMIT;
-
-                //List<String> accessionList = queryUsingLazyReact(query, numIteration);
-                 List<String> accessionList = query(query, numIteration);
-                logger.warn("Total Hitcount = " + hitcount + ",  Number of Accessions to be processed (when Pagination = true)  =  " + accessionList.size());
-                return accessionList;
-
-            }
-
-        } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-            logger.error(ex.getMessage(), ex);
+            uniqueAccessions = getDistinctAccessionsFromEntries(distinctEntries);
+        } catch (RestClientException e) {
+            logger.error(e.getMessage(), e);
+            uniqueAccessions = Observable.empty();
         }
-        return new ArrayList<>();
+
+        return uniqueAccessions;
     }
 
-    private EbeyeSearchResult queryEbeye(String query) throws InterruptedException, ExecutionException {
-
-        List<String> ebeyeDomains = new ArrayList<>();
-        ebeyeDomains.add(ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&query=");
-
-        // get element as soon as it is available
-        Optional<EbeyeSearchResult> result = ebeyeDomains.stream().map(base -> {
-            String url = base + query;
-            // open connection and fetch the result
-            EbeyeSearchResult searchResult = null;
-            try {
-                searchResult = getEbeyeSearchResult(url.trim());
-
-            } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-                logger.error(ex.getMessage(), ex);
-            }
-
-            return searchResult;
-
-        }).findAny();
-
-        return result.get();
+    private Observable<String> getDistinctAccessionsFromEntries(Observable<Entry> accessionObservable) {
+        return accessionObservable
+                .map(Entry::getUniprotAccession)
+                .distinct();
     }
+    //proteins
 
-    @Deprecated
-    private List<String> query(String query, int iteration) throws InterruptedException, ExecutionException {
-        final Set<String> accessions = new CopyOnWriteArraySet<>();
-
-        IntStream.rangeClosed(0, iteration).forEachOrdered(index -> {
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name,status&query=" + query;
-
-            try {
-                EbeyeSearchResult ebeyeSearchResult = searchEbeyeDomain(url).get();
-
-                List<Entry> entries = ebeyeSearchResult.getEntries().stream().distinct().collect(Collectors.toList());
-                entries.stream().forEach((entry) -> {
-                    accessions.add(entry.getUniprotAccession());
-                });
-            } catch (InterruptedException | NullPointerException | ExecutionException ex) {
-                logger.error(ex.getMessage(), ex);
-            }
-
-        });
-        return accessions.stream().limit(QUERY_LIMIT).collect(Collectors.toList());
+    private Observable<Protein> getDistinctProteinsFromEntries(Observable<Entry> proteinObservable) {
+        return proteinObservable
+                .map(Entry::getProtein)
+                .distinct();
 
     }
 
-    @Deprecated
-    @Async
-    private Future<EbeyeSearchResult> searchEbeyeDomain(String url) throws InterruptedException, ExecutionException {
-        EbeyeSearchResult results = getEbeyeSearchResult(url);
-        return new AsyncResult<>(results);
-    }
+    /**
+     * Sends a query to the Ebeye search service and creates an
+     * {@link Observable} which pushes the results as they are calculated. This
+     * allows the results to be processed asynchronously by the client calling
+     * the method.
+     *
+     * @param query the client query
+     * @return Observable of proteins that fulfill the query
+     */
+    public Observable<Protein> queryForUniqueProteins(String query) {
+        Preconditions.checkArgument(query != null, "Query can not be null");
 
-    @Deprecated
-    private EbeyeSearchResult getEbeyeSearchResult(String url) throws InterruptedException, ExecutionException {
-        HttpMethod method = HttpMethod.GET;
-
-        // Define response type
-        Class<EbeyeSearchResult> responseType = EbeyeSearchResult.class;
-
-        // Define headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
-
-        ListenableFuture<ResponseEntity<EbeyeSearchResult>> future = asyncRestTemplate
-                .exchange(url, method, requestEntity, responseType);
-
+        Observable<Protein> uniqueProteins;
         try {
-            ResponseEntity<EbeyeSearchResult> results = future.get();
-            return results.getBody();
-        } catch (HttpClientErrorException ex) {
-            logger.error(ex.getMessage(), ex);
+            Observable<Entry> distinctEntries = queryService.executeQuery(query).distinct();
+            uniqueProteins = getDistinctProteinsFromEntries(distinctEntries);
+        } catch (RestClientException e) {
+            logger.error(e.getMessage(), e);
+            uniqueProteins = Observable.empty();
         }
 
-        return null;
+        return uniqueProteins;
     }
 
-    private List<String> queryUsingLazyReact(String query, int iteration) throws InterruptedException, ExecutionException {
-        final List<String> urls = new CopyOnWriteArrayList<>();
-        IntStream.rangeClosed(0, iteration).parallel().forEachOrdered(index -> {
-            String url = ebeyeIndexUrl.getDefaultSearchIndexUrl() + "?format=json&size=100&start=" + index * DEFAULT_EBI_SEARCH_LIMIT + "&fields=name,status&query=" + query;
+    public List<Protein> queryForUniqueProteins(String ec, int limit) {
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+        String query = "INTENZ:" + ec;
+        query = UrlUtil.encode(query);
 
-            urls.add(url);
+        return searchForUniqueProteins(query, limit);
+    }
 
-        });
-
-        List<String> urlList = urls.stream().distinct().collect(Collectors.toList());
-
-        return searchEbeyeDomain(urlList);
+    public List<Protein> queryForUniqueProteins(String ec, String searchTerm, int limit) {
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+        Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
+        String query = searchTerm + " AND INTENZ:" + ec;
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
 
     }
 
-    public List<String> searchEbeyeDomain(List<String> urls) {
+    public List<Protein> findUniqueProteinsByOmimIdAndEc(String omimId, String ec, int limit) {
+        Preconditions.checkArgument(omimId != null, "omimId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
 
-       // List<String> accessions = new ArrayList<>();
-        HttpMethod method = HttpMethod.GET;
+        String query = "OMIM:" + omimId + " AND INTENZ:" + ec;
 
-        // Define response type
-        Class<EbeyeSearchResult> responseType = EbeyeSearchResult.class;
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
 
-        // Define headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    }
 
-        HttpEntity<EbeyeSearchResult> requestEntity = new HttpEntity<>(headers);
+    public List<Protein> findUniqueProteinsByTaxIdAndEc(String taxId, String ec, int limit) {
+        Preconditions.checkArgument(taxId != null, "taxId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
 
-        LazyReact lazyReact = new LazyReact();
+        String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
 
-        List<String> accessions = lazyReact
-                .fromStream(urls.stream()
-                        .map(url -> toCompletableFuture(asyncRestTemplate.exchange(url, method, requestEntity, responseType))))
-                .map(ResponseEntity<EbeyeSearchResult>::getBody)
-                .map(EbeyeSearchResult::getEntries).distinct()
-                .flatMap(Collection::stream).distinct()
-                .map(entry -> entry.getUniprotAccession())
-                .collect(Collectors.toList());
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
 
-//        List<List<Entry>> result
-//                = lazyReact.fromStream(urls.stream().map(x -> toCompletableFuture(asyncRestTemplate.exchange(x, method, requestEntity, responseType))))
-//                .map(ResponseEntity<EbeyeSearchResult>::getBody)
-//                .map(EbeyeSearchResult::getEntries).distinct().collect(Collectors.toList());
-//
-//        Iterator<List<Entry>> it = result.iterator();
-//
-//        while (it.hasNext()) {
-//            List<Entry> entries = it.next().stream().distinct().collect(Collectors.toList());
-//            entries.stream().forEach((entry) -> {
-//                accessions.add(entry.getUniprotAccession());
-//            });
-//        }
-        return accessions.stream().distinct().limit(QUERY_LIMIT).collect(Collectors.toList());
-        }
+    }
+
+    public List<Protein> findUniqueProteinsByPathwayIdAndEc(String pathwayId, String ec, int limit) {
+        Preconditions.checkArgument(pathwayId != null, "pathwayId can not be null");
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+
+        String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+
+        query = UrlUtil.encode(query);
+        return searchForUniqueProteins(query, limit);
+
+    }
 
 }

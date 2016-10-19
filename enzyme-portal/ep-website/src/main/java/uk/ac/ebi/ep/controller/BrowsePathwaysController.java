@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
@@ -11,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,6 +28,7 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
  */
 @Controller
 public class BrowsePathwaysController extends AbstractController {
+ private static final Logger logger = Logger.getLogger(BrowsePathwaysController.class);
 
 
     private static final String PATHWAYS = "/pathways";
@@ -50,7 +48,7 @@ public class BrowsePathwaysController extends AbstractController {
 
         pathwayList = finder.findAllPathways().stream().distinct().collect(Collectors.toList());
         String msg = String.format("Number of pathways found : %s", pathwayList.size());
-        LOGGER.debug(msg);
+        logger.debug(msg);
 
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
@@ -174,5 +172,17 @@ public class BrowsePathwaysController extends AbstractController {
             return new ArrayList<>();
         }
     }
-
+    
+//        @ResponseBody
+//    @RequestMapping(value = FIND_PATHWAYS_BY_NAME, method = RequestMethod.GET)
+//    public Callable<List<Pathway>> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
+//        if (name != null && name.length() >= 3) {
+//            //name = String.format("%%%s%%", name).toLowerCase();
+//            logger.info("ASYNC Executions ...... "+ name);
+//            return () -> enzymePortalService.findPathwaysByName(name).stream().distinct().collect(Collectors.toList());
+//        } else {
+//            return () -> new ArrayList<>();
+//        }
+//    }
+    
 }

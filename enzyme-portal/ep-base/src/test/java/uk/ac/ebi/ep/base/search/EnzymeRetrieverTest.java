@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeModel;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
@@ -23,12 +27,9 @@ import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
  *
  * @author joseph
  */
-//@Ignore
 public class EnzymeRetrieverTest extends BaseTest {
 
     private static final String uniprotAccession = "Q07973";
-
-
 
     /**
      * Test of getChebiAdapter method, of class EnzymeRetriever.
@@ -36,19 +37,16 @@ public class EnzymeRetrieverTest extends BaseTest {
     @Test
     public void testGetChebiAdapter() {
         System.out.println("getChebiAdapter");
-             IChebiAdapter result = instance.getChebiAdapter();
+        IChebiAdapter result = enzymeRetriever.getChebiAdapter();
         assertNotNull(result);
     }
-
 
     /**
      * Test of getIntenzAdapter method, of class EnzymeRetriever.
      */
     @Test
     public void testGetIntenzAdapter() {
-        System.out.println("getIntenzAdapter");
-        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
-        IntenzAdapter result = instance.getIntenzAdapter();
+        IntenzAdapter result = enzymeRetriever.getIntenzAdapter();
         assertNotNull(result);
     }
 
@@ -57,13 +55,9 @@ public class EnzymeRetrieverTest extends BaseTest {
      */
     @Test
     public void testGetEnzyme() {
-        System.out.println("getEnzyme");
-
         EnzymeModel expResult = new EnzymeModel();
         expResult.setAccession(uniprotAccession);
-
-        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
-        EnzymeModel result = instance.getEnzyme(uniprotAccession);
+        EnzymeModel result = enzymeRetriever.getEnzyme(uniprotAccession);
         assertEquals(expResult.getAccession(), result.getAccession());
         assertNotNull(result.getName());
 
@@ -76,7 +70,6 @@ public class EnzymeRetrieverTest extends BaseTest {
      */
     @Test
     public void testGetProteinStructure() throws Exception {
-        System.out.println("getProteinStructure");
 
         String accession = "Q09128";
         List<ProteinStructure> proteinstructure = new ArrayList<>();
@@ -95,14 +88,10 @@ public class EnzymeRetrieverTest extends BaseTest {
         expResult.setScientificName("Rattus norvegicus");
         expResult.setCommonName("Rat");
 
-        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
-        EnzymeModel result = instance.getProteinStructure(accession);
+        EnzymeModel result = enzymeRetriever.getProteinStructure(accession);
 
-        //result.setProteinstructure(proteinstructure);
         assertEquals(expResult, result);
         assertNotNull(result);
-       
-        //assertEquals(expResult.getProteinstructure().stream().findAny().get().getId(), result.getProteinstructure().stream().findAny().get().getId());
 
     }
 
@@ -113,8 +102,6 @@ public class EnzymeRetrieverTest extends BaseTest {
      */
     @Test
     public void testGetDiseases() throws Exception {
-        System.out.println("getDiseases");
-        //String uniprotAccession = "P49768";
 
         EnzymeModel expResult = new EnzymeModel();
 
@@ -125,29 +112,25 @@ public class EnzymeRetrieverTest extends BaseTest {
 
         expResult.setDisease(diseases);
 
-        EnzymeRetriever instance = new EnzymeRetriever(service, literatureService);
-        EnzymeModel result = instance.getDiseases(uniprotAccession);
+        EnzymeModel result = enzymeRetriever.getDiseases(uniprotAccession);
         assertEquals(expResult.getDisease().stream().findFirst().get(), result.getDisease().stream().findAny().get());
 
     }
-//
-//    /**
-//     * Test of getLiterature method, of class EnzymeRetriever.
-//     *
-//     * @throws java.lang.Exception
-//     */
+
     @Test
     public void testGetLiterature() throws Exception {
-        System.out.println("getLiterature");
 
         String uniprotAccession1 = "O76074";
-        EnzymeRetriever instance1 = new EnzymeRetriever(service,literatureService);
-         EnzymeModel result = instance1.getLiterature(uniprotAccession1);
-      
+        int limit = 10;
+        EnzymeModel result = enzymeRetriever.getLiterature(uniprotAccession1, limit);
+
         assertNotNull(result.getLiterature().size());
 
-    }
+        assertNotNull(result);
+        assertThat(result.getLiterature(), hasSize(greaterThan(1)));
+        assertThat(result.getLiterature(), hasSize(lessThanOrEqualTo(limit)));
 
+    }
 
     /**
      * Test of getReactionsPathways method, of class EnzymeRetriever.
@@ -156,10 +139,6 @@ public class EnzymeRetrieverTest extends BaseTest {
      */
     @Test
     public void testGetReactionsPathways() throws Exception {
-        System.out.println("getReactionsPathways");
-        //String uniprotAccession = "O76074";
-        //EnzymeRetriever instance = new EnzymeRetriever(service, ebeyeService);
-
         EnzymeModel expResult = new EnzymeModel();
 
         List<ReactionPathway> reactionPathway = new ArrayList<>();
@@ -183,10 +162,9 @@ public class EnzymeRetrieverTest extends BaseTest {
 
         expResult.setReactionpathway(reactionPathway);
 
-        EnzymeModel result = instance.getReactionsPathways("P63086");
-        
-        //assertEquals(expResult.getPathways().stream().findAny().get().getPathwayId().trim(), result.getPathways().stream().findAny().get().getPathwayId().trim());
+        EnzymeModel result = enzymeRetriever.getReactionsPathways("O76074");
+        assertNotNull(result);
+        assertThat(result.getReactionpathway(), hasSize(greaterThan(0)));
     }
-
 
 }

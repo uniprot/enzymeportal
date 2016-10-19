@@ -23,6 +23,8 @@ import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzConfig;
 import uk.ac.ebi.ep.enzymeservices.reactome.ReactomeConfig;
+import uk.ac.ebi.ep.enzymeservices.rhea.IRheaAdapter;
+import uk.ac.ebi.ep.enzymeservices.rhea.RheaWsAdapter;
 import uk.ac.ebi.ep.literatureservice.config.PmcConfig;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 
@@ -31,11 +33,11 @@ import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
  * @author joseph
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class, EbeyeRestService.class, PmcConfig.class})
+@ContextConfiguration(classes = {SpringDataMockConfig.class, GlobalConfig.class, EbeyeConfig.class, PmcConfig.class})
 public abstract class BaseTest {
 
     @Autowired
-    protected EnzymePortalService service;
+    protected EnzymePortalService enzymePortalService;
     @Autowired
     protected EbeyeRestService ebeyeService;
 
@@ -48,11 +50,19 @@ public abstract class BaseTest {
     @Autowired
     protected DataSource dataSource;
 
-    protected EnzymeRetriever instance;
+    protected EnzymeRetriever enzymeRetriever;
+    protected EnzymeFinder enzymeFinder;
 
     @Before
     public void setUp() {
-        instance = new EnzymeRetriever(service, literatureService);
+        IRheaAdapter rheaAdapter = new RheaWsAdapter();
+        IntenzAdapter intenzAdapter = new IntenzAdapter();
+        enzymeRetriever = new EnzymeRetriever();
+        enzymeRetriever.setEnzymePortalService(enzymePortalService);
+        enzymeRetriever.setLiteratureService(literatureService);
+        enzymeRetriever.setIntenzAdapter(intenzAdapter);
+        enzymeRetriever.setRheaAdapter(rheaAdapter);
+        enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeService);
 
     }
 
@@ -102,8 +112,4 @@ public abstract class BaseTest {
         return chebiConfig;
     }
 
-    @Bean
-    public LiteratureService literatureService() {
-        return new LiteratureService();
-    }
 }

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
@@ -10,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +38,7 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
  */
 @Controller
 public class BrowseTaxonomyController extends AbstractController {
+ private static final Logger logger = Logger.getLogger(BrowseTaxonomyController.class);
 
     private static final String ORGANISMS = "/organisms";
     private static final String BROWSE_TAXONOMY = "/browse/taxonomy";
@@ -299,7 +297,7 @@ public class BrowseTaxonomyController extends AbstractController {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+        logger.warn("Duration :  (" + elapsedtime + " sec)");
 
       
         return organisms;
@@ -332,7 +330,7 @@ public class BrowseTaxonomyController extends AbstractController {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
-        LOGGER.warn("Duration :  (" + elapsedtime + " sec)");
+        logger.warn("Duration :  (" + elapsedtime + " sec)");
          model.addAttribute("taxonomy", organisms);
       
         return "taxonomy-test";

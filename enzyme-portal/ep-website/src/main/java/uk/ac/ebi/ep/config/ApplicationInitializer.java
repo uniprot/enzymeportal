@@ -46,6 +46,7 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         //Dispatcher servlet
         ServletRegistration.Dynamic dispatcher
                 = servletContext.addServlet("ep-website-dispatcher", new DispatcherServlet(rootContext));
+        dispatcher.setAsyncSupported(true);
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
         dispatcher.addMapping("*.html");
