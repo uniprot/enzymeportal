@@ -2,3 +2,17 @@
  *.xml
  *.log 
 *.idea*
+
+.DS_Store
+
+*.jar
+
+*.class
+
+*.log
+
+enzyme-portal/ebeye-rest-adapter/src/main/java/uk/ac/ebi/ep/ebeye/Demo.java
+
+enzyme-portal/ebeye-rest-adapter/src/main/java/uk/ac/ebi/ep/ebeye/testing/EbeyeRestServiceTest.java
+
+enzyme-portal/ebeye-rest-adapter/src/main/java/uk/ac/ebi/ep/ebeye/testing/AsyncEbeyeService.java
