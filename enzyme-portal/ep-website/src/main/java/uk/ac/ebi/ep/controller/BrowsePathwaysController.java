@@ -30,7 +30,6 @@ import uk.ac.ebi.ep.data.search.model.SearchResults;
 public class BrowsePathwaysController extends AbstractController {
  private static final Logger logger = Logger.getLogger(BrowsePathwaysController.class);
 
-
     private static final String PATHWAYS = "/pathways";
 
     private static final String BROWSE_PATHWAYS = "/browse/pathways";
@@ -104,7 +103,7 @@ public class BrowsePathwaysController extends AbstractController {
             setLastSummaries(session, results.getSummaryentries());
             searchModel.setSearchresults(results);
             applyFilters(searchModel, request);
-             model.addAttribute("searchConfig", searchConfig);
+            model.addAttribute("searchConfig", searchConfig);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));
             clearHistory(session);
@@ -119,7 +118,6 @@ public class BrowsePathwaysController extends AbstractController {
 
     private SearchResults findEnzymesByPathway(String pathwayId, String pathwayName) {
 
-        SearchResults results = new SearchResults();
         EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         SearchParams searchParams = new SearchParams();
@@ -130,21 +128,17 @@ public class BrowsePathwaysController extends AbstractController {
 
         finder.setSearchParams(searchParams);
 
-    
-       
-            String simplePathwayName = pathwayName.toLowerCase();
-      
-            results = finder.computeEnzymeSummariesByPathwayName(simplePathwayName);
-            
-          if(results.getTotalfound() == 0){
-                results = finder.computeEnzymeSummariesByPathwayId(pathwayId);
-          }
-  
-        
+        String simplePathwayName = pathwayName.toLowerCase();
+
+        SearchResults results = finder.computeEnzymeSummariesByPathwayName(simplePathwayName);
+
+        if (results.getTotalfound() == 0) {
+            results = finder.computeEnzymeSummariesByPathwayId(pathwayId);
+        }
 
         if (results.getTotalfound() == 0) {
 
-               return getEnzymes(finder, searchParams);
+            return getEnzymes(finder, searchParams);
         }
 
         return results;
@@ -157,15 +151,16 @@ public class BrowsePathwaysController extends AbstractController {
         return results;
     }
 
-    /**Note : to access the name & id use pathwayName and pathwayId respectively
-     * 
+    /**
+     * Note : to access the name & id use pathwayName and pathwayId respectively
+     *
      * @param name pathway name
      * @return pathways
      */
     @ResponseBody
     @RequestMapping(value = FIND_PATHWAYS_BY_NAME, method = RequestMethod.GET)
     public List<Pathway> getPathwaysByName(@RequestParam(value = "name", required = true) String name) {
-        if (name != null && name.length()>=3) {
+        if (name != null && name.length() >= 3) {
             //name = String.format("%%%s%%", name).toLowerCase();
             return enzymePortalService.findPathwaysByName(name).stream().distinct().collect(Collectors.toList());
         } else {

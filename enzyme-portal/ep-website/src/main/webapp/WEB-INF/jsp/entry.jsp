@@ -158,21 +158,21 @@
                                             <ul>                                    
                                                 <li id="enzyme" class="protein">
                                                     <a href="enzyme" class="tab ${enzymeSelected}">
-                                                            <span class="label icon icon-conceptual" data-icon="P">
+                                                            <span class="labelEP icon icon-conceptual" data-icon="P">
                                                                <spring:message code="label.entry.enzyme.title"/>
                                                             </span>
                                                     </a>
                                                 </li>
                                                 <li id="structure" class="structure">
                                                     <a href="proteinStructure" class="tab ${proteinStructureSelected}">
-                                                            <span class="label icon icon-conceptual icon-c4" data-icon="s">
+                                                            <span class="labelEP icon icon-conceptual icon-c4" data-icon="s">
                                                                 <spring:message code="label.entry.proteinStructure.title"/>
                                                             </span>
                                                     </a>
                                                 </li>
                                                 <li id="reaction" class="reaction">
                                                     <a href="reactionsPathways" class="tab ${reactionsPathwaysSelected}">
-                                                            <span class="label icon icon-conceptual" data-icon="y">
+                                                            <span class="labelEP icon icon-conceptual" data-icon="y">
                                                                 <spring:message code="label.entry.reactionsPathways.title"/>
                                                                 
                                                             </span>
@@ -180,21 +180,21 @@
                                                 </li>
                                                 <li id="molecule" class="molecule">
                                                     <a href="molecules" class="tab ${moleculesSelected}">
-                                                             <span class="label icon icon-conceptual" data-icon="b">
+                                                             <span class="labelEP icon icon-conceptual" data-icon="b">
                                                                 <spring:message code="label.entry.molecules.title"/>
                                                             </span>
                                                     </a>
                                                 </li>
                                                 <li id="disease" class="disease">
                                                     <a href="diseaseDrugs" class="tab ${diseaseDrugsSelected}">
-                                                            <span class="label icon icon-species" data-icon="v">
+                                                            <span class="labelEP icon icon-species" data-icon="v">
                                                                 <spring:message code="label.entry.disease.title"/>
                                                             </span>
                                                     </a>
                                                 </li>
                                                 <li id="literature" class="literature">
                                                     <a href="literature" class="tab ${literatureSelected}">
-                                                            <span class="label icon icon-conceptual" data-icon="l">
+                                                            <span class="labelEP icon icon-conceptual" data-icon="l">
                                                                 <spring:message code="label.entry.literature.title"/>
                                                             </span>
                                                     </a>

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Generate enzyme-centric XML for indexing
 #This is how to run this script
 #DB_Config e.g uzpdev

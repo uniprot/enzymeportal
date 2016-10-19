@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.autocomplete;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,19 +10,14 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Suggestion implements Comparable<Suggestion>{
-
     @JsonProperty("suggestion")
     private String suggestedKeyword;
-    
-    private Suggestion(){
-        
-    }
+
+    private Suggestion(){}
 
     public Suggestion(String suggestedKeyword) {
         this.suggestedKeyword = suggestedKeyword;
     }
-    
-    
 
     public String getSuggestedKeyword() {
         return suggestedKeyword;
@@ -61,7 +51,4 @@ public class Suggestion implements Comparable<Suggestion>{
     public int compareTo(Suggestion s) {
        return this.suggestedKeyword.compareToIgnoreCase(s.getSuggestedKeyword());
     }
-    
-    
-
 }

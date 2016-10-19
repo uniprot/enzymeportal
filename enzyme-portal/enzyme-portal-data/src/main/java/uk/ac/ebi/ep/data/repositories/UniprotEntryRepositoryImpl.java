@@ -272,15 +272,15 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         JPAQuery query = new JPAQuery(entityManager);
         List<Species> result = query.from($).where($.accession.in(accessions)).distinct().orderBy($.scientificName.asc())
                 .list(Projections.constructor(Species.class, $.scientificName, $.commonName, $.taxId));
-                
+
         return result;
     }
-    
-            @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     @Override
     public Page<UniprotEntry> findPageableEntryByEc(String ec, Pageable pageable) {
         JPAQuery query = new JPAQuery(entityManager);
-        int pageSize =pageable.getPageSize();
+        int pageSize = pageable.getPageSize();
         int page = pageable.getPageNumber();
         List<UniprotEntry> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ec))
                 .distinct().limit(pageSize).offset((page) * pageSize)
@@ -288,5 +288,5 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
         return new PageImpl<>(result, pageable, result.size());
 
     }
-    
+
 }

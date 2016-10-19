@@ -3,30 +3,40 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.ebeye.search;
+package uk.ac.ebi.ep.ebeye.model;
 
+import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  *
- * @author joseph
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EbeyeSearchResult {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+"hitCount",
+"entries",
+"facets"
+})
+public class EBISearchResult {
 
     @JsonProperty("hitCount")
     private Integer hitCount;
     @JsonProperty("entries")
-    private List<Entry> entries;
+    private List<Entry> entries = new ArrayList<>();
+    @JsonProperty("facets")
+    private List<Facet> facets = new ArrayList<>();
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -54,11 +64,6 @@ public class EbeyeSearchResult {
      */
     @JsonProperty("entries")
     public List<Entry> getEntries() {
-
-        if (entries == null) {
-            entries = new ArrayList<>();
-        }
-
         return entries;
     }
 
@@ -71,6 +76,24 @@ public class EbeyeSearchResult {
         this.entries = entries;
     }
 
+    /**
+     *
+     * @return The facets
+     */
+    @JsonProperty("facets")
+    public List<Facet> getFacets() {
+        return facets;
+    }
+
+    /**
+     *
+     * @param facets The facets
+     */
+    @JsonProperty("facets")
+    public void setFacets(List<Facet> facets) {
+        this.facets = facets;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -81,9 +104,10 @@ public class EbeyeSearchResult {
         this.additionalProperties.put(name, value);
     }
 
-    @JsonIgnore
-    public Stream<Entry> entryStreams() {
-        return entries == null ? Stream.empty() : entries.stream();
+    @Override
+    public String toString() {
+        return "ModelResult{" + "hitCount=" + hitCount + ", entries=" + entries + ", facets=" + facets + '}';
     }
-
+    
+    
 }

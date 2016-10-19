@@ -19,8 +19,8 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
  *
  * @author joseph
  */
-@NoRepositoryBean
-public interface UniprotEntryRepositoryCustom {
+   @NoRepositoryBean
+   public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymesByNamePrefixes(List<String> nameprefixes);
 

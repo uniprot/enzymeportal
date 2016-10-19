@@ -20,7 +20,7 @@ public class UniprotEntryServiceTestIT extends AbstractDataTest {
     private static final String ACCESSION = "Q64441";
 
     @Override
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         dataSource.getConnection().close();
     }
 
