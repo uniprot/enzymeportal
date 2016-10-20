@@ -162,9 +162,9 @@ public class EnzymeRetrieverTest extends BaseTest {
 
         expResult.setReactionpathway(reactionPathway);
 
-        EnzymeModel result = enzymeRetriever.getReactionsPathways("O76074");
+        EnzymeModel result = enzymeRetriever.getReactionsPathways("Q8CHX6");
         assertNotNull(result);
-        assertThat(result.getReactionpathway(), hasSize(greaterThan(0)));
+        assertThat(result.getPathways(), hasSize(greaterThan(0)));
     }
 
 }

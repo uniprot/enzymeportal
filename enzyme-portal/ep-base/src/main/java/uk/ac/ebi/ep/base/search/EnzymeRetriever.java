@@ -438,7 +438,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
             throws EnzymeRetrieverException {
 
         EnzymeModel model = getEnzymeModel(uniprotAccession);
-        List<String> catalyticActivities = enzymePortalService.findCatalyticActivitiesByAccession(model.getAccession());
+        List<String> catalyticActivities = enzymePortalService.findCatalyticActivitiesByAccession(uniprotAccession);
         model.setCatalyticActivities(catalyticActivities);
         addReactionsPathways(model);
         return model;
@@ -464,6 +464,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
         List<Pathway> pathways = enzymePortalService.findPathwaysByAccession(model.getAccession());
         model.setPathways(pathways);
         reactionPathway.setPathways(pathways);
+        reactionPathway.setReactions(reactions);
 
         if (reactions != null && !reactions.isEmpty()) {
             reactionPathway.setReactions(reactions);
