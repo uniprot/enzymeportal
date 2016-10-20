@@ -185,13 +185,6 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
-        
-        
-    
-        
-        
-        
-        
     </repositories>
     <distributionManagement>
        
@@ -543,11 +536,7 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>    
-            
 
-            
-            
-            
         </plugins>
         <extensions>
             <extension>
@@ -568,86 +557,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-<!--
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <github.global.server>github</github.global.server>
-    </properties>-->
-    
-<!--    mainly used in the latext ep development if BOM is to be used-->
-<!--    <dependencyManagement>
-        <dependencies>
-            
-                        spring framework
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-framework-bom</artifactId>
-                <version>4.0.3.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>4.0.3.RELEASE</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>4.0.3.RELEASE</version>
-            </dependency>
-            
-                        spring data
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-jpa</artifactId>
-                <version>1.5.2.RELEASE</version>
-                                <version>1.4.5.RELEASE</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-commons</artifactId>
-                <version>1.7.2.RELEASE</version>
-            </dependency>
-            
-                        hibernate core
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>4.3.5.Final</version>
-            </dependency>
-            
-
-
-            hibernate entity manager
-
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-entitymanager</artifactId>
-                <version>4.3.5.Final</version>
-            </dependency>
-
-            
-                    hibernate validator
-                        
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>5.0.3.Final</version>
-            </dependency>
-
-            
-
-        </dependencies>
-
-    </dependencyManagement>-->
     
     <modules>
        
@@ -665,6 +574,7 @@
         <module>LiteratureService</module>
         <module>ep-base</module>
         <module>ep-website</module>
+        <module>ep-benchmarks</module>
     </modules>
     
     <profiles>
