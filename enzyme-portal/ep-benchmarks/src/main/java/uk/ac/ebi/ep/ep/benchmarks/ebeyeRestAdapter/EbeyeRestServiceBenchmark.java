@@ -6,7 +6,6 @@
 package uk.ac.ebi.ep.ep.benchmarks.ebeyeRestAdapter;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -21,14 +20,16 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
+import org.openjdk.jmh.profile.GCProfiler;
+import org.openjdk.jmh.profile.StackProfiler;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
+import rx.Observable;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
-
 
 /**
  *
@@ -41,70 +42,54 @@ import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 @Fork(1)
 @State(Scope.Benchmark)
 public class EbeyeRestServiceBenchmark {
+
     //double x = 1e6;
-    private EbeyeRestService service;
-
-    @Bean
-    public EbeyeRestService ebeyeRestService() {
-
-        return null;// new EbeyeRestService();//TODO
-    }
+    @Autowired
+    private EbeyeRestService ebeyeRestService;
 
     @Setup
     public void setup() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-
-        context.register(EbeyeRestService.class);
         context.scan("uk.ac.ebi.ep.ebeye");
         context.refresh();
 
-        service = context.getBean(EbeyeRestService.class);
+        ebeyeRestService = context.getBean(EbeyeRestService.class);
 
     }
 
     @TearDown(Level.Trial)
     public void doTearDown() {
 
-        service = null;
+        ebeyeRestService = null;
     }
 
     @Benchmark
-    public void query(Blackhole blackhole) throws InterruptedException, ExecutionException {
+    public void queryForUniqueAccessions(Blackhole blackhole) {
 
         String query = "alzheimer disease";
-        query = " sildenafil";
-        query = "dna ligase";
-        //query = "ligase";
         query = "kinase";
-        //query="ligase";
-        //query = "sildenafil";
-        List<String> accessions = null;//service.queryEbeyeForAccessions(query, true);
+        query = "sildenafil";
+        Observable<String> accessions = ebeyeRestService.queryForUniqueAccessions(query);
         blackhole.consume(accessions);
 
     }
 
     @Benchmark
-    public void queryLazyReact(Blackhole blackhole) throws InterruptedException, ExecutionException {
+    public void queryForUniqueAccessionsByEc(Blackhole blackhole) {
 
-        String query = "alzheimer disease";
-        query = " sildenafil";
-        query = "dna ligase";
-        //query = "ligase";
-        query = "kinase";
-        //query="ligase";
-        //query = "sildenafil";
-        List<String> accessions = null;// service.queryEbeyeForAccessionsLazyReact(query, true, 0);
+        String ec = "1.1.1.1";
+        int limit = 100;
+        List<String> accessions = ebeyeRestService.queryForUniqueAccessionsByEc(ec, limit);
         blackhole.consume(accessions);
 
     }
 
- 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(EbeyeRestServiceBenchmark.class.getSimpleName())
                 .threads(20)
-                //.addProfiler(StackProfiler.class)
-                //.addProfiler(GCProfiler.class)
+                .addProfiler(StackProfiler.class)
+                .addProfiler(GCProfiler.class)
                 .warmupIterations(1)
                 .measurementIterations(1)
                 .forks(1)
