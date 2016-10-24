@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>enzymeservices</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
     
     <description>
@@ -16,11 +16,7 @@
     </parent>
     
     <properties>
-<!--        <org.springframework-version>4.1.7.RELEASE</org.springframework-version>
         
-        <slf4j.version>1.7.5</slf4j.version>
-        <log4j.version>1.2.17</log4j.version>-->
-         
     
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -33,7 +29,7 @@
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
             <artifactId>enzyme-portal-data</artifactId>
-            <version>1.1.3-SNAPSHOT</version>
+            <version>1.1.3</version>
         </dependency>
 
       
@@ -45,7 +41,6 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-<!--            <version>1.2.17</version>-->
         </dependency>
 
         <dependency>
@@ -91,17 +86,11 @@
         <dependency>
             <groupId>commons-pool</groupId>
             <artifactId>commons-pool</artifactId>
-<!--            <version>1.6</version>-->
         </dependency>   
-                
-<!--           chebi adapter     -->
-                
-                
-                
+                  
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-<!--            <version>4.11</version>-->
         </dependency>  
         
     </dependencies>
