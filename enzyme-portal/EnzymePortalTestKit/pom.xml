@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>EnzymePortalTestKit</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
     
     <parent>
@@ -17,8 +17,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-<!--        <org.springframework-version>4.1.7.RELEASE</org.springframework-version>-->
-        
         <slf4j.version>1.7.5</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <gatling.version>2.1.6</gatling.version>
@@ -94,14 +92,12 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-<!--            <version>${log4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency> 
@@ -109,7 +105,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -117,50 +112,23 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-<!--            <version>${slf4j.version}</version>-->
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
- 
-
-        
-<!--        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${org.springframework-version}</version>
-            <exclusions>
-                 Exclude Commons Logging in favor of SLF4j 
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>  -->
-        
-        
- 
-
-        
         
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
-<!--            <version>1.3</version>-->
- 
         </dependency>
         
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-<!--            <version>${org.springframework-version}</version>-->
-  
+            <artifactId>spring-test</artifactId> 
         </dependency> 
          
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-<!--            <version>4.11</version>-->
-        
             <exclusions>
                 <exclusion>
                     <artifactId>hamcrest-core</artifactId>
@@ -171,20 +139,17 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-<!--            <version>1.9.5</version>-->
-         
+        
         </dependency>
         
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-<!--            <version>1.4.185</version>-->
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-<!--            <version>2.4</version>-->
         </dependency>
         
     </dependencies> 
