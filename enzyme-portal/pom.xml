@@ -129,6 +129,7 @@
             </snapshots>
             <id>ebi-repo</id>
             <name>EBI maven repository</name>
+<!--            http://www.ebi.ac.uk/~maven/m2repo/uk/ac/ebi/ep/  (enzyme portal repo web view)-->
             <url>http://www.ebi.ac.uk/~maven/m2repo</url>
 <!--             <url>http://www.ebi.ac.uk/~maven/public_html/m2repo</url>-->
         </repository> 
