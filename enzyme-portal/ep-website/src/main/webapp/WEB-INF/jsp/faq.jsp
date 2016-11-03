@@ -83,7 +83,7 @@
                         <li> <a href="faq#09">What can do I with enzymes in my basket?</a>  </li>
 
                         <li><a href="faq#10">Can I download the results from the search?</a></li>
-                        <li><a href="faq#11">Where can I find the old Enzyme Portal pages?</a></li>
+<!--                        <li><a href="faq#11">Where can I find the old Enzyme Portal pages?</a></li>-->
 
                     </ul>
 
@@ -165,15 +165,15 @@
                     <a id="10"><h4>Can I download the results from the search?</h4></a>
 
                     <fieldset>
-                        <p>Yes, You can download search results and in several formats. The download will be a zipped file by default but you can de-select this option using the provided checkbox</p>
+                        <p>Yes, You can download search results and in several formats. The download will be a zipped file by default but you can de-select this option using the provided checkbox.</p>
                     </fieldset>
 
 
 
-                    <a id="11"><h4>Where can I find the old Enzyme Portal pages?</h4></a>
+<!--                    <a id="11"><h4>Where can I find the old Enzyme Portal pages?</h4></a>
                     <fieldset>
                         <p>The old Enzyme Portal pages can be found at <a href="http://www.ebi.ac.uk/enzymeportal/legacy/">http://www.ebi.ac.uk/enzymeportal/legacy/</a>. Please note that these pages are no longer updated and will be phased out at the end of 2015.</p>
-                    </fieldset>
+                    </fieldset>-->
                     <a id="12"></a>
                     <fieldset>
 
