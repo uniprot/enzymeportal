@@ -129,8 +129,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
     }
 
     private List<EnzymeAccession> getRelatedSPecies(UniprotEntry uniprotEntry) {
-//        String defaultSpecies = CommonSpecies.HUMAN.getScientificName();
-//
+
         List<EnzymeAccession> relatedSpecies = new LinkedList<>();
         // TODO query for related proteins and use the obj. possible null pointer if db is not populated with related protein
 
@@ -149,15 +148,7 @@ public class EnzymeRetriever {//  extends EnzymeBase {
                 ea.setSpecies(e.getSpecies());
                 ea.setUniprotid(e.getName());
 
-//            if (e.getScientificName() != null && e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
-//
-//                relatedSpecies.add(0, ea);
-//
-//            } else if (e.getScientificName() != null && !e.getScientificName().equalsIgnoreCase(defaultSpecies)) {
-//                relatedSpecies.add(ea);
-//
-//            }
-                relatedSpecies = relatedSpeciesWithHumanOnTop(ea, e);
+                relatedSpecies.addAll(relatedSpeciesWithHumanOnTop(ea, e));
             }
         }
         return relatedSpecies;
