@@ -40,13 +40,16 @@
             </div>
         
             <section class="grid_4 alpha">&nbsp;</section>
+            <c:choose>
+                <c:when test="${not empty comparison.compared[1].uniprotaccessions[0]}">
+                
             <section class="grid_18 omega">
                 <h2>Comparing enzymes
                     <a href="compare?acc=${comparison.compared[0].uniprotaccessions[0]}&acc=${comparison.compared[1].uniprotaccessions[0]}"
                         class="icon icon-generic" data-icon="L"
                         style="font-size: smaller;"
                         title="permalink to this comparison"></a></h2>
-            </section>
+            </section>        
             <br clear="all"/>
 
             <section class="grid_4 alpha" id="comparison-header">
@@ -67,6 +70,11 @@
                 </section>
                 <br clear="all"/>
             </section>
+              </c:when>
+                <c:otherwise>
+                    <b>You can only compare enzymes of different organisms. Please check your selection</b>
+                </c:otherwise>
+            </c:choose>          
 
             <c:forEach var="topComparison" items="${comparison.subComparisons}">
                 <section class="grid_4 alpha" id="${sc.key}">&nbsp;</section>

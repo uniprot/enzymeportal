@@ -59,7 +59,7 @@ public class UniprotEntryService {
     @Transactional(readOnly = true)
     public List<UniprotEntry> findEnzymesByAccessions(List<String> accessions) {
 
-        return repository.findEnzymesByAccessions(accessions);
+        return repository.findSummariesByAccessions(accessions);
     }
 
     private static Predicate isAccession(String accession) {

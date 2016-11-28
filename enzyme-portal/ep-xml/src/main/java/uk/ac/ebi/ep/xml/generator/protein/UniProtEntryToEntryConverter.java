@@ -36,6 +36,7 @@ public class UniProtEntryToEntryConverter extends XmlTransformer implements Item
         entry.setName(uniprotEntry.getProteinName());
         entry.setDescription(uniprotEntry.getProteinName());
 
+        //addProteinGroupIdFields(uniprotEntry, fields);
         addStatus(uniprotEntry, fields);
         addScientificNameFields(uniprotEntry, fields);
         addCommonNameFields(uniprotEntry, fields);

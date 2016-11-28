@@ -19,16 +19,18 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
  *
  * @author joseph
  */
-   @NoRepositoryBean
-   public interface UniprotEntryRepositoryCustom {
+@NoRepositoryBean
+public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymesByNamePrefixes(List<String> nameprefixes);
 
     @Deprecated
     List<UniprotEntry> findEnzymesByAccessions(List<String> accessions);
 
+    @Deprecated
     List<UniprotEntry> findEnzymesByAccession(String accession);
 
+    @Deprecated
     List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
 
     @Deprecated

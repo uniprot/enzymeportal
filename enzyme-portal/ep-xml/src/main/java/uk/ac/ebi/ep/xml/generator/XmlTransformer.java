@@ -76,6 +76,13 @@ public class XmlTransformer {
         }
     }
 
+//    protected void addProteinGroupIdFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+//        if (Objects.nonNull(uniprotEntry.getProteinGroupId())) {
+//            Field field = new Field(FieldName.PROTEIN_GROUP_ID.getName(), uniprotEntry.getProteinGroupId().getProteinGroupId());
+//            fields.add(field);
+//        }
+//    }
+
     @Deprecated
     protected void addProteinInfoFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {

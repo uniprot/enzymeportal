@@ -147,5 +147,5 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ COUNT(*) FROM UNIPROT_ENTRY", nativeQuery = true)
     Long countUniprotEntries();
-
+    
 }

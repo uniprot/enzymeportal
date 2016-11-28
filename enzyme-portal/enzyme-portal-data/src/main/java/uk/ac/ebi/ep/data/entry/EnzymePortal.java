@@ -42,7 +42,7 @@ public class EnzymePortal {
         final EnzymePortal other = (EnzymePortal) obj;
         return Objects.equals(this.protein.getProteinName(), other.protein.getProteinName());
     }
-    
 
     
+
 }

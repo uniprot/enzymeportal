@@ -247,12 +247,20 @@ public final class Functions {
 
     public static String getSummaryBasketId(UniprotEntry summary) {
         List<String> accs = new ArrayList<>();
-        accs.add(summary.getAccession());
+       // accs.add(summary.getAccession());
 //        summary.getRelatedspecies().stream().forEach((acc) -> {
-//            accs.add(acc.getUniprotaccessions().get(0));
+//            //accs.add(acc.getUniprotaccessions().get(0));
+//        Stream.of(acc.getUniprotaccessions().stream().findFirst().get());
 //        });
 
-        return accs.toString();
+        //return accs.toString();
+        return summary.getAccession();
+        
+//        System.out.println("FUNCTION 1 "+ summary.getRelatedspecies().stream().findFirst().get().getUniprotaccession());  
+//        System.out.println("FUNCTION 2 "+ summary.getRelatedspecies().stream().findFirst().get().getUniprotaccessions());
+//        
+//        return summary.getRelatedspecies().stream().distinct().findFirst().get().getUniprotaccession();
+//    
     }
 
     public static List<UniprotEntry> sortBlastResult(List<UniprotEntry> enzymes) {

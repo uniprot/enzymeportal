@@ -50,11 +50,12 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
     private BigDecimal relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-     //@OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
     //@BatchSize(size = 100)
     @Fetch(FetchMode.JOIN)
     private Set<UniprotEntry> uniprotEntrySet;
+    //private List<UniprotEntry> uniprotEntrySet;
 
     public RelatedProteins() {
     }
@@ -81,6 +82,12 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
 
     @XmlTransient
     public Set<UniprotEntry> getUniprotEntrySet() {
+        // List<EnzymeAccession> sortedSpecies = relatedspecies
+//        return uniprotEntrySet.stream()
+//                .sorted(Comparator.comparing(UniprotEntry::getExpEvidenceFlag)
+//                        .reversed())
+//                .collect(Collectors.toList());
+
         return uniprotEntrySet;
     }
 
