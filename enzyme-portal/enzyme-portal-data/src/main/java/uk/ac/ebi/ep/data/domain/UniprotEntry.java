@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.util.Assert;
 import uk.ac.ebi.ep.data.common.ModelOrganisms;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
@@ -194,6 +195,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public UniprotEntry(String accession) {
+        Assert.notNull(accession, "Accession must not be null");
         this.accession = accession;
     }
 
