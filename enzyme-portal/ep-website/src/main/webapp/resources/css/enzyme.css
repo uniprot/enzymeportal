@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : enzyme
     Created on : May 6, 2011, 8:03:11 PM
     Author     : hongcao
@@ -16,7 +16,7 @@ img {
 }
 /*overidding frontier css*/
 dt{
-	clear: none;  
+	clear: none;
 	padding: 0em 0em;
     font-family: inherit;
 }
@@ -110,12 +110,12 @@ span.synonyms {
     text-align:justify;
 }
 span.enzymeDisease{
-     margin-right: 5px;  
+     margin-right: 5px;
     text-align:justify;
 }
 span h1{
   font-family: 'HelveticaNeueLT Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
-  
+
 }
 
 
@@ -240,14 +240,21 @@ button.comparison {
 /* XAV CSS */
 #browse-box-container {
     margin: 3em auto;
+    width:100%;
+    text-align: center;
+}
+
+.home-page-descriptions div{
+    padding: 0px 10px 0px 10px;
 }
 
 a.browse-box {
     text-align: center;
     color:white;
     display: inline-block;
-    height:120px;
+    height:160px;
     padding-top: 1em;
+    margin-left: 2em;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -344,7 +351,7 @@ div#local-masthead ul.dropdown-menu li {
 }
 
 
-/* D3 
+/* D3
 ------------------------*/
 #taxonomy-tree .node circle {
   fill: #fff;
@@ -424,7 +431,7 @@ ul.catalytic-activity-list li {
 	left:0;
 	z-index: 1000;
 	float: left;
-	min-width: 160px;
+	min-width: 260px;
 	padding: 5px;
 	margin: 2px 0 0;
 	text-align: left;

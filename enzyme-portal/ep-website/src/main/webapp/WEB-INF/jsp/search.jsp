@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : search
     Created on : Sep 17, 2012, 4:05:40 PM
     Author     : joseph
@@ -27,16 +27,16 @@
 <c:set var="pageTitle" value="Search results"/>
 <%@include file="head.jspf" %>
 
-<body class="level2 ${totalfound eq 0? 'noresults' : ''}">
+<body class="full-width level2 ${totalfound eq 0? 'noresults' : ''}">
 
  <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
 
 <!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
   <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
- 
+
 <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />-->
  <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
- 
+
     <script>
 		$(function() {
 			$("#accordion").accordion({
@@ -46,7 +46,7 @@
 			});
 		});
 	</script>
-    
+
     <div id="skip-to">
             <ul>
                 <li><a href="#content">Skip to main content</a></li>
@@ -56,11 +56,11 @@
             </ul>
         </div>
 
-        <div id="wrapper" class="container_24">
+        <div id="wrapper">
 
             <%@include file="header.jspf" %>
-            
-            <div id="content" role="main" class="grid_24 clearfix">
+
+            <div id="content" role="main" class="clearfix">
 
                 <!--Global variables-->
                 <c:set var="showButton" value="Show more"/>
@@ -79,35 +79,32 @@
                     var diseaseAutoCompleteDataSource = [];
                     var ecAutoCompleteDataSource = [];
                 </script>
-                
-                
-                       <c:choose>
-                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">	
-                                <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>	
-                            </c:when>
 
-                            <c:otherwise>
-                                <c:set var="searchText"
-                                       value="${Fn:escapeHTML(searchModel.searchparams.text)}"/>
-                            </c:otherwise>
-                        </c:choose>
+                 <c:choose>
+                      <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
+                          <c:set var="searchText" value="${searchModel.searchparams.sequence}"/>
+                      </c:when>
 
-                <!-- Suggested layout containers -->  
+                      <c:otherwise>
+                          <c:set var="searchText"
+                                 value="${Fn:escapeHTML(searchModel.searchparams.text)}"/>
+                      </c:otherwise>
+                  </c:choose>
+
+                <!-- Suggested layout containers -->
                 <section >
                     <div>
                         <%@ include file="breadcrumbs.jsp" %>
                     </div>
-
-
                 </section>
 
                 <section class="clearfix">
-                    <section class="grid_18 alpha"  >
+                    <section>
 
                         <c:if test="${totalfound eq 0}">
                             <c:if test="${searchText eq ''}">
                                <c:set var="searchText"
-                                       value=" "/> 
+                                       value=" "/>
                             </c:if>
                             <h2>No results found</h2>
                             <p class="alert">We're sorry but we couldn't find anything that matched your search for " ${searchText} ". Please try another search or use the<a href="advanceSearch"> advanced search</a></p>
@@ -115,7 +112,7 @@
                                 $(document).ready(function() {
                                     try {
                                         /* The simplest implementation, used on your zero search results pages */
-                                        updateSummary({noResults: true});	       
+                                        updateSummary({noResults: true});
                                     } catch (except_1) {}
                                 });
                             </script>
@@ -127,17 +124,20 @@
                     <c:if test="${searchModel.searchparams.type ne 'SEQUENCE'}">
                         <script src="${pageContext.request.contextPath}/resources/javascript/ebi-global-search-run.js"></script>
                         <script src="${pageContext.request.contextPath}/resources/javascript/ebi-global-search.js"></script>
-                        <aside class="grid_6 omega shortcuts expander" id="search-extras">	    	
-                        <div id="ebi_search_results"><h3
-                            class="slideToggle icon icon-functional"
-                            data-icon="u">Show more data from EMBL-EBI</h3>
+                        <aside class="shortcuts expander more-results" id="search-extras">
+                        <button class="button icon icon-functional" type="button" data-toggle="ebi_search_results" data-icon="u"> Show more data from EMBL-EBI</button>
+                        <div class="dropdown-pane" id="ebi_search_results" data-dropdown data-hover="true" data-hover-pane="true">
+                          No additional results
                         </div>
                     </aside>
                     </c:if>
 
                 </section>
 
-                <section class="grid_6" id="search-results">
+
+<div class="row">
+
+                <section class="large-3 columns" id="search-results">
                     <c:if test="${ searchresults.totalfound gt 0}">
                         <div class="filter">
                             <div class="title">
@@ -145,7 +145,7 @@
                             </div>
                             <div class="line"></div>
                             <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="search" method="POST">
-                                <form:hidden path="searchparams.type" />	
+                                <form:hidden path="searchparams.type" />
                                 <form:hidden path="searchparams.text" />
                                 <form:hidden path="searchparams.sequence" />
                                 <form:hidden path="searchparams.previoustext" />
@@ -159,12 +159,14 @@
                                 <br/>
                                  <%@ include file="filter-family.jsp"%>
                             </form:form>
-                        </div> 
+                        </div>
                     </c:if>
                 </section>
-                <section class="grid_18" id="keywordSearchResult">
+
+
+                <section class="large-9 columns" id="keywordSearchResult">
                   <c:if test="${searchModel.searchparams.type eq 'COMPOUND'}">
-                  
+
                     <form id="goBackStructureSearch"
                         action="${pageContext.request.contextPath}/advanceSearch"
                         method="POST" style="text-align: center;">
@@ -194,9 +196,9 @@
                             </figcaption>
                         </figure>
                     </div>
-                    
+
                     </form>
-                    
+
                     <script>
                     if (typeof(sessionStorage.drawnImg) != 'undefined'){
                     	$('#drawnImg').attr('src', sessionStorage.drawnImg);
@@ -212,7 +214,7 @@
                         }
                     });
                     </script>
-                  </c:if>                                              
+                  </c:if>
                     <c:if test="${totalfound eq -100}">
                         <spring:message code="label.search.empty"/>
                     </c:if>
@@ -224,6 +226,11 @@
                                     <%@include file="basket-buttons.jspf" %>
                                 </div>
 <!--                                <div class="action-buttons"><small title="" class="icon-uniprot reviewed-icon" data-icon="s">Reviewed</small>  <small title="" class="icon-uniprot unreviewed-icon" data-icon="t">Unreviewed</small></div>-->
+
+
+
+
+
                                 <div id="paginationNav" style="text-align: right;">
                                     <form:form modelAttribute="pagination" >
                                         <c:if test="${totalPages gt pagination.maxDisplayedPages}">
@@ -237,17 +244,17 @@
                                             Previous
                                         </a>
                                         Page ${pagination.currentPage} of ${totalPages}
-    
+
                                         <c:if test="${pagination.lastResult+1 lt summaryEntriesSize}">
                                             <input id ="nextStart" type="hidden"
-                                                   value="${startRecord + pagination.numberOfResultsPerPage}">                                    
+                                                   value="${startRecord + pagination.numberOfResultsPerPage}">
                                             <a id="nextButton" href="javascript:void(0);">
                                                 Next
                                             </a>
-                                        </c:if>                         
+                                        </c:if>
                                         <%-- Add species filter to this form, don't lose it: --%>
                                         <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
-                                            <input type="checkbox" style="display: none;" 
+                                            <input type="checkbox" style="display: none;"
                                                    name="searchparams.species"
                                                    value="${filterSp.scientificname}" />
                                         </c:forEach>
@@ -265,28 +272,27 @@
                                        begin="${pagination.firstResult}"
                                        end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
                                     <%@ include file="summary.jspf"%>
-                            </c:forEach>   
+                            </c:forEach>
                                 </c:when>
                                 <c:otherwise>
                                     <c:forEach items="${summaryEntries}"
                                        begin="${pagination.firstResult}"
                                        end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
                                     <%@ include file="summary.jspf"%>
-                            </c:forEach>     
+                            </c:forEach>
                                 </c:otherwise>
-                                 
+
                             </c:choose>
-                          
-            
+
+
                         </div>
                     </c:if>
                 </section>
             </div>
-
+</div>
     <%@include file="footer.jspf" %>
-    
+
         </div> <!--! end of #wrapper -->
 
     </body>
 </html>
-

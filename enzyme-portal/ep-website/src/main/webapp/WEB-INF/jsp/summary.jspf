@@ -29,7 +29,7 @@
 --%>
 <c:set var="primAcc" value="${theSpecies.uniprotaccessions[0]}"/>
 
-<div class="resultItem grid_24">
+<div class="resultItem">
 
 <div class="summary-header">
     <c:if test="${showCheckbox != false}">
@@ -49,20 +49,22 @@
         </h4>
                 <c:choose>
                     <c:when test="${enzyme.entryType eq 0}">
-             <small title="Reviewed by UniProt" class="icon-uniprot reviewed-icon" data-icon="s"></small>             
+             <small title="Reviewed by UniProt" class="icon-uniprot reviewed-icon" data-icon="s"></small>
                     </c:when>
                     <c:otherwise>
-          <small title="UniProt unreviewed" class="icon-uniprot unreviewed-icon" data-icon="t"></small>              
+          <small title="UniProt unreviewed" class="icon-uniprot unreviewed-icon" data-icon="t"></small>
                     </c:otherwise>
                 </c:choose>
-                
 
-        
-        
+
+
+
     </c:if>
 </div>
 <%--${not empty basket and--%>
 <%--not empty basket[epfn:getSummaryBasketId(enzyme)]? 'checked': ''}--%>
+
+<div class="row>">
 
 <c:choose>
     <%--
@@ -74,7 +76,7 @@
         <a href="#" ><span class="displayMsg" style="font-size:small;text-align:center " > No Result was found for this Selection.</span></a>
     </c:when>
     <c:otherwise>
-        <div class="proteinImg grid_3">
+        <div class="proteinImg large-2 columns">
             <c:set var="imgFile" value='${theSpecies.pdbeaccession[0]}'/>
             <c:set var="imgFooter" value=""/>
             <c:set var="specieWithImage" value="${primAcc}"/>
@@ -123,7 +125,7 @@
     </c:otherwise>
 </c:choose>
 
-<div class="desc grid_21">
+<div class="desc large-10 columns">
     <c:if test="${not empty theSpecies.enzymeFunction}">
         <div>
             <c:set var="function" value='${theSpecies.enzymeFunction}'/>
@@ -178,17 +180,17 @@
     <c:set var="disLimitedDisplayDefault" value="${5}"/>
     <c:set var="disLimitedDisplay" value="${disLimitedDisplayDefault}"/>
      <c:set var="disLink" value="${pageContext.request.contextPath}/search/${primAcc}/diseaseDrugs/"/>
-    
+
     <div id="enzymeDisease ">
         <c:if test="${ enzymeDiseaseSize >0}">
-             
+
             <b>Diseases :</b>
             <c:if test="${enzymeDiseaseSize > 0 && enzymeDiseaseSize <= disLimitedDisplay}">
                 <c:set var="disLimitedDisplay" value="${enzymeDiseaseSize}"/>
             </c:if>
             <c:set var="hiddenDis" value=""/>
             <c:forEach var="i" begin="0" end="${disLimitedDisplay-1}">
-               
+
                 <xchars:translate>
                     <span class="resultPageDisease" style="border-bottom-style:none"><a href="${pageContext.request.contextPath}/search/${primAcc}/diseaseDrugs${epfn:removeSlash(enzymeDisease[i].id)}">${enzymeDisease[i].name}</a></span>;
                 </xchars:translate>
@@ -241,7 +243,7 @@
                                   title="Score = ${relspecies[i].score}"
                                     > ${relspecies[i].identity}&#37;</span>
 
-                                           
+
                             </c:if
                             >]
                         </c:otherwise>
@@ -260,7 +262,7 @@
                                   title="Score = ${relspecies[i].score}"
                                     > ${relspecies[i].identity}&#37;</span>
 
-                                           
+
                             </c:if
                             >]
                                 </c:when>
@@ -273,7 +275,7 @@
                                   title="Score = ${relspecies[i].score}"
                                     > ${relspecies[i].identity}&#37;</span>
 
-                                           
+
                             </c:if
                             >]
                                 </c:otherwise>
@@ -285,29 +287,29 @@
             </c:if>
         </div>
     </div>
-            
+
 
             <c:if test="${not empty enzyme.ec}">
-               <b>EC : </b> 
+               <b>EC : </b>
                <span>
-      
+
         <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme#intenz-ec"><c:out value="${enzyme.ec}"/></a>
-                 
+
                </span><br/>
             </c:if>
-            
+
 <!--            catalytic activities-->
     <%--<c:if test="${not empty enzyme.enzymeCatalyticActivitySet && empty enzyme.function && empty enzyme.synonym}">--%>
     <c:if test="${not empty enzyme.enzymeCatalyticActivitySet}">
         <c:set var="enzymeCatalyticActivitySize" value="${fn:length(enzyme.enzymeCatalyticActivitySet)}"/>
-  
+
         <c:if test="${enzymeCatalyticActivitySize eq 1}">
-           <b>Catalytic Activity: </b> 
+           <b>Catalytic Activity: </b>
         </c:if>
         <c:if test="${enzymeCatalyticActivitySize gt 1}">
-          <b>Catalytic Activities: </b>  
+          <b>Catalytic Activities: </b>
         </c:if>
-      
+
         <ul class="catalytic-activity-list">
             <c:forEach items="${enzyme.enzymeCatalyticActivitySet}" var="activity"  begin="0" end="0">
                 <li class="reaction">${activity.catalyticActivity}</li>
@@ -318,6 +320,7 @@
         </ul>
     </c:if>
 
+</div>
 </div>
 
 </div>

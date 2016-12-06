@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : ${name}
     Created on : ${date}, ${time}
     Author     : ${user}
@@ -6,7 +6,7 @@
         Purpose of the stylesheet follows.
 */
 
-/* 
+/*
    TODO customize this sample style
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
@@ -66,10 +66,20 @@ a:link, a:visited {
 }
 
 
-.filterButton, .searchButton, .button {
+.filterButton, .searchButton{
     /*position: relative;*/
     /*background: #ddd;*/
 /*    background: #72B55F;*/
+
+
+/* padding crap  padding crap  padding crap  padding crap  padding crap  padding crap  padding crap  padding crap
+
+
+
+               */
+
+
+
     /*color: #72B55F;*/
     background: #207a7a;
     color: white;
@@ -116,7 +126,7 @@ div.filter  {
     min-height: 120px;
     max-height: 600px;
     */
-    border: 1px solid #ddd;    
+    border: 1px solid #ddd;
     -moz-border-radius: 8px 8px 8px 8px;
     border-radius:8px 8px 8px 8px;
     -webkit-border-radius:8px 8px 8px 8px;
@@ -131,6 +141,7 @@ div.filter  {
     line-height:16pt;
     overflow:auto;
     max-height: 400px;
+    margin-top:10px;
     /*    margin-right: 5px;*/
 }
 
@@ -142,7 +153,7 @@ div.filter  {
 
 .otherName {
     font-size: 8pt;
-    font-style: italic;    
+    font-style: italic;
 }
 /*.checkItem {
     vertical-align: top;
@@ -173,7 +184,7 @@ div.filter  {
 }
 
 .checkItem {
-   
+
 vertical-align: top;
 /*    margin-right: 0px;*/
     float: left;
@@ -254,7 +265,7 @@ vertical-align: top;
     padding: 5px;
     vertical-align: middle;
     text-align: center;
-    height: 100px;    
+    height: 100px;
     width: 7%;
 }
 
@@ -269,7 +280,7 @@ vertical-align: top;
     max-width: 99%
 }
 /*.resultContent a:link{
-   color: #408C8C; 
+   color: #408C8C;
 }*/
 
 .line {
@@ -287,7 +298,8 @@ vertical-align: top;
     margin:0em 0 0.5em 0;
     padding-bottom:1em;
     vertical-align: top;
-    min-height: 80px;    
+    min-height: 80px;
+    width: 100%;
 }
 
 .summary-header {
@@ -296,14 +308,14 @@ vertical-align: top;
 
 .summary-header h4 {
     display: inline-block;
-    border-bottom: 1px dotted #207A7A;
+    /*border-bottom: 1px dotted #207A7A;*/
 }
 
 .proteinImg {
     /*    float: left;
         width:110px;*/
     /*height:90px;*/
-    text-align: center;    
+    text-align: center;
     /*    margin-right: 5px;*/
     /*border: none;*/
     /*border: 1px solid #ddd;*/
@@ -313,11 +325,11 @@ a.noLine {
 
     border-bottom-style: none;
 
-} 
+}
 /* css to end underline in auto complete terms*/
 
 a.ui-corner-all{
-    border-bottom-style: none; 
+    border-bottom-style: none;
 }
 
 
@@ -325,7 +337,7 @@ a.ui-corner-all{
 .proteinImg a{
     color: white;
     text-decoration: none;
-    border-bottom-style: none; 
+    border-bottom-style: none;
     max-width: 120px;
     max-height: 90px;
 }
@@ -344,13 +356,10 @@ a.ui-corner-all{
 }
 
 .desc {
-    /*    float: left;*/
     text-align: left;
-    /*for smaller resolution
-    width: 55%;*/
-    /*    width: 65%;*/
-    /*border: 1px solid #ddd;*/
     display: table-cell;
+    vertical-align: top;
+    padding-left: 20px;
 }
 
 
@@ -412,7 +421,7 @@ button.removeFromBasket {
 }
 
 .iconBox img
-{   
+{
     border: none;
 }
 
@@ -440,6 +449,16 @@ button.removeFromBasket {
     padding: 2ex 1em;
     width: 75em;
 }
+
+.more-results{
+  display: inline;
+  float: right;
+}
+
+select {
+  width: auto;
+}
+
 
 /*sort of tooltip to pop up scientific names*/
 a.popup {
@@ -500,34 +519,29 @@ a.popup:hover span {
 
 .hrLine{
     border-style: ridge;
-
 }
 
 span.resultPageDisease{
-   color:  #207a7a; 
+   color:  #207a7a;
 }
 a.formSubmit{
-    color:  #207a7a; 
+    color:  #207a7a;
 }
 
 /*for sequence search*/
 
 a.formSubmit {
-
     cursor: pointer;
-
 }
 
 #search-tabs {
-
     margin-bottom: 0ex;
-
 }
 
-.searchTab {	
+.searchTab {
     padding: 0.5ex 2em;
-    margin: 0ex 1em;	
-    border-top-left-radius: 2ex;	
+    margin: 0ex 1em;
+    border-top-left-radius: 2ex;
     border-top-right-radius: 2ex;
     display: inline;
 
@@ -550,75 +564,75 @@ a.formSubmit {
 }
 
 /* Search scores (BLAST) */
-	
+
 .score {
-	
+
  background-color: #cdf;
-	
+
  padding: 0ex 0.1em;
-	
+
  border: thin solid #bbb;
-	
+
 }
-	
+
 .score.S1 {
-	
+
   background-color: #bcf;
-	
+
 }
-	
+
 .score.S2 {
-	
+
  background-color: #bdc;
-	
+
 }
-	
+
 .score.S3 {
-	
+
  background-color: #ada;
-	
+
 }
-	
+
 .score.S4 {
-	
+
   background-color: #ce6;
-	
+
 }
-	
+
 .score.S5 {
-	
+
   background-color: #ee2;
-	
+
 }
-	
+
 .score.S6 {
-	
+
   background-color: #fd4;
-	
+
 }
-	
+
 .score.S7 {
-	
+
   background-color: #fc6;
-	
+
 }
-	
+
 .score.S8 {
-	
+
   background-color: #fb7;
-	
+
 }
-	
+
 .score.S9 {
-	
+
   background-color: #faa;
-	
+
 }
-	
+
 .score.S10 {
-	
+
   background-color: #f88;
-	
+
 }
 /*see auto complete code in js*/
 .ui-menu-item-highlight{
@@ -628,11 +642,11 @@ a.formSubmit {
 
 /*for home page EP resources box*/
 
-.shortcuts>div ul.split { 
-	float: left; 
+.shortcuts>div ul.split {
+	float: left;
 	width: 40%;
 	margin: 0 1%;
-	
+
 	list-style: none;
 	padding: 9px 0 9px 9px;	/* Add some breathing space */
 }
@@ -656,7 +670,7 @@ div.highlight h3 { color: #333; }*/
 	background-color: #ededed;
 	display: block;
 	padding-bottom: 9px;
-	
+
 	-moz-border-radius: 5px;
 	-khtml-border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -792,7 +806,7 @@ span.popup:hover span {
     background-color:#A1C7C7; color:#000000;
     font-style:italic;
     font-weight: bolder;
-    
+
 }
 /*to help scroll the items in the accordion*/
 .scroll{

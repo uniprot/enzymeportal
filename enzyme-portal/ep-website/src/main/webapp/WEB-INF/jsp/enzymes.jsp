@@ -29,7 +29,7 @@
 
 </head>
 
-<body class="level2"><!-- add any of your classes or IDs -->
+<body class="level2 full-width"><!-- add any of your classes or IDs -->
 <div id="skip-to">
     <ul>
         <li><a href="#content">Skip to main content</a></li>
@@ -46,41 +46,38 @@
     var ecAutoCompleteDataSource = [];
 </script>
 
-<div id="wrapper" class="container_24">
+<div id="wrapper" class="">
     <%@include file="header.jspf" %>
 
-    <div id="content" role="main" class="grid_24 clearfix" >
-
-
-
+    <div id="content" role="main" class="clearfix" >
 
 
 <!-- Feedback widget code  -->
 
-        <img id="trigger" src="${pageContext.request.contextPath}/resources/images/feedback.png" />
-        <div id='slider'>
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScvxggSYUe_6rmsLmJ-wBEm8BLz0SBH_RmHD3Bvp7DiN4G4JA/viewform?embedded=true" width="300" height="100%" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-        </div>
-        <script>
-            $('#slider').slideReveal({
-              trigger: $("#trigger"),
-                position: "right",
-                width: "300"
-            });
-        </script>
+        <%--<img id="trigger" src="${pageContext.request.contextPath}/resources/images/feedback.png" />--%>
+        <%--<div id='slider'>--%>
+            <%--<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScvxggSYUe_6rmsLmJ-wBEm8BLz0SBH_RmHD3Bvp7DiN4G4JA/viewform?embedded=true" width="300" height="100%" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>--%>
+        <%--</div>--%>
+        <%--<script>--%>
+            <%--$('#slider').slideReveal({--%>
+              <%--trigger: $("#trigger"),--%>
+                <%--position: "right",--%>
+                <%--width: "300"--%>
+            <%--});--%>
+        <%--</script>--%>
+
 <!-- END of Feedback widget code  -->
 
 
-
-        <section class="grid_18 alpha">
-            <h1>Enzyme Results</h1> 
-            <h2>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h2>
+        <section>
+            <h2>Enzyme Results</h2>
+            <h3>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h3>
         </section>
 
-        <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
 
 
-            <section class="grid_6 alpha pagination-container">
+
+            <section class="pagination-container">
 
                 <input id="paginationPage" name="servicePage" type="hidden" value="">
                  <input name="keywordType" type="hidden" value="${keywordType}">
@@ -101,15 +98,11 @@
 
             </section>
 
-            <section class="grid_24">
-
-                <section class="grid_6 alpha" id="search-filters">
-
+            <div class="row">
+                <section id="search-filters" class="large-3 columns">
+                    <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
                     <div class="filter">
-
                         <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
-
-
                         <div id="activeFilters" class="sublevel1">
                             <div class="subTitle">Active filters</div>
                             <ul>
@@ -117,7 +110,6 @@
 
                             </ul>
                         </div>
-
 
                         <c:forEach var="facet" items="${enzymeFacet}">
                              <div>
@@ -186,125 +178,100 @@
                              </div>
                          </c:forEach>
                     </div>
-
+                    </form>
                 </section>
 
-        </form>
-
-
-
-
-            <section class="grid_18 alpha" id="search-results">
-
-                 <c:if test="${not empty enzymeView}">
-                    <div>
-
-                       <table id="enzymeResults" cellpadding="60" cellspacing="60">
-                           <tr>
-                               <th width="20%">Name</th>
-                               <th width="5%">Protein Hits</th>
-                               <th width="15%">Enzyme Family</th>
-                               <th width="10%">EC</th>
-                               <th width="30%">Catalytic Activity</th>
-                               <th width="20%">Species</th>
-                           </tr>
-
-                           <c:forEach var="enzyme" items="${enzymeView}">
-                               <tr class="enzymeRow">
-                                   <c:choose>
-                                        <c:when test='${enzyme.numEnzymeHits > 0}'>
-                                            <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
-                                        </c:when>
-                                       <c:otherwise>
-                                           <td>${enzyme.enzymeName}</td>
-                                       </c:otherwise>
-                                   </c:choose>
-                                   <td>${enzyme.numEnzymeHits}</td>
-                                   <td>${enzyme.enzymeFamily}</td>
-                                   <td>${enzyme.ec}</td>
-                                   <td>${enzyme.catalyticActivities}</td>
-                                   <td>
-                                       <c:set var="enzymeSpeciesSize" value="${fn:length(enzyme.species)}"/>
-                                       <c:set var="enzymeSpecies" value="${enzyme.species}"/>
-                                       <c:set var="enzymeSpeciesMaxDisplay" value="${5}"/>
-
-                                       <c:if test="${enzymeSpeciesSize gt 0}">
-                                           <c:if test="${enzymeSpeciesSize <= enzymeSpeciesMaxDisplay}">
-                                               <ul>
-                                                   <c:forEach var="i" begin="0" end="${enzymeSpeciesSize-1}">
-                                                     <li>${enzyme.species[i]}</li>
-                                                   </c:forEach>
-                                               </ul>
-                                           </c:if>
-                                           <c:if test="${enzymeSpeciesSize > enzymeSpeciesMaxDisplay}">
-                                               <ul>
-                                                   <c:forEach var="i" begin="0" end="${enzymeSpeciesMaxDisplay-1}">
-                                                     <li>${enzyme.species[i]}</li>
-                                                   </c:forEach>
-                                                    <li>${enzymeSpeciesSize-5} others</li>
-                                               </ul>
-
-                                           </c:if>
-                                       </c:if>
-                                   </td>
+                <section class="large-9 columns" id="search-results">
+                    <c:if test="${not empty enzymeView}">
+                        <div>
+                           <table id="enzymeResults" cellpadding="60" cellspacing="60">
+                               <tr>
+                                   <th width="20%">Name</th>
+                                   <th width="5%">Protein Hits</th>
+                                   <th width="15%">Enzyme Family</th>
+                                   <th width="10%">EC</th>
+                                   <th width="30%">Catalytic Activity</th>
+                                   <th width="20%">Species</th>
                                </tr>
-                               <tr id="proteinList" style="display: none">
-                                   <td colspan="6">
+                               <c:forEach var="enzyme" items="${enzymeView}">
+                                   <tr class="enzymeRow">
+                                       <c:choose>
+                                            <c:when test='${enzyme.numEnzymeHits > 0}'>
+                                                <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
+                                            </c:when>
+                                           <c:otherwise>
+                                               <td>${enzyme.enzymeName}</td>
+                                           </c:otherwise>
+                                       </c:choose>
+                                       <td>${enzyme.numEnzymeHits}</td>
+                                       <td>${enzyme.enzymeFamily}</td>
+                                       <td>${enzyme.ec}</td>
+                                       <td>${enzyme.catalyticActivities}</td>
+                                       <td>
+                                           <c:set var="enzymeSpeciesSize" value="${fn:length(enzyme.species)}"/>
+                                           <c:set var="enzymeSpecies" value="${enzyme.species}"/>
+                                           <c:set var="enzymeSpeciesMaxDisplay" value="${5}"/>
+                                           <c:if test="${enzymeSpeciesSize gt 0}">
+                                               <c:if test="${enzymeSpeciesSize <= enzymeSpeciesMaxDisplay}">
+                                                   <ul>
+                                                       <c:forEach var="i" begin="0" end="${enzymeSpeciesSize-1}">
+                                                         <li>${enzyme.species[i]}</li>
+                                                       </c:forEach>
+                                                   </ul>
+                                               </c:if>
+                                               <c:if test="${enzymeSpeciesSize > enzymeSpeciesMaxDisplay}">
+                                                   <ul>
+                                                       <c:forEach var="i" begin="0" end="${enzymeSpeciesMaxDisplay-1}">
+                                                         <li>${enzyme.species[i]}</li>
+                                                       </c:forEach>
+                                                        <li>${enzymeSpeciesSize-5} others</li>
+                                                   </ul>
 
-
-                                       <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
-                                       <input name="keywordType" type="hidden" value="${keywordType}">
-                                       <input name="searchTerm" type="hidden" value="${searchKey}">
-                                       <input name="searchId" type="hidden" value="${searchId}">
-                                       
-                                        <input name="ec" type="hidden" value="${enzyme.ec}">
-                                       <form:hidden path="searchparams.previoustext" />
-                                       <form:hidden path="searchparams.text" value="${searchKey}-${enzyme.ec}" />
-                                       <form:hidden path="searchparams.type" value="${searchType}"/>
-
-
-                                    <table id="enzymeResultsProteins">
-                                        <tr>
-                                            <th width="3%"> </th>
-                                            <th width="40%">Associated Proteins:</th>
-                                            <th width="57%"> </th>
-                                        </tr>
-                                        <c:set var="proteinSize" value="${fn:length(enzyme.proteins)}"/>
-
-
-                                            <c:forEach var="p" begin="0" end="4">
-                                                <tr class="proteinRow">
-                                                    <td> </td>
-                                                    <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.proteins[p].accession}/enzyme">${enzyme.proteins[p].proteinName}</a></td>
-                                                    <td>${enzyme.proteins[p].species}</td>
-                                                </tr>
-                                            </c:forEach>
-                                            <c:if test="${proteinSize >= 5}">
-                                            <tr class="proteinRow">
-
-                                                <td> </td>
-                                                <td><button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit">View all ${enzyme.numEnzymeHits} Proteins</button></td>
-                                                <td> </td>
-
-                                            </tr>
-                                            </c:if>
-
-                                    </table>
-                                       </form:form>
-                                    </td>
-                               </tr>
-                           </c:forEach>
-
-                       </table>
-
-                    </div>
-
-                </c:if>
-
-            </section>
-        </section>
-
-
+                                               </c:if>
+                                           </c:if>
+                                       </td>
+                                   </tr>
+                                   <tr id="proteinList" style="display: none">
+                                       <td colspan="6">
+                                           <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
+                                               <input name="keywordType" type="hidden" value="${keywordType}">
+                                               <input name="searchTerm" type="hidden" value="${searchKey}">
+                                               <input name="searchId" type="hidden" value="${searchId}">
+                                               <input name="ec" type="hidden" value="${enzyme.ec}">
+                                               <form:hidden path="searchparams.previoustext" />
+                                               <form:hidden path="searchparams.text" value="${searchKey}-${enzyme.ec}" />
+                                               <form:hidden path="searchparams.type" value="${searchType}"/>
+                                                <table id="enzymeResultsProteins">
+                                                    <tr>
+                                                        <th width="3%"> </th>
+                                                        <th width="40%">Associated Proteins:</th>
+                                                        <th width="57%"> </th>
+                                                    </tr>
+                                                    <c:set var="proteinSize" value="${fn:length(enzyme.proteins)}"/>
+                                                        <c:forEach var="p" begin="0" end="4">
+                                                            <tr class="proteinRow">
+                                                                <td> </td>
+                                                                <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.proteins[p].accession}/enzyme">${enzyme.proteins[p].proteinName}</a></td>
+                                                                <td>${enzyme.proteins[p].species}</td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                        <c:if test="${proteinSize >= 5}">
+                                                        <tr class="proteinRow">
+                                                            <td> </td>
+                                                            <td><button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit">View all ${enzyme.numEnzymeHits} Proteins</button></td>
+                                                            <td> </td>
+                                                        </tr>
+                                                        </c:if>
+                                                </table>
+                                           </form:form>
+                                        </td>
+                                   </tr>
+                               </c:forEach>
+                           </table>
+                        </div>
+                    </c:if>
+                </section>
+            </div>
 
         <section class="grid_24 alpha">
 
@@ -324,7 +291,6 @@
 
 
         </section>
-
 
 
     </div>
