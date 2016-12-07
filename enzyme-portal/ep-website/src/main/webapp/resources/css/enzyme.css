@@ -34,6 +34,19 @@ table{
     background-color: inherit;
 }
 
+div#content {
+	padding-bottom: 0px;
+	min-height: 0px;
+	padding-left: 10px;
+}
+
+.disease-overview-box{
+  width: 22%;
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 20px
+}
+
 /*frontier overridding ends*/
 
 .reaction.block {
