@@ -258,7 +258,7 @@
                 </section>
             </div>
 
-        <section class="grid_24 alpha">
+        <section>
             <c:if test="${page.totalElements gt page.size}">
                 <nav class="paginationContainer">
                       <ul class="pagination">

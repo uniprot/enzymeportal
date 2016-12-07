@@ -101,11 +101,11 @@
         </section>
 
         <section class="large-3 columns">
-            <div class="panels-flexible-region panels-flexible-region-about_us-right_ panels-flexible-region-last ">
+            <div class=" panels-flexible-region-about_us-right_ panels-flexible-region-last ">
                 <div class="inside panels-flexible-region-inside panels-flexible-region-about_us-right_-inside panels-flexible-region-inside-last">
                     <div class="shortcuts">
-                        <div class="panel-pane pane-custom pane-8 clearfix">
-                            <h4 class="pane-title">Popular</h4>
+                        <div>
+                            <h4>Popular</h4>
                             <ul class="split">
                                 <li><a href="http://www.ebi.ac.uk/training/online/course/enzyme-portal-quick-tour"
                                        class="icon icon-generic icon-c1" data-icon="t">Quick Tour</a></li>
@@ -117,22 +117,21 @@
                         </div>
                     </div>
                     <!--      first video-->
-                    <div class="panel-separator"></div>
+
                     <div class="shortcuts">
-                        <div class="panel-pane pane-custom pane-9 clearfix">
-                            <h4 class="pane-title"> Learn more about Enzyme Portal</h4>
-                            <div class="pane-content">
+                        <div>
+                            <h4 > Learn more about Enzyme Portal</h4>
+                            <div>
                                 <iframe src="https://www.youtube.com/embed/eCHWYLVN230" frameborder="0" allowfullscreen></iframe>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-separator"></div>
-                    <div class="panel-pane pane-custom pane-10 clearfix">
-                        <div class="pane-content">
-                            <h4><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents</span></h4>
-                            <p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub</a>, an online project hosting service. </span>
-                            </p>
-                        </div>
+
+
+                    <div>
+                        <h4><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents</span></h4>
+                        <p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub</a>, an online project hosting service. </span>
+                        </p>
                     </div>
                 </div>
             </div>
