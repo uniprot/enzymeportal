@@ -59,7 +59,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         expResult.setScientificName("Mus musculus");
         expResult.setProteinName("MOCK-1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial");
         expResult.setName("CP24A_MOUSE");
-       // expResult.setProteinGroupId(pg);
+       expResult.setProteinGroupId("EUN8I9");
         
         UniprotEntry result = enzymePortalService.findByAccession(ACCESSION);
         assertEquals(expResult, result);

@@ -158,7 +158,7 @@ public class EnzymeFinderIT extends BaseTest {
      */
     @Test
     public void testComputeEnzymeSummariesByEc() {
-        int expectedResult = 2;
+        int expectedResult = 1;
         String ec = "3.4.24.85";
         SearchResults result = enzymeFinder.computeEnzymeSummariesByEc(ec);
         assertNotNull(result);

@@ -319,16 +319,17 @@ public class EnzymeFinder extends EnzymeBase {
                 Set<UniprotEntry> enzymes = queryDatabaseForProteins(accessions);
                 stopWatch.stop();
                 logger.warn("Synchronous :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
-                if (enzymes != null) {
-                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
-                }
+//                if (enzymes != null) {
+//                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
+//                }
 
-                return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
+                return enzymes.stream().distinct().sorted().collect(Collectors.toList());
             } else if (accessions.size() > ACCESSION_SIZE_SYNC_TRIGGER && accessions.size() < ACCESSION_SIZE) {
 
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
-                Set<UniprotEntry> enzymes = useParallelExec(accessions);
+               // Set<UniprotEntry> enzymes = useParallelExec(accessions);
+                Set<UniprotEntry> enzymes = useSpliterator(accessions);
                 stopWatch.stop();
                 logger.warn("useParallelExec :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
                 if (enzymes != null) {
@@ -344,16 +345,16 @@ public class EnzymeFinder extends EnzymeBase {
                 Set<UniprotEntry> enzymes = useSpliterator(accessions);
                 stopWatch.stop();
                 logger.warn("useSpliterator :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
-                if (enzymes != null) {
-                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
-                }
-                return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
+//                if (enzymes != null) {
+//                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
+//                }
+                return enzymes.stream().distinct().sorted().collect(Collectors.toList());
 
             }
 
         }
 
-        return enzymeList.stream().sorted().collect(Collectors.toList());
+        return new ArrayList<>();
     }
 
     private Set<UniprotEntry> queryDatabaseForProteins(List<String> accessions) {
@@ -732,7 +733,7 @@ public class EnzymeFinder extends EnzymeBase {
             computeFilterFacets(e);
         });
 
-        return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
+        return enzymeList;//.stream().collect(Collectors.toList());
     }
 
 

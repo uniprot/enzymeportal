@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.xml.generator;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -76,12 +77,12 @@ public class XmlTransformer {
         }
     }
 
-//    protected void addProteinGroupIdFields(UniprotEntry uniprotEntry, Set<Field> fields) {
-//        if (Objects.nonNull(uniprotEntry.getProteinGroupId())) {
-//            Field field = new Field(FieldName.PROTEIN_GROUP_ID.getName(), uniprotEntry.getProteinGroupId().getProteinGroupId());
-//            fields.add(field);
-//        }
-//    }
+    protected void addProteinGroupIdFields(UniprotEntry uniprotEntry, Set<Field> fields) {
+        if (Objects.nonNull(uniprotEntry.getProteinGroupId())) {
+            Field field = new Field(FieldName.PROTEIN_GROUP_ID.getName(), uniprotEntry.getProteinGroupId());
+            fields.add(field);
+        }
+    }
 
     @Deprecated
     protected void addProteinInfoFields(UniprotEntry uniprotEntry, Set<Field> fields) {

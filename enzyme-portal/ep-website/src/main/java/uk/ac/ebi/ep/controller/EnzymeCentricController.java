@@ -93,6 +93,7 @@ public class EnzymeCentricController extends AbstractController {
         KeywordType type = KeywordType.valueOf(keywordType);
         switch (type) {
             case KEYWORD:
+                System.out.println("UTIL "+ searchUtil);
                 boolean isEc = searchUtil.validateEc(searchTerm);
                 if (isEc) {
                     view = findEnzymesByEC(searchTerm, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model, searchModel, view);

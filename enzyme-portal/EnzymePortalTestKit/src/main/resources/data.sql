@@ -14,8 +14,8 @@ Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (421687,'
 
 
 --PROTEIN_GROUP
-Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('cGMP-specific 3'',5''-cyclic phosphodiesterase','E76XC1');
-Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial','EUN8I9');
+-- Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('cGMP-specific 3'',5''-cyclic phosphodiesterase','E76XC1');
+-- Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial','EUN8I9');
 
 
 --Uniprot Entry

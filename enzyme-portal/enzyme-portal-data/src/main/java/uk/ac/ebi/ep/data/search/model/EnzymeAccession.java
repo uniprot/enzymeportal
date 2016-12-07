@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -35,11 +34,11 @@ public class EnzymeAccession implements Serializable {
     protected Boolean expEvidence;
     protected String uniprotaccession;
     protected String enzymeFunction;
-    protected String proteinNameGroupId;
+   
     protected String PDB_SOURCE = "PDB";
     protected int PDB_CODE_LIMIT = 500;
     protected int SORTED_SPECIES_LIMIT = 100;
-    protected String proteinname;
+    protected Long taxId;
 
 
     /**
@@ -327,24 +326,6 @@ public class EnzymeAccession implements Serializable {
         this.diseases = diseases;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.species.getTaxId());
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EnzymeAccession other = (EnzymeAccession) obj;
-        return Objects.equals(this.species.getTaxId(), other.species.getTaxId());
-    }
       
 //    @Override
 //    public int hashCode() {
@@ -405,20 +386,9 @@ public class EnzymeAccession implements Serializable {
         this.enzymeFunction = enzymeFunction;
     }
 
-    public String getProteinNameGroupId() {
-        return proteinNameGroupId;
-    }
 
-    public void setProteinNameGroupId(String proteinNameGroupId) {
-        this.proteinNameGroupId = proteinNameGroupId;
-    }
-
-    public String getProteinname() {
-        return proteinname;
-    }
-
-    public void setProteinname(String proteinname) {
-        this.proteinname = proteinname;
+    public Long getTaxId() {
+        return taxId;
     }
 
 
