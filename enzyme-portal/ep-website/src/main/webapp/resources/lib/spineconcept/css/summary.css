@@ -20,6 +20,7 @@
 	border-bottom-right-radius: 5px;
 	-moz-border-radius-bottomRight: 5px;
 	-webkit-border-bottom-right-radius: 5px;
+	width: 100%
 }
 
 .classification .box .trigger {
@@ -61,7 +62,7 @@
 	width: 235px;
 	cursor: pointer;
 	color: #000;
-        
+
 }
 
 .box .name {
@@ -576,7 +577,7 @@
 	float: none;
 	max-width: none;
 	padding: 2px;
-	margin: 5px auto; 
+	margin: 5px auto;
 	border: 1px solid #FFF;
 	border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -584,7 +585,7 @@
 }
 
 .summary .image.wide img {
-	margin: 0px auto; 
+	margin: 0px auto;
 	display: block;
 	position: relative;
 	max-width: 100%;

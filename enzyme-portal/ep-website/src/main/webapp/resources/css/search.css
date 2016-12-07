@@ -133,7 +133,13 @@ div.filter  {
     margin-left: 2px;
     margin-right: 2px;
 }
-.sublevel1 { border:1px thin #ddd; width:inherit;   }
+.sublevel1 {
+  border:1px thin #ddd;
+  width:inherit;
+}
+.sublevel1 ul{
+  margin-top: 10px;
+}
 /*.sublevel1 { overflow:auto ;border:1px thin #ddd;width: 260px; height:400px }*/
 .filterContent {
     margin-left: 5px;
@@ -458,7 +464,6 @@ button.removeFromBasket {
 select {
   width: auto;
 }
-
 
 /*sort of tooltip to pop up scientific names*/
 a.popup {

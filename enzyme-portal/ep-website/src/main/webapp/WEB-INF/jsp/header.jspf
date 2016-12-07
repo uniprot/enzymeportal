@@ -67,7 +67,7 @@
          <div class="columns medium-6" id="local-title">
            <a href="${pageContext.request.contextPath}" title="Back to Enzyme Portal homepage">
              <img src="${pageContext.request.contextPath}/resources/images/enzymeportal_logo.png" alt="Enzyme Portal logo" style="width :64px; height: 64px; margin-right: 0px">
-             <span style="margin-top: 30px; display: inline-block"> <h1 style="padding-left: 0px">Enzyme Portal</h1></span>
+             <span style="margin-top: 30px; display:inline-block"> <h1 style="padding-left: 0px">Enzyme Portal</h1></span>
            </a>
          </div>
 
@@ -81,12 +81,7 @@
 
          <!-- local-nav -->
              <nav >
-
-
-               <ul class="dropdown menu float-left" data-description="navigational" role="menubar" data-dropdown-menu="nkt63w-dropdown-menu">
-
-
-
+               <ul class="dropdown menu float-left" data-description="navigational">
                  <li class="first ${fn:containsIgnoreCase(pageTitle, 'home')?
                      'active' : ''}"><a href="${pageContext.request.contextPath}"
                      title="">Home</a></li>
