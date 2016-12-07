@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : enzymes
     Created on : May 6, 2016, 11:39:04 AM
     Author     : Joseph <joseph@ebi.ac.uk>
@@ -24,9 +24,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.min.css" type="text/css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.themes.min.css" type="text/css" />
 
-
-
-
 </head>
 
 <body class="level2 full-width"><!-- add any of your classes or IDs -->
@@ -51,7 +48,6 @@
 
     <div id="content" role="main" class="clearfix" >
 
-
 <!-- Feedback widget code  -->
 
         <%--<img id="trigger" src="${pageContext.request.contextPath}/resources/images/feedback.png" />--%>
@@ -74,11 +70,7 @@
             <h3>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h3>
         </section>
 
-
-
-
             <section class="pagination-container">
-
                 <input id="paginationPage" name="servicePage" type="hidden" value="">
                  <input name="keywordType" type="hidden" value="${keywordType}">
                   <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
@@ -95,7 +87,6 @@
                           </ul>
                     </nav>
                 </c:if>
-
             </section>
 
             <div class="row">
@@ -107,7 +98,6 @@
                             <div class="subTitle">Active filters</div>
                             <ul>
                                 <li id="activeOrganisms"></li>
-
                             </ul>
                         </div>
 
@@ -160,21 +150,17 @@
                                                      <c:set var="speciesParams" value="${searchModel.searchparams.species}"/>
                                                 </div>
                                                 <input id="auto-complete-holder" name="filterFacet" type="hidden" />
-
                                             </li>
 
                                             <div id="organismList">
                                             <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
-
-                                                     <c:forEach var="v" items="${facet.facetValues}">
-                                                        <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                                     </c:forEach>
-
+                                               <c:forEach var="v" items="${facet.facetValues}">
+                                                  <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                               </c:forEach>
                                             </div>
                                          </ul>
                                      </div>
                                  </c:if>
-
                              </div>
                          </c:forEach>
                     </div>
@@ -226,7 +212,6 @@
                                                        </c:forEach>
                                                         <li>${enzymeSpeciesSize-5} others</li>
                                                    </ul>
-
                                                </c:if>
                                            </c:if>
                                        </td>
@@ -258,7 +243,7 @@
                                                         <c:if test="${proteinSize >= 5}">
                                                         <tr class="proteinRow">
                                                             <td> </td>
-                                                            <td><button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit">View all ${enzyme.numEnzymeHits} Proteins</button></td>
+                                                            <td><button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numEnzymeHits} Proteins</button></td>
                                                             <td> </td>
                                                         </tr>
                                                         </c:if>
@@ -273,8 +258,7 @@
                 </section>
             </div>
 
-        <section class="grid_24 alpha">
-
+        <section>
             <c:if test="${page.totalElements gt page.size}">
                 <nav class="paginationContainer">
                       <ul class="pagination">
@@ -288,14 +272,8 @@
                       </ul>
                 </nav>
             </c:if>
-
-
         </section>
-
-
     </div>
-
-
 
     <%@include file="footer.jspf" %>
 </div>

@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : browse
     Created on : Jul 23, 2013, 12:17:33 PM
     Author     : joseph
@@ -40,12 +40,11 @@
     </ul>
 </div>
 
-<div id="wrapper" class="container_24">
+<div id="wrapper">
     <%@include file="header.jspf" %>
 
-    <div id="content" role="main" class="grid_24 clearfix" ng-controller="TypeAheadController">
+    <div id="content" role="main" class="clearfix" ng-controller="TypeAheadController">
         <h1>Diseases</h1>
-
         <div class="container-browse-search">
             <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
             <input id="disease-input" class="browse-search" type="text"
@@ -59,30 +58,9 @@
                     No Results Found
                 </div>
         </div>
-
         <c:if test="${not empty diseaseList}">
             <ep:alphabeticalDisplay items="${diseaseList}" type="diseases" maxDisplay="5"/>
         </c:if>
-<%-- 
-        <c:if test="${not empty alldiseaseList}">
-            <div class="grid_24">
-
-                <h3 style="text-align: center">Diseases that starts with letter ${startsWith}</h3>
-                <ul>
-                    <c:forEach var="data" items="${alldiseaseList}">
-                        <div class="grid_6">
-
-                            <li><a   href="${pageContext.request.contextPath}/search-disease?entryid=${data.meshId}&entryname=${data.diseaseName}&AMP;searchparams.type=KEYWORD&searchparams.previoustext=${data.diseaseName}&searchparams.start=0&searchparams.text=${data.diseaseName}">${data.diseaseName} (${0})</a></li>
-                        </div>
-
-                    </c:forEach>
-
-                </ul>
-
-            </div>
-
-        </c:if>
-            --%>
 
     </div>
 
