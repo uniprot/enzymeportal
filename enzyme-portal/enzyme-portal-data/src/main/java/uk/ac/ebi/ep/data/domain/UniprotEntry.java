@@ -113,10 +113,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @Size(max = 10)
     @Column(name = "PROTEIN_GROUP_ID")
     private String proteinGroupId;
-
-    @Column(name = "REFERENCE_PROTEOME")
-    private BigInteger referenceProteome;
-
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<EntryToGeneMapping> entryToGeneMappingSet;
@@ -765,14 +761,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public void setEntryToGeneMappingSet(Set<EntryToGeneMapping> entryToGeneMappingSet) {
         this.entryToGeneMappingSet = entryToGeneMappingSet;
-    }
-
-    public BigInteger getReferenceProteome() {
-        return referenceProteome;
-    }
-
-    public void setReferenceProteome(BigInteger referenceProteome) {
-        this.referenceProteome = referenceProteome;
     }
 
     public String getProteinGroupId() {

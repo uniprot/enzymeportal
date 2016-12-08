@@ -19,4 +19,5 @@ echo "LSF logs can be found here $LOG_DIR "
 echo "(Ctrl-C to cancel, Enter to continue)"
 read ok
 
-bsub -R "rusage[mem=32000]" -M 32000 -q production-rh6 -o $LOG_DIR  $1 $2
+#bsub -R "rusage[mem=32000]" -M 32000 -q production-rh6 -o $LOG_DIR  $1 $2
+bsub -o $LOG_DIR  $1 $2
