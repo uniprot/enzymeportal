@@ -9,12 +9,14 @@
 
 <c:forEach var="i" begin="0" end="1">
     <c:set var="item" value="${theComparison.value.compared[i]}"/>
-    <section class="grid_12 
+    <section class="large-5 columns
              ${(theComparison.value.different and not empty item)? 'diff':'same'}" >
         <%@include file="comparison-item.jsp" %>
     </section>
 </c:forEach>
 <br clear="all"/>
+
+
 <c:choose>
 
     <c:when test="${theComparison.key eq 'Sequence'}">
@@ -26,20 +28,20 @@
         	window.open(alignQuery);
         }
         </script>
-        <section class="grid_8 alpha">&nbsp;</section>
-        <section class="grid_8">
-            <div class="${theComparison.value.different? 'diff':'same'}">
-                <button type="submit" class="comparison"
+        <section>&nbsp;</section>
+        <section class="large-10 columns">
+
+                <button type="submit" class="button comparison"
                     name="referrer" value="Enzyme portal"
                     onclick="sendUniprotAlignQuery()"
                 	${theComparison.value.different? '' : 'disabled'}>
                     Compare protein sequences
                 </button>
-            </div>
+
         </section>
-        <section class="grid_8 omega">&nbsp;</section>
+        <section>&nbsp;</section>
     </c:when>
-    
+
     <c:when test="${theComparison.key eq 'Protein structures'}">
         <script>
         function sendPdbeCompareQuery(){
@@ -52,7 +54,7 @@
         	$(which).attr('src', imgSrc);
         }
         </script>
-        <section class="grid_8 alpha">
+        <section class="large-10 columns">
             <div class="${theComparison.value.different? 'diff':'same'}">
             <c:if test="${fn:length(theComparison.value.compared[0]) gt 0}">
                 <img id="psImg0"
@@ -60,11 +62,11 @@
             </c:if>
             </div>
         </section>
-        <section class="grid_8">
+        <section class="large-10 columns">
             <div class="${theComparison.value.different? 'diff':'same'}">
                 <c:if test="${fn:length(theComparison.value.compared[0]) gt 0
                     and fn:length(theComparison.value.compared[1]) gt 0}">
-                    <button type="submit" class="comparison"
+                    <button type="submit" class="button comparison"
                         name="referrer" value="Enzyme portal"
                         onclick="sendPdbeCompareQuery()">
                         Run protein structure similarity
@@ -72,7 +74,7 @@
                 </c:if>
             </div>
         </section>
-        <section class="grid_8 omega">
+        <section class="large-10 columns">
             <div class="${theComparison.value.different? 'diff':'same'}">
             <c:if test="${fn:length(theComparison.value.compared[1]) gt 0}">
                 <img id="psImg1"
@@ -81,5 +83,5 @@
             </div>
         </section>
     </c:when>
-    
+
 </c:choose>

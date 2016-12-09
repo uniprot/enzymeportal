@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : faq
     Created on : Sep 5, 2012, 1:49:51 PM
     Updated on : Sep 24, 2015, 11:20:58 AM
@@ -20,16 +20,16 @@
     <body class="level2"><!-- add any of your classes or IDs -->
         <%@include file="skipto.jspf" %>
 
-        <div id="wrapper" class="container_24">
+        <div id="wrapper">
             <%@include file="header.jspf" %>
 
-            <div id="content" role="main" class="grid_24 clearfix">
+            <div id="content" role="main" class="clearfix">
 
                 <!-- If you require a breadcrumb trail, its root should be your service.
                        You don't need a breadcrumb trail on the homepage of your service... -->
                 <nav id="breadcrumb">
                     <p>
-                        <a href=".">Enzyme Portal</a> &gt; 
+                        <a href=".">Enzyme Portal</a> &gt;
                         FAQ
                     </p>
                 </nav>
@@ -98,7 +98,7 @@
 
                     <a id="02"></a><h4>How can I see species-related information for a given enzyme?</h4>
                     <fieldset>
-                        <p>When enzymes have identical name but belong to different species they are grouped into one entry. To see the information related to one particular species use the drop down menu at the top of the enzyme page. Please see <a class="showLink" href="https://www.youtube.com/watch?v=7doCBhF_XrQ" target="_blank">video</a> </p>     
+                        <p>When enzymes have identical name but belong to different species they are grouped into one entry. To see the information related to one particular species use the drop down menu at the top of the enzyme page. Please see <a class="showLink" href="https://www.youtube.com/watch?v=7doCBhF_XrQ" target="_blank">video</a> </p>
                     </fieldset>
 
                     <a id="03"><h4>How can I combine search filters?</h4></a>
@@ -120,12 +120,12 @@
                             Drug > Sildenafil</i>, for example - the results shown
                         will be those enzymes affected by sildenafil <i>and</i>
                         present in <i>either</i> human or mouse.</p>
-                    </fieldset>               
+                    </fieldset>
 
                     <a id="04"></a><h4>What is the meaning of those compounds used as filters for the search results?</h4>
                     <fieldset>
                         <p>The compounds listed along the search results are any small molecules which are related to them, be it as activators, inhibitors or cofactors of those enzymes. They can be used as filters to narrow your search if you are particularly interested in the biochemistry of concrete chemicals, for example enzymes using manganese as a cofactor.</p>
-                    </fieldset> 
+                    </fieldset>
 
                     <a id="05"></a><h4>Why does the small molecules tab show fewer
                         Inhibitors than the ChEMBL page?</h4>
@@ -140,15 +140,15 @@
                             are shown.</p>
                     </fieldset>
 
-                    <a id="06"></a><h4>How to use the "Disease", "Enzyme Classification", "Taxonomy" and "Pathways" boxes on the home page?</h4>           
+                    <a id="06"></a><h4>How to use the "Disease", "Enzyme Classification", "Taxonomy" and "Pathways" boxes on the home page?</h4>
                     <fieldset>
-                        <p>The home page shows boxes that represent the types of data you can browse using Enzyme Portal. For example, you can click on "Disease" and view a list of all diseases that have enzymes linked to them in Enzyme Portal. You can also search for your disease of interest within this list. Clicking on a disease name will take you to a results page listing all enzymes related to that disease. You can explore data in similar ways through the "Enzyme Classification", "Taxonomy" and "Pathways" boxes.</p> 
-                    </fieldset>        
+                        <p>The home page shows boxes that represent the types of data you can browse using Enzyme Portal. For example, you can click on "Disease" and view a list of all diseases that have enzymes linked to them in Enzyme Portal. You can also search for your disease of interest within this list. Clicking on a disease name will take you to a results page listing all enzymes related to that disease. You can explore data in similar ways through the "Enzyme Classification", "Taxonomy" and "Pathways" boxes.</p>
+                    </fieldset>
 
                     <a id="07"><h4>How can I search for a disease or a pathway that is not displayed on the Disease or Pathways pages?</h4></a>
                     <fieldset>
-                        <p>The Disease or Pathways pages display only a limited list of the diseases or pathways available in alphabetical order. To search for a disease or a pathway that is not displayed on the page, use the search box on the top of the page. The search box uses a controlled vocabulary. Just start typing the first few letters of the disease or pathway and a drop down menu will appear where the most relevant suggestion can be selected.</p>  
-                    </fieldset>           
+                        <p>The Disease or Pathways pages display only a limited list of the diseases or pathways available in alphabetical order. To search for a disease or a pathway that is not displayed on the page, use the search box on the top of the page. The search box uses a controlled vocabulary. Just start typing the first few letters of the disease or pathway and a drop down menu will appear where the most relevant suggestion can be selected.</p>
+                    </fieldset>
 
 
                     <a id="08"><h4>Are all species available from the "Taxonomy" page?</h4></a>
@@ -158,7 +158,7 @@
 
                     <a id="09"><h4>What can do I with enzymes in my basket?</h4></a>
                     <fieldset>
-                        <p>The Enzyme Portal basket offers a tool to compare two enzymes. Just select your enzymes of interest and add them to your basket. Once inside your basket, select an organism for the enzymes you wish to compare using the dropdowns under the button called "Compare selected". Then click on the button to compare the selected enzymes. The results will show you a comparison of the content for each enzyme, a comparison of their structures (if available) and a button to launch a comparison of the protein sequences. </p>    
+                        <p>The Enzyme Portal basket offers a tool to compare two enzymes. Just select your enzymes of interest and add them to your basket. Once inside your basket, select an organism for the enzymes you wish to compare using the dropdowns under the button called "Compare selected". Then click on the button to compare the selected enzymes. The results will show you a comparison of the content for each enzyme, a comparison of their structures (if available) and a button to launch a comparison of the protein sequences. </p>
                     </fieldset>
 
 
@@ -192,5 +192,3 @@
 
     </body>
 </html>
-
-

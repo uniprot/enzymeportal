@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : pathways
     Created on : Oct 31, 2014, 11:38:19 AM
     Author     : joseph
@@ -18,13 +18,13 @@
         <c:set var="pageTitle" value="Browse pathways"/>
         <%@include file="head.jspf" %>
     <body>
-    <div id="wrapper" class="container_24">
+    <div id="wrapper">
         <%@include file="header.jspf" %>
 
-        <div id="content" role="main" class="grid_24 clearfix" ng-controller="TypeAheadController">
+        <div id="content" role="main" class="clearfix" ng-controller="TypeAheadController">
             <h1>Pathways</h1>
 
-           
+
             <div class="container-browse-search">
             <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
                 <input id="pathway-input" class="browse-search" type="text" ng-model="pathwayTypeAheadController"

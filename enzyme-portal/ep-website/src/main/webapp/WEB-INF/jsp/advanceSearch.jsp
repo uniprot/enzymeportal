@@ -1,4 +1,4 @@
-    <%-- 
+    <%--
     Document   : advanceSearch
     Created on : Nov 19, 2012, 10:55:37 AM
     Author     : joseph
@@ -25,24 +25,24 @@
 
         <%@include file="skipto.jspf" %>
 
-        <div id="wrapper" class="container_24">
+        <div id="wrapper">
             <%@include file="header.jspf" %>
-            
-            <div id="content" role="main" class="grid_24 clearfix">
 
-                <!-- Suggested layout containers --> 
+            <div id="content" role="main" class="clearfix">
+
+                <!-- Suggested layout containers -->
           <nav id="breadcrumb">
      	<p>
-		    <a href="${pageContext.request.contextPath}">Enzyme Portal</a> &gt; 
+		    <a href="${pageContext.request.contextPath}">Enzyme Portal</a> &gt;
 		    Sequence Search
 			</p>
   	</nav>
-    
 
-            
+
+
             <section>
              <div class="contents">
-            <div class="page container_12"> 
+            <div class="page">
                  <%@include file="searchBox.jsp" %>
             </div>
                      </div>
@@ -50,9 +50,9 @@
                 <!-- End suggested layout containers -->
 
             </div>
-               
+
             <%@include file="footer.jspf" %>
-    
+
         </div> <!--! end of #wrapper -->
 
     </body>

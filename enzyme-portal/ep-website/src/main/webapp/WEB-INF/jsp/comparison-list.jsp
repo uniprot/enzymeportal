@@ -14,10 +14,10 @@
 <c:if test="${not fn:contains(comparePath, 'Protein structures')
     and not fn:contains(comparePath, 'Reactions and pathways')
     and not fn:contains(comparePath, 'Diseases')}">
-    <section class="grid_12 comparison subheader" id="${theComparison.key}">
+    <section class="large-5 columns comparison subheader" id="${theComparison.key}">
         ${theComparison.key}
     </section>
-    <section class="grid_12 comparison subheader omega">
+    <section class="large-5 columns comparison subheader">
         ${theComparison.key}
     </section>
     <br clear="all"/>

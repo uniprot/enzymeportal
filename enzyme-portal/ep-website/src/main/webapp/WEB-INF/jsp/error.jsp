@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : error
     Created on : Sep 5, 2012, 2:18:11 PM
     Author     : joseph
@@ -29,12 +29,12 @@
     <div id="wrapper" class="container_24">
         <%@include file="header.jspf" %>
 
-        <div id="content" role="main" class="grid_24 clearfix">
-                
+        <div id="content" role="main" class="clearfix">
+
             <nav id="breadcrumb">
                 <p><a href="/enzymeportal">Enzyme Portal</a> &gt; Error</p>
             </nav>
-           
+
             <c:choose>
                 <c:when test="${not empty errorCode}">
                     <%-- No-op, everything done below by spring:message --%>
@@ -42,7 +42,7 @@
                 <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
                     <c:set var="errorCode" value="search"/>
                     <c:set var="errorParam" value="sequence search"/>
-                    <c:set var="searchText" value="your sequence search"/>	
+                    <c:set var="searchText" value="your sequence search"/>
                 </c:when>
                 <c:otherwise>
                     <c:set var="errorCode" value="search"/>
@@ -52,26 +52,26 @@
                            value="your search for ${searchModel.searchparams.text}"/>
                 </c:otherwise>
             </c:choose>
-            
+
             <section>
                   <c:set var="errorParam" value=" search"/>
                 <h2><spring:message htmlEscape="false"
                     code="error.${errorCode}.title"/>
                 </h2>
-                
+
                 <p class="alert">
-            We are sorry but we couldn't find anything that matched your ${errorParam}. Please try again later        
+            We are sorry but we couldn't find anything that matched your ${errorParam}. Please try again later
                 </p>
-                
-               
-               <%-- 
+
+
+               <%--
                 <p class="alert">
                     <spring:message code="error.${errorCode}"
                         arguments="${errorParam}"/>
                 </p>
                 --%>
             </section>
-            
+
         </div>
 
         <%@include file="footer.jspf" %>
@@ -79,4 +79,3 @@
 
 </body>
 </html>
-

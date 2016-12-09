@@ -199,6 +199,7 @@ legend.comparison.header {
 
 .diff {
 	background-color: #ddd;
+  margin-left: 10px;
 }
 section.diff img {
 	background-color: #fff;

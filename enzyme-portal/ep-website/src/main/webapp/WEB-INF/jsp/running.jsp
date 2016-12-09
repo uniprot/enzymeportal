@@ -26,20 +26,20 @@
 		}
 		setTimeout(checkJob, 5000);
 	</script>
-       
-    <div id="wrapper" class="container_24">
+
+    <div id="wrapper">
 
         <%@include file="header.jspf" %>
 
-        <div id="content" role="main" class="grid_24 clearfix">
+        <div id="content" role="main" class="clearfix">
 
             <nav id="breadcrumb">
              	<p>
-        		    <a href="/enzymeportal">Enzyme Portal</a> &gt; 
+        		    <a href="/enzymeportal">Enzyme Portal</a> &gt;
         		    Sequence search in progress ....
         		</p>
           	</nav>
-    
+
         	<form:form id="check-job" modelAttribute="searchModel"
     	    	action="${pageContext.request.contextPath}/checkJob" method="POST">
     	    	<form:hidden path="searchparams.text" />
@@ -49,21 +49,21 @@
     		    <form:hidden path="searchparams.type" />
 			    <input type="hidden" name="jobId" value="${jobId}"/>
         	</form:form>
-    	
+
             <section>
                 <div style="margin: 4ex 4em;">
-                     Job ID: ${jobId} 
+                     Job ID: ${jobId}
                     <img alt="Searching..." src="resources/images/loading16.gif"
                     	style="margin: 0ex 1em"/>
                     Searching protein sequence...
                 </div>
             </section>
 
-        </div>      
-                
-        <%@include file="footer.jspf" %>        
-                
-    </div>                
-		
+        </div>
+
+        <%@include file="footer.jspf" %>
+
+    </div>
+
 </body>
 </html>
