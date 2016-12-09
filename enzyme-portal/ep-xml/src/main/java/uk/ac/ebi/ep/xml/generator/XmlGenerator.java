@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
@@ -74,10 +73,10 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         Path path = Paths.get(xmlFileLocation);
-       boolean isFileExists =  Files.exists(path, LinkOption.NOFOLLOW_LINKS);
-       if(isFileExists == false){
-           createFileAndDirectory(xmlFileLocation);
-       }
+//       boolean isFileExists =  Files.exists(path, LinkOption.NOFOLLOW_LINKS);
+//       if(isFileExists == false){
+//           createFileAndDirectory(xmlFileLocation);
+//       }
         try {
             Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             //m.marshal(database, System.out);
