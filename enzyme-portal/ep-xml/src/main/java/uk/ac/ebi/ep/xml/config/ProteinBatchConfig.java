@@ -29,7 +29,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
@@ -39,6 +38,7 @@ import uk.ac.ebi.ep.xml.model.Entry;
 import uk.ac.ebi.ep.xml.util.LogChunkListener;
 import uk.ac.ebi.ep.xml.util.LogJobListener;
 import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
+import uk.ac.ebi.ep.xml.util.XmlFileUtils;
 
 /**
  * Configures the protein centric XML generator to use Spring batch.
@@ -69,6 +69,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
     @Bean
     public Resource proteinCentricXmlDir() {
+        XmlFileUtils file = null;
         return new FileSystemResource(xmlConfigParams.getProteinCentricXmlDir());
     }
 
@@ -116,6 +117,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     @Bean
     public ItemWriter<Entry> entryToXmlWriter() {
         PrettyPrintStaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();
+        XmlFileUtils.createDirectory(xmlConfigParams.getXmlDir());
         xmlWriter.setResource(proteinCentricXmlDir());
         xmlWriter.setRootTagName("database");
         xmlWriter.setMarshaller(entryMarshaller());

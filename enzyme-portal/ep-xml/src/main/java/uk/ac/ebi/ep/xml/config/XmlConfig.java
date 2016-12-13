@@ -36,6 +36,7 @@ public class XmlConfig {
         params.setEnzymeCentricXmlDir(enzymeCentricXmlDir());
         params.setProteinCentricXmlDir(proteinCentricXmlDir());
         params.setReleaseNumber(releaseNumber());
+        params.setXmlDir(xmlDir());
 
         return params;
     }
@@ -58,5 +59,9 @@ public class XmlConfig {
 
     private int chunkSize() {
         return Integer.parseInt(env.getProperty("ep.protein.centric.chunk"));
+    }
+    
+    private String xmlDir(){
+        return env.getProperty("ep.xml.dir");
     }
 }

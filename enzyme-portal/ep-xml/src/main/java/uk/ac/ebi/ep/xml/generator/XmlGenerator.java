@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
-import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -18,6 +15,7 @@ import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.model.Database;
 import uk.ac.ebi.ep.xml.service.XmlService;
 import uk.ac.ebi.ep.xml.util.Preconditions;
+import uk.ac.ebi.ep.xml.util.XmlFileUtils;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 /**
@@ -66,17 +64,18 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
 
     }
 
-    protected void writeXml(Database database, String xmlFileLocation) throws JAXBException {
+    protected void writeXml(Database database,String xmlDir, String xmlFile) throws JAXBException {
         // create JAXB context and instantiate marshaller
         JAXBContext context = JAXBContext.newInstance(Database.class);
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        Path path = Paths.get(xmlFileLocation);
-//       boolean isFileExists =  Files.exists(path, LinkOption.NOFOLLOW_LINKS);
-//       if(isFileExists == false){
-//           createFileAndDirectory(xmlFileLocation);
-//       }
+        Path path = Paths.get(xmlFile);
+       boolean isFileExists =  Files.exists(path, LinkOption.NOFOLLOW_LINKS);
+       if(isFileExists == false){
+           XmlFileUtils.createDirectory(xmlDir);
+       }
+
         try {
             Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             //m.marshal(database, System.out);
@@ -84,35 +83,11 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
             m.marshal(database, writer);
             //m.marshal(database, new File(enzymeCentricXmlDir));
             
-            logger.info("Done writing XML to this Dir :" + xmlFileLocation);
+            logger.info("Done writing XML to this Location :" + xmlFile);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }
     }
     
-        /**
-     *
-     * @param dataList data
-     * @param fileLocation where file will be writen
-     * @param filename filename
-     * 
-     */
-    private void createFileAndDirectory(String xmlFileLocation) {
-        try {
-
-            String fileDir = xmlFileLocation;
-            Set<PosixFilePermission> perms
-                    = PosixFilePermissions.fromString("rwxr-x---");
-            FileAttribute<Set<PosixFilePermission>> attr
-                    = PosixFilePermissions.asFileAttribute(perms);
-            Files.createDirectories(Paths.get(fileDir), attr);
-
-           
- 
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
-    }
-
 
 }

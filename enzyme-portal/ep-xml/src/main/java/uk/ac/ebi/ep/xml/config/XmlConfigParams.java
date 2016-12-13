@@ -26,6 +26,7 @@ public class XmlConfigParams {
     private String proteinCentricXmlDir;
     private String ebeyeXSDs;
     private int chunkSize;
+    private String xmlDir;
 
     public String getReleaseNumber() {
         return releaseNumber;
@@ -66,6 +67,16 @@ public class XmlConfigParams {
     public void setChunkSize(int chunkSize) {
         this.chunkSize = chunkSize;
     }
+
+    public String getXmlDir() {
+        return xmlDir;
+    }
+
+    public void setXmlDir(String xmlDir) {
+        this.xmlDir = xmlDir;
+    }
+    
+    
 
     @Override
     public String toString() {
