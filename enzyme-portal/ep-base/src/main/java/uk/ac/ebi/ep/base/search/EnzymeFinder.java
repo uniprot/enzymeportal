@@ -316,38 +316,31 @@ public class EnzymeFinder extends EnzymeBase {
 
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
+                logger.warn("About to query database using synchronous for " + accessions.size() + " accessions");
                 Set<UniprotEntry> enzymes = queryDatabaseForProteins(accessions);
                 stopWatch.stop();
                 logger.warn("Synchronous :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
-//                if (enzymes != null) {
-//                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
-//                }
 
                 return enzymes.stream().distinct().sorted().collect(Collectors.toList());
             } else if (accessions.size() > ACCESSION_SIZE_SYNC_TRIGGER && accessions.size() < ACCESSION_SIZE) {
 
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
-               // Set<UniprotEntry> enzymes = useParallelExec(accessions);
+                logger.warn("About to query database using useParallelExec for " + accessions.size() + " accessions");
+                // Set<UniprotEntry> enzymes = useParallelExec(accessions);
                 Set<UniprotEntry> enzymes = useSpliterator(accessions);
                 stopWatch.stop();
                 logger.warn("useParallelExec :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
-                if (enzymes != null) {
-                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
-                }
-
                 return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
 
             } else if (accessions.size() >= ACCESSION_SIZE) {
 
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
+                logger.warn("About to query database using useSpliterator for " + accessions.size() + " accessions");
                 Set<UniprotEntry> enzymes = useSpliterator(accessions);
                 stopWatch.stop();
                 logger.warn("useSpliterator :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
-//                if (enzymes != null) {
-//                    enzymeList.addAll(computeUniqueEnzymes(enzymes));
-//                }
                 return enzymes.stream().distinct().sorted().collect(Collectors.toList());
 
             }
@@ -396,6 +389,7 @@ public class EnzymeFinder extends EnzymeBase {
     }
 
     private Set<UniprotEntry> useParallelExec(List<String> accessions) {
+        Set<UniprotEntry> enzymeList = new LinkedHashSet<>();
         final ForkJoinPool executorService = new ForkJoinPool();
 
         int half = divide(accessions);
@@ -418,7 +412,7 @@ public class EnzymeFinder extends EnzymeBase {
         CompletableFuture<Set<UniprotEntry>> future4 = CompletableFuture
                 .supplyAsync(() -> queryDatabaseForProteins(fourthPart), executorService);
 
-        return future.thenCombineAsync(future2, (a, b) -> combine(a, b), executorService)
+        Set<UniprotEntry> enzymes = future.thenCombineAsync(future2, (a, b) -> combine(a, b), executorService)
                 .thenCombineAsync(future3, (c, d) -> combine(c, d), executorService)
                 .thenCombineAsync(future4, (x, y) -> combine(x, y), executorService)
                 .join()
@@ -426,6 +420,11 @@ public class EnzymeFinder extends EnzymeBase {
                 .distinct()
                 .collect(Collectors.toSet());
 
+        if (enzymes != null) {
+
+            enzymeList.addAll(computeUniqueEnzymes(enzymes));
+        }
+        return enzymeList;
     }
 
     private final Comparator<UniprotEntry> SWISSPROT_FIRST = (UniprotEntry e1, UniprotEntry e2) -> e1.getEntryType().compareTo(e2.getEntryType());
@@ -735,7 +734,6 @@ public class EnzymeFinder extends EnzymeBase {
 
         return enzymeList;//.stream().collect(Collectors.toList());
     }
-
 
     @Deprecated
     private List<UniprotEntry> getEnzymesByAccessions(List<String> accessions) {
