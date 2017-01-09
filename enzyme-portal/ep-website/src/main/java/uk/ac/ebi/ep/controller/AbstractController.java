@@ -96,7 +96,7 @@ public abstract class AbstractController {
     protected String pdbImgUrl;
     @Autowired
     protected String uniprotAlignUrl;
-    
+
     @Autowired
     protected SearchUtil searchUtil;
 
@@ -392,7 +392,7 @@ public abstract class AbstractController {
                     if (selectedItems.equals(theSpecies.getScientificname())) {
                         theSpecies.setSelected(true);
                     }
-
+ 
                 }
             }
 
@@ -437,7 +437,7 @@ public abstract class AbstractController {
             if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty() || !ecNumbersFilter.isEmpty()) {
                 List<UniprotEntry> filteredResults
                         = new LinkedList<>(resultSet.getSummaryentries());
-
+             
                 CollectionUtils.filter(filteredResults,
                         new SpeciesPredicate(speciesFilter));
                 CollectionUtils.filter(filteredResults,

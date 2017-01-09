@@ -89,7 +89,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         accessions.add("PK5671");
         accessions.add("fakeAccession");
 
-        int expResult = 3;
+        int expResult = 2;
 
         List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccessions(accessions);
         assertEquals(expResult, result.size());
@@ -105,7 +105,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         LOGGER.info("findEnzymeByNamePrefix");
         String namePrefix = "CP24A";
 
-        int expResult = 3;
+        int expResult = 2;
         List<UniprotEntry> result = uniprotEntryRepository.findEnzymeByNamePrefix(namePrefix);
         assertEquals(expResult, result.size());
         assertTrue(result.size() > 0);

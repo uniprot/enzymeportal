@@ -93,6 +93,7 @@ public class EnzymeCentricController extends AbstractController {
         KeywordType type = KeywordType.valueOf(keywordType);
         switch (type) {
             case KEYWORD:
+                
                 boolean isEc = searchUtil.validateEc(searchTerm);
                 if (isEc) {
                     view = findEnzymesByEC(searchTerm, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model, searchModel, view);
@@ -151,6 +152,7 @@ public class EnzymeCentricController extends AbstractController {
 
     private String findEnzymesBySearchTerm(String searchTerm, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model, SearchModel searchModel, String view) {
         EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage * pageSize, pageSize, facetCount, filters);
+        int LOWEST_BEST_MATCHED_RESULT_SIZE = 4;
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
             Pageable pageable = new PageRequest(startPage, pageSize);
@@ -166,6 +168,7 @@ public class EnzymeCentricController extends AbstractController {
                 if (proteins.isEmpty()) {
                     proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
                             .stream()
+                            .limit(LOWEST_BEST_MATCHED_RESULT_SIZE)
                             .sorted()
                             .collect(Collectors.toList());
                 }

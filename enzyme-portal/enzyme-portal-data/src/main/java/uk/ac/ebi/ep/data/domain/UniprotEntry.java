@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,11 +43,13 @@ import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.common.ModelOrganisms;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
@@ -108,6 +110,9 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
+    @Size(max = 10)
+    @Column(name = "PROTEIN_GROUP_ID")
+    private String proteinGroupId;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<EntryToGeneMapping> entryToGeneMappingSet;
@@ -243,6 +248,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.name = name;
     }
 
+    @Override
     public Long getTaxId() {
         return taxId;
     }
@@ -268,7 +274,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public String getCommonName() {
-        if (commonName == null) {
+        if (commonName == null || StringUtils.isEmpty(commonName)) {
             commonName = scientificName;
         }
 
@@ -341,12 +347,33 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.synonymNames = synonymNames;
     }
 
-    //Note : using protein name will reduce all related species to 1 per enzyme hence we use uniprot accession for the equals and hashcode
+//    @Override
+//    public int hashCode() {
+//        int hash = 3;
+//        hash = 59 * hash + Objects.hashCode(this.accession);
+//        hash = 59 * hash + Objects.hashCode(this.proteinName);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final UniprotEntry other = (UniprotEntry) obj;
+//        if (!Objects.equals(this.accession, other.accession)) {
+//            return false;
+//        }
+//        return Objects.equals(this.proteinName, other.proteinName);
+//    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.accession);
-        hash = 97 * hash + Objects.hashCode(this.proteinName);
+        int hash = 3;
+        hash = 11 * hash + Objects.hashCode(this.proteinGroupId);
         return hash;
     }
 
@@ -359,12 +386,8 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             return false;
         }
         final UniprotEntry other = (UniprotEntry) obj;
-        if (!Objects.equals(this.accession, other.accession)) {
-            return false;
-        }
-        return Objects.equals(this.proteinName, other.proteinName);
+        return Objects.equals(this.proteinGroupId, other.proteinGroupId);
     }
-
     public String getScientificname() {
         return getScientificName();
     }
@@ -373,25 +396,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return getCommonName();
     }
 
-//
-//    @Override
-//    public int compareTo(UniprotEntry other) {
-//        if (this.getCommonname() == null & other.getCommonname() == null) {
-//            return this.getScientificname().compareTo(other.getScientificname());
-//        }
-//        if (this.getCommonname() != null & other.getCommonname() == null) {
-//            return this.getCommonname().compareTo(other.getScientificname());
-//        }
-//        if (this.getCommonname() == null & other.getCommonname() != null) {
-//            return this.getScientificname().compareTo(other.getCommonname());
-//        }
-//
-//        if (this.getCommonname() != null & this.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName()) && other.getCommonname() != null & other.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(CommonSpecies.Baker_Yeast.getScientificName())) {
-//            return this.getScientificname().compareTo(other.getScientificname());
-//        }
-//        return this.getCommonname().compareTo(other.getCommonname());
-//
-//    }
     @Override
     public Species getSpecies() {
         Species specie = new Species();
@@ -440,7 +444,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
 
-        e.getUniprotXrefSet().stream().filter(x -> "PDB".equalsIgnoreCase(x.getSource())).limit(500).collect(Collectors.toList()).stream().forEach(xref -> {
+        e.getUniprotXrefSet().stream().filter(x -> PDB_SOURCE.equalsIgnoreCase(x.getSource())).limit(PDB_CODE_LIMIT).collect(Collectors.toList()).stream().forEach(xref -> {
             pdbcodes.add(xref.getSourceId());
         });
 
@@ -464,7 +468,8 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
         if (synonymName.isPresent()) {
 
-            synonym = Stream.of(synonymName.get().split(";")).distinct()
+            synonym = Stream.of(synonymName.get().split(";"))
+                    .distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(getProteinName().trim())))
                     .distinct()
                     .collect(Collectors.toList());
@@ -499,9 +504,9 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
         List<String> ec = new ArrayList<>();
         if (!getEnzymePortalEcNumbersSet().isEmpty()) {
-            this.getEnzymePortalEcNumbersSet().stream().forEach(ecNum -> {
-                ec.add(ecNum.getEcNumber());
-            });
+            this.getEnzymePortalEcNumbersSet()
+                    .stream()
+                    .forEach(ecNum -> ec.add(ecNum.getEcNumber()));
         }
 
         return ec;
@@ -515,7 +520,10 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public List<Compound> getCompounds() {
 
         if (this.getEnzymePortalCompoundSet() != null) {
-            return this.getEnzymePortalCompoundSet().stream().distinct().collect(Collectors.toList());
+            return this.getEnzymePortalCompoundSet()
+                    .stream()
+                    .distinct()
+                    .collect(Collectors.toList());
         }
 
         return new ArrayList<>();
@@ -531,16 +539,25 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public List<EnzymeAccession> getRelatedspecies() {
+        return getRelatedProteinsId().getUniprotEntrySet()
+                .stream()
+                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
+                        .reversed())
+                .limit(SORTED_SPECIES_LIMIT)
+                .collect(Collectors.toList());
+    }
 
-        Map<Integer, EnzymeAccession> priorityMapper = new TreeMap<>();
+    public List<EnzymeAccession> getRelatedspecies1() {
+
+        final Map<Integer, UniprotEntry> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);
         AtomicInteger customKey = new AtomicInteger(6);
 
-        LinkedList<EnzymeAccession> relatedspecies = new LinkedList<>();
+        LinkedHashSet<EnzymeAccession> relatedspecies = new LinkedHashSet<>();
 
-        if (this.getRelatedProteinsId() != null) {
+        if (getRelatedProteinsId() != null) {
 
-            this.getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
+            getRelatedProteinsId().getUniprotEntrySet().stream().forEach((entry) -> {
 
                 Species sp = buildSpeciesFromEntry(entry);
                 entry.setSpecies(sp);
@@ -557,7 +574,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
                 sortSpecies(sp, entry, priorityMapper, customKey, key);
 
-                //relatedspecies.add(entry);
+                // relatedspecies.add(entry);
             });
         }
 
@@ -565,14 +582,19 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             relatedspecies.add(map.getValue());
         });
 
-        List<EnzymeAccession> sortedSpecies = relatedspecies.stream()
-                .distinct()
+        List<EnzymeAccession> sortedSpecies = relatedspecies
+                .stream()
+                //.distinct()
                 .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
-                        .reversed()
-                        .thenComparing(EnzymeAccession::getSpecies))
+                        .reversed())
                 .collect(Collectors.toList());
 
-        return sortedSpecies.stream().distinct().limit(50).collect(Collectors.toList());
+        return sortedSpecies
+                .stream()
+                //.distinct()
+                .limit(SORTED_SPECIES_LIMIT)
+                .collect(Collectors.toList());
+
     }
 
     private Species buildSpeciesFromEntry(UniprotEntry entry) {
@@ -584,7 +606,11 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return sp;
     }
 
-    private void sortSpecies(Species sp, EnzymeAccession entry, Map<Integer, EnzymeAccession> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
+    public Boolean humanOnTop() {
+        return this.getScientificName().equalsIgnoreCase(ModelOrganisms.HUMAN.getScientificName());
+    }
+
+    private void sortSpecies(Species sp, UniprotEntry entry, Map<Integer, UniprotEntry> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
         //Human,Mouse, Mouse-ear cress, fruit fly, yeast, e.coli, Rat,worm
         // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
         if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.HUMAN.getScientificName())) {
@@ -637,11 +663,9 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     @Override
     public List<String> getUniprotaccessions() {
+        //return Collections.singletonList(getAccession());
+        return Stream.of(getAccession()).collect(Collectors.toList());
 
-        List<String> uniprotAccessions = new ArrayList<>();
-
-        uniprotAccessions.add(getAccession());
-        return uniprotAccessions.stream().distinct().collect(Collectors.toList());
     }
 
     @XmlTransient
@@ -690,6 +714,14 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public BigInteger getExpEvidenceFlag() {
+        if (expEvidenceFlag != null) {
+            if (expEvidenceFlag.equals(BigInteger.ONE)) {
+                this.setExpEvidence(Boolean.TRUE);
+            } else {
+                this.setExpEvidence(Boolean.FALSE);
+            }
+        }
+
         return expEvidenceFlag;
     }
 
@@ -717,6 +749,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         sb.append(", proteinName=").append(proteinName);
         sb.append(", scientificName=").append(scientificName);
         sb.append(", commonName=").append(commonName);
+        sb.append(", expEvidenceFlag=").append(expEvidenceFlag);
         sb.append('}');
         return sb.toString();
     }
@@ -728,6 +761,28 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public void setEntryToGeneMappingSet(Set<EntryToGeneMapping> entryToGeneMappingSet) {
         this.entryToGeneMappingSet = entryToGeneMappingSet;
+    }
+
+    public String getProteinGroupId() {
+        return proteinGroupId;
+    }
+
+    public void setProteinGroupId(String proteinGroupId) {
+        this.proteinGroupId = proteinGroupId;
+    }
+
+    @Override
+    public Boolean getExpEvidence() {
+        expEvidence = false;
+        if (expEvidenceFlag != null) {
+            if (expEvidenceFlag.equals(BigInteger.ONE)) {
+                expEvidence = Boolean.TRUE;
+            } else {
+                expEvidence = Boolean.FALSE;
+            }
+        }
+
+        return expEvidence;
     }
 
 }

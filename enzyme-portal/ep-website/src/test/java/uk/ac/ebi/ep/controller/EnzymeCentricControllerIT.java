@@ -8,9 +8,7 @@ package uk.ac.ebi.ep.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,10 +29,8 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 import org.springframework.web.context.WebApplicationContext;
-import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
-import uk.ac.ebi.ep.ebeye.EbeyeRestService;
-import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
+import uk.ac.ebi.ep.web.utils.SearchUtil;
 
 /**
  *
@@ -44,32 +40,22 @@ import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
 
 @ContextConfiguration(classes = {WebTestConfig.class, ApplicationContextMock.class})
 @WebAppConfiguration
-public class EnzymeCentricControllerIT {// extends BaseTest {
+public class EnzymeCentricControllerIT {
 
     @Autowired
     protected EnzymePortalService enzymePortalServiceMock;
     @Autowired
     private WebApplicationContext wac;
+
     @Autowired
-    private Config searchConfig;
-    @Autowired
-    private EbeyeRestService ebeyeRestService;
-    @Autowired
-    private EnzymeCentricService enzymeCentricService;
+    protected SearchUtil searchUtilMock;
 
     private MockMvc mockMvc;
 
-    private final SearchController searchController = new SearchController();//(searchConfig, enzymePortalServiceMock, ebeyeRestService);
+    private final SearchController searchController = new SearchController();
 
-    private final EnzymeCentricController enzymeCentricController = new EnzymeCentricController();//(ebeyeRestService, enzymeCentricService);
+    private final EnzymeCentricController enzymeCentricController = new EnzymeCentricController();
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
 
     @Before
     public void setup() {
@@ -81,9 +67,7 @@ public class EnzymeCentricControllerIT {// extends BaseTest {
 
         DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
         StandaloneMockMvcBuilder standaloneMockMvcBuilder = MockMvcBuilders.standaloneSetup(searchController, enzymeCentricController);
-        // this.mockMvc = builder.build();
-        //this.mockMvc = standaloneSetup(new SearchController(searchConfig, enzymePortalServiceMock, ebeyeRestService))
-        // .build();
+
         this.mockMvc = standaloneMockMvcBuilder.build();
     }
 
@@ -92,32 +76,15 @@ public class EnzymeCentricControllerIT {// extends BaseTest {
     }
 
     @Test
-    public void testMyMvcController() throws Exception {
+    public void testHomeController() throws Exception {
         ResultMatcher ok = MockMvcResultMatchers.status().isOk();
         ResultMatcher msg = MockMvcResultMatchers.model()
                 .attribute("homeVideo", "homeVideo");
 
-//        
-//          public String postSearchResult(@RequestParam(required = false, value = "searchKey") String searchKey,
-//            @RequestParam(required = false, value = "filterFacet") List<String> filters,
-//            @RequestParam(required = false, value = "servicePage") Integer servicePage,
-//            @RequestParam(required = false, value = "keywordType") String keywordType,
-//            @RequestParam(required = false, value = "searchId") String searchId,
-//    
-//         ResultActions resultActions = mockMvc.perform(get("/").accept(MediaType.ALL));
-//
-//    resultActions.andExpect(status().is4xxClientError());
-//         resultActions.andExpect(msg);
-//
-//    resultActions.andExpect(view().name("index"));
-//
-//
-//         System.out.println("REQUESTBUILDER "+ resultActions);
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .get("/")
                 .accept(MediaType.ALL);
         this.mockMvc.perform(builder)
-                // mockMvc.perform(get("/").accept(MediaType.ALL))
                 .andDo(print())
                 .andExpect(view().name("index"))
                 .andExpect(ok)
@@ -128,7 +95,7 @@ public class EnzymeCentricControllerIT {// extends BaseTest {
     /**
      * Test of getSearchResults method, of class EnzymeCentricController.
      */
-    //@Test
+    @Test
     @Ignore
     public void testGetSearchResults() throws Exception {
         System.out.println("getSearchResults");
@@ -136,8 +103,8 @@ public class EnzymeCentricControllerIT {// extends BaseTest {
         ResultMatcher ok = MockMvcResultMatchers.status().isOk();
         ResultMatcher msg = MockMvcResultMatchers.model()
                 .attribute("enzymeView", "homeVideo");
-        
-               ResultMatcher searchModel = MockMvcResultMatchers.model()
+
+        ResultMatcher searchModel = MockMvcResultMatchers.model()
                 .attribute("enzymeView", "homeVideo");
 
         String searchKey = "sildenafil";
@@ -145,17 +112,7 @@ public class EnzymeCentricControllerIT {// extends BaseTest {
         Integer servicePage = null;
         String keywordType = "KEYWORD";
         String searchId = "sildenafil";
-//        SearchModel searchModel = null;
-//        BindingResult result_2 = null;
-//        Model model = null;
-//        HttpSession session = null;
-//        HttpServletRequest request = null;
-//        HttpServletResponse response = null;
-//        EnzymeCentricController instance = new EnzymeCentricController();
-//        String expResult = "";
-//        String result = instance.getSearchResults(searchKey, filters, servicePage, keywordType, searchId, searchModel, result_2, model, session, request, response);
-//        
-//        
+     
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                 .post("/enzymes")
                 //.get("/enzymes")
@@ -164,7 +121,7 @@ public class EnzymeCentricControllerIT {// extends BaseTest {
                 .param("keywordType", keywordType)
                 .param("servicePage", Integer.toString(1)).param("filterFacet", filters.toString())
                 .param("searchId", searchId);
-                //.sessionAttr("searchModel", new SearchModel());
+        //.sessionAttr("searchModel", new SearchModel());
         this.mockMvc.perform(builder)
                 .andDo(print())
                 .andExpect(view().name("enzymes"))
@@ -173,23 +130,5 @@ public class EnzymeCentricControllerIT {// extends BaseTest {
 
     }
 //
-//    /**
-//     * Test of postSearchResult method, of class EnzymeCentricController.
-//     */
-//    @Test
-//    public void testPostSearchResult() {
-//        System.out.println("postSearchResult");
-//        String searchKey = "";
-//        List<String> filters = null;
-//        Integer servicePage = null;
-//        String keywordType = "";
-//        String searchId = "";
-//        SearchModel searchModel = null;
-//        Model model = null;
-//        HttpServletRequest request = null;
-//        EnzymeCentricController instance = new EnzymeCentricController();
-//        String expResult = "";
-//        String result = instance.postSearchResult(searchKey, filters, servicePage, keywordType, searchId, searchModel, model, request);
-//
-//    }
+
 }

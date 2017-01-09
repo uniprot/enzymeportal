@@ -89,7 +89,7 @@ public class EnzymeRetrieverTest extends BaseTest {
         expResult.setCommonName("Rat");
 
         EnzymeModel result = enzymeRetriever.getProteinStructure(accession);
-
+        
         assertEquals(expResult, result);
         assertNotNull(result);
 

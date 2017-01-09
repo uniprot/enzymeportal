@@ -79,6 +79,9 @@ public class Species implements Comparable<Species>, Serializable {
      *
      */
     public String getCommonname() {
+        if (commonname == null) {
+            commonname = scientificname;
+        }
         return commonname;
     }
 
@@ -144,22 +147,19 @@ public class Species implements Comparable<Species>, Serializable {
         return Objects.equals(this.scientificname, other.scientificname);
     }
 
-    
-    
-
-
-    
-    
     @Override
     public String toString() {
-        return "Species{" + "scientificname=" + scientificname + ", commonname=" + commonname + '}';
+        final StringBuilder sb = new StringBuilder("Species{");
+        sb.append("taxId=").append(taxId);
+        sb.append("scientificname=").append(scientificname);
+        sb.append("commonname=").append(commonname);
+
+        return sb.toString();
     }
 
     @Override
     public int compareTo(Species o) {
         return this.scientificname.compareToIgnoreCase(o.getScientificname());
     }
-
-    
 
 }

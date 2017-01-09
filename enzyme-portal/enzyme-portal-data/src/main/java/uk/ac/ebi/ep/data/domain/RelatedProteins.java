@@ -7,7 +7,7 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,11 +20,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
 
 /**
  *
@@ -38,7 +38,11 @@ import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
     @NamedQuery(name = "RelatedProteins.findByRelProtInternalId", query = "SELECT r FROM RelatedProteins r WHERE r.relProtInternalId = :relProtInternalId")
     //@NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix")
 })
-public class RelatedProteins extends EnzymeAccession implements Serializable {
+//public class RelatedProteins extends EnzymeAccession implements Serializable {
+public class RelatedProteins implements Serializable {
+    @Size(max = 4000)
+    @Column(name = "PROTEIN_NAME")
+    private String proteinName;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -50,11 +54,12 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
     private BigDecimal relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-     //@OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
     //@BatchSize(size = 100)
     @Fetch(FetchMode.JOIN)
-    private Set<UniprotEntry> uniprotEntrySet;
+    //private Set<UniprotEntry> uniprotEntrySet;
+    private List<UniprotEntry> uniprotEntrySet;
 
     public RelatedProteins() {
     }
@@ -80,11 +85,18 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
     }
 
     @XmlTransient
-    public Set<UniprotEntry> getUniprotEntrySet() {
+    public List<UniprotEntry> getUniprotEntrySet() {
+        // List<EnzymeAccession> sortedSpecies = relatedspecies
+//        return uniprotEntrySet.stream()
+//                .sorted(Comparator.comparing(UniprotEntry::humanOnTop).reversed())
+//                //.sorted(Comparator.comparing(UniprotEntry::getExpEvidenceFlag)
+//                       // .reversed())
+//                .collect(Collectors.toList());
+
         return uniprotEntrySet;
     }
 
-    public void setUniprotEntrySet(Set<UniprotEntry> uniprotEntrySet) {
+    public void setUniprotEntrySet(List<UniprotEntry> uniprotEntrySet) {
         this.uniprotEntrySet = uniprotEntrySet;
     }
 
@@ -108,6 +120,14 @@ public class RelatedProteins extends EnzymeAccession implements Serializable {
     @Override
     public String toString() {
         return "uk.ac.ebi.ep.data.domain.RelatedProteins[" + relProtInternalId + " ]";
+    }
+
+    public String getProteinName() {
+        return proteinName;
+    }
+
+    public void setProteinName(String proteinName) {
+        this.proteinName = proteinName;
     }
 
 }

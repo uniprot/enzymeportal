@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -34,6 +34,12 @@ public class EnzymeAccession implements Serializable {
     protected Boolean expEvidence;
     protected String uniprotaccession;
     protected String enzymeFunction;
+   
+    protected String PDB_SOURCE = "PDB";
+    protected int PDB_CODE_LIMIT = 500;
+    protected int SORTED_SPECIES_LIMIT = 100;
+    protected Long taxId;
+
 
     /**
      * Gets the value of the uniprotaccessions property.
@@ -61,7 +67,11 @@ public class EnzymeAccession implements Serializable {
         if (uniprotaccessions == null) {
             uniprotaccessions = new ArrayList<>();
         }
-        return this.uniprotaccessions;
+        return this.uniprotaccessions
+                .stream()
+                .distinct()
+                .limit(5)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -104,6 +114,7 @@ public class EnzymeAccession implements Serializable {
      * Objects of the following type(s) are allowed in the list {@link String }
      *
      *
+     * @return pdbeaccessions
      */
     public List<String> getPdbeaccession() {
         if (pdbeaccession == null) {
@@ -315,25 +326,26 @@ public class EnzymeAccession implements Serializable {
         this.diseases = diseases;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.species.getScientificname());
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EnzymeAccession other = (EnzymeAccession) obj;
-        return Objects.equals(this.species.getScientificname(), other.species.getScientificname());
-    }
-
+      
+//    @Override
+//    public int hashCode() {
+//        int hash = 3;
+//        hash = 79 * hash + Objects.hashCode(this.species.getScientificname());
+//        return hash;
+//    }
+//    
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final EnzymeAccession other = (EnzymeAccession) obj;
+//        return Objects.equals(this.species.getScientificname(), other.species.getScientificname());
+//    }
+    
 //    @Override
 //    public String toString() {
 //        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + '}';
@@ -348,8 +360,8 @@ public class EnzymeAccession implements Serializable {
 
     public Boolean getExpEvidence() {
 
-        if(expEvidence == null){
-            expEvidence = Boolean.FALSE;//.valueOf("0");
+        if (expEvidence == null) {
+            expEvidence = Boolean.FALSE;
         }
         return expEvidence;
     }
@@ -374,6 +386,10 @@ public class EnzymeAccession implements Serializable {
         this.enzymeFunction = enzymeFunction;
     }
 
+
+    public Long getTaxId() {
+        return taxId;
+    }
+
+
 }
-
-

@@ -29,8 +29,8 @@ public class ListComparison extends AbstractComparison<List<?>> {
 
     @Override
     protected void getSubComparisons(List<?> l1, List<?> l2) {
-        if (l1 == null) l1 = new ArrayList<Object>();
-        if (l2 == null) l2 = new ArrayList<Object>();
+        if (l1 == null) l1 = new ArrayList<>();
+        if (l2 == null) l2 = new ArrayList<>();
         List<?> common = ListUtils.intersection(l1, l2);
         List<?> onlyL1 = ListUtils.subtract(l1, common);
         List<?> onlyL2 = ListUtils.subtract(l2, common);

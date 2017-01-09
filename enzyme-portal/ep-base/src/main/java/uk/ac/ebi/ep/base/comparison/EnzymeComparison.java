@@ -44,7 +44,7 @@ public class EnzymeComparison extends AbstractComparison<EnzymeModel> {
      */
     private ListComparison getDiseasesComparison(EnzymeModel e1, EnzymeModel e2) {
         // Put evidences away:
-        Map<String, List<String>> evs = new HashMap<String, List<String>>();
+        Map<String, List<String>> evs = new HashMap<>();
         final List<Disease> d1 = e1.getDisease();
         for (Disease dis : d1) {
             final List<String> ev = dis.getEvidences();

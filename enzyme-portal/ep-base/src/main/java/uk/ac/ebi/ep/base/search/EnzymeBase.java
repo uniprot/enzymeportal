@@ -22,7 +22,7 @@ public abstract class EnzymeBase {
 
     protected EnzymePortalService enzymePortalService;
     protected EbeyeRestService ebeyeRestService;
-   
+
     private EnzymeBase() {
 
     }
@@ -39,7 +39,7 @@ public abstract class EnzymeBase {
         this.enzymePortalService = service;
         this.ebeyeRestService = ebeyeRestService;
     }
- 
+
     /**
      * Retrieves the protein recommended name as well as any synonyms.
      *
@@ -66,9 +66,9 @@ public abstract class EnzymeBase {
         }
         return nameSynonyms;
     }
-    
-        @Deprecated
-   private List<String> computeSynonymNames(UniprotEntry uniprotEntry) {
+
+    @Deprecated
+    private List<String> computeSynonymNames(UniprotEntry uniprotEntry) {
         List<String> synonyms = new LinkedList<>();
 
         String namesColumn = uniprotEntry.getSynonymNames();

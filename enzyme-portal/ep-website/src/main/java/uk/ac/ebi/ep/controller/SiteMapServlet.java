@@ -58,9 +58,8 @@ public class SiteMapServlet extends HttpServlet {
                   URLConnection con = url.openConnection(java.net.Proxy.NO_PROXY);
                     
                     LOGGER.info("Connected to sitemap...");
-                     InputStream inputStream = null;
-                  
-                    inputStream = con.getInputStream();
+
+                   InputStream inputStream = con.getInputStream();
                 
                     int r = -1;
                     LOGGER.debug("Starting to read sitemap...");

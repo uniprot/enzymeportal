@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.projection.ProjectionFactory;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
+import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymeCatalyticActivityRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
@@ -68,10 +69,14 @@ public class WebTestConfig {
         return Mockito.mock(LiteratureService.class);
     }
 
-   
     @Bean
     public BasketController basketController() {
         return Mockito.mock(BasketController.class);
+    }
+    
+        @Bean
+    public EnzymeCentricController enzymeCentricController() {
+        return Mockito.mock(EnzymeCentricController.class);
     }
 
     @Bean
@@ -218,10 +223,15 @@ public class WebTestConfig {
     public IntenzAdapter intenzAdapter() {
         return Mockito.mock(IntenzAdapter.class);
     }
-    
-        @Bean
-    public SearchUtil searchUtil(){
+
+    @Bean
+    public SearchUtil searchUtilMock() {
         return Mockito.mock(SearchUtil.class);
+    }
+
+    @Bean
+    public Config config() {
+        return Mockito.mock(Config.class);
     }
 
 }
