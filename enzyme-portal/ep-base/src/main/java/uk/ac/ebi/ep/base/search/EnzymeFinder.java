@@ -308,7 +308,6 @@ public class EnzymeFinder extends EnzymeBase {
     }
 
     private List<UniprotEntry> findUniprotEntriesbyAccessions(List<String> accessions) {
-        Set<UniprotEntry> enzymeList = new LinkedHashSet<>();
 
         if (!accessions.isEmpty()) {
 
@@ -327,17 +326,16 @@ public class EnzymeFinder extends EnzymeBase {
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
                 logger.warn("About to query database using useParallelExec for " + accessions.size() + " accessions");
-                // Set<UniprotEntry> enzymes = useParallelExec(accessions);
-                Set<UniprotEntry> enzymes = useSpliterator(accessions);
+                Set<UniprotEntry> enzymes = useParallelExec(accessions);
+                //Set<UniprotEntry> enzymes = useSpliterator(accessions);
                 stopWatch.stop();
                 logger.warn("useParallelExec :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
-                return enzymeList.stream().distinct().sorted().collect(Collectors.toList());
+                return enzymes.stream().distinct().sorted().collect(Collectors.toList());
 
             } else if (accessions.size() >= ACCESSION_SIZE) {
 
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
-                logger.warn("About to query database using useSpliterator for " + accessions.size() + " accessions");
                 Set<UniprotEntry> enzymes = useSpliterator(accessions);
                 stopWatch.stop();
                 logger.warn("useSpliterator :: Database Query took " + stopWatch.getTotalTimeSeconds() + " secs for " + accessions.size() + " accessions");
