@@ -37,16 +37,19 @@ public class EnzymeCentricTest extends BaseTest {
         enzyme_1.setEcNumber("1.1.1.1");
         enzyme_1.setEnzymeName("alcohol dehydrogenase");
         enzyme_1.setCatalyticActivity(" (1) An alcohol + NAD(+) = an aldehyde or ketone + NADH. (2) A secondary alcohol + NAD(+) = a ketone + NADH.");
+        enzyme_1.setTransferFlag("N");
 
         IntenzEnzymes enzyme_2 = new IntenzEnzymes(BigDecimal.valueOf(2L));
         enzyme_2.setEcNumber("6.1.1.1");
         enzyme_2.setEnzymeName("tyrosine—tRNA ligase");
         enzyme_2.setCatalyticActivity("ATP + L-tyrosine + tRNA(Tyr) = AMP + diphosphate + L-tyrosyl-tRNA(Tyr).");
+        enzyme_2.setTransferFlag("N");
 
         IntenzEnzymes enzyme_3 = new IntenzEnzymes(BigDecimal.valueOf(3L));
 
         enzyme_3.setEcNumber("3.4.24.85");
         enzyme_3.setEnzymeName("S2P endopeptidase");
+        enzyme_3.setTransferFlag("N");
 
         enzymes.add(enzyme_1);
         enzymes.add(enzyme_2);
