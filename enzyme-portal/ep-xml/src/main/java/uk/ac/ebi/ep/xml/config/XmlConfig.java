@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.xml.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
@@ -15,6 +16,7 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
  * @author joseph
  */
 @Configuration
+@Import({EnzymePortalXmlService.class})
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class XmlConfig {
     @Autowired
