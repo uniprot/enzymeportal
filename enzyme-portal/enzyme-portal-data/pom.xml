@@ -10,7 +10,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.6</version>
+        <version>1.0.7-SNAPSHOT</version>
     </parent>
 
     
@@ -188,6 +188,11 @@
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
 
     </dependencies>
     <build>
@@ -239,7 +244,7 @@
             </plugin>
             
 
-         </plugins>
+        </plugins>
         <resources>
             <resource>
                 <directory>${ep.config.dir}</directory>

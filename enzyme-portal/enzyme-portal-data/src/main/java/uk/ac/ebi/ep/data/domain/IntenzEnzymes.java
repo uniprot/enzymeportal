@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
@@ -18,12 +14,22 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
 @Entity
+//@EqualsAndHashCode
+@Getter
+@Setter
+@ToString
+//@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "INTENZ_ENZYMES")
 @XmlRootElement
 @NamedQueries({
@@ -33,6 +39,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "IntenzEnzymes.findByEnzymeName", query = "SELECT i FROM IntenzEnzymes i WHERE i.enzymeName = :enzymeName"),
     @NamedQuery(name = "IntenzEnzymes.findByCatalyticActivity", query = "SELECT i FROM IntenzEnzymes i WHERE i.catalyticActivity = :catalyticActivity")})
 public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
+    @Size(max = 1)
+    @Column(name = "TRANSFER_FLAG")
+    private String transferFlag;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -49,43 +58,9 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
     @Column(name = "CATALYTIC_ACTIVITY")
     private String catalyticActivity;
 
-    public IntenzEnzymes() {
-    }
 
     public IntenzEnzymes(BigDecimal internalId) {
         this.internalId = internalId;
-    }
-
-    public BigDecimal getInternalId() {
-        return internalId;
-    }
-
-    public void setInternalId(BigDecimal internalId) {
-        this.internalId = internalId;
-    }
-
-    public String getEcNumber() {
-        return ecNumber;
-    }
-
-    public void setEcNumber(String ecNumber) {
-        this.ecNumber = ecNumber;
-    }
-
-    public String getEnzymeName() {
-        return enzymeName;
-    }
-
-    public void setEnzymeName(String enzymeName) {
-        this.enzymeName = enzymeName;
-    }
-
-    public String getCatalyticActivity() {
-        return catalyticActivity;
-    }
-
-    public void setCatalyticActivity(String catalyticActivity) {
-        this.catalyticActivity = catalyticActivity;
     }
 
     @Override
@@ -105,11 +80,6 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
         }
         final IntenzEnzymes other = (IntenzEnzymes) obj;
         return Objects.equals(this.ecNumber, other.ecNumber);
-    }
-
-    @Override
-    public String toString() {
-        return "IntenzEnzymes{" + "ecNumber=" + ecNumber + ", enzymeName=" + enzymeName + '}';
     }
 
     @Override

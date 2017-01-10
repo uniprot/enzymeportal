@@ -128,9 +128,21 @@ public class EnzymePortalXmlService {
         return uniprotEntryRepository.findStreamedSwissprotEnzymesByEc(ec);
     }
 
+    @Deprecated
     @Transactional(readOnly = true)
     public Stream<UniprotEntry> streamEnzymes() {
         return uniprotEntryRepository.streamEnzymes();
+    }
+
+    @Transactional(readOnly = true)
+    public Stream<IntenzEnzymes> streamIntenzEnzymes() {
+        return intenzEnzymesRepository.streamAllIntenzEnzymes();
+    }
+
+    @Transactional(readOnly = true)
+    public List<IntenzEnzymes> findNonTransferredEnzymes() {
+
+        return intenzEnzymesRepository.findNonTransferredEnzymes();
     }
 
 }
