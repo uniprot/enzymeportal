@@ -10,7 +10,7 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
 /**
  * Queries the Ebeye search REST server for suggestions based on client queries.
  *
- * @author Ricardo Antunes
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 public class EbeyeSuggestionService {
 
