@@ -35,7 +35,8 @@ public class DevDataConfig extends AbstractConfig {
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(password);
-        config.setDriverClassName("oracle.jdbc.OracleDriver");
+        //config.setDriverClassName("oracle.jdbc.OracleDriver");
+         config.setDriverClassName("oracle.jdbc.pool.OracleDataSource");
 
         return new HikariDataSource(config);
     }

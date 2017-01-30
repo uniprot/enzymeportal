@@ -23,7 +23,6 @@ import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
  *
  * @author joseph
  */
-@Transactional
 @Service
 public class EnzymePortalXmlService {
 
@@ -134,7 +133,7 @@ public class EnzymePortalXmlService {
         return uniprotEntryRepository.streamEnzymes();
     }
 
-    @Transactional(readOnly = true)
+    
     public Stream<IntenzEnzymes> streamIntenzEnzymes() {
         return intenzEnzymesRepository.streamAllIntenzEnzymes();
     }

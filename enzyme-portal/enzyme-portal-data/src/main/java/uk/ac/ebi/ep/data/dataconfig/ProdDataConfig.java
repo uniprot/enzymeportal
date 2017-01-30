@@ -34,7 +34,8 @@ public class ProdDataConfig implements EnzymePortalDataConfig {
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(password);
-        config.setDriverClassName("oracle.jdbc.OracleDriver");
+        //config.setDriverClassName("oracle.jdbc.OracleDriver");
+        config.setDriverClassName("oracle.jdbc.pool.OracleDataSource");
 
         HikariDataSource ds = new HikariDataSource(config);
         return ds;

@@ -25,6 +25,6 @@ public interface IntenzEnzymesRepository extends JpaRepository<IntenzEnzymes, Lo
     @Query(value = "SELECT * FROM INTENZ_ENZYMES WHERE TRANSFER_FLAG = 'N'", nativeQuery = true)
     List<IntenzEnzymes> findNonTransferredEnzymes();
 
-    @Query("select e from IntenzEnzymes e")
+    @Query("select e from IntenzEnzymes e where transferFlag='N'")
     Stream<IntenzEnzymes> streamAllIntenzEnzymes();
 }
