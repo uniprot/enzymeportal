@@ -42,7 +42,7 @@ public final class Entry extends ProteinView implements Serializable, Comparable
     private Fields fields;
 
     @JsonIgnore
-    private final Map<String, Fields> fieldsMap = new HashMap<>();
+    transient final Map<String, Fields> fieldsMap = new HashMap<>();
 
     public Entry() {
     }

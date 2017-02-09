@@ -24,11 +24,11 @@ public class Equation
 {
 
  
-    protected List<Object> reactantlist;
+    transient List<Object> reactantlist;
   
     protected String direction;
    
-    protected List<Object> productlist;
+    transient List<Object> productlist;
 
     /**
      * Gets the value of the reactantlist property.

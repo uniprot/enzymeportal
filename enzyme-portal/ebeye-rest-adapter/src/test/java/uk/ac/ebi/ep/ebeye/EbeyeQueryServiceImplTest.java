@@ -32,6 +32,7 @@ import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 /**
  * Tests the behaviour of the {@link uk.ac.ebi.ep.ebeye.EbeyeQueryServiceImpl}
  * class.
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 public class EbeyeQueryServiceImplTest {
 
@@ -49,7 +50,7 @@ public class EbeyeQueryServiceImplTest {
     private Function<String, Entry> entryCreator;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         serverUrl.setChunkSize(CHUNK_SIZE);
         serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
@@ -66,7 +67,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void null_rest_template_in_constructor_throws_exception() throws Exception {
+    public void null_rest_template_in_constructor_throws_exception() throws IllegalArgumentException {
         EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         RestTemplate restTemplate = null;
 
@@ -77,7 +78,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void null_service_configuration_object_in_constructor_throws_exception() throws Exception {
+    public void null_service_configuration_object_in_constructor_throws_exception() throws IllegalArgumentException {
         EbeyeIndexProps serverUrl = null;
         RestTemplate restTemplate = new RestTemplate();
 
@@ -88,7 +89,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void null_query_throws_exception() throws Exception {
+    public void null_query_throws_exception() throws IllegalArgumentException {
         String query = null;
 
         thrown.expect(IllegalArgumentException.class);
@@ -98,7 +99,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void execute_query_returns_zero_entries_because_ebeye_server_finds_zero_entries() throws Exception {
+    public void execute_query_returns_zero_entries_because_ebeye_server_finds_zero_entries() throws IOException {
         String query = "query";
 
         String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
@@ -115,7 +116,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void ebeye_server_returns_hitCount_less_than_maxEntries_so_only_single_request_used() throws Exception {
+    public void ebeye_server_returns_hitCount_less_than_maxEntries_so_only_single_request_used() throws IOException {
         String query = "query";
         int limit = MAX_ENTRIES_IN_RESPONSE;
 
@@ -132,7 +133,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void ebeye_server_returns_hitCount_greater_than_maxEntries_so_multi_requests_used() throws Exception {
+    public void ebeye_server_returns_hitCount_greater_than_maxEntries_so_multi_requests_used() throws IOException {
         String query = "query";
         int limit = MAX_ENTRIES_IN_RESPONSE + 1;
 
@@ -160,7 +161,7 @@ public class EbeyeQueryServiceImplTest {
 
     @Test
     public void ebeye_server_fails_to_reply_to_first_query_during_first_attempt_but_succeeds_on_second()
-            throws Exception {
+            throws IOException {
         String query = "query";
         int entriesSize = MAX_ENTRIES_IN_RESPONSE;
 
@@ -185,7 +186,7 @@ public class EbeyeQueryServiceImplTest {
     @Test
     public void
             ebeye_server_fails_to_reply_to_first_query_during_first_and_retry_attempts_so_service_returns_an_empty_observable()
-            throws Exception {
+            throws IOException {
         String query = "query";
 
         String requestUrl = createQueryUrl(query, MAX_ENTRIES_IN_RESPONSE, 0);
@@ -205,7 +206,7 @@ public class EbeyeQueryServiceImplTest {
     @Test
     public void
             ebeye_server_fails_to_reply_to_second_query_on_first_attempt_but_succeeds_on_second_so_service_returns_all_entries()
-            throws Exception {
+            throws IOException {
         String query = "query";
         int entriesSize = 20;
 
@@ -238,7 +239,7 @@ public class EbeyeQueryServiceImplTest {
     @Test
     public void
             ebeye_server_fails_to_reply_to_second_query_on_first_and_retry_attempt_so_service_returns_only_first_set_of_entries()
-            throws Exception {
+            throws IOException {
         String query = "query";
         int entriesSize = 20;
 
@@ -267,7 +268,7 @@ public class EbeyeQueryServiceImplTest {
 
     @Test
     public void maxRetrievableEntries_is_15_and_number_of_hits_is_20_unique_accession_search_returns_only_15()
-            throws Exception {
+            throws IOException {
         int maxRetrievableEntries = 15;
         ebeyeQueryService.setMaxRetrievableHits(maxRetrievableEntries);
 
@@ -301,7 +302,8 @@ public class EbeyeQueryServiceImplTest {
     }
 
     private String createQueryUrl(String query, int size, int start) {
-        return String.format(EBEYE_REQUEST, query, MAX_ENTRIES_IN_RESPONSE, start);
+        size = MAX_ENTRIES_IN_RESPONSE;
+        return String.format(EBEYE_REQUEST, query, size, start);
     }
 
     private EbeyeSearchResult createSearchResult(List<Entry> entries, int hitCount) {

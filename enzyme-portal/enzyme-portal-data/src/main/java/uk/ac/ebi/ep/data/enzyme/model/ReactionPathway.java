@@ -20,12 +20,12 @@ import java.util.Objects;
 public class ReactionPathway
         implements Serializable {
 
-    protected EnzymeReaction reaction;
-    protected List<Pathway> pathways;
+    transient EnzymeReaction reaction;
+    transient List<Pathway> pathways;
 
-    protected List<Object> mechanism;
+    transient List<Object> mechanism;
 
-    protected List<String> provenance;
+    transient List<String> provenance;
 
     protected List<EnzymeReaction> reactions;
 

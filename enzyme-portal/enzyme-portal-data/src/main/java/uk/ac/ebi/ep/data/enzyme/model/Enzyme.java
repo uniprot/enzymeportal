@@ -23,13 +23,13 @@ public class Enzyme
 {
 
    
-    protected List<EnzymeHierarchy> echierarchies;
+    transient List<EnzymeHierarchy> echierarchies;
     
-    protected List<String> enzymetype;
+    transient List<String> enzymetype;
    
     protected Sequence sequence;
    
-    protected List<String> provenance;
+    transient List<String> provenance;
 
     /**
      * Gets the value of the echierarchies property.

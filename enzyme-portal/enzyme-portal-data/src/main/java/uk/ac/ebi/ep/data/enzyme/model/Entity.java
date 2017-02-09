@@ -28,10 +28,10 @@ public class Entity
     protected String description;
   
  
-    protected Object url;
+    transient Object url;
 
-    protected List<Object> xrefs;
-    protected List<String> evidence;
+    transient List<Object> xrefs;
+    transient List<String> evidence;
 
     /**
      * Gets the value of the id property.

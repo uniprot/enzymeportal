@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package uk.ac.ebi.ep.data.search.model;
 
@@ -22,10 +17,10 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 public class SearchFilters implements Serializable{
     
     
-    protected List<Disease> diseases;
-    protected List<Compound> compounds;
-    protected List<Species> species;
-    protected List<EcNumber> ecNumbers;
+    private List<Disease> diseases;
+    private List<Compound> compounds;
+    private List<Species> species;
+    private List<EcNumber> ecNumbers;
 
     public List<EcNumber> getEcNumbers() {
         if(ecNumbers == null){

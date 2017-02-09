@@ -25,9 +25,9 @@ public class ProteinStructure
 
     protected Image image;
   
-    protected List<DASSummary> summary;
+    transient List<DASSummary> summary;
     
-    protected List<String> provenance;
+    transient List<String> provenance;
 
     /**
      * Gets the value of the image property.

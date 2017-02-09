@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.ebeye.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -11,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +33,7 @@ import java.util.Set;
 //    "disease_name",
 //    "enzyme_family"
 //})
-public class Fields {
+public class Fields implements Serializable {
 
     @JsonProperty("id")
     private List<String> ec = new ArrayList<>();

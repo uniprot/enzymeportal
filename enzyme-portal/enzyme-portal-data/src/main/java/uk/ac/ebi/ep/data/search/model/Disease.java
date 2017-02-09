@@ -22,11 +22,11 @@ public class Disease implements Serializable {
     protected String name;
     protected String description;
 
-    protected Object url;
+    transient Object url;
     protected boolean selected;
     protected int numEnzyme;
 
-    protected List<String> evidences = new ArrayList<>();
+    protected transient List<String> evidences = new ArrayList<>();
     public static final Comparator<String> NAME_COMPARATOR
             = new ChemicalNameComparator();
 

@@ -27,7 +27,7 @@ public class XmlTransformer {
 
     public static final String ENZYME_PORTAL = "Enzyme Portal";
     public static final String ENZYME_PORTAL_DESCRIPTION = "The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.";
-
+    private static final String REACTOME_PATHWAY_ID_REGEX = "^R-.*-.*";
     private final XmlConfigParams xmlConfigParams;
 
     public XmlTransformer(XmlConfigParams xmlConfigParams) {
@@ -84,6 +84,12 @@ public class XmlTransformer {
         }
     }
 
+    /**
+     *
+     * @param uniprotEntry
+     * @param fields
+     * @deprecated (proteinInfo field is no longer used )
+     */
     @Deprecated
     protected void addProteinInfoFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
@@ -115,16 +121,15 @@ public class XmlTransformer {
         }
     }
 
-    private void computeSynonymsAndBuildFields(Optional<String> synonymName, String proteinName, Set<Field> fields) {
+    void computeSynonymsAndBuildFields(Optional<String> synonymName, String proteinName, Set<Field> fields) {
         if (synonymName.isPresent()) {
             Stream.of(synonymName.get().split(";")).distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
-                    .map((syn) -> {
+                    .map(syn -> {
                         Field field = new Field(FieldName.SYNONYM.getName(), syn);
                         return field;
-                    }).forEach((field) -> {
-                        fields.add(field);
-                    });
+                    }).forEach(field -> fields.add(field));
+
         }
     }
 
@@ -160,9 +165,8 @@ public class XmlTransformer {
             uniprotEntry.getEnzymePortalEcNumbersSet()
                     .stream()
                     .map(ecNumbers -> new Ref(ecNumbers.getEcNumber(), DatabaseName.INTENZ.getDbName()))
-                    .forEach(xref -> {
-                        refs.add(xref);
-                    });
+                    .forEach(xref -> refs.add(xref));
+
         }
     }
 
@@ -189,9 +193,8 @@ public class XmlTransformer {
                 fields.add(field);
                 Ref xref = new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
                 return xref;
-            }).forEach(xref -> {
-                refs.add(xref);
-            });
+            }).forEach(xref -> refs.add(xref));
+
         }
     }
 
@@ -208,9 +211,7 @@ public class XmlTransformer {
 
             uniprotEntry.getEntryToGeneMappingSet().stream()
                     .map(geneMapping -> new Field(FieldName.GENE_NAME.getName(), geneMapping.getGeneName()))
-                    .forEach(field -> {
-                        fields.add(field);
-                    });
+                    .forEach(field -> fields.add(field));
 
         }
     }
@@ -221,18 +222,14 @@ public class XmlTransformer {
             uniprotEntry.getEnzymePortalPathwaysSet()
                     .stream()
                     .map(pathway -> new Ref(parseReactomePathwayId(pathway.getPathwayId()), DatabaseName.REACTOME.getDbName()))
-                    .forEach(xref -> {
-                        refs.add(xref);
-                    });
+                    .forEach(xref -> refs.add(xref));
         }
     }
-
-    private static final String REACTOME_PATHWAY_ID_REGEX = "^R-.*-.*";
 
     private String parseReactomePathwayId(String reactomePathwayId) {
         if (reactomePathwayId.matches(REACTOME_PATHWAY_ID_REGEX)) {
             String[] sections = reactomePathwayId.split("-");
-            reactomePathwayId = sections[0] + "-" + sections[2];
+            return sections[0] + "-" + sections[2];
         }
 
         return reactomePathwayId;

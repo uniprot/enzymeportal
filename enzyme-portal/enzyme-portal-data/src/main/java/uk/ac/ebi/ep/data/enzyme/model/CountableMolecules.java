@@ -24,7 +24,7 @@ public class CountableMolecules
 {
 
    
-    protected List<Molecule> molecule;
+    private List<Molecule> molecule;
    
     protected Integer totalFound;
 

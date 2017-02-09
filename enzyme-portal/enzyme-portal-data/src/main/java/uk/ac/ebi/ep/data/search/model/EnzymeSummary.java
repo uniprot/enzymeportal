@@ -14,16 +14,16 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 public class EnzymeSummary extends EnzymeAccession  implements Comparable<EnzymeSummary>, Serializable {
 
-    protected List<String> ec;
+    transient List<String> ec;
 
     private String accession;
 
     protected String name;
     protected String function;
-    protected List<String> synonym;
+    transient List<String> synonym;
 
-    protected String uniprotid;
-    protected List<EnzymeAccession> relatedspecies;
+    //protected String uniprotid;
+    transient List<EnzymeAccession> relatedspecies;
 
  
     private UniprotEntry uniprotAccession;

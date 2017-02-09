@@ -25,7 +25,7 @@ public class DASSummary
    
     protected String label;
    
-    protected List<String> note;
+    transient List<String> note;
 
     /**
      * Gets the value of the label property.

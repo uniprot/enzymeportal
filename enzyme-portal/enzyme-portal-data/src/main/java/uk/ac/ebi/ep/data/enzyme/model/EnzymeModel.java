@@ -27,21 +27,21 @@ import uk.ac.ebi.ep.data.search.model.Species;
 public class EnzymeModel extends UniprotEntry implements Serializable {
 
     protected Enzyme enzyme;
-    protected List<ProteinStructure> proteinstructure;
-    protected List<ReactionPathway> reactionpathway;
+    transient List<ProteinStructure> proteinstructure;
+    transient List<ReactionPathway> reactionpathway;
 
     protected String requestedfield;
 
     protected ChemicalEntity molecule;
-    protected List<Disease> disease;
+    transient List<Disease> disease;
 
-    protected List<Object> literature;
+    transient List<Object> literature;
 
-    protected List<Pathway> pathways;
-    protected List<EnzymeAccession> relatedspecies;
-    protected List<String> synonyms;
+    transient List<Pathway> pathways;
+    transient List<EnzymeAccession> relatedspecies;
+    transient List<String> synonyms;
 
-    protected List<String> catalyticActivities;
+    transient List<String> catalyticActivities;
 
     public List<String> getCatalyticActivities() {
         if (catalyticActivities == null) {

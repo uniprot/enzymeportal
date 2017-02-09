@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
  */
 public class EnzymeAccession implements Serializable {
 
-    protected List<String> uniprotaccessions;
+    transient List<String> uniprotaccessions;
 
     protected Species species;
-    protected List<String> pdbeaccession;
-    protected List<Compound> compounds;
-    protected List<Disease> diseases;
+    protected transient List<String> pdbeaccession;
+    transient List<Compound> compounds;
+    transient List<Disease> diseases;
 
     protected Boolean scoring = Boolean.FALSE;
     protected Float identity = 0.0f;

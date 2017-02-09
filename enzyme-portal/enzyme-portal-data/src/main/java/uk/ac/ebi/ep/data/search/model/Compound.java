@@ -17,7 +17,7 @@ public class Compound  implements  Serializable {
     protected String name;
     protected String definition;
 
-    protected Object url;
+    transient Object url;
 
     public Compound() {
     }

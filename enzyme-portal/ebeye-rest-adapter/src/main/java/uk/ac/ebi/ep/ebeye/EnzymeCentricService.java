@@ -56,12 +56,12 @@ public class EnzymeCentricService {
         Preconditions.checkArgument(query != null, "'query' must not be null");
         Preconditions.checkArgument(facets != null, "'facets' must not be null");
         Preconditions.checkArgument(facetCount > -1, "startPage can not be less than 0");
-
+        int facetsCount = facetCount;
         if (facetCount > FACET_COUNT_LIMIT) {
-            facetCount = FACET_COUNT_LIMIT;
+            facetsCount = FACET_COUNT_LIMIT;
         }
 
-        return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetCount, facets, startPage, pageSize));
+        return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetsCount, facets, startPage, pageSize));
     }
 
     private EBISearchResult getEbiSearchResult(String url) {
@@ -81,7 +81,7 @@ public class EnzymeCentricService {
         return getSearchResult(query, startPage, pageSize, facets, facetCount);
 
     }
-    
+
     //http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal?query=REACTOME:R-CFA-1489509%20OR%20REACTOME:R-HSA-1489509&size=100&start=0&fields=name,scientific_name,status&sort=status&reverse=true&format=xml
 //http://www.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_enzymes?query=REACTOME:R-GGA-189451
     public EBISearchResult findEbiSearchResultsByPathwayId(String pathwayId, int startPage, int pageSize, String facets, int facetCount) {

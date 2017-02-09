@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;
@@ -28,10 +24,10 @@ public class SearchParams implements Serializable {
     protected String previoustext;
     protected int start;
     protected int size;
-    protected List<String> compounds;
-    protected List<String> diseases;
-    protected List<String> species;
-    protected List<Integer> ecFamilies;
+    private List<String> compounds;
+    private List<String> diseases;
+    private List<String> species;
+    private List<Integer> ecFamilies;
 
     protected SearchParams.SearchType type;
 
