@@ -23,7 +23,7 @@ public class EnzymeHierarchy
 {
 
    
-    protected List<EcClass> ecclass;
+    protected transient List<EcClass> ecclass;
 
     /**
      * Gets the value of the ecclass property.

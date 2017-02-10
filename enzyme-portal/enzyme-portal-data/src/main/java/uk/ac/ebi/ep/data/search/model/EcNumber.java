@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.data.search.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author joseph
  */
-public class EcNumber {
+public class EcNumber implements Serializable {
 
     protected boolean selected;
     private Integer ec;

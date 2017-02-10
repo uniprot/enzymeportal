@@ -1,9 +1,5 @@
 package uk.ac.ebi.ep.xml.generator.protein;
 
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
-import uk.ac.ebi.ep.xml.generator.XmlTransformer;
-import uk.ac.ebi.ep.xml.util.DateTimeUtil;
-
 import com.google.common.base.Preconditions;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -12,6 +8,10 @@ import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import org.springframework.batch.item.xml.StaxWriterCallback;
+import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.xml.generator.XmlTransformer;
+import uk.ac.ebi.ep.xml.util.DateTimeUtil;
+import uk.ac.ebi.ep.xml.util.EpXmlRuntimeException;
 
 /**
  * Adds some meta data to the protein centric XML file:
@@ -25,13 +25,15 @@ import org.springframework.batch.item.xml.StaxWriterCallback;
  * @author Ricardo Antunes
  */
 public class ProteinXmlHeaderCallback implements StaxWriterCallback {
-    final static String DB_NAME_ELEMENT = "name";
-    final static String DB_DESCRIPTION_ELEMENT = "description";
-    final static String RELEASE_VERSION_ELEMENT = "release";
-    final static String RELEASE_DATE_ELEMENT = "release_date";
-    final static String ENTRY_COUNT_ELEMENT = "entry_count";
+     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ProteinXmlHeaderCallback.class);
+ 
+    static final  String DB_NAME_ELEMENT = "name";
+    static final  String DB_DESCRIPTION_ELEMENT = "description";
+   static final  String RELEASE_VERSION_ELEMENT = "release";
+    static final  String RELEASE_DATE_ELEMENT = "release_date";
+    static final  String ENTRY_COUNT_ELEMENT = "entry_count";
 
-    final static String ENTRIES_ELEMENT = "entries";
+    static final  String ENTRIES_ELEMENT = "entries";
 
     private final String release;
     private final EnzymePortalXmlService enzymePortalService;
@@ -57,7 +59,8 @@ public class ProteinXmlHeaderCallback implements StaxWriterCallback {
             XMLEvent event = eventFactory.createStartElement("", "", ENTRIES_ELEMENT);
             writer.add(event);
         } catch (XMLStreamException ex) {
-            throw new RuntimeException("Unable to write the header on the XML file");
+            logger.error("Unable to write the header on the XML file"+ ex);
+             throw new EpXmlRuntimeException("Unable to write the header on the XML file");
         }
     }
 

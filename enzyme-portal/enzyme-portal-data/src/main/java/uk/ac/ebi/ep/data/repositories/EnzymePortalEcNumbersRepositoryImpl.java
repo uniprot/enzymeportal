@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.jpa.impl.JPAQuery;
@@ -45,19 +40,16 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
     @Override
     public List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId) {
 
-        //EntityGraph eGraph = entityManager.getEntityGraph("EcNumberEntityGraph");
-        //eGraph.addAttributeNodes("uniprotAccession");
 
         JPAQuery query = new JPAQuery(entityManager);
-       // query.setHint("javax.persistence.fetchgraph", eGraph);
-
+ 
         List<EcNumber> result = query.from($).where($.uniprotAccession.taxId.eq(taxId))
                 .list(Projections.constructor(EcNumber.class, $.ecFamily)).stream().distinct().collect(Collectors.toList());
 
         result.sort(SORT_BY_EC);
         return result;
     }
-    public static Comparator<EcNumber> SORT_BY_EC = (EcNumber ec1, EcNumber ec2) -> ec1.getEc().compareTo(ec2.getEc());
+    public static final Comparator<EcNumber> SORT_BY_EC = (EcNumber ec1, EcNumber ec2) -> ec1.getEc().compareTo(ec2.getEc());
 
     @Override
     public List<EcNumber> findEnzymeFamiliesByEcNumber(String ecNumber) {

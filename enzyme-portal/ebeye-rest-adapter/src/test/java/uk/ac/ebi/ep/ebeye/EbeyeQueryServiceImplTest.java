@@ -67,7 +67,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void null_rest_template_in_constructor_throws_exception() throws IllegalArgumentException {
+    public void null_rest_template_in_constructor_throws_exception()   {
         EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         RestTemplate restTemplate = null;
 
@@ -78,7 +78,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void null_service_configuration_object_in_constructor_throws_exception() throws IllegalArgumentException {
+    public void null_service_configuration_object_in_constructor_throws_exception()   {
         EbeyeIndexProps serverUrl = null;
         RestTemplate restTemplate = new RestTemplate();
 
@@ -89,7 +89,7 @@ public class EbeyeQueryServiceImplTest {
     }
 
     @Test
-    public void null_query_throws_exception() throws IllegalArgumentException {
+    public void null_query_throws_exception()   {
         String query = null;
 
         thrown.expect(IllegalArgumentException.class);
@@ -302,7 +302,6 @@ public class EbeyeQueryServiceImplTest {
     }
 
     private String createQueryUrl(String query, int size, int start) {
-        size = MAX_ENTRIES_IN_RESPONSE;
         return String.format(EBEYE_REQUEST, query, size, start);
     }
 

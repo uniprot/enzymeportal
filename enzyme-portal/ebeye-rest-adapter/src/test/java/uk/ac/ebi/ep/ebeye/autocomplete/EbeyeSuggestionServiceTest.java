@@ -22,6 +22,7 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 
 /**
  * Tests the behaviour of the {@link EbeyeSuggestionService} class.
+ * @author joseph
  */
 public class EbeyeSuggestionServiceTest {
     private static final String SERVER_URL = "http://www.myserver.com/ebeye";
@@ -35,7 +36,7 @@ public class EbeyeSuggestionServiceTest {
     private EbeyeSuggestionService ebeyeQueryService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()   {
         EbeyeIndexProps serverUrl = new EbeyeIndexProps();
         serverUrl.setChunkSize(CHUNK_SIZE);
         serverUrl.setMaxEbiSearchLimit(MAX_ENTRIES_IN_RESPONSE);
@@ -50,7 +51,7 @@ public class EbeyeSuggestionServiceTest {
     }
 
     @Test
-    public void non_matching_term_ppp_sent_to_autocomplete_returns_no_suggestions() throws Exception {
+    public void non_matching_term_ppp_sent_to_autocomplete_returns_no_suggestions() throws IOException  {
         String searchTerm = "ppp";
 
         String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);
@@ -69,7 +70,7 @@ public class EbeyeSuggestionServiceTest {
     }
 
     @Test
-    public void partial_term_phos_sent_to_autocomplete_returns_valid_suggestions() throws Exception {
+    public void partial_term_phos_sent_to_autocomplete_returns_valid_suggestions() throws IOException  {
         String searchTerm = "phos";
 
         String requestUrl = String.format(AUTOCOMPLETE_REQUEST, searchTerm);

@@ -1,12 +1,12 @@
 package uk.ac.ebi.ep.xml.generator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-
 import static org.hamcrest.CoreMatchers.is;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +18,7 @@ import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
-
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.xml.config.MockProteinBatchConfig;
 import uk.ac.ebi.ep.xml.config.MockXmlConfig;
@@ -44,7 +42,7 @@ public class ProteinCentricBatchIT {
     private EntityManager entityManager;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         entityManager = entityManagerFactory.createEntityManager();
     }
 
@@ -54,7 +52,7 @@ public class ProteinCentricBatchIT {
     }
 
     @Test
-    public void successfulJobRun() throws Exception {
+    public void successfulJobRun() throws Exception  {
         int expectedEntries = countEntries();
 
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();

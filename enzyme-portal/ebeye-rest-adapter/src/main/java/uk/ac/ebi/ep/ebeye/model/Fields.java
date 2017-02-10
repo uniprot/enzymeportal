@@ -58,7 +58,7 @@ public class Fields implements Serializable {
     @JsonProperty("status")
     private List<String> status = new ArrayList<>();
     @JsonIgnore
-    private final Map<String, Object> additionalProperties = new HashMap<>();
+    private transient final Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      *

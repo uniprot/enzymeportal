@@ -14,70 +14,66 @@ import uk.ac.ebi.ep.centralservice.chembl.service.PageMeta;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-"mechanisms",
-"page_meta"
+    "mechanisms",
+    "page_meta"
 })
 /**
  *
  * @author joseph
  */
 public class FdaApproved {
-    
-@JsonProperty("mechanisms")
-private List<Mechanism> mechanisms = new ArrayList<>();
-@JsonProperty("page_meta")
-private PageMeta pageMeta;
-@JsonIgnore
-private final Map<String, Object> additionalProperties = new HashMap<>();
 
-/**
-* 
-* @return
-* The mechanisms
-*/
-@JsonProperty("mechanisms")
-public List<Mechanism> getMechanisms() {
-return mechanisms;
-}
+    @JsonProperty("mechanisms")
+    private List<Mechanism> mechanisms = new ArrayList<>();
+    @JsonProperty("page_meta")
+    private PageMeta pageMeta;
+    @JsonIgnore
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
-/**
-* 
-* @param mechanisms
-* The mechanisms
-*/
-@JsonProperty("mechanisms")
-public void setMechanisms(List<Mechanism> mechanisms) {
-this.mechanisms = mechanisms;
-}
+    /**
+     *
+     * @return The mechanisms
+     */
+    @JsonProperty("mechanisms")
+    public List<Mechanism> getMechanisms() {
+        return mechanisms;
+    }
 
-/**
-* 
-* @return
-* The pageMeta
-*/
-@JsonProperty("page_meta")
-public PageMeta getPageMeta() {
-return pageMeta;
-}
+    /**
+     *
+     * @param mechanisms The mechanisms
+     */
+    @JsonProperty("mechanisms")
+    public void setMechanisms(List<Mechanism> mechanisms) {
+        this.mechanisms = mechanisms;
+    }
 
-/**
-* 
-* @param pageMeta
-* The page_meta
-*/
-@JsonProperty("page_meta")
-public void setPageMeta(PageMeta pageMeta) {
-this.pageMeta = pageMeta;
-}
+    /**
+     *
+     * @return The pageMeta
+     */
+    @JsonProperty("page_meta")
+    public PageMeta getPageMeta() {
+        return pageMeta;
+    }
 
-@JsonAnyGetter
-public Map<String, Object> getAdditionalProperties() {
-return this.additionalProperties;
-}
+    /**
+     *
+     * @param pageMeta The page_meta
+     */
+    @JsonProperty("page_meta")
+    public void setPageMeta(PageMeta pageMeta) {
+        this.pageMeta = pageMeta;
+    }
 
-@JsonAnySetter
-public void setAdditionalProperty(String name, Object value) {
-this.additionalProperties.put(name, value);
-}
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
 
 }

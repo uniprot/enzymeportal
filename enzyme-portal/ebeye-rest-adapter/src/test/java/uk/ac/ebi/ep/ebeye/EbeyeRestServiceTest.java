@@ -20,6 +20,7 @@ import uk.ac.ebi.ep.ebeye.utils.UrlUtil;
 
 /**
  * Tests the behaviour of the {@link uk.ac.ebi.ep.ebeye.EbeyeRestService} class.
+ * @author joseph
  */
 @RunWith(MockitoJUnitRunner.class)
 public class EbeyeRestServiceTest extends XCentricSetup {
@@ -204,9 +205,8 @@ public class EbeyeRestServiceTest extends XCentricSetup {
     }
 
     private BiFunction<String, String, Protein> createProtein() {
-        return (acc, name) -> {
-            return new Protein(acc, "proteinName_" + name, "human", "reviewed");
-        };
+        return (acc, name) -> new Protein(acc, "proteinName_" + name, "human", "reviewed");
+     
     }
 
     /**

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
@@ -52,8 +48,6 @@ public class EntryToGeneMapping implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
-    public EntryToGeneMapping() {
-    }
 
     public EntryToGeneMapping(Long geneInternalId) {
         this.geneInternalId = geneInternalId;
@@ -100,15 +94,11 @@ public class EntryToGeneMapping implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof EntryToGeneMapping)) {
             return false;
         }
         EntryToGeneMapping other = (EntryToGeneMapping) object;
-        if ((this.geneInternalId == null && other.geneInternalId != null) || (this.geneInternalId != null && !this.geneInternalId.equals(other.geneInternalId))) {
-            return false;
-        }
-        return true;
+        return !((this.geneInternalId == null && other.geneInternalId != null) || (this.geneInternalId != null && !this.geneInternalId.equals(other.geneInternalId)));
     }
 
     @Override

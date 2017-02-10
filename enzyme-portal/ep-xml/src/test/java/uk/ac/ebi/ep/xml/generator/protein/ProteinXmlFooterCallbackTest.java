@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.xml.generator.protein;
 
+import java.io.IOException;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
@@ -15,14 +16,14 @@ public class ProteinXmlFooterCallbackTest extends AbstractCallbackSetup {
     private final ProteinXmlFooterCallback footerCallback = new ProteinXmlFooterCallback();
 
     @Test
-    public void missingStartEntriesElementTagThrowsException() throws Exception {
+    public void missingStartEntriesElementTagThrowsException() throws IOException  {
         thrown.expectMessage("Unable to write the footer on the XML file");
 
         footerCallback.write(writer);
     }
 
     @Test
-    public void addsClosingEntriesTagToOutput() throws Exception {
+    public void addsClosingEntriesTagToOutput() throws XMLStreamException, IOException  {
         addStartEntriesTag(writer);
         footerCallback.write(writer);
 

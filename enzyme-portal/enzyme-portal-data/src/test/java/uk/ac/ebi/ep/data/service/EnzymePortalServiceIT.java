@@ -51,9 +51,6 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     @Test
     public void testFindByAccession() {
         LOGGER.info("findByAccession");
-//        ProteinGroups pg = new ProteinGroups();
-//        pg.setProteinGroupId("EUN8I9");
-//        pg.setProteinName("1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial");
         UniprotEntry expResult = new UniprotEntry(ACCESSION);
         expResult.setCommonName("Mouse");
         expResult.setScientificName("Mus musculus");
@@ -167,7 +164,6 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         accessions.add("Q64441");
         accessions.add("fakeAccession");
 
-        //int expResult = 4;
         List<UniprotEntry> result = enzymePortalService.findEnzymesByAccessions(accessions);
         
         assertTrue(result.size() > 1);
@@ -254,7 +250,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         accessions.add("NotAnEnzyme");
         
         List<String> result = enzymePortalService.filterEnzymesInAccessions(accessions);
-        assertTrue(result.size() > 0);
+        assertTrue(!result.isEmpty());
         
     }
 
@@ -332,8 +328,6 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         String ecNumber = "1.14.13.126";
         
         List<String> expResult = new LinkedList<>();
-//        expResult.add("Q07973");
-//        expResult.add("Q09128");
         expResult.add("Q64441");
         List<String> result = enzymePortalService.findAccessionsByEc(ecNumber);
         
@@ -468,9 +462,8 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         result
                 .stream()
                 .filter(taxonomy -> taxonomy.getTaxId() == 9606)
-                .forEach(taxonomy -> {
-                    assertTrue(taxonomy.getNumEnzymes() == numEnzymeForHuman);
-                });
+                .forEach(taxonomy ->  assertTrue(taxonomy.getNumEnzymes() == numEnzymeForHuman));
+
         
     }
 

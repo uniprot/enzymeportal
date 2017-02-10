@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.centralservice.helper;
 
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
@@ -13,6 +8,9 @@ import uk.ac.ebi.ep.data.search.model.Compound;
  * @author joseph
  */
 public class CompoundUtil {
+
+    private CompoundUtil() {
+    }
 
     public static EnzymePortalCompound computeRole(EnzymePortalCompound compound, String relationship) {
         switch (Relationship.valueOf(relationship)) {
@@ -63,8 +61,7 @@ public class CompoundUtil {
                 break;
             case is_drug_for:
             case is_target_of:
-                role = (compoundId.startsWith("CHEMBL")
-                        ? Compound.Role.BIOACTIVE.name() : Compound.Role.DRUG.name());
+                role = compoundId.startsWith("CHEMBL") ? Compound.Role.BIOACTIVE.name() : Compound.Role.DRUG.name();
                 break;
             default:
         }

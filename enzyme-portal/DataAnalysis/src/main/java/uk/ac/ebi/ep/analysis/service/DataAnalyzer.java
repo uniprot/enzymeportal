@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.analysis.service;
 
 import java.io.BufferedOutputStream;
@@ -143,11 +138,9 @@ public class DataAnalyzer {
         enzymeEvidences.stream().map(ev -> {
             String acc = ev.getAccession();
             String evidence = ev.getEvidenceLine();
-            String data = "Accession : " + acc + " : EvidenType : " + evidence;
-            return data;
-        }).forEach(data -> {
-            dataList.add(data);
-        });
+            return "Accession : " + acc + " : EvidenType : " + evidence;
+
+        }).forEach(data -> dataList.add(data));
 
         if (!StringUtil.isNullOrEmpty(fileDir)) {
             createDirAndFile(dataList, fileDir, filename, deleteFile);
@@ -158,7 +151,8 @@ public class DataAnalyzer {
     }
 
     /**
-     *This writes file to ${user.home}
+     * This writes file to ${user.home}
+     *
      * @param dataList data to write
      * @param filename filename
      * @param deleteFile set to true if needs to delete file after creation
@@ -286,12 +280,9 @@ public class DataAnalyzer {
         partitioned.parallel().forEach(chunk -> {
 
             chunk.stream()
-                    .filter(accession -> (enzymes.contains(accession)))
+                    .filter(accession -> enzymes.contains(accession))
                     .map(accession -> createSpEnzymeEvidence(accession, evidenceType))
-                    .forEach(evidence -> {
-                        evidences.add(evidence);
-                    });
-
+                    .forEach(evidence -> evidences.add(evidence));
         });
 
         return evidences;

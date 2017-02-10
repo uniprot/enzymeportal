@@ -216,7 +216,7 @@ public class SearchFilters implements Serializable{
         this.species = species;
     }
     
-        public static Comparator<EcNumber> SORT_BY_EC = (EcNumber o1, EcNumber o2) -> {
+        public static final Comparator<EcNumber> SORT_BY_EC = (EcNumber o1, EcNumber o2) -> {
         if (o1.getEc() == null && o2.getEc() == null) {
             return 0;
         }

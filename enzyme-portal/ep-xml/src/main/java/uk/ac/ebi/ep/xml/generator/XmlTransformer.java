@@ -126,8 +126,8 @@ public class XmlTransformer {
             Stream.of(synonymName.get().split(";")).distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
                     .map(syn -> {
-                        Field field = new Field(FieldName.SYNONYM.getName(), syn);
-                        return field;
+                        return new Field(FieldName.SYNONYM.getName(), syn);
+                       
                     }).forEach(field -> fields.add(field));
 
         }
@@ -178,8 +178,8 @@ public class XmlTransformer {
                 Field compoundType = new Field(FieldName.COMPOUND_TYPE.getName(), compound.getCompoundRole());
                 fields.add(field);
                 fields.add(compoundType);
-                Ref xref = new Ref(compound.getCompoundId(), compound.getCompoundSource());
-                return xref;
+                return new Ref(compound.getCompoundId(), compound.getCompoundSource());
+                
             }).forEach(xref -> {
                 refs.add(xref);
             });
@@ -191,8 +191,8 @@ public class XmlTransformer {
             uniprotEntry.getEnzymePortalDiseaseSet().stream().map(disease -> {
                 Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
                 fields.add(field);
-                Ref xref = new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
-                return xref;
+               return new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
+                
             }).forEach(xref -> refs.add(xref));
 
         }

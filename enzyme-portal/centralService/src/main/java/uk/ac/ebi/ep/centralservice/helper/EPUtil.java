@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package uk.ac.ebi.ep.centralservice.helper;
 
@@ -25,6 +20,10 @@ import java.util.regex.Pattern;
  */
 public class EPUtil {
 
+    private EPUtil() {
+    }
+
+    
     private static final String REGEXP_HOW =
             "(?: with low affinity| competitively)?";
     private static final String REGEXP_PROHIB =

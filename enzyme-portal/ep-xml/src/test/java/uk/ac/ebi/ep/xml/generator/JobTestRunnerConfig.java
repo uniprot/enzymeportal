@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableBatchProcessing
 public class JobTestRunnerConfig {
     @Bean
-    public JobLauncherTestUtils utils() throws Exception {
+    public JobLauncherTestUtils utils()  {
         return new JobLauncherTestUtils();
     }
 }

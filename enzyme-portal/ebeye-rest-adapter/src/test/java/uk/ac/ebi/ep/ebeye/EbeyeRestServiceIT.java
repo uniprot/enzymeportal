@@ -26,10 +26,11 @@ public class EbeyeRestServiceIT {
 
     @Autowired
     private EbeyeRestService ebeyeRestService;
+    private static final String KINASE = "kinase";
 
     @Test
-    public void query_with_limit_of_5_sent_to_ebeyeSearch_returns_at_most_5_accessions() throws Exception {
-        String query = "kinase";
+    public void query_with_limit_of_5_sent_to_ebeyeSearch_returns_at_most_5_accessions()  {
+        String query = KINASE;
         int limit = 5;
 
         List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(query, limit);
@@ -37,8 +38,8 @@ public class EbeyeRestServiceIT {
     }
 
     @Test
-    public void query_with_limit_of_800_sent_to_ebeyeSearch_returns_at_most_5_accessions() throws Exception {
-        String query = "kinase";
+    public void query_with_limit_of_800_sent_to_ebeyeSearch_returns_at_most_5_accessions()  {
+        String query = KINASE;
         int limit = 800;
 
         List<String> actualAccs = ebeyeRestService.queryForUniqueAccessions(query, limit);
@@ -108,7 +109,7 @@ public class EbeyeRestServiceIT {
     @Test
     public void testQuery_For_Observable_UniqueProteins() {
 
-        String query = "kinase";
+        String query = KINASE;
 
         Observable<Protein> result = ebeyeRestService.queryForUniqueProteins(query);
         List<Protein> actualUniqueProteins = result.toList().toBlocking().single();

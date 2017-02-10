@@ -1,9 +1,11 @@
 package uk.ac.ebi.ep.xml.generator.protein;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -12,6 +14,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * Abstract class containing common methods used by the implementing classes.
@@ -24,7 +27,7 @@ public abstract class AbstractCallbackSetup {
     protected XMLEventWriter writer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws XMLStreamException  {
         output = new StringWriter();
         writer = setupEventWriter(output);
     }
@@ -35,12 +38,12 @@ public abstract class AbstractCallbackSetup {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() throws XMLStreamException, IOException  {
         writer.close();
         output.close();
     }
 
-    protected Document parse(String xml) throws Exception {
+    protected Document parse(String xml) throws SAXException, ParserConfigurationException, IOException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(false);
         documentBuilderFactory.setValidating(false);
