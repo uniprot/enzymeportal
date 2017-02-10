@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author joseph
  */
 public class Compound  implements  Serializable {
-
+ private static final long serialVersionUID = 1L;
     private Compound.Role role;
     protected boolean selected;
 
@@ -17,7 +17,7 @@ public class Compound  implements  Serializable {
     protected String name;
     protected String definition;
 
-    transient Object url;
+    protected transient Object url;
 
     public Compound() {
     }

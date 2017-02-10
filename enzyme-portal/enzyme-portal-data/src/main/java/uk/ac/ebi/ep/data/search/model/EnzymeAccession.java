@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
  */
 public class EnzymeAccession implements Serializable {
 
-    transient List<String> uniprotaccessions;
+    protected transient List<String> uniprotaccessions;
 
     protected Species species;
     protected transient List<String> pdbeaccession;
-    transient List<Compound> compounds;
-    transient List<Disease> diseases;
+    protected transient List<Compound> compounds;
+    protected transient List<Disease> diseases;
 
     protected Boolean scoring = Boolean.FALSE;
     protected Float identity = 0.0f;
@@ -34,12 +34,11 @@ public class EnzymeAccession implements Serializable {
     protected Boolean expEvidence;
     protected String uniprotaccession;
     protected String enzymeFunction;
-   
+
     protected String PDB_SOURCE = "PDB";
     protected int PDB_CODE_LIMIT = 500;
     protected int SORTED_SPECIES_LIMIT = 100;
     protected Long taxId;
-
 
     /**
      * Gets the value of the uniprotaccessions property.
@@ -326,7 +325,6 @@ public class EnzymeAccession implements Serializable {
         this.diseases = diseases;
     }
 
-      
 //    @Override
 //    public int hashCode() {
 //        int hash = 3;
@@ -345,7 +343,6 @@ public class EnzymeAccession implements Serializable {
 //        final EnzymeAccession other = (EnzymeAccession) obj;
 //        return Objects.equals(this.species.getScientificname(), other.species.getScientificname());
 //    }
-    
 //    @Override
 //    public String toString() {
 //        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + '}';
@@ -386,10 +383,8 @@ public class EnzymeAccession implements Serializable {
         this.enzymeFunction = enzymeFunction;
     }
 
-
     public Long getTaxId() {
         return taxId;
     }
-
 
 }

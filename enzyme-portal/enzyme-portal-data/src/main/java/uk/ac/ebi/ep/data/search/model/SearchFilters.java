@@ -15,7 +15,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
  * @author joseph
  */
 public class SearchFilters implements Serializable{
-    
+     private static final long serialVersionUID = 1L;
     
     private List<Disease> diseases;
     private List<Compound> compounds;

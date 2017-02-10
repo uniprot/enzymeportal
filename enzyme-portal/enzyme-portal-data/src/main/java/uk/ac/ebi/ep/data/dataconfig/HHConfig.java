@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.dataconfig;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -39,7 +35,6 @@ public class HHConfig implements EnzymePortalDataConfig {
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(password);
-        //config.setDriverClassName("oracle.jdbc.OracleDriver");
         config.setDriverClassName("oracle.jdbc.pool.OracleDataSource");
 
         return new HikariDataSource(config);

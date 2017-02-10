@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author joseph
  */
 public class Species implements Comparable<Species>, Serializable {
-
+ private static final long serialVersionUID = 1L;
     private String scientificname;
 
     private String commonname;

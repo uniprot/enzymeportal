@@ -23,7 +23,7 @@ public class CountableMolecules
     implements Serializable
 {
 
-   
+    private static final long serialVersionUID = 1L;
     private List<Molecule> molecule;
    
     protected Integer totalFound;

@@ -16,13 +16,13 @@ import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
  *
  */
 public class Disease implements Serializable {
-
+ private static final long serialVersionUID = 1L;
     protected String id;
 
     protected String name;
     protected String description;
 
-    transient Object url;
+    protected transient Object url;
     protected boolean selected;
     protected int numEnzyme;
 
@@ -225,7 +225,7 @@ public class Disease implements Serializable {
         return Objects.equals(this.name, other.name);
     }
 
-    private String cleanDiseaseName(String diseaseName) {
+     String cleanDiseaseName(String diseaseName) {
 
         String cleanName = null;
         if (null != diseaseName) {

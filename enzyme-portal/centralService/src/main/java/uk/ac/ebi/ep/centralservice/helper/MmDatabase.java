@@ -1,7 +1,5 @@
 package uk.ac.ebi.ep.centralservice.helper;
 
-import org.apache.log4j.Logger;
-
 /**
  * Databases included in the mega-map (or encountered in some way during the
  * process of building it).
@@ -60,12 +58,10 @@ public enum MmDatabase {
     WebElements,
     Wikipedia;
 
-    private static final Logger LOGGER = Logger.getLogger(MmDatabase.class);
-
     /**
      * Any synonyms for the database.
      */
-    private String[] synonyms;
+    private final String[] synonyms;
 
     private MmDatabase(String... synonyms) {
         this.synonyms = synonyms;
@@ -111,9 +107,6 @@ public enum MmDatabase {
                     }
                 }
             }
-        }
-        if (result == null) {
-            LOGGER.warn("No database found for " + s);
         }
         return result;
     }

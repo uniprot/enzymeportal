@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
  * @author joseph
  */
 public class EcNumber implements Serializable {
-
+ private static final long serialVersionUID = 1L;
     protected boolean selected;
     private Integer ec;
     protected String family;
-    protected List<String> families = new ArrayList<>();
+    protected transient List<String> families = new ArrayList<>();
     protected EnzymeFamily enzymeFamily;
 
     public EcNumber() {

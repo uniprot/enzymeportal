@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class ChemicalEntity
         implements Serializable {
-
-    transient List<EnzymeReaction> reactions;
+ private static final long serialVersionUID = 1L;
+    protected transient List<EnzymeReaction> reactions;
     protected CountableMolecules inhibitors;
     protected CountableMolecules activators;
     protected CountableMolecules cofactors;

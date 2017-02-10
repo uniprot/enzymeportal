@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
@@ -24,15 +19,39 @@ public interface UniprotEntryRepositoryCustom {
 
     List<UniprotEntry> findEnzymesByNamePrefixes(List<String> nameprefixes);
 
+    /**
+     *
+     * @param accessions
+     * @return 
+     * @deprecated (no longer needed )
+     */
     @Deprecated
     List<UniprotEntry> findEnzymesByAccessions(List<String> accessions);
 
+    /**
+     *
+     * @param accession
+     * @return 
+     * @deprecated (no longer needed )
+     */
     @Deprecated
     List<UniprotEntry> findEnzymesByAccession(String accession);
 
+    /**
+     *
+     * @param namePrefix
+     * @return 
+     * @deprecated (no longer needed )
+     */
     @Deprecated
     List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
 
+    /**
+     *
+     * @param taxids
+     * @return 
+     * @deprecated (no longer needed )
+     */
     @Deprecated
     List<Taxonomy> getCountForOrganisms(List<Long> taxids);
 
