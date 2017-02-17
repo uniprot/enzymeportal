@@ -48,6 +48,9 @@ public class EntryToGeneMapping implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
+    public EntryToGeneMapping() {
+    }
+
 
     public EntryToGeneMapping(Long geneInternalId) {
         this.geneInternalId = geneInternalId;

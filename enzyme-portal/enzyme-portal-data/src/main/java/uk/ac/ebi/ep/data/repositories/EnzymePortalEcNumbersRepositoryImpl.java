@@ -30,10 +30,11 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
     public List<String> findAccessionsByEc(String ecNumber) {
         JPAQuery query = new JPAQuery(entityManager);
 
-        List<String> enzymes = query.from($).where($.ecNumber.equalsIgnoreCase(ecNumber))
+      return query.from($).where($.ecNumber.equalsIgnoreCase(ecNumber))
+                .distinct()
                 .list($.uniprotAccession.accession);
 
-        return enzymes.stream().collect(Collectors.toList());
+       
     }
 
     @Transactional(readOnly = true)

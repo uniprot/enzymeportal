@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.service;
 
 import com.mysema.query.BooleanBuilder;
@@ -26,6 +21,7 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
+import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.domain.ProjectedSpecies;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
@@ -41,6 +37,7 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymesToTaxonomyRepository;
+import uk.ac.ebi.ep.data.repositories.IntenzEnzymesRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
@@ -85,13 +82,20 @@ public class EnzymePortalService {
     private EnzymeCatalyticActivityRepository catalyticActivityRepository;
     @Autowired
     private ProjectionFactory projectionFactory;
-    
+
     @Autowired
     private EnzymesToTaxonomyRepository enzymesToTaxonomyRepository;
+    @Autowired
+    private IntenzEnzymesRepository intenzEnzymesRepository;
 
     private static final int ORACLE_IN_CLAUSE_LIMIT = 1000;
     private static final int QUERY_LIMIT = 999;
     private static final int START_INDEX = 0;
+
+    @Transactional(readOnly = true)
+    public IntenzEnzymes findIntenzEnzymesByEc(String ecNumber) {
+        return intenzEnzymesRepository.findByEcNumber(ecNumber);
+    }
 
     @Transactional(readOnly = true)
     public List<EnzymeCatalyticActivity> findEnzymeCatalyticActivities() {
@@ -831,7 +835,5 @@ public class EnzymePortalService {
     public void updateExpEvidenceFlag() {
         uniprotEntryRepository.updateExpEvidenceFlag();
     }
-
-
 
 }

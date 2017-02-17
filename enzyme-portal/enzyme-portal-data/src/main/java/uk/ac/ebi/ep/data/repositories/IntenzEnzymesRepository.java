@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 
 /**
@@ -27,4 +28,7 @@ public interface IntenzEnzymesRepository extends JpaRepository<IntenzEnzymes, Lo
 
     @Query("select e from IntenzEnzymes e where transferFlag='N'")
     Stream<IntenzEnzymes> streamAllIntenzEnzymes();
+
+    @Query(value = "SELECT * FROM INTENZ_ENZYMES WHERE EC_NUMBER = :EC_NUMBER AND TRANSFER_FLAG = 'N'", nativeQuery = true)
+    IntenzEnzymes findByEcNumber(@Param("EC_NUMBER") String ecNumber);
 }
