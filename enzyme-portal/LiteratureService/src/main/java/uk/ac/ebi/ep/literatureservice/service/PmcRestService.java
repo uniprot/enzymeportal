@@ -24,6 +24,17 @@ public class PmcRestService {
 
     public Optional<EuropePMC> findPublicationsByKeyword(String keyword) {
         String url = pmcServiceUrl.getGenericUrl() + keyword + "&format=json&resulttype=core";
+        return publicationsByKeyword(keyword, url);
+
+    }
+
+    public Optional<EuropePMC> findPublicationsByKeyword(String keyword, int limit) {
+        String url = pmcServiceUrl.getGenericUrl() + keyword + "&format=json&pageSize=" + limit + "&resulttype=core";
+        return publicationsByKeyword(keyword, url);
+
+    }
+
+    public Optional<EuropePMC> publicationsByKeyword(String keyword, String url) {
         Optional<EuropePMC> pmc = Optional.empty();
         try {
 
@@ -35,7 +46,6 @@ public class PmcRestService {
             LOGGER.error(e.getMessage(), e);
         }
         return pmc;
-
     }
 
     public Optional<EuropePMC> findPublicationsByAccession(String accession, int limit) {

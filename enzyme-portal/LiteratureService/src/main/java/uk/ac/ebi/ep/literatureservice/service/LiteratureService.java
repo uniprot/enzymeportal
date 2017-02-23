@@ -37,6 +37,11 @@ public class LiteratureService {
         return pmcRestService.findPublicationsByKeyword(keyword);
     }
 
+    private Optional<EuropePMC> findCitationsByKeyword(String keyword, int limit) {
+
+        return pmcRestService.findPublicationsByKeyword(keyword, limit);
+    }
+
     /**
      * searches EUPMC service using a keyword (term)
      *
@@ -45,6 +50,18 @@ public class LiteratureService {
      */
     public EuropePMC getCitationsBySearchTerm(String term) {
         return findCitationsByKeyword(term).orElse(new EuropePMC());
+
+    }
+
+    /**
+     * searches EUPMC service using a keyword (term)
+     *
+     * @param term could be (enzyme|protein name)
+     * @param limit number of citations to return
+     * @return EuropePMC
+     */
+    public EuropePMC getCitationsBySearchTerm(String term, int limit) {
+        return findCitationsByKeyword(term, limit).orElse(new EuropePMC());
 
     }
 
@@ -65,7 +82,7 @@ public class LiteratureService {
     }
 
     private List<LabelledCitation> computeLabelledCitation(EuropePMC pmc) {
-        List<LabelledCitation> citations = new LinkedList<>();   
+        List<LabelledCitation> citations = new LinkedList<>();
         pmc.getResultList().getResult().stream().forEach(result -> {
             EnumSet<CitationLabel> labels = getLabels(result);
             LabelledCitation citation = new LabelledCitation(result, labels);

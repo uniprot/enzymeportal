@@ -225,6 +225,12 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
+    public List<String> findAccessionsByEc(String ecNumber, int limit) {
+
+        return ecNumbersRepository.findAccessionsByEc(ecNumber, limit);
+    }
+
+    @Transactional(readOnly = true)
     public List<EnzymePortalEcNumbers> findByEcNumbersByAccession(String accession) {
 
         return ecNumbersRepository.findByEcNumbersByAccession(accession);

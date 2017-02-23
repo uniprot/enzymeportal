@@ -35,7 +35,7 @@ public class HHConfig implements EnzymePortalDataConfig {
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(password);
-        config.setDriverClassName("oracle.jdbc.pool.OracleDataSource");
+        config.setDriverClassName("oracle.jdbc.OracleDriver");
 
         return new HikariDataSource(config);
     }

@@ -52,7 +52,7 @@ public class ProteinCentricBatchIT {
     }
 
     @Test
-    public void successfulJobRun() throws Exception  {
+    public void successfulJobRun() throws Exception   {
         int expectedEntries = countEntries();
 
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();

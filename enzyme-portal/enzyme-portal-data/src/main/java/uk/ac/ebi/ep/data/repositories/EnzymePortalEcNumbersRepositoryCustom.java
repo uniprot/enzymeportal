@@ -17,6 +17,7 @@ import uk.ac.ebi.ep.data.search.model.EcNumber;
 public interface EnzymePortalEcNumbersRepositoryCustom {
     
     List<String> findAccessionsByEc(String ecNumber);
+    List<String> findAccessionsByEc(String ecNumber, int limit);
     List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId);
    List<EcNumber> findEnzymeFamiliesByEcNumber(String ecNumber);
 

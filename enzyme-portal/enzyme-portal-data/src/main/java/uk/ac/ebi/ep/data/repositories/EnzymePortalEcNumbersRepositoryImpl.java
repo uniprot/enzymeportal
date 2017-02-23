@@ -30,20 +30,31 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
     public List<String> findAccessionsByEc(String ecNumber) {
         JPAQuery query = new JPAQuery(entityManager);
 
-      return query.from($).where($.ecNumber.equalsIgnoreCase(ecNumber))
+        return query.from($).where($.ecNumber.equalsIgnoreCase(ecNumber))
                 .distinct()
                 .list($.uniprotAccession.accession);
 
-       
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<String> findAccessionsByEc(String ecNumber, int limit) {
+        JPAQuery query = new JPAQuery(entityManager);
+
+        return query.from($)
+                .where($.ecNumber.equalsIgnoreCase(ecNumber))
+                .distinct()
+                .limit(limit)
+                .list($.uniprotAccession.accession);
+
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId) {
 
-
         JPAQuery query = new JPAQuery(entityManager);
- 
+
         List<EcNumber> result = query.from($).where($.uniprotAccession.taxId.eq(taxId))
                 .list(Projections.constructor(EcNumber.class, $.ecFamily)).stream().distinct().collect(Collectors.toList());
 
