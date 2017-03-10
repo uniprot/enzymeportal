@@ -1,8 +1,10 @@
 --Related Proteins
-Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (132218,'CP24A');
+--Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (132218,'CP24A');
+Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX,PROTEIN_NAME) values (132218,'CP24A','1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial');
 Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (546391,'MBTP2');
 Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (808171,'CP7B1');
-Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (853983,'PDE5A');
+--Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (853983,'PDE5A');
+Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX,PROTEIN_NAME) values (853983,'PDE5A','cGMP-specific 3'',5''-cyclic phosphodiesterase');
 Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (83490,'MDR1');
 Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (563781,'D5CT29');
 Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (83672,'Q1CFF4');
@@ -14,8 +16,8 @@ Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (421687,'
 
 
 --PROTEIN_GROUP
--- Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('cGMP-specific 3'',5''-cyclic phosphodiesterase','E76XC1');
--- Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial','EUN8I9');
+Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('cGMP-specific 3'',5''-cyclic phosphodiesterase','E76XC1');
+Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial','EUN8I9');
 
 
 --Uniprot Entry
@@ -170,3 +172,7 @@ Insert into ENZYMES_TO_TAXONOMY (INTERNAL_ID,EC_NUMBER,TAX_ID,SCIENTIFIC_NAME,CO
 Insert into ENZYMES_TO_TAXONOMY (INTERNAL_ID,EC_NUMBER,TAX_ID,SCIENTIFIC_NAME,COMMON_NAME) values (8073,'1.1.1.102',9606,'Homo sapiens','Human');
 Insert into ENZYMES_TO_TAXONOMY (INTERNAL_ID,EC_NUMBER,TAX_ID,SCIENTIFIC_NAME,COMMON_NAME) values (16740,'1.1.1.14',9606,'Homo sapiens','Human');
 
+--INTEN_ZENZYMES
+Insert into INTENZ_ENZYMES (INTERNAL_ID,EC_NUMBER,ENZYME_NAME,CATALYTIC_ACTIVITY,TRANSFER_FLAG) values (1,'1.1.1.1','Alcohol dehydrogenase','(1) An alcohol + NAD(+) = an aldehyde or ketone + NADH. (2) A secondary alcohol + NAD(+) = a ketone + NADH.','N');
+Insert into INTENZ_ENZYMES (INTERNAL_ID,EC_NUMBER,ENZYME_NAME,CATALYTIC_ACTIVITY,TRANSFER_FLAG) values (2,'6.1.1.1','Tyrosine--tRNA ligase','ATP + L-tyrosine + tRNA(Tyr) = AMP + diphosphate + L-tyrosyl-tRNA(Tyr).','N');
+Insert into INTENZ_ENZYMES (INTERNAL_ID,EC_NUMBER,ENZYME_NAME,CATALYTIC_ACTIVITY,TRANSFER_FLAG) values (3,'3.4.24.85','S2P endopeptidase','Cleaves several transcription factors that are type-2 transmembraneproteins within membrane-spanning domains. Known substrates includesterol regulatory element-binding protein (SREBP) -1, SREBP-2 and formsof the transcriptional activator ATF6. SREBP-2 is cleaved at the site477-DRSRILL-|-CVLTFLCLSFNPLTSLLQWGGA-505. The residues Asn-Pro,11 residues distal to the site of cleavage in the membrane-spanningdomain, are important for cleavage by S2P endopeptidase. Replacement ofeither of these residues does not prevent cleavage, but there is nocleavage if both of these residues are replaced.','N');
