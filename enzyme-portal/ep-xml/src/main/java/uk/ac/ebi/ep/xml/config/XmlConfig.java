@@ -1,13 +1,14 @@
 package uk.ac.ebi.ep.xml.config;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.EnzymeCentric;
+import uk.ac.ebi.ep.xml.generator.ProteinCentric;
 import uk.ac.ebi.ep.xml.generator.XmlGenerator;
 
 /**
@@ -16,18 +17,27 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
  * @author joseph
  */
 @Configuration
-@Import({EnzymePortalXmlService.class})
+//@Import({EnzymePortalXmlService.class})
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class XmlConfig {
+
     @Autowired
     private Environment env;
 
     @Autowired
     private EnzymePortalXmlService enzymePortalXmlService;
+    
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Bean(name = "enzymeCentric")
     public XmlGenerator enzymeCentric() {
         return new EnzymeCentric(enzymePortalXmlService, xmlConfigParams());
+    }
+
+    @Bean(name = "proteinCentric")
+    public XmlGenerator proteinCentric() {
+        return new ProteinCentric(enzymePortalXmlService, xmlConfigParams(),sessionFactory);
     }
 
     @Bean
@@ -62,8 +72,8 @@ public class XmlConfig {
     private int chunkSize() {
         return Integer.parseInt(env.getProperty("ep.protein.centric.chunk"));
     }
-    
-    private String xmlDir(){
+
+    private String xmlDir() {
         return env.getProperty("ep.xml.dir");
     }
 }

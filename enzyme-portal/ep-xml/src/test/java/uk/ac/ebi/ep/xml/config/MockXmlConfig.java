@@ -29,11 +29,12 @@ import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 @Configuration
 @PropertySource(value = "classpath:test-xml-config.ep", ignoreResourceNotFound = true)
 public class MockXmlConfig {
+
     @Autowired
     private Environment env;
 
     @Bean
-    public EnzymePortalXmlService xmlService(){
+    public EnzymePortalXmlService xmlService() {
         return new EnzymePortalXmlService();
     }
 
@@ -48,8 +49,8 @@ public class MockXmlConfig {
 
         return params;
     }
-       
-        public String releaseNumber() {
+
+    public String releaseNumber() {
         return env.getProperty("release.number");
     }
 

@@ -2,67 +2,32 @@ package uk.ac.ebi.ep.xml.generator;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.contentOf;
 import org.junit.After;
 import org.junit.Before;
-import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 
 /**
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-public class EnzymeCentricTest extends BaseTest {
+public class EnzymeCentricIT extends BaseTest {
 
     private XmlGenerator enzymeCentricInstance;
-    private List<IntenzEnzymes> enzymes;
-
     @Before
     @Override
     public void setUp() {
         enzymeCentricInstance = new EnzymeCentric(xmlService, mockXmlConfigParams);
-        enzymes = new ArrayList<>();
-        IntenzEnzymes enzyme1 = new IntenzEnzymes();
-        enzyme1.setInternalId(BigDecimal.ONE);
-        enzyme1.setEcNumber("1.1.1.1");
-        enzyme1.setEnzymeName("alcohol dehydrogenase");
-        enzyme1.setCatalyticActivity(" (1) An alcohol + NAD(+) = an aldehyde or ketone + NADH. (2) A secondary alcohol + NAD(+) = a ketone + NADH.");
-        enzyme1.setTransferFlag("N");
-
-        IntenzEnzymes enzyme2 = new IntenzEnzymes(BigDecimal.valueOf(2L));
-        enzyme2.setEcNumber("6.1.1.1");
-        enzyme2.setEnzymeName("tyrosine—tRNA ligase");
-        enzyme2.setCatalyticActivity("ATP + L-tyrosine + tRNA(Tyr) = AMP + diphosphate + L-tyrosyl-tRNA(Tyr).");
-        enzyme2.setTransferFlag("N");
-
-        IntenzEnzymes enzyme3 = new IntenzEnzymes(BigDecimal.valueOf(3L));
-
-        enzyme3.setEcNumber("3.4.24.85");
-        enzyme3.setEnzymeName("S2P endopeptidase");
-        enzyme3.setTransferFlag("N");
-
-        enzymes.add(enzyme1);
-        enzymes.add(enzyme2);
-        enzymes.add(enzyme3);
-
-        xmlService.addIntenzEnzymes(enzymes);
     }
 
     @After
     @Override
     public void tearDown() throws SQLException {
         dataSource.getConnection().close();
-        enzymes.clear();
     }
 
     @org.junit.Test//(expected = IllegalArgumentException.class)
@@ -121,9 +86,7 @@ public class EnzymeCentricTest extends BaseTest {
         assertThat(contentOf(output)).containsIgnoringCase(xml.trim());
 
         //  peek the generated file              
-        try (Stream<String> data = Files.lines(output.toPath(), StandardCharsets.UTF_8)) {
-            data.forEach(d -> System.out.println(d));
-        }
+        printGeneratedXML(output);
     }
 
     private String generateXml(File output) {
@@ -147,8 +110,8 @@ public class EnzymeCentricTest extends BaseTest {
                 + "    <entry_count>3</entry_count>\n"
                 + "    <entries>\n"
                 + "        <entry id=\"1.1.1.1\">\n"
-                + "            <name>alcohol dehydrogenase</name>\n"
-                + "            <description> (1) An alcohol + NAD(+) = an aldehyde or ketone + NADH. (2) A secondary alcohol + NAD(+) = a ketone + NADH.</description>\n"
+                + "            <name>Alcohol dehydrogenase</name>\n"
+                + "            <description>(1) An alcohol + NAD(+) = an aldehyde or ketone + NADH. (2) A secondary alcohol + NAD(+) = a ketone + NADH.</description>\n"
                 + "            <additional_fields>\n"
                 + "                <field name=\"enzyme_family\">Oxidoreductases</field>\n"
                 + "            </additional_fields>\n"
@@ -156,6 +119,7 @@ public class EnzymeCentricTest extends BaseTest {
                 + "        </entry>\n"
                 + "        <entry id=\"3.4.24.85\">\n"
                 + "            <name>S2P endopeptidase</name>\n"
+                + "            <description>Cleaves several transcription factors that are type-2 transmembraneproteins within membrane-spanning domains. Known substrates includesterol regulatory element-binding protein (SREBP) -1, SREBP-2 and formsof the transcriptional activator ATF6. SREBP-2 is cleaved at the site477-DRSRILL-|-CVLTFLCLSFNPLTSLLQWGGA-505. The residues Asn-Pro,11 residues distal to the site of cleavage in the membrane-spanningdomain, are important for cleavage by S2P endopeptidase. Replacement ofeither of these residues does not prevent cleavage, but there is nocleavage if both of these residues are replaced.</description>\n"
                 + "            <additional_fields>\n"
                 + "                <field name=\"uniprot_name\">Q1CFF4_YERPN</field>\n"
                 + "                <field name=\"scientific_name\">Yersinia pestis bv. Antiqua (strain Nepal516)</field>\n"
@@ -197,7 +161,7 @@ public class EnzymeCentricTest extends BaseTest {
                 + "            </cross_references>\n"
                 + "        </entry>\n"
                 + "        <entry id=\"6.1.1.1\">\n"
-                + "            <name>tyrosine—tRNA ligase</name>\n"
+                + "            <name>Tyrosine--tRNA ligase</name>\n"
                 + "            <description>ATP + L-tyrosine + tRNA(Tyr) = AMP + diphosphate + L-tyrosyl-tRNA(Tyr).</description>\n"
                 + "            <additional_fields>\n"
                 + "                <field name=\"enzyme_family\">Ligases</field>\n"

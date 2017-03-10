@@ -7,12 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
-import uk.ac.ebi.ep.xml.model.Database;
 import uk.ac.ebi.ep.xml.service.XmlService;
 import uk.ac.ebi.ep.xml.util.Preconditions;
 import uk.ac.ebi.ep.xml.util.XmlFileUtils;
@@ -30,6 +32,7 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
 
     public XmlGenerator(EnzymePortalXmlService enzymePortalXmlService, XmlConfigParams xmlConfigParams) {
         super(xmlConfigParams);
+        Preconditions.checkArgument(enzymePortalXmlService == null, "enzymePortalXmlService can not be null");
         this.enzymePortalXmlService = enzymePortalXmlService;
     }
 
@@ -64,30 +67,50 @@ public abstract class XmlGenerator extends XmlTransformer implements XmlService 
 
     }
 
-    protected void writeXml(Database database,String xmlDir, String xmlFile) throws JAXBException {
+    protected <U> void writeXml(U data, String xmlDir, String xmlFile) throws JAXBException {
         // create JAXB context and instantiate marshaller
-        JAXBContext context = JAXBContext.newInstance(Database.class);
-        Marshaller m = context.createMarshaller();
-        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-        Path path = Paths.get(xmlFile);
-       boolean isFileExists =  Files.exists(path, LinkOption.NOFOLLOW_LINKS);
-       if(isFileExists == false){
-           XmlFileUtils.createDirectory(xmlDir);
-       }
-
+        Marshaller m = xmlMarshaller(data.getClass());
         try {
-            Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-            //m.marshal(database, System.out);
+            Writer writer = createPathToWriteXML(xmlDir, xmlFile);
+            //m.marshal(data, System.out);
             // Write to File
-            m.marshal(database, writer);
-            //m.marshal(database, new File(enzymeCentricXmlDir));
-            
+            m.marshal(data, writer);
+            //m.marshal(data, new File(enzymeCentricXmlDir));
+
             logger.info("Done writing XML to this Location :" + xmlFile);
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);
         }
     }
-    
+
+    protected Writer createPathToWriteXML(String xmlDir, String xmlFile) throws IOException {
+        Path path = Paths.get(xmlFile);
+        boolean isFileExists = Files.exists(path, LinkOption.NOFOLLOW_LINKS);
+        if (isFileExists == false) {
+            XmlFileUtils.createDirectory(xmlDir);
+        }
+        Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+        return writer;
+    }
+
+    protected <T> Marshaller xmlMarshaller(Class<T> clazz) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(clazz);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        return marshaller;
+    }
+
+    protected <T> org.springframework.oxm.Marshaller springXmlMarshaller(Class<T> clazz) throws JAXBException {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+
+        marshaller.setClassesToBeBound(clazz);
+
+        Map<String, Object> jaxbProps = new HashMap<>();
+        jaxbProps.put(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        marshaller.setMarshallerProperties(jaxbProps);
+
+        return marshaller;
+    }
 
 }

@@ -41,17 +41,18 @@ public class ProteinXmlHeaderCallbackTest extends AbstractCallbackSetup {
     private ProteinXmlHeaderCallback headerCallback;
 
     @Mock
-    private EnzymePortalXmlService enzymeService;
+    private EnzymePortalXmlService xmlService;
+    private static final String ENTRY_COUNT = "17";
 
-    @Override @Before
+    @Override
+    @Before
     public void setUp() throws XMLStreamException {
         super.setUp();
-
-        headerCallback = new ProteinXmlHeaderCallback(RELEASE_VERSION, enzymeService);
+        headerCallback = new ProteinXmlHeaderCallback(RELEASE_VERSION, ENTRY_COUNT);
     }
 
     @Test
-    public void headerContainsDatabaseNameElement() throws IOException, SAXException, ParserConfigurationException  {
+    public void headerContainsDatabaseNameElement() throws IOException, SAXException, ParserConfigurationException {
         headerCallback.write(writer);
 
         String xmlOutput = wrapWithRootElement(output.toString());
@@ -63,7 +64,7 @@ public class ProteinXmlHeaderCallbackTest extends AbstractCallbackSetup {
     }
 
     @Test
-    public void headerContainsDatabaseDescriptionElement() throws IOException, Exception  {
+    public void headerContainsDatabaseDescriptionElement() throws IOException, Exception {
         headerCallback.write(writer);
 
         Document xmlDoc = createXmlDocument(output.toString());
@@ -73,7 +74,7 @@ public class ProteinXmlHeaderCallbackTest extends AbstractCallbackSetup {
     }
 
     @Test
-    public void headerContainsReleaseVersionElement() throws IOException, Exception  {
+    public void headerContainsReleaseVersionElement() throws IOException, Exception {
         headerCallback.write(writer);
 
         Document xmlDoc = createXmlDocument(output.toString());
@@ -98,8 +99,7 @@ public class ProteinXmlHeaderCallbackTest extends AbstractCallbackSetup {
     public void headerContainsEntryCountElement() throws Exception {
         long totalCount = 17;
 
-        when(enzymeService.countUniprotEntries()).thenReturn(totalCount);
-
+        when(xmlService.countUniprotEntries()).thenReturn(totalCount);
         headerCallback.write(writer);
 
         Document xmlDoc = createXmlDocument(output.toString());
@@ -116,7 +116,6 @@ public class ProteinXmlHeaderCallbackTest extends AbstractCallbackSetup {
 
         assertElementAppearsNTimesInDoc(ENTRY_COUNT_ELEMENT, 1, xmlDoc);
     }
-
 
     Document createXmlDocument(String toConvert) throws Exception {
         return parse(wrapWithRootElement(output.toString()));

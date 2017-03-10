@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.xml.generator;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -28,7 +29,7 @@ import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MockProteinBatchConfig.class, MockXmlConfig.class, JobTestRunnerConfig.class,
-        SpringDataMockConfig.class})
+    SpringDataMockConfig.class})
 public class ProteinCentricBatchIT {
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
@@ -42,17 +43,18 @@ public class ProteinCentricBatchIT {
     private EntityManager entityManager;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         entityManager = entityManagerFactory.createEntityManager();
+
     }
 
     @After
-    public void closeResources() {
+    public void closeResources() throws SQLException {
         entityManager.close();
     }
 
     @Test
-    public void successfulJobRun() throws Exception   {
+    public void successfulJobRun() throws Exception {
         int expectedEntries = countEntries();
 
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();

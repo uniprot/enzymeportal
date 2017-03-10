@@ -1,7 +1,15 @@
 package uk.ac.ebi.ep.xml.generator;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.stream.Stream;
 import javax.sql.DataSource;
 import junit.framework.TestCase;
+import org.hibernate.SessionFactory;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
@@ -34,6 +42,9 @@ public abstract class BaseTest extends TestCase {
     @Autowired
     protected XmlConfigParams mockXmlConfigParams;
 
+    @Autowired
+    protected SessionFactory sessionFactory;
+
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
@@ -45,6 +56,25 @@ public abstract class BaseTest extends TestCase {
                 .getRoot().toPath()
                 .resolve(folder)
                 .toString();
+    }
+
+    protected void printGeneratedXML(File output) throws IOException {
+        //  peek the generated file   
+        try (Stream<String> data = Files.lines(output.toPath(), StandardCharsets.UTF_8)) {
+            data.forEach(d -> System.out.println(d));
+        }
+    }
+
+    protected void printXml(String fileLocation) throws IOException {
+        try (FileReader fileReader = new FileReader(fileLocation);
+                BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
     }
 
 }

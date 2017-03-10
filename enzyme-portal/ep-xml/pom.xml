@@ -6,7 +6,7 @@
     <parent>
         <artifactId>ep</artifactId>
         <groupId>uk.ac.ebi.ep</groupId>
-        <version>1.0.6</version>
+        <version>1.0.7-SNAPSHOT</version>
     </parent>
 
     <name>ep-xml</name>
@@ -14,7 +14,7 @@
         The Enzyme Portal XML Generator.
     </description>
     <artifactId>ep-xml</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>

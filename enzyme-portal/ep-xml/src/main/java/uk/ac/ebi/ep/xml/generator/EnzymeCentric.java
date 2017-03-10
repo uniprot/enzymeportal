@@ -67,18 +67,16 @@ public class EnzymeCentric extends XmlGenerator {
 
     @Override
     public void generateXmL(String xmlFileLocation) throws JAXBException {
-       
-//        List<IntenzEnzymes> enzymes
-//                = enzymePortalXmlService.findAllIntenzEnzymes().stream().sorted().collect(Collectors.toList());  
-          List<IntenzEnzymes> enzymes
+
+        List<IntenzEnzymes> enzymes
                 = enzymePortalXmlService.findNonTransferredEnzymes().stream().sorted().collect(Collectors.toList());
         int entryCount = enzymes.size();
 
         logger.warn("Number of Intenz enzymes ready to be processed : " + entryCount);
-       
+
         Database database = buildDatabaseInfo(entryCount);
 
-        List<Entry> entryList = enzymes.stream().map(enzyme -> {          
+        List<Entry> entryList = enzymes.stream().map(enzyme -> {
             List<UniprotEntry> entries = enzymePortalXmlService.findEnzymesByEcNumberNativeQuery(enzyme.getEcNumber());
             Entry processedEntry;
 

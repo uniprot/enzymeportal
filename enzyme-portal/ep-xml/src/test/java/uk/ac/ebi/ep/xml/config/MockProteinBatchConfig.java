@@ -18,6 +18,7 @@ package uk.ac.ebi.ep.xml.config;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -44,7 +45,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
@@ -73,9 +73,6 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    private EnzymePortalXmlService xmlService;
     @Autowired
     private XmlConfigParams mockXmlConfigParams;
 
@@ -117,6 +114,7 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
         databaseReader.setEntityManagerFactory(entityManagerFactory);
         databaseReader.setQueryString("select u from UniprotEntry u");
         databaseReader.setPageSize(mockXmlConfigParams.getChunkSize());
+        databaseReader.setSaveState(false);
         return databaseReader;
     }
 
@@ -137,7 +135,12 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
     }
 
     private StaxWriterCallback xmlHeaderCallback() {
-        return new ProteinXmlHeaderCallback(mockXmlConfigParams.getReleaseNumber(), xmlService);
+        return new ProteinXmlHeaderCallback(mockXmlConfigParams.getReleaseNumber(), countEntries());
+    }
+
+    private String countEntries() {
+        Query query = entityManagerFactory.createEntityManager().createQuery("select count(u.dbentryId) from UniprotEntry u");
+        return String.valueOf(query.getSingleResult());
     }
 
     private JobExecutionListener logJobListener(String jobName) {

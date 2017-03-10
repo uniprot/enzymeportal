@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.xml.config;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -30,7 +31,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.protein.UniProtEntryToEntryConverter;
@@ -45,7 +45,7 @@ import uk.ac.ebi.ep.xml.util.XmlFileUtils;
  */
 @Configuration
 @EnableBatchProcessing
-@Import({EnzymePortalXmlService.class, XmlConfig.class})
+@Import({XmlConfig.class})
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
@@ -62,14 +62,10 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    private EnzymePortalXmlService enzymePortalXmlService;
-
-    @Autowired
     private XmlConfigParams xmlConfigParams;
 
     @Bean
     public Resource proteinCentricXmlDir() {
-        XmlFileUtils file = null;
         return new FileSystemResource(xmlConfigParams.getProteinCentricXmlDir());
     }
 
@@ -106,6 +102,7 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
         databaseReader.setEntityManagerFactory(entityManagerFactory);
         databaseReader.setQueryString("select u from UniprotEntry u");
         databaseReader.setPageSize(xmlConfigParams.getChunkSize());
+        databaseReader.setSaveState(false);
         return databaseReader;
     }
 
@@ -127,7 +124,12 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
     }
 
     private StaxWriterCallback xmlHeaderCallback() {
-        return new ProteinXmlHeaderCallback(xmlConfigParams.getReleaseNumber(), enzymePortalXmlService);
+        return new ProteinXmlHeaderCallback(xmlConfigParams.getReleaseNumber(), countEntries());
+    }
+
+    private String countEntries() {
+        Query query = entityManagerFactory.createEntityManager().createQuery("select count(u.dbentryId) from UniprotEntry u");
+        return String.valueOf(query.getSingleResult());
     }
 
     private JobExecutionListener logJobListener(String jobName) {
@@ -167,4 +169,5 @@ public class ProteinBatchConfig extends DefaultBatchConfigurer {
 
         return marshaller;
     }
+
 }

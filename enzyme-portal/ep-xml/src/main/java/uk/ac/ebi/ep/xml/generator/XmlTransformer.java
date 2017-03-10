@@ -1,7 +1,6 @@
 package uk.ac.ebi.ep.xml.generator;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -15,6 +14,7 @@ import uk.ac.ebi.ep.xml.model.Field;
 import uk.ac.ebi.ep.xml.model.Ref;
 import uk.ac.ebi.ep.xml.util.DatabaseName;
 import uk.ac.ebi.ep.xml.util.FieldName;
+import uk.ac.ebi.ep.xml.util.Preconditions;
 
 /**
  *
@@ -31,10 +31,12 @@ public class XmlTransformer {
     private final XmlConfigParams xmlConfigParams;
 
     public XmlTransformer(XmlConfigParams xmlConfigParams) {
+        Preconditions.checkArgument(xmlConfigParams == null, "XmlConfigParams (XML Configuration) can not be null");
+
         this.xmlConfigParams = xmlConfigParams;
     }
 
-    protected Database buildDatabaseInfo(int entryCount) {
+    protected Database buildDatabaseInfo(long entryCount) {
         Database database = new Database();
         database.setName(ENZYME_PORTAL);
         database.setDescription(ENZYME_PORTAL_DESCRIPTION);
@@ -77,34 +79,6 @@ public class XmlTransformer {
         }
     }
 
-    protected void addProteinGroupIdFields(UniprotEntry uniprotEntry, Set<Field> fields) {
-        if (Objects.nonNull(uniprotEntry.getProteinGroupId())) {
-            Field field = new Field(FieldName.PROTEIN_GROUP_ID.getName(), uniprotEntry.getProteinGroupId());
-            fields.add(field);
-        }
-    }
-
-    /**
-     *
-     * @param uniprotEntry
-     * @param fields
-     * @deprecated (proteinInfo field is no longer used )
-     */
-    @Deprecated
-    protected void addProteinInfoFields(UniprotEntry uniprotEntry, Set<Field> fields) {
-        if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
-            String specie = uniprotEntry.getScientificName();
-            if (!StringUtils.isEmpty(uniprotEntry.getCommonName())) {
-                specie = uniprotEntry.getCommonName();
-            }
-            String proteinInfo = uniprotEntry.getAccession() + "|" + uniprotEntry.getProteinName() + "_" + specie;
-
-            Field field = new Field(FieldName.PROTEIN_INFO.getName(), proteinInfo);
-            fields.add(field);
-
-        }
-    }
-
     protected void addScientificNameFields(UniprotEntry uniprotEntry, Set<Field> fields) {
         if (!StringUtils.isEmpty(uniprotEntry.getScientificName())) {
             Field field = new Field(FieldName.SCIENTIFIC_NAME.getName(), uniprotEntry.getScientificName());
@@ -123,11 +97,14 @@ public class XmlTransformer {
 
     void computeSynonymsAndBuildFields(Optional<String> synonymName, String proteinName, Set<Field> fields) {
         if (synonymName.isPresent()) {
-            Stream.of(synonymName.get().split(";")).distinct()
+            Stream.of(synonymName
+                    .get()
+                    .split(";"))
+                    .distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(proteinName.trim())))
                     .map(syn -> {
                         return new Field(FieldName.SYNONYM.getName(), syn);
-                       
+
                     }).forEach(field -> fields.add(field));
 
         }
@@ -179,7 +156,7 @@ public class XmlTransformer {
                 fields.add(field);
                 fields.add(compoundType);
                 return new Ref(compound.getCompoundId(), compound.getCompoundSource());
-                
+
             }).forEach(xref -> {
                 refs.add(xref);
             });
@@ -191,8 +168,8 @@ public class XmlTransformer {
             uniprotEntry.getEnzymePortalDiseaseSet().stream().map(disease -> {
                 Field field = new Field(FieldName.DISEASE_NAME.getName(), disease.getDiseaseName());
                 fields.add(field);
-               return new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
-                
+                return new Ref(disease.getOmimNumber(), DatabaseName.OMIM.getDbName());
+
             }).forEach(xref -> refs.add(xref));
 
         }
