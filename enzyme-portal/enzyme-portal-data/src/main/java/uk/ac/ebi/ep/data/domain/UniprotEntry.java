@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.domain;
 
 import com.mysema.query.annotations.QueryInit;
@@ -43,7 +38,6 @@ import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
@@ -110,9 +104,12 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
-    @Size(max = 10)
-    @Column(name = "PROTEIN_GROUP_ID")
-    private String proteinGroupId;
+    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProteinGroups proteinGroupId;
+    @Column(name = "PDB_FLAG")
+    private Character pdbFlag;
+
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     private Set<EntryToGeneMapping> entryToGeneMappingSet;
@@ -347,6 +344,28 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.synonymNames = synonymNames;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.proteinName);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UniprotEntry other = (UniprotEntry) obj;
+        if (!Objects.equals(this.proteinName, other.proteinName)) {
+            return false;
+        }
+        return true;
+    }
+
 //    @Override
 //    public int hashCode() {
 //        int hash = 3;
@@ -369,25 +388,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 //        }
 //        return Objects.equals(this.proteinName, other.proteinName);
 //    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 11 * hash + Objects.hashCode(this.proteinGroupId);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final UniprotEntry other = (UniprotEntry) obj;
-        return Objects.equals(this.proteinGroupId, other.proteinGroupId);
-    }
     public String getScientificname() {
         return getScientificName();
     }
@@ -763,14 +763,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.entryToGeneMappingSet = entryToGeneMappingSet;
     }
 
-    public String getProteinGroupId() {
-        return proteinGroupId;
-    }
-
-    public void setProteinGroupId(String proteinGroupId) {
-        this.proteinGroupId = proteinGroupId;
-    }
-
     @Override
     public Boolean getExpEvidence() {
         expEvidence = false;
@@ -783,6 +775,22 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         }
 
         return expEvidence;
+    }
+
+    public Character getPdbFlag() {
+        return pdbFlag;
+    }
+
+    public void setPdbFlag(Character pdbFlag) {
+        this.pdbFlag = pdbFlag;
+    }
+
+    public ProteinGroups getProteinGroupId() {
+        return proteinGroupId;
+    }
+
+    public void setProteinGroupId(ProteinGroups proteinGroupId) {
+        this.proteinGroupId = proteinGroupId;
     }
 
 }

@@ -1,22 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.service;
 
 import com.mysema.query.types.Predicate;
 import java.util.List;
 import java.util.stream.Stream;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
+import uk.ac.ebi.ep.data.domain.ProteinGroups;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.repositories.IntenzEnzymesRepository;
+import uk.ac.ebi.ep.data.repositories.ProteinGroupsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 
 /**
@@ -30,6 +26,9 @@ public class EnzymePortalXmlService {
     private IntenzEnzymesRepository intenzEnzymesRepository;
     @Autowired
     private UniprotEntryRepository uniprotEntryRepository;
+
+    @Autowired
+    private ProteinGroupsRepository proteinGroupsRepository;
 
     private static Predicate swissprotEnzymesByEcNumber(String ecNumber) {
         QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
@@ -87,11 +86,6 @@ public class EnzymePortalXmlService {
         return uniprotEntryRepository.findEnzymesByEc(ec);
     }
 
-    public Page<UniprotEntry> findPageableEnzymesByEcNumber(Pageable pageable, String ec) {
-
-        return uniprotEntryRepository.findAll(enzymesByEcNumber(ec), pageable);
-    }
-
     @Transactional(readOnly = true)
     public List<UniprotEntry> findUniprotEntries() {
 
@@ -105,12 +99,6 @@ public class EnzymePortalXmlService {
 
     //****** TODO ******
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> findPageableUniprotEntries(Pageable pageable) {
-
-        return uniprotEntryRepository.findAll(pageable);
-    }
-
-    @Transactional(readOnly = true)
     public List<UniprotEntry> findUniprotEntriesOrderedByEntryType() {
 
         return uniprotEntryRepository.findUniprotEntriesOrderedByEntryType();
@@ -123,25 +111,33 @@ public class EnzymePortalXmlService {
     }
 
     @Transactional(readOnly = true)
-    public Stream<List<UniprotEntry>> findStreamedSwissprotEnzymesByEc(String ec) {
-        return uniprotEntryRepository.findStreamedSwissprotEnzymesByEc(ec);
-    }
-
-    @Deprecated
-    @Transactional(readOnly = true)
-    public Stream<UniprotEntry> streamEnzymes() {
-        return uniprotEntryRepository.streamEnzymes();
-    }
-
-    
-    public Stream<IntenzEnzymes> streamIntenzEnzymes() {
-        return intenzEnzymesRepository.streamAllIntenzEnzymes();
-    }
-
-    @Transactional(readOnly = true)
     public List<IntenzEnzymes> findNonTransferredEnzymes() {
 
         return intenzEnzymesRepository.findNonTransferredEnzymes();
     }
 
+    @Transactional
+    /**
+     * example query -      <code>
+     *   String query = "select e from IntenzEnzymes e where transferFlag='N'";
+     * </code>
+     */
+    public Stream<IntenzEnzymes> streamIntenzEnzymesInBatch(SessionFactory sessionFactory, String query, int batchSize) {
+        return intenzEnzymesRepository.streamingService(IntenzEnzymes.class, sessionFactory, query, batchSize);
+    }
+
+    @Transactional
+    public Stream<UniprotEntry> streamUniprotEntriesInBatch(SessionFactory sessionFactory, String query, int batchSize) {
+        return uniprotEntryRepository.streamingService(UniprotEntry.class, sessionFactory, query, batchSize);
+    }
+
+    @Transactional
+    public Stream<ProteinGroups> streamProteinGroupsInBatch(SessionFactory sessionFactory, String query, int batchSize) {
+        return proteinGroupsRepository.streamingService(ProteinGroups.class, sessionFactory, query, batchSize);
+    }
+
+    @Transactional(readOnly = true)
+    public Long countProteinGroups() {
+        return proteinGroupsRepository.countProteinGroups();
+    }
 }

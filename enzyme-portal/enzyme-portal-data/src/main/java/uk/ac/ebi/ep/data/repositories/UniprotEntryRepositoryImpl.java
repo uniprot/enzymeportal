@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.repositories;
 
 import com.mysema.query.BooleanBuilder;
@@ -33,7 +28,10 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
  */
 public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom {
 
+    //@Autowired
+    //private SessionFactory sessionFactory;
     @PersistenceContext
+    //@PersistenceContext(type = PersistenceContextType.EXTENDED)
     private EntityManager entityManager;
     private static final QUniprotEntry $ = QUniprotEntry.uniprotEntry;
 
@@ -262,7 +260,7 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     private List<String> findAccessionsByEC(String ecNumber) {
         JPAQuery query = new JPAQuery(entityManager);
         List<String> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct().list($.accession);
-        return result.stream().distinct().limit(1000).collect(Collectors.toList());
+        return result.stream().distinct().collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

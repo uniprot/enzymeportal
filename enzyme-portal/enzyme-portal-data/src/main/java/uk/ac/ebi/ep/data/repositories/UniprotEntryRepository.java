@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
@@ -27,8 +26,8 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  * @author joseph
  */
 //@RepositoryRestResource(excerptProjection = ProjectedSpecies.class)
- @RepositoryRestResource(itemResourceRel = "uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
-public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, JpaSpecificationExecutor<UniprotEntry>, UniprotEntryRepositoryCustom {
+@RepositoryRestResource(itemResourceRel = "uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
+public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, JpaSpecificationExecutor<UniprotEntry>, UniprotEntryRepositoryCustom,DataStreamingService {
 
     default UniprotEntry findByUniprotAccession(String acc) {
         return findByAccession(acc);
@@ -43,17 +42,17 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 //            @Transactional(readOnly = true)
 //    @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
 //    CompletableFuture<UniprotEntry> findEnzymeByAccessionAsync(@Param("accession") String accession);
-
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findAccessions();
-    
+
     @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0 AND ACCESSION IS NOT NULL", nativeQuery = true)
     List<String> findSwissProtAccessions();
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY", nativeQuery = true)
     List<UniprotEntry> findUniprotEntries();
-     @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     //@Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER", nativeQuery = true)
     @Query(value = "SELECT * FROM UNIPROT_ENTRY u, ENZYME_PORTAL_EC_NUMBERS ec WHERE u.ACCESSION = ec.UNIPROT_ACCESSION AND ec.EC_NUMBER = :EC_NUMBER", nativeQuery = true)
     List<UniprotEntry> findEnzymesByEc(@Param("EC_NUMBER") String ecNumber);
@@ -120,28 +119,19 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     List<UniprotEntry> findSwissprotEnzymesByEc(@Param("EC_NUMBER") String ecNumber);
 
     @Transactional(readOnly = true)
-    @Query(value = "SELECT e FROM UniprotEntry e "
-            + "left join e.enzymePortalEcNumbersSet ec "
-            + "WHERE ec.uniprotAccession = e.accession "
-            + "AND ec.ecNumber = :ecNumber AND e.entryType =0")
-    Stream<List<UniprotEntry>> findStreamedSwissprotEnzymesByEc(@Param("ecNumber") String ecNumber);
-
-    @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY ORDER BY ENTRY_TYPE ASC", nativeQuery = true)
     List<UniprotEntry> findUniprotEntriesOrderedByEntryType();
 
-    //@QueryHints(value = @QueryHint(name = HINT_FETCH_SIZE, value = "" + 0))
     @QueryHints(value = {
         @QueryHint(name = "org.hibernate.ScrollMode", value = "FORWARD_ONLY"),
-        @QueryHint(name = HINT_FETCH_SIZE, value = "" + 0)
-//            @QueryHint(name = "org.hibernate.cacheMode", value = "NORMAL"),
-//            @QueryHint(name = "org.hibernate.cacheRegion", value = "myCacheRegion")
+        @QueryHint(name = HINT_FETCH_SIZE, value = "" + 900)
     })
-    @Query(value = "SELECT e FROM UniprotEntry e")
-    Stream<UniprotEntry> streamEnzymes();
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT /*+ PARALLEL(auto) */ COUNT(*) FROM UNIPROT_ENTRY", nativeQuery = true)
     Long countUniprotEntries();
-    
+
+    @Query(value = "SELECT e.accession FROM UniprotEntry e")
+    Stream<String> streamProteinIds();
+
 }

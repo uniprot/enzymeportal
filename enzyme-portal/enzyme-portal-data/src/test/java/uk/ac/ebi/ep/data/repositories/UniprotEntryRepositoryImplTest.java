@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.repositories;
 
 import java.sql.SQLException;
@@ -89,7 +84,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         accessions.add("PK5671");
         accessions.add("fakeAccession");
 
-        int expResult = 2;
+        int expResult = 3;
 
         List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccessions(accessions);
         assertEquals(expResult, result.size());
@@ -126,17 +121,8 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
         accessions.add("Q64441");
         accessions.add("NotAnEnzyme");
 
-//        List<String> expResult = new LinkedList<>();
-//
-//        expResult.add("Q0III2");
-//        expResult.add("Q63688");
-//        expResult.add("Q60991");
-
         List<String> result = uniprotEntryRepository.filterEnzymesFromAccessions(accessions).stream().distinct().collect(Collectors.toList());
         assertTrue(result.size() > 1);
-
-      
-        
 
     }
 
@@ -151,7 +137,7 @@ public class UniprotEntryRepositoryImplTest extends AbstractDataTest {
 
         int expResult = 1;
         List<UniprotEntry> result = uniprotEntryRepository.findEnzymesByAccession(accession).stream().distinct().collect(Collectors.toList());
-      
+
         assertEquals(expResult, result.size());
 
     }

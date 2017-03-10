@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.testConfig;
 
 import java.sql.SQLException;
 import java.util.Properties;
 import javax.sql.DataSource;
+import org.hibernate.SessionFactory;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +13,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -26,28 +24,34 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import uk.ac.ebi.ep.testkit.TestKit;
 
 /**
- *configuration for integration test
+ * configuration for integration test
+ *
  * @author joseph
  */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("uk.ac.ebi.ep.data.repositories")
-@PropertySource({"classpath:data.sql","classpath:schema.sql"})
+@PropertySource({"classpath:data.sql", "classpath:schema.sql"})
 public class SpringDataMockConfig extends TestKit {
-protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SpringDataMockConfig.class);
+
+    protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SpringDataMockConfig.class);
+
     @Bean
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
 
-
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         builder.setType(EmbeddedDatabaseType.H2);
+        builder.setName("ep");
         //return builder.build();
         //return builder.addDefaultScripts().build();
-        return builder.addScript("classpath:schema.sql").addScript("classpath:data.sql").build();
+        return builder
+                .addScript("classpath:schema.sql")
+                .addScript("classpath:data.sql")
+                .build();
 
     }
 
@@ -71,8 +75,9 @@ protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SpringD
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty(" hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         //properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        //properties.setProperty("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
+        properties.setProperty("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
         properties.setProperty("spring.jpa.hibernate.ddl-auto", "update");
+        //properties.setProperty("spring.jpa.hibernate.ddl-auto", "create-drop");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabase(Database.H2);
@@ -95,5 +100,43 @@ protected static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SpringD
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
     }
-    
+
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan(
+                new String[]{"uk.ac.ebi.ep.data.domain"});
+        sessionFactory.setHibernateProperties(h2Properties());
+
+        return sessionFactory;
+    }
+
+//        @Bean
+//    public SessionFactory sessionFactory() {
+//        EntityManager em = entityManagerFactory().getObject().createEntityManager();
+//        Session session = em.unwrap(Session.class);
+//
+//        return session.getSessionFactory();
+//    }
+    //@Bean(name = "hibernateTransactionManager")
+    //@Autowired
+    public HibernateTransactionManager hibernateTransactionManager(SessionFactory sessionFactory) {
+
+        HibernateTransactionManager txManager = new HibernateTransactionManager();
+        txManager.setSessionFactory(sessionFactory);
+        //txManager.setAllowResultAccessAfterCompletion(true);
+
+        return txManager;
+    }
+
+    private Properties h2Properties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+        properties.setProperty("hibernate.format_sql", "true");
+        properties.setProperty(" hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        properties.setProperty("spring.jpa.hibernate.ddl-auto", "update");
+
+        return properties;
+    }
 }

@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.data.dataconfig;
 
 import java.util.Properties;
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -73,16 +66,9 @@ public class DataConfig {
     @Bean
     public PlatformTransactionManager transactionManager() {
 
-       return hibernateTransactionManager();
-        //return new JpaTransactionManager(entityManagerFactory().getObject());
+        //return hibernateTransactionManager();
+        return new JpaTransactionManager(entityManagerFactory().getObject());
 
-    }
-
-    private SessionFactory sessionFactory() {
-        EntityManager em = entityManagerFactory().getObject().createEntityManager();
-        Session session = em.unwrap(Session.class);
-
-        return session.getSessionFactory();
     }
 
     @Bean
@@ -90,12 +76,37 @@ public class DataConfig {
         return new HibernateExceptionTranslator();
     }
 
-    //@Bean
-    public HibernateTransactionManager hibernateTransactionManager() {
-        HibernateTransactionManager manager = new HibernateTransactionManager(sessionFactory());
-        manager.setAllowResultAccessAfterCompletion(true);
+//    private HibernateTransactionManager hibernateTransactionManager() {
+//        HibernateTransactionManager manager = new HibernateTransactionManager(sessionFactory().getObject());
+//        manager.setAllowResultAccessAfterCompletion(true);
+//        return manager;
+//
+//    }
+    //    @Bean
+//    public SessionFactory sessionFactory() {
+//        EntityManager em = entityManagerFactory().getObject().createEntityManager();
+//        Session session = em.unwrap(Session.class);
+//
+//        return session.getSessionFactory();
+//    }
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 
-        return manager;
+        sessionFactory.setDataSource(dataSource);
+        sessionFactory.setPackagesToScan("uk.ac.ebi.ep.data.domain");
+        sessionFactory.setHibernateProperties(hibernateProperties());
 
+        return sessionFactory;
+    }
+
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.cache.provider_class", "org.hibernate.cache.NoCacheProvider");
+        properties.setProperty("hibernate.connection.driver_class", "oracle.jdbc.OracleDriver");
+
+        properties.setProperty("hibernate.cache.use_second_level_cache", "false");
+        properties.setProperty("hibernate.cache.auto_evict_collection_cache", "true");
+        return properties;
     }
 }
