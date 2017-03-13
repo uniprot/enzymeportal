@@ -40,12 +40,12 @@ public class PmcRestServiceIT {
     public void testFindPublicationsByKeyword() {
 
         String keyword = "cancer";
-        int expectedResultSize = 25;
+        int expectedResultSize = 2;
 
         Optional<EuropePMC> result = pmcRestService.findPublicationsByKeyword(keyword);
 
         assertNotNull(result);
-        assertThat(result.get().getResultList().getResult(), hasSize(greaterThan(1)));
+        assertThat(result.get().getResultList().getResult(), hasSize(greaterThan(expectedResultSize)));
         assertThat(result.get().getResultList().getResult(), hasSize(greaterThanOrEqualTo(expectedResultSize)));
 
     }
