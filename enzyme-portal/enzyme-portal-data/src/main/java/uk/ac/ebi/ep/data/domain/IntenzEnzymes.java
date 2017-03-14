@@ -1,23 +1,27 @@
-
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -39,15 +43,21 @@ import lombok.ToString;
     @NamedQuery(name = "IntenzEnzymes.findByEnzymeName", query = "SELECT i FROM IntenzEnzymes i WHERE i.enzymeName = :enzymeName"),
     @NamedQuery(name = "IntenzEnzymes.findByCatalyticActivity", query = "SELECT i FROM IntenzEnzymes i WHERE i.catalyticActivity = :catalyticActivity")})
 public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
-    @Size(max = 1)
-    @Column(name = "TRANSFER_FLAG")
-    private String transferFlag;
-    private static final long serialVersionUID = 1L;
+
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "INTERNAL_ID")
-    private BigDecimal internalId;
+    private Long internalId;
+    @Column(name = "TRANSFER_FLAG")
+    private Character transferFlag;
+    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    private Set<IntenzCofactors> intenzCofactorsSet;
+    @OneToMany(mappedBy = "ecNumber",fetch = FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    private Set<IntenzAltNames> intenzAltNamesSet;
+    private static final long serialVersionUID = 1L;
     @Size(max = 15)
     @Column(name = "EC_NUMBER")
     private String ecNumber;
@@ -58,8 +68,7 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
     @Column(name = "CATALYTIC_ACTIVITY")
     private String catalyticActivity;
 
-
-    public IntenzEnzymes(BigDecimal internalId) {
+    public IntenzEnzymes(Long internalId) {
         this.internalId = internalId;
     }
 
@@ -84,7 +93,41 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
 
     @Override
     public int compareTo(IntenzEnzymes o) {
-      return this.getEcNumber().compareTo(o.getEcNumber());
+        return this.getEcNumber().compareTo(o.getEcNumber());
     }
-    
+
+    public Long getInternalId() {
+        return internalId;
+    }
+
+    public void setInternalId(Long internalId) {
+        this.internalId = internalId;
+    }
+
+    public Character getTransferFlag() {
+        return transferFlag;
+    }
+
+    public void setTransferFlag(Character transferFlag) {
+        this.transferFlag = transferFlag;
+    }
+
+    @XmlTransient
+    public Set<IntenzCofactors> getIntenzCofactorsSet() {
+        return intenzCofactorsSet;
+    }
+
+    public void setIntenzCofactorsSet(Set<IntenzCofactors> intenzCofactorsSet) {
+        this.intenzCofactorsSet = intenzCofactorsSet;
+    }
+
+    @XmlTransient
+    public Set<IntenzAltNames> getIntenzAltNamesSet() {
+        return intenzAltNamesSet;
+    }
+
+    public void setIntenzAltNamesSet(Set<IntenzAltNames> intenzAltNamesSet) {
+        this.intenzAltNamesSet = intenzAltNamesSet;
+    }
+
 }
