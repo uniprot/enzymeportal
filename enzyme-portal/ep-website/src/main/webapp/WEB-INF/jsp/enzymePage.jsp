@@ -26,18 +26,20 @@
         <h3>${enzymePage.ec}</h3>
         <h4>${enzymePage.catalyticActivities}</h4>
         
-        <h2>characterized Proteins</h2>
-        <p>todo ...</p>
 
+       
+
+        <c:if test="${not empty enzymePage.accessions }">
         <h2>Associated Proteins</h2>
-
         <c:forEach items="${enzymePage.accessions}" var="acc">
             <ul>
                 <li> <a href="${pageContext.request.contextPath}/search/${acc}/enzyme">${acc}</a></li>
 
             </ul>
         </c:forEach>
+         </c:if>
 
+         <c:if test="${not empty enzymePage.accessions }">
         <h2>Publications</h2>
 
         <c:forEach items="${enzymePage.citations}" var="citation">
@@ -46,6 +48,6 @@
 
             </ul>
         </c:forEach>            
-
+       </c:if>
     </body>
 </html>

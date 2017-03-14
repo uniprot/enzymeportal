@@ -14,15 +14,14 @@ import uk.ac.ebi.ep.literatureservice.model.Result;
 @Builder(builderMethodName = "enzymePageBuilder")
 public class EnzymePage {
 
-
-
     //@Singular
     private final List<String> accessions;
     private String enzymeName;
     private String ec;
     private String catalyticActivities;
+    private final List<String> cofactor;
+    private final List<String> altName;
     //@Singular
-    private List<Result> citations;  
-    
+    private List<Result> citations;
 
 }
