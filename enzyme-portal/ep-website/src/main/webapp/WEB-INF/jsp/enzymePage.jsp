@@ -23,11 +23,11 @@
     <body>
         <h1>Demo</h1>
         <h2>${enzymePage.enzymeName}</h2>
+        <h3>${enzymePage.altName}</h3>
         <h3>${enzymePage.ec}</h3>
+        <h3>${enzymePage.cofactor}</h3>
         <h4>${enzymePage.catalyticActivities}</h4>
-        
 
-       
 
         <c:if test="${not empty enzymePage.accessions }">
         <h2>Associated Proteins</h2>

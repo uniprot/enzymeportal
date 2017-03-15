@@ -42,7 +42,7 @@ public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePor
     @Id
     @Basic(optional = false)
     @Column(name = "PATHWAY_INTERNAL_ID") 
-     @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_PATHWAY_INTERNAL_ID")
+     @SequenceGenerator(allocationSize = 10, name = "seqGenerator", sequenceName = "SEQ_PATHWAY_INTERNAL_ID")
     @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
     private Long pathwayInternalId;
     @Column(name = "PATHWAY_ID")
