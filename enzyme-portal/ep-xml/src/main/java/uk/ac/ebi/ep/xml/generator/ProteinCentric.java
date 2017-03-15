@@ -38,6 +38,7 @@ public class ProteinCentric extends XmlGenerator {
     private final static String QUERY = "SELECT p FROM ProteinGroups p";
     private final XmlConfigParams xmlConfigParams;
     private final SessionFactory sessionFactory;
+    private static final int PARALLEL_PROCESSING_TRIGGER = 100;
 
     public ProteinCentric(EnzymePortalXmlService enzymePortalXmlService, XmlConfigParams xmlConfigParams, SessionFactory sessionFactory) {
         super(enzymePortalXmlService, xmlConfigParams);
@@ -118,7 +119,7 @@ public class ProteinCentric extends XmlGenerator {
         }
 
         xmlWriter.close();
-        
+
         //TODO DELETE ME AFTER TEST
         System.out.println("NUMBER OF ENTRIES COUNTED " + entryCounter.get());
         logger.error("NUMBER OF ENTRIES COUNTED " + entryCounter.get());
@@ -142,8 +143,13 @@ public class ProteinCentric extends XmlGenerator {
         entry.setId(pg.getProteinGroupId());
         entry.setName(pg.getProteinName());
         entry.setDescription(pg.getProteinName());
+        if (pg.getUniprotEntryList().size() >= PARALLEL_PROCESSING_TRIGGER) {
+            pg.getUniprotEntryList().parallelStream().forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
 
-        pg.getUniprotEntryList().parallelStream().forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
+        } else {
+            pg.getUniprotEntryList().forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
+
+        }
 
         AdditionalFields additionalFields = new AdditionalFields();
         additionalFields.setField(fields);
