@@ -59,7 +59,7 @@ public class Cofactors extends CompoundParser {
             if (xref != null) {
                 Optional<LiteCompound> liteCompound = Optional.empty();
                 try {
-                    LOGGER.info("Special case : xref search in CHEBI " + xref);
+                    LOGGER.warn("Special case : xref search in CHEBI " + xref);
                     liteCompound = Optional.ofNullable(findByChEBIiD(xref));
                 } catch (Exception e) {
                     LOGGER.error("Chebi webservice error while searching " + xref, e);
@@ -140,7 +140,7 @@ public class Cofactors extends CompoundParser {
             String cofactorName = nameMatcher.group(1).replaceAll(";", "");
 
             if (cofactorName != null) {
-                LOGGER.info("cofactor name search in CHEBI " + cofactorName);
+                LOGGER.warn("cofactor name search in CHEBI " + cofactorName);
                 Optional<LiteCompound> liteCompound = Optional.ofNullable(findByCompoundName(cofactorName));
 
                 if (liteCompound.isPresent()) {
