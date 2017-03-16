@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,7 +39,7 @@ public class ProteinGroups implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "PROTEIN_GROUP_ID")
     private String proteinGroupId;
-     @OneToMany(mappedBy = "proteinGroupId")
+    @OneToMany(mappedBy = "proteinGroupId")
     private List<UniprotEntry> uniprotEntryList;
 
     public ProteinGroups() {
@@ -66,13 +67,15 @@ public class ProteinGroups implements Serializable {
 
     @XmlTransient
     public List<UniprotEntry> getUniprotEntryList() {
+        if (uniprotEntryList == null) {
+            uniprotEntryList = new ArrayList<>();
+        }
         return uniprotEntryList;
     }
 
     public void setUniprotEntryList(List<UniprotEntry> uniprotEntryList) {
         this.uniprotEntryList = uniprotEntryList;
     }
-
 
     @Override
     public int hashCode() {
@@ -89,6 +92,7 @@ public class ProteinGroups implements Serializable {
         ProteinGroups other = (ProteinGroups) object;
         return !((this.proteinGroupId == null && other.proteinGroupId != null) || (this.proteinGroupId != null && !this.proteinGroupId.equals(other.proteinGroupId)));
     }
+
     @Override
     public String toString() {
         return "uk.ac.ebi.ep.data.domain.ProteinGroups[ proteinGroupId=" + proteinGroupId + " ]";
