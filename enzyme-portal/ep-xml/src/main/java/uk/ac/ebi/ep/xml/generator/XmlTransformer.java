@@ -152,9 +152,9 @@ public class XmlTransformer {
 
             uniprotEntry.getEnzymePortalCompoundSet().stream().map(compound -> {
                 Field field = new Field(FieldName.COMPOUND_NAME.getName(), compound.getCompoundName());
-                Field compoundType = new Field(FieldName.COMPOUND_TYPE.getName(), compound.getCompoundRole());
+                //Field compoundType = new Field(FieldName.COMPOUND_TYPE.getName(), compound.getCompoundRole());
                 fields.add(field);
-                fields.add(compoundType);
+                //fields.add(compoundType);
                 return new Ref(compound.getCompoundId(), compound.getCompoundSource());
 
             }).forEach(xref -> {

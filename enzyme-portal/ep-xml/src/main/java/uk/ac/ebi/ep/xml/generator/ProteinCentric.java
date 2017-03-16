@@ -165,7 +165,7 @@ public class ProteinCentric extends XmlGenerator {
     private void addFieldsAndXRefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
         addUniprotIdFields(uniprotEntry, fields);
 
-        addStatus(uniprotEntry, fields);
+        //addStatus(uniprotEntry, fields);
         addScientificNameFields(uniprotEntry, fields);
         addCommonNameFields(uniprotEntry, fields);
         addGeneNameFields(uniprotEntry, fields);
