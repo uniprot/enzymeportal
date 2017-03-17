@@ -102,7 +102,7 @@ public abstract class CompoundParser {
                 entry.setCompoundId(chebiId);
                 entry.setCompoundName(chebiName);
                 entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-          
+
             } else {
                 LOGGER.info("Not found in ChEBI: " + name);
             }
@@ -110,8 +110,6 @@ public abstract class CompoundParser {
         }
         return entry;
     }
-
-
 
     /**
      * Searches a compound name in ChEBI. Please note that if the name does not
@@ -158,7 +156,7 @@ public abstract class CompoundParser {
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(name);
                     entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-                 } else {
+                } else {
                     LOGGER.info("Not found in ChEBI: " + name);
                 }
             } catch (ChebiWebServiceFault_Exception e) {
@@ -167,7 +165,5 @@ public abstract class CompoundParser {
         }
         return entry;
     }
-    
-
 
 }

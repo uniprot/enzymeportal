@@ -9,9 +9,9 @@ import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 
 /**
  *
- * @author joseph
+ * @author Joseph <joseph@ebi.ac.uk>
  */
-public class CofactorParser {
+public class CofactorParserFTP {
 
     public static void main(String... args) {
         if (args == null || args.length == 0) {
@@ -29,7 +29,7 @@ public class CofactorParser {
         context.refresh();
 
         EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);
-        compoundService.loadCofactors();
+        compoundService.loadCofactorsFromFTPFiles();
 
     }
 }
