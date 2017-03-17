@@ -18,6 +18,7 @@ public interface EnzymePortalSummaryRepositoryCustom {
 
 
     List<Summary> findSummariesByCommentType(String commentType);
+    List<Summary> findSummariesByCommentType(String commentType, int limit);
 
 //    EnzymePortalSummary findEnzymeSummaryByAccession(String accession);
 //

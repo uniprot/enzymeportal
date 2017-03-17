@@ -36,6 +36,16 @@ public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRep
 
         return result;
     }
+    
+        @Override
+    public List<Summary> findSummariesByCommentType(String commentType, int limit) {
+
+        String nativeQuery = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM ENZYME_PORTAL_SUMMARY WHERE COMMENT_TYPE = :COMMENT_TYPE";
+        Query query = entityManager.createNativeQuery(nativeQuery, "findCommentTextAndAccession");
+        List<Summary> result = query.setParameter("COMMENT_TYPE", commentType).setMaxResults(limit).getResultList();
+
+        return result;
+    }
 
 //    public List<EnzymePortalSummary> findEnzymeSummariesByAccessions(List<String> accessions) {
 //        EntityGraph eGraph = entityManager.getEntityGraph("summary.graph");
