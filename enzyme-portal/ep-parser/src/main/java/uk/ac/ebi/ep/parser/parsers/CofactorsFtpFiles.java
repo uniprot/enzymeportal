@@ -97,7 +97,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
 
     private void parseCofactorText(List<Summary> enzymeSummary) {
 //parallel processing
-        enzymeSummary.parallelStream().forEach(summary -> processCofactors(summary));
+        enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
         logger.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
 
@@ -106,7 +106,6 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 .filter(compound -> compound != null)
                 .forEach(compound -> {
                     enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
-    
                 });
         logger.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
