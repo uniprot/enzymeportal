@@ -1,11 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.ChebiCompound;
 
 /**
@@ -14,7 +13,11 @@ import uk.ac.ebi.ep.data.domain.ChebiCompound;
  */
 public interface ChebiCompoundRepository extends JpaRepository<ChebiCompound, Long> {
 
-    ChebiCompound findByChebiAccession(String chebiId);
+        @Transactional(readOnly = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM CHEBI_COMPOUND WHERE CHEBI_ACCESSION = :CHEBI_ACCESSION ", nativeQuery = true)
+    ChebiCompound findByChebiAccession(@Param("CHEBI_ACCESSION")String chebiAccession);
 
-    ChebiCompound findByCompoundName(String compoundName);
+            @Transactional(readOnly = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM CHEBI_COMPOUND WHERE COMPOUND_NAME = :COMPOUND_NAME ", nativeQuery = true)
+    ChebiCompound findByCompoundName(@Param("COMPOUND_NAME") String compoundName);
 }

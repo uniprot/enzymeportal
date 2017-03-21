@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.QEnzymePortalSummary;
 import uk.ac.ebi.ep.data.entry.Summary;
 
@@ -27,6 +28,7 @@ public class EnzymePortalSummaryRepositoryImpl implements EnzymePortalSummaryRep
     }
 
 
+    @Transactional(readOnly = true)
     @Override
     public List<Summary> findSummariesByCommentType(String commentType) {
 
