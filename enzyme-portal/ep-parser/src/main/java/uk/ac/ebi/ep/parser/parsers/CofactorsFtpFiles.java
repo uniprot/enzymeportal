@@ -106,6 +106,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 .filter(compound -> compound != null)
                 .forEach(compound -> {
                     enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+    
                 });
         logger.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
