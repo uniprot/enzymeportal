@@ -69,8 +69,12 @@ public class ProteinCentric extends XmlGenerator {
         }
     }
 
+    private Long proteinGroupsCount() {
+        return enzymePortalXmlService.countProteinGroups();
+    }
+
     private StaxWriterCallback addXmlHeader() {
-        String numEntries = enzymePortalXmlService.countProteinGroups().toString();
+        String numEntries = proteinGroupsCount().toString();
 
         return new ProteinCentricHeader(xmlConfigParams.getReleaseNumber(), numEntries, enzymePortalXmlService);
     }
@@ -111,8 +115,8 @@ public class ProteinCentric extends XmlGenerator {
         Set<Ref> refs = Collections.synchronizedSet(new HashSet<>());
 
         final PrettyPrintStaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
-
-        try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize)) {
+        long numberOfEntries = proteinGroupsCount();
+        try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize, numberOfEntries)) {
 
             entryStream.forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
 
