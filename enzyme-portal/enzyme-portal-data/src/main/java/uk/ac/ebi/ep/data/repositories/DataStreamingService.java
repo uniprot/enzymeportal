@@ -12,11 +12,29 @@ import uk.ac.ebi.ep.data.util.QueryStreamUtil;
  */
 public interface DataStreamingService {
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @param sessionFactory
+     * @param query
+     * @param batchSize
+     * @return
+     */
     default <T> Stream<T> streamingService(Class<T> clazz, SessionFactory sessionFactory, String query, int batchSize) {
-
+        
         return QueryStreamUtil.resultStream(clazz, batchSize, sessionFactory
                 .openSession()
                 .createQuery(query).scroll(ScrollMode.FORWARD_ONLY));
-
+        
     }
+    
+    default <T> Stream<T> streamingService(Class<T> clazz, SessionFactory sessionFactory, String query, int batchSize, long limit) {
+        
+        return QueryStreamUtil.resultStream(clazz, batchSize, sessionFactory
+                .openSession()
+                .createQuery(query).scroll(ScrollMode.FORWARD_ONLY)).limit(limit);
+        
+    }
+    
 }

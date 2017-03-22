@@ -136,6 +136,11 @@ public class EnzymePortalXmlService {
         return proteinGroupsRepository.streamingService(ProteinGroups.class, sessionFactory, query, batchSize);
     }
 
+    @Transactional
+    public Stream<ProteinGroups> streamProteinGroupsInBatch(SessionFactory sessionFactory, String query, int batchSize, long limit) {
+        return proteinGroupsRepository.streamingService(ProteinGroups.class, sessionFactory, query, batchSize, limit);
+    }
+
     @Transactional(readOnly = true)
     public Long countProteinGroups() {
         return proteinGroupsRepository.countProteinGroups();
