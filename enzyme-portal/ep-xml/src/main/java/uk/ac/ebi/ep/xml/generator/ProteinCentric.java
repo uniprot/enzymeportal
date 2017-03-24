@@ -38,7 +38,6 @@ public class ProteinCentric extends XmlGenerator {
     private final static String QUERY = "SELECT p FROM ProteinGroups p";
     private final XmlConfigParams xmlConfigParams;
     private final SessionFactory sessionFactory;
-    private static final int PARALLEL_PROCESSING_TRIGGER = 100;
 
     public ProteinCentric(EnzymePortalXmlService enzymePortalXmlService, XmlConfigParams xmlConfigParams, SessionFactory sessionFactory) {
         super(enzymePortalXmlService, xmlConfigParams);
@@ -109,13 +108,13 @@ public class ProteinCentric extends XmlGenerator {
     @Override
     public void generateXmL(String xmlFileLocation) throws JAXBException {
 
-        final int batchSize = xmlConfigParams.getChunkSize();
-
+        //int batchSize = xmlConfigParams.getChunkSize();
         Set<Field> fields = Collections.synchronizedSet(new HashSet<>());
         Set<Ref> refs = Collections.synchronizedSet(new HashSet<>());
 
         final PrettyPrintStaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
-        long numberOfEntries = proteinGroupsCount();
+        Long numberOfEntries = proteinGroupsCount();
+        final int batchSize = numberOfEntries.intValue();
         try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize, numberOfEntries)) {
 
             entryStream.forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
@@ -147,13 +146,10 @@ public class ProteinCentric extends XmlGenerator {
         entry.setId(pg.getProteinGroupId());
         entry.setName(pg.getProteinName());
         entry.setDescription(pg.getProteinName());
-        if (pg.getUniprotEntryList().size() >= PARALLEL_PROCESSING_TRIGGER) {
-            pg.getUniprotEntryList().parallelStream().forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
-
-        } else {
-            pg.getUniprotEntryList().forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
-
-        }
+        pg.getUniprotEntryList()
+                .parallelStream()
+                .parallel()
+                .forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
 
         AdditionalFields additionalFields = new AdditionalFields();
         additionalFields.setField(fields);
