@@ -70,9 +70,11 @@
         </script>
 <!-- END of Feedback widget code  -->
 
+        <section class="grid_3">
+            <img src="/enzymeportal/resources/images/protein_page_logo.jpg">
+        </section>
 
-
-        <section class="grid_18 alpha">
+        <section class="grid_15 alpha">
             <h1>Enzyme Results</h1> 
             <h2>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h2>
         </section>
