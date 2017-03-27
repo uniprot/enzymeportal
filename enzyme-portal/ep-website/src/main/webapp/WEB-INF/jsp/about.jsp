@@ -16,14 +16,14 @@
 <c:set var="pageTitle" value="About Us &lt; Enzyme Portal &gt; EMBL-EBI"/>
 <%@include file="head.jspf" %>
 
-<body class="level2"><!-- add any of your classes or IDs -->
+<body class="level2 full-width"><!-- add any of your classes or IDs -->
 <%@include file="skipto.jspf" %>
 
-<div id="wrapper" class="container_24">
+<div id="wrapper">
 
     <%@include file="header.jspf" %>
 
-    <div id="content" role="main" class="grid_24 clearfix">
+    <div id="content" role="main" class="clearfix">
 
         <!-- If you require a breadcrumb trail, its root should be your service.
                 You don't need a breadcrumb trail on the homepage of your service... -->
@@ -44,41 +44,20 @@
         <!--<div class="panels-flexible-row panels-flexible-row-about_us-main-row panels-flexible-row-first clearfix">
           <div class="inside panels-flexible-row-inside panels-flexible-row-about_us-main-row-inside panels-flexible-row-inside-first clearfix">-->
 
-        <section class="grid_18 alpha">
+        <div class="row">
+
+        <section class="large-9 columns">
             <!--<div class="panels-flexible-region panels-flexible-region-about_us-center panels-flexible-region-first ">
               <div class="inside panels-flexible-region-inside panels-flexible-region-about_us-center-inside panels-flexible-region-inside-first">-->
 
             <div id="intro" style="background-color: white;">
                 <div class="panel-pane pane-custom pane-3 clearfix">
-
                     <h3 class="pane-title">About Enzyme Portal</h3>
-
-
-                    <!--   <div class="pane-content"> -->
-
-                    <p></p>
-
-<!--                    <div class="caption caption-right">
-                        <div style="width: 301px;">
-                            <%-- b>Welcome to the Enzyme Portal</b --%>
-                            <iframe class="grid_24"
-                                    src="http://www.youtube.com/embed/Kldp0WXcxUM"
-                                    frameborder="0"
-                                    allowfullscreen></iframe>
-                        </div>
-                        Enzyme Portal - An Introduction
-                    </div>
-                    <p></p>-->
-                    <!--<p>The European Bioinformatics Institute is part of <a href="http://www.embl.org/" class=" external">EMBL</a>, Europe?s flagship laboratory for the life sciences. EMBL-EBI provides freely available&nbsp;<a href="http://www.ebi.ac.uk/services">data from life science experiments</a> covering the full spectrum of molecular biology. About 20% of our institute is devoted to <a href="http://www.ebi.ac.uk/research">investigator-led research</a> using computational approaches to unravel the secrets of life. Our extensive <a href="http://www.ebi.ac.uk/training/">training</a> programme helps researchers in academia and <a href="http://www.ebi.ac.uk/industry/">industry</a> to make the most of the incredible amount of data being produced every day in life science experiments.</p>
-                    <p>We are a non-profit, intergovernmental organisation funded by <a href="http://www.embl.de/aboutus/general_information/organisation/member_states/index.html" class=" external">EMBL member states</a>. Our 520 staff hail from 43 countries, and we welcome a regular stream of visiting scientists throughout the year. We are located on the <a href="http://frontier.ebi.ac.uk/about/visit-us">Wellcome Trust Genome Campus</a> in Hinxton, Cambridge in the United Kingdom.</p>-->
-
                     <p>
                         The Enzyme Portal is for those interested in
                         the biology of enzymes and proteins with enzymatic
                         activity.
-                        <!--	</p>
 
-                            <p>-->
                         It integrates publicly available
                         information about enzymes, such as small-molecule chemistry,
                         biochemical pathways and drug compounds. It provides a concise
@@ -115,30 +94,18 @@
                     </p>
                     <!--   </div> -->
 
-
                 </div>
             </div>
 
             <div class="panel-separator"></div>
-            <!--  </div>
-            </div> -->
-
         </section>
 
-        <section class="grid_6 omega">
-
-            <div class="panels-flexible-region panels-flexible-region-about_us-right_ panels-flexible-region-last ">
+        <section class="large-3 columns">
+            <div class=" panels-flexible-region-about_us-right_ panels-flexible-region-last ">
                 <div class="inside panels-flexible-region-inside panels-flexible-region-about_us-right_-inside panels-flexible-region-inside-last">
-
                     <div class="shortcuts">
-                        <div class="panel-pane pane-custom pane-8 clearfix">
-
-                            <h3 class="pane-title">Popular</h3>
-
-
-                            <!--   <div class="pane-content"> -->
-
-
+                        <div>
+                            <h4>Popular</h4>
                             <ul class="split">
                                 <li><a href="http://www.ebi.ac.uk/training/online/course/enzyme-portal-quick-tour"
                                        class="icon icon-generic icon-c1" data-icon="t">Quick Tour</a></li>
@@ -146,61 +113,25 @@
                                        class="icon icon-conceptual icon-c8" data-icon="l">Publications</a></li>
                                 <li><a href="https://github.com/uniprot/enzymeportal"
                                        class="icon icon-generic icon-c8" data-icon=";">Documentation</a></li>
-
                             </ul>
-                            <!--<ul class="split">
-
-                             <li><a href="http://ebi-cheminf.github.com/enzymeportal/ep/" class="icon icon-generic icon-c8" data-icon=";">Documentation</a></li>
-
-                            </ul>-->
-                            <!--   </div> -->
-
-
                         </div>
                     </div>
                     <!--      first video-->
-                    <div class="panel-separator"></div>
 
                     <div class="shortcuts">
-                        <div class="panel-pane pane-custom pane-9 clearfix">
-
-                            <h3 class="pane-title"> Learn more about Enzyme Portal</h3>
-
-
-                            <div class="pane-content">
-
-                                <%-- b>Explore Enzyme Portal</b --%>
-
-                                <iframe class="grid_24"
-                                        src="https://www.youtube.com/embed/eCHWYLVN230"
-                                        frameborder="0"
-                                        allowfullscreen></iframe>
-
+                        <div>
+                            <h4 > Learn more about Enzyme Portal</h4>
+                            <div>
+                                <iframe src="https://www.youtube.com/embed/eCHWYLVN230" frameborder="0" allowfullscreen></iframe>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-separator"></div>
-
-                    <div class="panel-pane pane-custom pane-10 clearfix">
 
 
-                        <div class="pane-content">
-
-                            <h3><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4"
-                                      data-icon=")">Technical Documents<br>
-</span></h3>
-
-                            <p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a
-                                    href="https://github.com/ebi-cheminf/enzymeportal">GitHub</a>, an online project hosting service. </span>
-                            </p>
-
-<!--                            <p><span>Additionally, the technical documentation (Javadoc, project information) is also <a
-                                    href="http://ebi-cheminf.github.com/enzymeportal/ep/">available online</a> </span>
-                            </p>-->
-
-                        </div>
-
-
+                    <div>
+                        <h4><span id="internal-source-marker_0.35187150686265334" class="icon icon-generic icon-c4" data-icon=")">Technical Documents</span></h4>
+                        <p><span>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available, and can be downloaded from <a href="https://github.com/ebi-cheminf/enzymeportal">GitHub</a>, an online project hosting service. </span>
+                        </p>
                     </div>
                 </div>
             </div>

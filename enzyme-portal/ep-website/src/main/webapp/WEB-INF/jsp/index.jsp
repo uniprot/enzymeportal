@@ -22,41 +22,41 @@
     <%@include file="skipto.jspf" %>
 
 
-    <div id="wrapper" class="container_24">
+    <div id="wrapper" class="">
 
     <%@include file="header.jspf" %>
 
-    <div id="content" role="main" class="grid_24 clearfix">
+    <div id="content" role="main" class="row">
 
-        <section class="grid_24">
-            <div id="browse-box-container" class="prefix_4 grid_24">
-                <a href="browse/disease" class="browse-box disease-box grid_4">
-                    <h4>Diseases</h4>
+        <section>
+            <div id="browse-box-container">
+                <a href="browse/disease" class="browse-box disease-box large-2 ">
+                    <h4>Diseases<br />&nbsp;</h4>
                     <span class="icon icon-generic" data-icon="B"></span>
                 </a>
-                <a href="browse/enzymes"  class="browse-box enzyme-box grid_4">
-                    <h4>Enzyme Classification</h4>
+                <a href="browse/enzymes"  class="browse-box enzyme-box large-2 ">
+                    <h4>Enzyme<br />Classification</h4>
                     <span class="icon icon-conceptual" data-icon="b"></span>
                 </a>
-                <a href="browse/taxonomy"  class="browse-box taxonomy-box grid_4">
-                    <h4>Taxonomy</h4>
+                <a href="browse/taxonomy"  class="browse-box taxonomy-box large-2 ">
+                    <h4>Taxonomy<br />&nbsp;</h4>
                     <span class="icon icon-conceptual" data-icon="o"></span>
                 </a>
-                <a href="browse/pathways"  class="browse-box gene-box grid_4">
-                    <h4>Pathways</h4>
+                <a href="browse/pathways"  class="browse-box gene-box large-2 ">
+                    <h4>Pathways<br />&nbsp;</h4>
                     <span class="icon icon-conceptual" data-icon="y"></span>
                 </a>
             </div>
         </section>
 
-        <section class="grid_24">
-            <div class="grid_6">
+        <section class="row home-page-descriptions">
+            <div class="large-3 columns">
                 <h4>About Enzyme Portal</h4>
                 <p>The Enzyme Portal integrates publicly available information about enzymes, such as small-molecule chemistry, biochemical pathways and drug compounds.
                 See walk-through <a target="_blank" href="https://www.youtube.com/channel/UCLXd9kRfdlSVLx9Snsi1qIA">videos</a> to learn more</p>
                 <p><a href="about">more...</a></p>
             </div>
-            <div class="grid_6">
+            <div class="large-3 columns">
                 <h4>Enzyme Portal Resources</h4>
                 <p>To build its reports, the Enzyme Portal uses data from <a href="http://www.uniprot.org" target="_blank">UniProtKb</a>,
                     <a href="http://www.ebi.ac.uk/pdbe/" target="_blank">PDBe</a>, <a href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>,
@@ -64,12 +64,12 @@
                     <a href="http://www.ebi.ac.uk/rhea/" target="_blank">Rhea</a>, <a href="http://www.ebi.ac.uk/intenz/" target="_blank">IntEnz</a> and many more resources.</p>
                 <p><a href="about">more...</a></p>
             </div>
-            <div class="grid_6">
+            <div class="large-3 columns">
                 <h4>Technical documents</h4>
                 <p>The Enzyme Portal is an open source project developed at the EMBL-EBI and the source code is freely available and can be downloaded from <a href="https://github.com/computingfacts/enzymeportal" target="_blank">GitHub</a>, an online project hosting service.</p>
                 <p>Additionally, the technical documentation (Javadoc, project information) is also available online.</p>
             </div>
-            <div class="grid_6">
+            <div class="large-3 columns">
                 <h4>Tools</h4>
                 <p><strong>Protein sequence search:</strong> search Enzyme Portal with a sequence by clicking on the <a href="http://www.ebi.ac.uk/Tools/services/web/toolform.ebi?tool=ncbiblast&database=enzymeportal"> Sequence search link </a> in the search area.</p>
                 <p><strong>Compare enzymes:</strong> the Enzyme Portal basket provides a tool for comparing two enzymes. Select your enzymes from search results and add them to your basket to access the tool.</p>

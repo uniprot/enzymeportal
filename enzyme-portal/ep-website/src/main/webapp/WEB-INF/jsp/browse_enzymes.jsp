@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : browse_enzymes
     Created on : Jul 23, 2013, 12:17:33 PM
     Author     : joseph
@@ -28,7 +28,7 @@
 
     </head>
 
-    <body class="level2"><!-- add any of your classes or IDs -->
+    <body><!-- add any of your classes or IDs -->
         <div id="skip-to">
             <ul>
                 <li><a href="#content">Skip to main content</a></li>
@@ -38,43 +38,28 @@
             </ul>
         </div>
 
-        <div id="wrapper" class="container_24">
-             <%@include file="header.jspf" %>
-             
-            <div id="content" role="main" class="grid_24 clearfix">
-
-                 <div class="grid_24">
-                     <h1>Enzyme Classification</h1>
-                    <h3 >Browse enzymes By Enzyme Classification</h3><br/>
-                    <div>
-                        
-                <div >
-                        <div >
-                           <ul>
-                                    <li><a href="${pageContext.request.contextPath}/browse/enzyme/1/Oxidoreductases">EC 1</a>&nbsp;&nbsp;Oxidoreductases</li>
-                                        <li><a href="${pageContext.request.contextPath}/browse/enzyme/2/Transferases">EC 2</a>&nbsp;&nbsp;Transferases</li>
-                                        <li><a href="${pageContext.request.contextPath}/browse/enzyme/3/Hydrolases">EC 3</a>&nbsp;&nbsp;Hydrolases</li>
-                                        <li><a href="${pageContext.request.contextPath}/browse/enzyme/4/Lyases">EC 4</a>&nbsp;&nbsp;Lyases</li>
-                                        <li><a href="${pageContext.request.contextPath}/browse/enzyme/5/Isomerases">EC 5</a>&nbsp;&nbsp;Isomerases</li>
-                                        <li><a href="${pageContext.request.contextPath}/browse/enzyme/6/Ligases">EC 6</a>&nbsp;&nbsp;Ligases</li>
-                                </ul>
-                        </div>
-                </div>
-
-                    </div>
-                </div>  
-         
-
-            </div>
-
-
-
+          <div id="wrapper">
+               <%@include file="header.jspf" %>
+              <div id="content" role="main" class="clearfix">
+                   <div>
+                      <h2>Enzyme Classification</h2>
+                      <h4>Browse enzymes By Enzyme Classification</h4>
+                      <div>
+                         <ul>
+                            <li><a href="${pageContext.request.contextPath}/browse/enzyme/1/Oxidoreductases">EC 1</a>&nbsp;&nbsp;Oxidoreductases</li>
+                            <li><a href="${pageContext.request.contextPath}/browse/enzyme/2/Transferases">EC 2</a>&nbsp;&nbsp;Transferases</li>
+                            <li><a href="${pageContext.request.contextPath}/browse/enzyme/3/Hydrolases">EC 3</a>&nbsp;&nbsp;Hydrolases</li>
+                            <li><a href="${pageContext.request.contextPath}/browse/enzyme/4/Lyases">EC 4</a>&nbsp;&nbsp;Lyases</li>
+                            <li><a href="${pageContext.request.contextPath}/browse/enzyme/5/Isomerases">EC 5</a>&nbsp;&nbsp;Isomerases</li>
+                            <li><a href="${pageContext.request.contextPath}/browse/enzyme/6/Ligases">EC 6</a>&nbsp;&nbsp;Ligases</li>
+                        </ul>
+                      </div>
+                  </div>
+          </div>
 
             <%@include file="footer.jspf" %>
         </div> <!--! end of #wrapper -->
 
-
-       
     </body>
 
 </html>

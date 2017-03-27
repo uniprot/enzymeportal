@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : organisms
     Created on : Nov 3, 2014, 4:45:22 PM
     Author     : joseph
@@ -29,15 +29,15 @@
     </ul>
 </div>
 
-<div id="wrapper" class="container_24">
+<div id="wrapper">
     <%@include file="header.jspf" %>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
-  
+
 
     </script>
 
-    <div id="content" role="main" class="grid_24 clearfix">
+    <div id="content" role="main" class="clearfix">
         <h1>Taxonomy</h1>
         <div id="taxonomy-tree" taxonomy-tree></div>
         <img id="spinner" ng-src="${pageContext.request.contextPath}/resources/images/loading128.gif" style="display:none;" class="center"/>

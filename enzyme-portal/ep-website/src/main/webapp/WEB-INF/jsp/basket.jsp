@@ -11,14 +11,14 @@
 <body class="level2">
 
     <%@include file="skipto.jspf" %>
-    
-    <div id="wrapper" class="container_24">
-       
-        <%@include file="header.jspf" %>
-       
-        <div id="content" role="main" class="grid_24 clearfix">
 
-            <section class="grid_24 alpha">
+    <div id="wrapper">
+
+        <%@include file="header.jspf" %>
+
+        <div id="content" role="main" class="clearfix">
+
+            <section>
                 <h2>Compare enzymes</h2>
             </section>
             <br clear="all"/>
@@ -26,7 +26,8 @@
             <form action="compare" method="post"
                 style="font-family: verdana, sans-serif;">
 
-            <section class="grid_19 alpha">
+<div class="row">
+            <section class="large-8 columns">
                 <div id="basketEmptyMsg"
                     style="display: ${empty basket? 'block':'none'}">
                     <spring:message code="basket.empty"/>
@@ -41,25 +42,27 @@
                         arguments="${fn:length(basket)}"/>
                 </div>
             </section>
-            <section class="grid_4">
+            <section class="large-3 columns">
                 <c:if test="${fn:length(basket) gt 1}">
                     <button id="compareButton" disabled
-                        class="icon icon-functional"
-                        data-icon="O">Compare selected</button>
+                        class="button icon icon-functional"
+                        data-icon="O"> Compare selected</button>
                 </c:if>
             </section>
-            <section class="grid_1 omega">
+            <section class="large-1 columns">
+              <%-- Empty --%>
             </section>
-            
+</div>
+<div class="row">
             <c:forEach var="basketItem" items="${basket}" varStatus="vsEnzymes">
                 <c:set var="enzyme" value="${basketItem.value}"/>
                 <div>
-                <section class="grid_19 alpha">
+                <section class="large-8 columns">
                     <%@include file="util/prioritiseSpecies.jsp" %>
                     <c:set var="showCheckbox" value="false"/>
                     <%@include file="summary.jspf" %>
                 </section>
-                <section class="grid_4">
+                <section class="large-3 columns">
                     <select class="toCompare" name="acc"
                         onchange="updateCompareButton(event)"
                         title="Select one species to compare.">
@@ -71,7 +74,7 @@
                             title="Deselect this enzyme"></option>
                     </select>
                 </section>
-                <section class="grid_1 omega">
+                <section class="large-1 columns">
                     <button class="removeFromBasket icon icon-functional"
                         title="Remove this summary from your basket."
                         data-icon="d"
@@ -80,15 +83,15 @@
                 </section>
                 </div>
             </c:forEach>
-            
+</div>
             <script>updateCompareButton();</script>
 
             </form>
 
         </div>
-        
+
         <%@include file="footer.jspf" %>
-        
+
     </div>
 </body>
 </html>

@@ -7,15 +7,15 @@
 <html>
 <c:set var="pageTitle" value="Comparing enzymes"/>
 <%@include file="head.jspf"%>
-<body class="level2">
+<body class="level2 full-width">
 
     <%@include file="skipto.jspf" %>
 
-    <div id="wrapper" class="container_24">
-       
+    <div id="wrapper">
+
         <%@include file="header.jspf" %>
-       
-        <div id="content" role="main" class="grid_24 clearfix">
+
+        <div id="content" role="main" class="clearfix">
 
             <div id="comparison-outline">
                 <ul>
@@ -38,47 +38,53 @@
                 </c:forEach>
                 </ul>
             </div>
-        
-            <section class="grid_4 alpha">&nbsp;</section>
-            <c:choose>
-                <c:when test="${not empty comparison.compared[1].uniprotaccessions[0]}">
-                
-            <section class="grid_18 omega">
+
+<div class="row">
+
+            <section class="large-2 columns">&nbsp;</section>
+            <section class="large-10 columns">
                 <h2>Comparing enzymes
                     <a href="compare?acc=${comparison.compared[0].uniprotaccessions[0]}&acc=${comparison.compared[1].uniprotaccessions[0]}"
                         class="icon icon-generic" data-icon="L"
                         style="font-size: smaller;"
                         title="permalink to this comparison"></a></h2>
-            </section>        
+            </section>
             <br clear="all"/>
 
-            <section class="grid_4 alpha" id="comparison-header">
-                &nbsp;
-            </section>
-            <section class="grid_20 omega">
-                <section class="grid_12 comparison header">
-                    <a href="search/${comparison.compared[0].uniprotaccessions[0]}/enzyme">
-                    ${comparison.compared[0].name}<br/>
-                    (${comparison.compared[0].species.scientificname})
-                    </a>
-                </section>
-                <section class="grid_12 omega comparison header">
-                    <a href="search/${comparison.compared[1].uniprotaccessions[0]}/enzyme">
-                    ${comparison.compared[1].name}<br/>
-                    (${comparison.compared[1].species.scientificname})
-                    </a>
-                </section>
-                <br clear="all"/>
-            </section>
-              </c:when>
-                <c:otherwise>
-                    <b>You can only compare enzymes of different organisms. Please check your selection</b>
-                </c:otherwise>
-            </c:choose>          
+</div>
 
+        <div class="row">
+
+          <section class="large-2 columns" id="comparison-header">
+              &nbsp;
+          </section>
+
+
+              <section class="large-5 columns comparison header">
+
+                  <a href="search/${comparison.compared[0].uniprotaccessions[0]}/enzyme">
+                  ${comparison.compared[0].name}<br/>
+                  (${comparison.compared[0].species.scientificname})
+                  </a>
+              </section>
+              <section class="large-5 columns comparison header">
+
+                  <a href="search/${comparison.compared[1].uniprotaccessions[0]}/enzyme">
+                  ${comparison.compared[1].name}<br/>
+                  (${comparison.compared[1].species.scientificname})
+                  </a>
+              </section>
+              <br clear="all"/>
+
+
+
+        </div>
+    <div class="row">
             <c:forEach var="topComparison" items="${comparison.subComparisons}">
-                <section class="grid_4 alpha" id="${sc.key}">&nbsp;</section>
-                <section class="grid_20 omega">
+
+
+                <section class="large-2 columns" id="${sc.key}">&nbsp;</section>
+                <section class="large-10 columns">
                     <fieldset class="comparison" id="${topComparison.key}">
 
                         <legend class="comparison header">${topComparison.key}</legend>
@@ -90,19 +96,20 @@
                             <c:otherwise>
                                 <c:forEach var="theComparison"
                                     items="${topComparison.value.subComparisons}">
-                                  <%@include file="comparison-list.jsp" %> 
+                                  <%@include file="comparison-list.jsp" %>
                                 </c:forEach>
                             </c:otherwise>
                         </c:choose>
-      
+
                     </fieldset>
                 </section>
             </c:forEach>
-           
+          </div>
+
         </div>
-       
+
         <%@include file="footer.jspf" %>
-        
+
     </div>
 </body>
 </html>
