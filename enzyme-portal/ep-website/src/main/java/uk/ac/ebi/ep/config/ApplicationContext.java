@@ -42,16 +42,22 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
  * @author joseph
  */
 @Configuration
-@ComponentScan(basePackages = {"uk.ac.ebi.ep.config","uk.ac.ebi.ep.controller","uk.ac.ebi.ep.base", "uk.ac.ebi.ep.ebeye.config","uk.ac.ebi.ep.data.service","uk.ac.ebi.ep.literatureservice.config"})
+@ComponentScan(basePackages = {"uk.ac.ebi.ep.config", "uk.ac.ebi.ep.controller", "uk.ac.ebi.ep.base", "uk.ac.ebi.ep.ebeye.config", "uk.ac.ebi.ep.data.service", "uk.ac.ebi.ep.literatureservice.config"})
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@Import({EbeyeConfig.class,EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class, PowerGateConfig.class, OliverYardConfig.class,HXFBConfig.class,HHConfig.class, DataConfig.class})
+@Import({EbeyeConfig.class, EnzymePortalConfig.class, DevDataConfig.class, ProdDataConfig.class, PowerGateConfig.class, OliverYardConfig.class, HXFBConfig.class, HHConfig.class, DataConfig.class})
 @ImportResource("classpath:trace-context.xml")
 @PropertySource("classpath:ep.properties")
 public class ApplicationContext extends WebMvcConfigurerAdapter {
 
-    /**Maps resources path to webapp/resources
-     * 
+//    @Override
+//    public void configurePathMatch(PathMatchConfigurer configurer) {
+//        configurer.setUseSuffixPatternMatch(false);
+//    }
+
+    /**
+     * Maps resources path to webapp/resources
+     *
      * @param registry ResourceHandlerRegistry
      */
     @Override
@@ -72,7 +78,6 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
         argumentResolvers.add(resolver);
 
     }
-
 
     // Provides internationalization of messages
     @Bean
@@ -101,7 +106,6 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
         return resolver;
 
     }
-
 
     @Bean
     public FormattingConversionService formattingConversionService() {

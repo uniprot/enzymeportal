@@ -64,7 +64,10 @@
             <section>
                 <h3>Catalytic Activity</h3>
                 <p>${enzymePage.catalyticActivities}</p>
-
+NOTE --
+1. title should be Cofactor , and not Co Factor
+2.only show cofactor if available : hint use c:if check here.
+3. cofactor is a list, pls use c:forEach to loop item
                 <h3>Co Factors</h3>
                 <p>${enzymePage.cofactor}</p>
 

@@ -25,15 +25,43 @@ import uk.ac.ebi.ep.web.utils.EnzymePage;
  */
 @Controller
 public class EnzymePageController extends AbstractController {
-    
+
     private static final Logger logger = Logger.getLogger(EnzymePageController.class);
-    
-    @RequestMapping(value = "/page/{ec}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/search/ec/{ec:.+}", method = RequestMethod.GET)
     public String showEnzyme(@PathVariable("ec") String ec, Model model, RedirectAttributes attributes) {
-        
+
         int accessionLimit = 7;
         long startTime = System.nanoTime();
-        
+        boolean isEc = searchUtil.validateEc(ec);
+        if (isEc) {
+
+            EnzymePage enzymePage = computeEnzymePage(ec, accessionLimit);
+        //IntenzEnzymes intenz = findEnzymeByEcNumber(ec);
+
+            //EnzymePage enzymePage = addEnzyme(intenz);
+            long endTime = System.nanoTime();
+            long duration = endTime - startTime;
+            long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
+            logger.warn("Time taken to find Enzyme " + ec + " :  (" + elapsedtime + " sec)");
+
+            model.addAttribute("enzymePage", enzymePage);
+
+            model.addAttribute("ec", ec);
+            return "enzymePage";
+        }
+
+        return "error";
+    }
+
+    @Deprecated
+    @RequestMapping(value = "/page/{ec:.+}", method = RequestMethod.GET)
+    public String showEnzymeDeprecated(@PathVariable("ec") String ec, Model model, RedirectAttributes attributes) {
+
+        int accessionLimit = 7;
+        long startTime = System.nanoTime();
+        boolean isEc = searchUtil.validateEc(ec);
+
         EnzymePage enzymePage = computeEnzymePage(ec, accessionLimit);
         //IntenzEnzymes intenz = findEnzymeByEcNumber(ec);
 
@@ -42,39 +70,39 @@ public class EnzymePageController extends AbstractController {
         long duration = endTime - startTime;
         long elapsedtime = TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS);
         logger.warn("Time taken to find Enzyme " + ec + " :  (" + elapsedtime + " sec)");
-        
+
         model.addAttribute("enzymePage", enzymePage);
-        
+
         model.addAttribute("ec", ec);
-        
+
         return "enzymePage";
     }
-    
+
     @Autowired
     public EnzymePageController(EnzymePortalService enzymePortalService, LiteratureService litService) {
         this.enzymePortalService = enzymePortalService;
         this.literatureService = litService;
     }
-    
+
     private List<Result> findCitations(String term, int limit) {
-        
+
         EuropePMC epmc = literatureService.getCitationsBySearchTerm(term, limit);
-        
+
         return epmc.getResultList().getResult();
     }
-    
+
     private IntenzEnzymes findEnzymeByEcNumber(String ecNumber) {
-        
+
         return enzymePortalService.findIntenzEnzymesByEc(ecNumber);
-        
+
     }
-    
+
     private List<String> findAccessionsByEcNumber(String ecNumber, int limit) {
         return enzymePortalService.findAccessionsByEc(ecNumber, limit);
     }
-    
+
     private EnzymePage addAccessions(List<String> accs, IntenzEnzymes e) {
-        
+
         return EnzymePage
                 .enzymePageBuilder()
                 .enzymeName(e.getEnzymeName())
@@ -82,11 +110,11 @@ public class EnzymePageController extends AbstractController {
                 .catalyticActivities(e.getCatalyticActivity())
                 .accessions(accs)
                 .build();
-        
+
     }
-    
+
     private EnzymePage addAccessions(List<String> accs, EnzymePage e) {
-        
+
         return EnzymePage
                 .enzymePageBuilder()
                 .enzymeName(e.getEnzymeName())
@@ -94,9 +122,9 @@ public class EnzymePageController extends AbstractController {
                 .catalyticActivities(e.getCatalyticActivities())
                 .accessions(accs)
                 .build();
-        
+
     }
-    
+
     private EnzymePage addCitations(List<Result> cit, EnzymePage e) {
         return EnzymePage
                 .enzymePageBuilder()
@@ -106,9 +134,9 @@ public class EnzymePageController extends AbstractController {
                 .accessions(e.getAccessions())
                 .citations(cit)
                 .build();
-        
+
     }
-    
+
     private EnzymePage addEnzyme(IntenzEnzymes e) {
         final List<String> cofactors = new ArrayList<>();
         final List<String> altNames = new ArrayList<>();
@@ -127,10 +155,10 @@ public class EnzymePageController extends AbstractController {
                     .cofactor(cofactors)
                     .altName(altNames)
                     .build();
-            
+
         }
         return EnzymePage.enzymePageBuilder().build();
-        
+
     }
 
 //
@@ -155,11 +183,11 @@ public class EnzymePageController extends AbstractController {
 //        return display.toBlocking().single();
 //    }
     private EnzymePage computeEnzymePage(String ecNumber, int limit) {
-        
+
         CompletableFuture<IntenzEnzymes> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
-        
+
         CompletableFuture<List<String>> accessions = CompletableFuture.supplyAsync(() -> findAccessionsByEcNumber(ecNumber, limit));
-        
+
         CompletableFuture<List<Result>> citations = CompletableFuture.supplyAsync(() -> findCitations(ecNumber, limit));
 
 //
@@ -172,7 +200,7 @@ public class EnzymePageController extends AbstractController {
 //        // }
 //        
         return addEnzyme(enzyme.join());
-        
+
     }
 
 //    public static void main(String[] args) {
