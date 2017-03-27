@@ -28,7 +28,7 @@ public class EnzymePageController extends AbstractController {
 
     private static final Logger logger = Logger.getLogger(EnzymePageController.class);
 
-    @RequestMapping(value = "/search/ec/{ec:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/ec/{ec}", method = RequestMethod.GET)
     public String showEnzyme(@PathVariable("ec") String ec, Model model, RedirectAttributes attributes) {
 
         int accessionLimit = 7;

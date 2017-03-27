@@ -194,7 +194,7 @@
                                        </c:choose>
                                        <td>${enzyme.numEnzymeHits}</td>
                                        <td>${enzyme.enzymeFamily}</td>
-                                       <td>${enzyme.ec}</td>
+                                       <td><a href="page/${enzyme.ec}">${enzyme.ec}</a></td>
                                        <td>${enzyme.catalyticActivities}</td>
                                        <td>
                                            <c:set var="enzymeSpeciesSize" value="${fn:length(enzyme.species)}"/>

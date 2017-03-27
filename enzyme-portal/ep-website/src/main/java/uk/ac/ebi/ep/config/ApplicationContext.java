@@ -23,6 +23,7 @@ import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -50,10 +51,10 @@ import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 @PropertySource("classpath:ep.properties")
 public class ApplicationContext extends WebMvcConfigurerAdapter {
 
-//    @Override
-//    public void configurePathMatch(PathMatchConfigurer configurer) {
-//        configurer.setUseSuffixPatternMatch(false);
-//    }
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseSuffixPatternMatch(false);
+    }
 
     /**
      * Maps resources path to webapp/resources
