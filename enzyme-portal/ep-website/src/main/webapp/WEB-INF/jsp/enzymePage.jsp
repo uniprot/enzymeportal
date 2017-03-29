@@ -43,52 +43,81 @@
     <div id="wrapper" class="container_24">
         <%@include file="header.jspf" %>
 
-        <div id="content" role="main" class="grid_24 clearfix" >
+        <div id="content" role="main" class="clearfix" >
 
-            <section class="grid_3">
-                <img src="/enzymeportal/resources/images/enzyme_page_logo.jpg">
-            </section>
-
-            <section class="grid_15 alpha">
-                <h1>Enzyme</h1>
-                <h2>${enzymePage.ec} - ${enzymePage.enzymeName}</h2>
-            </section>
-
-            <section class="grid_6 alpha">
-                <div id="alternative-names">
-                    <strong>Alternative Name(s):</strong>
-                    <p>${enzymePage.altName}</p>
+            <div class="row" id="title-row">
+                <div class="large-2 columns">
+                    <img src="/enzymeportal/resources/images/enzyme_page_logo.jpg">
                 </div>
-            </section>
 
-            <section>
+                <section class="large-7 columns">
+                    <h1>Enzyme</h1>
+                    <h2>${enzymePage.ec} - ${enzymePage.enzymeName}</h2>
+                </section>
+
+                <section class="large-3 columns">
+                    <div id="alternative-names">
+                        <strong>Alternative Name(s):</strong>
+                        <p>${enzymePage.altName}</p>
+                    </div>
+                </section>
+
+            </div>
+            <section class="row">
                 <h3>Catalytic Activity</h3>
                 <p>${enzymePage.catalyticActivities}</p>
-NOTE --
-1. title should be Cofactor , and not Co Factor
-2.only show cofactor if available : hint use c:if check here.
-3. cofactor is a list, pls use c:forEach to loop item
-                <h3>Co Factors</h3>
-                <p>${enzymePage.cofactor}</p>
 
 
-                <c:if test="${not empty enzymePage.accessions }">
-                    <h3>Associated Proteins</h3>
-                    <c:forEach items="${enzymePage.accessions}" var="acc">
-                        <ul>
-                            <li> <a href="${pageContext.request.contextPath}/search/${acc}/enzyme">${acc}</a></li>
-                        </ul>
-                    </c:forEach>
-                 </c:if>
+                <h3>Cofactors</h3>
+                     <c:choose>
+                       <c:when test="${not empty enzymePage.cofactor }">
+                           <c:forEach items="${enzymePage.cofactor}" var="acc">
+                            <p>${enzymePage.cofactor}</p>
+                        </c:forEach>
+                       </c:when>
+                       <c:otherwise>
+                           There are no Cofactors for this Enzyme
+                       </c:otherwise>
+                     </c:choose>
 
-                 <c:if test="${not empty enzymePage.accessions }">
-                    <h3>Citations</h3>
-                    <c:forEach items="${enzymePage.citations}" var="citation">
-                        <ul>
-                            <li> <c:out value="${citation.title}"/></li>
-                        </ul>
-                    </c:forEach>
-               </c:if>
+
+                <h3>Associated Proteins</h3>
+                     <c:choose>
+                       <c:when test="${not empty enzymePage.accessions }">
+                           <c:forEach items="${enzymePage.accessions}" var="acc">
+                               <ul>
+                                   <li> <a href="${pageContext.request.contextPath}/search/${acc}/enzyme">${acc}</a></li>
+                               </ul>
+                           </c:forEach>
+                       </c:when>
+                       <c:otherwise>
+                           There are no Associated Proteins for this Enzyme
+                       </c:otherwise>
+                     </c:choose>
+
+
+
+
+                <h3>Citations</h3>
+                <c:choose>
+                  <c:when test="${not empty enzymePage.accessions }">
+                      <c:forEach items="${enzymePage.citations}" var="citation">
+                          <ul>
+                              <li> <c:out value="${citation.title}"/></li>
+                          </ul>
+                      </c:forEach>
+                  </c:when>
+                  <c:otherwise>
+                      There are no citations for this Enzyme
+                  </c:otherwise>
+                </c:choose>
+
+
+
+
+
+
+
             </section>
 
         </div>

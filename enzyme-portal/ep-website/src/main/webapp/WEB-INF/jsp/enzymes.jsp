@@ -64,19 +64,21 @@
 
 <!-- END of Feedback widget code  -->
 
-        <section class="grid_3">
-            <img src="/enzymeportal/resources/images/protein_page_logo.jpg">
-        </section>
+        <div class="row" id="title-row">
+            <section class="large-2 columns">
+                <img src="/enzymeportal/resources/images/protein_page_logo.jpg">
+            </section>
 
-        <section class="grid_15 alpha">
-            <h2>Enzyme Results</h2>
-            <h3>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h3>
-        </section>
+            <section class="large-10 columns">
+                <h2>Protein</h2>
+                <h4>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h4>
+            </section>
+        </div>
 
             <section class="pagination-container">
-                <input id="paginationPage" name="servicePage" type="hidden" value="">
-                 <input name="keywordType" type="hidden" value="${keywordType}">
-                  <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
+                <input type="hidden" id="paginationPage" name="servicePage" value="">
+                <input type="hidden" name="keywordType" value="${keywordType}">
+                <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
                 <c:if test="${page.totalElements gt page.size}">
                     <nav class="paginationContainer">
                           <ul class="pagination">

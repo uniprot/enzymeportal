@@ -648,3 +648,16 @@ div#organismList{
     margin-top: 20px;
 
 }
+
+#alternative-names{
+    font-size: 70%;
+    max-height: 120px;
+    overflow: auto;
+}
+#title-row h1{
+    line-height: normal;
+}
+#title-row h2{
+    font-size: 34px;
+    line-height: normal;
+}
