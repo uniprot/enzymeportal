@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
@@ -7,6 +6,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,17 +20,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "CHEBI_COMPOUND")
 @XmlRootElement
-//@NamedQueries({
-//    @NamedQuery(name = "ChebiCompound.findAll", query = "SELECT c FROM ChebiCompound c"),
-//    @NamedQuery(name = "ChebiCompound.findByInternalId", query = "SELECT c FROM ChebiCompound c WHERE c.internalId = :internalId"),
-//    //@NamedQuery(name = "ChebiCompound.findByStatus", query = "SELECT c FROM ChebiCompound c WHERE c.status = :status"),
-//    //@NamedQuery(name = "ChebiCompound.findByChebiAccession", query = "SELECT c FROM ChebiCompound c WHERE c.chebiAccession = :chebiAccession"),
-//    //@NamedQuery(name = "ChebiCompound.findBySource", query = "SELECT c FROM ChebiCompound c WHERE c.source = :source"),
-//    //@NamedQuery(name = "ChebiCompound.findByCompoundName", query = "SELECT c FROM ChebiCompound c WHERE c.compoundName = :compoundName"),
-//    @NamedQuery(name = "ChebiCompound.findByModifiedOn", query = "SELECT c FROM ChebiCompound c WHERE c.modifiedOn = :modifiedOn"),
-//    @NamedQuery(name = "ChebiCompound.findByCreatedBy", query = "SELECT c FROM ChebiCompound c WHERE c.createdBy = :createdBy")
-//    //@NamedQuery(name = "ChebiCompound.findByStar", query = "SELECT c FROM ChebiCompound c WHERE c.star = :star")
-//})
+@NamedQueries({
+    @NamedQuery(name = "ChebiCompound.findAll", query = "SELECT c FROM ChebiCompound c"),
+    @NamedQuery(name = "ChebiCompound.findByInternalId", query = "SELECT c FROM ChebiCompound c WHERE c.internalId = :internalId"),
+    @NamedQuery(name = "ChebiCompound.findByChebiAccession", query = "SELECT c FROM ChebiCompound c WHERE c.chebiAccession = :chebiAccession"),
+    @NamedQuery(name = "ChebiCompound.findByCompoundName", query = "SELECT c FROM ChebiCompound c WHERE c.compoundName = :compoundName"),
+    @NamedQuery(name = "ChebiCompound.findBySource", query = "SELECT c FROM ChebiCompound c WHERE c.source = :source")})
 public class ChebiCompound implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,25 +33,15 @@ public class ChebiCompound implements Serializable {
     @NotNull
     @Column(name = "INTERNAL_ID")
     private BigDecimal internalId;
-    //@Column(name = "STATUS")
-    //private Character status;
     @Size(max = 30)
     @Column(name = "CHEBI_ACCESSION")
     private String chebiAccession;
-    //@Size(max = 30)
-   // @Column(name = "SOURCE")
-   // private String source;
     @Size(max = 4000)
     @Column(name = "COMPOUND_NAME")
     private String compoundName;
-//    @Size(max = 10)
-//    @Column(name = "MODIFIED_ON")
-//    private String modifiedOn;
-//    @Size(max = 15)
-//    @Column(name = "CREATED_BY")
-//    private String createdBy;
-   // @Column(name = "STAR")
-    //private BigInteger star;
+    @Size(max = 15)
+    @Column(name = "SOURCE")
+    private String source;
 
     public ChebiCompound() {
     }
@@ -72,14 +58,6 @@ public class ChebiCompound implements Serializable {
         this.internalId = internalId;
     }
 
-//    public Character getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(Character status) {
-//        this.status = status;
-//    }
-
     public String getChebiAccession() {
         return chebiAccession;
     }
@@ -87,14 +65,6 @@ public class ChebiCompound implements Serializable {
     public void setChebiAccession(String chebiAccession) {
         this.chebiAccession = chebiAccession;
     }
-
-//    public String getSource() {
-//        return source;
-//    }
-//
-//    public void setSource(String source) {
-//        this.source = source;
-//    }
 
     public String getCompoundName() {
         return compoundName;
@@ -104,29 +74,13 @@ public class ChebiCompound implements Serializable {
         this.compoundName = compoundName;
     }
 
-//    public String getModifiedOn() {
-//        return modifiedOn;
-//    }
-//
-//    public void setModifiedOn(String modifiedOn) {
-//        this.modifiedOn = modifiedOn;
-//    }
-//
-//    public String getCreatedBy() {
-//        return createdBy;
-//    }
-//
-//    public void setCreatedBy(String createdBy) {
-//        this.createdBy = createdBy;
-//    }
+    public String getSource() {
+        return source;
+    }
 
-//    public BigInteger getStar() {
-//        return star;
-//    }
-//
-//    public void setStar(BigInteger star) {
-//        this.star = star;
-//    }
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     @Override
     public int hashCode() {
