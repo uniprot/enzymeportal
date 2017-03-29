@@ -39,6 +39,9 @@ public class CofactorsFtpFiles implements ICompoundParser {
 
     private final EnzymePortalSummaryRepository enzymeSummaryRepository;
 
+    private static final String UNIPROT = "UniProt";
+    private static final String IUPAC = "IUPAC";
+
     public CofactorsFtpFiles(EnzymePortalParserService enzymePortalParserService, EnzymePortalSummaryRepository enzymeSummaryRepository) {
         this.enzymePortalParserService = enzymePortalParserService;
         this.enzymeSummaryRepository = enzymeSummaryRepository;
@@ -96,7 +99,6 @@ public class CofactorsFtpFiles implements ICompoundParser {
     }
 
     private void parseCofactorText(List<Summary> enzymeSummary) {
-//parallel processing
         enzymeSummary.stream().forEach(summary -> processCofactors(summary));
         //save compounds
         logger.warn("Writing to Enzyme Portal database... Number of cofactors to write : " + compounds.size());
@@ -105,7 +107,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 .stream()
                 .filter(compound -> compound != null)
                 .forEach(compound -> {
-                    enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
+             enzymePortalParserService.createCompound(compound.getCompoundId(), compound.getCompoundName(), compound.getCompoundSource(), compound.getRelationship(), compound.getUniprotAccession(), compound.getUrl(), compound.getCompoundRole(), compound.getNote());
                 });
         logger.warn("-------- Done populating the database with cofactors ---------------");
         compounds.clear();
@@ -187,8 +189,10 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 continue; // acronym, usually
             }
 
-            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundById(name);
-
+            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundById(name, UNIPROT);
+            if (chebiCompound == null) {
+                chebiCompound = enzymePortalParserService.findChebiCompoundById(name, IUPAC);
+            }else{
             String chebiId = chebiCompound.getChebiAccession();
             String chebiName = chebiCompound.getCompoundName();
 
@@ -202,6 +206,7 @@ public class CofactorsFtpFiles implements ICompoundParser {
 
             } else {
                 logger.info("Not found in ChEBI Compound Table: " + name);
+            }
             }
 
         }
@@ -231,7 +236,11 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 continue; // acronym, usually
             }
 
-            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundByName(name);
+            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundByName(name, UNIPROT);
+            if (chebiCompound == null) {
+                chebiCompound = enzymePortalParserService.findChebiCompoundByName(name, IUPAC);
+
+            }
 
             if (chebiCompound != null) {
 
