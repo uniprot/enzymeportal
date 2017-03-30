@@ -113,7 +113,7 @@ public class ProteinCentric extends XmlGenerator {
         Set<Ref> refs = Collections.synchronizedSet(new HashSet<>());
 
         final PrettyPrintStaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
-        Long numberOfEntries = proteinGroupsCount();
+        Long numberOfEntries = proteinGroupsCount()/2;//TODO remove later
         final int batchSize = numberOfEntries.intValue();
         try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize, numberOfEntries)) {
 

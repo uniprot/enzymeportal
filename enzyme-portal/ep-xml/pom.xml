@@ -35,7 +35,7 @@
                 </configuration>
             </plugin>
         </plugins>
-<!--        <resources>
+        <!--        <resources>
             <resource>
                 <directory>${ep.config.dir}</directory>
                 <includes>
@@ -147,6 +147,6 @@
             <artifactId>stax-utils</artifactId>
             <version>20070216</version>
         </dependency>
-
+        
     </dependencies>
 </project>
