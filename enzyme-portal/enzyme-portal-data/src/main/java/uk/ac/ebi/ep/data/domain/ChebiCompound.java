@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -84,24 +85,26 @@ public class ChebiCompound implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (internalId != null ? internalId.hashCode() : 0);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.chebiAccession);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ChebiCompound)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        ChebiCompound other = (ChebiCompound) object;
-        return !((this.internalId == null && other.internalId != null) || (this.internalId != null && !this.internalId.equals(other.internalId)));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ChebiCompound other = (ChebiCompound) obj;
+        return Objects.equals(this.chebiAccession, other.chebiAccession);
     }
-
+    
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.ChebiCompound[ internalId=" + internalId + " ]";
+        return "uk.ac.ebi.ep.data.domain.ChebiCompound[ compoundName =" + compoundName + " ]";
     }
     
 }

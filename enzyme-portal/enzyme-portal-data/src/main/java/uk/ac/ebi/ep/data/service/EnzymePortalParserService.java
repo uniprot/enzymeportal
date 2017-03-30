@@ -121,13 +121,13 @@ public class EnzymePortalParserService {
     }
 
     @Transactional(readOnly = true)
-    public ChebiCompound findChebiCompoundById(String chebiId, String source) {
+    public List<ChebiCompound> findChebiCompoundById(String chebiId, String source) {
 
         return chebiCompoundRepository.findByChebiAccession(chebiId, source);
     }
 
     @Transactional(readOnly = true)
-    public ChebiCompound findChebiCompoundByName(String compoundName, String source) {
+    public List<ChebiCompound> findChebiCompoundByName(String compoundName, String source) {
 
         return chebiCompoundRepository.findByCompoundName(compoundName, source);
     }
