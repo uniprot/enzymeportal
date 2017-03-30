@@ -189,24 +189,30 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 continue; // acronym, usually
             }
 
-            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundById(name, UNIPROT);
+            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundById(name, UNIPROT)
+                    .stream()
+                    .filter(c -> c.getSource().equalsIgnoreCase(UNIPROT))
+                    .distinct().findFirst().orElse(null);
             if (chebiCompound == null) {
-                chebiCompound = enzymePortalParserService.findChebiCompoundById(name, IUPAC);
-            }else{
-            String chebiId = chebiCompound.getChebiAccession();
-            String chebiName = chebiCompound.getCompoundName();
-
-            if (chebiId != null && !blackList.contains(chebiName) && !StringUtils.isEmpty(chebiName)) {
-
-                entry = new LiteCompound();
-                entry.setCompoundSource(MmDatabase.ChEBI.name());
-                entry.setCompoundId(chebiId);
-                entry.setCompoundName(chebiName);
-                entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-
-            } else {
-                logger.info("Not found in ChEBI Compound Table: " + name);
+                chebiCompound = enzymePortalParserService.findChebiCompoundById(name, IUPAC)
+                        .stream()
+                        .filter(c -> c.getSource().equalsIgnoreCase(IUPAC))
+                        .distinct().findFirst().orElse(null);
             }
+
+            if (chebiCompound != null) {
+                String chebiId = chebiCompound.getChebiAccession();
+                String chebiName = chebiCompound.getCompoundName();
+
+                if (chebiId != null && !blackList.contains(chebiName) && !StringUtils.isEmpty(chebiName)) {
+
+                    entry = new LiteCompound();
+                    entry.setCompoundSource(MmDatabase.ChEBI.name());
+                    entry.setCompoundId(chebiId);
+                    entry.setCompoundName(chebiName);
+                    entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
+
+                }
             }
 
         }
@@ -236,9 +242,15 @@ public class CofactorsFtpFiles implements ICompoundParser {
                 continue; // acronym, usually
             }
 
-            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundByName(name, UNIPROT);
+            ChebiCompound chebiCompound = enzymePortalParserService.findChebiCompoundByName(name, UNIPROT)
+                    .stream()
+                    .filter(c -> c.getSource().equalsIgnoreCase(UNIPROT))
+                    .distinct().findFirst().orElse(null);
             if (chebiCompound == null) {
-                chebiCompound = enzymePortalParserService.findChebiCompoundByName(name, IUPAC);
+                chebiCompound = enzymePortalParserService.findChebiCompoundByName(name, IUPAC)
+                        .stream()
+                        .filter(c -> c.getSource().equalsIgnoreCase(IUPAC))
+                        .distinct().findFirst().orElse(null);
 
             }
 
@@ -254,9 +266,8 @@ public class CofactorsFtpFiles implements ICompoundParser {
                     entry.setCompoundId(chebiId);
                     entry.setCompoundName(name);
                     entry.setUrl("https://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=" + chebiId);
-                } else {
-                    logger.info("Not found in ChEBI: " + name);
                 }
+
             }
 
         }
