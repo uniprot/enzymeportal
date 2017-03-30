@@ -37,7 +37,11 @@ public class DevDataConfig extends AbstractConfig {
         config.setPassword(password);
         config.setDriverClassName("oracle.jdbc.OracleDriver");
 
-         return new HikariDataSource(config);
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+        return new HikariDataSource(config);
     }
 
     @Override

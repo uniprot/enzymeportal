@@ -126,17 +126,17 @@ public class EnzymePortalXmlService {
         return intenzEnzymesRepository.streamingService(IntenzEnzymes.class, sessionFactory, query, batchSize);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Stream<UniprotEntry> streamUniprotEntriesInBatch(SessionFactory sessionFactory, String query, int batchSize) {
         return uniprotEntryRepository.streamingService(UniprotEntry.class, sessionFactory, query, batchSize);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Stream<ProteinGroups> streamProteinGroupsInBatch(SessionFactory sessionFactory, String query, int batchSize) {
         return proteinGroupsRepository.streamingService(ProteinGroups.class, sessionFactory, query, batchSize);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Stream<ProteinGroups> streamProteinGroupsInBatch(SessionFactory sessionFactory, String query, int batchSize, long limit) {
         return proteinGroupsRepository.streamingService(ProteinGroups.class, sessionFactory, query, batchSize, limit);
     }
