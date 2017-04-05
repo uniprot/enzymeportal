@@ -13,13 +13,13 @@
 <%@attribute name="type" required="true" %>
 <%@attribute name="maxDisplay" required="true" %>
 
-<div class="grid_24">
+<div class="large-12">
     <div class="clear"></div>
     <c:set var="count" value="0"/>
-    <div class="grid_24">
+    <div>
         <c:set var="alphabet" value="A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z"/>
         <c:forTokens var="letter" items="${alphabet}" delims="," varStatus="status">
-            <div class="grid_6 disease-overview-box">
+            <div class="large-3 disease-overview-box">
                 <c:set var="startsWith" value="${letter}"/>
                 <h3>${startsWith}</h3>
                 <ul>

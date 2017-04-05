@@ -639,12 +639,7 @@ div#organismList{
     cursor: pointer;
 }
 
-.two-columns{
-    width:45%;
-    padding: 0 10px 0 10px;
-}
-
-.video-panel{
+.video-panel div{
     margin-top: 20px;
 
 }
