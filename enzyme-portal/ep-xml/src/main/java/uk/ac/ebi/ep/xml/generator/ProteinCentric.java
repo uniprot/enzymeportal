@@ -120,6 +120,13 @@ public class ProteinCentric extends XmlGenerator {
             entryStream.forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
 
         }
+        
+        
+//        try (Stream<String> entryStream = enzymePortalXmlService.streamProteinGroupsIDInBatch(sessionFactory, QUERY, batchSize)) {
+//
+//            entryStream.forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
+//
+//        }
 
         xmlWriter.close();
 
@@ -129,7 +136,42 @@ public class ProteinCentric extends XmlGenerator {
     }
 
     AtomicInteger entryCounter = new AtomicInteger(0);//DELETE AFTER TEST
-
+//    private void writeEntry(PrettyPrintStaxEventItemWriter<Entry> xmlWriter, String proteinGroupId, Set<Field> fields, Set<Ref> refs) {
+//        final Entry entry = processProteinEntries(proteinGroupId, fields, refs);
+//
+//        try {
+//            xmlWriter.write(Arrays.asList(entry));
+//            entryCounter.getAndIncrement();
+//        } catch (Exception ex) {
+//            logger.error(ex.getMessage(), ex);
+//        }
+//    }
+//    
+//       private Entry processProteinEntries(String pgId, Set<Field> fields, Set<Ref> refs) {
+//        Entry entry = new Entry();
+//        List<UniprotEntry> entries = enzymePortalXmlService.findEnzymesByProteinGroupId(pgId);
+//        
+//        entries.parallelStream().parallel().forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
+//        entry.setId(pg.getProteinGroupId());
+//        entry.setName(pg.getProteinName());
+//        entry.setDescription(pg.getProteinName());
+//        pg.getUniprotEntryList()
+//                .parallelStream()
+//                .parallel()
+//                .forEach(uniprotEntry -> addFieldsAndXRefs(uniprotEntry, fields, refs));
+//
+//        AdditionalFields additionalFields = new AdditionalFields();
+//        additionalFields.setField(fields);
+//        entry.setAdditionalFields(additionalFields);
+//
+//        CrossReferences cr = new CrossReferences();
+//        cr.setRef(refs);
+//        entry.setCrossReferences(cr);
+//
+//        return entry;
+//    } 
+    
+    
     private void writeEntry(PrettyPrintStaxEventItemWriter<Entry> xmlWriter, ProteinGroups protein, Set<Field> fields, Set<Ref> refs) {
         final Entry entry = processProteinEntries(protein, fields, refs);
 

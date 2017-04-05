@@ -27,7 +27,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 //@RepositoryRestResource(excerptProjection = ProjectedSpecies.class)
 @RepositoryRestResource(itemResourceRel = "uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
-public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, JpaSpecificationExecutor<UniprotEntry>, UniprotEntryRepositoryCustom,DataStreamingService {
+public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, JpaSpecificationExecutor<UniprotEntry>, UniprotEntryRepositoryCustom, DataStreamingService {
 
     default UniprotEntry findByUniprotAccession(String acc) {
         return findByAccession(acc);
@@ -133,5 +133,9 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 
     @Query(value = "SELECT e.accession FROM UniprotEntry e")
     Stream<String> streamProteinIds();
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE PROTEIN_GROUP_ID = :PROTEIN_GROUP_ID ", nativeQuery = true)
+    List<UniprotEntry> findEnzymesByProteinGroupId(@Param("PROTEIN_GROUP_ID") String proteinGroupId);
 
 }
