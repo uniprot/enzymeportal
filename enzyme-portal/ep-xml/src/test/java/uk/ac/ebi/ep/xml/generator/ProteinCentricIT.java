@@ -48,7 +48,8 @@ public class ProteinCentricIT extends BaseTest {
 
         String filename = "protein.xml";
         File output = temporaryFolder.newFile(filename);
-        generateXml(output.getAbsolutePath());
+        //generateXml(output.getAbsolutePath());
+         generateXml(output.getPath());
         assertThat(output).exists().isFile();
         String[] xsd = {"http://www.ebi.ac.uk/ebisearch/XML4dbDumps.xsd"};
         Boolean validate = proteinCentricInstance.validateXML(output.getAbsolutePath(), xsd);
@@ -71,6 +72,7 @@ public class ProteinCentricIT extends BaseTest {
         File output = temporaryFolder.newFile(filename);
 
         String xml = generateXml(output.getPath());
+        
         String fileDir = output.getParent();
         assertThat(output).exists().isFile();
         assertThat(output).hasExtension("xml")
