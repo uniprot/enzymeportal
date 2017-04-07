@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -42,7 +40,7 @@ public class ProteinGroups implements Serializable {
     @Column(name = "PROTEIN_GROUP_ID")
     private String proteinGroupId;
     @OneToMany(mappedBy = "proteinGroupId")
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN)
     private List<UniprotEntry> uniprotEntryList;
 
     public ProteinGroups() {
