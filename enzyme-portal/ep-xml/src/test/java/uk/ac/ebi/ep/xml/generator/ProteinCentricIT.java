@@ -11,6 +11,7 @@ import javax.xml.bind.Marshaller;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import static uk.ac.ebi.ep.xml.generator.BaseTest.logger;
 import uk.ac.ebi.ep.xml.model.Database;
@@ -20,6 +21,7 @@ import uk.ac.ebi.ep.xml.model.Entry;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Ignore
 public class ProteinCentricIT extends BaseTest {
 
     private XmlGenerator proteinCentricInstance;
