@@ -138,7 +138,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Date lastUpdateTimestamp;
 
     @JoinColumn(name = "RELATED_PROTEINS_ID", referencedColumnName = "REL_PROT_INTERNAL_ID")
-    //@ManyToOne(fetch = FetchType.LAZY)
+    //@ManyToOne(fetch = FetchType.EAGER)
     @ManyToOne
     //@BatchSize(size = 10)
     //@Fetch(FetchMode.JOIN)

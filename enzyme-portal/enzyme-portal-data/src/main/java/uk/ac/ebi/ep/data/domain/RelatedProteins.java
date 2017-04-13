@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -45,8 +45,8 @@ public class RelatedProteins implements Serializable {
     private BigDecimal relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-    //@OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
+    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
     //@Fetch(FetchMode.JOIN)
     //private Set<UniprotEntry> uniprotEntrySet;
     private List<UniprotEntry> uniprotEntrySet;
