@@ -47,9 +47,7 @@ import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 @Import({MockXmlConfig.class})
 public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
 
-//    public static final String PROTEIN_CENTRIC_JOB = "PROTEIN_CENTRIC_JOB";
-//    public static final String PROTEIN_CENTRIC_DB_TO_XML_STEP = "readFromDbWriteToXMLStep";
-//    
+  
     private static final String READ_DATA_JOB = "READ_DATA_FROM_DB_JOB";
     private static final String READ_PROCESS_WRITE_XML_STEP = "readProcessAndWriteXMLstep";
 
@@ -112,16 +110,6 @@ public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
 
     }
 
-//    @Bean
-//    public ItemWriter<Entry> entryToXmlWriter() {
-//        PrettyPrintStaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();
-//        xmlWriter.setResource(proteinCentricXmlDir());
-//        xmlWriter.setRootTagName("database");
-//        xmlWriter.setMarshaller(entryMarshaller());
-//        xmlWriter.setHeaderCallback(xmlHeaderCallback());
-//        xmlWriter.setFooterCallback(new ProteinXmlFooterCallback());
-//        return xmlWriter;
-//    }
     @Bean
     public ItemWriter<Entry> xmlWriter() {
         PrettyPrintStaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();

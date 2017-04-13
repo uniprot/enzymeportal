@@ -14,6 +14,8 @@ DB_CONFIG="$1"
 echo "[INFO] Request to start generating protein-centric XML - $(date)"
 echo "[INFO] The dbconfig passed as parameter = " $DB_CONFIG
 echo "[INFO] *******************************************************************"
+#fine-tune memory for this job.
+export MAVEN_OPTS="-Xmx64g -Xss512m"
 WD=$(pwd)
 cd $(dirname $0)/..
 mvn exec:java -Dexec.mainClass="uk.ac.ebi.ep.xml.main.ProteinGroupXmlGenerator" -Dexec.cleanupDaemonThreads=false -Dexec.args="$DB_CONFIG"

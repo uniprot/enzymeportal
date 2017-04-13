@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import static org.hamcrest.CoreMatchers.is;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.BatchStatus;
@@ -27,6 +28,7 @@ import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {MockProteinBatchConfig.class, MockXmlConfig.class, JobTestRunnerConfig.class,
     SpringDataMockConfig.class})

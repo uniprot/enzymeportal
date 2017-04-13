@@ -46,6 +46,7 @@ import uk.ac.ebi.ep.xml.util.XmlFileUtils;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
+@Deprecated
 @Configuration
 @EnableBatchProcessing
 @Import({XmlConfig.class})

@@ -2,24 +2,27 @@ package uk.ac.ebi.ep.xml.util;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.TimeUnit;
-
-import static java.util.concurrent.TimeUnit.*;
+import static java.util.concurrent.TimeUnit.HOURS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
  * Utility method used to define how dates within the model should be defined.
  *
- * @author Ricardo Antunes
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 public final class DateTimeUtil {
+
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("d-MMM-uuuu");
 
-    private DateTimeUtil() {}
+    private DateTimeUtil() {
+    }
 
     /**
-     * Converts a {@link LocalDate} into its String representation according to the format defined by
-     * {@link #DATE_TIME_FORMATTER}.
+     * Converts a {@link LocalDate} into its String representation according to
+     * the format defined by {@link #DATE_TIME_FORMATTER}.
      *
      * @param date the date to format
      * @return the string representation of the date
@@ -31,8 +34,23 @@ public final class DateTimeUtil {
     }
 
     /**
-     * Converts a String representation of a date into a {@link LocalDate}. The date string needs to follow the
-     * format defined by the {@link #DATE_TIME_FORMATTER}.
+     * Converts a {@link LocalDate} into its String representation according to
+     * the format defined by {@link #DATE_TIME_FORMATTER}.
+     *
+     * @param date the datetime to format
+     * @param pattern Patterns for Formatting and Parsing
+     * @return the string representation of the date
+     * @throws NullPointerException if date to convert is null
+     * @throws DateTimeException if an error occurs during printing
+     */
+    public static String convertDateToString(LocalDateTime date, String pattern) {
+        return date.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * Converts a String representation of a date into a {@link LocalDate}. The
+     * date string needs to follow the format defined by the
+     * {@link #DATE_TIME_FORMATTER}.
      *
      * @param dateText the string to convert into a date
      * @return a LocalDate
@@ -44,7 +62,8 @@ public final class DateTimeUtil {
     }
 
     /**
-     * Given a start and end timestamp print out the difference between the two, in a human readable format.
+     * Given a start and end timestamp print out the difference between the two,
+     * in a human readable format.
      *
      * The time stamp needs to be at the millisecond range.
      *
@@ -52,7 +71,8 @@ public final class DateTimeUtil {
      *
      * @param start the start timestamp
      * @param end the end timestamp
-     * @return a string representing the time difference between the start and end timestamps
+     * @return a string representing the time difference between the start and
+     * end timestamps
      */
     public static String convertToText(long start, long end) {
         long processingTimeNano = end - start;

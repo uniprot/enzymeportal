@@ -17,7 +17,6 @@ import uk.ac.ebi.ep.xml.generator.XmlGenerator;
  * @author joseph
  */
 @Configuration
-//@Import({EnzymePortalXmlService.class})
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public class XmlConfig {
 

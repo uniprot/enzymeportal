@@ -2,11 +2,9 @@ package uk.ac.ebi.ep.xml.generator.proteinGroup;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.batch.item.ItemProcessor;
 import uk.ac.ebi.ep.data.domain.ProteinGroups;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
-import uk.ac.ebi.ep.xml.generator.XmlTransformer;
 import uk.ac.ebi.ep.xml.model.AdditionalFields;
 import uk.ac.ebi.ep.xml.model.CrossReferences;
 import uk.ac.ebi.ep.xml.model.Entry;
@@ -17,7 +15,7 @@ import uk.ac.ebi.ep.xml.model.Ref;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-public class ProteinGroupsProcessor extends XmlTransformer implements ItemProcessor<ProteinGroups, Entry> {
+public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups,Entry>{ //extends XmlTransformer implements ItemProcessor<ProteinGroups, Entry> {
 
     public ProteinGroupsProcessor(XmlConfigParams xmlConfigParams) {
         super(xmlConfigParams);

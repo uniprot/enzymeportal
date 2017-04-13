@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.xml.generator;
 
 import java.io.BufferedReader;
@@ -36,7 +35,8 @@ import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 @ContextConfiguration(classes = {MockProteinGroupBatchConfig.class, MockXmlConfig.class, JobTestRunnerConfig.class,
     SpringDataMockConfig.class})
 public class ProteinGroupBatchIT {
-     @Autowired
+
+    @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
     @Autowired

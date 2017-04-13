@@ -4,8 +4,9 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 import javax.xml.bind.JAXBException;
 import org.hibernate.SessionFactory;
 import org.springframework.batch.item.ExecutionContext;
@@ -107,38 +108,33 @@ public class ProteinCentric extends XmlGenerator {
     @Override
     public void generateXmL(String xmlFileLocation) throws JAXBException {
 
-        //int batchSize = xmlConfigParams.getChunkSize();
+        int batchSize = xmlConfigParams.getChunkSize();
         Set<Field> fields = Collections.synchronizedSet(new HashSet<>());
         Set<Ref> refs = Collections.synchronizedSet(new HashSet<>());
 
         final PrettyPrintStaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
-//        Long numberOfEntries = proteinGroupsCount()/2;//TODO remove later
-//        final int batchSize = numberOfEntries.intValue();
-//        try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize, numberOfEntries)) {
-//
-//            entryStream.forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
-//
-//        }
+        Long numberOfEntries = proteinGroupsCount();
 
-        List<ProteinGroups> proteinGroups = enzymePortalXmlService.findProteinGroups();
-        proteinGroups
-                .stream()
-                .forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
+        try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize, numberOfEntries)) {
+
+            entryStream.forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
+
+        }
 
         xmlWriter.close();
 
         //TODO DELETE ME AFTER TEST
         // System.out.println("NUMBER OF ENTRIES COUNTED " + entryCounter.get());
-        // logger.error("NUMBER OF ENTRIES COUNTED " + entryCounter.get());
+         logger.error("NUMBER OF ENTRIES COUNTED " + entryCounter.get());
     }
 
-    //AtomicInteger entryCounter = new AtomicInteger(0);//DELETE AFTER TEST
+    AtomicInteger entryCounter = new AtomicInteger(0);//DELETE AFTER TEST
     private void writeEntry(PrettyPrintStaxEventItemWriter<Entry> xmlWriter, ProteinGroups protein, Set<Field> fields, Set<Ref> refs) {
         final Entry entry = processProteinEntries(protein, fields, refs);
 
         try {
             xmlWriter.write(Arrays.asList(entry));
-            // entryCounter.getAndIncrement();
+             entryCounter.getAndIncrement();
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
@@ -168,7 +164,6 @@ public class ProteinCentric extends XmlGenerator {
     private void addFieldsAndXRefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
         addUniprotIdFields(uniprotEntry, fields);
 
-        //addStatus(uniprotEntry, fields);
         addScientificNameFields(uniprotEntry, fields);
         addCommonNameFields(uniprotEntry, fields);
         addGeneNameFields(uniprotEntry, fields);
