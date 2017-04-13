@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.data.dataconfig.DataConfig;
-import uk.ac.ebi.ep.xml.config.ProteinGroupBatchConfig;
+import uk.ac.ebi.ep.xml.config.ProteinGroupsBatchConfig;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 /**
@@ -53,7 +53,7 @@ public class ProteinGroupXmlGenerator {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.registerShutdownHook();
         context.getEnvironment().setActiveProfiles(profile);
-        context.register(DataConfig.class, ProteinGroupBatchConfig.class);
+        context.register(DataConfig.class, ProteinGroupsBatchConfig.class);
         context.scan("uk.ac.ebi.ep.data.dataconfig");
         context.refresh();
 
