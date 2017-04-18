@@ -57,8 +57,13 @@
 
                 <section class="large-3 columns">
                     <div id="alternative-names">
+                        <c:if test="${not empty enzymePage.altNames}">
                         <strong>Alternative Name(s):</strong>
-                        <p>${enzymePage.altName}</p>
+                        <c:forEach items="${enzymePage.altNames}" var="a">
+                           <p>${a.altName}</p> 
+                        </c:forEach>
+                        
+                        </c:if>
                     </div>
                 </section>
 
@@ -70,9 +75,9 @@
 
                 <h3>Cofactors</h3>
                      <c:choose>
-                       <c:when test="${not empty enzymePage.cofactor }">
-                           <c:forEach items="${enzymePage.cofactor}" var="acc">
-                            <p>${enzymePage.cofactor}</p>
+                       <c:when test="${not empty enzymePage.cofactors }">
+                           <c:forEach items="${enzymePage.cofactors}" var="c">
+                            <p>${c.cofactor}</p>
                         </c:forEach>
                        </c:when>
                        <c:otherwise>
@@ -83,10 +88,10 @@
 
                 <h3>Associated Proteins</h3>
                      <c:choose>
-                       <c:when test="${not empty enzymePage.accessions }">
-                           <c:forEach items="${enzymePage.accessions}" var="acc">
+                       <c:when test="${not empty enzymePage.proteins }">
+                           <c:forEach items="${enzymePage.proteins}" var="p">
                                <ul>
-                                   <li> <a href="${pageContext.request.contextPath}/search/${acc}/enzyme">${acc}</a></li>
+                                   <li> <a href="${pageContext.request.contextPath}/search/${p.accession}/enzyme">${p.proteinName} *** Note:: *** ${p.commonName}</a></li>
                                </ul>
                            </c:forEach>
                        </c:when>
@@ -100,7 +105,7 @@
 
                 <h3>Citations</h3>
                 <c:choose>
-                  <c:when test="${not empty enzymePage.accessions }">
+                  <c:when test="${not empty enzymePage.citations }">
                       <c:forEach items="${enzymePage.citations}" var="citation">
                           <ul>
                               <li> <c:out value="${citation.title}"/></li>

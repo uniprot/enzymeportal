@@ -1,8 +1,12 @@
 package uk.ac.ebi.ep.web.utils;
 
 import java.util.List;
+import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
+import uk.ac.ebi.ep.data.domain.IntenzAltNames;
+import uk.ac.ebi.ep.data.domain.IntenzCofactors;
+import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.literatureservice.model.Result;
 
 /**
@@ -14,14 +18,13 @@ import uk.ac.ebi.ep.literatureservice.model.Result;
 @Builder(builderMethodName = "enzymePageBuilder")
 public class EnzymePage {
 
-    //@Singular
-    private final List<String> accessions;
     private String enzymeName;
     private String ec;
     private String catalyticActivities;
-    private final List<String> cofactor;
-    private final List<String> altName;
+    private final Set<IntenzCofactors> cofactors;
+    private final Set<IntenzAltNames> altNames;
     //@Singular
+    private final List<AssociatedProtein> proteins;
     private List<Result> citations;
 
 }
