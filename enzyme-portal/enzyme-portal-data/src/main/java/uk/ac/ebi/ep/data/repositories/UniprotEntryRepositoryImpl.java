@@ -10,12 +10,14 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.data.entry.EnzymePortal;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
@@ -248,6 +250,18 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Protein> findProteinByEc(String ec, int limit) {
+        JPAQuery query = new JPAQuery(entityManager);
+        List<Protein> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.equalsIgnoreCase(ec).and($.entryType.eq(Short.valueOf("0"))))
+                .distinct()
+                .limit(limit)
+                .list(Projections.constructor(Protein.class, $.accession, $.proteinName, $.commonName));
+
+        return result;
+    }
+
+    @Override
     public List<Species> findSpeciesByEcNumber(String ecNumber) {
         JPAQuery query = new JPAQuery(entityManager);
         List<Species> result = query.from($).where($.enzymePortalEcNumbersSet.any().ecNumber.eq(ecNumber)).distinct().orderBy($.scientificName.asc())
@@ -284,6 +298,28 @@ public class UniprotEntryRepositoryImpl implements UniprotEntryRepositoryCustom 
                 .distinct().limit(pageSize).offset((page) * pageSize)
                 .list($).stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
         return new PageImpl<>(result, pageable, result.size());
+
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<AssociatedProtein> findAssociatedProteinsByEC(String ecNumber, String entryType, int limit) {
+
+        Query query = entityManager.createNativeQuery("SELECT u.PROTEIN_NAME,u.ACCESSION,u.COMMON_NAME FROM UNIPROT_ENTRY u, ENZYME_PORTAL_EC_NUMBERS e WHERE e.UNIPROT_ACCESSION=u.ACCESSION AND e.EC_NUMBER='" + ecNumber + "' AND u.ENTRY_TYPE=" + entryType + " AND ROWNUM <=" + limit + "", "associatedProteins");
+
+        return query.getResultList();
+
+    }
+
+    @Override
+    public List<AssociatedProtein> findAssociatedProteinsByEC(String ecNumber, int limit) {
+
+        Query query = entityManager.createNativeQuery("SELECT u.ACCESSION,u.PROTEIN_NAME,u.COMMON_NAME FROM UNIPROT_ENTRY u, ENZYME_PORTAL_EC_NUMBERS e WHERE e.UNIPROT_ACCESSION=u.ACCESSION AND e.EC_NUMBER='" + ecNumber + "' ORDER BY u.ENTRY_TYPE", "associatedProteins");
+
+        @SuppressWarnings("unchecked")
+        List<AssociatedProtein> associatedProteins = query.getResultList();
+        return associatedProteins.stream().
+                limit(limit).collect(Collectors.toList());
 
     }
 

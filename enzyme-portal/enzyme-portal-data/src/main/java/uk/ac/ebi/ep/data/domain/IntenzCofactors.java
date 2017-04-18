@@ -85,12 +85,12 @@ public class IntenzCofactors implements Serializable {
             return false;
         }
         IntenzCofactors other = (IntenzCofactors) object;
-        return !((this.internalId == null && other.internalId != null) || (this.internalId != null && !this.internalId.equals(other.internalId)));
+        return !((other.internalId != null && null == this.internalId) || (this.internalId != null && !this.internalId.equals(other.internalId)));
     }
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.IntenzCofactors[ internalId=" + internalId + " ]";
+        return "uk.ac.ebi.ep.data.domain.IntenzCofactors[ cofactor=" + cofactor + " ]";
     }
 
 }

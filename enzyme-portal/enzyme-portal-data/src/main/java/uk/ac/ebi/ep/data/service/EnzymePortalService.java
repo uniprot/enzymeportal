@@ -27,6 +27,7 @@ import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
@@ -842,4 +843,13 @@ public class EnzymePortalService {
         uniprotEntryRepository.updateExpEvidenceFlag();
     }
 
+    @Transactional(readOnly = true)
+    public List<AssociatedProtein> findAssociatedProteinsByEcNumber(String ecNumber, String entryType, int limit) {
+        return uniprotEntryRepository.findAssociatedProteinsByEC(ecNumber, entryType, limit);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AssociatedProtein> findAssociatedProteinsByEcNumber(String ecNumber, int limit) {
+        return uniprotEntryRepository.findAssociatedProteinsByEC(ecNumber, limit);
+    }
 }

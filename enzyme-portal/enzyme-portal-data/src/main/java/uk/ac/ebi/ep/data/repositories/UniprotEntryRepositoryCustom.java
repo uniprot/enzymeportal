@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.Species;
@@ -74,10 +75,13 @@ public interface UniprotEntryRepositoryCustom {
     List<UniprotEntry> findSummariesByAcc(List<String> accession);
 
     List<Protein> findProteinByEc(String ec);
+    List<Protein> findProteinByEc(String ec, int limit) ;
 
     List<Species> findSpeciesByEcNumber(String ecNumber);
 
     List<Species> findSpeciesByEcNumberViaAccessions(String ecNumber, List<String> accessions);
 
     Page<UniprotEntry> findPageableEntryByEc(String ec, Pageable pageable);
+    List<AssociatedProtein> findAssociatedProteinsByEC( String ecNumber, String entryType, int limit);
+    List<AssociatedProtein> findAssociatedProteinsByEC( String ecNumber, int limit);
 }

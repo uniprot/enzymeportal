@@ -35,6 +35,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,6 +46,7 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.data.common.ModelOrganisms;
+import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.data.search.model.Compound;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.EnzymeAccession;
@@ -87,20 +89,51 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 })
 
-@SqlResultSetMapping(
-        name = "browseTaxonomy",
-        classes = {
-            @ConstructorResult(
-                    targetClass = Taxonomy.class,
-                    columns = {
-                        @ColumnResult(name = "tax_Id", type = Long.class),
-                        @ColumnResult(name = "scientific_Name"),
-                        @ColumnResult(name = "common_Name"),
-                        @ColumnResult(name = "numEnzymes", type = Long.class)
-                    }
-            )
-        }
-)
+//@SqlResultSetMapping(
+//        name = "browseTaxonomy",
+//        classes = {
+//            @ConstructorResult(
+//                    targetClass = Taxonomy.class,
+//                    columns = {
+//                        @ColumnResult(name = "tax_Id", type = Long.class),
+//                        @ColumnResult(name = "scientific_Name"),
+//                        @ColumnResult(name = "common_Name"),
+//                        @ColumnResult(name = "numEnzymes", type = Long.class)
+//                    }
+//            )
+//        }
+//)
+@SqlResultSetMappings({
+    @SqlResultSetMapping(
+            name = "browseTaxonomy",
+            classes = {
+                @ConstructorResult(
+                        targetClass = Taxonomy.class,
+                        columns = {
+                            @ColumnResult(name = "tax_Id", type = Long.class),
+                            @ColumnResult(name = "scientific_Name"),
+                            @ColumnResult(name = "common_Name"),
+                            @ColumnResult(name = "numEnzymes", type = Long.class)
+                        }
+                )
+            }
+    ),
+    @SqlResultSetMapping(
+            name = "associatedProteins",
+            classes = {
+                @ConstructorResult(
+                        targetClass = AssociatedProtein.class,
+                        columns = {
+                            @ColumnResult(name = "PROTEIN_NAME"),
+                            @ColumnResult(name = "ACCESSION"),
+                            @ColumnResult(name = "COMMON_NAME")
+
+                        }
+                )
+            }
+    )
+
+})
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 

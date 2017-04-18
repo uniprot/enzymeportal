@@ -20,8 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -51,11 +49,11 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
     private Long internalId;
     @Column(name = "TRANSFER_FLAG")
     private Character transferFlag;
-    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.EAGER)
+    //@Fetch(FetchMode.JOIN)
     private Set<IntenzCofactors> intenzCofactorsSet;
-    @OneToMany(mappedBy = "ecNumber",fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "ecNumber",fetch = FetchType.EAGER)
+    //@Fetch(FetchMode.JOIN)
     private Set<IntenzAltNames> intenzAltNamesSet;
     private static final long serialVersionUID = 1L;
     @Size(max = 15)
