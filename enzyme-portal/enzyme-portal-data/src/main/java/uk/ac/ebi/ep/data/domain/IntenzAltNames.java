@@ -90,7 +90,7 @@ public class IntenzAltNames implements Serializable {
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.data.domain.IntenzAltNames[ internalId=" + internalId + " ]";
+        return "uk.ac.ebi.ep.data.domain.IntenzAltNames[ AltName=" + altName + " ]";
     }
 
 }

@@ -31,7 +31,7 @@ public class Protein extends UniprotEntry {
     }
 
 
-    
+
     
 
     @Override
@@ -52,7 +52,7 @@ public class Protein extends UniprotEntry {
         final Protein other = (Protein) obj;
         return Objects.equals(this.enzymName, other.enzymName);
     }
-    
+
 
     
     
