@@ -89,11 +89,37 @@
                 <h3>Associated Proteins</h3>
                      <c:choose>
                        <c:when test="${not empty enzymePage.proteins }">
-                           <c:forEach items="${enzymePage.proteins}" var="p">
-                               <ul>
-                                   <li> <a href="${pageContext.request.contextPath}/search/${p.accession}/enzyme">${p.proteinName} *** Note:: *** ${p.commonName}</a></li>
-                               </ul>
-                           </c:forEach>
+                           <c:set var="count" value="0" scope="page" />
+                           <table id="associatedProteins">
+                              <tr>
+                                  <th>ID</th>
+                                  <th>Protein name</th>
+                                  <th>Common name</th>
+                              </tr>
+                               <c:forEach items="${enzymePage.proteins}" var="p" varStatus="proteinsCounter">
+                                   <c:if test="${proteinsCounter.count <= 5}">
+                                   <tr>
+                                       <td><a href="${pageContext.request.contextPath}/search/${p.accession}/enzyme">${p.accession}</a></td>
+                                       <td>${p.proteinName}</td>
+                                       <td>${p.commonName}</td>
+                                   </tr>
+                                   </c:if>
+
+
+                               </c:forEach>
+
+                               <c:if test="${fn:length(enzymePage.proteins)} > 5}">
+                               <tr>
+                                   <td colspan="3">button here1</td>
+                               </tr>
+                               </c:if>
+                               <c:if test="${fn:length(enzymePage.proteins)} < 5}">
+                               <tr>
+                                   <td colspan="3">button here2</td>
+                               </tr>
+                               </c:if>
+
+                           </table>
                        </c:when>
                        <c:otherwise>
                            There are no Associated Proteins for this Enzyme
@@ -101,16 +127,16 @@
                      </c:choose>
 
 
-
-
                 <h3>Citations</h3>
                 <c:choose>
                   <c:when test="${not empty enzymePage.citations }">
+                      <ul id="citations">
                       <c:forEach items="${enzymePage.citations}" var="citation">
-                          <ul>
+
                               <li> <c:out value="${citation.title}"/></li>
-                          </ul>
+
                       </c:forEach>
+                      </ul>
                   </c:when>
                   <c:otherwise>
                       There are no citations for this Enzyme

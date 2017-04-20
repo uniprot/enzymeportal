@@ -130,7 +130,10 @@ h6 a:visited {
 
 
 /* Table heading cells */
-th { background-color: #228171; }
+th {
+	background-color: #CBE8EC;
+	text-align: left;
+}
 
 
 

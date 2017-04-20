@@ -473,9 +473,6 @@ ul.catalytic-activity-list li {
 
 /*********** ENZYME VIEW  **********/
 
-#enzymeResults th{
-    background-color: #ECF0F1;
-}
 #enzymeResultsProteins th{
     background-color: inherit;
     font-weight: bold;
@@ -483,7 +480,7 @@ ul.catalytic-activity-list li {
 
 #enzymeResults td, #enzymeResults th{
     vertical-align: top;
-    padding: inherit;
+    /*padding: inherit;*/
 }
 
 .enzymeName{
@@ -492,7 +489,7 @@ ul.catalytic-activity-list li {
 }
 
 table#enzymeResults tr:nth-child(4n+2){
-    background-color:#CBE8EC;
+    background-color:#fff;
 }
 
 /*table#enzymeResults td, table#enzymeResults th{*/
@@ -518,7 +515,7 @@ table#enzymeResults tr.proteinSectionOpen{
 }
 
 table#enzymeResults tr:nth-child(4n+3){
-    background-color:#CBE8EC;
+    background-color:#fff;
 }
 
 .paginationText{
