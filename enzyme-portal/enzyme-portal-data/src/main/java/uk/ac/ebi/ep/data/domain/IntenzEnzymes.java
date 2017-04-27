@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -52,7 +53,7 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
     @OneToMany(mappedBy = "ecNumber", fetch = FetchType.EAGER)
     //@Fetch(FetchMode.JOIN)
     private Set<IntenzCofactors> intenzCofactorsSet;
-    @OneToMany(mappedBy = "ecNumber",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ecNumber", fetch = FetchType.EAGER)
     //@Fetch(FetchMode.JOIN)
     private Set<IntenzAltNames> intenzAltNamesSet;
     private static final long serialVersionUID = 1L;
@@ -112,6 +113,9 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
 
     @XmlTransient
     public Set<IntenzCofactors> getIntenzCofactorsSet() {
+        if (intenzCofactorsSet == null) {
+            intenzCofactorsSet = new HashSet<>();
+        }
         return intenzCofactorsSet;
     }
 
@@ -121,6 +125,9 @@ public class IntenzEnzymes implements Comparable<IntenzEnzymes>, Serializable {
 
     @XmlTransient
     public Set<IntenzAltNames> getIntenzAltNamesSet() {
+        if (intenzAltNamesSet == null) {
+            intenzAltNamesSet = new HashSet<>();
+        }
         return intenzAltNamesSet;
     }
 
