@@ -88,32 +88,32 @@
 
                 <h3>Associated Proteins</h3>
                      <c:choose>
-                       <c:when test="${not empty enzymePage.proteins }">
+                       <c:when test="${not empty enzymePage.proteins.entries }">
                            <c:set var="count" value="0" scope="page" />
                            <table id="associatedProteins">
                               <tr>
                                   <th>ID</th>
                                   <th>Protein name</th>
-                                  <th>Common name</th>
+                                  <th>Common name ****</th>
                               </tr>
-                               <c:forEach items="${enzymePage.proteins}" var="p" varStatus="proteinsCounter">
+                               <c:forEach items="${enzymePage.proteins.entries}" var="p" varStatus="proteinsCounter">
                                    <c:if test="${proteinsCounter.count <= 5}">
                                    <tr>
-                                       <td><a href="${pageContext.request.contextPath}/search/${p.accession}/enzyme">${p.accession}</a></td>
+                                       <td><a href="${pageContext.request.contextPath}/search/${p.proteinGroupId}/enzyme">${p.proteinGroupId}</a></td>
                                        <td>${p.proteinName}</td>
-                                       <td>${p.commonName}</td>
+                                       
                                    </tr>
                                    </c:if>
 
 
                                </c:forEach>
 
-                               <c:if test="${fn:length(enzymePage.proteins)} > 5}">
+                               <c:if test="${fn:length(enzymePage.proteins.entries)} > 5}">
                                <tr>
                                    <td colspan="3">button here1</td>
                                </tr>
                                </c:if>
-                               <c:if test="${fn:length(enzymePage.proteins)} < 5}">
+                               <c:if test="${fn:length(enzymePage.proteins.entries)} < 5}">
                                <tr>
                                    <td colspan="3">button here2</td>
                                </tr>
