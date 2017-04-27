@@ -21,7 +21,7 @@
     </div>
     <c:if test="${fn:length(searchFilter.species) gt 12}">
         <!--auto-complete search box-->
-        <div class="ui-widget grid_12zzz">
+        <div class="ui-widget" id="auto-complete">
             <input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />
             <input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>
         </div>

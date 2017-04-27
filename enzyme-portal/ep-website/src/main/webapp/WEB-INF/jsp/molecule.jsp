@@ -41,8 +41,8 @@
 			<div>${molecule.description}</div>
 			<c:if test="${not empty molecule.formula}">
 				<div>
-					<span class="bold"><spring:message
-							code="label.entry.molecules.formula" /></span>:
+					<span><strong><spring:message
+							code="label.entry.molecules.formula" /></strong></span>:
 					${molecule.formula}
 				</div>
 			</c:if>

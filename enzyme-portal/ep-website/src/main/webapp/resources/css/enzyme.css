@@ -11,9 +11,6 @@ html {
     -webkit-font-smoothing:antialiased;
 }
 
-img {
-    border: none;
-}
 /*overidding frontier css*/
 dt{
 	clear: none;
@@ -22,16 +19,16 @@ dt{
 }
 
 th,td{
-    border:none;
-    vertical-align: inherit;
+    /*border:none;*/
+    /*vertical-align: inherit;*/
 }
 th{
-    background-color:inherit;
+    /*background-color:inherit;*/
 }
 
 table{
-    border: none;
-    background-color: inherit;
+    /*border: none;*/
+    /*background-color: inherit;*/
 }
 
 div#content {
@@ -87,9 +84,6 @@ fieldset {
 legend {
     font-weight: bold;
 }
-.bold{
-    font-weight: bold;
-}
 
 .epBox {
     min-width: 200px;
@@ -118,14 +112,14 @@ label.citationFilter {
 	margin-right: 2em;
 }
 
-span.synonyms {
-    margin-right: 5px;
-    text-align:justify;
-}
-span.enzymeDisease{
-     margin-right: 5px;
-    text-align:justify;
-}
+/*span.synonyms {*/
+    /*margin-right: 5px;*/
+    /*text-align:justify;*/
+/*}*/
+/*span.enzymeDisease{*/
+     /*margin-right: 5px;*/
+    /*text-align:justify;*/
+/*}*/
 span h1{
   font-family: 'HelveticaNeueLT Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
 
@@ -479,9 +473,6 @@ ul.catalytic-activity-list li {
 
 /*********** ENZYME VIEW  **********/
 
-#enzymeResults th{
-    background-color: #ECF0F1;
-}
 #enzymeResultsProteins th{
     background-color: inherit;
     font-weight: bold;
@@ -489,7 +480,7 @@ ul.catalytic-activity-list li {
 
 #enzymeResults td, #enzymeResults th{
     vertical-align: top;
-    padding: inherit;
+    /*padding: inherit;*/
 }
 
 .enzymeName{
@@ -498,20 +489,20 @@ ul.catalytic-activity-list li {
 }
 
 table#enzymeResults tr:nth-child(4n+2){
-    background-color:#CBE8EC;
+    background-color:#fff;
 }
 
-table#enzymeResults td, table#enzymeResults th{
-    padding: 7px 10px 10px 10px;
-}
+/*table#enzymeResults td, table#enzymeResults th{*/
+    /*padding: 7px 10px 10px 10px;*/
+/*}*/
 
-table#enzymeResults th{
-    border-bottom: 1px solid #ccc;
-}
+/*table#enzymeResults th{*/
+    /*border-bottom: 1px solid #ccc;*/
+/*}*/
 
-table#enzymeResultsProteins td, table#enzymeResultsProteins th{
-    padding: 1px 1px 1px 1px;
-}
+/*table#enzymeResultsProteins td, table#enzymeResultsProteins th{*/
+    /*padding: 1px 1px 1px 1px;*/
+/*}*/
 
 table#enzymeResults td:first-child{
     padding-left: 20px;
@@ -524,7 +515,7 @@ table#enzymeResults tr.proteinSectionOpen{
 }
 
 table#enzymeResults tr:nth-child(4n+3){
-    background-color:#CBE8EC;
+    background-color:#fff;
 }
 
 .paginationText{
@@ -574,6 +565,14 @@ table#enzymeResultsProteins tr.proteinRow{
 
 #search-filters ul{
     list-style-type: none;
+}
+
+#auto-complete{
+    margin-top: 15px;
+}
+
+div#species_filters_n{
+    margin-top: 10px;
 }
 
 .paginationContainer, .pagination-container{
