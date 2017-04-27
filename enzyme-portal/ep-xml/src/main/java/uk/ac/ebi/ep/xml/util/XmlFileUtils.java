@@ -29,7 +29,7 @@ public class XmlFileUtils {
     public static void createDirectory(String directory) {
         String permission = "rwxr-x---";
         try {
-            createDirectoryWithPermission(directory, permission);
+            createDirectory(directory, permission);
         } catch (IOException ex) {
             logger.error("IOException while creating directory " + directory, ex);
         }
@@ -42,7 +42,7 @@ public class XmlFileUtils {
      * @param permission directory permission e.g. rwxr-x---
      * @throws IOException
      */
-    public static void createDirectoryWithPermission(String directory, String permission) throws IOException {
+    public static void createDirectory(String directory, String permission) throws IOException {
 
         Set<PosixFilePermission> perms
                 = PosixFilePermissions.fromString(permission);

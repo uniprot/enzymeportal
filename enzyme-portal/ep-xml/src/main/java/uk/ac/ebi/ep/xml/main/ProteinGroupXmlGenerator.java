@@ -28,10 +28,8 @@ public class ProteinGroupXmlGenerator {
         String profile;
         
         long heapSize = Runtime.getRuntime().totalMemory();
-        System.out.println("HEAP_SIZE " + heapSize +" bytes");
         long maxMemory = Runtime.getRuntime().maxMemory();
-        System.out.println("MAX_MEMORY " + maxMemory + " bytes");
-
+    
 
         //Preconditions.checkArgument(args.length != 1, "Please provide required parameters: \n\t0 - profile name");
         profile = args[0];

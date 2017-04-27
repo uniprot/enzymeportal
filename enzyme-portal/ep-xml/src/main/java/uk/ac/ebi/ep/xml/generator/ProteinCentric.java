@@ -115,7 +115,7 @@ public class ProteinCentric extends XmlGenerator {
         final PrettyPrintStaxEventItemWriter<Entry> xmlWriter = getXmlWriter(xmlFileLocation);
         Long numberOfEntries = proteinGroupsCount();
 
-        try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize, numberOfEntries)) {
+        try (Stream<ProteinGroups> entryStream = enzymePortalXmlService.streamProteinGroupsInBatch(sessionFactory, QUERY, batchSize)) {
 
             entryStream.forEach(protein -> writeEntry(xmlWriter, protein, fields, refs));
 
@@ -124,11 +124,11 @@ public class ProteinCentric extends XmlGenerator {
         xmlWriter.close();
 
         //TODO DELETE ME AFTER TEST
-        // System.out.println("NUMBER OF ENTRIES COUNTED " + entryCounter.get());
-         logger.error("NUMBER OF ENTRIES COUNTED " + entryCounter.get());
+         logger.error("Number of entries processed :  " + entryCounter.get() + " out of "+ numberOfEntries);
     }
 
     AtomicInteger entryCounter = new AtomicInteger(0);//DELETE AFTER TEST
+    
     private void writeEntry(PrettyPrintStaxEventItemWriter<Entry> xmlWriter, ProteinGroups protein, Set<Field> fields, Set<Ref> refs) {
         final Entry entry = processProteinEntries(protein, fields, refs);
 

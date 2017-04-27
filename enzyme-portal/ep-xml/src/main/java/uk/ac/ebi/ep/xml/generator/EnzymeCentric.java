@@ -22,6 +22,7 @@ import uk.ac.ebi.ep.xml.model.Entry;
 import uk.ac.ebi.ep.xml.model.Field;
 import uk.ac.ebi.ep.xml.model.Ref;
 import uk.ac.ebi.ep.xml.util.DatabaseName;
+import uk.ac.ebi.ep.xml.util.FieldName;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
 /**
@@ -69,7 +70,7 @@ public class EnzymeCentric extends XmlGenerator {
     public void generateXmL(String xmlFileLocation) throws JAXBException {
 
         List<IntenzEnzymes> enzymes
-                = enzymePortalXmlService.findNonTransferredEnzymes().stream().sorted().collect(Collectors.toList());
+                = enzymePortalXmlService.findNonTransferredEnzymes();
         int entryCount = enzymes.size();
 
         logger.warn("Number of Intenz enzymes ready to be processed : " + entryCount);
@@ -116,6 +117,8 @@ public class EnzymeCentric extends XmlGenerator {
         entry.setName(enzyme.getEnzymeName());
         entry.setDescription(enzyme.getCatalyticActivity());
         addEnzymeFamilyField(enzyme.getEcNumber(), fields);
+        addIntenzCofactorsField(enzyme, fields);
+        addAltNamesField(enzyme, fields);
         entries.forEach((uniprotEntry) -> {
             addUniprotIdFields(uniprotEntry, fields);
             addProteinNameFields(uniprotEntry, fields);
@@ -149,6 +152,30 @@ public class EnzymeCentric extends XmlGenerator {
         if (!StringUtils.isEmpty(enzyme.getEcNumber())) {
             Ref xref = new Ref(enzyme.getEcNumber(), DatabaseName.INTENZ.getDbName());
             refs.add(xref);
+        }
+    }
+
+    private void addIntenzCofactorsField(IntenzEnzymes enzyme, Set<Field> fields) {
+
+        if (!enzyme.getIntenzCofactorsSet().isEmpty()) {
+
+            enzyme.getIntenzCofactorsSet()
+                    .stream()
+                    .map(cofactors -> new Field(FieldName.INTENZ_COFACTORS.getName(), cofactors.getCofactor()))
+                    .forEach(field -> fields.add(field));
+
+        }
+    }
+
+    private void addAltNamesField(IntenzEnzymes enzyme, Set<Field> fields) {
+
+        if (!enzyme.getIntenzAltNamesSet().isEmpty()) {
+
+            enzyme.getIntenzAltNamesSet()
+                    .stream()
+                    .map(altName -> new Field(FieldName.INTENZ_ALT_NAMES.getName(), altName.getAltName()))
+                    .forEach(field -> fields.add(field));
+
         }
     }
 

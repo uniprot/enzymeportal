@@ -15,7 +15,7 @@ import uk.ac.ebi.ep.xml.model.Ref;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups,Entry>{ //extends XmlTransformer implements ItemProcessor<ProteinGroups, Entry> {
+public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups,Entry>{ 
 
     public ProteinGroupsProcessor(XmlConfigParams xmlConfigParams) {
         super(xmlConfigParams);
