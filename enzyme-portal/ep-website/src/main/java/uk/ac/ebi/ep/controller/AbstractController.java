@@ -41,6 +41,7 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
 import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
+import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
@@ -71,6 +72,8 @@ public abstract class AbstractController {
     protected EbeyeSuggestionService ebeyeSuggestionService;
     @Autowired
     protected EnzymeCentricService enzymeCentricService;
+    @Autowired
+    protected ProteinGroupService proteinGroupService;
     @Autowired
     protected LiteratureService literatureService;
 

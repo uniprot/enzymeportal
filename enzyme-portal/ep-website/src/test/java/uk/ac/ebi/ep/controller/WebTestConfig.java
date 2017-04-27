@@ -31,6 +31,7 @@ import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
 import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
+import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiAdapter;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
 import uk.ac.ebi.ep.enzymeservices.rhea.RheaWsAdapter;
@@ -47,6 +48,11 @@ public class WebTestConfig {
     @Bean
     public EnzymePortalService enzymePortalService() {
         return Mockito.mock(EnzymePortalService.class);
+    }
+
+    @Bean
+    ProteinGroupService proteinGroupService() {
+        return Mockito.mock(ProteinGroupService.class);
     }
 
     @Bean
@@ -73,8 +79,8 @@ public class WebTestConfig {
     public BasketController basketController() {
         return Mockito.mock(BasketController.class);
     }
-    
-        @Bean
+
+    @Bean
     public EnzymeCentricController enzymeCentricController() {
         return Mockito.mock(EnzymeCentricController.class);
     }

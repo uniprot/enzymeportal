@@ -89,9 +89,12 @@
                 <h3>Associated Proteins</h3>
                      <c:choose>
                        <c:when test="${not empty enzymePage.proteins }">
-                           <c:forEach items="${enzymePage.proteins}" var="p">
+                           
+                           <h4>Note:: Hit count : ${enzymePage.proteins.hitCount}</h4>
+                           <c:forEach items="${enzymePage.proteins.entries}" var="p">
+                               
                                <ul>
-                                   <li> <a href="${pageContext.request.contextPath}/search/${p.accession}/enzyme">${p.proteinName} *** Note:: *** ${p.commonName}</a></li>
+                                   <li> <a href="${pageContext.request.contextPath}/search/${p.proteinGroupId}/proteins">${p.proteinName}</a></li>
                                </ul>
                            </c:forEach>
                        </c:when>

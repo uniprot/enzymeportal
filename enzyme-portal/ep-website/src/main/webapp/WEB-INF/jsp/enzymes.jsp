@@ -241,11 +241,15 @@
                                                         <c:forEach var="p" begin="0" end="4">
                                                             <tr class="proteinRow">
                                                                 <td> </td>
+                                                                <%--
                                                                 <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.proteins[p].accession}/enzyme">${enzyme.proteins[p].proteinName}</a></td>
                                                                 <td>${enzyme.proteins[p].species}</td>
-                                                            </tr>
+                                                               --%>
+                                                                
+                                                               <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].proteinGroupId}/enzyme">${enzyme.proteinGroupEntry[p].proteinName}</a></td>
+                                                          </tr>
                                                         </c:forEach>
-                                                        <c:if test="${proteinSize >= 5}">
+                                                        <c:if test="${enzyme.numEnzymeHits >= 5}">
                                                         <tr class="proteinRow">
                                                             <td> </td>
                                                             <td><button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numEnzymeHits} Proteins</button></td>

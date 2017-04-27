@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
-import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.ebeye.ProteinGroupService;
+import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupResult;
 import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
 import uk.ac.ebi.ep.literatureservice.model.Result;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
@@ -29,7 +30,8 @@ public class EnzymePageController extends AbstractController {
     private static final Logger logger = Logger.getLogger(EnzymePageController.class);
 
     @Autowired
-    public EnzymePageController(EnzymePortalService enzymePortalService, LiteratureService litService) {
+    public EnzymePageController(ProteinGroupService proteinGroupService,EnzymePortalService enzymePortalService, LiteratureService litService) {
+       this.proteinGroupService = proteinGroupService;
         this.enzymePortalService = enzymePortalService;
         this.literatureService = litService;
     }
@@ -62,7 +64,7 @@ public class EnzymePageController extends AbstractController {
 
         CompletableFuture<IntenzEnzymes> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
 
-        CompletableFuture<List<AssociatedProtein>> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
+        CompletableFuture<ProteinGroupResult> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
 
         CompletableFuture<List<Result>> citations = CompletableFuture.supplyAsync(() -> findCitations(ecNumber, limit));
 
@@ -85,13 +87,19 @@ public class EnzymePageController extends AbstractController {
 
     }
 
-    private List<AssociatedProtein> findProteinsByEcNumber(String ecNumber, int limit) {
-        String entryType = "0";
-        return enzymePortalService.findAssociatedProteinsByEcNumber(ecNumber, limit);
-        // return enzymePortalService.findAssociatedProteinsByEcNumber(ecNumber, entryType, limit);
+//    private List<AssociatedProtein> findProteinsByEcNumber(String ecNumber, int limit) {
+//        String entryType = "0";
+//        return enzymePortalService.findAssociatedProteinsByEcNumber(ecNumber, limit);
+//        // return enzymePortalService.findAssociatedProteinsByEcNumber(ecNumber, entryType, limit);
+//    }
+    private ProteinGroupResult findProteinsByEcNumber(String ecNumber, int limit) {
+        int start = 0;
+        int pageSize = limit;
+        return proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
+
     }
 
-    private EnzymePage addProteins(List<AssociatedProtein> proteins, IntenzEnzymes e) {
+    private EnzymePage addProteins(ProteinGroupResult pgr, IntenzEnzymes e) {
 
         return EnzymePage
                 .enzymePageBuilder()
@@ -100,7 +108,7 @@ public class EnzymePageController extends AbstractController {
                 .altNames(e.getIntenzAltNamesSet())
                 .cofactors(e.getIntenzCofactorsSet())
                 .catalyticActivities(e.getCatalyticActivity())
-                .proteins(proteins)
+                .proteins(pgr)
                 .build();
 
     }

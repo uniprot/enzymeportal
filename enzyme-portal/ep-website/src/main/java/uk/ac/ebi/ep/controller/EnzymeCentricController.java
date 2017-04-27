@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
 import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
+import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupResult;
 import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 import uk.ac.ebi.ep.web.utils.KeywordType;
 
@@ -89,7 +89,7 @@ public class EnzymeCentricController extends AbstractController {
         KeywordType type = KeywordType.valueOf(keywordType);
         switch (type) {
             case KEYWORD:
-                
+
                 boolean isEc = searchUtil.validateEc(searchTerm);
                 if (isEc) {
                     view = findEnzymesByEC(searchTerm, startPage, pageSize, facetCount, filters, associatedProteinLimit, searchKey, keywordType, model, searchModel, view);
@@ -156,21 +156,34 @@ public class EnzymeCentricController extends AbstractController {
 
             List<Entry> entries = page.getContent();
             List<Entry> enzymeView = new LinkedList<>();
+//            entries.stream().forEach(entry -> {
+//                List<Protein> proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
+//                        .stream()
+//                        .sorted()
+//                        .collect(Collectors.toList());
+//                if (proteins.isEmpty()) {
+//                    proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
+//                            .stream()
+//                            .limit(LOWEST_BEST_MATCHED_RESULT_SIZE)
+//                            .sorted()
+//                            .collect(Collectors.toList())
+//                }
+//
+//                addProteinEntryToEnzymeView(proteins, entry, enzymeView);
+//
+//            });
+            int start = 0;
+            int limit = 10;
+
             entries.stream().forEach(entry -> {
-                List<Protein> proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
-                        .stream()
-                        .sorted()
-                        .collect(Collectors.toList());
-                if (proteins.isEmpty()) {
-                    proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
-                            .stream()
-                            .limit(LOWEST_BEST_MATCHED_RESULT_SIZE)
-                            .sorted()
-                            .collect(Collectors.toList());
-                }
+                ProteinGroupResult result = proteinGroupService.findProteinGroupResultBySearchTermAndEC(entry.getEc(), searchTerm, start, limit);
+                
+                entry.setProteinGroupEntry(result.getEntries());
+                entry.setNumProteins(result.getHitCount());
+                entry.setNumEnzymeHits(result.getHitCount());
+                enzymeView.add(entry);
 
-                addProteinEntryToEnzymeView(proteins, entry, enzymeView);
-
+                //addProteinEntryToEnzymeView(proteins, entry, enzymeView);
             });
 
             if (enzymeView.isEmpty() && !ebiSearchResult.getEntries().isEmpty()) {
