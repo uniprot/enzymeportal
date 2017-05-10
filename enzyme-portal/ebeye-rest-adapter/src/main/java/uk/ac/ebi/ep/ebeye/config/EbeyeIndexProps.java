@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.ebeye.config;
 
 /**
@@ -12,11 +7,20 @@ package uk.ac.ebi.ep.ebeye.config;
 public class EbeyeIndexProps {
 
     private String proteinCentricSearchUrl;
-    private String  enzymeCentricSearchUrl;
+    private String enzymeCentricSearchUrl;
+    private String proteinGroupSearchUrl;
 
     private int maxEbiSearchLimit;
 
     private int chunkSize;
+
+    public String getProteinGroupSearchUrl() {
+        return proteinGroupSearchUrl;
+    }
+
+    public void setProteinGroupSearchUrl(String proteinGroupSearchUrl) {
+        this.proteinGroupSearchUrl = proteinGroupSearchUrl;
+    }
 
     public String getEnzymeCentricSearchUrl() {
         return enzymeCentricSearchUrl;
@@ -33,7 +37,7 @@ public class EbeyeIndexProps {
     public void setProteinCentricSearchUrl(String proteinCentricSearchUrl) {
         this.proteinCentricSearchUrl = proteinCentricSearchUrl;
     }
-    
+
     public int getMaxEbiSearchLimit() {
         return maxEbiSearchLimit;
     }

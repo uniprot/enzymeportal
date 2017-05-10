@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.ebeye.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -55,6 +54,10 @@ public class Fields implements Serializable {
     private List<String> diseaseName = new ArrayList<>();
     @JsonProperty("enzyme_family")
     private List<String> enzymeFamily = new ArrayList<>();
+    @JsonProperty("intenz_cofactors")
+    private Set<String> intenzCofactors = new HashSet<>();
+    @JsonProperty("alt_names")
+    private Set<String> altNames = new HashSet<>();
     @JsonProperty("status")
     private List<String> status = new ArrayList<>();
     @JsonIgnore
@@ -252,8 +255,8 @@ public class Fields implements Serializable {
     public String toString() {
         return "Fields{" + "id=" + ec + ", name=" + name + ", description=" + description + ", proteinName=" + proteinName + ", commonName=" + commonName + ", scientificName=" + scientificName + ", compoundName=" + compoundName + ", diseaseName=" + diseaseName + ", enzymeFamily=" + enzymeFamily + '}';
     }
-    
-        @JsonProperty("status")
+
+    @JsonProperty("status")
     public List<String> getStatus() {
         return status;
     }
@@ -261,6 +264,26 @@ public class Fields implements Serializable {
     @JsonProperty("status")
     public void setStatus(List<String> status) {
         this.status = status;
+    }
+
+    @JsonProperty("intenz_cofactors")
+    public Set<String> getIntenzCofactors() {
+        return intenzCofactors;
+    }
+
+    @JsonProperty("intenz_cofactors")
+    public void setIntenzCofactors(Set<String> intenzCofactors) {
+        this.intenzCofactors = intenzCofactors;
+    }
+
+    @JsonProperty("alt_names")
+    public Set<String> getAltNames() {
+        return altNames;
+    }
+
+    @JsonProperty("alt_names")
+    public void setAltNames(Set<String> altNames) {
+        this.altNames = altNames;
     }
 
 }

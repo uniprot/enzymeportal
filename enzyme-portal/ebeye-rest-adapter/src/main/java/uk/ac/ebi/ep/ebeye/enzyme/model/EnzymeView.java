@@ -1,9 +1,9 @@
-
 package uk.ac.ebi.ep.ebeye.enzyme.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupEntry;
 import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 
 /**
@@ -19,7 +19,7 @@ public class EnzymeView {
     private List<String> catalyticActivities;
     private List<String> species;
     private List<Protein> proteins;
-    //private List<String> proteins;
+    private List<ProteinGroupEntry> proteinGroupEntry;
     private int numProteins;
 
     public String getEnzymeName() {
@@ -87,6 +87,17 @@ public class EnzymeView {
 
     public void setProteins(List<Protein> proteins) {
         this.proteins = proteins;
+    }
+
+    public List<ProteinGroupEntry> getProteinGroupEntry() {
+        if (proteinGroupEntry == null) {
+            proteinGroupEntry = new ArrayList<>();
+        }
+        return proteinGroupEntry;
+    }
+
+    public void setProteinGroupEntry(List<ProteinGroupEntry> proteinGroupEntry) {
+        this.proteinGroupEntry = proteinGroupEntry;
     }
 
     public int getNumProteins() {

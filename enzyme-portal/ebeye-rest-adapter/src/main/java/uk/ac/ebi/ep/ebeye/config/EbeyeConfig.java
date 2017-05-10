@@ -14,6 +14,7 @@ import uk.ac.ebi.ep.ebeye.EbeyeQueryServiceImpl;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
 import uk.ac.ebi.ep.ebeye.EnzymeCentricService;
+import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 
 /**
  * Configures the services that interface with the Ebeye search.
@@ -59,6 +60,11 @@ public class EbeyeConfig {
     }
 
     @Bean
+    public ProteinGroupService proteinGroupService(RestTemplate restTemplate, EbeyeIndexProps enzymeCentricProps) {
+        return new ProteinGroupService(restTemplate, enzymeCentricProps);
+    }
+
+    @Bean
     public EnzymeCentricService enzymeCentricService(RestTemplate restTemplate, EbeyeIndexProps enzymeCentricProps) {
         return new EnzymeCentricService(restTemplate, enzymeCentricProps);
     }
@@ -74,11 +80,13 @@ public class EbeyeConfig {
         int chunkSize = Integer.parseInt(env.getProperty("ebeye.chunk.size"));
         String enzymeCentricUrl = env.getProperty("ep.enzyme.centric.search.url");
         String proteinCentricUrl = env.getProperty("ep.protein.centric.search.url");
+        String proteinGroupUrl = env.getProperty("ep.protein.group.search.url");
 
         EbeyeIndexProps url = new EbeyeIndexProps();
 
         url.setProteinCentricSearchUrl(proteinCentricUrl);
         url.setEnzymeCentricSearchUrl(enzymeCentricUrl);
+        url.setProteinGroupSearchUrl(proteinGroupUrl);
         url.setChunkSize(chunkSize);
         url.setMaxEbiSearchLimit(maxEbiRequests);
 
