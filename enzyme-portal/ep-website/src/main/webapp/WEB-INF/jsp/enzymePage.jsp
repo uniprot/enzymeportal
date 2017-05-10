@@ -59,8 +59,8 @@
                     <div id="alternative-names">
                         <c:if test="${not empty enzymePage.altNames}">
                         <strong>Alternative Name(s):</strong>
-                        <c:forEach items="${enzymePage.altNames}" var="a">
-                           <p>${a.altName}</p> 
+                        <c:forEach items="${enzymePage.altNames}" var="altName">
+                           <p>${altName}</p> 
                         </c:forEach>
                         
                         </c:if>
@@ -77,7 +77,7 @@
                      <c:choose>
                        <c:when test="${not empty enzymePage.cofactors }">
                            <c:forEach items="${enzymePage.cofactors}" var="c">
-                            <p>${c.cofactor}</p>
+                            <p>${c}</p>
                         </c:forEach>
                        </c:when>
                        <c:otherwise>
@@ -92,15 +92,16 @@
                            <c:set var="count" value="0" scope="page" />
                            <table id="associatedProteins">
                               <tr>
-                                  <th>ID</th>
+                                  <th>ID ** no required</th>
                                   <th>Protein name</th>
                                   <th>Common name ****</th>
                               </tr>
                                <c:forEach items="${enzymePage.proteins.entries}" var="p" varStatus="proteinsCounter">
                                    <c:if test="${proteinsCounter.count <= 5}">
                                    <tr>
-                                       <td><a href="${pageContext.request.contextPath}/search/${p.proteinGroupId}/enzyme">${p.proteinGroupId}</a></td>
+                                       <td><a href="${pageContext.request.contextPath}/search/${p.primaryAccession}/enzyme">${p.primaryAccession}</a></td>
                                        <td>${p.proteinName}</td>
+                                       <td>${p.primarySpecie}</td>
                                        
                                    </tr>
                                    </c:if>

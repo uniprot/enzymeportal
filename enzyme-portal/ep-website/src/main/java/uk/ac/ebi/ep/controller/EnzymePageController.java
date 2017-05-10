@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.ProteinGroupService;
+import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
+import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
 import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupResult;
 import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
 import uk.ac.ebi.ep.literatureservice.model.Result;
@@ -62,7 +63,7 @@ public class EnzymePageController extends AbstractController {
 
     public EnzymePage computeEnzymePage(String ecNumber, int limit) {
 
-        CompletableFuture<IntenzEnzymes> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
+        CompletableFuture<Entry> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
 
         CompletableFuture<ProteinGroupResult> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
 
@@ -81,9 +82,17 @@ public class EnzymePageController extends AbstractController {
         return epmc.getResultList().getResult();
     }
 
-    private IntenzEnzymes findEnzymeByEcNumber(String ecNumber) {
+    private Entry findEnzymeByEcNumber(String ecNumber) {
 
-        return enzymePortalService.findIntenzEnzymesByEc(ecNumber);
+        //return enzymePortalService.findIntenzEnzymesByEc(ecNumber);
+        return getEbiSearchResultByEC(ecNumber).getEntries().stream().findAny().orElseGet(()-> new Entry());
+
+    }
+    
+        private EBISearchResult getEbiSearchResultByEC(String ec) {
+        String facets = "";
+        int startPage = 0; int pageSize =1;
+        return enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facets, 0);
 
     }
 
@@ -99,15 +108,15 @@ public class EnzymePageController extends AbstractController {
 
     }
 
-    private EnzymePage addProteins(ProteinGroupResult pgr, IntenzEnzymes e) {
+    private EnzymePage addProteins(ProteinGroupResult pgr, Entry e) {
 
         return EnzymePage
                 .enzymePageBuilder()
                 .enzymeName(e.getEnzymeName())
-                .ec(e.getEcNumber())
-                .altNames(e.getIntenzAltNamesSet())
-                .cofactors(e.getIntenzCofactorsSet())
-                .catalyticActivities(e.getCatalyticActivity())
+                .ec(e.getEc())
+                .altNames(e.getFields().getAltNames())
+                .cofactors(e.getFields().getIntenzCofactors())
+                .catalyticActivities(e.getFields().getDescription().stream().findAny().orElse(""))
                 .proteins(pgr)
                 .build();
 

@@ -177,11 +177,15 @@ public class EnzymeCentricController extends AbstractController {
 
             entries.stream().forEach(entry -> {
                 ProteinGroupResult result = proteinGroupService.findProteinGroupResultBySearchTermAndEC(entry.getEc(), searchTerm, start, limit);
-                
+                if (result.getHitCount() == 0) {
+                    result = proteinGroupService.findProteinGroupResultByEC(entry.getEc(), start, LOWEST_BEST_MATCHED_RESULT_SIZE);
+                }
                 entry.setProteinGroupEntry(result.getEntries());
                 entry.setNumProteins(result.getHitCount());
                 entry.setNumEnzymeHits(result.getHitCount());
-                enzymeView.add(entry);
+                if (result.getHitCount() > 0) {
+                    enzymeView.add(entry);
+                }
 
                 //addProteinEntryToEnzymeView(proteins, entry, enzymeView);
             });
