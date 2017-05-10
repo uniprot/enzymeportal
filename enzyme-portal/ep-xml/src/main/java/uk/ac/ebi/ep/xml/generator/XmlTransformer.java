@@ -211,5 +211,19 @@ public class XmlTransformer {
 
         return reactomePathwayId;
     }
+    
+    
+        protected void addPrimaryProteinField(UniprotEntry uniprotEntry, Set<Field> fields) {
+        
+            //add primary protein 
+            //1. swissProt + model organism + exp evidence
+            //2. if list is empty then add, model
+            
+            if (!StringUtils.isEmpty(uniprotEntry.getProteinName())) {
+            Field field = new Field(FieldName.PROTEIN_NAME.getName(), uniprotEntry.getProteinName());
+            fields.add(field);
+
+        }
+    }
 
 }
