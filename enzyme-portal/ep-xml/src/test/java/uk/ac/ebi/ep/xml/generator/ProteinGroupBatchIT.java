@@ -23,7 +23,7 @@ import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.xml.config.MockProteinGroupBatchConfig;
 import uk.ac.ebi.ep.xml.config.MockXmlConfig;
-import uk.ac.ebi.ep.xml.config.ProteinGroupBatchConfig;
+import uk.ac.ebi.ep.xml.config.ProteinGroupsBatchConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
@@ -67,7 +67,7 @@ public class ProteinGroupBatchIT {
         BatchStatus status = jobExecution.getStatus();
         assertThat(status, is(BatchStatus.COMPLETED));
 
-        StepExecution step = getStepByName(ProteinGroupBatchConfig.READ_PROCESS_WRITE_XML_STEP, jobExecution);
+        StepExecution step = getStepByName(ProteinGroupsBatchConfig.READ_PROCESS_WRITE_XML_STEP, jobExecution);
 
         assertThat(step.getReadCount(), is(expectedEntries));
         assertThat(step.getWriteCount(), is(expectedEntries));

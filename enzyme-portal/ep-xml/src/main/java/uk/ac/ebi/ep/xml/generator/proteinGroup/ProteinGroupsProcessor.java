@@ -15,7 +15,7 @@ import uk.ac.ebi.ep.xml.model.Ref;
  *
  * @author Joseph <joseph@ebi.ac.uk>
  */
-public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups,Entry>{ 
+public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
 
     public ProteinGroupsProcessor(XmlConfigParams xmlConfigParams) {
         super(xmlConfigParams);
@@ -33,6 +33,7 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups,Entry>{
         entry.setName(proteinGroups.getProteinName());
         entry.setDescription(proteinGroups.getProteinName());
 
+        addPrimaryProteinField(proteinGroups, fields);
         proteinGroups.getUniprotEntryList()
                 .stream()
                 .parallel()
