@@ -577,7 +577,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
                 .stream()
                 .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
                         .reversed())
-                .limit(SORTED_SPECIES_LIMIT)
+                //.limit(SORTED_SPECIES_LIMIT)
                 .collect(Collectors.toList());
     }
 
