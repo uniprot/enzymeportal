@@ -643,8 +643,7 @@ div#organismList{
 
 }
 
-#alternative-names{
-    font-size: 70%;
+#alternative-names, .alternative-names{
     max-height: 120px;
     overflow: auto;
 }

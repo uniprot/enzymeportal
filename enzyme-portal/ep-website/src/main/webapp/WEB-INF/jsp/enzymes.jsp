@@ -178,6 +178,7 @@
                            <table id="enzymeResults" cellpadding="60" cellspacing="60">
                                <tr>
                                    <th width="20%">Name</th>
+                                   <th>Alternative Names</th>
                                    <th width="5%">Protein Hits</th>
                                    <th width="15%">Enzyme Family</th>
                                    <th width="10%">EC</th>
@@ -194,6 +195,17 @@
                                                <td>${enzyme.enzymeName}</td>
                                            </c:otherwise>
                                        </c:choose>
+
+                                       <td>
+                                           <div class="alternative-names">
+                                           <ul>
+                                                <c:forEach var="altname" items="${enzyme.altNames}">
+                                                      <li>${altname}</li>
+                                                </c:forEach>
+                                           </ul>
+                                           </div>
+                                       </td>
+
                                        <td>${enzyme.numEnzymeHits}</td>
                                        <td>${enzyme.enzymeFamily}</td>
                                        <td><a href="search/ec/${enzyme.ec}">${enzyme.ec}</a></td>
