@@ -182,7 +182,7 @@
                                    <th width="15%">Enzyme Family</th>
                                    <th width="10%">EC</th>
                                    <th width="30%">Catalytic Activity</th>
-                                   <th width="20%">Species</th>
+                                   <th width="20%">Cofactor</th>
                                </tr>
                                <c:forEach var="enzyme" items="${enzymeView}">
                                    <tr class="enzymeRow">
@@ -199,26 +199,11 @@
                                        <td><a href="search/ec/${enzyme.ec}">${enzyme.ec}</a></td>
                                        <td>${enzyme.catalyticActivities}</td>
                                        <td>
-                                           <c:set var="enzymeSpeciesSize" value="${fn:length(enzyme.species)}"/>
-                                           <c:set var="enzymeSpecies" value="${enzyme.species}"/>
-                                           <c:set var="enzymeSpeciesMaxDisplay" value="${5}"/>
-                                           <c:if test="${enzymeSpeciesSize gt 0}">
-                                               <c:if test="${enzymeSpeciesSize <= enzymeSpeciesMaxDisplay}">
-                                                   <ul>
-                                                       <c:forEach var="i" begin="0" end="${enzymeSpeciesSize-1}">
-                                                         <li>${enzyme.species[i]}</li>
-                                                       </c:forEach>
-                                                   </ul>
-                                               </c:if>
-                                               <c:if test="${enzymeSpeciesSize > enzymeSpeciesMaxDisplay}">
-                                                   <ul>
-                                                       <c:forEach var="i" begin="0" end="${enzymeSpeciesMaxDisplay-1}">
-                                                         <li>${enzyme.species[i]}</li>
-                                                       </c:forEach>
-                                                        <li>${enzymeSpeciesSize-5} others</li>
-                                                   </ul>
-                                               </c:if>
-                                           </c:if>
+                                          <ul>
+                                               <c:forEach var="cofactor" items="${enzyme.intenzCofactors}">
+                                                     <li>${cofactor}</li>
+                                               </c:forEach>
+                                          </ul>
                                        </td>
                                    </tr>
                                    <tr id="proteinList" style="display: none">

@@ -85,28 +85,22 @@
                        </c:otherwise>
                      </c:choose>
 
-
                 <h3>Associated Proteins</h3>
                      <c:choose>
                        <c:when test="${not empty enzymePage.proteins.entries }">
                            <c:set var="count" value="0" scope="page" />
                            <table id="associatedProteins">
                               <tr>
-                                  <th>ID ** no required</th>
                                   <th>Protein name</th>
-                                  <th>Common name ****</th>
+                                  <th>Common name</th>
                               </tr>
                                <c:forEach items="${enzymePage.proteins.entries}" var="p" varStatus="proteinsCounter">
                                    <c:if test="${proteinsCounter.count <= 5}">
                                    <tr>
-                                       <td><a href="${pageContext.request.contextPath}/search/${p.primaryAccession}/enzyme">${p.primaryAccession}</a></td>
                                        <td>${p.proteinName}</td>
                                        <td>${p.primarySpecie}</td>
-                                       
                                    </tr>
                                    </c:if>
-
-
                                </c:forEach>
 
                                <c:if test="${fn:length(enzymePage.proteins.entries)} > 5}">
