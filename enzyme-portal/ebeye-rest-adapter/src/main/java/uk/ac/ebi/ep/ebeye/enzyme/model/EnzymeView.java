@@ -3,6 +3,7 @@ package uk.ac.ebi.ep.ebeye.enzyme.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupEntry;
 import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 
@@ -17,10 +18,13 @@ public class EnzymeView {
     private String enzymeFamily;
     private String ec;
     private List<String> catalyticActivities;
+    @Deprecated
     private List<String> species;
     private List<Protein> proteins;
     private List<ProteinGroupEntry> proteinGroupEntry;
     private int numProteins;
+    private Set<String> intenzCofactors;
+    private Set<String> altNames;
 
     public String getEnzymeName() {
         return enzymeName;
@@ -66,6 +70,7 @@ public class EnzymeView {
         this.catalyticActivities = catalyticActivities;
     }
 
+    @Deprecated
     public List<String> getSpecies() {
         if (species == null) {
             species = new ArrayList<>();
@@ -74,6 +79,7 @@ public class EnzymeView {
         return species;
     }
 
+    @Deprecated
     public void setSpecies(List<String> species) {
         this.species = species;
     }
@@ -106,6 +112,22 @@ public class EnzymeView {
 
     public void setNumProteins(int numProteins) {
         this.numProteins = numProteins;
+    }
+
+    public Set<String> getIntenzCofactors() {
+        return intenzCofactors;
+    }
+
+    public void setIntenzCofactors(Set<String> intenzCofactors) {
+        this.intenzCofactors = intenzCofactors;
+    }
+
+    public Set<String> getAltNames() {
+        return altNames;
+    }
+
+    public void setAltNames(Set<String> altNames) {
+        this.altNames = altNames;
     }
 
     @Override

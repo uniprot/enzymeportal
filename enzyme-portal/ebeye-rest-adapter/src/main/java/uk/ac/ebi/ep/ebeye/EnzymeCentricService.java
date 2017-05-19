@@ -26,7 +26,7 @@ public class EnzymeCentricService {
         this.restTemplate = restTemplate;
         this.enzymeCentricProps = enzymeCentricPropsFile;
     }
-
+    
     private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
 
         //String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY,OMIM,compound_type&compound_name&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
@@ -34,7 +34,7 @@ public class EnzymeCentricService {
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
             //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
-            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
             return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
         }
         return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
@@ -55,7 +55,7 @@ public class EnzymeCentricService {
         Preconditions.checkArgument(pageSize > -1, "pageSize can not be less than 0");
         Preconditions.checkArgument(query != null, "'query' must not be null");
         Preconditions.checkArgument(facets != null, "'facets' must not be null");
-        Preconditions.checkArgument(facetCount > -1, "startPage can not be less than 0");
+        Preconditions.checkArgument(facetCount > -1, "facetCount can not be less than 0");
         int facetsCount = facetCount;
         if (facetCount > FACET_COUNT_LIMIT) {
             facetsCount = FACET_COUNT_LIMIT;
@@ -64,10 +64,11 @@ public class EnzymeCentricService {
         return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetsCount, facets, startPage, pageSize));
     }
 
+    //TODO return minimal fields for faster loading of enzyme-centric view page
     private EBISearchResult getEbiSearchResult(String url) {
 
         logger.info("URL sent to EBI Service " + url);
-
+        System.out.println("URL SENT "+ url);
         EBISearchResult results = restTemplate.getForObject(url.trim(), EBISearchResult.class);
         return results;
     }

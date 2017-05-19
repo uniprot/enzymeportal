@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -145,6 +146,17 @@ public class Entry extends EnzymeView {
 
     }
 
+    @Override
+    public Set<String> getIntenzCofactors() {
+        return fields.getIntenzCofactors();
+    }
+
+    @Override
+    public Set<String> getAltNames() {
+        return fields.getAltNames();
+    }
+
+    @Deprecated
     @Override
     public List<String> getSpecies() {
         Map<Integer, String> priorityMapper = new TreeMap<>();
