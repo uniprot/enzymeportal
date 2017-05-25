@@ -473,9 +473,9 @@ ul.catalytic-activity-list li {
 
 /*********** ENZYME VIEW  **********/
 
-#enzymeResultsProteins th{
+#enzymeResultsProteins{
     background-color: inherit;
-    font-weight: bold;
+    padding: 10px;
 }
 
 #enzymeResults td, #enzymeResults th{
@@ -500,9 +500,7 @@ table#enzymeResults tr:nth-child(4n+2){
     /*border-bottom: 1px solid #ccc;*/
 /*}*/
 
-/*table#enzymeResultsProteins td, table#enzymeResultsProteins th{*/
-    /*padding: 1px 1px 1px 1px;*/
-/*}*/
+
 
 table#enzymeResults td:first-child{
     padding-left: 20px;
@@ -514,8 +512,8 @@ table#enzymeResults tr.proteinSectionOpen{
     border-right: solid 1px #ccc;
 }
 
-table#enzymeResults tr:nth-child(4n+3){
-    background-color:#fff;
+table#enzymeResults tr:nth-child(4n+5){
+    background-color:#f1f1f1;
 }
 
 .paginationText{
@@ -534,10 +532,6 @@ table#enzymeResults tr#proteinList {
     border-right: solid 1px #ccc;
 }
 
-
-table#enzymeResultsProteins tr.proteinRow{
-    background-color: inherit;
-}
 
 .sideTwizzle{
     background-image: url("../images/sideTwizzle.png");
@@ -558,7 +552,6 @@ table#enzymeResultsProteins tr.proteinRow{
 }
 
 #search-results ul{
-    list-style-type: circle;
     margin-bottom: 0px;
     padding-bottom: 0px;
 }
@@ -600,9 +593,7 @@ input[type=checkbox], input[type=radio]{
     margin-right: 5px;
     margin-bottom: 2px;
 }
-ul, ol{
-    padding-left: 5px;
-}
+
 
 #facetFilterForm{
     padding: 0px;

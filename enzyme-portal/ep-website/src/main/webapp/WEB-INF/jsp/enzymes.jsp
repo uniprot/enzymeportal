@@ -219,7 +219,7 @@
                                        </td>
                                    </tr>
                                    <tr id="proteinList" style="display: none">
-                                       <td colspan="6">
+                                       <td colspan="7">
                                            <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
                                                <input name="keywordType" type="hidden" value="${keywordType}">
                                                <input name="searchTerm" type="hidden" value="${searchKey}">
@@ -228,32 +228,19 @@
                                                <form:hidden path="searchparams.previoustext" />
                                                <form:hidden path="searchparams.text" value="${searchKey}-${enzyme.ec}" />
                                                <form:hidden path="searchparams.type" value="${searchType}"/>
-                                                <table id="enzymeResultsProteins">
-                                                    <tr>
-                                                        <th width="3%"> </th>
-                                                        <th width="40%">Associated Proteins:</th>
-                                                        <th width="57%"> </th>
-                                                    </tr>
-                                                    <c:set var="proteinSize" value="${fn:length(enzyme.proteins)}"/>
-                                                        <c:forEach var="p" begin="0" end="4">
-                                                            <tr class="proteinRow">
-                                                                <td> </td>
-                                                                <%--
-                                                                <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.proteins[p].accession}/enzyme">${enzyme.proteins[p].proteinName}</a></td>
-                                                                <td>${enzyme.proteins[p].species}</td>
-                                                               --%>
-                                                                
-                                                               <td width="50%"><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].proteinGroupId}/enzyme">${enzyme.proteinGroupEntry[p].proteinName}</a></td>
-                                                          </tr>
-                                                        </c:forEach>
-                                                        <c:if test="${enzyme.numEnzymeHits >= 5}">
-                                                        <tr class="proteinRow">
-                                                            <td> </td>
-                                                            <td><button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numEnzymeHits} Proteins</button></td>
-                                                            <td> </td>
-                                                        </tr>
-                                                        </c:if>
-                                                </table>
+                                               <h4>Associated Proteins:</h4>
+                                               <ul id="enzymeResultsProteins">
+                                                    <c:set var="proteinSize" value="${fn:length(enzyme.proteinGroupEntry)}"/>
+                                                    <c:if test="${proteinSize >= 5}">
+                                                       <c:set var="proteinSize" value="5"/>
+                                                    </c:if>
+                                                    <c:forEach var="p" begin="0" end="${proteinSize -1}">
+                                                        <li><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].proteinGroupId}/enzyme">${enzyme.proteinGroupEntry[p].proteinName}</a></li>
+                                                    </c:forEach>
+                                                    <c:if test="${enzyme.numEnzymeHits >= 5}">
+                                                          <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numEnzymeHits} Proteins</button>
+                                                    </c:if>
+                                               </ul>
                                            </form:form>
                                         </td>
                                    </tr>
