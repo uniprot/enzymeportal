@@ -52,7 +52,6 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
     private void addFieldsAndXRefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
 
         addUniprotIdFields(uniprotEntry, fields);
-
         addScientificNameFields(uniprotEntry, fields);
         addCommonNameFields(uniprotEntry, fields);
         addGeneNameFields(uniprotEntry, fields);
