@@ -638,6 +638,14 @@ div#organismList{
     max-height: 120px;
     overflow: auto;
 }
+#alternative-names{
+    margin-bottom: 15px;
+ }
+
+.enzymeContent section{
+    margin-bottom: 20px;
+}
+
 #title-row h1{
     line-height: normal;
 }

@@ -50,99 +50,107 @@
                     <img src="/enzymeportal/resources/images/enzyme_page_logo.jpg">
                 </div>
 
-                <section class="large-7 columns">
+                <section class="large-10 columns">
                     <h1>Enzyme</h1>
                     <h2>${enzymePage.ec} - ${enzymePage.enzymeName}</h2>
                 </section>
 
-                <section class="large-3 columns">
-                    <div id="alternative-names">
-                        <c:if test="${not empty enzymePage.altNames}">
-                        <strong>Alternative Name(s):</strong>
-                        <c:forEach items="${enzymePage.altNames}" var="altName">
-                           <p>${altName}</p> 
-                        </c:forEach>
-                        
-                        </c:if>
-                    </div>
-                </section>
-
             </div>
-            <section class="row">
-                <h3>Catalytic Activity</h3>
-                <p>${enzymePage.catalyticActivities}</p>
 
+            <div class="row" id="title-row">
+               <div class="large-2 columns"></div>
+               <div class="large-10 columns">
+                   <h5>Alternative Name(s):</h5>
+                   <div id="alternative-names">
+                       <c:if test="${not empty enzymePage.altNames}">
+                           <ul>
+                               <c:forEach items="${enzymePage.altNames}" var="altName">
+                                   <li>${altName}</li>
+                               </c:forEach>
+                            </ul>
+                       </c:if>
+                   </div>
+               </div>
+             </div>
 
-                <h3>Cofactors</h3>
-                     <c:choose>
-                       <c:when test="${not empty enzymePage.cofactors }">
-                           <c:forEach items="${enzymePage.cofactors}" var="c">
-                            <p>${c}</p>
-                        </c:forEach>
-                       </c:when>
-                       <c:otherwise>
-                           There are no Cofactors for this Enzyme
-                       </c:otherwise>
-                     </c:choose>
+            <section class="row enzymeContent">
+                <div class="large-2 columns"></div>
+                <div class="large-10 columns">
+                    <h3>Catalytic Activity</h3>
+                    <p>${enzymePage.catalyticActivities}</p>
 
-                <h3>Associated Proteins</h3>
-                     <c:choose>
-                       <c:when test="${not empty enzymePage.proteins.entries }">
-                           <c:set var="count" value="0" scope="page" />
-                           <table id="associatedProteins">
-                              <tr>
-                                  <th>Protein name</th>
-                                  <th>Common name</th>
-                              </tr>
-                               <c:forEach items="${enzymePage.proteins.entries}" var="p" varStatus="proteinsCounter">
-                                   <c:if test="${proteinsCounter.count <= 5}">
+                    <section>
+                    <h3>Cofactors</h3>
+                         <c:choose>
+                           <c:when test="${not empty enzymePage.cofactors }">
+                               <c:forEach items="${enzymePage.cofactors}" var="c">
+                                <p>${c}</p>
+                            </c:forEach>
+                           </c:when>
+                           <c:otherwise>
+                               There are no Cofactors for this Enzyme
+                           </c:otherwise>
+                         </c:choose>
+
+                    </section>
+                    <section>
+                    <h3>Associated Proteins</h3>
+                         <c:choose>
+                           <c:when test="${not empty enzymePage.proteins.entries }">
+                               <c:set var="count" value="0" scope="page" />
+                               <table id="associatedProteins">
+                                  <tr>
+                                      <th>Protein name</th>
+                                      <th>Common name</th>
+                                  </tr>
+                                   <c:forEach items="${enzymePage.proteins.entries}" var="p" varStatus="proteinsCounter">
+                                       <c:if test="${proteinsCounter.count <= 5}">
+                                       <tr>
+                                           <td>${p.proteinName}</td>
+                                           <td>${p.primarySpecie}</td>
+                                       </tr>
+                                       </c:if>
+                                   </c:forEach>
+
+                                   <c:if test="${fn:length(enzymePage.proteins.entries)} > 5}">
                                    <tr>
-                                       <td>${p.proteinName}</td>
-                                       <td>${p.primarySpecie}</td>
+                                       <td colspan="3">button here1</td>
                                    </tr>
                                    </c:if>
-                               </c:forEach>
+                                   <c:if test="${fn:length(enzymePage.proteins.entries)} < 5}">
+                                   <tr>
+                                       <td colspan="3">button here2</td>
+                                   </tr>
+                                   </c:if>
 
-                               <c:if test="${fn:length(enzymePage.proteins.entries)} > 5}">
-                               <tr>
-                                   <td colspan="3">button here1</td>
-                               </tr>
-                               </c:if>
-                               <c:if test="${fn:length(enzymePage.proteins.entries)} < 5}">
-                               <tr>
-                                   <td colspan="3">button here2</td>
-                               </tr>
-                               </c:if>
+                               </table>
+                           </c:when>
+                           <c:otherwise>
+                               There are no Associated Proteins for this Enzyme
+                           </c:otherwise>
+                         </c:choose>
+                    </section>
 
-                           </table>
-                       </c:when>
-                       <c:otherwise>
-                           There are no Associated Proteins for this Enzyme
-                       </c:otherwise>
-                     </c:choose>
+                    <section>
+                    <h3>Citations</h3>
+                    <c:choose>
+                      <c:when test="${not empty enzymePage.citations }">
+                          <ul id="citations">
+                          <c:forEach items="${enzymePage.citations}" var="citation">
 
+                                  <li> <c:out value="${citation.title}"/></li>
 
-                <h3>Citations</h3>
-                <c:choose>
-                  <c:when test="${not empty enzymePage.citations }">
-                      <ul id="citations">
-                      <c:forEach items="${enzymePage.citations}" var="citation">
+                          </c:forEach>
+                          </ul>
+                      </c:when>
+                      <c:otherwise>
+                          There are no citations for this Enzyme
+                      </c:otherwise>
+                    </c:choose>
 
-                              <li> <c:out value="${citation.title}"/></li>
+                    </section>
 
-                      </c:forEach>
-                      </ul>
-                  </c:when>
-                  <c:otherwise>
-                      There are no citations for this Enzyme
-                  </c:otherwise>
-                </c:choose>
-
-
-
-
-
-
+                </div>
 
             </section>
 
