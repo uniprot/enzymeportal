@@ -30,6 +30,10 @@ public class Fields {
     private List<String> scientificName = new ArrayList<>();
     @JsonProperty("UNIPROTKB")
     private List<String> UNIPROTKB = new ArrayList<>();
+    @JsonProperty("primary_accession")
+    private List<String> primaryAccession = new ArrayList<>();
+    @JsonProperty("primary_organism")
+    private List<String> primaryOrganism = new ArrayList<>();
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -116,4 +120,25 @@ public class Fields {
     public void setUNIPROTKB(List<String> UNIPROTKB) {
         this.UNIPROTKB = UNIPROTKB;
     }
+
+    @JsonProperty("primary_accession")
+    public List<String> getPrimaryAccession() {
+        return primaryAccession;
+    }
+
+    @JsonProperty("primary_accession")
+    public void setPrimaryAccession(List<String> primaryAccession) {
+        this.primaryAccession = primaryAccession;
+    }
+
+    @JsonProperty("primary_organism")
+    public List<String> getPrimaryOrganism() {
+        return primaryOrganism;
+    }
+
+    @JsonProperty("primary_organism")
+    public void setPrimaryOrganism(List<String> primaryOrganism) {
+        this.primaryOrganism = primaryOrganism;
+    }
+
 }

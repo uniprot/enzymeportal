@@ -80,14 +80,14 @@ public class ProteinGroupEntry implements ProteinView {
 
     @Override
     public String getPrimaryOrganism() {
-        return fields.getCommonName().stream().findFirst().orElse(fields.getScientificName().stream().findFirst().orElse("Please report this error"));
+        return fields.getPrimaryOrganism().stream().findFirst().orElse("");
 
     }
 
     @Override
     public String getPrimaryAccession() {
-        //temp implementation till we have primary accession in the index
-        return fields.getUNIPROTKB().stream().findAny().orElse("This should not happen .. report");
+     
+        return fields.getPrimaryAccession().stream().findAny().orElse("");
     }
 
     @Override
@@ -114,48 +114,7 @@ public class ProteinGroupEntry implements ProteinView {
         return "Entry{" + "proteinGroupId=" + getProteinGroupId() + ", proteinName=" + getProteinName() + '}';
     }
 
-       // temp implementation till we have primary specie in the index
-//    public List<String> getSpecies() {
-//        Map<Integer, String> priorityMapper = new TreeMap<>();
-//        AtomicInteger key = new AtomicInteger(50);
-//        AtomicInteger customKey = new AtomicInteger(6);
-//        LinkedList<String> sortedSpecies = new LinkedList<>();
-//
-//        List<String> species = fields.getCommonName();
-//        if (species.isEmpty()) {
-//            species = fields.getScientificName();
-//        }
-//
-//        species.stream().forEach((name) -> {
-//            sortSpecies(name, priorityMapper, customKey, key);
-//        });
-//
-//        priorityMapper.entrySet().stream().forEach(map -> {
-//            sortedSpecies.add(map.getValue());
-//        });
-//        return sortedSpecies.stream().distinct().limit(2).collect(Collectors.toList());
-//
-//    }
-//    
-//        private void sortSpecies(String specieName, Map<Integer, String> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
-//
-//        if (specieName.equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
-//
-//            priorityMapper.put(1, specieName);
-//        } else if (specieName.equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
-//
-//            priorityMapper.put(2, specieName);
-//        } else if (specieName.equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
-//            priorityMapper.put(3, specieName);
-//
-//        } else if (specieName.equalsIgnoreCase(ModelOrganisms.RAT.getCommonName())) {
-//            priorityMapper.put(customKey.getAndIncrement(), specieName);
-//
-//        } else {
-//            priorityMapper.put(key.getAndIncrement(), specieName);
-//        }
-//    }
-
+ 
     @Override
     @Deprecated
     public String getPrimarySpecie() {
