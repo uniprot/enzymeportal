@@ -21,7 +21,7 @@ import java.util.Map;
     "entries",
     "facets"
 })
-public class ProteinGroupResult {
+public class ProteinGroupSearchResult {
 
     @JsonProperty("hitCount")
     private Integer hitCount;
