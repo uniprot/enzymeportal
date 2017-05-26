@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
-import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
-import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupResult;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeEntry;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeSearchResult;
+import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupSearchResult;
 import uk.ac.ebi.ep.ebeye.protein.model.Protein;
 import uk.ac.ebi.ep.web.utils.KeywordType;
 
@@ -116,46 +117,46 @@ public class EnzymeCentricController extends AbstractController {
         return view;
     }
 
-    private EBISearchResult getEbiSearchResult(String query, int startPage, int pageSize, int facetCount, List<String> filters) {
+    private EnzymeSearchResult getEbiSearchResult(String query, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
         return enzymeCentricService.getSearchResult(query, startPage, pageSize, facets, facetCount);
     }
 
-    private EBISearchResult getEbiSearchResultByOmimId(String omimId, int startPage, int pageSize, int facetCount, List<String> filters) {
+    private EnzymeSearchResult getEbiSearchResultByOmimId(String omimId, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
         return enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facets, facetCount);
 
     }
 
-    private EBISearchResult getEbiSearchResultByTaxId(String taxId, int startPage, int pageSize, int facetCount, List<String> filters) {
+    private EnzymeSearchResult getEbiSearchResultByTaxId(String taxId, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
 
         return enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facets, facetCount);
 
     }
 
-    private EBISearchResult getEbiSearchResultByEC(String ec, int startPage, int pageSize, int facetCount, List<String> filters) {
+    private EnzymeSearchResult getEbiSearchResultByEC(String ec, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
         return enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facets, facetCount);
 
     }
 
-    private EBISearchResult getEbiSearchResultByPathwayId(String pathwayId, int startPage, int pageSize, int facetCount, List<String> filters) {
+    private EnzymeSearchResult getEbiSearchResultByPathwayId(String pathwayId, int startPage, int pageSize, int facetCount, List<String> filters) {
         String facets = filters.stream().collect(Collectors.joining(","));
         return enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facets, facetCount);
 
     }
 
     private String findEnzymesBySearchTerm(String searchTerm, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model, SearchModel searchModel, String view) {
-        EBISearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage * pageSize, pageSize, facetCount, filters);
+        EnzymeSearchResult ebiSearchResult = getEbiSearchResult(searchTerm, startPage * pageSize, pageSize, facetCount, filters);
         int LOWEST_BEST_MATCHED_RESULT_SIZE = 4;
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
             Pageable pageable = new PageRequest(startPage, pageSize);
-            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+            Page<EnzymeEntry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
 
-            List<Entry> entries = page.getContent();
-            List<Entry> enzymeView = new LinkedList<>();
+            List<EnzymeEntry> entries = page.getContent();
+            List<EnzymeEntry> enzymeView = new LinkedList<>();
 //            entries.stream().forEach(entry -> {
 //                List<Protein> proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), searchTerm, associatedProteinLimit)
 //                        .stream()
@@ -176,24 +177,24 @@ public class EnzymeCentricController extends AbstractController {
             int limit = 10;
 
             entries.stream().forEach(entry -> {
-                ProteinGroupResult result = proteinGroupService.findProteinGroupResultBySearchTermAndEC(entry.getEc(), searchTerm, start, limit);
+                ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultBySearchTermAndEC(entry.getEc(), searchTerm, start, limit);
                 if (result.getHitCount() == 0) {
                     result = proteinGroupService.findProteinGroupResultByEC(entry.getEc(), start, LOWEST_BEST_MATCHED_RESULT_SIZE);
                 }
-                entry.setProteinGroupEntry(result.getEntries());
-                entry.setNumProteins(result.getHitCount());
-                entry.setNumEnzymeHits(result.getHitCount());
-                if (result.getHitCount() > 0) {
-                    enzymeView.add(entry);
-                }
-
+//                entry.setProteinGroupEntry(result.getEntries());
+//                entry.setNumProteins(result.getHitCount());
+//                entry.setNumEnzymeHits(result.getHitCount());
+//                if (result.getHitCount() > 0) {
+//                    enzymeView.add(entry);
+//                }
+                addProteinEntryToEnzymeView(result, entry, enzymeView);
                 //addProteinEntryToEnzymeView(proteins, entry, enzymeView);
             });
 
             if (enzymeView.isEmpty() && !ebiSearchResult.getEntries().isEmpty()) {
-                logger.info(ebiSearchResult.getEntries().size()
+                logger.error(ebiSearchResult.getEntries().size()
                         + " results are found in Enzyme-centric index for query " + searchTerm + " But none in Protein-centric index");
-                ebiSearchResult = new EBISearchResult();
+                ebiSearchResult = new EnzymeSearchResult();
                 ebiSearchResult.setFacets(new ArrayList<>());
                 ebiSearchResult.setHitCount(0);
                 ebiSearchResult.setEntries(new ArrayList<>());
@@ -208,22 +209,25 @@ public class EnzymeCentricController extends AbstractController {
 
     private String findEnzymesByOmimId(String omimId, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model, SearchModel searchModel, String view) {
 
-        EBISearchResult ebiSearchResult = getEbiSearchResultByOmimId(omimId, startPage * pageSize, pageSize, facetCount, filters);
+        EnzymeSearchResult ebiSearchResult = getEbiSearchResultByOmimId(omimId, startPage * pageSize, pageSize, facetCount, filters);
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
             Pageable pageable = new PageRequest(startPage, pageSize);
-            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+            Page<EnzymeEntry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
 
-            List<Entry> entries = page.getContent();
-            List<Entry> enzymeView = new LinkedList<>();
+            List<EnzymeEntry> entries = page.getContent();
+            List<EnzymeEntry> enzymeView = new LinkedList<>();
             entries.stream()
                     .forEach(entry -> {
-
-                        List<Protein> proteins = ebeyeRestService.findUniqueProteinsByOmimIdAndEc(omimId, entry.getEc(), associatedProteinLimit)
-                        .stream()
-                        .sorted()
-                        .collect(Collectors.toList());
-                        addProteinEntryToEnzymeView(proteins, entry, enzymeView);
+                        ProteinGroupSearchResult result = proteinGroupService.findUniqueProteinsByOmimIdAndEc(omimId, entry.getEc(), associatedProteinLimit);
+                        addProteinEntryToEnzymeView(result, entry, enzymeView);
+//                        List<Protein> proteins = ebeyeRestService.findUniqueProteinsByOmimIdAndEc(omimId, entry.getEc(), associatedProteinLimit)
+//                        .stream()
+//                        .sorted()
+//                        .collect(Collectors.toList());
+//                        
+//                        
+//                        addProteinEntryToEnzymeView(proteins, entry, enzymeView);
 
                     });
 
@@ -235,23 +239,25 @@ public class EnzymeCentricController extends AbstractController {
 
     private String findEnzymesByTaxId(String taxId, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model, SearchModel searchModel, String view) {
 
-        EBISearchResult ebiSearchResult = getEbiSearchResultByTaxId(taxId, startPage * pageSize, pageSize, facetCount, filters);
+        EnzymeSearchResult ebiSearchResult = getEbiSearchResultByTaxId(taxId, startPage * pageSize, pageSize, facetCount, filters);
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
             Pageable pageable = new PageRequest(startPage, pageSize);
-            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+            Page<EnzymeEntry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
 
-            List<Entry> entries = page.getContent();
-            List<Entry> enzymeView = new LinkedList<>();
+            List<EnzymeEntry> entries = page.getContent();
+            List<EnzymeEntry> enzymeView = new LinkedList<>();
             entries.stream()
                     .forEach(entry -> {
-                        List<Protein> proteins = ebeyeRestService.findUniqueProteinsByTaxIdAndEc(taxId, entry.getEc(), associatedProteinLimit)
-                        .stream()
-                        .sorted()
-                        .collect(Collectors.toList());
+                        ProteinGroupSearchResult result = proteinGroupService.findUniqueProteinsByTaxIdAndEc(taxId, entry.getEc(), associatedProteinLimit);
+                        addProteinEntryToEnzymeView(result, entry, enzymeView);
 
-                        addProteinEntryToEnzymeView(proteins, entry, enzymeView);
-
+//                        List<Protein> proteins = ebeyeRestService.findUniqueProteinsByTaxIdAndEc(taxId, entry.getEc(), associatedProteinLimit)
+//                        .stream()
+//                        .sorted()
+//                        .collect(Collectors.toList());
+//
+//                        addProteinEntryToEnzymeView(proteins, entry, enzymeView);
                     });
 
             return constructModel(ebiSearchResult, enzymeView, page, filters, taxId, searchKey, keywordType, model, searchModel);
@@ -262,24 +268,25 @@ public class EnzymeCentricController extends AbstractController {
 
     private String findEnzymesByEC(String ec, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model, SearchModel searchModel, String view) {
 
-        EBISearchResult ebiSearchResult = getEbiSearchResultByEC(ec, startPage * pageSize, pageSize, facetCount, filters);
+        EnzymeSearchResult ebiSearchResult = getEbiSearchResultByEC(ec, startPage * pageSize, pageSize, facetCount, filters);
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
             Pageable pageable = new PageRequest(startPage, pageSize);
-            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+            Page<EnzymeEntry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
 
-            List<Entry> entries = page.getContent();
-            List<Entry> enzymeView = new LinkedList<>();
+            List<EnzymeEntry> entries = page.getContent();
+            List<EnzymeEntry> enzymeView = new LinkedList<>();
             entries.stream()
                     .forEach(entry -> {
+                        ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultByEC(entry.getEc(), 0, associatedProteinLimit);
+                        addProteinEntryToEnzymeView(result, entry, enzymeView);
 
-                        List<Protein> proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
-                        .stream()
-                        .sorted()
-                        .collect(Collectors.toList());
-
-                        addProteinEntryToEnzymeView(proteins, entry, enzymeView);
-
+//                        List<Protein> proteins = ebeyeRestService.queryForUniqueProteins(entry.getEc(), associatedProteinLimit)
+//                        .stream()
+//                        .sorted()
+//                        .collect(Collectors.toList());
+//
+//                        addProteinEntryToEnzymeView(proteins, entry, enzymeView);
                     });
 
             return constructModel(ebiSearchResult, enzymeView, page, filters, ec, searchKey, keywordType, model, searchModel);
@@ -290,23 +297,25 @@ public class EnzymeCentricController extends AbstractController {
 
     private String findEnzymesByPathwayId(String pathwayId, int startPage, int pageSize, int facetCount, List<String> filters, int associatedProteinLimit, String searchKey, String keywordType, Model model, SearchModel searchModel, String view) {
 
-        EBISearchResult ebiSearchResult = getEbiSearchResultByPathwayId(pathwayId, startPage * pageSize, pageSize, facetCount, filters);
+        EnzymeSearchResult ebiSearchResult = getEbiSearchResultByPathwayId(pathwayId, startPage * pageSize, pageSize, facetCount, filters);
         if (ebiSearchResult != null) {
             long hitCount = ebiSearchResult.getHitCount();
             Pageable pageable = new PageRequest(startPage, pageSize);
-            Page<Entry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
+            Page<EnzymeEntry> page = new PageImpl<>(ebiSearchResult.getEntries(), pageable, hitCount);
 
-            List<Entry> entries = page.getContent();
-            List<Entry> enzymeView = new LinkedList<>();
+            List<EnzymeEntry> entries = page.getContent();
+            List<EnzymeEntry> enzymeView = new LinkedList<>();
             entries.stream().forEach(entry -> {
 
-                List<Protein> proteins = ebeyeRestService.findUniqueProteinsByPathwayIdAndEc(pathwayId, entry.getEc(), associatedProteinLimit)
-                        .stream()
-                        .sorted()
-                        .collect(Collectors.toList());
+                ProteinGroupSearchResult result = proteinGroupService.findUniqueProteinsByPathwayIdAndEc(pathwayId, entry.getEc(), associatedProteinLimit);
+                addProteinEntryToEnzymeView(result, entry, enzymeView);
 
-                addProteinEntryToEnzymeView(proteins, entry, enzymeView);
-
+//                List<Protein> proteins = ebeyeRestService.findUniqueProteinsByPathwayIdAndEc(pathwayId, entry.getEc(), associatedProteinLimit)
+//                        .stream()
+//                        .sorted()
+//                        .collect(Collectors.toList());
+//
+//                addProteinEntryToEnzymeView(proteins, entry, enzymeView);
             });
 
             return constructModel(ebiSearchResult, enzymeView, page, filters, pathwayId, searchKey, keywordType, model, searchModel);
@@ -315,7 +324,7 @@ public class EnzymeCentricController extends AbstractController {
         return view;
     }
 
-    private String constructModel(EBISearchResult ebiSearchResult, List<Entry> enzymeView, Page page, List<String> filters, String searchId, String searchKey, String keywordType, Model model, SearchModel searchModel) {
+    private String constructModel(EnzymeSearchResult ebiSearchResult, List<EnzymeEntry> enzymeView, Page page, List<String> filters, String searchId, String searchKey, String keywordType, Model model, SearchModel searchModel) {
         int current = page.getNumber() + 1;
         int begin = Math.max(1, current - 5);
         int end = Math.min(begin + 10, page.getTotalPages());
@@ -338,6 +347,18 @@ public class EnzymeCentricController extends AbstractController {
 
     }
 
+    private void addProteinEntryToEnzymeView(ProteinGroupSearchResult result, EnzymeEntry entry, List<EnzymeEntry> enzymeView) {
+        int proteinHits = result.getHitCount();
+        if (proteinHits > 0) {
+            entry.setProteinGroupEntry(result.getEntries());
+            entry.setNumProteins(result.getHitCount());
+            entry.setNumEnzymeHits(result.getHitCount());
+
+            enzymeView.add(entry);
+        }
+    }
+
+    @Deprecated
     private void addProteinEntryToEnzymeView(List<Protein> proteins, Entry entry, List<Entry> enzymeView) {
 
         int proteinHits = proteins.size();
