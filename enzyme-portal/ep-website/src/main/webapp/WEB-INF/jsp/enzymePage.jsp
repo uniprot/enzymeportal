@@ -101,23 +101,23 @@
                                <table id="associatedProteins">
                                   <tr>
                                       <th>Protein name</th>
-                                      <th>Common name</th>
+                                      <th>Organism</th>
                                   </tr>
                                    <c:forEach items="${enzymePage.proteins.entries}" var="p" varStatus="proteinsCounter">
                                        <c:if test="${proteinsCounter.count <= 5}">
                                        <tr>
-                                           <td>${p.proteinName}</td>
-                                           <td>${p.primarySpecie}</td>
+                                           <td><a href="${pageContext.request.contextPath}/search/${p.primaryAccession}/enzyme">${p.proteinName}</td>
+                                           <td>${p.primaryOrganism}</td>
                                        </tr>
                                        </c:if>
                                    </c:forEach>
 
-                                   <c:if test="${fn:length(enzymePage.proteins.entries)} > 5}">
+                                   <c:if test="${fn:length(enzymePage.proteins.entries) > 5}">
                                    <tr>
                                        <td colspan="3">button here1</td>
                                    </tr>
                                    </c:if>
-                                   <c:if test="${fn:length(enzymePage.proteins.entries)} < 5}">
+                                   <c:if test="${fn:length(enzymePage.proteins.entries) <5}">
                                    <tr>
                                        <td colspan="3">button here2</td>
                                    </tr>
