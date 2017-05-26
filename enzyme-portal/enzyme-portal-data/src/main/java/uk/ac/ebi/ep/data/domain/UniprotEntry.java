@@ -641,31 +641,31 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     public Boolean humanOnTop() {
-        return this.getScientificName().equalsIgnoreCase(ModelOrganisms.HUMAN.getScientificName());
+        return this.getTaxId().equals(ModelOrganisms.HUMAN.getTaxId());
     }
 
     private void sortSpecies(Species sp, UniprotEntry entry, Map<Integer, UniprotEntry> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
         //Human,Mouse, Mouse-ear cress, fruit fly, yeast, e.coli, Rat,worm
         // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
-        if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.HUMAN.getScientificName())) {
+        if (sp.getTaxId().equals(ModelOrganisms.HUMAN.getTaxId())) {
 
             priorityMapper.put(1, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.MOUSE.getScientificName())) {
+        } else if (sp.getTaxId().equals(ModelOrganisms.MOUSE.getTaxId())) {
 
             priorityMapper.put(2, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.MOUSE_EAR_CRESS.getScientificName())) {
+        } else if (sp.getTaxId().equals(ModelOrganisms.MOUSE_EAR_CRESS.getTaxId())) {
 
             priorityMapper.put(3, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getScientificName())) {
+        } else if (sp.getTaxId().equals(ModelOrganisms.FRUIT_FLY.getTaxId())) {
 
             priorityMapper.put(4, entry);
-        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.ECOLI.getScientificName())) {
+        } else if (sp.getTaxId().equals(ModelOrganisms.ECOLI.getTaxId())) {
 
             priorityMapper.put(5, entry);
-        } else if (sp.getScientificname().split("\\(")[0].trim().equalsIgnoreCase(ModelOrganisms.BAKER_YEAST.getScientificName())) {
+        } else if (sp.getTaxId().equals(ModelOrganisms.BAKER_YEAST.getTaxId())) {
             priorityMapper.put(6, entry);
 
-        } else if (sp.getScientificname().equalsIgnoreCase(ModelOrganisms.RAT.getScientificName())) {
+        } else if (sp.getTaxId().equals(ModelOrganisms.RAT.getTaxId())) {
             priorityMapper.put(customKey.getAndIncrement(), entry);
         } else {
             priorityMapper.put(key.getAndIncrement(), entry);

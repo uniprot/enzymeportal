@@ -1,15 +1,11 @@
 package uk.ac.ebi.ep.xml.generator;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.ep.data.common.ModelOrganisms;
+import uk.ac.ebi.ep.data.domain.PrimaryProtein;
 import uk.ac.ebi.ep.data.domain.ProteinGroups;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.EcNumber;
@@ -219,57 +215,22 @@ public class XmlTransformer {
     }
 
     protected void addPrimaryProteinField(ProteinGroups proteinGroups, final Set<Field> fields) {
-        if (!proteinGroups.getUniprotEntryList().isEmpty()) {
 
-            UniprotEntry primaryProtein = proteinGroups.getUniprotEntryList().stream()
-                    .sorted(Comparator.comparing(UniprotEntry::getEntryType))
-                    .sorted(Comparator.comparing(UniprotEntry::getExpEvidenceFlag).reversed())
-                    .map(protein -> sortSpecies(protein, new AtomicInteger(0)))
-                    .findFirst().get();
+        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
 
-            //final Map<String, UniprotEntry> mapper = new TreeMap<>();
-            //mapper.putIfAbsent(proteinGroups.getProteinGroupId(), selectedProtein);
-            // UniprotEntry primaryProtein =  mapper.get(proteinGroups.getProteinGroupId());
+        if (primaryProtein != null) {
+
             Field primaryAccessionfield = new Field(FieldName.PRIMARY_ACCESSION.getName(), primaryProtein.getAccession());
             fields.add(primaryAccessionfield);
-            Field primaryOganismfield = new Field(FieldName.PRIMARY_ORGANISM.getName(), primaryProtein.getCommonName());
+            String commonName = primaryProtein.getCommonName();
+            if (commonName == null) {
+                commonName = primaryProtein.getScientificName();
+            }
+            Field primaryOganismfield = new Field(FieldName.PRIMARY_ORGANISM.getName(), commonName);
 
             fields.add(primaryOganismfield);
-
         }
 
-    }
-
-    private UniprotEntry sortSpecies(UniprotEntry entry, AtomicInteger key) {
-        Map<Integer, UniprotEntry> priorityMapper = new TreeMap<>();
-//Human,Mouse, Mouse-ear cress, fruit fly, yeast, e.coli, Rat,worm
-        // "Homo sapiens","Mus musculus","Rattus norvegicus", "Drosophila melanogaster","WORM","Saccharomyces cerevisiae","ECOLI"
-        if (entry.getScientificName().equalsIgnoreCase(ModelOrganisms.HUMAN.getScientificName())) {
-
-            priorityMapper.put(1, entry);
-        } else if (entry.getScientificName().equalsIgnoreCase(ModelOrganisms.MOUSE.getScientificName())) {
-
-            priorityMapper.put(2, entry);
-        } else if (entry.getScientificName().equalsIgnoreCase(ModelOrganisms.MOUSE_EAR_CRESS.getScientificName())) {
-
-            priorityMapper.put(3, entry);
-        } else if (entry.getScientificName().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getScientificName())) {
-
-            priorityMapper.put(4, entry);
-        } else if (entry.getScientificName().equalsIgnoreCase(ModelOrganisms.ECOLI.getScientificName())) {
-
-            priorityMapper.put(5, entry);
-        } else if (entry.getScientificName().split("\\(")[0].trim().equalsIgnoreCase(ModelOrganisms.BAKER_YEAST.getScientificName())) {
-            priorityMapper.put(6, entry);
-
-        } else if (entry.getScientificName().equalsIgnoreCase(ModelOrganisms.RAT.getScientificName())) {
-            priorityMapper.put(7, entry);
-        } else {
-            if (priorityMapper.isEmpty()) {
-                priorityMapper.put(key.getAndIncrement(), entry);
-            }
-        }
-        return priorityMapper.entrySet().stream().findFirst().get().getValue();
     }
 
 }

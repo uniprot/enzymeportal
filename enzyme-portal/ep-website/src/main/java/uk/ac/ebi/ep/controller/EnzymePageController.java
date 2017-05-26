@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.ProteinGroupService;
-import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
-import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
-import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupResult;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeEntry;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeSearchResult;
+import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupSearchResult;
 import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
 import uk.ac.ebi.ep.literatureservice.model.Result;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
@@ -31,8 +31,8 @@ public class EnzymePageController extends AbstractController {
     private static final Logger logger = Logger.getLogger(EnzymePageController.class);
 
     @Autowired
-    public EnzymePageController(ProteinGroupService proteinGroupService,EnzymePortalService enzymePortalService, LiteratureService litService) {
-       this.proteinGroupService = proteinGroupService;
+    public EnzymePageController(ProteinGroupService proteinGroupService, EnzymePortalService enzymePortalService, LiteratureService litService) {
+        this.proteinGroupService = proteinGroupService;
         this.enzymePortalService = enzymePortalService;
         this.literatureService = litService;
     }
@@ -41,10 +41,10 @@ public class EnzymePageController extends AbstractController {
     public String showEnzyme(@PathVariable("ec") String ec, Model model, RedirectAttributes attributes) {
 
         int resultLimit = 7;
-        long startTime = System.nanoTime();
+
         boolean isEc = searchUtil.validateEc(ec);
         if (isEc) {
-
+            long startTime = System.nanoTime();
             EnzymePage enzymePage = computeEnzymePage(ec, resultLimit);
 
             long endTime = System.nanoTime();
@@ -63,9 +63,9 @@ public class EnzymePageController extends AbstractController {
 
     public EnzymePage computeEnzymePage(String ecNumber, int limit) {
 
-        CompletableFuture<Entry> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
+        CompletableFuture<EnzymeEntry> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
 
-        CompletableFuture<ProteinGroupResult> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
+        CompletableFuture<ProteinGroupSearchResult> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
 
         CompletableFuture<List<Result>> citations = CompletableFuture.supplyAsync(() -> findCitations(ecNumber, limit));
 
@@ -82,33 +82,28 @@ public class EnzymePageController extends AbstractController {
         return epmc.getResultList().getResult();
     }
 
-    private Entry findEnzymeByEcNumber(String ecNumber) {
+    private EnzymeEntry findEnzymeByEcNumber(String ecNumber) {
 
         //return enzymePortalService.findIntenzEnzymesByEc(ecNumber);
-        return getEbiSearchResultByEC(ecNumber).getEntries().stream().findAny().orElseGet(()-> new Entry());
-
-    }
-    
-        private EBISearchResult getEbiSearchResultByEC(String ec) {
-        String facets = "";
-        int startPage = 0; int pageSize =1;
-        return enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facets, 0);
+        return getEbiSearchResultByEC(ecNumber).getEntries().stream().findAny().orElseGet(() -> new EnzymeEntry());
 
     }
 
-//    private List<AssociatedProtein> findProteinsByEcNumber(String ecNumber, int limit) {
-//        String entryType = "0";
-//        return enzymePortalService.findAssociatedProteinsByEcNumber(ecNumber, limit);
-//        // return enzymePortalService.findAssociatedProteinsByEcNumber(ecNumber, entryType, limit);
-//    }
-    private ProteinGroupResult findProteinsByEcNumber(String ecNumber, int limit) {
+    private EnzymeSearchResult getEbiSearchResultByEC(String ec) {
+        int pageSize = 1;
+        return enzymeCentricService.findEbiSearchResultsByEC(ec, pageSize);
+
+    }
+
+
+    private ProteinGroupSearchResult findProteinsByEcNumber(String ecNumber, int limit) {
         int start = 0;
         int pageSize = limit;
         return proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
 
     }
 
-    private EnzymePage addProteins(ProteinGroupResult pgr, Entry e) {
+    private EnzymePage addProteins(ProteinGroupSearchResult pgr, EnzymeEntry e) {
 
         return EnzymePage
                 .enzymePageBuilder()

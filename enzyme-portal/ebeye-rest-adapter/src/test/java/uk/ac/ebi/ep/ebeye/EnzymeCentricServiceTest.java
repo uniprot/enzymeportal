@@ -23,11 +23,11 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
-import uk.ac.ebi.ep.ebeye.enzyme.model.Entry;
-import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
-import uk.ac.ebi.ep.ebeye.model.Facet;
-import uk.ac.ebi.ep.ebeye.model.FacetValue;
-import uk.ac.ebi.ep.ebeye.model.Fields;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeEntry;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeFields;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeSearchResult;
+import uk.ac.ebi.ep.ebeye.model.enzyme.Facet;
+import uk.ac.ebi.ep.ebeye.model.enzyme.FacetValue;
 
 /**
  *
@@ -39,7 +39,7 @@ public class EnzymeCentricServiceTest {
     private static final String SERVER_URL = "http://www.myserver.com/ebeye";
 
     private MockRestServiceServer syncRestServerMock;
-    private Function<String, Entry> entryCreator;
+    private Function<String, EnzymeEntry> entryCreator;
     private Function<String, Facet> facetCreator;
 
     private static final int FACET_COUNT = 20;
@@ -64,12 +64,20 @@ public class EnzymeCentricServiceTest {
 
     private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
 
-        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family&sort=_relevance&reverse=true&format=json";
+        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
-            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family&sort=_relevance&reverse=true&format=json";
+            //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
             return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
         }
+
+//        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family&sort=_relevance&reverse=true&format=json";
+//
+//        if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
+//            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family&sort=_relevance&reverse=true&format=json";
+//            return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
+//        }
         return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
     }
 
@@ -83,16 +91,16 @@ public class EnzymeCentricServiceTest {
         String facetsList = "";
         String query = "query";
 
-        List<Entry> entries = createEntries(limit, entryCreator);
+        List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);
 
         String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        EBISearchResult resultSet = createSearchResult(entries, facets);
+        EnzymeSearchResult resultSet = createSearchResult(entries, facets);
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EBISearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
         List<FacetValue> facetValue = searchResult.getFacets().stream().findAny().get().getFacetValues();
 
         assertThat(searchResult.getEntries(), hasSize(limit));
@@ -115,16 +123,16 @@ public class EnzymeCentricServiceTest {
         String facetsList = "";
         String query = "query";
 
-        List<Entry> entries = createEntries(limit, entryCreator);
+        List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);
 
         String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+        EnzymeSearchResult resultSet = createSearchResult(entries, facets, limit);
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EBISearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
@@ -134,7 +142,7 @@ public class EnzymeCentricServiceTest {
 
     }
 
-    private List<Entry> createEntries(int num, Function< String, Entry> entryCreator) {
+    private List<EnzymeEntry> createEntries(int num, Function< String, EnzymeEntry> entryCreator) {
         return IntStream.range(0, num)
                 .mapToObj(String::valueOf)
                 .map(id -> entryCreator.apply(id))
@@ -148,8 +156,8 @@ public class EnzymeCentricServiceTest {
                 .collect(Collectors.toList());
     }
 
-    private EBISearchResult createSearchResult(List<Entry> entries, List<Facet> facets, int hitCount) {
-        EBISearchResult result = new EBISearchResult();
+    private EnzymeSearchResult createSearchResult(List<EnzymeEntry> entries, List<Facet> facets, int hitCount) {
+        EnzymeSearchResult result = new EnzymeSearchResult();
 
         result.setEntries(entries);
         result.setHitCount(hitCount);
@@ -158,12 +166,12 @@ public class EnzymeCentricServiceTest {
         return result;
     }
 
-    private EBISearchResult createSearchResult(List<Entry> entries, List<Facet> facets) {
+    private EnzymeSearchResult createSearchResult(List<EnzymeEntry> entries, List<Facet> facets) {
         return createSearchResult(entries, facets, entries.size());
     }
 
     private void mockSuccessfulServerResponse(MockRestServiceServer serverMock, String requestUrl,
-            EBISearchResult searchResult)
+            EnzymeSearchResult searchResult)
             throws IOException {
 
         serverMock.expect(requestTo(requestUrl)).andExpect(method(HttpMethod.GET))
@@ -193,7 +201,7 @@ public class EnzymeCentricServiceTest {
     private Function<String, Facet> createFacet() {
         List<String> name = new ArrayList<>();
         name.add("title");
-        Fields fields = new Fields();
+        EnzymeFields fields = new EnzymeFields();
         fields.setName(name);
         List<String> sciName = new ArrayList<>();
         sciName.add("homo sapien");
@@ -225,10 +233,10 @@ public class EnzymeCentricServiceTest {
         }
     }
 
-    private Function<String, Entry> createEntry() {
+    private Function<String, EnzymeEntry> createEntry() {
         List<String> name = new ArrayList<>();
         name.add("title");
-        Fields fields = new Fields();
+        EnzymeFields fields = new EnzymeFields();
         fields.setName(name);
         List<String> sciName = new ArrayList<>();
         sciName.add("homo sapien");
@@ -239,22 +247,22 @@ public class EnzymeCentricServiceTest {
         fields.setEnzymeFamily(family);
 
         String id = "1.1.1.";
-        Entry entry = new Entry(id, "enzymeportal", fields);
+        EnzymeEntry entry = new EnzymeEntry(id, "enzymeportal", fields);
         entry.setEnzymeName("enzyme_name_" + id);
 
         return new FunctionImpl(entry);
     }
 
-    private static class FunctionImpl implements Function<String, Entry> {
+    private static class FunctionImpl implements Function<String, EnzymeEntry> {
 
-        private final Entry entry;
+        private final EnzymeEntry entry;
 
-        public FunctionImpl(Entry entry) {
+        public FunctionImpl(EnzymeEntry entry) {
             this.entry = entry;
         }
 
         @Override
-        public Entry apply(String e) {
+        public EnzymeEntry apply(String e) {
             return entry;
         }
     }
@@ -273,16 +281,16 @@ public class EnzymeCentricServiceTest {
         String facetsList = "";
         String query = "query";
 
-        List<Entry> entries = createEntries(limit, entryCreator);
+        List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);
 
         String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+        EnzymeSearchResult resultSet = createSearchResult(entries, facets, limit);
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EBISearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
@@ -308,16 +316,16 @@ public class EnzymeCentricServiceTest {
         String omimId = "12345";
         String query = "OMIM:" + omimId;
 
-        List<Entry> entries = createEntries(limit, entryCreator);
+        List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);
 
         String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+        EnzymeSearchResult resultSet = createSearchResult(entries, facets, limit);
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
@@ -342,16 +350,16 @@ public class EnzymeCentricServiceTest {
         String pathwayId = "R-GGA-189451";
         String query = "REACTOME:" + pathwayId;
 
-        List<Entry> entries = createEntries(limit, entryCreator);
+        List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);
 
         String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+        EnzymeSearchResult resultSet = createSearchResult(entries, facets, limit);
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
@@ -375,16 +383,16 @@ public class EnzymeCentricServiceTest {
         String ec = "1.1.1.1";
         String query = "INTENZ:" + ec;
 
-        List<Entry> entries = createEntries(limit, entryCreator);
+        List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);
 
         String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+        EnzymeSearchResult resultSet = createSearchResult(entries, facets, limit);
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
@@ -409,16 +417,16 @@ public class EnzymeCentricServiceTest {
         String taxId = "9606";
         String query = "TAXONOMY:" + taxId;
 
-        List<Entry> entries = createEntries(limit, entryCreator);
+        List<EnzymeEntry> entries = createEntries(limit, entryCreator);
         List<Facet> facets = createFacets(facetCount, facetCreator);
 
         String queryUrl = buildQueryUrl(SERVER_URL, query, facetCount, facetsList, startPage, pageSize);
 
-        EBISearchResult resultSet = createSearchResult(entries, facets, limit);
+        EnzymeSearchResult resultSet = createSearchResult(entries, facets, limit);
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EBISearchResult searchResult = enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));

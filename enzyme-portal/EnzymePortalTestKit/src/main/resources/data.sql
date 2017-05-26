@@ -19,6 +19,9 @@ Insert into RELATED_PROTEINS (REL_PROT_INTERNAL_ID,NAME_PREFIX) values (421687,'
 Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('cGMP-specific 3'',5''-cyclic phosphodiesterase','E76XC1');
 Insert into PROTEIN_GROUPS (PROTEIN_NAME,PROTEIN_GROUP_ID) values ('1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial','EUN8I9');
 
+--PRIMARY_PROTEIN
+Insert into PRIMARY_PROTEIN (PROTEIN_GROUP_ID,ACCESSION,TAX_ID,COMMON_NAME,SCIENTIFIC_NAME,PRIORITY_CODE,PRIMARY_PROTEIN_ID) values ('E76XC1','O76074',9606,'Human','Homo sapiens','EMO',2742);
+Insert into PRIMARY_PROTEIN (PROTEIN_GROUP_ID,ACCESSION,TAX_ID,COMMON_NAME,SCIENTIFIC_NAME,PRIORITY_CODE,PRIMARY_PROTEIN_ID) values ('EUN8I9','Q07973',9606,'Human','Homo sapiens','EMO',2609);
 
 --Uniprot Entry
 --Insert into UNIPROT_ENTRY (DBENTRY_ID,ACCESSION,NAME,TAX_ID,PROTEIN_NAME,SCIENTIFIC_NAME,COMMON_NAME,SYNONYM_NAMES,SEQUENCE_LENGTH,RELATED_PROTEINS_ID,LAST_UPDATE_TIMESTAMP,FUNCTION,ENTRY_TYPE) values (35170617,'Q64441','CP24A_MOUSE',10090,'MOCK-1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial','Mus musculus','Mouse','CYP24A1;calcitriol,NADPH:oxygen oxidoreductase (24-hydroxylating);',514,132218, TO_CHAR('2015-02-04', 'yyyy-MM-dd'),'Has a role in maintaining calcium homeostasis. Catalyzes the NADPH-dependent 24-hydroxylation of calcidiol (25-hydroxyvitamin D(3)) and calcitriol (1-alpha,25-dihydroxyvitamin D(3)). The enzyme can perform up to 6 rounds of hydroxylation of calcitriol leading to calcitroic acid',0);

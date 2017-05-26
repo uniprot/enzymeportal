@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.common;
 
 import java.util.LinkedList;
@@ -16,39 +12,34 @@ import javax.validation.constraints.NotNull;
 public enum ModelOrganisms {
 
     //Human,Mouse, Mouse-ear cress, fruit fly, yeast, e.coli,Rat,//worm
-    HUMAN("Homo sapiens"),
-    MOUSE("Mus musculus"),
-    MOUSE_EAR_CRESS("Arabidopsis thaliana"),
-    FRUIT_FLY("Drosophila melanogaster"),
-    BAKER_YEAST("Saccharomyces cerevisiae"),
-    ECOLI("Escherichia coli"),
-    RAT("Rattus norvegicus");
-    // WORM("Caenorhabditis elegans");
+    HUMAN(9606),
+    MOUSE(10090),
+    MOUSE_EAR_CRESS(3702),
+    FRUIT_FLY(7227),
+    BAKER_YEAST(4932),
+    ECOLI(83333),
+    RAT(10116);
 
-    private static final List<String> allScientificNames = new LinkedList<>();
+    private static final List<Long> allTaxIds = new LinkedList<>();
 
     static {
         for (ModelOrganisms cs : ModelOrganisms.values()) {
-            allScientificNames.add(cs.scientificName);
+            allTaxIds.add(cs.taxId);
         }
     }
-    private String scientificName;
 
-    private ModelOrganisms(@NotNull String name) {
-        this.scientificName = name;
+    private long taxId;
+
+    private ModelOrganisms(@NotNull long taxId) {
+        this.taxId = taxId;
     }
 
-    public String getScientificName() {
-        return scientificName;
+    public long getTaxId() {
+        return taxId;
     }
 
-    /**
-     * List of most common species <i>scientific names</i>
-     *
-     * @return
-     */
-    public static List<String> getScientificNames() {
-        return allScientificNames;
+    public static List<Long> getAllTaxIds() {
+        return allTaxIds;
     }
 
 }

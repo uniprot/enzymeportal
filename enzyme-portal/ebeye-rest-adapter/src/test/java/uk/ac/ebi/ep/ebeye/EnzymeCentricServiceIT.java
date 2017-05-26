@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
-import uk.ac.ebi.ep.ebeye.model.EBISearchResult;
-import uk.ac.ebi.ep.ebeye.model.FacetValue;
+import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeSearchResult;
+import uk.ac.ebi.ep.ebeye.model.enzyme.FacetValue;
 
 /**
  * Tests the behaviour of the {@link EnzymeCentricService}.
@@ -44,7 +44,7 @@ public class EnzymeCentricServiceIT {
         String facets = filters.stream().collect(Collectors.joining(","));
         int facetCount = 5;
 
-        EBISearchResult result = enzymeCentricService.getSearchResult(query, startPage, pageSize, facets, facetCount);
+        EnzymeSearchResult result = enzymeCentricService.getSearchResult(query, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
         List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
 
@@ -52,7 +52,7 @@ public class EnzymeCentricServiceIT {
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
         assertThat(result.getEntries(), hasSize(pageSize));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
-        assertThat(facetValue, hasSize(facetCount + 1));
+        assertThat(facetValue, hasSize(facetCount));
 
     }
 
@@ -72,7 +72,7 @@ public class EnzymeCentricServiceIT {
         String facets = filters.stream().collect(Collectors.joining(","));
         int facetCount = 6;
 
-        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facets, facetCount);
+        EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByOmimId(omimId, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
         List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
 
@@ -99,16 +99,15 @@ public class EnzymeCentricServiceIT {
         String facets = filters.stream().collect(Collectors.joining(","));
         int facetCount = 5;
 
-        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facets, facetCount);
+        EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByPathwayId(pathwayId, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
         List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
-       
 
         assertNotNull(result);
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
-        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(9)));
+        assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(10)));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
-        assertThat(facetValue, hasSize(facetCount + 1));
+        assertThat(facetValue, hasSize(facetCount));
     }
 
     /**
@@ -126,7 +125,7 @@ public class EnzymeCentricServiceIT {
         String facets = filters.stream().collect(Collectors.joining(","));
         int facetCount = 5;
 
-        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facets, facetCount);
+        EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByEC(ec, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
         List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
 
@@ -134,7 +133,7 @@ public class EnzymeCentricServiceIT {
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
         assertThat(result.getEntries(), hasSize(1));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
-        assertThat(facetValue, hasSize(facetCount+1));
+        assertThat(facetValue, hasSize(facetCount));
     }
 
     /**
@@ -153,7 +152,7 @@ public class EnzymeCentricServiceIT {
         String facets = filters.stream().collect(Collectors.joining(","));
         int facetCount = 5;
 
-        EBISearchResult result = enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facets, facetCount);
+        EnzymeSearchResult result = enzymeCentricService.findEbiSearchResultsByTaxId(taxId, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
         List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
 
