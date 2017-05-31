@@ -9,6 +9,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -27,9 +28,13 @@ import uk.ac.ebi.ep.xml.util.XmlFileUtils;
  */
 public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups, Entry> {
 
+    protected static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ProteinGroupsBatchConfig.class);
+
     private static final String READ_QUERY = "select p from ProteinGroups p";
     private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
     private static final String ROOT_TAG_NAME = "database";
+    private static final String NATIVE_QUERY1 = "SELECT * FROM PROTEIN_GROUPS";
+    private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ROWNUM <= 300";
 
     @Bean
     @Override
@@ -60,7 +65,6 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
                 .start(readProcessWriteStep())
                 .listener(jobExecutionListener())
                 .build();
-
     }
 
     @Override
@@ -79,24 +83,40 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
                 .processor(entryProcessor())
                 .writer(xmlWriter())
                 .listener(logChunkListener())
+                .listener(stepExecutionListener())
+                .listener(itemReadListener())
+                .listener(itemProcessListener())
+                .listener(itemWriteListener())
                 .build();
 
     }
 
     @Override
-    @Bean
+    @Bean(destroyMethod="")
     public ItemReader<ProteinGroups> databaseReader() {
 
         JpaPagingItemReader<ProteinGroups> databaseReader = new JpaPagingItemReader<>();
         databaseReader.setEntityManagerFactory(entityManagerFactory);
-        databaseReader.setQueryString(READ_QUERY);
         databaseReader.setPageSize(xmlConfigParams.getChunkSize());
-        databaseReader.setSaveState(false);
+        //databaseReader.setQueryString(READ_QUERY);//JPQL 
+        databaseReader.setQueryProvider(createQueryProvider());//NATIVE QUERY// 
         return databaseReader;
     }
 
+    private JpaNativeQueryProvider<ProteinGroups> createQueryProvider() {
+        JpaNativeQueryProvider<ProteinGroups> queryProvider = new JpaNativeQueryProvider<>();
+        queryProvider.setSqlQuery(NATIVE_QUERY);
+        queryProvider.setEntityClass(ProteinGroups.class);
+        try {
+            queryProvider.afterPropertiesSet();
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return queryProvider;
+    }
+
     @Override
-    @Bean
+    @Bean(destroyMethod = "")
     public ItemWriter<Entry> xmlWriter() {
         PrettyPrintStaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();
         XmlFileUtils.createDirectory(xmlConfigParams.getXmlDir());

@@ -26,7 +26,6 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
         AdditionalFields additionalFields = new AdditionalFields();
         Set<Field> fields = new HashSet<>();
         Set<Ref> refs = new HashSet<>();
-
         Entry entry = new Entry();
 
         entry.setId(proteinGroups.getProteinGroupId());

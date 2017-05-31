@@ -108,7 +108,7 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
                 .build();
     }
 
-    @Bean
+    @Bean(destroyMethod = "")
     public ItemReader<UniprotEntry> uniProtEntryReader() {
         JpaPagingItemReader<UniprotEntry> databaseReader = new JpaPagingItemReader<>();
         databaseReader.setEntityManagerFactory(entityManagerFactory);
@@ -123,7 +123,7 @@ public class MockProteinBatchConfig extends DefaultBatchConfigurer {
         return new UniProtEntryToEntryConverter(mockXmlConfigParams);
     }
 
-    @Bean
+    @Bean(destroyMethod = "")
     public ItemWriter<Entry> entryToXmlWriter() {
         PrettyPrintStaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();
         xmlWriter.setResource(proteinCentricXmlDir());
