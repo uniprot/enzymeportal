@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.ProteinGroupService;
@@ -38,14 +39,14 @@ public class EnzymePageController extends AbstractController {
     }
 
     @RequestMapping(value = "/search/ec/{ec}", method = RequestMethod.GET)
-    public String showEnzyme(@PathVariable("ec") String ec, Model model, RedirectAttributes attributes) {
+    public String showEnzyme(@PathVariable("ec") String ec,@RequestParam(value = "enzymeName", required = true) String enzymeName, Model model, RedirectAttributes attributes) {
 
         int resultLimit = 7;
 
         boolean isEc = searchUtil.validateEc(ec);
         if (isEc) {
             long startTime = System.nanoTime();
-            EnzymePage enzymePage = computeEnzymePage(ec, resultLimit);
+            EnzymePage enzymePage = computeEnzymePage(ec,enzymeName, resultLimit);
 
             long endTime = System.nanoTime();
             long duration = endTime - startTime;
@@ -61,13 +62,13 @@ public class EnzymePageController extends AbstractController {
         return "error";
     }
 
-    public EnzymePage computeEnzymePage(String ecNumber, int limit) {
+    public EnzymePage computeEnzymePage(String ecNumber,String enzymeName, int limit) {
 
         CompletableFuture<EnzymeEntry> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
 
         CompletableFuture<ProteinGroupSearchResult> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
 
-        CompletableFuture<List<Result>> citations = CompletableFuture.supplyAsync(() -> findCitations(ecNumber, limit));
+        CompletableFuture<List<Result>> citations = CompletableFuture.supplyAsync(() -> findCitations(enzymeName, limit));
 
         return enzyme.thenCombine(proteins, (theEnzyme, protein) -> addProteins(protein, theEnzyme))
                 .thenCombine(citations, (finalResult, citation) -> addCitations(citation, finalResult))
@@ -75,9 +76,9 @@ public class EnzymePageController extends AbstractController {
 
     }
 
-    private List<Result> findCitations(String term, int limit) {
+    private List<Result> findCitations(String enzymeName, int limit) {
 
-        EuropePMC epmc = literatureService.getCitationsBySearchTerm(term, limit);
+        EuropePMC epmc = literatureService.getCitationsBySearchTerm(enzymeName, limit);
 
         return epmc.getResultList().getResult();
     }
