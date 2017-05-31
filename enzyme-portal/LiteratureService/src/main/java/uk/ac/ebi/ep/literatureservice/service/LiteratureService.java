@@ -72,6 +72,12 @@ public class LiteratureService {
 
     }
 
+    public EuropePMC findCitationsByUniprotAccession(String accession, int limit) {
+
+        return findCitationsByAccession(accession, limit).orElse(new EuropePMC());
+
+    }
+
     private List<LabelledCitation> getLabelledCitations(EuropePMC pmc, int limit) {
         return computeLabelledCitation(pmc)
                 .stream()
