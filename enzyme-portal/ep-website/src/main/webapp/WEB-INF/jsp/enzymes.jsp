@@ -185,17 +185,16 @@
                                    <th width="30%">Catalytic Activity</th>
                                    <th width="20%">Cofactor</th>
                                </tr>
-                               <c:forEach var="enzyme" items="${enzymeView}">
+                               <c:forEach var="enzyme" items="${enzymeView}" varStatus="theIndex">
                                    <tr class="enzymeRow">
                                        <c:choose>
                                             <c:when test='${enzyme.numProteins > 0}'>
-                                                <td class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
+                                                <td data-toggle="proteinList${theIndex.index}" class="enzymeName sideTwizzle">${enzyme.enzymeName}</td>
                                             </c:when>
                                            <c:otherwise>
                                                <td>${enzyme.enzymeName}</td>
                                            </c:otherwise>
                                        </c:choose>
-
                                        <td>
                                            <div class="alternative-names">
                                            <ul>
@@ -205,12 +204,10 @@
                                            </ul>
                                            </div>
                                        </td>
-
                                        <td>${enzyme.numProteins}</td>
                                        <td>${enzyme.enzymeFamily}</td>
                                        <td><a href="search/ec/${enzyme.ec}?enzymeName=${enzyme.enzymeName}">${enzyme.ec}</a></td>
                                        <td>${enzyme.catalyticActivities}</td>
-
                                        <td>
                                           <ul>
                                                <c:forEach var="cofactor" items="${enzyme.intenzCofactors}">
@@ -219,7 +216,7 @@
                                           </ul>
                                        </td>
                                    </tr>
-                                   <tr id="proteinList" style="display: none">
+                                   <tr id="proteinList${theIndex.index}" data-toggler data-animate="hinge-in-from-top hinge-out-from-top" style="display: none">
                                        <td colspan="7">
                                            <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
                                                <input name="keywordType" type="hidden" value="${keywordType}">
