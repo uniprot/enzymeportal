@@ -3,7 +3,11 @@ package uk.ac.ebi.ep.xml.util;
 import java.io.Writer;
 import javanet.staxutils.IndentingXMLEventWriter;
 import javanet.staxutils.helpers.EventWriterDelegate;
-import javax.xml.stream.*;
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.XMLEvent;
 import org.springframework.batch.item.xml.StaxEventItemWriter;
@@ -35,6 +39,7 @@ public class PrettyPrintStaxEventItemWriter<T> extends StaxEventItemWriter<T> {
             super(out);
         }
 
+        @Override
         public void add(XMLEvent event) throws XMLStreamException {
             if (event.getEventType() == XMLStreamConstants.CHARACTERS) {
                 Characters characters = event.asCharacters();
@@ -43,7 +48,7 @@ public class PrettyPrintStaxEventItemWriter<T> extends StaxEventItemWriter<T> {
                     return;
                 }
             }
-            super.add(event);
+            super.add(event);         
         }
     }
 }

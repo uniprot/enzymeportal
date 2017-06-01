@@ -6,9 +6,13 @@ import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.ItemProcessListener;
+import org.springframework.batch.core.ItemReadListener;
+import org.springframework.batch.core.ItemWriteListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -29,6 +33,7 @@ import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.util.DateTimeUtil;
+import uk.ac.ebi.ep.xml.util.GlobalListener;
 import uk.ac.ebi.ep.xml.util.LogChunkListener;
 
 /**
@@ -43,7 +48,7 @@ import uk.ac.ebi.ep.xml.util.LogChunkListener;
 @PropertySource(value = "classpath:ep-xml-config.properties", ignoreResourceNotFound = true)
 public abstract class AbstractBatchConfig<T, S> extends DefaultBatchConfigurer {
 
-    public static final int CHUNK_SIZE = 20;
+    public static final int CHUNK_SIZE = 10;
     private static final String pattern = "MMM_d_yyyy@hh:mma";
     private static final String date = DateTimeUtil.convertDateToString(LocalDateTime.now(), pattern);
     public static final String READ_DATA_JOB = "READ_DATA_FROM_DB_JOB_" + date;
@@ -85,7 +90,23 @@ public abstract class AbstractBatchConfig<T, S> extends DefaultBatchConfigurer {
     }
 
     protected ChunkListener logChunkListener() {
-        return new LogChunkListener(xmlConfigParams.getChunkSize());
+        return new LogChunkListener(CHUNK_SIZE);
+    }
+
+    protected StepExecutionListener stepExecutionListener() {
+        return new GlobalListener<>();
+    }
+
+    protected ItemReadListener itemReadListener() {
+        return new GlobalListener<>();
+    }
+
+    protected ItemProcessListener itemProcessListener() {
+        return new GlobalListener<>();
+    }
+
+    protected ItemWriteListener itemWriteListener() {
+        return new GlobalListener<>();
     }
 
     abstract JobExecutionListener jobExecutionListener();

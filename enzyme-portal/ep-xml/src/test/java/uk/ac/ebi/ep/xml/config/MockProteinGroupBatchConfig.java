@@ -5,9 +5,13 @@ import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.ItemProcessListener;
+import org.springframework.batch.core.ItemReadListener;
+import org.springframework.batch.core.ItemWriteListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -35,6 +39,7 @@ import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.proteinGroup.JobCompletionNotificationListener;
 import uk.ac.ebi.ep.xml.generator.proteinGroup.ProteinGroupsProcessor;
 import uk.ac.ebi.ep.xml.model.Entry;
+import uk.ac.ebi.ep.xml.util.GlobalListener;
 import uk.ac.ebi.ep.xml.util.LogChunkListener;
 import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 
@@ -47,7 +52,6 @@ import uk.ac.ebi.ep.xml.util.PrettyPrintStaxEventItemWriter;
 @Import({MockXmlConfig.class})
 public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
 
-  
     private static final String READ_DATA_JOB = "READ_DATA_FROM_DB_JOB";
     private static final String READ_PROCESS_WRITE_XML_STEP = "readProcessAndWriteXMLstep";
 
@@ -61,6 +65,7 @@ public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
     private EntityManagerFactory entityManagerFactory;
     @Autowired
     private XmlConfigParams mockXmlConfigParams;
+    public static final int CHUNK_SIZE = 10;
 
     @Bean
     public Resource proteinCentricXmlDir() {
@@ -86,15 +91,19 @@ public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
     @Bean
     public Step readFromDbWriteToXMLStep() {
         return stepBuilders.get(READ_PROCESS_WRITE_XML_STEP)
-                .<ProteinGroups, Entry>chunk(mockXmlConfigParams.getChunkSize())
+                .<ProteinGroups, Entry>chunk(CHUNK_SIZE)
                 .<ProteinGroups>reader(proteinGroupsReader())
                 .processor(proteinGroupsToEntryProcessor())
                 .writer(xmlWriter())
                 .listener(logChunkListener())
+                .listener(stepExecutionListener())
+                .listener(itemReadListener())
+                .listener(itemProcessListener())
+                .listener(itemWriteListener())
                 .build();
     }
 
-    @Bean
+    @Bean(destroyMethod = "")
     public ItemReader<ProteinGroups> proteinGroupsReader() {
         JpaPagingItemReader<ProteinGroups> databaseReader = new JpaPagingItemReader<>();
         databaseReader.setEntityManagerFactory(entityManagerFactory);
@@ -110,7 +119,7 @@ public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
 
     }
 
-    @Bean
+    @Bean(destroyMethod = "")
     public ItemWriter<Entry> xmlWriter() {
         PrettyPrintStaxEventItemWriter<Entry> xmlWriter = new PrettyPrintStaxEventItemWriter<>();
         // XmlFileUtils.createDirectory(mockXmlConfigParams.getXmlDir());
@@ -137,7 +146,7 @@ public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
     }
 
     private ChunkListener logChunkListener() {
-        return new LogChunkListener(mockXmlConfigParams.getChunkSize());
+        return new LogChunkListener(CHUNK_SIZE);
     }
 
     /**
@@ -168,6 +177,22 @@ public class MockProteinGroupBatchConfig extends DefaultBatchConfigurer {
         marshaller.setMarshallerProperties(jaxbProps);
 
         return marshaller;
+    }
+
+    protected StepExecutionListener stepExecutionListener() {
+        return new GlobalListener<>();
+    }
+
+    protected ItemReadListener itemReadListener() {
+        return new GlobalListener<>();
+    }
+
+    protected ItemProcessListener itemProcessListener() {
+        return new GlobalListener<>();
+    }
+
+    protected ItemWriteListener itemWriteListener() {
+        return new GlobalListener<>();
     }
 
 }
