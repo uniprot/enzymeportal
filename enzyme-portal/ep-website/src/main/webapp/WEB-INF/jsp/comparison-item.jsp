@@ -14,7 +14,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="epfn" uri="/WEB-INF/epTagLibray" %>
 
-<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script><!--
+<%--<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>--%>
+
+<!--
 <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />
 <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/literature.css" type="text/css" rel="stylesheet" />

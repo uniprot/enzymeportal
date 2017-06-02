@@ -39,7 +39,7 @@
 <!--
 <script>window.jQuery || document.write('<script src="../js/libs/jquery-1.10.2.min.js"><\/script>')</script>
 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<%--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>--%>
 <!-- Your custom JavaScript file scan go here... change names accordingly -->
 <!--
 <script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/plugins.js"></script>
@@ -67,7 +67,7 @@
 <script type="text/JavaScript">$(document).foundationExtendEBI();</script>
 
 
-<script src="${pageContext.request.contextPath}/resources/javascript/controllers.js"></script>
+<%--<script src="${pageContext.request.contextPath}/resources/javascript/controllers.js"></script>--%>
 <script src="${pageContext.request.contextPath}/resources/javascript/search.js"></script>
 <script src="${pageContext.request.contextPath}/resources/javascript/enzyme.js"></script>
 

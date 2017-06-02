@@ -18,11 +18,11 @@
     <c:set var="pageTitle" value="Enzymes"/>
     <%@include file="head.jspf" %>
 
-    <%--<script src="${pageContext.request.contextPath}/resources/javascript/jquery.easy-autocomplete.min.js"></script>--%>
+    <script src="${pageContext.request.contextPath}/resources/javascript/jquery.easy-autocomplete.min.js"></script>
     <%--<script src="${pageContext.request.contextPath}/resources/javascript/jquery.slidereveal.js"></script>--%>
 
-    <%--<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.min.css" type="text/css" />--%>
-    <%--<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.themes.min.css" type="text/css" />--%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.min.css" type="text/css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.themes.min.css" type="text/css" />
 
 </head>
 
@@ -95,7 +95,125 @@
             </section>
 
             <div class="row">
+
+
+
                 <section id="search-filters" class="large-3 columns">
+
+
+
+
+
+
+
+
+
+
+
+                    <%--<div class="subTitle">--%>
+                           <%--Species--%>
+                       <%--</div>--%>
+                       <%--<c:if test="${fn:length(facet.facetValues) gt 12}">--%>
+                           <%--<!--auto-complete search box-->--%>
+                           <%--<div class="ui-widget" id="auto-complete">--%>
+                               <%--<input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
+                               <%--<input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
+                           <%--</div>--%>
+                       <%--</c:if>--%>
+                       <%--<div class="filterContent">--%>
+                           <%--<c:set var="speciesList" value="${searchFilter.species}"/>--%>
+                           <%--<c:set var="speciesListSize" value="${fn:length(speciesList)}"/>--%>
+                           <%--<c:set var="speciesParams" value="${searchModel.searchparams.species}"/>--%>
+
+                           <%--<div id="species_filters_y"--%>
+                               <%--style="${empty searchModel.searchparams.species?--%>
+                               <%--'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>--%>
+                           <%--<div id="species_filters_n"></div>--%>
+
+                   		<%--<script>--%>
+                   			<%--$(document).ready(function () {--%>
+                   				<%--// (See search.js if in doubt)--%>
+
+                   				<%--// Initialise variables:--%>
+                   				<%--var group = 'species';--%>
+                   				<%--checkedFilters[group] = [];--%>
+                   				<%--uncheckedFilters[group] = [];--%>
+                   				<%--displayedFilters[group] = 0;--%>
+
+
+                                <%--&lt;%&ndash;<c:forEach var="org" items="${facet.facetValues}">&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;{"value": "${org.label}", "taxId": "TAXONOMY:${org.value}"},&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;</c:forEach>&ndash;%&gt;--%>
+
+
+                   				<%--// Populate js variables with data from server:--%>
+                   				<%--<c:forEach var="specie" items="${facet.facetValues}">--%>
+                   					<%--var sp = { "id": "TAXONOMY:${org.value}", "name": "${org.label}","taxId":"TAXONOMY:${org.value}" };--%>
+                   					<%--<c:choose>--%>
+                   						<%--<c:when test="${Fn:contains(speciesParams, specie.scientificname)}">--%>
+                   							<%--checkedFilters[group][checkedFilters[group].length] = sp;--%>
+                   						<%--</c:when>--%>
+                   						<%--<c:otherwise>--%>
+                   							<%--uncheckedFilters[group][uncheckedFilters[group].length] = sp;--%>
+                   						<%--</c:otherwise>--%>
+                   					<%--</c:choose>--%>
+                   					<%--speciesAutocompleteDataSource.push({--%>
+                   						<%--label: "${not empty specie.commonname? specie.commonname : specie.scientificname}",--%>
+                   						<%--value: "${specie.scientificname}"});--%>
+                   				<%--</c:forEach>--%>
+
+                   				<%--// Display filters:--%>
+                   				<%--for (var i = 0; i < checkedFilters[group].length; i++){--%>
+                   					<%--addCheckbox(group, checkedFilters[group][i], true);--%>
+                   				<%--}--%>
+                   				<%--for (var i = 0; displayedFilters[group] < ${filterSizeDefault}--%>
+                   				<%--&& displayedFilters[group] < ${speciesListSize}; i++){--%>
+                   					<%--addCheckbox(group, uncheckedFilters[group][i], false);--%>
+                   				<%--}--%>
+                   			<%--});--%>
+                   		<%--</script>--%>
+
+                           <%--<c:if test="${speciesListSize gt filterSizeDefault}">--%>
+                               <%--<img id="loading_more_sf" src="${pageContext.request.contextPath}/resources/images/loading16.gif"--%>
+                                   <%--style="display: none"/>--%>
+
+                               <%--<a id="more_sf" href="javascript:void(0)"--%>
+                                   <%--onclick="addUnselectedCheckboxes('species',--%>
+                                   <%--displayedFilters['species'],--%>
+                                   <%--${speciesListSize}-displayedFilters['species'], this)">See all--%>
+                                   <%--${speciesListSize}</a>--%>
+
+
+                           <%--</c:if>--%>
+
+                           <%--<c:if test="${speciesListSize gt 12}">--%>
+                               <%--<!--    then add auto complete-->--%>
+                               <%--<script>--%>
+                   				<%--$(document).ready(function(){--%>
+                   					<%--ResultAutoComplete('specieAT', speciesAutocompleteDataSource,'filtersForm','_ctempList_selected');--%>
+                   				<%--});--%>
+                               <%--</script>--%>
+                           <%--</c:if>--%>
+                       <%--</div>--%>
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+
                     <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
                     <div class="filter">
                         <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
@@ -170,6 +288,19 @@
                          </c:forEach>
                     </div>
                     </form>
+
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+                    <!-- ******************************************************************************************************************** -->
+
+
+
+
+
                 </section>
 
                 <section class="large-9 columns" id="search-results">

@@ -42,7 +42,7 @@
   <!-- for production the above can be replaced with -->
    <link href="resources/css/search.css" type="text/css" rel="stylesheet" />
   <link rel="stylesheet" href="//www.ebi.ac.uk/web_guidelines/css/compliance/mini/ebi-fluid-embl.css">
-  <script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>
+  <%--<script src="resources/lib/spineconcept/javascript/jquery-1.5.1.min.js" type="text/javascript"></script>--%>
         <script src="resources/javascript/search.js" type="text/javascript"></script>
 
   <style type="text/css">
