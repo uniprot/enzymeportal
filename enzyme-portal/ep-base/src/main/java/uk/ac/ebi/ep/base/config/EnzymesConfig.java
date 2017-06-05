@@ -7,8 +7,14 @@ package uk.ac.ebi.ep.base.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import uk.ac.ebi.ep.base.search.EnzymeFinder;
+import uk.ac.ebi.ep.base.search.EnzymeFinderService;
+import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.ebeye.EbeyeRestService;
+import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 
 /**
@@ -16,10 +22,17 @@ import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
  * @author joseph
  */
 @Configuration
+@ComponentScan(basePackages = {"uk.ac.ebi.ep.ebeye.config", "uk.ac.ebi.ep.data.service"})
 public class EnzymesConfig {
 
     @Autowired
     private Environment env;
+    @Autowired
+    private ProteinGroupService proteinGroupService;
+    @Autowired
+    private EnzymePortalService enzymePortalService;
+    @Autowired
+    private EbeyeRestService ebeyeRestService;
 
     @Bean
     public ChebiConfig chebiConfig() {
@@ -34,6 +47,10 @@ public class EnzymesConfig {
         return chebiConfig;
     }
 
-    
+    @Bean
+    public EnzymeFinderService enzymeFinderService() {
+
+        return new EnzymeFinder(enzymePortalService, ebeyeRestService, proteinGroupService);
+    }
 
 }

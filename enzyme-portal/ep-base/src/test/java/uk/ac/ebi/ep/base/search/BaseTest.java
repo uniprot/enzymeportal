@@ -18,6 +18,7 @@ import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
+import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 import uk.ac.ebi.ep.enzymeservices.intenz.IntenzAdapter;
@@ -40,6 +41,8 @@ public abstract class BaseTest {
     protected EnzymePortalService enzymePortalService;
     @Autowired
     protected EbeyeRestService ebeyeService;
+    @Autowired
+    protected ProteinGroupService proteinGroupService;
 
     @Autowired
     protected LiteratureService literatureService;
@@ -62,7 +65,7 @@ public abstract class BaseTest {
         enzymeRetriever.setLiteratureService(literatureService);
         enzymeRetriever.setIntenzAdapter(intenzAdapter);
         enzymeRetriever.setRheaAdapter(rheaAdapter);
-        enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeService);
+        enzymeFinder = new EnzymeFinder(enzymePortalService, ebeyeService, proteinGroupService);
 
     }
 
