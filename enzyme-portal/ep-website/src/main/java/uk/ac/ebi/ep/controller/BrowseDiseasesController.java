@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uk.ac.ebi.biobabel.util.collections.ChemicalNameComparator;
-import uk.ac.ebi.ep.base.search.EnzymeFinder;
+import uk.ac.ebi.ep.base.search.EnzymeFinderService;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.search.model.Disease;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
@@ -43,13 +40,12 @@ public class BrowseDiseasesController extends AbstractController {
     private static final String RESULT = "/search";
     private static final String FIND_DISEASES_BY_NAME = "/service/diseases";
 
-    private List<EnzymePortalDisease> diseaseList = new ArrayList<>(); 
+    private List<EnzymePortalDisease> diseaseList = new ArrayList<>();
 
     @RequestMapping(value = BROWSE_DISEASE, method = RequestMethod.GET)
     public String showDiseases(Model model) {
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
-        diseaseList = finder.findDiseases();
+        diseaseList = enzymeFinderService.findDiseases();
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         model.addAttribute("diseaseList", diseaseList);
@@ -146,7 +142,6 @@ public class BrowseDiseasesController extends AbstractController {
     private SearchResults findEnzymesByDisease(String diseaseId, String diseaseName) {
 
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
 
         SearchParams searchParams = new SearchParams();
         searchParams.setText(diseaseName);
@@ -154,20 +149,20 @@ public class BrowseDiseasesController extends AbstractController {
         searchParams.setStart(0);
         searchParams.setPrevioustext(diseaseName);
 
-        finder.setSearchParams(searchParams);
+        enzymeFinderService.setSearchParams(searchParams);
 
         String omimNUmber = diseaseId.trim();
-        results = finder.computeEnzymeSummariesByOmimNumber(omimNUmber);
+        results = enzymeFinderService.computeEnzymeSummariesByOmimNumber(omimNUmber);
 
         if (results == null) {
 
-            return getEnzymes(finder, searchParams);
+            return getEnzymes(enzymeFinderService, searchParams);
         }
 
         return results;
     }
 
-    private SearchResults getEnzymes(EnzymeFinder finder, SearchParams searchParams) {
+    private SearchResults getEnzymes(EnzymeFinderService finder, SearchParams searchParams) {
 
         SearchResults results = finder.getEnzymes(searchParams);
 

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
@@ -27,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uk.ac.ebi.ep.base.search.EnzymeFinder;
 import uk.ac.ebi.ep.common.Field;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.enzyme.model.ChemicalEntity;
@@ -472,9 +467,8 @@ public class SearchController extends AbstractController {
      */
     @Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
-        
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-        SearchResults results = finder.getEnzymes(searchParameters);
+
+        SearchResults results = enzymeFinderService.getEnzymes(searchParameters);
         
         return results;
     }
@@ -493,26 +487,25 @@ public class SearchController extends AbstractController {
         String searchTerm = HtmlUtility.cleanText(keyword);
         searchTerm = searchTerm.replaceAll("&quot;", "");
         SearchResults results = null;
-        
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
+
         if (keywordType.equalsIgnoreCase(KeywordType.KEYWORD.name())) {
-            results = finder.getAssociatedProteinsByEcAndFulltextSearch(ec, searchTerm, limit);
+            results = enzymeFinderService.getAssociatedProteinsByEcAndFulltextSearch(ec, searchTerm, limit);
         }
         if (keywordType.equalsIgnoreCase(KeywordType.DISEASE.name())) {
             String omimId = searchId;
-            results = finder.getAssociatedProteinsByOmimIdAndEc(omimId, ec, limit);
+            results = enzymeFinderService.getAssociatedProteinsByOmimIdAndEc(omimId, ec, limit);
         }
         if (keywordType.equalsIgnoreCase(KeywordType.EC.name())) {
             
-            results = finder.getAssociatedProteinsByEc(ec, limit);
+            results = enzymeFinderService.getAssociatedProteinsByEc(ec, limit);
         }
         if (keywordType.equalsIgnoreCase(KeywordType.TAXONOMY.name())) {
             String taxId = searchId;
-            results = finder.getAssociatedProteinsByTaxIdAndEc(taxId, ec, limit);
+            results = enzymeFinderService.getAssociatedProteinsByTaxIdAndEc(taxId, ec, limit);
         }
         if (keywordType.equalsIgnoreCase(KeywordType.PATHWAYS.name())) {
             String pathwayId = searchId;
-            results = finder.getAssociatedProteinsByPathwayIdAndEc(pathwayId, ec, limit);
+            results = enzymeFinderService.getAssociatedProteinsByPathwayIdAndEc(pathwayId, ec, limit);
         }
         
         return results;
@@ -529,11 +522,10 @@ public class SearchController extends AbstractController {
      */
     private SearchResults searchCompound(Model model, SearchModel searchModel) {
         SearchResults results = null;
-        EnzymeFinder finder = null;
+ 
         try {
-            finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-            
-            results = finder.getEnzymesByCompound(searchModel.getSearchparams());
+      
+            results = enzymeFinderService.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
             model.addAttribute("pagination", getPagination(searchModel));

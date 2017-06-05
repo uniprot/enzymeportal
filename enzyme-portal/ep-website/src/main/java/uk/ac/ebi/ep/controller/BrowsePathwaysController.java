@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import uk.ac.ebi.ep.base.search.EnzymeFinder;
+import uk.ac.ebi.ep.base.search.EnzymeFinderService;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
@@ -43,9 +43,8 @@ public class BrowsePathwaysController extends AbstractController {
 
     @RequestMapping(value = BROWSE_PATHWAYS, method = RequestMethod.GET)
     public String showPathways(Model model) {
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-
-        pathwayList = finder.findAllPathways().stream().distinct().collect(Collectors.toList());
+      
+        pathwayList = enzymeFinderService.findAllPathways().stream().distinct().collect(Collectors.toList());
         String msg = String.format("Number of pathways found : %s", pathwayList.size());
         logger.debug(msg);
 
@@ -118,33 +117,32 @@ public class BrowsePathwaysController extends AbstractController {
 
     private SearchResults findEnzymesByPathway(String pathwayId, String pathwayName) {
 
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-
+       
         SearchParams searchParams = new SearchParams();
         searchParams.setText(pathwayName);
         searchParams.setType(SearchParams.SearchType.KEYWORD);
         searchParams.setStart(0);
         searchParams.setPrevioustext(pathwayName);
 
-        finder.setSearchParams(searchParams);
+        enzymeFinderService.setSearchParams(searchParams);
 
         String simplePathwayName = pathwayName.toLowerCase();
 
-        SearchResults results = finder.computeEnzymeSummariesByPathwayName(simplePathwayName);
+        SearchResults results = enzymeFinderService.computeEnzymeSummariesByPathwayName(simplePathwayName);
 
         if (results.getTotalfound() == 0) {
-            results = finder.computeEnzymeSummariesByPathwayId(pathwayId);
+            results = enzymeFinderService.computeEnzymeSummariesByPathwayId(pathwayId);
         }
 
         if (results.getTotalfound() == 0) {
 
-            return getEnzymes(finder, searchParams);
+            return getEnzymes(enzymeFinderService, searchParams);
         }
 
         return results;
     }
 
-    private SearchResults getEnzymes(EnzymeFinder finder, SearchParams searchParams) {
+    private SearchResults getEnzymes(EnzymeFinderService finder, SearchParams searchParams) {
 
         SearchResults results = finder.getEnzymes(searchParams);
 

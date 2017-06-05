@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import uk.ac.ebi.ep.base.search.EnzymeFinder;
+import uk.ac.ebi.ep.base.search.EnzymeFinderService;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.search.model.Compound;
@@ -166,27 +166,26 @@ public class BrowseEnzymesController extends AbstractController {
     private SearchResults findEnzymesByEc(String ec) {
 
         SearchResults results = null;
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService,ebeyeRestService);
-
+     
         SearchParams searchParams = new SearchParams();
         searchParams.setText(ec);//use the ec number here. note ebeye is indexing ep data for ec to be searchable
         searchParams.setType(SearchParams.SearchType.KEYWORD);
         searchParams.setStart(0);
         searchParams.setPrevioustext(ec);//use ec here
 
-        finder.setSearchParams(searchParams);
+        enzymeFinderService.setSearchParams(searchParams);
 
-        results = finder.computeEnzymeSummariesByEc(ec);
+        results = enzymeFinderService.computeEnzymeSummariesByEc(ec);
 
         if (results == null) {
 
-            return getEnzymes(finder, searchParams);
+            return getEnzymes(enzymeFinderService, searchParams);
         }
 
         return results;
     }
 
-    private SearchResults getEnzymes(EnzymeFinder finder, SearchParams searchParams) {
+    private SearchResults getEnzymes(EnzymeFinderService finder, SearchParams searchParams) {
 
         SearchResults results = finder.getEnzymes(searchParams);
 

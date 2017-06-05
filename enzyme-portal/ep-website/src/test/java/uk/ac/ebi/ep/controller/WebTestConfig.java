@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.projection.ProjectionFactory;
+import uk.ac.ebi.ep.base.search.EnzymeFinderService;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
@@ -238,6 +239,12 @@ public class WebTestConfig {
     @Bean
     public Config config() {
         return Mockito.mock(Config.class);
+    }
+
+    @Bean
+    public EnzymeFinderService enzymeFinderService() {
+
+        return Mockito.mock(EnzymeFinderService.class);
     }
 
 }

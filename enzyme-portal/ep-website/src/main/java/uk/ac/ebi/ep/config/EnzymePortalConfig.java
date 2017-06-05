@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.config;
 
 import java.util.HashMap;
@@ -209,9 +205,9 @@ public class EnzymePortalConfig {
     public EnzymeRetriever enzymeRetriever() {
         return new EnzymeRetriever();
     }
-    
+
     @Bean
-    public SearchUtil searchUtil(){
+    public SearchUtil searchUtil() {
         return new SearchUtil();
     }
 

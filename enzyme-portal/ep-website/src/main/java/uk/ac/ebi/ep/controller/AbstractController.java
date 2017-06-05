@@ -24,7 +24,7 @@ import uk.ac.ebi.ep.base.common.CompoundsPredicate;
 import uk.ac.ebi.ep.base.common.DiseasesPredicate;
 import uk.ac.ebi.ep.base.common.EcNumberPredicate;
 import uk.ac.ebi.ep.base.common.SpeciesPredicate;
-import uk.ac.ebi.ep.base.search.EnzymeFinder;
+import uk.ac.ebi.ep.base.search.EnzymeFinderService;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.common.Pagination;
@@ -105,6 +105,8 @@ public abstract class AbstractController {
 
     @Autowired
     protected EnzymeRetriever enzymeRetriever;
+    @Autowired
+    protected EnzymeFinderService enzymeFinderService;
 
     protected static final String BROWSE_VIDEO = "browseVideo";
     protected static final String ENTRY_VIDEO = "entryVideo";
@@ -308,9 +310,7 @@ public abstract class AbstractController {
      * @return the search results.
      */
     protected SearchResults searchKeyword(SearchParams searchParameters) {
-        EnzymeFinder finder = new EnzymeFinder(enzymePortalService, ebeyeRestService);
-
-        SearchResults results = finder.getEnzymes(searchParameters);
+          SearchResults results = enzymeFinderService.getEnzymes(searchParameters);
 
         return results;
     }
@@ -395,7 +395,7 @@ public abstract class AbstractController {
                     if (selectedItems.equals(theSpecies.getScientificname())) {
                         theSpecies.setSelected(true);
                     }
- 
+
                 }
             }
 
@@ -440,7 +440,7 @@ public abstract class AbstractController {
             if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty() || !ecNumbersFilter.isEmpty()) {
                 List<UniprotEntry> filteredResults
                         = new LinkedList<>(resultSet.getSummaryentries());
-             
+
                 CollectionUtils.filter(filteredResults,
                         new SpeciesPredicate(speciesFilter));
                 CollectionUtils.filter(filteredResults,

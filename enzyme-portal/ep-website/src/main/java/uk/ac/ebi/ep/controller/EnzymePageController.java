@@ -85,14 +85,12 @@ public class EnzymePageController extends AbstractController {
 
     private EnzymeEntry findEnzymeByEcNumber(String ecNumber) {
 
-        //return enzymePortalService.findIntenzEnzymesByEc(ecNumber);
-        return getEbiSearchResultByEC(ecNumber).getEntries().stream().findAny().orElseGet(() -> new EnzymeEntry());
+          return getEbiSearchResultByEC(ecNumber).getEntries().stream().findAny().orElseGet(() -> new EnzymeEntry());
 
     }
 
     private EnzymeSearchResult getEbiSearchResultByEC(String ec) {
-        int pageSize = 1;
-        return enzymeCentricService.findEbiSearchResultsByEC(ec, pageSize);
+        return enzymeCentricService.findEnzymeByEC(ec);
 
     }
 
