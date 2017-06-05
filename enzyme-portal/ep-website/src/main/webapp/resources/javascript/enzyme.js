@@ -42,14 +42,6 @@ $( document ).ready(function() {
     });
 
 
-
-    $(".enzymeName").click(function() {
-        $(this).parent().next("#proteinList").toggle();
-        $(this).toggleClass("downTwizzle");
-        $(this).parent().toggleClass("proteinSectionOpen");
-
-    });
-
     $(".toggleSpeciesList").click(function() {
           $(this).parent().next(".speciesFullList").toggle();
       });

@@ -138,10 +138,19 @@
                           <ul id="citations">
                           <c:forEach items="${enzymePage.citations}" var="citation">
 
-                                  <li> <c:out value="${citation.title}"/></li>
+                                  <li>
+
+                              <a href="http://europepmc.org/abstract/${citation.source}/${citation.id}"
+                                              title="View ${citation.source} ${citation.id} in Europe PubMed Central"
+                                              target="_blank" class="extLink ${citation.source}">${citation.title}</a>
+                                  </li>
 
                           </c:forEach>
                           </ul>
+
+                          <a href="http://europepmc.org/search?page=1&query=${enzymePage.enzymeName}" target="_blank">
+                              <button id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View more in Europe PMC</button>
+                          </a>
                       </c:when>
                       <c:otherwise>
                           There are no citations for this Enzyme

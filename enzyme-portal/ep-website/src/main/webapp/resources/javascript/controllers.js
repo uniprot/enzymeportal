@@ -3,7 +3,8 @@
  *
  * Description
  */
-var enzymeApp = angular.module('enzyme-portal-app', ['ui.bootstrap']);
+//var enzymeApp = angular.module('enzyme-portal-app', ['ui.bootstrap']);
+// var enzymeApp = angular.module('enzyme-portal-app', ['mm.foundation']);
 
 enzymeApp.controller('TypeAheadController', ['$scope', '$http', '$location',
     function ($scope, $http, $location) {
