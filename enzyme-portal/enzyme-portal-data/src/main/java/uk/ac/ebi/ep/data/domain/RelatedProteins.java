@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -45,9 +47,9 @@ public class RelatedProteins implements Serializable {
     private BigDecimal relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.LAZY)
     //@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
-    //@Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.JOIN)
     //private Set<UniprotEntry> uniprotEntrySet;
     private List<UniprotEntry> uniprotEntrySet;
 
