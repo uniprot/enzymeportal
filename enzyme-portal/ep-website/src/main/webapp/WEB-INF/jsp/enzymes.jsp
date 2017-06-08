@@ -76,19 +76,21 @@
         </div>
 
             <section class="pagination-container">
-                <input type="hidden" id="paginationPage" name="servicePage" value="">
-                <input type="hidden" name="keywordType" value="${keywordType}">
-                <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
+
                 <c:if test="${page.totalElements gt page.size}">
                     <nav class="paginationContainer">
-                          <ul class="pagination">
+                          <ul class="pagination" role="navigation" aria-label="Pagination">
+
                             <c:if test="${currentIndex >= 2}">
-                                <li><a class="paginationLink" id="${currentIndex - 1}" href="#" aria-label="Previous"><span>&laquo;</span></a></li>
+                                <li class="pagination-previous"><a class="paginationLink" id="${currentIndex - 1}" href="#" aria-label="Page ${page.number}"></a></li>
                             </c:if>
-                            <li class="paginationText">Page ${page.number + 1} of ${page.totalPages}</li>
+
+                            <li>Page ${page.number + 1} of ${page.totalPages}</li>
+
                             <c:if test="${currentIndex < page.totalPages}">
-                                <li><a class="paginationLink" id="${currentIndex + 1}" href="#" aria-label="Next"><span>&raquo;</span></a></li>
+                                <li class="pagination-next"><a class="paginationLink" id="${currentIndex + 1}" href="#" aria-label="Next"></a></li>
                             </c:if>
+
                           </ul>
                     </nav>
                 </c:if>
@@ -96,209 +98,85 @@
 
             <div class="row">
 
-
-
                 <section id="search-filters" class="large-3 columns">
 
-
-
-
-
-
-
-
-
-
-
-                    <%--<div class="subTitle">--%>
-                           <%--Species--%>
-                       <%--</div>--%>
-                       <%--<c:if test="${fn:length(facet.facetValues) gt 12}">--%>
-                           <%--<!--auto-complete search box-->--%>
-                           <%--<div class="ui-widget" id="auto-complete">--%>
-                               <%--<input id="specieAT" itemtype="text" name="speciefilter" autocomplete="off" class="filterSearchBox" placeholder="Enter Species to filter" />--%>
-                               <%--<input id="_ctempList_selected" name="_ctempList_selected" type="hidden" value=""/>--%>
-                           <%--</div>--%>
-                       <%--</c:if>--%>
-                       <%--<div class="filterContent">--%>
-                           <%--<c:set var="speciesList" value="${searchFilter.species}"/>--%>
-                           <%--<c:set var="speciesListSize" value="${fn:length(speciesList)}"/>--%>
-                           <%--<c:set var="speciesParams" value="${searchModel.searchparams.species}"/>--%>
-
-                           <%--<div id="species_filters_y"--%>
-                               <%--style="${empty searchModel.searchparams.species?--%>
-                               <%--'border-bottom: none' : 'border-bottom: thin solid #ddd' }"></div>--%>
-                           <%--<div id="species_filters_n"></div>--%>
-
-                   		<%--<script>--%>
-                   			<%--$(document).ready(function () {--%>
-                   				<%--// (See search.js if in doubt)--%>
-
-                   				<%--// Initialise variables:--%>
-                   				<%--var group = 'species';--%>
-                   				<%--checkedFilters[group] = [];--%>
-                   				<%--uncheckedFilters[group] = [];--%>
-                   				<%--displayedFilters[group] = 0;--%>
-
-
-                                <%--&lt;%&ndash;<c:forEach var="org" items="${facet.facetValues}">&ndash;%&gt;--%>
-                                <%--&lt;%&ndash;{"value": "${org.label}", "taxId": "TAXONOMY:${org.value}"},&ndash;%&gt;--%>
-                                <%--&lt;%&ndash;</c:forEach>&ndash;%&gt;--%>
-
-
-                   				<%--// Populate js variables with data from server:--%>
-                   				<%--<c:forEach var="specie" items="${facet.facetValues}">--%>
-                   					<%--var sp = { "id": "TAXONOMY:${org.value}", "name": "${org.label}","taxId":"TAXONOMY:${org.value}" };--%>
-                   					<%--<c:choose>--%>
-                   						<%--<c:when test="${Fn:contains(speciesParams, specie.scientificname)}">--%>
-                   							<%--checkedFilters[group][checkedFilters[group].length] = sp;--%>
-                   						<%--</c:when>--%>
-                   						<%--<c:otherwise>--%>
-                   							<%--uncheckedFilters[group][uncheckedFilters[group].length] = sp;--%>
-                   						<%--</c:otherwise>--%>
-                   					<%--</c:choose>--%>
-                   					<%--speciesAutocompleteDataSource.push({--%>
-                   						<%--label: "${not empty specie.commonname? specie.commonname : specie.scientificname}",--%>
-                   						<%--value: "${specie.scientificname}"});--%>
-                   				<%--</c:forEach>--%>
-
-                   				<%--// Display filters:--%>
-                   				<%--for (var i = 0; i < checkedFilters[group].length; i++){--%>
-                   					<%--addCheckbox(group, checkedFilters[group][i], true);--%>
-                   				<%--}--%>
-                   				<%--for (var i = 0; displayedFilters[group] < ${filterSizeDefault}--%>
-                   				<%--&& displayedFilters[group] < ${speciesListSize}; i++){--%>
-                   					<%--addCheckbox(group, uncheckedFilters[group][i], false);--%>
-                   				<%--}--%>
-                   			<%--});--%>
-                   		<%--</script>--%>
-
-                           <%--<c:if test="${speciesListSize gt filterSizeDefault}">--%>
-                               <%--<img id="loading_more_sf" src="${pageContext.request.contextPath}/resources/images/loading16.gif"--%>
-                                   <%--style="display: none"/>--%>
-
-                               <%--<a id="more_sf" href="javascript:void(0)"--%>
-                                   <%--onclick="addUnselectedCheckboxes('species',--%>
-                                   <%--displayedFilters['species'],--%>
-                                   <%--${speciesListSize}-displayedFilters['species'], this)">See all--%>
-                                   <%--${speciesListSize}</a>--%>
-
-
-                           <%--</c:if>--%>
-
-                           <%--<c:if test="${speciesListSize gt 12}">--%>
-                               <%--<!--    then add auto complete-->--%>
-                               <%--<script>--%>
-                   				<%--$(document).ready(function(){--%>
-                   					<%--ResultAutoComplete('specieAT', speciesAutocompleteDataSource,'filtersForm','_ctempList_selected');--%>
-                   				<%--});--%>
-                               <%--</script>--%>
-                           <%--</c:if>--%>
-                       <%--</div>--%>
-
-
-
-
-
-
-
-
-
-
-
-
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-
                     <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
-                    <div class="filter">
-                        <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
-                        <div id="activeFilters" class="sublevel1">
-                            <div class="subTitle">Active filters</div>
-                            <ul>
-                                <li id="activeOrganisms"></li>
-                            </ul>
-                        </div>
+                        <input type="hidden" id="paginationPage" name="servicePage" value="">
+                        <input type="hidden" name="keywordType" value="${keywordType}">
+                        <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
+                        <div class="filter">
+                            <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"></input>
+                            <div id="activeFilters" class="sublevel1">
+                                <div class="subTitle">Active filters</div>
+                                <ul>
+                                    <li id="activeOrganisms"></li>
+                                </ul>
+                            </div>
 
-                        <c:forEach var="facet" items="${enzymeFacet}">
-                             <div>
-                                 <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
-                                 <c:if test="${facet.id eq 'enzyme_family'}">
-                                 <div class="sublevel1">
-                                     <div class="subTitle">Enzyme Family</div>
-                                     <ul>
-                                         <c:forEach var="v" items="${facet.facetValues}">
-                                             <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                         </c:forEach>
-                                     </ul>
-                                 </div>
-                                 </c:if>
-
-                                <c:if test="${facet.id eq 'TAXONOMY'}">
+                            <c:forEach var="facet" items="${enzymeFacet}">
+                                 <div>
+                                     <input type="hidden" id="filtersApplied" value="${filtersApplied}"></input>
+                                     <c:if test="${facet.id eq 'enzyme_family'}">
                                      <div class="sublevel1">
-                                        <div class="subTitle">Organism</div>
-                                        <ul>
-                                            <li>
-                                                <input id="organismsSearch" />
-                                                <script>
-                                                    var options = {
-                                                        data:[
-                                                            <c:forEach var="org" items="${facet.facetValues}">
-                                                            {"value": "${org.label}", "taxId": "TAXONOMY:${org.value}"},
-                                                            </c:forEach>
-                                                              ],
-                                                        placeholder: "Search for Organism",
-                                                        getValue: "value",
-                                                        list: {
-                                                                match: {
-                                                                    enabled: true
-                                                                },
-                                                                onClickEvent: function() {
-                                                                    var value = $("#organismsSearch").getSelectedItemData().taxId;
-                                                                    $("#auto-complete-holder").val(value).trigger("change");
-                                                                    $("#facetFilterForm").submit();
-                                                                }
-                                                            }
-                                                    };
-                                                    $("#organismsSearch").easyAutocomplete(options);
-                                                </script>
-
-                                                <div class="filterContent">
-                                                     <c:set var="speciesList" value="${facet.facetValues}"/>
-                                                     <c:set var="speciesListSize" value="${fn:length(facet.facetValues)}"/>
-                                                     <c:set var="speciesParams" value="${searchModel.searchparams.species}"/>
-                                                </div>
-                                                <input id="auto-complete-holder" name="filterFacet" type="hidden" />
-                                            </li>
-
-                                            <div id="organismList">
-                                            <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
-                                               <c:forEach var="v" items="${facet.facetValues}">
-                                                  <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
-                                               </c:forEach>
-                                            </div>
+                                         <div class="subTitle">Enzyme Family</div>
+                                         <ul>
+                                             <c:forEach var="v" items="${facet.facetValues}">
+                                                 <li><input id="enzyme_family_${v.value}" name="filterFacet" value="enzyme_family:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                             </c:forEach>
                                          </ul>
                                      </div>
-                                 </c:if>
-                             </div>
-                         </c:forEach>
-                    </div>
+                                     </c:if>
+
+                                    <c:if test="${facet.id eq 'TAXONOMY'}">
+                                         <div class="sublevel1">
+                                            <div class="subTitle">Organism</div>
+                                            <ul>
+                                                <li>
+                                                    <input id="organismsSearch" />
+                                                    <script>
+                                                        var options = {
+                                                            data:[
+                                                                <c:forEach var="org" items="${facet.facetValues}">
+                                                                {"value": "${org.label}", "taxId": "TAXONOMY:${org.value}"},
+                                                                </c:forEach>
+                                                                  ],
+                                                            placeholder: "Search for Organism",
+                                                            getValue: "value",
+                                                            list: {
+                                                                    match: {
+                                                                        enabled: true
+                                                                    },
+                                                                    onClickEvent: function() {
+                                                                        var value = $("#organismsSearch").getSelectedItemData().taxId;
+                                                                        $("#auto-complete-holder").val(value).trigger("change");
+                                                                        $("#facetFilterForm").submit();
+                                                                    }
+                                                                }
+                                                        };
+                                                        $("#organismsSearch").easyAutocomplete(options);
+                                                    </script>
+
+                                                    <div class="filterContent">
+                                                         <c:set var="speciesList" value="${facet.facetValues}"/>
+                                                         <c:set var="speciesListSize" value="${fn:length(facet.facetValues)}"/>
+                                                         <c:set var="speciesParams" value="${searchModel.searchparams.species}"/>
+                                                    </div>
+                                                    <input id="auto-complete-holder" name="filterFacet" type="hidden" />
+                                                </li>
+
+                                                <div id="organismList">
+                                                <c:set var="facetSize" value="${fn:length(facet.facetValues)}"/>
+                                                   <c:forEach var="v" items="${facet.facetValues}">
+                                                      <li><input id="TAXONOMY_${v.value}" name="filterFacet" value="TAXONOMY:${v.value}" type="checkbox" onChange="this.form.submit()"> ${v.label} (${v.count})</li>
+                                                   </c:forEach>
+                                                </div>
+                                             </ul>
+                                         </div>
+                                     </c:if>
+                                 </div>
+                             </c:forEach>
+                        </div>
                     </form>
-
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-                    <!-- ******************************************************************************************************************** -->
-
-
-
 
 
                 </section>
@@ -364,7 +242,7 @@
                                                        <c:set var="proteinSize" value="5"/>
                                                     </c:if>
                                                     <c:forEach var="p" begin="0" end="${proteinSize -1}">
-                                                        <li><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].primaryAccession}/enzyme">${enzyme.proteinGroupEntry[p].proteinName} (${enzyme.proteinGroupEntry[p].primaryOrganism})</a></li>
+                                                        <li><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].primaryAccession}/enzyme">${enzyme.proteinGroupEntry[p].proteinName} </a> - (${enzyme.proteinGroupEntry[p].primaryOrganism})</li>
                                                     </c:forEach>
                                                     <c:if test="${enzyme.numProteins >= 5}">
                                                           <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>
