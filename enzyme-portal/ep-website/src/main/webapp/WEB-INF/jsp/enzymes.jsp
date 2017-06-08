@@ -242,7 +242,7 @@
                                                        <c:set var="proteinSize" value="5"/>
                                                     </c:if>
                                                     <c:forEach var="p" begin="0" end="${proteinSize -1}">
-                                                        <li><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].primaryAccession}/enzyme">${enzyme.proteinGroupEntry[p].proteinName} (${enzyme.proteinGroupEntry[p].primaryOrganism})</a></li>
+                                                        <li><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].primaryAccession}/enzyme">${enzyme.proteinGroupEntry[p].proteinName} </a> - (${enzyme.proteinGroupEntry[p].primaryOrganism})</li>
                                                     </c:forEach>
                                                     <c:if test="${enzyme.numProteins >= 5}">
                                                           <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>

@@ -516,6 +516,10 @@ table#enzymeResults tr:nth-child(4n+5){
     background-color:#f1f1f1;
 }
 
+table#enzymeResultsProteins tr:nth-child(4n+5), table#enzymeResultsProteins tr:nth-child(4n+2){
+    background-color: #f1f1f1;
+}
+
 .paginationText{
     /*height: 50px;*/
     float: left;
