@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.parser.parsers;
 
 import java.util.List;
@@ -50,7 +45,6 @@ public class EnzymePortalCompoundParser {
     @Autowired
     private EnzymePortalParserService parserService;
 
-
     @Transactional
     public EnzymePortalCompound addCompound(EnzymePortalCompound c) {
         EnzymePortalCompound compound = compoundRepository.saveAndFlush(c);
@@ -82,8 +76,7 @@ public class EnzymePortalCompoundParser {
     public void loadChEBICompounds() {
 
         //ChEBICompounds chebi = new ChEBICompounds(enzymeSummaryRepository, compoundRepository);
-
-       // chebi.computeAndLoadChEBICompounds();
+        // chebi.computeAndLoadChEBICompounds();
         throw new UnsupportedOperationException("Not supported yet... This method is muted for now. Please call loadCofactors() or loadChemblMolecules() for Chembl compounds");
 
     }
@@ -91,7 +84,7 @@ public class EnzymePortalCompoundParser {
     @Transactional
     public void loadCofactors() {
 
-        CompoundParser compoundParser = new Cofactors(chebiWebServiceClient, compoundRepository, enzymeSummaryRepository,parserService);
+        CompoundParser compoundParser = new Cofactors(chebiWebServiceClient, compoundRepository, enzymeSummaryRepository, parserService);
         compoundParser.loadCofactors();
 
     }
@@ -99,18 +92,24 @@ public class EnzymePortalCompoundParser {
     @Transactional
     public void loadChemblMolecules() {
 
-        
         ChemblCompound chembl = new ChemblCompound(chemblService, chemblXmlParser, parserService);
         chembl.loadChEMBL();
-        
+
     }
 
-     @Transactional
+    @Transactional
     public void loadChemblFDA() {
 
         FDA fda = new FDA(chemblService, chemblXmlParser, parserService);
         fda.loadChEMBL();
 
     }
-    
+
+    @Transactional
+    public void loadCofactorsFromFTPFiles() {
+
+        ICompoundParser compoundParser = new CofactorsFtpFiles(parserService, enzymeSummaryRepository);
+        compoundParser.loadCofactors();
+
+    }
 }
