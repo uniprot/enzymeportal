@@ -571,7 +571,10 @@ public class SearchController extends AbstractController {
             List<Suggestion> suggestions = ebeyeSuggestionService.autocompleteSearch(cleanedKeyword.trim());
             
             if (suggestions != null && !suggestions.isEmpty()) {
-                return suggestions.stream().distinct().collect(Collectors.toList());
+                return suggestions
+                        .stream()
+                        .distinct()
+                        .collect(Collectors.toList());
             } else {
                 return new ArrayList<>();
             }

@@ -39,14 +39,14 @@ public class EnzymePageController extends AbstractController {
     }
 
     @RequestMapping(value = "/search/ec/{ec}", method = RequestMethod.GET)
-    public String showEnzyme(@PathVariable("ec") String ec,@RequestParam(value = "enzymeName", required = true) String enzymeName, Model model, RedirectAttributes attributes) {
+    public String showEnzyme(@PathVariable("ec") String ec, @RequestParam(value = "enzymeName", required = true) String enzymeName, Model model, RedirectAttributes attributes) {
 
         int resultLimit = 7;
 
         boolean isEc = searchUtil.validateEc(ec);
         if (isEc) {
             long startTime = System.nanoTime();
-            EnzymePage enzymePage = computeEnzymePage(ec,enzymeName, resultLimit);
+            EnzymePage enzymePage = computeEnzymePage(ec, enzymeName, resultLimit);
 
             long endTime = System.nanoTime();
             long duration = endTime - startTime;
@@ -62,7 +62,7 @@ public class EnzymePageController extends AbstractController {
         return "error";
     }
 
-    public EnzymePage computeEnzymePage(String ecNumber,String enzymeName, int limit) {
+    public EnzymePage computeEnzymePage(String ecNumber, String enzymeName, int limit) {
 
         CompletableFuture<EnzymeEntry> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
 
@@ -80,12 +80,18 @@ public class EnzymePageController extends AbstractController {
 
         EuropePMC epmc = literatureService.getCitationsBySearchTerm(enzymeName, limit);
 
-        return epmc.getResultList().getResult();
+        return epmc
+                .getResultList()
+                .getResult();
     }
 
     private EnzymeEntry findEnzymeByEcNumber(String ecNumber) {
 
-          return getEbiSearchResultByEC(ecNumber).getEntries().stream().findAny().orElseGet(() -> new EnzymeEntry());
+        return getEbiSearchResultByEC(ecNumber)
+                .getEntries()
+                .stream()
+                .findAny()
+                .orElseGet(() -> new EnzymeEntry());
 
     }
 
@@ -93,7 +99,6 @@ public class EnzymePageController extends AbstractController {
         return enzymeCentricService.findEnzymeByEC(ec);
 
     }
-
 
     private ProteinGroupSearchResult findProteinsByEcNumber(String ecNumber, int limit) {
         int start = 0;
