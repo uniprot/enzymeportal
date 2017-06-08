@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.service;
 
 import java.util.List;
@@ -10,9 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.ac.ebi.ep.data.domain.ChebiCompound;
 import uk.ac.ebi.ep.data.domain.TempCompoundCompare;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
+import uk.ac.ebi.ep.data.repositories.ChebiCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
@@ -44,6 +42,9 @@ public class EnzymePortalParserService {
 
     @Autowired
     private TempCompoundCompareRepository tempCompoundRepository;
+
+    @Autowired
+    private ChebiCompoundRepository chebiCompoundRepository;
 
     @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
@@ -94,13 +95,36 @@ public class EnzymePortalParserService {
     public void createTempCompounds(List<TempCompoundCompare> compounds) {
         tempCompoundRepository.save(compounds);
     }
-    
-    
+
     public void addTempCompound(String compoundId, String compoundName, String compoundSource, String relationship, String accession, String url, String compoundRole, String note) {
         tempCompoundRepository.addTempCompounds(compoundId, compoundName, compoundSource, relationship, accession, url, compoundRole, note);
     }
-    
-        public void insertCompoundsFromTempTable() {
+
+    public void insertCompoundsFromTempTable() {
         compoundRepository.insertCompounds();
+    }
+
+    @Transactional(readOnly = true)
+    public ChebiCompound findChebiCompoundById(String chebiId) {
+
+        return chebiCompoundRepository.findByChebiAccession(chebiId);
+    }
+
+    @Transactional(readOnly = true)
+    public ChebiCompound findChebiCompoundByName(String compoundName) {
+
+        return chebiCompoundRepository.findByCompoundName(compoundName);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChebiCompound> findChebiCompoundById(String chebiId, String source) {
+
+        return chebiCompoundRepository.findByChebiAccession(chebiId, source);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChebiCompound> findChebiCompoundByName(String compoundName, String source) {
+
+        return chebiCompoundRepository.findByCompoundName(compoundName, source);
     }
 }

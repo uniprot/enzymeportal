@@ -187,6 +187,7 @@ public class Compound  implements  Serializable {
     /**
      * Sets the value of the selected property.
      *
+     * @param value
      */
     public void setSelected(boolean value) {
         this.selected = value;

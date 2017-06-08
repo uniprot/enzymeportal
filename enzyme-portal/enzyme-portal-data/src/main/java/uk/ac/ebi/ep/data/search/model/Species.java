@@ -24,12 +24,12 @@ public class Species implements Comparable<Species>, Serializable {
     public Species() {
     }
 
-    public Species(String scientificname, String commonname) {
+    public Species( Long taxId,String scientificname) {
+        this.taxId = taxId;
         this.scientificname = scientificname;
-        this.commonname = commonname;
-
+        
     }
-
+    
     public Species(String scientificname, String commonname, Long taxId) {
         this.scientificname = scientificname;
         this.commonname = commonname;
@@ -130,8 +130,8 @@ public class Species implements Comparable<Species>, Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 23 * hash + Objects.hashCode(this.scientificname);
+        int hash = 3;
+        hash = 61 * hash + Objects.hashCode(this.taxId);
         return hash;
     }
 
@@ -144,8 +144,10 @@ public class Species implements Comparable<Species>, Serializable {
             return false;
         }
         final Species other = (Species) obj;
-        return Objects.equals(this.scientificname, other.scientificname);
+        return Objects.equals(this.taxId, other.taxId);
     }
+
+
 
     @Override
     public String toString() {

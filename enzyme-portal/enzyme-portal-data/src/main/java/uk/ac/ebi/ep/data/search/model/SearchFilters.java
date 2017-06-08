@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;
@@ -8,61 +7,56 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
  *
  * @author joseph
  */
-public class SearchFilters implements Serializable{
-     private static final long serialVersionUID = 1L;
-    
+public class SearchFilters implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private List<Disease> diseases;
     private List<Compound> compounds;
     private List<Species> species;
     private List<EcNumber> ecNumbers;
 
     public List<EcNumber> getEcNumbers() {
-        if(ecNumbers == null){
+        if (ecNumbers == null) {
             ecNumbers = new LinkedList<>();
         }
-        
-     
+
         return ecNumbers;
     }
 
     public void setEcNumbers(List<EcNumber> ecNumbers) {
         this.ecNumbers = ecNumbers;
     }
-    
-    
-    
-    
-    
-    
 
     /**
      * Gets the value of the diseases property.
-     * 
+     *
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the diseases property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the diseases property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getDiseases().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link EnzymePortalDisease }
-     * 
-     * 
-     * @return 
+     *
+     *
+     * @return
      */
     public List<Disease> getDiseases() {
         if (diseases == null) {
@@ -73,56 +67,58 @@ public class SearchFilters implements Serializable{
 
     /**
      * Gets the value of the compounds property.
-     * 
+     *
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the compounds property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the compounds property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getCompounds().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Compound }
-     * 
-     * 
-     * @return 
+     *
+     *
+     * @return
      */
     public List<Compound> getCompounds() {
         if (compounds == null) {
             compounds = new ArrayList<>();
         }
-        return this.compounds;
+        return this.compounds
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     /**
      * Gets the value of the species property.
-     * 
+     *
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the species property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the species property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getSpecies().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Species }
-     * 
-     * 
-     * @return 
+     * Objects of the following type(s) are allowed in the list {@link Species }
+     *
+     *
+     * @return
      */
     public List<Species> getSpecies() {
         if (species == null) {
@@ -131,14 +127,9 @@ public class SearchFilters implements Serializable{
         return this.species;
     }
 
-
-
-
-
-
     public SearchFilters withDiseases(Disease... values) {
-        if (values!= null) {
-            for (Disease value: values) {
+        if (values != null) {
+            for (Disease value : values) {
                 getDiseases().add(value);
             }
         }
@@ -146,35 +137,35 @@ public class SearchFilters implements Serializable{
     }
 
     public SearchFilters withDiseases(Collection<Disease> values) {
-        if (values!= null) {
+        if (values != null) {
             getDiseases().addAll(values);
         }
         return this;
     }
 
     public SearchFilters withCompounds(Compound... values) {
-        if (values!= null) {
+        if (values != null) {
             getCompounds().addAll(Arrays.asList(values));
         }
         return this;
     }
 
     public SearchFilters withCompounds(Collection<Compound> values) {
-        if (values!= null) {
+        if (values != null) {
             getCompounds().addAll(values);
         }
         return this;
     }
 
     public SearchFilters withSpecies(Species... values) {
-        if (values!= null) {
+        if (values != null) {
             getSpecies().addAll(Arrays.asList(values));
         }
         return this;
     }
 
     public SearchFilters withSpecies(Collection<Species> values) {
-        if (values!= null) {
+        if (values != null) {
             getSpecies().addAll(values);
         }
         return this;
@@ -182,11 +173,9 @@ public class SearchFilters implements Serializable{
 
     /**
      * Sets the value of the diseases property.
-     * 
-     * @param diseases
-     *     allowed object is
-     *     {@link EnzymePortalDisease }
-     *     
+     *
+     * @param diseases allowed object is {@link EnzymePortalDisease }
+     *
      */
     public void setDiseases(List<Disease> diseases) {
         this.diseases = diseases;
@@ -194,11 +183,9 @@ public class SearchFilters implements Serializable{
 
     /**
      * Sets the value of the compounds property.
-     * 
-     * @param compounds
-     *     allowed object is
-     *     {@link Compound }
-     *     
+     *
+     * @param compounds allowed object is {@link Compound }
+     *
      */
     public void setCompounds(List<Compound> compounds) {
         this.compounds = compounds;
@@ -206,17 +193,15 @@ public class SearchFilters implements Serializable{
 
     /**
      * Sets the value of the species property.
-     * 
-     * @param species
-     *     allowed object is
-     *     {@link Species }
-     *     
+     *
+     * @param species allowed object is {@link Species }
+     *
      */
     public void setSpecies(List<Species> species) {
         this.species = species;
     }
-    
-        public static final Comparator<EcNumber> SORT_BY_EC = (EcNumber o1, EcNumber o2) -> {
+
+    public static final Comparator<EcNumber> SORT_BY_EC = (EcNumber o1, EcNumber o2) -> {
         if (o1.getEc() == null && o2.getEc() == null) {
             return 0;
         }
@@ -229,6 +214,5 @@ public class SearchFilters implements Serializable{
         }
         return o1.getEc().compareTo(o2.getEc());
 
-     
     };
 }

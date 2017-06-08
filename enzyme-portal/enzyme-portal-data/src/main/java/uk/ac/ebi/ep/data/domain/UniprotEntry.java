@@ -89,20 +89,7 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 })
 
-//@SqlResultSetMapping(
-//        name = "browseTaxonomy",
-//        classes = {
-//            @ConstructorResult(
-//                    targetClass = Taxonomy.class,
-//                    columns = {
-//                        @ColumnResult(name = "tax_Id", type = Long.class),
-//                        @ColumnResult(name = "scientific_Name"),
-//                        @ColumnResult(name = "common_Name"),
-//                        @ColumnResult(name = "numEnzymes", type = Long.class)
-//                    }
-//            )
-//        }
-//)
+
 @SqlResultSetMappings({
     @SqlResultSetMapping(
             name = "browseTaxonomy",
@@ -157,10 +144,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
 
     private static final long serialVersionUID = 1L;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    private Set<EnzymePortalNames> enzymePortalNamesSet;
-    @OneToMany(mappedBy = "accession", fetch = FetchType.LAZY)
-    private Set<EnzymeXmlStore> enzymeXmlStoreSet;
 
     @Column(name = "ENTRY_TYPE")
     private Short entryType;
@@ -394,34 +377,10 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             return false;
         }
         final UniprotEntry other = (UniprotEntry) obj;
-        if (!Objects.equals(this.proteinName, other.proteinName)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.proteinName, other.proteinName);
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 3;
-//        hash = 59 * hash + Objects.hashCode(this.accession);
-//        hash = 59 * hash + Objects.hashCode(this.proteinName);
-//        return hash;
-//    }
-//
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final UniprotEntry other = (UniprotEntry) obj;
-//        if (!Objects.equals(this.accession, other.accession)) {
-//            return false;
-//        }
-//        return Objects.equals(this.proteinName, other.proteinName);
-//    }
+
     public String getScientificname() {
         return getScientificName();
     }
@@ -478,11 +437,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
 
-        e.getUniprotXrefSet().stream().filter(x -> PDB_SOURCE.equalsIgnoreCase(x.getSource())).limit(PDB_CODE_LIMIT).collect(Collectors.toList()).stream().forEach(xref -> {
-            pdbcodes.add(xref.getSourceId());
-        });
+        e.getUniprotXrefSet()
+                .stream()
+                .filter(x -> PDB_SOURCE.equalsIgnoreCase(x.getSource()))
+                .limit(PDB_CODE_LIMIT)
+                .forEach(xref -> pdbcodes.add(xref.getSourceId()));
 
-        return pdbcodes.stream().sorted().collect(Collectors.toList());
+        return pdbcodes;
 
     }
 
@@ -505,7 +466,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
             synonym = Stream.of(synonymName.get().split(";"))
                     .distinct()
                     .filter(otherName -> (!otherName.trim().equalsIgnoreCase(getProteinName().trim())))
-                    .distinct()
                     .collect(Collectors.toList());
 
         }
@@ -529,7 +489,10 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
                 String[] synonyms = namesColumn.substring(sepIndex + 2, namesColumn.length() - 1).split("\\) \\(");
                 nameSynonyms.addAll(Arrays.asList(synonyms));
             }
-            return nameSynonyms.stream().distinct().collect(Collectors.toList());
+            return nameSynonyms
+                    .stream()
+                    .distinct()
+                    .collect(Collectors.toList());
         }
         return nameSynonyms;
     }
@@ -567,13 +530,17 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public List<Disease> getDiseases() {
         if (this.getEnzymePortalDiseaseSet() != null) {
 
-            return this.getEnzymePortalDiseaseSet().stream().distinct().collect(Collectors.toList());
+            return this.getEnzymePortalDiseaseSet()
+                    .stream()
+                    .distinct()
+                    .collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
 
     public List<EnzymeAccession> getRelatedspecies() {
-        return getRelatedProteinsId().getUniprotEntrySet()
+        return getRelatedProteinsId()
+                .getUniprotEntrySet()
                 .stream()
                 .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
                         .reversed())
@@ -632,11 +599,9 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     private Species buildSpeciesFromEntry(UniprotEntry entry) {
-        Species sp = new Species();
-        sp.setScientificname(entry.getScientificName());
-        sp.setCommonname(entry.getCommonName());
+        Species sp = new Species(entry.getScientificName(), entry.getCommonName(), entry.getTaxId());
         sp.setSelected(false);
-        sp.setTaxId(entry.getTaxId());
+
         return sp;
     }
 
@@ -702,23 +667,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     }
 
-    @XmlTransient
-    public Set<EnzymePortalNames> getEnzymePortalNamesSet() {
-        return enzymePortalNamesSet;
-    }
-
-    public void setEnzymePortalNamesSet(Set<EnzymePortalNames> enzymePortalNamesSet) {
-        this.enzymePortalNamesSet = enzymePortalNamesSet;
-    }
-
-    @XmlTransient
-    public Set<EnzymeXmlStore> getEnzymeXmlStoreSet() {
-        return enzymeXmlStoreSet;
-    }
-
-    public void setEnzymeXmlStoreSet(Set<EnzymeXmlStore> enzymeXmlStoreSet) {
-        this.enzymeXmlStoreSet = enzymeXmlStoreSet;
-    }
 
     @XmlTransient
     public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {
