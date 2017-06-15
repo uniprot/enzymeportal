@@ -163,9 +163,9 @@ public class SitemapIndexGenerator {
     public SitemapIndexGenerator addUrl(SitemapIndexUrl url) {
         
         UrlUtils.checkUrl(url.url.toString(), baseUrlString);
-        if (urls.size() >= maxUrls) {
-            throw new RuntimeException("More than " + maxUrls + " urls");
-        }
+//        if (urls.size() >= maxUrls) {
+//            throw new RuntimeException("More than " + maxUrls + " urls");
+//        }
         urls.add(url);
         return this;
     }
