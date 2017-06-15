@@ -263,6 +263,7 @@
                     <include>chembl-adapter.properties</include>
                     <include>log4j.properties</include>
                     <include>ep-xml-config.properties</include>
+                    <include>sitemapProp.properties</include>
                     <!--                    <include>data.sql</include>
                     <include>schema.sql</include>-->
                    
