@@ -109,7 +109,13 @@ legend {
 label.citationFilter {
 	font-weight: normal;
 	color: black;
-	margin-right: 2em;
+	margin-right: 4em;
+    display: inline-block;
+}
+.citationFilter .label{
+    background: none;
+    padding-left: 0px;
+
 }
 
 /*span.synonyms {*/
