@@ -118,6 +118,9 @@ label.citationFilter {
 
 }
 
+.noResults{
+    color: #ccc;
+}
 /*span.synonyms {*/
     /*margin-right: 5px;*/
     /*text-align:justify;*/
