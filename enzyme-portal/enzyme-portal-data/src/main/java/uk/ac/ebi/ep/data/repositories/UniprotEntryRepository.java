@@ -65,6 +65,11 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)", nativeQuery = true)
     List<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION") List<String> accession);
 
+    @Query(value = "SELECT * FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION) /*#pageable}*/",
+            countQuery = "SELECT count(*) FROM UNIPROT_ENTRY WHERE ACCESSION IN (:ACCESSION)",
+            nativeQuery = true)
+    Page<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION") List<String> accession, Pageable pageable);
+
     @Transactional(readOnly = true)
     Page<UniprotEntry> findByAccessionIn(List<String> accessions, Pageable pageable);
 

@@ -436,6 +436,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     private List<String> getPdbCodes(UniprotEntry e) {
         List<String> pdbcodes = new ArrayList<>();
+//        
+//       return  e.getUniprotXrefSet()
+//                 .stream()
+//                 .filter(code -> PDB_SOURCE.equalsIgnoreCase(code.getSource()))
+//                 .map(xref->xref.getSourceId())
+//                 .limit(PDB_CODE_LIMIT)
+//                 .collect(Collectors.toList());
 
         e.getUniprotXrefSet()
                 .stream()
@@ -499,14 +506,19 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public List<String> getEc() {
 
-        List<String> ec = new ArrayList<>();
+        //List<String> ec = new ArrayList<>();
         if (!getEnzymePortalEcNumbersSet().isEmpty()) {
-            this.getEnzymePortalEcNumbersSet()
+//            this.getEnzymePortalEcNumbersSet()
+//                    .stream()
+//                    .forEach(ecNum -> ec.add(ecNum.getEcNumber()));
+            return  this.getEnzymePortalEcNumbersSet()
                     .stream()
-                    .forEach(ecNum -> ec.add(ecNum.getEcNumber()));
+                    .map(e->e.getEcNumber())
+                    .collect(Collectors.toList());
         }
 
-        return ec;
+       // return ec;
+        return new ArrayList<>();
     }
 
     public String getFunction() {
@@ -548,6 +560,7 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
                 .collect(Collectors.toList());
     }
 
+    @Deprecated
     public List<EnzymeAccession> getRelatedspecies1() {
 
         final Map<Integer, UniprotEntry> priorityMapper = new TreeMap<>();
