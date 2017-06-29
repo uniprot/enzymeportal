@@ -18,12 +18,6 @@
     <c:set var="pageTitle" value="Enzymes"/>
     <%@include file="head.jspf" %>
 
-    <script src="${pageContext.request.contextPath}/resources/javascript/jquery.easy-autocomplete.min.js"></script>
-    <%--<script src="${pageContext.request.contextPath}/resources/javascript/jquery.slidereveal.js"></script>--%>
-
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.min.css" type="text/css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.themes.min.css" type="text/css" />
-
 </head>
 
 <body class="level2 full-width"><!-- add any of your classes or IDs -->

@@ -75,6 +75,11 @@
     <!-- This is the global include file for jQuery -->
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 
+    <script src="${pageContext.request.contextPath}/resources/javascript/jquery.easy-autocomplete.min.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.min.css" type="text/css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/easy-autocomplete.themes.min.css" type="text/css" />
+
+
     <c:if test="${pageTitle eq 'Entry page'}">
         <%--<link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/960gs-fluid/grid.css" type="text/css" rel="stylesheet" />--%>
         <link media="screen" href="${pageContext.request.contextPath}/resources/lib/spineconcept/css/summary.css" type="text/css" rel="stylesheet" />

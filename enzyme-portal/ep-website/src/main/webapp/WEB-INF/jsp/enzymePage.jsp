@@ -112,6 +112,19 @@
                          <c:choose>
                            <c:when test="${not empty enzymePage.proteins.entries }">
                                <c:set var="count" value="0" scope="page" />
+
+
+
+                               <form:form id="proteinViewForm-${enzymePage.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
+                                   <input name="keywordType" type="hidden" value="${keywordType}">
+                                   <input name="searchTerm" type="hidden" value="${enzymePage.ec}">
+                                   <input name="searchId" type="hidden" value="${enzymePage.ec}">
+                                   <input name="ec" type="hidden" value="${enzymePage.ec}">
+                                   <form:hidden path="searchparams.previoustext" />
+                                   <%--<form:hidden path="searchparams.text" value="${searchKey}-${enzymePage.ec}" />--%>
+                                   <%--<form:hidden path="searchparams.type" value="${searchType}"/>--%>
+
+
                                <table id="associatedProteins">
                                   <tr>
                                       <th>Protein name</th>
@@ -126,18 +139,36 @@
                                        </c:if>
                                    </c:forEach>
 
+
+                                   <tr>
+
+                                       <td colspan="3">
                                    <c:if test="${fn:length(enzymePage.proteins.entries) > 5}">
-                                   <tr>
-                                       <td colspan="3">button here1</td>
-                                   </tr>
+                                         <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all Proteins</button>
                                    </c:if>
-                                   <c:if test="${fn:length(enzymePage.proteins.entries) <5}">
-                                   <tr>
-                                       <td colspan="3">button here2</td>
+                                       </td>
+
                                    </tr>
-                                   </c:if>
+
+                                   <%--<c:if test="${fn:length(enzymePage.proteins.entries) > 5}">--%>
+                                   <%--<tr>--%>
+                                       <%--<td colspan="3">button here1</td>--%>
+                                   <%--</tr>--%>
+                                   <%--</c:if>--%>
+                                   <%--<c:if test="${fn:length(enzymePage.proteins.entries) <5}">--%>
+                                   <%--<tr>--%>
+                                       <%--<td colspan="3">--%>
+                                           <%----%>
+
+                                           <%--<c:if test="${enzyme.numProteins >= 5}">--%>
+                                                 <%--<button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>--%>
+                                           <%--</c:if>--%>
+
+
+                                   <%--</c:if>--%>
 
                                </table>
+                               </form:form>
                            </c:when>
                            <c:otherwise>
                                There are no Associated Proteins for this Enzyme
