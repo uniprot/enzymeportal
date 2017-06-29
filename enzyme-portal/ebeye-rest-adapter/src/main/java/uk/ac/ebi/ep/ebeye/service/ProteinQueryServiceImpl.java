@@ -16,7 +16,7 @@ import uk.ac.ebi.ep.ebeye.utils.Preconditions;
  *
  * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
  */
-public abstract class ProteinQueryServiceImpl extends QueryService<ProteinGroupSearchResult, ProteinGroupEntry> {// implements EbeyeQueryService<ProteinGroupEntry> {
+public abstract class ProteinQueryServiceImpl extends QueryService<ProteinGroupSearchResult, ProteinGroupEntry> {
 
     private int maxRetrievableHits;
 
@@ -29,7 +29,7 @@ public abstract class ProteinQueryServiceImpl extends QueryService<ProteinGroupS
     public Observable<ProteinGroupEntry> executeQuery(String query) {
         Preconditions.checkArgument(query != null, "Query can not be null");
         //final String queryTemplate = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=status&reverse=true&format=json";
-        final String queryTemplate = "%s?query=%s&size=%d&start=%d&fields=primary_accession&reverse=true&format=json";
+        final String queryTemplate = "%s?query=%s&size=%d&start=%d&fields=primary_accession&sort=_relevance&reverse=true&format=json";
         final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
         final String endpoint = ebeyeIndexProps.getProteinGroupSearchUrl();
 

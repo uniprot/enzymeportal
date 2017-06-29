@@ -11,6 +11,5 @@ public interface ProteinView {
     String getPrimaryAccession();
 
     String getPrimaryOrganism();
-    @Deprecated
-    String getPrimarySpecie();
+
 }

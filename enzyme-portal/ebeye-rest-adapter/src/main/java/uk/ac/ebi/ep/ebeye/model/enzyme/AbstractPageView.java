@@ -16,10 +16,7 @@ public abstract class AbstractPageView {
     private long numEnzymeHits;
     private int numProteins;
     private List<ProteinGroupEntry> proteinGroupEntry;
-    @Deprecated
-    private List<ProteinGroupEntry> proteins;
-    @Deprecated
-    private List<String> species;
+
 
     public List<ProteinGroupEntry> getProteinGroupEntry() {
         if (proteinGroupEntry == null) {
@@ -32,19 +29,4 @@ public abstract class AbstractPageView {
         this.proteinGroupEntry = proteinGroupEntry;
     }
 
-//    public int getNumProteins() {
-//        return numProteins;
-//    }
-//
-//    public void setNumProteins(int numProteins) {
-//        this.numProteins = numProteins;
-//    }
-//
-//    public long getNumEnzymeHits() {
-//        return numEnzymeHits;
-//    }
-//
-//    public void setNumEnzymeHits(long numEnzymeHits) {
-//        this.numEnzymeHits = numEnzymeHits;
-//    }
 }

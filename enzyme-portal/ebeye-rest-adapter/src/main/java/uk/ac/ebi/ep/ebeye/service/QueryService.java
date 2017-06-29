@@ -83,10 +83,6 @@ public abstract class QueryService<T, E> {
      * service
      */
     protected Observable<URI> generateUrlRequests(String query, String queryTemplate, int resultSize, String endpoint, int start, int end) {
-//        final String ebeyeAccessionQuery = "%s?query=%s&size=%d&start=%d&fields=name,scientific_name,status&sort=status&reverse=true&format=json";
-//        final int resultSize = ebeyeIndexProps.getMaxEbiSearchLimit();
-//        final String endpoint = ebeyeIndexProps.getProteinCentricSearchUrl();
-
         return Observable.range(start, end)
                 .map(index -> URI.create(String.format(queryTemplate, endpoint, query, resultSize, index * ebeyeIndexProps.getMaxEbiSearchLimit())));
     }

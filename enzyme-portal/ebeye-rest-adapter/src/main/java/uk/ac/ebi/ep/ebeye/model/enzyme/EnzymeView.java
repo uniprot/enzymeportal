@@ -10,8 +10,7 @@ import java.util.Set;
 
 public interface EnzymeView {
 
-    //String getEnzymeName();
-
+  
     String getEc();
 
     String getEnzymeFamily();
