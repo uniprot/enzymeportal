@@ -43,21 +43,61 @@
 <div id="wrapper">
     <%@include file="header.jspf" %>
 
-    <div id="content" role="main" class="clearfix" ng-controller="TypeAheadController">
+    <div id="content" role="main" class="clearfix">
         <h1>Diseases</h1>
         <div class="container-browse-search">
-            <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
-            <input id="disease-input" class="browse-search" type="text"
-                   ng-model="diseasesTypeAheadController"
-                   placeholder="Disease name"
-                   typeahead="disease for disease in getDiseases($viewValue)"
-                   class="form-control"
-                   typeahead-on-select="onSelectDiseases($item, $model, $label)"
-                   typeahead-no-results="noResults">
-                <div ng-show="noResults">
-                    No Results Found
-                </div>
+            <input id="disease-input" autocomplete="off" type="text" placeholder="Disease name">
         </div>
+
+          <script>
+              var options = {
+                  url: function(phrase) {
+                     return "/enzymeportal/service/diseases";
+                   },
+
+                   getValue: function(element) {
+                     return element.name;
+                   },
+
+                   ajaxSettings: {
+                     dataType: "json",
+                     method: "GET",
+                     data: {
+                       dataType: "json"
+                     }
+                   },
+
+                   preparePostData: function(data) {
+                     data.name = $("#disease-input").val();
+
+                     return data;
+                   },
+
+                  list: {
+                          match: {
+                              enabled: true
+                          }
+                          ,
+                      onChooseEvent: function() {
+                              var clickedName = $("#disease-input").getSelectedItemData().name;
+                              var clickedId = $("#disease-input").getSelectedItemData().id;
+
+                              var url = '/enzymeportal/enzymes?searchKey=' + clickedName
+                              + '&searchparams.type=KEYWORD&searchparams.previoustext='
+                              + clickedName
+                              + '&searchparams.start=0&searchparams.text='
+                              + clickedName
+                              + '&keywordType=DISEASE'
+                              + '&searchId=' + clickedId;
+                      window.location.href = url;
+                          }
+                      }
+              };
+              $("#disease-input").easyAutocomplete(options);
+          </script>
+
+
+
         <c:if test="${not empty diseaseList}">
             <ep:alphabeticalDisplay items="${diseaseList}" type="diseases" maxDisplay="5"/>
         </c:if>

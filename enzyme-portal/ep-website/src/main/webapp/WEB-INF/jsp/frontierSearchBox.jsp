@@ -12,21 +12,77 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%@ page language="java" pageEncoding="UTF-8"%>
-<div ng-app="enzyme-portal-app">
-    <div ng-controller="TypeAheadController">
+<div >
+    <div >
         <div class="column medium-10" id="search-bar">
-            <form:form id="local-search" name="local-search" modelAttribute="searchModel" action="${pageContext.request.contextPath}/enzymes" method="POST">
-             <form:hidden path="searchparams.previoustext" />
+
+
+            <%--<form:form id="local-search" name="local-search" modelAttribute="searchModel" action="${pageContext.request.contextPath}/enzymes" method="POST">--%>
+            <form id="local-search" name="local-search" action="${pageContext.request.contextPath}/enzymes" method="POST">
+
+
+             <%--<form:hidden path="searchparams.previoustext" />--%>
+             <input type="hidden" name="searchparams.previoustext" value="XxX" />
+
+
              <input type="hidden" name="searchTerm" value="${searchTerm}"/>
              <input type="hidden" name="keywordType" value="KEYWORD"/>
              <fieldset>
                   <div class="input-group margin-bottom-none margin-top-large" >
-                        <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="35" maxlength="100" type="text" ng-model="searchTypeAheadController" placeholder="search for enzymes" typeahead="enzyme for enzyme in searchForEnzymes($viewValue)"  typeahead-loading="loadingPathway" typeahead-on-select="onSelect($item, $model, $label)">
+                        <input class="input-group-field" autocomplete="off" id="local-searchbox" tabindex="1" name="searchparams.text" size="35" maxlength="100" type="text" placeholder="search for enzymes">
+
+                      <script>
+                          var options = {
+
+                              url: function(phrase) {
+                                 return "/enzymeportal/service/search";
+                               },
+
+                               getValue: function(element) {
+                                 return element.suggestion;
+                               },
+
+                               ajaxSettings: {
+                                 dataType: "json",
+                                 method: "POST",
+                                 data: {
+                                   dataType: "json"
+                                 }
+                               },
+
+                               preparePostData: function(data) {
+                                 data.name = $("#local-searchbox").val();
+                                 return data;
+                               },
+
+                              list: {
+                                      match: {
+                                          enabled: true
+                                      }
+                                      ,
+                                      onClickEvent: function() {
+                                          var valueOfClickedItem = $("#local-searchbox").getSelectedItemData().suggestion;
+                                          $("#auto-complete-holder").val(valueOfClickedItem).trigger("change");
+                                          //alert("Fired!");
+                                          $("#local-searchbox").submit();
+                                      }
+                                  }
+                          };
+                          $("#local-searchbox").easyAutocomplete(options);
+
+                      </script>
+
+                      <input id="auto-complete-holder" name="searchKey" type="hidden" />
+
+
                           <div class="input-group-button">
                               <input id="search-keyword-submit" class="button icon icon-functional" tabindex="2" type="submit" name="submit" value="1">
                            </div>
                         <i ng-show="loadingPathway" class="glyphicon glyphicon-refresh" ></i>
                   </div>
+
+
+
                   <p id="example" class="small">
                       Examples:
                       <a href="${pageContext.request.contextPath}/enzymes?searchparams.type=KEYWORD&searchparams.previoustext=&searchparams.start=0&searchparams.text=sildenafil&keywordType=KEYWORD">sildenafil</a>,
@@ -38,7 +94,7 @@
                   </p>
 
               </fieldset>
-            </form:form>
+            </form>
         </div>
     </div>
 </div>

@@ -26,16 +26,62 @@
 
 
             <div class="container-browse-search">
-            <%--<input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8" class="form-control">--%>
-                <input id="pathway-input" class="browse-search" type="text" ng-model="pathwayTypeAheadController"
-                       placeholder="Pathway name" typeahead="pathway for pathway in getPathways($viewValue)"
-                       class="form-control" typeahead-on-select="onSelectPathways($item, $model, $label)"
-                       typeahead-no-results="noResults">
-                <div ng-show="noResults">
-                    No Results Found
-                </div>
-
+                 <input id="pathway-input" autocomplete="off" type="text" placeholder="Pathway name">
             </div>
+
+               <script>
+                   var options = {
+                       url: function(phrase) {
+                          return "/enzymeportal/service/pathways";
+                        },
+
+                        getValue: function(element) {
+                          return element.name;
+                        },
+
+                        ajaxSettings: {
+                          dataType: "json",
+                          method: "GET",
+                          data: {
+                            dataType: "json"
+                          }
+                        },
+
+//                       http://localhost:8080/enzymeportal/enzymes?searchKey=R-DRE-70895&searchparams.start=0&searchparams.text=Branched-chain%20amino%20acid%20catabolism&keywordType=PATHWAYS&searchId=R-DRE-70895
+
+//                       http://localhost:8080/enzymeportal/enzymes?searchKey=R-70895&searchparams.type=KEYWORD&searchparams.previoustext=Branched-chain%20amino%20acid%20catabolism&searchparams.start=0&searchparams.text=Branched-chain%20amino%20acid%20catabolism&keywordType=PATHWAYS&searchId=R-70895
+
+
+                        preparePostData: function(data) {
+                          data.name = $("#pathway-input").val();
+
+                          return data;
+                        },
+
+                       list: {
+                               match: {
+                                   enabled: true
+                               }
+                               ,
+                           onChooseEvent: function() {
+                               var clickedName = $("#pathway-input").getSelectedItemData().pathwayName;
+                               var clickedId = $("#pathway-input").getSelectedItemData().pathwayGroupId;
+                               var url = '/enzymeportal/enzymes?searchKey='
+                                       + clickedId
+                                       + '&searchparams.start=0&searchparams.text='
+                                       + clickedName
+                                       + '&keywordType=PATHWAYS'
+                                       + '&searchId=' + clickedId;
+
+                               console.log(url);
+
+                               window.location.href = url;
+                               }
+                           }
+                   };
+                   $("#pathway-input").easyAutocomplete(options);
+               </script>
+
 
             <c:if test="${not empty pathwayList}">
                 <ep:alphabeticalDisplay items="${pathwayList}" type="pathways" maxDisplay="5"/>

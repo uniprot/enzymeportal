@@ -60,15 +60,28 @@
             <div class="row" id="title-row">
                <div class="large-2 columns"></div>
                <div class="large-10 columns">
-                   <h5>Alternative Name(s):</h5>
+                <c:choose>
+                   <c:when test="${not empty enzymePage.altNames}">
+                       <h5>Alternative Name(s)</h5>
+                   </c:when>
+                   <c:otherwise>
+                       <h5 class="noResults">Alternative Name(s)</h5>
+                   </c:otherwise>
+                    </c:choose>
+
                    <div id="alternative-names">
-                       <c:if test="${not empty enzymePage.altNames}">
+                       <c:choose>
+                       <c:when test="${not empty enzymePage.altNames}">
                            <ul>
                                <c:forEach items="${enzymePage.altNames}" var="altName">
                                    <li>${altName}</li>
                                </c:forEach>
                             </ul>
-                       </c:if>
+                       </c:when>
+                       <c:otherwise>
+                           <p class="noResults">There are no alternative names for this Enzyme</p>
+                       </c:otherwise>
+                       </c:choose>
                    </div>
                </div>
              </div>
@@ -80,15 +93,16 @@
                     <p>${enzymePage.catalyticActivities}</p>
 
                     <section>
-                    <h3>Cofactors</h3>
                          <c:choose>
                            <c:when test="${not empty enzymePage.cofactors }">
+                               <h3>Cofactors</h3>
                                <c:forEach items="${enzymePage.cofactors}" var="c">
                                 <p>${c}</p>
-                            </c:forEach>
+                                </c:forEach>
                            </c:when>
                            <c:otherwise>
-                               There are no Cofactors for this Enzyme
+                               <h3 class="noResults">Cofactors</h3>
+                               <p class="noResults"> There are no Cofactors for this Enzyme</p>
                            </c:otherwise>
                          </c:choose>
 
@@ -98,6 +112,19 @@
                          <c:choose>
                            <c:when test="${not empty enzymePage.proteins.entries }">
                                <c:set var="count" value="0" scope="page" />
+
+
+
+                               <form:form id="proteinViewForm-${enzymePage.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
+                                   <input name="keywordType" type="hidden" value="${keywordType}">
+                                   <input name="searchTerm" type="hidden" value="${enzymePage.ec}">
+                                   <input name="searchId" type="hidden" value="${enzymePage.ec}">
+                                   <input name="ec" type="hidden" value="${enzymePage.ec}">
+                                   <form:hidden path="searchparams.previoustext" />
+                                   <%--<form:hidden path="searchparams.text" value="${searchKey}-${enzymePage.ec}" />--%>
+                                   <%--<form:hidden path="searchparams.type" value="${searchType}"/>--%>
+
+
                                <table id="associatedProteins">
                                   <tr>
                                       <th>Protein name</th>
@@ -112,18 +139,36 @@
                                        </c:if>
                                    </c:forEach>
 
+
+                                   <tr>
+
+                                       <td colspan="3">
                                    <c:if test="${fn:length(enzymePage.proteins.entries) > 5}">
-                                   <tr>
-                                       <td colspan="3">button here1</td>
-                                   </tr>
+                                         <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all Proteins</button>
                                    </c:if>
-                                   <c:if test="${fn:length(enzymePage.proteins.entries) <5}">
-                                   <tr>
-                                       <td colspan="3">button here2</td>
+                                       </td>
+
                                    </tr>
-                                   </c:if>
+
+                                   <%--<c:if test="${fn:length(enzymePage.proteins.entries) > 5}">--%>
+                                   <%--<tr>--%>
+                                       <%--<td colspan="3">button here1</td>--%>
+                                   <%--</tr>--%>
+                                   <%--</c:if>--%>
+                                   <%--<c:if test="${fn:length(enzymePage.proteins.entries) <5}">--%>
+                                   <%--<tr>--%>
+                                       <%--<td colspan="3">--%>
+                                           <%----%>
+
+                                           <%--<c:if test="${enzyme.numProteins >= 5}">--%>
+                                                 <%--<button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>--%>
+                                           <%--</c:if>--%>
+
+
+                                   <%--</c:if>--%>
 
                                </table>
+                               </form:form>
                            </c:when>
                            <c:otherwise>
                                There are no Associated Proteins for this Enzyme
@@ -132,9 +177,10 @@
                     </section>
 
                     <section>
-                    <h3>Citations</h3>
+
                     <c:choose>
                       <c:when test="${not empty enzymePage.citations }">
+                          <h3>Citations</h3>
                           <ul id="citations">
                           <c:forEach items="${enzymePage.citations}" var="citation">
 
@@ -153,7 +199,8 @@
                           </a>
                       </c:when>
                       <c:otherwise>
-                          There are no citations for this Enzyme
+                          <h3 class="noResults">Citations</h3>
+                          <p class="noResults">There are no citations for this Enzyme</p>
                       </c:otherwise>
                     </c:choose>
 

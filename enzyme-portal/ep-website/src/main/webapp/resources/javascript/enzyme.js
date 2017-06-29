@@ -62,21 +62,24 @@ $( document ).ready(function() {
     setTimeout(testCheckBoxes, 500);
 
 
-    var filtersAppliedList = $("#filtersApplied").val();
-    var type = typeof(filtersAppliedList);
-    filtersAppliedList = filtersAppliedList.replace('[','');
-    filtersAppliedList = filtersAppliedList.replace(']','');
-    var filtersAppliedArray = filtersAppliedList.split(',');
+    if($('#filtersApplied').length){
+        var filtersAppliedList = $("#filtersApplied").val();
+        var type = typeof(filtersAppliedList);
+        filtersAppliedList = filtersAppliedList.replace('[','');
+        filtersAppliedList = filtersAppliedList.replace(']','');
+        var filtersAppliedArray = filtersAppliedList.split(',');
 
-    $.each(filtersAppliedArray,function (index, value) {
-        facetToTick = $.trim(value);
-        facetToTick = facetToTick.replace(/\:/g, '_');
-        $("#"+facetToTick).prop('checked', true);
-        $("#"+facetToTick).parent().insertBefore("#activeOrganisms");
-   });
+        $.each(filtersAppliedArray,function (index, value) {
+            facetToTick = $.trim(value);
+            facetToTick = facetToTick.replace(/\:/g, '_');
+            $("#"+facetToTick).prop('checked', true);
+            $("#"+facetToTick).parent().insertBefore("#activeOrganisms");
+       });
 
-    if (filtersAppliedArray.length >= 1){
-        $("#activeFilters").show();
+        if (filtersAppliedArray.length >= 1){
+            $("#activeFilters").show();
+        }
     }
+
 
 });
