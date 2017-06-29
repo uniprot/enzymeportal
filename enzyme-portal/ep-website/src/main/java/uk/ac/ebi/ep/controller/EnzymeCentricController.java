@@ -41,7 +41,7 @@ public class EnzymeCentricController extends AbstractController {
     private static final String FILTER = "/search/filter";
     private static final String ENZYME_CENTRIC_PAGE = "enzymes";
     private static final int DEFAULT_EBI_SEARCH_FACET_COUNT = 1_000;
-    private static final int ASSOCIATED_PROTEIN_LIMIT = 8_00;
+    //private static final int ASSOCIATED_PROTEIN_LIMIT = 8_000;
     private static final int PAGE_SIZE = 10;
 
     @RequestMapping(value = SEARCH, method = RequestMethod.GET)
@@ -174,12 +174,16 @@ public class EnzymeCentricController extends AbstractController {
 //
 //            });
             int start = 0;
-            int limit = 10;
+            int limit = associatedProteinLimit;
 
             entries.stream().forEach(entry -> {
                 ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultBySearchTermAndEC(entry.getEc(), searchTerm, start, limit);
                 if (result.getHitCount() == 0) {
                     result = proteinGroupService.findProteinGroupResultByEC(entry.getEc(), start, LOWEST_BEST_MATCHED_RESULT_SIZE);
+                }
+                //limit asscoated protein result
+                if(result.getHitCount() > associatedProteinLimit){
+                    result.setHitCount(associatedProteinLimit);
                 }
 //                entry.setProteinGroupEntry(result.getEntries());
 //                entry.setNumProteins(result.getHitCount());

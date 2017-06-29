@@ -41,7 +41,7 @@ public class EnzymePageController extends AbstractController {
     @RequestMapping(value = "/search/ec/{ec}", method = RequestMethod.GET)
     public String showEnzyme(@PathVariable("ec") String ec, @RequestParam(value = "enzymeName", required = true) String enzymeName, Model model, RedirectAttributes attributes) {
 
-        int resultLimit = 7;
+        int resultLimit = ASSOCIATED_PROTEIN_LIMIT;
 
         boolean isEc = searchUtil.validateEc(ec);
         if (isEc) {

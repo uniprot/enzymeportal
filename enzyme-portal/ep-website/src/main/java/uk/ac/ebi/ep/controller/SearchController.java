@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.controller;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,24 +52,24 @@ import uk.ac.ebi.xchars.domain.EncodingType;
  */
 @Controller
 public class SearchController extends AbstractController {
+
     private static final Logger logger = Logger.getLogger(SearchController.class);
- 
+
     private static final String ENZYME_MODEL = "enzymeModel";
     private static final String ERROR = "error";
-    private static final int ASSOCIATED_PROTEIN_LIMIT = 8_00;
 
     private final Integer maxCitations = 50;
 
     private enum ResponsePage {
-        
+
         ENTRY, ERROR;
-        
+
         @Override
         public String toString() {
             return name().toLowerCase();
         }
     }
-    
+
     private boolean startsWithDigit(String data) {
         return Character.isDigit(data.charAt(0));
     }
@@ -108,11 +108,11 @@ public class SearchController extends AbstractController {
                     enzymeModel = enzymeRetriever.getMolecules(accession);
                     break;
                 case DISEASEDRUGS:
-                    
+
                     enzymeModel = enzymeRetriever.getDiseases(accession);
                     break;
                 case LITERATURE:
-                    
+
                     enzymeModel = enzymeRetriever.getLiterature(accession, maxCitations);
                     model.addAttribute("maxCitations", maxCitations);
                     break;
@@ -122,7 +122,7 @@ public class SearchController extends AbstractController {
                     break;
             }
             if (enzymeModel != null) {
-                
+
                 UniprotEntry entry = enzymePortalService.findByAccession(accession);
                 // If we got here from a bookmark, the summary might not be cached:
                 String summId = Functions.getSummaryBasketId(entry);
@@ -134,12 +134,12 @@ public class SearchController extends AbstractController {
                 } else if (sls.get(summId) == null) {
                     sls.put(summId, entry);
                 }
-                
+
                 enzymeModel.setRequestedfield(requestedField.name().toLowerCase());
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 model.addAttribute(ENTRY_VIDEO, ENTRY_VIDEO);
                 addToHistory(session, accession);
-                
+
             }
         } catch (EnzymeRetrieverException ex) {
             // FIXME: this is an odd job to signal an error for the JSP!
@@ -169,14 +169,14 @@ public class SearchController extends AbstractController {
                 logger.error("Error in retrieving Molecules Information");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.ENZYME.getName())) {
-                
+
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Enzymes");
                 Enzyme enzyme = new Enzyme();
                 enzyme.getEnzymetype().add(0, ERROR);
                 enzymeModel.setEnzyme(enzyme);
-                
+
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 logger.error("Error in retrieving Enzymes");
             }
@@ -187,40 +187,40 @@ public class SearchController extends AbstractController {
                 ProteinStructure structure = new ProteinStructure();
                 structure.setName(ERROR);
                 enzymeModel.getProteinstructure().add(0, structure);
-                
+
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 logger.error("Error in retrieving ProteinStructure");
             }
             if (requestedField.getName().equalsIgnoreCase(Field.REACTIONSPATHWAYS.getName())) {
                 enzymeModel = new EnzymeModel();
-                
+
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Reactions and Pathways");
                 ReactionPathway pathway = new ReactionPathway();
                 EnzymeReaction reaction = new EnzymeReaction();
-                
+
                 reaction.setName(ERROR);
                 pathway.setReaction(reaction);
                 enzymeModel.getReactionpathway().add(0, pathway);
-                
+
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 logger.error("Error in retrieving Reaction Pathways");
-                
+
             }
             if (requestedField.getName().equalsIgnoreCase(Field.LITERATURE.getName())) {
                 enzymeModel = new EnzymeModel();
                 enzymeModel.setRequestedfield(requestedField.getName());
                 enzymeModel.setName("Literatures");
-                
+
                 enzymeModel.getLiterature().add(0, ERROR);
-                
+
                 model.addAttribute(ENZYME_MODEL, enzymeModel);
                 logger.error("Error in retrieving Literature Information");
-                
+
             }
-            
+
         }
-        
+
         return responsePage;
     }
 
@@ -243,7 +243,7 @@ public class SearchController extends AbstractController {
         clearHistory(session);
         return "index";
     }
-    
+
     @ModelAttribute("/about")
     public SearchModel getabout(Model model) {
         SearchModel searchModelForm = searchform();
@@ -251,17 +251,17 @@ public class SearchController extends AbstractController {
         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return new SearchModel();
     }
-    
+
     @RequestMapping(value = "/faq")
     public SearchModel getfaq(Model model) {
-        
+
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return searchModelForm;
-        
+
     }
-    
+
     @RequestMapping(value = "/search")
     public SearchModel getSearch(Model model) {
         SearchModel searchModelForm = searchform();
@@ -307,14 +307,19 @@ public class SearchController extends AbstractController {
             if (results == null) {
                 // New search:
                 clearHistory(session);
-                
+
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
                         //results = searchKeyword(searchModel.getSearchparams());
+                        StopWatch stopWatch = new StopWatch();
+                        stopWatch.start();
                         results = searchKeyword(ec, searchTerm, searchId, keywordType, ASSOCIATED_PROTEIN_LIMIT);
-                        
+
                         model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
                         //LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
+                        stopWatch.stop();
+
+                        logger.error("Keyword Search for " + searchTerm + " took  ::: " + stopWatch.getTotalTimeSeconds());
                         break;
                     case SEQUENCE:
                         //view = searchSequence(model, searchModel);
@@ -326,8 +331,10 @@ public class SearchController extends AbstractController {
                     default:
                 }
             }
-            
+
             if (results != null) { // something to show
+                StopWatch stopWatch = new StopWatch();
+                stopWatch.start();
                 cacheSearch(session.getServletContext(), searchKey, results);
                 setLastSummaries(session, results.getSummaryentries());
                 searchModel.setSearchresults(results);
@@ -336,16 +343,19 @@ public class SearchController extends AbstractController {
                 model.addAttribute("searchModel", searchModel);
                 model.addAttribute("pagination", getPagination(searchModel));
                 request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
-                
+
                 clearHistory(session);
                 addToHistory(session, searchModel.getSearchparams().getType(),
                         searchKey, searchId, keywordType);
                 view = "search";
+                logger.error("Apply Filters took  ::: " + stopWatch.getTotalTimeSeconds());
+                stopWatch.stop();
             }
+
         } catch (Exception e) {
             logger.error("one of the search params (Text or Sequence is :" + searchKey, e);
         }
-        
+
         return view;
     }
 
@@ -418,10 +428,10 @@ public class SearchController extends AbstractController {
             prevSearches = Collections.synchronizedMap(
                     new LinkedHashMap<String, SearchResults>(
                             searchConfig.getSearchCacheSize(), 1, true));
-            
+
             servletContext.setAttribute(Attribute.prevSearches.getName(),
                     prevSearches);
-            
+
         }
         return prevSearches;
     }
@@ -439,9 +449,9 @@ public class SearchController extends AbstractController {
      */
     @Override
     protected String getSearchKey(SearchParams searchParams) {
-        
+
         String key = null;
-        
+
         switch (searchParams.getType()) {
             case KEYWORD:
                 key = searchParams.getText().trim().toLowerCase();
@@ -469,7 +479,7 @@ public class SearchController extends AbstractController {
     protected SearchResults searchKeyword(SearchParams searchParameters) {
 
         SearchResults results = enzymeFinderService.getEnzymes(searchParameters);
-        
+
         return results;
     }
 
@@ -483,7 +493,7 @@ public class SearchController extends AbstractController {
      * @return searchResults
      */
     protected SearchResults searchKeyword(String ec, String keyword, String searchId, String keywordType, int limit) {
-        
+
         String searchTerm = HtmlUtility.cleanText(keyword);
         searchTerm = searchTerm.replaceAll("&quot;", "");
         SearchResults results = null;
@@ -496,7 +506,7 @@ public class SearchController extends AbstractController {
             results = enzymeFinderService.getAssociatedProteinsByOmimIdAndEc(omimId, ec, limit);
         }
         if (keywordType.equalsIgnoreCase(KeywordType.EC.name())) {
-            
+
             results = enzymeFinderService.getAssociatedProteinsByEc(ec, limit);
         }
         if (keywordType.equalsIgnoreCase(KeywordType.TAXONOMY.name())) {
@@ -507,7 +517,7 @@ public class SearchController extends AbstractController {
             String pathwayId = searchId;
             results = enzymeFinderService.getAssociatedProteinsByPathwayIdAndEc(pathwayId, ec, limit);
         }
-        
+
         return results;
     }
 
@@ -522,9 +532,9 @@ public class SearchController extends AbstractController {
      */
     private SearchResults searchCompound(Model model, SearchModel searchModel) {
         SearchResults results = null;
- 
+
         try {
-      
+
             results = enzymeFinderService.getEnzymesByCompound(searchModel.getSearchparams());
             searchModel.setSearchresults(results);
             model.addAttribute("searchModel", searchModel);
@@ -560,16 +570,16 @@ public class SearchController extends AbstractController {
         model.addAttribute(SEQUENCE_VIDEO, SEQUENCE_VIDEO);
         return "advanceSearch";
     }
-    
+
     @ResponseBody
     @RequestMapping("/service/search")
     public List<Suggestion> enzymesAutocompleteSearch(@RequestParam(value = "name", required = true) String name) {
         if (name != null && name.length() >= 3) {
             String keyword = String.format("%%%s%%", name);
-            
+
             String cleanedKeyword = Jsoup.clean(keyword, Whitelist.basic());
             List<Suggestion> suggestions = ebeyeSuggestionService.autocompleteSearch(cleanedKeyword.trim());
-            
+
             if (suggestions != null && !suggestions.isEmpty()) {
                 return suggestions
                         .stream()
@@ -578,15 +588,15 @@ public class SearchController extends AbstractController {
             } else {
                 return new ArrayList<>();
             }
-            
+
         }
-        
+
         return new ArrayList<>();
-        
+
     }
-    
+
     public String resolveSpecialCharacters(String data) {
-        
+
         SpecialCharacters xchars = SpecialCharacters.getInstance(null);
         EncodingType[] encodings = {
             EncodingType.CHEBI_CODE,
@@ -599,24 +609,24 @@ public class SearchController extends AbstractController {
             EncodingType.SWISSPROT_CODE,
             EncodingType.UNICODE
         };
-        
+
         if (!xchars.validate(data)) {
             logger.warn("SPECIAL CHARACTER PARSING ERROR : This is not a valid xchars string!" + data);
-            
+
         }
         logger.info("available encodings " + Arrays.toString(encodings));
         return xchars.xml2Display(data, EncodingType.CHEBI_CODE);
     }
-    
+
     @RequestMapping(value = "/underconstruction", method = RequestMethod.GET)
     public String getSearchResult(Model model) {
         return "underconstruction";
     }
-    
+
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String getAbout(Model model) {
         model.addAttribute(HOME_VIDEO, HOME_VIDEO);
         return "about";
     }
-    
+
 }
