@@ -103,8 +103,11 @@ public class EnzymePageController extends AbstractController {
     private ProteinGroupSearchResult findProteinsByEcNumber(String ecNumber, int limit) {
         int start = 0;
         int pageSize = limit;
-        return proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
-
+        ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
+        if (result.getHitCount() > limit) {
+            result.setHitCount(limit);
+        }
+        return result;
     }
 
     private EnzymePage addProteins(ProteinGroupSearchResult pgr, EnzymeEntry e) {
@@ -117,6 +120,7 @@ public class EnzymePageController extends AbstractController {
                 .cofactors(e.getFields().getIntenzCofactors())
                 .catalyticActivities(e.getFields().getDescription().stream().findAny().orElse(""))
                 .proteins(pgr)
+                .numProteins(pgr.getHitCount())
                 .build();
 
     }
@@ -130,6 +134,7 @@ public class EnzymePageController extends AbstractController {
                 .altNames(e.getAltNames())
                 .cofactors(e.getCofactors())
                 .proteins(e.getProteins())
+                .numProteins(e.getNumProteins())
                 .citations(cit)
                 .build();
 
