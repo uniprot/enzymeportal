@@ -26,5 +26,6 @@ public class EnzymePage {
     private final ProteinGroupSearchResult proteins;
     private int numProteins;
     private List<Result> citations;
+    private int numCitations;
 
 }

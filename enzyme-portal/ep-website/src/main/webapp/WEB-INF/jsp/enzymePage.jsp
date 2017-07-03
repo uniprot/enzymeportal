@@ -193,10 +193,12 @@
 
                           </c:forEach>
                           </ul>
-
-                          <a href="http://europepmc.org/search?page=1&query=${enzymePage.enzymeName}" target="_blank">
+                          <c:if test="${enzymePage.numCitations > 10}">
+                           <a href="http://europepmc.org/search?page=1&query=${enzymePage.enzymeName}" target="_blank">
                               <button id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View more in Europe PMC</button>
-                          </a>
+                          </a>        
+                          </c:if>
+     
                       </c:when>
                       <c:otherwise>
                           <h3 class="noResults">Citations</h3>
