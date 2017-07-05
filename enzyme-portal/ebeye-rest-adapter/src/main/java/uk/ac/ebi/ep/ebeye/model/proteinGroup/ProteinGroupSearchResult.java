@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -44,7 +46,10 @@ public class ProteinGroupSearchResult {
 
     @JsonProperty("entries")
     public List<ProteinGroupEntry> getEntries() {
-        return entries;
+        return entries
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @JsonProperty("entries")
@@ -71,8 +76,5 @@ public class ProteinGroupSearchResult {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
-    
-    
 
 }

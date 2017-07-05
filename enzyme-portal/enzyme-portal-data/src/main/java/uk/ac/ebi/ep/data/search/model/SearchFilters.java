@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 
 /**
@@ -92,10 +91,8 @@ public class SearchFilters implements Serializable {
         if (compounds == null) {
             compounds = new ArrayList<>();
         }
-        return this.compounds
-                .stream()
-                .distinct()
-                .collect(Collectors.toList());
+        return this.compounds;
+
     }
 
     /**

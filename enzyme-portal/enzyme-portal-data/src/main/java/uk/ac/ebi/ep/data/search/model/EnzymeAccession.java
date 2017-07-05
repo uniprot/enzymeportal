@@ -69,7 +69,7 @@ public class EnzymeAccession implements Serializable {
         return this.uniprotaccessions
                 .stream()
                 .distinct()
-                .limit(5)
+                //.limit(5)
                 .collect(Collectors.toList());
     }
 

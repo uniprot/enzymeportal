@@ -28,8 +28,7 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
 
     public ProteinGroupService(RestTemplate restTemplate, EbeyeIndexProps proteinGroupPropertyFile) {
         super(proteinGroupPropertyFile, restTemplate, MAX_RETRIEVABLE_ENTRIES);
-        //this.restTemplate = restTemplate;
-        //this.proteinGroupProps = proteinGroupPropertyFile;
+
     }
 
     private ProteinGroupSearchResult getProteinGroupResult(String url) {
@@ -41,8 +40,6 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     }
 
     private String buildQueryUrl(String endpoint, String query, int startPage, int pageSize) {
-
-        //String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family&sort=_relevance&reverse=true&format=json";
         return String.format(QUERY_URL, endpoint, query, startPage, pageSize);
     }
 
@@ -81,7 +78,7 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         if (pageSize > 100) {
             pageSize = 100;
         }
-         return getSearchResult(query, startPage, pageSize);
+        return getSearchResult(query, startPage, pageSize);
     }
 
     public ProteinGroupSearchResult findUniqueProteinsByOmimIdAndEc(String omimId, String ec, int limit) {
@@ -117,7 +114,7 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         if (limit > 100) {
             limit = 100;
         }
- 
+
         return getSearchResult(query, startPage, limit);
 
     }
@@ -141,7 +138,6 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         }
         String query = "TAXONOMY:" + taxId + " AND INTENZ:" + ec;
 
-      
         return getSearchResult(query, startPage, limit);
 
     }
@@ -177,101 +173,4 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         return queryForUniquePrimaryAccessions(query, limit);
     }
 
-//    
-//        /**
-//     * Sends a query to the Ebeye search service and creates a response with the
-//     * accessions of the entries that fulfill the search criteria.
-//     *
-//     * @param query the client query
-//     * @param limit limit the number of results from Ebeye service. Use
-//     * {@link #NO_RESULT_LIMIT} if no limit is to be specified
-//     * @return list of accessions that fulfill the query
-//     */
-//    public List<String> queryForUniqueAccessions(String query, int limit) {
-//        Preconditions.checkArgument(limit > 0, "Limit can not be less than 1");
-//
-//        StopWatch stopWatch = new StopWatch();
-//        stopWatch.start();
-//
-//        List<String> uniqueAccessions = queryForUniqueAccessions(query)
-//                .limit(limit)
-//                .toList()
-//                .toBlocking()
-//                .single();
-//
-//        stopWatch.stop();
-//        logger.debug("Executing query:{}, took: {}", query, stopWatch.getTotalTimeSeconds() + " sec");
-//
-//        return uniqueAccessions;
-//    }
-//    
-//    
-//    
-//    /**
-//     * Sends a query to the Ebeye search service and creates an
-//     * {@link Observable} which pushes the results as they are calculated. This
-//     * allows the results to be processed asynchronously by the client calling
-//     * the method.
-//     *
-//     * @param query the client query
-//     * @return Observable of accessions that fulfill the query
-//     */
-//    public Observable<String> queryForUniqueAccessions(String query) {
-//        Preconditions.checkArgument(query != null, "Query can not be null");
-//
-//        Observable<String> uniqueAccessions;
-//
-//        try {
-//            Observable<ProteinGroupEntry> distinctEntries = executeQuery(query).distinct();
-//
-//            uniqueAccessions = getDistinctAccessionsFromEntries(distinctEntries);
-//        } catch (RestClientException e) {
-//            logger.error(e.getMessage(), e);
-//            uniqueAccessions = Observable.empty();
-//        }
-//
-//        return uniqueAccessions;
-//    }
-//
-//    private Observable<String> getDistinctAccessionsFromEntries(Observable<ProteinGroupEntry> accessionObservable) {
-//        return accessionObservable
-//                .map(ProteinGroupEntry::getPrimaryAccession)
-//                .distinct();
-//    }
-    //// TODO
-//    private ProteinGroupSearchResult getProteinViewResult(String url) {
-//
-//        logger.info("URL sent to EBI Service " + url);
-//        System.out.println("protein group  URL SENT " + url);
-//        ProteinGroupSearchResult results = restTemplate.getForObject(url.trim(), ProteinGroupSearchResult.class);
-//        return results;
-//    }
-//
-//    /**
-//     *
-//     * @param query searchTerm
-//     * @param startPage start page
-//     * @param pageSize page size
-//     * @return
-//     */
-//    private ProteinGroupSearchResult getProteinSearchResult(String query, int startPage, int pageSize) {
-//
-//        Preconditions.checkArgument(startPage > -1, "startPage can not be less than 0");
-//        Preconditions.checkArgument(pageSize > -1, "pageSize can not be less than 0");
-//        Preconditions.checkArgument(query != null, "'query' must not be null");
-//
-//        return getProteinViewResult(buildQueryUrl(proteinGroupProps.getProteinGroupSearchUrl(), query, startPage, pageSize));
-//    }
-//
-//    public ProteinGroupSearchResult findProteinGroupResultsByEC(String ec, int startPage, int pageSize) {
-//        Preconditions.checkArgument(ec != null, "ec can not be null");
-//        //Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
-//        String query = "INTENZ:" + ec;
-//        if (pageSize > 100) {
-//            pageSize = 100;
-//        }
-//        //query = UrlUtil.encode(query);
-//        return getProteinSearchResult(query, startPage, pageSize);
-//    }
-//    
 }

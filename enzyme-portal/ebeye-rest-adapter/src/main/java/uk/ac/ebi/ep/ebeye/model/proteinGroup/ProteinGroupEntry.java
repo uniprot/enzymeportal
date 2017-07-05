@@ -114,10 +114,4 @@ public class ProteinGroupEntry implements ProteinView {
         return "Entry{" + "proteinGroupId=" + getProteinGroupId() + ", proteinName=" + getProteinName() + '}';
     }
 
- 
-    @Override
-    @Deprecated
-    public String getPrimarySpecie() {
-       return fields.getCommonName().stream().findFirst().orElse(fields.getScientificName().stream().findFirst().orElse("Please report this error")); 
-    }
 }

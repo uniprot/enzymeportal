@@ -24,6 +24,8 @@ public class EnzymePage {
     private final Set<String> altNames;
     //@Singular
     private final ProteinGroupSearchResult proteins;
+    private int numProteins;
     private List<Result> citations;
+    private int numCitations;
 
 }

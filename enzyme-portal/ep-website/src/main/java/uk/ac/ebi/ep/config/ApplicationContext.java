@@ -27,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import uk.ac.ebi.ep.data.dataconfig.DataConfig;
@@ -61,12 +62,22 @@ public class ApplicationContext extends WebMvcConfigurerAdapter {
      *
      * @param registry ResourceHandlerRegistry
      */
+//    @Override
+//    public void addResourceHandlers1(ResourceHandlerRegistry registry) {
+//
+//        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+//        registry.addResourceHandler("/favicon.ico").addResourceLocations("/");
+//
+//    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/favicon.ico").addResourceLocations("/");
-
+        registry
+                .addResourceHandler("/resources/**", "/favicon.ico", "/files/**")
+                .addResourceLocations("/resources/", "/", "file:/nfs/public/rw/uniprot/enzyme_portal/sitemap/")
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
     }
 
     @Override

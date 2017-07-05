@@ -116,13 +116,13 @@
 
 
                                <form:form id="proteinViewForm-${enzymePage.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
-                                   <input name="keywordType" type="hidden" value="${keywordType}">
+                                   <input name="keywordType" type="hidden" value="EC">
                                    <input name="searchTerm" type="hidden" value="${enzymePage.ec}">
                                    <input name="searchId" type="hidden" value="${enzymePage.ec}">
                                    <input name="ec" type="hidden" value="${enzymePage.ec}">
                                    <form:hidden path="searchparams.previoustext" />
-                                   <%--<form:hidden path="searchparams.text" value="${searchKey}-${enzymePage.ec}" />--%>
-                                   <%--<form:hidden path="searchparams.type" value="${searchType}"/>--%>
+                                   <form:hidden path="searchparams.text" value="${enzymePage.ec}-${enzymePage.ec}" />
+                                  <form:hidden path="searchparams.type" value="KEYWORD"/>
 
 
                                <table id="associatedProteins">
@@ -143,8 +143,8 @@
                                    <tr>
 
                                        <td colspan="3">
-                                   <c:if test="${fn:length(enzymePage.proteins.entries) > 5}">
-                                         <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all Proteins</button>
+                                   <c:if test="${enzymePage.numProteins > 5}">
+                                         <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzymePage.numProteins} Proteins</button>
                                    </c:if>
                                        </td>
 
@@ -193,10 +193,12 @@
 
                           </c:forEach>
                           </ul>
-
-                          <a href="http://europepmc.org/search?page=1&query=${enzymePage.enzymeName}" target="_blank">
+                          <c:if test="${enzymePage.numCitations > 10}">
+                           <a href="http://europepmc.org/search?page=1&query=${enzymePage.enzymeName}" target="_blank">
                               <button id="all-proteins" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View more in Europe PMC</button>
-                          </a>
+                          </a>        
+                          </c:if>
+     
                       </c:when>
                       <c:otherwise>
                           <h3 class="noResults">Citations</h3>

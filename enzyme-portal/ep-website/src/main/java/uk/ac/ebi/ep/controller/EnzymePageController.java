@@ -30,6 +30,7 @@ import uk.ac.ebi.ep.web.utils.EnzymePage;
 public class EnzymePageController extends AbstractController {
 
     private static final Logger logger = Logger.getLogger(EnzymePageController.class);
+    private static final  int CITATION_LIMIT = 11;
 
     @Autowired
     public EnzymePageController(ProteinGroupService proteinGroupService, EnzymePortalService enzymePortalService, LiteratureService litService) {
@@ -41,9 +42,9 @@ public class EnzymePageController extends AbstractController {
     @RequestMapping(value = "/search/ec/{ec}", method = RequestMethod.GET)
     public String showEnzyme(@PathVariable("ec") String ec, @RequestParam(value = "enzymeName", required = true) String enzymeName, Model model, RedirectAttributes attributes) {
 
-        int resultLimit = 7;
+        int resultLimit = ASSOCIATED_PROTEIN_LIMIT;
 
-        boolean isEc = searchUtil.validateEc(ec);
+        boolean isEc = true;// searchUtil.validateEc(ec);//TODO
         if (isEc) {
             long startTime = System.nanoTime();
             EnzymePage enzymePage = computeEnzymePage(ec, enzymeName, resultLimit);
@@ -63,12 +64,12 @@ public class EnzymePageController extends AbstractController {
     }
 
     public EnzymePage computeEnzymePage(String ecNumber, String enzymeName, int limit) {
-
+       
         CompletableFuture<EnzymeEntry> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
 
         CompletableFuture<ProteinGroupSearchResult> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
 
-        CompletableFuture<List<Result>> citations = CompletableFuture.supplyAsync(() -> findCitations(enzymeName, limit));
+        CompletableFuture<List<Result>> citations = CompletableFuture.supplyAsync(() -> findCitations(enzymeName, CITATION_LIMIT));
 
         return enzyme.thenCombine(proteins, (theEnzyme, protein) -> addProteins(protein, theEnzyme))
                 .thenCombine(citations, (finalResult, citation) -> addCitations(citation, finalResult))
@@ -103,8 +104,11 @@ public class EnzymePageController extends AbstractController {
     private ProteinGroupSearchResult findProteinsByEcNumber(String ecNumber, int limit) {
         int start = 0;
         int pageSize = limit;
-        return proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
-
+        ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
+        if (result.getHitCount() > limit) {
+            result.setHitCount(limit);
+        }
+        return result;
     }
 
     private EnzymePage addProteins(ProteinGroupSearchResult pgr, EnzymeEntry e) {
@@ -117,6 +121,7 @@ public class EnzymePageController extends AbstractController {
                 .cofactors(e.getFields().getIntenzCofactors())
                 .catalyticActivities(e.getFields().getDescription().stream().findAny().orElse(""))
                 .proteins(pgr)
+                .numProteins(pgr.getHitCount())
                 .build();
 
     }
@@ -130,7 +135,9 @@ public class EnzymePageController extends AbstractController {
                 .altNames(e.getAltNames())
                 .cofactors(e.getCofactors())
                 .proteins(e.getProteins())
+                .numProteins(e.getNumProteins())
                 .citations(cit)
+                .numCitations(cit.size())
                 .build();
 
     }

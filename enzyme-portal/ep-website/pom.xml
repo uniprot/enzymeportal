@@ -4,7 +4,7 @@
 
     <groupId>uk.ac.ebi.ep</groupId>
     <artifactId>ep-website</artifactId>
-    <version>4.1.0-SANPSHOT</version>
+    <version>4.1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>enzymeportal</name>

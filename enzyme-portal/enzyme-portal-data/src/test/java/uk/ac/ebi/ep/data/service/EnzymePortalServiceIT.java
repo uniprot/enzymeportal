@@ -147,10 +147,10 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     public void testFindEnzymesByAccession() {
         LOGGER.info("findEnzymesByAccession");
         
-        int expResult = 1;
-        List<UniprotEntry> result = enzymePortalService.findEnzymesByAccession(UNIPROT_ACCESSION);
         
-        assertEquals(expResult, result.size());
+        UniprotEntry result = enzymePortalService.findEnzymeByAccession(UNIPROT_ACCESSION);
+        
+        assertNotNull(result);
         
     }
 
@@ -512,7 +512,7 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
         accessions.add("fakeAccession");
         
         int expResult = 4;
-        Page<UniprotEntry> result = enzymePortalService.findEnzymesByAccessions(accessions, PAGEABLE);
+        Page<UniprotEntry> result = enzymePortalService.findEnzymesByAccessionsIn(accessions, PAGEABLE);
         assertEquals(expResult, result.getContent().size());
         assertEquals(4, result.getTotalElements());
         assertEquals(1, result.getTotalPages());

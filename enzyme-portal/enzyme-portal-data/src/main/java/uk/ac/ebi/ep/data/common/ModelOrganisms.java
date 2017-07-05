@@ -20,11 +20,11 @@ public enum ModelOrganisms {
     ECOLI(83333),
     RAT(10116);
 
-    private static final List<Long> allTaxIds = new LinkedList<>();
+    private static final List<Long> taxIds = new LinkedList<>();
 
     static {
         for (ModelOrganisms cs : ModelOrganisms.values()) {
-            allTaxIds.add(cs.taxId);
+            taxIds.add(cs.taxId);
         }
     }
 
@@ -38,8 +38,8 @@ public enum ModelOrganisms {
         return taxId;
     }
 
-    public static List<Long> getAllTaxIds() {
-        return allTaxIds;
+    public static List<Long> getTaxIds() {
+        return taxIds;
     }
 
 }

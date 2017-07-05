@@ -305,9 +305,11 @@ public class EnzymePortalService {
     }
 
     @Transactional(readOnly = true)
-    public List<UniprotEntry> findEnzymesByAccession(String accession) {
+    public UniprotEntry findEnzymeByAccession(String accession) {
 
-        return uniprotEntryRepository.findEnzymesByAccession(accession);
+        //return uniprotEntryRepository.findByAccession(accession);
+        return uniprotEntryRepository.findEnzymeByAccession(accession);
+        
     }
 
     @Transactional(readOnly = true)
@@ -321,6 +323,12 @@ public class EnzymePortalService {
         //return uniprotEntryRepository.findSummariesByAccessions(accessions).stream().distinct().filter(Objects::nonNull).collect(Collectors.toList());
 
         return uniprotEntryRepository.findSummariesByAccessions(accessions);//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
+
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UniprotEntry> findEnzymesByAccessions(List<String> accessions, Pageable pageable) {
+        return uniprotEntryRepository.findSummariesByAccessions(accessions, pageable);//.stream().map(EnzymePortal::new).distinct().map(EnzymePortal::unwrapProtein).filter(Objects::nonNull).collect(Collectors.toList());
 
     }
 
@@ -363,8 +371,9 @@ public class EnzymePortalService {
         return enzymePortalCompoundRepository.findCompoundsByAccession(accession);
     }
 
+    @Deprecated
     @Transactional(readOnly = true)
-    public Page<UniprotEntry> findEnzymesByAccessions(List<String> accessions, Pageable pageable) {
+    public Page<UniprotEntry> findEnzymesByAccessionsDeprecated(List<String> accessions, Pageable pageable) {
 
         return uniprotEntryRepository.findAll(enzymesByAccessions(accessions), pageable);
 

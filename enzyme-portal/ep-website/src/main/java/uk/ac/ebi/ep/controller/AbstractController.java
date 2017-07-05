@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.controller;
 
 import java.util.Collections;
@@ -113,6 +110,8 @@ public abstract class AbstractController {
     protected static final String HOME_VIDEO = "homeVideo";
     protected static final String SEARCH_VIDEO = "searchVideo";
     protected static final String SEQUENCE_VIDEO = "sequenceVideo";
+    
+     protected static final int ASSOCIATED_PROTEIN_LIMIT = 6_00;
 
     @ModelAttribute("searchModel")
     public SearchModel searchform() {
