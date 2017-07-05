@@ -3,90 +3,10 @@
  *
  * Description
  */
-//var enzymeApp = angular.module('enzyme-portal-app', ['ui.bootstrap']);
+// var enzymeApp = angular.module('enzyme-portal-app', ['ui.bootstrap']);
 // var enzymeApp = angular.module('enzyme-portal-app', ['mm.foundation']);
+// var enzymeApp =
 
-enzymeApp.controller('TypeAheadController', ['$scope', '$http', '$location',
-    function ($scope, $http, $location) {
-
-        $scope.idMappings = [];
-
-        $scope.searchForEnzymes = function (val) {
-            return $http.get('/enzymeportal/service/search', {
-                params: {
-                    name: val
-                }
-            }).then(function (response) {
-
-                return $.map(response.data, function (s, i) {
-                    return s.suggestion;
-                });
-
-            });
-        };
-
-        $scope.getPathways = function (val) {
-            return $http.get('/enzymeportal/service/pathways', {
-                params: {
-                    name: val
-                }
-            }).then(function (response) {
-                return $.map(response.data, function (d, i) {
-                    $scope.idMappings[d.pathwayName] = d.pathwayGroupId;
-                    return d.pathwayName;
-                });
-            });
-        };
-
-        $scope.getDiseases = function (val) {
-            return $http.get('/enzymeportal/service/diseases', {
-                params: {
-                    name: val
-                }
-            }).then(function (response) {
-                return $.map(response.data, function (d, i) {
-                    $scope.idMappings[d.name] = d.id;
-                    return d.name;
-                });
-            });
-        };
-
-        $scope.onSelectPathways = function ($model) {
-            var name = $model;
-            var groupId = $scope.idMappings[$model];
-            $scope.selectedItem = $model;
-
-
-            var url = '/enzymeportal/enzymes?searchKey='
-                    + name
-                    + '&searchparams.start=0&searchparams.text='
-                    + name
-                    + '&keywordType=PATHWAYS'
-                    + '&searchId=' + groupId;
-
-            window.location.href = url;
-
-
-
-        };
-
-        $scope.onSelectDiseases = function ($model) {
-            var name = $model;
-            var id = $scope.idMappings[$model];
-
-            $scope.selectedItem = $model;
-            var url = '/enzymeportal/enzymes?searchKey=' + name
-                    + '&searchparams.type=KEYWORD&searchparams.previoustext='
-                    + name
-                    + '&searchparams.start=0&searchparams.text='
-                    + name
-                    + '&keywordType=DISEASE'
-                    + '&searchId=' + id;
-
-            window.location.href = url;
-        };
-
-    }]);
 
 enzymeApp.factory('organismService', function ($http) {
     return {
