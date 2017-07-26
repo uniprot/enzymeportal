@@ -201,13 +201,13 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private List<EnzymePortalSummary> enzymePortalSummarySet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     //@BatchSize(size = 10)
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
     //@BatchSize(size = 20)
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
 
     public UniprotEntry() {
@@ -506,19 +506,20 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     public List<String> getEc() {
 
-        //List<String> ec = new ArrayList<>();
+        List<String> ec = new ArrayList<>();
         if (!getEnzymePortalEcNumbersSet().isEmpty()) {
-//            this.getEnzymePortalEcNumbersSet()
-//                    .stream()
-//                    .forEach(ecNum -> ec.add(ecNum.getEcNumber()));
-            return  this.getEnzymePortalEcNumbersSet()
+            this.getEnzymePortalEcNumbersSet()
                     .stream()
-                    .map(e->e.getEcNumber())
-                    .collect(Collectors.toList());
+                    .forEach(ecNum -> ec.add(ecNum.getEcNumber()));
+//            return  this.getEnzymePortalEcNumbersSet()
+//                    .stream()
+//                    .map(e->e.getEcNumber())
+//                    .collect(Collectors.toList());
+            return ec;
         }
 
-       // return ec;
-        return new ArrayList<>();
+        return ec;
+        //return new ArrayList<>();
     }
 
     public String getFunction() {

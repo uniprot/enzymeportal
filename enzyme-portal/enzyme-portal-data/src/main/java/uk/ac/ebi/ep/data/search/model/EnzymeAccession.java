@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package uk.ac.ebi.ep.data.search.model;
 
 import java.io.Serializable;
@@ -10,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -66,11 +61,7 @@ public class EnzymeAccession implements Serializable {
         if (uniprotaccessions == null) {
             uniprotaccessions = new ArrayList<>();
         }
-        return this.uniprotaccessions
-                .stream()
-                .distinct()
-                //.limit(5)
-                .collect(Collectors.toList());
+        return this.uniprotaccessions;
     }
 
     /**
@@ -325,28 +316,6 @@ public class EnzymeAccession implements Serializable {
         this.diseases = diseases;
     }
 
-//    @Override
-//    public int hashCode() {
-//        int hash = 3;
-//        hash = 79 * hash + Objects.hashCode(this.species.getScientificname());
-//        return hash;
-//    }
-//    
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj == null) {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass()) {
-//            return false;
-//        }
-//        final EnzymeAccession other = (EnzymeAccession) obj;
-//        return Objects.equals(this.species.getScientificname(), other.species.getScientificname());
-//    }
-//    @Override
-//    public String toString() {
-//        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + '}';
-//    }
     public String getUniprotid() {
         return uniprotid;
     }

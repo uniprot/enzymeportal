@@ -396,6 +396,11 @@ public class SearchParams implements Serializable {
     public enum SearchType {
 
         KEYWORD,
+        EC2PROTEIN,
+        PATHWAYS,
+        DISEASE,
+        TAXONOMY,
+        EC,
         SEQUENCE,
         COMPOUND;
 

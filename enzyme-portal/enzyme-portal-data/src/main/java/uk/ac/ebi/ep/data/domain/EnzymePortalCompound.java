@@ -46,20 +46,20 @@ import uk.ac.ebi.ep.data.search.model.Compound;
     @NamedAttributeNode("uniprotAccession")
 })
 
-   @SqlResultSetMapping(
-       name="compoundMapping",
-       classes={
-          @ConstructorResult(
-               targetClass=Compound.class,
-                 columns={
-                    @ColumnResult(name="COMPOUND_ID"),
-                    @ColumnResult(name="COMPOUND_NAME"),
-                    @ColumnResult(name="URL"),
-                    @ColumnResult(name="COMPOUND_ROLE")
+@SqlResultSetMapping(
+        name = "compoundMapping",
+        classes = {
+            @ConstructorResult(
+                    targetClass = Compound.class,
+                    columns = {
+                        @ColumnResult(name = "COMPOUND_ID"),
+                        @ColumnResult(name = "COMPOUND_NAME"),
+                        @ColumnResult(name = "URL"),
+                        @ColumnResult(name = "COMPOUND_ROLE")
                     }
-          )
-       }
-      )
+            )
+        }
+)
 
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalCompound.findAll", query = "SELECT e FROM EnzymePortalCompound e"),
@@ -122,6 +122,14 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.compoundInternalId = compoundInternalId;
     }
 
+    public EnzymePortalCompound(String compoundId, String compoundName, String url, String compoundRole) {
+        super(compoundId, compoundName, url, compoundRole);
+        this.compoundId = compoundId;
+        this.compoundName = compoundName;
+        this.compoundRole = compoundRole;
+        this.url = url;
+    }
+
     public EnzymePortalCompound(String compoundId, String compoundName, String compoundSource, String relationship, String compoundRole, String url, UniprotEntry uniprotAccession, String note) {
         this.compoundId = compoundId;
         this.compoundName = compoundName;
@@ -132,8 +140,6 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.uniprotAccession = uniprotAccession;
         this.note = note;
     }
-    
-    
 
     public String getCompoundId() {
         return compoundId;
@@ -194,7 +200,6 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.uniprotAccession = uniprotAccession;
     }
 
-    
     @Override
     public String getUrl() {
         return url;
@@ -255,9 +260,7 @@ public class EnzymePortalCompound extends Compound implements Serializable {
 
     @Override
     public String toString() {
-        return "EnzymePortalCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", compoundRole=" + compoundRole +  ", note=" + note + '}';
+        return "EnzymePortalCompound{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", compoundRole=" + compoundRole + ", note=" + note + '}';
     }
-    
-    
 
 }
