@@ -68,7 +68,7 @@
                 <c:set var="searchSequence" value="${searchModel.searchparams.sequence}"/>
                 <c:set var="startRecord" value="${pagination.firstResult}"/>
                 <c:set var="searchresults" value="${searchModel.searchresults}"/>
-                <c:set var="searchFilter" value="${searchresults.searchfilters}"/>
+                <c:set var="searchFilter" value="${searchfilters}"/>
                 <c:set var="summaryEntries" value="${searchresults.summaryentries}"/>
                 <c:set var="summaryEntriesSize" value="${fn:length(summaryEntries)}"/>
                 <c:set var="totalfound" value="${searchresults.totalfound}"/>
@@ -144,7 +144,7 @@
                                 Search Filters
                             </div>
                             <div class="line"></div>
-                            <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="search" method="POST">
+                            <form:form id="filtersForm" name="filtersForm" modelAttribute="searchModel" action="search?page=${pagination.currentPage}" method="POST">
                                 <form:hidden path="searchparams.type" />
                                 <form:hidden path="searchparams.text" />
                                 <form:hidden path="searchparams.sequence" />
@@ -236,7 +236,7 @@
                                         <c:if test="${totalPages gt pagination.maxDisplayedPages}">
                                             <c:set var="maxPages" value="${pagination.maxDisplayedPages}"/>
                                             <c:set var="showNextButton" value="${true}"/>
-                                        </c:if>
+                                        </c:if>                                      
                                         <input id="prevStart" type="hidden"
                                                value="${pagination.firstResult - pagination.numberOfResultsPerPage}">
                                         <a id="prevButton" href="javascript:void(0);"
@@ -245,13 +245,13 @@
                                         </a>
                                         Page ${pagination.currentPage} of ${totalPages}
 
-                                        <c:if test="${pagination.lastResult+1 lt summaryEntriesSize}">
+                                        <c:if test="${pagination.lastResult+1 lt searchresults.totalfound}">
                                             <input id ="nextStart" type="hidden"
                                                    value="${startRecord + pagination.numberOfResultsPerPage}">
                                             <a id="nextButton" href="javascript:void(0);">
                                                 Next
                                             </a>
-                                        </c:if>
+                                                                   </c:if>
                                         <%-- Add species filter to this form, don't lose it: --%>
                                         <c:forEach var="filterSp" items="${searchModel.searchresults.searchfilters.species}">
                                             <input type="checkbox" style="display: none;"
@@ -275,13 +275,18 @@
                             </c:forEach>
                                 </c:when>
                                 <c:otherwise>
-                                    <c:forEach items="${summaryEntries}"
+                                    <c:forEach items="${summaryEntries}" var="enzyme">
+                                    <%@ include file="summary.jspf"%>
+                            </c:forEach>
+                                    <%--
+                              <c:forEach items="${summaryEntries}"
                                        begin="${pagination.firstResult}"
                                        end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
                                     <%@ include file="summary.jspf"%>
                             </c:forEach>
-                                </c:otherwise>
-
+                            
+                                --%>
+                                    </c:otherwise>
                             </c:choose>
 
 
