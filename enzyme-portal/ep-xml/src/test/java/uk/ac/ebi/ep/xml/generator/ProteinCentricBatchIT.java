@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
-import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
+import uk.ac.ebi.ep.model.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.xml.config.MockProteinBatchConfig;
 import uk.ac.ebi.ep.xml.config.MockXmlConfig;
 import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;

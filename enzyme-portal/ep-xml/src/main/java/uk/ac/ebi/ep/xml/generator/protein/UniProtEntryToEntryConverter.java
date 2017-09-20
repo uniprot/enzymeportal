@@ -3,7 +3,7 @@ package uk.ac.ebi.ep.xml.generator.protein;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.batch.item.ItemProcessor;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.model.UniprotEntry;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.generator.XmlTransformer;
 import uk.ac.ebi.ep.xml.model.AdditionalFields;

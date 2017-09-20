@@ -2,8 +2,8 @@ package uk.ac.ebi.ep.xml.generator.proteinGroup;
 
 import java.util.HashSet;
 import java.util.Set;
-import uk.ac.ebi.ep.data.domain.ProteinGroups;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
+import uk.ac.ebi.ep.model.ProteinGroups;
+import uk.ac.ebi.ep.model.UniprotEntry;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.model.AdditionalFields;
 import uk.ac.ebi.ep.xml.model.CrossReferences;
@@ -31,8 +31,13 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
         entry.setId(proteinGroups.getProteinGroupId());
         entry.setName(proteinGroups.getProteinName());
         entry.setDescription(proteinGroups.getProteinName());
-
+        
+        addEntryTypeFields(proteinGroups, fields);
         addPrimaryProteinField(proteinGroups, fields);
+
+        addRelatedSpeciesField(proteinGroups, fields);
+        addFunctionFields(proteinGroups, fields);
+
         proteinGroups.getUniprotEntryList()
                 .stream()
                 .parallel()
@@ -58,7 +63,8 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
         addSynonymFields(uniprotEntry, fields);
         addAccessionXrefs(uniprotEntry, refs);
 
-        addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
+        // addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
+        addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
 
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
         addEcXrefs(uniprotEntry, refs);

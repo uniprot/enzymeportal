@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 
 /**
  *

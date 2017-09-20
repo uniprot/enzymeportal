@@ -47,15 +47,17 @@
 
 
     <dependencies>
+        
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>enzyme-portal-data</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <artifactId>ep-model</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.ep</groupId>
-            <artifactId>enzyme-portal-data</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <artifactId>ep-model</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

@@ -27,7 +27,7 @@ public class XmlFileUtils {
      *
      */
     public static void createDirectory(String directory) {
-        String permission = "rwxr-x---";
+        String permission = "rwxr-xr--";
         try {
             createDirectory(directory, permission);
         } catch (IOException ex) {

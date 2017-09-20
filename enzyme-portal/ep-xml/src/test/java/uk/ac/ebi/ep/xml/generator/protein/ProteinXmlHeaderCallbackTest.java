@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.XmlTransformer;
 import static uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback.DB_DESCRIPTION_ELEMENT;
 import static uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback.DB_NAME_ELEMENT;

@@ -13,9 +13,9 @@ import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import uk.ac.ebi.ep.data.domain.ProteinGroups;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.model.ProteinGroups;
+import uk.ac.ebi.ep.model.UniprotEntry;
+import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinCentricHeader;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
@@ -124,17 +124,17 @@ public class ProteinCentric extends XmlGenerator {
         xmlWriter.close();
 
         //TODO DELETE ME AFTER TEST
-         logger.error("Number of entries processed :  " + entryCounter.get() + " out of "+ numberOfEntries);
+        logger.error("Number of entries processed :  " + entryCounter.get() + " out of " + numberOfEntries);
     }
 
     AtomicInteger entryCounter = new AtomicInteger(0);//DELETE AFTER TEST
-    
+
     private void writeEntry(PrettyPrintStaxEventItemWriter<Entry> xmlWriter, ProteinGroups protein, Set<Field> fields, Set<Ref> refs) {
         final Entry entry = processProteinEntries(protein, fields, refs);
 
         try {
             xmlWriter.write(Arrays.asList(entry));
-             entryCounter.getAndIncrement();
+            entryCounter.getAndIncrement();
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
@@ -145,6 +145,11 @@ public class ProteinCentric extends XmlGenerator {
         entry.setId(pg.getProteinGroupId());
         entry.setName(pg.getProteinName());
         entry.setDescription(pg.getProteinName());
+        addFunctionFields(pg, fields);
+        addEntryTypeFields(pg, fields);
+        addPrimaryProteinField(pg, fields);
+        addPDBFields(pg, fields);
+        addRelatedSpeciesField(pg, fields);
         pg.getUniprotEntryList()
                 .stream()
                 .parallel()
@@ -171,8 +176,8 @@ public class ProteinCentric extends XmlGenerator {
         addSynonymFields(uniprotEntry, fields);
         addAccessionXrefs(uniprotEntry, refs);
 
-        addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
-
+       // addCompoundFieldsAndXrefs(uniprotEntry, fields, refs);
+        addCompoundDataFieldsAndXrefs(uniprotEntry, fields, refs);
         addDiseaseFieldsAndXrefs(uniprotEntry, fields, refs);
         addEcXrefs(uniprotEntry, refs);
         addPathwaysXrefs(uniprotEntry, refs);

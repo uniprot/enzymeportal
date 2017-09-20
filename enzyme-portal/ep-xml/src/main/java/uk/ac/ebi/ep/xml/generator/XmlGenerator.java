@@ -13,7 +13,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import uk.ac.ebi.ep.xml.service.XmlService;
 import uk.ac.ebi.ep.xml.util.Preconditions;

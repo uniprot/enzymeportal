@@ -13,7 +13,7 @@ import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import uk.ac.ebi.ep.data.domain.ProteinGroups;
+import uk.ac.ebi.ep.model.ProteinGroups;
 import static uk.ac.ebi.ep.xml.config.AbstractBatchConfig.READ_DATA_JOB;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
 import uk.ac.ebi.ep.xml.generator.proteinGroup.JobCompletionNotificationListener;
@@ -34,6 +34,8 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
     private static final String COUNT_QUERY = "select count(p.proteinGroupId) from ProteinGroups p";
     private static final String ROOT_TAG_NAME = "database";
     private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS";
+     //private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE PROTEIN_GROUP_ID='E76XC1'";
+    // private static final String NATIVE_QUERY = "SELECT * FROM PROTEIN_GROUPS WHERE ENTRY_TYPE=0 AND ROWNUM <= 5";
 
     @Bean
     @Override
@@ -91,7 +93,7 @@ public class ProteinGroupsBatchConfig extends AbstractBatchConfig<ProteinGroups,
     }
 
     @Override
-    @Bean(destroyMethod="")
+    @Bean(destroyMethod = "")
     public ItemReader<ProteinGroups> databaseReader() {
 
         JpaPagingItemReader<ProteinGroups> databaseReader = new JpaPagingItemReader<>();

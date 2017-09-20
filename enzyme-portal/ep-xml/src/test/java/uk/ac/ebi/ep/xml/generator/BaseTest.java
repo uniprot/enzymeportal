@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
-import uk.ac.ebi.ep.data.testConfig.SpringDataMockConfig;
+import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.model.testConfig.SpringDataMockConfig;
 import uk.ac.ebi.ep.xml.config.MockXmlConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 

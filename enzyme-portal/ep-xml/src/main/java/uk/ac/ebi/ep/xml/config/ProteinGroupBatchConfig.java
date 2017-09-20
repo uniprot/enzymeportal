@@ -31,7 +31,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import uk.ac.ebi.ep.data.domain.ProteinGroups;
+import uk.ac.ebi.ep.model.ProteinGroups;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlFooterCallback;
 import uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback;
 import uk.ac.ebi.ep.xml.generator.proteinGroup.JobCompletionNotificationListener;

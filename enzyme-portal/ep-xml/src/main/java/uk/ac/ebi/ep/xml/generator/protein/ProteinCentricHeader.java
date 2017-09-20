@@ -6,7 +6,7 @@ import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import uk.ac.ebi.ep.data.service.EnzymePortalXmlService;
+import uk.ac.ebi.ep.model.service.EnzymePortalXmlService;
 import uk.ac.ebi.ep.xml.generator.XmlTransformer;
 import static uk.ac.ebi.ep.xml.generator.protein.ProteinXmlHeaderCallback.DB_NAME_ELEMENT;
 import uk.ac.ebi.ep.xml.util.EpXmlRuntimeException;

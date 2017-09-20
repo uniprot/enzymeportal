@@ -11,7 +11,8 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
+import uk.ac.ebi.ep.config.DataConfig;
+import uk.ac.ebi.ep.model.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.xml.config.ProteinGroupsBatchConfig;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
 
@@ -26,10 +27,9 @@ public class ProteinGroupXmlGenerator {
 
     public static void main(String[] args) throws Exception {
         String profile;
-        
+
         long heapSize = Runtime.getRuntime().totalMemory();
         long maxMemory = Runtime.getRuntime().maxMemory();
-    
 
         //Preconditions.checkArgument(args.length != 1, "Please provide required parameters: \n\t0 - profile name");
         profile = args[0];
@@ -51,8 +51,8 @@ public class ProteinGroupXmlGenerator {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.registerShutdownHook();
         context.getEnvironment().setActiveProfiles(profile);
-        context.register(DataConfig.class, ProteinGroupsBatchConfig.class);
-        context.scan("uk.ac.ebi.ep.data.dataconfig");
+        context.register(DataConfig.class, GlobalConfig.class, ProteinGroupsBatchConfig.class);
+        context.scan("uk.ac.ebi.ep.config");
         context.refresh();
 
         runProteinGroupBatch(context);

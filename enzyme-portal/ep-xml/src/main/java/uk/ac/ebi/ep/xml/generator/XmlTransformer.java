@@ -1,14 +1,16 @@
 package uk.ac.ebi.ep.xml.generator;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.ep.data.domain.PrimaryProtein;
-import uk.ac.ebi.ep.data.domain.ProteinGroups;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.search.model.EcNumber;
+import uk.ac.ebi.ep.model.PrimaryProtein;
+import uk.ac.ebi.ep.model.ProteinGroups;
+import uk.ac.ebi.ep.model.UniprotEntry;
+import uk.ac.ebi.ep.model.search.model.EcNumber;
 import uk.ac.ebi.ep.xml.config.XmlConfigParams;
 import static uk.ac.ebi.ep.xml.generator.XmlTransformer.ENZYME_PORTAL;
 import uk.ac.ebi.ep.xml.model.Database;
@@ -165,6 +167,38 @@ public class XmlTransformer {
         }
     }
 
+    protected void addCompoundDataFieldsAndXrefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
+        String COFACTOR = "COFACTOR";
+        String INHIBITOR = "INHIBITOR";
+        String ACTIVATOR = "ACTIVATOR";
+        if (!uniprotEntry.getEnzymePortalCompoundSet().isEmpty()) {
+            uniprotEntry.getEnzymePortalCompoundSet()
+                    .stream()
+                    .map(compound -> {
+                        if (compound.getCompoundRole().equalsIgnoreCase(COFACTOR)) {
+                            Field field = new Field(FieldName.COFACTOR.getName(), compound.getCompoundName());
+                            fields.add(field);
+                        }
+                        return compound;
+                    }).map(compound -> {
+                        if (compound.getCompoundRole().equalsIgnoreCase(INHIBITOR)) {
+                            Field field = new Field(FieldName.INHIBITOR.getName(), compound.getCompoundName());
+                            fields.add(field);
+                        }
+                        return compound;
+                    }).map(compound -> {
+                        if (compound.getCompoundRole().equalsIgnoreCase(ACTIVATOR)) {
+                            Field field = new Field(FieldName.ACTIVATOR.getName(), compound.getCompoundName());
+                            fields.add(field);
+                        }
+                        return compound;
+                    }).map(compound -> new Ref(compound.getCompoundId(), compound.getCompoundSource()))
+                    .forEach(xref -> {
+                        refs.add(xref);
+                    });
+        }
+    }
+
     protected void addDiseaseFieldsAndXrefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
         if (!uniprotEntry.getEnzymePortalDiseaseSet().isEmpty()) {
             uniprotEntry.getEnzymePortalDiseaseSet().stream().map(disease -> {
@@ -229,6 +263,89 @@ public class XmlTransformer {
             Field primaryOganismfield = new Field(FieldName.PRIMARY_ORGANISM.getName(), commonName);
 
             fields.add(primaryOganismfield);
+
+            //add PDB info
+            addPDBInfo(primaryProtein, fields);
+
+        }
+
+    }
+
+    protected void addFunctionFields(ProteinGroups proteinGroups, Set<Field> fields) {
+        proteinGroups.getUniprotEntryList()
+                .stream()
+                .filter(entry -> (!StringUtils.isEmpty(entry.getFunction())))
+                .map(entry -> new Field(FieldName.FUNCTION.getName(), entry.getFunction()))
+                .limit(1)
+                .forEach(field -> fields.add(field));
+    }
+
+    protected void addEntryTypeFields(ProteinGroups proteinGroups, Set<Field> fields) {
+
+        String entryType = proteinGroups.getEntryType().toString();
+        Field entryTypefield = new Field(FieldName.ENTRY_TYPE.getName(), entryType);
+
+        fields.add(entryTypefield);
+    }
+
+    protected void addRelatedSpeciesField(ProteinGroups proteinGroups, final Set<Field> fields) {
+
+        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
+
+        for (UniprotEntry entry : proteinGroups.getUniprotEntryList()) {
+
+            if (primaryProtein.getAccession().equalsIgnoreCase(entry.getAccession())) {
+
+                List<UniprotEntry> rel = entry.getRelatedspecies();
+                LinkedList<String> relatedSpeciesList = new LinkedList<>();
+                rel.stream().map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()).concat("|"))
+                        .forEach(related_species -> relatedSpeciesList.offer(related_species)
+                        );
+                String rsField = relatedSpeciesList
+                        .stream()
+                        .reduce((k, v) -> k + "" + v).get();
+
+                Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
+                fields.add(relatedSpeciesField);
+
+            }
+        }
+
+    }
+
+    private void addPDBInfo(PrimaryProtein primaryProtein, Set<Field> fields) {
+        Character hasPdbFlag = 'Y';
+        String pdbId = primaryProtein.getPdbId();
+        String specieWithImage = primaryProtein.getScientificName();
+
+        if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
+            Field pdbfield = new Field(FieldName.PDB.getName(), pdbId);
+            fields.add(pdbfield);
+
+            Field specieWithImagefield = new Field(FieldName.PDB_SPECIE.getName(), specieWithImage);
+            fields.add(specieWithImagefield);
+        }
+    }
+
+    protected void addPDBFields(ProteinGroups proteinGroups, Set<Field> fields) {
+        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
+        //String PDB_SOURCE = "PDB";
+        if (primaryProtein != null) {
+            Character hasPdbFlag = 'Y';
+            String pdbId = primaryProtein.getPdbId();
+            String specieWithImage = primaryProtein.getCommonName();
+            if (specieWithImage == null) {
+                specieWithImage = primaryProtein.getScientificName();
+            }
+            if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
+                Field pdbfield = new Field(FieldName.PDB.getName(), pdbId);
+                fields.add(pdbfield);
+
+                Field specieWithImagefield = new Field(FieldName.PDB_SPECIE.getName(), specieWithImage);
+                fields.add(specieWithImagefield);
+
+            }
+
         }
 
     }

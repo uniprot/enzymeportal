@@ -11,7 +11,7 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
+import uk.ac.ebi.ep.config.DataConfig;
 import uk.ac.ebi.ep.xml.config.ProteinBatchConfig;
 import uk.ac.ebi.ep.xml.util.Preconditions;
 import uk.ac.ebi.ep.xml.validator.EnzymePortalXmlValidator;
@@ -34,7 +34,7 @@ public final class ProteinCentricXmlGenerator {
         context.registerShutdownHook();
         context.getEnvironment().setActiveProfiles(profile);
         context.register(DataConfig.class, ProteinBatchConfig.class);
-        context.scan("uk.ac.ebi.ep.data.dataconfig");
+        context.scan("uk.ac.ebi.ep.config");
         context.refresh();
 
         runXmlGeneration(context);

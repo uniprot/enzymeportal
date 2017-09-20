@@ -1,8 +1,8 @@
 package uk.ac.ebi.ep.xml.main;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
-import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
+import uk.ac.ebi.ep.config.DataConfig;
+import uk.ac.ebi.ep.model.dataconfig.GlobalConfig;
 import uk.ac.ebi.ep.xml.config.XmlConfig;
 import uk.ac.ebi.ep.xml.generator.ProteinCentric;
 import uk.ac.ebi.ep.xml.generator.XmlGenerator;
@@ -28,7 +28,7 @@ public class ProteinXmlGenerator {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.getEnvironment().setActiveProfiles(profile);
         context.register(DataConfig.class, XmlConfig.class, GlobalConfig.class);
-        context.scan("uk.ac.ebi.ep.data.dataconfig");
+        context.scan("uk.ac.ebi.ep.config");
         context.refresh();
 
         XmlGenerator proteinGenerator = context.getBean(ProteinCentric.class);
