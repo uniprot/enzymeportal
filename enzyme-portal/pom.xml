@@ -251,6 +251,10 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.0</version>
@@ -405,7 +409,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-<!--                    <version>0.7.2.201409121644</version>-->
+                    <!--                    <version>0.7.2.201409121644</version>-->
                     <version>0.7.8</version>
                     <executions>
                         <!-- Sets up jacaco for unit test coverage analysis (jacoco.agent.ut.arg) -->
@@ -553,7 +557,10 @@
             <dependency>
                 <groupId>io.spring.platform</groupId>
                 <artifactId>platform-bom</artifactId>
-                <version>2.0.3.RELEASE</version>
+                 <version>Brussels-SR4</version>
+<!--                <version>Athens-SR6</version>-->
+<!--                                                <version>2.0.3.RELEASE</version>-->
+<!--                                <version>2.0.3.RELEASE</version>-->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -563,6 +570,9 @@
     <modules>
        
         <module>EnzymePortalTestKit</module>
+<!--        <module>ep-solr</module>-->
+        <module>ep-config</module>
+        <module>ep-model</module>
         <module>enzyme-portal-data</module>
         <module>ep-xml</module>
         <module>DataAnalysis</module>
