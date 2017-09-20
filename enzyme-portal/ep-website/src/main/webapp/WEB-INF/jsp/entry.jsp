@@ -134,7 +134,7 @@
                                     <c:if test="${i==0}">
                                         <c:set var="select" value="selected"/>
                                     </c:if>
-                                    <li class="${select}"> :${relSpecies[i]}:
+                                    <li class="${select}">
                                         <a href="../${relSpecies[i].uniprotaccessions[0]}/${requestedfield}">
                                             <div class='box ${fn:replace(species.scientificname, " ", "_")}'>
                                                 <span class="name"><c:out value="${species.commonname}"/></span>
