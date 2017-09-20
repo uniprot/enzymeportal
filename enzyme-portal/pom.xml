@@ -573,8 +573,8 @@
 <!--        <module>ep-solr</module>-->
         <module>ep-config</module>
         <module>ep-model</module>
-        <module>enzyme-portal-data</module>
         <module>ep-xml</module>
+        <module>enzyme-portal-data</module>
         <module>DataAnalysis</module>
         <module>SitemapGenerator</module>
         <module>PDBeAdapter</module>
