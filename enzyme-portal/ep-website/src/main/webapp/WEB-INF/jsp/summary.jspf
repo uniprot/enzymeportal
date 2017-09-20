@@ -291,11 +291,14 @@
 
             <c:if test="${not empty enzyme.ec}">
                <b>EC : </b>
-               <span>
+              
+                   <c:forEach var="ec" items="${enzyme.ec}">
+              <span>
+            <a href="${pageContext.request.contextPath}/search/ec/${ec}"><c:out value="${ec}"/></a>  
+             </span>
+                   </c:forEach>
 
-        <a href="${pageContext.request.contextPath}/search/${primAcc}/enzyme#intenz-ec"><c:out value="${enzyme.ec}"/></a>
-
-               </span><br/>
+               <br/>
             </c:if>
 
 <!--            catalytic activities-->
