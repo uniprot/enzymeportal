@@ -65,7 +65,7 @@
 
             <section class="large-10 columns">
                 <h2>Protein</h2>
-                <h4>${ebiResult.hitCount} enzymatic activities found for "${Fn:splitHyphen(searchKey)}"</h4>
+                <h4>${ebiResult.hitCount} enzymatic activities found for "${searchKey}"</h4>
             </section>
         </div>
 
@@ -120,7 +120,7 @@
                                          </ul>
                                      </div>
                                      </c:if>
-
+                                     <%--
                                     <c:if test="${facet.id eq 'TAXONOMY'}">
                                          <div class="sublevel1">
                                             <div class="subTitle">Organism</div>
@@ -167,6 +167,7 @@
                                              </ul>
                                          </div>
                                      </c:if>
+                                     --%>
                                  </div>
                              </c:forEach>
                         </div>
@@ -228,15 +229,14 @@
                                                <input name="ec" type="hidden" value="${enzyme.ec}">
                                                <form:hidden path="searchparams.previoustext" />
                                                <form:hidden path="searchparams.text" value="${searchKey}-${enzyme.ec}" />
-                                               <form:hidden path="searchparams.type" value="${searchType}"/>
+                                               <form:hidden path="searchparams.type" value="${keywordType}"/>
+                           
+                                   
                                                <h4>Associated Proteins:</h4>
                                                <ul id="enzymeResultsProteins">
-                                                    <c:set var="proteinSize" value="${enzyme.numProteins}"/>
-                                                    <c:if test="${proteinSize >= 5}">
-                                                       <c:set var="proteinSize" value="5"/>
-                                                    </c:if>
-                                                    <c:forEach var="p" begin="0" end="${proteinSize -1}">
-                                                        <li><a href="${pageContext.request.contextPath}/search/${enzyme.proteinGroupEntry[p].primaryAccession}/enzyme">${enzyme.proteinGroupEntry[p].proteinName} </a> - (${enzyme.proteinGroupEntry[p].primaryOrganism})</li>
+                                                    <c:forEach items="${enzyme.proteinGroupEntry}" var="p">
+
+                                                            <li><a href="${pageContext.request.contextPath}/search/${p.primaryAccession}/enzyme">${p.proteinName} </a> - (${p.primaryOrganism})</li>
                                                     </c:forEach>
                                                     <c:if test="${enzyme.numProteins >= 5}">
                                                           <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>
