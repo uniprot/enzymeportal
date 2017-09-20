@@ -108,7 +108,7 @@
 
                     </section>
                     <section>
-                    <h3>Associated Proteins</h3>
+                    <h3>Associated Proteins ${searchTerm}</h3>
                          <c:choose>
                            <c:when test="${not empty enzymePage.proteins.entries }">
                                <c:set var="count" value="0" scope="page" />
@@ -116,13 +116,15 @@
 
 
                                <form:form id="proteinViewForm-${enzymePage.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
-                                   <input name="keywordType" type="hidden" value="EC">
-                                   <input name="searchTerm" type="hidden" value="${enzymePage.ec}">
-                                   <input name="searchId" type="hidden" value="${enzymePage.ec}">
+                                   <input type="hidden" name="keywordType" value="${keywordType}">
+                                  <input type="hidden" id="searchId" name="searchId" value="${searchId}"/>
+                                  <input type="hidden" id="searchKey" name="searchKey" value="${searchKey}"/>
+                                   <input name="searchTerm" type="hidden" value="${searchTerm}">
+                                   
                                    <input name="ec" type="hidden" value="${enzymePage.ec}">
                                    <form:hidden path="searchparams.previoustext" />
                                    <form:hidden path="searchparams.text" value="${enzymePage.ec}-${enzymePage.ec}" />
-                                  <form:hidden path="searchparams.type" value="KEYWORD"/>
+                                  <form:hidden path="searchparams.type" value="${keywordType}"/>
 
 
                                <table id="associatedProteins">
