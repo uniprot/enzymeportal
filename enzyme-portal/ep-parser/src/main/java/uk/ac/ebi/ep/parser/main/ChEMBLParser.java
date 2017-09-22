@@ -28,7 +28,7 @@ public class ChEMBLParser {
             profile = args[0];
             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
             context.getEnvironment().setActiveProfiles(profile);
-            context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.parser.config");
+             context.scan("uk.ac.ebi.ep.config", "uk.ac.ebi.ep.parser.config");
             context.refresh();
 
             EnzymePortalCompoundParser compoundService = context.getBean(EnzymePortalCompoundParser.class);

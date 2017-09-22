@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
-import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.EnzymePortalCompound;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalEcNumbersRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalReactionRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
+import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 
 /**

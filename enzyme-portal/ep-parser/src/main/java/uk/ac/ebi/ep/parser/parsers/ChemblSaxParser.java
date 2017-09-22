@@ -28,10 +28,10 @@ import uk.ac.ebi.ep.centralservice.helper.CompoundUtil;
 import uk.ac.ebi.ep.centralservice.helper.EbinocleParser;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.model.EnzymePortalCompound;
+import uk.ac.ebi.ep.model.UniprotEntry;
 
 /**
  * Parser for the <code>chembl-target_component.xml</code> file (ebinocle

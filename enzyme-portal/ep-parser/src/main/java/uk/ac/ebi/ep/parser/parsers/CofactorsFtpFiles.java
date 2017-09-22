@@ -10,11 +10,11 @@ import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
-import uk.ac.ebi.ep.data.domain.ChebiCompound;
-import uk.ac.ebi.ep.data.entry.Summary;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.data.search.model.Compound;
-import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.search.model.Compound;
+import uk.ac.ebi.ep.model.search.model.Summary;
+import uk.ac.ebi.ep.model.ChebiCompound;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
+import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 
 /**
  *

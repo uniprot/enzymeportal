@@ -14,7 +14,6 @@ import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.chembl.config.ChemblServiceUrl;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblRestService;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
-import uk.ac.ebi.ep.parser.parsers.DiseaseParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalCompoundParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPDBeParser;
 import uk.ac.ebi.ep.parser.parsers.EnzymePortalPathwaysParser;
@@ -34,10 +33,10 @@ public class GlobalDataConfig {
     @Autowired
     private Environment env;
 
-    @Bean
-    public DiseaseParser diseaseParser() {
-        return new DiseaseParser();
-    }
+//    @Bean
+//    public DiseaseParser diseaseParser() {
+//        return new DiseaseParser();
+//    }
 
     @Bean
     public EnzymePortalCompoundParser enzymePortalCompoundParser() {

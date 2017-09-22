@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.ep.centralservice.chembl.service.ChemblService;
-import uk.ac.ebi.ep.data.domain.TempCompoundCompare;
-import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.TempCompoundCompare;
 import static uk.ac.ebi.ep.parser.inbatch.PartitioningSpliterator.partition;
 import uk.ac.ebi.ep.parser.xmlparser.ChemblXmlParser;
 

@@ -19,9 +19,9 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.LiteEntityList;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
+import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 
 /**
  *

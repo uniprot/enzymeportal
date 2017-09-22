@@ -12,11 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
-import uk.ac.ebi.ep.data.entry.Summary;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
-import uk.ac.ebi.ep.data.search.model.Compound;
-import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.search.model.Compound;
+import uk.ac.ebi.ep.model.search.model.Summary;
+import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalSummaryRepository;
 
 /**
  *

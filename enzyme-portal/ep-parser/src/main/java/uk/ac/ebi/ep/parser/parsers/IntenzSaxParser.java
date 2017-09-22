@@ -21,13 +21,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import uk.ac.ebi.ep.centralservice.helper.EbinocleParser;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
-import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
+import uk.ac.ebi.ep.model.EnzymePortalCompound;
+import uk.ac.ebi.ep.model.EnzymePortalEcNumbers;
+import uk.ac.ebi.ep.model.EnzymePortalReaction;
+import uk.ac.ebi.ep.model.UniprotEntry;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalCompoundRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalEcNumbersRepository;
+import uk.ac.ebi.ep.model.repositories.EnzymePortalReactionRepository;
 
 /**
  * Parser for IntEnzXML which extracts data interesting for the Enzyme Portal
@@ -53,6 +53,7 @@ import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
  *
  * @since 1.0.16
  */
+@Deprecated
 public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
 
     private final Logger LOGGER = Logger.getLogger(IntenzSaxParser.class);
@@ -225,7 +226,7 @@ public class IntenzSaxParser extends DefaultHandler implements EbinocleParser {
                         reaction.setReactionSource(rheaEntry.getReactionSource());
                         reaction.setRelationship(Relationship.between(
                                 MmDatabase.EC, MmDatabase.Rhea).name());
-                        reaction.setUniprotAccession(summary.getUniprotAccession());
+                        //reaction.setUniprotAccession(summary.getUniprotAccession());
                         reactions.add(reaction);
 
                         //reaction_per_ec = reactionRepository.save(reaction);

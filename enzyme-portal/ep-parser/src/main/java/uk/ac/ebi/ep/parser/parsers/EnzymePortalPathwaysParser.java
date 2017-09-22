@@ -20,9 +20,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.UniprotEntry;
-import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
-import uk.ac.ebi.ep.data.service.EnzymePortalParserService;
+import uk.ac.ebi.ep.model.UniprotEntry;
+import uk.ac.ebi.ep.model.repositories.UniprotEntryRepository;
+import uk.ac.ebi.ep.model.service.EnzymePortalParserService;
 import uk.ac.ebi.ep.parser.main.PathwaysParser;
 
 /**
