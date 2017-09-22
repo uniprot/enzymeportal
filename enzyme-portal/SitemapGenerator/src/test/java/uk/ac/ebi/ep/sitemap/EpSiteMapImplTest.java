@@ -7,13 +7,13 @@ package uk.ac.ebi.ep.sitemap;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.transaction.Transactional;
 import org.junit.After;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Bean;
-import uk.ac.ebi.ep.data.service.UniprotEntryService;
+import uk.ac.ebi.ep.model.service.SitemapService;
+
 import uk.ac.ebi.ep.sitemap.generator.EnzymePortalSiteMap;
 import uk.ac.ebi.ep.sitemap.generator.SiteMapGenerator;
 
@@ -22,17 +22,16 @@ import uk.ac.ebi.ep.sitemap.generator.SiteMapGenerator;
  * @author joseph
  */
 //@Ignore
-@Transactional
 public class EpSiteMapImplTest {
 
     private SiteMapGenerator instance = null;
     private final String fileDirectory = System.getProperty("user.home");
     private final String filename = "SiteMapTest";
-    
+
     @Before
     public void setUp() {
 
-        instance = new EnzymePortalSiteMap(uniprotEntryService());
+        instance = new EnzymePortalSiteMap(sitemapService());
     }
 
     @After
@@ -63,10 +62,10 @@ public class EpSiteMapImplTest {
         assertTrue(output.exists());
 
     }
-    
+
     @Bean
-    public UniprotEntryService uniprotEntryService(){
-        return new UniprotEntryService();
+    public SitemapService sitemapService() {
+        return new SitemapService();
     }
 
 }

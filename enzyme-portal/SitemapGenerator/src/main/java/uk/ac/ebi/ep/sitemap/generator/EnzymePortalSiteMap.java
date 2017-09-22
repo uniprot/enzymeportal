@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package uk.ac.ebi.ep.sitemap.generator;
 
@@ -13,12 +8,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
 import javax.xml.bind.Marshaller;
 import org.apache.log4j.Logger;
 import org.sitemaps.ObjectFactory;
 import org.springframework.stereotype.Service;
-import uk.ac.ebi.ep.data.service.UniprotEntryService;
+import uk.ac.ebi.ep.model.service.SitemapService;
+
 import uk.ac.ebi.ep.sitemap.advanced.ChangeFreq;
 import uk.ac.ebi.ep.sitemap.advanced.W3CDateFormat;
 import uk.ac.ebi.ep.sitemap.advanced.WebSitemapGenerator;
@@ -47,16 +42,16 @@ public class EnzymePortalSiteMap extends SiteMapGenerator<File> {
     private static final String[] tabs = {ENZYME_TAB, PROTEIN_STRUCTURE_TAB, REACTION_PATHWAYS_TAB, MOLECULES_TAB, DISEASE_TAB, LITERATURE_TAB};
 
      //@Autowired
-    private final UniprotEntryService uniprotEntryService;
+    private final SitemapService sitemapService;
     
     /**
      * 
      *
-     * @param uniprotEntryService
+     * @param sitemapService
      */
 
-    public EnzymePortalSiteMap(UniprotEntryService uniprotEntryService) {
-        this.uniprotEntryService = uniprotEntryService;
+    public EnzymePortalSiteMap(SitemapService sitemapService) {
+        this.sitemapService = sitemapService;
     }
     
     
@@ -132,6 +127,6 @@ public class EnzymePortalSiteMap extends SiteMapGenerator<File> {
 
     private List<String> getAccessions() {
 
-        return uniprotEntryService.findAllUniprotAccessions().stream().distinct().collect(Collectors.toList());
+        return sitemapService.findUniprotAccessions();
     }
 }
