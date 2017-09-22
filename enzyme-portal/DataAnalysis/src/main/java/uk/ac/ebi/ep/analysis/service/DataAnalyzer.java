@@ -28,12 +28,12 @@ import java.util.stream.Stream;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.ac.ebi.biobabel.util.StringUtil;
+import org.springframework.util.StringUtils;
 import uk.ac.ebi.ep.analysis.config.ServiceUrl;
-import static uk.ac.ebi.ep.data.batch.PartitioningSpliterator.partition;
-import uk.ac.ebi.ep.data.domain.SpEnzymeEvidence;
-import uk.ac.ebi.ep.data.service.AnalysisService;
-import uk.ac.ebi.ep.data.service.EnzymePortalService;
+import uk.ac.ebi.ep.model.SpEnzymeEvidence;
+import static uk.ac.ebi.ep.model.batch.PartitioningSpliterator.partition;
+import uk.ac.ebi.ep.model.service.AnalysisService;
+
 
 /**
  *
@@ -47,8 +47,8 @@ public class DataAnalyzer {
     private ServiceUrl serviceUrl;
     @Autowired
     private AnalysisService analysisService;
-    @Autowired
-    private EnzymePortalService enzymePortalService;
+//    @Autowired
+//    private EnzymePortalService enzymePortalService;
 
     /**
      *
@@ -90,7 +90,7 @@ public class DataAnalyzer {
 
             analysisService.populateEvidences(enzymeEvidences);
             logger.warn("finished updating the evidence table. Starting to update UniprotEntry table with evidence Flag");
-            enzymePortalService.updateExpEvidenceFlag();
+            analysisService.updateExpEvidenceFlag();
         } catch (InterruptedException | ExecutionException ex) {
             logger.error("InterruptedException | ExecutionException ", ex);
         }
@@ -110,7 +110,7 @@ public class DataAnalyzer {
         try {
             List<SpEnzymeEvidence> enzymeEvidences = computeAccessionsWithEvidences();
             String fileName = filename;
-            if (StringUtil.isNullOrEmpty(filename)) {
+            if (filename == null || StringUtils.isEmpty(filename)) {
                 fileName = "evidence.tsv";
             }
             logger.warn("num evidences written to file [" + fileName + "] " + enzymeEvidences.size());
@@ -142,7 +142,7 @@ public class DataAnalyzer {
 
         }).forEach(data -> dataList.add(data));
 
-        if (!StringUtil.isNullOrEmpty(fileDir)) {
+        if (fileDir != null && !StringUtils.isEmpty(fileDir)) {
             createDirAndFile(dataList, fileDir, filename, deleteFile);
         } else {
             createFile(dataList, filename, deleteFile);
@@ -289,7 +289,7 @@ public class DataAnalyzer {
     }
 
     private List<SpEnzymeEvidence> computeAccessionsWithEvidences() throws InterruptedException, ExecutionException {
-        List<String> enzymes = enzymePortalService.findAllSwissProtAccessions();
+        List<String> enzymes = analysisService.findAllSwissProtAccessions();
         logger.info("num swissprot enzymes from enzyme portal database " + enzymes.size());
 
         CompletableFuture<List<SpEnzymeEvidence>> functionFuture = CompletableFuture

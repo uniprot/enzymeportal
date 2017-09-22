@@ -9,10 +9,10 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import uk.ac.ebi.ep.analysis.config.AnalysisConfig;
 import uk.ac.ebi.ep.analysis.service.DataAnalyzer;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
-import uk.ac.ebi.ep.data.dataconfig.DevDataConfig;
-import uk.ac.ebi.ep.data.dataconfig.GlobalConfig;
-import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
+import uk.ac.ebi.ep.config.DataConfig;
+import uk.ac.ebi.ep.config.DevDataConfig;
+import uk.ac.ebi.ep.config.ProdDataConfig;
+import uk.ac.ebi.ep.model.dataconfig.GlobalConfig;
 
 /**
  *

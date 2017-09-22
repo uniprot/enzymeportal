@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.springframework.util.StringUtils;
-import uk.ac.ebi.ep.data.domain.SpEnzymeEvidence;
+import uk.ac.ebi.ep.model.SpEnzymeEvidence;
 
 /**
  *

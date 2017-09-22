@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import uk.ac.ebi.ep.analysis.service.DataAnalyzer;
-import uk.ac.ebi.ep.data.service.EnzymePortalService;
 
 /**
  *
@@ -49,8 +48,8 @@ public class AnalysisConfig {
         return new DataAnalyzer();
     }
     
-     @Bean
-    public EnzymePortalService enzymePortalService() {
-        return new EnzymePortalService();
-    }
+//     @Bean
+//    public EnzymePortalService enzymePortalService() {
+//        return new EnzymePortalService();
+//    }
 }
