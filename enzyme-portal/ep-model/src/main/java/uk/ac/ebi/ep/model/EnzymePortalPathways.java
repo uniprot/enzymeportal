@@ -1,28 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
 @Table(name = "ENZYME_PORTAL_PATHWAYS")
@@ -30,54 +28,49 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalPathways.findAll", query = "SELECT e FROM EnzymePortalPathways e"),
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayInternalId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayInternalId = :pathwayInternalId"),
-    @NamedQuery(name = "EnzymePortalPathways.findByPathwayId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayId = :pathwayId"),
+    //@NamedQuery(name = "EnzymePortalPathways.findByPathwayId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayId = :pathwayId"),
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayUrl", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayUrl = :pathwayUrl"),
     @NamedQuery(name = "EnzymePortalPathways.findByPathwayName", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayName = :pathwayName"),
     @NamedQuery(name = "EnzymePortalPathways.findByStatus", query = "SELECT e FROM EnzymePortalPathways e WHERE e.status = :status"),
-    @NamedQuery(name = "EnzymePortalPathways.findBySpecies", query = "SELECT e FROM EnzymePortalPathways e WHERE e.species = :species"),
-    @NamedQuery(name = "EnzymePortalPathways.findByPathwayGroupId", query = "SELECT e FROM EnzymePortalPathways e WHERE e.pathwayGroupId = :pathwayGroupId")})
-public class EnzymePortalPathways implements Serializable {
+    @NamedQuery(name = "EnzymePortalPathways.findBySpecies", query = "SELECT e FROM EnzymePortalPathways e WHERE e.species = :species")})
+public class EnzymePortalPathways  implements Serializable, Comparable<EnzymePortalPathways> {
+    @Size(max = 15)
+    @Column(name = "PATHWAY_GROUP_ID")
+    private String pathwayGroupId;
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "PATHWAY_INTERNAL_ID")
-    private BigDecimal pathwayInternalId;
-    @Size(max = 15)
+    @Column(name = "PATHWAY_INTERNAL_ID") 
+     @SequenceGenerator(allocationSize = 10, name = "seqGenerator", sequenceName = "SEQ_PATHWAY_INTERNAL_ID")
+    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
+    private Long pathwayInternalId;
     @Column(name = "PATHWAY_ID")
     private String pathwayId;
-    @Size(max = 255)
     @Column(name = "PATHWAY_URL")
     private String pathwayUrl;
-    @Size(max = 4000)
     @Column(name = "PATHWAY_NAME")
     private String pathwayName;
-    @Size(max = 5)
     @Column(name = "STATUS")
     private String status;
-    @Size(max = 255)
     @Column(name = "SPECIES")
     private String species;
-    @Size(max = 15)
-    @Column(name = "PATHWAY_GROUP_ID")
-    private String pathwayGroupId;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
-
+    
     public EnzymePortalPathways() {
     }
 
-    public EnzymePortalPathways(BigDecimal pathwayInternalId) {
+    public EnzymePortalPathways(Long pathwayInternalId) {
         this.pathwayInternalId = pathwayInternalId;
     }
-
-    public BigDecimal getPathwayInternalId() {
+  
+    public Long getPathwayInternalId() {
         return pathwayInternalId;
     }
 
-    public void setPathwayInternalId(BigDecimal pathwayInternalId) {
+    public void setPathwayInternalId(Long pathwayInternalId) {
         this.pathwayInternalId = pathwayInternalId;
     }
 
@@ -121,14 +114,6 @@ public class EnzymePortalPathways implements Serializable {
         this.species = species;
     }
 
-    public String getPathwayGroupId() {
-        return pathwayGroupId;
-    }
-
-    public void setPathwayGroupId(String pathwayGroupId) {
-        this.pathwayGroupId = pathwayGroupId;
-    }
-
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -139,27 +124,46 @@ public class EnzymePortalPathways implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (pathwayInternalId != null ? pathwayInternalId.hashCode() : 0);
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.pathwayName);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EnzymePortalPathways)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        EnzymePortalPathways other = (EnzymePortalPathways) object;
-        if ((this.pathwayInternalId == null && other.pathwayInternalId != null) || (this.pathwayInternalId != null && !this.pathwayInternalId.equals(other.pathwayInternalId))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final EnzymePortalPathways other = (EnzymePortalPathways) obj;
+        return Objects.equals(this.pathwayName, other.pathwayName);
     }
+
+
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.ep.model.EnzymePortalPathways[ pathwayInternalId=" + pathwayInternalId + " ]";
+        return "EnzymePortalPathways{" + "pathwayGroupId=" + pathwayGroupId + ", pathwayId=" + pathwayId + ", pathwayUrl=" + pathwayUrl + ", pathwayName=" + pathwayName + ", status=" + status + ", species=" + species +  '}';
     }
+
+
+
+    @Override
+    public int compareTo(EnzymePortalPathways o) {
+     return this.pathwayName.compareToIgnoreCase(o.getPathwayName());
+    }
+
+    public String getPathwayGroupId() {
+        return pathwayGroupId;
+    }
+
+    public void setPathwayGroupId(String pathwayGroupId) {
+        this.pathwayGroupId = pathwayGroupId;
+    }
+
+   
+    
     
 }

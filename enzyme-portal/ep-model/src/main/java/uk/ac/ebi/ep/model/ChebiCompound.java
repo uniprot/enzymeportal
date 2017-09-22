@@ -1,8 +1,8 @@
-
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 @Entity
 @Table(name = "CHEBI_COMPOUND")
@@ -28,8 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ChebiCompound.findByCompoundName", query = "SELECT c FROM ChebiCompound c WHERE c.compoundName = :compoundName"),
     @NamedQuery(name = "ChebiCompound.findBySource", query = "SELECT c FROM ChebiCompound c WHERE c.source = :source")})
 public class ChebiCompound implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @NotNull
@@ -86,27 +86,23 @@ public class ChebiCompound implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (internalId != null ? internalId.hashCode() : 0);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.chebiAccession);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ChebiCompound)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        ChebiCompound other = (ChebiCompound) object;
-        if ((this.internalId == null && other.internalId != null) || (this.internalId != null && !this.internalId.equals(other.internalId))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final ChebiCompound other = (ChebiCompound) obj;
+        return Objects.equals(this.chebiAccession, other.chebiAccession);
     }
 
-    @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.ep.model.ChebiCompound[ internalId=" + internalId + " ]";
-    }
-    
+
+
 }

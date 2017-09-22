@@ -1,48 +1,56 @@
-
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Optional;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import uk.ac.ebi.ep.model.search.model.EcNumber;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
 @Table(name = "ENZYME_PORTAL_EC_NUMBERS")
 @XmlRootElement
+
+@NamedEntityGraph(name = "EcNumberEntityGraph", attributeNodes = {
+    @NamedAttributeNode("uniprotAccession")
+})
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalEcNumbers.findAll", query = "SELECT e FROM EnzymePortalEcNumbers e"),
-    @NamedQuery(name = "EnzymePortalEcNumbers.findByEcInternalId", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecInternalId = :ecInternalId"),
-    @NamedQuery(name = "EnzymePortalEcNumbers.findByEcNumber", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecNumber = :ecNumber"),
-    @NamedQuery(name = "EnzymePortalEcNumbers.findByEcFamily", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecFamily = :ecFamily")})
-public class EnzymePortalEcNumbers implements Serializable {
+    @NamedQuery(name = "EnzymePortalEcNumbers.findByEcInternalId", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecInternalId = :ecInternalId")
+    //@NamedQuery(name = "EnzymePortalEcNumbers.findByEcNumber", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecNumber = :ecNumber")
+})
+public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Comparable<EcNumber> {
+
+    @Column(name = "EC_FAMILY")
+    private Integer ecFamily;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "EC_INTERNAL_ID")
     private BigDecimal ecInternalId;
-    @Size(max = 15)
     @Column(name = "EC_NUMBER")
     private String ecNumber;
-    @Column(name = "EC_FAMILY")
-    private Short ecFamily;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne
+   // @ManyToOne
+     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     public EnzymePortalEcNumbers() {
@@ -68,14 +76,6 @@ public class EnzymePortalEcNumbers implements Serializable {
         this.ecNumber = ecNumber;
     }
 
-    public Short getEcFamily() {
-        return ecFamily;
-    }
-
-    public void setEcFamily(Short ecFamily) {
-        this.ecFamily = ecFamily;
-    }
-
     public UniprotEntry getUniprotAccession() {
         return uniprotAccession;
     }
@@ -86,27 +86,65 @@ public class EnzymePortalEcNumbers implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (ecInternalId != null ? ecInternalId.hashCode() : 0);
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.ecNumber);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EnzymePortalEcNumbers)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        EnzymePortalEcNumbers other = (EnzymePortalEcNumbers) object;
-        if ((this.ecInternalId == null && other.ecInternalId != null) || (this.ecInternalId != null && !this.ecInternalId.equals(other.ecInternalId))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final EnzymePortalEcNumbers other = (EnzymePortalEcNumbers) obj;
+        return Objects.equals(this.ecNumber, other.ecNumber);
     }
+
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.ep.model.EnzymePortalEcNumbers[ ecInternalId=" + ecInternalId + " ]";
+        return ecNumber;
     }
-    
-}
+
+    /**
+     *
+     * @return the enzyme family representation of the ec class
+     */
+    @Override
+    public String getFamily() {
+        Optional<Integer> ec = Optional.ofNullable(this.getEcFamily());
+        if (ec.isPresent()) {
+            return computeEcToFamilyName(ec.get());
+        }
+        return "";
+
+    }
+
+    /**
+     *
+     * @return ec class
+     */
+    @Override
+    public Integer getEc() {
+        return getEcFamily();
+
+    }
+
+    @Override
+    public int compareTo(EcNumber o) {
+        return this.ecFamily.compareTo(getEcFamily());
+
+    }
+
+    public Integer getEcFamily() {
+        return ecFamily;
+    }
+
+    public void setEcFamily(Integer ecFamily) {
+        this.ecFamily = ecFamily;
+    }
+
+        }

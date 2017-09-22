@@ -1,26 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
 @Table(name = "TEMP_COMPOUND_COMPARE")
@@ -38,41 +34,34 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TempCompoundCompare.findByCompoundInternalId", query = "SELECT t FROM TempCompoundCompare t WHERE t.compoundInternalId = :compoundInternalId")})
 public class TempCompoundCompare implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Size(max = 30)
     @Column(name = "COMPOUND_ID")
     private String compoundId;
-    @Size(max = 4000)
     @Column(name = "COMPOUND_NAME")
     private String compoundName;
-    @Size(max = 30)
     @Column(name = "COMPOUND_SOURCE")
     private String compoundSource;
-    @Size(max = 30)
     @Column(name = "RELATIONSHIP")
     private String relationship;
-    @Size(max = 15)
     @Column(name = "UNIPROT_ACCESSION")
     private String uniprotAccession;
-    @Size(max = 255)
     @Column(name = "URL")
     private String url;
-    @Size(max = 30)
     @Column(name = "COMPOUND_ROLE")
     private String compoundRole;
-    @Size(max = 4000)
     @Column(name = "NOTE")
     private String note;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "COMPOUND_INTERNAL_ID")
-    private BigDecimal compoundInternalId;
+      @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "TEMP_COMPOUND_COMPARE_SEQ")
+    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.AUTO)
+    private Long compoundInternalId;
 
     public TempCompoundCompare() {
     }
 
-    public TempCompoundCompare(BigDecimal compoundInternalId) {
+    public TempCompoundCompare(Long compoundInternalId) {
         this.compoundInternalId = compoundInternalId;
     }
 
@@ -140,37 +129,44 @@ public class TempCompoundCompare implements Serializable {
         this.note = note;
     }
 
-    public BigDecimal getCompoundInternalId() {
+    public Long getCompoundInternalId() {
         return compoundInternalId;
     }
 
-    public void setCompoundInternalId(BigDecimal compoundInternalId) {
+    public void setCompoundInternalId(Long compoundInternalId) {
         this.compoundInternalId = compoundInternalId;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (compoundInternalId != null ? compoundInternalId.hashCode() : 0);
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.compoundId);
+        hash = 37 * hash + Objects.hashCode(this.uniprotAccession);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TempCompoundCompare)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        TempCompoundCompare other = (TempCompoundCompare) object;
-        if ((this.compoundInternalId == null && other.compoundInternalId != null) || (this.compoundInternalId != null && !this.compoundInternalId.equals(other.compoundInternalId))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final TempCompoundCompare other = (TempCompoundCompare) obj;
+        if (!Objects.equals(this.compoundId, other.compoundId)) {
+            return false;
+        }
+        return Objects.equals(this.uniprotAccession, other.uniprotAccession);
     }
+
+
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.ep.model.TempCompoundCompare[ compoundInternalId=" + compoundInternalId + " ]";
+        return "TempCompoundCompare{" + "compoundId=" + compoundId + ", compoundName=" + compoundName + ", compoundSource=" + compoundSource + ", relationship=" + relationship + ", uniprotAccession=" + uniprotAccession + ", url=" + url + ", compoundRole=" + compoundRole + ", note=" + note + '}';
     }
+
+
     
 }

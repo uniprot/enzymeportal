@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author Joseph <joseph@ebi.ac.uk>
  */
 @Entity
 @Table(name = "ENZYMES_TO_TAXONOMY")
@@ -35,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymesToTaxonomy.findByCommonName", query = "SELECT e FROM EnzymesToTaxonomy e WHERE e.commonName = :commonName")})
 public class EnzymesToTaxonomy implements Serializable {
     private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Id
     @Basic(optional = false)
     @NotNull
@@ -45,7 +39,7 @@ public class EnzymesToTaxonomy implements Serializable {
     @Column(name = "EC_NUMBER")
     private String ecNumber;
     @Column(name = "TAX_ID")
-    private BigInteger taxId;
+    private Long taxId;
     @Size(max = 255)
     @Column(name = "SCIENTIFIC_NAME")
     private String scientificName;
@@ -76,11 +70,11 @@ public class EnzymesToTaxonomy implements Serializable {
         this.ecNumber = ecNumber;
     }
 
-    public BigInteger getTaxId() {
+    public Long getTaxId() {
         return taxId;
     }
 
-    public void setTaxId(BigInteger taxId) {
+    public void setTaxId(Long taxId) {
         this.taxId = taxId;
     }
 
@@ -122,7 +116,7 @@ public class EnzymesToTaxonomy implements Serializable {
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.ep.model.EnzymesToTaxonomy[ internalId=" + internalId + " ]";
+        return "uk.ac.ebi.ep.data.domain.EnzymesToTaxonomy[ internalId=" + internalId + " ]";
     }
     
 }

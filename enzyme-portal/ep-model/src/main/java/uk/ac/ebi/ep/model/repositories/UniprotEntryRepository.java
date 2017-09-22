@@ -42,10 +42,10 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 //            @Transactional(readOnly = true)
 //    @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
 //    CompletableFuture<UniprotEntry> findEnzymeByAccessionAsync(@Param("accession") String accession);
-    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
+    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY", nativeQuery = true)
     List<String> findAccessions();
 
-    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0 AND ACCESSION IS NOT NULL", nativeQuery = true)
+    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0", nativeQuery = true)
     List<String> findSwissProtAccessions();
 
     @Transactional(readOnly = true)

@@ -1,62 +1,61 @@
-
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
 @Table(name = "ENZYME_CATALYTIC_ACTIVITY")
 @XmlRootElement
+
+@NamedEntityGraph(name = "ActivityEntityGraph", attributeNodes = {  
+    @NamedAttributeNode("uniprotAccession")
+})
+
 @NamedQueries({
     @NamedQuery(name = "EnzymeCatalyticActivity.findAll", query = "SELECT e FROM EnzymeCatalyticActivity e"),
     @NamedQuery(name = "EnzymeCatalyticActivity.findByActivityInternalId", query = "SELECT e FROM EnzymeCatalyticActivity e WHERE e.activityInternalId = :activityInternalId"),
-    @NamedQuery(name = "EnzymeCatalyticActivity.findByCatalyticActivity", query = "SELECT e FROM EnzymeCatalyticActivity e WHERE e.catalyticActivity = :catalyticActivity"),
-    @NamedQuery(name = "EnzymeCatalyticActivity.findByDbentryId", query = "SELECT e FROM EnzymeCatalyticActivity e WHERE e.dbentryId = :dbentryId")})
+    @NamedQuery(name = "EnzymeCatalyticActivity.findByCatalyticActivity", query = "SELECT e FROM EnzymeCatalyticActivity e WHERE e.catalyticActivity = :catalyticActivity")})
 public class EnzymeCatalyticActivity implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ACTIVITY_INTERNAL_ID")
-    private BigDecimal activityInternalId;
-    @Size(max = 4000)
+    private Long activityInternalId;
     @Column(name = "CATALYTIC_ACTIVITY")
     private String catalyticActivity;
-    @Column(name = "DBENTRY_ID")
-    private Long dbentryId;
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     public EnzymeCatalyticActivity() {
     }
 
-    public EnzymeCatalyticActivity(BigDecimal activityInternalId) {
+    public EnzymeCatalyticActivity(Long activityInternalId) {
         this.activityInternalId = activityInternalId;
     }
 
-    public BigDecimal getActivityInternalId() {
+    public Long getActivityInternalId() {
         return activityInternalId;
     }
 
-    public void setActivityInternalId(BigDecimal activityInternalId) {
+    public void setActivityInternalId(Long activityInternalId) {
         this.activityInternalId = activityInternalId;
     }
 
@@ -66,14 +65,6 @@ public class EnzymeCatalyticActivity implements Serializable {
 
     public void setCatalyticActivity(String catalyticActivity) {
         this.catalyticActivity = catalyticActivity;
-    }
-
-    public Long getDbentryId() {
-        return dbentryId;
-    }
-
-    public void setDbentryId(Long dbentryId) {
-        this.dbentryId = dbentryId;
     }
 
     public UniprotEntry getUniprotAccession() {
@@ -106,7 +97,9 @@ public class EnzymeCatalyticActivity implements Serializable {
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.ep.model.EnzymeCatalyticActivity[ activityInternalId=" + activityInternalId + " ]";
+        return catalyticActivity;
     }
+
+
     
 }

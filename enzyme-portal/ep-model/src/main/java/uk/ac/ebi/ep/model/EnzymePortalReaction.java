@@ -1,29 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author joseph
  */
-@Deprecated
 @Entity
 @Table(name = "ENZYME_PORTAL_REACTION")
 @XmlRootElement
@@ -56,12 +55,12 @@ public class EnzymePortalReaction   implements Serializable {
     private String relationship;
     @Column(name = "URL")
     private String url;
-    //@JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    //@ManyToOne(fetch = FetchType.LAZY)
-//    private UniprotEntry uniprotAccession;
-//    
-//   // @ManyToMany(mappedBy = "enzymePortalReactionSet",fetch = FetchType.LAZY)
-//    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
+    @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UniprotEntry uniprotAccession;
+    
+    @ManyToMany(mappedBy = "enzymePortalReactionSet",fetch = FetchType.LAZY)
+    private Set<EnzymePortalCompound> enzymePortalCompoundSet;
 
     public EnzymePortalReaction() {
     }
@@ -118,13 +117,13 @@ public class EnzymePortalReaction   implements Serializable {
         this.url = url;
     }
 
-//    public UniprotEntry getUniprotAccession() {
-//        return uniprotAccession;
-//    }
-//
-//    public void setUniprotAccession(UniprotEntry uniprotAccession) {
-//        this.uniprotAccession = uniprotAccession;
-//    }
+    public UniprotEntry getUniprotAccession() {
+        return uniprotAccession;
+    }
+
+    public void setUniprotAccession(UniprotEntry uniprotAccession) {
+        this.uniprotAccession = uniprotAccession;
+    }
 
     @Override
     public int hashCode() {
@@ -151,14 +150,14 @@ public class EnzymePortalReaction   implements Serializable {
         return reactionName;
     }
 
-//    @XmlTransient
-//    public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
-//        return enzymePortalCompoundSet;
-//    }
-//
-//    public void setEnzymePortalCompoundSet(Set<EnzymePortalCompound> enzymePortalCompoundSet) {
-//        this.enzymePortalCompoundSet = enzymePortalCompoundSet;
-//    }
+    @XmlTransient
+    public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
+        return enzymePortalCompoundSet;
+    }
+
+    public void setEnzymePortalCompoundSet(Set<EnzymePortalCompound> enzymePortalCompoundSet) {
+        this.enzymePortalCompoundSet = enzymePortalCompoundSet;
+    }
 
 
 

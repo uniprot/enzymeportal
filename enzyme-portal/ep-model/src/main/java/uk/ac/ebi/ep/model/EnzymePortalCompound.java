@@ -1,8 +1,9 @@
-
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.ColumnResult;
@@ -13,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
@@ -22,6 +25,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import uk.ac.ebi.ep.model.search.model.Compound;
 
 /**
@@ -89,11 +93,11 @@ public class EnzymePortalCompound extends Compound implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
-//    @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
-//        @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
-//        @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    private Set<EnzymePortalReaction> enzymePortalReactionSet;
+    @JoinTable(name = "COMPOUND_TO_REACTION", joinColumns = {
+        @JoinColumn(name = "COMPOUND_INTERNAL_ID", referencedColumnName = "COMPOUND_INTERNAL_ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "REACTION_INTERNAL_ID", referencedColumnName = "REACTION_INTERNAL_ID")})
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<EnzymePortalReaction> enzymePortalReactionSet;
 
     @Column(name = "NOTE")
     private String note;
@@ -208,17 +212,17 @@ public class EnzymePortalCompound extends Compound implements Serializable {
         this.compoundRole = compoundRole;
     }
 
-//    @XmlTransient
-//    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
-//        if (enzymePortalReactionSet == null) {
-//            enzymePortalReactionSet = new HashSet<>();
-//        }
-//        return this.enzymePortalReactionSet;
-//    }
-//
-//    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
-//        this.enzymePortalReactionSet = enzymePortalReactionSet;
-//    }
+    @XmlTransient
+    public Set<EnzymePortalReaction> getEnzymePortalReactionSet() {
+        if (enzymePortalReactionSet == null) {
+            enzymePortalReactionSet = new HashSet<>();
+        }
+        return this.enzymePortalReactionSet;
+    }
+
+    public void setEnzymePortalReactionSet(Set<EnzymePortalReaction> enzymePortalReactionSet) {
+        this.enzymePortalReactionSet = enzymePortalReactionSet;
+    }
 
     @Override
     public String getId() {

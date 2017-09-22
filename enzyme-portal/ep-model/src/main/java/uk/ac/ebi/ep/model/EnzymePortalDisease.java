@@ -1,28 +1,57 @@
-
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import uk.ac.ebi.ep.model.search.model.Disease;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
 @Table(name = "ENZYME_PORTAL_DISEASE")
 @XmlRootElement
+
+@NamedEntityGraph(name = "DiseaseEntityGraph", attributeNodes = {
+    @NamedAttributeNode("uniprotAccession")
+})
+
+   @SqlResultSetMapping(
+       name="diseaseMapping",
+       classes={
+          @ConstructorResult(
+               targetClass=Disease.class,
+                 columns={
+                    @ColumnResult(name="OMIM_NUMBER"),
+                    @ColumnResult(name="DISEASE_NAME"),
+                    @ColumnResult(name="URL")
+                   
+                    }
+          )
+       }
+      )
+
 @NamedQueries({
     @NamedQuery(name = "EnzymePortalDisease.findAll", query = "SELECT e FROM EnzymePortalDisease e"),
     @NamedQuery(name = "EnzymePortalDisease.findByDiseaseId", query = "SELECT e FROM EnzymePortalDisease e WHERE e.diseaseId = :diseaseId"),
@@ -34,54 +63,50 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EnzymePortalDisease.findByDefinition", query = "SELECT e FROM EnzymePortalDisease e WHERE e.definition = :definition"),
     @NamedQuery(name = "EnzymePortalDisease.findByScore", query = "SELECT e FROM EnzymePortalDisease e WHERE e.score = :score"),
     @NamedQuery(name = "EnzymePortalDisease.findByUrl", query = "SELECT e FROM EnzymePortalDisease e WHERE e.url = :url")})
-public class EnzymePortalDisease implements Serializable {
+public class EnzymePortalDisease extends Disease implements Serializable, Comparable<EnzymePortalDisease> {
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "DISEASE_ID")
-    private BigDecimal diseaseId;
-    @Size(max = 30)
+    @SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_DISEASE_ID")
+    @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
+    private Long diseaseId;
     @Column(name = "OMIM_NUMBER")
     private String omimNumber;
-    @Size(max = 30)
     @Column(name = "MESH_ID")
     private String meshId;
-    @Size(max = 30)
     @Column(name = "EFO_ID")
     private String efoId;
-    @Size(max = 150)
     @Column(name = "DISEASE_NAME")
     private String diseaseName;
-    @Size(max = 4000)
     @Column(name = "EVIDENCE")
     private String evidence;
-    @Size(max = 4000)
     @Column(name = "DEFINITION")
     private String definition;
-    @Size(max = 150)
     @Column(name = "SCORE")
     private String score;
-    @Size(max = 255)
     @Column(name = "URL")
     private String url;
+
     @JoinColumn(name = "UNIPROT_ACCESSION", referencedColumnName = "ACCESSION")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private UniprotEntry uniprotAccession;
 
     public EnzymePortalDisease() {
     }
 
-    public EnzymePortalDisease(BigDecimal diseaseId) {
+    public EnzymePortalDisease(Long diseaseId) {
         this.diseaseId = diseaseId;
     }
 
-    public BigDecimal getDiseaseId() {
+    public Long getDiseaseId() {
         return diseaseId;
     }
 
-    public void setDiseaseId(BigDecimal diseaseId) {
+    public void setDiseaseId(Long diseaseId) {
         this.diseaseId = diseaseId;
     }
 
@@ -110,7 +135,7 @@ public class EnzymePortalDisease implements Serializable {
     }
 
     public String getDiseaseName() {
-        return diseaseName;
+        return diseaseName.replaceAll(",", "").split("\\(")[0];
     }
 
     public void setDiseaseName(String diseaseName) {
@@ -141,12 +166,18 @@ public class EnzymePortalDisease implements Serializable {
         this.score = score;
     }
 
+    @Override
     public String getUrl() {
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "EnzymePortalDisease{" + "diseaseId=" + diseaseId + ", omimNumber=" + omimNumber + ", meshId=" + meshId + ", diseaseName=" + diseaseName + '}';
     }
 
     public UniprotEntry getUniprotAccession() {
@@ -159,27 +190,77 @@ public class EnzymePortalDisease implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (diseaseId != null ? diseaseId.hashCode() : 0);
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.diseaseName);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EnzymePortalDisease)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        EnzymePortalDisease other = (EnzymePortalDisease) object;
-        if ((this.diseaseId == null && other.diseaseId != null) || (this.diseaseId != null && !this.diseaseId.equals(other.diseaseId))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final EnzymePortalDisease other = (EnzymePortalDisease) obj;
+        return Objects.equals(this.diseaseName, other.diseaseName);
     }
 
     @Override
-    public String toString() {
-        return "uk.ac.ebi.ep.ep.model.EnzymePortalDisease[ diseaseId=" + diseaseId + " ]";
+    public int compareTo(EnzymePortalDisease o) {
+        return o.getDiseaseName().compareToIgnoreCase(this.getDiseaseName());
+    }
+
+    @Override
+    public List<String> getEvidences() {
+        if (evidences == null) {
+            evidences = new ArrayList<>();
+        }
+
+        evidences.add(getEvidence());
+        return evidences;
+    }
+
+    @Override
+    public void setEvidences(List<String> evidences) {
+        this.evidences = evidences;
+    }
+
+    @Override
+    public String getId() {
+        return omimNumber;
+    }
+
+    @Override
+    public String getName() {
+  
+        return diseaseName.replaceAll(",", "").split("\\(")[0];
+    }
+
+    @Override
+    public String getDescription() {
+        return definition;
+    }
+
+    /**
+     * Gets the value of the selected property.
+     *
+     * @return selected
+     */
+    @Override
+    public boolean isSelected() {
+        return selected;
+    }
+
+    /**
+     * Gets the value of the numEnzyme property.
+     *
+     * @return numEnzyme
+     */
+    @Override
+    public int getNumEnzyme() {
+        return numEnzyme;
     }
     
 }

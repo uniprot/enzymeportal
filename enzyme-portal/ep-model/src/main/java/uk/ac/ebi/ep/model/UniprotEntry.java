@@ -44,22 +44,11 @@ import uk.ac.ebi.ep.model.common.ModelOrganisms;
 @NamedQueries({
     @NamedQuery(name = "UniprotEntry.findAll", query = "SELECT u FROM UniprotEntry u"),
     @NamedQuery(name = "UniprotEntry.findByDbentryId", query = "SELECT u FROM UniprotEntry u WHERE u.dbentryId = :dbentryId"),
-    @NamedQuery(name = "UniprotEntry.findByAccession", query = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession"),
-    @NamedQuery(name = "UniprotEntry.findByName", query = "SELECT u FROM UniprotEntry u WHERE u.name = :name"),
-    @NamedQuery(name = "UniprotEntry.findByTaxId", query = "SELECT u FROM UniprotEntry u WHERE u.taxId = :taxId"),
     @NamedQuery(name = "UniprotEntry.findByProteinName", query = "SELECT u FROM UniprotEntry u WHERE u.proteinName = :proteinName"),
     @NamedQuery(name = "UniprotEntry.findByScientificName", query = "SELECT u FROM UniprotEntry u WHERE u.scientificName = :scientificName"),
-    @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName"),
-    @NamedQuery(name = "UniprotEntry.findBySequenceLength", query = "SELECT u FROM UniprotEntry u WHERE u.sequenceLength = :sequenceLength"),
-    @NamedQuery(name = "UniprotEntry.findByLastUpdateTimestamp", query = "SELECT u FROM UniprotEntry u WHERE u.lastUpdateTimestamp = :lastUpdateTimestamp"),
-    @NamedQuery(name = "UniprotEntry.findByFunction", query = "SELECT u FROM UniprotEntry u WHERE u.function = :function"),
-    @NamedQuery(name = "UniprotEntry.findByEntryType", query = "SELECT u FROM UniprotEntry u WHERE u.entryType = :entryType"),
-    @NamedQuery(name = "UniprotEntry.findByFunctionLength", query = "SELECT u FROM UniprotEntry u WHERE u.functionLength = :functionLength"),
-    @NamedQuery(name = "UniprotEntry.findBySynonymNames", query = "SELECT u FROM UniprotEntry u WHERE u.synonymNames = :synonymNames"),
-    @NamedQuery(name = "UniprotEntry.findByExpEvidenceFlag", query = "SELECT u FROM UniprotEntry u WHERE u.expEvidenceFlag = :expEvidenceFlag"),
-    @NamedQuery(name = "UniprotEntry.findByUncharacterized", query = "SELECT u FROM UniprotEntry u WHERE u.uncharacterized = :uncharacterized"),
-    @NamedQuery(name = "UniprotEntry.findByPdbFlag", query = "SELECT u FROM UniprotEntry u WHERE u.pdbFlag = :pdbFlag")})
-    //@NamedQuery(name = "UniprotEntry.findByNamePrefix", query = "SELECT u FROM UniprotEntry u WHERE u.namePrefix = :namePrefix")})
+    @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
+})
+
 public class UniprotEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;

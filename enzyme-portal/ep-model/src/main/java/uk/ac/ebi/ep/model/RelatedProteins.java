@@ -1,16 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.ep.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -23,32 +20,37 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
+ * @author joseph
  */
 @Entity
 @Table(name = "RELATED_PROTEINS")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RelatedProteins.findAll", query = "SELECT r FROM RelatedProteins r"),
-    @NamedQuery(name = "RelatedProteins.findByRelProtInternalId", query = "SELECT r FROM RelatedProteins r WHERE r.relProtInternalId = :relProtInternalId"),
-    @NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix"),
-    @NamedQuery(name = "RelatedProteins.findByProteinName", query = "SELECT r FROM RelatedProteins r WHERE r.proteinName = :proteinName")})
+    @NamedQuery(name = "RelatedProteins.findByRelProtInternalId", query = "SELECT r FROM RelatedProteins r WHERE r.relProtInternalId = :relProtInternalId")
+    //@NamedQuery(name = "RelatedProteins.findByNamePrefix", query = "SELECT r FROM RelatedProteins r WHERE r.namePrefix = :namePrefix")
+})
 public class RelatedProteins implements Serializable {
-    private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "REL_PROT_INTERNAL_ID")
-    private BigDecimal relProtInternalId;
-    @Size(max = 120)
-    @Column(name = "NAME_PREFIX")
-    private String namePrefix;
     @Size(max = 4000)
     @Column(name = "PROTEIN_NAME")
     private String proteinName;
-    @OneToMany(mappedBy = "relatedProteinsId")
-    private Set<UniprotEntry> uniprotEntrySet;
+
+    private static final long serialVersionUID = 1L;
+
+    @NotNull
+    @Id
+    @Basic(optional = false)
+    @Column(name = "REL_PROT_INTERNAL_ID")
+    //@SequenceGenerator(allocationSize = 1, name = "seqGenerator", sequenceName = "SEQ_REL_PROT_ID")
+   // @GeneratedValue(generator = "seqGenerator", strategy = GenerationType.SEQUENCE)
+    private BigDecimal relProtInternalId;
+    @Column(name = "NAME_PREFIX")
+    private String namePrefix;
+    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
+    //@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
+    //@Fetch(FetchMode.JOIN)
+    //private Set<UniprotEntry> uniprotEntrySet;
+    private List<UniprotEntry> uniprotEntrySet;
 
     public RelatedProteins() {
     }
@@ -73,20 +75,23 @@ public class RelatedProteins implements Serializable {
         this.namePrefix = namePrefix;
     }
 
-    public String getProteinName() {
-        return proteinName;
-    }
-
-    public void setProteinName(String proteinName) {
-        this.proteinName = proteinName;
-    }
-
     @XmlTransient
-    public Set<UniprotEntry> getUniprotEntrySet() {
+    public List<UniprotEntry> getUniprotEntrySet() {
+        // List<EnzymeAccession> sortedSpecies = relatedspecies
+//        return uniprotEntrySet.stream()
+//                .sorted(Comparator.comparing(UniprotEntry::humanOnTop).reversed())
+//                //.sorted(Comparator.comparing(UniprotEntry::getExpEvidenceFlag)
+//                       // .reversed())
+//                .collect(Collectors.toList());
+        
+        if(uniprotEntrySet == null){
+            uniprotEntrySet = new ArrayList<>();
+        }
+
         return uniprotEntrySet;
     }
 
-    public void setUniprotEntrySet(Set<UniprotEntry> uniprotEntrySet) {
+    public void setUniprotEntrySet(List<UniprotEntry> uniprotEntrySet) {
         this.uniprotEntrySet = uniprotEntrySet;
     }
 
@@ -104,15 +109,20 @@ public class RelatedProteins implements Serializable {
             return false;
         }
         RelatedProteins other = (RelatedProteins) object;
-        if ((this.relProtInternalId == null && other.relProtInternalId != null) || (this.relProtInternalId != null && !this.relProtInternalId.equals(other.relProtInternalId))) {
-            return false;
-        }
-        return true;
+        return !((this.relProtInternalId == null && other.relProtInternalId != null) || (this.relProtInternalId != null && !this.relProtInternalId.equals(other.relProtInternalId)));
     }
 
     @Override
     public String toString() {
-        return "uk.ac.ebi.ep.ep.model.RelatedProteins[ relProtInternalId=" + relProtInternalId + " ]";
+        return "uk.ac.ebi.ep.data.domain.RelatedProteins[" + relProtInternalId + " ]";
     }
-    
+
+    public String getProteinName() {
+        return proteinName;
+    }
+
+    public void setProteinName(String proteinName) {
+        this.proteinName = proteinName;
+    }
+
 }
