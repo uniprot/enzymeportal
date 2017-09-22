@@ -19,7 +19,7 @@ import uk.ac.ebi.ep.centralservice.chembl.molecule.Molecule;
 import uk.ac.ebi.ep.centralservice.helper.CompoundUtil;
 import uk.ac.ebi.ep.centralservice.helper.MmDatabase;
 import uk.ac.ebi.ep.centralservice.helper.Relationship;
-import uk.ac.ebi.ep.data.domain.TempCompoundCompare;
+import uk.ac.ebi.ep.model.TempCompoundCompare;
 
 /**
  *

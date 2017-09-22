@@ -1,7 +1,7 @@
 package uk.ac.ebi.ep.centralservice.helper;
 
-import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
-import uk.ac.ebi.ep.data.search.model.Compound;
+import uk.ac.ebi.ep.model.search.model.Compound;
+import uk.ac.ebi.ep.model.EnzymePortalCompound;
 
 /**
  *
