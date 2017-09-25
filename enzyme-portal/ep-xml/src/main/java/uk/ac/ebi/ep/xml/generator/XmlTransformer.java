@@ -288,6 +288,8 @@ public class XmlTransformer {
     protected void addRelatedSpeciesField(ProteinGroups proteinGroups, final Set<Field> fields) {
 
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
+        
+        if(primaryProtein != null){
 
         for (UniprotEntry entry : proteinGroups.getUniprotEntryList()) {
 
@@ -317,6 +319,7 @@ public class XmlTransformer {
 
             }
         }
+    }
 
     }
 
