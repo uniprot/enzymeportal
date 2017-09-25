@@ -14,6 +14,7 @@ public enum KeywordType {
     KEYWORD("KEYWORD"),
     DISEASE("DISEASE"),
     EC("EC"),
+    EC2PROTEIN("EC2PROTEIN"),
     TAXONOMY("TAXONOMY"),
     PATHWAYS("PATHWAYS");
 

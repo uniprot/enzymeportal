@@ -16,7 +16,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +35,7 @@ import uk.ac.ebi.ep.data.enzyme.model.ReactionPathway;
 import uk.ac.ebi.ep.data.exceptions.EnzymeFinderException;
 import uk.ac.ebi.ep.data.exceptions.EnzymeRetrieverException;
 import uk.ac.ebi.ep.data.search.model.Disease;
+import uk.ac.ebi.ep.data.search.model.SearchFilters;
 import uk.ac.ebi.ep.data.search.model.SearchModel;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.search.model.SearchResults;
@@ -301,7 +301,10 @@ public class SearchController extends AbstractController {
             // See if it is already there, perhaps we are paginating:
             Map<String, SearchResults> prevSearches
                     = getPreviousSearches(session.getServletContext());
+            System.out.println("SEARCH PARAM IN MODEL " + searchModel.getSearchparams().getText());
             String modelSearchKey = getSearchKey(searchModel.getSearchparams());
+            System.out.println("MODEL SEARCH KEY " + modelSearchKey);
+            System.out.println("DATA " + searchTerm + " ID " + searchId + " type" + keywordType);
             searchKey = Jsoup.clean(modelSearchKey, Whitelist.basic());
             results = prevSearches.get(searchKey);
             if (results == null) {
@@ -310,16 +313,11 @@ public class SearchController extends AbstractController {
 
                 switch (searchModel.getSearchparams().getType()) {
                     case KEYWORD:
-                        //results = searchKeyword(searchModel.getSearchparams());
-                        StopWatch stopWatch = new StopWatch();
-                        stopWatch.start();
+
                         results = searchKeyword(ec, searchTerm, searchId, keywordType, ASSOCIATED_PROTEIN_LIMIT);
 
                         model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
-                        //LOGGER.warn("keyword search=" + searchModel.getSearchparams().getText());
-                        stopWatch.stop();
 
-                        logger.error("Keyword Search for " + searchTerm + " took  ::: " + stopWatch.getTotalTimeSeconds());
                         break;
                     case SEQUENCE:
                         //view = searchSequence(model, searchModel);
@@ -333,14 +331,16 @@ public class SearchController extends AbstractController {
             }
 
             if (results != null) { // something to show
-                StopWatch stopWatch = new StopWatch();
-                stopWatch.start();
+
                 cacheSearch(session.getServletContext(), searchKey, results);
                 setLastSummaries(session, results.getSummaryentries());
                 searchModel.setSearchresults(results);
                 applyFilters(searchModel, request);
                 model.addAttribute("searchConfig", searchConfig);
                 model.addAttribute("searchModel", searchModel);
+                SearchFilters searchfilters = searchModel.getSearchresults().getSearchfilters();
+               
+                 model.addAttribute("searchfilters", searchfilters);
                 model.addAttribute("pagination", getPagination(searchModel));
                 request.setAttribute("searchTerm", searchModel.getSearchparams().getText());
 
@@ -348,8 +348,7 @@ public class SearchController extends AbstractController {
                 addToHistory(session, searchModel.getSearchparams().getType(),
                         searchKey, searchId, keywordType);
                 view = "search";
-                logger.error("Apply Filters took  ::: " + stopWatch.getTotalTimeSeconds());
-                stopWatch.stop();
+
             }
 
         } catch (Exception e) {
@@ -456,6 +455,21 @@ public class SearchController extends AbstractController {
             case KEYWORD:
                 key = searchParams.getText().trim().toLowerCase();
                 break;
+            case EC:
+                key = searchParams.getText();
+                break;
+            case DISEASE:
+                key = searchParams.getText();
+                break;
+            case EC2PROTEIN:
+                key = searchParams.getText();
+                break;
+            case PATHWAYS:
+                key = searchParams.getText();
+                break;
+            case TAXONOMY:
+                key = searchParams.getText();
+                break;
             case SEQUENCE:
                 key = searchParams.getSequence().trim().toUpperCase()
                         .replaceAll("[\n\r]", "");
@@ -475,7 +489,7 @@ public class SearchController extends AbstractController {
      * @param searchParameters the search parameters.
      * @return the search results.
      */
-    @Override
+    //@Override
     protected SearchResults searchKeyword(SearchParams searchParameters) {
 
         SearchResults results = enzymeFinderService.getEnzymes(searchParameters);
@@ -506,6 +520,10 @@ public class SearchController extends AbstractController {
             results = enzymeFinderService.getAssociatedProteinsByOmimIdAndEc(omimId, ec, limit);
         }
         if (keywordType.equalsIgnoreCase(KeywordType.EC.name())) {
+
+            results = enzymeFinderService.getAssociatedProteinsByEc(ec, limit);
+        }
+        if (keywordType.equalsIgnoreCase(KeywordType.EC2PROTEIN.name())) {
 
             results = enzymeFinderService.getAssociatedProteinsByEc(ec, limit);
         }

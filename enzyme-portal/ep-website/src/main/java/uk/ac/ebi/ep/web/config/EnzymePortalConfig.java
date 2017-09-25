@@ -1,5 +1,5 @@
 
-package uk.ac.ebi.ep.config;
+package uk.ac.ebi.ep.web.config;
 
 import java.util.HashMap;
 import java.util.Map;

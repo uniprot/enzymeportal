@@ -25,7 +25,7 @@
          fully-qualified @Configuration classes -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>uk.ac.ebi.ep.config.ApplicationContext</param-value>
+        <param-value>uk.ac.ebi.ep.web.config.ApplicationContext</param-value>
     </context-param>
     
 

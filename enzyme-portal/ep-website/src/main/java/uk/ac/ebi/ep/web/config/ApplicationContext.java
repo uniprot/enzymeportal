@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.ep.config;
+package uk.ac.ebi.ep.web.config;
 
 import java.util.List;
 import java.util.Locale;
@@ -30,13 +30,13 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
-import uk.ac.ebi.ep.data.dataconfig.DevDataConfig;
-import uk.ac.ebi.ep.data.dataconfig.HHConfig;
-import uk.ac.ebi.ep.data.dataconfig.HXFBConfig;
-import uk.ac.ebi.ep.data.dataconfig.OliverYardConfig;
-import uk.ac.ebi.ep.data.dataconfig.PowerGateConfig;
-import uk.ac.ebi.ep.data.dataconfig.ProdDataConfig;
+import uk.ac.ebi.ep.config.DataConfig;
+import uk.ac.ebi.ep.config.DevDataConfig;
+import uk.ac.ebi.ep.config.HHConfig;
+import uk.ac.ebi.ep.config.HXFBConfig;
+import uk.ac.ebi.ep.config.OliverYardConfig;
+import uk.ac.ebi.ep.config.PowerGateConfig;
+import uk.ac.ebi.ep.config.ProdDataConfig;
 import uk.ac.ebi.ep.ebeye.config.EbeyeConfig;
 
 /**

@@ -74,7 +74,7 @@ public class EnzymeCentricControllerIT {
     @After
     public void tearDown() {
     }
-
+    
     @Test
     public void testHomeController() throws Exception {
         ResultMatcher ok = MockMvcResultMatchers.status().isOk();

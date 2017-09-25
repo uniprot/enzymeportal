@@ -112,6 +112,7 @@ public abstract class AbstractController {
     protected static final String SEQUENCE_VIDEO = "sequenceVideo";
     
      protected static final int ASSOCIATED_PROTEIN_LIMIT = 6_00;
+     protected static final int MAX_PROTEIN_DISPLAY_LIMIT = 6_00;
 
     @ModelAttribute("searchModel")
     public SearchModel searchform() {
@@ -275,6 +276,7 @@ public abstract class AbstractController {
      * text from the user.
      * @return A normalised string.
      */
+    @Deprecated
     protected String getSearchKey(SearchParams searchParams) {
 
         String key = null;
@@ -308,11 +310,11 @@ public abstract class AbstractController {
      * @param searchParameters the search parameters.
      * @return the search results.
      */
-    protected SearchResults searchKeyword(SearchParams searchParameters) {
-          SearchResults results = enzymeFinderService.getEnzymes(searchParameters);
-
-        return results;
-    }
+//    protected SearchResults searchKeyword(SearchParams searchParameters) {
+//          SearchResults results = enzymeFinderService.getEnzymes(searchParameters);
+//
+//        return results;
+//    }
 
     /**
      * Adds a pagination object to the model, suitable to the search results and
@@ -344,7 +346,8 @@ public abstract class AbstractController {
             searchParameters.setSize(searchConfig.getResultsPerPage());
             SearchResults resultSet = searchModel.getSearchresults();
 
-            final int numOfResults = resultSet.getSummaryentries().size();
+            //final int numOfResults = resultSet.getSummaryentries().size();
+            final int numOfResults = Math.toIntExact(resultSet.getTotalfound());
             Pagination pagination = new Pagination(
                     numOfResults, searchParameters.getSize());
             pagination.setFirstResult(searchParameters.getStart());
@@ -436,7 +439,7 @@ public abstract class AbstractController {
                     });
 
             //if an item is seleted, then filter the list
-            if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty() || !ecNumbersFilter.isEmpty()) {
+            if (!speciesFilter.isEmpty() || !compoundsFilter.isEmpty() || !diseasesFilter.isEmpty() || !ecNumbersFilter.isEmpty()) {             
                 List<UniprotEntry> filteredResults
                         = new LinkedList<>(resultSet.getSummaryentries());
 

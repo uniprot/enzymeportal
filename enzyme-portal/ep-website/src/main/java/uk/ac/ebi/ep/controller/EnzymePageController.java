@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import static uk.ac.ebi.ep.controller.AbstractController.SEARCH_VIDEO;
+import uk.ac.ebi.ep.data.search.model.SearchModel;
+import uk.ac.ebi.ep.data.search.model.SearchParams;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.ProteinGroupService;
 import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeEntry;
@@ -21,6 +24,7 @@ import uk.ac.ebi.ep.literatureservice.model.EuropePMC;
 import uk.ac.ebi.ep.literatureservice.model.Result;
 import uk.ac.ebi.ep.literatureservice.service.LiteratureService;
 import uk.ac.ebi.ep.web.utils.EnzymePage;
+import uk.ac.ebi.ep.web.utils.KeywordType;
 
 /**
  *
@@ -30,7 +34,7 @@ import uk.ac.ebi.ep.web.utils.EnzymePage;
 public class EnzymePageController extends AbstractController {
 
     private static final Logger logger = Logger.getLogger(EnzymePageController.class);
-    private static final  int CITATION_LIMIT = 11;
+    private static final int CITATION_LIMIT = 11;
 
     @Autowired
     public EnzymePageController(ProteinGroupService proteinGroupService, EnzymePortalService enzymePortalService, LiteratureService litService) {
@@ -40,13 +44,16 @@ public class EnzymePageController extends AbstractController {
     }
 
     @RequestMapping(value = "/search/ec/{ec}", method = RequestMethod.GET)
-    public String showEnzyme(@PathVariable("ec") String ec, @RequestParam(value = "enzymeName", required = true) String enzymeName, Model model, RedirectAttributes attributes) {
+    public String showEnzyme(@PathVariable("ec") String ec, @RequestParam(value = "enzymeName", required = false) String enzymeName, Model model, SearchModel searchModel, RedirectAttributes attributes) {
 
-        int resultLimit = ASSOCIATED_PROTEIN_LIMIT;
+        int resultLimit = 7;// ASSOCIATED_PROTEIN_LIMIT;
 
         boolean isEc = true;// searchUtil.validateEc(ec);//TODO
         if (isEc) {
             long startTime = System.nanoTime();
+            if(enzymeName == null){
+                enzymeName = ec;
+            }
             EnzymePage enzymePage = computeEnzymePage(ec, enzymeName, resultLimit);
 
             long endTime = System.nanoTime();
@@ -56,7 +63,20 @@ public class EnzymePageController extends AbstractController {
 
             model.addAttribute("enzymePage", enzymePage);
 
+            SearchModel searchModelForm = new SearchModel();
+            SearchParams searchParams = new SearchParams();
+            searchParams.setStart(0);
+            searchParams.setType(SearchParams.SearchType.EC2PROTEIN);
+            searchParams.setPrevioustext("");
+            searchModelForm.setSearchparams(searchParams);
+
             model.addAttribute("ec", ec);
+            model.addAttribute("searchKey", ec);
+            model.addAttribute("searchTerm", ec);
+            model.addAttribute("keywordType", KeywordType.EC2PROTEIN.name());
+            model.addAttribute("searchId", ec);
+            model.addAttribute("searchModel", searchModelForm);
+            model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);
             return "enzymePage";
         }
 
@@ -64,7 +84,7 @@ public class EnzymePageController extends AbstractController {
     }
 
     public EnzymePage computeEnzymePage(String ecNumber, String enzymeName, int limit) {
-       
+
         CompletableFuture<EnzymeEntry> enzyme = CompletableFuture.supplyAsync(() -> findEnzymeByEcNumber(ecNumber));
 
         CompletableFuture<ProteinGroupSearchResult> proteins = CompletableFuture.supplyAsync(() -> findProteinsByEcNumber(ecNumber, limit));
@@ -105,8 +125,8 @@ public class EnzymePageController extends AbstractController {
         int start = 0;
         int pageSize = limit;
         ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultByEC(ecNumber, start, pageSize);
-        if (result.getHitCount() > limit) {
-            result.setHitCount(limit);
+        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
+            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
         }
         return result;
     }

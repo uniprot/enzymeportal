@@ -14,20 +14,14 @@ import uk.ac.ebi.ep.base.search.EnzymeFinderService;
 import uk.ac.ebi.ep.base.search.EnzymeRetriever;
 import uk.ac.ebi.ep.common.Config;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymeCatalyticActivityRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymePortalSummaryRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymesToTaxonomyRepository;
-import uk.ac.ebi.ep.data.repositories.IntenzEnzymesRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
-import uk.ac.ebi.ep.data.repositories.SpEnzymeEvidenceRepository;
-import uk.ac.ebi.ep.data.repositories.TempCompoundCompareRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
-import uk.ac.ebi.ep.data.service.AnalysisService;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
 import uk.ac.ebi.ep.ebeye.EbeyeRestService;
 import uk.ac.ebi.ep.ebeye.EbeyeSuggestionService;
@@ -125,16 +119,16 @@ public class WebTestConfig {
     public StatusController statusController() {
         return Mockito.mock(StatusController.class);
     }
-
-    @Bean
-    public SpEnzymeEvidenceRepository spEnzymeEvidenceRepository() {
-        return Mockito.mock(SpEnzymeEvidenceRepository.class);
-    }
-
-    @Bean
-    public AnalysisService analysisService() {
-        return Mockito.mock(AnalysisService.class);
-    }
+//
+//    @Bean
+//    public SpEnzymeEvidenceRepository spEnzymeEvidenceRepository() {
+//        return Mockito.mock(SpEnzymeEvidenceRepository.class);
+//    }
+//
+//    @Bean
+//    public AnalysisService analysisService() {
+//        return Mockito.mock(AnalysisService.class);
+//    }
 
     @Bean
     public DiseaseRepository diseaseRepository() {
@@ -155,11 +149,11 @@ public class WebTestConfig {
     public EnzymePortalCompoundRepository enzymePortalCompoundRepository() {
         return Mockito.mock(EnzymePortalCompoundRepository.class);
     }
-
-    @Bean
-    public TempCompoundCompareRepository tempCompoundCompareRepository() {
-        return Mockito.mock(TempCompoundCompareRepository.class);
-    }
+//
+//    @Bean
+//    public TempCompoundCompareRepository tempCompoundCompareRepository() {
+//        return Mockito.mock(TempCompoundCompareRepository.class);
+//    }
 
     @Bean
     public EnzymePortalPathwaysRepository enzymePortalPathwaysRepository() {
@@ -180,11 +174,11 @@ public class WebTestConfig {
     public EnzymePortalEcNumbersRepository ecNumbersRepository() {
         return Mockito.mock(EnzymePortalEcNumbersRepository.class);
     }
-
-    @Bean
-    public EnzymeCatalyticActivityRepository catalyticActivityRepository() {
-        return Mockito.mock(EnzymeCatalyticActivityRepository.class);
-    }
+//
+//    @Bean
+//    public EnzymeCatalyticActivityRepository catalyticActivityRepository() {
+//        return Mockito.mock(EnzymeCatalyticActivityRepository.class);
+//    }
 
     @Bean
     public EnzymesToTaxonomyRepository enzymesToTaxonomyRepository() {
@@ -196,15 +190,15 @@ public class WebTestConfig {
         return Mockito.mock(ProjectionFactory.class);
     }
 
-    @Bean
-    public EnzymePortalSummaryRepository enzymePortalSummaryRepository() {
-        return Mockito.mock(EnzymePortalSummaryRepository.class);
-    }
-
-    @Bean
-    public IntenzEnzymesRepository intenzEnzymesRepository() {
-        return Mockito.mock(IntenzEnzymesRepository.class);
-    }
+//    @Bean
+//    public EnzymePortalSummaryRepository enzymePortalSummaryRepository() {
+//        return Mockito.mock(EnzymePortalSummaryRepository.class);
+//    }
+//
+//    @Bean
+//    public IntenzEnzymesRepository intenzEnzymesRepository() {
+//        return Mockito.mock(IntenzEnzymesRepository.class);
+//    }
 
     @Bean
     public DataSource dataSource() {
