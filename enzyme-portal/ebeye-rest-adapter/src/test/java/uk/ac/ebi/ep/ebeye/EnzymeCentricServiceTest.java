@@ -63,12 +63,12 @@ public class EnzymeCentricServiceTest {
     }
 
     private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
-
+        
         String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:TAXONOMY&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
             //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
-            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
             return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
         }
 
@@ -100,7 +100,7 @@ public class EnzymeCentricServiceTest {
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EnzymeSearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.getQuerySearchResult(query, startPage, pageSize, facetsList, facetCount);
         List<FacetValue> facetValue = searchResult.getFacets().stream().findAny().get().getFacetValues();
 
         assertThat(searchResult.getEntries(), hasSize(limit));
@@ -132,7 +132,7 @@ public class EnzymeCentricServiceTest {
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EnzymeSearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.getQuerySearchResult(query, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));
@@ -268,7 +268,7 @@ public class EnzymeCentricServiceTest {
     }
 
     /**
-     * Test of getSearchResult method, of class EnzymeCentricService.
+     * Test of getQuerySearchResult method, of class EnzymeCentricService.
      *
      * @throws java.io.IOException
      */
@@ -290,7 +290,7 @@ public class EnzymeCentricServiceTest {
 
         mockSuccessfulServerResponse(syncRestServerMock, queryUrl, resultSet);
 
-        EnzymeSearchResult searchResult = enzymeCentricService.getSearchResult(query, startPage, pageSize, facetsList, facetCount);
+        EnzymeSearchResult searchResult = enzymeCentricService.getQuerySearchResult(query, startPage, pageSize, facetsList, facetCount);
 
         assertNotNull(searchResult);
         assertThat(searchResult.getEntries(), hasSize(lessThanOrEqualTo(searchResult.getHitCount())));

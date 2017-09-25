@@ -124,7 +124,9 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
         String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
+        System.out.println("THE QUERY before encoding : "+ query);
         query = UrlUtil.encode(query);
+        System.out.println("QUERY AFTER ENCODING "+ query);
         return queryForUniquePrimaryAccessions(query, limit);
 
     }

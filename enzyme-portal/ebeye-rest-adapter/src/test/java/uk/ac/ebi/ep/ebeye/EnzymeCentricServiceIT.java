@@ -30,7 +30,7 @@ public class EnzymeCentricServiceIT {
     private EnzymeCentricService enzymeCentricService;
 
     /**
-     * Test of getSearchResult method, of class EnzymeCentricService.
+     * Test of getQuerySearchResult method, of class EnzymeCentricService.
      */
     @Test
     public void testGetSearchResult_with_query_and_zeroStartPage_and_pageSize_of_10_and_filter_for_human_with_facetCount_of_5() {
@@ -44,7 +44,7 @@ public class EnzymeCentricServiceIT {
         String facets = filters.stream().collect(Collectors.joining(","));
         int facetCount = 5;
 
-        EnzymeSearchResult result = enzymeCentricService.getSearchResult(query, startPage, pageSize, facets, facetCount);
+        EnzymeSearchResult result = enzymeCentricService.getQuerySearchResult(query, startPage, pageSize, facets, facetCount);
         int hitcount = result.getHitCount();
         List<FacetValue> facetValue = result.getFacets().stream().findAny().get().getFacetValues();
 
@@ -52,7 +52,7 @@ public class EnzymeCentricServiceIT {
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
         assertThat(result.getEntries(), hasSize(pageSize));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
-        assertThat(facetValue, hasSize(facetCount));
+        assertThat(facetValue, hasSize(greaterThanOrEqualTo(facetCount)));
 
     }
 
@@ -107,7 +107,7 @@ public class EnzymeCentricServiceIT {
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(10)));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
-        assertThat(facetValue, hasSize(facetCount));
+        assertThat(facetValue, hasSize(greaterThanOrEqualTo(facetCount)));
     }
 
     /**
@@ -133,7 +133,7 @@ public class EnzymeCentricServiceIT {
         assertThat(result.getEntries(), hasSize(lessThanOrEqualTo(hitcount)));
         assertThat(result.getEntries(), hasSize(1));
         assertThat(result.getFacets(), hasSize(greaterThanOrEqualTo(facetCount)));
-        assertThat(facetValue, hasSize(facetCount));
+        assertThat(facetValue, hasSize(greaterThanOrEqualTo(facetCount)));
     }
 
     /**

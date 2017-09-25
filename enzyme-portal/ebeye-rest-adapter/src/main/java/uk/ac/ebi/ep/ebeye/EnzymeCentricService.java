@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.model.enzyme.EnzymeSearchResult;
 import uk.ac.ebi.ep.ebeye.utils.Preconditions;
+import uk.ac.ebi.ep.ebeye.utils.UrlUtil;
 
 /**
  * REST client that communicates with the EBeye search web-service retrieving
@@ -34,7 +35,7 @@ public class EnzymeCentricService {
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
             //ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,compound_name,disease_name,enzyme_family&format=json";
-            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,name,description,UNIPROTKB,protein_name,common_name,scientific_name,enzyme_family,alt_names,intenz_cofactors&sort=_relevance&reverse=true&format=json";
             return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
         }
         return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
@@ -49,7 +50,7 @@ public class EnzymeCentricService {
      * @param facetCount number of facets to be returned
      * @return
      */
-    public EnzymeSearchResult getSearchResult(String query, int startPage, int pageSize, String facets, int facetCount) {
+    public EnzymeSearchResult getQuerySearchResult(String query, int startPage, int pageSize, String facets, int facetCount) {
 
         Preconditions.checkArgument(startPage > -1, "startPage can not be less than 0");
         Preconditions.checkArgument(pageSize > -1, "pageSize can not be less than 0");
@@ -60,7 +61,23 @@ public class EnzymeCentricService {
         if (facetCount > FACET_COUNT_LIMIT) {
             facetsCount = FACET_COUNT_LIMIT;
         }
+        query = UrlUtil.encode(query);
+        return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetsCount, facets, startPage, pageSize));
+    }
+    
+    
+        private EnzymeSearchResult getEnzymeSearchResult(String query, int startPage, int pageSize, String facets, int facetCount) {
 
+        Preconditions.checkArgument(startPage > -1, "startPage can not be less than 0");
+        Preconditions.checkArgument(pageSize > -1, "pageSize can not be less than 0");
+        Preconditions.checkArgument(query != null, "'query' must not be null");
+        Preconditions.checkArgument(facets != null, "'facets' must not be null");
+        Preconditions.checkArgument(facetCount > -1, "facetCount can not be less than 0");
+        int facetsCount = facetCount;
+        if (facetCount > FACET_COUNT_LIMIT) {
+            facetsCount = FACET_COUNT_LIMIT;
+        }
+      
         return getEbiSearchResult(buildQueryUrl(enzymeCentricProps.getEnzymeCentricSearchUrl(), query, facetsCount, facets, startPage, pageSize));
     }
 
@@ -78,7 +95,7 @@ public class EnzymeCentricService {
 
         String query = "OMIM:" + omimId;
 
-        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+        return getEnzymeSearchResult(query, startPage, pageSize, facets, facetCount);
 
     }
 
@@ -89,7 +106,7 @@ public class EnzymeCentricService {
 
         String query = "REACTOME:" + pathwayId;
 
-        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+        return getEnzymeSearchResult(query, startPage, pageSize, facets, facetCount);
 
     }
 
@@ -99,7 +116,7 @@ public class EnzymeCentricService {
 
         String query = "INTENZ:" + ec;
 
-        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+        return getEnzymeSearchResult(query, startPage, pageSize, facets, facetCount);
 
     }
 
@@ -111,7 +128,7 @@ public class EnzymeCentricService {
         int pageSize = 1;
         String query = "INTENZ:" + ec;
 
-        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+        return getEnzymeSearchResult(query, startPage, pageSize, facets, facetCount);
 
     }
 
@@ -121,7 +138,7 @@ public class EnzymeCentricService {
 
         String query = "TAXONOMY:" + taxId;
 
-        return getSearchResult(query, startPage, pageSize, facets, facetCount);
+        return getEnzymeSearchResult(query, startPage, pageSize, facets, facetCount);
 
     }
 // current model TODO
