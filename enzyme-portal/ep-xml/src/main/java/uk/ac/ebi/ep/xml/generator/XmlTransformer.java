@@ -264,9 +264,6 @@ public class XmlTransformer {
 
             fields.add(primaryOganismfield);
 
-            //add PDB info
-            addPDBInfo(primaryProtein, fields);
-
         }
 
     }
@@ -298,9 +295,19 @@ public class XmlTransformer {
 
                 List<UniprotEntry> rel = entry.getRelatedspecies();
                 LinkedList<String> relatedSpeciesList = new LinkedList<>();
-                rel.stream().map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()).concat("|"))
-                        .forEach(related_species -> relatedSpeciesList.offer(related_species)
-                        );
+
+                if (rel.size() > 1) {
+                    rel.stream()
+                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()).concat("|"))
+                            .forEach(related_species -> relatedSpeciesList.offer(related_species)
+                            );
+                } else {
+                    rel.stream()
+                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()))
+                            .forEach(related_species -> relatedSpeciesList.offer(related_species)
+                            );
+                }
+
                 String rsField = relatedSpeciesList
                         .stream()
                         .reduce((k, v) -> k + "" + v).get();
@@ -313,41 +320,67 @@ public class XmlTransformer {
 
     }
 
-    private void addPDBInfo(PrimaryProtein primaryProtein, Set<Field> fields) {
-        Character hasPdbFlag = 'Y';
-        String pdbId = primaryProtein.getPdbId();
-        String specieWithImage = primaryProtein.getScientificName();
-
-        if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
-            Field pdbfield = new Field(FieldName.PDB.getName(), pdbId);
-            fields.add(pdbfield);
-
-            Field specieWithImagefield = new Field(FieldName.PDB_SPECIE.getName(), specieWithImage);
-            fields.add(specieWithImagefield);
-        }
-    }
-
-    protected void addPDBFields(ProteinGroups proteinGroups, Set<Field> fields) {
+    protected void addPrimaryImage(ProteinGroups proteinGroups, Set<Field> fields) {
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
-        //String PDB_SOURCE = "PDB";
+
         if (primaryProtein != null) {
+            String specieWithImage = primaryProtein.getScientificName();
+
+            if (primaryProtein.getCommonName() != null) {
+                specieWithImage = primaryProtein.getCommonName();
+            }
+
             Character hasPdbFlag = 'Y';
-            String pdbId = primaryProtein.getPdbId();
-            String specieWithImage = primaryProtein.getCommonName();
-            if (specieWithImage == null) {
-                specieWithImage = primaryProtein.getScientificName();
-            }
+            String pdbId = primaryProtein.getPdbId() + "|" + specieWithImage;
             if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
-                Field pdbfield = new Field(FieldName.PDB.getName(), pdbId);
+                Field pdbfield = new Field(FieldName.PRIMARY_IMAGE.getName(), pdbId);
                 fields.add(pdbfield);
+            }
+        }
+    }
 
-                Field specieWithImagefield = new Field(FieldName.PDB_SPECIE.getName(), specieWithImage);
-                fields.add(specieWithImagefield);
+    protected void addPrimaryImageSpecie(ProteinGroups proteinGroups, Set<Field> fields) {
+        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
 
+        if (primaryProtein != null) {
+
+            Character hasPdbFlag = 'Y';
+
+            String specieWithImage = primaryProtein.getScientificName();
+
+            if (primaryProtein.getCommonName() != null) {
+                specieWithImage = primaryProtein.getCommonName();
             }
 
-        }
+            if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
 
+                Field specieWithImagefield = new Field(FieldName.PRIMARY_IMAGE_SPECIE.getName(), specieWithImage);
+                fields.add(specieWithImagefield);
+            }
+        }
     }
+//
+//    protected void addPDBFields(ProteinGroups proteinGroups, Set<Field> fields) {
+//        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
+//        //String PDB_SOURCE = "PDB";
+//        if (primaryProtein != null) {
+//            Character hasPdbFlag = 'Y';
+//            String pdbId = primaryProtein.getPdbId();
+//            String specieWithImage = primaryProtein.getCommonName();
+//            if (specieWithImage == null) {
+//                specieWithImage = primaryProtein.getScientificName();
+//            }
+//            if (primaryProtein.getPdbFlag().equals(hasPdbFlag)) {
+//                Field pdbfield = new Field(FieldName.PDB.getName(), pdbId);
+//                fields.add(pdbfield);
+//
+//                Field specieWithImagefield = new Field(FieldName.PDB_SPECIE.getName(), specieWithImage);
+//                fields.add(specieWithImagefield);
+//
+//            }
+//
+//        }
+//
+//    }
 
 }

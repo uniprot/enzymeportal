@@ -31,9 +31,13 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
         entry.setId(proteinGroups.getProteinGroupId());
         entry.setName(proteinGroups.getProteinName());
         entry.setDescription(proteinGroups.getProteinName());
-        
+
         addEntryTypeFields(proteinGroups, fields);
         addPrimaryProteinField(proteinGroups, fields);
+        //add PDB info
+        addPrimaryImage(proteinGroups, fields);
+        //add structure image specie
+        addPrimaryImageSpecie(proteinGroups, fields);
 
         addRelatedSpeciesField(proteinGroups, fields);
         addFunctionFields(proteinGroups, fields);
@@ -55,7 +59,7 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
 
     private void addFieldsAndXRefs(UniprotEntry uniprotEntry, Set<Field> fields, Set<Ref> refs) {
 
-        addUniprotIdFields(uniprotEntry, fields);
+        // addUniprotIdFields(uniprotEntry, fields);
         addScientificNameFields(uniprotEntry, fields);
         addCommonNameFields(uniprotEntry, fields);
         addGeneNameFields(uniprotEntry, fields);
