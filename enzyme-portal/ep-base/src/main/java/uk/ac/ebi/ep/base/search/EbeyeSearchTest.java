@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ep.config.DataConfig;
 import uk.ac.ebi.ep.data.common.CommonSpecies;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
 import uk.ac.ebi.ep.data.search.model.Species;
 import uk.ac.ebi.ep.data.service.DiseaseService;
 import uk.ac.ebi.ep.data.service.EnzymePortalService;
@@ -44,7 +44,7 @@ public class EbeyeSearchTest {
         context.getEnvironment().setActiveProfiles("uzpdev");
         //context.getEnvironment().setActiveProfiles("ezprel");
         context.register(DataConfig.class);
-        context.scan("uk.ac.ebi.ep.data.dataconfig");
+        context.scan("uk.ac.ebi.ep.config","uk.ac.ebi.ep.data.dataconfig");
         context.refresh();
 
         UniprotEntryService service = context.getBean(UniprotEntryService.class);

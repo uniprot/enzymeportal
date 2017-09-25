@@ -9,7 +9,7 @@ package uk.ac.ebi.ep.base.search;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.base.config.EnzymesConfig;
-import uk.ac.ebi.ep.data.dataconfig.DataConfig;
+import uk.ac.ebi.ep.config.DataConfig;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.exceptions.EnzymeFinderException;
 import uk.ac.ebi.ep.data.search.model.SearchParams;
@@ -36,7 +36,7 @@ public class EPCoreTest {
         context.getEnvironment().setActiveProfiles("uzpdev");
         //context.getEnvironment().setActiveProfiles("ezprel");
       context.register(DataConfig.class, EbeyeRestService.class, EnzymesConfig.class);
-        context.scan("uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.base.config.EnzymesConfig", "uk.ac.ebi.ep.ebeye");
+        context.scan("uk.ac.ebi.ep.config","uk.ac.ebi.ep.data.dataconfig", "uk.ac.ebi.ep.base.config.EnzymesConfig", "uk.ac.ebi.ep.ebeye");
         context.refresh();
 
         EnzymePortalService service = context.getBean(EnzymePortalService.class);
