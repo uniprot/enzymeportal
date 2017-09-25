@@ -31,8 +31,8 @@ public abstract class AbstractDataTest extends TestCase {
 
     @Autowired
     protected UniprotEntryService uniprotEntryService;
-    @Autowired
-    protected EnzymePortalXmlService enzymePortalXmlService;
+//    @Autowired
+//    protected EnzymePortalXmlService enzymePortalXmlService;
 
     @Autowired
     protected DataSource dataSource;

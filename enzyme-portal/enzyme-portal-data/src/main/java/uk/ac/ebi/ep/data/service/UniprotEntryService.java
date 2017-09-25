@@ -5,7 +5,8 @@
  */
 package uk.ac.ebi.ep.data.service;
 
-import com.mysema.query.types.Predicate;
+
+import com.querydsl.core.types.Predicate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class UniprotEntryService {
 
     @Autowired
     private UniprotEntryRepository repository;
-
-    @Transactional(readOnly = true)
+    
+        @Transactional(readOnly = true)
     public Optional<UniprotEntry> findByAccession(String accession) {
 
         return Optional.ofNullable(repository.findByAccession(accession));

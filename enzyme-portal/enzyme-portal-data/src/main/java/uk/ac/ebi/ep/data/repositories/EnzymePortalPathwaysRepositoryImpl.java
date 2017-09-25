@@ -1,10 +1,8 @@
-
 package uk.ac.ebi.ep.data.repositories;
 
-import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.types.Projections;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +19,19 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
     private EntityManager entityManager;
     private static final QEnzymePortalPathways $ = QEnzymePortalPathways.enzymePortalPathways;
 
-     @Transactional(readOnly = true)
-   // @Override
+    @Transactional(readOnly = true)
+    // @Override
     public List<Pathway> findPathwaysByAccession(String accession) {
 
-        JPAQuery query = new JPAQuery(entityManager);
-        
-   
-  List<Pathway> pathways = query.from($).where($.uniprotAccession.accession.equalsIgnoreCase(accession))
-                .list(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName));
-  
+        // JPAQuery query = new JPAQuery(entityManager);
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+
+        List<Pathway> pathways = jpaQueryFactory
+                .select(Projections.constructor(Pathway.class, $.pathwayId, $.pathwayName))
+                .from($)
+                .where($.uniprotAccession.accession.equalsIgnoreCase(accession))
+                .fetch();
+
         return pathways;
     }
 
@@ -51,17 +52,18 @@ public class EnzymePortalPathwaysRepositoryImpl implements EnzymePortalPathwaysR
 //        return enzymes;
 //
 //    }
-
     @Transactional(readOnly = true)
     @Override
     public List<Pathway> findPathwaysByName(String name) {
-        JPAQuery query = new JPAQuery(entityManager);
-
-          String pathwayName = String.format("%%%s%%", name).toLowerCase();
-        List<Pathway> entries = query.from($).where($.pathwayName.toLowerCase().like(pathwayName))
-                .list(Projections.constructor(Pathway.class,$.pathwayGroupId, $.pathwayId, $.pathwayName));
-
-        return entries.stream().distinct().collect(Collectors.toList());
+        // JPAQuery query = new JPAQuery(entityManager);
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        String pathwayName = String.format("%%%s%%", name).toLowerCase();
+        return jpaQueryFactory
+                .select(Projections.constructor(Pathway.class, $.pathwayGroupId, $.pathwayId, $.pathwayName))
+                .from($)
+                .where($.pathwayName.toLowerCase().like(pathwayName))
+                .distinct()
+                .fetch();
 
     }
 }

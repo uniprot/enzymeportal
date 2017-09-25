@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.data.domain;
 
-import com.mysema.query.annotations.QueryInit;
+import com.querydsl.core.annotations.QueryEntity;
+import com.querydsl.core.annotations.QueryInit;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
  * @author joseph
  */
 @Entity
+@QueryEntity
 @Table(name = "UNIPROT_ENTRY")
 @XmlRootElement
 
@@ -65,7 +67,7 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
     @NamedAttributeNode(value = "relatedProteinsId", subgraph = "uniprotEntrySet"),
     @NamedAttributeNode("enzymePortalPathwaysSet"),
     @NamedAttributeNode("enzymePortalReactionSet"),
-    @NamedAttributeNode("enzymePortalSummarySet"),
+    //@NamedAttributeNode("enzymePortalSummarySet"),
     @NamedAttributeNode(value = "enzymePortalCompoundSet", subgraph = "enzymePortalCompoundSet"),
     @NamedAttributeNode("enzymePortalDiseaseSet"),
     @NamedAttributeNode("uniprotXrefSet"),
@@ -88,7 +90,6 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
     @NamedQuery(name = "UniprotEntry.findByCommonName", query = "SELECT u FROM UniprotEntry u WHERE u.commonName = :commonName")
 
 })
-
 
 @SqlResultSetMappings({
     @SqlResultSetMapping(
@@ -124,15 +125,25 @@ import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 public class UniprotEntry extends EnzymeAccession implements Serializable, Comparable<UniprotEntry> {
 
-    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ProteinGroups proteinGroupId;
+//    @JoinColumn(name = "PREFIX_ID", referencedColumnName = "PREFIX_ID")
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    private PrefixNames prefixId;
+//
+//    @Column(name = "UNCHARACTERIZED")
+//    private BigInteger uncharacterized;
+//    @Size(max = 15)
+//    @Column(name = "NAME_PREFIX")
+//    private String namePrefix;
+
+//    @JoinColumn(name = "PROTEIN_GROUP_ID", referencedColumnName = "PROTEIN_GROUP_ID")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private ProteinGroups proteinGroupId;
     @Column(name = "PDB_FLAG")
     private Character pdbFlag;
 
-    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    private Set<EntryToGeneMapping> entryToGeneMappingSet;
+//    @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    @Fetch(FetchMode.JOIN)
+//    private Set<EntryToGeneMapping> entryToGeneMappingSet;
 
     @Column(name = "FUNCTION_LENGTH")
     private BigInteger functionLength;
@@ -171,7 +182,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     //@Lob
     @Column(name = "SYNONYM_NAMES")
     private String synonymNames;
-
     @Basic(optional = false)
     @Column(name = "DBENTRY_ID")
     private long dbentryId;
@@ -198,16 +208,16 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     private Set<EnzymePortalPathways> enzymePortalPathwaysSet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     private Set<EnzymePortalReaction> enzymePortalReactionSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-    private List<EnzymePortalSummary> enzymePortalSummarySet;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
+//    private List<EnzymePortalSummary> enzymePortalSummarySet;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     //@BatchSize(size = 10)
-    //@Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalCompound> enzymePortalCompoundSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     //@BatchSize(size = 20)
-    //@Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalDisease> enzymePortalDiseaseSet;
 
     public UniprotEntry() {
@@ -317,14 +327,14 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         this.enzymePortalReactionSet = enzymePortalReactionSet;
     }
 
-    @XmlTransient
-    public List<EnzymePortalSummary> getEnzymePortalSummarySet() {
-        return enzymePortalSummarySet;
-    }
-
-    public void setEnzymePortalSummarySet(List<EnzymePortalSummary> enzymePortalSummarySet) {
-        this.enzymePortalSummarySet = enzymePortalSummarySet;
-    }
+//    @XmlTransient
+//    public List<EnzymePortalSummary> getEnzymePortalSummarySet() {
+//        return enzymePortalSummarySet;
+//    }
+//
+//    public void setEnzymePortalSummarySet(List<EnzymePortalSummary> enzymePortalSummarySet) {
+//        this.enzymePortalSummarySet = enzymePortalSummarySet;
+//    }
 
     @XmlTransient
     public Set<EnzymePortalCompound> getEnzymePortalCompoundSet() {
@@ -379,7 +389,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         final UniprotEntry other = (UniprotEntry) obj;
         return Objects.equals(this.proteinName, other.proteinName);
     }
-
 
     public String getScientificname() {
         return getScientificName();
@@ -551,7 +560,46 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         return new ArrayList<>();
     }
 
+//    public List<RelatedSpecies> getRelatedspecie() {
+//        return prefixId.getRelatedSpeciesSet()
+//                .stream()
+//                .sorted(Comparator.comparing(RelatedSpecies::getRanking))
+//                .collect(Collectors.toList());
+//    }
+    public List<EnzymeAccession> getRelatedspeciesOLD() {
+
+//        return prefixId.getRelatedSpeciesSet()
+//                .stream()
+//                .map(sp -> buildRelatedSpecie(sp))
+//                .sorted(Comparator.comparing(EnzymeAccession::getExpEvidence)
+//                        .reversed())
+//                .collect(Collectors.toList());
+        return null;
+
+    }
+
+//    private EnzymeAccession buildRelatedSpecie(RelatedSpecies rel) {
+//        Species sp = new Species(rel.getScientificName(), rel.getCommonName(), rel.getTaxId());
+//        sp.setSelected(false);
+//        EnzymeAccession ea = new EnzymeAccession();
+//        ea.setSpecies(sp);
+//        ea.setUniprotaccession(rel.getAccession());
+//        ea.getUniprotaccessions().add(rel.getAccession());
+//        Optional<BigInteger> evidence = Optional.ofNullable(rel.getExpEvidenceFlag());
+//
+//        if (evidence.isPresent()) {
+//            if (evidence.get().equals(BigInteger.ONE)) {
+//                ea.setExpEvidence(Boolean.TRUE);
+//            } else {
+//                ea.setExpEvidence(Boolean.FALSE);
+//            }
+//        }
+//
+//        return ea;
+//    }
+
     public List<EnzymeAccession> getRelatedspecies() {
+
         return getRelatedProteinsId()
                 .getUniprotEntrySet()
                 .stream()
@@ -613,9 +661,11 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     }
 
     private Species buildSpeciesFromEntry(UniprotEntry entry) {
-        Species sp = new Species(entry.getScientificName(), entry.getCommonName(), entry.getTaxId());
-        sp.setSelected(false);
+//        Species sp = new Species(entry.getScientificName(), entry.getCommonName(), entry.getTaxId());
+//        sp.setSelected(false);
 
+        Species sp = entry.getSpecies();
+        sp.setSelected(false);
         return sp;
     }
 
@@ -681,7 +731,6 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
 
     }
 
-
     @XmlTransient
     public Set<EnzymeCatalyticActivity> getEnzymeCatalyticActivitySet() {
         return enzymeCatalyticActivitySet;
@@ -746,18 +795,19 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
         sb.append(", scientificName=").append(scientificName);
         sb.append(", commonName=").append(commonName);
         sb.append(", expEvidenceFlag=").append(expEvidenceFlag);
+       // sb.append(", RelatedSpecies=").append(getRelatedspecies());
         sb.append('}');
         return sb.toString();
     }
 
-    @XmlTransient
-    public Set<EntryToGeneMapping> getEntryToGeneMappingSet() {
-        return entryToGeneMappingSet;
-    }
-
-    public void setEntryToGeneMappingSet(Set<EntryToGeneMapping> entryToGeneMappingSet) {
-        this.entryToGeneMappingSet = entryToGeneMappingSet;
-    }
+//    @XmlTransient
+//    public Set<EntryToGeneMapping> getEntryToGeneMappingSet() {
+//        return entryToGeneMappingSet;
+//    }
+//
+//    public void setEntryToGeneMappingSet(Set<EntryToGeneMapping> entryToGeneMappingSet) {
+//        this.entryToGeneMappingSet = entryToGeneMappingSet;
+//    }
 
     @Override
     public Boolean getExpEvidence() {
@@ -780,13 +830,37 @@ public class UniprotEntry extends EnzymeAccession implements Serializable, Compa
     public void setPdbFlag(Character pdbFlag) {
         this.pdbFlag = pdbFlag;
     }
+//
+//    public ProteinGroups getProteinGroupId() {
+//        return proteinGroupId;
+//    }
+//
+//    public void setProteinGroupId(ProteinGroups proteinGroupId) {
+//        this.proteinGroupId = proteinGroupId;
+//    }
 
-    public ProteinGroups getProteinGroupId() {
-        return proteinGroupId;
-    }
-
-    public void setProteinGroupId(ProteinGroups proteinGroupId) {
-        this.proteinGroupId = proteinGroupId;
-    }
+//    public BigInteger getUncharacterized() {
+//        return uncharacterized;
+//    }
+//
+//    public void setUncharacterized(BigInteger uncharacterized) {
+//        this.uncharacterized = uncharacterized;
+//    }
+//
+//    public String getNamePrefix() {
+//        return namePrefix;
+//    }
+//
+//    public void setNamePrefix(String namePrefix) {
+//        this.namePrefix = namePrefix;
+//    }
+//
+//    public PrefixNames getPrefixId() {
+//        return prefixId;
+//    }
+//
+//    public void setPrefixId(PrefixNames prefixId) {
+//        this.prefixId = prefixId;
+//    }
 
 }

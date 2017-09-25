@@ -1,10 +1,9 @@
 package uk.ac.ebi.ep.data.repositories;
 
-import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.types.Projections;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,24 +27,27 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
     @Transactional(readOnly = true)
     @Override
     public List<String> findAccessionsByEc(String ecNumber) {
-        JPAQuery query = new JPAQuery(entityManager);
-
-        return query.from($).where($.ecNumber.equalsIgnoreCase(ecNumber))
+        //JPAQuery query = new JPAQuery(entityManager);
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        return jpaQueryFactory.selectDistinct($.uniprotAccession.accession)
+                .from($)
+                .where($.ecNumber.equalsIgnoreCase(ecNumber))
                 .distinct()
-                .list($.uniprotAccession.accession);
+                .fetch();
 
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<String> findAccessionsByEc(String ecNumber, int limit) {
-        JPAQuery query = new JPAQuery(entityManager);
-
-        return query.from($)
+        // JPAQuery query = new JPAQuery(entityManager);
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        return jpaQueryFactory.selectDistinct($.uniprotAccession.accession)
+                .from($)
                 .where($.ecNumber.equalsIgnoreCase(ecNumber))
                 .distinct()
                 .limit(limit)
-                .list($.uniprotAccession.accession);
+                .fetch();
 
     }
 
@@ -53,10 +55,14 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
     @Override
     public List<EcNumber> findEnzymeFamiliesByTaxId(Long taxId) {
 
-        JPAQuery query = new JPAQuery(entityManager);
-
-        List<EcNumber> result = query.from($).where($.uniprotAccession.taxId.eq(taxId))
-                .list(Projections.constructor(EcNumber.class, $.ecFamily)).stream().distinct().collect(Collectors.toList());
+        // JPAQuery query = new JPAQuery(entityManager);
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        List<EcNumber> result = jpaQueryFactory
+                .select(Projections.constructor(EcNumber.class, $.ecFamily))
+                .from($)
+                .where($.uniprotAccession.taxId.eq(taxId))
+                .distinct()
+                .fetch();
 
         result.sort(SORT_BY_EC);
         return result;
@@ -65,11 +71,27 @@ public class EnzymePortalEcNumbersRepositoryImpl implements EnzymePortalEcNumber
 
     @Override
     public List<EcNumber> findEnzymeFamiliesByEcNumber(String ecNumber) {
-        JPAQuery query = new JPAQuery(entityManager);
-        List<EcNumber> result = query.from($).where($.ecNumber.eq(ecNumber))
-                .list(Projections.constructor(EcNumber.class, $.ecFamily)).stream().distinct().collect(Collectors.toList());
+        // JPAQuery query = new JPAQuery(entityManager);
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        List<EcNumber> result = jpaQueryFactory
+                .select(Projections.constructor(EcNumber.class, $.ecFamily))
+                .from($)
+                .where($.ecNumber.eq(ecNumber)).distinct().fetch();
 
         result.sort(SORT_BY_EC);
         return result;
+    }
+
+    @Override
+    public List<EcNumber> findEcNumberInAccessions(List<String> accessions) {
+
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+
+        return jpaQueryFactory
+                .select(Projections.constructor(EcNumber.class, $.ecFamily))
+                .from($)
+                .where($.uniprotAccession.accession.in(accessions))
+                .distinct()
+                .fetch();
     }
 }

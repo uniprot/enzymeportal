@@ -1,6 +1,0 @@
-select cv.topic, cb.comment_block_id, cb.text 
-from comment_block cb, cv_comment_topics cv 
-where dbentry_id = 35101043
-and cb.comment_topics_id = cv.comment_topics_id
-
-select dbentry_id from dbentry where accession = 'Q08499'

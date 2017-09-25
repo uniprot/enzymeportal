@@ -27,7 +27,7 @@ import uk.ac.ebi.ep.data.domain.UniprotEntry;
  */
 //@RepositoryRestResource(excerptProjection = ProjectedSpecies.class)
 @RepositoryRestResource(itemResourceRel = "uniprotEntry", collectionResourceRel = "uniprotEntry", path = "uniprotEntry")
-public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, JpaSpecificationExecutor<UniprotEntry>, UniprotEntryRepositoryCustom, DataStreamingService {
+public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long>, QueryDslPredicateExecutor<UniprotEntry>, JpaSpecificationExecutor<UniprotEntry>,DataStreamingService, UniprotEntryRepositoryCustom {
 
     default UniprotEntry findByUniprotAccession(String acc) {
         return findByAccession(acc);
@@ -42,15 +42,19 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
 //            @Transactional(readOnly = true)
 //    @Query(value = "SELECT u FROM UniprotEntry u WHERE u.accession = :accession")
 //    CompletableFuture<UniprotEntry> findEnzymeByAccessionAsync(@Param("accession") String accession);
-    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ACCESSION IS NOT NULL", nativeQuery = true)
+    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY", nativeQuery = true)
     List<String> findAccessions();
 
-    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0 AND ACCESSION IS NOT NULL", nativeQuery = true)
+    @Query(value = "SELECT ACCESSION FROM UNIPROT_ENTRY WHERE ENTRY_TYPE=0", nativeQuery = true)
     List<String> findSwissProtAccessions();
 
     @Transactional(readOnly = true)
-    @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY", nativeQuery = true)
+    @Query(value = "SELECT * FROM UNIPROT_ENTRY", nativeQuery = true)
     List<UniprotEntry> findUniprotEntries();
+    
+        @Transactional(readOnly = true)
+    @Query(value = "SELECT /*+ PARALLEL(auto) */ *  FROM UNIPROT_ENTRY WHERE ROWNUM < 100", nativeQuery = true)
+    List<UniprotEntry> select100UniprotEntries();
 
     @Transactional(readOnly = true)
     //@Query(value = "SELECT * from UNIPROT_ENTRY u JOIN ENZYME_PORTAL_EC_NUMBERS e ON u.ACCESSION=e.UNIPROT_ACCESSION WHERE e.EC_NUMBER= :EC_NUMBER", nativeQuery = true)
@@ -71,7 +75,7 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     Page<UniprotEntry> findSummariesByAccessions(@Param("ACCESSION") List<String> accession, Pageable pageable);
 
     @Transactional(readOnly = true)
-    Page<UniprotEntry> findByAccessionIn(List<String> accessions, Pageable pageable);
+    Page<UniprotEntry> findDistinctByAccessionIn(List<String> accessions, Pageable pageable);
 
     @Transactional(readOnly = true)
     @EntityGraph(value = "UniprotEntryEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
@@ -142,5 +146,5 @@ public interface UniprotEntryRepository extends JpaRepository<UniprotEntry, Long
     @Transactional(readOnly = true)
     @Query(value = "SELECT DISTINCT /*+ PARALLEL(auto) */ * FROM UNIPROT_ENTRY WHERE PROTEIN_GROUP_ID = :PROTEIN_GROUP_ID ", nativeQuery = true)
     List<UniprotEntry> findEnzymesByProteinGroupId(@Param("PROTEIN_GROUP_ID") String proteinGroupId);
-
+    
 }

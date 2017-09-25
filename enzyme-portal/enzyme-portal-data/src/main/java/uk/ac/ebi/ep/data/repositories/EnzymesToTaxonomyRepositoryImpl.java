@@ -5,8 +5,8 @@
  */
 package uk.ac.ebi.ep.data.repositories;
 
-import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.types.Projections;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,13 +28,15 @@ public class EnzymesToTaxonomyRepositoryImpl implements EnzymesToTaxonomyReposit
     @Override
     public List<Taxonomy> getCountForOrganisms(List<Long> taxids) {
 
-        JPAQuery query = new JPAQuery(entityManager);
-
-        List<Taxonomy> result = query.from($)
+        // JPAQuery query = new JPAQuery(entityManager);
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+        List<Taxonomy> result = jpaQueryFactory
+                .select(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()))
+                .from($)
                 .where($.taxId.in(taxids))
                 .distinct()
-                .groupBy($.taxId, $.scientificName, $.commonName).
-                list(Projections.constructor(Taxonomy.class, $.taxId, $.scientificName, $.commonName, $.taxId.count()));
+                .groupBy($.taxId, $.scientificName, $.commonName)
+                .fetch();
 
         return result;
     }

@@ -36,7 +36,7 @@ import uk.ac.ebi.ep.data.search.model.EcNumber;
     @NamedQuery(name = "EnzymePortalEcNumbers.findByEcInternalId", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecInternalId = :ecInternalId")
     //@NamedQuery(name = "EnzymePortalEcNumbers.findByEcNumber", query = "SELECT e FROM EnzymePortalEcNumbers e WHERE e.ecNumber = :ecNumber")
 })
-public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Comparable<EnzymePortalEcNumbers> {
+public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Comparable<EcNumber> {
 
     @Column(name = "EC_FAMILY")
     private Integer ecFamily;
@@ -135,8 +135,8 @@ public class EnzymePortalEcNumbers extends EcNumber implements Serializable, Com
     }
 
     @Override
-    public int compareTo(EnzymePortalEcNumbers o) {
-        return this.ecFamily.compareTo(o.getEcFamily());
+    public int compareTo(EcNumber o) {
+        return this.ecFamily.compareTo(getEcFamily());
 
     }
 

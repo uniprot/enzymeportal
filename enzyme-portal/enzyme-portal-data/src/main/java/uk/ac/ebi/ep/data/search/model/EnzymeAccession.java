@@ -356,4 +356,9 @@ public class EnzymeAccession implements Serializable {
         return taxId;
     }
 
+    @Override
+    public String toString() {
+        return "EnzymeAccession{" + "species=" + species + ", expEvidence=" + expEvidence + ", uniprotaccession=" + uniprotaccession + '}';
+    }
+
 }

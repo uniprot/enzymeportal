@@ -5,8 +5,8 @@
  */
 package uk.ac.ebi.ep.data.repositories;
 
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.impl.JPAQuery;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,30 +19,28 @@ import uk.ac.ebi.ep.data.domain.RelatedProteins;
  * @author joseph
  */
 public class RelatedProteinsRepositoryImpl implements RelatedProteinsRepositoryCustom {
-    
+
     @PersistenceContext
     private EntityManager entityManager;
     private static final QRelatedProteins $ = QRelatedProteins.relatedProteins;
-    
-    @Transactional(readOnly = true)  
+
+    @Transactional(readOnly = true)
     @Override
     public List<RelatedProteins> findRelatedProteinsByNamePrefixes(List<String> nameprefixes) {
-        
 
-        
-        JPAQuery query = new JPAQuery(entityManager);
-        
-     
-        
+        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
+
+       // JPAQuery query = new JPAQuery(entityManager);
         BooleanBuilder builder = new BooleanBuilder();
-        
+
         nameprefixes.stream().forEach(prefix -> {
-            
+
             builder.or($.namePrefix.equalsIgnoreCase(prefix));
-            
+
         });
-        return query.from($).where(builder).list($);        
-        
+        return jpaQueryFactory.selectFrom($)
+                .where(builder).fetch();
+
     }
-    
+
 }

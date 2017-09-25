@@ -2,6 +2,7 @@ package uk.ac.ebi.ep.data.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -16,8 +17,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -47,9 +46,9 @@ public class RelatedProteins implements Serializable {
     private BigDecimal relProtInternalId;
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
-    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "relatedProteinsId", fetch = FetchType.EAGER)
     //@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "relatedProteinsId")
-    @Fetch(FetchMode.JOIN)
+    //@Fetch(FetchMode.JOIN)
     //private Set<UniprotEntry> uniprotEntrySet;
     private List<UniprotEntry> uniprotEntrySet;
 
@@ -84,6 +83,10 @@ public class RelatedProteins implements Serializable {
 //                //.sorted(Comparator.comparing(UniprotEntry::getExpEvidenceFlag)
 //                       // .reversed())
 //                .collect(Collectors.toList());
+        
+        if(uniprotEntrySet == null){
+            uniprotEntrySet = new ArrayList<>();
+        }
 
         return uniprotEntrySet;
     }

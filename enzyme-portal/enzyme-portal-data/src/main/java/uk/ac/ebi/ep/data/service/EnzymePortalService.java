@@ -1,27 +1,31 @@
 package uk.ac.ebi.ep.data.service;
 
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.expr.StringExpression;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.StringExpression;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.ac.ebi.ep.data.domain.EnzymeCatalyticActivity;
 import uk.ac.ebi.ep.data.domain.EnzymePortalCompound;
 import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
-import uk.ac.ebi.ep.data.domain.IntenzEnzymes;
 import uk.ac.ebi.ep.data.domain.ProjectedSpecies;
 import uk.ac.ebi.ep.data.domain.QUniprotEntry;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
@@ -32,13 +36,11 @@ import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.enzyme.model.EnzymeReaction;
 import uk.ac.ebi.ep.data.enzyme.model.Pathway;
 import uk.ac.ebi.ep.data.repositories.DiseaseRepository;
-import uk.ac.ebi.ep.data.repositories.EnzymeCatalyticActivityRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalCompoundRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalEcNumbersRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalPathwaysRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymePortalReactionRepository;
 import uk.ac.ebi.ep.data.repositories.EnzymesToTaxonomyRepository;
-import uk.ac.ebi.ep.data.repositories.IntenzEnzymesRepository;
 import uk.ac.ebi.ep.data.repositories.RelatedProteinsRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotEntryRepository;
 import uk.ac.ebi.ep.data.repositories.UniprotXrefRepository;
@@ -79,30 +81,30 @@ public class EnzymePortalService {
     @Autowired
     private EnzymePortalEcNumbersRepository ecNumbersRepository;
 
-    @Autowired
-    private EnzymeCatalyticActivityRepository catalyticActivityRepository;
+//    @Autowired
+//    private EnzymeCatalyticActivityRepository catalyticActivityRepository;
     @Autowired
     private ProjectionFactory projectionFactory;
 
     @Autowired
     private EnzymesToTaxonomyRepository enzymesToTaxonomyRepository;
-    @Autowired
-    private IntenzEnzymesRepository intenzEnzymesRepository;
+//    @Autowired
+//    private IntenzEnzymesRepository intenzEnzymesRepository;
 
     private static final int ORACLE_IN_CLAUSE_LIMIT = 1000;
     private static final int QUERY_LIMIT = 999;
     private static final int START_INDEX = 0;
-
-    @Transactional(readOnly = true)
-    public IntenzEnzymes findIntenzEnzymesByEc(String ecNumber) {
-        return intenzEnzymesRepository.findByEcNumber(ecNumber);
-    }
-
-    @Transactional(readOnly = true)
-    public List<EnzymeCatalyticActivity> findEnzymeCatalyticActivities() {
-
-        return catalyticActivityRepository.findAllEnzymeCatalyticActivity();
-    }
+//
+//    @Transactional(readOnly = true)
+//    public IntenzEnzymes findIntenzEnzymesByEc(String ecNumber) {
+//        return intenzEnzymesRepository.findByEcNumber(ecNumber);
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public List<EnzymeCatalyticActivity> findEnzymeCatalyticActivities() {
+//
+//        return catalyticActivityRepository.findAllEnzymeCatalyticActivity();
+//    }
 
     @Transactional(readOnly = true)
     public UniprotEntry findByAccession(String accession) {
@@ -309,7 +311,7 @@ public class EnzymePortalService {
 
         //return uniprotEntryRepository.findByAccession(accession);
         return uniprotEntryRepository.findEnzymeByAccession(accession);
-        
+
     }
 
     @Transactional(readOnly = true)
@@ -382,7 +384,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public Page<UniprotEntry> findEnzymesByAccessionsIn(List<String> accessions, Pageable pageable) {
 
-        return uniprotEntryRepository.findByAccessionIn(accessions, pageable);
+        return uniprotEntryRepository.findDistinctByAccessionIn(accessions, pageable);
 
     }
 
@@ -833,7 +835,7 @@ public class EnzymePortalService {
         if (accessions.size() >= ORACLE_IN_CLAUSE_LIMIT) {
             accessions = accessions.subList(START_INDEX, QUERY_LIMIT);
         }
-        Page page = uniprotEntryRepository.findByAccessionIn(accessions, pageable);
+        Page page = uniprotEntryRepository.findDistinctByAccessionIn(accessions, pageable);
         return page;
 
     }
@@ -843,11 +845,12 @@ public class EnzymePortalService {
         if (accessions.size() >= ORACLE_IN_CLAUSE_LIMIT) {
             accessions = accessions.subList(START_INDEX, QUERY_LIMIT);
         }
-        Page page = uniprotEntryRepository.findByAccessionIn(accessions, pageable);
+        Page page = uniprotEntryRepository.findDistinctByAccessionIn(accessions, pageable);
         return page;
 
     }
 
+    @Deprecated
     public void updateExpEvidenceFlag() {
         uniprotEntryRepository.updateExpEvidenceFlag();
     }
@@ -860,5 +863,94 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<AssociatedProtein> findAssociatedProteinsByEcNumber(String ecNumber, int limit) {
         return uniprotEntryRepository.findAssociatedProteinsByEC(ecNumber, limit);
+    }
+
+    //updated repository queries
+    
+    //species by accession
+    
+        @Transactional(readOnly = true)
+    public List<Species> findSpeciesInAccessions(List<String> accessions) {
+        return uniprotEntryRepository.findSpeciesInAccessions(accessions);
+    }
+    
+    //compounds by accession
+    @Transactional(readOnly = true)
+    public List<Compound> findCompoundsInAccessions(List<String> accessions) {
+        return enzymePortalCompoundRepository.findCompoundsInAccessions(accessions);
+    }
+      //diseases by accession
+
+    @Transactional(readOnly = true)
+    public List<Disease> findDiseasesInAccessions(List<String> accessions) {
+        return diseaseRepository.findDiseasesInAccessions(accessions);
+    }
+
+    //ec by accession
+    @Transactional(readOnly = true)
+    public List<EcNumber> findEcNumberInAccessions(List<String> accessions) {
+        return ecNumbersRepository.findEcNumberInAccessions(accessions);
+    }
+    
+        @Transactional(readOnly = true)
+    public Page<UniprotEntry> findEnzymesWithAccessions(List<String> accessions, Pageable pageable) {
+       // return uniprotEntryRepository.findSummariesByAccessions(accessions, pageable);
+         //return uniprotEntryRepository.findEnzymesWithAccessions(accessions, pageable,uniprotEntryRepository);
+         // return uniprotEntryRepository.findEnzymesWithAccessions(accessions, pageable);
+         
+        return uniprotEntryRepository.findDistinctByAccessionIn(accessions, pageable);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<UniprotEntry> findEnzymesWithFilter(List<String> accessions, List<String> taxIds, List<String> compoundIds, List<String> omimNumbers, List<Integer> ecNumbers, Pageable pageable) {
+
+        return uniprotEntryRepository.findAll(filterFacets(accessions, taxIds, compoundIds, omimNumbers, ecNumbers), pageable);
+    }
+
+    private static Predicate filterFacets(List<String> accessions, List<String> taxIds, List<String> compoundIds, List<String> omimNumbers, List<Integer> ecNumbers) {
+
+        QUniprotEntry enzyme = QUniprotEntry.uniprotEntry;
+       // Predicate sp = enzyme.taxId.in(taxIds);
+        
+      Predicate sp = enzyme.scientificName.in(taxIds);//use tax id after fixing js
+  
+  
+    
+//// 
+//      JPAExpressions.selectFrom(enzyme).innerJoin(qepc)
+//              .where(qepc.compoundId.in(compoundIds));
+   
+        Predicate compound =   enzyme.enzymePortalCompoundSet.any().compoundId.in(compoundIds);
+        
+     
+        
+        Predicate disease = enzyme.enzymePortalDiseaseSet.any().omimNumber.in(omimNumbers);
+        
+  
+        Predicate ec =  enzyme.enzymePortalEcNumbersSet.any().ecFamily.in(ecNumbers);
+
+
+       // Predicate protein = enzyme.accession.in(accessions);
+        //Predicate filter = ExpressionUtils.allOf(protein,sp, compound, disease, ec);
+         //Predicate filter = ExpressionUtils.anyOf(protein, sp, compound, disease,ec);
+          //BooleanBuilder builder = new BooleanBuilder();
+          //builder.andAnyOf(ec,sp);
+         // Expressions.allOf(ec);
+       // return  enzyme.accession.in(accessions).and(builder.andAnyOf(ec,sp).getValue());
+        //return filter;
+        //return enzyme.accession.in(accessions).andAnyOf(sp,ec,compound, disease);//23.246s
+        return enzyme.accession.in(accessions).andAnyOf(ExpressionUtils.anyOf( sp,ec, compound, disease));
+    }
+    
+    
+         private final Set<String> sortedParams = new HashSet<>(
+            Arrays.asList("ENTRY_TYPE"));
+      /** Define page request with paging and sorting. **/
+    public PageRequest getPageRequest(String sortType, String sortProperty, int page, int pageSize) {
+       
+ 
+        //return new PageRequest(page, pageSize, new Sort(new Sort.Order(sortProperty)));
+        return new PageRequest(page, pageSize, Sort.Direction.ASC,sortProperty);
     }
 }

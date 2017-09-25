@@ -5,6 +5,7 @@
  */
 package uk.ac.ebi.ep.data.search.model;
 
+import com.querydsl.core.annotations.QueryProjection;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,9 @@ import java.util.stream.Collectors;
  *
  * @author joseph
  */
-public class EcNumber implements Serializable {
- private static final long serialVersionUID = 1L;
+public class EcNumber implements Comparable<EcNumber>, Serializable {
+
+    private static final long serialVersionUID = 1L;
     protected boolean selected;
     private Integer ec;
     protected String family;
@@ -27,6 +29,7 @@ public class EcNumber implements Serializable {
 
     }
 
+    @QueryProjection
     public EcNumber(Integer ec) {
         this.ec = ec;
         selected = Boolean.FALSE;
@@ -67,10 +70,8 @@ public class EcNumber implements Serializable {
         getFamily();
         return families.stream().distinct().collect(Collectors.toList());
     }
-    
-    
-    
-        public String computeEcToFamilyName(int ec) {
+
+    public String computeEcToFamilyName(int ec) {
 
         if (ec == 1) {
 
@@ -94,8 +95,8 @@ public class EcNumber implements Serializable {
 
         return "Invalid Ec Number";
     }
-        
-        public Integer computeFamilyNameToEc(String family) {
+
+    public Integer computeFamilyNameToEc(String family) {
 
         if (family.equalsIgnoreCase(EnzymeFamily.OXIDOREDUCTASES.getName())) {
             //return 1;
@@ -118,8 +119,6 @@ public class EcNumber implements Serializable {
         }
         return 0;
     }
-
-
 
     /**
      *
@@ -175,6 +174,11 @@ public class EcNumber implements Serializable {
         return "invalid enzyme family";
     }
 
+    @Override
+    public int compareTo(EcNumber o) {
+      return  ec.compareTo(o.getEc());
+    }
+
     public enum EnzymeFamily {
 
         OXIDOREDUCTASES("Oxidoreductases"),
@@ -224,9 +228,8 @@ public class EcNumber implements Serializable {
         }
 
     }
-    
-    
-        public enum EnzymeClass {
+
+    public enum EnzymeClass {
 
         OXIDOREDUCTASES(1),
         TRANSFERASES(2),
@@ -273,8 +276,6 @@ public class EcNumber implements Serializable {
         final EcNumber other = (EcNumber) obj;
         return Objects.equals(this.ec, other.ec);
     }
-
-
 
     @Override
     public String toString() {

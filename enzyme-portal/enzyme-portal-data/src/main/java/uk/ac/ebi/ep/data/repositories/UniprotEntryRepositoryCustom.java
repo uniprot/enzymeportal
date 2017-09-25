@@ -9,7 +9,6 @@ import uk.ac.ebi.ep.data.entry.AssociatedProtein;
 import uk.ac.ebi.ep.data.entry.Protein;
 import uk.ac.ebi.ep.data.search.model.EnzymeSummary;
 import uk.ac.ebi.ep.data.search.model.Species;
-import uk.ac.ebi.ep.data.search.model.Taxonomy;
 
 /**
  *
@@ -23,39 +22,35 @@ public interface UniprotEntryRepositoryCustom {
     /**
      *
      * @param accessions
-     * @return 
+     * @return
      * @deprecated (no longer needed )
      */
-    @Deprecated
-    List<UniprotEntry> findEnzymesByAccessions(List<String> accessions);
-
+//    @Deprecated
+//    List<UniprotEntry> findEnzymesByAccessions(List<String> accessions);
     /**
      *
      * @param accession
-     * @return 
+     * @return
      * @deprecated (no longer needed )
      */
-    @Deprecated
-    List<UniprotEntry> findEnzymesByAccession(String accession);
-
+//    @Deprecated
+//    List<UniprotEntry> findEnzymesByAccession(String accession);
     /**
      *
      * @param namePrefix
-     * @return 
+     * @return
      * @deprecated (no longer needed )
      */
-    @Deprecated
-    List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
-
+//    @Deprecated
+//    List<UniprotEntry> findEnzymeByNamePrefix(String namePrefix);
     /**
      *
      * @param taxids
-     * @return 
+     * @return
      * @deprecated (no longer needed )
      */
-    @Deprecated
-    List<Taxonomy> getCountForOrganisms(List<Long> taxids);
-
+//    @Deprecated
+//    List<Taxonomy> getCountForOrganisms(List<Long> taxids);
     List<String> findAccessionsByTaxId(Long taxId);
 
     List<UniprotEntry> findEnzymesByTaxId(Long taxId);
@@ -75,13 +70,22 @@ public interface UniprotEntryRepositoryCustom {
     List<UniprotEntry> findSummariesByAcc(List<String> accession);
 
     List<Protein> findProteinByEc(String ec);
-    List<Protein> findProteinByEc(String ec, int limit) ;
+
+    List<Protein> findProteinByEc(String ec, int limit);
 
     List<Species> findSpeciesByEcNumber(String ecNumber);
 
     List<Species> findSpeciesByEcNumberViaAccessions(String ecNumber, List<String> accessions);
 
     Page<UniprotEntry> findPageableEntryByEc(String ec, Pageable pageable);
-    List<AssociatedProtein> findAssociatedProteinsByEC( String ecNumber, String entryType, int limit);
-    List<AssociatedProtein> findAssociatedProteinsByEC( String ecNumber, int limit);
+
+    List<AssociatedProtein> findAssociatedProteinsByEC(String ecNumber, String entryType, int limit);
+
+    List<AssociatedProtein> findAssociatedProteinsByEC(String ecNumber, int limit);
+     List<Species> findSpeciesInAccessions( List<String> accessions);
+
+    Page<UniprotEntry> findEnzymesWithAccessions(List<String> accessions, Pageable pageable);
+
+    Page<UniprotEntry> findEnzymesWithAccessions(List<String> accessions, Pageable pageable, UniprotEntryRepository uniprotEntryRepository);
+
 }

@@ -22,48 +22,48 @@ import uk.ac.ebi.ep.data.search.model.Disease;
 public class DiseaseService {
     
     @Autowired
-    private DiseaseRepository repository;
+    private DiseaseRepository diseaseRepository;
     
     @Transactional
     public EnzymePortalDisease addDisease(EnzymePortalDisease d) {
-        return repository.saveAndFlush(d);
+        return diseaseRepository.saveAndFlush(d);
         
     }
     
     @Transactional
     public List<EnzymePortalDisease> addDiseases(List<EnzymePortalDisease> d) {
-       return repository.save(d);
+       return diseaseRepository.save(d);
         
     }
     
     @Transactional(readOnly = true)
     public EnzymePortalDisease findById(Long id) {
         
-        return repository.findOne(id);
+        return diseaseRepository.findOne(id);
     }
     
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseases() {
         
-        return repository.findAll();
+        return diseaseRepository.findAll();
     }
     
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseasesByNamePrefix(List<String> namePrefixes) {
         
-        return repository.findDiseasesByNamePrefixes(namePrefixes);
+        return diseaseRepository.findDiseasesByNamePrefixes(namePrefixes);
     }
     
     @Transactional(readOnly = true)
     public List<EnzymePortalDisease> findDiseasesByAccessions(List<String> accessions) {
         
-        return repository.findDiseasesByAccessions(accessions);
+        return diseaseRepository.findDiseasesByAccessions(accessions);
     }
     
     @Transactional(readOnly = true)
     public List<Disease> findDiseasesByAccession(String accession) {
         
-        return repository.findDiseasesByAccession(accession);
+        return diseaseRepository.findDiseasesByAccession(accession);
     }
 
     
@@ -75,7 +75,7 @@ public class DiseaseService {
           @Transactional(readOnly = true)
      public List<Disease> findDiseasesLike(String diseaseName){
        
-         return repository.findDiseasesNameLike(diseaseName);
+         return diseaseRepository.findDiseasesNameLike(diseaseName);
      }
     
     

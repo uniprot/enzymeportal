@@ -19,7 +19,6 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalDisease;
 import uk.ac.ebi.ep.data.domain.EnzymePortalEcNumbers;
 import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
 import uk.ac.ebi.ep.data.domain.EnzymePortalReaction;
-import uk.ac.ebi.ep.data.domain.ProteinGroups;
 import uk.ac.ebi.ep.data.domain.RelatedProteins;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.domain.UniprotXref;
@@ -52,14 +51,14 @@ public class EnzymePortalServiceIT extends AbstractDataTest {
     @Test
     public void testFindByAccession() {
         LOGGER.info("findByAccession");
-        ProteinGroups pg = new ProteinGroups("EUN8I9");
-        pg.setProteinName("MOCK-1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial");
+        //ProteinGroups pg = new ProteinGroups("EUN8I9");
+        //pg.setProteinName("MOCK-1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial");
         UniprotEntry expResult = new UniprotEntry(ACCESSION);
         expResult.setCommonName("Mouse");
         expResult.setScientificName("Mus musculus");
         expResult.setProteinName("MOCK-1,25-dihydroxyvitamin D(3) 24-hydroxylase, mitochondrial");
         expResult.setName("CP24A_MOUSE");
-        expResult.setProteinGroupId(pg);
+        //expResult.setProteinGroupId(pg);
         
         UniprotEntry result = enzymePortalService.findByAccession(ACCESSION);
         assertEquals(expResult, result);

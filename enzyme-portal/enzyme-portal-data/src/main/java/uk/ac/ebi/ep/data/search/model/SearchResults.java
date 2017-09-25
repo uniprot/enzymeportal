@@ -9,21 +9,34 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
-
 
 /**
  *
  * @author joseph
  */
-public class SearchResults implements Serializable {
+public final class SearchResults implements Serializable {
 
-    private Long totalfound;
+    private long totalfound;
     private SearchFilters searchfilters;
 
     private List<UniprotEntry> summaryentries;
-    
+
+    private List<String> searchResultAccession;
+
+    public List<String> getSearchResultAccession() {
+        if (searchResultAccession == null) {
+            searchResultAccession = new LinkedList<>();
+        }
+        return searchResultAccession;
+    }
+
+    public void setSearchResultAccession(List<String> searchResultAccession) {
+        this.searchResultAccession = searchResultAccession;
+    }
+
     /**
      * Gets the value of the searchfilters property.
      *
@@ -31,6 +44,9 @@ public class SearchResults implements Serializable {
      *
      */
     public SearchFilters getSearchfilters() {
+        if (searchfilters == null) {
+            searchfilters = new SearchFilters();
+        }
         return searchfilters;
     }
 
@@ -128,7 +144,5 @@ public class SearchResults implements Serializable {
     public String toString() {
         return "SearchResults{" + "totalfound=" + totalfound + ", searchfilters=" + searchfilters + ", summaryentries=" + summaryentries + '}';
     }
-    
-    
 
 }
