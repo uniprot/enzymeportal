@@ -32,6 +32,9 @@ import org.springframework.util.StringUtils;
     @NamedQuery(name = "PrimaryProtein.findByScientificName", query = "SELECT p FROM PrimaryProtein p WHERE p.scientificName = :scientificName"),
     @NamedQuery(name = "PrimaryProtein.findByPriorityCode", query = "SELECT p FROM PrimaryProtein p WHERE p.priorityCode = :priorityCode")})
 public class PrimaryProtein implements Serializable {
+    @Size(max = 4000)
+    @Column(name = "FUNCTION")
+    private String function;
     @Column(name = "PDB_FLAG")
     private Character pdbFlag;
     @Size(max = 10)
@@ -167,6 +170,17 @@ public class PrimaryProtein implements Serializable {
 
     public void setPdbId(String pdbId) {
         this.pdbId = pdbId;
+    }
+
+    public String getFunction() {
+        if(function == null){
+            function = "";
+        }
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
     }
 
 }
