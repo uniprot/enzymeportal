@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import uk.ac.ebi.ep.model.PrimaryProtein;
 import uk.ac.ebi.ep.model.ProteinGroups;
 import uk.ac.ebi.ep.model.UniprotEntry;
@@ -176,20 +176,27 @@ public class XmlTransformer {
                     .stream()
                     .map(compound -> {
                         if (compound.getCompoundRole().equalsIgnoreCase(COFACTOR)) {
-                            Field field = new Field(FieldName.COFACTOR.getName(), compound.getCompoundName());
-                            fields.add(field);
+                            String chebiId = compound.getCompoundId().replaceAll("CHEBI:", "");
+                            Field cofactor = new Field(FieldName.COFACTOR.getName(), chebiId);
+                            fields.add(cofactor);
+                            Field cofactorName = new Field(FieldName.COFACTOR_NAME.getName(), compound.getCompoundName());
+                            fields.add(cofactorName);
                         }
                         return compound;
                     }).map(compound -> {
                         if (compound.getCompoundRole().equalsIgnoreCase(INHIBITOR)) {
-                            Field field = new Field(FieldName.INHIBITOR.getName(), compound.getCompoundName());
-                            fields.add(field);
+                            Field inhibitor = new Field(FieldName.INHIBITOR.getName(), compound.getCompoundId());
+                            fields.add(inhibitor);
+                            Field inhibitorName = new Field(FieldName.INHIBITOR_NAME.getName(), compound.getCompoundName());
+                            fields.add(inhibitorName);
                         }
                         return compound;
                     }).map(compound -> {
                         if (compound.getCompoundRole().equalsIgnoreCase(ACTIVATOR)) {
-                            Field field = new Field(FieldName.ACTIVATOR.getName(), compound.getCompoundName());
-                            fields.add(field);
+                            Field activator = new Field(FieldName.ACTIVATOR.getName(), compound.getCompoundId());
+                            fields.add(activator);
+                            Field activatorName = new Field(FieldName.ACTIVATOR_NAME.getName(), compound.getCompoundName());
+                            fields.add(activatorName);
                         }
                         return compound;
                     }).map(compound -> new Ref(compound.getCompoundId(), compound.getCompoundSource()))
@@ -269,12 +276,22 @@ public class XmlTransformer {
     }
 
     protected void addFunctionFields(ProteinGroups proteinGroups, Set<Field> fields) {
-        proteinGroups.getUniprotEntryList()
-                .stream()
-                .filter(entry -> (!StringUtils.isEmpty(entry.getFunction())))
-                .map(entry -> new Field(FieldName.FUNCTION.getName(), entry.getFunction()))
-                .limit(1)
-                .forEach(field -> fields.add(field));
+
+        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
+
+        if (primaryProtein != null && !StringUtils.isEmpty(primaryProtein.getFunction())) {
+
+            Field primaryFunctionfield = new Field(FieldName.FUNCTION.getName(), primaryProtein.getFunction());
+
+            fields.add(primaryFunctionfield);
+        }
+
+//        proteinGroups.getUniprotEntryList()
+//                .stream()
+//                .filter(entry -> (!StringUtils.isEmpty(entry.getFunction())))
+//                .map(entry -> new Field(FieldName.FUNCTION.getName(), entry.getFunction()))
+//                .limit(1)
+//                .forEach(field -> fields.add(field));
     }
 
     protected void addEntryTypeFields(ProteinGroups proteinGroups, Set<Field> fields) {
@@ -285,41 +302,52 @@ public class XmlTransformer {
         fields.add(entryTypefield);
     }
 
+    private static String removeLastCharRegexOptional(String s) {
+        return Optional.ofNullable(s)
+                .map(str -> str.replaceAll(".$", ""))
+                .orElse(s);
+    }
+
     protected void addRelatedSpeciesField(ProteinGroups proteinGroups, final Set<Field> fields) {
 
         PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
-        
-        if(primaryProtein != null){
 
-        for (UniprotEntry entry : proteinGroups.getUniprotEntryList()) {
+        if (primaryProtein != null) {
 
-            if (primaryProtein.getAccession().equalsIgnoreCase(entry.getAccession())) {
+            for (UniprotEntry entry : proteinGroups.getUniprotEntryList()) {
 
-                List<UniprotEntry> rel = entry.getRelatedspecies();
-                LinkedList<String> relatedSpeciesList = new LinkedList<>();
+                if (primaryProtein.getAccession().equalsIgnoreCase(entry.getAccession())) {
 
-                if (rel.size() > 1) {
+                    List<UniprotEntry> rel = entry.getRelatedspecies();
+                    LinkedList<String> relatedSpeciesList = new LinkedList<>();
+
+//                    if (rel.size() > 1) {
+//                        rel.stream()
+//                                .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()).concat("|"))
+//                                .forEach(related_species -> relatedSpeciesList.offer(related_species)
+//                                );
+//                    } else {
+//                        rel.stream()
+//                                .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()))
+//                                .forEach(related_species -> relatedSpeciesList.offer(related_species)
+//                                );
+//                    }
                     rel.stream()
                             .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()).concat("|"))
                             .forEach(related_species -> relatedSpeciesList.offer(related_species)
                             );
-                } else {
-                    rel.stream()
-                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()))
-                            .forEach(related_species -> relatedSpeciesList.offer(related_species)
-                            );
+
+                    String rs = relatedSpeciesList
+                            .stream()
+                            .reduce((k, v) -> k + "" + v).get();
+                    String rsField = StringUtils.removeEnd(rs, "|");
+
+                    Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
+                    fields.add(relatedSpeciesField);
+
                 }
-
-                String rsField = relatedSpeciesList
-                        .stream()
-                        .reduce((k, v) -> k + "" + v).get();
-
-                Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
-                fields.add(relatedSpeciesField);
-
             }
         }
-    }
 
     }
 
