@@ -262,7 +262,7 @@ public class SearchController extends AbstractController {
 
     }
 
-    @RequestMapping(value = "/search")
+    @RequestMapping(value = "/searchXXX")
     public SearchModel getSearch(Model model) {
         SearchModel searchModelForm = searchform();
         model.addAttribute("searchModel", searchModelForm);
@@ -285,7 +285,7 @@ public class SearchController extends AbstractController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/searchXXX", method = RequestMethod.POST)
     public String postSearchResult(SearchModel searchModel, Model model, @RequestParam(required = false, value = "searchTerm") String searchTerm,
             @RequestParam(required = false, value = "ec") String ec, @RequestParam(required = false, value = "searchId") String searchId, @RequestParam(required = false, value = "keywordType") String keywordType,
             HttpSession session, HttpServletRequest request, HttpServletResponse response) {
