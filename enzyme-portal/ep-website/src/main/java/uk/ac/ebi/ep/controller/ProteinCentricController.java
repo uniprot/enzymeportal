@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
@@ -15,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -96,15 +93,31 @@ public class ProteinCentricController extends AbstractController {
     }
 
     @RequestMapping(value = SEARCH, method = RequestMethod.GET)
-    public String getSearchResults(@RequestParam(required = false, value = "ec") String ec, @RequestParam(required = false, value = "searchKey") String searchKey,
-            @RequestParam(required = false, value = "filterFacet") List<String> filters,
-            @RequestParam(required = false, value = "servicePage") Integer servicePage,
-            @RequestParam(required = false, value = "keywordType") String keywordType,
-            @RequestParam(required = false, value = "searchId") String searchId,
-            SearchModel searchModel, BindingResult result,
-            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-        return postSearchResult(ec, searchKey, filters, servicePage, keywordType, searchId, searchModel, model, request);
+    public String getSearchResults(Model model) {
+        String ec = "2.7.7.7";
+        String searchTerm = "human";
+        int facetCount = 10;
+        List<String> filters = new ArrayList<>();
+
+        filters.add("cofactor");
+        filters.add("inhibitor");
+        int startPage = 0;
+        int pageSize = 20;
+        SearchModel searchModel = searchform();
+        return findProteinResult(ec, searchTerm, facetCount, filters, startPage, pageSize, model, searchModel);
+
     }
+
+//    @RequestMapping(value = SEARCH, method = RequestMethod.GET)
+//    public String getSearchResults(@RequestParam(required = false, value = "ec") String ec, @RequestParam(required = false, value = "searchKey") String searchKey,
+//            @RequestParam(required = false, value = "filterFacet") List<String> filters,
+//            @RequestParam(required = false, value = "servicePage") Integer servicePage,
+//            @RequestParam(required = false, value = "keywordType") String keywordType,
+//            @RequestParam(required = false, value = "searchId") String searchId,
+//            SearchModel searchModel, BindingResult result,
+//            Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+//        return postSearchResult(ec, searchKey, filters, servicePage, keywordType, searchId, searchModel, model, request);
+//    }
 
     @RequestMapping(value = SEARCH, method = RequestMethod.POST)
     public String postSearchResult(@RequestParam(required = true, value = "ec") String ec, @RequestParam(required = false, value = "searchKey") String searchKey,

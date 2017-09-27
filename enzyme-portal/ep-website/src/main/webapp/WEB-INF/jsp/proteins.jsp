@@ -35,6 +35,9 @@
 
                 Protein result contents goes here 
 
+                <c:forEach var="p" items="${proteinView}" >
+                    <p>${p.proteinName}</p>
+                </c:forEach>
 
             </div>
             <%@include file="footer.jspf" %>
