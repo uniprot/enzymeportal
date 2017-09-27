@@ -1,6 +1,7 @@
 package uk.ac.ebi.ep.ebeye;
 
 import java.util.List;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ep.ebeye.config.EbeyeIndexProps;
 import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupSearchResult;
@@ -25,6 +26,7 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     //private final RestTemplate restTemplate;
     //private final EbeyeIndexProps proteinGroupProps;
     private static final int MAX_RETRIEVABLE_ENTRIES = 10_000;
+    private static final int FACET_COUNT_LIMIT = 1_000;
 
     public ProteinGroupService(RestTemplate restTemplate, EbeyeIndexProps proteinGroupPropertyFile) {
         super(proteinGroupPropertyFile, restTemplate, MAX_RETRIEVABLE_ENTRIES);
@@ -34,13 +36,24 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
     private ProteinGroupSearchResult getProteinGroupResult(String url) {
 
         logger.info("URL sent to EBI Service " + url);
-
         ProteinGroupSearchResult results = restTemplate.getForObject(url.trim(), ProteinGroupSearchResult.class);
         return results;
     }
 
     private String buildQueryUrl(String endpoint, String query, int startPage, int pageSize) {
         return String.format(QUERY_URL, endpoint, query, startPage, pageSize);
+    }
+
+    private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
+        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:common_name,cofactor,inhibitor,activator,disease_name&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species&sort=_relevance&reverse=true&format=json";
+
+        if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
+
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facetsfield=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species&sort=_relevance&reverse=true&format=json";
+
+            return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
+        }
+        return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
     }
 
     /**
@@ -59,6 +72,52 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         return getProteinGroupResult(buildQueryUrl(ebeyeIndexProps.getProteinGroupSearchUrl(), query, startPage, pageSize));
     }
 
+    /**
+     *
+     * @param query searchTerm
+     * @param startPage start page
+     * @param pageSize page size
+     * @return
+     */
+    private ProteinGroupSearchResult getSearchResult(String query, int facetCount, String facets, int startPage, int pageSize) {
+
+        Preconditions.checkArgument(startPage > -1, "startPage can not be less than 0");
+        Preconditions.checkArgument(pageSize > -1, "pageSize can not be less than 0");
+        Preconditions.checkArgument(query != null, "'query' must not be null");
+        Preconditions.checkArgument(facets != null, "'facets' must not be null");
+        Preconditions.checkArgument(facetCount > -1, "facetCount can not be less than 0");
+        int facetsCount = facetCount;
+        if (facetCount > FACET_COUNT_LIMIT) {
+            facetsCount = FACET_COUNT_LIMIT;
+        }
+       
+
+        return getProteinGroupResult(buildQueryUrl(ebeyeIndexProps.getProteinGroupSearchUrl(), query, facetsCount, facets, startPage, pageSize));
+    }
+
+    public ProteinGroupSearchResult findProteinCentricResultByEC(String ec, int facetCount, String facets, int startPage, int pageSize) {
+        Preconditions.checkArgument(ec != null, "'ec' must not be null");
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+
+        String query = "INTENZ:" + ec;
+
+        return getSearchResult(query, facetCount, facets, startPage, pageSize);
+
+    }
+
+    public ProteinGroupSearchResult findProteinCentricResultBySearchTermAndEC(String ec, String searchTerm, int facetCount, String facets, int startPage, int pageSize) {
+        Preconditions.checkArgument(ec != null, "ec can not be null");
+        Preconditions.checkArgument(searchTerm != null, "searchTerm can not be null");
+        String query = searchTerm + " AND INTENZ:" + ec;
+        if (pageSize > 100) {
+            pageSize = 100;
+        }
+        return getSearchResult(query, facetCount, facets, startPage, pageSize);
+    }
+
+    //=== web endpoints end ======
     public ProteinGroupSearchResult findProteinGroupResultByEC(String ec, int startPage, int pageSize) {
         Preconditions.checkArgument(ec != null, "'ec' must not be null");
         if (pageSize > 100) {
@@ -124,9 +183,9 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         Preconditions.checkArgument(ec != null, "ec can not be null");
 
         String query = "REACTOME:" + pathwayId + " AND INTENZ:" + ec;
-        System.out.println("THE QUERY before encoding : "+ query);
+
         query = UrlUtil.encode(query);
-        System.out.println("QUERY AFTER ENCODING "+ query);
+
         return queryForUniquePrimaryAccessions(query, limit);
 
     }
