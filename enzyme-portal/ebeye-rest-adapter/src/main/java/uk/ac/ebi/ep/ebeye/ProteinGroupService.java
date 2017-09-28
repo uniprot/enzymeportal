@@ -44,14 +44,17 @@ public class ProteinGroupService extends ProteinQueryServiceImpl {
         return String.format(QUERY_URL, endpoint, query, startPage, pageSize);
     }
 
+    //Example of filter by facet
+    //http://wwwdev.ebi.ac.uk/ebisearch/ws/rest/enzymeportal_proteins?query=human&facetcount=10&facets=cofactor:18420,OMIM:612740&format=xml
     private String buildQueryUrl(String endpoint, String query, int facetCount, String facets, int startPage, int pageSize) {
-        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets:common_name,cofactor,inhibitor,activator,disease_name&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species&sort=_relevance&reverse=true&format=json";
+        String ebeyeQueryUrl = "%s?query=%s&facetcount=%d&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species&sort=_relevance&reverse=true&format=json";
 
         if (!StringUtils.isEmpty(facets) && StringUtils.hasText(facets)) {
 
-            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facetsfield=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species&sort=_relevance&reverse=true&format=json";
+            ebeyeQueryUrl = "%s?query=%s&facetcount=%d&facets=%s&start=%d&size=%d&fields=id,primary_organism,primary_accession,name,common_name,scientific_name,entry_type,gene_name,primary_image,function,related_species&sort=_relevance&reverse=true&format=json";
 
             return String.format(ebeyeQueryUrl, endpoint, query, facetCount, facets, startPage, pageSize);
+   
         }
         return String.format(ebeyeQueryUrl, endpoint, query, facetCount, startPage, pageSize);
     }

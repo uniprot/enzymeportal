@@ -34,6 +34,22 @@ public class Fields {
     private List<String> primaryAccession = new ArrayList<>();
     @JsonProperty("primary_organism")
     private List<String> primaryOrganism = new ArrayList<>();
+
+    @JsonProperty("entry_type")
+    private List<String> entryType = new ArrayList<>();
+
+    @JsonProperty("gene_name")
+    private List<String> geneName = new ArrayList<>();
+
+    @JsonProperty("primary_image")
+    private List<String> primaryImage = new ArrayList<>();
+
+    @JsonProperty("function")
+    private List<String> function = new ArrayList<>();
+
+    @JsonProperty("related_species")
+    private List<String> relatedSpecies = new ArrayList<>();
+
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -139,6 +155,56 @@ public class Fields {
     @JsonProperty("primary_organism")
     public void setPrimaryOrganism(List<String> primaryOrganism) {
         this.primaryOrganism = primaryOrganism;
+    }
+
+    @JsonProperty("entry_type")
+    public List<String> getEntryType() {
+        return entryType;
+    }
+
+    @JsonProperty("entry_type")
+    public void setEntryType(List<String> entryType) {
+        this.entryType = entryType;
+    }
+
+    @JsonProperty("gene_name")
+    public List<String> getGeneName() {
+        return geneName;
+    }
+
+    @JsonProperty("gene_name")
+    public void setGeneName(List<String> geneName) {
+        this.geneName = geneName;
+    }
+
+    @JsonProperty("primary_image")
+    public List<String> getPrimaryImage() {
+        return primaryImage;
+    }
+
+    @JsonProperty("primary_image")
+    public void setPrimaryImage(List<String> primaryImage) {
+        this.primaryImage = primaryImage;
+    }
+
+    @JsonProperty("related_species")
+    public List<String> getRelatedSpecies() {
+        return relatedSpecies;
+    }
+
+    @JsonProperty("related_species")
+    public void setRelatedSpecies(List<String> relatedSpecies) {
+        this.relatedSpecies = relatedSpecies;
+    }
+
+    @JsonProperty("function")
+    public List<String> getFunction() {
+        return function;
+    }
+
+    @JsonProperty("function")
+    public void setFunction(List<String> function) {
+        this.function = function;
     }
 
 }

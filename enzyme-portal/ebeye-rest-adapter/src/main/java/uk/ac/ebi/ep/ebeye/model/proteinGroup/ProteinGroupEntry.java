@@ -4,9 +4,17 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  *
@@ -86,7 +94,7 @@ public class ProteinGroupEntry implements ProteinView {
 
     @Override
     public String getPrimaryAccession() {
-     
+
         return fields.getPrimaryAccession().stream().findAny().orElse("");
     }
 
@@ -109,9 +117,64 @@ public class ProteinGroupEntry implements ProteinView {
         return Objects.equals(this.id, other.id);
     }
 
+//    @Override
+//    public String toString() {
+//        return "Entry{" + "proteinGroupId=" + getProteinGroupId() + ", proteinName=" + getProteinName() + '}';
+//    }
     @Override
-    public String toString() {
-        return "Entry{" + "proteinGroupId=" + getProteinGroupId() + ", proteinName=" + getProteinName() + '}';
+    public String getEntryType() {
+        return fields.getEntryType().stream().findAny().orElse("");
+    }
+
+    @Override
+    public List<String> getGeneName() {
+        return fields.getGeneName();
+    }
+
+    @Override
+    public PdbImage getPrimaryImage() {
+        return fields.getPrimaryImage()
+                .stream()
+                .map(m -> m.split("\\|"))
+                .map(p -> new PdbImage(p[0], p[1]))
+                .findAny()
+                .orElse(new PdbImage());
+
+    }
+
+    @Override
+    public String getFunction() {
+        return fields.getFunction().stream().findAny().orElse("");
+    }
+
+    @Override
+    public List<RelSpecies> getRelatedSpecies() {
+
+        return buildRelSpecies();
+    }
+
+    private List<RelSpecies> buildRelSpecies() {
+        Set<RelSpecies> specieList = new LinkedHashSet<>();
+        List<String> ph = Stream.of("O76074;Human;Homo sapiens | Q28156;Bovine;Bos taurus | Q8CG03;Mouse;Mus musculus | O54735;Rat;Rattus norvegicus | O77746;Dog;Canis lupus familiaris").collect(Collectors.toList());
+        List<String[]> items
+                = fields.getRelatedSpecies()
+                .stream()
+                .map(String::trim)
+                .map(rel -> rel.replace("\\|", " \\|"))
+                .map(s -> s.split("\\|"))
+                .collect(toList());
+
+        List<String> foo = new LinkedList<>();
+        for (String[] item : items) {
+            foo = Arrays.asList(item);
+        }
+
+        specieList = foo.stream()
+                .map(comma -> comma.split("\\;"))
+                .map(specie -> new RelSpecies(specie[0], specie[1], specie[2]))
+                .collect(Collectors.toSet());
+
+        return specieList.stream().collect(Collectors.toList());
     }
 
 }

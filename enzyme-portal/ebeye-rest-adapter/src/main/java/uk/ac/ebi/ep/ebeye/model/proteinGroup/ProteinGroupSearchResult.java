@@ -30,7 +30,8 @@ public class ProteinGroupSearchResult {
     @JsonProperty("entries")
     private List<ProteinGroupEntry> entries = new ArrayList<>();
     @JsonProperty("facets")
-    private List<Object> facets = new ArrayList<>();
+    private List<Facet> facets = new ArrayList<>();
+
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -58,12 +59,12 @@ public class ProteinGroupSearchResult {
     }
 
     @JsonProperty("facets")
-    public List<Object> getFacets() {
+    public List<Facet> getFacets() {
         return facets;
     }
 
     @JsonProperty("facets")
-    public void setFacets(List<Object> facets) {
+    public void setFacets(List<Facet> facets) {
         this.facets = facets;
     }
 
