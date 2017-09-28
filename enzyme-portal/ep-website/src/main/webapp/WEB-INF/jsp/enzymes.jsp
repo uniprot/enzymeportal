@@ -228,7 +228,10 @@
                                                <input name="searchId" type="hidden" value="${searchId}">
                                                <input name="ec" type="hidden" value="${enzyme.ec}">
                                                <form:hidden path="searchparams.previoustext" />
+                                               <form:hidden path="searchparams.text" value="${searchKey}" />
+                                               <%--
                                                <form:hidden path="searchparams.text" value="${searchKey}-${enzyme.ec}" />
+                                               --%>
                                                <form:hidden path="searchparams.type" value="${keywordType}"/>
                            
                                    
