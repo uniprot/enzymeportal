@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import uk.ac.ebi.ep.model.PrimaryProtein;
@@ -332,15 +333,20 @@ public class XmlTransformer {
 //                                .forEach(related_species -> relatedSpeciesList.offer(related_species)
 //                                );
 //                    }
-                    rel.stream()
-                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()).concat("|"))
-                            .forEach(related_species -> relatedSpeciesList.offer(related_species)
-                            );
+//                    rel.stream()
+//                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()).concat("|"))
+//                            .forEach(related_species -> relatedSpeciesList.offer(related_species)
+//                            );
+                    List<String> specieList = rel.stream()
+                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()))
+                            .collect(Collectors.toList());
+                    //.forEach(related_species -> relatedSpeciesList.offer(related_species)
 
-                    String rs = relatedSpeciesList
-                            .stream()
-                            .reduce((k, v) -> k + "" + v).get();
-                    String rsField = StringUtils.removeEnd(rs, "|");
+                    String rs = String.join(" | ", specieList);
+//                    String rs = relatedSpeciesList
+//                            .stream()
+//                            .reduce((k, v) -> k + "" + v).get();
+                    String rsField = StringUtils.removeEnd(rs, " | ");
 
                     Field relatedSpeciesField = new Field(FieldName.RELATED_SPECIES.getName(), rsField);
                     fields.add(relatedSpeciesField);
@@ -367,6 +373,22 @@ public class XmlTransformer {
                 Field pdbfield = new Field(FieldName.PRIMARY_IMAGE.getName(), pdbId);
                 fields.add(pdbfield);
             }
+        }
+    }
+
+    protected void addPrimaryEc(ProteinGroups proteinGroups, Set<Field> fields) {
+        PrimaryProtein primaryProtein = proteinGroups.getPrimaryProtein();
+        if (primaryProtein != null) {
+
+            proteinGroups.getUniprotEntryList()
+                    .stream()
+                    .filter(entry -> (entry.getAccession().equals(primaryProtein.getAccession())))
+                    .forEach(entry -> {
+                        entry.getEnzymePortalEcNumbersSet()
+                        .stream()
+                        .map(ec -> new Field(FieldName.EC.getName(), ec.getEcNumber()))
+                        .forEach(ecfield -> fields.add(ecfield));
+                    });
         }
     }
 

@@ -34,6 +34,7 @@ public class ProteinGroupsProcessor extends XmlProcessor<ProteinGroups, Entry> {
 
         addEntryTypeFields(proteinGroups, fields);
         addPrimaryProteinField(proteinGroups, fields);
+        addPrimaryEc(proteinGroups, fields);
         //add PDB info
         addPrimaryImage(proteinGroups, fields);
         //add structure image specie
