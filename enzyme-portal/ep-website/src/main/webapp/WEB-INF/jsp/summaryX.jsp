@@ -15,6 +15,7 @@
       $('#relSpecies_${resultItemId}').hide();
       $('#dis_${resultItemId}').hide();
       $('#syn_${resultItemId}').hide();
+      $('#gene_${resultItemId}').hide();
       $('#fun_${resultItemId}').hide();
 
     });
@@ -62,7 +63,6 @@ enzyme.entryType == entryType
     
     --%>
     
-    In the loop<br />
     
     <c:if test='${not empty enzyme.proteinName }'>
         <h4>
@@ -79,10 +79,6 @@ enzyme.entryType == entryType
                     <small title="UniProt unreviewed" class="icon-uniprot unreviewed-icon" data-icon="t"></small>
                 </c:otherwise>
             </c:choose>
-
-
-
-
     </c:if>
 </div>
 
@@ -192,30 +188,29 @@ enzyme.entryType == entryType
     </c:if>
     
     
-        <c:set var="geneName" value="${enzyme.geneName}"/>
+    <c:set var="geneName" value="${enzyme.geneName}"/>
     <c:set var="geneSize" value="${fn:length(geneName)}"/>
-    <c:set var="synLimitedDisplayDefault" value="${5}"/>
-    <c:set var="synLimitedDisplay" value="${synLimitedDisplayDefault}"/>
+    <c:set var="geneLimitedDisplayDefault" value="${5}"/>
+    <c:set var="geneLimitedDisplay" value="${geneLimitedDisplayDefault}"/>
     <c:if test='${geneSize>0}'>
-        <div id ="synonym">
+        <div id ="genename">
             <b>Gene name</b>:
-            <c:if test="${geneSize > 0 && geneSize <= synLimitedDisplay}">
-                <c:set var="synLimitedDisplay" value="${geneSize}"/>
+            <c:if test="${geneSize > 0 && geneSize <= geneLimitedDisplay}">
+                <c:set var="geneLimitedDisplay" value="${geneSize}"/>
             </c:if>
 
-            <c:set var="hiddenSyns" value=""/>
-            <c:forEach var="i" begin="0" end="${synLimitedDisplay-1}">
-                <c:out value="${synonym[i]}"/>;
+            <c:set var="hiddenGenes" value=""/>
+            <c:forEach var="i" begin="0" end="${geneLimitedDisplay-1}">
+                <c:out value="${geneName[i]}"/>;
 
             </c:forEach>
-            <c:if test="${geneSize>synLimitedDisplay}">
-                <span id='syn_${resultItemId}' >
-                    <c:forEach var="i" begin="${synLimitedDisplay}" end="${geneSize-1}">
-                        <c:out value="${synonym[i]}"/>;
-
+            <c:if test="${geneSize>geneLimitedDisplay}">
+                <span id='gene_${resultItemId}' >
+                    <c:forEach var="i" begin="${geneLimitedDisplay}" end="${geneSize-1}">
+                        <c:out value="${geneName[i]}"/>;
                     </c:forEach>
                 </span>
-                <a class="showLink" id="<c:out value='syn_link_${resultItemId}'/>">Show more other names</a>
+                <a class="showLink" id="<c:out value='gene_link_${resultItemId}'/>">Show more Gene names</a>
             </c:if>
         </div>
     </c:if>

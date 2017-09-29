@@ -70,10 +70,7 @@
                 
                 <div class="row">
 
-
-
                     <section id="search-filters" class="large-3 columns">
-
                         <form id="facetFilterForm" action="${pageContext.request.contextPath}/enzymes" method="POST">
                             <input type="hidden" id="paginationPage" name="servicePage" value="">
                             <input type="hidden" name="keywordType" value="${keywordType}">
@@ -101,72 +98,40 @@
                                              </ul>
                                          </div>
                                          </c:if>
-
                                      </div>
                              <%--    </c:forEach>    --%>
                             </div>
                         </form>
+                    </section>
+
+                    <section class="resultContent large-9 columns">
+                          <c:set var="resultItemId" value="${0}"/>
+                        <c:choose>
+                            <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
+                           <c:forEach items="${proteinView}"
+                                   begin="${pagination.firstResult}"
+                                   end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
+                                <%@ include file="summaryX.jsp"%>
+                        </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${proteinView}" var="enzyme">
+                                <%@ include file="summaryX.jsp"%>
+                        </c:forEach>
+                                <%--
+                          <c:forEach items="${summaryEntries}"
+                                   begin="${pagination.firstResult}"
+                                   end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
+                                <%@ include file="summary.jspf"%>
+                        </c:forEach>
+
+                            --%>
+                                </c:otherwise>
+                        </c:choose>
 
                     </section>
 
-
-
-
-
-
-
-
-
-
-
-                        <div class="resultContent">
-                              <c:set var="resultItemId" value="${0}"/>
-                            <c:choose>
-                                <c:when test="${searchModel.searchparams.type eq 'SEQUENCE'}">
-                               <c:forEach items="${proteinView}"
-                                       begin="${pagination.firstResult}"
-                                       end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
-                                    <%@ include file="summaryX.jsp"%>
-                            </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach items="${proteinView}" var="enzyme">
-                                    <%@ include file="summaryX.jsp"%>
-                            </c:forEach>
-                                    <%--
-                              <c:forEach items="${summaryEntries}"
-                                       begin="${pagination.firstResult}"
-                                       end="${pagination.lastResult}" var="enzyme" varStatus="vsEnzymes">
-                                    <%@ include file="summary.jspf"%>
-                            </c:forEach>
-                            
-                                --%>
-                                    </c:otherwise>
-                            </c:choose>
-
-
-                        </div>
-                                
-
-  
-
-
-
-
-
-
                 </div>    
-                
-                
-                
-                
-                
-                
-                
-                
-                
-               <br /> 
-                Bottom of new stuff
                 
 <%-- 
                 <c:forEach var="p" items="${proteinView}" >
