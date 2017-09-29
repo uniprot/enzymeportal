@@ -26,6 +26,6 @@ public interface ProteinView {
 
     List<String> getSynonym();
 
-    List<String> getDiseaseName();
+    List<String> getdiseases();
 
 }

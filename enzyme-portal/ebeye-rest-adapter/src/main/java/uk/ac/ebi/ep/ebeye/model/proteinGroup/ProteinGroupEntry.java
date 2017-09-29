@@ -186,7 +186,7 @@ public class ProteinGroupEntry implements ProteinView {
     }
 
     @Override
-    public List<String> getDiseaseName() {
+    public List<String> getdiseases() {
         return fields.getDiseaseName();
     }
     
