@@ -24,4 +24,8 @@ public interface ProteinView {
 
     List<RelSpecies> getRelatedSpecies();
 
+    List<String> getSynonym();
+
+    List<String> getDiseaseName();
+
 }

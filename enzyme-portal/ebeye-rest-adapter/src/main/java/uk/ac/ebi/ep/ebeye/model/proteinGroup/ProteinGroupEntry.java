@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
+import uk.ac.ebi.ep.ebeye.protein.model.ModelOrganisms;
 
 /**
  *
@@ -155,7 +157,7 @@ public class ProteinGroupEntry implements ProteinView {
 
     private List<RelSpecies> buildRelSpecies() {
         Set<RelSpecies> specieList = new LinkedHashSet<>();
-        List<String> ph = Stream.of("O76074;Human;Homo sapiens | Q28156;Bovine;Bos taurus | Q8CG03;Mouse;Mus musculus | O54735;Rat;Rattus norvegicus | O77746;Dog;Canis lupus familiaris").collect(Collectors.toList());
+       // List<String> ph = Stream.of("O76074;Human;Homo sapiens | Q28156;Bovine;Bos taurus | Q8CG03;Mouse;Mus musculus | O54735;Rat;Rattus norvegicus | O77746;Dog;Canis lupus familiaris").collect(Collectors.toList());
         List<String[]> items
                 = fields.getRelatedSpecies()
                 .stream()
@@ -174,7 +176,57 @@ public class ProteinGroupEntry implements ProteinView {
                 .map(specie -> new RelSpecies(specie[0], specie[1], specie[2]))
                 .collect(Collectors.toSet());
 
-        return specieList.stream().collect(Collectors.toList());
+       // return specieList.stream().collect(Collectors.toList());
+        return sortByModelOrganism(specieList);
     }
+
+    @Override
+    public List<String> getSynonym() {
+       return fields.getSynonym().stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getDiseaseName() {
+        return fields.getDiseaseName();
+    }
+    
+   
+    private List<RelSpecies> sortByModelOrganism(Set<RelSpecies> species){
+            Map<Integer, RelSpecies> priorityMapper = new TreeMap<>();
+        AtomicInteger key = new AtomicInteger(50);
+        AtomicInteger customKey = new AtomicInteger(6);
+        LinkedList<RelSpecies> sortedSpecies = new LinkedList<>();
+
+
+        species.stream().forEach((name) -> {
+            sortSpecies(name, priorityMapper, customKey, key);
+        });
+
+        priorityMapper.entrySet().stream().forEach(map -> {
+            sortedSpecies.add(map.getValue());
+        });
+        return sortedSpecies.stream().distinct().limit(50).collect(Collectors.toList());
+    }
+    
+    private void sortSpecies(RelSpecies specie, Map<Integer, RelSpecies> priorityMapper, AtomicInteger customKey, AtomicInteger key) {
+
+        if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.HUMAN.getCommonName())) {
+
+            priorityMapper.put(1, specie);
+        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.MOUSE.getCommonName())) {
+
+            priorityMapper.put(2, specie);
+        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.FRUIT_FLY.getCommonName())) {
+            priorityMapper.put(3, specie);
+
+        } else if (specie.getCommonName().equalsIgnoreCase(ModelOrganisms.RAT.getCommonName())) {
+            priorityMapper.put(customKey.getAndIncrement(), specie);
+
+        } else {
+            priorityMapper.put(key.getAndIncrement(), specie);
+        }
+    }
+
+
 
 }

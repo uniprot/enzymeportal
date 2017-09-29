@@ -49,6 +49,10 @@ public class Fields {
 
     @JsonProperty("related_species")
     private List<String> relatedSpecies = new ArrayList<>();
+    @JsonProperty("synonym")
+    private List<String> synonym = new ArrayList<>();
+    @JsonProperty("disease_name")
+    private List<String> diseaseName = new ArrayList<>();
 
     @JsonIgnore
     private final Map<String, Object> additionalProperties = new HashMap<>();
@@ -205,6 +209,26 @@ public class Fields {
     @JsonProperty("function")
     public void setFunction(List<String> function) {
         this.function = function;
+    }
+
+    @JsonProperty("synonym")
+    public List<String> getSynonym() {
+        return synonym;
+    }
+
+    @JsonProperty("synonym")
+    public void setSynonym(List<String> synonym) {
+        this.synonym = synonym;
+    }
+
+    @JsonProperty("disease_name")
+    public List<String> getDiseaseName() {
+        return diseaseName;
+    }
+
+    @JsonProperty("disease_name")
+    public void setDiseaseName(List<String> diseaseName) {
+        this.diseaseName = diseaseName;
     }
 
 }
