@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import uk.ac.ebi.ep.adapter.chembl.ChemblConfig;
 import uk.ac.ebi.ep.data.domain.UniprotEntry;
 import uk.ac.ebi.ep.data.enzyme.model.Molecule;
+import uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupEntry;
 import uk.ac.ebi.ep.enzymeservices.chebi.ChebiConfig;
 
 /**
@@ -243,6 +244,13 @@ public final class Functions {
                     molecule.getId());
         }
         return imgSrc;
+    }
+    
+       public static String getSummaryBasketId(ProteinGroupEntry proteinGroupEntry) {
+
+        return proteinGroupEntry.getPrimaryAccession();
+        
+
     }
 
     public static String getSummaryBasketId(UniprotEntry summary) {
