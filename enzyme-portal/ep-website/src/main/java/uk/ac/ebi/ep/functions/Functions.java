@@ -246,7 +246,7 @@ public final class Functions {
         return imgSrc;
     }
     
-       public static String getSummaryBasketId(ProteinGroupEntry proteinGroupEntry) {
+       public static String getBasketId(ProteinGroupEntry proteinGroupEntry) {
 
         return proteinGroupEntry.getPrimaryAccession();
         

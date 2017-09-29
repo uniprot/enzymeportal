@@ -71,6 +71,13 @@
         <function-class>uk.ac.ebi.ep.functions.Functions</function-class>
         <function-signature>java.lang.String getMoleculeImgSrc(uk.ac.ebi.ep.data.enzyme.model.Molecule)</function-signature>
     </function>
+        <function>
+        <name>getBasketId</name>
+        <description>Builds a unique and reproducible ID for an protein entry
+            based on its UniProt accessions.</description>
+        <function-class>uk.ac.ebi.ep.functions.Functions</function-class>
+        <function-signature>java.lang.String getBasketId(uk.ac.ebi.ep.ebeye.model.proteinGroup.ProteinGroupEntry)</function-signature>
+    </function>
     <function>
         <name>getSummaryBasketId</name>
         <description>Builds a unique and reproducible ID for an enzyme summary,

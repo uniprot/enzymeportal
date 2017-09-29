@@ -109,10 +109,24 @@
 
                     </section>
 
+ <%-- 
+                             <c:if test="${fn:length(proteinView) gt 0 }">
+                            <div style="width: 100%;">
+                
+                                <div class="action-buttons">
+                                    <%@include file="basket-buttons.jspf" %>
+                                </div>
 
 
+                                <div id="paginationNav" style="text-align: right;">
+                                    paging here
+                                </div><!-- pagination -->
+                            </div>
+                        <div class="clear"></div>
+                        <div class="line"></div>
+                    </c:if>
 
-
+--%>
 
 
 
@@ -146,7 +160,7 @@
 
 
                         </div>
-                                
+   
 
   
 
