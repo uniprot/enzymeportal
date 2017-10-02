@@ -1,2 +1,2 @@
-pmc.specific.url=http://www.ebi.ac.uk/europepmc/webservices/rest/search?query=UNIPROT_PUBS:
-pmc.generic.url=http://www.ebi.ac.uk/europepmc/webservices/rest/search/query=
+pmc.specific.url=https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=UNIPROT_PUBS:
+pmc.generic.url=https://www.ebi.ac.uk/europepmc/webservices/rest/search/query=
