@@ -44,10 +44,10 @@ public class ChebiConfig implements ChebiConfigMBean {
 	int timeout = 30000;
 	
 	protected String compoundBaseUrl =
-	        "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=";
+	        "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=";
 
 	protected String compoundImgBaseUrl =
-	        "http://www.ebi.ac.uk/chebi/displayImage.do?"
+	        "https://www.ebi.ac.uk/chebi/displayImage.do?"
 	        + "defaultImage=true&imageIndex=0&chebiId=";
 	
 	protected String wsTestUrl =
