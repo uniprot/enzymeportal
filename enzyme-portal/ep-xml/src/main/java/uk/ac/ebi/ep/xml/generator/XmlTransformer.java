@@ -1,5 +1,6 @@
 package uk.ac.ebi.ep.xml.generator;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -297,10 +298,15 @@ public class XmlTransformer {
 
     protected void addEntryTypeFields(ProteinGroups proteinGroups, Set<Field> fields) {
 
-        String entryType = proteinGroups.getEntryType().toString();
-        Field entryTypefield = new Field(FieldName.ENTRY_TYPE.getName(), entryType);
+        BigInteger type = proteinGroups.getEntryType();
+        if (type != null) {
 
-        fields.add(entryTypefield);
+            String entryType = String.valueOf(type);
+            Field entryTypefield = new Field(FieldName.ENTRY_TYPE.getName(), entryType);
+
+            fields.add(entryTypefield);
+        }
+
     }
 
     private static String removeLastCharRegexOptional(String s) {
