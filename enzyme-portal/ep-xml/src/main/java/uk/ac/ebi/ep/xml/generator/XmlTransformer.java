@@ -2,7 +2,6 @@ package uk.ac.ebi.ep.xml.generator;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -326,7 +325,7 @@ public class XmlTransformer {
                 if (primaryProtein.getAccession().equalsIgnoreCase(entry.getAccession())) {
 
                     List<UniprotEntry> rel = entry.getRelatedspecies();
-                    LinkedList<String> relatedSpeciesList = new LinkedList<>();
+                   // LinkedList<String> relatedSpeciesList = new LinkedList<>();
 
 //                    if (rel.size() > 1) {
 //                        rel.stream()
@@ -344,7 +343,7 @@ public class XmlTransformer {
 //                            .forEach(related_species -> relatedSpeciesList.offer(related_species)
 //                            );
                     List<String> specieList = rel.stream()
-                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName()))
+                            .map(u -> (u.getAccession() + ";" + u.getCommonName() + ";" + u.getScientificName() +";"+ u.getExpEvidenceFlag()))
                             .collect(Collectors.toList());
                     //.forEach(related_species -> relatedSpeciesList.offer(related_species)
 
