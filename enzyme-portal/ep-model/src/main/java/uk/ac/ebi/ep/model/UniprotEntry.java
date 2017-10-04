@@ -114,7 +114,7 @@ public class UniprotEntry implements Serializable {
     @OneToMany(mappedBy = "uniprotAccession")
     private Set<EnzymeCatalyticActivity> enzymeCatalyticActivitySet;
     @OneToMany(mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
-     @Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.JOIN)
     private Set<EnzymePortalEcNumbers> enzymePortalEcNumbersSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uniprotAccession", fetch = FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
@@ -285,7 +285,6 @@ public class UniprotEntry implements Serializable {
 //    public void setNamePrefix(String namePrefix) {
 //        this.namePrefix = namePrefix;
 //    }
-
     @XmlTransient
     public Set<UniprotXref> getUniprotXrefSet() {
         return uniprotXrefSet;
@@ -302,7 +301,6 @@ public class UniprotEntry implements Serializable {
 //    public void setPrefixId(PrefixNames prefixId) {
 //        this.prefixId = prefixId;
 //    }
-
     public ProteinGroups getProteinGroupId() {
         return proteinGroupId;
     }
@@ -408,6 +406,10 @@ public class UniprotEntry implements Serializable {
     }
 
     public List<UniprotEntry> getRelatedspecies() {
+        return relatedProteinsId.getUniprotEntrySet();
+    }
+
+    public List<UniprotEntry> getRelatedspeciesTodo() {
 
         final Map<Integer, UniprotEntry> priorityMapper = new TreeMap<>();
         AtomicInteger key = new AtomicInteger(50);

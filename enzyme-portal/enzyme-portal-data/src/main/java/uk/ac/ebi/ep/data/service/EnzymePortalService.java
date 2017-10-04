@@ -248,7 +248,7 @@ public class EnzymePortalService {
     @Transactional(readOnly = true)
     public List<EnzymePortalPathways> findPathways() {
 
-        return pathwaysRepository.findAll();
+        return pathwaysRepository.findPathways();
     }
 
     @Transactional(readOnly = true)

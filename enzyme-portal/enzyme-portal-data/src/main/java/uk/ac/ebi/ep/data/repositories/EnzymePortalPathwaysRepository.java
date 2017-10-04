@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.ep.data.repositories;
 
 import java.util.List;
@@ -15,6 +14,9 @@ import uk.ac.ebi.ep.data.domain.EnzymePortalPathways;
  * @author joseph
  */
 public interface EnzymePortalPathwaysRepository extends JpaRepository<EnzymePortalPathways, Long>, QueryDslPredicateExecutor<EnzymePortalPathways>, EnzymePortalPathwaysRepositoryCustom {
+
+    @Query(value = "SELECT * FROM ENZYME_PORTAL_PATHWAYS", nativeQuery = true)
+    List<EnzymePortalPathways> findPathways();
 
     EnzymePortalPathways findByPathwayId(Long pathwayId);
 

@@ -7,10 +7,10 @@
     <parent>
         <groupId>uk.ac.ebi.ep</groupId>
         <artifactId>ep</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.7-SNAPSHOT</version>
     </parent>
     <artifactId>chembl-adapter</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>ChEMBL adapter</name>
     <description>Module providing proxies to ChEMBL.</description>
 
