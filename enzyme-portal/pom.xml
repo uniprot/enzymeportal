@@ -580,7 +580,7 @@
         <module>ep-parser</module>
         <module>SitemapGenerator</module>
         <module>enzyme-portal-data</module>
-<!--                <module>epTools</module>-->
+        <!--                <module>epTools</module>-->
         <module>ebeye-rest-adapter</module>
         <module>enzymeservices</module>
         <module>LiteratureService</module>
