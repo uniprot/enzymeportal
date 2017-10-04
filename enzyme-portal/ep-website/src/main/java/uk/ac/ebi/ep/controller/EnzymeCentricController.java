@@ -188,16 +188,16 @@ public class EnzymeCentricController extends AbstractController {
             entries.stream().forEach(entry -> {
                 ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultBySearchTermAndEC(entry.getEc(), searchTerm, start, limit);
                 //limit asscoated protein result
-                if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
-                    result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
-                }
+//                if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
+//                    result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
+//                }
 
                 if (result.getHitCount() == 0) {
                     result = proteinGroupService.findProteinGroupResultByEC(entry.getEc(), start, LOWEST_BEST_MATCHED_RESULT_SIZE);
                     //limit asscoated protein result
-                    if (result.getHitCount() > LOWEST_BEST_MATCHED_RESULT_SIZE) {
-                        result.setHitCount(LOWEST_BEST_MATCHED_RESULT_SIZE);
-                    }
+//                    if (result.getHitCount() > LOWEST_BEST_MATCHED_RESULT_SIZE) {
+//                        result.setHitCount(LOWEST_BEST_MATCHED_RESULT_SIZE);
+//                    }
                 }
 
 //                entry.setProteinGroupEntry(result.getEntries());
@@ -239,9 +239,9 @@ public class EnzymeCentricController extends AbstractController {
             entries.stream()
                     .forEach(entry -> {
                         ProteinGroupSearchResult result = proteinGroupService.findUniqueProteinsByOmimIdAndEc(omimId, entry.getEc(), associatedProteinLimit);
-                        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
-                            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
-                        }
+//                        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
+//                            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
+//                        }
 
                         addProteinEntryToEnzymeView(result, entry, enzymeView);
 //                        List<Protein> proteins = ebeyeRestService.findUniqueProteinsByOmimIdAndEc(omimId, entry.getEc(), associatedProteinLimit)
@@ -273,9 +273,9 @@ public class EnzymeCentricController extends AbstractController {
             entries.stream()
                     .forEach(entry -> {
                         ProteinGroupSearchResult result = proteinGroupService.findUniqueProteinsByTaxIdAndEc(taxId, entry.getEc(), associatedProteinLimit);
-                        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
-                            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
-                        }
+//                        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
+//                            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
+//                        }
 
                         addProteinEntryToEnzymeView(result, entry, enzymeView);
 
@@ -306,9 +306,9 @@ public class EnzymeCentricController extends AbstractController {
             entries.stream()
                     .forEach(entry -> {
                         ProteinGroupSearchResult result = proteinGroupService.findProteinGroupResultByEC(entry.getEc(), 0, associatedProteinLimit);
-                        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
-                            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
-                        }
+//                        if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
+//                            result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
+//                        }
 
                         addProteinEntryToEnzymeView(result, entry, enzymeView);
 
@@ -339,9 +339,9 @@ public class EnzymeCentricController extends AbstractController {
             entries.stream().forEach(entry -> {
 
                 ProteinGroupSearchResult result = proteinGroupService.findUniqueProteinsByPathwayIdAndEc(pathwayId, entry.getEc(), associatedProteinLimit);
-                if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
-                    result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
-                }
+//                if (result.getHitCount() > MAX_PROTEIN_DISPLAY_LIMIT) {
+//                    result.setHitCount(MAX_PROTEIN_DISPLAY_LIMIT);
+//                }
 
                 addProteinEntryToEnzymeView(result, entry, enzymeView);
 

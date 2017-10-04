@@ -36,7 +36,7 @@ public class ProteinCentricController extends AbstractController {
     private static final String PROTEIN_CENTRIC_PAGE = "search";
     private static final int DEFAULT_EBI_SEARCH_FACET_COUNT = 1_0;
 
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 10;
 
     private ProteinGroupSearchResult getProteinCentricSearchTermResult(String ec, String searchTerm, int facetCount, List<String> filters, int startPage, int pageSize) {
 

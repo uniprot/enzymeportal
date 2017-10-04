@@ -127,7 +127,7 @@ public class EnzymePortalConfig {
         return chebiConfig;
     }
 
-    //@Bean
+    @Bean
     public ChebiAdapter chebiAdapter() {
         ChebiAdapter chebiAdapter = new ChebiAdapter();
         chebiAdapter.setConfig(chebiConfig());
