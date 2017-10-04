@@ -582,11 +582,13 @@
         <module>enzyme-portal-data</module>
         <!--                <module>epTools</module>-->
         <module>ebeye-rest-adapter</module>
+         <module>chembl-adapter</module>
         <module>enzymeservices</module>
         <module>LiteratureService</module>
         <module>ep-base</module>
         <module>ep-website</module>
         <module>ep-benchmarks</module>
+       
     </modules>
     
     <profiles>
