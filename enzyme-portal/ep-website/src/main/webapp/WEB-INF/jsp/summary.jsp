@@ -54,6 +54,11 @@ enzyme.entryType == entryType
 <div class="resultItem">
 
 <div class="summary-header">
+        <c:if test="${showCheckbox != false}">
+        <input type="checkbox" class="forBasket"
+               title="Select entry"
+               value="${epfn:getBasketId(enzyme)}"/>
+    </c:if>
     <%--  Basket Bingo
     <c:if test="${showCheckbox != false}">
         <input type="checkbox" class="forBasket"
@@ -98,10 +103,13 @@ enzyme.entryType == entryType
            
                         <c:set var="imgFile" value="${enzyme.primaryImage.pdbId}"/>
                         <c:set var="specieWithImage" value="${enzyme.primaryImage.specie}"/>
-                        <c:set var="imgFooter">
+                        <c:if test="${enzyme.primaryOrganism ne enzyme.primaryImage.specie}">
+                            <c:set var="imgFooter">
                             <spring:message code="label.entry.proteinStructure.other.species"/>
                             ${enzyme.primaryImage.specie}
-                        </c:set>
+                        </c:set>  
+                        </c:if>
+
 
 
             </c:if>

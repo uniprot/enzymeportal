@@ -76,7 +76,7 @@ public abstract class AbstractController {
 
     @Autowired
     protected RheaWsAdapter rheaAdapter;
-    @Autowired
+   // @Autowired
     protected ChebiAdapter chebiAdapter;
     @Autowired
     protected IntenzAdapter intenzAdapter;

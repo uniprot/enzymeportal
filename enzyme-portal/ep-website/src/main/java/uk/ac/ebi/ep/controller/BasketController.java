@@ -48,13 +48,49 @@ public class BasketController extends AbstractController {
      * @param session the user session.
      * @return a string with the current number of enzymes in the basket.
      */
-    @RequestMapping(value = "/ajax/basket")
+//    @RequestMapping(value = "/ajax/basket")
+//    @ResponseBody
+//    protected String updateBasket(HttpServletResponse response,
+//            @RequestParam String id, @RequestParam Boolean checked,
+//            HttpSession session) {
+//        @SuppressWarnings("unchecked")
+//        Map<String, UniprotEntry> lastSummaries = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
+//        @SuppressWarnings("unchecked")
+//        Map<String, UniprotEntry> basket = (Map<String, UniprotEntry>) session.getAttribute(Attribute.basket.name());
+//        if (basket == null) {
+//            basket = Collections.synchronizedMap(
+//                    new LinkedHashMap<String, UniprotEntry>());
+//            session.setAttribute(Attribute.basket.name(), basket);
+//        }
+//        for (String basketId : id.split(";")) {
+//            if (checked && lastSummaries != null) {
+//                final UniprotEntry summary = lastSummaries.get(basketId);
+//                if (summary != null) {
+//                    basket.put(basketId, summary);
+//                }
+//                if (summary == null) {
+//                    // build a fresh one:
+//                    // TODO
+//                }
+//            } else {
+//                basket.remove(basketId);
+//            }
+//        }
+//        response.setContentType("text/plain");
+//        return String.valueOf(basket.size());
+//    }
+    
+    
+        @RequestMapping(value = "/ajax/basket")
     @ResponseBody
     protected String updateBasket(HttpServletResponse response,
             @RequestParam String id, @RequestParam Boolean checked,
             HttpSession session) {
-        @SuppressWarnings("unchecked")
-        Map<String, UniprotEntry> lastSummaries = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
+        
+        
+        
+        //@SuppressWarnings("unchecked")
+        //Map<String, UniprotEntry> lastSummaries = (Map<String, UniprotEntry>) session.getAttribute(Attribute.lastSummaries.name());
         @SuppressWarnings("unchecked")
         Map<String, UniprotEntry> basket = (Map<String, UniprotEntry>) session.getAttribute(Attribute.basket.name());
         if (basket == null) {
@@ -63,8 +99,8 @@ public class BasketController extends AbstractController {
             session.setAttribute(Attribute.basket.name(), basket);
         }
         for (String basketId : id.split(";")) {
-            if (checked && lastSummaries != null) {
-                final UniprotEntry summary = lastSummaries.get(basketId);
+            if (checked ) {
+                final UniprotEntry summary = enzymePortalService.findByAccession(basketId); //lastSummaries.get(basketId);
                 if (summary != null) {
                     basket.put(basketId, summary);
                 }
@@ -79,6 +115,8 @@ public class BasketController extends AbstractController {
         response.setContentType("text/plain");
         return String.valueOf(basket.size());
     }
+    
+    
 
     @RequestMapping(value = "/basket")
     protected String getBasket(Model model) {

@@ -45,7 +45,7 @@
            function getOrganismHierarchy() {
                return $.ajax("/enzymeportal/resources/javascript/organisms.json").then(function(d){
                    return d;
-               })
+               });
             }
 
            function getOrganismCount(taxids) {
@@ -82,7 +82,7 @@
                                     getTaxids(d, taxids);
                                 });
                             }
-                        }
+                        };
 
                         mashData = function (organism, counts) {
                             if (organism.taxid) {
@@ -97,7 +97,7 @@
                                 });
                             }
                             return organism;
-                        }
+                        };
 
                         draw = function (data) {
                             var width = 960,
@@ -132,7 +132,7 @@
                                     .attr("class", "node")
                                     .attr("transform", function (d) {
                                         return "translate(" + d.y + "," + d.x + ")";
-                                    })
+                                    });
 
                             node.append("circle")
                                     .attr("r", 4.5);
@@ -141,7 +141,7 @@
                                     .attr("xlink:href", function (d) {
 
                                         if (d.taxid) {
-                                            return '/enzymeportal/enzymes?searchKey=' + d.taxid
+                                            return '/enzymeportal/enzymes?searchKey=' + d.name
                                                     + '&searchparams.type=KEYWORD&searchparams.previoustext='
                                                     + d.name
                                                     + '&searchparams.start=0&searchparams.text='
@@ -167,7 +167,7 @@
 
                             d3.select(self.frameElement).style("height", height + "px");
                             $("#spinner").hide();
-                        }
+                        };
                     //}
                // };
             };

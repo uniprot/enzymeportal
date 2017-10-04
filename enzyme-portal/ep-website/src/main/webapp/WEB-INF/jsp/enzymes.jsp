@@ -224,7 +224,7 @@
                                        <td colspan="7">
                                            <form:form id="proteinViewForm-${enzyme.ec}" action="${pageContext.request.contextPath}/search" modelAttribute="searchModel" method="POST">
                                                <input name="keywordType" type="hidden" value="${keywordType}">
-                                               <input name="searchTerm" type="hidden" value="${searchKey}">
+                                               <input name="searchKey" type="hidden" value="${searchKey}">
                                                <input name="searchId" type="hidden" value="${searchId}">
                                                <input name="ec" type="hidden" value="${enzyme.ec}">
                                                <form:hidden path="searchparams.previoustext" />
@@ -241,7 +241,7 @@
 
                                                             <li><a href="${pageContext.request.contextPath}/search/${p.primaryAccession}/enzyme">${p.proteinName} </a> - (${p.primaryOrganism})</li>
                                                     </c:forEach>
-                                                    <c:if test="${enzyme.numProteins >= 5}">
+                                                    <c:if test="${enzyme.numProteins >= 0}">
                                                           <button id="full-view" class="full-view icon icon-functional btn" data-icon="F" type="submit"> View all ${enzyme.numProteins} Proteins</button>
                                                     </c:if>
                                                </ul>

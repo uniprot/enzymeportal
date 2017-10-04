@@ -66,14 +66,14 @@ public class EnzymePageController extends AbstractController {
             SearchModel searchModelForm = new SearchModel();
             SearchParams searchParams = new SearchParams();
             searchParams.setStart(0);
-            searchParams.setType(SearchParams.SearchType.EC2PROTEIN);
+            searchParams.setType(SearchParams.SearchType.EC);
             searchParams.setPrevioustext("");
             searchModelForm.setSearchparams(searchParams);
 
             model.addAttribute("ec", ec);
             model.addAttribute("searchKey", ec);
-            model.addAttribute("searchTerm", ec);
-            model.addAttribute("keywordType", KeywordType.EC2PROTEIN.name());
+            //model.addAttribute("searchTerm", ec);
+            model.addAttribute("keywordType", KeywordType.EC.name());
             model.addAttribute("searchId", ec);
             model.addAttribute("searchModel", searchModelForm);
             model.addAttribute(SEARCH_VIDEO, SEARCH_VIDEO);

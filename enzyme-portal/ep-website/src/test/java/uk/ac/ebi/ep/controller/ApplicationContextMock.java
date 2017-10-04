@@ -47,13 +47,13 @@ public class ApplicationContextMock {
 
     @Bean
     public String pdbImgUrl() {
-        String pdbImgUrl = "http://www.ebi.ac.uk/pdbe/static/entry/{0}_deposited_chain_front_image-200x200.png";
+        String pdbImgUrl = "https://www.ebi.ac.uk/pdbe/static/entry/{0}_deposited_chain_front_image-200x200.png";
         return pdbImgUrl;
     }
 
     @Bean
     public String pdbStructureCompareUrl() {
-        String pdbStructureCompareUrl = "http://www.ebi.ac.uk/msd-srv/ssm/cgi-bin/ssmserver?";
+        String pdbStructureCompareUrl = "https://www.ebi.ac.uk/msd-srv/ssm/cgi-bin/ssmserver?";
         return pdbStructureCompareUrl;
     }
 
@@ -62,8 +62,8 @@ public class ApplicationContextMock {
         IntenzConfig config = new IntenzConfig();
 
         config.setTimeout(30000);
-        config.setIntenzXmlUrl("http://www.ebi.ac.uk/intenz/ws/EC/{0}.{1}.{2}.{3}.xml");
-        config.setEcBaseUrl("http://www.ebi.ac.uk/intenz/query?cmd=Search&q=");
+        config.setIntenzXmlUrl("https://www.ebi.ac.uk/intenz/ws/EC/{0}.{1}.{2}.{3}.xml");
+        config.setEcBaseUrl("https://www.ebi.ac.uk/intenz/query?cmd=Search&q=");
         return config;
     }
 
@@ -104,8 +104,8 @@ public class ApplicationContextMock {
         chebiConfig.setMaxThreads(10);
         chebiConfig.setSearchStars("ALL");
         chebiConfig.setMaxRetrievedMolecules(3);
-        chebiConfig.setCompoundBaseUrl("http://www.ebi.ac.uk/chebi/searchId.do?chebiId=");
-        chebiConfig.setCompoundImgBaseUrl("http://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=");
+        chebiConfig.setCompoundBaseUrl("https://www.ebi.ac.uk/chebi/searchId.do?chebiId=");
+        chebiConfig.setCompoundImgBaseUrl("https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=");
 
         return chebiConfig;
     }
@@ -160,11 +160,11 @@ public class ApplicationContextMock {
     public PDBeUrl pDBeUrl() {
         PDBeUrl pdBeUrl = new PDBeUrl();
 
-        String summaryUrl = "http://www.ebi.ac.uk/pdbe/api/pdb/entry/summary/";
-        String experimentUrl = "http://www.ebi.ac.uk/pdbe/api/pdb/entry/experiment/";
-        String publicationsUrl = "http://www.ebi.ac.uk/pdbe/api/pdb/entry/publications/";
-        String moleculesUrl = "http://www.ebi.ac.uk/pdbe/api/pdb/entry/molecules/";
-        String structuralDomainUrl = "http://www.ebi.ac.uk/pdbe/api/mappings/cath/";
+        String summaryUrl = "https://www.ebi.ac.uk/pdbe/api/pdb/entry/summary/";
+        String experimentUrl = "https://www.ebi.ac.uk/pdbe/api/pdb/entry/experiment/";
+        String publicationsUrl = "https://www.ebi.ac.uk/pdbe/api/pdb/entry/publications/";
+        String moleculesUrl = "https://www.ebi.ac.uk/pdbe/api/pdb/entry/molecules/";
+        String structuralDomainUrl = "https://www.ebi.ac.uk/pdbe/api/mappings/cath/";
 
         pdBeUrl.setSummaryUrl(summaryUrl);
         pdBeUrl.setExperimentUrl(experimentUrl);

@@ -1,10 +1,4 @@
-<%-- 
-    Document   : basket
-    Created on : Oct 2, 2017, 3:46:29 PM
-    Author     : <a href="mailto:joseph@ebi.ac.uk">Joseph</a>
---%>
-
-<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -66,7 +60,7 @@
                 <section class="large-8 columns">
                     <%@include file="util/prioritiseSpecies.jsp" %>
                     <c:set var="showCheckbox" value="false"/>
-                    <%@include file="summary_basket.jspf" %>
+                    <%@include file="summary.jspf" %>
                 </section>
                 <section class="large-3 columns">
                     <select class="toCompare" name="acc"

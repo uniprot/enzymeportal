@@ -75,7 +75,7 @@ public class EnzymePortalConfig {
 
         config.setTimeout(Integer.parseInt(env.getProperty("intenz.ws.timeout")));
         config.setIntenzXmlUrl(env.getProperty("intenz.xml.url"));
-        config.setEcBaseUrl("http://www.ebi.ac.uk/intenz/query?cmd=Search&q=");
+        config.setEcBaseUrl("https://www.ebi.ac.uk/intenz/query?cmd=Search&q=");
         return config;
     }
 
@@ -127,7 +127,7 @@ public class EnzymePortalConfig {
         return chebiConfig;
     }
 
-    @Bean
+    //@Bean
     public ChebiAdapter chebiAdapter() {
         ChebiAdapter chebiAdapter = new ChebiAdapter();
         chebiAdapter.setConfig(chebiConfig());
